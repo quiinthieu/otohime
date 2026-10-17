@@ -1,69 +1,167 @@
 @import "tailwindcss";
 
 :root {
-  --water: #e7f3f2;
-  --depth: #12343c;
-  --tide: #1f6a66;
-  --shell: #f7f4ef;
-  --mist: #5c7574;
-  --background: var(--water);
-  --foreground: var(--depth);
+  --night: #1c1c1c;
+  --ink: #111111;
+  --field: #1c1c1c;
+  --glow: #c5e64a;
+  --glow-press: #d4f06a;
+  --paper: #f4f6f0;
+  --mist: #8d8d8d;
+  --danger: #f0b4a0;
+  --background: var(--night);
+  --foreground: var(--paper);
 }
 
 @theme inline {
-  --color-water: var(--water);
-  --color-depth: var(--depth);
-  --color-tide: var(--tide);
-  --color-shell: var(--shell);
+  --color-night: var(--night);
+  --color-ink: var(--ink);
+  --color-field: var(--field);
+  --color-glow: var(--glow);
+  --color-glow-press: var(--glow-press);
+  --color-paper: var(--paper);
   --color-mist: var(--mist);
+  --color-danger: var(--danger);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-figtree), sans-serif;
-  --font-display: var(--font-fraunces), serif;
+  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --water: #07141c;
-    --depth: #e7f2f1;
-    --tide: #8fcfc8;
-    --shell: #10242c;
-    --mist: #9bb0ae;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--water);
-  color: var(--depth);
-  font-family: var(--font-figtree), sans-serif;
+  background-color: var(--night);
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 16px 16px;
+  color: var(--paper);
+  font-family: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--tide) 28%, transparent);
+  background: color-mix(in srgb, var(--glow) 35%, transparent);
+  color: var(--ink);
 }
 
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {
-  outline: 2px solid var(--tide);
+  outline: 2px solid var(--glow);
   outline-offset: 3px;
 }
 
-@keyframes name-in {
+.app-card {
+  background: var(--ink);
+  border-radius: 1.75rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 28px 80px rgba(0, 0, 0, 0.55);
+}
+
+.field-input {
+  height: 2.75rem;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 0.7rem;
+  background: var(--field);
+  padding-inline: 0.9rem;
+  color: var(--paper);
+  font-size: 0.875rem;
+}
+
+.field-input::placeholder {
+  color: color-mix(in srgb, var(--mist) 80%, transparent);
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--glow) 55%, transparent);
+}
+
+.field-reveal {
+  position: absolute;
+  top: 0;
+  right: 0.75rem;
+  bottom: 0;
+  color: var(--mist);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.field-reveal:hover {
+  color: var(--paper);
+}
+
+.btn-primary {
+  display: inline-flex;
+  height: 2.75rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 0.7rem;
+  background: var(--glow);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1f12;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: var(--glow-press);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+}
+
+.btn-quiet {
+  display: inline-flex;
+  height: 2.75rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.7rem;
+  background: var(--field);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.btn-quiet:hover {
+  background: color-mix(in srgb, var(--field) 70%, #2a2a2a);
+}
+
+.btn-text {
+  color: var(--glow);
+  font-weight: 600;
+}
+
+.btn-text:hover {
+  color: var(--glow-press);
+}
+
+.surface-in {
+  animation: surface 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes surface {
   from {
     opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.name-in {
-  animation: name-in 0.7s ease;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .name-in {
+  .surface-in {
     animation: none;
   }
 }

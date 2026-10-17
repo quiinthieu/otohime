@@ -2,15 +2,22 @@ name: otohime
 
 services:
   postgres:
-    image: postgres:17
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: otohime
       POSTGRES_PASSWORD: otohime
       POSTGRES_DB: otohime
     ports:
+      # 5433 avoids the default 5432 and mini-app DB ports (55432+).
       - "5433:5432"
     volumes:
       - otohime_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U otohime -d otohime"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+      start_period: 5s
 
 volumes:
   otohime_pg:
