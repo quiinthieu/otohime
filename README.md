@@ -5,19 +5,14 @@ Personal site for [otohime.dev](https://otohime.dev). One Next.js app serves the
 ## Local setup
 
 ```bash
-cp .env.example .env
-openssl rand -base64 32
+bash scripts/dev.sh
 ```
 
-Put the generated value in `BETTER_AUTH_SECRET`.
+That creates `.env` if needed (including `BETTER_AUTH_SECRET`), starts Postgres, applies migrations, and runs Next.js. The app listens on port **4000** by default (`http://localhost:4000`) so it stays outside the mini-app range **3000–3098**. Postgres listens on **5433**.
 
-```bash
-docker compose up -d
-npm run db:migrate
-npm run dev
-```
+`BOOTSTRAP_ONLY=1 bash scripts/dev.sh` prepares the database and exits without starting the app. `SKIP_BROWSER=1` skips opening a tab.
 
-The app is at [http://localhost:3000](http://localhost:3000). Postgres listens on port **5433** so it does not take the default port used by other local databases.
+The script raises Node's HTTP header size so mini-app cookies on `localhost` do not produce a blank 431 page.
 
 ## Layout
 
