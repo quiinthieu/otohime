@@ -1,0 +1,16 @@
+name: otohime
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: otohime
+      POSTGRES_PASSWORD: otohime
+      POSTGRES_DB: otohime
+    ports:
+      - "5433:5432"
+    volumes:
+      - otohime_pg:/var/lib/postgresql/data
+
+volumes:
+  otohime_pg:
