@@ -2,9 +2,11 @@
 
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
 export default function SignInPage() {
+  const router = useRouter();
   const [mode, setMode] = useState<"sign-in" | "create">("sign-in");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,7 +22,13 @@ export default function SignInPage() {
         ? await authClient.signUp.email({ name, email, password })
         : await authClient.signIn.email({ email, password });
 
-    setMessage(result.error?.message ?? "Signed in.");
+    if (result.error) {
+      setMessage(result.error.message ?? "Could not sign in.");
+      return;
+    }
+
+    router.push("/");
+    router.refresh();
   }
 
   return (
