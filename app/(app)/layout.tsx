@@ -1,10 +1,23 @@
 import { BrandMark } from "@/components/brand-mark";
-import { NavLinks, NavList, SignOutButton, type NavItem } from "@/components/nav-links";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import {
+  NavLinks,
+  NavList,
+  SignOutButton,
+  StopImpersonatingButton,
+  type NavItem,
+} from "@/components/nav-links";
+import { getSession } from "@/lib/dal";
+import { can } from "@/lib/permissions";
 import { Suspense } from "react";
 
-const BASE: NavItem[] = [{ href: "/", label: "Home" }];
+const BASE: NavItem[] = [
+  { href: "/", label: "Home" },
+  { href: "/account", label: "Account" },
+];
+const ADMIN: NavItem[] = [
+  { href: "/admin/users", label: "Users" },
+  { href: "/admin/roles", label: "Roles" },
+];
 
 // The chrome prerenders; anything that reads the session streams in behind
 // its own boundary, and pages stream behind loading.tsx.
@@ -23,6 +36,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Account />
         </Suspense>
       </header>
+      <Suspense fallback={null}>
+        <ImpersonationBanner />
+      </Suspense>
       <div className="lg:grid lg:grid-cols-[220px_1fr]">
         <nav aria-label="Main" className="appnav">
           <div className="mb-5 hidden lg:block">
@@ -30,7 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <p className="text-[12px] text-muted">A personal place.</p>
           </div>
           <Suspense fallback={<NavList items={BASE} />}>
-            <NavLinks items={BASE} />
+            <Nav />
           </Suspense>
         </nav>
         <main id="main" tabIndex={-1} className="min-w-0 outline-none">
@@ -41,14 +57,39 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
+// The nav only hints; every gated page checks again (lib/dal.ts).
+async function Nav() {
+  const session = await getSession();
+  const admin = can(session?.user.role, { user: ["list"] });
+  return <NavLinks items={admin ? [...BASE, ...ADMIN] : BASE} />;
+}
+
 async function Account() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session) return null;
+  const role = session.user.role ?? "user";
 
   return (
     <div className="flex min-w-0 items-center gap-3">
       <span className="hidden truncate text-muted sm:inline">{session.user.email}</span>
+      <span className="badge" data-role={role}>
+        {role}
+      </span>
       <SignOutButton />
+    </div>
+  );
+}
+
+async function ImpersonationBanner() {
+  const session = await getSession();
+  if (!session?.session.impersonatedBy) return null;
+
+  return (
+    <div className="banner">
+      <p>
+        You&apos;re impersonating {session.user.name} ({session.user.email})
+      </p>
+      <StopImpersonatingButton />
     </div>
   );
 }

@@ -45,6 +45,7 @@ jobs:
     env:
       DATABASE_URL: postgresql://otohime:otohime@localhost:5432/otohime
       BETTER_AUTH_URL: http://localhost:3000
+      BASE_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v7
       # Restored before npm ci so hashFiles never walks node_modules.
@@ -60,6 +61,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+      - run: npm test
       - name: Migrations match db/schema.ts
         run: |
           npx drizzle-kit check
@@ -68,6 +70,11 @@ jobs:
           test -z "$(git status --porcelain db/migrations)"
       - run: npm run build
       - run: npm run db:migrate
+      - name: E2E against next start
+        run: |
+          npm start &
+          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
+          npm run test:e2e
 
   preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository

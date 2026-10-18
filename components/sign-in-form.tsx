@@ -3,6 +3,7 @@
 import { Field } from "@/components/field";
 import { FigTitle } from "@/components/figures";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
@@ -18,6 +19,10 @@ export function SignInForm() {
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email"));
     const password = String(form.get("password"));
+    // Same-site paths only ("//x" and "/\x" leave the site); Better Auth
+    // checks callbackURL again on the server.
+    const raw = new URLSearchParams(location.search).get("next");
+    const next = raw && /^\/(?![/\\])/.test(raw) ? raw : "/";
     setMessage("");
     setBusy(true);
 
@@ -27,17 +32,25 @@ export function SignInForm() {
           email,
           password,
         })
-      : await authClient.signIn.email({ email, password });
-
-    setBusy(false);
+      : await authClient.signIn.email({
+          email,
+          password,
+          // unchecked: the session cookie ends when the browser closes
+          rememberMe: form.get("remember") === "on",
+          callbackURL: next,
+        });
 
     if (result.error) {
+      setBusy(false);
       setMessage(result.error.message ?? "Could not sign in.");
       return;
     }
 
-    router.push("/");
-    router.refresh();
+    // Sign-in: Better Auth's client follows callbackURL with a full page load.
+    if (isCreate) {
+      router.push(next);
+      router.refresh();
+    }
   }
 
   return (
@@ -67,6 +80,17 @@ export function SignInForm() {
           hint={isCreate ? "At least 8 characters." : undefined}
           required
         />
+        {isCreate ? null : (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <label className="check">
+              <input type="checkbox" name="remember" defaultChecked />
+              Remember me
+            </label>
+            <Link href="/forgot-password" className="link">
+              Forgot password?
+            </Link>
+          </div>
+        )}
         {message ? (
           <p role="alert" className="alert">
             {message}
