@@ -3,7 +3,7 @@
 import { Doodle, type DoodleName } from "@/components/doodles";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export type NavItem = { href: string; label: string; doodle: DoodleName };
 
@@ -38,13 +38,16 @@ export function NavLinks({ items }: { items: NavItem[] }) {
 }
 
 export function SignOutButton() {
+  const router = useRouter();
   return (
     <button
       type="button"
       className="btn btn-sm w-full"
       onClick={async () => {
         await authClient.signOut();
-        location.href = "/";
+        // proxy.ts now rewrites / to the welcome page
+        router.push("/");
+        router.refresh();
       }}
     >
       Sign out
