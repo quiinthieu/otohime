@@ -611,6 +611,49 @@
     animation-delay: -0.25s;
   }
 
+  .fig-belt {
+    fill: none;
+    stroke: #807766;
+    stroke-width: 2.2;
+  }
+
+  /* Rack lights blink on their own; faster, and the reels turn, on a job. */
+  .led {
+    animation: blink 1.6s steps(1) infinite;
+  }
+
+  [data-busy] .led {
+    animation-duration: 0.3s;
+  }
+
+  .reel {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  [data-busy] .reel {
+    animation: spin 0.8s steps(8) infinite;
+  }
+
+  .log {
+    width: fit-content;
+    min-height: 8em;
+    margin-inline: auto;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre;
+  }
+
+  .log li:last-child {
+    color: var(--ink);
+  }
+
+  .log[data-running] li:last-child::after {
+    content: "▋";
+    animation: blink 1s steps(1) infinite;
+  }
+
   /* Colour swatches under a figure, as in the reference. */
   .swatch {
     display: block;
@@ -638,8 +681,13 @@
 
   /*
    * Operable figures (components/machine.tsx), after the reference's stage:
-   * controls | figure | readouts, stacked with the figure first on phones.
+   * controls | figure | readouts, stacked with the figure first when the
+   * machine's column is narrow.
    */
+  .machine {
+    container-type: inline-size;
+  }
+
   .machine-stage {
     display: grid;
     gap: 1rem;
@@ -666,7 +714,7 @@
     gap: 0.75rem 2rem;
   }
 
-  @media (min-width: 48rem) {
+  @container (min-width: 40rem) {
     .machine-stage {
       grid-template-columns: 8.5rem minmax(0, 1fr) 8rem;
       align-items: start;
@@ -835,6 +883,18 @@
 @keyframes bulb {
   50% {
     fill: var(--yellow);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 1turn;
   }
 }
 

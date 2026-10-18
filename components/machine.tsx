@@ -30,6 +30,7 @@ export function Machine({
   busy,
   controls,
   stats,
+  below,
   readout,
   children,
 }: {
@@ -40,6 +41,7 @@ export function Machine({
   busy: boolean;
   controls: React.ReactNode;
   stats?: React.ReactNode;
+  below?: React.ReactNode;
   readout: string;
   children: React.ReactNode;
 }) {
@@ -65,6 +67,7 @@ export function Machine({
         </div>
         {stats ? <dl className="machine-stats">{stats}</dl> : null}
       </div>
+      {below}
       <p className="readout" aria-live="polite">
         {readout}
       </p>

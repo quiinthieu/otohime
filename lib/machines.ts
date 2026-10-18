@@ -94,3 +94,77 @@ export function claw(s: Claw, action: ClawAction): Claw {
   if (action === "right") return s.slot < SLOTS ? { ...s, slot: s.slot + 1 } : s;
   return { ...s, phase: "down", missed: false };
 }
+
+/* Conveyor: a batch of parcels rides the belt and drops into bins by colour. */
+
+export const LANES = 5;
+export const BELT = 300; // belt length
+export const FALL = 3; // frames from the belt into a bin
+export const binX = (lane: number) => 70 + 50 * lane; // a bin's middle
+const BATCH = 8;
+const SPEED = 10; // belt units a frame
+
+export type Parcel = { id: number; x: number; lane: number; fall: number; rows: number };
+export type Conveyor = {
+  queue: number[]; // lanes still in the hopper
+  parcels: Parcel[];
+  bins: number[];
+  rows: number; // loaded since the last truncate
+  batch: number; // rows in the current or latest batch
+  batches: number;
+  belt: number; // frames the belt has run, for its stripes
+  next: number; // the next parcel's id
+  gap: number; // frames until the hopper drops the next parcel
+};
+export type ConveyorAction = "run" | "truncate" | Frame;
+
+export const newConveyor = (): Conveyor => ({
+  queue: [],
+  parcels: [],
+  bins: Array(LANES).fill(0),
+  rows: 0,
+  batch: 0,
+  batches: 0,
+  belt: 0,
+  next: 0,
+  gap: 0,
+});
+
+export const conveyorBusy = (s: Conveyor) => s.queue.length > 0 || s.parcels.length > 0;
+
+function conveyorFrame(s: Conveyor): Conveyor {
+  if (!conveyorBusy(s)) return s;
+  const parcels: Parcel[] = [];
+  const bins = [...s.bins];
+  let { rows, batch, queue, next, gap } = s;
+  for (const p of s.parcels) {
+    if (p.x < binX(p.lane)) parcels.push({ ...p, x: Math.min(p.x + SPEED, binX(p.lane)) });
+    else if (p.fall < FALL) parcels.push({ ...p, fall: p.fall + 1 });
+    else {
+      bins[p.lane]++;
+      rows += p.rows;
+      batch += p.rows;
+    }
+  }
+  if (queue.length && !gap) {
+    // ponytail: made-up row counts, steady so the tests can count them
+    parcels.push({ id: next, x: 18, lane: queue[0], fall: 0, rows: 120 + ((next * 97) % 400) });
+    queue = queue.slice(1);
+    next++;
+    gap = 3;
+  } else {
+    gap = Math.max(0, gap - 1);
+  }
+  const done = !queue.length && !parcels.length;
+  return { ...s, parcels, bins, rows, batch, queue, next, gap, belt: s.belt + 1, batches: s.batches + (done ? 1 : 0) };
+}
+
+export function conveyor(s: Conveyor, action: ConveyorAction): Conveyor {
+  if (action === "tick") return conveyorFrame(s);
+  if (action === "settle") return settle(s, conveyorFrame, conveyorBusy);
+  if (conveyorBusy(s)) return s;
+  if (action === "truncate") return { ...s, bins: Array(LANES).fill(0), rows: 0 };
+  // a steady shuffle of lanes, different every batch
+  const queue = Array.from({ length: BATCH }, (_, i) => (i * 3 + s.batches * 2) % LANES);
+  return { ...s, queue, batch: 0, gap: 0 };
+}

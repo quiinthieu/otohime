@@ -15,6 +15,7 @@ import { Suspense } from "react";
 // Public pages for everyone; signed-in people also get their own rooms.
 const PUBLIC: NavItem[] = [
   { href: "/", label: "Home" },
+  { href: "/work", label: "Work" },
   { href: "/play", label: "Play" },
 ];
 const MINE: NavItem[] = [
