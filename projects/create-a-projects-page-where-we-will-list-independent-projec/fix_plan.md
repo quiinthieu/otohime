@@ -43,3 +43,11 @@ candidates, in order of likelihood:
 Lasting fix for visibility: give QA job pods a read-only GitHub token
 (`actions:read` on quiinthieu/otohime), so they can read run status directly
 instead of inferring it from the production site.
+
+## Still open at 18:02Z (run-6018)
+
+The cause, the files and the steps above are unchanged: `/projects` is still
+404 and `/` still serves the 6456dd7 console. Re-raised as the operator
+action `sign-in-required:ci-provider:quiinthieu-otohime` with the same ready
+probe (`https://otohime.dev/projects`, 200, body contains "Nothing on the bench
+yet"). The probe relaunches QA as soon as a person re-runs CI on main.

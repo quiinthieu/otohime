@@ -62,3 +62,20 @@ against the LCD's right edge at 88. It fits, but a longer label would not.
   has no `gh` CLI or GitHub token, and the Actions API returns 404.
 
 See [fix_plan.md](fix_plan.md).
+
+## Re-check, run-6018 (2026-10-18 18:02Z)
+
+Following the esc-252 answer, this run made one check: production.
+
+| Check | Result |
+| --- | --- |
+| `GET https://otohime.dev/projects` | 404, `x-vercel-cache: HIT`, `age: 2282` |
+| Console on `GET https://otohime.dev/` | four lines (WORK, PLAY, NOTES, MUSIC) at -142, -130, -118, -106, which is the 6456dd7 layout; `age: 5448` |
+| `git merge-base --is-ancestor e097b14 origin/main` | yes (head b6a4b07) |
+| `git merge-base --is-ancestor e097b14 6456dd7` | no, so the deployed build does not contain the delivery |
+| `git log 6456dd7..origin/main -- .github package.json package-lock.json next.config.ts vercel.json` | empty |
+
+Verdict: still **fail, cause=environment**. The delivery e097b14 is correct
+(green gate ver-2273, and the local CI run in run-6006 passed with e2e 9/9),
+but CI on main has not deployed it. Per the answer, the local suites were not
+re-run. The fix is unchanged; see [fix_plan.md](fix_plan.md).
