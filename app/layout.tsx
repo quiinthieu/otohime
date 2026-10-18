@@ -1,24 +1,38 @@
-import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Nunito, Shantell_Sans } from "next/font/google";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin"],
+});
+
+// ponytail: default axes; add axes: ["INFM"] if the hand reads too neat
+const shantell = Shantell_Sans({
+  variable: "--font-shantell",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Otohime",
+  title: { default: "Otohime", template: "%s · Otohime" },
   description: "A personal place at otohime.dev",
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f1e6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1631" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} h-full antialiased`}
+      className={`${nunito.variable} ${shantell.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-sans">{children}</body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

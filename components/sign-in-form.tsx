@@ -61,10 +61,10 @@ export function SignInForm() {
   return (
     <div className="flex flex-col items-center text-center">
       <BrandMark />
-      <h1 className="mt-8 text-[2rem] leading-tight font-bold tracking-tight text-paper">
+      <h1 className="mt-8 text-[2rem] leading-tight font-bold tracking-tight text-ink">
         {isCreate ? "Create an account" : "Welcome back!"}
       </h1>
-      <p className="mt-2 text-sm text-mist">
+      <p className="mt-2 text-sm text-muted">
         {isCreate
           ? "A personal place at otohime.dev."
           : "Pick up where you left off, and keep things moving."}
@@ -80,7 +80,7 @@ export function SignInForm() {
             </label>
             <input
               id="name"
-              className="field-input"
+              className="field"
               value={name}
               onChange={(event) => setName(event.target.value)}
               autoComplete="name"
@@ -96,7 +96,7 @@ export function SignInForm() {
           <input
             id="email"
             type="email"
-            className="field-input"
+            className="field"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             autoComplete="email"
@@ -111,7 +111,7 @@ export function SignInForm() {
           <input
             id="password"
             type={visible ? "text" : "password"}
-            className="field-input pr-16"
+            className="field pr-16"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete={isCreate ? "new-password" : "current-password"}
@@ -120,13 +120,13 @@ export function SignInForm() {
           />
           <button
             type="button"
-            className="field-reveal"
+            className="reveal"
             onClick={() => setVisible((current) => !current)}
           >
             {visible ? "Hide" : "Show"}
           </button>
         </div>
-        <button type="submit" className="btn-primary mt-2" disabled={busy}>
+        <button type="submit" className="btn btn-primary w-full mt-2" disabled={busy}>
           {busy
             ? isCreate
               ? "Creating…"
@@ -142,11 +142,11 @@ export function SignInForm() {
           {message}
         </p>
       ) : null}
-      <p className="mt-6 text-sm text-mist">
+      <p className="mt-6 text-sm text-muted">
         {isCreate ? "Already have an account? " : "Don't have an account? "}
         <button
           type="button"
-          className="btn-text"
+          className="link"
           onClick={() => {
             setMessage("");
             setMode((current) =>
