@@ -13,7 +13,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 // Public pages for everyone; signed-in people also get their own rooms.
-const PUBLIC: NavItem[] = [{ href: "/", label: "Home" }];
+const PUBLIC: NavItem[] = [
+  { href: "/", label: "Home" },
+  { href: "/play", label: "Play" },
+];
 const MINE: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/account", label: "Account" },

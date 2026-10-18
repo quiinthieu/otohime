@@ -1,6 +1,7 @@
 import { useId } from "react";
 
-// The reference's colour swatches. Figures take one; FigurePlayground swaps it.
+// The reference's colour swatches. Figures take one; FigurePlayground and
+// Machine swap it.
 export const swatches = {
   yellow: "#f4b829",
   coral: "#ef6a4c",
@@ -11,23 +12,34 @@ export const swatches = {
 
 export type Swatch = keyof typeof swatches;
 
-type Point = [x: number, y: number, z: number];
+export type Point = [x: number, y: number, z: number];
+type Origin = [x: number, y: number];
 
 // Isometric projection: x runs down-right, y down-left, z up.
 const COS30 = Math.cos(Math.PI / 6);
-const at =
-  ([ox, oy]: [number, number]) =>
-  ([x, y, z]: Point) =>
-    `${(ox + (x - y) * COS30).toFixed(1)},${(oy + (x + y) / 2 - z).toFixed(1)}`;
+const fixed = (n: number) => n.toFixed(1);
+export const screen = ([ox, oy]: Origin, [x, y, z]: Point): Origin => [
+  ox + (x - y) * COS30,
+  oy + (x + y) / 2 - z,
+];
+export const at = (origin: Origin) => (point: Point) => screen(origin, point).map(fixed).join(",");
 
-// A box standing on the ground, lit from the back right: the shadow falls
-// towards the viewer's left, like the reference.
-function box(origin: [number, number], w: number, d: number, h: number) {
-  const p = at(origin);
+// A box with its back corner at `base` (the ground origin by default), lit
+// from the back right: the shadow falls towards the viewer's left, like the
+// reference. `cast` is the height the shadow falls from, so tall machines
+// keep their shadow inside the picture.
+export function box(origin: Origin, w: number, d: number, h: number, base: Point = [0, 0, 0], cast = h) {
+  const p = (q: Point) => at(origin)([q[0] + base[0], q[1] + base[1], q[2] + base[2]]);
   const poly = (points: Point[]) => points.map(p).join(" ");
+  // Draws flat artwork onto a face: (0, 0) is the face's bottom-left corner
+  // as seen, x runs along the face and y runs down, so up is negative.
+  const onto = (skew: number, corner: Point) => {
+    const [x, y] = screen(origin, [corner[0] + base[0], corner[1] + base[1], corner[2] + base[2]]);
+    return `matrix(${fixed(COS30)} ${skew} 0 1 ${fixed(x)} ${fixed(y)})`;
+  };
   // The top's outline on the ground, shifted by (-k, +l); the hull of that
   // and the footprint is the shadow.
-  const [k, l] = [h * 0.4, h * 0.75];
+  const [k, l] = [cast * 0.4, cast * 0.75];
   return {
     p,
     poly,
@@ -35,6 +47,8 @@ function box(origin: [number, number], w: number, d: number, h: number) {
     top: poly([[0, 0, h], [w, 0, h], [w, d, h], [0, d, h]]),
     shaded: poly([[0, d, 0], [w, d, 0], [w, d, h], [0, d, h]]),
     lit: poly([[w, 0, 0], [w, d, 0], [w, d, h], [w, 0, h]]),
+    onShaded: onto(0.5, [0, d, 0]),
+    onLit: onto(-0.5, [w, d, 0]),
   };
 }
 
@@ -104,29 +118,27 @@ function Parcel() {
 }
 
 // Hand-inked, isometric and grainy. Decorative: hidden from assistive tech.
-// color="inherit" takes --fig from a FigurePlayground around it.
-export function Figure({
-  kind,
-  color,
+// wobble is how far the line work strays, the reference's slider.
+export function Inked({
+  viewBox,
+  wobble = 3.5,
   className = "",
+  style,
+  children,
 }: {
-  kind: "lock" | "open-lock" | "parcel";
-  color?: Swatch | "inherit";
+  viewBox: string;
+  wobble?: number;
   className?: string;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
 }) {
   const id = `fig${useId().replace(/[^\w-]/g, "")}`;
-  const fill = color ?? (kind === "parcel" ? "yellow" : "mint");
   return (
-    <svg
-      viewBox="0 0 400 360"
-      aria-hidden="true"
-      className={`figure ${className}`}
-      style={fill === "inherit" ? undefined : ({ "--fig": swatches[fill] } as React.CSSProperties)}
-    >
+    <svg viewBox={viewBox} aria-hidden="true" className={`figure ${className}`} style={style}>
       <filter id={id} x="-5%" y="-5%" width="110%" height="110%">
         {/* wobble the line work, then speckle it like a riso print */}
         <feTurbulence type="turbulence" baseFrequency="0.035" numOctaves="2" seed="3" result="warp" />
-        <feDisplacementMap in="SourceGraphic" in2="warp" scale="3.5" xChannelSelector="R" yChannelSelector="G" result="inked" />
+        <feDisplacementMap in="SourceGraphic" in2="warp" scale={wobble} xChannelSelector="R" yChannelSelector="G" result="inked" />
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="8" result="noise" />
         <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 0 0 0 -0.82" result="specks" />
         <feComposite in="specks" in2="inked" operator="in" result="grain" />
@@ -142,9 +154,31 @@ export function Figure({
         strokeLinejoin="round"
         strokeLinecap="round"
       >
-        {kind === "parcel" ? <Parcel /> : <Lock open={kind === "open-lock"} />}
+        {children}
       </g>
     </svg>
+  );
+}
+
+// color="inherit" takes --fig from a FigurePlayground around it.
+export function Figure({
+  kind,
+  color,
+  className = "",
+}: {
+  kind: "lock" | "open-lock" | "parcel";
+  color?: Swatch | "inherit";
+  className?: string;
+}) {
+  const fill = color ?? (kind === "parcel" ? "yellow" : "mint");
+  return (
+    <Inked
+      viewBox="0 0 400 360"
+      className={className}
+      style={fill === "inherit" ? undefined : ({ "--fig": swatches[fill] } as React.CSSProperties)}
+    >
+      {kind === "parcel" ? <Parcel /> : <Lock open={kind === "open-lock"} />}
+    </Inked>
   );
 }
 
