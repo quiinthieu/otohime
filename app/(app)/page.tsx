@@ -1,9 +1,7 @@
-import { Mascot } from "@/components/doodles";
+import { FigTitle, Figure } from "@/components/figures";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-
-export const instant = false;
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -11,14 +9,11 @@ export default async function DashboardPage() {
   const { name, email } = session.user;
 
   return (
-    <div className="rise flex items-center gap-6">
-      <div>
-        <h1 className="text-[2rem] sm:text-[2.5rem]">
-          Hi, <span className="squiggle">{name.split(" ")[0] || name}</span>!
-        </h1>
-        <p className="mt-2 text-muted">Signed in as {email}</p>
-      </div>
-      <Mascot className="ml-auto hidden w-28 text-ink sm:block" />
+    <div className="rise">
+      <FigTitle n="01" hint={`signed in as ${email}`}>
+        Hello, {name.split(" ")[0] || name}
+      </FigTitle>
+      <Figure kind="open-lock" className="mx-auto mt-6 block w-full max-w-sm" />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { Doodle } from "@/components/doodles";
 import { Field } from "@/components/field";
+import { FigTitle } from "@/components/figures";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
@@ -42,26 +42,14 @@ export function SignInForm() {
 
   return (
     <div>
-      <h1 className="text-[2rem] sm:text-[2.5rem]">
-        {isCreate ? (
-          <>
-            Create an <span className="squiggle">account</span>
-          </>
-        ) : (
-          <>
-            Welcome <span className="squiggle">back</span>!
-          </>
-        )}
-      </h1>
+      <FigTitle n="02">{isCreate ? "Create an account" : "Sign in"}</FigTitle>
       <p className="mt-2 text-muted">
         {isCreate
-          ? "A personal place at otohime.dev."
-          : "Pick up where you left off, and keep things moving."}
+          ? "Pick a name, an email and a password."
+          : "Type your email and password, then log in."}
       </p>
-      <form onSubmit={onSubmit} className="mt-8 grid gap-4">
-        {isCreate ? (
-          <Field label="Name" name="name" autoComplete="name" required />
-        ) : null}
+      <form onSubmit={onSubmit} className="mt-6 grid gap-4">
+        {isCreate ? <Field label="Name" name="name" autoComplete="name" required /> : null}
         <Field
           label="Email"
           name="email"
@@ -84,28 +72,30 @@ export function SignInForm() {
             {message}
           </p>
         ) : null}
-        <button type="submit" className="btn btn-primary mt-2 w-full" disabled={busy}>
-          {busy
-            ? isCreate
-              ? "Creating…"
-              : "Signing in…"
-            : isCreate
-              ? "Create account"
-              : "Log in"}
-          {busy ? null : <Doodle name="arrow" className="wiggle" />}
-        </button>
+        <div>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
+            {busy
+              ? isCreate
+                ? "Creating…"
+                : "Signing in…"
+              : isCreate
+                ? "Create account"
+                : "Log in"}
+            {busy ? null : <span aria-hidden="true">→</span>}
+          </button>
+        </div>
       </form>
       <p className="mt-6 text-muted">
-        {isCreate ? "Already have an account? " : "Don't have an account? "}
+        {isCreate ? "Already have an account? " : "No account yet? "}
         <button
           type="button"
-          className="link"
+          className="link text-ink"
           onClick={() => {
             setMessage("");
             setMode(isCreate ? "sign-in" : "create");
           }}
         >
-          {isCreate ? "Log in" : "Sign up"}
+          {isCreate ? "Log in" : "Create one"}
         </button>
       </p>
     </div>
