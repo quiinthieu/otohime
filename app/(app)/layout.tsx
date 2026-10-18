@@ -9,10 +9,13 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getSession } from "@/lib/dal";
 import { can } from "@/lib/permissions";
+import Link from "next/link";
 import { Suspense } from "react";
 
-const BASE: NavItem[] = [
-  { href: "/", label: "Home" },
+// Public pages for everyone; signed-in people also get their own rooms.
+const PUBLIC: NavItem[] = [{ href: "/", label: "Home" }];
+const MINE: NavItem[] = [
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/account", label: "Account" },
 ];
 const ADMIN: NavItem[] = [
@@ -49,12 +52,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <p className="font-bold tracking-[0.02em]">Otohime</p>
             <p className="text-[12px] text-muted">A personal place.</p>
           </div>
-          <Suspense fallback={<NavList items={BASE} />}>
+          <Suspense fallback={<NavList items={PUBLIC} />}>
             <Nav />
           </Suspense>
         </nav>
         <main id="main" tabIndex={-1} className="min-w-0 outline-none">
-          <div className="mx-auto max-w-4xl px-5 py-6 sm:px-8 lg:py-8">{children}</div>
+          <div className="mx-auto max-w-5xl px-5 py-6 sm:px-8 lg:py-8">{children}</div>
         </main>
       </div>
     </>
@@ -64,13 +67,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 // The nav only hints; every gated page checks again (lib/dal.ts).
 async function Nav() {
   const session = await getSession();
-  const admin = can(session?.user.role, { user: ["list"] });
-  return <NavLinks items={admin ? [...BASE, ...ADMIN] : BASE} />;
+  if (!session) return <NavLinks items={PUBLIC} />;
+  const admin = can(session.user.role, { user: ["list"] });
+  return <NavLinks items={[...PUBLIC, ...MINE, ...(admin ? ADMIN : [])]} />;
 }
 
 async function Account() {
   const session = await getSession();
-  if (!session) return null;
+  if (!session) {
+    return (
+      <Link href="/sign-in" className="btn">
+        Sign in
+      </Link>
+    );
+  }
   const role = session.user.role ?? "user";
 
   return (

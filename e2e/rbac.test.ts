@@ -57,7 +57,7 @@ after(async () => {
 });
 
 test("signed-out visitors are redirected before anything streams", async () => {
-  for (const path of ["/admin/users", "/admin/roles", "/account"]) {
+  for (const path of ["/dashboard", "/admin/users", "/admin/roles", "/account"]) {
     const res = await page(path);
     assert.equal(res.status, 307, path);
     assert.equal(
