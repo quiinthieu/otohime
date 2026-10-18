@@ -1,6 +1,9 @@
 import type { Swatch } from "@/components/figures";
 
 export type Game = { title: string; note: string; colour: Swatch };
+// track: the id after /track/ in Share → Copy song link. Optional; it lets
+// the deck show which song is playing.
+export type Song = { title: string; artist: string; note: string; colour: Swatch; track?: string };
 
 // The words on the public pages, in one place. A first draft: everything
 // marked TODO(otohime) is invented and waits for the real thing.
@@ -60,4 +63,18 @@ export const site = {
     { title: "Tetris Effect", note: "Bin packing, with feelings.", colour: "blue" },
     { title: "Outer Wilds", note: "Twenty-two minutes at a time.", colour: "yellow" },
   ] satisfies Game[],
+  // TODO(otohime)
+  music: "Songs I keep coming back to, on one tape. Press play on the deck.",
+  // TODO(otohime): your playlist, the id after /playlist/ in Share → Copy link.
+  // A public Spotify playlist stands in for now.
+  playlist: "37i9dQZF1DX4UtSsGT1Sbe",
+  // TODO(otohime): your songs, best first
+  songs: [
+    { title: "Take on Me", artist: "a-ha", note: "One impossible note, attempted every time.", colour: "yellow", track: "2WfaOiMkCvy7F5fcp2zZ8L" },
+    { title: "Billie Jean", artist: "Michael Jackson", note: "A bassline steady enough to set a cron by.", colour: "coral", track: "5ChkMS8OtdzJeqyybCc9R5" },
+    { title: "Total Eclipse of the Heart", artist: "Bonnie Tyler", note: "For the 3 a.m. backfill.", colour: "blue", track: "7wuJGgpTNzbUyn26IOY6rj" },
+    { title: "Heaven Is A Place On Earth", artist: "Belinda Carlisle", note: "Volume up, tests green.", colour: "pink", track: "37Q5anxoGWYdRsyeXkkNoI" },
+    { title: "La Isla Bonita", artist: "Madonna", note: "The holiday the pipeline never takes.", colour: "mint", track: "6r8k1vznHrzlEKYxL4dZEe" },
+    { title: "The Winner Takes It All", artist: "ABBA", note: "Plays whenever a deploy rolls back.", colour: "yellow", track: "3oEkrIfXfSh9zGnE7eBzSV" },
+  ] satisfies Song[],
 };

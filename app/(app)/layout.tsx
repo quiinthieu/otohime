@@ -11,6 +11,7 @@ const PUBLIC: NavItem[] = [
   { href: "/work", label: "Work" },
   { href: "/play", label: "Play" },
   { href: "/notes", label: "Notes" },
+  { href: "/music", label: "Music" },
 ];
 const MINE: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
