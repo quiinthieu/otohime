@@ -91,6 +91,12 @@ jobs:
       NEON_API: https://console.neon.tech/api/v2/projects/${{ vars.NEON_PROJECT_ID }}
       NEON_BRANCH: preview/pr-${{ github.event.pull_request.number }}
     steps:
+      - name: Preview settings are present
+        env:
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+        run: |
+          missing=$(for v in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID NEON_API_KEY NEON_PROJECT_ID; do [ -n "${!v}" ] || printf '%s ' "$v"; done)
+          if [ -n "$missing" ]; then echo "::error::Set these repo secrets/variables for previews: $missing(see README → Deploying)"; exit 1; fi
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
