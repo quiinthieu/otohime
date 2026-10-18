@@ -60,6 +60,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+      - run: npm test
       - name: Migrations match db/schema.ts
         run: |
           npx drizzle-kit check
