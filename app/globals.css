@@ -934,6 +934,67 @@
   }
 }
 
+/*
+ * Page changes (the public pages wrap themselves in <ViewTransition>): old
+ * content leaves fast, new content arrives gently, the masthead stays put
+ * and the current nav pill slides to its new place.
+ */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.page-out) {
+  animation: 150ms ease-in both fade-out;
+}
+
+::view-transition-new(.page-in) {
+  animation: 210ms ease-out 150ms both fade-in;
+}
+
+.masthead {
+  view-transition-name: masthead;
+}
+
+::view-transition-group(masthead) {
+  z-index: 100;
+  animation: none;
+}
+
+::view-transition-old(masthead) {
+  display: none;
+}
+
+::view-transition-new(masthead) {
+  animation: none;
+}
+
+.nav-item[aria-current="page"] {
+  view-transition-name: nav-current;
+}
+
+::view-transition-group(nav-current) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* A theme switch reveals the page as one piece. */
+:root.theming .masthead,
+:root.theming .nav-item {
+  view-transition-name: none;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 /* ponytail: one global reset rather than per-animation opt-outs */
 @media (prefers-reduced-motion: reduce) {
   *,
