@@ -4,6 +4,7 @@ import { can, type Permissions } from "@/lib/permissions";
 import Link from "next/link";
 
 const rooms: { href: string; title: string; blurb: string; needs?: Permissions }[] = [
+  { href: "/account", title: "Account", blurb: "Your name, password and devices." },
   {
     href: "/admin/users",
     title: "Users",

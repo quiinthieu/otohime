@@ -10,7 +10,10 @@ import { getSession } from "@/lib/dal";
 import { can } from "@/lib/permissions";
 import { Suspense } from "react";
 
-const BASE: NavItem[] = [{ href: "/", label: "Home" }];
+const BASE: NavItem[] = [
+  { href: "/", label: "Home" },
+  { href: "/account", label: "Account" },
+];
 const ADMIN: NavItem[] = [
   { href: "/admin/users", label: "Users" },
   { href: "/admin/roles", label: "Roles" },

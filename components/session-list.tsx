@@ -65,7 +65,10 @@ export function SessionList<T extends SessionRow>({
           <div className="min-w-0 flex-1">
             <p className="font-bold">{device(session.userAgent)}</p>
             <p className="text-sm text-muted">
-              {[session.ipAddress, `active ${ago(session.updatedAt)}`].filter(Boolean).join(" · ")}
+              {/* skip the all-zero "unspecified" address local requests report */}
+              {[session.ipAddress?.match(/[1-9a-f]/i) && session.ipAddress, `active ${ago(session.updatedAt)}`]
+                .filter(Boolean)
+                .join(" · ")}
             </p>
           </div>
           {action?.(session)}
