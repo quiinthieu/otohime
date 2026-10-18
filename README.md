@@ -23,3 +23,17 @@ db/             Drizzle schema, client, and migrations
 ```
 
 The browser talks only to this Next.js server. `lib/` and `db/` are the only code that opens Postgres.
+
+## Deploying
+
+GitHub Actions (`.github/workflows/ci.yml`) does it all:
+
+- **Every PR** runs lint, typecheck, a migration drift check and a build. It also gets a preview on Vercel backed by its own Neon branch (`preview/pr-<n>`, a copy of production that is migrated first). The branch is deleted when the PR closes.
+- **Every push to `main`** runs the same checks, then builds, migrates production, deploys to Vercel and smoke-tests `https://otohime.dev/api/health`.
+
+Rules that keep this safe:
+
+- Production migrates before the new code goes live, and the old code keeps serving if the deploy fails. So migrations must be expand-only: add first, drop in a later PR.
+- `drizzle-kit migrate` runs every pending migration in one transaction, so `CREATE INDEX CONCURRENTLY` won't work.
+- Don't run `vercel --prod` from a laptop; it skips the migration.
+- Keep the Vercel Git integration disconnected, or Vercel deploys before CI migrates.
