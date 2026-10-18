@@ -1,82 +1,93 @@
-import { useId } from "react";
+import { doodlePaths, Mascot, type DoodleName } from "@/components/doodles";
 
+const swimmers: [DoodleName, string][] = [
+  ["bubble", "translate(40 116) scale(1.3)"],
+  ["bubble", "translate(300 250) scale(.9)"],
+  ["bubble", "translate(62 300) scale(.7)"],
+  ["fish", "translate(236 136) scale(1.9)"],
+  ["fish", "translate(84 196) scale(-1.3 1.3)"],
+];
+
+// The Dragon Palace under the sea. Decorative: hidden from assistive tech.
 export function ScenePanel() {
-  const rawId = useId();
-  const id = rawId.replace(/:/g, "");
-  const bg = `scene-bg-${id}`;
-  const shaft = `scene-shaft-${id}`;
-  const pearl = `scene-pearl-${id}`;
-
   return (
-    <div className="relative order-1 h-48 w-full shrink-0 self-stretch md:order-2 md:h-auto md:min-h-full md:w-[48%] md:p-3 md:pl-0">
-      <div className="relative h-full min-h-48 overflow-hidden bg-[#1b5c6b] md:rounded-[1.25rem]">
+    <div
+      aria-hidden="true"
+      className="relative order-1 h-40 w-full shrink-0 self-stretch md:order-2 md:h-auto md:w-[46%] md:p-3 md:pl-0"
+    >
+      <div className="relative h-full min-h-40 overflow-hidden border-b-2 border-ink bg-linear-to-b from-scene-top to-scene-bottom text-ink md:rounded-[var(--wobble)] md:border-2">
         <svg
           viewBox="0 0 360 560"
           preserveAspectRatio="xMidYMid slice"
-          className="absolute inset-0 h-full w-full"
-          role="img"
-          aria-label="Abstract tide palace and pearl"
+          className="absolute inset-0 size-full"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={3}
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          <defs>
-            <linearGradient id={bg} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#163a62" />
-              <stop offset="55%" stopColor="#1f7a86" />
-              <stop offset="100%" stopColor="#2aa3a8" />
-            </linearGradient>
-            <linearGradient id={shaft} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f4e4c8" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#f4e4c8" stopOpacity="0" />
-            </linearGradient>
-            <radialGradient id={pearl} cx="38%" cy="32%" r="70%">
-              <stop offset="0%" stopColor="#ffffff" />
-              <stop offset="55%" stopColor="#f3eee6" />
-              <stop offset="100%" stopColor="#d9cfc4" />
-            </radialGradient>
-          </defs>
+          <path
+            d="M150 0 96 300M205 0 168 250M262 0 246 200"
+            className="stroke-pearl/50"
+            strokeWidth={6}
+            strokeDasharray="2 14"
+          />
+          <path d="M0 72c30-14 60 14 90 0s60-14 90 0 60 14 90 0 60-14 90 0" />
 
-          <rect width="360" height="560" fill={`url(#${bg})`} />
+          {/* vector-effect isn't inherited, so each scaled doodle sets it */}
+          {swimmers.map(([name, transform]) => (
+            <path
+              key={transform}
+              d={doodlePaths[name]}
+              className={name === "fish" ? "fill-coral" : undefined}
+              strokeWidth={2.5}
+              vectorEffect="non-scaling-stroke"
+              transform={transform}
+            />
+          ))}
 
-          <polygon points="210,0 262,0 168,560 96,560" fill={`url(#${shaft})`} />
-          <polygon
-            points="268,0 304,0 228,560 176,560"
-            fill={`url(#${shaft})`}
-            opacity="0.7"
+          <path className="fill-pearl" d="M80 330h120v160H80Z" />
+          <path className="fill-pearl" d="M104 250h72v60h-72Z" />
+          <path
+            className="fill-coral"
+            d="M60 340c26 0 50-12 80-40 30 28 54 40 80 40-3 8-10 12-18 12H78c-8 0-15-4-18-12Z"
           />
+          <path
+            className="fill-coral"
+            d="M88 262c20 0 38-10 52-30 14 20 32 30 52 30-2 7-8 10-14 10h-76c-6 0-12-3-14-10Z"
+          />
+          <path d="M140 232v-22" />
+          <circle cx="140" cy="200" r="10" className="fill-pearl" />
+          <path
+            d={doodlePaths.star}
+            className="fill-gold"
+            strokeWidth={2}
+            vectorEffect="non-scaling-stroke"
+            transform="translate(152 166) scale(1.1)"
+          />
+          <path className="fill-navy" d="M124 490v-48a16 16 0 0 1 32 0v48Z" />
+          <circle cx="104" cy="384" r="9" className="fill-navy" />
+          <circle cx="176" cy="384" r="9" className="fill-navy" />
+
+          <g className="stroke-sea" strokeWidth={4}>
+            <path d="M30 560c-10-30 14-48 2-78s12-46 0-74" />
+            <path d="M52 560c8-24-12-40-2-64s-10-36 0-58" />
+            <path d="M330 560c10-28-14-44-2-72s-12-40 0-66" />
+          </g>
 
           <path
-            d="M132 214 C168 186 192 186 228 214 L216 224 C192 202 168 202 144 224 Z"
-            fill="#c5e64a"
+            className="fill-surface"
+            d="M0 478c40-14 80 12 120 0s80-14 120 0 80 12 120 0V560H0Z"
           />
           <path
-            d="M104 258 C158 218 202 218 256 258 L240 270 C202 238 158 238 120 270 Z"
-            fill="#f0c8b0"
-          />
-          <path
-            d="M72 308 C148 254 212 254 288 308 L268 322 C212 278 148 278 92 322 Z"
-            fill="#f0c8b0"
-          />
-
-          <path
-            d="M146 470 L146 348 Q146 308 180 308 Q214 308 214 348 L214 470 Z"
-            fill="#1c2d6e"
-          />
-
-          <circle cx="272" cy="360" r="42" fill={`url(#${pearl})`} />
-          <circle cx="258" cy="346" r="11" fill="#fff" opacity="0.5" />
-
-          <path
-            d="M0 430 C52 410 88 450 136 434 C184 418 220 450 268 434 C316 418 340 438 360 426 L360 560 L0 560 Z"
-            fill="#f0c8b0"
-          />
-          <path
-            d="M0 462 C56 442 96 482 148 464 C200 446 236 478 288 462 C328 450 344 466 360 458 L360 560 L0 560 Z"
-            fill="#2aa3a8"
-          />
-          <path
-            d="M0 498 C60 482 108 518 168 502 C228 486 268 518 324 502 C344 496 352 504 360 500 L360 560 L0 560 Z"
-            fill="#1c2d6e"
+            d={doodlePaths.shell}
+            className="fill-coral"
+            strokeWidth={2}
+            vectorEffect="non-scaling-stroke"
+            transform="translate(24 468) scale(1.3)"
           />
         </svg>
+        <Mascot className="absolute right-3 bottom-1 w-28 md:right-[5%] md:bottom-[12%] md:w-[52%] md:max-w-56" />
       </div>
     </div>
   );

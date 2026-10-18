@@ -1,29 +1,10 @@
 "use client";
 
 import { BrandMark } from "@/components/brand-mark";
+import { Doodle } from "@/components/doodles";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-
-function Arrow() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M3.5 8h9M8.5 4l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export function SignInForm() {
   const router = useRouter();
@@ -134,7 +115,7 @@ export function SignInForm() {
             : isCreate
               ? "Create account"
               : "Log in"}
-          {busy ? null : <Arrow />}
+          {busy ? null : <Doodle name="arrow" className="wiggle" />}
         </button>
       </form>
       {message ? (

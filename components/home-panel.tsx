@@ -1,28 +1,9 @@
 "use client";
 
 import { BrandMark } from "@/components/brand-mark";
+import { Doodle } from "@/components/doodles";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
-
-function Arrow() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M3.5 8h9M8.5 4l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export function HomePanel() {
   const { data: session, isPending } = authClient.useSession();
@@ -48,7 +29,7 @@ export function HomePanel() {
         </p>
         <Link href="/sign-in" className="btn btn-primary mt-8 w-full">
           Sign in
-          <Arrow />
+          <Doodle name="arrow" className="wiggle" />
         </Link>
       </div>
     );
