@@ -44,6 +44,30 @@ export function Doodle({
 
 export type Mood = "happy" | "sleepy" | "worried";
 
+// The turtle with a title and actions: 404, 403, errors and empty states.
+export function Notice({
+  mood,
+  title,
+  page = false,
+  children,
+}: {
+  mood: Mood;
+  title: string;
+  page?: boolean;
+  children?: React.ReactNode;
+}) {
+  const Heading = page ? "h1" : "h2";
+  return (
+    <div
+      className={`rise flex flex-col items-center gap-3 text-center ${page ? "min-h-[70dvh] justify-center" : "py-8"}`}
+    >
+      <Mascot mood={mood} className={page ? "w-40 text-ink" : "w-28 text-ink"} />
+      <Heading className={page ? "text-[2rem]" : "text-xl"}>{title}</Heading>
+      {children}
+    </div>
+  );
+}
+
 // A small sea turtle (Urashima Tarō's ride to the palace). Outline is
 // currentColor: ink in light mode, a pearl die-cut edge in dark mode.
 export function Mascot({
