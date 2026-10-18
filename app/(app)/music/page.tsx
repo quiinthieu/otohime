@@ -1,5 +1,5 @@
 import { FigTitle, swatches } from "@/components/figures";
-import { SpotifyPlayer } from "@/components/spotify-player";
+import { YouTubePlayer } from "@/components/youtube-player";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
@@ -15,7 +15,7 @@ export default function MusicPage() {
         </FigTitle>
         <p className="mt-2 text-muted">{site.music}</p>
         <div className="mt-8">
-          <SpotifyPlayer playlist={site.playlist} songs={site.songs} />
+          <YouTubePlayer songs={site.songs} playlist={site.playlist} />
         </div>
         <h2 className="caption mt-12">On the tape</h2>
         <ul className="mt-3 grid gap-x-10 sm:grid-cols-2">

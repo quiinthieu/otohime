@@ -38,27 +38,31 @@ function Hub({ x }: { x: number }) {
 
 export function CassetteDeck({
   ready,
-  failed,
   playing,
   position,
   duration,
   title,
   label,
+  readout,
   onToggle,
   onStop,
   onSeek,
+  onPrev,
+  onNext,
   below,
 }: {
   ready: boolean;
-  failed: boolean;
   playing: boolean;
   position: number; // ms into the song
   duration: number; // ms
   title?: string;
   label?: string; // the cassette label's colour
+  readout: string;
   onToggle: () => void;
   onStop: () => void;
   onSeek: (seconds: number) => void;
+  onPrev: () => void;
+  onNext: () => void;
   below: React.ReactNode;
 }) {
   // the last key pressed stays down for a moment, so the press shows
@@ -77,15 +81,6 @@ export function CassetteDeck({
 
   // Tape winds from the left pack onto the right one as the song plays.
   const t = duration > 0 ? Math.min(position / duration, 1) : 0;
-  const readout = failed
-    ? "Spotify didn't load. Open the playlist in Spotify instead."
-    : !ready
-      ? "Loading the tape…"
-      : playing
-        ? `Playing ${title ?? "the playlist"}.`
-        : position > 0
-          ? "Paused."
-          : "Press play. You hear previews unless you're signed in to Spotify.";
 
   return (
     <Machine
@@ -112,6 +107,12 @@ export function CassetteDeck({
           </Chip>
           <Chip aria-disabled={!ready || undefined} aria-label="Forward 10 seconds" onClick={() => act("ff", () => onSeek(10))}>
             ▶▶ 10s
+          </Chip>
+          <Chip aria-disabled={!ready || undefined} aria-label="Previous song" onClick={() => act("rew", onPrev)}>
+            |◀ Prev
+          </Chip>
+          <Chip aria-disabled={!ready || undefined} aria-label="Next song" onClick={() => act("ff", onNext)}>
+            Next ▶|
           </Chip>
         </>
       }
