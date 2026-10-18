@@ -69,7 +69,7 @@ test("signed-out visitors are redirected before anything streams", async () => {
 });
 
 test("the public pages are open to everyone", async () => {
-  for (const path of ["/", "/work", "/play", "/notes"]) {
+  for (const path of ["/", "/work", "/play", "/notes", "/music"]) {
     assert.equal((await page(path)).status, 200, path);
   }
 });
