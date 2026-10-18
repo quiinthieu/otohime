@@ -6,6 +6,7 @@ import {
   StopImpersonatingButton,
   type NavItem,
 } from "@/components/nav-links";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { getSession } from "@/lib/dal";
 import { can } from "@/lib/permissions";
 import { Suspense } from "react";
@@ -32,9 +33,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </a>
       <header className="masthead">
         <BrandMark />
-        <Suspense fallback={null}>
-          <Account />
-        </Suspense>
+        <div className="flex min-w-0 items-center gap-3">
+          <Suspense fallback={null}>
+            <Account />
+          </Suspense>
+          <ThemeToggle />
+        </div>
       </header>
       <Suspense fallback={null}>
         <ImpersonationBanner />

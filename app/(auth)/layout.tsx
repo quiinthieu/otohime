@@ -1,13 +1,17 @@
 import { BrandMark } from "@/components/brand-mark";
 import { FigurePlayground } from "@/components/figure-playground";
 import { Figure } from "@/components/figures";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <header className="masthead">
         <BrandMark />
-        <span className="caption">a personal place</span>
+        <div className="flex items-center gap-3">
+          <span className="caption">a personal place</span>
+          <ThemeToggle />
+        </div>
       </header>
       <main className="mx-auto grid max-w-6xl items-center gap-x-16 gap-y-8 px-5 py-10 sm:px-8 lg:min-h-[calc(100dvh-4rem)] lg:grid-cols-[minmax(0,22rem)_1fr]">
         <div className="rise">{children}</div>

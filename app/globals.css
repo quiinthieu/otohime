@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
 /*
- * Paper and ink, after colorfigures.vercel.app. Light only, like the reference.
- * WCAG contrast on paper: ink 14.4, muted 5.1, danger 5.3. Ink on the swatches:
- * yellow 9.3, coral 5.4, mint 9.6, blue 6.2, pink 8.7. Hairlines are decoration.
+ * Paper and ink, after colorfigures.vercel.app, on light or dark paper.
+ * WCAG contrast on paper, light / dark: ink 14.4 / 14.1, muted 5.1 / 6.4,
+ * danger 5.3 / 6.8. Text on a swatch is always dark (--on-swatch): yellow 9.2,
+ * coral 5.4, mint 9.6, blue 6.2, pink 8.7. Hairlines are decoration.
+ *
+ * The OS picks the theme until someone presses the toggle; data-theme on
+ * <html> then pins it (components/theme-toggle.tsx).
  */
 :root {
-  color-scheme: light;
-  --paper: #f2efe7;
-  --paper-2: #ebe7dc;
-  --field: #faf8f3;
-  --ink: #231e16;
-  --muted: #6b6456;
-  --line: #ddd6c8;
-  --hairline: rgb(35 30 22 / 0.14);
-  --danger: #b03a22;
+  color-scheme: light dark;
+  --paper: light-dark(#f2efe7, #1c1915);
+  --paper-2: light-dark(#ebe7dc, #27231d);
+  --field: light-dark(#faf8f3, #221f1a);
+  --ink: light-dark(#231e16, #ebe6da);
+  --muted: light-dark(#6b6456, #a39b8b);
+  --line: light-dark(#ddd6c8, #3a342c);
+  --hairline: light-dark(rgb(35 30 22 / 0.14), rgb(235 230 218 / 0.14));
+  --danger: light-dark(#b03a22, #f0826a);
   --yellow: #f4b829;
   --coral: #ef6a4c;
   --mint: #93d3b0;
   --blue: #76a0e2;
   --pink: #f3a6bb;
-  --shade: #3f4e93;
+  --shade: light-dark(#3f4e93, #2b3666);
+  /* Ink that stays dark in both themes: text on swatches, figure line work. */
+  --on-swatch: #231e16;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -62,7 +76,7 @@
 
   ::selection {
     background: var(--yellow);
-    color: var(--ink);
+    color: var(--on-swatch);
   }
 
   hr {
@@ -131,11 +145,13 @@
   }
 
   .btn-primary:hover:not(:disabled) {
-    background: #3e3a33;
+    background: color-mix(in srgb, var(--ink) 85%, var(--paper));
   }
 
   .btn-danger {
+    border-color: var(--on-swatch);
     background: var(--coral);
+    color: var(--on-swatch);
   }
 
   .btn-ghost {
@@ -163,6 +179,7 @@
 
   .link:hover {
     background: var(--yellow);
+    color: var(--on-swatch);
   }
 
   .field {
@@ -247,7 +264,7 @@
   .card {
     border: 1px solid var(--line);
     border-radius: 12px;
-    background: rgb(255 255 255 / 0.35);
+    background: light-dark(rgb(255 255 255 / 0.35), rgb(255 255 255 / 0.03));
   }
 
   .card-link {
@@ -293,11 +310,17 @@
     background: var(--coral);
   }
 
+  .badge:is([data-role="owner"], [data-role="admin"], [data-tone]) {
+    border-color: var(--on-swatch);
+    color: var(--on-swatch);
+  }
+
   .alert {
     padding: 0.625rem 0.875rem;
-    border: 1px solid var(--ink);
+    border: 1px solid var(--on-swatch);
     border-radius: 10px;
     background: var(--pink);
+    color: var(--on-swatch);
   }
 
   .alert[data-tone="ok"] {
@@ -305,7 +328,9 @@
   }
 
   .alert[data-tone="info"] {
+    border-color: var(--ink);
     background: var(--paper-2);
+    color: var(--ink);
   }
 
   .banner {
@@ -315,8 +340,9 @@
     justify-content: center;
     gap: 0.75rem;
     padding: 0.5rem 1rem;
-    border-bottom: 1px solid var(--ink);
+    border-bottom: 1px solid var(--on-swatch);
     background: var(--yellow);
+    color: var(--on-swatch);
   }
 
   .table-wrap {
@@ -389,7 +415,7 @@
     height: 4rem;
     padding: 0 1.25rem;
     border-bottom: 1px solid var(--hairline);
-    background: rgb(242 239 231 / 0.92);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
     backdrop-filter: blur(6px);
   }
 
@@ -462,7 +488,7 @@
     }
 
     .nav-item[aria-current="page"] small {
-      color: rgb(242 239 231 / 0.7);
+      color: color-mix(in srgb, var(--paper) 70%, transparent);
     }
   }
 
@@ -472,9 +498,10 @@
     place-items: center;
     width: 1.75rem;
     height: 1.75rem;
-    border: 1px solid var(--ink);
+    border: 1px solid var(--on-swatch);
     border-radius: 50%;
     background: var(--mint);
+    color: var(--on-swatch);
     font-size: 12px;
     font-weight: 600;
   }
@@ -485,9 +512,12 @@
     animation: breathe 1.6s ease-in-out infinite;
   }
 
-  /* Isometric figures (components/figures.tsx). --fig is the swatch colour. */
+  /*
+   * Isometric figures (components/figures.tsx). --fig is the swatch colour.
+   * They are printed objects: the same dark line work on either paper.
+   */
   .figure {
-    color: var(--ink);
+    color: var(--on-swatch);
   }
 
   .fig-shade {
@@ -504,7 +534,7 @@
   }
 
   .fig-shaded {
-    fill: color-mix(in srgb, var(--fig, var(--mint)) 62%, var(--ink));
+    fill: color-mix(in srgb, var(--fig, var(--mint)) 62%, var(--on-swatch));
   }
 
   .fig-metal {
@@ -520,7 +550,7 @@
   }
 
   .fig-paper {
-    fill: var(--field);
+    fill: #faf8f3;
   }
 
   /* Colour swatches under a figure, as in the reference. */
@@ -528,7 +558,7 @@
     display: block;
     width: 1.625rem;
     height: 1.625rem;
-    border: 1px solid var(--ink);
+    border: 1px solid var(--on-swatch);
     border-radius: 50%;
     cursor: pointer;
   }
@@ -547,6 +577,42 @@
   .rise {
     animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
+
+  /* A round pill, like the reference's turn buttons. */
+  .icon-btn {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .icon-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* The filled half turns over with the theme. */
+  .theme-toggle svg {
+    transition: rotate 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  :root[data-theme="dark"] .theme-toggle svg {
+    rotate: 180deg;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .theme-toggle svg {
+      rotate: 180deg;
+    }
+  }
 }
 
 @keyframes rise {
@@ -559,6 +625,29 @@
 @keyframes breathe {
   50% {
     opacity: 0.55;
+  }
+}
+
+/*
+ * Theme switch: the new paper spreads out from the toggle like ink.
+ * --tx, --ty and --tr are set on <html> by components/theme-toggle.tsx.
+ */
+:root.theming::view-transition-old(root),
+:root.theming::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root.theming::view-transition-new(root) {
+  animation: ink-spread 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes ink-spread {
+  from {
+    clip-path: circle(0 at var(--tx) var(--ty));
+  }
+  to {
+    clip-path: circle(var(--tr) at var(--tx) var(--ty));
   }
 }
 
