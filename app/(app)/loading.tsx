@@ -4,11 +4,8 @@ export default function Loading() {
       <p role="status" className="sr-only">
         Loading…
       </p>
-      <div className="skeleton h-12 w-2/3 max-w-md" />
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="skeleton h-28" />
-        <div className="skeleton h-28" />
-      </div>
+      <div className="skeleton h-5 w-1/2 max-w-sm" />
+      <div className="skeleton h-64" />
     </div>
   );
 }

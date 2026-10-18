@@ -1,4 +1,3 @@
-import { Doodle } from "@/components/doodles";
 import { requirePermission } from "@/lib/dal";
 import { can, roles, statements, type Permissions, type RoleName } from "@/lib/permissions";
 import type { Metadata } from "next";
@@ -50,7 +49,7 @@ export default async function RolesPage() {
                     <td key={role}>
                       {can(role, { [resource]: [action] } as Permissions) ? (
                         <>
-                          <Doodle name="check" className="size-5 text-sea" />
+                          <span aria-hidden="true">●</span>
                           <span className="sr-only">Allowed</span>
                         </>
                       ) : (

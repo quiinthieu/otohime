@@ -1,4 +1,4 @@
-import { Notice } from "@/components/doodles";
+import { Notice } from "@/components/figures";
 import { auth } from "@/lib/auth";
 import { requirePermission } from "@/lib/dal";
 import type { Metadata } from "next";
@@ -98,7 +98,7 @@ export default async function UsersPage({ searchParams }: PageProps<"/admin/user
           </table>
         </div>
       ) : (
-        <Notice mood="sleepy" title="No one by that name">
+        <Notice n="—" title="No one by that email" figure="parcel" heading="h2">
           <p className="text-muted">Try another email.</p>
         </Notice>
       )}

@@ -1,18 +1,20 @@
 import { BrandMark } from "@/components/brand-mark";
-import { ScenePanel } from "@/components/scene-panel";
+import { FigurePlayground } from "@/components/figure-playground";
+import { Figure } from "@/components/figures";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex min-h-dvh items-center justify-center p-4 sm:p-6 md:p-10">
-      <div className="card flex w-full max-w-[1040px] flex-col overflow-hidden md:min-h-[600px] md:flex-row">
-        <div className="order-2 flex flex-1 flex-col justify-center px-6 py-10 sm:px-10 md:order-1 md:px-14 md:py-12">
-          <div className="rise mx-auto w-full max-w-sm">
-            <BrandMark />
-            <div className="mt-8">{children}</div>
-          </div>
-        </div>
-        <ScenePanel />
-      </div>
-    </main>
+    <>
+      <header className="masthead">
+        <BrandMark />
+        <span className="caption">a personal place</span>
+      </header>
+      <main className="mx-auto grid max-w-6xl items-center gap-x-16 gap-y-8 px-5 py-10 sm:px-8 lg:min-h-[calc(100dvh-4rem)] lg:grid-cols-[minmax(0,22rem)_1fr]">
+        <div className="rise">{children}</div>
+        <FigurePlayground>
+          <Figure kind="lock" color="inherit" className="mx-auto block w-full max-w-[28rem]" />
+        </FigurePlayground>
+      </main>
+    </>
   );
 }
