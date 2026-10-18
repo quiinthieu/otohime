@@ -17,10 +17,26 @@ The script raises Node's HTTP header size so mini-app cookies on `localhost` do 
 ## Layout
 
 ```
-app/            pages and route handlers
-lib/auth.ts     Better Auth
-db/             Drizzle schema, client, and migrations
+app/                 pages and route handlers
+lib/auth.ts          Better Auth, plus the role-hierarchy guard
+lib/permissions.ts   roles and what each may do
+db/                  Drizzle schema, client, and migrations
 ```
+
+## Roles
+
+There are three site-wide roles: `owner` > `admin` > `user`. New accounts are `user`. The full permission matrix is at `/admin/roles`. An admin can only manage people ranked below them, and can only hand out roles below their own. So owners can't be created from the app at all.
+
+To make the first owner, sign up, then run:
+
+```bash
+# local
+docker compose exec postgres psql -U otohime -d otohime -c "UPDATE \"user\" SET role='owner' WHERE email='you@example.com';"
+# Neon (production or a branch)
+psql "$DATABASE_URL" -c "UPDATE \"user\" SET role='owner' WHERE email='you@example.com';"
+```
+
+The change takes effect on the next request.
 
 The browser talks only to this Next.js server. `lib/` and `db/` are the only code that opens Postgres.
 

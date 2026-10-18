@@ -1,7 +1,6 @@
 // Site-wide roles. Pure and package-only imports, so `node --test` loads it as-is.
 import { adminAc, defaultAc as ac, userAc } from "better-auth/plugins/admin/access";
 
-export { ac };
 export const statements = ac.statements;
 
 // Highest first: the roles page renders its columns in this order.
