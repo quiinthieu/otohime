@@ -73,9 +73,11 @@ LCD has room for only four menu lines.
 7. `e2e/rbac.test.ts`: add `/projects` to "the public pages are open to
    everyone", and assert that `/projects` HTML has `aria-label="Main"` and the
    empty-state heading.
-8. Do not commit the `AGENTS.md` block that `next dev` re-adds.
+8. `README.md`: one line saying that the public pages are listed in `lib/pages.ts`
+   and that projects are added as entries in `site.projectList` in `content/site.ts`.
+9. Do not commit the `AGENTS.md` block that `next dev` re-adds.
 
-**Interfaces.** `content/site.ts`; `lib/pages.ts`; `lib/pages.test.ts`;
+**Interfaces.** `README.md`; `content/site.ts`; `lib/pages.ts`; `lib/pages.test.ts`;
 `app/(app)/projects/page.tsx`; `app/(app)/layout.tsx`;
 `components/handheld.tsx`; `app/(app)/dashboard/page.tsx`;
 `app/(app)/account/page.tsx`; `app/(app)/admin/users/page.tsx`;
@@ -87,8 +89,8 @@ LCD has room for only four menu lines.
 - `npm ci && npm run lint && npm run typecheck`
 - `node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/pages.test.ts`
 - `npm test` (the whole unit suite, including the unchanged machine tests)
-- `npm run build` with the CI placeholder env, then confirm `/projects` is in
-  the build's route manifest.
+- `npm run build` with the CI placeholder env (it needs no running database;
+  checked on 6456dd7), then `grep -q '"/projects"' .next/app-path-routes-manifest.json`.
 
 **Acceptance.** The public pages `/projects` returns 200 without a session. It
 renders inside the sidebar layout, with the heading "Projects", Fig. 06, and the
