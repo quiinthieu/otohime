@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { site } from "@/content/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: { default: "Otohime", template: "%s · Otohime" },
-  description: "A personal place at otohime.dev",
+  description: `Otohime. ${site.tagline}`,
 };
 
 export const viewport: Viewport = {

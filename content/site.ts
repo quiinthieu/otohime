@@ -5,6 +5,39 @@ export type Game = { title: string; note: string; colour: Swatch };
 // The words on the public pages, in one place. A first draft: everything
 // marked TODO(otohime) is invented and waits for the real thing.
 export const site = {
+  tagline: "Data engineer. Plays games.",
+  // TODO(otohime): the rest is a first draft
+  bio: [
+    "I move data from where it lands to where people can use it, and keep it honest on the way.",
+    "Most days that means warehouses, schedules and SQL. Some nights it means a backfill.",
+    "The rest of the time I'm playing something with a skill tree, a speedrun timer or a factory that must grow.",
+  ],
+  // TODO(otohime)
+  now: [
+    { what: "Building", note: "a streaming pipeline that pages nobody" },
+    { what: "Playing", note: "Hades II, one more run" },
+    { what: "Reading", note: "Designing Data-Intensive Applications, again" },
+  ],
+  // TODO(otohime): add GitHub, a game profile, anything else
+  links: [{ label: "Email", href: "mailto:hello@otohime.dev" }],
+  // TODO(otohime)
+  notes: [
+    {
+      date: "2026-10-12",
+      title: "Backfills are a feature",
+      body: "Two years of events, replayed in an afternoon, because the jobs were idempotent from day one.",
+    },
+    {
+      date: "2026-09-28",
+      title: "On twos",
+      body: "The figures here animate at twelve frames a second, like hand-drawn film. Smoother looked worse.",
+    },
+    {
+      date: "2026-09-03",
+      title: "The contract caught it",
+      body: "A data contract stopped a breaking change before anyone opened a dashboard. First time. Worth it.",
+    },
+  ],
   // TODO(otohime)
   work: "I build the pipes between where data lands and where people use it: batch jobs, streams, and the odd 3 a.m. backfill.",
   // TODO(otohime): your stack

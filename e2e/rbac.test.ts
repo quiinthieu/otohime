@@ -68,6 +68,12 @@ test("signed-out visitors are redirected before anything streams", async () => {
   }
 });
 
+test("the public pages are open to everyone", async () => {
+  for (const path of ["/", "/work", "/play", "/notes"]) {
+    assert.equal((await page(path)).status, 200, path);
+  }
+});
+
 test("a plain user can't list users or raise their own role", async () => {
   assert.equal((await api("/admin/list-users", users.plain.cookie)).status, 403);
   assert.equal((await api("/update-user", users.plain.cookie, { role: "owner" })).status, 400);

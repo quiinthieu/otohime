@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "New password" };
 export default function ResetPasswordPage() {
   return (
     <>
-      <FigTitle n="04">New password</FigTitle>
+      <FigTitle n="03">New password</FigTitle>
       <p className="mt-2 text-muted">
         Choose a new password. Every device signed in to your account will be signed out.
       </p>

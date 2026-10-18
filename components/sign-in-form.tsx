@@ -55,7 +55,7 @@ export function SignInForm() {
 
   return (
     <div>
-      <FigTitle n="02">{isCreate ? "Create an account" : "Sign in"}</FigTitle>
+      <FigTitle n="01">{isCreate ? "Create an account" : "Sign in"}</FigTitle>
       <p className="mt-2 text-muted">
         {isCreate
           ? "Pick a name, an email and a password."

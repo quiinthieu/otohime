@@ -611,6 +611,19 @@
     animation-delay: -0.25s;
   }
 
+  .fig-lcd {
+    fill: color-mix(in srgb, var(--mint) 45%, #faf8f3);
+  }
+
+  .lcd {
+    fill: #2b2722;
+    font-size: 8.5px;
+  }
+
+  .lcd-cursor {
+    animation: blink 1s steps(1) infinite;
+  }
+
   .fig-belt {
     fill: none;
     stroke: #807766;

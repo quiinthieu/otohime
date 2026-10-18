@@ -12,7 +12,7 @@ export default async function RolesPage() {
 
   return (
     <div className="rise">
-      <FigTitle n="04" hint="read-only: roles live in code">
+      <FigTitle n="08" hint="read-only: roles live in code">
         Roles
       </FigTitle>
       <p className="mt-2 text-muted">

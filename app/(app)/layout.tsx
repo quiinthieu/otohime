@@ -7,6 +7,7 @@ import {
   type NavItem,
 } from "@/components/nav-links";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { site } from "@/content/site";
 import { getSession } from "@/lib/dal";
 import { can } from "@/lib/permissions";
 import Link from "next/link";
@@ -17,6 +18,7 @@ const PUBLIC: NavItem[] = [
   { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
   { href: "/play", label: "Play" },
+  { href: "/notes", label: "Notes" },
 ];
 const MINE: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
@@ -54,7 +56,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <nav aria-label="Main" className="appnav">
           <div className="mb-5 hidden lg:block">
             <p className="font-bold tracking-[0.02em]">Otohime</p>
-            <p className="text-[12px] text-muted">A personal place.</p>
+            <p className="text-[12px] text-muted">{site.tagline}</p>
           </div>
           <Suspense fallback={<NavList items={PUBLIC} />}>
             <Nav />
