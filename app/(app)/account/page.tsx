@@ -20,7 +20,7 @@ export default async function AccountPage() {
 
   return (
     <div className="rise grid gap-6">
-      <FigTitle n="06" hint={user.email}>
+      <FigTitle n="07" hint={user.email}>
         Account
       </FigTitle>
       <section className="card grid gap-4 p-5">

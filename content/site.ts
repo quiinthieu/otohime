@@ -1,6 +1,11 @@
 import type { Swatch } from "@/components/figures";
 
 export type Game = { title: string; note: string; colour: Swatch };
+// A way to reach me, as a line on the home page's switchboard. code is the
+// line's label on the board.
+export type Line = { label: string; handle: string; href: string; code: string; colour: Swatch };
+// video: the song's YouTube upload, the id after watch?v= in its link.
+export type Song = { title: string; artist: string; note: string; colour: Swatch; video: string };
 
 // The words on the public pages, in one place. A first draft: everything
 // marked TODO(otohime) is invented and waits for the real thing.
@@ -18,8 +23,20 @@ export const site = {
     { what: "Playing", note: "Hades II, one more run" },
     { what: "Reading", note: "Designing Data-Intensive Applications, again" },
   ],
-  // TODO(otohime): add GitHub, a game profile, anything else
-  links: [{ label: "Email", href: "mailto:hello@otohime.dev" }],
+  lines: [
+    { label: "Telegram", handle: "@otohime73", href: "https://t.me/otohime73", code: "TG", colour: "blue" },
+    { label: "X", handle: "@otohime73", href: "https://x.com/otohime73", code: "X", colour: "yellow" },
+    // TODO(otohime): the handle should be the profile's display name
+    {
+      label: "Spotify",
+      handle: "otohime",
+      href: "https://open.spotify.com/user/2rjk8knzs0fyfc7oovb2zezqw",
+      code: "SP",
+      colour: "mint",
+    },
+    // TODO(otohime): a first draft
+    { label: "Email", handle: "hello@otohime.dev", href: "mailto:hello@otohime.dev", code: "@", colour: "coral" },
+  ] satisfies Line[],
   // TODO(otohime)
   notes: [
     {
@@ -60,4 +77,34 @@ export const site = {
     { title: "Tetris Effect", note: "Bin packing, with feelings.", colour: "blue" },
     { title: "Outer Wilds", note: "Twenty-two minutes at a time.", colour: "yellow" },
   ] satisfies Game[],
+  // TODO(otohime)
+  music: "Three songs on repeat, one channel each. Tune in.",
+  // The same songs on Spotify, linked under the player: the id after
+  // /playlist/ in Share → Copy link.
+  playlist: "609w1YzsoSy1zuHmyBhYwu",
+  // The songs in play order, each with why it's there.
+  // TODO(otohime): the reasons are a first draft; make them yours
+  songs: [
+    {
+      title: "Nicole Kidman",
+      artist: "ADÉLA",
+      note: "A song about dressing up like a film star for one night. It turns any Tuesday into a premiere.",
+      colour: "pink",
+      video: "IXA6bQsVNjs",
+    },
+    {
+      title: "bye",
+      artist: "Altare",
+      note: "A goodbye that waves instead of slamming the door. Three minutes, then out, like any good exit.",
+      colour: "blue",
+      video: "agneRtEe-t8",
+    },
+    {
+      title: "Less than a Lover",
+      artist: "JENNIE",
+      note: "Lo-fi guitar, old keys and the space between friends and more. A whole summer in under three minutes.",
+      colour: "yellow",
+      video: "vR49dHUwMUA",
+    },
+  ] satisfies Song[],
 };

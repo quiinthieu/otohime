@@ -2,8 +2,10 @@
 
 import { box } from "@/components/figures";
 import { Chip, Machine, useTick } from "@/components/machine";
+import { newPad, pad, type Button } from "@/lib/machines";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useReducer } from "react";
+import { useEffect, useEffectEvent, useReducer } from "react";
 
 // A pocket console standing up, its screen a menu of the site. W is its
 // thickness, D the front's width.
@@ -14,24 +16,17 @@ const H = 176;
 const body = box(O, W, D, H, [0, 0, 0], 60);
 const cartridge = box(O, 12, 76, 14, [2, 18, H]);
 const MENU = [
-  { label: "WORK", href: "/work" },
-  { label: "PLAY", href: "/play" },
-  { label: "NOTES", href: "/notes" },
+  { label: "Work", href: "/work" },
+  { label: "Play", href: "/play" },
+  { label: "Notes", href: "/notes" },
+  { label: "Music", href: "/music" },
 ];
-
-type Button = "up" | "down" | "a";
-type Pad = { cursor: number; pressed: Button | null; hold: number };
-
-function pad(s: Pad, action: Button | "tick"): Pad {
-  if (action === "tick") return s.hold > 1 ? { ...s, hold: s.hold - 1 } : { ...s, pressed: null, hold: 0 };
-  const step = action === "up" ? -1 : action === "down" ? 1 : 0;
-  // a button stays down for two frames, so the press shows
-  return { cursor: (s.cursor + step + MENU.length) % MENU.length, pressed: action, hold: 2 };
-}
+const PITCH = 12; // the menu's line height on the screen
+const line = (i: number) => -142 + i * PITCH; // a menu line's baseline
 
 export function Handheld() {
   const router = useRouter();
-  const [s, dispatch] = useReducer(pad, { cursor: 0, pressed: null, hold: 0 });
+  const [s, dispatch] = useReducer(pad, MENU.length, newPad);
   useTick(s.pressed !== null, dispatch);
   const item = MENU[s.cursor];
   const lit = (button: Button) => (s.pressed === button ? "fig-lamp" : "fig-dark");
@@ -43,6 +38,28 @@ export function Handheld() {
     setTimeout(() => router.push(item.href), wait);
   }
 
+  // The arrow keys and Enter (or A) work the console from anywhere on the
+  // page, except in a form field.
+  const onKey = useEffectEvent((event: KeyboardEvent) => {
+    if (event.metaKey || event.ctrlKey || event.altKey || event.defaultPrevented) return;
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest("input, textarea, select, [contenteditable]")) return;
+    // ponytail: the console has the arrows only at the top of the page;
+    // scrolled down at all, they scroll it again
+    if (scrollY > 0) return;
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      event.preventDefault();
+      dispatch(event.key === "ArrowUp" ? "up" : "down");
+    } else if (event.key === "a" || event.key === "A" || (event.key === "Enter" && !target?.closest("a, button"))) {
+      open();
+    }
+  });
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => onKey(event);
+    window.addEventListener("keydown", listener);
+    return () => window.removeEventListener("keydown", listener);
+  }, []);
+
   return (
     <Machine
       label="Pocket console"
@@ -51,6 +68,20 @@ export function Handheld() {
       viewBox="0 0 230 310"
       busy={s.pressed !== null}
       readout={`Press A to open ${item.label.toLowerCase()}.`}
+      below={
+        // The menu as plain links, for screen readers; they show when tabbed to.
+        <nav aria-label="Pages" className="sr-only focus-within:not-sr-only">
+          <ul className="flex flex-wrap justify-center gap-2 pb-3">
+            {MENU.map(({ label, href }) => (
+              <li key={href}>
+                <Link href={href} className="btn btn-sm">
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      }
       controls={
         <>
           <Chip onClick={() => dispatch("up")}>▲ Up</Chip>
@@ -72,20 +103,26 @@ export function Handheld() {
         <path d="M8 -120h8M8 -112h8M8 -104h8" fill="none" strokeWidth={1.6} />
       </g>
       <g transform={body.onLit}>
-        {/* screen: bezel, power light, the menu */}
+        {/* The screen boots once the figure has printed: the power light,
+            a splash, then the menu (.boot and .splash in globals.css). */}
         <rect x={10} y={-166} width={92} height={74} rx={4} className="fig-dark" />
-        <circle cx={17} cy={-140} r={2.4} className="fig-lamp" />
-        <rect x={24} y={-158} width={64} height={56} rx={1.5} className="fig-lcd" />
-        {MENU.map(({ label }, i) => (
-          <text key={label} x={40} y={-139 + i * 14} className="fig-text lcd">
-            {label}
-          </text>
-        ))}
-        <polygon
-          points={`29,${-146 + s.cursor * 14} 35,${-142.5 + s.cursor * 14} 29,${-139 + s.cursor * 14}`}
-          className="lcd lcd-cursor"
-          stroke="none"
-        />
+        <circle cx={17} cy={-140} r={2.4} className="fig-lamp boot" style={{ animationDelay: "0.7s" }} />
+        <rect x={24} y={-158} width={64} height={56} rx={1.5} className="fig-lcd boot" style={{ animationDelay: "0.8s" }} />
+        <text x={56} y={-127} textAnchor="middle" className="fig-text lcd splash">
+          OTOHIME
+        </text>
+        <g className="boot" style={{ animationDelay: "1.6s" }}>
+          {MENU.map(({ label }, i) => (
+            <text key={label} x={40} y={line(i)} className="fig-text lcd">
+              {label.toUpperCase()}
+            </text>
+          ))}
+          <polygon
+            points={`29,${line(s.cursor) - 7} 35,${line(s.cursor) - 3.5} 29,${line(s.cursor)}`}
+            className="lcd lcd-cursor"
+            stroke="none"
+          />
+        </g>
         <text x={12} y={-80} className="fig-text" style={{ fontSize: 7 }}>
           POCKET
         </text>
