@@ -2,12 +2,16 @@
   "name": "otohime",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "bash scripts/dev.sh",
     "dev:next": "NODE_OPTIONS=--max-http-header-size=65536 next dev --port 4000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "prisma studio --port 4500"

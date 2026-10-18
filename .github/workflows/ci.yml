@@ -1,0 +1,177 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+  push:
+    branches: [main]
+
+# PRs: a new push cancels the stale run. main: runs queue in order and are
+# never cancelled mid-flight, so an older commit can't deploy after a newer one.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash # explicit bash = -eo pipefail
+
+env:
+  # Build-time placeholder only: Better Auth throws without a secret when NODE_ENV=production.
+  # Deployed functions read the real value from the Vercel project env at runtime.
+  BETTER_AUTH_SECRET: ci-placeholder-not-a-real-secret-0123456789abcdef
+
+jobs:
+  checks:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: otohime
+          POSTGRES_PASSWORD: otohime
+          POSTGRES_DB: otohime
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U otohime -d otohime"
+          --health-interval 2s
+          --health-timeout 5s
+          --health-retries 15
+    env:
+      DATABASE_URL: postgresql://otohime:otohime@localhost:5432/otohime
+      BETTER_AUTH_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v7
+      # Restored before npm ci so hashFiles never walks node_modules.
+      - uses: actions/cache@v6
+        with:
+          path: .next/cache
+          key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: nextjs-${{ hashFiles('package-lock.json') }}-
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Migrations match db/schema.ts
+        run: |
+          npx drizzle-kit check
+          npm run db:generate
+          # generate wrote files = schema changed without a committed migration
+          test -z "$(git status --porcelain db/migrations)"
+      - run: npm run build
+      - run: npm run db:migrate
+
+  preview:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_API: https://console.neon.tech/api/v2/projects/${{ vars.NEON_PROJECT_ID }}
+      NEON_BRANCH: preview/pr-${{ github.event.pull_request.number }}
+    steps:
+      - name: Preview settings are present
+        env:
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+        run: |
+          missing=$(for v in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID NEON_API_KEY NEON_PROJECT_ID; do [ -n "${!v}" ] || printf '%s ' "$v"; done)
+          if [ -n "$missing" ]; then echo "::error::Set these repo secrets/variables for previews: $missing(see README → Deploying)"; exit 1; fi
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: npm
+      - run: npm ci
+      - name: Neon branch (create or reuse)
+        run: |
+          # Retries cover Neon's 423 "project has running operations" (concurrent PRs).
+          neon() { curl -fsS --retry 6 --retry-delay 10 --retry-all-errors -H "Authorization: Bearer $NEON_API_KEY" -H "Content-Type: application/json" "$@"; }
+          id=$(neon "$NEON_API/branches?search=$NEON_BRANCH" | jq -r --arg n "$NEON_BRANCH" 'first(.branches[] | select(.name == $n) | .id)')
+          if [ -z "$id" ]; then
+            # Child of the default (production) branch; the expiry backstops a missed cleanup.
+            body=$(jq -n --arg n "$NEON_BRANCH" --arg e "$(date -u -d '+14 days' +%FT%TZ)" \
+              '{branch: {name: $n, expires_at: $e}, endpoints: [{type: "read_write"}]}')
+            id=$(neon -X POST "$NEON_API/branches" -d "$body" | jq -r .branch.id)
+          fi
+          uri() { neon "$NEON_API/connection_uri?branch_id=$id&database_name=neondb&role_name=neondb_owner&pooled=$1" | jq -r .uri; }
+          direct=$(uri false)
+          pooled=$(uri true)
+          # Child branches inherit production's role password: mask it before anything can print it.
+          echo "::add-mask::$(node -p 'new URL(process.argv[1]).password' "$direct")"
+          { echo "DATABASE_URL=$direct"; echo "DATABASE_URL_POOLED=$pooled"; } >> "$GITHUB_ENV"
+      - run: npx vercel@64 pull --yes --environment=preview
+      - run: npx vercel@64 build
+      - run: npm run db:migrate # DATABASE_URL = direct URL of the PR branch
+      - name: Deploy
+        id: deploy
+        run: |
+          # Assign first: a failed deploy inside echo "$(…)" would not fail the step.
+          url=$(npx vercel@64 deploy --prebuilt --archive=tgz --env DATABASE_URL="$DATABASE_URL_POOLED")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Smoke test (vercel curl adds the protection bypass)
+        env:
+          URL: ${{ steps.deploy.outputs.url }}
+        run: npx vercel@64 curl "$URL/api/health" --yes -- --fail --silent --show-error
+      - name: Comment preview URL
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          URL: ${{ steps.deploy.outputs.url }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr comment "$PR" --edit-last --create-if-none --body "Preview: $URL (Neon branch $NEON_BRANCH)"
+
+  production:
+    needs: checks
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: npm
+      - run: npm ci
+      - run: npx vercel@64 pull --yes --environment=production
+      # Build before migrating: a failed build never leaves prod migrated ahead of its code.
+      - run: npx vercel@64 build --prod
+      - run: npm run db:migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_UNPOOLED }}
+      - run: npx vercel@64 deploy --prebuilt --prod --archive=tgz
+      - run: curl -fsS --retry 5 --retry-all-errors --retry-delay 5 https://otohime.dev/api/health
+
+  cleanup:
+    if: github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    env:
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_API: https://console.neon.tech/api/v2/projects/${{ vars.NEON_PROJECT_ID }}
+      NEON_BRANCH: preview/pr-${{ github.event.pull_request.number }}
+    steps:
+      - name: Delete Neon branch (no-op if absent)
+        run: |
+          neon() { curl -fsS --retry 6 --retry-delay 10 --retry-all-errors -H "Authorization: Bearer $NEON_API_KEY" "$@"; }
+          id=$(neon "$NEON_API/branches?search=$NEON_BRANCH" | jq -r --arg n "$NEON_BRANCH" 'first(.branches[] | select(.name == $n) | .id)')
+          if [ -n "$id" ]; then neon -X DELETE "$NEON_API/branches/$id" > /dev/null; fi
