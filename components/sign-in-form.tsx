@@ -1,6 +1,5 @@
 "use client";
 
-import { BrandMark } from "@/components/brand-mark";
 import { Doodle } from "@/components/doodles";
 import { Field } from "@/components/field";
 import { authClient } from "@/lib/auth-client";
@@ -43,8 +42,7 @@ export function SignInForm() {
 
   return (
     <div>
-      <BrandMark />
-      <h1 className="mt-8 text-[2rem] sm:text-[2.5rem]">
+      <h1 className="text-[2rem] sm:text-[2.5rem]">
         {isCreate ? (
           <>
             Create an <span className="squiggle">account</span>
