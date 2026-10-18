@@ -1,4 +1,5 @@
 import { Handheld } from "@/components/handheld";
+import { Switchboard } from "@/components/switchboard";
 import { site } from "@/content/site";
 import { ViewTransition } from "react";
 
@@ -29,15 +30,6 @@ export default function HomePage() {
                 {line}
               </p>
             ))}
-            <ul className="mt-8 flex flex-wrap gap-3">
-              {site.links.map(({ label, href }) => (
-                <li key={href}>
-                  <a href={href} className="btn">
-                    {label} <span aria-hidden="true">→</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
           <div>
             <h2 className="caption">Now</h2>
@@ -49,6 +41,14 @@ export default function HomePage() {
                 </div>
               ))}
             </dl>
+          </div>
+        </section>
+        <section aria-labelledby="elsewhere" className="mt-12">
+          <h2 id="elsewhere" className="caption">
+            Elsewhere
+          </h2>
+          <div className="mt-4">
+            <Switchboard lines={site.lines} />
           </div>
         </section>
       </div>

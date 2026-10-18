@@ -795,6 +795,12 @@
     opacity: 0.35;
   }
 
+  /* the picked one of a set, like the switchboard's line */
+  .chip[aria-pressed="true"] {
+    background: var(--fig, var(--yellow));
+    color: var(--on-swatch);
+  }
+
   .stat dt {
     color: var(--muted);
     font-size: 11px;

@@ -1,19 +1,44 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
-  claw,
+  boardBusy,
   conveyor,
   conveyorBusy,
   LANES,
   newClaw,
   newConveyor,
+  claw,
+  newBoard,
   newPad,
   pad,
+  PLUG,
   SLOTS,
+  switchboard,
+  type BoardAction,
   type ClawAction,
   type ConveyorAction,
   type PadAction,
 } from "./machines.ts";
+
+const call = (...actions: BoardAction[]) => actions.reduce(switchboard, newBoard());
+
+test("a call plugs in, rings, then someone picks up", () => {
+  const ringing = call(0, ...Array<BoardAction>(PLUG).fill("tick"));
+  assert.equal(boardBusy(ringing), true);
+  const s = call(0, "settle");
+  assert.equal(boardBusy(s), false);
+  assert.equal(s.line, 0);
+  assert.equal(s.calls, 1);
+  assert.equal(switchboard(s, 0), s);
+});
+
+test("another line mid-call moves the cord; the same line carries on", () => {
+  const s = call(0, "tick", "tick", 2);
+  assert.equal(s.line, 2);
+  assert.equal(s.t, 0);
+  assert.equal(s.calls, 0);
+  assert.equal(call(0, "tick", 0).t, 1);
+});
 
 const tap = (...actions: PadAction[]) => actions.reduce(pad, newPad(4));
 

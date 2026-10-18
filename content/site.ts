@@ -1,6 +1,9 @@
 import type { Swatch } from "@/components/figures";
 
 export type Game = { title: string; note: string; colour: Swatch };
+// A way to reach me, as a line on the home page's switchboard. code is the
+// line's label on the board.
+export type Line = { label: string; handle: string; href: string; code: string; colour: Swatch };
 // video: the song's YouTube upload, the id after watch?v= in its link.
 export type Song = { title: string; artist: string; note: string; colour: Swatch; video: string };
 
@@ -20,8 +23,20 @@ export const site = {
     { what: "Playing", note: "Hades II, one more run" },
     { what: "Reading", note: "Designing Data-Intensive Applications, again" },
   ],
-  // TODO(otohime): add GitHub, a game profile, anything else
-  links: [{ label: "Email", href: "mailto:hello@otohime.dev" }],
+  lines: [
+    { label: "Telegram", handle: "@otohime73", href: "https://t.me/otohime73", code: "TG", colour: "blue" },
+    { label: "X", handle: "@otohime73", href: "https://x.com/otohime73", code: "X", colour: "yellow" },
+    // TODO(otohime): the handle should be the profile's display name
+    {
+      label: "Spotify",
+      handle: "otohime",
+      href: "https://open.spotify.com/user/2rjk8knzs0fyfc7oovb2zezqw",
+      code: "SP",
+      colour: "mint",
+    },
+    // TODO(otohime): a first draft
+    { label: "Email", handle: "hello@otohime.dev", href: "mailto:hello@otohime.dev", code: "@", colour: "coral" },
+  ] satisfies Line[],
   // TODO(otohime)
   notes: [
     {

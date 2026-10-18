@@ -15,7 +15,7 @@ export function useTick(running: boolean, dispatch: (action: "tick") => void) {
 }
 
 // Under reduced motion a press jumps straight to where the machine rests.
-export function press<A extends string>(dispatch: (action: A | "settle") => void, action: A) {
+export function press<A extends string | number>(dispatch: (action: A | "settle") => void, action: A) {
   dispatch(action);
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) dispatch("settle");
 }
