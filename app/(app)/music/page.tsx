@@ -1,6 +1,6 @@
 import { FigTitle, swatches } from "@/components/figures";
 import { SpotifyPlayer } from "@/components/spotify-player";
-import { site, type Song } from "@/content/site";
+import { site } from "@/content/site";
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
 
@@ -19,7 +19,7 @@ export default function MusicPage() {
         </div>
         <h2 className="caption mt-12">On the tape</h2>
         <ul className="mt-3 grid gap-x-10 sm:grid-cols-2">
-          {site.songs.map((song: Song) => (
+          {site.songs.map((song) => (
             <li key={song.title} className="flex items-start gap-3 border-t border-line py-3">
               <span
                 aria-hidden="true"
@@ -31,7 +31,7 @@ export default function MusicPage() {
                   <span className="font-semibold">{song.title}</span>{" "}
                   <span className="text-muted">· {song.artist}</span>
                 </span>
-                {song.note ? <span className="text-muted">{song.note}</span> : null}
+                <span className="text-muted">{song.note}</span>
               </span>
             </li>
           ))}

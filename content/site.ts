@@ -3,7 +3,7 @@ import type { Swatch } from "@/components/figures";
 export type Game = { title: string; note: string; colour: Swatch };
 // track: the id after /track/ in Share → Copy song link. Optional; it lets
 // the deck show which song is playing.
-export type Song = { title: string; artist: string; note?: string; colour: Swatch; track?: string };
+export type Song = { title: string; artist: string; note: string; colour: Swatch; track?: string };
 
 // The words on the public pages, in one place. A first draft: everything
 // marked TODO(otohime) is invented and waits for the real thing.
@@ -67,11 +67,29 @@ export const site = {
   music: "Songs I keep coming back to, on one tape. Press play on the deck.",
   // The id after /playlist/ in Share → Copy link.
   playlist: "609w1YzsoSy1zuHmyBhYwu",
-  // The playlist's songs, in its order.
-  // TODO(otohime): a note on each, saying why
+  // The playlist's songs, in its order, each with why it's there.
+  // TODO(otohime): the reasons are a first draft; make them yours
   songs: [
-    { title: "Nicole Kidman", artist: "ADÉLA", colour: "pink", track: "70cHKK8bHAfJrOGVnfRG9J" },
-    { title: "bye", artist: "Altare", colour: "blue", track: "4dTmQfqA75KrfynUF1TUX9" },
-    { title: "Less than a Lover", artist: "JENNIE", colour: "yellow", track: "19UnXjpLshSLobPspdyxlD" },
+    {
+      title: "Nicole Kidman",
+      artist: "ADÉLA",
+      note: "A song about dressing up like a film star for one night. It turns any Tuesday into a premiere.",
+      colour: "pink",
+      track: "70cHKK8bHAfJrOGVnfRG9J",
+    },
+    {
+      title: "bye",
+      artist: "Altare",
+      note: "A goodbye that waves instead of slamming the door. Three minutes, then out, like any good exit.",
+      colour: "blue",
+      track: "4dTmQfqA75KrfynUF1TUX9",
+    },
+    {
+      title: "Less than a Lover",
+      artist: "JENNIE",
+      note: "Lo-fi guitar, old keys and the space between friends and more. A whole summer in under three minutes.",
+      colour: "yellow",
+      track: "19UnXjpLshSLobPspdyxlD",
+    },
   ] satisfies Song[],
 };
