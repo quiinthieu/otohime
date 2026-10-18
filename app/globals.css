@@ -624,6 +624,16 @@
     animation: blink 1s steps(1) infinite;
   }
 
+  /* The console on the front page boots: each part waits its turn
+     (animation-delay inline), and the splash comes and goes. */
+  .boot {
+    animation: boot 0.01s steps(1) both;
+  }
+
+  .splash {
+    animation: splash 1.6s steps(1) both;
+  }
+
   .fig-belt {
     fill: none;
     stroke: #807766;
@@ -922,6 +932,24 @@
   }
 }
 
+@keyframes boot {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes splash {
+  0% {
+    opacity: 0;
+  }
+  56% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @keyframes vu {
   0% {
     rotate: -22deg;
@@ -1030,6 +1058,7 @@
   ::before,
   ::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }

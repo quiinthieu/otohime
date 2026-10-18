@@ -7,10 +7,29 @@ import {
   LANES,
   newClaw,
   newConveyor,
+  newPad,
+  pad,
   SLOTS,
   type ClawAction,
   type ConveyorAction,
+  type PadAction,
 } from "./machines.ts";
+
+const tap = (...actions: PadAction[]) => actions.reduce(pad, newPad(4));
+
+test("the console's cursor wraps around the menu both ways", () => {
+  assert.equal(tap("up").cursor, 3);
+  assert.equal(tap("down", "down", "down", "down").cursor, 0);
+  assert.equal(tap("a").cursor, 0);
+});
+
+test("a console button stays down for two frames, then lets go", () => {
+  assert.equal(tap("a").pressed, "a");
+  assert.equal(tap("a", "tick").pressed, "a");
+  assert.equal(tap("a", "tick", "tick").pressed, null);
+  assert.equal(tap("down", "settle").pressed, null);
+  assert.equal(tap("down", "settle").cursor, 1);
+});
 
 const press = (n: number, action: ClawAction): ClawAction[] => Array(n).fill(action);
 const play = (start = newClaw(6), ...actions: ClawAction[]) => actions.reduce(claw, start);

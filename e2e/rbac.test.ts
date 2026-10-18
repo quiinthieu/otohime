@@ -74,6 +74,11 @@ test("the public pages are open to everyone", async () => {
   }
 });
 
+test("the front page is an entrance, without the sidebar", async () => {
+  assert.doesNotMatch(await (await page("/")).text(), /aria-label="Main"/);
+  assert.match(await (await page("/work")).text(), /aria-label="Main"/);
+});
+
 test("a plain user can't list users or raise their own role", async () => {
   assert.equal((await api("/admin/list-users", users.plain.cookie)).status, 403);
   assert.equal((await api("/update-user", users.plain.cookie, { role: "owner" })).status, 400);

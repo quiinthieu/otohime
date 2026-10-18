@@ -11,6 +11,25 @@ function settle<S>(state: S, frame: (s: S) => S, busy: (s: S) => boolean): S {
   return state;
 }
 
+/* Pocket console: a menu cursor, and a button that stays down for two frames
+   so the press shows. */
+
+export type Button = "up" | "down" | "a";
+export type Pad = { items: number; cursor: number; pressed: Button | null; hold: number };
+export type PadAction = Button | Frame;
+
+export const newPad = (items: number): Pad => ({ items, cursor: 0, pressed: null, hold: 0 });
+
+const padBusy = (s: Pad) => s.pressed !== null;
+const padFrame = (s: Pad): Pad => (s.hold > 1 ? { ...s, hold: s.hold - 1 } : { ...s, pressed: null, hold: 0 });
+
+export function pad(s: Pad, action: PadAction): Pad {
+  if (action === "tick") return padFrame(s);
+  if (action === "settle") return settle(s, padFrame, padBusy);
+  const step = action === "up" ? -1 : action === "down" ? 1 : 0;
+  return { ...s, cursor: (s.cursor + step + s.items) % s.items, pressed: action, hold: 2 };
+}
+
 /* Claw machine. Slot 0 is over the prize chute; capsules sit in 1..SLOTS. */
 
 export const SLOTS = 6;
