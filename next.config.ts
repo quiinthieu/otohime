@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  // forbidden() for gated pages (lib/dal.ts)
+  experimental: { authInterrupts: true },
   turbopack: {
     rules: {
       "*.css": {

@@ -1,16 +1,24 @@
 import { BrandMark } from "@/components/brand-mark";
 import { Doodle } from "@/components/doodles";
-import { NavLinks, NavList, SignOutButton, type NavItem } from "@/components/nav-links";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import {
+  NavLinks,
+  NavList,
+  SignOutButton,
+  StopImpersonatingButton,
+  type NavItem,
+} from "@/components/nav-links";
+import { getSession } from "@/lib/dal";
+import { can } from "@/lib/permissions";
 import { Suspense } from "react";
 
 const BASE: NavItem[] = [{ href: "/", label: "Home", doodle: "shell" }];
+const ADMIN: NavItem[] = [
+  { href: "/admin/users", label: "Users", doodle: "fish" },
+  { href: "/admin/roles", label: "Roles", doodle: "star" },
+];
 
-// Pages in this group block on the server (export const instant = false), so
-// redirect() and forbidden() keep real 307/403 status codes.
-// ponytail: never wrap {children} in Suspense or add a loading.tsx here; either
-// one streams gated pages as 200. Navigations block until the page is ready.
+// The chrome prerenders; anything that reads the session streams in behind
+// its own boundary, and pages stream behind loading.tsx.
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[17rem_1fr]">
@@ -45,24 +53,35 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Doodle name="close" className="size-6" />
         </button>
         <Suspense fallback={<NavList items={BASE} />}>
-          <NavLinks items={BASE} />
+          <Nav />
         </Suspense>
         <hr className="mt-auto" />
-        <Suspense fallback={<div className="skeleton h-24" />}>
+        <Suspense fallback={<div className="skeleton h-28" />}>
           <UserCard />
         </Suspense>
       </nav>
       <main id="main" tabIndex={-1} className="min-w-0 outline-none">
+        <Suspense fallback={null}>
+          <ImpersonationBanner />
+        </Suspense>
         <div className="mx-auto max-w-5xl px-4 py-6 sm:px-8 lg:py-10">{children}</div>
       </main>
     </div>
   );
 }
 
+// The nav only hints; every gated page checks again (lib/dal.ts).
+async function Nav() {
+  const session = await getSession();
+  const admin = can(session?.user.role, { user: ["list"] });
+  return <NavLinks items={admin ? [...BASE, ...ADMIN] : BASE} />;
+}
+
 async function UserCard() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   if (!session) return null;
   const { name, email } = session.user;
+  const role = session.user.role ?? "user";
 
   return (
     <div className="grid gap-3">
@@ -75,7 +94,26 @@ async function UserCard() {
           <p className="truncate text-sm text-muted">{email}</p>
         </div>
       </div>
+      <p>
+        <span className="badge" data-role={role}>
+          {role}
+        </span>
+      </p>
       <SignOutButton />
+    </div>
+  );
+}
+
+async function ImpersonationBanner() {
+  const session = await getSession();
+  if (!session?.session.impersonatedBy) return null;
+
+  return (
+    <div className="banner">
+      <p>
+        You&apos;re impersonating {session.user.name} ({session.user.email})
+      </p>
+      <StopImpersonatingButton />
     </div>
   );
 }

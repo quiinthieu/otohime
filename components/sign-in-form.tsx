@@ -18,6 +18,10 @@ export function SignInForm() {
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email"));
     const password = String(form.get("password"));
+    // Same-site paths only ("//x" and "/\x" leave the site); Better Auth
+    // checks callbackURL again on the server.
+    const raw = new URLSearchParams(location.search).get("next");
+    const next = raw && /^\/(?![/\\])/.test(raw) ? raw : "/";
     setMessage("");
     setBusy(true);
 
@@ -27,17 +31,19 @@ export function SignInForm() {
           email,
           password,
         })
-      : await authClient.signIn.email({ email, password });
-
-    setBusy(false);
+      : await authClient.signIn.email({ email, password, callbackURL: next });
 
     if (result.error) {
+      setBusy(false);
       setMessage(result.error.message ?? "Could not sign in.");
       return;
     }
 
-    router.push("/");
-    router.refresh();
+    // Sign-in: Better Auth's client follows callbackURL with a full page load.
+    if (isCreate) {
+      router.push(next);
+      router.refresh();
+    }
   }
 
   return (

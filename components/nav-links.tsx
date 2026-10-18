@@ -54,3 +54,20 @@ export function SignOutButton() {
     </button>
   );
 }
+
+export function StopImpersonatingButton() {
+  const router = useRouter();
+  return (
+    <button
+      type="button"
+      className="btn btn-sm"
+      onClick={async () => {
+        await authClient.admin.stopImpersonating();
+        router.push("/admin/users");
+        router.refresh();
+      }}
+    >
+      Stop impersonating
+    </button>
+  );
+}
