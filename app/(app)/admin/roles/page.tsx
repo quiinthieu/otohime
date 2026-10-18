@@ -1,3 +1,4 @@
+import { FigTitle } from "@/components/figures";
 import { requirePermission } from "@/lib/dal";
 import { can, roles, statements, type Permissions, type RoleName } from "@/lib/permissions";
 import type { Metadata } from "next";
@@ -11,10 +12,9 @@ export default async function RolesPage() {
 
   return (
     <div className="rise">
-      <h1 className="text-[2rem]">Roles</h1>
-      <p className="mt-2 text-muted">
-        What each role can do. Roles are defined in code, so this page is read-only.
-      </p>
+      <FigTitle n="04" hint="read-only: roles live in code">
+        Roles
+      </FigTitle>
       <p className="mt-2 text-muted">
         Ranks run owner › admin › user. You can only manage people ranked below you, and only
         give out roles below your own.
@@ -36,7 +36,7 @@ export default async function RolesPage() {
           {Object.entries(statements).map(([resource, actions]) => (
             <tbody key={resource}>
               <tr>
-                <th scope="rowgroup" colSpan={names.length + 1} className="font-display text-base">
+                <th scope="rowgroup" colSpan={names.length + 1} className="font-semibold">
                   {resource}
                 </th>
               </tr>

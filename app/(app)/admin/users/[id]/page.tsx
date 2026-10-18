@@ -1,3 +1,4 @@
+import { FigTitle } from "@/components/figures";
 import { SessionList } from "@/components/session-list";
 import { UserActions } from "@/components/user-actions";
 import { auth } from "@/lib/auth";
@@ -44,26 +45,22 @@ export default async function UserPage({ params }: PageProps<"/admin/users/[id]"
       <Link href="/admin/users" className="link w-fit">
         ← Users
       </Link>
-      <section className="card flex flex-wrap items-center gap-4 p-5">
-        <span className="avatar size-14 text-2xl" aria-hidden="true">
-          {user.name.slice(0, 1).toUpperCase()}
-        </span>
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-[1.75rem]">{user.name}</h1>
-          <p className="truncate text-muted">{user.email}</p>
-          <p className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="badge" data-role={role}>
-              {role}
+      <div>
+        <FigTitle n="03" hint={user.email}>
+          {user.name}
+        </FigTitle>
+        <p className="mt-2 flex flex-wrap items-center gap-2">
+          <span className="badge" data-role={role}>
+            {role}
+          </span>
+          {user.banned ? (
+            <span className="badge" data-tone="danger">
+              Banned
             </span>
-            {user.banned ? (
-              <span className="badge" data-tone="danger">
-                Banned
-              </span>
-            ) : null}
-            <span className="text-sm text-muted">Joined {joined.format(new Date(user.createdAt))}</span>
-          </p>
-        </div>
-      </section>
+          ) : null}
+          <span className="text-muted">joined {joined.format(new Date(user.createdAt))}</span>
+        </p>
+      </div>
 
       {manageable ? (
         <UserActions
@@ -78,7 +75,7 @@ export default async function UserPage({ params }: PageProps<"/admin/users/[id]"
           sessions={<SessionList sessions={sessions} empty="Not signed in anywhere." />}
         />
       ) : (
-        <p className="alert" data-tone="sea">
+        <p className="alert" data-tone="info">
           {user.id === me.user.id
             ? "This is you. Manage your own account from the Account page."
             : "Their role is at or above yours, so this page is read-only."}

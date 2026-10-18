@@ -1,4 +1,4 @@
-import { Notice } from "@/components/figures";
+import { FigTitle, Notice } from "@/components/figures";
 import { auth } from "@/lib/auth";
 import { requirePermission } from "@/lib/dal";
 import type { Metadata } from "next";
@@ -33,12 +33,9 @@ export default async function UsersPage({ searchParams }: PageProps<"/admin/user
 
   return (
     <div className="rise">
-      <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-[2rem]">Users</h1>
-        <span className="badge" data-tone="plain">
-          {total}
-        </span>
-      </div>
+      <FigTitle n="03" hint={`${total} ${total === 1 ? "person" : "people"}${q ? ` matching “${q}”` : ""}`}>
+        Users
+      </FigTitle>
       <form role="search" className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-end">
         <div className="flex-1">
           <label htmlFor="q" className="label">
@@ -84,7 +81,7 @@ export default async function UsersPage({ searchParams }: PageProps<"/admin/user
                         Banned
                       </span>
                     ) : (
-                      <span className="badge">Active</span>
+                      <span className="badge" data-tone="ok">Active</span>
                     )}
                   </td>
                   <td className="hidden sm:table-cell">

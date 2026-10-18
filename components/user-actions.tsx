@@ -71,7 +71,7 @@ export function UserActions({
       <div className="grid gap-5 lg:grid-cols-2">
         {assignable.length > 1 ? (
           <form onSubmit={saveRole} className="card grid content-start gap-3 p-5">
-            <h2 id="role-heading" className="text-xl">
+            <h2 id="role-heading" className="caption">
               Role
             </h2>
             <select
@@ -91,8 +91,8 @@ export function UserActions({
             </button>
           </form>
         ) : null}
-        <section className="card grid content-start gap-3 p-5">
-          <h2 className="text-xl">Access</h2>
+        <section className={`card grid content-start gap-3 p-5 ${assignable.length > 1 ? "" : "lg:col-span-2"}`}>
+          <h2 className="caption">Access</h2>
           {user.banned ? (
             <>
               <p className="alert">Banned{user.banReason ? `: ${user.banReason}` : "."}</p>
@@ -126,7 +126,7 @@ export function UserActions({
         </section>
         <section className="card grid gap-3 p-5 lg:col-span-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-xl">Sessions</h2>
+            <h2 className="caption">Sessions</h2>
             <button
               type="button"
               className="btn btn-sm"
@@ -143,7 +143,7 @@ export function UserActions({
           {sessions}
         </section>
         <section className="card grid gap-3 border-danger p-5 lg:col-span-2">
-          <h2 className="text-xl">Danger zone</h2>
+          <h2 className="caption">Danger zone</h2>
           <p className="text-muted">Deleting removes their account and every session. It can&apos;t be undone.</p>
           <button
             type="button"
@@ -153,7 +153,7 @@ export function UserActions({
             Delete user…
           </button>
           <dialog ref={dialog} className="dialog" aria-labelledby="delete-title">
-            <h2 id="delete-title" className="text-xl">
+            <h2 id="delete-title" className="font-semibold">
               Delete {user.name}?
             </h2>
             <p className="mt-2 text-muted">Their account and sessions go away for good.</p>
