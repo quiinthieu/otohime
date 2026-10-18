@@ -1,49 +1,33 @@
 "use client";
 
-import { BrandMark } from "@/components/brand-mark";
+import { Field } from "@/components/field";
+import { FigTitle } from "@/components/figures";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
-function Arrow() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M3.5 8h9M8.5 4l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 export function SignInForm() {
   const router = useRouter();
   const [mode, setMode] = useState<"sign-in" | "create">("sign-in");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [visible, setVisible] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const isCreate = mode === "create";
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const email = String(form.get("email"));
+    const password = String(form.get("password"));
     setMessage("");
     setBusy(true);
 
-    const result =
-      mode === "create"
-        ? await authClient.signUp.email({ name, email, password })
-        : await authClient.signIn.email({ email, password });
+    const result = isCreate
+      ? await authClient.signUp.email({
+          name: String(form.get("name")),
+          email,
+          password,
+        })
+      : await authClient.signIn.email({ email, password });
 
     setBusy(false);
 
@@ -56,105 +40,62 @@ export function SignInForm() {
     router.refresh();
   }
 
-  const isCreate = mode === "create";
-
   return (
-    <div className="flex flex-col items-center text-center">
-      <BrandMark />
-      <h1 className="mt-8 text-[2rem] leading-tight font-bold tracking-tight text-paper">
-        {isCreate ? "Create an account" : "Welcome back!"}
-      </h1>
-      <p className="mt-2 text-sm text-mist">
+    <div>
+      <FigTitle n="02">{isCreate ? "Create an account" : "Sign in"}</FigTitle>
+      <p className="mt-2 text-muted">
         {isCreate
-          ? "A personal place at otohime.dev."
-          : "Pick up where you left off, and keep things moving."}
+          ? "Pick a name, an email and a password."
+          : "Type your email and password, then log in."}
       </p>
-      <form
-        onSubmit={onSubmit}
-        className="mt-8 flex w-full flex-col gap-3 text-left"
-      >
-        {isCreate ? (
-          <div>
-            <label htmlFor="name" className="sr-only">
-              Name
-            </label>
-            <input
-              id="name"
-              className="field-input"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              autoComplete="name"
-              placeholder="Your name"
-              required
-            />
-          </div>
+      <form onSubmit={onSubmit} className="mt-6 grid gap-4">
+        {isCreate ? <Field label="Name" name="name" autoComplete="name" required /> : null}
+        <Field
+          label="Email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder="you@otohime.dev"
+          required
+        />
+        <Field
+          label="Password"
+          name="password"
+          type="password"
+          autoComplete={isCreate ? "new-password" : "current-password"}
+          minLength={8}
+          hint={isCreate ? "At least 8 characters." : undefined}
+          required
+        />
+        {message ? (
+          <p role="alert" className="alert">
+            {message}
+          </p>
         ) : null}
         <div>
-          <label htmlFor="email" className="sr-only">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            className="field-input"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            autoComplete="email"
-            placeholder="you@otohime.dev"
-            required
-          />
-        </div>
-        <div className="relative">
-          <label htmlFor="password" className="sr-only">
-            Password
-          </label>
-          <input
-            id="password"
-            type={visible ? "text" : "password"}
-            className="field-input pr-16"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            autoComplete={isCreate ? "new-password" : "current-password"}
-            minLength={8}
-            required
-          />
-          <button
-            type="button"
-            className="field-reveal"
-            onClick={() => setVisible((current) => !current)}
-          >
-            {visible ? "Hide" : "Show"}
+          <button type="submit" className="btn btn-primary" disabled={busy}>
+            {busy
+              ? isCreate
+                ? "Creating…"
+                : "Signing in…"
+              : isCreate
+                ? "Create account"
+                : "Log in"}
+            {busy ? null : <span aria-hidden="true">→</span>}
           </button>
         </div>
-        <button type="submit" className="btn-primary mt-2" disabled={busy}>
-          {busy
-            ? isCreate
-              ? "Creating…"
-              : "Signing in…"
-            : isCreate
-              ? "Create account"
-              : "Log in"}
-          {busy ? null : <Arrow />}
-        </button>
       </form>
-      {message ? (
-        <p className="mt-4 text-sm text-danger" role="alert">
-          {message}
-        </p>
-      ) : null}
-      <p className="mt-6 text-sm text-mist">
-        {isCreate ? "Already have an account? " : "Don't have an account? "}
+      <p className="mt-6 text-muted">
+        {isCreate ? "Already have an account? " : "No account yet? "}
         <button
           type="button"
-          className="btn-text"
+          className="link text-ink"
           onClick={() => {
             setMessage("");
-            setMode((current) =>
-              current === "sign-in" ? "create" : "sign-in",
-            );
+            setMode(isCreate ? "sign-in" : "create");
           }}
         >
-          {isCreate ? "Log in" : "Sign up"}
+          {isCreate ? "Log in" : "Create one"}
         </button>
       </p>
     </div>
