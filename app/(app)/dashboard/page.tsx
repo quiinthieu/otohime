@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   return (
     <div className="rise">
       <FigTitle
-        n="06"
+        n="07"
         hint={
           <>
             signed in as {user.email}{" "}

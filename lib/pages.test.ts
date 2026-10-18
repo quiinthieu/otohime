@@ -1,0 +1,29 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { site } from "../content/site.ts";
+import { CONSOLE_MENU, LCD, menuBaseline, PUBLIC_PAGES } from "./pages.ts";
+
+test("/projects is the sixth public page", () => {
+  assert.equal(PUBLIC_PAGES[5].href, "/projects");
+});
+
+test("the console menu is the public pages minus Home, in order", () => {
+  assert.deepEqual(
+    CONSOLE_MENU,
+    PUBLIC_PAGES.filter((page) => page.href !== "/"),
+  );
+  assert.equal(CONSOLE_MENU.length, 5);
+});
+
+test("every console menu line fits inside the LCD", () => {
+  for (let i = 0; i < CONSOLE_MENU.length; i++) {
+    const y = menuBaseline(i);
+    assert.ok(y >= LCD.y + 8 && y <= LCD.y + LCD.h - 3, `line ${i} at ${y}`);
+  }
+});
+
+test("the projects list and intro are in site", () => {
+  assert.ok(Array.isArray(site.projectList));
+  assert.equal(typeof site.projects, "string");
+  assert.ok(site.projects.length > 0);
+});

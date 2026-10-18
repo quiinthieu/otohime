@@ -2,6 +2,7 @@
 
 import { box } from "@/components/figures";
 import { Chip, Machine, useTick } from "@/components/machine";
+import { CONSOLE_MENU, LCD, menuBaseline } from "@/lib/pages";
 import { newPad, pad, type Button } from "@/lib/machines";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,14 +16,7 @@ const D = 112;
 const H = 176;
 const body = box(O, W, D, H, [0, 0, 0], 60);
 const cartridge = box(O, 12, 76, 14, [2, 18, H]);
-const MENU = [
-  { label: "Work", href: "/work" },
-  { label: "Play", href: "/play" },
-  { label: "Notes", href: "/notes" },
-  { label: "Music", href: "/music" },
-];
-const PITCH = 12; // the menu's line height on the screen
-const line = (i: number) => -142 + i * PITCH; // a menu line's baseline
+const MENU = CONSOLE_MENU;
 
 export function Handheld() {
   const router = useRouter();
@@ -107,18 +101,18 @@ export function Handheld() {
             a splash, then the menu (.boot and .splash in globals.css). */}
         <rect x={10} y={-166} width={92} height={74} rx={4} className="fig-dark" />
         <circle cx={17} cy={-140} r={2.4} className="fig-lamp boot" style={{ animationDelay: "0.7s" }} />
-        <rect x={24} y={-158} width={64} height={56} rx={1.5} className="fig-lcd boot" style={{ animationDelay: "0.8s" }} />
+        <rect x={24} y={LCD.y} width={64} height={LCD.h} rx={1.5} className="fig-lcd boot" style={{ animationDelay: "0.8s" }} />
         <text x={56} y={-127} textAnchor="middle" className="fig-text lcd splash">
           OTOHIME
         </text>
         <g className="boot" style={{ animationDelay: "1.6s" }}>
           {MENU.map(({ label }, i) => (
-            <text key={label} x={40} y={line(i)} className="fig-text lcd">
+            <text key={label} x={40} y={menuBaseline(i)} className="fig-text lcd">
               {label.toUpperCase()}
             </text>
           ))}
           <polygon
-            points={`29,${line(s.cursor) - 7} 35,${line(s.cursor) - 3.5} 29,${line(s.cursor)}`}
+            points={`29,${menuBaseline(s.cursor) - 7} 35,${menuBaseline(s.cursor) - 3.5} 29,${menuBaseline(s.cursor)}`}
             className="lcd lcd-cursor"
             stroke="none"
           />

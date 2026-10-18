@@ -69,7 +69,7 @@ test("signed-out visitors are redirected before anything streams", async () => {
 });
 
 test("the public pages are open to everyone", async () => {
-  for (const path of ["/", "/work", "/play", "/notes", "/music"]) {
+  for (const path of ["/", "/work", "/play", "/notes", "/music", "/projects"]) {
     assert.equal((await page(path)).status, 200, path);
   }
 });
@@ -77,6 +77,12 @@ test("the public pages are open to everyone", async () => {
 test("the front page is an entrance, without the sidebar", async () => {
   assert.doesNotMatch(await (await page("/")).text(), /aria-label="Main"/);
   assert.match(await (await page("/work")).text(), /aria-label="Main"/);
+});
+
+test("the projects page sits in the sidebar and shows its empty state", async () => {
+  const html = await (await page("/projects")).text();
+  assert.match(html, /aria-label="Main"/);
+  assert.match(html, /Nothing on the bench yet/);
 });
 
 test("a plain user can't list users or raise their own role", async () => {

@@ -2,17 +2,12 @@ import { Masthead } from "@/components/masthead";
 import { NavLinks, NavList, type NavItem } from "@/components/nav-links";
 import { site } from "@/content/site";
 import { getSession } from "@/lib/dal";
+import { PUBLIC_PAGES } from "@/lib/pages";
 import { can } from "@/lib/permissions";
 import { Suspense } from "react";
 
 // Public pages for everyone; signed-in people also get their own rooms.
-const PUBLIC: NavItem[] = [
-  { href: "/", label: "Home" },
-  { href: "/work", label: "Work" },
-  { href: "/play", label: "Play" },
-  { href: "/notes", label: "Notes" },
-  { href: "/music", label: "Music" },
-];
+const PUBLIC: NavItem[] = [...PUBLIC_PAGES];
 const MINE: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/account", label: "Account" },

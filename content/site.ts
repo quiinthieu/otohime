@@ -1,5 +1,12 @@
 import type { Swatch } from "@/components/figures";
 
+export type Project = {
+  title: string;
+  note: string;
+  href?: string;
+  status: "building" | "live" | "shelved";
+  colour: Swatch;
+};
 export type Game = { title: string; note: string; colour: Swatch };
 // A way to reach me, as a line on the home page's switchboard. code is the
 // line's label on the board.
@@ -77,6 +84,10 @@ export const site = {
     { title: "Tetris Effect", note: "Bin packing, with feelings.", colour: "blue" },
     { title: "Outer Wilds", note: "Twenty-two minutes at a time.", colour: "yellow" },
   ] satisfies Game[],
+  // TODO(otohime)
+  projects: "Independent projects, built in my own time and not for any employer. The bench is empty for now.",
+  // Add a project here and it shows up on /projects.
+  projectList: [] as Project[],
   // TODO(otohime)
   music: "Three songs on repeat, one channel each. Tune in.",
   // The same songs on Spotify, linked under the player: the id after

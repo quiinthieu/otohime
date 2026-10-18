@@ -21,6 +21,7 @@ app/                 pages and route handlers
 app/(home)/          the front page, an entrance with no sidebar
 app/(app)/           the other pages, with the sidebar
 content/site.ts      the words on the public pages
+lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
 lib/permissions.ts   roles and what each may do
 lib/machines.ts      state for the figures you can play with
