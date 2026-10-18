@@ -3,6 +3,7 @@
 import { Field } from "@/components/field";
 import { FigTitle } from "@/components/figures";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
@@ -31,7 +32,13 @@ export function SignInForm() {
           email,
           password,
         })
-      : await authClient.signIn.email({ email, password, callbackURL: next });
+      : await authClient.signIn.email({
+          email,
+          password,
+          // unchecked: the session cookie ends when the browser closes
+          rememberMe: form.get("remember") === "on",
+          callbackURL: next,
+        });
 
     if (result.error) {
       setBusy(false);
@@ -73,6 +80,17 @@ export function SignInForm() {
           hint={isCreate ? "At least 8 characters." : undefined}
           required
         />
+        {isCreate ? null : (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <label className="check">
+              <input type="checkbox" name="remember" defaultChecked />
+              Remember me
+            </label>
+            <Link href="/forgot-password" className="link">
+              Forgot password?
+            </Link>
+          </div>
+        )}
         {message ? (
           <p role="alert" className="alert">
             {message}

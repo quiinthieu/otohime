@@ -63,6 +63,23 @@ const roleHierarchy = createAuthMiddleware(async (ctx) => {
   }
 });
 
+// ponytail: Resend's HTTP API over fetch, no SDK. Without a key (local, CI,
+// previews) the message is logged instead; production refuses to drop it.
+async function sendEmail(to: string, subject: string, text: string) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) {
+    if (process.env.VERCEL_ENV === "production") throw new Error("RESEND_API_KEY is not set");
+    console.info(`[email] to=${to} subject=${subject}\n${text}`);
+    return;
+  }
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ from: process.env.EMAIL_FROM, to, subject, text }),
+  });
+  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
+}
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -70,6 +87,15 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    revokeSessionsOnPasswordReset: true,
+    // ponytail: the send is awaited, so response time hints whether an
+    // account exists; open sign-up already tells anyone that.
+    sendResetPassword: ({ user, url }) =>
+      sendEmail(
+        user.email,
+        "Reset your Otohime password",
+        `Someone asked to reset the password for ${user.email}.\n\nChoose a new one here (the link works for an hour):\n${url}\n\nIf it wasn't you, ignore this email; nothing changes.`,
+      ),
   },
   trustedOrigins: [
     process.env.BETTER_AUTH_URL ?? "http://localhost:4000",
