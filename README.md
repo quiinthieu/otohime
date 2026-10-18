@@ -40,6 +40,20 @@ The change takes effect on the next request.
 
 The browser talks only to this Next.js server. `lib/` and `db/` are the only code that opens Postgres.
 
+## Tests
+
+- `npm test` runs the unit tests (roles and the rank rule). It needs no database.
+- `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
+
+  ```bash
+  npm run build
+  PORT=4010 BETTER_AUTH_URL=http://localhost:4010 npm start
+  # in another terminal
+  BASE_URL=http://localhost:4010 DATABASE_URL=postgresql://otohime:otohime@localhost:5433/otohime npm run test:e2e
+  ```
+
+CI runs both on every PR.
+
 ## Deploying
 
 GitHub Actions (`.github/workflows/ci.yml`) does it all:
