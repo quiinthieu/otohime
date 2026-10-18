@@ -20,31 +20,34 @@ export function press<A extends string>(dispatch: (action: A | "settle") => void
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) dispatch("settle");
 }
 
+// The figure is line work in an Inked, or, when it needs its own markup
+// (the television holds an iframe), whatever `figure` draws at a wobble.
+type Figure =
+  | { viewBox: string; children: React.ReactNode; figure?: never }
+  | { figure: (wobble: number) => React.ReactNode; viewBox?: never; children?: never };
+
 // The reference's stage: controls on the left, the figure, readouts on the
 // right, then the wobble slider and the swatches under a hairline.
 export function Machine({
   label,
   caption,
   colour,
-  viewBox,
   busy,
   controls,
   stats,
   below,
   readout,
-  children,
+  ...art
 }: {
   label: string;
   caption: string;
   colour: Swatch;
-  viewBox: string;
   busy: boolean;
   controls: React.ReactNode;
   stats?: React.ReactNode;
   below?: React.ReactNode;
   readout: string;
-  children: React.ReactNode;
-}) {
+} & Figure) {
   const [fig, setFig] = useState(colour);
   const [wobble, setWobble] = useState(3.5);
   const wobbleId = useId();
@@ -61,9 +64,13 @@ export function Machine({
           {controls}
         </div>
         <div className="machine-figure" data-busy={busy || undefined}>
-          <Inked viewBox={viewBox} wobble={wobble} className="block w-full">
-            {children}
-          </Inked>
+          {art.figure ? (
+            art.figure(wobble)
+          ) : (
+            <Inked viewBox={art.viewBox} wobble={wobble} className="block w-full">
+              {art.children}
+            </Inked>
+          )}
         </div>
         {stats ? <dl className="machine-stats">{stats}</dl> : null}
       </div>

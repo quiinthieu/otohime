@@ -1,5 +1,5 @@
 import { FigTitle, swatches } from "@/components/figures";
-import { YouTubePlayer } from "@/components/youtube-player";
+import { Television } from "@/components/television";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
@@ -10,16 +10,16 @@ export default function MusicPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <FigTitle n="05" hint="side a, side b">
+        <FigTitle n="05" hint="three channels">
           Music
         </FigTitle>
         <p className="mt-2 text-muted">{site.music}</p>
         <div className="mt-8">
-          <YouTubePlayer songs={site.songs} playlist={site.playlist} />
+          <Television songs={site.songs} playlist={site.playlist} />
         </div>
-        <h2 className="caption mt-12">On the tape</h2>
-        <ul className="mt-3 grid gap-x-10 sm:grid-cols-2">
-          {site.songs.map((song) => (
+        <h2 className="caption mt-12">Listings</h2>
+        <ol className="mt-3 grid gap-x-10 sm:grid-cols-2">
+          {site.songs.map((song, i) => (
             <li key={song.title} className="flex items-start gap-3 border-t border-line py-3">
               <span
                 aria-hidden="true"
@@ -27,6 +27,7 @@ export default function MusicPage() {
                 style={{ background: swatches[song.colour] }}
               />
               <span>
+                <span className="caption block">CH {String(i + 1).padStart(2, "0")}</span>
                 <span className="block">
                   <span className="font-semibold">{song.title}</span>{" "}
                   <span className="text-muted">· {song.artist}</span>
@@ -35,7 +36,7 @@ export default function MusicPage() {
               </span>
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
     </ViewTransition>
   );

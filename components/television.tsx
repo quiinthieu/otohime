@@ -1,7 +1,7 @@
 "use client";
 
-import { CassetteDeck } from "@/components/cassette-deck";
 import { Inked, swatches } from "@/components/figures";
+import { Chip, Machine, Stat } from "@/components/machine";
 import type { Song } from "@/content/site";
 import { useEffect, useRef, useState } from "react";
 
@@ -11,13 +11,8 @@ type Player = {
   cuePlaylist(videos: string[]): void;
   playVideo(): void;
   pauseVideo(): void;
-  seekTo(seconds: number, allowSeekAhead: boolean): void;
-  previousVideo(): void;
-  nextVideo(): void;
+  playVideoAt(index: number): void;
   getPlaylistIndex(): number;
-  getCurrentTime(): number; // seconds
-  getDuration(): number; // seconds
-  getIframe(): HTMLIFrameElement;
   destroy(): void;
 };
 type PlayerEvent = { target: Player; data: number };
@@ -63,24 +58,16 @@ function iframeApi() {
 const IDLE = {
   ready: false,
   failed: false, // the API didn't load
-  error: false, // the current song won't play here
+  error: false, // this channel's song won't play here
   playing: false,
-  index: 0,
-  position: 0, // ms
-  duration: 0, // ms
+  index: 0, // the channel, from 0
 };
 
-// The player sends no time updates, so the deck reads them.
-const playhead = (p: Player) => ({
-  index: Math.max(0, p.getPlaylistIndex()),
-  position: p.getCurrentTime() * 1000,
-  duration: p.getDuration() * 1000,
-});
-
-// YouTube plays the songs in a hand-drawn TV; the tape deck above drives it.
+// A television with a song on every channel. YouTube's player is the
+// screen, and the remote changes channel.
 // ponytail: the music stops when you leave /music; a player in the layout
 // would keep it going between pages.
-export function YouTubePlayer({ songs, playlist }: { songs: Song[]; playlist: string }) {
+export function Television({ songs, playlist }: { songs: Song[]; playlist: string }) {
   const host = useRef<HTMLDivElement>(null);
   const player = useRef<Player | null>(null);
   const [s, setS] = useState(IDLE);
@@ -108,8 +95,10 @@ export function YouTubePlayer({ songs, playlist }: { songs: Song[]; playlist: st
               player.current = target;
               setS((s) => ({ ...s, ready: true }));
             },
+            // Also how the set learns that a song ended and the next began.
             onStateChange: ({ target, data }) => {
-              if (live) setS((s) => ({ ...s, ...playhead(target), playing: data === PLAYING, error: false }));
+              if (!live) return;
+              setS((s) => ({ ...s, index: Math.max(0, target.getPlaylistIndex()), playing: data === PLAYING, error: false }));
             },
             onError: () => {
               if (live) setS((s) => ({ ...s, playing: false, error: true }));
@@ -131,71 +120,60 @@ export function YouTubePlayer({ songs, playlist }: { songs: Song[]; playlist: st
     };
   }, [videos]);
 
-  useEffect(() => {
-    if (!s.playing) return;
-    const id = setInterval(() => {
-      const p = player.current;
-      if (p) setS((s) => ({ ...s, ...playhead(p) }));
-    }, 500);
-    return () => clearInterval(id);
-  }, [s.playing]);
-
-  // Moves land straight on the deck, even while paused. A seek returns
-  // where it went, because the player reports a seek late.
-  function act(move: (p: Player) => number | void) {
-    const p = player.current;
-    if (!p) return;
-    const to = move(p);
-    setS((s) => ({ ...s, ...playhead(p), ...(typeof to === "number" && { position: to * 1000 }) }));
+  // The set shows the new channel at once; YouTube's own report follows.
+  function tune(index: number) {
+    player.current?.playVideoAt(index);
+    setS((s) => ({ ...s, index }));
   }
 
-  const song = s.ready ? songs[s.index] : undefined;
+  const n = songs.length;
+  const song = songs[s.index];
+  const channel = `CH ${s.index + 1}: ${song.title}, ${song.artist}.`;
   const readout = s.failed
-    ? "YouTube didn't load. The playlist is on Spotify too."
+    ? "YouTube didn't load. The songs are on Spotify too."
     : !s.ready
-      ? "Loading the tape…"
+      ? "Warming up…"
       : s.error
-        ? "That song won't play here. Try the next one."
+        ? "Static on this channel. Try the next one."
         : s.playing
-          ? `Playing ${song?.title ?? "the tape"}.`
-          : s.position > 0
-            ? "Paused."
-            : "Press play.";
+          ? channel
+          : `${channel} Press play.`;
 
   return (
     <>
-      <CassetteDeck
-        ready={s.ready}
-        playing={s.playing}
-        position={s.position}
-        duration={s.duration}
-        title={song?.title}
-        label={song ? swatches[song.colour] : undefined}
+      <Machine
+        label="Television"
+        caption="Remote"
+        colour="coral"
+        busy={s.playing}
         readout={readout}
-        onToggle={() => act((p) => (s.playing ? p.pauseVideo() : p.playVideo()))}
-        onStop={() => {
-          // seekTo leaves a paused player paused but starts any other, so an
-          // untouched tape stays put
-          if (!s.playing && s.position === 0) return;
-          act((p) => {
-            p.pauseVideo();
-            p.seekTo(0, true);
-            return 0;
-          });
-        }}
-        onSeek={(seconds) =>
-          act((p) => {
-            const to = Math.max(0, p.getCurrentTime() + seconds);
-            p.seekTo(to, true);
-            return to;
-          })
-        }
-        onPrev={() => act((p) => p.previousVideo())}
-        onNext={() => act((p) => p.nextVideo())}
-        below={
-          <Television busy={s.playing} hidden={s.failed}>
+        figure={(wobble) => (
+          <TVSet wobble={wobble} channel={s.index + 1} lamp={s.ready ? swatches[song.colour] : undefined}>
             <div ref={host} className="size-full" />
-          </Television>
+          </TVSet>
+        )}
+        controls={
+          <>
+            <Chip
+              aria-disabled={!s.ready || undefined}
+              aria-label={s.playing ? "Pause" : "Play"}
+              onClick={() => (s.playing ? player.current?.pauseVideo() : player.current?.playVideo())}
+            >
+              {s.playing ? "❚❚ Pause" : "▶ Play"}
+            </Chip>
+            <Chip aria-disabled={!s.ready || undefined} aria-label="Channel up" onClick={() => tune((s.index + 1) % n)}>
+              ▲ Ch
+            </Chip>
+            <Chip aria-disabled={!s.ready || undefined} aria-label="Channel down" onClick={() => tune((s.index + n - 1) % n)}>
+              ▼ Ch
+            </Chip>
+          </>
+        }
+        stats={
+          <>
+            <Stat k="Channel" v={s.index + 1} />
+            <Stat k="On air" v={song.title} small />
+          </>
         }
       />
       <p className="mt-6">
@@ -211,15 +189,27 @@ export function YouTubePlayer({ songs, playlist }: { songs: Song[]; playlist: st
 const SET = { w: 400, h: 424 };
 const SCREEN = { x: 20, y: 60, w: 360, h: 300 };
 const EARS = ["M200 40 136 8", "M200 40 264 8"];
+const pct = (n: number, of: number) => `${(n / of) * 100}%`;
 
 // A hand-inked television with YouTube's player in its screen. YouTube wants
 // the player at least 200px each way with nothing in front of it, so the
 // screen is most of the set and the drawing stays behind it: 6:5 keeps it
-// tall enough down to a 267px-wide set.
-function Television({ busy, hidden, children }: { busy: boolean; hidden: boolean; children: React.ReactNode }) {
+// tall enough down to a 267px-wide set. The lamp takes the channel's colour
+// and the first knob points at the channel.
+function TVSet({
+  wobble,
+  channel,
+  lamp,
+  children,
+}: {
+  wobble: number;
+  channel: number;
+  lamp?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className={hidden ? "hidden" : "relative mx-auto my-4 w-full max-w-[440px]"} data-busy={busy || undefined}>
-      <Inked viewBox={`0 0 ${SET.w} ${SET.h}`} className="block w-full">
+    <div className="relative mx-auto w-full max-w-[440px]">
+      <Inked viewBox={`0 0 ${SET.w} ${SET.h}`} wobble={wobble} className="block w-full">
         <ellipse cx={200} cy={410} rx={180} ry={10} className="fig-shade" />
         <rect x={52} y={392} width={18} height={16} rx={3} className="fig-shaded" />
         <rect x={330} y={392} width={18} height={16} rx={3} className="fig-shaded" />
@@ -236,20 +226,26 @@ function Television({ busy, hidden, children }: { busy: boolean; hidden: boolean
         {/* the cabinet, the screen's dark rim, and the panel under it */}
         <rect x={4} y={44} width={392} height={352} rx={30} className="fig-lit" />
         <rect x={SCREEN.x - 6} y={SCREEN.y - 6} width={SCREEN.w + 12} height={SCREEN.h + 12} rx={18} className="fig-dark" />
-        <path d="M28 376h150M28 386h150" className="fig-belt" />
-        <circle cx={284} cy={381} r={3.6} className="fig-lamp" />
-        <circle cx={318} cy={381} r={10} className="fig-top" />
-        <path d="M318 381v-8" fill="none" strokeWidth={2} />
+        <path d="M28 376h108M28 386h108" className="fig-belt" />
+        <rect x={150} y={370} width={58} height={22} rx={2} className="fig-lcd" />
+        <text x={179} y={385} textAnchor="middle" className="fig-text lcd">
+          CH {channel}
+        </text>
+        <circle cx={284} cy={381} r={4.5} className="led" fill={lamp ?? "var(--coral)"} />
+        <g transform={`rotate(${-45 + 45 * (channel - 1)} 318 381)`}>
+          <circle cx={318} cy={381} r={10} className="fig-top" />
+          <path d="M318 381v-8" fill="none" strokeWidth={2} />
+        </g>
         <circle cx={354} cy={381} r={10} className="fig-top" />
         <path d="M354 381l6 -5" fill="none" strokeWidth={2} />
       </Inked>
       <div
         className="absolute"
         style={{
-          left: `${(SCREEN.x / SET.w) * 100}%`,
-          top: `${(SCREEN.y / SET.h) * 100}%`,
-          width: `${(SCREEN.w / SET.w) * 100}%`,
-          height: `${(SCREEN.h / SET.h) * 100}%`,
+          left: pct(SCREEN.x, SET.w),
+          top: pct(SCREEN.y, SET.h),
+          width: pct(SCREEN.w, SET.w),
+          height: pct(SCREEN.h, SET.h),
         }}
       >
         {children}

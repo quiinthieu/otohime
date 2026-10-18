@@ -63,7 +63,7 @@ export const site = {
     { title: "Outer Wilds", note: "Twenty-two minutes at a time.", colour: "yellow" },
   ] satisfies Game[],
   // TODO(otohime)
-  music: "Songs I keep coming back to, on one tape. Press play on the deck.",
+  music: "Three songs on repeat, one channel each. Tune in.",
   // The same songs on Spotify, linked under the player: the id after
   // /playlist/ in Share → Copy link.
   playlist: "609w1YzsoSy1zuHmyBhYwu",
