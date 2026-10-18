@@ -1,65 +1,46 @@
-import { FigTitle, Figure } from "@/components/figures";
-import { requireUser } from "@/lib/dal";
-import { can, type Permissions } from "@/lib/permissions";
-import Link from "next/link";
+import { FigTitle } from "@/components/figures";
+import { Handheld } from "@/components/handheld";
+import { site } from "@/content/site";
+import { ViewTransition } from "react";
 
-const rooms: { href: string; title: string; blurb: string; needs?: Permissions }[] = [
-  { href: "/account", title: "Account", blurb: "Your name, password and devices." },
-  {
-    href: "/admin/users",
-    title: "Users",
-    blurb: "Roles, bans and sessions.",
-    needs: { user: ["list"] },
-  },
-  {
-    href: "/admin/roles",
-    title: "Roles",
-    blurb: "What each role can do.",
-    needs: { user: ["list"] },
-  },
-];
-
-export default async function DashboardPage() {
-  const { user } = await requireUser("/");
-  const role = user.role ?? "user";
-  const open = rooms.filter((room) => !room.needs || can(user.role, room.needs));
-
+// The public front page, for everyone.
+export default function HomePage() {
   return (
-    <div className="rise">
-      <FigTitle
-        n="01"
-        hint={
-          <>
-            signed in as {user.email}{" "}
-            <span className="badge" data-role={role}>
-              {role}
-            </span>
-          </>
-        }
-      >
-        Hello, {user.name.split(" ")[0] || user.name}
-      </FigTitle>
-      <div className="mt-8 grid items-center gap-8 md:grid-cols-[1fr_minmax(0,20rem)]">
-        {open.length ? (
-          <ul className="grid content-start gap-3">
-            {open.map(({ href, title, blurb }) => (
-              <li key={href}>
-                <Link href={href} className="card card-link">
-                  <span>
-                    <span className="block font-semibold">
-                      {title} <span aria-hidden="true">→</span>
-                    </span>
-                    <span className="text-muted">{blurb}</span>
-                  </span>
-                </Link>
-              </li>
+    <ViewTransition enter="page-in" exit="page-out" default="none">
+      <div className="rise">
+        <FigTitle n="01" hint={site.tagline.toLowerCase()}>
+          Otohime
+        </FigTitle>
+        <div className="mt-8 grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <div>
+            <p className="text-[15px] font-semibold">{site.tagline}</p>
+            {site.bio.map((line) => (
+              <p key={line} className="mt-3 max-w-prose text-muted">
+                {line}
+              </p>
             ))}
-          </ul>
-        ) : (
-          <p className="text-muted">You&apos;re in. There&apos;s nothing else to open yet.</p>
-        )}
-        <Figure kind="open-lock" className="mx-auto block w-full max-w-xs" />
+            <h2 className="caption mt-10">Now</h2>
+            <dl className="mt-2">
+              {site.now.map(({ what, note }) => (
+                <div key={what} className="grid grid-cols-[6rem_1fr] gap-x-4 border-t border-line py-2.5">
+                  <dt className="text-muted">{what}</dt>
+                  <dd>{note}</dd>
+                </div>
+              ))}
+            </dl>
+            <ul className="mt-8 flex flex-wrap gap-3">
+              {site.links.map(({ label, href }) => (
+                <li key={href}>
+                  <a href={href} className="btn">
+                    {label} <span aria-hidden="true">→</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Handheld />
+        </div>
       </div>
-    </div>
+    </ViewTransition>
   );
 }

@@ -22,7 +22,7 @@ export function SignInForm() {
     // Same-site paths only ("//x" and "/\x" leave the site); Better Auth
     // checks callbackURL again on the server.
     const raw = new URLSearchParams(location.search).get("next");
-    const next = raw && /^\/(?![/\\])/.test(raw) ? raw : "/";
+    const next = raw && /^\/(?![/\\])/.test(raw) ? raw : "/dashboard";
     setMessage("");
     setBusy(true);
 
@@ -55,7 +55,7 @@ export function SignInForm() {
 
   return (
     <div>
-      <FigTitle n="02">{isCreate ? "Create an account" : "Sign in"}</FigTitle>
+      <FigTitle n="01">{isCreate ? "Create an account" : "Sign in"}</FigTitle>
       <p className="mt-2 text-muted">
         {isCreate
           ? "Pick a name, an email and a password."

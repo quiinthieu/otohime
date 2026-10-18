@@ -18,10 +18,14 @@ The script raises Node's HTTP header size so mini-app cookies on `localhost` do 
 
 ```
 app/                 pages and route handlers
+content/site.ts      the words on the public pages
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
 lib/permissions.ts   roles and what each may do
+lib/machines.ts      state for the figures you can play with
 db/                  Drizzle schema, client, and migrations
 ```
+
+The site follows the OS's light or dark setting until someone presses the theme toggle. Their choice is kept in `localStorage.theme`.
 
 The browser talks only to this Next.js server. `lib/` and `db/` are the only code that opens Postgres.
 

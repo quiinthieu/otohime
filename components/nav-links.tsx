@@ -39,7 +39,7 @@ export function SignOutButton() {
       className="btn btn-primary"
       onClick={async () => {
         await authClient.signOut();
-        // proxy.ts now rewrites / to the welcome page
+        // back to the public front page
         router.push("/");
         router.refresh();
       }}

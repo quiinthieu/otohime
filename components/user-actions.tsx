@@ -60,7 +60,7 @@ export function UserActions({
           disabled={busy}
           onClick={async () => {
             if (await run(() => authClient.admin.impersonateUser({ userId: user.id }))) {
-              router.push("/");
+              router.push("/dashboard");
               router.refresh();
             }
           }}

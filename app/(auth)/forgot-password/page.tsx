@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Forgot password" };
 export default function ForgotPasswordPage() {
   return (
     <>
-      <FigTitle n="03">Forgot password</FigTitle>
+      <FigTitle n="02">Forgot password</FigTitle>
       <p className="mt-2 text-muted">Type your email and we&apos;ll send a link to choose a new password.</p>
       <div className="mt-6">
         <ForgotPasswordForm />

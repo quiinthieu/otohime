@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
 /*
- * Paper and ink, after colorfigures.vercel.app. Light only, like the reference.
- * WCAG contrast on paper: ink 14.4, muted 5.1, danger 5.3. Ink on the swatches:
- * yellow 9.3, coral 5.4, mint 9.6, blue 6.2, pink 8.7. Hairlines are decoration.
+ * Paper and ink, after colorfigures.vercel.app, on light or dark paper.
+ * WCAG contrast on paper, light / dark: ink 14.4 / 14.1, muted 5.1 / 6.4,
+ * danger 5.3 / 6.8. Text on a swatch is always dark (--on-swatch): yellow 9.2,
+ * coral 5.4, mint 9.6, blue 6.2, pink 8.7. Hairlines are decoration.
+ *
+ * The OS picks the theme until someone presses the toggle; data-theme on
+ * <html> then pins it (components/theme-toggle.tsx).
  */
 :root {
-  color-scheme: light;
-  --paper: #f2efe7;
-  --paper-2: #ebe7dc;
-  --field: #faf8f3;
-  --ink: #231e16;
-  --muted: #6b6456;
-  --line: #ddd6c8;
-  --hairline: rgb(35 30 22 / 0.14);
-  --danger: #b03a22;
+  color-scheme: light dark;
+  --paper: light-dark(#f2efe7, #1c1915);
+  --paper-2: light-dark(#ebe7dc, #27231d);
+  --field: light-dark(#faf8f3, #221f1a);
+  --ink: light-dark(#231e16, #ebe6da);
+  --muted: light-dark(#6b6456, #a39b8b);
+  --line: light-dark(#ddd6c8, #3a342c);
+  --hairline: light-dark(rgb(35 30 22 / 0.14), rgb(235 230 218 / 0.14));
+  --danger: light-dark(#b03a22, #f0826a);
   --yellow: #f4b829;
   --coral: #ef6a4c;
   --mint: #93d3b0;
   --blue: #76a0e2;
   --pink: #f3a6bb;
-  --shade: #3f4e93;
+  --shade: light-dark(#3f4e93, #2b3666);
+  /* Ink that stays dark in both themes: text on swatches, figure line work. */
+  --on-swatch: #231e16;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -36,6 +50,7 @@
   --color-blue: var(--blue);
   --color-pink: var(--pink);
   --color-shade: var(--shade);
+  --color-on-swatch: var(--on-swatch);
   /* ponytail: system faces, no font download */
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-sans: Inter, "Helvetica Neue", Arial, sans-serif;
@@ -62,7 +77,7 @@
 
   ::selection {
     background: var(--yellow);
-    color: var(--ink);
+    color: var(--on-swatch);
   }
 
   hr {
@@ -131,11 +146,13 @@
   }
 
   .btn-primary:hover:not(:disabled) {
-    background: #3e3a33;
+    background: color-mix(in srgb, var(--ink) 85%, var(--paper));
   }
 
   .btn-danger {
+    border-color: var(--on-swatch);
     background: var(--coral);
+    color: var(--on-swatch);
   }
 
   .btn-ghost {
@@ -163,6 +180,7 @@
 
   .link:hover {
     background: var(--yellow);
+    color: var(--on-swatch);
   }
 
   .field {
@@ -247,7 +265,7 @@
   .card {
     border: 1px solid var(--line);
     border-radius: 12px;
-    background: rgb(255 255 255 / 0.35);
+    background: light-dark(rgb(255 255 255 / 0.35), rgb(255 255 255 / 0.03));
   }
 
   .card-link {
@@ -293,11 +311,17 @@
     background: var(--coral);
   }
 
+  .badge:is([data-role="owner"], [data-role="admin"], [data-tone]) {
+    border-color: var(--on-swatch);
+    color: var(--on-swatch);
+  }
+
   .alert {
     padding: 0.625rem 0.875rem;
-    border: 1px solid var(--ink);
+    border: 1px solid var(--on-swatch);
     border-radius: 10px;
     background: var(--pink);
+    color: var(--on-swatch);
   }
 
   .alert[data-tone="ok"] {
@@ -305,7 +329,9 @@
   }
 
   .alert[data-tone="info"] {
+    border-color: var(--ink);
     background: var(--paper-2);
+    color: var(--ink);
   }
 
   .banner {
@@ -315,8 +341,9 @@
     justify-content: center;
     gap: 0.75rem;
     padding: 0.5rem 1rem;
-    border-bottom: 1px solid var(--ink);
+    border-bottom: 1px solid var(--on-swatch);
     background: var(--yellow);
+    color: var(--on-swatch);
   }
 
   .table-wrap {
@@ -389,7 +416,7 @@
     height: 4rem;
     padding: 0 1.25rem;
     border-bottom: 1px solid var(--hairline);
-    background: rgb(242 239 231 / 0.92);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
     backdrop-filter: blur(6px);
   }
 
@@ -462,7 +489,7 @@
     }
 
     .nav-item[aria-current="page"] small {
-      color: rgb(242 239 231 / 0.7);
+      color: color-mix(in srgb, var(--paper) 70%, transparent);
     }
   }
 
@@ -472,9 +499,10 @@
     place-items: center;
     width: 1.75rem;
     height: 1.75rem;
-    border: 1px solid var(--ink);
+    border: 1px solid var(--on-swatch);
     border-radius: 50%;
     background: var(--mint);
+    color: var(--on-swatch);
     font-size: 12px;
     font-weight: 600;
   }
@@ -485,9 +513,14 @@
     animation: breathe 1.6s ease-in-out infinite;
   }
 
-  /* Isometric figures (components/figures.tsx). --fig is the swatch colour. */
+  /*
+   * Isometric figures (components/figures.tsx). --fig is the swatch colour.
+   * They are printed objects: the same dark line work on either paper.
+   */
   .figure {
-    color: var(--ink);
+    color: var(--on-swatch);
+    /* printed in, one roller pass, on twos */
+    animation: print 0.6s steps(12) both;
   }
 
   .fig-shade {
@@ -504,7 +537,7 @@
   }
 
   .fig-shaded {
-    fill: color-mix(in srgb, var(--fig, var(--mint)) 62%, var(--ink));
+    fill: color-mix(in srgb, var(--fig, var(--mint)) 62%, var(--on-swatch));
   }
 
   .fig-metal {
@@ -520,7 +553,118 @@
   }
 
   .fig-paper {
-    fill: var(--field);
+    fill: #faf8f3;
+  }
+
+  /* Machine parts. Interiors are tinted from --fig. */
+  .fig-dark {
+    fill: #2b2722;
+  }
+
+  .fig-inside {
+    fill: color-mix(in srgb, var(--fig, var(--mint)) 36%, #231e16);
+  }
+
+  .fig-inside-lit {
+    fill: color-mix(in srgb, var(--fig, var(--mint)) 50%, #231e16);
+  }
+
+  .fig-floor {
+    fill: color-mix(in srgb, var(--fig, var(--mint)) 22%, #faf8f3);
+  }
+
+  .fig-glass {
+    fill: rgb(255 255 255 / 0.16);
+  }
+
+  .fig-glint {
+    fill: none;
+    stroke: #faf8f3;
+    stroke-width: 2.4;
+    opacity: 0.8;
+  }
+
+  .fig-text {
+    fill: var(--on-swatch);
+    stroke: none;
+    font: 700 11px / 1 var(--font-mono);
+    letter-spacing: 0.1em;
+  }
+
+  .fig-lamp {
+    fill: var(--coral);
+  }
+
+  .bulb {
+    fill: #faf8f3;
+  }
+
+  [data-busy] .fig-lamp {
+    fill: var(--yellow);
+  }
+
+  [data-busy] .bulb {
+    animation: bulb 0.5s steps(1) infinite;
+  }
+
+  [data-busy] .bulb:nth-child(even) {
+    animation-delay: -0.25s;
+  }
+
+  .fig-lcd {
+    fill: color-mix(in srgb, var(--mint) 45%, #faf8f3);
+  }
+
+  .lcd {
+    fill: #2b2722;
+    font-size: 8.5px;
+  }
+
+  .lcd-cursor {
+    animation: blink 1s steps(1) infinite;
+  }
+
+  .fig-belt {
+    fill: none;
+    stroke: #807766;
+    stroke-width: 2.2;
+  }
+
+  /* Rack lights blink on their own; faster, and the reels turn, on a job. */
+  .led {
+    animation: blink 1.6s steps(1) infinite;
+  }
+
+  [data-busy] .led {
+    animation-duration: 0.3s;
+  }
+
+  .reel {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  [data-busy] .reel {
+    animation: spin 0.8s steps(8) infinite;
+  }
+
+  .log {
+    width: fit-content;
+    min-height: 8em;
+    margin-inline: auto;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre;
+  }
+
+  .log li:last-child {
+    color: var(--ink);
+  }
+
+  .log[data-running] li:last-child::after {
+    content: "▋";
+    animation: blink 1s steps(1) infinite;
   }
 
   /* Colour swatches under a figure, as in the reference. */
@@ -528,7 +672,7 @@
     display: block;
     width: 1.625rem;
     height: 1.625rem;
-    border: 1px solid var(--ink);
+    border: 1px solid var(--on-swatch);
     border-radius: 50%;
     cursor: pointer;
   }
@@ -547,6 +691,181 @@
   .rise {
     animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
+
+  /*
+   * Operable figures (components/machine.tsx), after the reference's stage:
+   * controls | figure | readouts, stacked with the figure first when the
+   * machine's column is narrow.
+   */
+  .machine {
+    container-type: inline-size;
+  }
+
+  .machine-stage {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .machine-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .machine-controls .caption {
+    flex-basis: 100%;
+  }
+
+  .machine-figure {
+    order: -1;
+  }
+
+  .machine-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+  }
+
+  @container (min-width: 40rem) {
+    .machine-stage {
+      grid-template-columns: 8.5rem minmax(0, 1fr) 8rem;
+      align-items: start;
+    }
+
+    .machine-controls {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .machine-figure {
+      order: 0;
+    }
+
+    .machine-stats {
+      display: grid;
+      justify-items: end;
+      text-align: right;
+    }
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 5px 14px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 13px / 1.3 var(--font-mono);
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      translate 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .chip:hover:not([aria-disabled="true"]) {
+    background: var(--fig, var(--yellow));
+    color: var(--on-swatch);
+    translate: -1px -1px;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .chip:active:not([aria-disabled="true"]) {
+    translate: 1px 1px;
+    box-shadow: none;
+  }
+
+  .chip[aria-disabled="true"] {
+    cursor: default;
+    opacity: 0.35;
+  }
+
+  .stat dt {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .stat dd {
+    font: 700 28px / 1.15 var(--font-mono);
+  }
+
+  .stat-small dd {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .bump {
+    animation: bump 0.35s ease-out;
+  }
+
+  .readout {
+    min-height: 1.5em;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .machine-knobs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .machine-knobs input[type="range"] {
+    width: min(16rem, 70vw);
+    accent-color: var(--ink);
+  }
+
+  /* A round pill, like the reference's turn buttons. */
+  .icon-btn {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .icon-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* The filled half turns over with the theme. */
+  .theme-toggle svg {
+    transition: rotate 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  :root[data-theme="dark"] .theme-toggle svg {
+    rotate: 180deg;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .theme-toggle svg {
+      rotate: 180deg;
+    }
+  }
 }
 
 @keyframes rise {
@@ -559,6 +878,120 @@
 @keyframes breathe {
   50% {
     opacity: 0.55;
+  }
+}
+
+@keyframes print {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes bump {
+  from {
+    scale: 1.18;
+  }
+}
+
+@keyframes bulb {
+  50% {
+    fill: var(--yellow);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+/*
+ * Theme switch: the new paper spreads out from the toggle like ink.
+ * --tx, --ty and --tr are set on <html> by components/theme-toggle.tsx.
+ */
+:root.theming::view-transition-old(root),
+:root.theming::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root.theming::view-transition-new(root) {
+  animation: ink-spread 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes ink-spread {
+  from {
+    clip-path: circle(0 at var(--tx) var(--ty));
+  }
+  to {
+    clip-path: circle(var(--tr) at var(--tx) var(--ty));
+  }
+}
+
+/*
+ * Page changes (the public pages wrap themselves in <ViewTransition>): old
+ * content leaves fast, new content arrives gently, the masthead stays put
+ * and the current nav pill slides to its new place.
+ */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.page-out) {
+  animation: 150ms ease-in both fade-out;
+}
+
+::view-transition-new(.page-in) {
+  animation: 210ms ease-out 150ms both fade-in;
+}
+
+.masthead {
+  view-transition-name: masthead;
+}
+
+::view-transition-group(masthead) {
+  z-index: 100;
+  animation: none;
+}
+
+::view-transition-old(masthead) {
+  display: none;
+}
+
+::view-transition-new(masthead) {
+  animation: none;
+}
+
+.nav-item[aria-current="page"] {
+  view-transition-name: nav-current;
+}
+
+::view-transition-group(nav-current) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* A theme switch reveals the page as one piece. */
+:root.theming .masthead,
+:root.theming .nav-item {
+  view-transition-name: none;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 }
 

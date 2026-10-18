@@ -33,7 +33,7 @@ export default async function UsersPage({ searchParams }: PageProps<"/admin/user
 
   return (
     <div className="rise">
-      <FigTitle n="03" hint={`${total} ${total === 1 ? "person" : "people"}${q ? ` matching “${q}”` : ""}`}>
+      <FigTitle n="07" hint={`${total} ${total === 1 ? "person" : "people"}${q ? ` matching “${q}”` : ""}`}>
         Users
       </FigTitle>
       <form role="search" className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-end">
