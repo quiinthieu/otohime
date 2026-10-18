@@ -80,7 +80,15 @@ async function sendEmail(to: string, subject: string, text: string) {
   if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
 }
 
+// Each preview deploy gets a fresh *.vercel.app URL. Trust exactly this
+// deployment's own URL (a Vercel system env var), never a wildcard.
+const preview =
+  process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : undefined;
+
 export const auth = betterAuth({
+  baseURL: preview ?? process.env.BETTER_AUTH_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
@@ -101,6 +109,7 @@ export const auth = betterAuth({
     process.env.BETTER_AUTH_URL ?? "http://localhost:4000",
     "https://otohime.dev",
     "https://www.otohime.dev",
+    ...(preview ? [preview] : []),
   ],
   // adminRoles also makes owners need impersonate-admins to be impersonated.
   plugins: [admin({ roles, adminRoles: ["owner", "admin"] })],
