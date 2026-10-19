@@ -192,6 +192,7 @@ check "/capsule has Insert coin" has capsule 'Insert coin'
 check "/capsule has Turn" has capsule 'Turn'
 check "/capsule has Open" has capsule 'Open'
 check "/capsule has the rates line" has capsule 'Legend 5%'
+check "/capsule has Reset album" has capsule 'Reset album'
 check "/capsule has the disclaimer" has capsule 'Not affiliated'
 check "/capsule links home" has capsule 'href="/"'
 check "/capsule stylesheet is Capsule's own" capsule_stylesheet

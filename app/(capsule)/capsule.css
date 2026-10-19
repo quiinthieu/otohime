@@ -154,6 +154,63 @@ h2 { font-family: var(--hand); font-weight: 400; font-size: 24px; margin: 0 0 16
 .count { font-family: var(--hand); font-size: 13px; color: var(--muted); }
 .slot.owned .count { color: var(--ink); }
 .tally { font-size: 11px; letter-spacing: 1.4px; color: var(--muted); margin: 24px 0 0; text-align: center; }
+.album-section h2:focus { outline: none; }
+.album-section h2:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
+
+/* An owned slot is a button that opens the card large; an unowned one is not. */
+.slot-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 12px;
+}
+.slot-button:hover .card { transform: rotate(-1.5deg); }
+
+/* Reset album: the confirm is inline, never a browser prompt. */
+.reset { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 20px; }
+.reset-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--hand);
+  font-size: 15px;
+}
+.button-small { font-size: 13px; padding: 6px 12px; box-shadow: 2px 2px 0 var(--ink); }
+.button-danger { background: var(--coral); }
+.button-danger:hover:not(:disabled) { background: var(--coral-dark); }
+.reset-note { font-size: 12px; color: var(--muted); margin: 0; min-height: 1.4em; }
+
+/* The enlarge view: a native modal <dialog>. */
+.enlarge {
+  max-width: min(560px, calc(100vw - 32px));
+  padding: 24px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 18px 14px 20px 15px;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.enlarge[open] { animation: rise 0.4s steps(5, end) both; }
+.enlarge::backdrop { background: rgba(58, 42, 40, 0.45); }
+.enlarge-body { display: flex; flex-wrap: wrap; gap: 20px 24px; align-items: center; justify-content: center; }
+.card-large { width: 220px; max-width: 70vw; }
+.enlarge-text { flex: 1 1 200px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.enlarge-text p { margin: 0; }
+.enlarge-name { font-family: var(--hand); font-size: 28px; }
+.enlarge-film { font-size: 13px; color: var(--muted); }
+.enlarge-meta { display: flex; gap: 10px; align-items: center; font-family: var(--hand); font-size: 16px; }
+.tier { font: 600 10px var(--sans); letter-spacing: 1.4px; text-transform: uppercase; padding: 3px 8px; border: 2px solid var(--ink); border-radius: 8px 6px 9px 7px; }
+.tier-common { background: #8fcbb8; }
+.tier-rare { background: #97b4ea; }
+.tier-legend { background: var(--gold); }
+.enlarge-note { font-size: 14px; line-height: 1.5; margin-bottom: 8px !important; }
 
 .card { display: block; height: auto; overflow: visible; }
 
@@ -171,7 +228,11 @@ h2 { font-family: var(--hand); font-weight: 400; font-size: 24px; margin: 0 0 16
   .machine { width: 220px; }
 }
 
+/* Reduced motion: no keyframes or transitions anywhere (the card's rise, the
+   dialog's entrance), no nudges on press or hover. The crank and the capsule
+   are posed by machine.ts frames, which capsule-app settles at once. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .button:active:not(:disabled) { transform: none; }
+  .slot-button:hover .card { transform: none; }
 }

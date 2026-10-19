@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useReducer, useState, useSyncExternalStore, type ReactNode } from "react";
-import { tally, turn } from "../_lib/actions.ts";
-import { CARDS, type Card as CardData } from "../_lib/cards.ts";
+import { resetAlbum, turn } from "../_lib/actions.ts";
+import type { Card as CardData } from "../_lib/cards.ts";
 import { DAILY_COINS, MAX_COINS, STORAGE_KEY, normalizeLedger, serialize, type Ledger } from "../_lib/ledger.ts";
 import { machineBusy, newMachine, step, type MachineAction } from "../_lib/machine.ts";
+import { Album } from "./album";
 import { Card } from "./card";
 import { Machine } from "./machine";
 
@@ -82,7 +83,6 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
   const coinIn = phase === "loaded";
   // Insert coin spends nothing: the coin in the slot still belongs to the ledger.
   const coins = ledger.coins - (coinIn ? 1 : 0);
-  const count = tally(ledger);
 
   // 12 fps while the crank turns or the capsule opens; reduced motion settles at once.
   const busy = machineBusy(machine);
@@ -113,6 +113,13 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
     save(result.ledger);
     setDrawn(result.card);
     press("turn");
+  };
+
+  // Reset album clears the cards only: seed, coins and day stay, so it mints nothing.
+  const wipe = () => {
+    const t = Date.now();
+    save(resetAlbum(normalizeLedger(read(), t, mintSeed)));
+    setClock(t);
   };
 
   const status =
@@ -198,21 +205,7 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
 
         {rates}
 
-        <section className="album-section" aria-label="Album">
-          <h2>Album</h2>
-          <ol className="album">
-            {CARDS.map((card) => {
-              const n = ledger.owned[card.id] ?? 0;
-              return (
-                <li key={card.id} data-slot={card.id} className={n > 0 ? "slot owned" : "slot"}>
-                  <Card card={card} ghost={n === 0} />
-                  <span className="count">{n > 0 ? `×${n}` : "\u00a0"}</span>
-                </li>
-              );
-            })}
-          </ol>
-          <p className="tally">{`${count.owned} of ${count.total} · ${count.draws} ${count.draws === 1 ? "draw" : "draws"}`}</p>
-        </section>
+        <Album ledger={ledger} onReset={wipe} />
       </main>
       {footer}
     </div>

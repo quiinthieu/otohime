@@ -94,3 +94,24 @@ test("resetAlbum keeps seed, coins and lastDay", () => {
   assert.equal(reset.sinceLegend, 0);
   assert.deepEqual(reload(reset), reset);
 });
+
+test("Reset album, then reload: coins and seed kept, nothing owned, the next turn spends one coin", () => {
+  let ledger = freshLedger(42, NOW);
+  for (let i = 0; i < 3; i++) ledger = turn(ledger, NOW)!.ledger;
+  assert.equal(ledger.coins, 2);
+  assert.equal(tally(ledger).draws, 3);
+
+  const after = reload(resetAlbum(ledger));
+  assert.equal(after.seed, 42);
+  assert.equal(after.coins, 2);
+  assert.equal(after.lastDay, ledger.lastDay);
+  assert.deepEqual(after.owned, {});
+  assert.deepEqual(tally(after), { owned: 0, total: 12, draws: 0 });
+
+  const next = turn(after, NOW);
+  assert.ok(next);
+  assert.equal(next.ledger.coins, 1);
+  assert.equal(next.ledger.draws, 1);
+  assert.equal(next.ledger.owned[next.card.id], 1);
+  assert.equal(tally(next.ledger).owned, 1);
+});
