@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type Ref } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type Ref } from "react";
 import type { Tonearm } from "../_lib/deck.ts";
 import { PLATTER, TONEARM_PIVOT, TURNTABLE_VIEW } from "../_lib/geometry.ts";
 import { labelArt, type Rpm, type VinylRecord } from "../_lib/records.ts";
@@ -12,10 +12,12 @@ import { ARM_LENGTH, armAngle, pointerToAngle, progressOf, scrubSeconds } from "
 // platterRef (a transform, never a re-render). The arm's angle is a CSS
 // variable: at rest, or (hovering, down or lifted) at the playback position
 // between the first and last grooves (_lib/tonearm.ts), so the arm is also
-// the seek bar. It can be dragged (pointer capture, touch included: only the
-// arm has touch-action: none) and it is a keyboard slider; letting it go or
-// pressing Enter runs tonearm.dropAction. The platter's rim is the drop
-// target for sleeves dragged from the crate. The cell clips everything
+// the seek bar. It can be dragged (pointer capture, touch included) and it is
+// a keyboard slider; letting it go or pressing Enter runs tonearm.dropAction.
+// A finger on the arm drags it because a non-passive touchstart listener
+// stops the page panning: touch-action does not apply inside an <svg>, and
+// React's onTouchStart is passive. Sleeves keep scrolling by touch. The
+// platter's rim is the drop target for sleeves dragged from the crate. The cell clips everything
 // (overflow: hidden), so neither the arm nor its shadow can reach the monitor.
 
 const { cx, cy, r: R } = PLATTER;
@@ -66,9 +68,22 @@ export function Turntable({
 }) {
   const id = useId();
   const svgRef = useRef<SVGSVGElement>(null);
+  const armRef = useRef<SVGGElement>(null);
   const grab = useRef<{ pointer: number; x: number; y: number; moved: boolean; angle: number } | null>(null);
   const [held, setHeld] = useState<number | null>(null); // the angle while the arm is held
   const angle = held ?? armAngle(arm, progressOf(time, duration));
+
+  // Stop the pan a finger on the arm would start, so the pointer is not
+  // cancelled. A disabled arm (no record) lets the page scroll.
+  useEffect(() => {
+    const el = armRef.current;
+    if (!el) return;
+    const hold = (e: TouchEvent) => {
+      if (e.cancelable && el.getAttribute("aria-disabled") !== "true") e.preventDefault();
+    };
+    el.addEventListener("touchstart", hold, { passive: false });
+    return () => el.removeEventListener("touchstart", hold);
+  }, []);
 
   // Pointer to view units: the SVG keeps the view's 5:4 shape, so one scale fits both axes.
   function toView(e: PointerEvent) {
@@ -201,6 +216,7 @@ export function Turntable({
           <rect x={PX - 9} y={PY + ARM - 8} width="18" height="26" rx="3" fill="#000" />
         </g>
         <g
+          ref={armRef}
           className="tonearm"
           role="slider"
           tabIndex={record ? 0 : -1}

@@ -149,7 +149,9 @@ main { width: min(100% - 32px, 1440px); margin: 16px auto 0; flex: 1; }
 .platter { transform-box: view-box; transform-origin: 200px 200px; }
 /* The arm's angle is --arm, set by turntable.tsx: rest, or the playback
    position between the first and last grooves. Held, it follows the pointer
-   with no transition. */
+   with no transition. touch-action has no effect inside an <svg>: the
+   touchstart listener in turntable.tsx stops a finger's pan; this rule is the
+   declared intent and the walk reads it. */
 .tonearm,
 .arm-shadow {
   transform-box: view-box;

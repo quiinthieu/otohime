@@ -211,6 +211,16 @@ touch_action_only_arm() {
   [ -z "$bad" ] || { echo "touch-action: none on $(printf '%s' "$bad" | head -n 1 | cut -c1-120)"; return 1; }
 }
 
+# touch-action does not apply inside an <svg>, so the tonearm's touch drag
+# rests on a non-passive touchstart listener that the served HTML cannot show.
+arm_touch_listener() {
+  local f='app/(vinyl)/_components/turntable.tsx'
+  [ -f "$f" ] || { echo "$f not found"; return 1; }
+  grep -qF 'addEventListener("touchstart"' "$f" || { echo "no touchstart listener on the tonearm"; return 1; }
+  grep -qF 'passive: false' "$f" || { echo "the touchstart listener is not passive: false"; return 1; }
+  grep -qF 'removeEventListener("touchstart"' "$f" || { echo "the touchstart listener is never removed"; return 1; }
+}
+
 # The crackle is synthesised: no audio file is shipped with Vinyl or the site.
 no_audio_files() {
   local found
@@ -271,6 +281,7 @@ check "/vinyl stylesheet keeps the player 200 px tall on phones" css_has 'max\(2
 check "/vinyl stylesheet never hides the player" player_never_hidden
 check "/vinyl stylesheet clips the turntable cell" turntable_clips
 check "/vinyl stylesheet sets touch-action: none only on the tonearm" touch_action_only_arm
+check "tonearm stops a finger's pan with a non-passive touchstart" arm_touch_listener
 check "/vinyl stylesheet removes the flight under reduced motion" css_has 'prefers-reduced-motion: *reduce\)[^@]*\.flight[^{]*\{[^}]*display: *none' '.flight { display: none } under reduced motion'
 check "no audio files under app/(vinyl) or public/" no_audio_files
 check "/vinyl/nope returns 404" status_is vinyl_nope 404
