@@ -1,0 +1,177 @@
+/* Capsule's own stylesheet, hand-written: no Tailwind and no site tokens.
+   The colours are the art brief's palette roles. Nothing here sets
+   overflow: hidden, so the wobble filter on the cards and the machine is never
+   clipped at its edge. */
+:root {
+  --ink: #3a2a28;
+  --paper: #f6f1e7;
+  --blush: #f3a6bb;
+  --white: #fffdf8;
+  --coral: #ef8a72;
+  --coral-dark: #d9604a;
+  --gold: #efc64a;
+  --muted: #8a7a6c;
+  --line: #e2d8c6;
+  --hand: "Chalkboard SE", "Comic Neue", "Comic Sans MS", cursive;
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
+
+.capsule { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* Top bar */
+.topbar {
+  height: 84px;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 2px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; font-family: var(--hand); font-size: 26px; }
+.brand-detail { display: block; font: 9px var(--sans); letter-spacing: 1.8px; color: var(--muted); margin-top: 4px; }
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  display: block;
+  border: 3px solid var(--ink);
+  border-radius: 52% 48% 50% 46%;
+  background: var(--white);
+  box-shadow: inset 0 14px 0 var(--coral);
+}
+.home-link {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 9px 13px;
+  border: 2px solid var(--line);
+  border-radius: 10px 12px 9px 11px;
+}
+.home-link:hover { background: var(--white); }
+
+/* Stage */
+.stage {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 36px 5% 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.eyebrow { font-size: 9px; letter-spacing: 1.6px; font-weight: 600; margin: 0 0 12px; color: var(--muted); }
+h1 {
+  font-family: var(--hand);
+  font-size: clamp(30px, 3.4vw, 44px);
+  font-weight: 400;
+  line-height: 1.15;
+  margin: 0;
+  text-align: center;
+}
+h1 em { font-style: normal; color: var(--coral-dark); }
+h2 { font-family: var(--hand); font-weight: 400; font-size: 24px; margin: 0 0 16px; text-align: center; }
+
+/* Machine and controls */
+.booth {
+  width: 100%;
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 24px 48px;
+}
+.machine { width: 260px; height: auto; display: block; overflow: visible; }
+.controls { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 280px; }
+
+.reveal { width: 160px; height: 252px; display: flex; align-items: flex-start; justify-content: center; }
+.reveal-card { display: flex; flex-direction: column; align-items: center; animation: rise 0.6s steps(7, end) both; }
+.reveal-card .card { width: 150px; }
+.reveal-name { font-family: var(--hand); font-size: 18px; margin: 6px 0 0; }
+.reveal-film { font-size: 11px; color: var(--muted); margin: 3px 0 0; }
+.reveal-empty {
+  width: 150px;
+  height: 200px;
+  display: grid;
+  place-items: center;
+  border: 3px dashed var(--line);
+  border-radius: 14px 12px 15px 11px;
+  font-family: var(--hand);
+  font-size: 48px;
+  color: var(--line);
+}
+@keyframes rise {
+  from { transform: translateY(40px) scale(0.6); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.button {
+  font-family: var(--hand);
+  font-size: 16px;
+  padding: 10px 16px;
+  background: var(--white);
+  border: 3px solid var(--ink);
+  border-radius: 14px 11px 13px 10px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.button:hover:not(:disabled) { background: #fff4dc; }
+.button:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.button:disabled { cursor: default; opacity: 0.4; box-shadow: none; }
+
+.status { font-family: var(--hand); font-size: 15px; margin: 0; min-height: 1.4em; text-align: center; }
+
+.tray { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.coins { display: flex; gap: 4px; }
+.coin { width: 14px; height: 14px; display: block; border: 2px solid var(--ink); border-radius: 50%; background: var(--gold); }
+.coin.spent { background: transparent; border-color: var(--line); }
+
+.rates { font-size: 12px; color: var(--muted); text-align: center; margin: 32px 0 0; line-height: 1.6; }
+
+/* Album */
+.album-section { width: 100%; margin-top: 40px; display: flex; flex-direction: column; align-items: center; }
+.album {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px 14px;
+}
+.slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.slot .card { width: 100%; max-width: 110px; }
+.count { font-family: var(--hand); font-size: 13px; color: var(--muted); }
+.slot.owned .count { color: var(--ink); }
+.tally { font-size: 11px; letter-spacing: 1.4px; color: var(--muted); margin: 24px 0 0; text-align: center; }
+
+.card { display: block; height: auto; overflow: visible; }
+
+.page-footer { display: flex; justify-content: center; padding: 28px 5%; color: var(--muted); font-size: 11px; text-align: center; }
+
+@media (max-width: 720px) {
+  .album { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .topbar { padding: 0 20px; height: 72px; }
+  .brand { font-size: 22px; }
+  .brand-detail { font-size: 8px; letter-spacing: 1.2px; }
+  .stage { padding: 26px 18px; }
+  .album { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .machine { width: 220px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .button:active:not(:disabled) { transform: none; }
+}
