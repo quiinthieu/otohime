@@ -78,7 +78,7 @@ The change takes effect on the next request.
 
 ## Tests
 
-- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's layers and sources, number words, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`, and Elements' dataset, facts, categories, grid, atom maths, dialog reducer and import isolation under `app/(elements)/_lib/*.test.ts`). It needs no database.
+- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's layers and sources, number words, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`, and Elements' dataset, facts, categories, grid, atom maths, dialog reducer and import isolation under `app/(elements)/_lib/*.test.ts`, and Vinyl's records, deck state machine, platter inertia, layout geometry, oEmbed verdicts, player effects, iframe_api loader and import isolation under `app/(vinyl)/_lib/*.test.ts`). It needs no database.
 - `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
 
   ```bash
@@ -121,6 +121,37 @@ Elements (`app/(elements)/`) draws the periodic table from data vendored into th
 **Validation.** `npm run elements:validate` checks the facts (all 118 keys plus `needsReview`, the schema, the length and full-stop rules, the host allowlist, no duplicates) and the dataset (118 elements in order, unique symbols, shells summing to the atomic number, categories, grid rows, the licence file). A failure names the first offending atomic number. Both files also run in `npm test`.
 
 **Refreshing the dataset.** `npm run elements:vendor` downloads the upstream JSON and `LICENSE.md` at the current upstream commit and rewrites `elements.ts` (the commit is recorded in its header) and `LICENSE.md`; `npm run elements:vendor -- <commit>` pins a specific commit. Review the diff, run `npm run elements:validate`, and commit the output. Never edit `elements.ts` by hand.
+
+## Vinyl records
+
+Vinyl (`app/(vinyl)/`, the page arrives with the next task) plays a crate of records on a turntable, with the music in a visible YouTube player. Its records live in `app/(vinyl)/_lib/records.json`; the rules they must keep are in `validateRecords` in `app/(vinyl)/_lib/records.ts`.
+
+**Adding a record.** Append an object to `records.json`:
+
+- `id`: lower-case words joined by hyphens, unique. `title`, `artist`, `genre`: non-empty text. `year`: a whole year from 1900 to this year. `rpm`: `33` or `45`.
+- `youtubeVideoId`: the 11-character id from `youtube.com/watch?v=<id>`. Optional `startSeconds` and `endSeconds` (numbers, start before end) trim it. Optional `youtubePlaylistId`, and optional `tracks: [{ "side": "A" | "B", "title", "youtubeVideoId" }]` for a Side A / Side B track list.
+- `coverArtUrl`: `"procedural:<id>"` (the sleeve is drawn from the record's colours) or a path on this site starting with `/`. Never a YouTube thumbnail: `ytimg.com` and `youtube.com` URLs are rejected, because YouTube's terms forbid altering or reusing its thumbnails as our art.
+- `labelColor` and `accentColor`: `#rrggbb`. The label text is black or white, whichever contrasts more with `labelColor`, and must reach 4.5:1 (WCAG AA); the validator checks it.
+- Drop `placeholder: true` once the id is a real choice.
+
+**Checking video ids.** `npm run vinyl:check` validates `records.json`, then asks YouTube's oEmbed endpoint about every distinct video id (four at a time, 8 s timeout) and prints a table `record · videoId · status · verdict`: `embeddable` (200), `malformed` (400; YouTube also answers 400 for a well-formed id that no video has), `embedding-disabled` (401 or 403), `not-found` (404) or `network`. It exits 1 on any invalid record or dead video, 2 when the only failures are network ones, else 0. `npm run vinyl:check -- --offline` validates without the network. Repeated video ids are warnings, not errors.
+
+**Placeholders to replace.** All twelve records are placeholders that cycle the three `/music` starter videos (all embeddable on 2026-10-19). Replace each `youtubeVideoId` with your record's video and run `npm run vinyl:check`:
+
+| Record id | Title | Video id |
+| --- | --- | --- |
+| `harbour-lights` | Harbour Lights | `IXA6bQsVNjs` |
+| `velvet-morning` | Velvet Morning | `agneRtEe-t8` |
+| `paper-satellites` | Paper Satellites | `vR49dHUwMUA` (tracks: A `vR49dHUwMUA`, A `IXA6bQsVNjs`, B `agneRtEe-t8`) |
+| `neon-tide` | Neon Tide | `IXA6bQsVNjs` |
+| `willow-road` | Willow Road | `agneRtEe-t8` |
+| `blue-hour-sessions` | Blue Hour Sessions | `vR49dHUwMUA` |
+| `golden-thread` | Golden Thread | `IXA6bQsVNjs` |
+| `concrete-garden` | Concrete Garden | `agneRtEe-t8` |
+| `glass-meridian` | Glass Meridian | `vR49dHUwMUA` |
+| `four-winds` | Four Winds | `IXA6bQsVNjs` |
+| `chalk-and-cedar` | Chalk and Cedar | `agneRtEe-t8` |
+| `nocturne-for-trains` | Nocturne for Trains | `vR49dHUwMUA` |
 
 ## Deploying
 
