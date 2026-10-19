@@ -30,6 +30,7 @@ cited_sha: 44c06ab095abd9d8017eaaf8e4ca83f654f5dfbc
 | Lighthouse 12, desktop preset | `/elements` ×3 on production | perf 97 / 100 / 100; a11y, best practices and SEO 100; FCP 0.3 s, LCP 0.4 s, TBT 0 ms, CLS 0; the 3D chunk is not requested | `lh.mjs` |
 | curl | `/`, `/projects`, `/shore`, `/capsule`, `/sun`, `/vinyl`, `/elements/og`, `/elements/xx` | 200 ×7, 404 for xx; `/projects` links `/elements` exactly once | curl |
 | Clean `npm ci` of HEAD 174e3e2, Node 22.12.0 | lint, typecheck, `npm test`, `npm run elements:validate`, build, `next start -p 4031`, my walk + `scripts/walk-elements.sh` | lint/typecheck clean; 284/284 tests; validator 14/14. Build ok, build-sha 174e3e2. Local walks: desktop 50/50, phone 39/39, nogpu 45/45; repo walk 46/46. Server log has only the Ready lines | `server.log` |
+| Production redeployed mid-run to pm-191's `0d3ac28` | `git diff 44c06ab 0d3ac28` on Elements paths; re-ran my desktop and phone walks on production | No change under `app/(elements)`, `package*.json` or `next.config.ts` (Vinyl files only). Desktop 50/50, phone 39/39 | build-sha `0d3ac28962a33cefc70390cbb087ddac65d9cb13`, `redeploy/*.log` |
 | origin/main | `git log` for pm-190 commits 49d0661, d0a9e28, cce36cb, 68dc5c7, 44c06ab, 174e3e2 | Author and committer are `Otohime <quiinthieu@gmail.com>` on all six; no Co-Authored-By trailer. 44c06ab is an ancestor of main, and 44c06ab..174e3e2 changes only `qa-t-1085.md` | matches plan.commit_identity; there was no author.txt in the evidence |
 
 Verdict: **pass**. A visitor gets the full periodic table, which works before any 3D code loads. Clicking or pressing a key opens a detail view, a bottom sheet on a phone. It shows a lazily loaded interactive 3D Bohr atom, the element's own sourced fun fact, key stats and Wikipedia attribution. There are fallbacks for reduced motion, for no WebGL and for no JavaScript.
@@ -40,6 +41,7 @@ Verdict: **pass**. A visitor gets the full periodic table, which works before an
 | --- | --- | --- |
 | otohime.dev (Vercel, Next 16.4.2) | `44c06ab095abd9d8017eaaf8e4ca83f654f5dfbc` | `build-sha` meta on `/` and `/elements`, 2026-10-19 ~16:50–17:00Z |
 | 3D chunk | `/_next/static/chunks/27wvz16czfdew.js` | the only script with `InstancedMesh`; the same name in production and in the local build |
+| otohime.dev after the mid-run redeploy | `0d3ac28962a33cefc70390cbb087ddac65d9cb13` | `build-sha` meta; Elements code identical to 44c06ab |
 | Repo HEAD (docs only past the deploy) | `174e3e2c78eaf66e8990bb7872e3b25f3bfc3066` | `git rev-parse HEAD`; local build carries it |
 
 ## Every done task, seen as a user
