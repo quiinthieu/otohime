@@ -128,8 +128,9 @@ upstream recipe inspector, and re-skinning any otohime page.
      `mountGlass` in `useEffect`, destroys it on unmount, elevation −3 on
      pointerdown), `shore-app.tsx` (idle → running → paused → done, ledger,
      scene), `icons.tsx` (play, pause, reset, check, sun, moon from
-     `app.mjs`). Server page `app/(shore)/shore/page.tsx` with metadata title
-     "Shore". Parents of glass must not `overflow: hidden` (48 px glow gutter).
+     `app.mjs`). Server page `app/(shore)/shore/page.tsx` with metadata
+     `title: { absolute: "Shore" }` (the template would otherwise give
+     "Shore · Shore"). Parents of glass must not `overflow: hidden` (48 px glow gutter).
   6. `package.json` `test` adds `'app/(shore)/_lib/*.test.ts'` after
      `'lib/**/*.test.ts'`; the strip-types flags stay before `--test`.
      `lib/build-stamp.test.ts` also asserts that `app/(shore)/layout.tsx`
