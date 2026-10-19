@@ -23,8 +23,8 @@ test("BUILD_SHA prefers GITHUB_SHA, then VERCEL_GIT_COMMIT_SHA, then dev", () =>
   );
 });
 
-test("the root layout publishes BUILD_SHA as <meta name=build-sha>", () => {
-  const layout = read("app/layout.tsx");
+test("the site root layout publishes BUILD_SHA as <meta name=build-sha>", () => {
+  const layout = read("app/(site)/layout.tsx");
   assert.match(layout, /other:\s*\{\s*"build-sha":\s*process\.env\.BUILD_SHA\s*\?\?\s*"dev"\s*\}/);
 });
 

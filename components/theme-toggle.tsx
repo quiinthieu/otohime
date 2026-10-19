@@ -32,7 +32,7 @@ function subscribe(onChange: () => void) {
   };
 }
 
-// The inline script in app/layout.tsx applies a pinned theme before paint;
+// The inline script in app/(site)/layout.tsx applies a pinned theme before paint;
 // this button pins one. The icon turns over in CSS, so it never flashes.
 // ponytail: once pinned there is no "follow the OS" option; clearing
 // localStorage.theme brings it back.

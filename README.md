@@ -17,9 +17,10 @@ The script raises Node's HTTP header size so mini-app cookies on `localhost` do 
 ## Layout
 
 ```
-app/                 pages and route handlers
-app/(home)/          the front page, an entrance with no sidebar
-app/(app)/           the other pages, with the sidebar
+app/                 holds only api/ and icon.svg; every page lives in a route group
+app/(site)/          the whole site under one root layout (layout.tsx, globals.css)
+app/(site)/(home)/   the front page, an entrance with no sidebar
+app/(site)/(app)/    the other pages, with the sidebar
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -27,6 +28,8 @@ lib/permissions.ts   roles and what each may do
 lib/machines.ts      state for the figures you can play with
 db/                  Drizzle schema, client, and migrations
 ```
+
+A page with its own design gets its own route group with a `layout.tsx` (its own `<html>` and stylesheet), so it does not inherit the site's CSS. Moving between root layouts is a full page load.
 
 The site follows the OS's light or dark setting until someone presses the theme toggle. Their choice is kept in `localStorage.theme`.
 
