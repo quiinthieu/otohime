@@ -6,7 +6,8 @@
 #   BASE_URL=https://otohime.dev bash scripts/walk-elements.sh     # walk a deployed URL, no build or start
 #
 # Env: PORT (4029), BASE_URL (remote mode), EXPECT_SHA (build-sha to expect; defaults to
-# GITHUB_SHA locally, any 40-hex sha remotely), SKIP_BUILD=1.
+# GITHUB_SHA locally, any 40-hex sha remotely; with SKIP_BUILD=1 and neither set, the reused
+# build's stamp is unknown, so a 40-hex sha or "dev" passes), SKIP_BUILD=1.
 # Counts use grep -c and numeric tests only: BSD wc pads its output, so string compares fail.
 # No `set -e`: every check runs, and the summary names the ones that failed.
 set -u
@@ -55,8 +56,11 @@ if [ -z "$BASE_URL" ]; then
   export BETTER_AUTH_SECRET="${BETTER_AUTH_SECRET:-ci-placeholder-not-a-real-secret-0123456789abcdef}"
   export BETTER_AUTH_URL="${BETTER_AUTH_URL:-http://localhost:$PORT}"
   export DATABASE_URL="${DATABASE_URL:-postgresql://otohime:otohime@localhost:5432/otohime}"
+  if [ "${SKIP_BUILD:-}" = "1" ] && [ -z "$EXPECT_SHA" ] && [ -z "${GITHUB_SHA:-}" ]; then
+    ANY_SHA_OR_DEV=1
+  fi
   export GITHUB_SHA="${GITHUB_SHA:-0123456789abcdef0123456789abcdef01234567}"
-  EXPECT_SHA="${EXPECT_SHA:-$GITHUB_SHA}"
+  [ -n "${ANY_SHA_OR_DEV:-}" ] || EXPECT_SHA="${EXPECT_SHA:-$GITHUB_SHA}"
   READY_TRIES=60
 
   if curl -s -o /dev/null --max-time 2 "$BASE_URL/"; then
@@ -141,6 +145,8 @@ build_sha_matches() {
   sha="$(grep -oE '<meta name="build-sha" content="[^"]*"' "$WORK/elements.body" | head -n 1 | sed -E 's/.*content="([^"]*)"/\1/')"
   if [ -n "$EXPECT_SHA" ]; then
     [ "$sha" = "$EXPECT_SHA" ] || { echo "build-sha is '${sha:-none}', want $EXPECT_SHA"; return 1; }
+  elif [ -n "${ANY_SHA_OR_DEV:-}" ]; then
+    printf '%s' "$sha" | grep -qE '^([0-9a-f]{40}|dev)$' || { echo "build-sha is '${sha:-none}', want 40 hex or dev"; return 1; }
   else
     printf '%s' "$sha" | grep -qE '^[0-9a-f]{40}$' || { echo "build-sha is '${sha:-none}', want 40 hex"; return 1; }
   fi
@@ -195,6 +201,31 @@ no_three_code() {
     fi
   done
   [ "$i" -ge 1 ] || { echo "no script chunks found"; return 1; }
+}
+
+# No preload or modulepreload link names a chunk after three.
+no_three_preload() {
+  if grep -oE '<link[^>]*rel="(modulepreload|preload)"[^>]*>' "$WORK/elements.body" | grep -qi 'three'; then
+    echo "preloads a three chunk: $(grep -oE '<link[^>]*rel="(modulepreload|preload)"[^>]*>' "$WORK/elements.body" | grep -i 'three' | head -n 1)"
+    return 1
+  fi
+}
+
+# Local builds only: the 3D atom was built into some chunk (it holds InstancedMesh),
+# and the /elements HTML names none of those chunks, so it arrives only after a click.
+three_chunk_built_not_referenced() {
+  local dir=.next/static/chunks files n f name
+  [ -d "$dir" ] || { echo "$dir not found"; return 1; }
+  files="$(grep -rlF --include='*.js' -- 'InstancedMesh' "$dir")"
+  n="$(printf '%s' "$files" | grep -c .)"
+  [ "$n" -ge 1 ] || { echo "no built chunk contains InstancedMesh"; return 1; }
+  for f in $files; do
+    name="$(basename "$f")"
+    if grep -qF -- "$name" "$WORK/elements.body"; then
+      echo "/elements references the 3D chunk $name"
+      return 1
+    fi
+  done
 }
 
 # Iron's fact and its source, read from funFacts.json and escaped the way React escapes text.
@@ -256,6 +287,8 @@ check "/elements has a closed dialog" has elements '<dialog'
 check "/elements links home" has elements 'href="/"'
 check "/elements names no three chunk" no_three_chunk
 check "/elements loads no 3D code" no_three_code
+check "/elements preloads no three chunk" no_three_preload
+[ "$LOCAL" -eq 1 ] && check "the 3D chunk is built but /elements does not reference it" three_chunk_built_not_referenced
 check "/elements stylesheet is Elements' own" elements_stylesheet
 
 check "/elements/fe returns 200" status_is fe 200

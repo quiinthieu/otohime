@@ -44,9 +44,10 @@ app/(elements)/      Elements, a periodic table with a Bohr atom per element: it
                      elements/page.tsx is /elements and elements/[symbol]/page.tsx the 118 static pages
                      (/elements/fe), the no-JS path; _components/ holds the table island (table.tsx: roving
                      tabindex, arrow keys, legend dimming), the cells, the legend, the <dialog> (element-dialog.tsx),
-                     the shared detail (element-detail.tsx) and the 2D Bohr diagram (bohr-svg.tsx);
+                     the shared detail (element-detail.tsx), the 2D Bohr diagram (bohr-svg.tsx) and the
+                     lazily loaded 3D atom (atom-3d.tsx);
                      its data and pure maths are in _lib/ (elements.ts vendored under CC BY-SA 3.0 with
-                     its LICENSE.md, funFacts.json, categories, grid, atom, view, format); `npm test` covers its
+                     its LICENSE.md, funFacts.json, categories, grid, atom, view, format, webgl); `npm test` covers its
                      _lib/*.test.ts; only _components/atom-3d.tsx may import three, fiber or drei
 app/(vinyl)/         Vinyl, a crate of records, a turntable and a visible YouTube player: its own root layout
                      and CSS (no Tailwind, system fonts); layout.tsx and vinyl.css are its root layout;
@@ -110,7 +111,7 @@ Walk Capsule and the site the same way with `bash scripts/walk-capsule.sh` (buil
 
 Walk Sun and the site the same way with `bash scripts/walk-sun.sh` (builds, serves on :4027), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-sun.sh`.
 
-Walk Elements and the site the same way with `bash scripts/walk-elements.sh` (builds, serves on :4029: 118 cells, 10 legend items, both series markers, the attribution links, no 3D code on the table page, iron's fact on `/elements/fe` and a 404 for `/elements/xx`), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-elements.sh`.
+Walk Elements and the site the same way with `bash scripts/walk-elements.sh` (builds, serves on :4029: 118 cells, 10 legend items, both series markers, the attribution links, no 3D code on the table page and no reference to the built 3D chunk, iron's fact on `/elements/fe` and a 404 for `/elements/xx`), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-elements.sh`.
 
 Walk Vinyl and the site the same way with `bash scripts/walk-vinyl.sh` (builds, serves on :4031: 12 sleeves, one monitor and one player host, no `iframe_api` or `<iframe>` in the server HTML, no `no-referrer` policy, Vinyl's one stylesheet with the player's `aspect-ratio: 16 / 9`, `min-width: 480px` and `max(200px, …)` and nothing hiding it, and `/projects` linking `/vinyl` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-vinyl.sh`.
 
@@ -139,6 +140,15 @@ The table is server-rendered: 118 links to `/elements/<symbol>`, so it works bef
 **Adding or editing a fun fact.** Each entry is `"<atomic number>": { "fact": "...", "sourceUrl": "https://..." }`. A fact is one sentence of at most 200 characters, ends with a full stop, contains no URL, is suitable for all ages and is not a copy of the source's wording. `sourceUrl` must be `https://` on one of `en.wikipedia.org`, `periodic-table.rsc.org`, `www.rsc.org`, `www.nist.gov`, `physics.nist.gov`, `pubchem.ncbi.nlm.nih.gov`, `iupac.org`, `www.lanl.gov` or `science.nasa.gov`, and the page must actually state the fact. Never invent a fact: if you are unsure, write a conservative, well-documented one and add its atomic number to the top-level `needsReview` list, which marks facts still waiting for a person to check them against their source. Remove the number once it is checked. The list is empty at the moment: every fact was checked against its cited article.
 
 **Validation.** `npm run elements:validate` checks the facts (all 118 keys plus `needsReview`, the schema, the length and full-stop rules, the host allowlist, no duplicates) and the dataset (118 elements in order, unique symbols, shells summing to the atomic number, categories, grid rows, the licence file). A failure names the first offending atomic number. Both files also run in `npm test`.
+
+**The 3D atom.** `app/(elements)/_components/atom-3d.tsx` is the only file that imports `three`, `@react-three/fiber` or `@react-three/drei` (`isolation.test.ts` enforces it), and the dialog loads it with `next/dynamic` (`ssr: false`) only after the first open, so the table page ships none of it; the walk checks that the built 3D chunk exists and that `/elements` does not name it. While the chunk loads, the dialog shows the Bohr SVG.
+
+- Fixed allocations: one Canvas stays mounted across Prev/Next and close/reopen, with one nucleus `InstancedMesh` (64 nucleons at most, a representative cluster for larger nuclei, and the caption then says "showing 64 of N nucleons"), one electron `InstancedMesh` (118) and seven tori shown or hidden by shell count. Changing element rewrites matrices, colours and visibility only, so there is nothing to dispose and nothing grows over 118 clicks. Rendering stops while the dialog is closed.
+- Lighting is a hemisphere light, one key light and an environment drawn from two `Lightformer`s: no HDR or texture is fetched. The tint is the category colour the page's theme resolved (`--cat`).
+- Drag rotates and wheel or pinch zooms within limits; panning is off. A slow auto-rotate pauses while you interact and resumes four seconds after.
+- `prefers-reduced-motion: reduce` turns off auto-rotate and holds the electrons still (`frameloop="demand"`); it is re-read when the setting changes.
+- Fallback: without WebGL (probed once in `_lib/webgl.ts`), if the renderer fails or the WebGL context is lost, the dialog keeps the Bohr SVG.
+- GLB models: `NEXT_PUBLIC_ELEMENTS_GLB=1` at build time makes the atom try the dataset's `bohr_model_3d` GLB, with the procedural atom shown while it loads and if it fails. It is off by default because the files sit in a third-party bucket with no stated licence; they are never vendored here.
 
 **Refreshing the dataset.** `npm run elements:vendor` downloads the upstream JSON and `LICENSE.md` at the current upstream commit and rewrites `elements.ts` (the commit is recorded in its header) and `LICENSE.md`; `npm run elements:vendor -- <commit>` pins a specific commit. Review the diff, run `npm run elements:validate`, and commit the output. Never edit `elements.ts` by hand.
 
