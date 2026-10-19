@@ -8,7 +8,8 @@ import pg from "pg";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:4000";
 const db = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-const run = Date.now().toString(36);
+// node --test runs each file in its own process at once: a bare timestamp can collide across files.
+const run = `r${Date.now().toString(36)}${process.pid.toString(36)}`;
 const mail = (who: string) => `${who}-${run}@e2e.test`;
 const pw = (who: string) => `pw-${run}-${who}`;
 const users: Record<string, { id: string; cookie: string }> = {};
