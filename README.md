@@ -36,7 +36,9 @@ app/(capsule)/       Capsule, a coin-and-crank card machine: its own root layout
 app/(sun)/           Sun, an animated cutaway of the Sun: its own root layout and CSS (no Tailwind),
                      whose facts and tour are pure data in _lib/ (sun.ts, format.ts, tour.ts);
                      layout.tsx and sun.css are its root layout; sun/page.tsx is /sun;
-                     _components/ holds the SVG stage and the tour; `npm test` covers its _lib/*.test.ts
+                     _components/ holds the SVG stage and the tour; `npm test` covers its _lib/*.test.ts;
+                     the poster's words are _lib/poster.ts, the ink is _lib/ink.ts (rough.js, fixed seed)
+                     and _lib/words.ts is the shared word counter
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -72,7 +74,7 @@ The change takes effect on the next request.
 
 ## Tests
 
-- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's facts, number words and tour under `app/(sun)/_lib/*.test.ts`). It needs no database.
+- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's facts, number words, tour, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`). It needs no database.
 - `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
 
   ```bash
