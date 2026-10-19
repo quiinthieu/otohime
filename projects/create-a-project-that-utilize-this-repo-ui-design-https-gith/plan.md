@@ -33,6 +33,7 @@ proved the layout split on Next 16.4.2).
 | Vendor `web/dist/sea-glass.mjs` from sea-glass@db70d71 with its Apache-2.0 `LICENSE`, typed by a hand-written `sea-glass.d.mts`. | The Kotlin library has no web artefact; the playground renderer is "the visual source of truth". Under `allowJs`, a sibling `.d.ts` is ignored, so the types file must be `.d.mts`. |
 | Two SWE tasks: the move first, then Shore. | The move touches every route and can be proven alone with no visible change. Shore's visual fix cycles then never re-touch it. |
 | Each task proves itself on a local `next start` of the delivery sha. QA and acceptance check otohime.dev's `build-sha` meta; if production has not caught up, acceptance passes on the local walk with a watch on `https://otohime.dev/shore`. | Public pages serve with no database. Production serves 7147cf8 today, so deploys are flowing, but a verification item must not depend on another system's timing. |
+| Every delivery commit is authored and committed as `Otohime <quiinthieu@gmail.com>` by setting `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL`, `GIT_COMMITTER_NAME` and `GIT_COMMITTER_EMAIL` on the `git commit` itself, and a verification item checks `git log -1 --format=%ae`. | Fleet leases export `GIT_AUTHOR_*=Claude Code`, which beats `git config`; this plan's first commit (0c39a9c) went out that way. Vercel Hobby only deploys owner-authored commits (README). |
 | CI's e2e test stops expecting the empty bench and expects the Shore row. | `e2e/rbac.test.ts` asserts "Nothing on the bench yet", and that step gates the production deploy. |
 
 ## Features (v1)
@@ -77,6 +78,9 @@ upstream recipe inspector, and re-skinning any otohime page.
   4. README layout block: `app/(site)/` is the whole site under one root
      layout; `app/` itself holds only `api/` and `icon.svg`; a page with its own
      design gets its own route group with a `layout.tsx`.
+  5. Commit with `GIT_AUTHOR_NAME=Otohime GIT_AUTHOR_EMAIL=quiinthieu@gmail.com
+     GIT_COMMITTER_NAME=Otohime GIT_COMMITTER_EMAIL=quiinthieu@gmail.com git commit …`
+     (the job env sets Claude Code, which Vercel will not deploy).
 - **Interfaces:** `app/(site)/`; `app/layout.tsx` (moved); `app/error.tsx`
   (moved); `app/not-found.tsx` (moved); `app/globals.css` (moved);
   `app/(site)/[...rest]/page.tsx`; `lib/build-stamp.test.ts`; `README.md`
@@ -87,7 +91,8 @@ upstream recipe inspector, and re-skinning any otohime page.
   unmatched URL returns 404 with "Nothing in this parcel"; `build-sha` is still
   published; `app/layout.tsx` no longer exists.
 - **Verification:** `npm ci`, lint, typecheck, unit tests; a production build
-  and a `next start` walk of the routes above on port 4018.
+  and a `next start` walk of the routes above on port 4018; the delivery
+  commit's author email is `quiinthieu@gmail.com`.
 
 ### 2. Add Shore, a sea-glass focus timer in its own root layout
 
@@ -139,6 +144,7 @@ upstream recipe inspector, and re-skinning any otohime page.
   9. README layout block: `app/(shore)/` is Shore, with its own root layout and
      CSS, and the sea-glass renderer vendored under Apache-2.0; the unit test
      glob covers it.
+  10. Commit with the owner identity env, as in task 1.
 - **Interfaces:** `app/(shore)/`; `content/site.ts`; `package.json`;
   `eslint.config.mjs`; `lib/build-stamp.test.ts`; `e2e/rbac.test.ts`;
   `README.md`
@@ -153,7 +159,7 @@ upstream recipe inspector, and re-skinning any otohime page.
   now adds a pebble that survives a reload, and the dark scene toggles.
 - **Verification:** `npm ci`, lint, typecheck, unit tests; a production build
   and a `next start` walk on port 4019 (markers above, plus the stylesheet
-  check).
+  check); the delivery commit's author email is `quiinthieu@gmail.com`.
 
 ## QA and acceptance
 
