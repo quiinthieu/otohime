@@ -212,9 +212,13 @@ variables set on `git commit`.
      - Finishing the same session twice does not mint twice: either
        `washUp` is idempotent on `startedAt`, or the test pins the current
        guard. Pick one and record it.
-  4. The isolation test still passes. Commit with the owner identity env,
+  4. README layout block: one line saying `app/(shore)/_lib/actions.ts`
+     holds the ledger changes behind Shore's buttons, and that
+     `actions.test.ts` proves the Begin → Finish now → reload path
+     without a browser.
+  5. The isolation test still passes. Commit with the owner identity env,
      as in task 1.
-- **Interfaces:** `app/(shore)/_lib/actions.ts`;
+- **Interfaces:** `README.md`; `app/(shore)/_lib/actions.ts`;
   `app/(shore)/_lib/actions.test.ts`; `app/(shore)/_components/shore-app.tsx`
 - **Non-goals:** visual changes, new features, a browser test harness
   (Playwright or jsdom), persisting a running session across reload, and
