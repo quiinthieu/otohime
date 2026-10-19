@@ -190,7 +190,7 @@ check "/sun title is Sun" has sun '<title>Sun</title>'
 check "/sun has no site sidebar" lacks sun 'aria-label="Main"'
 check "/sun build-sha" build_sha_matches
 check "/sun has exactly 8 chapter sections" count_eq sun 'data-chapter-section="' 8
-check "/sun has at least 2 scenes" count_ge sun 'data-scene="' 2
+check "/sun has exactly 8 scenes" count_eq sun 'data-scene="' 8
 check "/sun has the core temperature" has sun '15.7 million K'
 check "/sun has the photon's trip" has sun '170,000 years'
 check "/sun has the light time" has sun '8 min 19 s'

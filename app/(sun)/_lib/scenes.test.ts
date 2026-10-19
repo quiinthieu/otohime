@@ -1,16 +1,17 @@
 // Every animated chapter must have its scene in the stage, its keyframes in the
 // CSS, and a still under prefers-reduced-motion. Both files are read as text:
-// node --test cannot import .tsx. Task 3 widens ANIMATED to every chapter.
+// node --test cannot import .tsx.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
+import { CHAPTERS } from "./sun.ts";
 
 const SUN = join(import.meta.dirname, "..");
 const stage = readFileSync(join(SUN, "_components", "stage.tsx"), "utf8");
 const css = readFileSync(join(SUN, "sun.css"), "utf8");
 
-const ANIMATED = ["scale", "core"];
+const ANIMATED = CHAPTERS.map((c) => c.id);
 
 function filesUnder(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {

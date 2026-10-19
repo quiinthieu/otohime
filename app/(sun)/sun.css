@@ -91,7 +91,13 @@ main { flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; padding: 24px 5%
 /* Scenes: all are in the HTML, the one that matches data-chapter shows */
 .sun-svg [data-scene] { opacity: 0; visibility: hidden; transition: opacity 0.4s; }
 .sun-svg[data-chapter="scale"] [data-scene="scale"],
-.sun-svg[data-chapter="core"] [data-scene="core"] { opacity: 1; visibility: visible; }
+.sun-svg[data-chapter="core"] [data-scene="core"],
+.sun-svg[data-chapter="radiative"] [data-scene="radiative"],
+.sun-svg[data-chapter="convective"] [data-scene="convective"],
+.sun-svg[data-chapter="photosphere"] [data-scene="photosphere"],
+.sun-svg[data-chapter="chromosphere"] [data-scene="chromosphere"],
+.sun-svg[data-chapter="corona"] [data-scene="corona"],
+.sun-svg[data-chapter="life"] [data-scene="life"] { opacity: 1; visibility: visible; }
 
 /* Scene: scale. Resting pose: the pulse has arrived at Earth. */
 .sun-svg .earth { fill: #5aa9e6; }
@@ -141,6 +147,140 @@ main { flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; padding: 24px 5%
   60% { transform: translate(0, 0); opacity: 1; }
   95% { transform: translate(72px, -80px); opacity: 1; }
   100% { transform: translate(72px, -80px); opacity: 0; }
+}
+
+/* Scene: radiative. Resting pose: the zig-zag is drawn in full and the photon is at its end. */
+.sun-svg .speck { fill: var(--muted); opacity: 0.7; }
+.sun-svg .walk { fill: none; stroke: #fff3b0; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+.sun-svg .walker { fill: #fff3b0; stroke: var(--gold); stroke-width: 2; transform: translate(98px, -106px); }
+.sun-svg[data-chapter="radiative"] .walk { animation: sun-radiative-trail 9s linear infinite; }
+.sun-svg[data-chapter="radiative"] .walker { animation: sun-radiative-photon 9s linear infinite; }
+@keyframes sun-radiative-trail {
+  0%, 6% { stroke-dashoffset: 1; opacity: 1; }
+  86%, 97% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@keyframes sun-radiative-photon {
+  0% { transform: translate(0, 0); opacity: 0; }
+  6% { transform: translate(0, 0); opacity: 1; }
+  18.8% { transform: translate(30px, -20px); }
+  28.1% { transform: translate(14px, -42px); }
+  40.9% { transform: translate(48px, -54px); }
+  51.7% { transform: translate(32px, -80px); }
+  65.7% { transform: translate(70px, -70px); }
+  73.6% { transform: translate(66px, -92px); }
+  86%, 97% { transform: translate(98px, -106px); opacity: 1; }
+  100% { transform: translate(98px, -106px); opacity: 0; }
+}
+
+/* Scene: convective. Resting pose: arrows on every cell, the dashes at rest. */
+.sun-svg .box { stroke: var(--muted); stroke-width: 1.5; }
+.sun-svg .cell { fill: none; stroke: rgba(255, 255, 255, 0.85); stroke-width: 2.5; stroke-dasharray: 9 7; stroke-dashoffset: 0; }
+.sun-svg .arrow { fill: #fff; stroke: none; }
+.sun-svg .hint { fill: rgba(255, 255, 255, 0.85); }
+.sun-svg[data-chapter="convective"] .cell.cw { animation: sun-convective-roll 2.4s linear infinite; }
+.sun-svg[data-chapter="convective"] .cell.ccw { animation: sun-convective-rollback 2.4s linear infinite; }
+@keyframes sun-convective-roll { to { stroke-dashoffset: -32; } }
+@keyframes sun-convective-rollback { to { stroke-dashoffset: 32; } }
+
+/* Scene: photosphere. Resting pose: both spots mid-disc, the equator one ahead. */
+.sun-svg .granule { fill: #ffe9a8; opacity: 0.55; }
+.sun-svg .penumbra { fill: #7a3b10; }
+.sun-svg .umbra { fill: #2a1206; }
+.sun-svg .spot-eq { transform: translateX(145px); }
+.sun-svg .spot-hi { transform: translateX(35px); }
+.sun-svg[data-chapter="photosphere"] .granule { animation: sun-photosphere-shimmer 3s ease-in-out var(--d, 0s) infinite; }
+.sun-svg[data-chapter="photosphere"] .spot-eq { animation: sun-photosphere-equator 5s linear infinite; }
+.sun-svg[data-chapter="photosphere"] .spot-hi { animation: sun-photosphere-pole 7.2s linear infinite; }
+@keyframes sun-photosphere-shimmer {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.85; }
+}
+@keyframes sun-photosphere-equator {
+  0% { transform: translateX(0); opacity: 0; }
+  8% { opacity: 1; }
+  92% { transform: translateX(220px); opacity: 1; }
+  100% { transform: translateX(220px); opacity: 0; }
+}
+@keyframes sun-photosphere-pole {
+  0% { transform: translateX(0); opacity: 0; }
+  8% { opacity: 1; }
+  92% { transform: translateX(140px); opacity: 1; }
+  100% { transform: translateX(140px); opacity: 0; }
+}
+
+/* Scene: chromosphere. Resting pose: spicules at full height. */
+.sun-svg .rim { fill: none; stroke: #ff4d6d; stroke-width: 5; opacity: 0.6; }
+.sun-svg .spicule { stroke: #ff6f91; stroke-width: 2.5; stroke-linecap: round; transform: scaleY(1); }
+.sun-svg[data-chapter="chromosphere"] .spicule { animation: sun-chromosphere-jet 2.4s ease-out var(--d, 0s) infinite; }
+.sun-svg[data-chapter="chromosphere"] .rim { animation: sun-chromosphere-rim 3s ease-in-out infinite; }
+@keyframes sun-chromosphere-jet {
+  0%, 100% { transform: scaleY(0.15); }
+  35%, 45% { transform: scaleY(1); }
+}
+@keyframes sun-chromosphere-rim {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.85; }
+}
+
+/* Scene: corona. Resting pose: the CME is mid-flight between the Sun and Earth. */
+.sun-svg .streamer { fill: var(--gold); opacity: 0.4; }
+.sun-svg .glow { fill: none; stroke: #ff6f61; stroke-width: 9; stroke-linecap: round; opacity: 0.25; }
+.sun-svg .prominence { fill: none; stroke: #ff6f61; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 7; stroke-dashoffset: 0; }
+.sun-svg .wind { stroke: #bfe3ff; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 10 14; stroke-dashoffset: 0; opacity: 0.8; }
+.sun-svg .bubble { fill: var(--sky); fill-opacity: 0.85; stroke: #5aa9e6; stroke-width: 1.5; stroke-dasharray: 4 4; }
+.sun-svg .cme { transform-box: fill-box; transform-origin: center; transform: translate(97px, 58px) scale(1); }
+.sun-svg .cme circle { fill: rgba(255, 209, 102, 0.18); stroke: var(--gold); stroke-width: 2.5; }
+.sun-svg[data-chapter="corona"] .streamer { animation: sun-corona-streamer 4s ease-in-out var(--d, 0s) infinite; }
+.sun-svg[data-chapter="corona"] .prominence { animation: sun-corona-loop 1.6s linear infinite; }
+.sun-svg[data-chapter="corona"] .wind { animation: sun-corona-wind 1.2s linear infinite; }
+.sun-svg[data-chapter="corona"] .cme { animation: sun-corona-cme 6s ease-in-out infinite; }
+@keyframes sun-corona-streamer {
+  0%, 100% { transform: scaleY(0.88); opacity: 0.25; }
+  50% { transform: scaleY(1.12); opacity: 0.5; }
+}
+@keyframes sun-corona-loop { to { stroke-dashoffset: -34; } }
+@keyframes sun-corona-wind { to { stroke-dashoffset: -48; } }
+@keyframes sun-corona-cme {
+  0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+  50% { transform: translate(97px, 58px) scale(1); opacity: 1; }
+  100% { transform: translate(170px, 102px) scale(1.5); opacity: 0; }
+}
+
+/* Scene: life. Resting pose: all three sizes drawn and labelled, the marker at the end. */
+.sun-svg .axis { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.sun-svg .tick { fill: var(--muted); }
+.sun-svg .body-sun { fill: #ffd166; stroke: var(--ink); stroke-width: 1.5; }
+.sun-svg .body-giant { fill: #d94f3a; stroke: var(--ink); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; }
+.sun-svg .body-dwarf { fill: #e8f1ff; stroke: var(--ink); stroke-width: 1.5; }
+.sun-svg .marker { fill: var(--gold); transform: translateX(295px); }
+.sun-svg[data-chapter="life"] .marker { animation: sun-life-marker 9s linear infinite; }
+.sun-svg[data-chapter="life"] .stage-sun { animation: sun-life-sun 9s ease-in-out infinite; }
+.sun-svg[data-chapter="life"] .stage-giant { animation: sun-life-giant 9s ease-in-out infinite; }
+.sun-svg[data-chapter="life"] .body-giant { animation: sun-life-swell 9s ease-in-out infinite; }
+.sun-svg[data-chapter="life"] .stage-dwarf { animation: sun-life-dwarf 9s ease-in-out infinite; }
+@keyframes sun-life-marker {
+  0% { transform: translateX(0); opacity: 1; }
+  90%, 96% { transform: translateX(295px); opacity: 1; }
+  100% { transform: translateX(295px); opacity: 0; }
+}
+@keyframes sun-life-sun {
+  0%, 20%, 100% { opacity: 0.2; }
+  26%, 95% { opacity: 1; }
+}
+@keyframes sun-life-giant {
+  0%, 50%, 100% { opacity: 0.15; }
+  62%, 80% { opacity: 1; }
+  92% { opacity: 0.35; }
+}
+@keyframes sun-life-swell {
+  0%, 50%, 100% { transform: scale(0.45); }
+  62%, 80% { transform: scale(1); }
+  92% { transform: scale(0.6); }
+}
+@keyframes sun-life-dwarf {
+  0%, 82%, 100% { opacity: 0.15; }
+  90%, 95% { opacity: 1; }
 }
 
 /* Controls and dots */

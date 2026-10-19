@@ -92,6 +92,8 @@ Walk Capsule and the site the same way with `bash scripts/walk-capsule.sh` (buil
 
 Walk Sun and the site the same way with `bash scripts/walk-sun.sh` (builds, serves on :4027), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-sun.sh`.
 
+To add a Sun chapter: add an entry to `CHAPTERS` in `app/(sun)/_lib/sun.ts` with sourced facts, add a `<g data-scene="<id>">` group to `app/(sun)/_components/stage.tsx` (no filter on it), and add `@keyframes sun-<id>-<part>` to `app/(sun)/sun.css`, run only under `[data-chapter="<id>"]`, with the scene's resting pose as its static style (reduced motion shows that pose). `sun.test.ts` and `scenes.test.ts` check each of these, and the walk counts the scene groups.
+
 Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and serves on :4025: the three starters from `content/site.ts` must still show, with status 200), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-music.sh`.
 
 See every drawn Capsule card on one sheet with `npm run --silent capsule:sheet > /tmp/capsule.svg`, then open the file in a browser or any SVG viewer.
