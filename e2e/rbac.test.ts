@@ -123,6 +123,33 @@ test("the owner lists users and makes an admin", async () => {
   assert.ok(html.includes(mail("victim")));
 });
 
+// The roles page draws one <tbody> per resource: a rowgroup header, then a row per action whose
+// cells run owner, admin, user and say "Allowed" or "Not allowed" for screen readers.
+function grants(html: string, resource: string) {
+  const group = html.split("<tbody>").find((t) => t.includes(`>${resource}</th>`));
+  assert.ok(group, `a ${resource} row on /admin/roles`);
+  const rows = [...group.matchAll(/<th scope="row"[^>]*>([^<]+)<\/th>(.*?)<\/tr>/g)];
+  return Object.fromEntries(
+    rows.map(([, action, cells]) => [
+      action,
+      [...cells.matchAll(/(Not allowed|Allowed)</g)].map((m) => m[1] === "Allowed"),
+    ]),
+  );
+}
+
+test("song create and delete are owner-only on /admin/roles", async () => {
+  for (const who of ["owner", "admin"]) {
+    const res = await page("/admin/roles", users[who].cookie);
+    assert.equal(res.status, 200, who);
+    // [owner, admin, user]
+    assert.deepEqual(
+      grants(await res.text(), "song"),
+      { create: [true, false, false], delete: [true, false, false] },
+      who,
+    );
+  }
+});
+
 test("an admin can't escalate or touch the owner", async () => {
   const { rows } = await db.query(`SELECT token FROM session WHERE user_id = $1 LIMIT 1`, [
     users.owner.id,

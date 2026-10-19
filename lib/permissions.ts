@@ -1,13 +1,17 @@
 // Site-wide roles. Pure and package-only imports, so `node --test` loads it as-is.
-import { adminAc, defaultAc as ac, userAc } from "better-auth/plugins/admin/access";
+import { createAccessControl } from "better-auth/plugins/access";
+import { adminAc, defaultStatements, userAc } from "better-auth/plugins/admin/access";
+
+// Better Auth's admin statements plus the songs owners put on /music.
+export const ac = createAccessControl({ ...defaultStatements, song: ["create", "delete"] });
 
 export const statements = ac.statements;
 
 // Highest first: the roles page renders its columns in this order.
 export const roles = {
-  owner: ac.newRole(ac.statements), // everything, incl. impersonate-admins
-  admin: adminAc, // Better Auth's admin set (no impersonate-admins)
-  user: userAc, // nothing
+  owner: ac.newRole(ac.statements), // everything, incl. impersonate-admins and song
+  admin: ac.newRole({ ...adminAc.statements }), // Better Auth's admin set; no song
+  user: ac.newRole({ ...userAc.statements }), // nothing
 };
 
 export type RoleName = keyof typeof roles;

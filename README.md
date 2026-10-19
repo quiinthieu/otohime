@@ -35,6 +35,7 @@ content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
 lib/permissions.ts   roles and what each may do
+lib/songs.ts         the rules for songs owners add (video links, field limits); pure
 lib/machines.ts      state for the figures you can play with
 db/                  Drizzle schema, client, and migrations
 ```
@@ -48,6 +49,8 @@ The browser talks only to this Next.js server. `lib/` and `db/` are the only cod
 ## Roles
 
 There are three site-wide roles: `owner` > `admin` > `user`. New accounts are `user`. The full permission matrix is at `/admin/roles`. An admin can only manage people ranked below them, and can only hand out roles below their own. So owners can't be created from the app at all.
+
+`song: create, delete` (the songs owners add to `/music`) is owner-only: admins and users have no grant.
 
 To make the first owner, sign up, then run:
 
@@ -72,7 +75,9 @@ The change takes effect on the next request.
   BASE_URL=http://localhost:4010 DATABASE_URL=postgresql://otohime:otohime@localhost:5433/otohime npm run test:e2e
   ```
 
-CI runs both on every PR.
+- `bash scripts/e2e-local.sh` is the one-command e2e. It needs docker: it starts a throwaway Postgres on a free port, applies the migrations, builds (skip with `SKIP_BUILD=1`), serves on `APP_PORT` (default 4027), runs `npm run test:e2e`, then removes the container and the server.
+
+CI runs the unit and e2e tests on every PR.
 
 Walk Shore and the site with `bash scripts/walk-shore.sh` (builds, serves on :4019, one `ok`/`not ok` line per check), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-shore.sh`.
 

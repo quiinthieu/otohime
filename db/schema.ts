@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, index, integer } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -78,6 +78,19 @@ export const verification = pgTable(
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
+
+// Songs owners add to the /music television; the three starters stay in content/site.ts.
+export const song = pgTable("song", {
+  id: text("id").primaryKey(), // crypto.randomUUID()
+  title: text("title").notNull(),
+  artist: text("artist").notNull(),
+  note: text("note").notNull(), // "" when none
+  colour: text("colour").notNull(), // a Swatch key, checked in lib/songs.ts
+  video: text("video").notNull(), // 11-char YouTube id
+  position: integer("position").notNull(), // play order after the built-ins
+  createdBy: text("created_by").references(() => user.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
 
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),

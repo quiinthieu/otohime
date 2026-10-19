@@ -8,7 +8,7 @@ import {
 import { admin } from "better-auth/plugins/admin";
 import { db } from "../db/client";
 import * as schema from "../db/schema";
-import { mayAct, roles } from "./permissions";
+import { ac, mayAct, roles } from "./permissions";
 
 // /admin/* endpoints that act on nobody else. Every other /admin/* path must
 // name a target the actor outranks, or it is refused (fail closed).
@@ -112,6 +112,6 @@ export const auth = betterAuth({
     ...(preview ? [preview] : []),
   ],
   // adminRoles also makes owners need impersonate-admins to be impersonated.
-  plugins: [admin({ roles, adminRoles: ["owner", "admin"] })],
+  plugins: [admin({ ac, roles, adminRoles: ["owner", "admin"] })],
   hooks: { before: roleHierarchy },
 });

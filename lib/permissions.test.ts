@@ -17,6 +17,17 @@ test("role permissions", () => {
   assert.ok(can("user,admin", { user: ["list"] }), "several roles: any one grants");
 });
 
+test("only owners may add or remove songs", () => {
+  assert.ok(can("owner", { song: ["create", "delete"] }));
+  assert.ok(can("owner", { song: ["create"] }));
+  assert.ok(can("owner,user", { song: ["delete"] }));
+  for (const role of ["admin", "user", null, undefined, "", "constructor", "__proto__"]) {
+    assert.ok(!can(role, { song: ["create"] }), String(role));
+    assert.ok(!can(role, { song: ["delete"] }), String(role));
+    assert.ok(!can(role, { song: ["create", "delete"] }), String(role));
+  }
+});
+
 test("ranks", () => {
   assert.deepEqual(
     ["owner", "admin", "user", null, "", "toString", "admin,owner"].map(rankOf),
