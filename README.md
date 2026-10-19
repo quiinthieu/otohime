@@ -23,6 +23,8 @@ app/(site)/(home)/   the front page, an entrance with no sidebar
 app/(site)/(app)/    the other pages, with the sidebar
 app/(shore)/        Shore, a focus timer: its own root layout and CSS (no Tailwind), with the
                      sea-glass renderer vendored in _lib/ under Apache-2.0; `npm test` covers its _lib/*.test.ts
+app/(capsule)/       Capsule, a coin-and-crank card machine: its own root layout and CSS (no Tailwind),
+                     with its pure engine (cards, draws, coins, ledger) in _lib/; `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -54,7 +56,7 @@ The change takes effect on the next request.
 
 ## Tests
 
-- `npm test` runs the unit tests (roles and the rank rule, and Shore's timer, ledger and pebbles under `app/(shore)/_lib/`). It needs no database.
+- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger and machine under `app/(capsule)/_lib/*.test.ts`). It needs no database.
 - `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
 
   ```bash
