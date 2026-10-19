@@ -21,6 +21,8 @@ app/                 holds only api/ and icon.svg; every page lives in a route g
 app/(site)/          the whole site under one root layout (layout.tsx, globals.css)
 app/(site)/(home)/   the front page, an entrance with no sidebar
 app/(site)/(app)/    the other pages, with the sidebar
+app/(site)/(app)/music/  /music, a television with one song per channel: the starters live in content/site.ts,
+                     signed-in owners add channels from the page (at most 12) and remove them; actions.ts holds the writes
 app/(shore)/        Shore, a focus timer: its own root layout and CSS (no Tailwind), with the
                      sea-glass renderer vendored in _lib/ under Apache-2.0; `npm test` covers its _lib/*.test.ts
                      _lib/actions.ts holds the ledger changes behind Shore's buttons; actions.test.ts proves
@@ -36,6 +38,7 @@ lib/pages.ts         the public pages (sidebar and console menu); add a project 
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
 lib/permissions.ts   roles and what each may do
 lib/songs.ts         the rules for songs owners add (video links, field limits); pure
+lib/songs-store.ts   reads, adds and removes the songs owners add (the only code that touches the `song` table)
 lib/machines.ts      state for the figures you can play with
 db/                  Drizzle schema, client, and migrations
 ```
@@ -82,6 +85,8 @@ CI runs the unit and e2e tests on every PR.
 Walk Shore and the site with `bash scripts/walk-shore.sh` (builds, serves on :4019, one `ok`/`not ok` line per check), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-shore.sh`.
 
 Walk Capsule and the site the same way with `bash scripts/walk-capsule.sh` (builds, serves on :4021), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-capsule.sh`.
+
+Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and serves on :4025: the three starters from `content/site.ts` must still show, with status 200), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-music.sh`.
 
 See every drawn Capsule card on one sheet with `npm run --silent capsule:sheet > /tmp/capsule.svg`, then open the file in a browser or any SVG viewer.
 

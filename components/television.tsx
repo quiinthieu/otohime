@@ -232,7 +232,7 @@ function TVSet({
           CH {channel}
         </text>
         <circle cx={284} cy={381} r={4.5} className="led" fill={lamp ?? "var(--coral)"} />
-        <g transform={`rotate(${-45 + 45 * (channel - 1)} 318 381)`}>
+        <g transform={`rotate(${-45 + 45 * Math.min(channel - 1, 6)} 318 381)`}>
           <circle cx={318} cy={381} r={10} className="fig-top" />
           <path d="M318 381v-8" fill="none" strokeWidth={2} />
         </g>

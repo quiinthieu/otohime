@@ -92,7 +92,7 @@ export const site = {
     { title: "Capsule", note: "A coin, a crank, and a hand-drawn card to keep.", href: "/capsule", status: "live", colour: "coral" },
   ] as Project[],
   // TODO(otohime)
-  music: "Three songs on repeat, one channel each. Tune in.",
+  music: "Songs on repeat, one channel each. Tune in.",
   // The same songs on Spotify, linked under the player: the id after
   // /playlist/ in Share → Copy link.
   playlist: "609w1YzsoSy1zuHmyBhYwu",
