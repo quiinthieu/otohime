@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
+import { clearDay, sceneClass, washUp, withScene } from "../_lib/actions";
 import { STORAGE_KEY, normalizeLedger, serialize, today, type Ledger, type Scene } from "../_lib/ledger";
-import { LENGTHS, mint, tally, dayNumber, type Length } from "../_lib/pebbles";
+import { LENGTHS, tally, type Length } from "../_lib/pebbles";
 import { begin, format, pause, remaining, resume, type Session } from "../_lib/timer";
 import { Glass } from "./glass";
 import { Icon } from "./icons";
@@ -64,13 +65,7 @@ function update(change: (ledger: Ledger) => Ledger) {
   listeners.forEach((cb) => cb());
 }
 
-function washUp(session: Session) {
-  update((ledger) => {
-    const day = dayNumber(session.startedAt);
-    const index = ledger.pebbles.filter((p) => dayNumber(p.startedAt) === day).length;
-    return { ...ledger, pebbles: [...ledger.pebbles, mint(session.startedAt, session.minutes as Length, index)] };
-  });
-}
+const finish = (session: Session) => update((ledger) => washUp(ledger, session));
 
 export function ShoreApp({ header, footer }: { header: ReactNode; footer: ReactNode }) {
   const raw = useSyncExternalStore(subscribe, read, readServer);
@@ -96,7 +91,7 @@ export function ShoreApp({ header, footer }: { header: ReactNode; footer: ReactN
       setClock(t);
       if (!finished && remaining(t, session) <= 0) {
         finished = true;
-        washUp(session);
+        finish(session);
         setPhase("done");
       }
     };
@@ -136,14 +131,13 @@ export function ShoreApp({ header, footer }: { header: ReactNode; footer: ReactN
   };
   const finishNow = () => {
     if (!session) return;
-    washUp(session);
+    finish(session);
     setClock(Date.now());
     setPhase("done");
   };
-  const setScene = (value: Scene) => update((l) => ({ ...l, scene: value }));
+  const setScene = (value: Scene) => update((l) => withScene(l, value));
   const clearToday = () => {
-    const day = dayNumber(Date.now());
-    update((l) => ({ ...l, pebbles: l.pebbles.filter((p) => dayNumber(p.startedAt) !== day) }));
+    update((l) => clearDay(l, Date.now()));
     setConfirming(false);
   };
 
@@ -159,7 +153,7 @@ export function ShoreApp({ header, footer }: { header: ReactNode; footer: ReactN
           : "Pick a length, then press Begin.";
 
   return (
-    <div className={scene === "dark" ? "shore dark-scene" : "shore"}>
+    <div className={sceneClass(scene)}>
       {header}
       <main className="stage">
         <p className="eyebrow">ONE SESSION. ONE PIECE OF GLASS.</p>

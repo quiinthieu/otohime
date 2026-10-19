@@ -23,6 +23,8 @@ app/(site)/(home)/   the front page, an entrance with no sidebar
 app/(site)/(app)/    the other pages, with the sidebar
 app/(shore)/        Shore, a focus timer: its own root layout and CSS (no Tailwind), with the
                      sea-glass renderer vendored in _lib/ under Apache-2.0; `npm test` covers its _lib/*.test.ts
+                     _lib/actions.ts holds the ledger changes behind Shore's buttons; actions.test.ts proves
+                     Begin -> Finish now -> reload without a browser
 app/(capsule)/       Capsule, a coin-and-crank card machine: its own root layout and CSS (no Tailwind),
                      with its pure engine (cards, draws, coins, ledger) in _lib/; `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
