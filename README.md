@@ -48,6 +48,13 @@ app/(elements)/      Elements, a periodic table with a Bohr atom per element: it
                      its data and pure maths are in _lib/ (elements.ts vendored under CC BY-SA 3.0 with
                      its LICENSE.md, funFacts.json, categories, grid, atom, view, format); `npm test` covers its
                      _lib/*.test.ts; only _components/atom-3d.tsx may import three, fiber or drei
+app/(vinyl)/         Vinyl, a crate of records, a turntable and a visible YouTube player: its own root layout
+                     and CSS (no Tailwind, system fonts); layout.tsx and vinyl.css are its root layout;
+                     vinyl/page.tsx is /vinyl (the client island plus a no-JS list with a Watch on YouTube
+                     link per record); _components/ holds the shell (vinyl-app.tsx: the one player, timers,
+                     the 250 ms clock, the rAF platter, visibility, keys), the crate, sleeves, turntable,
+                     monitor, LCD and transport; its pure engine is in _lib/ (records, deck, spin, geometry,
+                     oembed, player, youtube); `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -105,6 +112,8 @@ Walk Sun and the site the same way with `bash scripts/walk-sun.sh` (builds, serv
 
 Walk Elements and the site the same way with `bash scripts/walk-elements.sh` (builds, serves on :4029: 118 cells, 10 legend items, both series markers, the attribution links, no 3D code on the table page, iron's fact on `/elements/fe` and a 404 for `/elements/xx`), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-elements.sh`.
 
+Walk Vinyl and the site the same way with `bash scripts/walk-vinyl.sh` (builds, serves on :4031: 12 sleeves, one monitor and one player host, no `iframe_api` or `<iframe>` in the server HTML, no `no-referrer` policy, Vinyl's one stylesheet with the player's `aspect-ratio: 16 / 9`, `min-width: 480px` and `max(200px, …)` and nothing hiding it, and `/projects` linking `/vinyl` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-vinyl.sh`.
+
 Sun's parts and callouts live in `app/(sun)/_lib/poster.ts`; the ink is rough.js with a fixed seed in `app/(sun)/_lib/ink.ts`; `bash scripts/walk-sun.sh` counts the words on the served page (cap 220, `WORD_CAP` in `app/(sun)/_lib/words.ts`).
 
 Sun's motion is CSS only in `app/(sun)/sun.css`: the ink draws itself on, then three loops run (convection, photon, wind); all of it is off under reduced motion, and `app/(sun)/_lib/motion.test.ts` tests it.
@@ -135,7 +144,7 @@ The table is server-rendered: 118 links to `/elements/<symbol>`, so it works bef
 
 ## Vinyl records
 
-Vinyl (`app/(vinyl)/`, the page arrives with the next task) plays a crate of records on a turntable, with the music in a visible YouTube player. Its records live in `app/(vinyl)/_lib/records.json`; the rules they must keep are in `validateRecords` in `app/(vinyl)/_lib/records.ts`.
+Vinyl (`/vinyl`, `app/(vinyl)/`) plays a crate of records on a turntable, with the music in a visible YouTube player. Its records live in `app/(vinyl)/_lib/records.json`; the rules they must keep are in `validateRecords` in `app/(vinyl)/_lib/records.ts`.
 
 **Adding a record.** Append an object to `records.json`:
 
@@ -163,6 +172,23 @@ Vinyl (`app/(vinyl)/`, the page arrives with the next task) plays a crate of rec
 | `four-winds` | Four Winds | `IXA6bQsVNjs` |
 | `chalk-and-cedar` | Chalk and Cedar | `agneRtEe-t8` |
 | `nocturne-for-trains` | Nocturne for Trains | `vR49dHUwMUA` |
+
+**Playing.** "Place on turntable" puts a record on the platter and, the first time, loads YouTube's player script and creates the page's one player; every later record is cued into that same player. Play swings the arm in; it hovers while YouTube buffers, lowers when YouTube reports playing, and the platter spins up and down with inertia (`_lib/spin.ts`, one `requestAnimationFrame` loop) following YouTube's reported state, not the buttons. Keys in the deck: Space plays or pauses, ← and → change record, Escape ejects. Under reduced motion the platter stays still and the PLAYING lamp shows it plays.
+
+**YouTube compliance checklist.** These rules come from YouTube's API Services policies and win over every other requirement:
+
+| # | Rule | Where it is enforced |
+| --- | --- | --- |
+| 1 | The player is visible, at least 200×200 (480×270 or more on a desktop, 16:9) | `vinyl.css`: `[data-player-host]` is `width: 100%; height: max(200px, 56.25vw)`, and from 1024 px `min-width: 480px; aspect-ratio: 16 / 9`; its box is reserved before the player loads; no rule hides it (`_lib/geometry.test.ts`, `scripts/walk-vinyl.sh`) |
+| 2 | Nothing in front of any part of the player | The monitor's bezel and chin are padding around the host and a row below it; the host is `position: relative; z-index: 1; isolation: isolate`; the placeholder sits behind it and goes once the iframe exists; error and tap notes sit in the chin; the turntable cell clips the tonearm (`overflow: hidden`); `_lib/geometry.test.ts` |
+| 3 | No audio isolation, no downloads | The video is always shown; nothing offers a download and only a future `crackle.ts` may open an `AudioContext` (`_lib/isolation.test.ts`) |
+| 4 | Documented player parameters only; YouTube thumbnails untouched | `PLAYER_VARS` is exactly `playsinline`, `rel`, `origin` (`_lib/player.test.ts`); sleeves and labels are drawn by code and `validateRecords` rejects YouTube art URLs |
+| 5 | Playback starts only from a user action; one player per page | Only actions carrying `user: true` can produce a play (`_lib/deck.test.ts`); auto-advance and auto-skip cue the next record and wait for Play; the player script loads on the first placement and one `YT.Player` is reused |
+| 6 | No background play | A hidden tab pauses (`visibilitychange`); `pagehide` and unmount destroy the player (`vinyl-app.tsx`, `_lib/deck.test.ts`) |
+| 7 | Referer sent; `origin` passed | No `Referrer-Policy` and no `referrerpolicy` anywhere, so the browser default `strict-origin-when-cross-origin` applies; `origin: location.origin` (`scripts/walk-vinyl.sh`, `_lib/player.test.ts`) |
+| 8 | Watch on YouTube per record; graceful errors | Every sleeve, the monitor and the no-JS list link `youtube.com/watch?v=`; `onError` shows a friendly message with Skip and Watch on YouTube and cues the next record after 4 s; a play the browser refuses shows "Tap the video to play" |
+
+**Licensing notes.** All sleeves and labels are drawn by code from each record's colours; no image, font or audio file is shipped or fetched. These projects were studied for ideas only, and nothing was copied from any of them: shadcn.io's Vinyl Player and Vinyl Collection blocks (shadcn.io's licence forbids redistribution), Fitbert/the-shelf (no licence file, so all rights reserved), thebuggeddev/vinyl (no licence visible; a three.js player, not used) and bitu467/record-player (no licence).
 
 ## Deploying
 
