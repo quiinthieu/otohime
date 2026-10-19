@@ -33,6 +33,8 @@ app/(capsule)/       Capsule, a coin-and-crank card machine: its own root layout
                      _components/ holds the machine, the card frame and the app (buttons, coin tray, album)
                      _lib/art/ holds the hand-drawn cards as path data (one file per card, ART in index.ts)
                      and svg.ts, which draws them for the page and for `npm run capsule:sheet`
+app/(sun)/           Sun, an animated cutaway of the Sun: its own root layout and CSS, whose facts
+                     and tour are pure data in _lib/ (sun.ts, format.ts, tour.ts); `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -68,7 +70,7 @@ The change takes effect on the next request.
 
 ## Tests
 
-- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`). It needs no database.
+- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's facts, number words and tour under `app/(sun)/_lib/*.test.ts`). It needs no database.
 - `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
 
   ```bash
