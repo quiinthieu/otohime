@@ -100,6 +100,8 @@ Walk Sun and the site the same way with `bash scripts/walk-sun.sh` (builds, serv
 
 Sun's parts and callouts live in `app/(sun)/_lib/poster.ts`; the ink is rough.js with a fixed seed in `app/(sun)/_lib/ink.ts`; `bash scripts/walk-sun.sh` counts the words on the served page (cap 220, `WORD_CAP` in `app/(sun)/_lib/words.ts`).
 
+Sun's motion is CSS only in `app/(sun)/sun.css`: the ink draws itself on, then three loops run (convection, photon, wind); all of it is off under reduced motion, and `app/(sun)/_lib/motion.test.ts` tests it.
+
 Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and serves on :4025: the three starters from `content/site.ts` must still show, with status 200), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-music.sh`.
 
 See every drawn Capsule card on one sheet with `npm run --silent capsule:sheet > /tmp/capsule.svg`, then open the file in a browser or any SVG viewer.

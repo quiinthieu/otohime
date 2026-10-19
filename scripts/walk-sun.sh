@@ -165,6 +165,12 @@ sun_stylesheet() {
   done
 }
 
+# The stylesheet sun_stylesheet fetched draws the ink on (task 3's motion).
+stylesheet_draws() {
+  [ -s "$WORK/sun.css" ] || { echo "no stylesheet fetched"; return 1; }
+  grep -qF -- "sun-draw" "$WORK/sun.css" || { echo "stylesheet has no sun-draw"; return 1; }
+}
+
 # Exactly three stages inside the <ol data-life> strip.
 life_strip() {
   local strip n
@@ -231,6 +237,8 @@ check "/sun has at most $WORD_CAP visible words (counted $WORDS)" words_within_c
 check "/sun links NASA's Sun facts" has sun 'href="https://science.nasa.gov/sun/facts/"'
 check "/sun links home" has sun 'href="/"'
 check "/sun stylesheet is Sun's own" sun_stylesheet
+check "/sun has exactly 3 ink loops" count_eq sun 'data-loop="' 3
+check "/sun stylesheet draws the ink on" stylesheet_draws
 
 check "/projects returns 200" status_is projects 200
 check "/projects has the sidebar" has projects 'aria-label="Main"'

@@ -182,6 +182,57 @@ h1 {
   .life { max-width: 720px; justify-self: center; width: 100%; }
 }
 
+/* Motion, CSS only. The ink draws itself on, layer by layer from the core out
+   (about 2.5s), then three loops run: convection cells roll, a photon walks its
+   zig-zag, the solar wind streams off. Every base style is the resting pose:
+   the dash and the hidden starts live only inside @keyframes, so a still
+   (reduced motion, or CSS that never loads) is the whole drawing. */
+.sun-svg { --draw: 0.9s; --loops: 2.6s; }
+[data-layer="core"] { --at: 0s; }
+[data-layer="radiative"] { --at: 0.25s; }
+[data-layer="convective"] { --at: 0.5s; }
+[data-layer="photosphere"] { --at: 0.75s; }
+[data-layer="chromosphere"] { --at: 1s; }
+[data-layer="corona"] { --at: 1.25s; }
+
+[data-layer] path { animation: sun-draw var(--draw) ease-in-out var(--at) both; }
+[data-layer] .wash,
+[data-layer] .hachure,
+[data-layer] .pin { animation: sun-ink-fade 0.6s ease-out calc(var(--at) + 0.6s) both; }
+.sun-svg .earth { animation: sun-ink-fade 0.6s ease-out 2s both; }
+
+[data-loop] { animation: sun-ink-fade 0.6s ease-out var(--loops) both; }
+[data-loop="convection"] .cell { animation: sun-convection-roll 8s linear calc(var(--loops) + 0.6s) infinite; }
+[data-loop="convection"] .ccw { animation-direction: reverse; }
+[data-loop="photon"] .walker { animation: sun-photon-walk 5s linear calc(var(--loops) + 0.6s) infinite; }
+[data-loop="wind"] .stream {
+  animation: sun-wind-stream 2.4s linear calc(var(--loops) + 0.6s + var(--i, 0) * 0.45s) infinite backwards;
+}
+
+@keyframes sun-draw {
+  from { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  to { stroke-dasharray: 1; stroke-dashoffset: 0; }
+}
+/* no "to": each part fades up to its own resting opacity */
+@keyframes sun-ink-fade {
+  from { opacity: 0; }
+}
+@keyframes sun-convection-roll {
+  to { transform: rotate(360deg); }
+}
+/* stage.tsx rests the dot at -0.6; the dash pattern repeats every 1.01, so
+   -0.6 to -1.61 runs the dot out to the convection zone and back in from the
+   core without a jump. */
+@keyframes sun-photon-walk {
+  from { stroke-dashoffset: -0.6; }
+  to { stroke-dashoffset: -1.61; }
+}
+@keyframes sun-wind-stream {
+  from { transform: translate(0, 0); opacity: 0; }
+  25%, 70% { opacity: 1; }
+  to { transform: translate(var(--wx), var(--wy)); opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
