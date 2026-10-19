@@ -38,7 +38,7 @@ A normal main run takes about 4 minutes from push to live.
 | Decision | Why |
 | --- | --- |
 | One SWE task: pm-171's revision-2 contract, committed explicitly as the owner with no `Co-Authored-By` trailer. | It is the smallest change that both completes pm-171 and tests the author hypothesis. |
-| The commit author is set with `git -c user.name=Otohime -c user.email=quiinthieu@gmail.com commit`, not left to platform defaults. | Fleet leases still commit as Claude Code (pm-176 rep-3438); explicit flags work on any substrate. |
+| The commit author is set with `GIT_AUTHOR_*`/`GIT_COMMITTER_*` env vars on `git commit`, not left to platform defaults and not with `git -c user.*`. | Fleet leases still commit as Claude Code (pm-176 rep-3438) and export `GIT_AUTHOR_*`, which override `-c user.*`; only env vars set on the commit command win on any substrate. |
 | An author gate is a verification item. | A wrongly authored delivery would silently not deploy and cost a QA cycle. The item runs only when the checkout has a `.git`. |
 | `.github/workflows/ci.yml` is not changed. | A blind CI edit cannot be observed and could break the deploy path that last worked. |
 | Production is checked by QA at its start (one curl), not waited for. | The push-to-live time is about 4 minutes and QA starts later. A 404 with a correctly authored commit is a `cause=environment` fail that re-raises the CI chore. |
@@ -73,11 +73,15 @@ otohime.dev serves.
    on any page names the live commit, and one line saying commits to main must
    be authored by the site owner's GitHub email or Vercel Hobby will not deploy
    them.
-5. Commit explicitly as the owner, with no trailer:
-   `git -c user.name=Otohime -c user.email=quiinthieu@gmail.com commit -m "pm-180/<task_id>: …"`.
-   Before pushing, check `git log -1 --format='%an <%ae>'` prints
-   `Otohime <quiinthieu@gmail.com>` and
-   `git log -1 --format=%B | grep -ci co-authored-by` prints 0; amend if not.
+5. Commit explicitly as the owner, with no trailer. `git -c user.*` is NOT
+   enough: fleet leases export `GIT_AUTHOR_*`/`GIT_COMMITTER_*`, which beat
+   `-c` (checked in this run: the plan commit came out as Claude Code). Use
+   `GIT_AUTHOR_NAME=Otohime GIT_AUTHOR_EMAIL=quiinthieu@gmail.com
+   GIT_COMMITTER_NAME=Otohime GIT_COMMITTER_EMAIL=quiinthieu@gmail.com git commit -m "pm-180/<task_id>: …"`
+   (no trailer in the message). Before pushing, check
+   `git log -1 --format='%an <%ae>'` prints `Otohime <quiinthieu@gmail.com>`
+   and `git log -1 --format=%B | grep -ci co-authored-by` prints 0; amend
+   with the same env vars if not.
 6. Do not change the Projects page, `lib/pages.ts` or `.github/workflows/ci.yml`.
    Do not commit the `AGENTS.md` block that `next dev` re-adds.
 
