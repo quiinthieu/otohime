@@ -80,6 +80,8 @@ Walk Capsule and the site the same way with `bash scripts/walk-capsule.sh` (buil
 
 See every drawn Capsule card on one sheet with `npm run --silent capsule:sheet > /tmp/capsule.svg`, then open the file in a browser or any SVG viewer.
 
+To add or swap a Capsule card, edit its entry in `app/(capsule)/_lib/cards.ts` (id, name, film, year, tier, colours, note) and draw it as `app/(capsule)/_lib/art/<id>.ts`, registered in `art/index.ts`. Follow the art brief in the plan: absolute path commands only, palette-role fills, and one ink outline. `app/(capsule)/_lib/art.test.ts` checks that every card is drawn and every path stays inside the card face, and `npm run capsule:sheet` previews the set. This is also the takedown rollback: replace the set with original characters this way, and leave the machine, the economy and the page untouched.
+
 ## Deploying
 
 GitHub Actions (`.github/workflows/ci.yml`) does it all:

@@ -67,9 +67,9 @@ function pathProblems(d: string): string[] {
 
 const ids = new Set<string>(CARDS.map((c) => c.id));
 
-test("every drawing is for a card, and the first four are drawn", () => {
+test("every card is drawn, and every drawing is for a card", () => {
   for (const id of Object.keys(ART)) assert.ok(ids.has(id), `${id} is not a card`);
-  for (const id of ["soot-sprite", "jiji", "totoro", "no-face"] as const) assert.ok(ART[id], `${id} is not drawn`);
+  assert.deepEqual(Object.keys(ART), CARDS.map((c) => c.id)); // in album order, so the sheet reads like the album
 });
 
 test("paths use absolute M L H V C S Q T Z inside the card face", () => {
@@ -107,4 +107,5 @@ test("the sheet is one balanced SVG with no raster, gradient or link", () => {
   assert.equal(closes, 1);
   for (const bad of ["<image", "gradient", "href="]) assert.ok(!svg.toLowerCase().includes(bad.toLowerCase()), bad);
   for (const id of Object.keys(ART)) assert.ok(svg.includes(`wobble-${id}`), `${id} not on the sheet`);
+  assert.equal(svg.match(/<filter id="wobble-/g)?.length, CARDS.length);
 });

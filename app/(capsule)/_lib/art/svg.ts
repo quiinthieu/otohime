@@ -85,10 +85,11 @@ export function sheetSvg(cards: readonly Card[]): string {
     const x = (i % cols) * cellW + 15;
     const y = Math.floor(i / cols) * cellH + 12;
     const caption = `${card.film} (${card.year}) · ${tierName(card.tier)}`;
+    const size = Math.min(7, Math.round((280 / caption.length) * 10) / 10); // a long title still fits its cell
     return (
       `<g transform="translate(${x} ${y})">` +
       cardFaceSvg(card, `wobble-${card.id}`) +
-      `<text x="${VIEW_W / 2}" y="${VIEW_H + 16}" text-anchor="middle" font-family="${FONT}" font-size="7" fill="${PALETTE.ink}">${escapeXml(caption)}</text>` +
+      `<text x="${VIEW_W / 2}" y="${VIEW_H + 16}" text-anchor="middle" font-family="${FONT}" font-size="${size}" fill="${PALETTE.ink}">${escapeXml(caption)}</text>` +
       `</g>`
     );
   });
