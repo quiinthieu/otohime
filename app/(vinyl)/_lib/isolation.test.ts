@@ -63,7 +63,7 @@ const CRACKLE = join(ROOT, "app/(vinyl)/_lib/crackle.ts");
 const DOWNLOAD = /\bdownload\s*=|["'`]download["'`]|\.download\b|<[A-Za-z][^>]*\sdownload(?=[\s/>={])/;
 
 test("the scan finds Vinyl's files", () => {
-  for (const name of ["records.ts", "deck.ts", "spin.ts", "geometry.ts", "oembed.ts", "player.ts", "youtube.ts"]) {
+  for (const name of ["records.ts", "deck.ts", "spin.ts", "geometry.ts", "oembed.ts", "player.ts", "youtube.ts", "tonearm.ts", "flight.ts", "crackle.ts"]) {
     assert.ok(vinylFiles.some((f) => f.endsWith(join("_lib", name))), name);
   }
 });
@@ -99,8 +99,34 @@ test("no download attribute anywhere in Vinyl", () => {
 });
 
 test("only crackle.ts may mention AudioContext", () => {
+  assert.ok(/new AudioContext\(/.test(readFileSync(CRACKLE, "utf8")), "crackle.ts opens its own");
   for (const file of vinylFiles.filter((f) => f !== CRACKLE)) {
     assert.ok(!/AudioContext/.test(readFileSync(file, "utf8")), relative(ROOT, file));
+  }
+});
+
+test("no audio file under app/(vinyl)/ or public/", () => {
+  const audio = (dir: string): string[] => {
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return [];
+    }
+    return entries.flatMap((e) => {
+      const path = join(dir, e.name);
+      return e.isDirectory() ? audio(path) : /\.(mp3|wav|ogg)$/i.test(e.name) ? [path] : [];
+    });
+  };
+  assert.deepEqual([...audio(join(ROOT, "app/(vinyl)")), ...audio(join(ROOT, "public"))].map((f) => relative(ROOT, f)), []);
+});
+
+test("touch-action: none is set on the tonearm and nowhere else", () => {
+  const css = readFileSync(join(ROOT, "app/(vinyl)/vinyl.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter((m) => /touch-action:\s*none/.test(m[2]));
+  assert.deepEqual(rules.map((m) => m[1].trim()), [".tonearm"]);
+  for (const file of vinylFiles.filter((f) => /\.tsx?$/.test(f))) {
+    assert.ok(!/touchAction/.test(readFileSync(file, "utf8")), relative(ROOT, file)); // no inline style sets it
   }
 });
 

@@ -199,6 +199,25 @@ turntable_clips() {
   [ -n "$hits" ] || { echo "no overflow: hidden on .turntable-cell"; return 1; }
 }
 
+# touch-action: none is on the tonearm alone: sleeves and the crate keep
+# scrolling by touch. One rule per line; its selector is what precedes its {.
+touch_action_only_arm() {
+  local rules bad
+  [ -s "$WORK/vinyl.css" ] || { echo "no stylesheet fetched"; return 1; }
+  rules="$(tr '\n' ' ' <"$WORK/vinyl.css" | sed 's/}/}\
+/g' | grep -E 'touch-action: *none')"
+  [ -n "$rules" ] || { echo "no touch-action: none on the tonearm"; return 1; }
+  bad="$(printf '%s\n' "$rules" | sed -E 's/\{[^{]*$//; s/.*[{]//' | grep -vxE ' *\.tonearm *')"
+  [ -z "$bad" ] || { echo "touch-action: none on $(printf '%s' "$bad" | head -n 1 | cut -c1-120)"; return 1; }
+}
+
+# The crackle is synthesised: no audio file is shipped with Vinyl or the site.
+no_audio_files() {
+  local found
+  found="$(find 'app/(vinyl)' public -type f \( -iname '*.mp3' -o -iname '*.wav' -o -iname '*.ogg' \) 2>/dev/null)"
+  [ -z "$found" ] || { echo "audio files: $(printf '%s' "$found" | tr '\n' ' ' | cut -c1-200)"; return 1; }
+}
+
 manifest_lists_vinyl() {
   local f=.next/app-path-routes-manifest.json
   [ -f "$f" ] || { echo "$f not found"; return 1; }
@@ -230,6 +249,16 @@ check "/vinyl links every record on YouTube" count_ge vinyl 'youtube.com/watch?v
 check "/vinyl has a polite live region" has vinyl 'aria-live="polite"'
 check "/vinyl has a search box" has vinyl 'type="search"'
 check "/vinyl has a speed switch" has vinyl 'type="radio"'
+check "/vinyl has a tonearm slider" count_eq vinyl 'role="slider"' 1
+check "/vinyl tonearm slider is labelled" has vinyl 'aria-label="Tonearm"'
+check "/vinyl tonearm slider has a value text" has vinyl 'aria-valuetext="0:00 of 0:00, at rest"'
+check "/vinyl has one platter drop target" count_eq vinyl 'data-drop-target="platter"' 1
+check "/vinyl sleeves are drag handles" count_eq vinyl 'class="sleeve-grip"' 12
+if [ "${NEXT_PUBLIC_VINYL_CRACKLE:-}" = "1" ] && [ "$LOCAL" -eq 1 ]; then
+  check "/vinyl shows the crackle toggle (flag on)" has vinyl 'data-crackle'
+else
+  check "/vinyl has no crackle toggle (flag off by default)" lacks vinyl 'data-crackle'
+fi
 check "/vinyl does not load iframe_api before a record is placed" lacks vinyl 'iframe_api'
 check "/vinyl has no iframe in the server HTML" lacks vinyl '<iframe'
 check "/vinyl sets no referrerpolicy" lacks vinyl 'referrerpolicy='
@@ -241,6 +270,9 @@ check "/vinyl stylesheet keeps the player 480 px wide on desktop" css_has 'min-w
 check "/vinyl stylesheet keeps the player 200 px tall on phones" css_has 'max\(200px' 'max(200px'
 check "/vinyl stylesheet never hides the player" player_never_hidden
 check "/vinyl stylesheet clips the turntable cell" turntable_clips
+check "/vinyl stylesheet sets touch-action: none only on the tonearm" touch_action_only_arm
+check "/vinyl stylesheet removes the flight under reduced motion" css_has 'prefers-reduced-motion: *reduce\)[^@]*\.flight[^{]*\{[^}]*display: *none' '.flight { display: none } under reduced motion'
+check "no audio files under app/(vinyl) or public/" no_audio_files
 check "/vinyl/nope returns 404" status_is vinyl_nope 404
 
 check "/projects returns 200" status_is projects 200

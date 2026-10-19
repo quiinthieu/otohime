@@ -117,6 +117,10 @@ main { width: min(100% - 32px, 1440px); margin: 16px auto 0; flex: 1; }
 .sleeve:focus-within { transform: translateY(-6px); }
 .sleeve[aria-current="true"] { outline: 2px solid var(--accent); outline-offset: -2px; }
 .sleeve-art { display: block; width: 100%; aspect-ratio: 1; border-radius: 6px; }
+/* The drag handle keeps touch-action: auto, so a swipe still scrolls the crate;
+   a touch drag starts with a long press (sleeve-drag.ts). */
+.sleeve-grip { cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.sleeve[data-dragging="true"] { opacity: 0.55; }
 .sleeve h3 { font-size: 0.9375rem; line-height: 1.25; margin-top: 4px; }
 .sleeve .artist { font-size: 0.8125rem; color: var(--muted); }
 .badges { display: flex; flex-wrap: wrap; gap: 4px; font-size: 0.75rem; }
@@ -141,21 +145,34 @@ main { width: min(100% - 32px, 1440px); margin: 16px auto 0; flex: 1; }
   overflow: hidden;
   border-radius: 18px;
 }
-.turntable svg { display: block; width: 100%; height: auto; aspect-ratio: 5 / 4; }
+.turntable svg { display: block; width: 100%; height: auto; aspect-ratio: 5 / 4; user-select: none; -webkit-user-select: none; }
 .platter { transform-box: view-box; transform-origin: 200px 200px; }
+/* The arm's angle is --arm, set by turntable.tsx: rest, or the playback
+   position between the first and last grooves. Held, it follows the pointer
+   with no transition. */
 .tonearm,
 .arm-shadow {
   transform-box: view-box;
   transform-origin: 440px 64px;
   transition: transform 600ms cubic-bezier(0.3, 0.7, 0.3, 1), opacity 600ms ease;
 }
-.arm-shadow { opacity: 0.35; transform: translate(4px, 5px); }
-.turntable[data-arm="hover"] .tonearm { transform: rotate(27deg); }
-.turntable[data-arm="hover"] .arm-shadow { opacity: 0.18; transform: translate(14px, 18px) rotate(27deg); }
-.turntable[data-arm="down"] .tonearm { transform: rotate(31deg); }
-.turntable[data-arm="down"] .arm-shadow { opacity: 0.4; transform: translate(3px, 4px) rotate(31deg); }
-.turntable[data-arm="lifted"] .tonearm { transform: rotate(31deg); }
-.turntable[data-arm="lifted"] .arm-shadow { opacity: 0.18; transform: translate(14px, 18px) rotate(31deg); }
+.tonearm { transform: rotate(var(--arm, 0deg)); cursor: grab; touch-action: none; }
+.tonearm[aria-disabled="true"] { cursor: default; }
+.turntable[data-held="true"] .tonearm { cursor: grabbing; }
+.turntable[data-held="true"] .tonearm,
+.turntable[data-held="true"] .arm-shadow { transition: none; }
+.arm-shadow { opacity: 0.35; transform: translate(4px, 5px) rotate(var(--arm, 0deg)); }
+.turntable[data-arm="down"] .arm-shadow { opacity: 0.4; transform: translate(3px, 4px) rotate(var(--arm, 0deg)); }
+.turntable[data-arm="hover"] .arm-shadow,
+.turntable[data-arm="lifted"] .arm-shadow,
+.turntable[data-held="true"] .arm-shadow { opacity: 0.18; transform: translate(14px, 18px) rotate(var(--arm, 0deg)); }
+.arm-grab { stroke: transparent; pointer-events: stroke; }
+.arm-focus { stroke: var(--focus); opacity: 0; }
+.tonearm:focus-visible .arm-focus { opacity: 0.9; }
+/* A dragged sleeve: the rim shows where it lands, and lights up when it will. */
+.drop-ring { stroke: var(--accent); stroke-width: 6; opacity: 0; transition: opacity 150ms ease; }
+.turntable[data-drop="ready"] .drop-ring { opacity: 0.5; stroke-dasharray: 12 10; }
+.turntable[data-drop="over"] .drop-ring { opacity: 1; }
 .led { fill: #4a1612; }
 .led[data-on="true"] { fill: #ff5a4a; }
 .playing-lamp { fill: #163d1c; }
@@ -176,6 +193,28 @@ main { width: min(100% - 32px, 1440px); margin: 16px auto 0; flex: 1; }
 .speed label { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 10px; border-radius: 8px; background: var(--raised); }
 .speed input { accent-color: var(--accent); margin: 0; }
 .speed:disabled { opacity: 0.55; }
+.crackle { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 40px; margin-top: 6px; font-size: 0.875rem; color: var(--muted); }
+.crackle input { accent-color: var(--accent); width: 18px; height: 18px; margin: 0; }
+
+/* The dragged disc and the flying record: fixed layers moved by transform
+   only. JS never shows the ghost over the monitor and never flies across it. */
+.ghost,
+.flight {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, #d9d9d9 0 2%, var(--label, #888) 2.5% 30%, transparent 31%),
+    repeating-radial-gradient(circle, #111 0 3px, #1e1e20 3px 5px);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
+}
+.ghost { width: 96px; height: 96px; opacity: 0.92; }
+.flight { transform-origin: 0 0; will-change: transform, opacity; }
+.ghost:not([data-show]),
+.flight:not([data-show]) { display: none; }
 
 /* Monitor: the bezel is padding around the player host, the chin sits under it */
 .monitor { grid-area: monitor; min-width: 0; }
@@ -293,11 +332,14 @@ main { width: min(100% - 32px, 1440px); margin: 16px auto 0; flex: 1; }
 }
 
 /* Reduced motion: no lift, no swing, no spin (vinyl-app.tsx keeps the platter
-   still); the playing lamp fades in place instead. */
+   still) and no flight (vinyl-app.tsx doesn't start one); the playing lamp
+   fades in place instead. */
 @media (prefers-reduced-motion: reduce) {
   .sleeve,
   .tonearm,
-  .arm-shadow { transition: none; }
+  .arm-shadow,
+  .drop-ring { transition: none; }
+  .flight { display: none; }
   .sleeve:hover,
   .sleeve:focus-within { transform: none; }
 }

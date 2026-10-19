@@ -36,7 +36,7 @@ export const TURNTABLE_MAX_W = 420;
 export const TURNTABLE_VIEW = { w: 500, h: 400 };
 export const PLATTER = { cx: 200, cy: 200, r: 176 };
 export const TONEARM_PIVOT = { x: 440, y: 64 };
-export const TONEARM_SWEEP: Box = { x: 252, y: 16, w: 236, h: 368 }; // every angle the arm can take, inside the view
+export const TONEARM_SWEEP: Box = { x: 206, y: 12, w: 292, h: 384 }; // every angle the arm can take (0° to 45°, tonearm.ts) and its shadow, inside the view
 export const LCD_H = 72;
 export const TRANSPORT_H = 112;
 

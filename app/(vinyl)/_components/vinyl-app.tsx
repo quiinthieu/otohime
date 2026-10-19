@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type KeyboardEvent } from "react";
+import { CRACKLE_ENABLED, crackleShouldPlay, createCrackle, type Crackle } from "../_lib/crackle.ts";
 import {
   current,
   initialDeck,
@@ -14,13 +15,17 @@ import {
   type Phase,
   type TimerName,
 } from "../_lib/deck.ts";
+import { boxOf, flightPlan } from "../_lib/flight.ts";
+import type { Box } from "../_lib/geometry.ts";
 import { mapState, PLAYER_VARS, runEffect, YT_STATE, type PlayerLike } from "../_lib/player.ts";
 import type { VinylRecord } from "../_lib/records.ts";
 import { advance, settled, type Spin } from "../_lib/spin.ts";
+import { armAria, dropAction, keyAction } from "../_lib/tonearm.ts";
 import { loadYouTubeApi } from "../_lib/youtube.ts";
 import { Crate } from "./crate";
 import { Lcd } from "./lcd";
 import { Monitor } from "./monitor";
+import { useSleeveDrag } from "./sleeve-drag";
 import { Transport } from "./transport";
 import { Turntable } from "./turntable";
 
@@ -29,6 +34,14 @@ import { Turntable } from "./turntable";
 // playVideo() is always part of a user gesture. Only this file touches the
 // player: one YT.Player, created the first time a record is placed, reused
 // for every record after that and destroyed on pagehide and unmount.
+//
+// Placing a record (button or drag) flies a disc from the sleeve to the
+// platter: a FLIP animation on a fixed layer, transform and opacity only,
+// skipped under reduced motion and whenever its path would cross the
+// monitor. With NEXT_PUBLIC_VINYL_CRACKLE=1 a synthesised crackle
+// (_lib/crackle.ts) runs while the record plays; without it no audio code
+// runs at all. Every listener, timer, frame, animation and sound started here
+// is released on unmount, one cleanup per effect.
 
 const POLL_MS = 250;
 const ACTIVE: readonly Phase[] = ["starting", "buffering", "playing"];
@@ -51,6 +64,15 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
   const reduced = useSyncExternalStore(subscribeReduced, reducedNow, reducedOnServer);
 
   const deckRef = useRef(deck);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const crateRef = useRef<HTMLElement>(null);
+  const ghostRef = useRef<HTMLDivElement>(null);
+  const flightRef = useRef<HTMLDivElement>(null);
+  const flying = useRef<Animation | null>(null);
+  const crackle = useRef<Crackle | null>(null);
+  const [crackleOn, setCrackleOn] = useState(true);
+  const crackleOnRef = useRef(crackleOn);
+  const [scrub, setScrub] = useState<number | null>(null); // the time a held tonearm points at
   const hostRef = useRef<HTMLDivElement>(null);
   const platterRef = useRef<SVGGElement>(null);
   const created = useRef<PlayerLike | null>(null); // constructed; callable only once ready
@@ -62,6 +84,8 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
   const wantsPlay = useRef(false); // a gesture's play, waiting for that cue
 
   const dispatch = useCallback(function dispatch(action: Action) {
+    // A gesture that plays is also the one moment the crackle may wake its audio.
+    if (CRACKLE_ENABLED && action.type === "play" && action.user === true && crackleOnRef.current) crackle.current?.unlock();
     const step = reduce(deckRef.current, action);
     deckRef.current = step.state;
     setDeck(step.state);
@@ -214,7 +238,9 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
   useEffect(() => {
     const pending = timers.current;
     const onVisibility = () => {
-      if (document.visibilityState === "hidden") dispatch({ type: "hidden" });
+      if (document.visibilityState !== "hidden") return;
+      crackle.current?.set(false);
+      dispatch({ type: "hidden" });
     };
     const onPageHide = () => dispatch({ type: "unmount" });
     // Back from the back/forward cache: the player was destroyed, so put the record back.
@@ -234,6 +260,54 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
       pending.clear();
     };
   }, [dispatch]);
+
+  // The crackle: created only with the flag, sounding only while the record plays.
+  useEffect(() => {
+    if (!CRACKLE_ENABLED) return;
+    const c = createCrackle();
+    crackle.current = c;
+    return () => {
+      c.close();
+      crackle.current = null;
+    };
+  }, []);
+  useEffect(() => {
+    crackleOnRef.current = crackleOn;
+    const hidden = document.visibilityState === "hidden";
+    crackle.current?.set(crackleShouldPlay({ enabled: CRACKLE_ENABLED, on: crackleOn, phase: deck.phase, hidden }));
+  }, [crackleOn, deck.phase]);
+
+  // The crate-to-platter flight. A new flight replaces one still in the air.
+  const fly = useCallback((index: number, from: Box) => {
+    const root = rootRef.current;
+    const el = flightRef.current;
+    const to = boxOf(root?.querySelector("[data-drop-target]"));
+    if (!root || !el || !to || typeof el.animate !== "function") return;
+    const plan = flightPlan(from, to, boxOf(root.querySelector("[data-monitor]")), reducedNow());
+    flying.current?.cancel();
+    if (!plan) return;
+    const { x, y, w, h } = plan.box;
+    el.style.cssText = `left:${x}px;top:${y}px;width:${w}px;height:${h}px;--label:${deckRef.current.records[index]?.labelColor ?? "#888"}`;
+    el.dataset.show = "true";
+    const animation = el.animate(plan.keyframes, { duration: plan.duration, easing: plan.easing });
+    const land = () => {
+      if (flying.current === animation) flying.current = null;
+      delete el.dataset.show;
+    };
+    animation.addEventListener("finish", land);
+    animation.addEventListener("cancel", land);
+    flying.current = animation;
+  }, []);
+  useEffect(() => () => flying.current?.cancel(), []);
+
+  const place = useCallback(
+    (index: number, from: Box | null) => {
+      dispatch({ type: "select", index, user: true });
+      if (from) fly(index, from);
+    },
+    [dispatch, fly],
+  );
+  const { drag, start: startDrag } = useSleeveDrag({ rootRef, crateRef, ghostRef, onDrop: place });
 
   const record = current(deck);
   const active = ACTIVE.includes(deck.phase);
@@ -269,8 +343,15 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
   }
 
   return (
-    <div className="deck" onKeyDown={onKeyDown} data-phase={deck.phase}>
-      <Crate records={records} current={record?.id ?? null} onPlace={(index) => dispatch({ type: "select", index, user: true })} />
+    <div className="deck" ref={rootRef} onKeyDown={onKeyDown} data-phase={deck.phase}>
+      <Crate
+        records={records}
+        current={record?.id ?? null}
+        dragging={drag ? (records[drag.index]?.id ?? null) : null}
+        sectionRef={crateRef}
+        onPlace={place}
+        onDragStart={startDrag}
+      />
       <div
         className="turntable-cell"
         role="group"
@@ -283,9 +364,36 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
           arm={tonearm(deck)}
           rpm={selectedRpm(deck)}
           playing={deck.phase === "playing"}
+          time={deck.time}
+          duration={deck.duration}
+          slider={armAria(deck)}
+          drop={drag ? (drag.over ? "over" : "ready") : null}
           onRpm={(rpm) => dispatch({ type: "rpm", rpm, user: true })}
+          onArmDrop={(angle) => {
+            for (const action of dropAction(angle, deckRef.current)) dispatch(action);
+          }}
+          onArmKey={(key) => {
+            const actions = keyAction(key, deckRef.current);
+            if (actions === null) return false;
+            for (const action of actions) dispatch(action);
+            return true;
+          }}
+          onScrub={setScrub}
           platterRef={platterRef}
         />
+        {CRACKLE_ENABLED && (
+          <label className="crackle" data-crackle="">
+            <input
+              type="checkbox"
+              checked={crackleOn}
+              onChange={(e) => {
+                if (e.target.checked) crackle.current?.unlock();
+                setCrackleOn(e.target.checked);
+              }}
+            />
+            <span>Crackle</span>
+          </label>
+        )}
       </div>
       <Monitor
         record={record}
@@ -307,7 +415,7 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
         canPlay={canPlay}
         active={active}
         canStop={canStop}
-        time={deck.time}
+        time={scrub ?? deck.time}
         duration={deck.duration}
         volume={deck.volume}
         onToggle={toggle}
@@ -318,6 +426,14 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
         onSeek={(seconds) => dispatch({ type: "seek", seconds, user: true })}
         onVolume={(value) => dispatch({ type: "volume", value, user: true })}
       />
+      {/* Fixed layers for the dragged disc and the flight; neither is ever drawn over the monitor. */}
+      <div
+        className="ghost"
+        ref={ghostRef}
+        aria-hidden="true"
+        style={{ "--label": drag ? records[drag.index]?.labelColor : undefined } as CSSProperties}
+      />
+      <div className="flight" ref={flightRef} aria-hidden="true" />
     </div>
   );
 }
