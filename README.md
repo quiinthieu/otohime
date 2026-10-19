@@ -66,6 +66,8 @@ The change takes effect on the next request.
 
 CI runs both on every PR.
 
+Walk Shore and the site with `bash scripts/walk-shore.sh` (builds, serves on :4019, one `ok`/`not ok` line per check), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-shore.sh`.
+
 ## Deploying
 
 GitHub Actions (`.github/workflows/ci.yml`) does it all:
