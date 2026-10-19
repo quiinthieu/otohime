@@ -103,7 +103,7 @@ cited_sha: f5040bf3fc7cde31acf59874db02ea628e03878b
 | Crate: browse, hover/focus lift, keyboard, search, genre filter | 12 sleeves; "willow" → 1; Jazz → 2; "zzzz" → "No records match"; hover lifts by 6 px |
 | Place by click/tap and by drag-and-drop, label art on the platter | Button at both sizes; mouse drag with the drop ring `over` and a flight; finger long-press drag at 390. The turntable's label names the record |
 | Turntable: platter, strobe, LED, 33/45, tonearm | LED lights on placement; arm moves `rest` → `hover` (starting/buffering) → `down` (playing) → `lifted` (paused) |
-| Rotation follows the player's state with inertia | The platter starts turning only when YouTube reports playing. After pause it eases 13° → 77° → 92° → 93.8° and is still about 2.1 s later |
+| Rotation follows the player's state with inertia | The platter starts turning only when YouTube reports playing. After pause it eases 14° → 72° → 93° → 95° (desktop) and is still about 2.1 s later |
 | Controls: play/pause, stop, prev/next, volume, seek, eject; tonearm scrub | Seek to half → YouTube 91 s; volume 30 → `getVolume()` 30; Next/Previous; Escape ejects. The arm dragged to 40° → 106–132 s; the arm back to rest pauses; the arm slider: Enter, PageUp, Enter |
 | Keyboard: Space, arrows, Esc | Space pauses; ArrowRight/ArrowLeft change record; Escape empties the platter |
 | LCD with aria-live | The LCD shows title, artist, status and time; `aria-live="polite"` (repo walk) |
