@@ -51,6 +51,8 @@ function reachesOutside(file: string, spec: string): string | null {
 
 test("the scan finds Sun's files", () => {
   assert.ok(sunFiles.some((f) => f.endsWith(join("_lib", "sun.ts"))));
+  assert.ok(sunFiles.some((f) => f.endsWith("layout.tsx")));
+  assert.ok(sunFiles.some((f) => f.endsWith("sun.css")));
 });
 
 test("nothing under app/(sun)/ imports the site, Tailwind, Shore or Capsule", () => {

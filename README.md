@@ -33,8 +33,10 @@ app/(capsule)/       Capsule, a coin-and-crank card machine: its own root layout
                      _components/ holds the machine, the card frame and the app (buttons, coin tray, album)
                      _lib/art/ holds the hand-drawn cards as path data (one file per card, ART in index.ts)
                      and svg.ts, which draws them for the page and for `npm run capsule:sheet`
-app/(sun)/           Sun, an animated cutaway of the Sun: its own root layout and CSS, whose facts
-                     and tour are pure data in _lib/ (sun.ts, format.ts, tour.ts); `npm test` covers its _lib/*.test.ts
+app/(sun)/           Sun, an animated cutaway of the Sun: its own root layout and CSS (no Tailwind),
+                     whose facts and tour are pure data in _lib/ (sun.ts, format.ts, tour.ts);
+                     layout.tsx and sun.css are its root layout; sun/page.tsx is /sun;
+                     _components/ holds the SVG stage and the tour; `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -87,6 +89,8 @@ CI runs the unit and e2e tests on every PR.
 Walk Shore and the site with `bash scripts/walk-shore.sh` (builds, serves on :4019, one `ok`/`not ok` line per check), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-shore.sh`.
 
 Walk Capsule and the site the same way with `bash scripts/walk-capsule.sh` (builds, serves on :4021), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-capsule.sh`.
+
+Walk Sun and the site the same way with `bash scripts/walk-sun.sh` (builds, serves on :4027), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-sun.sh`.
 
 Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and serves on :4025: the three starters from `content/site.ts` must still show, with status 200), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-music.sh`.
 

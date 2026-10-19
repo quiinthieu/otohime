@@ -90,6 +90,7 @@ export const site = {
   projectList: [
     { title: "Shore", note: "A focus timer that leaves sea glass behind.", href: "/shore", status: "live", colour: "mint" },
     { title: "Capsule", note: "A coin, a crank, and a hand-drawn card to keep.", href: "/capsule", status: "live", colour: "coral" },
+    { title: "Sun", note: "Eight chapters through a star, one layer at a time.", href: "/sun", status: "live", colour: "yellow" },
   ] as Project[],
   // TODO(otohime)
   music: "Songs on repeat, one channel each. Tune in.",

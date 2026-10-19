@@ -1,0 +1,213 @@
+/* Sun's own stylesheet, hand-written: no Tailwind and no site tokens.
+   Nothing here sets overflow: hidden on a parent of the wobble-filtered SVG,
+   so the filter is never clipped at its edge. Scene keyframes are named
+   sun-<chapter>-<part> and run only under [data-chapter="<chapter>"]; each
+   scene's static style is its resting pose, which is what reduced motion shows. */
+:root {
+  --sky: #0b1020;
+  --panel: #131a33;
+  --line: #2a3355;
+  --ink: #f4efe4;
+  --muted: #9aa3bd;
+  --gold: #ffd166;
+  --sun: #f4a259;
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--sky);
+  font-synthesis: none;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--sky); }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: var(--gold); }
+button:focus-visible, a:focus-visible, .stage:focus-visible { outline: 2px dashed var(--gold); outline-offset: 4px; }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sun { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; padding: 24px 5% 8px; }
+
+/* Top bar */
+.topbar {
+  min-height: 72px;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-name { display: block; font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
+.brand-detail { display: block; font-size: 9px; letter-spacing: 1.8px; color: var(--muted); margin-top: 3px; }
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  display: block;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 38%, #fff3b0, var(--gold) 45%, var(--sun));
+  box-shadow: 0 0 14px 2px rgba(255, 209, 102, 0.45);
+}
+.home-link {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.home-link:hover { background: var(--panel); color: var(--ink); }
+
+/* Stage */
+.tour { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.stage { width: 100%; border: 1px solid var(--line); border-radius: 14px; background: var(--sky); }
+.sun-svg { width: 100%; height: auto; display: block; overflow: visible; font-family: var(--sans); fill: var(--ink); }
+.sun-svg .sky { fill: var(--sky); }
+.sun-svg .note { fill: var(--muted); }
+.sun-svg .path { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 5; fill: none; }
+
+/* The lit layer: the others fade back */
+.sun-svg [data-layer] { opacity: 0.28; transition: opacity 0.4s; }
+.sun-svg [data-legend] { opacity: 0.5; transition: opacity 0.4s; }
+.sun-svg:is([data-chapter="scale"], [data-chapter="life"]) :is([data-layer], [data-legend]) { opacity: 1; }
+.sun-svg[data-chapter="core"] :is([data-layer="core"], [data-legend="core"]),
+.sun-svg[data-chapter="radiative"] :is([data-layer="radiative"], [data-legend="radiative"]),
+.sun-svg[data-chapter="convective"] :is([data-layer="convective"], [data-legend="convective"]),
+.sun-svg[data-chapter="photosphere"] :is([data-layer="photosphere"], [data-legend="photosphere"]),
+.sun-svg[data-chapter="chromosphere"] :is([data-layer="chromosphere"], [data-legend="chromosphere"]),
+.sun-svg[data-chapter="corona"] :is([data-layer="corona"], [data-legend="corona"]) { opacity: 1; }
+
+/* Scenes: all are in the HTML, the one that matches data-chapter shows */
+.sun-svg [data-scene] { opacity: 0; visibility: hidden; transition: opacity 0.4s; }
+.sun-svg[data-chapter="scale"] [data-scene="scale"],
+.sun-svg[data-chapter="core"] [data-scene="core"] { opacity: 1; visibility: visible; }
+
+/* Scene: scale. Resting pose: the pulse has arrived at Earth. */
+.sun-svg .earth { fill: #5aa9e6; }
+.sun-svg .ring { fill: none; stroke: #5aa9e6; stroke-width: 1.5; transform-box: fill-box; transform-origin: center; }
+.sun-svg .inset { fill: #5aa9e6; stroke: var(--ink); stroke-width: 1.5; }
+.sun-svg .land { fill: #6bbf59; }
+.sun-svg .pulse { fill: #fff3b0; transform: translate(var(--dx), var(--dy)); }
+.sun-svg[data-chapter="scale"] .pulse { animation: sun-scale-pulse 5s ease-in infinite; }
+.sun-svg[data-chapter="scale"] .ring { animation: sun-scale-arrive 5s ease-out infinite; }
+@keyframes sun-scale-pulse {
+  0% { transform: translate(0, 0); opacity: 0; }
+  8% { opacity: 1; }
+  80% { transform: translate(var(--dx), var(--dy)); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 1; }
+}
+@keyframes sun-scale-arrive {
+  0%, 78% { transform: scale(1); opacity: 0.2; }
+  85% { transform: scale(1.6); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+/* Scene: core. Resting pose: protons joined into helium, the photon just out. */
+.sun-svg .lens { fill: #1a1630; stroke: var(--gold); stroke-width: 2; }
+.sun-svg .proton { fill: #ff9f68; stroke: var(--ink); stroke-width: 1.5; transform: translate(var(--tx), var(--ty)); }
+.sun-svg .p1 { --fx: -62px; --fy: -48px; --tx: -9px; --ty: -9px; }
+.sun-svg .p2 { --fx: 62px; --fy: -48px; --tx: 9px; --ty: -9px; }
+.sun-svg .p3 { --fx: -62px; --fy: 48px; --tx: -9px; --ty: 9px; }
+.sun-svg .p4 { --fx: 62px; --fy: 48px; --tx: 9px; --ty: 9px; }
+.sun-svg .helium { fill: rgba(255, 243, 176, 0.35); stroke: #fff3b0; stroke-width: 1.5; }
+.sun-svg .photon { fill: #fff3b0; stroke: var(--gold); stroke-width: 2; transform: translate(36px, -40px); }
+.sun-svg[data-chapter="core"] .proton { animation: sun-core-proton 5s ease-in-out infinite; }
+.sun-svg[data-chapter="core"] .helium { animation: sun-core-helium 5s ease-out infinite; }
+.sun-svg[data-chapter="core"] .photon { animation: sun-core-photon 5s ease-out infinite; }
+@keyframes sun-core-proton {
+  0% { transform: translate(var(--fx), var(--fy)); opacity: 0; }
+  6%, 15% { transform: translate(var(--fx), var(--fy)); opacity: 1; }
+  55%, 90% { transform: translate(var(--tx), var(--ty)); opacity: 1; }
+  98%, 100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+}
+@keyframes sun-core-helium {
+  0%, 50% { opacity: 0; }
+  58%, 90% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+@keyframes sun-core-photon {
+  0%, 54% { transform: translate(0, 0); opacity: 0; }
+  60% { transform: translate(0, 0); opacity: 1; }
+  95% { transform: translate(72px, -80px); opacity: 1; }
+  100% { transform: translate(72px, -80px); opacity: 0; }
+}
+
+/* Controls and dots */
+.controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.button {
+  min-width: 92px;
+  padding: 10px 18px;
+  background: var(--panel);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  font-weight: 600;
+}
+.button:hover:not(:disabled) { background: #1d2750; }
+.button:disabled { cursor: default; opacity: 0.35; border-color: var(--line); }
+.dots { display: flex; gap: 6px; justify-content: center; }
+.dot {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+.dot:hover { border-color: var(--gold); }
+.dot[aria-current="step"] { background: var(--gold); border-color: var(--gold); color: var(--sky); font-weight: 700; }
+
+/* Caption, counters, facts */
+.caption { text-align: center; max-width: 640px; }
+.caption-title { margin: 0; font-size: 22px; font-weight: 600; color: var(--gold); }
+.caption-lede { margin: 6px 0 0; line-height: 1.55; color: var(--ink); }
+.counters { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 0; width: 100%; }
+.counter { flex: 1 1 240px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; text-align: center; }
+.counter[data-active="true"] { border-color: var(--gold); }
+.counter dt { font-size: 12px; color: var(--muted); }
+.counter dd { margin: 4px 0 0; font-size: 22px; font-weight: 600; }
+.facts { width: 100%; padding: 14px 18px; background: var(--panel); border-radius: 12px; transition: opacity 0.2s; }
+.facts[data-phase="entering"] { opacity: 0.5; }
+.facts-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.facts-list li { line-height: 1.5; overflow-wrap: anywhere; }
+.fact-label { display: block; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.fact-source { font-size: 11px; white-space: nowrap; }
+
+/* The eight chapters, always in the page */
+.chapters { margin-top: 48px; display: grid; gap: 20px; }
+.chapter { padding: 20px 22px; border: 1px solid var(--line); border-radius: 12px; }
+.chapter-no { margin: 0; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+.chapter h2 { margin: 4px 0 8px; font-size: 24px; font-weight: 600; color: var(--gold); }
+.lede { margin: 0 0 14px; line-height: 1.6; }
+
+.page-footer { padding: 28px 5% 40px; text-align: center; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); margin-top: 40px; }
+.page-footer p { margin: 4px 0; }
+
+/* Phone: one column, no horizontal overflow at 390px */
+@media (max-width: 600px) {
+  main { padding-top: 16px; }
+  .topbar { padding: 8px 16px; }
+  .brand-detail { display: none; }
+  .sun-svg .legend { display: none; }
+  .dots { gap: 4px; }
+  .dot { width: 34px; height: 34px; }
+  .chapter { padding: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
