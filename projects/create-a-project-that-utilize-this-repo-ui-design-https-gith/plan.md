@@ -35,6 +35,8 @@ proved the layout split on Next 16.4.2).
 | Each task proves itself on a local `next start` of the delivery sha. QA and acceptance check otohime.dev's `build-sha` meta; if production has not caught up, acceptance passes on the local walk with a watch on `https://otohime.dev/shore`. | Public pages serve with no database. Production serves 7147cf8 today, so deploys are flowing, but a verification item must not depend on another system's timing. |
 | Every delivery commit is authored and committed as `Otohime <quiinthieu@gmail.com>` by setting `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL`, `GIT_COMMITTER_NAME` and `GIT_COMMITTER_EMAIL` on the `git commit` itself, and a verification item checks `git log -1 --format=%ae`. | Fleet leases export `GIT_AUTHOR_*=Claude Code`, which beats `git config`; this plan's first commit (0c39a9c) went out that way. Vercel Hobby only deploys owner-authored commits (README). |
 | CI's e2e test stops expecting the empty bench and expects the Shore row. | `e2e/rbac.test.ts` asserts "Nothing on the bench yet", and that step gates the production deploy. |
+| Revision 3: keep 1e171e8 and re-plan only its proof; the walk becomes `scripts/walk-shore.sh` in the repo. | t-1052 failed three gates on BSD `wc -l` padding in an inline walk that no SWE could edit; production already serves the code correctly. |
+| Revision 3: the browser click-through acceptance line becomes unit tests over pure `_lib/actions.ts`; a real browser pass is advisory QA. | Headless Chrome cannot navigate in these leases, so the line could never be proven; this is the nearest provable deliverable (gap recorded as a decision). |
 
 ## Features (v1)
 
@@ -59,9 +61,210 @@ proved the layout split on Next 16.4.2).
 Not in v1: accounts or sync, notifications, sounds, per-session notes, the
 upstream recipe inspector, and re-skinning any otohime page.
 
-## Tasks
+## Revision 3: re-plan after t-1052 failed its gate (run-6257)
 
-### 1. Give the site its own route-group root layout
+### What happened
+
+- **t-1051** (the site moved to `app/(site)/`) is done: delivery 5d2040d, QA
+  pass in [qa-t-1051.md](qa-t-1051.md). It stays as is.
+- **t-1052** (Shore) was built and pushed as **1e171e8**. That code is on
+  main, and **otohime.dev serves it today**: `build-sha` is 1e171e8, `/shore`
+  returns 200 with `<title>Shore</title>`, three `class="glass` and no sidebar,
+  `/projects` has one `href="/shore"`, and `/shore/nope` returns 404 with the
+  parcel page (probed 2026-10-19 by this run). The task still failed its green
+  gate three times (ver-2375, 2377, 2378, 2382). It is now superseded.
+- **Why it failed:** the gate's last item was a 600-character inline
+  `bash -c` walk. On the macOS gate, BSD `wc -l` prints `       1`, so
+  `test "$(grep -o 'href="/shore"' … | wc -l)" = 1` is false whatever the app
+  serves. A harmless `curl: (7)` line from `--retry-connrefused` was the only
+  stderr, so the gate never named the failing step. Each SWE run traced it to
+  `wc -l` and made no code change, because a SWE cannot edit its own
+  verification line. The operator answered esc-263, but the stored contract
+  kept the old command.
+- **What was never proven:** t-1052's acceptance line "in a browser, Begin
+  then Finish now adds a pebble that survives a reload, and the scene toggle
+  switches to the dark scene". Headless Chrome cannot navigate inside these
+  leases, so no run could do it.
+
+### What the new tasks do differently
+
+| Failed attempt (t-1052) | New tasks |
+| --- | --- |
+| The walk was an inline one-liner in the contract. A broken probe needed an operator to edit the contract. | The walk is **`scripts/walk-shore.sh`, checked into the repo** (task 1). The gate runs `bash scripts/walk-shore.sh`. If a probe is wrong, the SWE fixes it with a commit. |
+| Counts used `wc -l` with a string `test … = 1` (BSD pads). | Counts use `grep -c` and numeric `-eq`/`-ge` only. A verification item fails the task if `wc -l` appears in the script. |
+| `set -e` stopped at the first false step and printed nothing, so the gate showed only a curl retry line. | Every check runs and prints `ok - <name>` or `not ok - <name>: <detail>`, then `walk: N ok, M failed`. A red gate names the check. |
+| Readiness used `curl --retry-connrefused`, which printed misleading `curl: (7)` lines. | Readiness is a bounded silent loop (at most 60 tries, 1 s apart) that the script drives itself. |
+| A browser click-through was an acceptance line that no lease could perform. | The ledger transitions behind Begin, Finish now, the scene toggle and Clear today move into pure `app/(shore)/_lib/actions.ts`. A unit test drives the same path the buttons call, through serialize and `normalizeLedger` (the reload) (task 2). A real browser pass is advisory QA. |
+| One task carried the whole feature, so its proof could not be split from its code. | Task 1 changes no app code (`qa: skip`). Task 2 is a small refactor plus tests, proven by task 1's script. |
+
+**Recorded gap (decision, run-6257):** on this platform no machine check
+proves canvas pixels or a real click. The nearest deliverable is the action
+unit tests plus the server-rendered markers: three or more glass elements, the
+Dark scene button and the Finish now action in `/shore`'s HTML. QA attaches
+light and dark screenshots when a browser works. A missing browser is noted,
+not failed.
+
+**Commit identity:** 5d2040d and 1e171e8 carry a `Co-Authored-By` trailer,
+and Vercel deployed 1e171e8 anyway. The trailer is accepted, and QA does not
+fail a delivery for it. The identity check is the author email,
+`quiinthieu@gmail.com`, which the four `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
+variables set on `git commit`.
+
+## Tasks (revision 3)
+
+### 1. Check in Shore's walk as a portable script
+
+- **Role:** software_engineer, `qa: skip`. It adds a script and a README
+  line and changes nothing a person sees. Its verification fully proves it.
+- **Problem:** Shore's local `next start` walk lived only as an inline
+  one-liner in t-1052's contract. It used BSD-unsafe `wc -l` string compares
+  and stopped silently at the first false step, so three gates failed on a
+  code that was already right, and no SWE could fix the probe.
+- **Action items:**
+  1. Add `scripts/walk-shore.sh` (bash, `set -u`, no `set -e` around the
+     checks). Local mode (default): it sets the CI placeholder env if unset:
+     `BETTER_AUTH_SECRET=ci-placeholder-not-a-real-secret-0123456789abcdef`,
+     `BETTER_AUTH_URL=http://localhost:$PORT`,
+     `DATABASE_URL=postgresql://otohime:otohime@localhost:5432/otohime` and
+     `GITHUB_SHA=0123456789abcdef0123456789abcdef01234567`. Then it runs
+     `npm run build`, unless `SKIP_BUILD=1`, with the log in a temp dir that
+     it prints on failure. It starts `./node_modules/.bin/next start -p
+     "$PORT"` (`PORT` defaults to 4019) in its own process group, and its
+     EXIT trap kills that group so no `next-server` is left behind. Readiness
+     is a silent loop of at most 60 × 1 s `curl -s -o /dev/null`.
+  2. Remote mode: when `BASE_URL` is set (for example
+     `https://otohime.dev`), skip build and start and walk that URL.
+     `EXPECT_SHA` defaults to `GITHUB_SHA` locally. Remotely, if
+     `EXPECT_SHA` is unset, any 40-hex `build-sha` counts.
+  3. A `check <name> <command…>` helper runs every check, prints `ok -
+     <name>` or `not ok - <name>: <detail>`, and the script ends with `walk:
+     N ok, M failed` and exits 1 if M > 0. Count with `grep -c` (or
+     `grep -o … | grep -c .`) and compare with `-eq`/`-ge`. Never use `wc -l`
+     or a string compare of a count.
+  4. The checks:
+     - (local only) `.next/app-path-routes-manifest.json` lists `"/shore"`.
+     - `/shore` returns 200 with `<title>Shore</title>`, at least three
+       `class="glass`, no `aria-label="Main"`, and a `build-sha` meta equal
+       to `EXPECT_SHA`. Its HTML has `aria-label="Dark scene"` and the text
+       `Finish now`.
+     - `/shore` links exactly one stylesheet under `/_next/static/`. That
+       stylesheet is fetched with a 200 and a non-empty body, and contains none
+       of `--tw-`, `tailwind` or `--color-paper`. A missing or empty stylesheet
+       fails the check: a dry run against a dead port showed a bare "no match"
+       grep passing vacuously.
+     - `/projects` returns 200 with `aria-label="Main"` and exactly one
+       `href="/shore"`.
+     - `/`, `/work`, `/play`, `/notes` and `/music` return 200.
+     - `/shore/nope` and `/nonexistent` return 404 with `Nothing in this
+       parcel`.
+  5. Add one line to the README: how to walk Shore locally (`bash
+     scripts/walk-shore.sh`) and against production
+     (`BASE_URL=https://otohime.dev bash scripts/walk-shore.sh`).
+  6. Run it on this lease against main (1e171e8's code). It must exit 0.
+     Commit with `GIT_AUTHOR_NAME=Otohime GIT_AUTHOR_EMAIL=quiinthieu@gmail.com
+     GIT_COMMITTER_NAME=Otohime GIT_COMMITTER_EMAIL=quiinthieu@gmail.com git
+     commit …`. Stop stray servers with `pkill -x next-server`, never
+     `pkill -f "next start"`.
+- **Interfaces:** `scripts/walk-shore.sh`; `README.md`
+- **Non-goals:** any change under `app/`, `content/` or `e2e/`; CI workflow
+  changes; walking production from the gate.
+- **Acceptance:** `bash scripts/walk-shore.sh` builds, serves and walks Shore
+  and the site on the delivery sha, prints one line per check and exits 0. It
+  leaves no server on its port. Pointed at a URL where nothing listens, it
+  exits non-zero.
+- **Verification:**
+  - `npm ci && npm run lint && npm run typecheck && npm test`
+  - `bash -n scripts/walk-shore.sh && ! grep -nE 'wc +-l' scripts/walk-shore.sh`
+  - `bash scripts/walk-shore.sh`
+  - `if curl -s -o /dev/null --max-time 2 http://localhost:4019/; then exit 1; fi`
+    (no server left behind)
+  - `if BASE_URL=http://127.0.0.1:4029 bash scripts/walk-shore.sh; then exit 1; fi`
+    (the walk fails when Shore is not there)
+  - `test "$(git log -1 --format=%ae)" = quiinthieu@gmail.com`
+
+### 2. Prove Shore's buttons with unit tests on the actions they call
+
+- **Role:** software_engineer, depends on 1. QA is required, because it
+  touches `app/(shore)/_components/shore-app.tsx`.
+- **Problem:** t-1052's browser acceptance line (Begin → Finish now → a
+  pebble survives a reload; the dark scene sticks) could never be run here.
+  The ledger changes those buttons make live inside `shore-app.tsx`
+  (`washUp`, the scene setter, Clear today), where no test can reach them.
+- **Action items:**
+  1. Add pure `app/(shore)/_lib/actions.ts`:
+     - `washUp(ledger, session): Ledger` mints the pebble for
+       `dayNumber(session.startedAt)` with the next index of that day.
+     - `withScene(ledger, scene): Ledger`.
+     - `clearDay(ledger, now): Ledger` drops only `now`'s day.
+     - `sceneClass(scene)` returns `"shore"` or `"shore dark-scene"`.
+     It imports only `./ledger.ts`, `./pebbles.ts` and `./timer.ts`.
+  2. `shore-app.tsx` calls these through its existing `update()` and uses
+     `sceneClass` for the wrapper. No markup, copy or behaviour change.
+  3. Add `app/(shore)/_lib/actions.test.ts` (node:test). It covers:
+     - `begin(25, t)` then `washUp`, `serialize` and `normalizeLedger`
+       (the reload), after which `today()` has one mint pebble with
+       `seedFor(day, 0)`.
+     - A second session the same day gets index 1 and a distinct seed.
+     - 15 gives amber and 45 gives lilac.
+     - `withScene(dark)` survives the reload, and `sceneClass` gives
+       `"shore dark-scene"`.
+     - `clearDay` keeps yesterday's pebbles.
+     - Finishing the same session twice does not mint twice: either
+       `washUp` is idempotent on `startedAt`, or the test pins the current
+       guard. Pick one and record it.
+  4. The isolation test still passes. Commit with the owner identity env,
+     as in task 1.
+- **Interfaces:** `app/(shore)/_lib/actions.ts`;
+  `app/(shore)/_lib/actions.test.ts`; `app/(shore)/_components/shore-app.tsx`
+- **Non-goals:** visual changes, new features, a browser test harness
+  (Playwright or jsdom), persisting a running session across reload, and
+  changes to `app/(site)/`.
+- **Acceptance:** the action tests pass and drive Begin → Finish now →
+  reload → one pebble, and dark scene → reload → dark. `shore-app.tsx`
+  imports its ledger changes from `_lib/actions`. `bash
+  scripts/walk-shore.sh` still exits 0 on the delivery sha.
+- **Verification:**
+  - `npm ci && npm run lint && npm run typecheck && npm test`
+  - `node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'app/(shore)/_lib/actions.test.ts' 'app/(shore)/_lib/isolation.test.ts'`
+  - `grep -q '_lib/actions' 'app/(shore)/_components/shore-app.tsx' && ! grep -q 'mint(' 'app/(shore)/_components/shore-app.tsx'`
+  - `bash scripts/walk-shore.sh`
+  - `test "$(git log -1 --format=%ae)" = quiinthieu@gmail.com`
+
+## QA and acceptance
+
+- **QA (task 2):**
+  1. Rerun the verification on the delivery sha.
+  2. Read `<meta name="build-sha">` on https://otohime.dev/. If it is the
+     delivery sha or a descendant, run `BASE_URL=https://otohime.dev
+     EXPECT_SHA=<that sha> bash scripts/walk-shore.sh`.
+  3. If a headless browser works, attach light and dark scene screenshots of
+     `/shore` and click through Begin → Finish now → reload. A missing
+     browser is a note, not a fail.
+  4. Do not fail for the `Co-Authored-By` trailer.
+- **Acceptance:** if otohime.dev serves the final sha, walk it with
+  `BASE_URL=https://otohime.dev EXPECT_SHA=<final sha> bash
+  scripts/walk-shore.sh`. Then follow `/projects` → the Shore row → `/shore`
+  → the "otohime.dev" link → `/`. Otherwise walk a local `bash
+  scripts/walk-shore.sh` of the final sha, and pass with a watch on
+  https://otohime.dev/shore: the same remote walk with `EXPECT_SHA` set to
+  the final sha or a descendant, `not_before` one hour after the push.
+
+## Risks
+
+- **Port clash on the gate.** Port 4019 is the default. The script takes
+  `PORT`, and a verification item checks that nothing is left listening.
+- **Canvas support.** `ctx.filter` blur is missing in Safari < 18 and in
+  jsdom. Shadows then render unblurred, and nothing breaks.
+- **Stopping servers.** Use `pkill -x next-server`, never
+  `pkill -f "next start"`, which kills the agent's shell.
+- **`AGENTS.md` churn.** `next dev` re-adds its block. Leave it alone.
+
+## Revision 2 tasks (history)
+
+Task 1 (t-1051) and task 2 (t-1052) of revision 2 are kept below as they were
+proposed. t-1052's code is the base the revision 3 tasks prove.
+
+#### r2-1. Give the site its own route-group root layout
 
 - **Role:** software_engineer
 - **Problem:** `app/layout.tsx` is the only root layout, so every route inherits
@@ -94,7 +297,7 @@ upstream recipe inspector, and re-skinning any otohime page.
   and a `next start` walk of the routes above on port 4018; the delivery
   commit's author email is `quiinthieu@gmail.com`.
 
-### 2. Add Shore, a sea-glass focus timer in its own root layout
+#### r2-2. Add Shore, a sea-glass focus timer in its own root layout
 
 - **Role:** software_engineer, depends on 1
 - **Problem:** The Projects bench is empty, and nothing on the site uses
@@ -162,32 +365,3 @@ upstream recipe inspector, and re-skinning any otohime page.
   and a `next start` walk on port 4019 (markers above, plus the stylesheet
   check); the delivery commit's author email is `quiinthieu@gmail.com`.
 
-## QA and acceptance
-
-- **QA (each task):** rerun the task's verification on the delivery sha. Then
-  read `<meta name="build-sha">` on https://otohime.dev/ and walk production
-  if it serves the delivery sha (or a descendant). For task 2, take light- and
-  dark-scene screenshots of `/shore` with a headless browser (e.g. Chrome
-  `--headless --screenshot`) and click through Begin → Finish now → reload. A
-  missing browser is noted in the report, not a fail: the curl markers and
-  unit tests stand.
-- **Acceptance:** walk the plan on otohime.dev if it serves the final sha:
-  `/shore` (timer, pebble, scene), `/projects` → Shore row → `/shore` →
-  "otohime.dev" link → `/`, and `/nonexistent` → parcel page. If production
-  lags, walk a local `next start` of the final sha and pass with a watch on
-  https://otohime.dev/shore (`build-sha` = final sha or a descendant, 200, three
-  or more `class="glass`), `not_before` one hour after the push.
-
-## Risks
-
-- **The move touches every route.** It is `git mv` only and the spike was
-  green, but task 1's walk covers each public page and the 404.
-- **Canvas support.** `ctx.filter` blur is missing in Safari < 18 and in
-  jsdom: shadows render unblurred, nothing breaks. The canvas mounts in
-  `useEffect`, so there is no hydration mismatch.
-- **Performance.** Each piece shades a bitmap on mount and resize. Cap the
-  visible shore at 12 pebbles per row and never animate recipe values.
-- **Stopping servers.** Use `pkill -x next-server`, never
-  `pkill -f "next start"` (it kills the agent's shell). The verification
-  commands kill their own process group on exit.
-- **`AGENTS.md` churn.** `next dev` re-adds its block; leave it alone.
