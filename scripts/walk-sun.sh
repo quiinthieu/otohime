@@ -165,6 +165,29 @@ sun_stylesheet() {
   done
 }
 
+# Exactly three stages inside the <ol data-life> strip.
+life_strip() {
+  local strip n
+  strip="$(tr '\n' ' ' <"$WORK/sun.body" | grep -oE '<ol[^>]*data-life[^>]*>.*</ol>' | sed -E 's#(</ol>).*#\1#')"
+  [ -n "$strip" ] || { echo "no <ol data-life>"; return 1; }
+  n="$(printf '%s' "$strip" | grep -oF 'data-stage="' | grep -c .)"
+  [ "$n" -eq 3 ] || { echo "found $n stages in data-life, want exactly 3"; return 1; }
+}
+
+# The visible words on /sun, counted by the same visibleWords the unit tests use.
+WORDS_JS='import { readFileSync } from "node:fs";
+import { visibleWords, WORD_CAP } from "./app/(sun)/_lib/words.ts";
+const html = readFileSync(process.argv[1], "utf8");
+console.log(`${visibleWords(html)} ${WORD_CAP}`);'
+count_words() {
+  node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
+    --input-type=module -e "$WORDS_JS" "$WORK/sun.body" 2>/dev/null
+}
+words_within_cap() {
+  [ -n "$WORDS" ] || { echo "the word count failed"; return 1; }
+  [ "$WORDS" -le "$WORD_CAP" ] || { echo "$WORDS visible words, the cap is $WORD_CAP"; return 1; }
+}
+
 manifest_lists_sun() {
   local f=.next/app-path-routes-manifest.json
   [ -f "$f" ] || { echo "$f not found"; return 1; }
@@ -183,20 +206,28 @@ get music /music
 get sun_nope /sun/nope
 get nonexistent /nonexistent
 
+read -r WORDS WORD_CAP <<<"$(count_words)"
+WORDS="${WORDS:-}"
+WORD_CAP="${WORD_CAP:-220}"
+
 [ "$LOCAL" -eq 1 ] && check "manifest lists /sun" manifest_lists_sun
 
 check "/sun returns 200" status_is sun 200
 check "/sun title is Sun" has sun '<title>Sun</title>'
 check "/sun has no site sidebar" lacks sun 'aria-label="Main"'
 check "/sun build-sha" build_sha_matches
-check "/sun has exactly 8 chapter sections" count_eq sun 'data-chapter-section="' 8
-check "/sun has exactly 8 scenes" count_eq sun 'data-scene="' 8
+check "/sun has exactly 6 inked layers" count_eq sun 'data-layer="' 6
+check "/sun has exactly 6 callouts" count_eq sun 'data-callout="' 6
+check "/sun has exactly 4 badges" count_eq sun 'data-badge="' 4
+check "/sun has a 3-stage life strip" life_strip
 check "/sun has the core temperature" has sun '15.7 million K'
 check "/sun has the photon's trip" has sun '170,000 years'
 check "/sun has the light time" has sun '8 min 19 s'
-check "/sun has Next" has sun 'Next'
-check "/sun has Play" has sun 'Play'
-check "/sun has the live caption" has sun 'aria-live="polite"'
+check "/sun has 109 Earths" has sun '>109<'
+check "/sun has no buttons" lacks sun '<button'
+check "/sun has no live region" lacks sun 'aria-live'
+check "/sun has no tour" lacks sun 'data-tour'
+check "/sun has at most $WORD_CAP visible words (counted $WORDS)" words_within_cap
 check "/sun links NASA's Sun facts" has sun 'href="https://science.nasa.gov/sun/facts/"'
 check "/sun links home" has sun 'href="/"'
 check "/sun stylesheet is Sun's own" sun_stylesheet

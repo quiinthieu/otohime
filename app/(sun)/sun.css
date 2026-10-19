@@ -1,29 +1,37 @@
 /* Sun's own stylesheet, hand-written: no Tailwind and no site tokens.
-   Nothing here sets overflow: hidden on a parent of the wobble-filtered SVG,
-   so the filter is never clipped at its edge. Scene keyframes are named
-   sun-<chapter>-<part> and run only under [data-chapter="<chapter>"]; each
-   scene's static style is its resting pose, which is what reduced motion shows. */
+   A cream-paper poster in hand lettering. One column on a phone, two from
+   900px. Nothing sets overflow: hidden around the cutaway, and the SVG never
+   grows past its column, so a 390px phone has no sideways scroll. The smallest
+   text at 390px is 12px or more, SVG labels included. */
 :root {
-  --sky: #0b1020;
-  --panel: #131a33;
-  --line: #2a3355;
-  --ink: #f4efe4;
-  --muted: #9aa3bd;
-  --gold: #ffd166;
-  --sun: #f4a259;
-  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-family: var(--sans);
+  --paper: #f6f1e7;
+  --paper-edge: #ebe2cf;
+  --ink: #3a2a28;
+  --ink-soft: #6b5a50;
+  --sun-yellow: #f4b400;
+  --sun-amber: #f59f2a;
+  --sun-orange: #e0672c;
+  --sun-red: #d6453d;
+  --earth: #2f6fd0;
+  --hand-stack: "Chalkboard SE", "Comic Neue", "Comic Sans MS", cursive;
+  --title: var(--font-title, var(--hand-stack));
+  --hand: var(--font-hand, var(--hand-stack));
+  --frame-radius: 14px 12px 15px 11px;
+  font-family: var(--hand);
+  font-size: 18px;
+  line-height: 1.35;
   color: var(--ink);
-  background: var(--sky);
+  background-color: var(--paper);
+  /* paper grain: a faint noise of dots, drawn inline so nothing is fetched */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%233a2a28' fill-opacity='.05'%3E%3Ccircle cx='13' cy='21' r='.8'/%3E%3Ccircle cx='71' cy='9' r='.6'/%3E%3Ccircle cx='102' cy='44' r='.9'/%3E%3Ccircle cx='37' cy='66' r='.7'/%3E%3Ccircle cx='88' cy='93' r='.6'/%3E%3Ccircle cx='19' cy='104' r='.9'/%3E%3Ccircle cx='58' cy='112' r='.5'/%3E%3C/g%3E%3C/svg%3E");
   font-synthesis: none;
-  color-scheme: dark;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--sky); }
-button, a { -webkit-tap-highlight-color: transparent; }
-button { font: inherit; color: inherit; cursor: pointer; }
-a { color: var(--gold); }
-button:focus-visible, a:focus-visible, .stage:focus-visible { outline: 2px dashed var(--gold); outline-offset: 4px; }
+body { margin: 0; }
+a { color: var(--ink); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+a:hover { color: var(--sun-orange); }
+a:focus-visible { outline: 2px dashed var(--sun-orange); outline-offset: 3px; border-radius: 4px; }
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -36,318 +44,148 @@ button:focus-visible, a:focus-visible, .stage:focus-visible { outline: 2px dashe
 }
 
 .sun { min-height: 100vh; display: flex; flex-direction: column; }
-main { flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; padding: 24px 5% 8px; }
 
-/* Top bar */
-.topbar {
-  min-height: 72px;
-  padding: 0 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* Top bar: the way home */
+.topbar { padding: 14px 16px 0; max-width: 1180px; width: 100%; margin: 0 auto; }
+.home-link { font-family: var(--title); font-size: 22px; }
+
+/* The poster grid */
+.poster {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 16px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "title" "art" "callouts" "badges" "life";
+  align-content: start;
   gap: 20px;
-  border-bottom: 1px solid var(--line);
 }
-.brand { display: flex; align-items: center; gap: 12px; }
-.brand-name { display: block; font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
-.brand-detail { display: block; font-size: 9px; letter-spacing: 1.8px; color: var(--muted); margin-top: 3px; }
-.brand-mark {
+.title { grid-area: title; }
+.cutaway { grid-area: art; margin: 0; min-width: 0; }
+.callouts { grid-area: callouts; }
+.badges { grid-area: badges; }
+.life { grid-area: life; }
+
+h1 {
+  margin: 0;
+  font-family: var(--title);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1;
+}
+.tagline { margin: 4px 0 0; font-size: 22px; color: var(--ink-soft); }
+
+/* The cutaway */
+.sun-svg { display: block; width: 100%; max-width: 100%; height: auto; }
+.sun-svg text { font-family: var(--title); font-size: 24px; fill: var(--ink); }
+.sun-svg .pin text { font-weight: 700; }
+.sun-svg .wash { stroke: none; opacity: 0.28; }
+
+/* Callouts: one line per numbered layer */
+.callouts { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; align-content: start; }
+.callouts li { display: flex; gap: 12px; align-items: baseline; }
+.callouts p { margin: 0; }
+.callouts strong { font-family: var(--title); font-size: 24px; font-weight: 700; margin-right: 2px; }
+.num {
+  flex: none;
   width: 30px;
   height: 30px;
-  display: block;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 38%, #fff3b0, var(--gold) 45%, var(--sun));
-  box-shadow: 0 0 14px 2px rgba(255, 209, 102, 0.45);
-}
-.home-link {
-  font-size: 12px;
-  color: var(--muted);
-  text-decoration: none;
-  padding: 9px 13px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
-.home-link:hover { background: var(--panel); color: var(--ink); }
-
-/* Stage */
-.tour { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-.stage { width: 100%; border: 1px solid var(--line); border-radius: 14px; background: var(--sky); }
-.sun-svg { width: 100%; height: auto; display: block; overflow: visible; font-family: var(--sans); fill: var(--ink); }
-.sun-svg .sky { fill: var(--sky); }
-.sun-svg .note { fill: var(--muted); }
-.sun-svg .path { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 5; fill: none; }
-
-/* The lit layer: the others fade back */
-.sun-svg [data-layer] { opacity: 0.28; transition: opacity 0.4s; }
-.sun-svg [data-legend] { opacity: 0.5; transition: opacity 0.4s; }
-.sun-svg:is([data-chapter="scale"], [data-chapter="life"]) :is([data-layer], [data-legend]) { opacity: 1; }
-.sun-svg[data-chapter="core"] :is([data-layer="core"], [data-legend="core"]),
-.sun-svg[data-chapter="radiative"] :is([data-layer="radiative"], [data-legend="radiative"]),
-.sun-svg[data-chapter="convective"] :is([data-layer="convective"], [data-legend="convective"]),
-.sun-svg[data-chapter="photosphere"] :is([data-layer="photosphere"], [data-legend="photosphere"]),
-.sun-svg[data-chapter="chromosphere"] :is([data-layer="chromosphere"], [data-legend="chromosphere"]),
-.sun-svg[data-chapter="corona"] :is([data-layer="corona"], [data-legend="corona"]) { opacity: 1; }
-
-/* Scenes: all are in the HTML, the one that matches data-chapter shows */
-.sun-svg [data-scene] { opacity: 0; visibility: hidden; transition: opacity 0.4s; }
-.sun-svg[data-chapter="scale"] [data-scene="scale"],
-.sun-svg[data-chapter="core"] [data-scene="core"],
-.sun-svg[data-chapter="radiative"] [data-scene="radiative"],
-.sun-svg[data-chapter="convective"] [data-scene="convective"],
-.sun-svg[data-chapter="photosphere"] [data-scene="photosphere"],
-.sun-svg[data-chapter="chromosphere"] [data-scene="chromosphere"],
-.sun-svg[data-chapter="corona"] [data-scene="corona"],
-.sun-svg[data-chapter="life"] [data-scene="life"] { opacity: 1; visibility: visible; }
-
-/* Scene: scale. Resting pose: the pulse has arrived at Earth. */
-.sun-svg .earth { fill: #5aa9e6; }
-.sun-svg .ring { fill: none; stroke: #5aa9e6; stroke-width: 1.5; transform-box: fill-box; transform-origin: center; }
-.sun-svg .inset { fill: #5aa9e6; stroke: var(--ink); stroke-width: 1.5; }
-.sun-svg .land { fill: #6bbf59; }
-.sun-svg .pulse { fill: #fff3b0; transform: translate(var(--dx), var(--dy)); }
-.sun-svg[data-chapter="scale"] .pulse { animation: sun-scale-pulse 5s ease-in infinite; }
-.sun-svg[data-chapter="scale"] .ring { animation: sun-scale-arrive 5s ease-out infinite; }
-@keyframes sun-scale-pulse {
-  0% { transform: translate(0, 0); opacity: 0; }
-  8% { opacity: 1; }
-  80% { transform: translate(var(--dx), var(--dy)); opacity: 1; }
-  100% { transform: translate(var(--dx), var(--dy)); opacity: 1; }
-}
-@keyframes sun-scale-arrive {
-  0%, 78% { transform: scale(1); opacity: 0.2; }
-  85% { transform: scale(1.6); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.6; }
+  display: inline-grid;
+  place-items: center;
+  font-family: var(--title);
+  font-weight: 700;
+  font-size: 22px;
+  border: 2px solid var(--ink);
+  border-radius: 52% 48% 50% 46%;
+  background: #fffaf0;
+  transform: translateY(4px);
 }
 
-/* Scene: core. Resting pose: protons joined into helium, the photon just out. */
-.sun-svg .lens { fill: #1a1630; stroke: var(--gold); stroke-width: 2; }
-.sun-svg .proton { fill: #ff9f68; stroke: var(--ink); stroke-width: 1.5; transform: translate(var(--tx), var(--ty)); }
-.sun-svg .p1 { --fx: -62px; --fy: -48px; --tx: -9px; --ty: -9px; }
-.sun-svg .p2 { --fx: 62px; --fy: -48px; --tx: 9px; --ty: -9px; }
-.sun-svg .p3 { --fx: -62px; --fy: 48px; --tx: -9px; --ty: 9px; }
-.sun-svg .p4 { --fx: 62px; --fy: 48px; --tx: 9px; --ty: 9px; }
-.sun-svg .helium { fill: rgba(255, 243, 176, 0.35); stroke: #fff3b0; stroke-width: 1.5; }
-.sun-svg .photon { fill: #fff3b0; stroke: var(--gold); stroke-width: 2; transform: translate(36px, -40px); }
-.sun-svg[data-chapter="core"] .proton { animation: sun-core-proton 5s ease-in-out infinite; }
-.sun-svg[data-chapter="core"] .helium { animation: sun-core-helium 5s ease-out infinite; }
-.sun-svg[data-chapter="core"] .photon { animation: sun-core-photon 5s ease-out infinite; }
-@keyframes sun-core-proton {
-  0% { transform: translate(var(--fx), var(--fy)); opacity: 0; }
-  6%, 15% { transform: translate(var(--fx), var(--fy)); opacity: 1; }
-  55%, 90% { transform: translate(var(--tx), var(--ty)); opacity: 1; }
-  98%, 100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
-}
-@keyframes sun-core-helium {
-  0%, 50% { opacity: 0; }
-  58%, 90% { opacity: 1; }
-  98%, 100% { opacity: 0; }
-}
-@keyframes sun-core-photon {
-  0%, 54% { transform: translate(0, 0); opacity: 0; }
-  60% { transform: translate(0, 0); opacity: 1; }
-  95% { transform: translate(72px, -80px); opacity: 1; }
-  100% { transform: translate(72px, -80px); opacity: 0; }
-}
-
-/* Scene: radiative. Resting pose: the zig-zag is drawn in full and the photon is at its end. */
-.sun-svg .speck { fill: var(--muted); opacity: 0.7; }
-.sun-svg .walk { fill: none; stroke: #fff3b0; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 0; }
-.sun-svg .walker { fill: #fff3b0; stroke: var(--gold); stroke-width: 2; transform: translate(98px, -106px); }
-.sun-svg[data-chapter="radiative"] .walk { animation: sun-radiative-trail 9s linear infinite; }
-.sun-svg[data-chapter="radiative"] .walker { animation: sun-radiative-photon 9s linear infinite; }
-@keyframes sun-radiative-trail {
-  0%, 6% { stroke-dashoffset: 1; opacity: 1; }
-  86%, 97% { stroke-dashoffset: 0; opacity: 1; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
-}
-@keyframes sun-radiative-photon {
-  0% { transform: translate(0, 0); opacity: 0; }
-  6% { transform: translate(0, 0); opacity: 1; }
-  18.8% { transform: translate(30px, -20px); }
-  28.1% { transform: translate(14px, -42px); }
-  40.9% { transform: translate(48px, -54px); }
-  51.7% { transform: translate(32px, -80px); }
-  65.7% { transform: translate(70px, -70px); }
-  73.6% { transform: translate(66px, -92px); }
-  86%, 97% { transform: translate(98px, -106px); opacity: 1; }
-  100% { transform: translate(98px, -106px); opacity: 0; }
-}
-
-/* Scene: convective. Resting pose: arrows on every cell, the dashes at rest. */
-.sun-svg .box { stroke: var(--muted); stroke-width: 1.5; }
-.sun-svg .cell { fill: none; stroke: rgba(255, 255, 255, 0.85); stroke-width: 2.5; stroke-dasharray: 9 7; stroke-dashoffset: 0; }
-.sun-svg .arrow { fill: #fff; stroke: none; }
-.sun-svg .hint { fill: rgba(255, 255, 255, 0.85); }
-.sun-svg[data-chapter="convective"] .cell.cw { animation: sun-convective-roll 2.4s linear infinite; }
-.sun-svg[data-chapter="convective"] .cell.ccw { animation: sun-convective-rollback 2.4s linear infinite; }
-@keyframes sun-convective-roll { to { stroke-dashoffset: -32; } }
-@keyframes sun-convective-rollback { to { stroke-dashoffset: 32; } }
-
-/* Scene: photosphere. Resting pose: both spots mid-disc, the equator one ahead. */
-.sun-svg .granule { fill: #ffe9a8; opacity: 0.55; }
-.sun-svg .penumbra { fill: #7a3b10; }
-.sun-svg .umbra { fill: #2a1206; }
-.sun-svg .spot-eq { transform: translateX(145px); }
-.sun-svg .spot-hi { transform: translateX(35px); }
-.sun-svg[data-chapter="photosphere"] .granule { animation: sun-photosphere-shimmer 3s ease-in-out var(--d, 0s) infinite; }
-.sun-svg[data-chapter="photosphere"] .spot-eq { animation: sun-photosphere-equator 5s linear infinite; }
-.sun-svg[data-chapter="photosphere"] .spot-hi { animation: sun-photosphere-pole 7.2s linear infinite; }
-@keyframes sun-photosphere-shimmer {
-  0%, 100% { opacity: 0.25; }
-  50% { opacity: 0.85; }
-}
-@keyframes sun-photosphere-equator {
-  0% { transform: translateX(0); opacity: 0; }
-  8% { opacity: 1; }
-  92% { transform: translateX(220px); opacity: 1; }
-  100% { transform: translateX(220px); opacity: 0; }
-}
-@keyframes sun-photosphere-pole {
-  0% { transform: translateX(0); opacity: 0; }
-  8% { opacity: 1; }
-  92% { transform: translateX(140px); opacity: 1; }
-  100% { transform: translateX(140px); opacity: 0; }
-}
-
-/* Scene: chromosphere. Resting pose: spicules at full height. */
-.sun-svg .rim { fill: none; stroke: #ff4d6d; stroke-width: 5; opacity: 0.6; }
-.sun-svg .spicule { stroke: #ff6f91; stroke-width: 2.5; stroke-linecap: round; transform: scaleY(1); }
-.sun-svg[data-chapter="chromosphere"] .spicule { animation: sun-chromosphere-jet 2.4s ease-out var(--d, 0s) infinite; }
-.sun-svg[data-chapter="chromosphere"] .rim { animation: sun-chromosphere-rim 3s ease-in-out infinite; }
-@keyframes sun-chromosphere-jet {
-  0%, 100% { transform: scaleY(0.15); }
-  35%, 45% { transform: scaleY(1); }
-}
-@keyframes sun-chromosphere-rim {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.85; }
-}
-
-/* Scene: corona. Resting pose: the CME is mid-flight between the Sun and Earth. */
-.sun-svg .streamer { fill: var(--gold); opacity: 0.4; }
-.sun-svg .glow { fill: none; stroke: #ff6f61; stroke-width: 9; stroke-linecap: round; opacity: 0.25; }
-.sun-svg .prominence { fill: none; stroke: #ff6f61; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 7; stroke-dashoffset: 0; }
-.sun-svg .wind { stroke: #bfe3ff; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 10 14; stroke-dashoffset: 0; opacity: 0.8; }
-.sun-svg .bubble { fill: var(--sky); fill-opacity: 0.85; stroke: #5aa9e6; stroke-width: 1.5; stroke-dasharray: 4 4; }
-.sun-svg .cme { transform-box: fill-box; transform-origin: center; transform: translate(97px, 58px) scale(1); }
-.sun-svg .cme circle { fill: rgba(255, 209, 102, 0.18); stroke: var(--gold); stroke-width: 2.5; }
-.sun-svg[data-chapter="corona"] .streamer { animation: sun-corona-streamer 4s ease-in-out var(--d, 0s) infinite; }
-.sun-svg[data-chapter="corona"] .prominence { animation: sun-corona-loop 1.6s linear infinite; }
-.sun-svg[data-chapter="corona"] .wind { animation: sun-corona-wind 1.2s linear infinite; }
-.sun-svg[data-chapter="corona"] .cme { animation: sun-corona-cme 6s ease-in-out infinite; }
-@keyframes sun-corona-streamer {
-  0%, 100% { transform: scaleY(0.88); opacity: 0.25; }
-  50% { transform: scaleY(1.12); opacity: 0.5; }
-}
-@keyframes sun-corona-loop { to { stroke-dashoffset: -34; } }
-@keyframes sun-corona-wind { to { stroke-dashoffset: -48; } }
-@keyframes sun-corona-cme {
-  0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
-  50% { transform: translate(97px, 58px) scale(1); opacity: 1; }
-  100% { transform: translate(170px, 102px) scale(1.5); opacity: 0; }
-}
-
-/* Scene: life. Resting pose: all three sizes drawn and labelled, the marker at the end. */
-.sun-svg .axis { stroke: var(--muted); stroke-width: 1.5; fill: none; }
-.sun-svg .tick { fill: var(--muted); }
-.sun-svg .body-sun { fill: #ffd166; stroke: var(--ink); stroke-width: 1.5; }
-.sun-svg .body-giant { fill: #d94f3a; stroke: var(--ink); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; }
-.sun-svg .body-dwarf { fill: #e8f1ff; stroke: var(--ink); stroke-width: 1.5; }
-.sun-svg .marker { fill: var(--gold); transform: translateX(295px); }
-.sun-svg[data-chapter="life"] .marker { animation: sun-life-marker 9s linear infinite; }
-.sun-svg[data-chapter="life"] .stage-sun { animation: sun-life-sun 9s ease-in-out infinite; }
-.sun-svg[data-chapter="life"] .stage-giant { animation: sun-life-giant 9s ease-in-out infinite; }
-.sun-svg[data-chapter="life"] .body-giant { animation: sun-life-swell 9s ease-in-out infinite; }
-.sun-svg[data-chapter="life"] .stage-dwarf { animation: sun-life-dwarf 9s ease-in-out infinite; }
-@keyframes sun-life-marker {
-  0% { transform: translateX(0); opacity: 1; }
-  90%, 96% { transform: translateX(295px); opacity: 1; }
-  100% { transform: translateX(295px); opacity: 0; }
-}
-@keyframes sun-life-sun {
-  0%, 20%, 100% { opacity: 0.2; }
-  26%, 95% { opacity: 1; }
-}
-@keyframes sun-life-giant {
-  0%, 50%, 100% { opacity: 0.15; }
-  62%, 80% { opacity: 1; }
-  92% { opacity: 0.35; }
-}
-@keyframes sun-life-swell {
-  0%, 50%, 100% { transform: scale(0.45); }
-  62%, 80% { transform: scale(1); }
-  92% { transform: scale(0.6); }
-}
-@keyframes sun-life-dwarf {
-  0%, 82%, 100% { opacity: 0.15; }
-  90%, 95% { opacity: 1; }
-}
-
-/* Controls and dots */
-.controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-.button {
-  min-width: 92px;
-  padding: 10px 18px;
-  background: var(--panel);
-  border: 1px solid var(--gold);
-  border-radius: 10px;
-  font-weight: 600;
-}
-.button:hover:not(:disabled) { background: #1d2750; }
-.button:disabled { cursor: default; opacity: 0.35; border-color: var(--line); }
-.dots { display: flex; gap: 6px; justify-content: center; }
-.dot {
-  width: 36px;
-  height: 36px;
+/* Badges: four headline numbers, two by two on a phone */
+.badges {
+  list-style: none;
+  margin: 0;
   padding: 0;
-  border-radius: 50%;
-  background: transparent;
-  border: 1px solid var(--line);
-  font-size: 13px;
-  color: var(--muted);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
-.dot:hover { border-color: var(--gold); }
-.dot[aria-current="step"] { background: var(--gold); border-color: var(--gold); color: var(--sky); font-weight: 700; }
+.badges li {
+  position: relative;
+  padding: 14px 12px 12px;
+  border-radius: var(--frame-radius);
+  background: rgba(255, 250, 240, 0.7);
+  text-align: center;
+}
+.badges .frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.badges strong {
+  display: block;
+  font-family: var(--title);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.05;
+  color: var(--sun-orange);
+}
+.badges span { display: block; font-size: 16px; }
 
-/* Caption, counters, facts */
-.caption { text-align: center; max-width: 640px; }
-.caption-title { margin: 0; font-size: 22px; font-weight: 600; color: var(--gold); }
-.caption-lede { margin: 6px 0 0; line-height: 1.55; color: var(--ink); }
-.counters { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 0; width: 100%; }
-.counter { flex: 1 1 240px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; text-align: center; }
-.counter[data-active="true"] { border-color: var(--gold); }
-.counter dt { font-size: 12px; color: var(--muted); }
-.counter dd { margin: 4px 0 0; font-size: 22px; font-weight: 600; }
-.facts { width: 100%; padding: 14px 18px; background: var(--panel); border-radius: 12px; transition: opacity 0.2s; }
-.facts[data-phase="entering"] { opacity: 0.5; }
-.facts-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.facts-list li { line-height: 1.5; overflow-wrap: anywhere; }
-.fact-label { display: block; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-.fact-source { font-size: 11px; white-space: nowrap; }
+/* Life strip: Today, Red giant, White dwarf */
+.life {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  align-items: start;
+  text-align: center;
+}
+.life li { display: grid; justify-items: center; gap: 2px; position: relative; }
+.life li + li::before {
+  content: "→";
+  position: absolute;
+  left: -14px;
+  top: 38px;
+  font-size: 22px;
+  color: var(--ink-soft);
+}
+.life svg { width: 80%; max-width: 120px; height: auto; display: block; }
+.life strong { font-family: var(--title); font-weight: 700; font-size: 24px; }
+.life span { font-size: 14px; color: var(--ink-soft); }
 
-/* The eight chapters, always in the page */
-.chapters { margin-top: 48px; display: grid; gap: 20px; }
-.chapter { padding: 20px 22px; border: 1px solid var(--line); border-radius: 12px; }
-.chapter-no { margin: 0; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
-.chapter h2 { margin: 4px 0 8px; font-size: 24px; font-weight: 600; color: var(--gold); }
-.lede { margin: 0 0 14px; line-height: 1.6; }
+/* Credit */
+.credit {
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 12px 16px 28px;
+  border-top: 2px dashed var(--paper-edge);
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.credit p { margin: 0; }
 
-.page-footer { padding: 28px 5% 40px; text-align: center; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); margin-top: 40px; }
-.page-footer p { margin: 4px 0; }
-
-/* Phone: one column, no horizontal overflow at 390px */
-@media (max-width: 600px) {
-  main { padding-top: 16px; }
-  .topbar { padding: 8px 16px; }
-  .brand-detail { display: none; }
-  .sun-svg .legend { display: none; }
-  .dots { gap: 4px; }
-  .dot { width: 34px; height: 34px; }
-  .chapter { padding: 16px; }
+/* Two columns from 900px: the cutaway on the left, the callouts beside its cut */
+@media (min-width: 900px) {
+  .topbar, .poster, .credit { padding-left: 32px; padding-right: 32px; }
+  .poster {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-areas: "art title" "art callouts" "badges badges" "life life";
+    grid-template-rows: auto 1fr;
+    column-gap: 40px;
+  }
+  .title { align-self: end; }
+  h1 { font-size: 88px; }
+  .badges { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .badges strong { font-size: 36px; }
+  .life { max-width: 720px; justify-self: center; width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
   }

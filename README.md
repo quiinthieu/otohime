@@ -33,12 +33,12 @@ app/(capsule)/       Capsule, a coin-and-crank card machine: its own root layout
                      _components/ holds the machine, the card frame and the app (buttons, coin tray, album)
                      _lib/art/ holds the hand-drawn cards as path data (one file per card, ART in index.ts)
                      and svg.ts, which draws them for the page and for `npm run capsule:sheet`
-app/(sun)/           Sun, an animated cutaway of the Sun: its own root layout and CSS (no Tailwind),
-                     whose facts and tour are pure data in _lib/ (sun.ts, format.ts, tour.ts);
-                     layout.tsx and sun.css are its root layout; sun/page.tsx is /sun;
-                     _components/ holds the SVG stage and the tour; `npm test` covers its _lib/*.test.ts;
-                     the poster's words are _lib/poster.ts, the ink is _lib/ink.ts (rough.js, fixed seed)
-                     and _lib/words.ts is the shared word counter
+app/(sun)/           Sun, a one-page hand-drawn poster of the Sun: its own root layout and CSS (no Tailwind),
+                     whose layers, sources and number words are pure data in _lib/ (sun.ts, format.ts);
+                     layout.tsx (hand fonts via next/font) and sun.css are its root layout; sun/page.tsx is /sun;
+                     _components/ holds the inked cutaway (stage.tsx), all server components; `npm test` covers
+                     its _lib/*.test.ts; the poster's words are _lib/poster.ts, the ink is _lib/ink.ts
+                     (rough.js, fixed seed) and _lib/words.ts is the shared word counter
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -74,7 +74,7 @@ The change takes effect on the next request.
 
 ## Tests
 
-- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's facts, number words, tour, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`). It needs no database.
+- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's layers and sources, number words, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`). It needs no database.
 - `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
 
   ```bash
@@ -94,7 +94,7 @@ Walk Capsule and the site the same way with `bash scripts/walk-capsule.sh` (buil
 
 Walk Sun and the site the same way with `bash scripts/walk-sun.sh` (builds, serves on :4027), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-sun.sh`.
 
-To add a Sun chapter: add an entry to `CHAPTERS` in `app/(sun)/_lib/sun.ts` with sourced facts, add a `<g data-scene="<id>">` group to `app/(sun)/_components/stage.tsx` (no filter on it), and add `@keyframes sun-<id>-<part>` to `app/(sun)/sun.css`, run only under `[data-chapter="<id>"]`, with the scene's resting pose as its static style (reduced motion shows that pose). `sun.test.ts` and `scenes.test.ts` check each of these, and the walk counts the scene groups.
+Sun's parts and callouts live in `app/(sun)/_lib/poster.ts`; the ink is rough.js with a fixed seed in `app/(sun)/_lib/ink.ts`; `bash scripts/walk-sun.sh` counts the words on the served page (cap 220, `WORD_CAP` in `app/(sun)/_lib/words.ts`).
 
 Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and serves on :4025: the three starters from `content/site.ts` must still show, with status 200), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-music.sh`.
 
