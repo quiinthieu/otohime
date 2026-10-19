@@ -209,8 +209,9 @@ change to `app/(site)/`, `app/(shore)/` or `app/(capsule)/`.
   and a flat diagram. `/sun` must become the hand-drawn poster, and the walk
   must stop checking the old tour and start enforcing the word cap.
 - **Action items:**
-  1. Read `node_modules/next/dist/docs/01-app/03-api-reference/02-components/font.md`
-     (and any Next 16 doc you touch) before writing code (`AGENTS.md`).
+  1. Read the font guide under `node_modules/next/dist/docs/` (find it with
+     `grep -rl next/font/google node_modules/next/dist/docs | head`) and any
+     other Next 16 doc you touch before writing code (`AGENTS.md`).
   2. `app/(sun)/layout.tsx`: load Caveat and Patrick Hand with
      `next/font/google` (`variable: "--font-title"` / `"--font-hand"`,
      `display: "swap"`, `fallback: ["Chalkboard SE", "Comic Neue", "Comic Sans MS", "cursive"]`),
@@ -323,8 +324,8 @@ change to `app/(site)/`, `app/(shore)/` or `app/(capsule)/`.
      the resting styles (full dash offset 0, opacity 1) are the base styles,
      so a still reads complete and CSS that never loads cannot hide the
      drawing.
-  3. `app/(sun)/_lib/motion.test.ts` (renamed from the idea of
-     `poster.test.ts` to avoid clashing with task 1's data test): reads
+  3. `app/(sun)/_lib/motion.test.ts` (not `poster.test.ts`, which is task 1's data
+     test): reads
      `stage.tsx` and `sun.css` as text and asserts: six `data-layer="` ids
      equal `LAYERS`; three `data-loop="` values `convection`, `photon`,
      `wind`; `@keyframes sun-draw`, `sun-convection-roll`, `sun-photon-walk`
