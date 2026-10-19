@@ -5,6 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: { default: "Otohime", template: "%s · Otohime" },
   description: `Otohime. ${site.tagline}`,
+  other: { "build-sha": process.env.BUILD_SHA ?? "dev" },
 };
 
 export const viewport: Viewport = {
