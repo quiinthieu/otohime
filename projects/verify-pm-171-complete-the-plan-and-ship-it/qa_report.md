@@ -1,27 +1,29 @@
-# QA report: pm-180 / t-1045 (run-6184)
+# QA report: pm-180 / t-1045 (run-6196)
 
-Verdict: **fail, cause=environment**. The delivery is correct; production does not serve it.
+Verdict: **pass**. Cited sha: 7f63d87d10c635414104bf0d42195f7a8b67f53e (delivery code c3cc730840d5d9bfd9e47abb2d7a523734f75942).
 
-Delivery sha: c3cc730840d5d9bfd9e47abb2d7a523734f75942 (origin/main HEAD, pushed 2026-10-19 ~03:54Z).
-Green gate for c3cc730: pass (install/lint/typecheck, npm test, pages test, local build+walk, author gate).
+Green gate for 7f63d87: pass. Deployed commit: 7f63d87 (read from production, below). `git merge-base --is-ancestor c3cc730 7f63d87` and `git merge-base --is-ancestor e097b14 7f63d87` both hold.
 
-## Checked on Node v22.12.0, darwin lease, clean tree at c3cc730
+## Production (checked first)
+
+| Check | Result |
+| --- | --- |
+| `GET https://otohime.dev/projects` | 200; "Nothing on the bench yet" x2; `aria-label="Main"` |
+| `GET https://otohime.dev/` | 200; `y="-146"` console lines |
+| `<meta name="build-sha">` on `/` and `/projects` | `7f63d87d10c635414104bf0d42195f7a8b67f53e`, equal to origin/main HEAD |
+
+The earlier environment fail (rep-3458, `/projects` 404) is resolved. Production now serves the owner-authored commits, which fits the plan's hypothesis that Vercel Hobby was skipping commits not authored by the site owner. It is inferred, not read from GitHub Actions.
+
+## Local checks (Node v22.12.0, darwin lease, clean tree at 7f63d87)
 
 | Check | Result |
 | --- | --- |
 | npm ci, lint, typecheck | pass |
-| npm test | pass, 17/17 (strip-types flags work on 22.12) |
-| author | `Otohime <quiinthieu@gmail.com>`, Co-Authored-By count 0 (matches plan.commit_identity) |
-| npm run build with GITHUB_SHA=c3cc730... | pass; `/projects` in app-path-routes-manifest |
-| next start :4017, signed out, `/projects` | 200; "Nothing on the bench yet" x2; `aria-label="Main"` sidebar; Fig. 06 present |
-| `/` | 200; PROJECTS; `y="-146"` |
-| `<meta name="build-sha">` | content = c3cc730... on `/projects`, `/` and the not-found page |
+| npm test | pass, 21/21 |
+| author of c3cc730 and 7f63d87 | `Otohime <quiinthieu@gmail.com>`, Co-Authored-By count 0 (matches plan.commit_identity) |
+| npm run build with GITHUB_SHA=0123...4567 | pass; `/projects` in app-path-routes-manifest |
+| next start :4017, signed out | `/projects` 200 with "Nothing on the bench yet", `aria-label="Main"`; `/` 200 with PROJECTS and `y="-146"`; both carry build-sha = 0123...4567 |
 
-The contract's one-shot bash -c script printed `curl: (7)` and still exits 0 on darwin, so each step was run separately (above).
+Each build and start step was run separately, not as the contract's one-shot script. That script can print `curl: (7)` and still exit 0 on darwin, so its exit code is not proof.
 
-## Production (https://otohime.dev)
-
-- `GET /projects` -> 404 (`x-matched-path: /404`, `x-vercel-cache: HIT`, last-modified Sun 18 Oct 18:34Z). `/` has no `build-sha` meta and no `-146` line.
-- ~8 minutes after the push (plan: ~4 minutes push-to-live) the site still serves the old build. No deployed commit exists to compare, so `git merge-base --is-ancestor c3cc730 <deployed>` cannot be satisfied.
-- Author hypothesis: the delivery commit is correctly authored with the owner's email, and production still did not move. Caveat: earlier deployed commits (6456dd7 and before) are authored `Ōtohime` (macron) with the same email; c3cc730 is `Otohime`. Vercel checks the email, so I do not think the name matters, but it is the one visible difference.
-- `.github/workflows/ci.yml` last changed 2026-10-18 19:09 (07eed29), before the last deployed commit 6456dd7 (23:27). CI config did not change between the last green deploy and now, so the cause is outside the repo: GitHub Actions run/minutes/concurrency, `VERCEL_TOKEN`, or `DATABASE_URL_UNPOOLED`. GitHub Actions is not readable from here (gh unauthenticated, repo private).
+No application source was edited.
