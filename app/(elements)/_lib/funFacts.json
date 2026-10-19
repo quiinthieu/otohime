@@ -1,0 +1,475 @@
+{
+  "1": {
+    "fact": "Hydrogen is the most abundant element in the universe, making up about 75 percent of all normal matter by mass.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Hydrogen"
+  },
+  "2": {
+    "fact": "Helium was first spotted in the Sun's light during an 1868 solar eclipse, decades before anyone found it on Earth.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Helium"
+  },
+  "3": {
+    "fact": "Lithium is the least dense of all metals, so light that it can float on water.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Lithium"
+  },
+  "4": {
+    "fact": "Beryllium lets X-rays pass through it so easily that it is used for the windows of X-ray tubes.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Beryllium"
+  },
+  "5": {
+    "fact": "Boron gives a bright green colour to flames, so it is used in green flares and fireworks.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Boron"
+  },
+  "6": {
+    "fact": "Diamond and graphite are both pure carbon; only the way the atoms bond makes one the hardest natural material and the other soft enough for pencils.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Carbon"
+  },
+  "7": {
+    "fact": "Nitrogen makes up about 78 percent of the air you breathe.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Nitrogen"
+  },
+  "8": {
+    "fact": "Liquid oxygen is pale blue and so magnetic that it can hang as a bridge between the poles of a powerful magnet.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Oxygen"
+  },
+  "9": {
+    "fact": "Fluorine reacts with every other element except the lightest noble gases, yet fluoride made from it is added to toothpaste to fight tooth decay.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Fluorine"
+  },
+  "10": {
+    "fact": "Neon glows a vivid reddish orange in a glass tube with electricity running through it, the colour that made neon signs famous.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Neon"
+  },
+  "11": {
+    "fact": "Sodium is a metal soft enough to cut with a knife, and it reacts violently with water.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Sodium"
+  },
+  "12": {
+    "fact": "Burning magnesium gives off a brilliant white light, which is why early photographers used magnesium powder for flash.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Magnesium"
+  },
+  "13": {
+    "fact": "Before industrial production began in 1856, aluminium was so hard to make that it cost more than gold.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Aluminium"
+  },
+  "14": {
+    "fact": "Silicon is the second most abundant element in Earth's crust, after oxygen.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Silicon"
+  },
+  "15": {
+    "fact": "Phosphorus was discovered in 1669 by Hennig Brand, who was boiling down urine in search of the philosopher's stone.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Phosphorus"
+  },
+  "16": {
+    "fact": "Sulfur was known in ancient times as brimstone, and Homer's Iliad and Odyssey both mention its smell after lightning strikes.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Sulfur"
+  },
+  "17": {
+    "fact": "Chlorine is a yellow-green gas, and its name comes from the Greek word chloros, meaning pale green.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Chlorine"
+  },
+  "18": {
+    "fact": "Argon makes up almost 1 percent of Earth's atmosphere, about 23 times as much as carbon dioxide.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Argon"
+  },
+  "19": {
+    "fact": "Your nerves and muscles need potassium to work, and bananas are a well-known source of it.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Potassium"
+  },
+  "20": {
+    "fact": "Calcium is the most abundant metal in the human body, and the fifth most abundant element in it.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Calcium"
+  },
+  "21": {
+    "fact": "Mendeleev predicted scandium in 1869, calling it ekaboron, ten years before it was discovered in 1879.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Scandium"
+  },
+  "22": {
+    "fact": "Titanium has the highest strength-to-density ratio of any metal, so it is used in jet engines and spacecraft.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Titanium"
+  },
+  "23": {
+    "fact": "Vanadium is named after Vanadís, a name of the Norse goddess Freyja, because its compounds come in so many beautiful colours.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Vanadium"
+  },
+  "24": {
+    "fact": "Traces of chromium give rubies their red colour and emeralds their green.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Chromium"
+  },
+  "25": {
+    "fact": "Lumps called manganese nodules, often about the size of a potato, lie scattered across large areas of the deep ocean floor.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Manganese_nodule"
+  },
+  "26": {
+    "fact": "Iron is the most common element on Earth by mass, and much of it lies in the planet's core.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Iron"
+  },
+  "27": {
+    "fact": "Cobalt is named after kobolds, goblins that German miners blamed for ores that gave off poisonous fumes and no useful metal.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Cobalt"
+  },
+  "28": {
+    "fact": "The US five-cent coin is called a nickel, but it is three quarters copper and only one quarter nickel.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Nickel"
+  },
+  "29": {
+    "fact": "Copper slowly turns green as it weathers, which is why the Statue of Liberty is green instead of copper-coloured.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Copper"
+  },
+  "30": {
+    "fact": "A thin coat of zinc stops steel from rusting, a process called galvanizing.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Zinc"
+  },
+  "31": {
+    "fact": "Gallium melts at about 30 °C, so a piece of it can melt in your hand.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Gallium"
+  },
+  "32": {
+    "fact": "Mendeleev predicted germanium in 1869, calling it ekasilicon, 17 years before Clemens Winkler found it in 1886.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Germanium"
+  },
+  "33": {
+    "fact": "At normal air pressure, arsenic does not melt: it turns straight from a solid into a gas.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Arsenic"
+  },
+  "34": {
+    "fact": "Selenium conducts electricity better in light than in the dark, which made it useful in early light meters and photocopiers.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Selenium"
+  },
+  "35": {
+    "fact": "Bromine is one of only two elements that are liquid at room temperature; the other is mercury.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Bromine"
+  },
+  "36": {
+    "fact": "From 1960 to 1983 the length of a metre was officially defined by the light given off by krypton atoms.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Krypton"
+  },
+  "37": {
+    "fact": "Rubidium was discovered in 1861 from deep red lines in its spectrum, and its name comes from the Latin for deep red.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Rubidium"
+  },
+  "38": {
+    "fact": "Strontium compounds give fireworks and road flares their bright red colour.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Strontium"
+  },
+  "39": {
+    "fact": "Yttrium is named after Ytterby, a Swedish village where a heavy black rock found in an old quarry in 1787 led to its discovery.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Yttrium"
+  },
+  "40": {
+    "fact": "Zirconium hardly absorbs neutrons, so it is used to wrap the fuel rods inside nuclear reactors.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Zirconium"
+  },
+  "41": {
+    "fact": "Niobium is named after Niobe, daughter of Tantalus in Greek myth, because it is so similar to tantalum.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Niobium"
+  },
+  "42": {
+    "fact": "Bacteria that turn nitrogen from the air into food for plants rely on enzymes that contain molybdenum.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Molybdenum"
+  },
+  "43": {
+    "fact": "Technetium, made in 1937, was the first mostly artificial element, and its name comes from the Greek technetos, meaning artificial.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Technetium"
+  },
+  "44": {
+    "fact": "Ruthenium takes its name from Ruthenia, a Latin name for Russia, where Karl Ernst Claus isolated it in 1844.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Ruthenium"
+  },
+  "45": {
+    "fact": "Rhodium is one of the rarest precious metals, and most of it ends up in the catalytic converters that clean car exhaust.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Rhodium"
+  },
+  "46": {
+    "fact": "Palladium takes up hydrogen so readily that it is used to purify hydrogen gas, and it was central to the cold fusion experiments of the late 1980s.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Palladium"
+  },
+  "47": {
+    "fact": "Silver conducts electricity and heat better than any other metal and reflects light better too.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Silver"
+  },
+  "48": {
+    "fact": "Cadmium was discovered in 1817 as an impurity in a zinc compound and was long used in rechargeable nickel-cadmium batteries.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Cadmium"
+  },
+  "49": {
+    "fact": "Indium is soft enough to cut with a knife, and a bar of it makes a high-pitched cry when it is bent.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Indium"
+  },
+  "50": {
+    "fact": "Mixing tin with copper makes bronze, the alloy that gave the Bronze Age its name.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Tin"
+  },
+  "51": {
+    "fact": "Powdered antimony compounds have been used as cosmetics since ancient times, often as the dark eye make-up known as kohl.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Antimony"
+  },
+  "52": {
+    "fact": "Taking in even tiny amounts of tellurium can give people breath that smells strongly of garlic.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Tellurium"
+  },
+  "53": {
+    "fact": "Iodine is a shiny dark solid that melts into a deep violet liquid and boils into a violet gas, and its name comes from the Greek for violet.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Iodine"
+  },
+  "54": {
+    "fact": "Xenon is the fuel of ion engines that have pushed spacecraft such as NASA's Dawn probe through space.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Xenon"
+  },
+  "55": {
+    "fact": "The second is defined by caesium: it is exactly 9,192,631,770 cycles of the radiation from a caesium-133 atom.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Cesium"
+  },
+  "56": {
+    "fact": "Barium sulfate blocks X-rays, so since 1908 doctors have used it to make the digestive system show up on X-ray images.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Barium"
+  },
+  "57": {
+    "fact": "Lanthanum gives its name to the whole lanthanide series, and its oxide is used to make high-quality camera lenses.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Lanthanum"
+  },
+  "58": {
+    "fact": "Cerium metal catches fire so easily that it is used in ferrocerium lighters, and cerium oxide is used to polish glass.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Cerium"
+  },
+  "59": {
+    "fact": "Praseodymium was split in 1885 out of didymium, a mixture once thought to be one element, and the pure metal slowly grows a green coating in air.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Praseodymium"
+  },
+  "60": {
+    "fact": "Neodymium magnets are the strongest widely available permanent magnets, used in audio equipment, hard disk drives and electric car motors.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Neodymium"
+  },
+  "61": {
+    "fact": "Promethium is named after Prometheus, the Titan who stole fire for humans, and it is radioactive although both its neighbours are stable.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Promethium"
+  },
+  "62": {
+    "fact": "Samarium was the first element named, indirectly, after a person: the mining official Vasili Samarsky-Bykhovets.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Samarium"
+  },
+  "63": {
+    "fact": "Red-glowing security marks on euro banknotes are made with europium, which helps to spot forgeries.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Europium"
+  },
+  "64": {
+    "fact": "Gadolinium compounds are injected into patients as contrast agents to make MRI scans clearer.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Gadolinium"
+  },
+  "65": {
+    "fact": "Most of the world's terbium goes into green phosphors, which gave the green glow of fluorescent lamps and old television tubes.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Terbium"
+  },
+  "66": {
+    "fact": "Dysprosium's name comes from the Greek word for hard to get, because it was so difficult to separate from other elements.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Dysprosium"
+  },
+  "67": {
+    "fact": "Holmium has the highest magnetic permeability of any element, so it is used for the pole pieces of the strongest static magnets.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Holmium"
+  },
+  "68": {
+    "fact": "Erbium gives glass a pink tint, and glass fibres doped with erbium amplify the light signals sent through optical cables.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Erbium"
+  },
+  "69": {
+    "fact": "Thulium is named after Thule, an ancient name for a far northern land, and it is the second-least abundant lanthanide in Earth's crust.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Thulium"
+  },
+  "70": {
+    "fact": "Ytterbium atoms tick inside some of the most precise atomic clocks ever built.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Ytterbium"
+  },
+  "71": {
+    "fact": "Lutetium is named after Lutetia, the Latin name for Paris.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Lutetium"
+  },
+  "72": {
+    "fact": "Hafnium is named after Hafnia, the Latin name for Copenhagen, the city where it was discovered.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Hafnium"
+  },
+  "73": {
+    "fact": "Tantalum was named after Tantalus, who in Greek myth could never drink the water around him, because the metal cannot soak up acid.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Tantalum"
+  },
+  "74": {
+    "fact": "Tungsten melts at about 3,422 °C, the highest of any metal, and its symbol W comes from its other name, wolfram.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Tungsten"
+  },
+  "75": {
+    "fact": "Rhenium, found in 1925, was the last element with a stable isotope to be discovered.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Rhenium"
+  },
+  "76": {
+    "fact": "Osmium is the densest naturally occurring element, about twice as dense as lead.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Osmium"
+  },
+  "77": {
+    "fact": "A worldwide layer of rock rich in iridium helped show that an asteroid struck Earth when the dinosaurs died out.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Iridium"
+  },
+  "78": {
+    "fact": "Until 2019 the kilogram was defined by a single cylinder of platinum and iridium alloy, made in 1879.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Platinum"
+  },
+  "79": {
+    "fact": "Gold is so malleable that a single gram can be beaten into a sheet of about one square metre.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Gold"
+  },
+  "80": {
+    "fact": "Mercury is the only metal that is liquid at room temperature.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Mercury_(element)"
+  },
+  "81": {
+    "fact": "Thallium was discovered in 1861 from a bright green line in its spectrum, and its name comes from the Greek for green shoot.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Thallium"
+  },
+  "82": {
+    "fact": "Lead's symbol Pb comes from its Latin name, plumbum, and lead production in Roman times reached unprecedented levels.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Lead_(element)"
+  },
+  "83": {
+    "fact": "Bismuth crystals grow in stair-step shapes, and a thin layer of oxide makes them shimmer with rainbow colours.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Bismuth"
+  },
+  "84": {
+    "fact": "Polonium was discovered by Marie and Pierre Curie in 1898 and named after Marie's homeland, Poland.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Polonium"
+  },
+  "85": {
+    "fact": "Astatine is the rarest naturally occurring element in Earth's crust: less than a gram of it exists at any one time.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Astatine"
+  },
+  "86": {
+    "fact": "Radon is a radioactive gas that is denser than air, so it can collect in basements and crawl spaces under homes.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Radon"
+  },
+  "87": {
+    "fact": "Francium, found by Marguerite Perey in 1939, was the last element discovered in nature rather than made in a lab.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Francium"
+  },
+  "88": {
+    "fact": "Radium's radiation makes some chemicals glow, so after its discovery it was widely used in paints that shine in the dark.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Radium"
+  },
+  "89": {
+    "fact": "Actinium is so radioactive that it glows with a pale blue light in the dark.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Actinium"
+  },
+  "90": {
+    "fact": "Thorium is named after Thor, the Norse god of thunder, and is about three times as abundant in Earth's crust as uranium.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Thorium"
+  },
+  "91": {
+    "fact": "Protactinium's name means precursor of actinium, because it decays into actinium.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Protactinium"
+  },
+  "92": {
+    "fact": "Uranium was named after the planet Uranus, which had been discovered only eight years earlier.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Uranium"
+  },
+  "93": {
+    "fact": "Neptunium, the first element heavier than uranium to be made, was named after Neptune, the planet beyond Uranus.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Neptunium"
+  },
+  "94": {
+    "fact": "The heat from decaying plutonium-238 has powered spacecraft such as the Voyager probes and the Curiosity rover.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Plutonium"
+  },
+  "95": {
+    "fact": "Many household smoke detectors contain a tiny amount of americium.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Americium"
+  },
+  "96": {
+    "fact": "Curium, named after Marie and Pierre Curie, has been the radiation source in instruments that analyse rocks on Mars.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Curium"
+  },
+  "97": {
+    "fact": "Berkelium is named after Berkeley, California, where it was first made in 1949.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Berkelium"
+  },
+  "98": {
+    "fact": "Californium gives off so many neutrons that tiny amounts are used to start up nuclear reactors.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Californium"
+  },
+  "99": {
+    "fact": "Einsteinium was first found in the debris of the first hydrogen bomb test, in 1952, and is named after Albert Einstein.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Einsteinium"
+  },
+  "100": {
+    "fact": "Fermium was found in the debris of the same 1952 hydrogen bomb test as einsteinium and is named after Enrico Fermi.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Fermium"
+  },
+  "101": {
+    "fact": "Mendelevium is named after Dmitri Mendeleev, and the first experiment to make it produced only 17 atoms.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Mendelevium"
+  },
+  "102": {
+    "fact": "Nobelium is named after Alfred Nobel, the inventor of dynamite who founded the Nobel Prizes.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Nobelium"
+  },
+  "103": {
+    "fact": "Lawrencium is named after Ernest Lawrence, who invented the cyclotron, a machine that speeds up particles.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Lawrencium"
+  },
+  "104": {
+    "fact": "Rutherfordium, named after physicist Ernest Rutherford, is not found in nature and can only be made in a particle accelerator.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Rutherfordium"
+  },
+  "105": {
+    "fact": "Dubnium is named after Dubna, the Russian town that is home to the Joint Institute for Nuclear Research.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Dubnium"
+  },
+  "106": {
+    "fact": "Seaborgium honours the chemist Glenn T. Seaborg, who was still alive when the name was chosen.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Seaborgium"
+  },
+  "107": {
+    "fact": "Bohrium is named after Niels Bohr, whose model of the atom inspired diagrams like the one on this page.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Bohrium"
+  },
+  "108": {
+    "fact": "Hassium is named after Hesse, the German state where it was first made in 1984.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Hassium"
+  },
+  "109": {
+    "fact": "Meitnerium honours Lise Meitner, one of the discoverers of nuclear fission.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Meitnerium"
+  },
+  "110": {
+    "fact": "Darmstadtium is named after the German city of Darmstadt, where it was first made in 1994.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Darmstadtium"
+  },
+  "111": {
+    "fact": "Roentgenium is named after Wilhelm Röntgen, who discovered X-rays.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Roentgenium"
+  },
+  "112": {
+    "fact": "Copernicium honours the astronomer Nicolaus Copernicus, and its name was made official on the 537th anniversary of his birth.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Copernicium"
+  },
+  "113": {
+    "fact": "Nihonium was the first element named by a team in Asia, and its name comes from Nihon, a Japanese name for Japan.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Ununtrium"
+  },
+  "114": {
+    "fact": "Flerovium is named after the Flerov Laboratory of Nuclear Reactions in Dubna, Russia, where it was first made.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Flerovium"
+  },
+  "115": {
+    "fact": "Moscovium is named after the Moscow region, home to the laboratory in Dubna where it was first made.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Ununpentium"
+  },
+  "116": {
+    "fact": "Livermorium is named after Lawrence Livermore National Laboratory in California, and only about 35 atoms of it had been made by 2020.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Livermorium"
+  },
+  "117": {
+    "fact": "Tennessine is named after the US state of Tennessee, home to Oak Ridge National Laboratory and other research centres.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Tennessine"
+  },
+  "118": {
+    "fact": "Oganesson, the heaviest known element, honours Yuri Oganessian, who played a leading role in discovering the heaviest elements.",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Oganesson"
+  },
+  "needsReview": []
+}

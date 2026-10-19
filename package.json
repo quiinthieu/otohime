@@ -15,19 +15,24 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "prisma studio --port 4500",
-    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'lib/**/*.test.ts' 'app/(shore)/_lib/*.test.ts' 'app/(capsule)/_lib/*.test.ts' 'app/(sun)/_lib/*.test.ts'",
+    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'lib/**/*.test.ts' 'app/(shore)/_lib/*.test.ts' 'app/(capsule)/_lib/*.test.ts' 'app/(sun)/_lib/*.test.ts' 'app/(elements)/_lib/*.test.ts'",
     "test:e2e": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'e2e/**/*.test.ts'",
+    "elements:validate": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'app/(elements)/_lib/facts.test.ts' 'app/(elements)/_lib/elements.test.ts'",
+    "elements:vendor": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/vendor-elements.ts",
     "capsule:sheet": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/capsule-sheet.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.7.10",
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.2",
     "better-auth": "^1.7.10",
     "drizzle-orm": "^0.45.4",
     "next": "16.4.2",
     "pg": "^8.23.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "roughjs": "4.6.6"
+    "roughjs": "4.6.6",
+    "three": "0.186.1"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
@@ -35,6 +40,7 @@
     "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "0.186.0",
     "dotenv": "^18.0.8",
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",

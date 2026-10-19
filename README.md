@@ -39,6 +39,10 @@ app/(sun)/           Sun, a one-page hand-drawn poster of the Sun: its own root 
                      _components/ holds the inked cutaway (stage.tsx), all server components; `npm test` covers
                      its _lib/*.test.ts; the poster's words are _lib/poster.ts, the ink is _lib/ink.ts
                      (rough.js, fixed seed) and _lib/words.ts is the shared word counter
+app/(elements)/      Elements, a periodic table with a Bohr atom per element (/elements, pages to come):
+                     its data and pure maths are in _lib/ (elements.ts vendored under CC BY-SA 3.0 with
+                     its LICENSE.md, funFacts.json, categories, grid, atom, view); `npm test` covers its
+                     _lib/*.test.ts; only _components/atom-3d.tsx may import three, fiber or drei
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -74,7 +78,7 @@ The change takes effect on the next request.
 
 ## Tests
 
-- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's layers and sources, number words, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`). It needs no database.
+- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's layers and sources, number words, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`, and Elements' dataset, facts, categories, grid, atom maths, dialog reducer and import isolation under `app/(elements)/_lib/*.test.ts`). It needs no database.
 - `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
 
   ```bash
@@ -101,6 +105,22 @@ Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and ser
 See every drawn Capsule card on one sheet with `npm run --silent capsule:sheet > /tmp/capsule.svg`, then open the file in a browser or any SVG viewer.
 
 To add or swap a Capsule card, edit its entry in `app/(capsule)/_lib/cards.ts` (id, name, film, year, tier, colours, note) and draw it as `app/(capsule)/_lib/art/<id>.ts`, registered in `art/index.ts`. Follow the art brief in the plan: absolute path commands only, palette-role fills, and one ink outline. `app/(capsule)/_lib/art.test.ts` checks that every card is drawn and every path stays inside the card face, and `npm run capsule:sheet` previews the set. This is also the takedown rollback: replace the set with original characters this way, and leave the machine, the economy and the page untouched.
+
+## Elements
+
+Elements (`app/(elements)/`) draws the periodic table from data vendored into the repo; nothing is fetched at runtime.
+
+**Data sources and licences.**
+
+- `app/(elements)/_lib/elements.ts` is generated from [Bowserinator/Periodic-Table-JSON](https://github.com/Bowserinator/Periodic-Table-JSON) (elements 1 to 118 only; the upstream file also has 119). Its summaries are Wikipedia text, so the dataset is under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/); the licence text is kept beside it in `app/(elements)/_lib/LICENSE.md`, and wherever a summary is shown the page must link the element's `source` article and the licence. The npm repackaging `periodic-table-data-complete` says MIT, which cannot override the Wikipedia text, so it is not used.
+- `app/(elements)/_lib/funFacts.json` holds one fun fact per element, written in our own words, each with the page it can be checked on (`sourceUrl`). The RSC and Los Alamos periodic tables may be cited but never copied: their terms forbid reuse.
+- The 3D atom uses `three`, `@react-three/fiber` and `@react-three/drei`, all MIT, pinned to exact versions in `package.json`.
+
+**Adding or editing a fun fact.** Each entry is `"<atomic number>": { "fact": "...", "sourceUrl": "https://..." }`. A fact is one sentence of at most 200 characters, ends with a full stop, contains no URL, is suitable for all ages and is not a copy of the source's wording. `sourceUrl` must be `https://` on one of `en.wikipedia.org`, `periodic-table.rsc.org`, `www.rsc.org`, `www.nist.gov`, `physics.nist.gov`, `pubchem.ncbi.nlm.nih.gov`, `iupac.org`, `www.lanl.gov` or `science.nasa.gov`, and the page must actually state the fact. Never invent a fact: if you are unsure, write a conservative, well-documented one and add its atomic number to the top-level `needsReview` list, which marks facts still waiting for a person to check them against their source. Remove the number once it is checked. The list is empty at the moment: every fact was checked against its cited article.
+
+**Validation.** `npm run elements:validate` checks the facts (all 118 keys plus `needsReview`, the schema, the length and full-stop rules, the host allowlist, no duplicates) and the dataset (118 elements in order, unique symbols, shells summing to the atomic number, categories, grid rows, the licence file). A failure names the first offending atomic number. Both files also run in `npm test`.
+
+**Refreshing the dataset.** `npm run elements:vendor` downloads the upstream JSON and `LICENSE.md` at the current upstream commit and rewrites `elements.ts` (the commit is recorded in its header) and `LICENSE.md`; `npm run elements:vendor -- <commit>` pins a specific commit. Review the diff, run `npm run elements:validate`, and commit the output. Never edit `elements.ts` by hand.
 
 ## Deploying
 
