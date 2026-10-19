@@ -39,9 +39,14 @@ app/(sun)/           Sun, a one-page hand-drawn poster of the Sun: its own root 
                      _components/ holds the inked cutaway (stage.tsx), all server components; `npm test` covers
                      its _lib/*.test.ts; the poster's words are _lib/poster.ts, the ink is _lib/ink.ts
                      (rough.js, fixed seed) and _lib/words.ts is the shared word counter
-app/(elements)/      Elements, a periodic table with a Bohr atom per element (/elements, pages to come):
+app/(elements)/      Elements, a periodic table with a Bohr atom per element: its own root layout and CSS
+                     (no Tailwind, system fonts); layout.tsx and elements.css are its root layout;
+                     elements/page.tsx is /elements and elements/[symbol]/page.tsx the 118 static pages
+                     (/elements/fe), the no-JS path; _components/ holds the table island (table.tsx: roving
+                     tabindex, arrow keys, legend dimming), the cells, the legend, the <dialog> (element-dialog.tsx),
+                     the shared detail (element-detail.tsx) and the 2D Bohr diagram (bohr-svg.tsx);
                      its data and pure maths are in _lib/ (elements.ts vendored under CC BY-SA 3.0 with
-                     its LICENSE.md, funFacts.json, categories, grid, atom, view); `npm test` covers its
+                     its LICENSE.md, funFacts.json, categories, grid, atom, view, format); `npm test` covers its
                      _lib/*.test.ts; only _components/atom-3d.tsx may import three, fiber or drei
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
@@ -78,7 +83,7 @@ The change takes effect on the next request.
 
 ## Tests
 
-- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's layers and sources, number words, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`, and Elements' dataset, facts, categories, grid, atom maths, dialog reducer and import isolation under `app/(elements)/_lib/*.test.ts`, and Vinyl's records, deck state machine, platter inertia, layout geometry, oEmbed verdicts, player effects, iframe_api loader and import isolation under `app/(vinyl)/_lib/*.test.ts`). It needs no database.
+- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's layers and sources, number words, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`, and Elements' dataset, facts, categories, grid, atom maths, labels and number formats, dialog reducer and import isolation under `app/(elements)/_lib/*.test.ts`, and Vinyl's records, deck state machine, platter inertia, layout geometry, oEmbed verdicts, player effects, iframe_api loader and import isolation under `app/(vinyl)/_lib/*.test.ts`). It needs no database.
 - `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
 
   ```bash
@@ -98,6 +103,8 @@ Walk Capsule and the site the same way with `bash scripts/walk-capsule.sh` (buil
 
 Walk Sun and the site the same way with `bash scripts/walk-sun.sh` (builds, serves on :4027), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-sun.sh`.
 
+Walk Elements and the site the same way with `bash scripts/walk-elements.sh` (builds, serves on :4029: 118 cells, 10 legend items, both series markers, the attribution links, no 3D code on the table page, iron's fact on `/elements/fe` and a 404 for `/elements/xx`), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-elements.sh`.
+
 Sun's parts and callouts live in `app/(sun)/_lib/poster.ts`; the ink is rough.js with a fixed seed in `app/(sun)/_lib/ink.ts`; `bash scripts/walk-sun.sh` counts the words on the served page (cap 220, `WORD_CAP` in `app/(sun)/_lib/words.ts`).
 
 Sun's motion is CSS only in `app/(sun)/sun.css`: the ink draws itself on, then three loops run (convection, photon, wind); all of it is off under reduced motion, and `app/(sun)/_lib/motion.test.ts` tests it.
@@ -111,6 +118,8 @@ To add or swap a Capsule card, edit its entry in `app/(capsule)/_lib/cards.ts` (
 ## Elements
 
 Elements (`app/(elements)/`) draws the periodic table from data vendored into the repo; nothing is fetched at runtime.
+
+The table is server-rendered: 118 links to `/elements/<symbol>`, so it works before and without JavaScript. Once hydrated, the cells share one tab stop and the arrow keys, Home and End move between them; a plain click, Enter or Space opens the detail in a native `<dialog>` (a bottom sheet under 768 px) with Prev/Next, Close, Esc and a backdrop click, and focus returns to the cell. A click with a modifier key follows the link. Light and dark follow the OS unless the site's theme toggle pinned one (`localStorage.theme`).
 
 **Data sources and licences.**
 
