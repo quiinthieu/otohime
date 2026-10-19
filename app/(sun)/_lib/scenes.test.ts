@@ -42,6 +42,12 @@ test("reduced motion turns every animation off", () => {
   assert.ok(block[0].includes("transition: none"));
 });
 
+test("the visually-hidden heading is clipped so it cannot scroll the page sideways", () => {
+  const block = css.match(/\.visually-hidden\s*\{[^}]*\}/);
+  assert.ok(block, "no .visually-hidden rule");
+  assert.match(block[0], /overflow:\s*hidden/);
+});
+
 test("the wobble filter is never on a scene", () => {
   const scenes = stage.slice(stage.indexOf("data-scene="));
   assert.ok(!scenes.includes("filter="), "a scene group carries a filter");

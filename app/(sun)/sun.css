@@ -30,6 +30,7 @@ button:focus-visible, a:focus-visible, .stage:focus-visible { outline: 2px dashe
   height: 1px;
   margin: -1px;
   padding: 0;
+  overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
 }
