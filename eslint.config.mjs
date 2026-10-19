@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored verbatim from sea-glass (Apache-2.0).
+    "app/(shore)/_lib/sea-glass.mjs",
   ]),
 ]);
 

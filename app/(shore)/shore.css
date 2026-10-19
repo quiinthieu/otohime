@@ -1,0 +1,207 @@
+/* Shore's own stylesheet. Hand-written from the sea-glass playground's
+   styles.css (https://github.com/mttmcknn/sea-glass, db70d71): tokens, top bar,
+   stage, captions, glass, segmented control, icon actions, dark scene. */
+:root {
+  --paper: #f4f5f0;
+  --ink: #253d36;
+  --muted: #5d7064;
+  --line: #dce2da;
+  --stage: #edf0ea;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; cursor: pointer; color: inherit; border: 0; background: none; }
+button:disabled { cursor: default; opacity: 0.45; }
+button:focus-visible, a:focus-visible { outline: 2px solid #477f70; outline-offset: 5px; }
+button svg { display: block; }
+svg { width: 20px; height: 20px; stroke-width: 1.7; }
+[hidden] { display: none !important; }
+
+/* Scene: the light and dark pair. Everything below the top bar sits in it. */
+.shore {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(ellipse at 50% 22%, #fbfcf7 0%, #edf0e9 80%);
+  color: var(--ink);
+  transition: background 0.25s, color 0.25s;
+}
+.shore.dark-scene {
+  background: radial-gradient(ellipse at 45% 20%, #344a46, #233735);
+  color: #eaf0e3;
+}
+
+/* Top bar */
+.topbar {
+  height: 94px;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  gap: 20px;
+}
+.dark-scene .topbar { border-color: #3c5047; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--serif);
+  font-size: 26px;
+  letter-spacing: -0.6px;
+}
+.brand-detail { display: block; font: 9px var(--sans); letter-spacing: 1.8px; color: var(--muted); margin-top: 5px; }
+.dark-scene .brand-detail { color: #a8b9a7; }
+.brand-mark { width: 42px; height: 43px; position: relative; display: block; }
+.brand-mark i {
+  position: absolute;
+  border-radius: 45% 54% 48% 42%;
+  width: 24px;
+  height: 27px;
+  box-shadow: inset 2px 2px 5px #ffffffad, 1px 4px 6px #334d3626;
+  transform: rotate(-12deg);
+  background: #cbe5dc;
+  left: 2px;
+  top: 1px;
+}
+.brand-mark i:nth-child(2) { background: #d9d1e9; left: 16px; top: 9px; transform: rotate(13deg); }
+.brand-mark i:nth-child(3) { background: #a8d8dd; left: 5px; top: 19px; width: 25px; height: 22px; }
+.home-link {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.home-link:hover { background: #e9ede5; }
+.dark-scene .home-link { color: #a8b9a7; border-color: #3c5047; }
+.dark-scene .home-link:hover { background: #2d423e; }
+
+/* Stage */
+.stage {
+  flex: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 42px 5% 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.eyebrow { font-size: 9px; letter-spacing: 1.6px; font-weight: 600; margin: 0 0 13px; color: var(--muted); text-align: center; }
+.dark-scene .eyebrow { color: #a8b9a7; }
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 3.3vw, 49px);
+  font-weight: 400;
+  letter-spacing: -1.6px;
+  line-height: 1.12;
+  margin: 0;
+  text-align: center;
+}
+h1 em { font-weight: 400; color: #71867a; }
+.dark-scene h1 em { color: #a8baa8; }
+.intro-copy { font-size: 12px; line-height: 1.8; color: var(--muted); margin: 17px 0 0; text-align: center; }
+.dark-scene .intro-copy { color: #a8b9a7; }
+
+.stage-toolbar { width: 100%; display: flex; align-items: center; justify-content: space-between; margin: 34px 0 13px; gap: 10px; }
+.specimen-caption { display: flex; color: #8e9c8f; font-size: 8px; letter-spacing: 1.4px; gap: 14px; font-weight: 500; }
+.dark-scene .specimen-caption { color: #a8b9a7; }
+.live-indicator { display: flex; align-items: center; gap: 5px; }
+.live-indicator::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: #839f88; }
+.scene-buttons { display: flex; padding: 3px; background: #e8ece4; border-radius: 8px; gap: 2px; }
+.dark-scene .scene-buttons { background: #2d423e; }
+.scene-button { width: 29px; height: 27px; display: grid; place-items: center; border-radius: 5px; color: var(--muted); }
+.scene-button svg { width: 15px; height: 15px; }
+.scene-button.selected { background: #fafbf7; box-shadow: 0 1px 4px #283b2512; color: var(--ink); }
+.dark-scene .scene-button.selected { background: #4a625b; color: #eaf0e3; }
+
+/* The shore itself. Parents of glass never clip: the glow reaches 48px out. */
+.panel {
+  width: 100%;
+  padding: 23px 27px 20px;
+  position: relative;
+  overflow: visible;
+  border: 1px solid #dde3d7;
+  border-radius: 16px;
+  background: #ffffff40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.dark-scene .panel { border-color: #3c5047; background: #ffffff0a; }
+
+/* Glass */
+.glass { position: relative; isolation: isolate; overflow: visible; border: 0; background: transparent; color: var(--glass-ink, #2c6074); flex-shrink: 0; }
+.glass > canvas { z-index: -1; position: absolute; pointer-events: none; }
+.glass span, .glass svg { position: relative; pointer-events: none; }
+.glass:focus-visible { outline-offset: 8px; }
+.glass:is(button):active { transform: translateY(2px); }
+
+/* Length: a lilac capsule segmented control */
+.segmented { width: calc(100% - 6px); max-width: 260px; height: 46px; display: flex; align-items: center; padding: 5px; gap: 2px; margin-top: 12px; }
+.segmented button { flex: 1; font-size: 12px; height: 33px; border-radius: 25px; padding: 0 7px; }
+.segmented button.chosen { background: #ffffff69; box-shadow: 0 1px 3px #3c245614; }
+
+/* Begin / Pause / Resume */
+.begin-button { width: 270px; max-width: 100%; height: 88px; display: flex; align-items: center; justify-content: center; gap: 19px; margin: 39px auto 0; font-size: 25px; letter-spacing: -0.5px; font-weight: 550; }
+.begin-button svg { width: 34px; height: 34px; stroke-width: 2.3; }
+
+.countdown { font-family: var(--serif); font-size: clamp(64px, 12vw, 104px); letter-spacing: -3px; line-height: 1; margin: 40px 0 0; font-variant-numeric: tabular-nums; }
+.countdown-note { font-family: var(--serif); font-style: italic; color: #8a9b8b; font-size: 13px; margin: 12px 0 0; min-height: 1.4em; text-align: center; }
+.dark-scene .countdown-note { color: #a8baa8; }
+
+/* Reset / Finish now */
+.reference-toolbar { width: min(100%, 340px); height: 82px; display: flex; align-items: center; justify-content: space-evenly; padding: 0 17px; gap: 6px; margin-top: 38px; }
+.icon-action { position: relative; min-width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; border-radius: 25px; color: inherit; font-size: 12px; }
+.icon-action:hover:not(:disabled) { background: #ffffff25; }
+.icon-action:active:not(:disabled) { transform: translateY(2px); }
+.icon-action svg { width: 22px; height: 22px; stroke-width: 2.2; }
+
+/* Today's pebbles */
+.pebble-row { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 25px 20px; margin: 44px 0 0; max-width: calc(12 * 72px + 11 * 20px); min-height: 70px; }
+.pebble { width: 72px; height: 70px; }
+.tally { font-size: 11px; letter-spacing: 1.4px; color: var(--muted); margin: 30px 0 0; text-align: center; }
+.dark-scene .tally { color: #a8b9a7; }
+.stage-note { font-family: var(--serif); font-style: italic; text-align: center; color: #8a9b8b; font-size: 13px; margin: 22px 0 0; }
+.dark-scene .stage-note { color: #a8baa8; }
+
+/* Clear today, confirmed inline */
+.clear-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 18px 0 0; font-size: 12px; min-height: 36px; }
+.plain-button { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 9px 13px; border: 1px solid var(--line); border-radius: 8px; }
+.plain-button:hover:not(:disabled) { background: #e9ede5; }
+.dark-scene .plain-button { border-color: #3c5047; }
+.dark-scene .plain-button:hover:not(:disabled) { background: #2d423e; }
+.plain-button.danger { border-color: #c98f8f; color: #8a3b3b; }
+.dark-scene .plain-button.danger { color: #f0b4b4; }
+
+.page-footer { display: flex; justify-content: center; padding: 28px 5%; color: #8e9c8f; font-size: 9px; letter-spacing: 1.4px; }
+.dark-scene .page-footer { color: #a8b9a7; }
+
+@media (max-width: 480px) {
+  .topbar { padding: 0 20px; height: 79px; }
+  .brand { gap: 8px; font-size: 22px; }
+  .brand-detail { font-size: 8px; letter-spacing: 1.4px; }
+  .brand-mark { transform: scale(0.85); width: 34px; }
+  .stage { padding: 26px 20px; }
+  h1 { font-size: 34px; letter-spacing: -1.2px; }
+  .panel { padding: 20px 16px; }
+  .begin-button { width: 218px; height: 76px; font-size: 23px; gap: 15px; margin-top: 35px; }
+  .begin-button svg { width: 29px; height: 29px; }
+  .reference-toolbar { height: 64px; padding: 0 6px; }
+  .pebble { width: 62px; height: 61px; }
+  .pebble-row { gap: 20px 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .glass:is(button):active, .icon-action:active:not(:disabled) { transform: none; }
+}

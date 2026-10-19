@@ -85,9 +85,11 @@ export const site = {
     { title: "Outer Wilds", note: "Twenty-two minutes at a time.", colour: "yellow" },
   ] satisfies Game[],
   // TODO(otohime)
-  projects: "Independent projects, built in my own time and not for any employer. The bench is empty for now.",
+  projects: "Independent projects, built in my own time and not for any employer.",
   // Add a project here and it shows up on /projects.
-  projectList: [] as Project[],
+  projectList: [
+    { title: "Shore", note: "A focus timer that leaves sea glass behind.", href: "/shore", status: "live", colour: "mint" },
+  ] as Project[],
   // TODO(otohime)
   music: "Three songs on repeat, one channel each. Tune in.",
   // The same songs on Spotify, linked under the player: the id after

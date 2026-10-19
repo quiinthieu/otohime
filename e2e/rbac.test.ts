@@ -79,10 +79,16 @@ test("the front page is an entrance, without the sidebar", async () => {
   assert.match(await (await page("/work")).text(), /aria-label="Main"/);
 });
 
-test("the projects page sits in the sidebar and shows its empty state", async () => {
+test("the projects page sits in the sidebar and lists Shore", async () => {
   const html = await (await page("/projects")).text();
   assert.match(html, /aria-label="Main"/);
-  assert.match(html, /Nothing on the bench yet/);
+  assert.match(html, /href="\/shore"/);
+});
+
+test("Shore is its own page, without the site's sidebar", async () => {
+  const res = await page("/shore");
+  assert.equal(res.status, 200);
+  assert.doesNotMatch(await res.text(), /aria-label="Main"/);
 });
 
 test("a plain user can't list users or raise their own role", async () => {
