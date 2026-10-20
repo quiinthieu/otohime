@@ -36,7 +36,7 @@ const SOURCES = {
 // plain GET form. Each query field falls back to its default on its own.
 export default async function PlanispherePage({ searchParams }: PageProps<"/planisphere">) {
   const query = await searchParams;
-  // connection() marks the request as live, so reading the clock below is not a prerender error. No <Suspense>: the page still blocks.
+  // connection() marks the request as live, so reading the clock below is not a prerender error. The page still blocks, with no boundary.
   await connection();
   // The clock is read after that, per request: the sky is always for now unless the query says otherwise.
   // eslint-disable-next-line react-hooks/purity
