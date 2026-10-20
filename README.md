@@ -69,6 +69,13 @@ app/(rotor)/         Rotor, a hand-drawn Enigma I: its own root layout and CSS (
                      and rotor-app.tsx, the one client island, types on it (keys, lamps, tape, lid form, share URL);
                      its engine is in _lib/ (wiring, enigma, tape, machine, board, form, copy, ink, words);
                      `npm test` covers its _lib/*.test.ts
+app/(planisphere)/   Planisphere, tonight's sky on an inked star wheel: its own root layout and CSS (no Tailwind);
+                     layout.tsx (Orrery's hand fonts via next/font) and planisphere.css are its root layout;
+                     planisphere/page.tsx is /planisphere, rendered per request from the query
+                     (?city=hcmc&date=2026-10-20&hour=21) so its GET form draws the sky with JavaScript off;
+                     _components/wheel.tsx draws the frame, hour ring, window and star disc on the server and
+                     moon-corner.tsx the Moon; its engine is in _lib/ (stars, lines, cities, time, sky, sun, moon,
+                     wheel, ink, words); `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -134,6 +141,8 @@ Walk Vinyl and the site the same way with `bash scripts/walk-vinyl.sh` (builds, 
 
 Probe the dropdown pickers in headless Chromium with `bash scripts/probe-selects.sh` (builds, serves on :4033, installs Playwright into a temp prefix and opens Vinyl's genre select and a site `select.field` in light and dark, and presses Escape, Space and the arrows inside the open Vinyl picker with a record on the platter), or against production with `BASE_URL=https://otohime.dev bash scripts/probe-selects.sh`. The pickers are customizable selects (`appearance: base-select`) behind `@supports`, so Firefox keeps the native popup.
 
+Walk Planisphere and the site with `bash scripts/walk-planisphere.sh` (builds, serves on :4037: no `B:` templates or `$RC` and exactly one GET form; Tokyo on 2026-10-20 at 21:00 draws at least 400 stars and 80 constellation lines, all four compass letters, one Moon, the north disc and Vega but not Sirius in the "up now" line; Ho Chi Minh City at noon shows the daytime window; Sydney shows the south disc; bad query values fall back to Ho Chi Minh City with a 200; every body is under 400 KB; the page links only its own stylesheet, with reduced motion and no Tailwind; the explainer is at most 120 words; the credit links are there; `/projects` links `/planisphere` once; no `"use client"` file yet), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-planisphere.sh`.
+
 Walk Rotor and the site the same way with `bash scripts/walk-rotor.sh` (builds, serves on :4035: 26 lamps, 26 keys, three windows and one GET form; `?m=AAAAA` prints `BDZGO` on the tape, also as the no-JS form submits it; `?pos=ADU&m=AAAA` shows `BFY` in the windows (the double step); bad fields fall back to the defaults with a 200; `?m=BDZGO` decodes to `AAAAA`; a rings-and-plugs vector matches the engine; one `"use client"` file, no rough.js in any client chunk, an explainer of at most 120 words, both wiring sources linked and `/projects` linking `/rotor` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-rotor.sh`.
 
 The Sun's parts and callouts live in `app/(orrery)/_lib/poster.ts` and every other body's in `app/(orrery)/_lib/bodies.ts`; the ink is rough.js with a fixed seed in `app/(orrery)/_lib/ink.ts`; `bash scripts/walk-orrery.sh` counts the words on every served page (cap 220, `WORD_CAP` in `app/(orrery)/_lib/words.ts`).
@@ -180,6 +189,10 @@ The table is server-rendered: 118 links to `/elements/<symbol>`, so it works bef
 ## Rotor
 
 Rotor (`/rotor`, `app/(rotor)/`) is an Enigma I drawn in ink on cream paper: three rotor windows, 26 lamps, 26 keys and a paper tape. Type on the real keyboard or click the drawn keys. The right rotor steps (with the double step), one lamp lights amber and the tape grows in groups of five, plain above and code below. The lid holds the settings: three of rotors I–V, rings, start positions, reflector B or C and up to ten plug pairs. The Share line is a URL with the settings and the message, and the address bar follows it as you type. Type the code back in with the same settings and the message returns. With JavaScript off, the lid is a plain GET form and the server encodes. The wiring is Wikipedia's rotor table, checked against the Crypto Museum's (`_lib/wiring.ts`), and the engine is pinned to `AAAAA` → `BDZGO` and an independent simulator in `_lib/enigma.test.ts`.
+
+## Planisphere
+
+Planisphere (`/planisphere`, `app/(planisphere)/`) draws the sky for a city, a date and an hour as a paper star wheel: a disc of 921 stars (magnitude 4.5 or brighter, J2000, no precession) centred on the pole you can see, turned by one `rotate()` under a frame whose oval window is the horizon for the latitude. The maths is plain: Greenwich mean sidereal time (Meeus ch. 12) gives local sidereal time, which gives each star's altitude and azimuth; the Sun is Meeus ch. 25 low precision and the Moon is the Astronomical Almanac's seven-term longitude series, so every 2026 phase lands within 20 minutes. The stars and constellation lines are d3-celestial's (BSD-3-Clause, XHIP via VizieR V/137D, lines after the IAU), vendored by `scripts/vendor-planisphere.ts`; nothing is fetched at runtime. The page awaits `searchParams` with `export const instant = false` and no `<Suspense>`, so a plain GET form works with JavaScript off, and each query field falls back to its default on its own.
 
 ## Vinyl records
 

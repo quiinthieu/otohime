@@ -80,7 +80,7 @@ test("the front page is an entrance, without the sidebar", async () => {
   assert.match(await (await page("/work")).text(), /aria-label="Main"/);
 });
 
-test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl and Rotor", async () => {
+test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor and Planisphere", async () => {
   const html = await (await page("/projects")).text();
   assert.match(html, /aria-label="Main"/);
   assert.match(html, /href="\/shore"/);
@@ -90,6 +90,7 @@ test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, El
   assert.match(html, /href="\/elements"/);
   assert.match(html, /href="\/vinyl"/);
   assert.match(html, /href="\/rotor"/);
+  assert.match(html, /href="\/planisphere"/);
 });
 
 test("Shore is its own page, without the site's sidebar", async () => {
@@ -140,6 +141,14 @@ test("Vinyl is its own page, without the site's sidebar", async () => {
 
 test("Rotor is its own page, without the site's sidebar", async () => {
   const res = await page("/rotor");
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  assert.doesNotMatch(html, /aria-label="Main"/);
+  assert.match(html, /href="\/projects"/);
+});
+
+test("Planisphere is its own page, without the site's sidebar", async () => {
+  const res = await page("/planisphere");
   assert.equal(res.status, 200);
   const html = await res.text();
   assert.doesNotMatch(html, /aria-label="Main"/);
