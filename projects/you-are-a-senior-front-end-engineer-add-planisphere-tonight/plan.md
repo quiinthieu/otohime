@@ -460,3 +460,195 @@ its group list from `app/`.
   landed.
 - **Fonts.** If the Google fonts fail to fetch at build time, Orrery's build
   fails too. That is an environment cause, not this plan's code.
+
+## Cycle 2: change request 1 (run-6845)
+
+Acceptance cycle 1 ([acceptance_report_1.md](acceptance_report_1.md),
+[change_request_1.md](change_request_1.md), cited sha 6997065) failed on one
+thing a visitor feels: **on a phone, the wheel cannot be turned by finger.**
+A finger drag turns the disc for about 15°. Then Chrome cancels the pointer
+and the page scrolls or pans instead. It also found an error line in the
+server log on every render, and a known axe finding. t-1161, t-1162 and
+t-1163 stay done. This cycle adds two tasks, numbered from 1. Neither
+depends on the other, so they can run at the same time.
+
+### What the product owner checked (2026-10-20, local build of 2992cdb, same page code as 6997065)
+
+| Check | Result |
+| --- | --- |
+| Playwright 1.64 chromium headless shell, 390×844, `isMobile`, `hasTouch`, a 90° finger arc on the disc through CDP `Input.dispatchTouchEvent`, Tokyo 2026-10-20 21:00, page at scrollY 120 | As deployed: 21:00 → 22:00 and 21:00 → 20:00, 1 `pointercancel` each. **The bug reproduces in the headless shell**, so a scripted probe can hold the line. |
+| The same arcs with `svg.wheel { touch-action: none }` injected | 21:00 → 03:00 (date 2026-10-21) and 21:00 → 15:00, 0 `pointercancel`, scrollY unchanged. A finger scroll on the explainer still moves the page (772 → 587). |
+| `next start` of the unchanged page, two `/planisphere` renders | 2 × `Error: Route "/planisphere": Next.js encountered the unstable value Date.now() while prerendering.` |
+| The page with `import { connection } from "next/server"` and `await connection();` right after `await searchParams` | Build exit 0, `ƒ /planisphere`. Default, Tokyo, Sydney and bad-value queries: all 200, 0 `<template id="B:`, 0 `$RC`, 917/804/862/917 `data-star`. **0 "unstable value" lines in the server log.** |
+| axe-core 4 (wcag2a, wcag2aa, wcag21aa, best-practice), Tokyo 21:00 at 1366 | With the svg as `role="img"`: `nested-interactive` (serious). With the svg as `role="group"`: no violations. |
+
+Every throwaway edit was reverted. Nothing from these probes is committed.
+
+### Decisions (cycle 2)
+
+| Decision | Why |
+| --- | --- |
+| `touch-action: none` goes on the `<svg class="wheel">` box, **only once the island has hydrated**. The island sets `data-turnable` on the svg on mount, and the CSS says `.wheel[data-turnable] { touch-action: none; }`. The ineffective `touch-action` on `[data-disc]` is removed. | Chrome decides touch-action from boxed elements, and the `<g>` is not one. With JavaScript off, nothing can turn the disc, so a finger on the chart must still scroll the page as it does now. A non-passive `touchstart` listener would keep the frame corners scrollable, but it is more code for a few pixels. |
+| The touch check is a new browser probe, `scripts/probe-planisphere-touch.sh` and `.mjs`, on **port 4043**, in the `probe-selects.sh` pattern: Playwright `1.64.0` and `axe-core` installed into a temp prefix, `package.json` unchanged. The dead-port check uses 4039. | The curl walk cannot touch. Real touch input is the lesson from cycle 1: mouse events at a phone viewport pass even when touch-action is wrong. Ports 4019–4037, 4039, 4041, 4045 and 4051–4057 are taken or reserved. |
+| `await connection()` after `await searchParams` and before `Date.now()`. `instant = false` stays, with no `<Suspense>`. | Proven above. The docs' example wraps the component in Suspense, but that is for a page with a static shell. Here the page blocks, and a boundary would hide the answer from a visitor without JavaScript (research §5). |
+| The walk, in local mode, fails when the server log has an error line. | The change request asks that the walk check this. It is the only place a `next start` log is read. |
+| The chart svg becomes `role="group"`, still labelled by its title and description. It rides along in task 1. | One attribute clears axe's `nested-interactive`. Task 1's probe runs axe anyway. |
+
+### Task 1. Turn the wheel by finger on a phone
+
+- **Role:** software_engineer. QA is required.
+- **Problem:** On a phone, a finger drag on the disc turns it for about 15°.
+  Then Chrome fires `pointercancel` and scrolls or pans the page, because
+  `touch-action: none` sits on the SVG `<g data-disc>`, which Chrome ignores.
+  Turning the wheel by hand is the plan's main interaction. Also, axe reports
+  `nested-interactive` (serious), because the focusable slider sits inside
+  `<svg role="img">`.
+- **Action items:**
+  1. Write `scripts/probe-planisphere-touch.sh` and
+     `scripts/probe-planisphere-touch.mjs` first, in the style of
+     `probe-selects.sh`: port 4043 (with the reserved-port bump), local build
+     and `next start` or `BASE_URL`, `SKIP_BUILD=1`, the walk's placeholder
+     env, process-group cleanup, one `ok -`/`not ok -` line per check, a
+     summary, no `set -e`. It installs `playwright@1.64.0` and an exact
+     `axe-core` 4.x into a temp prefix and runs `chromium --only-shell`.
+     Checks, all with real touch through a CDP session
+     (`Input.dispatchTouchEvent`), never `page.mouse` or `page.touchscreen.tap`
+     for a drag:
+     - 390×844, `isMobile`, `hasTouch`, Tokyo 2026-10-20 21:00, page scrolled
+       to 120: a 90° finger arc on the disc (radius 0.3 × the `.frame-face`
+       width, starting below the centre) in each direction moves the form's
+       hour by exactly 6 h (one way to 15, the other to 3 with the date on
+       2026-10-21), with 0 `pointercancel` and scrollY still 120.
+     - The same quarter turn on Sydney (the south disc) moves the hour by 6 h.
+     - A 60° arc that starts with the finger moving upward moves the hour by
+       4 h, and the page does not scroll.
+     - A finger drag on the explainer (outside the wheel) scrolls the page by
+       at least 100 px.
+     - JavaScript disabled, same viewport: the svg has no `data-turnable`,
+       and a finger drag starting on the chart scrolls the page by at least
+       100 px.
+     - 1366×768 mouse drag of 90° still moves 6 h. ArrowRight on the focused
+       disc still gives 21:15.
+     - axe at 1366×768 and 390×844 (wcag2a, wcag2aa, wcag21aa): no
+       `nested-interactive`, and no serious or critical violation.
+     - No console errors or page errors.
+  2. Run the probe on the unfixed tree. Record the failing lines with
+     `plan_manager_record_decision` (the red): the touch-turn lines must fail.
+  3. `planisphere-app.tsx`: on mount, set `data-turnable` on `svg.wheel`.
+     `planisphere.css`: add `.wheel[data-turnable] { touch-action: none; }`,
+     and drop `touch-action` from `.wheel [data-disc]`. Nothing else in the
+     drag code changes, unless the probe shows it must; record it if so.
+  4. `wheel.tsx`: the chart `<svg>` becomes `role="group"`, still with
+     `aria-labelledby="wheel-title wheel-desc"`. The disc stays the page's
+     one `role="slider"`.
+  5. README: one probe line next to the other probes, naming port 4043 and
+     what it checks.
+- **Interfaces:** `app/(planisphere)/_components/planisphere-app.tsx`;
+  `app/(planisphere)/planisphere.css`;
+  `app/(planisphere)/_components/wheel.tsx`;
+  `scripts/probe-planisphere-touch.sh`; `scripts/probe-planisphere-touch.mjs`;
+  `README.md`.
+- **Non-goals:** pinch zoom; multi-touch turning; inertia; any change to the
+  no-JavaScript HTML beyond the svg's role; adding Playwright or axe to
+  `package.json`; the server log (task 2).
+- **Acceptance:** On a 390×844 phone with JavaScript on, a quarter-turn
+  finger drag on the disc moves the hour by 6 h, with no `pointercancel` and
+  no page scroll. A finger still scrolls the page outside the wheel, and
+  anywhere with JavaScript off. Mouse and keyboard turning are unchanged.
+  axe reports no `nested-interactive`.
+  `bash scripts/probe-planisphere-touch.sh` and
+  `bash scripts/walk-planisphere.sh` exit 0.
+- **Verification:**
+  - `npm ci && npm run lint && npm run typecheck && npm test`
+  - `bash -n scripts/probe-planisphere-touch.sh && node --check scripts/probe-planisphere-touch.mjs`
+  - `bash scripts/probe-planisphere-touch.sh`
+  - `if BASE_URL=http://127.0.0.1:4039 bash scripts/probe-planisphere-touch.sh; then exit 1; fi`
+  - `grep -q 'Input.dispatchTouchEvent' scripts/probe-planisphere-touch.mjs && grep -q 'pointercancel' scripts/probe-planisphere-touch.mjs && grep -q 'nested-interactive' scripts/probe-planisphere-touch.mjs`
+  - `grep -q 'data-turnable' 'app/(planisphere)/_components/planisphere-app.tsx' && grep -qE '\.wheel\[data-turnable\][^{]*\{[^}]*touch-action: *none' 'app/(planisphere)/planisphere.css'`
+  - `! grep -n 'role="img"' 'app/(planisphere)/_components/wheel.tsx' && grep -q 'role="group"' 'app/(planisphere)/_components/wheel.tsx'`
+  - `bash scripts/walk-planisphere.sh`
+  - `test "$(grep -rl '"use client"' 'app/(planisphere)' | grep -c .)" -eq 1`
+  - `git diff --quiet HEAD -- package.json package-lock.json`
+  - `test "$(git log -1 --format=%ae)" = quiinthieu@gmail.com`
+
+### Task 2. Planisphere renders with a clean server log
+
+- **Role:** software_engineer. QA is required (it touches the page).
+- **Problem:** Every render of `/planisphere` logs `Error: Route
+  "/planisphere": Next.js encountered the unstable value Date.now() while
+  prerendering` from `parseQuery(query, Date.now())` in
+  `app/(planisphere)/planisphere/page.tsx`. That is 38 of 38 renders in
+  acceptance. A real error in the log would be lost among them, and nothing
+  checks the log.
+- **Action items:**
+  1. Read `node_modules/next/dist/docs/01-app/03-api-reference/04-functions/connection.md`
+     and `01-app/01-getting-started/08-caching.md` ("Random values and
+     timestamps").
+  2. `scripts/walk-planisphere.sh`: in local mode, after every request,
+     check that `$WORK/server.log` has no line matching `Error`, `⨯` or
+     `unstable value`, and print the first match as the detail. In remote
+     mode, print a `note:` line saying the log is not readable, and do not
+     count it as ok or failed. Run the walk on the unfixed page and record
+     the failing line with `plan_manager_record_decision` (the red). If a
+     route other than Planisphere logs an error that this plan cannot fix,
+     narrow the check to lines naming `/planisphere` plus `unstable value`,
+     and record that.
+  3. `page.tsx`: `import { connection } from "next/server"`, and
+     `await connection();` right after `const query = await searchParams;`
+     and before `Date.now()`. Keep `export const instant = false`. Add no
+     `<Suspense>`. Drop the `react-hooks/purity` disable comment if lint no
+     longer needs it.
+  4. README: add the server-log check to the walk line.
+- **Interfaces:** `app/(planisphere)/planisphere/page.tsx`;
+  `scripts/walk-planisphere.sh`; `README.md`.
+- **Non-goals:** caching the page or any part of it; changing `instant`;
+  other routes' logs; the touch fix (task 1).
+- **Acceptance:** A local `next start` serves every page in the walk with no
+  error line in the server log, and the walk fails if one appears. The page
+  is unchanged for a visitor: still dynamic, still complete with JavaScript
+  off, with no `<template id="B:` and no `$RC`.
+  `bash scripts/walk-planisphere.sh` exits 0.
+- **Verification:**
+  - `npm ci && npm run lint && npm run typecheck && npm test`
+  - `bash -n scripts/walk-planisphere.sh && ! grep -nE 'wc +-l' scripts/walk-planisphere.sh`
+  - `bash scripts/walk-planisphere.sh`
+  - `if BASE_URL=http://127.0.0.1:4039 bash scripts/walk-planisphere.sh; then exit 1; fi`
+  - `grep -q 'server.log' scripts/walk-planisphere.sh && grep -q 'unstable value' scripts/walk-planisphere.sh`
+  - `awk '/await searchParams/{a=NR} /await connection\(\)/{b=NR} /Date\.now\(\)/{c=NR} END{exit !(a && b && c && a < b && b < c)}' 'app/(planisphere)/planisphere/page.tsx'`
+  - `grep -q 'export const instant = false' 'app/(planisphere)/planisphere/page.tsx' && ! grep -n 'Suspense' 'app/(planisphere)/planisphere/page.tsx'`
+  - `test "$(git log -1 --format=%ae)" = quiinthieu@gmail.com`
+
+### QA (cycle 2)
+
+**Task 1.** Headless Chrome at 390×844 (`isMobile`, `hasTouch`) and
+1366×768, light and dark, motion on and off. Use real touch through a CDP
+session: `Input.dispatchTouchEvent`, never mouse events for a "touch" line.
+Check:
+
+- `bash scripts/probe-planisphere-touch.sh` exits 0 on the delivery sha.
+  Then repeat by hand: a quarter-turn finger drag on Tokyo and on Sydney
+  moves 6 h, with no `pointercancel` and no page scroll.
+- A finger scroll outside the wheel still scrolls the page, and so does a
+  finger on the chart with JavaScript off.
+- The mouse drag, the arrow keys, Now and Use my location (mocked) still
+  work, as in t-1163's QA.
+- axe has no `nested-interactive`. Lighthouse accessibility is at least 95
+  (it was 100). No console errors.
+
+**Task 2.** Run `bash scripts/walk-planisphere.sh` on the delivery sha and
+read the walk's server-log line. Also start `next start` by hand, with the
+walk's placeholder env, and open `/planisphere` with JavaScript off and on:
+no error in the log, and the no-JavaScript form round trip (Tokyo,
+2026-10-20, 21:00) still works.
+
+### Acceptance (cycle 2)
+
+After CI deploys both tasks:
+
+- `BASE_URL=https://otohime.dev bash scripts/walk-planisphere.sh` exits 0.
+- `BASE_URL=https://otohime.dev bash scripts/probe-planisphere-touch.sh`
+  exits 0.
+- A local `next start` of the deployed sha serves the walk with a clean
+  server log. Vercel's logs are not reachable from a lease.
+- Then repeat cycle 1's walkthrough: no JavaScript, mouse, keyboard, Now and
+  Use my location, all as before.
