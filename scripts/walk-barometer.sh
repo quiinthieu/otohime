@@ -12,7 +12,8 @@
 # 4 s timeout fired, and the fake's log shows the request reached it). Local only.
 #
 # Env: PORT (4051), BASE_URL (remote mode), EXPECT_SHA (build-sha to expect; defaults to
-# GITHUB_SHA locally, any 40-hex sha remotely), SKIP_BUILD=1, QUIET=1, FAKE_PORT (4057).
+# GITHUB_SHA locally, any 40-hex sha remotely; with SKIP_BUILD=1 and neither set, the reused
+# build's stamp is unknown, so a 40-hex sha or "dev" passes), SKIP_BUILD=1, QUIET=1, FAKE_PORT (4057).
 # Counts use grep -c and numeric tests only: BSD wc pads its output, so string compares fail.
 # Rendered things are counted by attribute form (data-face=") because App Router repeats the
 # server's text in the inline RSC payload.
@@ -107,8 +108,11 @@ if [ -z "$BASE_URL" ]; then
   export BETTER_AUTH_SECRET="${BETTER_AUTH_SECRET:-ci-placeholder-not-a-real-secret-0123456789abcdef}"
   export BETTER_AUTH_URL="${BETTER_AUTH_URL:-http://localhost:$PORT}"
   export DATABASE_URL="${DATABASE_URL:-postgresql://otohime:otohime@localhost:5432/otohime}"
+  if [ "${SKIP_BUILD:-}" = "1" ] && [ -z "$EXPECT_SHA" ] && [ -z "${GITHUB_SHA:-}" ]; then
+    ANY_SHA_OR_DEV=1
+  fi
   export GITHUB_SHA="${GITHUB_SHA:-0123456789abcdef0123456789abcdef01234567}"
-  EXPECT_SHA="${EXPECT_SHA:-$GITHUB_SHA}"
+  [ -n "${ANY_SHA_OR_DEV:-}" ] || EXPECT_SHA="${EXPECT_SHA:-$GITHUB_SHA}"
   READY_TRIES=60
 
   if curl -s -o /dev/null --max-time 2 "$BASE_URL/"; then
@@ -195,6 +199,8 @@ build_sha_matches() {
   sha="$(grep -oE '<meta name="build-sha" content="[^"]*"' "$WORK/$1.body" | head -n 1 | sed -E 's/.*content="([^"]*)"/\1/')"
   if [ -n "$EXPECT_SHA" ]; then
     [ "$sha" = "$EXPECT_SHA" ] || { echo "build-sha is '${sha:-none}', want $EXPECT_SHA"; return 1; }
+  elif [ -n "${ANY_SHA_OR_DEV:-}" ]; then
+    printf '%s' "$sha" | grep -qE '^([0-9a-f]{40}|dev)$' || { echo "build-sha is '${sha:-none}', want 40 hex or dev"; return 1; }
   else
     printf '%s' "$sha" | grep -qE '^[0-9a-f]{40}$' || { echo "build-sha is '${sha:-none}', want 40 hex"; return 1; }
   fi

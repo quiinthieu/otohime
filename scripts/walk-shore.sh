@@ -6,7 +6,8 @@
 #   BASE_URL=https://otohime.dev bash scripts/walk-shore.sh     # walk a deployed URL, no build or start
 #
 # Env: PORT (4019), BASE_URL (remote mode), EXPECT_SHA (build-sha to expect; defaults to
-# GITHUB_SHA locally, any 40-hex sha remotely), SKIP_BUILD=1.
+# GITHUB_SHA locally, any 40-hex sha remotely; with SKIP_BUILD=1 and neither set, the reused
+# build's stamp is unknown, so a 40-hex sha or "dev" passes), SKIP_BUILD=1.
 # Counts use grep -c and numeric tests only: BSD wc pads its output, so string compares fail.
 # No `set -e`: every check runs, and the summary names the ones that failed.
 set -u
@@ -55,8 +56,11 @@ if [ -z "$BASE_URL" ]; then
   export BETTER_AUTH_SECRET="${BETTER_AUTH_SECRET:-ci-placeholder-not-a-real-secret-0123456789abcdef}"
   export BETTER_AUTH_URL="${BETTER_AUTH_URL:-http://localhost:$PORT}"
   export DATABASE_URL="${DATABASE_URL:-postgresql://otohime:otohime@localhost:5432/otohime}"
+  if [ "${SKIP_BUILD:-}" = "1" ] && [ -z "$EXPECT_SHA" ] && [ -z "${GITHUB_SHA:-}" ]; then
+    ANY_SHA_OR_DEV=1
+  fi
   export GITHUB_SHA="${GITHUB_SHA:-0123456789abcdef0123456789abcdef01234567}"
-  EXPECT_SHA="${EXPECT_SHA:-$GITHUB_SHA}"
+  [ -n "${ANY_SHA_OR_DEV:-}" ] || EXPECT_SHA="${EXPECT_SHA:-$GITHUB_SHA}"
   READY_TRIES=60
 
   if curl -s -o /dev/null --max-time 2 "$BASE_URL/"; then
@@ -141,6 +145,8 @@ build_sha_matches() {
   sha="$(grep -oE '<meta name="build-sha" content="[^"]*"' "$WORK/shore.body" | head -n 1 | sed -E 's/.*content="([^"]*)"/\1/')"
   if [ -n "$EXPECT_SHA" ]; then
     [ "$sha" = "$EXPECT_SHA" ] || { echo "build-sha is '${sha:-none}', want $EXPECT_SHA"; return 1; }
+  elif [ -n "${ANY_SHA_OR_DEV:-}" ]; then
+    printf '%s' "$sha" | grep -qE '^([0-9a-f]{40}|dev)$' || { echo "build-sha is '${sha:-none}', want 40 hex or dev"; return 1; }
   else
     printf '%s' "$sha" | grep -qE '^[0-9a-f]{40}$' || { echo "build-sha is '${sha:-none}', want 40 hex"; return 1; }
   fi
