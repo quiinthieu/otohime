@@ -132,3 +132,82 @@ ec39dad. This plan repeats only what the task needs.
 1. **Style the dropdown pickers like their pages** (software_engineer, no
    dependencies). It is one task: two CSS blocks with one pattern, two walk
    checks, one probe and one review.
+
+## Cycle 1: the Vinyl Genre picker keeps its keyboard
+
+Change request `change_request_0.md` (acceptance at 83881c1): on /vinyl, with
+a record on the platter, keys pressed inside the open Genre picker reach the
+deck. Escape ejects the record and the picker stays open. Space on a
+highlighted genre plays or pauses. ArrowLeft/ArrowRight change the record.
+t-1135 (the CSS, the walks and `probe-selects.sh`) stays as delivered.
+
+**Cause.** While a customizable select's picker is open, focus is on an
+`<option>`. The deck's `onKeyDown` in `app/(vinyl)/_components/vinyl-app.tsx`
+skips only targets whose `tagName` is INPUT/SELECT/TEXTAREA. An OPTION falls
+through, and the handler takes Space, the arrows and Escape and calls
+`preventDefault()`, so the picker never sees them. The probe only pressed
+ArrowDown+Enter, which the deck ignores, so it missed this.
+
+**Sweep.** No other route group has this bug. Selects live only in
+`crate.tsx`, `add-channel-form.tsx` and `user-actions.tsx`. The home handheld
+(`components/handheld.tsx`) already skips `closest("input, textarea, select,
+[contenteditable]")`, and that covers options. The Elements table and dialog
+handlers sit on pages with no select. `turntable.tsx` handles keys only on its
+own arm. The capture `keydown` in `sleeve-drag.ts` is bound only during a drag.
+The site's Colour and Role pickers already close on Escape.
+
+### Change (one software-engineer task)
+
+1. `vinyl-app.tsx`: the deck skips any key whose target is inside a form
+   control, using the handheld's test:
+   `el.closest("input, select, textarea, [contenteditable]")`. That replaces
+   the `tagName` list, keeps `isContentEditable`, and updates the comment.
+   Everything else stays the same: Space on a button, the modifier and
+   `defaultPrevented` guards, and the four shortcuts on the deck and turntable.
+2. `scripts/probe-selects.mjs`: a new `/vinyl keys` section at 1366×768 and
+   390×844. Each round reloads `/vinyl` and clicks the first `button.place` so
+   a record is on the platter. It reads `.deck[data-phase]` and the record
+   (the turntable's `aria-label` / `.deck` state) before every key. Checks:
+   - Open Genre, press Escape: the picker closes (`:open` false), the value
+     stays `""`, and the deck phase and record do not change.
+   - Open Genre, press ArrowDown then Space: the value leaves `""`, the picker
+     closes, and the deck phase does not change (no play).
+   - Open Genre, press ArrowRight (and ArrowLeft): the picker stays open or
+     closes the way the browser decides, but the record on the platter and the
+     deck phase do not change. Then press Escape to close it.
+   - Control, picker closed, focus on `.turntable-cell`: ArrowRight changes
+     the record and Escape takes the deck to `empty`. The deck keeps its
+     shortcuts.
+   - Each check prints `ok -` / `not ok -`, and the run ends with the existing
+     `probe: N ok, M failed` summary.
+3. `scripts/probe-selects.sh`: update the header comment to say it now presses
+   Escape, Space and the arrows inside the open Vinyl picker with a record
+   loaded. No new env.
+4. README line 123: add "and the keys inside the open Vinyl picker" to the
+   probe-selects sentence.
+
+### Out of scope
+
+- Any CSS change. The look passed acceptance everywhere.
+- Changes to the site pickers, the handheld, the Elements handlers or the
+  turntable arm keys.
+- A custom listbox, or adding Playwright to `package.json` or CI.
+
+### Verification (runnable in the checkout, no waiting)
+
+- `npm run lint && npm run typecheck && npm test`.
+- `bash scripts/probe-selects.sh`: builds, serves on :4033 and exits 0. Every
+  `/vinyl keys` line is `ok`, and so are the existing picker checks. Against
+  main before the fix, the Escape and Space lines print `not ok`, which proves
+  the probe would have caught the bug.
+- `bash scripts/walk-vinyl.sh`: exits 0.
+- QA, in Chrome at 1366 and 390 px: place a record, open Genre, then press
+  Escape, Space and the arrows. Check that the deck's shortcuts still work on
+  the turntable.
+- Acceptance after deploy: `BASE_URL=https://otohime.dev bash
+  scripts/probe-selects.sh` and the change request's `acceptance-keys.mjs`.
+
+### Task graph (cycle 1)
+
+1. **Keep keys inside the open Vinyl picker** (software_engineer, no
+   dependencies).
