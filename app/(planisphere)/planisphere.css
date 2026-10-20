@@ -146,6 +146,31 @@ h2 { margin: 0 0 8px; font-family: var(--title); font-weight: 700; font-size: 30
 [data-daylight] .line-layer,
 [data-daylight] .name-layer { opacity: 0.25; }
 
+/* The island: it wraps the page's content without a box of its own. The disc is
+   the slider; only it opts out of touch scrolling, and it turns in 0.4 s (the
+   reduced-motion rule below switches that off). */
+.island { display: contents; }
+.wheel [data-disc] { touch-action: none; cursor: grab; outline: none; transition: transform 0.4s ease-out; }
+.wheel [data-rim] { transition: transform 0.4s ease-out; }
+.wheel [data-disc][data-dragging] { cursor: grabbing; transition: none; }
+.wheel [data-rim][data-dragging] { transition: none; }
+.wheel .disc-hit { fill: transparent; stroke: none; }
+.wheel [data-disc]:focus-visible .disc-hit { stroke: var(--coral); stroke-width: 6; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.actions:empty { display: none; }
+.actions button {
+  padding: 6px 18px;
+  border: 2px solid var(--ink);
+  border-radius: var(--frame-radius);
+  background: var(--field);
+  font-family: var(--title);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.actions button:hover { background: var(--amber); color: #3a2a28; }
+.live { margin: 0; min-width: 0; flex: 1 1 14ch; overflow-wrap: anywhere; color: var(--ink-soft); }
+
 .daytime { margin: 8px 0 0; padding: 6px 10px; border: 2px dashed var(--ink); border-radius: var(--frame-radius); background: var(--field); }
 .up { margin: 10px 0 0; overflow-wrap: anywhere; color: var(--ink-soft); }
 

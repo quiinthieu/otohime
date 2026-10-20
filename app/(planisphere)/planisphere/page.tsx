@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PlanisphereApp } from "../_components/planisphere-app";
 import { MoonCorner } from "../_components/moon-corner";
 import { clock, Wheel } from "../_components/wheel";
 import { CITIES } from "../_lib/cities.ts";
@@ -7,7 +8,7 @@ import { upNow } from "../_lib/sky.ts";
 import { STARS } from "../_lib/stars.ts";
 import { sunAltitude } from "../_lib/sun.ts";
 import { localToUtc } from "../_lib/time.ts";
-import { parseQuery, placeName } from "../_lib/wheel.ts";
+import { parseQuery, placeName, toQuery } from "../_lib/wheel.ts";
 
 // absolute: the layout's template would otherwise make this "Planisphere · Planisphere".
 export const metadata: Metadata = { title: { absolute: "Planisphere" } };
@@ -58,6 +59,8 @@ export default async function PlanispherePage({ searchParams }: PageProps<"/plan
           </a>
         </nav>
       </header>
+      {/* The island wraps the whole bench; its key restarts it when the server draws a new window. */}
+      <PlanisphereApp key={toQuery(state)} initial={state} named={STARS.filter((s) => s[4])}>
       <main className="bench">
         <header className="title">
           <h1>Planisphere</h1>
@@ -97,6 +100,7 @@ export default async function PlanispherePage({ searchParams }: PageProps<"/plan
             </label>
             <button type="submit">Show</button>
           </form>
+          <div className="actions" data-actions="" />
           <MoonCorner phaseDeg={moonPhase} />
           <section className="explainer" data-explainer="" aria-labelledby="how">
             <h2 id="how">How to read it</h2>
@@ -106,6 +110,7 @@ export default async function PlanispherePage({ searchParams }: PageProps<"/plan
           </section>
         </div>
       </main>
+      </PlanisphereApp>
       <footer className="credit">
         <p>
           Stars and constellation lines from <a href={SOURCES.celestial}>d3-celestial</a> (BSD-3-Clause), built on the Hipparcos catalogue as{" "}

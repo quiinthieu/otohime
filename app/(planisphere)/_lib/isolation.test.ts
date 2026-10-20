@@ -125,11 +125,31 @@ test("no network call anywhere under app/(planisphere)/", () => {
   for (const file of group) assert.ok(!FETCH.test(readFileSync(file, "utf8")), relative(ROOT, file));
 });
 
-test("at most one client file in the group", () => {
+const ISLAND = join(ROOT, "app/(planisphere)/_components/planisphere-app.tsx");
+const ISLAND_LIB = ["time", "sky", "sun", "moon", "wheel", "cities"];
+
+test("exactly one client file in the group: planisphere-app.tsx", () => {
   const clients = group.filter((f) => CLIENT.test(readFileSync(f, "utf8")));
-  assert.ok(clients.length <= 1, clients.map((f) => relative(ROOT, f)).join(", "));
-  for (const f of clients) assert.ok(f.endsWith("planisphere-app.tsx"), relative(ROOT, f));
+  assert.deepEqual(clients.map((f) => relative(ROOT, f)), [relative(ROOT, ISLAND)]);
   for (const f of group.filter((g) => g.includes(`${sep}_lib${sep}`))) assert.ok(!clients.includes(f), relative(ROOT, f));
+});
+
+test("the island imports none of the stars, the lines, the ink or roughjs, only the engine", () => {
+  const specs = specifiers(ISLAND);
+  for (const spec of specs) {
+    assert.ok(!DATA_OR_INK.test(spec) && !ROUGH.test(spec), `the island imports ${spec}`);
+    if (spec.startsWith(".")) {
+      const m = /^\.\.\/_lib\/([a-z]+)\.ts$/.exec(spec);
+      assert.ok(m && ISLAND_LIB.includes(m[1]), `the island imports ${spec}`);
+    }
+  }
+  assert.ok(specs.includes("../_lib/wheel.ts"));
+});
+
+test("the components that ink are server files", () => {
+  for (const name of ["wheel.tsx", "moon-corner.tsx"]) {
+    assert.ok(!CLIENT.test(readFileSync(join(ROOT, "app/(planisphere)/_components", name), "utf8")), name);
+  }
 });
 
 test("GROUPS is read from app/: the site and every other project, never Planisphere", () => {

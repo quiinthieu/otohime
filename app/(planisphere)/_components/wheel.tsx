@@ -159,7 +159,7 @@ export function Wheel({ state, daylight }: { state: State; daylight: boolean }) 
 
       <g transform={`translate(${CX} ${CY})`}>
         {/* the disc's rim: the date scale, turning with the stars */}
-        <g transform={`rotate(${r1(rotation)})`} aria-hidden="true">
+        <g data-rim="" transform={`rotate(${r1(rotation)})`} aria-hidden="true">
           <circle className="rim-paper" r={R + RIM} />
           {marks.map(({ m, tick, mid }) => {
             const a = rimPoint(tick, R, hemisphere);
@@ -188,7 +188,18 @@ export function Wheel({ state, daylight }: { state: State; daylight: boolean }) 
         <path className="window-fill" d={window} />
 
         <g clipPath="url(#window-clip)">
-          <g data-disc="" transform={`rotate(${r1(rotation)})`}>
+          <g
+            data-disc=""
+            role="slider"
+            tabIndex={0}
+            aria-label="Hour"
+            aria-valuemin={0}
+            aria-valuemax={23.75}
+            aria-valuenow={state.hour}
+            aria-valuetext={clock(state.hour)}
+            transform={`rotate(${r1(rotation)})`}
+          >
+            <circle className="disc-hit" r={R + RIM} />
             <g aria-hidden="true" className="ecliptic-layer">
               {ecliptic.map((pts, i) => (
                 <polyline key={i} data-ecliptic="" points={pointText(pts)} />
@@ -214,19 +225,16 @@ export function Wheel({ state, daylight }: { state: State; daylight: boolean }) 
                 ))}
             </g>
             <g aria-hidden="true">
-              {sunAt && (
-                <g data-sun="" transform={`translate(${r1(sunAt.x)} ${r1(sunAt.y)})`}>
-                  <circle className="sun" r="8" />
-                  <circle className="sun-halo" r="13" />
-                </g>
-              )}
-              {moonAt && (
-                <g data-moon="" transform={`translate(${r1(moonAt.x)} ${r1(moonAt.y)})`}>
-                  <circle className="moon-dark" r="9" />
-                  <path className="moon-lit" d={litPath(moonPhase, 9)} />
-                  <circle className="moon-rim" r="9" />
-                </g>
-              )}
+              {/* always drawn: the island moves them, and one may rise into the disc on another date */}
+              <g data-sun="" transform={`translate(${r1(sunAt?.x ?? 0)} ${r1(sunAt?.y ?? 0)})`} visibility={sunAt ? undefined : "hidden"}>
+                <circle className="sun" r="8" />
+                <circle className="sun-halo" r="13" />
+              </g>
+              <g data-moon="" transform={`translate(${r1(moonAt?.x ?? 0)} ${r1(moonAt?.y ?? 0)})`} visibility={moonAt ? undefined : "hidden"}>
+                <circle className="moon-dark" r="9" />
+                <path className="moon-lit" d={litPath(moonPhase, 9)} />
+                <circle className="moon-rim" r="9" />
+              </g>
             </g>
           </g>
         </g>

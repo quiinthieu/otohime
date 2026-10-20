@@ -65,6 +65,11 @@ export function phaseWords(phaseDeg: number): string {
   return `about ${COUNT_WORDS[days]} ${days === 1 ? "day" : "days"} ${delta > 0 ? "past" : "before"} ${key.name}`;
 }
 
+/** The Moon corner's sentence, the same on the server and when the island turns the wheel. */
+export function moonSentence(phaseDeg: number): string {
+  return `${phaseWords(phaseDeg)}, ${Math.round(illuminated(phaseDeg) * 100)} % lit, ${age(phaseDeg).toFixed(1)} days old.`;
+}
+
 const f2 = (n: number) => String(Number(n.toFixed(2)));
 
 /**

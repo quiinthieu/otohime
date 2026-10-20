@@ -205,12 +205,32 @@ explainer_within_cap() {
   [ "$words" -le "$cap" ] || { echo "$words explainer words, the cap is $cap"; return 1; }
 }
 
-# Zero "use client" files under app/(planisphere) until the island lands.
-no_client_files() {
+# Exactly one "use client" file under app/(planisphere): the island.
+one_client_file() {
   local files n
   files="$(grep -rlE '^[[:space:]]*["'"'"']use client["'"'"']' 'app/(planisphere)')"
   n="$(printf '%s' "$files" | grep -c .)"
-  [ "$n" -eq 0 ] || { echo "found $n \"use client\" files: $(printf '%s' "$files" | tr '\n' ' ')"; return 1; }
+  [ "$n" -eq 1 ] || { echo "found $n \"use client\" files: $(printf '%s' "$files" | tr '\n' ' ')"; return 1; }
+  case "$files" in *planisphere-app.tsx) ;; *) echo "the one client file is $files"; return 1 ;; esac
+}
+
+# The /_next/static/chunks/*.js files the page references, fetched into $WORK/chunks.
+fetch_chunks() {
+  local srcs src i=0
+  mkdir -p "$WORK/chunks"
+  srcs="$(grep -oE '/_next/static/chunks/[^"\\]*\.js' "$WORK/$1.body" | sort -u)"
+  for src in $srcs; do
+    i=$((i + 1))
+    curl -s --max-time 30 -o "$WORK/chunks/$i.js" "$BASE_URL$src" || { echo "could not fetch $src"; return 1; }
+  done
+  [ "$i" -ge 1 ] || { echo "the page references no chunks"; return 1; }
+}
+
+# chunks_lack <fixed-text>: no fetched chunk contains it.
+chunks_lack() {
+  local hit
+  hit="$(grep -lF -- "$1" "$WORK"/chunks/*.js 2>/dev/null | head -n 1)"
+  [ -z "$hit" ] || { echo "a client chunk contains '$1': $hit"; return 1; }
 }
 
 # Every stylesheet /planisphere links is free of Tailwind and the site's tokens, and one is
@@ -256,6 +276,7 @@ get tokyo "$TOKYO"
 get noon '/planisphere?city=hcmc&date=2026-10-20&hour=12'
 get sydney '/planisphere?city=sydney&date=2026-10-20&hour=21'
 get bad '/planisphere?city=nope&date=x&hour=99'
+get here '/planisphere?lat=10.82&lon=106.63&tz=Asia/Ho_Chi_Minh&date=2026-10-20&hour=21'
 get projects /projects
 get home /
 get shore /shore
@@ -288,7 +309,13 @@ check "/planisphere links VizieR V/137D" has planisphere 'V/137D"'
 check "/planisphere links the IAU" has planisphere 'href="https://www.iau.org/'
 check "/planisphere links Orrery" has planisphere 'href="/orrery"'
 check "/planisphere stylesheets are Planisphere's own" planisphere_stylesheets
-check "no \"use client\" file under app/(planisphere)" no_client_files
+check "exactly one \"use client\" file under app/(planisphere): the island" one_client_file
+check "/planisphere serves exactly one slider" count_eq planisphere 'role="slider"' 1
+check "the slider is the disc, named Hour" has planisphere 'aria-label="Hour"'
+check "/planisphere's client chunks fetch" fetch_chunks planisphere
+check "no chunk ships roughjs" chunks_lack roughjs
+check "no chunk ships rough.js" chunks_lack rough.js
+check "no chunk ships the star data (Betelgeuse)" chunks_lack Betelgeuse
 check "/planisphere's ink stays inside the chart" ink_in_bounds planisphere
 
 # Tokyo, 2026-10-20 21:00: the north disc, Vega up and Sirius not
@@ -327,12 +354,20 @@ check "bad query values return 200" status_is bad 200
 check "bad query values select Ho Chi Minh City" selected bad hcmc
 check "bad query values still draw the north disc" has bad 'data-hemisphere="north"'
 
+# Use my location: the server draws the window for the position and labels it
+check "a position returns 200" status_is here 200
+check "a position is labelled Your location" has here 'Your location'
+check "a position at 10.82 N is the north disc" has here 'data-hemisphere="north"'
+check "a position draws at least 400 stars" count_ge here 'data-star=""' 400
+check "a position keeps one slider" count_eq here 'role="slider"' 1
+
 # Weight
 check "/planisphere is under 400 KB" size_le planisphere 400000
 check "Tokyo is under 400 KB" size_le tokyo 400000
 check "Ho Chi Minh City at noon is under 400 KB" size_le noon 400000
 check "Sydney is under 400 KB" size_le sydney 400000
 check "bad query values are under 400 KB" size_le bad 400000
+check "a position is under 400 KB" size_le here 400000
 
 # The project list and the other pages
 check "/projects returns 200" status_is projects 200
