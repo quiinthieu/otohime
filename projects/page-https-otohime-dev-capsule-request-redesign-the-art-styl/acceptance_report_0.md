@@ -7,20 +7,6 @@ cycle: 0
 cited_sha: ae62f088110e2e381ac93d0ac1263c3a31c44a45
 ---
 
-# Acceptance: pm-196, Capsule, Printed (run-6687)
-
-**Verdict: pass.** At https://otohime.dev/capsule the cards, album and machine are now printed in ink: thin rough outlines, hatched shade, muted fills on grained cream paper, Fraunces type, and numbered double-rule frames with ink, slate or gold edges. A visitor can no longer tell the card before it is revealed:
-
-- every capsule is the same shell;
-- the turn length varies per round and does not depend on the tier;
-- the capsule drops out of the dome;
-- the card rises as a plain back, the tier edge draws on, and only then does the card flip to its face;
-- the album and tally change only at the reveal.
-
-The crank can be pulled by hand with a mouse or a finger.
-
-## Walkthrough (production, headless Chromium 1248, Linux pod, 2026-10-20)
-
 | Starting state | Action | Observable result | Evidence |
 | --- | --- | --- | --- |
 | Fresh visitor, 1366×768 | Open /capsule | Fraunces headline "Put a coin in. / See who rolls out." on `rgb(243,236,221)` paper. The inked coral machine has 8 identical coral-over-paper capsules. 12 album slots are hatched card backs labelled "Slot n, not found yet" (No. 01 to No. 12). 1 stylesheet, overflow 0, no console or page errors | `desk-idle.png`; probe `ok - desk` |
@@ -40,7 +26,19 @@ The crank can be pulled by hand with a mouse or a finger.
 | Seed 2, mid-turn | Reload the page | Calcifer is kept: album `calcifer`, "1 of 12 · 1 draw" | probe `ok - reload mid-turn` |
 | 390×844 | Measure the machine top to the Open button bottom | 674 px, so the machine (where the card rises) and Open fit in one screen | probe `ok - phone` layout; `phone-natural.png` |
 
-Probe totals: 19 ok, 0 failed. The scripts and screenshots are in `/tmp/acc` (scratch, not committed).
+Walked on https://otohime.dev/capsule in headless Chromium 1248, Linux pod, 2026-10-20. Probe totals: 19 ok, 0 failed. The scripts and screenshots are in `/tmp/acc` (scratch, not committed).
+
+# Acceptance: pm-196, Capsule, Printed (run-6687)
+
+**Verdict: pass.** At https://otohime.dev/capsule the cards, album and machine are now printed in ink: thin rough outlines, hatched shade, muted fills on grained cream paper, Fraunces type, and numbered double-rule frames with ink, slate or gold edges. A visitor can no longer tell the card before it is revealed:
+
+- every capsule is the same shell;
+- the turn length varies per round and does not depend on the tier;
+- the capsule drops out of the dome;
+- the card rises as a plain back, the tier edge draws on, and only then does the card flip to its face;
+- the album and tally change only at the reveal.
+
+The crank can be pulled by hand with a mouse or a finger.
 
 ## How the five leaks in the plan stand
 
