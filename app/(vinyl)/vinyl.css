@@ -347,6 +347,18 @@ main { width: min(100% - 32px, 1440px); margin: 16px auto 0; flex: 1; }
   [data-player-host] { min-width: 480px; height: auto; aspect-ratio: 16 / 9; }
 }
 
+/* The hop to or from another root layout (the site, another project)
+   crossfades instead of cutting, and the title travels from its row on
+   /projects to this h1. Both documents must carry this rule; the type keeps
+   the fade on the hop alone. */
+@view-transition { navigation: auto; types: hop; }
+::view-transition { pointer-events: none; }
+:root:active-view-transition-type(hop)::view-transition-old(root) { animation: 150ms ease-in both fade-out; }
+:root:active-view-transition-type(hop)::view-transition-new(root) { animation: 210ms ease-out 150ms both fade-in; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+h1 { view-transition-name: project-vinyl; }
+
 /* Reduced motion: no lift, no swing, no spin (vinyl-app.tsx keeps the platter
    still) and no flight (vinyl-app.tsx doesn't start one); the playing lamp
    fades in place instead. */
@@ -358,4 +370,8 @@ main { width: min(100% - 32px, 1440px); margin: 16px auto 0; flex: 1; }
   .flight { display: none; }
   .sleeve:hover,
   .sleeve:focus-within { transform: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }

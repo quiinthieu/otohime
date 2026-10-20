@@ -1027,6 +1027,32 @@
   animation: 210ms ease-out 150ms both fade-in;
 }
 
+/*
+ * The hop to or from a project (another root layout, so a full document
+ * load) crossfades the same way instead of cutting. Both documents must
+ * carry this rule, so every project's stylesheet has a copy. The project's
+ * title travels from its row on /projects to the project's h1, which is
+ * named project-<slug> there; --vt is set inline on the row's link. The
+ * hop is typed so the fade stays off the site's own page changes, where the
+ * root does not change and the default crossfade holds it steady.
+ */
+@view-transition {
+  navigation: auto;
+  types: hop;
+}
+
+:root:active-view-transition-type(hop)::view-transition-old(root) {
+  animation: 150ms ease-in both fade-out;
+}
+
+:root:active-view-transition-type(hop)::view-transition-new(root) {
+  animation: 210ms ease-out 150ms both fade-in;
+}
+
+.project-title {
+  view-transition-name: var(--vt, none);
+}
+
 .masthead {
   view-transition-name: masthead;
 }
@@ -1055,7 +1081,8 @@
 
 /* A theme switch reveals the page as one piece. */
 :root.theming .masthead,
-:root.theming .nav-item {
+:root.theming .nav-item,
+:root.theming .project-title {
   view-transition-name: none;
 }
 

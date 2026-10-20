@@ -1,7 +1,7 @@
 import { FigTitle, Notice, swatches } from "@/components/figures";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
-import { ViewTransition } from "react";
+import { type CSSProperties, ViewTransition } from "react";
 
 export const metadata: Metadata = { title: "Projects" };
 
@@ -31,7 +31,18 @@ export default function ProjectsPage() {
                 <span>
                   <span className="block">
                     <span className="font-semibold">
-                      {project.href ? <a href={project.href}>{project.title}</a> : project.title}
+                      {project.href ? (
+                        // The title travels to the project's h1 on the hop: globals.css names it from --vt.
+                        <a
+                          href={project.href}
+                          className="project-title"
+                          style={{ "--vt": `project-${project.href.slice(1)}` } as CSSProperties}
+                        >
+                          {project.title}
+                        </a>
+                      ) : (
+                        project.title
+                      )}
                     </span>{" "}
                     <span className="badge">{project.status}</span>
                   </span>

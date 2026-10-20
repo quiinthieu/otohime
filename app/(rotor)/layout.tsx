@@ -46,6 +46,10 @@ export default function RotorLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${title.variable} ${hand.variable}`} suppressHydrationWarning>
       <head>
+        {/* The hop between root layouts crossfades only if this document opts in before its first frame. The copy in
+           rotor.css can arrive too late on a first visit (an inline script behind a loading stylesheet), so the opt-in is
+           also parsed with the HTML. */}
+        <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
       </head>
       <body>{children}</body>

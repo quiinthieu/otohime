@@ -24,6 +24,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <head>
+        {/* The hop between root layouts crossfades only if this document opts in before its first frame. The copy in
+           globals.css can arrive too late on a first visit (an inline script behind a loading stylesheet), so the opt-in is
+           also parsed with the HTML. */}
+        <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
       </head>
       <body className="min-h-full">{children}</body>

@@ -228,11 +228,27 @@ textarea { resize: vertical; }
 .credit { padding: 8px 16px 24px; max-width: 1180px; width: 100%; margin: 0 auto; color: var(--ink-soft); }
 .credit p { margin: 0; }
 
+/* The hop to or from another root layout (the site, another project)
+   crossfades instead of cutting, and the title travels from its row on
+   /projects to this h1. Both documents must carry this rule; the type keeps
+   the fade on the hop alone. */
+@view-transition { navigation: auto; types: hop; }
+::view-transition { pointer-events: none; }
+:root:active-view-transition-type(hop)::view-transition-old(root) { animation: 150ms ease-in both fade-out; }
+:root:active-view-transition-type(hop)::view-transition-new(root) { animation: 210ms ease-out 150ms both fade-in; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+h1 { view-transition-name: project-rotor; }
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     transition: none !important;
     animation: none !important;
+  }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }

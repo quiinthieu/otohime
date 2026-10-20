@@ -157,6 +157,8 @@ Walk Barometer and the site the same way with `bash scripts/walk-barometer.sh` (
 
 Walk Rotor and the site the same way with `bash scripts/walk-rotor.sh` (builds, serves on :4035: 26 lamps, 26 keys, three windows and one GET form; `?m=AAAAA` prints `BDZGO` on the tape, also as the no-JS form submits it; `?pos=ADU&m=AAAA` shows `BFY` in the windows (the double step); bad fields fall back to the defaults with a 200; `?m=BDZGO` decodes to `AAAAA`; a rings-and-plugs vector matches the engine; one `"use client"` file, no rough.js in any client chunk, an explainer of at most 120 words, both wiring sources linked and `/projects` linking `/rotor` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-rotor.sh`.
 
+Probe the hop between the site and the projects in headless Chromium with `bash scripts/probe-motion.sh` (builds, serves on :4061, installs Playwright into a temp prefix; at 1366x768 and 390x844 it clicks the real links `/projects` → each of the eight projects, `/shore` → `/projects` and Planisphere's "Next door" → `/orrery`, and goes `/orrery/sun` → `/planisphere` by script, since no link joins them: `pageswap` and `pagereveal` must both carry a view transition of type `hop`, the root fades out in 150 ms and in over 210 ms after 150 ms, the title moves as `project-<slug>`, and no `project-*` name is on two elements; under reduced motion the same hops complete and nothing at load runs longer than 1 ms; the site's own page changes keep the default crossfade; no console or page error; and with `@view-transition` stripped from what `/shore` loads, the hop into it must cut), or against production with `BASE_URL=https://otohime.dev bash scripts/probe-motion.sh`.
+
 The Sun's parts and callouts live in `app/(orrery)/_lib/poster.ts` and every other body's in `app/(orrery)/_lib/bodies.ts`; the ink is rough.js with a fixed seed in `app/(orrery)/_lib/ink.ts`; `bash scripts/walk-orrery.sh` counts the words on every served page (cap 220, `WORD_CAP` in `app/(orrery)/_lib/words.ts`).
 
 Orrery's motion is CSS only in `app/(orrery)/orrery.css`: the ink draws itself on, layer by layer; on the Sun's poster three loops then run (convection, photon, wind); all of it is off under reduced motion, and `app/(orrery)/_lib/motion.test.ts` tests it.
@@ -168,6 +170,18 @@ A Capsule round is staged so the tier comes last. Turn commits the draw and also
 See every drawn Capsule card on one sheet with `npm run --silent capsule:sheet > /tmp/capsule.svg`, then open the file in a browser or any SVG viewer.
 
 To add or swap a Capsule card, edit its entry in `app/(capsule)/_lib/cards.ts` (id, name, film, year, tier, colours, note) and draw it as `app/(capsule)/_lib/art/<id>.ts`, registered in `art/index.ts`. Follow the printed-ink brief in the pm-196 plan: absolute path commands only, palette-role fills (the card colour is mixed 12 % toward paper), one thin rough ink outline per stroked shape, the `hatch` role for shade (rough hachure, never outlined), `weight: "fine"` for whiskers, fur and hair lines, no gradients and no raster. The ink comes from `app/(capsule)/_lib/art/ink.ts` (Capsule's own copy of Sun's rough.js wrapper, seeded per shape so the server and the browser draw the same bytes), and the pinned Totoro hash in `art.test.ts` pins the look: change it only after looking at the sheet. `app/(capsule)/_lib/art.test.ts` checks that every card is drawn and every path stays inside the card face, and `npm run capsule:sheet` previews the set. This is also the takedown rollback: replace the set with original characters this way, and leave the machine, the economy and the page untouched.
+
+## Motion
+
+The app moves in one house style, with no motion library: CSS, React's `<ViewTransition>` and the browser's `@view-transition`.
+
+- Figures and machines run on twos, at 12 fps, from pure reducers (`lib/machines.ts`); smoother looked worse.
+- Ink draws itself on (`stroke-dashoffset` from 1 to 0 over `pathLength="1"`), then the parts fade up.
+- The base style is the resting pose: every keyframe animates *from* somewhere, so a still (reduced motion, CSS that never loads, JavaScript off) is the whole drawing.
+- The exit is fast and the enter gentle: 150 ms out, 210 ms in after it, nothing over 400 ms except a draw-on. Loops only on things that loop in life (a lamp, a platter).
+- Each stylesheet ends with its own `prefers-reduced-motion` block, which also zeroes the `::view-transition-group/old/new(*)` pseudo-elements (`*` does not match them).
+
+The site and each project are separate root layouts, so a hop between them is a full document load. It crossfades only when both documents opt in. So every stylesheet carries a copy of the hop rule (it is never imported across route groups): `@view-transition { navigation: auto; types: hop; }`, the root fade under `:root:active-view-transition-type(hop)` (typed, so the site's own page changes keep the default crossfade) and `h1 { view-transition-name: project-<slug>; }`, the name the row title on `/projects` carries through `--vt`. Each root layout also repeats `@view-transition{navigation:auto;types:hop}` in an inline `<style>` in its `<head>`. On a first visit Chromium settles the opt-in before a stylesheet that is still loading applies, and the hop then cuts. **A new project copies the rule and the inline `<style>`, and names its `h1`.** `lib/motion.test.ts` fails until it does, and `scripts/probe-motion.sh` watches the hops run.
 
 ## Elements
 

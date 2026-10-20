@@ -379,6 +379,18 @@ h2 {
   .enlarge { padding: 20px; }
 }
 
+/* The hop to or from another root layout (the site, another project)
+   crossfades instead of cutting, and the title travels from its row on
+   /projects to this h1. Both documents must carry this rule; the type keeps
+   the fade on the hop alone. */
+@view-transition { navigation: auto; types: hop; }
+::view-transition { pointer-events: none; }
+:root:active-view-transition-type(hop)::view-transition-old(root) { animation: 150ms ease-in both fade-out; }
+:root:active-view-transition-type(hop)::view-transition-new(root) { animation: 210ms ease-out 150ms both fade-in; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+h1 { view-transition-name: project-capsule; }
+
 /* Reduced motion: no keyframes or transitions anywhere (the card settling, the
    edge drawing on, the sparks, the dialog's entrance, the slot's lift), no
    nudges on press or hover. The crank, the drop and the open stages are posed
@@ -390,4 +402,8 @@ h2 {
   .sparks { display: none; }
   .button:active:not(:disabled) { transform: none; }
   .slot-button:hover .card { transform: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }

@@ -170,23 +170,34 @@ build_sha_matches() {
   fi
 }
 
-# The Sun's poster links exactly one /_next/static/ stylesheet; fetch it and inspect it.
+# The Sun's poster links exactly one stylesheet of Orrery's own and, beside it, at most next/font's chunk
+# (@font-face rules and its generated _className / _variable classes for Caveat and Patrick Hand); fetch them,
+# keep Orrery's as sun.css and inspect it.
 sun_stylesheet() {
-  local hrefs n href code
-  hrefs="$(grep -oE 'href="/_next/static/[^"]*\.css[^"]*"' "$WORK/body-sun.body" | sort -u)"
-  n="$(printf '%s' "$hrefs" | grep -c .)"
-  [ "$n" -eq 1 ] || { echo "found $n stylesheets, want exactly 1"; return 1; }
-  href="$(printf '%s' "$hrefs" | sed -E 's/^href="(.*)"$/\1/; s/&amp;/\&/g')"
-  code="$(curl -s --max-time 30 -o "$WORK/sun.css" -w '%{http_code}' "$BASE_URL$href")"
-  [ "$code" = "200" ] || { echo "stylesheet $href returned HTTP $code"; return 1; }
-  [ -s "$WORK/sun.css" ] || { echo "stylesheet $href is empty"; return 1; }
-  grep -qF -- "prefers-reduced-motion" "$WORK/sun.css" || { echo "stylesheet $href has no prefers-reduced-motion"; return 1; }
-  for bad in --tw- tailwind --color-paper; do
-    if grep -qiF -- "$bad" "$WORK/sun.css"; then
-      echo "stylesheet $href contains '$bad'"
-      return 1
+  local hrefs href code i=0 own=0 rest
+  hrefs="$(grep -oE 'href="/_next/static/[^"]*\.css[^"]*"' "$WORK/body-sun.body" | sort -u | sed -E 's/^href="(.*)"$/\1/; s/&amp;/\&/g')"
+  [ -n "$hrefs" ] || { echo "found no stylesheet"; return 1; }
+  rm -f "$WORK/sun.css"
+  for href in $hrefs; do
+    i=$((i + 1))
+    code="$(curl -s --max-time 30 -o "$WORK/style-$i.css" -w '%{http_code}' "$BASE_URL$href")"
+    [ "$code" = "200" ] || { echo "stylesheet $href returned HTTP $code"; return 1; }
+    [ -s "$WORK/style-$i.css" ] || { echo "stylesheet $href is empty"; return 1; }
+    for bad in --tw- tailwind --color-paper; do
+      if grep -qiF -- "$bad" "$WORK/style-$i.css"; then
+        echo "stylesheet $href contains '$bad'"
+        return 1
+      fi
+    done
+    if grep -qF -- "prefers-reduced-motion" "$WORK/style-$i.css"; then
+      own=$((own + 1))
+      cp "$WORK/style-$i.css" "$WORK/sun.css"
+    else
+      rest="$(tr -d '\n' <"$WORK/style-$i.css" | sed -E 's#/\*[^*]*\*+([^/*][^*]*\*+)*/##g; s/@font-face *\{[^}]*\}//g; s/\.[A-Za-z0-9_-]+_(className|variable) *\{[^}]*\}//g; s/[[:space:]]//g')"
+      [ -z "$rest" ] || { echo "stylesheet $href is neither Orrery's nor only next/font's: ${rest:0:80}"; return 1; }
     fi
   done
+  [ "$own" -eq 1 ] || { echo "found $own stylesheets with prefers-reduced-motion, want exactly 1"; rm -f "$WORK/sun.css"; return 1; }
 }
 
 # The stylesheet sun_stylesheet fetched draws the ink on (task 3's motion).
