@@ -205,6 +205,8 @@ check "/capsule has exactly 8 capsule shells" count_eq capsule 'data-shell' 8
 for colour in '#8fcbb8' '#97b4ea' '#efc64a'; do
   check "/capsule lacks the old tier colour $colour" lacks capsule "$colour"
 done
+# The round is staged: the booth names its stage, and the server renders it at rest.
+check "/capsule booth starts at the idle stage" has capsule 'data-stage="idle"'
 check "/capsule has Insert coin" has capsule 'Insert coin'
 check "/capsule has Turn" has capsule 'Turn'
 check "/capsule has Open" has capsule 'Open'

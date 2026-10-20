@@ -112,32 +112,89 @@ h2 {
   align-items: center;
   gap: 24px 48px;
 }
-.machine { width: 260px; max-width: 100%; height: auto; display: block; overflow: visible; }
+.machine-wrap { position: relative; width: 260px; max-width: 100%; }
+.machine { width: 100%; height: auto; display: block; overflow: visible; }
 .controls { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 280px; max-width: 100%; }
 
 .reveal { width: 160px; height: 252px; display: flex; align-items: flex-start; justify-content: center; }
-.reveal-card { display: flex; flex-direction: column; align-items: center; animation: rise 0.6s steps(7, end) both; }
+.reveal-card { display: flex; flex-direction: column; align-items: center; animation: settle 0.5s steps(6, end) both; }
 .reveal-card .card { width: 150px; filter: drop-shadow(0 2px 0 var(--rule)); }
 .reveal-name { font-family: var(--display); font-size: 19px; margin: 8px 0 0; }
 .reveal-film { font-size: 12px; font-style: italic; color: var(--ink-soft); margin: 3px 0 0; }
-.reveal-empty {
+/* The empty tray beside the machine, where the revealed card comes to rest. */
+.reveal:empty::before {
+  content: "";
   width: 150px;
   height: 200px;
-  display: grid;
-  place-items: center;
   border: 1px solid var(--rule);
   outline: 1px solid var(--rule);
   outline-offset: -5px;
   border-radius: 4px;
-  font-family: var(--display);
-  font-style: italic;
-  font-size: 52px;
-  color: var(--rule);
+}
+@keyframes settle {
+  from { transform: translate(-36px, 18px) rotate(-5deg); opacity: 0.4; }
+  to { transform: none; opacity: 1; }
 }
 @keyframes rise {
   from { transform: translateY(40px) scale(0.6); opacity: 0; }
   to { transform: none; opacity: 1; }
 }
+
+/* The staged reveal. The booth carries data-stage (idle, loaded, turning,
+   dropping, ready, shake, part, rise, edge, hold, flip, revealed); the machine
+   poses itself in its SVG, and the card rises out of the chute here. The
+   riser's bottom edge is the chute mouth ((262 - 222) / 262 of the machine),
+   and --rise and --flip (0..1) come from the 12 fps frames, so the pose is
+   stepped like the crank. Every resting style is the final pose: a still or
+   reduced motion shows the whole card and the whole edge. */
+.riser {
+  position: absolute;
+  left: 25%;
+  bottom: 15.3%;
+  width: 50%;
+  perspective: 700px;
+  pointer-events: none;
+}
+/* rising, nothing shows below the mouth: the card comes up out of the capsule */
+.booth[data-stage="rise"] .riser { clip-path: inset(-200% -60% 0 -60%); }
+.riser .card { width: 100%; filter: drop-shadow(0 2px 0 var(--rule)); }
+.riser-card { transform: translateY(calc((1 - var(--rise, 1)) * 100%)) rotateY(calc(var(--flip, 0) * 180deg)); }
+/* the face takes over edge-on and turns the rest of the way to the front */
+.riser-card[data-side="face"] { transform: rotateY(calc((var(--flip, 1) - 1) * 180deg)); }
+/* the tier edge draws on round the inner rule (its perimeter is 496), and a
+   legend's corner fans come in with it */
+.booth[data-stage="edge"] .riser [data-edge] { animation: edge-draw 0.5s steps(6, end) both; }
+.booth[data-stage="edge"] .riser [data-edge] ~ path { animation: edge-fans 0.5s steps(6, end) both; }
+@keyframes edge-draw {
+  from { stroke-dasharray: 496; stroke-dashoffset: 496; }
+  to { stroke-dasharray: 496; stroke-dashoffset: 0; }
+}
+@keyframes edge-fans {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+/* a legend holds: a short gold glow and eight sparks */
+.booth[data-stage="hold"] .riser .card {
+  filter: drop-shadow(0 0 5px rgba(184, 134, 43, 0.75)) drop-shadow(0 0 16px rgba(184, 134, 43, 0.45));
+}
+.sparks { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+.sparks i {
+  position: absolute;
+  width: 3px;
+  height: 12px;
+  margin: -6px 0 0 -1.5px;
+  border-radius: 2px;
+  background: var(--gold);
+  box-shadow: 0 0 0 1px var(--paper);
+  transform: rotate(var(--a)) translateY(-104px);
+  animation: spark 0.5s steps(6, end) both;
+}
+@keyframes spark {
+  from { transform: rotate(var(--a)) translateY(-56px) scaleY(0.3); opacity: 0; }
+  to { transform: rotate(var(--a)) translateY(-104px); opacity: 1; }
+}
+.booth[data-stage="ready"] .status,
+.booth[data-stage="revealed"] .status { font-style: normal; }
 
 /* Letterpress buttons: an ink rule, a paper fill, a bite of shadow, pressed in. */
 .buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
@@ -306,16 +363,20 @@ h2 {
   .brand-detail { letter-spacing: 0.8px; }
   .stage { padding: 28px 18px; }
   .album { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 12px; }
-  .machine { width: 220px; }
+  .machine-wrap { width: 220px; }
+  .sparks i { transform: rotate(var(--a)) translateY(-90px); }
   .enlarge { padding: 20px; }
 }
 
-/* Reduced motion: no keyframes or transitions anywhere (the card's rise, the
-   dialog's entrance, the slot's lift), no nudges on press or hover. The crank
-   and the capsule are posed by machine.ts frames, which capsule-app settles at
-   once. */
+/* Reduced motion: no keyframes or transitions anywhere (the card settling, the
+   edge drawing on, the sparks, the dialog's entrance, the slot's lift), no
+   nudges on press or hover. The crank, the drop and the open stages are posed
+   by machine.ts frames, which capsule-app settles at once, so each press lands
+   on its last pose and the riser never shows. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .riser-card, .riser-card[data-side="face"] { transform: none; }
+  .sparks { display: none; }
   .button:active:not(:disabled) { transform: none; }
   .slot-button:hover .card { transform: none; }
 }

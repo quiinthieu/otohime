@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useReducer, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useReducer, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { resetAlbum, turn } from "../_lib/actions.ts";
 import type { Card as CardData } from "../_lib/cards.ts";
 import { DAILY_COINS, MAX_COINS, STORAGE_KEY, normalizeLedger, serialize, type Ledger } from "../_lib/ledger.ts";
 import { machineBusy, newMachine, step, type MachineAction } from "../_lib/machine.ts";
+import { albumView, isNewCard, revealView } from "../_lib/reveal.ts";
 import { Album } from "./album";
 import { Card } from "./card";
 import { Machine } from "./machine";
@@ -80,6 +81,9 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
 
   const ledger = normalizeLedger(raw, now, noSeed);
   const { phase } = machine;
+  // The reveal reads only this view of the machine: no edge and no face until
+  // the edge stage, whatever card `drawn` holds.
+  const view = revealView(machine);
   const coinIn = phase === "loaded";
   // Insert coin spends nothing: the coin in the slot still belongs to the ledger.
   const coins = ledger.coins - (coinIn ? 1 : 0);
@@ -103,7 +107,8 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
     press("insert");
   };
 
-  // Turn commits the draw: the card is in the album before the crank stops.
+  // Turn commits the draw (a reload mid-round keeps the card), but the album
+  // holds it back until the reveal, and the round plays the turn it was dealt.
   const crank = () => {
     if (phase !== "loaded") return;
     const t = Date.now();
@@ -112,7 +117,7 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
     if (!result) return;
     save(result.ledger);
     setDrawn(result.card);
-    press("turn");
+    press({ type: "turn", frames: result.frames, drop: result.drop, tier: result.card.tier });
   };
 
   // Reset album clears the cards only: seed, coins and day stay, so it mints nothing.
@@ -128,14 +133,43 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
       : phase === "turning"
         ? "Turning…"
         : phase === "ready"
-          ? "A capsule rolled out. Open it."
+          ? "Something rolled out. Open it."
           : phase === "opening"
             ? "Opening…"
             : phase === "revealed" && drawn
-              ? `${drawn.name}. ${tierName(drawn)}.`
+              ? `${drawn.name}. ${tierName(drawn)}.${isNewCard(ledger, drawn.id) ? " New to your album." : ""}`
               : ledger.coins > 0
                 ? "Insert a coin to begin."
                 : "No coins left. More tomorrow.";
+
+  const pending = drawn && (phase === "turning" || phase === "ready" || phase === "opening") ? drawn.id : null;
+
+  // The card rising out of the chute, from the rise stage to the end of the
+  // flip: a plain back with no number, then its tier edge, then (from the
+  // second half of the flip) its face. --rise and --flip are set from the
+  // 12 fps frames; capsule.css turns them into the pose.
+  const riser =
+    view.card !== "none" && view.stage !== "revealed" ? (
+      <div
+        className="riser"
+        style={{ "--rise": view.stage === "rise" ? view.progress : 1, "--flip": view.flip } as CSSProperties}
+      >
+        <div className="riser-card" data-side={view.card}>
+          {view.card === "face" && drawn ? (
+            <Card card={drawn} grain />
+          ) : (
+            <Card back={view.edge ? { edge: view.edge } : {}} label="A card, face down" grain />
+          )}
+        </div>
+        {view.stage === "hold" && (
+          <span className="sparks" aria-hidden="true">
+            {Array.from({ length: 8 }, (_, i) => (
+              <i key={i} style={{ "--a": `${i * 45 + 22}deg` } as CSSProperties} />
+            ))}
+          </span>
+        )}
+      </div>
+    ) : null;
 
   const refill =
     ledger.coins >= MAX_COINS
@@ -153,20 +187,19 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
           <em>See who rolls out.</em>
         </h1>
 
-        <section className="booth" aria-label="Machine">
-          <Machine state={machine} coinIn={coinIn} />
+        <section className="booth" aria-label="Machine" data-stage={view.stage}>
+          <div className="machine-wrap">
+            <Machine state={machine} coinIn={coinIn} />
+            {riser}
+          </div>
 
           <div className="controls">
             <div className="reveal">
-              {phase === "revealed" && drawn ? (
+              {view.card === "face" && view.stage === "revealed" && drawn && (
                 <div className="reveal-card">
                   <Card card={drawn} grain />
                   <p className="reveal-name">{drawn.name}</p>
                   <p className="reveal-film">{`${drawn.film} · ${drawn.year}`}</p>
-                </div>
-              ) : (
-                <div className="reveal-empty" aria-hidden="true">
-                  ?
                 </div>
               )}
             </div>
@@ -205,7 +238,7 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
 
         {rates}
 
-        <Album ledger={ledger} onReset={wipe} />
+        <Album ledger={albumView(ledger, pending)} onReset={wipe} />
       </main>
       {footer}
     </div>

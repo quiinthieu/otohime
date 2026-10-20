@@ -2,8 +2,9 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { turn } from "./actions.ts";
 import { CARDS, PITY, RATES, TIERS, type Tier } from "./cards.ts";
-import { draw, ratesLine, tierFor } from "./gacha.ts";
+import { draw, dropIndex, ratesLine, tierFor, turnFrames } from "./gacha.ts";
 import { MAX_COINS, freshLedger } from "./ledger.ts";
+import { DOME_SIZE, TURN_MAX, TURN_MIN } from "./machine.ts";
 import { prng } from "./rng.ts";
 
 const NOW = new Date(2026, 9, 19, 12).getTime();
@@ -84,4 +85,45 @@ test("the rates line is built from RATES and PITY", () => {
     line,
     "Common 70% · Rare 25% · Legend 5% · a legend at least every 20 draws · coins are free and can't be bought",
   );
+});
+
+test("turnFrames stays in 16..28 and takes at least 8 lengths over 200 draws", () => {
+  assert.equal(TURN_MIN, 16);
+  assert.equal(TURN_MAX, 28);
+  for (const seed of [1, 42, 3735928559]) {
+    const seen = new Set<number>();
+    for (let n = 0; n < 200; n++) {
+      const f = turnFrames(seed, n);
+      assert.ok(Number.isInteger(f) && f >= TURN_MIN && f <= TURN_MAX, `seed ${seed} n ${n}: ${f}`);
+      seen.add(f);
+    }
+    assert.ok(seen.size >= 8, `seed ${seed}: ${seen.size} distinct lengths`);
+  }
+});
+
+test("dropIndex picks one of the 8 capsules in the dome", () => {
+  assert.equal(DOME_SIZE, 8);
+  const seen = new Set<number>();
+  for (let n = 0; n < 200; n++) {
+    const d = dropIndex(42, n);
+    assert.ok(Number.isInteger(d) && d >= 0 && d < DOME_SIZE, `${d}`);
+    seen.add(d);
+  }
+  assert.equal(seen.size, DOME_SIZE);
+});
+
+test("the turn's length and drop do not depend on sinceLegend, so they cannot encode the tier", () => {
+  for (const seed of [1, 42, 3735928559]) {
+    for (let draws = 0; draws < 60; draws++) {
+      const base = { ...freshLedger(seed, NOW), coins: MAX_COINS, draws };
+      const plain = turn({ ...base, sinceLegend: 0 }, NOW)!;
+      // a pity legend, for the same seed and draw index
+      const pity = turn({ ...base, sinceLegend: PITY - 1 }, NOW)!;
+      assert.equal(pity.card.tier, "legend");
+      assert.equal(plain.frames, pity.frames);
+      assert.equal(plain.drop, pity.drop);
+      assert.equal(plain.frames, turnFrames(seed, draws));
+      assert.equal(plain.drop, dropIndex(seed, draws));
+    }
+  }
 });

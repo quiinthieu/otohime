@@ -2,14 +2,17 @@ import { useId } from "react";
 import { inkEllipse, inkLine, inkPath, type InkOptions, type InkPath } from "../_lib/art/ink.ts";
 import { CORAL, EDGE, grainFilter, mix } from "../_lib/art/svg.ts";
 import { PALETTE } from "../_lib/art/types.ts";
-import { OPEN_FRAMES, TURN_FRAMES, type Machine as MachineState } from "../_lib/machine.ts";
+import { DROP_FRAMES, type Machine as MachineState } from "../_lib/machine.ts";
+import { revealView } from "../_lib/reveal.ts";
 
 // The capsule machine, printed in the cards' ink and posed from machine.ts
 // state: a glass dome of capsules, a coin slot, a crank that turns on twos and
 // a chute. The ink is drawn once, at module level, with fixed seeds (so the
 // server and the browser draw the same bytes); a pose is only a transform on a
-// group, so no frame redraws it. Every frame is a pure function of (phase,
-// frame), so reduced motion just skips to the last one.
+// group, so no frame redraws it. Every frame is a pure function of the
+// machine state (phase, frame, the turn's length and which capsule drops), so
+// reduced motion just skips to the last one. Nothing here reads the tier: up
+// to the open shell, every round of every tier is posed the same.
 //
 // Every capsule is the same shell, coral over paper, in the dome and out of it:
 // its colour says nothing about the card inside.
@@ -92,18 +95,69 @@ const WAITING: [number, number, number][] = [
   [60, 78, -25],
   [100, 62, 0],
 ];
+// While the crank turns, each capsule cycles through these nudges, out of step
+// with its neighbours: a tilt and a small bounce, on twos.
+const TUMBLE: [number, number][] = [
+  [-16, 1],
+  [12, -3],
+  [24, -1],
+  [-8, -4],
+];
+// The chute capsule rocking in the shake stage, one pose a frame.
+const SHAKE: [number, number][] = [
+  [-10, -1.5],
+  [9, 1.5],
+  [-8, -1],
+  [6, 1],
+  [-4, -0.5],
+  [2, 0],
+];
+const MOUTH: [number, number] = [100, 128]; // the dome's floor, over the collar
+const REST: [number, number] = [100, 226]; // in the chute
+
+// Where the falling capsule is k frames into the drop (0..5): down the dome
+// on a short curve to the mouth, through the collar (hidden behind it), then
+// into the chute, a little low, before it settles at REST.
+function dropPose(k: number, [x0, y0, tilt]: [number, number, number]): { x: number; y: number; r: number; inDome: boolean } {
+  if (k <= 2) {
+    const t = (k + 1) / 3;
+    // a quadratic from the capsule's place to the mouth, bending in under it
+    const cx = x0;
+    const cy = MOUTH[1];
+    const x = (1 - t) ** 2 * x0 + 2 * (1 - t) * t * cx + t * t * MOUTH[0];
+    const y = (1 - t) ** 2 * y0 + 2 * (1 - t) * t * cy + t * t * MOUTH[1];
+    return { x, y, r: tilt + 55 * (k + 1), inDome: true };
+  }
+  if (k === 3) return { x: 100, y: 152, r: 0, inDome: true };
+  return k === 4 ? { x: 100, y: 214, r: 30, inDome: false } : { x: 100, y: 229, r: -6, inDome: false };
+}
+
+const Shell = ({ x, y, r }: { x: number; y: number; r: number }) => (
+  <g data-shell="" transform={`translate(${x} ${y}) rotate(${r})`}>
+    <Top />
+    <Bottom />
+  </g>
+);
 
 export function Machine({ state, coinIn }: { state: MachineState; coinIn: boolean }) {
-  const { phase, frame } = state;
+  const { phase, frame, length, drop } = state;
+  const view = revealView(state);
   const turning = phase === "turning";
-  // On twos: the pose changes every other frame, a sixth of a turn each time.
-  const crank = turning ? Math.floor(frame / 2) * (360 / (TURN_FRAMES / 2)) : 0;
-  const jiggle = turning ? (Math.floor(frame / 2) % 2 === 0 ? -2 : 2) : 0;
-  // The capsule drops into the chute over the last frames of the turn.
-  const dropping = turning && frame >= TURN_FRAMES - 4;
-  const out = phase === "ready" || phase === "opening" || phase === "revealed";
-  const capsuleY = dropping ? 204 + (frame - (TURN_FRAMES - 4)) * 6 : 226;
-  const part = phase === "opening" ? (frame + 1) / OPEN_FRAMES : phase === "revealed" ? 1 : 0;
+  const dropAt = length - DROP_FRAMES;
+  const cranking = view.stage === "turning";
+  // On twos: the crank poses every other frame and ends on a whole turn as the
+  // capsule falls, however long this round's turn is.
+  const poses = Math.max(1, Math.ceil(dropAt / 2));
+  const turns = Math.max(1, Math.round(poses / 6));
+  const pose = Math.floor(frame / 2);
+  const crank = cranking ? Math.round(((pose + 1) / poses) * turns * 360) : 0;
+  const jiggle = cranking ? (pose % 2 === 0 ? -2 : 2) : 0;
+  // The capsule that falls leaves a gap in the dome until the next Insert.
+  const gone = turning ? frame >= dropAt : phase === "ready" || phase === "opening" || phase === "revealed";
+  const falling = view.shell === "dropping" ? dropPose(frame - dropAt, WAITING[drop % WAITING.length]) : null;
+  const out = view.shell === "closed" || view.shell === "shake" || view.shell === "open";
+  const [rock, sway] = view.shell === "shake" ? SHAKE[Math.min(frame, SHAKE.length - 1)] : [0, 0];
+  const part = view.stage === "part" ? view.progress : view.shell === "open" ? 1 : 0;
   // useId may contain characters a url(#...) reference does not like.
   const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
   const grain = `grain${id}`;
@@ -123,13 +177,14 @@ export function Machine({ state, coinIn }: { state: MachineState; coinIn: boolea
         {/* the glass dome and what waits inside */}
         <ellipse cx={DOME.cx} cy={DOME.cy} rx={DOME.w / 2} ry={DOME.h / 2} fill={GLASS} />
         <g transform={`translate(0 ${jiggle})`}>
-          {WAITING.map(([x, y, tilt], i) => (
-            <g key={i} data-shell="" transform={`translate(${x} ${y}) rotate(${tilt + (turning ? jiggle * 4 : 0)})`}>
-              <Top />
-              <Bottom />
-            </g>
-          ))}
+          {WAITING.map(([x, y, tilt], i) => {
+            if (gone && i === drop) return null;
+            const [nudge, bounce] = cranking ? TUMBLE[(pose + i) % TUMBLE.length] : [0, 0];
+            return <Shell key={i} x={x} y={y + bounce} r={tilt + nudge} />;
+          })}
         </g>
+        {/* the falling capsule, behind the collar and the body until it reaches the chute */}
+        {falling?.inDome && <Shell x={falling.x} y={falling.y} r={falling.r} />}
         <Ink paths={ART.reflection} />
         <Ink paths={ART.glint} />
         <Ink paths={ART.dome} />
@@ -172,8 +227,9 @@ export function Machine({ state, coinIn }: { state: MachineState; coinIn: boolea
         {/* the paper grain over the machine, not the page around it */}
         <rect x="0" y="0" width="200" height="262" filter={`url(#${grain})`} clipPath={`url(#${clip})`} opacity={0.07} pointerEvents="none" />
 
-        {(dropping || out) && (
-          <g data-shell="" transform={`translate(100 ${capsuleY})`}>
+        {falling && !falling.inDome && <Shell x={falling.x} y={falling.y} r={falling.r} />}
+        {out && (
+          <g data-shell="" transform={`translate(${REST[0] + sway} ${REST[1]}) rotate(${rock})`}>
             <g transform={`translate(${-14 * part} ${-22 * part}) rotate(${-30 * part})`} className="capsule-half">
               <Top />
             </g>

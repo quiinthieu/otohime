@@ -25,12 +25,15 @@ test("Insert, Turn, Open, reload: the card is kept, one coin is spent", () => {
   const r = turn(ledger, NOW);
   assert.ok(r);
   ledger = r.ledger;
-  m = step(m, "turn");
+  m = step(m, { type: "turn", frames: r.frames, drop: r.drop, tier: r.card.tier });
   assert.equal(m.phase, "turning");
+  assert.equal(m.length, r.frames);
   // a reload mid-crank already has the card
   assert.equal(reload(ledger).owned[r.card.id], 1);
 
-  for (let i = 0; i < 100 && m.phase === "turning"; i++) m = step(m, "tick");
+  for (let i = 0; i < r.frames - 1; i++) m = step(m, "tick");
+  assert.equal(m.phase, "turning");
+  m = step(m, "tick");
   assert.equal(m.phase, "ready");
   m = step(m, "open");
   assert.equal(m.phase, "opening");
@@ -51,6 +54,8 @@ test("a reload never re-rolls the next draw", () => {
     const reloaded = turn(reload({ ...ledger, coins: 9 }), NOW);
     assert.ok(kept && reloaded);
     assert.equal(reloaded.card.id, kept.card.id);
+    assert.equal(reloaded.frames, kept.frames);
+    assert.equal(reloaded.drop, kept.drop);
     assert.deepEqual(reloaded.ledger, kept.ledger);
     ledger = kept.ledger;
   }
