@@ -36,7 +36,7 @@ const under = (dir: string) => filesUnder(join(ROOT, dir));
 const SELF = import.meta.filename;
 const vinylFiles = under("app/(vinyl)").filter((f) => f !== SELF);
 
-const GROUPS = ["(site)", "(shore)", "(capsule)", "(sun)", "(elements)"];
+const GROUPS = ["(site)", "(shore)", "(capsule)", "(orrery)", "(elements)"];
 const OUTSIDE = ["components", "content", "lib", ...GROUPS.map((g) => join("app", g))].map((d) => join(ROOT, d));
 
 // Anything that resolves into the site's or another project's code or styles, by alias or by ../
@@ -86,7 +86,7 @@ test("_lib/ imports no React or Next", () => {
 test("nothing outside app/(vinyl)/ imports Vinyl", () => {
   const others = [...GROUPS.flatMap((g) => under(`app/${g}`)), ...under("components"), ...under("lib"), ...under("content")];
   assert.ok(others.length > 10);
-  assert.ok(others.some((f) => f.endsWith("sun.css")));
+  assert.ok(others.some((f) => f.endsWith("orrery.css")));
   for (const file of others) {
     for (const spec of specifiers(file)) {
       assert.ok(!/vinyl\.css/.test(spec) && !/\(vinyl\)/.test(spec), `${relative(ROOT, file)} imports ${spec}`);
@@ -142,7 +142,7 @@ test("the checkers flag what they should", () => {
   assert.equal(reachesOutside(f, "../../(site)/layout"), join("app", "(site)"));
   assert.equal(reachesOutside(f, "@/app/(shore)/_lib/ledger"), "app/(shore)");
   assert.equal(reachesOutside(f, "../../(capsule)/capsule.css"), "app/(capsule)");
-  assert.equal(reachesOutside(f, "../../(sun)/_lib/sun"), join("app", "(sun)"));
+  assert.equal(reachesOutside(f, "../../(orrery)/_lib/sun"), join("app", "(orrery)"));
   assert.equal(reachesOutside(f, "@/app/(elements)/_lib/grid"), "app/(elements)");
   assert.equal(reachesOutside(f, "../../(elements)/_lib/grid"), join("app", "(elements)"));
   assert.equal(reachesOutside(f, "./deck.ts"), null);

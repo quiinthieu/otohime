@@ -33,13 +33,17 @@ app/(capsule)/       Capsule, a coin-and-crank card machine: its own root layout
                      _components/ holds the machine, the card frame and the app (buttons, coin tray, album)
                      _lib/art/ holds the hand-drawn cards as path data (one file per card, ART in index.ts)
                      and svg.ts, which draws them for the page and for `npm run capsule:sheet`
-app/(sun)/           Sun, a one-page hand-drawn poster of the Sun: its own root layout and CSS (no Tailwind),
-                     whose layers, sources and number words are pure data in _lib/ (sun.ts, format.ts);
-                     layout.tsx (hand fonts via next/font) and sun.css are its root layout; sun/page.tsx is /sun;
-                     _components/ holds the inked cutaway (stage.tsx), all server components; `npm test` covers
-                     its _lib/*.test.ts; the poster's words are _lib/poster.ts, the ink is _lib/ink.ts
-                     (rough.js, fixed seed) and _lib/words.ts is the shared word counter
-                     _lib/bodies.ts holds the 14 Orrery bodies (sourced, tested by bodies.test.ts) and _lib/cutaway.ts draws any of them (tested by cutaway.test.ts); no page uses them yet
+app/(orrery)/        Orrery, hand-drawn posters of the Sun, the eight planets and five stars: its own root layout
+                     and CSS (no Tailwind); layout.tsx (hand fonts via next/font) and orrery.css are its root layout;
+                     orrery/page.tsx is the index /orrery and orrery/[body]/page.tsx the 14 static posters
+                     (/orrery/saturn), with not-found.tsx for an unknown one; /sun is a 308 to /orrery/sun
+                     (next.config.ts). _lib/bodies.ts holds the 14 bodies (sourced, tested by bodies.test.ts)
+                     and _lib/cutaway.ts draws any of them (tested by cutaway.test.ts); _components/ holds the
+                     Sun's own poster (sun-poster.tsx, its inked stage.tsx), every other body's (body-poster.tsx,
+                     cutaway.tsx) and the shared top bar and Previous / Next (chrome.tsx), all server components.
+                     The Sun's layers, sources and number words are pure data in _lib/ (sun.ts, format.ts), its
+                     words are _lib/poster.ts, the ink is _lib/ink.ts (rough.js, fixed seed) and _lib/words.ts
+                     is the shared word counter; `npm test` covers its _lib/*.test.ts
 app/(elements)/      Elements, a periodic table with a Bohr atom per element: its own root layout and CSS
                      (no Tailwind, system fonts); layout.tsx and elements.css are its root layout;
                      elements/page.tsx is /elements and elements/[symbol]/page.tsx the 118 static pages
@@ -95,7 +99,7 @@ The change takes effect on the next request.
 
 ## Tests
 
-- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Sun's layers and sources, number words, poster words, ink and word counter under `app/(sun)/_lib/*.test.ts`, and Elements' dataset, facts, categories, grid, atom maths, labels and number formats, dialog reducer and import isolation under `app/(elements)/_lib/*.test.ts`, and Vinyl's records, deck state machine, platter inertia, layout geometry, oEmbed verdicts, player effects, iframe_api loader, tonearm drag and keys, crate-to-platter drag and flight, crackle and import isolation under `app/(vinyl)/_lib/*.test.ts`). It needs no database.
+- `npm test` runs the unit tests (roles and the rank rule, Shore's timer, ledger and pebbles under `app/(shore)/_lib/`, and Capsule's cards, draws, coins, ledger, machine and art under `app/(capsule)/_lib/*.test.ts`, and Orrery's bodies, cutaways, the Sun's layers and sources, number words, poster words, ink, motion, word counter and import isolation under `app/(orrery)/_lib/*.test.ts`, and Elements' dataset, facts, categories, grid, atom maths, labels and number formats, dialog reducer and import isolation under `app/(elements)/_lib/*.test.ts`, and Vinyl's records, deck state machine, platter inertia, layout geometry, oEmbed verdicts, player effects, iframe_api loader, tonearm drag and keys, crate-to-platter drag and flight, crackle and import isolation under `app/(vinyl)/_lib/*.test.ts`). It needs no database.
 - `npm run test:e2e` runs HTTP tests for RBAC and session revocation against a running production build. They sign up throwaway `@e2e.test` users and delete them afterwards:
 
   ```bash
@@ -113,7 +117,7 @@ Walk Shore and the site with `bash scripts/walk-shore.sh` (builds, serves on :40
 
 Walk Capsule and the site the same way with `bash scripts/walk-capsule.sh` (builds, serves on :4021), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-capsule.sh`.
 
-Walk Sun and the site the same way with `bash scripts/walk-sun.sh` (builds, serves on :4027), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-sun.sh`.
+Walk Orrery and the site the same way with `bash scripts/walk-orrery.sh` (builds, serves on :4027; every poster, the index, the `/sun` redirect and the 404s), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-orrery.sh`.
 
 Walk Elements and the site the same way with `bash scripts/walk-elements.sh` (builds, serves on :4029: 118 cells, 10 legend items, both series markers, the attribution links, no 3D code on the table page and no reference to the built 3D chunk, iron's fact on `/elements/fe` and a 404 for `/elements/xx`), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-elements.sh`.
 
@@ -123,9 +127,9 @@ Walk Vinyl and the site the same way with `bash scripts/walk-vinyl.sh` (builds, 
 
 Probe the dropdown pickers in headless Chromium with `bash scripts/probe-selects.sh` (builds, serves on :4033, installs Playwright into a temp prefix and opens Vinyl's genre select and a site `select.field` in light and dark, and presses Escape, Space and the arrows inside the open Vinyl picker with a record on the platter), or against production with `BASE_URL=https://otohime.dev bash scripts/probe-selects.sh`. The pickers are customizable selects (`appearance: base-select`) behind `@supports`, so Firefox keeps the native popup.
 
-Sun's parts and callouts live in `app/(sun)/_lib/poster.ts`; the ink is rough.js with a fixed seed in `app/(sun)/_lib/ink.ts`; `bash scripts/walk-sun.sh` counts the words on the served page (cap 220, `WORD_CAP` in `app/(sun)/_lib/words.ts`).
+The Sun's parts and callouts live in `app/(orrery)/_lib/poster.ts` and every other body's in `app/(orrery)/_lib/bodies.ts`; the ink is rough.js with a fixed seed in `app/(orrery)/_lib/ink.ts`; `bash scripts/walk-orrery.sh` counts the words on every served page (cap 220, `WORD_CAP` in `app/(orrery)/_lib/words.ts`).
 
-Sun's motion is CSS only in `app/(sun)/sun.css`: the ink draws itself on, then three loops run (convection, photon, wind); all of it is off under reduced motion, and `app/(sun)/_lib/motion.test.ts` tests it.
+Orrery's motion is CSS only in `app/(orrery)/orrery.css`: the ink draws itself on, layer by layer; on the Sun's poster three loops then run (convection, photon, wind); all of it is off under reduced motion, and `app/(orrery)/_lib/motion.test.ts` tests it.
 
 Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and serves on :4025: the three starters from `content/site.ts` must still show, with status 200), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-music.sh`.
 

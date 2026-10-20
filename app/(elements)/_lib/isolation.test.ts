@@ -1,8 +1,8 @@
-// Elements owes nothing to the site, Shore, Capsule or Sun, and none of them owes
+// Elements owes nothing to the site, Shore, Capsule or Orrery, and none of them owes
 // anything to Elements. Inside Elements, only _components/atom-3d.tsx may import
 // three, @react-three/fiber or @react-three/drei, so the table page can never pull
 // the 3D chunk, and _lib/ stays free of React. This reads import specifiers only,
-// so prose that mentions a name is fine. Modelled on app/(sun)/_lib/isolation.test.ts.
+// so prose that mentions a name is fine. Modelled on app/(orrery)/_lib/isolation.test.ts.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
@@ -30,7 +30,7 @@ const under = (dir: string) => filesUnder(join(ROOT, dir));
 const SELF = import.meta.filename;
 const elementsFiles = under("app/(elements)").filter((f) => f !== SELF);
 
-const GROUPS = ["(site)", "(shore)", "(capsule)", "(sun)"];
+const GROUPS = ["(site)", "(shore)", "(capsule)", "(orrery)"];
 const OUTSIDE = ["components", "content", "lib", ...GROUPS.map((g) => join("app", g))].map((d) => join(ROOT, d));
 
 // Anything that resolves into the site's or another project's code or styles, by alias or by ../
@@ -85,7 +85,7 @@ test("_lib/ imports no React or Next", () => {
 test("nothing outside app/(elements)/ imports Elements", () => {
   const others = [...GROUPS.flatMap((g) => under(`app/${g}`)), ...under("components"), ...under("lib")];
   assert.ok(others.length > 10);
-  assert.ok(others.some((f) => f.endsWith("sun.css")));
+  assert.ok(others.some((f) => f.endsWith("orrery.css")));
   for (const file of others) {
     for (const spec of specifiers(file)) {
       assert.ok(!/elements\.css/.test(spec) && !/\(elements\)/.test(spec), `${relative(ROOT, file)} imports ${spec}`);
@@ -104,8 +104,8 @@ test("the checkers flag what they should", () => {
   assert.equal(reachesOutside(f, "../../(site)/layout"), join("app", "(site)"));
   assert.equal(reachesOutside(f, "@/app/(shore)/_lib/ledger"), "app/(shore)");
   assert.equal(reachesOutside(f, "../../(capsule)/capsule.css"), "app/(capsule)");
-  assert.equal(reachesOutside(f, "../../(sun)/_lib/sun"), join("app", "(sun)"));
-  assert.equal(reachesOutside(f, "@/app/(sun)/_lib/words"), "app/(sun)");
+  assert.equal(reachesOutside(f, "../../(orrery)/_lib/sun"), join("app", "(orrery)"));
+  assert.equal(reachesOutside(f, "@/app/(orrery)/_lib/words"), "app/(orrery)");
   assert.equal(reachesOutside(f, "./grid.ts"), null);
   assert.equal(reachesOutside(f, "../elements.css"), null);
   assert.equal(reachesOutside(f, "react"), null);

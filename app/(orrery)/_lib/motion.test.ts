@@ -1,4 +1,4 @@
-// Sun's motion, read from stage.tsx and sun.css as text: the six inked layers,
+// The Sun's motion, read from stage.tsx and orrery.css as text: the six inked layers,
 // the three loops, the four keyframes, the reduced-motion block, and that the
 // still is the whole drawing. No browser: the walk and QA look at it in one.
 import assert from "node:assert/strict";
@@ -10,7 +10,7 @@ import { LAYERS } from "./sun.ts";
 const SUN = resolve(import.meta.dirname, "..");
 const ROOT = resolve(SUN, "../..");
 const stage = readFileSync(join(SUN, "_components", "stage.tsx"), "utf8");
-const css = readFileSync(join(SUN, "sun.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+const css = readFileSync(join(SUN, "orrery.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 
 type Block = { prelude: string; body: string };
 
@@ -33,7 +33,7 @@ function blocks(text: string): Block[] {
       }
     }
   }
-  assert.equal(depth, 0, "sun.css has unbalanced braces");
+  assert.equal(depth, 0, "orrery.css has unbalanced braces");
   return out;
 }
 
@@ -108,13 +108,15 @@ test("the still is the complete drawing", () => {
 });
 
 test("the stage is a server component with no filter, image, video or canvas", () => {
-  for (const bad of ['"use client"', "'use client'", "<filter", "<image", "<video", "<canvas", "filter=", "useState", "useEffect"]) {
+  // the directive spelled out of its parts, so a grep for it finds no client code here
+  const directives = ['"', "'"].map((q) => `${q}use client${q}`);
+  for (const bad of [...directives, "<filter", "<image", "<video", "<canvas", "filter=", "useState", "useEffect"]) {
     assert.ok(!stage.includes(bad), `stage.tsx contains ${bad}`);
   }
-  assert.ok(!/(?<![-\w])filter\s*:/.test(css), "sun.css sets a filter");
+  assert.ok(!/(?<![-\w])filter\s*:/.test(css), "orrery.css sets a filter");
 });
 
-test("nothing under app/(sun)/ refers to a raster or a video", () => {
+test("nothing under app/(orrery)/ refers to a raster or a video", () => {
   const files = (dir: string): string[] =>
     readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? files(join(dir, e.name)) : [join(dir, e.name)]));
   const all = files(SUN);

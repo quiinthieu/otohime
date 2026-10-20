@@ -275,7 +275,7 @@ get vinyl /vinyl
 get projects /projects
 get shore /shore
 get capsule /capsule
-get sun /sun
+get orrery /orrery
 get elements /elements
 get home /
 get music /music
@@ -331,10 +331,10 @@ check "/projects has the sidebar" has projects 'aria-label="Main"'
 check "/projects links /vinyl once" count_eq projects 'href="/vinyl"' 1
 
 check "/ returns 200" status_is home 200
-check "/projects links /sun" count_ge projects 'href="/sun"' 1
+check "/projects links /orrery" count_ge projects 'href="/orrery"' 1
 check "/shore returns 200" status_is shore 200
 check "/capsule returns 200" status_is capsule 200
-check "/sun returns 200" status_is sun 200
+check "/orrery returns 200" status_is orrery 200
 check "/elements returns 200" status_is elements 200
 check "/music returns 200" status_is music 200
 

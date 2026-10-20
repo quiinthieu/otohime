@@ -1,5 +1,5 @@
-// Sun owes nothing to the site, Shore or Capsule, and none of them owes anything
-// to Sun. This reads import specifiers only, so prose that mentions a name is
+// Orrery owes nothing to the site, Shore or Capsule, and none of them owes anything
+// to Orrery. This reads import specifiers only, so prose that mentions a name is
 // fine. Modelled on app/(capsule)/_lib/isolation.test.ts, not shared with it.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
@@ -26,7 +26,7 @@ function specifiers(file: string): string[] {
 const under = (dir: string) => filesUnder(join(ROOT, dir));
 
 const SELF = import.meta.filename;
-const sunFiles = under("app/(sun)").filter((f) => f !== SELF);
+const orreryFiles = under("app/(orrery)").filter((f) => f !== SELF);
 
 // Anything that resolves into the site's, Shore's or Capsule's code or styles, by alias or by ../
 const OUTSIDE = ["components", "content", "lib", join("app", "(site)"), join("app", "(shore)"), join("app", "(capsule)")].map((d) =>
@@ -49,14 +49,14 @@ function reachesOutside(file: string, spec: string): string | null {
   return null;
 }
 
-test("the scan finds Sun's files", () => {
-  assert.ok(sunFiles.some((f) => f.endsWith(join("_lib", "sun.ts"))));
-  assert.ok(sunFiles.some((f) => f.endsWith("layout.tsx")));
-  assert.ok(sunFiles.some((f) => f.endsWith("sun.css")));
+test("the scan finds Orrery's files", () => {
+  assert.ok(orreryFiles.some((f) => f.endsWith(join("_lib", "sun.ts"))));
+  assert.ok(orreryFiles.some((f) => f.endsWith("layout.tsx")));
+  assert.ok(orreryFiles.some((f) => f.endsWith("orrery.css")));
 });
 
-test("nothing under app/(sun)/ imports the site, Tailwind, Shore or Capsule", () => {
-  for (const file of sunFiles) {
+test("nothing under app/(orrery)/ imports the site, Tailwind, Shore or Capsule", () => {
+  for (const file of orreryFiles) {
     for (const spec of specifiers(file)) {
       const bad = reachesOutside(file, spec);
       assert.equal(bad, null, `${relative(ROOT, file)} imports ${spec} (${bad})`);
@@ -64,7 +64,7 @@ test("nothing under app/(sun)/ imports the site, Tailwind, Shore or Capsule", ()
   }
 });
 
-test("nothing under app/(site)/, app/(shore)/, app/(capsule)/, components/ or lib/ imports Sun", () => {
+test("nothing under app/(site)/, app/(shore)/, app/(capsule)/, components/ or lib/ imports Orrery", () => {
   const others = [...under("app/(site)"), ...under("app/(shore)"), ...under("app/(capsule)"), ...under("components"), ...under("lib")];
   assert.ok(others.length > 10);
   assert.ok(others.some((f) => f.endsWith("shore.css")));
@@ -72,7 +72,7 @@ test("nothing under app/(site)/, app/(shore)/, app/(capsule)/, components/ or li
   for (const file of others) {
     for (const spec of specifiers(file)) {
       assert.ok(
-        !/sun\.css/.test(spec) && !/\(sun\)/.test(spec),
+        !/orrery\.css/.test(spec) && !/\(orrery\)/.test(spec),
         `${relative(ROOT, file)} imports ${spec}`,
       );
     }
@@ -80,7 +80,7 @@ test("nothing under app/(site)/, app/(shore)/, app/(capsule)/, components/ or li
 });
 
 test("the checker flags what it should", () => {
-  const f = join(ROOT, "app/(sun)/_lib/x.ts");
+  const f = join(ROOT, "app/(orrery)/_lib/x.ts");
   assert.equal(reachesOutside(f, "@/components/figures"), "@/components");
   assert.equal(reachesOutside(f, "@/content/site"), "@/content");
   assert.equal(reachesOutside(f, "@/lib/machines"), "@/lib");
@@ -96,6 +96,6 @@ test("the checker flags what it should", () => {
   assert.equal(reachesOutside(f, "@/app/(capsule)/_lib/cards"), "app/(capsule)");
   assert.equal(reachesOutside(f, "../../(capsule)/capsule.css"), "app/(capsule)");
   assert.equal(reachesOutside(f, "./sun.ts"), null);
-  assert.equal(reachesOutside(f, "../sun.css"), null);
+  assert.equal(reachesOutside(f, "../orrery.css"), null);
   assert.equal(reachesOutside(f, "react"), null);
 });

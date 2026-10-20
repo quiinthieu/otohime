@@ -1,15 +1,14 @@
-import type { Metadata } from "next";
-import { Ink } from "../_components/ink";
-import { Stage } from "../_components/stage";
+import type { ReactNode } from "react";
+import { Ink } from "./ink";
+import { Stage } from "./stage";
 import { inkCircle, inkRect } from "../_lib/ink.ts";
 import { BADGES, CALLOUTS, FOOTER, LIFE, TAGLINE, TITLE, type LifeStage } from "../_lib/poster.ts";
 import { LAYERS, SOURCES } from "../_lib/sun.ts";
 
-// absolute: the layout's template would otherwise make this "Sun · Sun".
-export const metadata: Metadata = { title: { absolute: "Sun" } };
-
-// The poster: one server-rendered page, no client component. Every word is in
-// _lib/poster.ts; the walk counts them on the served HTML (cap 220).
+// The Sun's poster, the pm-189 page moved here unchanged: one server-rendered
+// poster, no client component. Every word is in _lib/poster.ts; the walk counts
+// them on the served HTML (cap 220). The page around it (orrery/[body]) gives
+// the top bar, and steps (Previous / Next) sits between the poster and the credit.
 
 const layerName = (id: string) => LAYERS.find((l) => l.id === id)?.name ?? id;
 
@@ -24,22 +23,9 @@ const LIFE_INK: Record<LifeStage["id"], { r: number; colour: string }> = {
   dwarf: { r: 5, colour: "#9cc3e6" },
 };
 
-export default function SunPage() {
+export function SunPoster({ steps }: { steps: ReactNode }) {
   return (
-    <div className="sun">
-      <header className="topbar">
-        <nav className="ways-out" aria-label="Site">
-          {/* A plain <a>: / is in another root layout, which needs a full page load. */}
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a className="home-link" href="/">
-            otohime.dev
-          </a>
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a className="home-link" href="/projects">
-            <span aria-hidden="true">←</span> All projects
-          </a>
-        </nav>
-      </header>
+    <>
       <main className="poster">
         <header className="title">
           <h1>{TITLE}</h1>
@@ -92,6 +78,7 @@ export default function SunPage() {
           ))}
         </ol>
       </main>
+      {steps}
       <footer className="credit">
         <p>
           {FOOTER}
@@ -109,6 +96,6 @@ export default function SunPage() {
           </a>
         </p>
       </footer>
-    </div>
+    </>
   );
 }

@@ -1,5 +1,6 @@
-/* Sun's own stylesheet, hand-written: no Tailwind and no site tokens.
-   A cream-paper poster in hand lettering. One column on a phone, two from
+/* Orrery's own stylesheet, hand-written: no Tailwind and no site tokens.
+   Cream-paper posters in hand lettering: the Sun's (pm-189) and, in the same
+   grid, one for every other body, plus the index of tiles. One column on a phone, two from
    900px. Nothing sets overflow: hidden around the cutaway, and the SVG never
    grows past its column, so a 390px phone has no sideways scroll. The smallest
    text at 390px is 12px or more, SVG labels included. */
@@ -43,11 +44,11 @@ a:focus-visible { outline: 2px dashed var(--sun-orange); outline-offset: 3px; bo
   white-space: nowrap;
 }
 
-.sun { min-height: 100vh; display: flex; flex-direction: column; }
+.sun, .orrery { min-height: 100vh; display: flex; flex-direction: column; }
 
 /* Top bar: the way home */
 .topbar { padding: 14px 16px 0; max-width: 1180px; width: 100%; margin: 0 auto; }
-.ways-out { display: flex; align-items: center; gap: 8px; }
+.ways-out { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
 .home-link { font-family: var(--title); font-size: 22px; }
 .ways-out .home-link + .home-link { font-size: 18px; }
 
@@ -156,6 +157,53 @@ h1 {
 .life strong { font-family: var(--title); font-weight: 700; font-size: 24px; }
 .life span { font-size: 14px; color: var(--ink-soft); }
 
+/* Previous / Next, between the poster and the credit */
+.steps {
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 16px;
+  font-family: var(--title);
+  font-size: 22px;
+}
+
+/* The index: one tile per body, wrapping; three to a row on a phone */
+.index {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 16px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-content: start;
+}
+.index .title { grid-area: auto; }
+.index h2 { margin: 0 0 8px; font-family: var(--title); font-weight: 700; font-size: 34px; }
+.tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 12px;
+}
+.tiles a { display: grid; justify-items: center; gap: 4px; text-decoration: none; }
+.tiles svg { width: 100%; max-width: 120px; height: auto; display: block; }
+.tiles span { font-family: var(--title); font-weight: 700; font-size: 24px; text-align: center; }
+.tiles a:hover span { text-decoration: underline; }
+.tiles .also { align-self: center; text-align: center; font-size: 18px; color: var(--ink-soft); }
+
+/* 404 */
+.missing { flex: 1; max-width: 640px; width: 100%; margin: 0 auto; padding: 32px 16px; }
+.missing-code { margin: 0; font-family: var(--title); font-size: 30px; color: var(--sun-orange); }
+.missing h1 { font-size: 48px; }
+
 /* Credit */
 .credit {
   max-width: 1180px;
@@ -170,7 +218,7 @@ h1 {
 
 /* Two columns from 900px: the cutaway on the left, the callouts beside its cut */
 @media (min-width: 900px) {
-  .topbar, .poster, .credit { padding-left: 32px; padding-right: 32px; }
+  .topbar, .poster, .steps, .index, .credit { padding-left: 32px; padding-right: 32px; }
   .poster {
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     grid-template-areas: "art title" "art callouts" "badges badges" "life life";
@@ -190,6 +238,8 @@ h1 {
    the dash and the hidden starts live only inside @keyframes, so a still
    (reduced motion, or CSS that never loads) is the whole drawing. */
 .sun-svg { --draw: 0.9s; --loops: 2.6s; }
+/* The Sun's six layers take their delays here; every other body's cutaway
+   (cutaway.tsx) sets --at inline on each layer and pin, 0.25s apart. */
 [data-layer="core"] { --at: 0s; }
 [data-layer="radiative"] { --at: 0.25s; }
 [data-layer="convective"] { --at: 0.5s; }
@@ -200,8 +250,11 @@ h1 {
 [data-layer] path { animation: sun-draw var(--draw) ease-in-out var(--at) both; }
 [data-layer] .wash,
 [data-layer] .hachure,
-[data-layer] .pin { animation: sun-ink-fade 0.6s ease-out calc(var(--at) + 0.6s) both; }
-.sun-svg .earth { animation: sun-ink-fade 0.6s ease-out 2s both; }
+[data-layer] .pin,
+[data-pins] .pin { animation: sun-ink-fade 0.6s ease-out calc(var(--at) + 0.6s) both; }
+.sun-svg .earth,
+.sun-svg .compare,
+.sun-svg .outline { animation: sun-ink-fade 0.6s ease-out 2s both; }
 
 [data-loop] { animation: sun-ink-fade 0.6s ease-out var(--loops) both; }
 [data-loop="convection"] .cell { animation: sun-convection-roll 8s linear calc(var(--loops) + 0.6s) infinite; }

@@ -1,5 +1,5 @@
 // Printed ink for Capsule's cards, as SVG path data. This is Capsule's own copy
-// of app/(sun)/_lib/ink.ts (a copy, never an import: the two route groups stay
+// of app/(orrery)/_lib/ink.ts (a copy, never an import: the two route groups stay
 // apart), with a finer, calmer line: one stroke per outline, light wobble. The
 // seed is fixed per shape, so the server prerender and the browser draw the
 // same bytes and hydration matches. The CJS bundle is imported because plain

@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Patrick_Hand } from "next/font/google";
-import "./sun.css";
+import "./orrery.css";
 
-// Sun is its own root layout: its own <html>, <body> and stylesheet. It must
+// Orrery is its own root layout: its own <html>, <body> and stylesheet. It must
 // not import the site's globals.css, Tailwind or anything from the site, Shore or Capsule.
 // The hand lettering is self-hosted by next/font at build time, so the browser
 // never asks Google for it; the cursive stack covers a font that fails to load.
@@ -22,8 +22,8 @@ const hand = Patrick_Hand({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Sun", template: "%s · Sun" },
-  description: "Our star on one hand-drawn poster: six layers cut open, Earth to scale and four NASA-sourced numbers.",
+  title: { default: "Orrery", template: "%s · Orrery" },
+  description: "The Sun, the eight planets and five stars, each cut open on a hand-drawn poster with its layers numbered and four sourced numbers.",
   other: { "build-sha": process.env.BUILD_SHA ?? "dev" },
 };
 
@@ -31,7 +31,7 @@ export const viewport: Viewport = {
   themeColor: "#f6f1e7",
 };
 
-export default function SunLayout({ children }: LayoutProps<"/">) {
+export default function OrreryLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${title.variable} ${hand.variable}`}>
       <body>{children}</body>

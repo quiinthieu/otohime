@@ -264,7 +264,7 @@ get xx /elements/xx
 get projects /projects
 get shore /shore
 get capsule /capsule
-get sun /sun
+get orrery /orrery
 get home /
 get nonexistent /nonexistent
 
@@ -314,11 +314,11 @@ check "/elements/xx is the parcel page" has xx 'Nothing in this parcel'
 check "/projects returns 200" status_is projects 200
 check "/projects has the sidebar" has projects 'aria-label="Main"'
 check "/projects links /elements once" count_eq projects 'href="/elements"' 1
-check "/projects links /sun" count_ge projects 'href="/sun"' 1
+check "/projects links /orrery" count_ge projects 'href="/orrery"' 1
 
 check "/shore returns 200" status_is shore 200
 check "/capsule returns 200" status_is capsule 200
-check "/sun returns 200" status_is sun 200
+check "/orrery returns 200" status_is orrery 200
 check "/ returns 200" status_is home 200
 check "/nonexistent returns 404" status_is nonexistent 404
 check "/nonexistent is the parcel page" has nonexistent 'Nothing in this parcel'

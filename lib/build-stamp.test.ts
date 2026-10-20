@@ -38,8 +38,8 @@ test("Capsule's root layout publishes BUILD_SHA as <meta name=build-sha> too", (
   assert.match(layout, /other:\s*\{\s*"build-sha":\s*process\.env\.BUILD_SHA\s*\?\?\s*"dev"\s*\}/);
 });
 
-test("Sun's root layout publishes BUILD_SHA as <meta name=build-sha> too", () => {
-  const layout = read("app/(sun)/layout.tsx");
+test("Orrery's root layout publishes BUILD_SHA as <meta name=build-sha> too", () => {
+  const layout = read("app/(orrery)/layout.tsx");
   assert.match(layout, /other:\s*\{\s*"build-sha":\s*process\.env\.BUILD_SHA\s*\?\?\s*"dev"\s*\}/);
 });
 
