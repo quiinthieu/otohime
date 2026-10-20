@@ -6,8 +6,9 @@ import { Ink } from "./ink";
 
 // Any body's cutaway as SVG: _lib/cutaway.ts draws it (pure, unit-tested) and
 // this only maps it to elements. One <g data-layer> per layer, inside out, each
-// drawn on in turn by orrery.css (its --at set here); the pins sit above every
-// layer so no band paints over a number. Every path has pathLength="1".
+// drawn on in turn by orrery.css (its --at set here); then one <g data-mark>
+// per mark (rings, spots, Sirius B...), and the pins above everything so nothing
+// paints over a number. Every path has pathLength="1".
 
 const STEP = 0.25; // seconds between layers, as on the Sun's stage
 
@@ -16,7 +17,7 @@ export function Cutaway({ body }: { body: Body }) {
   const at = (i: number) => ({ "--at": `${i * STEP}s` }) as CSSProperties;
   const label = `Cutaway of ${body.name} with a quarter removed, ${c.layers.length} layers numbered from the centre: ${body.layers
     .map((l, i) => `${i + 1} ${l.name.toLowerCase()}`)
-    .join(", ")}; ${c.compare.label}.`;
+    .join(", ")}; ${[c.compare.label, ...c.marks.flatMap((m) => (m.labels ?? []).map((l) => l.text))].join("; ")}.`;
   return (
     <svg className="sun-svg" viewBox="0 0 640 600" role="img" aria-label={label}>
       {c.layers.map((l, i) => (
@@ -33,6 +34,19 @@ export function Cutaway({ body }: { body: Body }) {
       <g className="outline">
         <Ink paths={c.outline} />
       </g>
+
+      {c.marks.map((m) => (
+        // a dash in pathLength units: Polaris's pulse rings, about 20 px on, 16 off
+        <g key={m.id} data-mark={m.id} strokeDasharray={m.dashed ? "0.012 0.0095" : undefined}>
+          {m.wash && <path className="wash" d={m.wash.d} pathLength="1" fill={m.wash.colour} fillRule="evenodd" />}
+          <Ink paths={m.paths} />
+          {m.labels?.map((l) => (
+            <text key={l.text} x={l.x} y={l.y} textAnchor="end">
+              {l.text}
+            </text>
+          ))}
+        </g>
+      ))}
 
       <g data-pins="">
         {c.layers.map((l, i) => {

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { BODIES, bodyBySlug, type Body } from "./bodies.ts";
-import { MARGIN, MIN_BAND, VIEW, cutaway, drawnBands, type Cutaway } from "./cutaway.ts";
+import { MARGIN, MARKS, MIN_BAND, VIEW, cutaway, drawnBands, ringArcs, type Cutaway } from "./cutaway.ts";
 
 const drawn = new Map<string, Cutaway>(BODIES.map((b) => [b.slug, cutaway(b)]));
 const of = (b: Body) => drawn.get(b.slug) as Cutaway;
@@ -27,7 +27,6 @@ test("every body's cut has its layers, in order, numbered 1..n, each inked", () 
       assert.match(l.shape, /^M/, `${b.slug}.${l.id}`);
     }
     assert.ok(c.outline.length >= 1, b.slug);
-    assert.deepEqual(c.marks, [], b.slug);
   }
 });
 
@@ -40,6 +39,10 @@ test("no path has NaN, undefined or Infinity", () => {
       assert.ok(Number.isFinite(p.strokeWidth), b.slug);
     }
     for (const l of c.layers) assert.doesNotMatch(l.shape, /NaN|undefined|Infinity/, `${b.slug}.${l.id}`);
+    for (const m of c.marks) {
+      if (m.wash) assert.doesNotMatch(m.wash.d, /NaN|undefined|Infinity/, `${b.slug}.${m.id} wash`);
+      for (const l of m.labels ?? []) assert.ok(Number.isFinite(l.x) && Number.isFinite(l.y), `${b.slug}.${m.id} label`);
+    }
     const nums = [c.centre.x, c.centre.y, c.radius, c.compare.r, c.compare.at.x, c.compare.at.y, c.compare.centre.x, c.compare.centre.y];
     for (const x of nums) assert.ok(Number.isFinite(x), b.slug);
   }
@@ -180,4 +183,148 @@ test("cutaway.ts imports ink.ts and bodies.ts only", () => {
   const text = readFileSync(new URL("./cutaway.ts", import.meta.url), "utf8");
   const specs = [...text.matchAll(/^import[^"']*["']([^"']+)["']/gm)].map((m) => m[1]).sort();
   assert.deepEqual(specs, ["./bodies.ts", "./ink.ts"]);
+});
+
+// The box round inked path data (rough.js writes absolute M, L and C), with
+// each curve sampled: its control points overshoot the line it draws.
+function inkBox(ds: string[]): { x0: number; y0: number; x1: number; y1: number } {
+  const ps = inkPoints(ds);
+  const xs = ps.map((p) => p.x);
+  const ys = ps.map((p) => p.y);
+  return { x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) };
+}
+
+// Points along inked path data: every end point, and 19 more on each curve.
+function inkPoints(ds: string[]): { x: number; y: number }[] {
+  const out: { x: number; y: number }[] = [];
+  const add = (x: number, y: number) => out.push({ x, y });
+  for (const d of ds) {
+    let cur = [0, 0];
+    for (const [, cmd, args] of d.matchAll(/([MLC])([^MLCZ]*)/g)) {
+      const v = (args.match(/-?\d+(?:\.\d+)?(?:e[-+]?\d+)?/gi) ?? []).map(Number);
+      const step = cmd === "C" ? 6 : 2;
+      for (let i = 0; i + step - 1 < v.length; i += step) {
+        const end = [v[i + step - 2], v[i + step - 1]];
+        if (cmd === "C") {
+          for (let k = 1; k < 20; k++) {
+            const t = k / 20;
+            const u = 1 - t;
+            const at = (j: number) => u * u * u * cur[j] + 3 * u * u * t * v[i + j] + 3 * u * t * t * v[i + 2 + j] + t * t * t * end[j];
+            add(at(0), at(1));
+          }
+        }
+        add(end[0], end[1]);
+        cur = end;
+      }
+    }
+  }
+  return out;
+}
+
+// The marks the plan names, body by body; the Sun and the rest have none.
+const MARK_IDS: Record<string, string[]> = {
+  earth: ["clouds"],
+  mars: ["polar-cap"],
+  jupiter: ["bands", "great-red-spot"],
+  saturn: ["rings"],
+  uranus: ["rings", "tilt"],
+  neptune: ["dark-spot"],
+  sirius: ["companion"],
+  vega: ["flattened"],
+  polaris: ["pulse-rings"],
+  betelgeuse: ["lumpy"],
+};
+
+test("each body draws exactly the marks its data names, each inked", () => {
+  for (const b of BODIES) {
+    assert.deepEqual([...(b.marks ?? [])], MARK_IDS[b.slug] ?? [], `${b.slug}'s data`);
+    const c = of(b);
+    assert.deepEqual(
+      c.marks.map((m) => m.id),
+      [...(b.marks ?? [])],
+      b.slug,
+    );
+    for (const m of c.marks) {
+      assert.ok(MARKS[m.id], `${b.slug}: ${m.id} has a drawer`);
+      assert.ok(m.paths.length >= 1, `${b.slug}.${m.id} has no ink`);
+    }
+  }
+  assert.throws(() => cutaway({ ...(bodyBySlug("mars") as Body), marks: ["moustache"] }), /no mark moustache/);
+});
+
+test("Saturn and Uranus have rings; the near half crosses the disc, the far half goes behind it", () => {
+  for (const slug of ["saturn", "uranus"]) {
+    const c = of(bodyBySlug(slug) as Body);
+    const rings = c.marks.find((m) => m.id === "rings");
+    assert.ok(rings, `${slug} has no rings`);
+    const box = inkBox(rings.paths.map((p) => p.d));
+    // rings at their true radius reach well past the disc
+    const span = Math.max(box.x1 - box.x0, box.y1 - box.y0) / 2;
+    assert.ok(span > 1.6 * c.radius, `${slug}: rings span ${span} for R ${c.radius}`);
+  }
+  // the far half's visible arcs run from the ring's ends to the limb: the left
+  // one ends on it, the right one starts on it
+  const arcs = ringArcs(300, 300, 200, 0.3, -12, 100);
+  assert.equal(arcs.length, 3, "two far ends and the near half");
+  const nums = (d: string) => (d.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number);
+  const onLimb = ([x, y]: number[]) => Math.abs(Math.hypot(x - 300, y - 300) - 100) < 0.05;
+  assert.ok(onLimb(nums(arcs[0]).slice(-2)), `the left far arc ends at ${nums(arcs[0]).slice(-2)}`);
+  assert.ok(onLimb(nums(arcs[1]).slice(0, 2)), `the right far arc starts at ${nums(arcs[1]).slice(0, 2)}`);
+  assert.equal(ringArcs(300, 300, 90, 0.3, 0, 100).length, 1, "a ring inside the disc shows only its near half");
+});
+
+test("Vega is drawn flattened: its outline's box is 2.42 / 2.73 tall to wide", () => {
+  const vega = bodyBySlug("vega") as Body;
+  const c = of(vega);
+  assert.deepEqual(
+    c.marks.map((m) => m.id),
+    ["flattened"],
+  );
+  const box = inkBox(c.outline.map((p) => p.d));
+  const ratio = (box.y1 - box.y0) / (box.x1 - box.x0);
+  assert.ok(Math.abs(ratio - 2.42 / 2.73) <= 0.02, `Vega's outline is ${ratio.toFixed(4)} tall to wide`);
+  // its layers are squashed with it, so none pokes past the outline at a pole
+  const top = Math.min(...c.layers.map((l) => inkBox(l.paths.map((p) => p.d)).y0));
+  assert.ok(c.centre.y - top < 1.1 * (c.centre.y - box.y0) + 2, "a layer runs past the flattened pole");
+});
+
+test("Sirius B is at least 2 px, and true to scale or labelled not to scale", () => {
+  const c = of(bodyBySlug("sirius") as Body);
+  const mark = c.marks.find((m) => m.id === "companion");
+  assert.ok(mark?.scale, "Sirius has no companion");
+  const { r, trueR } = mark.scale;
+  assert.ok(r >= 2, `Sirius B r = ${r}`);
+  const text = (mark.labels ?? []).map((l) => l.text).join(" ");
+  assert.match(text, /^Sirius B, a white dwarf/);
+  const toScale = Math.abs(r / trueR - 1) < 0.01;
+  assert.ok(toScale || /not to scale/.test(text), `r ${r} vs true ${trueR}, labelled "${text}"`);
+  // and it sits off the star, inside the page
+  const box = inkBox(mark.paths.map((p) => p.d));
+  const outer = Math.max(...drawnBands((bodyBySlug("sirius") as Body).layers, 1).map((x) => x.r1)) * c.radius;
+  const gap = Math.hypot((box.x0 + box.x1) / 2 - c.centre.x, (box.y0 + box.y1) / 2 - c.centre.y) - outer;
+  assert.ok(gap > 40, `Sirius B is ${gap} px off the star`);
+  for (const l of mark.labels ?? []) assert.ok(l.x <= VIEW.w - MARGIN && l.y >= MARGIN, `label at ${l.x},${l.y}`);
+});
+
+test("every mark's ink stays on the page", () => {
+  for (const b of BODIES) {
+    for (const m of of(b).marks) {
+      const box = inkBox(m.paths.map((p) => p.d));
+      assert.ok(box.x0 >= 0 && box.y0 >= 0 && box.x1 <= VIEW.w && box.y1 <= VIEW.h, `${b.slug}.${m.id}: ${JSON.stringify(box)}`);
+    }
+  }
+});
+
+test("the 'to scale' mark keeps clear of every mark", () => {
+  for (const b of BODIES) {
+    const c = of(b);
+    if (c.compare.shape === "orbit") continue; // Earth's orbit sits inside Betelgeuse
+    const { centre, r } = c.compare;
+    for (const m of c.marks) {
+      const near = Math.min(...inkPoints(m.paths.map((p) => p.d)).map((p) => Math.hypot(p.x - centre.x, p.y - centre.y)));
+      assert.ok(near > r + 4, `${b.slug}: ${m.id} comes within ${near.toFixed(1)} px of ${c.compare.label} (r ${r})`);
+    }
+  }
+  // Vega's spin axis does not push the Sun off the page: it is a whole dot
+  assert.equal(of(bodyBySlug("vega") as Body).compare.shape, "dot");
 });

@@ -227,9 +227,9 @@ words_within_cap() {
   [ "$words" -le "$cap" ] || { echo "$words visible words, the cap is $cap"; return 1; }
 }
 
-# Every body as "<slug> <layer count>", in the one fixed order, read from bodies.ts.
+# Every body as "<slug> <layer count> <mark count>", in the one fixed order, read from bodies.ts.
 BODIES_JS='import { BODIES } from "./app/(orrery)/_lib/bodies.ts";
-for (const b of BODIES) console.log(`${b.slug} ${b.layers.length}`);'
+for (const b of BODIES) console.log(`${b.slug} ${b.layers.length} ${(b.marks ?? []).length}`);'
 
 manifest_lists() {
   local f=.next/prerender-manifest.json
@@ -282,17 +282,19 @@ while read -r slug _; do
 done <<<"$BODY_LIST"
 check "/orrery has at most 220 visible words" words_within_cap orrery
 check "/orrery is at most 120000 bytes" size_le orrery 120000
+check "/orrery has Saturn's rings" count_eq orrery 'data-mark="rings"' 1
 check "/orrery has no hachure" lacks orrery 'class="hachure"'
 check "/orrery has no buttons" lacks orrery '<button'
 check "/orrery links home" has orrery 'href="/"'
 check "/orrery links the project list" has orrery 'href="/projects"'
 
 # Every poster
-while read -r slug layers; do
+while read -r slug layers marks; do
   [ -n "$slug" ] || continue
   key="body-$slug"
   check "/orrery/$slug returns 200" status_is "$key" 200
   check "/orrery/$slug has exactly $layers inked layers" count_eq "$key" 'data-layer="' "$layers"
+  check "/orrery/$slug has exactly $marks marks" count_eq "$key" 'data-mark="' "$marks"
   check "/orrery/$slug has exactly $layers callouts" count_eq "$key" 'data-callout="' "$layers"
   check "/orrery/$slug has exactly 4 badges" count_eq "$key" 'data-badge="' 4
   check "/orrery/$slug has at most 220 visible words" words_within_cap "$key"
@@ -324,6 +326,22 @@ check "/orrery/sun has exactly 3 ink loops" count_eq body-sun 'data-loop="' 3
 check "/orrery/sun stylesheet draws the ink on" stylesheet_draws
 check "/orrery/sun links Next: Mercury" has body-sun 'href="/orrery/mercury"'
 check "/orrery/betelgeuse has a 3-stage life strip" life_strip body-betelgeuse
+
+# The marks that make each body itself
+check "/orrery/saturn has its rings" has body-saturn 'data-mark="rings"'
+check "/orrery/uranus has its rings" has body-uranus 'data-mark="rings"'
+check "/orrery/uranus has its tilt" has body-uranus 'data-mark="tilt"'
+check "/orrery/jupiter has its bands" has body-jupiter 'data-mark="bands"'
+check "/orrery/jupiter has the Great Red Spot" has body-jupiter 'data-mark="great-red-spot"'
+check "/orrery/earth has clouds" has body-earth 'data-mark="clouds"'
+check "/orrery/mars has a polar cap" has body-mars 'data-mark="polar-cap"'
+check "/orrery/neptune has a dark spot" has body-neptune 'data-mark="dark-spot"'
+check "/orrery/sirius has its companion" has body-sirius 'data-mark="companion"'
+check "/orrery/sirius names Sirius B" has body-sirius 'Sirius B, a white dwarf'
+check "/orrery/vega is flattened" has body-vega 'data-mark="flattened"'
+check "/orrery/betelgeuse is lumpy" has body-betelgeuse 'data-mark="lumpy"'
+check "/orrery/polaris has its pulse rings" has body-polaris 'data-mark="pulse-rings"'
+check "/orrery/sun has no marks" lacks body-sun 'data-mark="'
 check "/orrery/earth has no life strip" lacks body-earth 'data-life'
 
 check "/orrery/nope returns 404" status_is orrery_nope 404

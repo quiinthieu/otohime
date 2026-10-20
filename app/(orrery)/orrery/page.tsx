@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { TopBar } from "../_components/chrome";
 import { Ink } from "../_components/ink";
 import { ORRERY, bodyBySlug, type Body } from "../_lib/bodies.ts";
+import { RINGS, ringArcs } from "../_lib/cutaway.ts";
 import { inkCircle, inkPath } from "../_lib/ink.ts";
 import { ROW_VIEW, edgeArc, edgeArea, planetRow, starRow, type Disc, type Edge, type Row } from "../_lib/rows.ts";
 
@@ -21,11 +22,36 @@ const colourOf = (b: Body) =>
 
 const body = (slug: string) => bodyBySlug(slug)!;
 
-function DiscLink({ disc }: { disc: Disc }) {
+// Saturn's rings, outline only, at the poster's tilt: as wide as the room
+// between Jupiter and Uranus allows. True scale (2.27 of its radius) would cover
+// both, so here only the discs are to scale.
+function SaturnRings({ row, disc }: { row: Row; disc: Disc }) {
+  const at = (slug: string) => row.discs.find((d) => d.slug === slug);
+  const [left, right] = [at("jupiter"), at("uranus")];
+  if (!left || !right) return null;
+  const a = Math.min(disc.cx - (left.cx + left.r), right.cx - right.r - disc.cx) - 8;
+  const { km, open, tilt } = RINGS.saturn;
+  const outer = Math.max(...km);
+  return (
+    <g data-mark="rings">
+      {km.map((k, i) => (
+        <Ink
+          key={k}
+          paths={ringArcs(disc.cx, disc.cy, (a * k) / outer, open, tilt, disc.r).flatMap((d, j) =>
+            inkPath(d, { seed: `row-ring-${i}-${j}`, strokeWidth: k === outer || i === 0 ? 1.8 : 1.1, roughness: 0.8 }),
+          )}
+        />
+      ))}
+    </g>
+  );
+}
+
+function DiscLink({ disc, row }: { disc: Disc; row: Row }) {
   const b = body(disc.slug);
   return (
     <a href={`/orrery/${disc.slug}`} data-body={disc.slug}>
       <Ink paths={inkCircle(disc.cx, disc.cy, disc.r, { seed: `row-${disc.slug}`, fill: colourOf(b), fillStyle: "solid", strokeWidth: 2 })} />
+      {disc.slug === "saturn" && <SaturnRings row={row} disc={disc} />}
       <text x={disc.label.x} y={disc.label.y} textAnchor="middle">
         {disc.name}
       </text>
@@ -59,7 +85,7 @@ function SizeRow({ row }: { row: Row }) {
             <EdgeLink key={e.slug} edge={e} />
           ))}
           {row.discs.map((d) => (
-            <DiscLink key={d.slug} disc={d} />
+            <DiscLink key={d.slug} disc={d} row={row} />
           ))}
         </svg>
       </div>

@@ -33,6 +33,8 @@ export type Body = {
   layers: readonly BodyLayer[];
   sources: Record<string, Source>;
   compare: Comparison; // the "to scale" mark
+  polarRadiusKm?: number; // a body spun flat (Vega); radiusKm is the equator
+  marks?: readonly string[]; // what makes it itself: rings, a spot, a companion (cutaway.ts draws them)
   poster: {
     title: string;
     tagline: string;
@@ -44,6 +46,8 @@ export type Body = {
 };
 
 export const SUN_RADIUS_KM = 695_700;
+// Sirius B, the white dwarf beside Sirius: 0.0084 R☉ on Wikipedia's Sirius infobox.
+export const SIRIUS_B_RADIUS_KM = Math.round(0.0084 * SUN_RADIUS_KM);
 const EARTH_RADIUS_KM = 6_378.137;
 const MOON_RADIUS_KM = 1_738.1;
 const JUPITER_RADIUS_KM = 71_492;
@@ -172,6 +176,7 @@ const EARTH: Body = {
   ],
   sources: planetSources("earth", "Earth"),
   compare: { label: "The Moon, to scale", radiusKm: MOON_RADIUS_KM, shape: "dot" },
+  marks: ["clouds"],
   poster: {
     title: "Earth",
     tagline: "Our planet, cut open.",
@@ -204,6 +209,7 @@ const MARS: Body = {
   ],
   sources: planetSources("mars", "Mars"),
   compare: EARTH_SCALE,
+  marks: ["polar-cap"],
   poster: {
     title: "Mars",
     tagline: "The red planet, cut open.",
@@ -235,6 +241,7 @@ const JUPITER: Body = {
   ],
   sources: planetSources("jupiter", "Jupiter"),
   compare: EARTH_SCALE,
+  marks: ["bands", "great-red-spot"],
   poster: {
     title: "Jupiter",
     tagline: "The largest planet, cut open.",
@@ -267,6 +274,7 @@ const SATURN: Body = {
   ],
   sources: planetSources("saturn", "Saturn"),
   compare: EARTH_SCALE,
+  marks: ["rings"],
   poster: {
     title: "Saturn",
     tagline: "The ringed planet, cut open.",
@@ -298,6 +306,7 @@ const URANUS: Body = {
   ],
   sources: planetSources("uranus", "Uranus"),
   compare: EARTH_SCALE,
+  marks: ["rings", "tilt"],
   poster: {
     title: "Uranus",
     tagline: "The tipped ice giant, cut open.",
@@ -328,6 +337,7 @@ const NEPTUNE: Body = {
   ],
   sources: planetSources("neptune", "Neptune"),
   compare: EARTH_SCALE,
+  marks: ["dark-spot"],
   poster: {
     title: "Neptune",
     tagline: "The farthest planet, cut open.",
@@ -402,6 +412,7 @@ const SIRIUS: Body = {
   ],
   sources: starSources("Sirius"),
   compare: SUN_SCALE,
+  marks: ["companion"],
   poster: {
     title: "Sirius",
     tagline: "The brightest night star, cut open.",
@@ -437,6 +448,8 @@ const VEGA: Body = {
   ],
   sources: starSources("Vega"),
   compare: SUN_SCALE,
+  polarRadiusKm: Math.round(2.418 * SUN_RADIUS_KM), // Wikipedia: 2.418 R☉ at the poles, 2.726 at the equator
+  marks: ["flattened"],
   poster: {
     title: "Vega",
     tagline: "A star spun flat, cut open.",
@@ -477,6 +490,7 @@ const POLARIS: Body = {
   ],
   sources: starSources("Polaris"),
   compare: SUN_SCALE,
+  marks: ["pulse-rings"],
   poster: {
     title: "Polaris",
     tagline: "The North Star, cut open.",
@@ -514,6 +528,7 @@ const BETELGEUSE: Body = {
   ],
   sources: starSources("Betelgeuse"),
   compare: { label: "Earth's orbit, to scale", radiusKm: AU_KM, shape: "orbit" },
+  marks: ["lumpy"],
   poster: {
     title: "Betelgeuse",
     tagline: "A red supergiant near its end, cut open.",
