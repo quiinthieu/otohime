@@ -8,6 +8,9 @@
 // with an uncaught "Transition was skipped. Navigation transition active". The root layout's pagereveal guard
 // hands the hop to React as document.__reactViewTransition, so the reveal waits for it. Every landing is watched
 // until the hop has finished, no Suspense template is left and no transition is in flight.
+// The 403's exits, as the plain user (the 403 reached by router.push and by page.goto): its Go home and the brand
+// mark (to /, a swap of the (app) layout for (home)) and the nav's Projects and Dashboard each fade the 403 out and
+// the next page in, read once a frame from getAnimations(); under reduced motion each completes and nothing runs.
 import { createRequire } from "node:module";
 import path from "node:path";
 import pg from "pg";
@@ -146,6 +149,70 @@ const loadAnimations = (page) =>
 const still = (anims) => anims.filter((a) => !(a.duration <= 1 || a.state === "finished"));
 const show = (anims) => anims.slice(0, 6).map((a) => `${a.name} ${a.duration}ms ${a.state}`).join(", ");
 
+// The 403's exits, as in scripts/probe-motion.mjs (copied, not imported): every ::view-transition-old/new animation
+// the document runs, sampled once a frame from its creation, so a
+// same-document change (React's) and a full load (the hop, read in the new document) are read the same way.
+// Also every element that gets an inline view-transition-name (React names the <ViewTransition> it animates),
+// with whether it holds the sidebar or the masthead.
+function watchFades() {
+  const seen = new Set();
+  window.__fades = [];
+  window.__named = [];
+  window.__fadesReset = () => {
+    seen.clear();
+    window.__fades.length = 0;
+    window.__named.length = 0;
+  };
+  const tick = () => {
+    for (const a of document.documentElement?.getAnimations({ subtree: true }) ?? []) {
+      const m = /^::view-transition-(old|new)\((.+)\)$/.exec(a.effect?.pseudoElement ?? "");
+      if (!m || seen.has(a)) continue;
+      seen.add(a);
+      const t = a.effect.getComputedTiming();
+      window.__fades.push({ side: m[1], group: m[2], name: a.animationName ?? "", duration: Number(t.duration), delay: t.delay });
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  // React sets the name and restores the style before an observer runs, so the name is read from either side.
+  new MutationObserver((records) => {
+    for (const { target: el, oldValue } of records) {
+      const style = `${oldValue ?? ""};${el.getAttribute("style") ?? ""}`;
+      const name = /view-transition-name:\s*([^;\s]+)/.exec(style)?.[1];
+      if (!name || name === "none") continue;
+      const holds = (sel) => el.matches(sel) || el.querySelector(sel) !== null;
+      window.__named.push({ name, tag: el.tagName.toLowerCase(), nav: holds(".appnav"), masthead: holds("header.masthead") });
+    }
+  }).observe(document, { attributes: true, attributeFilter: ["style"], attributeOldValue: true, subtree: true });
+}
+
+// Clicks `selector` (the first one visible) and waits for `to`, then for the new side to fade in and every
+// transition animation to end. Returns the fades and the named elements the change ran.
+async function swap(page, selector, to) {
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  await page.evaluate(() => window.__fadesReset());
+  const target = page.locator(selector).filter({ visible: true }).first();
+  // The masthead's Sign in streams in behind its own boundary.
+  await target.waitFor({ timeout: 15_000 });
+  await Promise.all([page.waitForURL((u) => u.pathname === to, { timeout: 15_000 }), target.click()]);
+  return settleFades(page);
+}
+async function settleFades(page) {
+  await page.waitForFunction(() => window.__fades.some((f) => f.side === "new" && /fade-in$/.test(f.name)), null, { timeout: 4000 }).catch(() => {});
+  await page
+    .waitForFunction(
+      () => !document.documentElement.getAnimations({ subtree: true }).some((a) => a.effect?.pseudoElement?.startsWith("::view-transition") && a.playState === "running"),
+      null,
+      { timeout: 4000 },
+    )
+    .catch(() => {});
+  await page.waitForTimeout(200);
+  return page.evaluate(() => ({ fades: window.__fades, named: window.__named }));
+}
+const fadedOut = (fades) => fades.some((f) => f.side === "old" && /fade-out$/.test(f.name) && f.duration === 150);
+const fadedIn = (fades) => fades.some((f) => f.side === "new" && /fade-in$/.test(f.name) && f.duration === 210 && f.delay === 150);
+const showFades = (fades) => fades.map((f) => `${f.side}(${f.group}) ${f.name} ${f.delay}+${f.duration}`).join(", ") || "no transition";
+
 // Fills the /sign-in form and submits it; resolves once the full load has reached `landing`.
 async function signIn(page, who, query, landing) {
   await page.goto(`${BASE_URL}/sign-in${query}`, { waitUntil: "load" });
@@ -258,6 +325,84 @@ try {
           await context.close();
         }
       }
+    }
+  }
+
+  // The 403, as the plain user, reached by a soft navigation from /dashboard and by a full load: its Go home, the
+  // brand mark and the nav's Projects and Dashboard each fade the 403 out and the next page in. Go home and the
+  // brand mark swap the (app) layout for (home); the nav stays inside (app). Under reduced motion each completes
+  // and nothing runs.
+  {
+    const LOCKED = 'h1:has-text("This room is locked")';
+    const reach = {
+      "router.push from /dashboard": async (page) => {
+        await page.goto(`${BASE_URL}/dashboard`, { waitUntil: "load" });
+        await settle(page);
+        await Promise.all([page.waitForURL((u) => u.pathname === "/admin/roles"), page.evaluate(() => window.next.router.push("/admin/roles"))]);
+      },
+      "page.goto": async (page) => {
+        await page.goto(`${BASE_URL}/admin/roles`, { waitUntil: "load" });
+        await settle(page);
+      },
+    };
+    const EXITS = [
+      ["its Go home", 'main a.btn[href="/"]', "/"],
+      ["the brand mark", 'header.masthead a[href="/"]', "/"],
+      ["the nav's Projects", 'nav[aria-label="Main"] a[href="/projects"]', "/projects"],
+      ["the nav's Dashboard", 'nav[aria-label="Main"] a[href="/dashboard"]', "/dashboard"],
+    ];
+    for (const [size, viewport] of [["1366x768", DESKTOP], ["390x844", PHONE]]) {
+      for (const reduced of [false, true]) {
+        const { context, page, errors } = await open(browser, { viewport, reduced, cookies: users.plain.cookies });
+        try {
+          await page.addInitScript(watchFades);
+          for (const [how, go] of Object.entries(reach)) {
+            for (const [what, selector, to] of EXITS) {
+              const label = `${size}${reduced ? " reduced motion" : ""} plain 403 (${how}) -> ${to} by ${what}`;
+              const from = errors.length;
+              try {
+                await go(page);
+                await page.locator(LOCKED).waitFor({ timeout: 15_000 });
+                const r = await swap(page, selector, to);
+                if (reduced) {
+                  const anims = await loadAnimations(page);
+                  check(`${label}: completes, with every transition animation 0 ms`, r.fades.every((f) => f.duration <= 1 && f.delay <= 1), showFades(r.fades));
+                  check(`${label}: every animation after it lasts <= 1 ms or has finished`, still(anims).length === 0, show(still(anims)));
+                } else {
+                  check(`${label}: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)`, fadedOut(r.fades) && fadedIn(r.fades), showFades(r.fades));
+                  const held = r.named.filter((n) => n.masthead);
+                  check(`${label}: the masthead stays out of the fading groups`, held.length === 0, JSON.stringify(held));
+                }
+                await settle(page);
+                const mine = errors.slice(from);
+                check(`${label}: no page error and no console error`, mine.length === 0, mine.slice(0, 3).join(" | "));
+              } catch (e) {
+                check(`${label}: completes`, false, e.message.split("\n")[0]);
+              }
+            }
+          }
+        } finally {
+          await context.close();
+        }
+      }
+    }
+
+    // JavaScript off: the 403 is drawn on the client (forbidden() is thrown inside loading.tsx's Suspense, so the
+    // server sends the skeleton and an errored boundary), like every streamed room. The way home is the masthead's
+    // brand mark, which is in the server's HTML.
+    const context = await browser.newContext({ viewport: DESKTOP, javaScriptEnabled: false });
+    await context.addCookies(users.plain.cookies);
+    const page = await context.newPage();
+    const label = "no-JS: plain /admin/roles: the brand mark navigates to /";
+    try {
+      await page.goto(`${BASE_URL}/admin/roles`, { waitUntil: "load" });
+      const home = page.locator('header.masthead a[href="/"]').filter({ visible: true }).first();
+      await Promise.all([page.waitForURL((u) => u.pathname === "/", { timeout: 10_000 }), home.click({ timeout: 5000 })]);
+      check(label, new URL(page.url()).pathname === "/", page.url());
+    } catch (e) {
+      check(label, false, e.message.split("\n")[0]);
+    } finally {
+      await context.close();
     }
   }
 

@@ -9,6 +9,11 @@
 // /forgot-password) carries the hop and logs no page error.
 // The site's own pages: a sidebar click /work -> /projects runs page-out and page-in, the eight /projects rows
 // rise 40 ms apart, and /sign-in and the 404 load cleanly; under reduced motion all of it is still.
+// The group swaps: both ways out of the 404 (its Go home and the brand mark, the 404 reached by page.goto and by
+// router.push from /work), /work -> / by the brand mark, / -> /work by the console, /work -> /sign-in and
+// /sign-in -> / each fade the old page out and the new one in, read once a frame from getAnimations(); moves
+// inside one group still do, with the sidebar and the masthead out of the fading groups. A location.assign from
+// /shore into the 404 carries the hop. With JavaScript off the 404 is the parcel page and its Go home goes to /.
 // The instruments: Barometer's four parts settle 0.15 s apart, Planisphere's lines draw on and its stars fade up
 // (a turn of the wheel adds only the disc's transform transition and replays nothing), and Rotor's windows roll
 // only once a key is pressed. Under reduced motion none of it runs, and with JavaScript off each page still
@@ -120,6 +125,12 @@ const rowRises = (page) =>
     }),
   );
 const siteErrors = [];
+// The 404 document's own load is logged as a failed resource, and so is the router's fetch of its flight data on a
+// soft navigation to it (the router then loads the document); anything else, any other 404 subresource included,
+// is an error. HTTP/1.1 (next start) logs "404 (Not Found)"; HTTP/2 (otohime.dev) has no reason phrase: "404 ()".
+const notFoundLoad = (e) =>
+  /\/does-not-exist: Failed to load resource: the server responded with a status of 404 \((?:Not Found)?\)$/.test(e) ||
+  /: Failed to load resource: the server responded with a status of 404 \((?:Not Found)?\) \(\S+\/does-not-exist\?_rsc=[^\s)]+\)$/.test(e);
 const still = (anims) => anims.filter((a) => !(a.duration <= 1 || a.state === "finished"));
 const show = (anims) =>
   anims
@@ -186,6 +197,69 @@ function watchSameDocument() {
     return vt;
   };
 }
+
+// Every ::view-transition-old/new animation the document runs, sampled once a frame from its creation, so a
+// same-document change (React's) and a full load (the hop, read in the new document) are read the same way.
+// Also every element that gets an inline view-transition-name (React names the <ViewTransition> it animates),
+// with whether it holds the sidebar or the masthead.
+function watchFades() {
+  const seen = new Set();
+  window.__fades = [];
+  window.__named = [];
+  window.__fadesReset = () => {
+    seen.clear();
+    window.__fades.length = 0;
+    window.__named.length = 0;
+  };
+  const tick = () => {
+    for (const a of document.documentElement?.getAnimations({ subtree: true }) ?? []) {
+      const m = /^::view-transition-(old|new)\((.+)\)$/.exec(a.effect?.pseudoElement ?? "");
+      if (!m || seen.has(a)) continue;
+      seen.add(a);
+      const t = a.effect.getComputedTiming();
+      window.__fades.push({ side: m[1], group: m[2], name: a.animationName ?? "", duration: Number(t.duration), delay: t.delay });
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  // React sets the name and restores the style before an observer runs, so the name is read from either side.
+  new MutationObserver((records) => {
+    for (const { target: el, oldValue } of records) {
+      const style = `${oldValue ?? ""};${el.getAttribute("style") ?? ""}`;
+      const name = /view-transition-name:\s*([^;\s]+)/.exec(style)?.[1];
+      if (!name || name === "none") continue;
+      const holds = (sel) => el.matches(sel) || el.querySelector(sel) !== null;
+      window.__named.push({ name, tag: el.tagName.toLowerCase(), nav: holds(".appnav"), masthead: holds("header.masthead") });
+    }
+  }).observe(document, { attributes: true, attributeFilter: ["style"], attributeOldValue: true, subtree: true });
+}
+
+// Clicks `selector` (the first one visible) and waits for `to`, then for the new side to fade in and every
+// transition animation to end. Returns the fades and the named elements the change ran.
+async function swap(page, selector, to) {
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  await page.evaluate(() => window.__fadesReset());
+  const target = page.locator(selector).filter({ visible: true }).first();
+  // The masthead's Sign in streams in behind its own boundary.
+  await target.waitFor({ timeout: 15_000 });
+  await Promise.all([page.waitForURL((u) => u.pathname === to, { timeout: 15_000 }), target.click()]);
+  return settleFades(page);
+}
+async function settleFades(page) {
+  await page.waitForFunction(() => window.__fades.some((f) => f.side === "new" && /fade-in$/.test(f.name)), null, { timeout: 4000 }).catch(() => {});
+  await page
+    .waitForFunction(
+      () => !document.documentElement.getAnimations({ subtree: true }).some((a) => a.effect?.pseudoElement?.startsWith("::view-transition") && a.playState === "running"),
+      null,
+      { timeout: 4000 },
+    )
+    .catch(() => {});
+  await page.waitForTimeout(200);
+  return page.evaluate(() => ({ fades: window.__fades, named: window.__named }));
+}
+const fadedOut = (fades) => fades.some((f) => f.side === "old" && /fade-out$/.test(f.name) && f.duration === 150);
+const fadedIn = (fades) => fades.some((f) => f.side === "new" && /fade-in$/.test(f.name) && f.duration === 210 && f.delay === 150);
+const showFades = (fades) => fades.map((f) => `${f.side}(${f.group}) ${f.name} ${f.delay}+${f.duration}`).join(", ") || "no transition";
 
 // Every animationstart in the document, with the animation's own timing: its start on the timeline, its delay and
 // its duration. Animation events bubble, so one listener on window hears every part.
@@ -316,6 +390,107 @@ try {
     }
   }
 
+  // Every exit from the 404 and every move between the (home), (app) and (auth) group layouts: the old page fades
+  // out and the new one fades in, and the masthead is never part of a fading group. Moves inside one group still
+  // hand over, with the sidebar and the masthead still. Under reduced motion each completes and nothing runs.
+  {
+    const toNotFound = {
+      goto: async (page) => {
+        await page.goto(`${BASE_URL}/does-not-exist`, { waitUntil: "load" });
+      },
+      soft: async (page) => {
+        await page.goto(`${BASE_URL}/work`, { waitUntil: "load" });
+        await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+        await Promise.all([page.waitForURL((u) => u.pathname === "/does-not-exist"), page.evaluate(() => window.next.router.push("/does-not-exist"))]);
+      },
+    };
+    const swapErrors = [];
+    const MOVES = [
+      ...Object.entries(toNotFound).flatMap(([how, reach]) => [
+        { label: `404 (${how === "goto" ? "page.goto" : "router.push from /work"}) -> / by its Go home`, reach, selector: 'a.btn[href="/"]', to: "/" },
+        { label: `404 (${how === "goto" ? "page.goto" : "router.push from /work"}) -> / by the brand mark`, reach, selector: 'header.masthead a[href="/"]', to: "/" },
+      ]),
+      { label: "/work -> / by the brand mark", from: "/work", selector: 'header.masthead a[href="/"]', to: "/" },
+      { label: "/ -> /work by the console menu", from: "/", selector: 'button.chip:has-text("Open")', to: "/work" },
+      { label: "/work -> /sign-in by the masthead's Sign in", from: "/work", selector: 'header.masthead a[href="/sign-in"]', to: "/sign-in" },
+      { label: "/sign-in -> / by the brand mark", from: "/sign-in", selector: 'header.masthead a[href="/"]', to: "/" },
+      { label: "/work -> /projects by the sidebar (one group)", from: "/work", selector: 'nav[aria-label="Main"] a[href="/projects"]', to: "/projects", within: true },
+      { label: "/sign-in -> /forgot-password (one group)", from: "/sign-in", selector: 'main a[href="/forgot-password"]', to: "/forgot-password", within: true },
+    ];
+    for (const [size, viewport] of [["1366x768", DESKTOP], ["390x844", PHONE]]) {
+      for (const reduced of [false, true]) {
+        const { context, page } = await open(browser, { viewport, reduced, sink: swapErrors });
+        try {
+          await page.addInitScript(watchFades);
+          for (const m of MOVES) {
+            const label = `${size}${reduced ? " reduced motion" : ""} ${m.label}`;
+            try {
+              if (m.reach) await m.reach(page);
+              else await page.goto(`${BASE_URL}${m.from}`, { waitUntil: "load" });
+              const r = await swap(page, m.selector, m.to);
+              if (reduced) {
+                const anims = await loadAnimations(page);
+                check(`${label}: completes, with every transition animation 0 ms`, r.fades.every((f) => f.duration <= 1 && f.delay <= 1), showFades(r.fades));
+                check(`${label}: every animation after it lasts <= 1 ms or has finished`, still(anims).length === 0, show(still(anims)));
+                continue;
+              }
+              check(`${label}: the old page fades out (150 ms) and the new page fades in (210 ms after 150 ms)`, fadedOut(r.fades) && fadedIn(r.fades), showFades(r.fades));
+              const held = r.named.filter((n) => n.masthead || (m.within && n.nav));
+              check(`${label}: the masthead${m.within ? " and the sidebar stay" : " stays"} out of the fading groups`, held.length === 0, JSON.stringify(held));
+            } catch (e) {
+              check(`${label}: completes`, false, e.message.split("\n")[0]);
+            }
+          }
+        } finally {
+          await context.close();
+        }
+      }
+    }
+
+    const swapReal = swapErrors.filter((e) => !notFoundLoad(e));
+    check("group swaps: no console error and no page error", swapReal.length === 0, swapReal.slice(0, 3).join(" | "));
+
+    // A full load from a project into the 404 carries the hop, and the 404's document opts in before its first frame.
+    for (const [size, viewport] of [["1366x768", DESKTOP], ["390x844", PHONE]]) {
+      const sink = [];
+      const { context, page } = await open(browser, { viewport, reduced: false, sink });
+      const label = `${size} /shore -> /does-not-exist (location.assign)`;
+      try {
+        const r = await hop(page, "/shore", "/does-not-exist", (t) => location.assign(t));
+        await page.waitForTimeout(300);
+        check(`${label}: pagereveal carries a view transition of type hop`, r.reveal === true && r.types.includes("hop"), `${r.reveal} ${r.types}`);
+        const old = r.anims.find((a) => a.pseudo === "::view-transition-old(root)" && /fade-out$/.test(a.name));
+        const now = r.anims.find((a) => a.pseudo === "::view-transition-new(root)" && /fade-in$/.test(a.name));
+        check(`${label}: the hop fades /shore out and the 404 in`, old?.duration === 150 && now?.duration === 210 && now?.delay === 150, show(r.anims));
+        const real = sink.filter((e) => !notFoundLoad(e));
+        check(`${label}: no page error and no console error`, real.length === 0, real.slice(0, 3).join(" | "));
+      } catch (e) {
+        check(`${label}: completes`, false, e.message.split("\n")[0]);
+      } finally {
+        await context.close();
+      }
+    }
+
+    // JavaScript off: the 404 still says what it says, with its status, and its Go home is a link to /.
+    {
+      const context = await browser.newContext({ viewport: DESKTOP, javaScriptEnabled: false });
+      const page = await context.newPage();
+      try {
+        const response = await page.goto(`${BASE_URL}/does-not-exist`, { waitUntil: "load" });
+        check("no-JS: /does-not-exist answers 404", response?.status() === 404, String(response?.status()));
+        const heading = await page.locator("h1").filter({ visible: true }).allTextContents();
+        check("no-JS: /does-not-exist shows the parcel page", heading.some((h) => h.includes("Nothing in this parcel")), heading.join(" | ") || "no h1");
+        const home = page.locator('a[href="/"]', { hasText: "Go home" }).filter({ visible: true }).first();
+        await Promise.all([page.waitForURL((u) => u.pathname === "/", { timeout: 10_000 }), home.click({ timeout: 5000 })]);
+        check("no-JS: the 404's Go home navigates to /", new URL(page.url()).pathname === "/", page.url());
+      } catch (e) {
+        check("no-JS: the 404's Go home navigates to /", false, e.message.split("\n")[0]);
+      } finally {
+        await context.close();
+      }
+    }
+  }
+
   // The site's other pages: /projects' rows rise in turn, and the sign-in page and the 404 load cleanly. Under
   // reduced motion the same pages are still and no row waits.
   for (const reduced of [false, true]) {
@@ -351,9 +526,6 @@ try {
       await context.close();
     }
   }
-  // The 404 document's own load is logged as a failed resource; anything else, a 404 subresource included, is an error.
-  // HTTP/1.1 (next start) logs "404 (Not Found)"; HTTP/2 (otohime.dev) has no reason phrase and logs "404 ()".
-  const notFoundLoad = (e) => /\/does-not-exist: Failed to load resource: the server responded with a status of 404 \((?:Not Found)?\)$/.test(e);
   const siteReal = siteErrors.filter((e) => !notFoundLoad(e));
   check("site: /projects, /sign-in and /does-not-exist load with no console error or page error", siteReal.length === 0, siteReal.slice(0, 3).join(" | "));
 

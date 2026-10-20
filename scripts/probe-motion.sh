@@ -11,6 +11,9 @@
 # project-*. Under reduced motion the same hops complete, and every animation at load lasts at most 1 ms or has
 # finished. No console error and no page error anywhere. Negative check: with @view-transition stripped from
 # the CSS /shore loads (page.route), the /projects -> /shore hop must reveal with no transition.
+# Group swaps: leaving the 404 (by its Go home and the brand mark), /work -> /, / -> /work (the console),
+# /work -> /sign-in and /sign-in -> / each fade the old page out and the new one in; a hop from /shore into the
+# 404 carries the transition with no page error; with JavaScript off the 404's Go home goes to /.
 #
 # Env: PORT (4061; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1.
 # Playwright is installed into a temp prefix at run time; package.json stays unchanged.

@@ -12,7 +12,8 @@
 # hop's view transition (motion on), and there is no page error and no console error until that transition
 # and every streamed Suspense reveal have settled. Under reduced motion every animation at load lasts at most
 # 1 ms or has finished. Negative check: with the root layout's pagereveal guard stripped from the /dashboard
-# HTML (page.route), a sign-in must log "Transition was skipped".
+# HTML (page.route), a sign-in must log "Transition was skipped". As the plain user, every way out of the 403
+# (its Go home, the brand mark, the nav's Projects and Dashboard) fades the 403 out and the next page in.
 #
 # The database, in this order: DATABASE_URL if it is set and answers; else a throwaway docker Postgres; else
 # embedded-postgres installed into the temp prefix. If none works it prints "not ok - database" and exits 1.

@@ -4,8 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
-  // forbidden() for gated pages (lib/dal.ts)
-  experimental: { authInterrupts: true },
+  // forbidden() for gated pages (lib/dal.ts). globalNotFound: an unknown address gets app/global-not-found.tsx,
+  // a whole document drawn on the server, since the site and the projects are separate root layouts.
+  experimental: { authInterrupts: true, globalNotFound: true },
   // Sun became Orrery (pm-199): the old page is the Sun's poster now. The exact
   // path only, so /sun/nope stays the site's 404. 308s are cached for good.
   async redirects() {

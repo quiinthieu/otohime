@@ -17,7 +17,8 @@ The script raises Node's HTTP header size so mini-app cookies on `localhost` do 
 ## Layout
 
 ```
-app/                 holds only api/ and icon.svg; every page lives in a route group
+app/                 holds only api/, icon.svg and global-not-found.tsx (the 404 for an unknown address, drawn
+                     with the site's parcel page); every page lives in a route group
 app/(site)/          the whole site under one root layout (layout.tsx, globals.css)
 app/(site)/(home)/   the front page, an entrance with no sidebar
 app/(site)/(app)/    the other pages, with the sidebar
@@ -184,6 +185,8 @@ The app moves in one house style, with no motion library: CSS, React's `<ViewTra
 - Each stylesheet ends with its own `prefers-reduced-motion` block, which also zeroes the `::view-transition-group/old/new(*)` pseudo-elements (`*` does not match them).
 
 The site and each project are separate root layouts, so a hop between them is a full document load. It crossfades only when both documents opt in. So every stylesheet carries a copy of the hop rule (it is never imported across route groups): `@view-transition { navigation: auto; types: hop; }`, the root fade under `:root:active-view-transition-type(hop)` (typed, so the site's own page changes keep the default crossfade) and `h1 { view-transition-name: project-<slug>; }`, the name the row title on `/projects` carries through `--vt`. Each root layout also repeats `@view-transition{navigation:auto;types:hop}` in an inline `<style>` in its `<head>`. On a first visit Chromium settles the opt-in before a stylesheet that is still loading applies, and the hop then cuts. **A new project copies the rule and the inline `<style>`, and names its `h1`.** `lib/motion.test.ts` fails until it does, and `scripts/probe-motion.sh` watches the hops run.
+
+Inside the site, React's `<ViewTransition>` runs a page's exit and enter only when it sits above every node that changes. Each page wraps itself (`enter="page-in" exit="page-out" default="none"`), and so does each group layout (`(home)`, `(app)`, `(auth)`), around everything below its masthead: a move between groups swaps the whole layout, and only the layout's wrapper can fire. The masthead stays outside, and the root layout stays bare. An unknown address gets `app/global-not-found.tsx`, a whole document drawn on the server with the opt-in in its `<head>`, so its exits are hops.
 
 ## Elements
 

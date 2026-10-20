@@ -184,21 +184,19 @@ function siteFiles(names: string[]): string[] {
     .sort();
 }
 
-const CATCH_ALL = join("app", "(site)", "[...rest]", "page.tsx");
-
 test("every site page hands over with a <ViewTransition> of its own", () => {
   const pages = siteFiles(["page.tsx", "not-found.tsx", "forbidden.tsx", "loading.tsx"]);
-  // The rooms, the auth pages, the public pages, the 404, the 403 and the skeleton (the catch-all is checked below).
+  // The rooms, the auth pages, the public pages, the 404, the 403 and the skeleton.
   assert.ok(pages.length >= 18, pages.join(", "));
   for (const name of ["not-found.tsx", "forbidden.tsx", "loading.tsx"]) {
     assert.ok(pages.some((p) => p.endsWith(name)), `no ${name} under app/(site)`);
   }
-  const bare = pages.filter((p) => p !== CATCH_ALL && !readFileSync(join(ROOT, p), "utf8").includes("<ViewTransition"));
+  const bare = pages.filter((p) => !readFileSync(join(ROOT, p), "utf8").includes("<ViewTransition"));
   assert.deepEqual(bare, [], "pages with no <ViewTransition>");
 });
 
 test("the pages fade like /work, and the skeleton only leaves", () => {
-  for (const p of siteFiles(["page.tsx", "not-found.tsx", "forbidden.tsx"]).filter((p) => p !== CATCH_ALL)) {
+  for (const p of siteFiles(["page.tsx", "not-found.tsx", "forbidden.tsx"])) {
     const text = readFileSync(join(ROOT, p), "utf8");
     assert.match(text, /<ViewTransition enter="page-in" exit="page-out" default="none"/, p);
     assert.match(text, /import \{[^}]*\bViewTransition\b[^}]*\} from "react";/, p);
@@ -207,17 +205,53 @@ test("the pages fade like /work, and the skeleton only leaves", () => {
   assert.match(loading, /<ViewTransition exit="page-out" default="none">/);
 });
 
-test("the catch-all only calls notFound(), so not-found.tsx carries its wrapper", () => {
-  const text = readFileSync(join(ROOT, CATCH_ALL), "utf8").replace(/\/\/.*$/gm, "");
-  const body = text.match(/export default function \w+\(\)\s*\{([^}]*)\}/)?.[1].trim();
-  assert.equal(body, "notFound();");
-  assert.doesNotMatch(text, /<ViewTransition/);
+test("an unknown address gets app/global-not-found.tsx, drawn on the server with the opt-in in its <head>", () => {
+  // A notFound() from a catch-all page outside a Suspense boundary is served as Next's empty error shell and drawn
+  // on the client: no inline opt-in (a hop into it aborts with "ViewTransition opt-in disabled") and a blank page
+  // without JavaScript. scripts/probe-motion.sh watches the hop into the 404 and its Go home with JavaScript off.
+  assert.deepEqual(siteFiles(["page.tsx"]).filter((p) => p.includes("[...")), [], "a catch-all page under app/(site)");
+  assert.match(readFileSync(join(ROOT, "next.config.ts"), "utf8"), /experimental:\s*\{[^}]*\bglobalNotFound:\s*true\b/);
+  const page = readFileSync(join(ROOT, "app/global-not-found.tsx"), "utf8");
+  assert.match(page, /<head>[\s\S]*<style>\{"@view-transition\{navigation:auto;types:hop\}"\}<\/style>[\s\S]*<\/head>/);
+  assert.match(page, /import "\.\/\(site\)\/globals\.css";/);
+  assert.match(page, /import NotFound from "\.\/\(site\)\/not-found";/);
+  assert.match(page, /<body[^>]*>\s*<NotFound \/>\s*<\/body>/);
 });
 
-test("no site layout wraps its children in a <ViewTransition>", () => {
+// The JSX between a component's `return (` and its closing `);`, comments stripped.
+function returned(p: string): string {
+  const text = readFileSync(join(ROOT, p), "utf8").replace(/\{\/\*[\s\S]*?\*\/\}/g, "");
+  return text.slice(text.indexOf("return ("));
+}
+
+test("the root layout stays bare, and each group layout wraps everything below its masthead", () => {
+  // React runs enter and exit only for a <ViewTransition> above every node it swaps. A move between groups swaps the
+  // whole group layout, so the pages' own wrappers (inside <main>) never fire and the layout's must.
+  assert.doesNotMatch(readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8"), /<ViewTransition/);
   const layouts = siteFiles(["layout.tsx"]);
-  assert.ok(layouts.length >= 4, layouts.join(", "));
-  for (const p of layouts) assert.doesNotMatch(readFileSync(join(ROOT, p), "utf8"), /<ViewTransition/, p);
+  assert.deepEqual(layouts, ["(app)", "(auth)", "(home)", ""].map((g) => join("app", "(site)", g, "layout.tsx")).sort());
+  for (const group of ["home", "app", "auth"]) {
+    const p = `app/(site)/(${group})/layout.tsx`;
+    const jsx = returned(p);
+    const wrappers = [...jsx.matchAll(/<ViewTransition\b[^>]*>/g)].map((m) => m[0]);
+    assert.deepEqual(wrappers, ['<ViewTransition enter="page-in" exit="page-out" default="none">'], p);
+    assert.equal(jsx.match(/<\/ViewTransition>/g)?.length, 1, p);
+    const open = jsx.indexOf("<ViewTransition");
+    const close = jsx.indexOf("</ViewTransition>");
+    const masthead = jsx.search(/<Masthead \/>|<header className="masthead">/);
+    assert.ok(masthead !== -1 && masthead < open, `${p}: the masthead is not above the wrapper`);
+    // Everything below the masthead is inside: nothing but the closing fragment follows the wrapper.
+    assert.match(jsx.slice(close), /^<\/ViewTransition>\s*<\/>\s*\);/, `${p}: something follows the wrapper`);
+    assert.doesNotMatch(jsx.slice(open, close), /<Masthead|className="masthead"/, `${p}: the masthead is inside the wrapper`);
+    assert.match(readFileSync(join(ROOT, p), "utf8"), /import \{[^}]*\bViewTransition\b[^}]*\} from "react";/, p);
+  }
+});
+
+test("the 404's bar, with the brand mark, stays out of its wrapper", () => {
+  const jsx = returned("app/(site)/not-found.tsx");
+  const header = jsx.indexOf('<header className="masthead">');
+  assert.ok(header !== -1 && header < jsx.indexOf("<ViewTransition"));
+  assert.match(jsx, /<header className="masthead">\s*<BrandMark \/>/);
 });
 
 test("the /projects rows rise one after another, and reduced motion drops the delay", () => {
