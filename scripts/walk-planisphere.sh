@@ -234,6 +234,21 @@ planisphere_stylesheets() {
   [ "$own" -eq 1 ] || { echo "no stylesheet with .window-fill and prefers-reduced-motion"; return 1; }
 }
 
+# ink_in_bounds <key>: every inked path after the wheel's translate(CX CY) group opens stays
+# within the hour ring's radius (316, plus a margin for rough.js wobble) of that centre. An ink
+# circle given the centre (CX, CY) again inside that group lands at the chart's far corner: its
+# own coordinates still look small, but they run to 676, so only this bound sees it.
+ink_in_bounds() {
+  local n worst
+  [ -f "$WORK/$1.body" ] || { echo "no body"; return 1; }
+  tr '\n' ' ' <"$WORK/$1.body" | awk '{ i = index($0, "translate(360 380)"); if (i) print substr($0, i) }' >"$WORK/$1.wheel"
+  [ -s "$WORK/$1.wheel" ] || { echo "no translate(360 380) group"; return 1; }
+  n="$(grep -oE ' d="M[^"]*"' "$WORK/$1.wheel" | grep -c .)"
+  [ "$n" -ge 10 ] || { echo "only $n inked paths found, want at least 10"; return 1; }
+  worst="$(grep -oE ' d="M[^"]*"' "$WORK/$1.wheel" | grep -oE -- '-?[0-9]+(\.[0-9]+)?' | awk 'BEGIN { m = 0 } { v = $1 + 0; if (v < 0) v = -v; if (v > m) m = v } END { print m }')"
+  awk -v w="$worst" 'BEGIN { exit !(w <= 340) }' || { echo "an inked coordinate reaches $worst from the wheel's centre, the ring is 316"; return 1; }
+}
+
 TOKYO='/planisphere?city=tokyo&date=2026-10-20&hour=21'
 
 get planisphere /planisphere
@@ -274,6 +289,7 @@ check "/planisphere links the IAU" has planisphere 'href="https://www.iau.org/'
 check "/planisphere links Orrery" has planisphere 'href="/orrery"'
 check "/planisphere stylesheets are Planisphere's own" planisphere_stylesheets
 check "no \"use client\" file under app/(planisphere)" no_client_files
+check "/planisphere's ink stays inside the chart" ink_in_bounds planisphere
 
 # Tokyo, 2026-10-20 21:00: the north disc, Vega up and Sirius not
 check "Tokyo returns 200" status_is tokyo 200
@@ -293,6 +309,7 @@ check "Tokyo is not daytime at 21:00" lacks tokyo 'data-daylight'
 check "Tokyo's up line names Vega" up_lists tokyo Vega
 check "Tokyo's up line leaves out Sirius" up_omits tokyo Sirius
 check "Tokyo keeps its date in the form" has tokyo 'value="2026-10-20"'
+check "Tokyo's ink stays inside the chart" ink_in_bounds tokyo
 
 # Ho Chi Minh City at noon is daytime
 check "Ho Chi Minh City at noon returns 200" status_is noon 200
@@ -303,6 +320,7 @@ check "Ho Chi Minh City at noon says the Sun is up" has noon 'The Sun is up over
 check "Sydney returns 200" status_is sydney 200
 check "Sydney is the south disc" has sydney 'data-hemisphere="south"'
 check "Sydney draws at least 400 stars" count_ge sydney 'data-star=""' 400
+check "Sydney's ink stays inside the chart" ink_in_bounds sydney
 
 # Bad values fall back
 check "bad query values return 200" status_is bad 200

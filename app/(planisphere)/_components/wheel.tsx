@@ -107,9 +107,9 @@ export function Wheel({ state, daylight }: { state: State; daylight: boolean }) 
   const hourNow = hourTickAngle(state.hour, place, state.date);
 
   const frame = inkRect(8, 8, VIEW.w - 16, VIEW.h - 16, { seed: "frame", strokeWidth: 2.6 });
-  const ringOuter = inkCircle(CX, CY, RING_OUT, { seed: "ring-out", strokeWidth: 2, roughness: 0.8 });
-  const ringInner = inkCircle(CX, CY, RING_IN, { seed: "ring-in", strokeWidth: 1.6, roughness: 0.8 });
-  const rimOuter = inkCircle(CX, CY, R + RIM, { seed: "rim-out", strokeWidth: 1.6, roughness: 0.8 });
+  const ringOuter = inkCircle(0, 0, RING_OUT, { seed: "ring-out", strokeWidth: 2, roughness: 0.8 });
+  const ringInner = inkCircle(0, 0, RING_IN, { seed: "ring-in", strokeWidth: 1.6, roughness: 0.8 });
+  const rimOuter = inkCircle(0, 0, R + RIM, { seed: "rim-out", strokeWidth: 1.6, roughness: 0.8 });
   const windowRim = inkPath(window, { seed: "window", strokeWidth: 2.4, roughness: 1 });
 
   const compass: ReactNode[] = COMPASS.map(({ letter, index }) => {
