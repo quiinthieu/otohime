@@ -187,6 +187,36 @@ css_has() {
   grep -qE -- "$1" "$WORK/vinyl.css" || { echo "stylesheet lacks $2"; return 1; }
 }
 
+# picker_styled <file>: the stylesheet carries @supports (appearance: base-select) and a ::picker(select) rule.
+picker_styled() {
+  [ -s "$1" ] || { echo "no stylesheet fetched"; return 1; }
+  grep -qE -- '@supports *\(appearance: *base-select\)' "$1" || { echo "stylesheet lacks @supports (appearance: base-select)"; return 1; }
+  grep -qE -- '::picker\(select\)' "$1" || { echo "stylesheet lacks ::picker(select)"; return 1; }
+}
+
+# base_select_guarded <file>: every base-select or ::picker( sits inside an @supports (appearance: base-select) block.
+# A grep cannot see nesting, so walk the braces and keep the stack of preludes.
+base_select_guarded() {
+  [ -s "$1" ] || { echo "no stylesheet fetched"; return 1; }
+  node -e '
+    const css = require("fs").readFileSync(process.argv[1], "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    const guard = /^@supports\s*\(\s*appearance\s*:\s*base-select\s*\)$/;
+    const stack = [];
+    let start = 0, bad = null;
+    const check = (text) => {
+      if (bad || !/base-select|::picker\(/.test(text)) return;
+      if (!stack.some((p) => guard.test(p))) bad = text.trim().slice(0, 100);
+    };
+    for (let i = 0; i < css.length; i++) {
+      const c = css[i];
+      if (c === "{") { const prelude = css.slice(start, i).trim(); if (!guard.test(prelude)) check(prelude); stack.push(prelude); start = i + 1; }
+      else if (c === ";") { check(css.slice(start, i)); start = i + 1; }
+      else if (c === "}") { check(css.slice(start, i)); stack.pop(); start = i + 1; }
+    }
+    if (bad) { console.log("outside @supports (appearance: base-select): " + bad); process.exit(1); }
+  ' "$1"
+}
+
 # The player is never hidden: no rule whose selector names the player host or
 # the monitor sets display: none or visibility: hidden. One rule per line first.
 player_never_hidden() {
@@ -287,6 +317,8 @@ check "/vinyl stylesheet keeps the player 16:9" css_has 'aspect-ratio: *16 */ *9
 check "/vinyl stylesheet keeps the player 480 px wide on desktop" css_has 'min-width: *480px' 'min-width: 480px'
 check "/vinyl stylesheet keeps the player 200 px tall on phones" css_has 'max\(200px' 'max(200px'
 check "/vinyl stylesheet never hides the player" player_never_hidden
+check "/vinyl stylesheet styles the select picker" picker_styled "$WORK/vinyl.css"
+check "/vinyl stylesheet keeps base-select inside @supports" base_select_guarded "$WORK/vinyl.css"
 check "/vinyl stylesheet clips the turntable cell" turntable_clips
 check "/vinyl stylesheet sets touch-action: none only on the tonearm" touch_action_only_arm
 check "tonearm stops a finger's pan with a non-passive touchstart" arm_touch_listener

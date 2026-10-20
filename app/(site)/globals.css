@@ -224,6 +224,48 @@
     background-repeat: no-repeat;
   }
 
+  @supports (appearance: base-select) {
+    select.field,
+    select.field::picker(select) {
+      appearance: base-select;
+    }
+
+    select.field::picker-icon {
+      display: none;
+    }
+
+    select.field::picker(select) {
+      margin-top: 4px;
+      padding: 4px;
+      border: 1px solid var(--ink);
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    select.field option {
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    select.field option:hover,
+    select.field option:focus-visible {
+      background: var(--paper-2);
+      outline: 0;
+    }
+
+    select.field option:checked {
+      background: var(--yellow);
+      color: var(--on-swatch);
+    }
+
+    select.field option::checkmark {
+      display: none;
+    }
+  }
+
   textarea.field {
     min-height: 4.5rem;
     resize: vertical;

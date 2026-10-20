@@ -94,6 +94,17 @@ main { width: min(100% - 32px, 1440px); margin: 16px auto 0; flex: 1; }
   border-radius: 8px;
   background: var(--card);
 }
+@supports (appearance: base-select) {
+  .crate-filters select,
+  .crate-filters select::picker(select) { appearance: base-select; }
+  .crate-filters select::picker-icon { color: var(--muted); }
+  .crate-filters select::picker(select) { margin-top: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); }
+  .crate-filters option { padding: 6px 10px; border-radius: 6px; }
+  .crate-filters option:hover,
+  .crate-filters option:focus-visible { background: var(--raised); outline: 0; }
+  .crate-filters option:checked { background: var(--accent); color: var(--bg); font-weight: 700; }
+  .crate-filters option::checkmark { display: none; }
+}
 .crate-empty { padding: 24px 8px; color: var(--muted); }
 .crate-list {
   list-style: none;

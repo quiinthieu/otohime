@@ -118,6 +118,8 @@ Walk Elements and the site the same way with `bash scripts/walk-elements.sh` (bu
 
 Walk Vinyl and the site the same way with `bash scripts/walk-vinyl.sh` (builds, serves on :4031: 12 sleeves, one monitor and one player host, no `iframe_api` or `<iframe>` in the server HTML, no `no-referrer` policy, Vinyl's one stylesheet with the player's `aspect-ratio: 16 / 9`, `min-width: 480px` and `max(200px, …)` and nothing hiding it, a `role="slider"` tonearm, one `data-drop-target` platter, `touch-action: none` on the tonearm alone and its non-passive `touchstart` listener in `turntable.tsx`, no flight under reduced motion, no crackle toggle unless `NEXT_PUBLIC_VINYL_CRACKLE=1`, no `.mp3`/`.wav`/`.ogg` under `app/(vinyl)` or `public/`, and `/projects` linking `/vinyl` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-vinyl.sh`.
 
+Probe the dropdown pickers in headless Chromium with `bash scripts/probe-selects.sh` (builds, serves on :4033, installs Playwright into a temp prefix and opens Vinyl's genre select and a site `select.field` in light and dark), or against production with `BASE_URL=https://otohime.dev bash scripts/probe-selects.sh`. The pickers are customizable selects (`appearance: base-select`) behind `@supports`, so Firefox keeps the native popup.
+
 Sun's parts and callouts live in `app/(sun)/_lib/poster.ts`; the ink is rough.js with a fixed seed in `app/(sun)/_lib/ink.ts`; `bash scripts/walk-sun.sh` counts the words on the served page (cap 220, `WORD_CAP` in `app/(sun)/_lib/words.ts`).
 
 Sun's motion is CSS only in `app/(sun)/sun.css`: the ink draws itself on, then three loops run (convection, photon, wind); all of it is off under reduced motion, and `app/(sun)/_lib/motion.test.ts` tests it.

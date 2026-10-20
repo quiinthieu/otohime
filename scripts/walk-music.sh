@@ -176,6 +176,52 @@ distinct_labels() {
   fi
 }
 
+# picker_styled <file>: the stylesheet carries @supports (appearance: base-select) and a ::picker(select) rule.
+picker_styled() {
+  [ -s "$1" ] || { echo "no stylesheet fetched"; return 1; }
+  grep -qE -- '@supports *\(appearance: *base-select\)' "$1" || { echo "stylesheet lacks @supports (appearance: base-select)"; return 1; }
+  grep -qE -- '::picker\(select\)' "$1" || { echo "stylesheet lacks ::picker(select)"; return 1; }
+}
+
+# base_select_guarded <file>: every base-select or ::picker( sits inside an @supports (appearance: base-select) block.
+# A grep cannot see nesting, so walk the braces and keep the stack of preludes.
+base_select_guarded() {
+  [ -s "$1" ] || { echo "no stylesheet fetched"; return 1; }
+  node -e '
+    const css = require("fs").readFileSync(process.argv[1], "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    const guard = /^@supports\s*\(\s*appearance\s*:\s*base-select\s*\)$/;
+    const stack = [];
+    let start = 0, bad = null;
+    const check = (text) => {
+      if (bad || !/base-select|::picker\(/.test(text)) return;
+      if (!stack.some((p) => guard.test(p))) bad = text.trim().slice(0, 100);
+    };
+    for (let i = 0; i < css.length; i++) {
+      const c = css[i];
+      if (c === "{") { const prelude = css.slice(start, i).trim(); if (!guard.test(prelude)) check(prelude); stack.push(prelude); start = i + 1; }
+      else if (c === ";") { check(css.slice(start, i)); start = i + 1; }
+      else if (c === "}") { check(css.slice(start, i)); stack.pop(); start = i + 1; }
+    }
+    if (bad) { console.log("outside @supports (appearance: base-select): " + bad); process.exit(1); }
+  ' "$1"
+}
+
+# Every stylesheet /music links (the site's own, with select.field), joined into $WORK/music.css.
+music_stylesheet() {
+  local hrefs href code
+  hrefs="$(grep -oE 'href="/_next/static/[^"]*\.css[^"]*"' "$WORK/music.body" | sort -u)"
+  [ -n "$hrefs" ] || { echo "/music links no stylesheet"; return 1; }
+  : >"$WORK/music.css"
+  while IFS= read -r href; do
+    href="$(printf '%s' "$href" | sed -E 's/^href="(.*)"$/\1/; s/&amp;/\&/g')"
+    code="$(curl -s --max-time 30 -o "$WORK/part.css" -w '%{http_code}' "$BASE_URL$href")"
+    [ "$code" = "200" ] || { echo "stylesheet $href returned HTTP $code"; return 1; }
+    cat "$WORK/part.css" >>"$WORK/music.css"
+    echo >>"$WORK/music.css"
+  done < <(printf '%s\n' "$hrefs")
+  [ -s "$WORK/music.css" ] || { echo "stylesheets are empty"; return 1; }
+}
+
 no_server_left() {
   ! curl -s -o /dev/null --max-time 2 "http://localhost:$PORT/" || { echo "something still answers on port $PORT"; return 1; }
 }
@@ -194,6 +240,10 @@ if [ "$LOCAL" -eq 1 ]; then
 else
   check "/music lists at least 3 channels" distinct_labels 3 ge
 fi
+
+check "/music stylesheets load" music_stylesheet
+check "/music stylesheet styles the select picker" picker_styled "$WORK/music.css"
+check "/music stylesheet keeps base-select inside @supports" base_select_guarded "$WORK/music.css"
 
 if [ "$LOCAL" -eq 1 ]; then
   cleanup
