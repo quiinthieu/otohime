@@ -39,6 +39,7 @@ app/(sun)/           Sun, a one-page hand-drawn poster of the Sun: its own root 
                      _components/ holds the inked cutaway (stage.tsx), all server components; `npm test` covers
                      its _lib/*.test.ts; the poster's words are _lib/poster.ts, the ink is _lib/ink.ts
                      (rough.js, fixed seed) and _lib/words.ts is the shared word counter
+                     _lib/bodies.ts holds the 14 Orrery bodies (sourced, tested by bodies.test.ts) and _lib/cutaway.ts draws any of them (tested by cutaway.test.ts); no page uses them yet
 app/(elements)/      Elements, a periodic table with a Bohr atom per element: its own root layout and CSS
                      (no Tailwind, system fonts); layout.tsx and elements.css are its root layout;
                      elements/page.tsx is /elements and elements/[symbol]/page.tsx the 118 static pages
