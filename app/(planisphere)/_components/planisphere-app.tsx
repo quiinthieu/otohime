@@ -165,6 +165,8 @@ export function PlanisphereApp({ initial, named, children }: { initial: State; n
   useEffect(() => {
     const el = root.current;
     if (!el) return;
+    // Chrome reads touch-action from the svg's box, not from the disc <g>; a finger turns the disc only once it can.
+    el.querySelector("svg.wheel")?.setAttribute("data-turnable", "");
     spin.current.angle ??= rotationOf(initial);
     if (painted.current === state) return;
     painted.current = state;

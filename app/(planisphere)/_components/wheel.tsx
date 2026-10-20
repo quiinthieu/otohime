@@ -138,7 +138,7 @@ export function Wheel({ state, daylight }: { state: State; daylight: boolean }) 
     <svg
       className="wheel"
       viewBox={`0 0 ${VIEW.w} ${VIEW.h}`}
-      role="img"
+      role="group"
       aria-labelledby="wheel-title wheel-desc"
       data-hemisphere={hemisphere}
       {...(daylight ? { "data-daylight": "" } : {})}
