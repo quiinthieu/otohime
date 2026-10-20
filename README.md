@@ -76,6 +76,14 @@ app/(planisphere)/   Planisphere, tonight's sky on an inked star wheel: its own 
                      _components/wheel.tsx draws the frame, hour ring, window and star disc on the server and
                      moon-corner.tsx the Moon; its engine is in _lib/ (stars, lines, cities, time, sky, sun, moon,
                      wheel, ink, words); `npm test` covers its _lib/*.test.ts
+app/(barometer)/     Barometer, a brass weather station for a chosen city: its own root layout and CSS (no Tailwind);
+                     layout.tsx (Orrery's hand fonts via next/font) and barometer.css are its root layout;
+                     barometer/page.tsx is /barometer, rendered per request from ?city=hcmc (an unknown city draws
+                     Ho Chi Minh City) so its GET form works with JavaScript off; _components/station.tsx inks the
+                     dial, thermometer, vane and cup on the server and hand-app.tsx, the one client island, submits
+                     the city on change and keeps the set hand in localStorage; its engine is in _lib/ (cities,
+                     codes, dial, reading, hand, station, ink, words); station.ts holds the only fetch;
+                     `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -143,6 +151,8 @@ Probe the dropdown pickers in headless Chromium with `bash scripts/probe-selects
 
 Walk Planisphere and the site with `bash scripts/walk-planisphere.sh` (builds, serves on :4037: no `B:` templates or `$RC` and exactly one GET form; Tokyo on 2026-10-20 at 21:00 draws at least 400 stars and 80 constellation lines, all four compass letters, one Moon, the north disc and Vega but not Sirius in the "up now" line; Ho Chi Minh City at noon shows the daytime window; Sydney shows the south disc; bad query values fall back to Ho Chi Minh City with a 200; every body is under 400 KB; the page links only its own stylesheet, with reduced motion and no Tailwind; the explainer is at most 120 words; the credit links are there; `/projects` links `/planisphere` once; no `"use client"` file yet), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-planisphere.sh`.
 
+Walk Barometer and the site the same way with `bash scripts/walk-barometer.sh` (builds, serves on :4051; `/barometer`, `?city=tokyo`, `?city=mexico-city` and `?city=nope` each draw exactly one face, `reading` or `quiet`, and the walk prints which, since the feed may be down: 200, the build-sha, one GET form, 24 cities, the Open-Meteo and CC BY 4.0 credit once, no `B:` templates or `$RC`, a body under 200 KB, and on the reading face a pressure of 900-1100 hPa (which rejects the 785 hPa surface pressure at altitude); `nope` and the bare page select Ho Chi Minh City, Tokyo selects Tokyo; `api.open-meteo.com` appears in no HTML and no client chunk; the page links only its own stylesheet; the explainer is at most 120 words; one `"use client"` file without rough.js; `/projects` links `/barometer` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-barometer.sh`.
+
 Walk Rotor and the site the same way with `bash scripts/walk-rotor.sh` (builds, serves on :4035: 26 lamps, 26 keys, three windows and one GET form; `?m=AAAAA` prints `BDZGO` on the tape, also as the no-JS form submits it; `?pos=ADU&m=AAAA` shows `BFY` in the windows (the double step); bad fields fall back to the defaults with a 200; `?m=BDZGO` decodes to `AAAAA`; a rings-and-plugs vector matches the engine; one `"use client"` file, no rough.js in any client chunk, an explainer of at most 120 words, both wiring sources linked and `/projects` linking `/rotor` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-rotor.sh`.
 
 The Sun's parts and callouts live in `app/(orrery)/_lib/poster.ts` and every other body's in `app/(orrery)/_lib/bodies.ts`; the ink is rough.js with a fixed seed in `app/(orrery)/_lib/ink.ts`; `bash scripts/walk-orrery.sh` counts the words on every served page (cap 220, `WORD_CAP` in `app/(orrery)/_lib/words.ts`).
@@ -193,6 +203,12 @@ Rotor (`/rotor`, `app/(rotor)/`) is an Enigma I drawn in ink on cream paper: thr
 ## Planisphere
 
 Planisphere (`/planisphere`, `app/(planisphere)/`) draws the sky for a city, a date and an hour as a paper star wheel: a disc of 921 stars (magnitude 4.5 or brighter, J2000, no precession) centred on the pole you can see, turned by one `rotate()` under a frame whose oval window is the horizon for the latitude. The maths is plain: Greenwich mean sidereal time (Meeus ch. 12) gives local sidereal time, which gives each star's altitude and azimuth; the Sun is Meeus ch. 25 low precision and the Moon is the Astronomical Almanac's seven-term longitude series, so every 2026 phase lands within 20 minutes. The stars and constellation lines are d3-celestial's (BSD-3-Clause, XHIP via VizieR V/137D, lines after the IAU), vendored by `scripts/vendor-planisphere.ts`; nothing is fetched at runtime. The page awaits `searchParams` with `export const instant = false` and no `<Suspense>`, so a plain GET form works with JavaScript off, and each query field falls back to its default on its own.
+
+## Barometer
+
+Barometer (`/barometer`, `app/(barometer)/`) draws a brass weather station for one of 24 cities: an aneroid dial with a black needle (Stormy, Rain, Change, Fair, Very Dry), a glass thermometer, a wind vane and a tin rain cup, all in rough.js ink, with one sentence under them ("Ho Chi Minh City, 17:30 local, 26.9 °C, 1011.2 hPa, drizzle."). The city is a plain GET form checked against the vendored list in `_lib/cities.ts`; an unknown city draws Ho Chi Minh City with a 200. With JavaScript on, the select reads on change, and **Set** moves the dial's second brass hand to the needle and keeps it in `localStorage` (`barometer.hand`), so the next visit shows whether the pressure rose or fell; **Clear** removes it.
+
+The readings are from [Open-Meteo](https://open-meteo.com/) (CC BY 4.0, no key), credited on every render. They are fetched only on the server, in `_lib/station.ts`: a `"use cache"` function whose `cacheLife` is 900 s after a good reading (the feed's own interval) and 60 s after a failure, with a 4 s `AbortSignal.timeout`. The dial reads `pressure_msl`, never `surface_pressure` (Mexico City answers 785 hPa for the second and about 1020 for the first). If the feed is down or slow the board still draws at rest, "The station is quiet.", with a 200. `BAROMETER_HOST` (an http(s) origin, read once at module load) points the server elsewhere for tests.
 
 ## Vinyl records
 

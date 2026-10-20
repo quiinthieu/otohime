@@ -63,6 +63,11 @@ test("Planisphere's root layout publishes BUILD_SHA as <meta name=build-sha> too
   assert.match(layout, /other:\s*\{\s*"build-sha":\s*process\.env\.BUILD_SHA\s*\?\?\s*"dev"\s*\}/);
 });
 
+test("Barometer's root layout publishes BUILD_SHA as <meta name=build-sha> too", () => {
+  const layout = read("app/(barometer)/layout.tsx");
+  assert.match(layout, /other:\s*\{\s*"build-sha":\s*process\.env\.BUILD_SHA\s*\?\?\s*"dev"\s*\}/);
+});
+
 test("the README documents the build stamp and the owner-author deploy rule", () => {
   const readme = read("README.md");
   assert.ok(readme.includes('<meta name="build-sha">'));

@@ -1,0 +1,244 @@
+/* Barometer's own stylesheet, hand-written: no Tailwind and no site tokens.
+   Wood, brass and a cream dial under brown ink; dark from the OS unless
+   localStorage.theme pinned light, or always when it pinned dark (the
+   layout's script sets data-theme). The instruments are always light objects,
+   so they keep a fixed dark ink; only the wood and the page change. The form
+   and the board stack in one column and stay inside the viewport at 320px: the
+   SVG shrinks with its column and long lines break. The needle swings once on
+   load; the reduced-motion rule at the end turns that off. */
+:root {
+  color-scheme: light;
+  --paper: #efe3c8;
+  --panel: #e6d6b4;
+  --ink: #3a2a28;
+  --ink-soft: #6b5a50;
+  --field: #fffaf0;
+  --coral: #c8472c;
+  --wood: #c9a26b;
+  --wood-edge: #8a5f3a;
+  --on-wood: #2f2018;
+  --brass: #d4a53a;
+  --brass-dark: #8f6a1c;
+  --cream: #f3ead2;
+  --dial-ink: #3a2a28;
+  --glass: #fbf6e6;
+  --mercury: #c8362b;
+  --water: #4f8fb8;
+  --tin: #cfd2d4;
+  --hand-stack: "Chalkboard SE", "Comic Neue", "Comic Sans MS", cursive;
+  --title: var(--font-title, var(--hand-stack));
+  --hand-font: var(--font-hand, var(--hand-stack));
+  --frame-radius: 14px 12px 15px 11px;
+  font-family: var(--hand-font);
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--ink);
+  background-color: var(--paper);
+  font-synthesis: none;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #2b1d14;
+  --panel: #36261b;
+  --ink: #efe6d6;
+  --ink-soft: #bfae98;
+  --field: #3b2b20;
+  --coral: #ff8a6e;
+  --wood: #5a3d27;
+  --wood-edge: #8a5f3a;
+  --on-wood: #f0e4cf;
+  --cream: #e4d9bd;
+  --glass: #e9e0c6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #2b1d14;
+    --panel: #36261b;
+    --ink: #efe6d6;
+    --ink-soft: #bfae98;
+    --field: #3b2b20;
+    --coral: #ff8a6e;
+    --wood: #5a3d27;
+    --wood-edge: #8a5f3a;
+    --on-wood: #f0e4cf;
+    --cream: #e4d9bd;
+    --glass: #e9e0c6;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: var(--ink); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+a:hover { color: var(--coral); }
+a:focus-visible,
+button:focus-visible,
+select:focus-visible {
+  outline: 2px dashed var(--coral);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.barometer { min-height: 100vh; display: flex; flex-direction: column; }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Top bar: the ways out. Wraps rather than overflowing at 320px. */
+.topbar { padding: 14px 16px 0; max-width: 960px; width: 100%; margin: 0 auto; }
+.ways-out { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-width: 0; }
+.home-link { font-family: var(--title); font-size: 22px; }
+.ways-out .home-link + .home-link { font-size: 18px; }
+
+.bench {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 8px 16px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 20px;
+}
+[data-station] { min-width: 0; display: grid; gap: 14px; }
+
+h1 { margin: 0; font-family: var(--title); font-weight: 700; font-size: 64px; line-height: 1; }
+h2 { margin: 0 0 8px; font-family: var(--title); font-weight: 700; font-size: 30px; line-height: 1.1; }
+.tagline { margin: 4px 0 0; font-size: 22px; color: var(--ink-soft); }
+
+/* The form: the city and Read, side by side where there is room */
+.picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  padding: 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--frame-radius);
+  background: var(--panel);
+}
+.field { display: grid; gap: 4px; min-width: 0; flex: 1 1 200px; }
+.field > span { font-size: 16px; }
+select, button { font: inherit; color: var(--ink); }
+select {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 4px 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  background: var(--field);
+}
+.picker button,
+.hand-button {
+  min-height: 40px;
+  padding: 4px 22px;
+  border: 2px solid var(--ink);
+  border-radius: var(--frame-radius);
+  background: var(--brass);
+  color: #3a2a28;
+  font-family: var(--title);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hand-button.quiet-button { background: var(--field); color: var(--ink); }
+@supports (appearance: base-select) {
+  select,
+  select::picker(select) { appearance: base-select; }
+  select::picker-icon { color: var(--ink-soft); }
+  select::picker(select) { margin-top: 4px; padding: 4px; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--field); color: var(--ink); }
+  option { padding: 6px 10px; border-radius: 6px; }
+  option:hover,
+  option:focus-visible { background: var(--panel); outline: 0; }
+  option:checked { background: var(--brass); color: #3a2a28; font-weight: 700; }
+  option::checkmark { display: none; }
+}
+
+/* The station */
+.station { display: block; width: 100%; max-width: 100%; height: auto; }
+.wood { fill: var(--wood); stroke: var(--wood-edge); stroke-width: 3; }
+.ink path { stroke: var(--ink); }
+.dial-ink path { stroke: var(--dial-ink); }
+.on-wood-ink path { stroke: var(--on-wood); }
+.station text { font-family: var(--title); fill: var(--dial-ink); }
+.dial-brass { fill: var(--brass); stroke: var(--brass-dark); stroke-width: 2; }
+.dial-face { fill: var(--cream); }
+.dial-word { font-size: 17px; font-weight: 700; }
+.dial-number { font-size: 14px; }
+.dial-unit { font-size: 15px; }
+.hand-fill { fill: var(--brass); }
+.needle-fill { fill: #1f1512; }
+.glass { fill: var(--glass); }
+.mercury { fill: var(--mercury); }
+.vane-face { fill: var(--cream); }
+.compass { font-size: 18px; font-weight: 700; fill: var(--on-wood); }
+.station .compass,
+.station .scale-number,
+.station .unit,
+.station .quiet-note { fill: var(--on-wood); }
+.scale-number { font-size: 14px; }
+.unit { font-size: 16px; }
+.tin { fill: var(--tin); }
+.water { fill: var(--water); }
+.quiet-note { font-size: 22px; }
+
+/* Moving parts turn about the dial's hub, the vane's pin, by their transform. */
+.needle,
+.set-hand { transform-box: view-box; transform-origin: 200px 200px; }
+.set-hand { transform: rotate(var(--hand, 0deg)); }
+.arrow { transform-box: view-box; transform-origin: 524px 104px; }
+.needle { animation: swing 1.1s ease-out; }
+@keyframes swing { from { transform: rotate(-135deg); } }
+/* The set hand is hidden until the visitor has set one for this city. */
+[data-station]:not([data-hand="set"]) [data-set-hand] { display: none; }
+[data-face="quiet"] .dial,
+[data-face="quiet"] .thermometer,
+[data-face="quiet"] .vane,
+[data-face="quiet"] .cup { opacity: 0.78; }
+
+.sentence {
+  margin: 0;
+  padding: 8px 12px;
+  border: 2px dashed var(--ink);
+  border-radius: var(--frame-radius);
+  background: var(--field);
+  font-size: 22px;
+  overflow-wrap: anywhere;
+}
+.hand-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; min-width: 0; }
+.hand-bar p { margin: 0; }
+.hand-note { color: var(--ink-soft); overflow-wrap: anywhere; min-width: 0; }
+
+/* The explainer and the credit */
+.explainer { max-width: 60ch; min-width: 0; }
+.explainer p { margin: 0 0 10px; }
+.credit { padding: 8px 16px 24px; max-width: 960px; width: 100%; margin: 0 auto; color: var(--ink-soft); }
+.credit p { margin: 0; overflow-wrap: anywhere; }
+
+@media (max-width: 480px) {
+  h1 { font-size: 48px; }
+  .tagline { font-size: 19px; }
+  .sentence { font-size: 19px; }
+  .picker button { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
