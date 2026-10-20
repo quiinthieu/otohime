@@ -1,0 +1,238 @@
+/* Rotor's own stylesheet, hand-written: no Tailwind and no site tokens.
+   Cream paper and brown ink, as Orrery; dark from the OS unless
+   localStorage.theme pinned light, or always when it pinned dark (the
+   layout's script sets data-theme). The box and the lid sit side by side from
+   900px and stack below it. Nothing is wider than the viewport at 320px: the
+   SVG and the keyboard shrink with their column, long URLs and tape lines
+   wrap, and fieldsets drop their min-content width. The only motion is the
+   key sink and the lamp glow, stepped at 12 fps by the island; under reduced
+   motion they jump to their end and no transition runs. */
+:root {
+  color-scheme: light;
+  --paper: #f6f1e7;
+  --panel: #efe6d3;
+  --ink: #3a2a28;
+  --ink-soft: #6b5a50;
+  --glass: #fffaf0;
+  --amber: #f59f2a;
+  --amber-glow: rgb(245 159 42 / 0.6);
+  --coral: #ef6a4c;
+  --field: #fffaf0;
+  --hand-stack: "Chalkboard SE", "Comic Neue", "Comic Sans MS", cursive;
+  --title: var(--font-title, var(--hand-stack));
+  --hand: var(--font-hand, var(--hand-stack));
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --frame-radius: 14px 12px 15px 11px;
+  font-family: var(--hand);
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--ink);
+  background-color: var(--paper);
+  font-synthesis: none;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1d1916;
+  --panel: #27211d;
+  --ink: #efe6d6;
+  --ink-soft: #b9ab98;
+  --glass: #2f2823;
+  --amber: #ffb648;
+  --amber-glow: rgb(255 182 72 / 0.55);
+  --coral: #ff8a6e;
+  --field: #2a231f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #1d1916;
+    --panel: #27211d;
+    --ink: #efe6d6;
+    --ink-soft: #b9ab98;
+    --glass: #2f2823;
+    --amber: #ffb648;
+    --amber-glow: rgb(255 182 72 / 0.55);
+    --coral: #ff8a6e;
+    --field: #2a231f;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: var(--ink); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+a:hover { color: var(--coral); }
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px dashed var(--coral);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rotor { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* Top bar: the ways out. Wraps rather than overflowing at 320px. */
+.topbar { padding: 14px 16px 0; max-width: 1180px; width: 100%; margin: 0 auto; }
+.ways-out { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-width: 0; }
+.home-link { font-family: var(--title); font-size: 22px; }
+.ways-out .home-link + .home-link { font-size: 18px; }
+
+/* The bench: title, machine, lid, explainer */
+.bench {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 16px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "title" "machine" "lid" "explainer";
+  align-content: start;
+  gap: 20px;
+}
+.title { grid-area: title; }
+.machine { grid-area: machine; min-width: 0; }
+.lid { grid-area: lid; min-width: 0; }
+.explainer { grid-area: explainer; min-width: 0; max-width: 60ch; }
+
+@media (min-width: 900px) {
+  .bench {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-areas: "title title" "machine lid" "explainer lid";
+    column-gap: 32px;
+  }
+}
+
+h1 { margin: 0; font-family: var(--title); font-weight: 700; font-size: 64px; line-height: 1; }
+h2 { margin: 0 0 8px; font-family: var(--title); font-weight: 700; font-size: 30px; line-height: 1.1; }
+.tagline { margin: 4px 0 0; font-size: 22px; color: var(--ink-soft); }
+
+/* The box */
+.box { display: block; width: 100%; max-width: 100%; height: auto; }
+.box .panel { fill: var(--panel); }
+.box .ink path { stroke: var(--ink); }
+.box text { font-family: var(--title); fill: var(--ink); }
+.window-letter { font-size: 34px; font-weight: 700; }
+.rotor-name { font-size: 18px; fill: var(--ink-soft); }
+.lamp text { font-size: 22px; font-weight: 700; }
+.lamp .glass { fill: var(--glass); }
+.lamp.lit .glass {
+  fill: var(--amber);
+  fill-opacity: calc(0.35 + 0.65 * var(--glow, 1));
+  filter: drop-shadow(0 0 calc(10px * var(--glow, 1)) var(--amber-glow));
+}
+
+/* The keyboard: three staggered rows on an 18-column grid, two columns a key */
+.keyboard { display: grid; gap: 4px; max-width: 560px; margin: 12px auto 0; }
+.keys-row { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); }
+.keys-row .key { grid-column: span 2; }
+.keys-row:nth-child(2) .key:first-child { grid-column: 2 / span 2; }
+.key {
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  margin: 0 2px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink);
+  font-family: var(--title);
+  font-weight: 700;
+  font-size: clamp(14px, 4vw, 22px);
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transform: translateY(calc(var(--sink, 0) * 3px)) scale(calc(1 - var(--sink, 0) * 0.06));
+}
+/* the key's face, inside its inked ring */
+.key::before { content: ""; position: absolute; inset: 11%; border-radius: 50%; background: var(--glass); }
+.key.down::before { background: var(--panel); }
+.key .cap { position: absolute; inset: 0; width: 100%; height: 100%; }
+.key .cap path { stroke: var(--ink); }
+.key span { position: relative; }
+
+/* The tape: plain above, code below, monospace in groups of five */
+.tape {
+  margin-top: 14px;
+  padding: 8px 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--frame-radius);
+  background: var(--field);
+  font-family: var(--mono);
+  font-size: 16px;
+  letter-spacing: 0.04em;
+}
+.tape p { margin: 0; display: flex; gap: 10px; align-items: baseline; min-height: 1.5em; min-width: 0; }
+.tape [data-tape] { overflow-wrap: anywhere; white-space: pre-wrap; min-width: 0; }
+.tape [data-tape="code"] { font-weight: 700; }
+.tape-label { flex: none; width: 4.5em; font-family: var(--hand); font-size: 15px; letter-spacing: 0; color: var(--ink-soft); }
+.cut { color: var(--ink-soft); }
+
+/* The lid: the settings form, the share line */
+.lid form { display: grid; gap: 12px; }
+fieldset { min-width: 0; margin: 0; padding: 8px 10px 10px; border: 2px solid var(--ink); border-radius: var(--frame-radius); }
+legend { padding: 0 4px; font-family: var(--title); font-size: 22px; font-weight: 700; }
+.slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.slot { display: grid; gap: 6px; }
+.slot label { display: grid; gap: 2px; font-size: 16px; }
+select, input, textarea, button { font: inherit; color: var(--ink); }
+select, input[name="plug"], textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  background: var(--field);
+}
+.reflector { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.reflector label { display: inline-flex; gap: 6px; align-items: center; }
+.reflector input { accent-color: var(--coral); width: 18px; height: 18px; }
+.field { display: grid; gap: 4px; }
+input[name="plug"], textarea { font-family: var(--mono); font-size: 16px; text-transform: uppercase; }
+input[aria-invalid="true"] { border-color: var(--coral); border-style: dashed; }
+textarea { resize: vertical; }
+.hint { margin: -6px 0 0; font-size: 15px; color: var(--ink-soft); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.actions button {
+  padding: 6px 18px;
+  border: 2px solid var(--ink);
+  border-radius: var(--frame-radius);
+  background: var(--glass);
+  font-family: var(--title);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.actions button[type="submit"] { background: var(--amber); color: #3a2a28; }
+.share, .decode { margin: 12px 0 0; overflow-wrap: anywhere; }
+.share a { font-family: var(--mono); font-size: 15px; }
+
+/* The explainer and the credit */
+.explainer p { margin: 0 0 10px; }
+.credit { padding: 8px 16px 24px; max-width: 1180px; width: 100%; margin: 0 auto; color: var(--ink-soft); }
+.credit p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

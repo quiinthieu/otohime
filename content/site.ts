@@ -93,6 +93,7 @@ export const site = {
     { title: "Orrery", note: "The Sun, the planets and five stars, cut open and drawn by hand.", href: "/orrery", status: "live", colour: "yellow" },
     { title: "Elements", note: "All 118, each with a spinning atom and one surprising fact.", href: "/elements", status: "live", colour: "blue" },
     { title: "Vinyl", note: "Dig the crate, drop the needle, watch it play.", href: "/vinyl", status: "live", colour: "pink" },
+    { title: "Rotor", note: "An Enigma, drawn by hand. Type and watch the lamps.", href: "/rotor", status: "live", colour: "coral" },
   ] as Project[],
   // TODO(otohime)
   music: "Songs on repeat, one channel each. Tune in.",

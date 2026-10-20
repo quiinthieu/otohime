@@ -110,6 +110,19 @@ test("no fetch( anywhere under app/(rotor)/", () => {
   for (const file of rotorFiles) assert.ok(!FETCH.test(readFileSync(file, "utf8")), relative(ROOT, file));
 });
 
+test("exactly one \"use client\" file, the island, and it imports no ink, box or rough.js", () => {
+  const clients = rotorFiles.filter((f) => /^\s*["']use client["']/m.test(readFileSync(f, "utf8")));
+  assert.deepEqual(clients.map((f) => relative(ROOT, f)), [join("app", "(rotor)", "_components", "rotor-app.tsx")]);
+  for (const spec of specifiers(clients[0])) {
+    assert.ok(!ROUGH.test(spec) && !/\/ink(\.ts)?$/.test(spec) && !/\/box$/.test(spec), `the island imports ${spec}`);
+  }
+});
+
+test("only the layout's theme pin and nothing else under app/(rotor)/ touches localStorage", () => {
+  const users = rotorFiles.filter((f) => /\.tsx?$/.test(f) && readFileSync(f, "utf8").includes("localStorage"));
+  assert.deepEqual(users.map((f) => relative(ROOT, f)), [join("app", "(rotor)", "layout.tsx")]);
+});
+
 test("GROUPS is read from app/: the site and every other project, never Rotor", () => {
   assert.ok(GROUPS.includes("(site)"), "(site)");
   assert.ok(GROUPS.includes("(shore)"), "(shore)");

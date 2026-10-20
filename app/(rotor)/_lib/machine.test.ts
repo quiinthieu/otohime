@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { DEFAULTS, encode, MESSAGE_CAP, toQuery, type Settings } from "./enigma.ts";
-import { FPS, FRAME_MS, KEY_FRAMES, LAMP_FRAMES, machine, newMachine, pending, type Machine, type MachineAction } from "./machine.ts";
+import { FPS, FRAME_MS, KEY_FRAMES, LAMP_FRAMES, machine, newMachine, pending, restore, type Machine, type MachineAction } from "./machine.ts";
 
 const play = (s: Machine, ...actions: MachineAction[]) => actions.reduce(machine, s);
 const press = (letter: string): MachineAction => ({ type: "press", letter });
@@ -120,4 +120,39 @@ test("clear empties the tape and goes back to the start", () => {
   assert.equal(s.plain, "");
   assert.equal(s.code, "");
   assert.equal(s.positions, "QEV");
+});
+
+test("a named release lets go of that key only", () => {
+  const down = play(newMachine(DEFAULTS), press("A"));
+  assert.equal(play(down, { type: "release", letter: "B" }), down);
+  assert.equal(play(down, { type: "release", letter: "a" }).down, null);
+});
+
+test("restore lights the last lamp, warm, and the next key carries on", () => {
+  const s = restore(DEFAULTS, "AAAAA");
+  assert.equal(s.lamp, "O");
+  assert.equal(s.lampFrame, LAMP_FRAMES);
+  assert.equal(s.positions, "AAF");
+  assert.ok(!pending(s));
+  assert.equal(restore(DEFAULTS, "").lamp, null);
+  assert.equal(restore(DEFAULTS, "AB!").lamp, encode(DEFAULTS, "AB")[1], "the last letter, not the last character");
+  assert.equal(play(s, press("A")).code, encode(DEFAULTS, "AAAAAA"));
+});
+
+test("plugs rewires the whole board, and a bad board keeps the old one", () => {
+  const typed = typeOn(newMachine(DEFAULTS), "HELLO");
+  const s = play(typed, { type: "plugs", pairs: ["ab", "CD"] });
+  assert.deepEqual(s.settings.plugs, ["AB", "CD"]);
+  assert.equal(s.code, encode({ ...DEFAULTS, plugs: ["AB", "CD"] }, "HELLO"));
+  assert.equal(play(s, { type: "plugs", pairs: ["AB", "BC"] }), s);
+  assert.equal(play(s, { type: "plugs", pairs: ["AB", "CD"] }), s);
+  assert.deepEqual(play(s, { type: "plugs", pairs: [] }).settings.plugs, []);
+});
+
+test("message retypes the tape from the start positions", () => {
+  const s = play(typeOn(newMachine(DEFAULTS), "XYZ"), { type: "message", text: "aaaaa" });
+  assert.equal(s.plain, "AAAAA");
+  assert.equal(s.code, "BDZGO");
+  assert.equal(s.positions, "AAF");
+  assert.equal(play(s, { type: "message", text: "A".repeat(300) }).plain.length, MESSAGE_CAP);
 });

@@ -20,6 +20,8 @@ export type InkOptions = {
   fillStyle?: "hachure" | "solid" | "zigzag";
   hachureAngle?: number;
   hachureGap?: number;
+  // one pass of the pen instead of rough.js's two: half the path data
+  disableMultiStroke?: boolean;
 };
 
 const generator = rough.generator();

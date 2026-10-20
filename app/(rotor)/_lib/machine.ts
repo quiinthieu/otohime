@@ -6,8 +6,9 @@
 // advances the key-sink and lamp-glow frames at 12 fps; under reduced motion
 // they jump straight to their last frame. A settings change sends the windows
 // back to the start positions and enciphers the tape again from there, so
-// the tape always matches the share URL.
-import { encodeLetter, MAX_PLUGS, MESSAGE_CAP, run, type Settings } from "./enigma.ts";
+// the tape always matches the share URL. "message" retypes the whole tape (the
+// lid's textarea); "plugs" rewires the whole plugboard (the lid's AB-CD field).
+import { encodeLetter, MAX_PLUGS, MESSAGE_CAP, parsePlugs, run, type Settings } from "./enigma.ts";
 import type { ReflectorName, RotorName } from "./wiring.ts";
 
 export const FPS = 12;
@@ -31,12 +32,14 @@ export type Machine = {
 
 export type MachineAction =
   | { type: "press"; letter: string }
-  | { type: "release" }
+  | { type: "release"; letter?: string }
   | { type: "set-rotor"; slot: Slot; name: RotorName }
   | { type: "set-ring"; slot: Slot; letter: string }
   | { type: "set-start"; slot: Slot; letter: string }
   | { type: "plug"; a: string; b: string }
   | { type: "unplug"; a: string }
+  | { type: "plugs"; pairs: readonly string[] }
+  | { type: "message"; text: string }
   | { type: "reflector"; name: ReflectorName }
   | { type: "motion"; reduced: boolean }
   | { type: "clear" }
@@ -50,6 +53,16 @@ export function newMachine(settings: Settings, message = "", reduced = false): M
   const plain = Array.from(message.toUpperCase()).slice(0, MESSAGE_CAP).join("");
   const { code, positions } = run(settings, plain);
   return { settings, positions, plain, code, down: null, lamp: null, keyFrame: 0, lampFrame: 0, reduced };
+}
+
+/**
+ * The machine as the page first shows it: like newMachine, with the lamp of
+ * the last letter still lit (fully warm), as the server drew it.
+ */
+export function restore(settings: Settings, message = "", reduced = false): Machine {
+  const s = newMachine(settings, message, reduced);
+  const lamp = s.code.replace(/[^A-Z]/g, "").at(-1) ?? null;
+  return lamp ? { ...s, lamp, lampFrame: LAMP_FRAMES } : s;
 }
 
 /** Whether a tick would change anything: the island's timer runs only while this holds. */
@@ -76,7 +89,9 @@ export function machine(s: Machine, action: MachineAction): Machine {
       };
     }
     case "release":
-      return s.down === null ? s : { ...s, down: null, lamp: null, keyFrame: 0, lampFrame: 0 };
+      // a named release lets go of that key only (another key coming up changes nothing)
+      return s.down === null || (action.letter !== undefined && action.letter.toUpperCase() !== s.down)
+        ? s : { ...s, down: null, lamp: null, keyFrame: 0, lampFrame: 0 };
     case "tick":
       return pending(s)
         ? {
@@ -122,6 +137,14 @@ export function machine(s: Machine, action: MachineAction): Machine {
       const plugs = s.settings.plugs.filter((p) => !p.includes(a));
       return plugs.length === s.settings.plugs.length ? s : resettle(s, { ...s.settings, plugs });
     }
+    case "plugs": {
+      const joined = action.pairs.join("-").toUpperCase();
+      const plugs = parsePlugs(joined);
+      if (joined !== "" && plugs.length === 0) return s; // not a valid plugboard: keep the old one
+      return plugs.join("-") === s.settings.plugs.join("-") ? s : resettle(s, { ...s.settings, plugs });
+    }
+    case "message":
+      return resettle({ ...s, plain: action.text }, s.settings);
     case "reflector":
       return action.name === s.settings.reflector ? s : resettle(s, { ...s.settings, reflector: action.name });
   }
