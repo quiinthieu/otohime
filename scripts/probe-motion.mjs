@@ -285,7 +285,8 @@ try {
     }
   }
   // The 404 document's own load is logged as a failed resource; anything else, a 404 subresource included, is an error.
-  const notFoundLoad = (e) => /\/does-not-exist: Failed to load resource: the server responded with a status of 404 \(Not Found\)$/.test(e);
+  // HTTP/1.1 (next start) logs "404 (Not Found)"; HTTP/2 (otohime.dev) has no reason phrase and logs "404 ()".
+  const notFoundLoad = (e) => /\/does-not-exist: Failed to load resource: the server responded with a status of 404 \((?:Not Found)?\)$/.test(e);
   const siteReal = siteErrors.filter((e) => !notFoundLoad(e));
   check("site: /projects, /sign-in and /does-not-exist load with no console error or page error", siteReal.length === 0, siteReal.slice(0, 3).join(" | "));
 
