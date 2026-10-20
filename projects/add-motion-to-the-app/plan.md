@@ -337,3 +337,272 @@ delivered sha, and the nine existing walks pass with `BASE_URL` set. A person
 at QA looks at the title morph once at each viewport. It is advisory: if it
 looks wrong, the fallback in Decisions is applied, and nothing waits on that
 look.
+
+---
+
+## Revision 2: after acceptance cycle 1 (run-6935)
+
+Tasks t-1184, t-1185 and t-1186 above are done and stay as they are. The cycle
+1 acceptance ([acceptance_report_1.md](acceptance_report_1.md),
+[change_request_1.md](change_request_1.md)) failed on two defects plus one
+smaller one. This revision adds two build tasks, numbered from 1 again, that
+depend only on each other.
+
+**Product, still owed.** Signing in ends on `/dashboard` with the crossfade and
+no page error, and so does any full-page load into a signed-in room (for
+example `?next=/account`). Every exit from the 403 and the 404 fades the page
+out and the next page in, their own Go home buttons included, and so does every
+move between the home page, the sidebar pages and the sign-in pages. Reduced
+motion and JavaScript off stay still. The motion checks sign in, so a
+regression turns the gate and CI red.
+
+### What was measured (run-6935, local production build of f06d68a, 1366×768, headless Chromium 156)
+
+A throwaway stack (docker Postgres, `next start` on :4091). An init script on
+every document wrapped `Document.prototype.startViewTransition` to log a stack,
+and listened to `pageswap`, `pagereveal` and `pageerror`. Nothing was changed
+in the repo. The candidate fixes below are **not yet proved**: proving them is
+the tasks' first step.
+
+**1. The sign-in page error is React's streamed reveal colliding with the hop.**
+The caller is not React DOM client or the Next router. It is Fizz's inline
+`$RV`/`$RC` script in the HTML (`/dashboard:4:273`, revealing boundary `B:0`,
+the `loading.tsx` Suspense boundary). That script calls
+`document.startViewTransition({update, types: []})` whenever the revealed
+content holds `vt-enter`/`vt-exit` markers. `pagereveal` carries the hop at
+32 ms. Fizz calls `startViewTransition` at 352 ms, while the hop is still
+active (it finishes at 416 ms). Chrome skips it and rejects `ready` with
+`AbortError: Transition was skipped. Navigation transition active`. Fizz's
+`A.ready.finally(...)` hands the rejection on with no handler, so it surfaces
+as the uncaught page error. The visitor still sees the hop's crossfade.
+
+| Full-load hop from `/shore` (`location.assign`), 2 runs each | Hop transition | Fizz `startViewTransition` | Page error |
+| --- | --- | --- | --- |
+| signed out: `/work` | yes | 2/2 | **2/2** |
+| signed out: `/sign-in`, `/`, `/projects` | yes | 0 | 0 |
+| signed out: `/does-not-exist` | **no** | 0 | **2/2**: `InvalidStateError: … ViewTransition opt-in disabled` |
+| owner: `/dashboard`, `/account`, `/admin/users`, `/admin/roles`, `/work` | yes | 2/2 each | **2/2 each** |
+| owner: `/` | yes | 0 | 0 |
+| plain user: `/dashboard`, `/account` | yes | 2/2 | **2/2** |
+| plain user: `/admin/roles` (403) | yes | 0 | 0 |
+
+So the defect is not limited to sign-in. Every dynamic `(app)` page whose
+boundary streams in after a hop logs it, signed-out `/work` included. Fizz
+already defers to a transition in flight:
+`var f=document.__reactViewTransition; if(f){f.finished.finally($RV.bind(null,g));return}`.
+
+**2. The 403 and 404 cuts are a route-group swap, not the buttons.**
+
+| From | Click | `startViewTransition` | `::view-transition-*` animations |
+| --- | --- | --- | --- |
+| 403 | its Go home | none | none (cut) |
+| 403 | brand mark (`/`) | none | none (cut) |
+| 403 | nav Projects / Dashboard | React DOM client | fade-out 150, fade-in 150+210 |
+| 404 | its Go home | React DOM client | only `old(…) fade-out 150` |
+| `/work`, `/dashboard` | brand mark (`/`) | **none** | **none (cut)** |
+
+Every soft navigation between the `(app)` and `(home)` group layouts cuts,
+`/work → /` included (the change request's "from /work, Home fades in" did not
+reproduce here). React runs `enter`/`exit` only for a `<ViewTransition>` that
+sits above every DOM node of the subtree being inserted or removed. On a group
+swap, both pages' wrappers are inside their layout's `<main>`, so neither
+fires. The 404's wrapper in `app/(site)/not-found.tsx` is at the top of what is
+removed, so its exit runs, but Home's wrapper is inside `(home)/layout.tsx`'s
+`<main>` and never enters. The `(auth)` group layout has the same shape, so
+`/work → /sign-in` (the masthead's Sign in) and `/sign-in → /` (its brand mark)
+are expected to cut as well.
+
+### Revision 2 decisions
+
+| Decision | Why |
+| --- | --- |
+| Fix the error at its source with a one-line inline guard in `app/(site)/layout.tsx`'s `<head>`: on `pagereveal` with a `viewTransition`, set `document.__reactViewTransition` to it and clear it when it finishes. | Fizz already waits on `document.__reactViewTransition.finished`, so the reveal runs right after the hop and both animate. Catching the rejection (`unhandledrejection.preventDefault`) or dropping `@view-transition` would hide the error or lose the crossfade, so both are refused. Removing `loading.tsx`'s wrapper is not enough, because the page's own `vt-enter` also triggers Fizz. |
+| If the guard leaves a collision (React DOM client also calls `startViewTransition` during a hop, or the guard makes React skip the hop), widen the guard in the same inline script: while the hop is active, a `startViewTransition` call runs its update after `hop.finished`. The hop's own animations must still run in full. | The checks below measure both conditions. Choosing between them is the engineer's, recorded with `plan_manager_record_decision`. |
+| A `<ViewTransition enter="page-in" exit="page-out" default="none">` goes in the three **group** layouts `(home)`, `(app)` and `(auth)`, around everything below the masthead. The root `app/(site)/layout.tsx` stays bare. This replaces the rule "no site layout wraps its children" for those three files. | A group layout does not persist across a group swap, so its wrapper is the one React can fire. Inside a group the layout persists, its wrapper (`default="none"`) does nothing, and the pages' own wrappers keep handing over as today. The masthead stays outside the wrapper and keeps its `masthead` name. |
+| Fallback, if the probe cannot show both fades after the layout wrappers: the brand mark and both Go home buttons become plain `<a href="/">`, so each of those exits is a full-load hop. | After task 1 a hop into `/` crossfades with no error (measured: 0 errors into `/`). This is less smooth (a document load) but certain. |
+| A full-load hop into the 404 must log no page error. It should also crossfade. If the 404 shell cannot carry the inline opt-in, the engineer records that and the probe asserts a clean cut instead. | Measured: the 404 HTML's `<head>` has neither the inline `<style>` nor a stylesheet, which is why the old page's transition aborts. |
+| A new `scripts/probe-motion-signed-in.sh` + `.mjs`, separate from `probe-motion.sh`. It gets its database in this order: `DATABASE_URL` when one is set and answers; else a throwaway docker Postgres (as `scripts/e2e-local.sh` does); else `embedded-postgres` installed into the temp prefix like Playwright. If all three fail, it prints `not ok - database` and exits 1. It never skips. | The probe went green because it had no database. Docker was not running on an earlier QA worker. Accounts are never created on otohime.dev, which would change production state. |
+| The signed-in probe also runs in CI: a step in the `checks` job after the e2e step, against the `next start` the job already runs, with its Postgres service. | Every later push turns red on this error, which the change request asks for. Raise `timeout-minutes` from 15 only if the step needs it. |
+| The probe proves it can see the error: a negative check strips the guard from the HTML (Playwright `page.route`) and asserts the sign-in then logs the page error. | Lesson: a check that cannot fail proves nothing. The guard is one line, so stripping it is exact. |
+| Ports: the signed-in probe defaults to **4063**, docker and embedded Postgres take a free port, and servers are stopped by process group. | 4061 belongs to `probe-motion.sh`. Lesson: never `pkill -f "next start"`. |
+| The rare `Page already revealed` abort (1 of 181 hops in cycle 1) is out of scope. | It does not reproduce (0 of 120 repeats) and the hop still completes. |
+
+### Tasks (revision 2)
+
+#### 1. Sign-in and every full-load hop into a streamed site page: crossfade, no page error, a signed-in probe in CI
+
+- **Role:** software_engineer. QA is required.
+- **Problem:** Every full-page load into a dynamic site page logs an uncaught
+  "Transition was skipped. Navigation transition active": each sign-in
+  (Better Auth follows `callbackURL` with a full load), `?next=/account`,
+  any hop from a project to `/dashboard`, `/account`, `/admin/*` or `/work`.
+  React's inline Fizz reveal starts a view transition while the inbound
+  cross-document hop is still active. `scripts/probe-motion.sh` has no
+  database, so it never signs in and stays green.
+- **Action items:**
+  1. Read `AGENTS.md`, `node_modules/next/dist/docs/01-app/02-guides/view-transitions.md`,
+     this revision's "What was measured", `scripts/probe-motion.mjs`,
+     `scripts/e2e-local.sh` and `e2e/rbac.test.ts` (sign-up through
+     `/api/auth/sign-up/email` with an `origin` header, owner promotion by
+     SQL, cleanup by email pattern, the 429 retry).
+  2. Write the failing check first. Add `scripts/probe-motion-signed-in.sh` and
+     `.mjs`, in the shape of `probe-motion.*`: Playwright 1.64.0 and the
+     Chromium shell in a temp prefix, one `ok -` / `not ok -` line per check,
+     and a summary line. Database order as in the decisions: `DATABASE_URL`,
+     else docker, else `embedded-postgres`; then `npm run db:migrate`, build
+     unless `SKIP_BUILD=1`, `NODE_ENV=production next start` on port 4063
+     (`BETTER_AUTH_URL` set to it). With `BASE_URL` set (CI) it uses that
+     server and `DATABASE_URL` for promotion only, and builds and starts
+     nothing. It creates an owner and a plain user named `*-<run>@probe.test`,
+     and deletes them on exit however the run ends. Run it against today's
+     code and keep its red output for the report.
+  3. Its checks, at 1366×768 and at 390×844 (`isMobile`, `hasTouch`), with
+     motion on and reduced. **Sign-in:** a fresh context fills the
+     `/sign-in` form and submits. It lands on `/dashboard`, and `pagereveal`
+     carries a `viewTransition` (motion on). No `pageerror` and no
+     `console.error` from submit until `viewTransition.finished` has settled
+     and every Suspense boundary has revealed (no `template[id^="B:"]` left,
+     and `document.getAnimations()` empty or finished). The same holds for
+     `/sign-in?next=/account`, which lands on `/account`. **Hops:** from
+     `/shore`, a `location.assign` into each of these, each a full load with
+     the hop transition and no error. Owner: `/dashboard`, `/account`,
+     `/admin`, `/admin/users`, `/admin/users/<plain id>`, `/admin/roles`,
+     `/work`, `/`, `/projects`. Plain user: `/dashboard`, `/account`,
+     `/admin/roles` (the 403). **Reduced motion:** every hop completes,
+     every animation at load lasts ≤ 1 ms or has finished, and there is no
+     error. **Negative:** with the guard script stripped from the
+     `/dashboard` HTML (`page.route`), a sign-in at 1366×768 logs the
+     "Transition was skipped" page error. That check passes only if the
+     error is seen.
+  4. Add the signed-out hops to `scripts/probe-motion.mjs`, which needs no
+     database: `location.assign` from `/shore` into `/work`, `/play`,
+     `/notes`, `/music`, `/sign-in` and `/forgot-password`, each with the
+     hop transition and no page error.
+  5. Fix it in `app/(site)/layout.tsx`: add the `pagereveal` guard from the
+     decisions to the inline `<head>` script next to the existing
+     `<style>{"@view-transition…"}</style>`, so it runs before any streamed
+     reveal. Re-run both probes. If a collision remains, or if the hop's root
+     `fade-out`/`fade-in` stop running in full, widen the guard as the
+     decisions describe and record the choice. Never catch or silence the
+     rejection, and never remove the opt-in.
+  6. `lib/motion.test.ts`: the site root layout's inline script listens for
+     `pagereveal` and assigns `document.__reactViewTransition`, and it sits
+     inside `<head>`.
+  7. CI: in `.github/workflows/ci.yml`'s `checks` job, after "E2E against
+     next start", add a step "Motion probe, signed in" that runs
+     `bash scripts/probe-motion-signed-in.sh` with the job's `BASE_URL` and
+     `DATABASE_URL`. Raise `timeout-minutes` only if the step needs it.
+  8. `README.md`: next to the motion probe's line, a line for the signed-in
+     probe saying what it needs (a database, found or started on its own).
+  9. Commit as `Otohime <quiinthieu@gmail.com>`. On a rebase conflict keep
+     both sides (lesson iss-9).
+- **Interfaces:** `app/(site)/layout.tsx`; `scripts/probe-motion-signed-in.sh`;
+  `scripts/probe-motion-signed-in.mjs`; `scripts/probe-motion.mjs`;
+  `lib/motion.test.ts`; `.github/workflows/ci.yml`; `README.md`.
+- **Non-goals:** the 403 and 404 exits and the route-group swap (task 2); any
+  change to a project; any change to Better Auth's redirect or the sign-in
+  form; dropping or typing the `@view-transition` opt-in differently; new
+  dependencies in `package.json`; signing up on otohime.dev.
+- **Acceptance:** Signing in through `/sign-in`, at both viewports, with
+  motion on or reduced, ends on `/dashboard` (or the `?next` room) with the
+  crossfade and no page error or console error. A full load from a project
+  into any signed-in room, or into `/work`, is just as clean. The signed-in
+  probe fails on today's code, passes on the delivery, and runs in CI.
+- **Verification:**
+  - `npm ci && npm run lint && npm run typecheck && npm test`
+  - `npm run build && SKIP_BUILD=1 bash scripts/probe-motion.sh`
+  - `SKIP_BUILD=1 bash scripts/probe-motion-signed-in.sh` (after the build)
+  - `grep -q 'probe-motion-signed-in.sh' .github/workflows/ci.yml`
+  - `SKIP_BUILD=1 bash scripts/walk-music.sh` (after the build)
+  - `test "$(git log -1 --format=%ae)" = quiinthieu@gmail.com`
+
+#### 2. Every exit from the 403 and the 404, and every move between the home page, the sidebar pages and the sign-in pages, fades out and in
+
+- **Role:** software_engineer. Depends on 1. QA is required.
+- **Problem:** A soft navigation between the `(home)`, `(app)` and `(auth)`
+  group layouts cuts. The 403's own Go home and the brand mark change the page
+  in one frame, `/work → /` and `/dashboard → /` cut, and leaving the 404 by
+  its Go home fades the 404 out but never fades Home in. The pages' wrappers
+  sit inside the layouts' `<main>`, and React fires enter and exit only for a
+  wrapper above every DOM node of the swapped subtree. Separately, a full-load
+  hop into `/does-not-exist` logs "ViewTransition opt-in disabled", because the
+  404 shell's `<head>` has no opt-in.
+- **Action items:**
+  1. Read this revision's "What was measured" and its decisions, and the
+     guide's section on where `<ViewTransition>` fires.
+  2. Write the failing checks first, and run them on task 1's delivery. In
+     `scripts/probe-motion-signed-in.mjs`, as the plain user: on the 403
+     (reached both by a soft navigation, e.g. a click from `/dashboard`
+     through an injected same-origin `<a href="/admin/roles">` dispatched to
+     Next's router, or `next.router.push`, and by `page.goto`), click (a) its
+     Go home, (b) the brand mark, (c) the nav's Projects, (d) the nav's
+     Dashboard. Each must show an old-side `fade-out` and a new-side
+     `fade-in`, read by a per-frame `getAnimations()` sampler on the
+     same-document path or by `pageswap`/`pagereveal` with listeners on both
+     documents on a full load. In `scripts/probe-motion.mjs` (no database):
+     on the 404 (by `page.goto` and by a soft navigation from `/work`), click
+     its Go home and the brand mark, each with both fades. `/work → /` by the
+     brand mark, `/ → /work` by the console menu, `/work → /sign-in` by the
+     masthead's Sign in and `/sign-in → /` by its brand mark, each with both
+     fades. A full-load hop from `/shore` into `/does-not-exist` logs no
+     page error and shows the hop transition (or the recorded clean cut).
+     All at 1366×768 and 390×844. On the phone, use the controls visible at
+     that width (the brand mark and the buttons; the nav where it shows).
+  3. Fix: in `app/(site)/(home)/layout.tsx`, `app/(site)/(app)/layout.tsx`
+     and `app/(site)/(auth)/layout.tsx`, wrap everything below the masthead in
+     `<ViewTransition enter="page-in" exit="page-out" default="none">`
+     (imported from `react`). The masthead stays outside. Keep every page's
+     own wrapper, `forbidden.tsx`, `not-found.tsx` and `loading.tsx` as they
+     are. Re-run the probes. Moves inside one group (sidebar clicks, auth
+     page to auth page, the skeleton handoff) must still hand over as before,
+     with the sidebar and masthead staying still. If any group-swap exit still
+     lacks either fade, apply the fallback from the decisions (plain
+     `<a href="/">` on the brand mark and both Go home buttons) and record it.
+  4. The 404 on a full load: find why its HTML head lacks the root layout's
+     inline `<style>` (see `app/(site)/[...rest]/page.tsx`, `ensureStatic`,
+     and `app/(site)/not-found.tsx`). Make the hop into it log no page error
+     and, if the shell can carry the opt-in, crossfade. Keep its 404 status
+     and its content with JavaScript off (the probe's existing 404 checks stay
+     green).
+  5. `lib/motion.test.ts`: replace "no site layout wraps its children" with:
+     `app/(site)/layout.tsx` has no `<ViewTransition`, and each of the
+     `(home)`, `(app)` and `(auth)` layouts has exactly one, with
+     `enter="page-in"`, `exit="page-out"`, `default="none"`, and the masthead
+     outside it. If the fallback was used, assert that `<a href="/"` appears
+     in `components/brand-mark.tsx`, `forbidden.tsx` and `not-found.tsx`.
+  6. Reduced motion: every one of these exits completes and every animation
+     lasts ≤ 1 ms or has finished. JavaScript off: Go home on the 403 and the
+     404 still navigates to `/`.
+  7. Commit as `Otohime <quiinthieu@gmail.com>`. On a rebase conflict keep
+     both sides.
+- **Interfaces:** `app/(site)/(home)/layout.tsx`; `app/(site)/(app)/layout.tsx`;
+  `app/(site)/(auth)/layout.tsx`; `app/(site)/(app)/forbidden.tsx`;
+  `app/(site)/not-found.tsx`; `app/(site)/[...rest]/page.tsx`;
+  `components/brand-mark.tsx`; `lib/motion.test.ts`;
+  `scripts/probe-motion.mjs`; `scripts/probe-motion-signed-in.mjs`.
+- **Non-goals:** the projects; `transitionTypes` or directional slides; the
+  nav `Suspense` fallback; the root layout's opt-in (task 1); the
+  `Page already revealed` abort; any change to what the 403 or 404 say.
+- **Acceptance:** On the 403 and the 404, every exit (the page's own Go home,
+  the brand mark, the nav) fades the page out and the next page in, at
+  1366×768 and 390×844, like `/work → /projects`. So does every move between
+  `/`, the sidebar pages and the sign-in pages. A full-load hop into the 404
+  logs no page error. Reduced motion is still, and with JavaScript off the
+  buttons still navigate.
+- **Verification:**
+  - `npm ci && npm run lint && npm run typecheck && npm test`
+  - `npm run build && SKIP_BUILD=1 bash scripts/probe-motion.sh`
+  - `SKIP_BUILD=1 bash scripts/probe-motion-signed-in.sh` (after the build)
+  - `! grep -q '<ViewTransition' 'app/(site)/layout.tsx' && for g in home app auth; do grep -q '<ViewTransition' "app/(site)/($g)/layout.tsx" || exit 1; done`
+  - `SKIP_BUILD=1 bash scripts/walk-music.sh` (after the build)
+  - `test "$(git log -1 --format=%ae)" = quiinthieu@gmail.com`
+
+### Acceptance (production, revision 2)
+
+`BASE_URL=https://otohime.dev bash scripts/probe-motion.sh` passes at the
+delivered sha (the cycle 1 count of 312 checks plus the new ones, 0 failed).
+The signed-in probe passes in CI's `checks` job for the delivered sha, and on
+the local stack (`SKIP_BUILD=1 bash scripts/probe-motion-signed-in.sh`) for the
+same sha. On otohime.dev, a person signs in with an operator-owned account
+(advisory; the probe is the gate) and sees the crossfade with no page error.
+The nine walks stay green.
