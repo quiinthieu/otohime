@@ -4,14 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { tally } from "../_lib/actions.ts";
 import { CARDS, type Card as CardData } from "../_lib/cards.ts";
 import type { Ledger } from "../_lib/ledger.ts";
+import { slotNumber } from "../_lib/art/svg.ts";
 import { Card } from "./card";
 
 const tierName = (c: CardData) => c.tier[0].toUpperCase() + c.tier.slice(1);
 
 // The album: twelve slots in CARDS order. An owned slot is a button that opens
 // the card large in a native <dialog> (Esc and Close shut it, focus goes back
-// to the slot); an unowned slot is a silhouette and nothing to press. Reset
-// album asks inline, in the page, never in a browser prompt.
+// to the slot); an unowned slot is its numbered card back and nothing to press:
+// no name, no silhouette and no tier, so the served album gives nothing away.
+// Reset album asks inline, in the page, never in a browser prompt.
 export function Album({ ledger, onReset }: { ledger: Ledger; onReset: () => void }) {
   const count = tally(ledger);
   const copies = CARDS.reduce((sum, c) => sum + (ledger.owned[c.id] ?? 0), 0);
@@ -73,25 +75,24 @@ export function Album({ ledger, onReset }: { ledger: Ledger; onReset: () => void
       <ol className="album">
         {CARDS.map((card) => {
           const owned = ledger.owned[card.id] ?? 0;
-          return (
-            <li key={card.id} data-slot={card.id} className={owned > 0 ? "slot owned" : "slot"}>
-              {owned > 0 ? (
-                <button
-                  type="button"
-                  className="slot-button"
-                  aria-haspopup="dialog"
-                  aria-label={`${card.name} ×${owned}. Open large`}
-                  onClick={(e) => show(card, e.currentTarget)}
-                >
-                  <Card card={card} />
-                  <span className="count">{`×${owned}`}</span>
-                </button>
-              ) : (
-                <>
-                  <Card card={card} ghost />
-                  <span className="count">{"\u00a0"}</span>
-                </>
-              )}
+          const n = slotNumber(card.id);
+          return owned > 0 ? (
+            <li key={n} data-slot={n} data-card={card.id} className="slot owned">
+              <button
+                type="button"
+                className="slot-button"
+                aria-haspopup="dialog"
+                aria-label={`${card.name} ×${owned}. Open large`}
+                onClick={(e) => show(card, e.currentTarget)}
+              >
+                <Card card={card} />
+                <span className="count">{`×${owned}`}</span>
+              </button>
+            </li>
+          ) : (
+            <li key={n} data-slot={n} data-unfound="" className="slot">
+              <Card back={{ number: n }} label={`Slot ${n}, not found yet`} />
+              <span className="count">{"\u00a0"}</span>
             </li>
           );
         })}
@@ -133,7 +134,7 @@ export function Album({ ledger, onReset }: { ledger: Ledger; onReset: () => void
       >
         {open && (
           <div className="enlarge-body">
-            <Card card={open} className="card-large" />
+            <Card card={open} className="card-large" grain />
             <div className="enlarge-text">
               <p className="enlarge-name" id="enlarge-name">
                 {open.name}

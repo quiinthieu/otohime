@@ -1,12 +1,20 @@
 // The drawings are data, so the brief is checked here: every drawing belongs to
 // a card, paths are absolute commands inside the 0 0 120 160 card face, fills
-// are palette roles, and the sheet carries no raster, gradient or link.
+// are palette roles, the printed-ink look holds (hatched shade, one outline per
+// stroked shape, no cheek blush where it does not belong), card backs give
+// nothing away, and the sheet carries no raster, gradient or link.
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { ART } from "./art/index.ts";
-import { sheetSvg } from "./art/svg.ts";
-import { ROLES, VIEW_H, VIEW_W } from "./art/types.ts";
-import { CARDS } from "./cards.ts";
+import { EDGE, cardBackSvg, cardFaceSvg, drawingToSvg, isOutlined, sheetSvg, slotNumber } from "./art/svg.ts";
+import { PALETTE, ROLES, VIEW_H, VIEW_W } from "./art/types.ts";
+import { CARDS, type CardId } from "./cards.ts";
+
+// A changed value means Totoro was redrawn: rough.js moved, or the renderer, the
+// frame or his drawing did. Update it only on purpose, after looking at the sheet.
+const TOTORO_FACE_SHA256 = "eb0a983e8255e48f33e1ee5c3c23196024e5423f56d75935bb9f2c6558c172ed";
 
 // How many numbers each command takes, and which of them are x (0) or y (1).
 const AXES: Record<string, number[]> = {
@@ -106,6 +114,83 @@ test("the sheet is one balanced SVG with no raster, gradient or link", () => {
   assert.equal(opens, 1);
   assert.equal(closes, 1);
   for (const bad of ["<image", "gradient", "href="]) assert.ok(!svg.toLowerCase().includes(bad.toLowerCase()), bad);
-  for (const id of Object.keys(ART)) assert.ok(svg.includes(`wobble-${id}`), `${id} not on the sheet`);
-  assert.equal(svg.match(/<filter id="wobble-/g)?.length, CARDS.length);
+  for (const id of Object.keys(ART)) assert.ok(svg.includes(`grain-${id}`), `${id} not on the sheet`);
+  assert.ok(svg.includes(`grain-back`), "the card back is not on the sheet");
+  assert.equal(svg.match(/<filter id="grain-/g)?.length, CARDS.length + 1);
+  assert.ok(!svg.includes("feDisplacementMap"), "the old wobble is gone");
+});
+
+const card = (id: CardId) => CARDS.find((c) => c.id === id)!;
+const drawn = Object.entries(ART).map(([id, drawing]) => ({ card: card(id as CardId), drawing }));
+
+test("shade is hatched: no shade role, and every card has a hatch shape", () => {
+  assert.ok(!(ROLES as readonly string[]).includes("shade"));
+  assert.ok(ROLES.includes("hatch"));
+  for (const { card, drawing } of drawn) {
+    assert.ok(drawing.shapes.some((s) => s.fill === "hatch"), `${card.id} has no hatch`);
+  }
+});
+
+test("Totoro, No-Face and Calcifer wear no blush", () => {
+  for (const id of ["totoro", "no-face", "calcifer"] as const) {
+    const shapes = ART[id]!.shapes;
+    assert.deepEqual(shapes.filter((s) => s.fill === "blush"), [], id);
+  }
+});
+
+test("a face is the same every time and has no NaN or undefined", () => {
+  for (const { card } of drawn) {
+    const a = cardFaceSvg(card);
+    assert.equal(a, cardFaceSvg(card), card.id);
+    assert.ok(!/NaN|undefined/.test(a), `${card.id} face has NaN or undefined`);
+    assert.ok(a.includes(card.name), `${card.id} face lacks its name`);
+    assert.ok(a.includes(`No. ${String(slotNumber(card.id)).padStart(2, "0")}`), `${card.id} face lacks its number`);
+    assert.ok(a.includes('class="plate"') && a.includes('font-family="Fraunces, Georgia, serif"'), `${card.id} plate`);
+    assert.ok(a.includes(`data-edge="${card.tier}"`) && a.includes(`stroke="${EDGE[card.tier]}"`), `${card.id} edge`);
+    const grained = cardFaceSvg(card, { grain: "g1" });
+    assert.ok(grained.startsWith(a) && grained.includes('<filter id="g1"') && grained.includes("feTurbulence"));
+  }
+});
+
+test("each stroked shape gets exactly one ink outline", () => {
+  for (const { card, drawing } of drawn) {
+    const svg = drawingToSvg(card, drawing);
+    const outlines = svg.match(new RegExp(`fill="none" stroke="${PALETTE.ink}"`, "g"))?.length ?? 0;
+    const stroked = drawing.shapes.filter(isOutlined).length;
+    assert.ok(stroked > 0, `${card.id} has no outlined shape`);
+    assert.equal(outlines, stroked, card.id);
+  }
+});
+
+test("Totoro's face is pinned", () => {
+  const hash = createHash("sha256").update(cardFaceSvg(card("totoro"))).digest("hex");
+  assert.equal(hash, TOTORO_FACE_SHA256);
+});
+
+test("a card back names no card, numbers nothing and shows no tier", () => {
+  const back = cardBackSvg();
+  for (const c of CARDS) assert.ok(!back.includes(c.name), c.name);
+  assert.ok(!back.includes("No."));
+  for (const tier of ["rare", "legend"] as const) assert.ok(!back.toLowerCase().includes(EDGE[tier]), tier);
+  assert.ok(!/data-edge|common|rare|legend/i.test(back));
+  assert.equal(back, cardBackSvg());
+  assert.ok(!/NaN|undefined/.test(back));
+});
+
+test("an album back carries its number, and an edge carries its tier", () => {
+  assert.ok(cardBackSvg({ number: 7 }).includes("No. 07"));
+  assert.ok(cardBackSvg({ number: 12 }).includes("No. 12"));
+  assert.ok(cardBackSvg({ edge: "legend" }).includes(EDGE.legend));
+  assert.equal(EDGE.legend, "#b8862b");
+  assert.ok(cardBackSvg({ edge: "rare" }).includes(EDGE.rare));
+});
+
+test("slots are numbered 1 to 12 in album order", () => {
+  assert.deepEqual(CARDS.map((c) => slotNumber(c.id)), CARDS.map((_, i) => i + 1));
+});
+
+test("art/ink.ts never touches the DOM", () => {
+  const src = readFileSync(new URL("./art/ink.ts", import.meta.url), "utf8");
+  assert.ok(!/\bdocument\b/.test(src), "document");
+  assert.ok(!/\bwindow\b/.test(src), "window");
 });

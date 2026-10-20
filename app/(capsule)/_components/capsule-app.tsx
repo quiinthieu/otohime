@@ -160,7 +160,7 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
             <div className="reveal">
               {phase === "revealed" && drawn ? (
                 <div className="reveal-card">
-                  <Card card={drawn} />
+                  <Card card={drawn} grain />
                   <p className="reveal-name">{drawn.name}</p>
                   <p className="reveal-film">{`${drawn.film} · ${drawn.year}`}</p>
                 </div>

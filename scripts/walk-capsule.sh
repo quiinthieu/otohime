@@ -188,6 +188,14 @@ check "/capsule title is Capsule" has capsule '<title>Capsule</title>'
 check "/capsule has no site sidebar" lacks capsule 'aria-label="Main"'
 check "/capsule build-sha" build_sha_matches
 check "/capsule has exactly 12 album slots" count_eq capsule 'data-slot="' 12
+# The server renders an empty album: twelve numbered card backs that name no card.
+check "/capsule has exactly 12 unfound slots" count_eq capsule 'data-unfound' 12
+check "/capsule numbers its slots to No. 12" has capsule 'No. 12'
+check "/capsule slots are numbers, not card ids" lacks capsule 'data-slot="totoro"'
+check "/capsule has no tier hint on a slot" lacks capsule 'Not found yet: a'
+for name in Totoro Calcifer No-Face 'Robot soldier'; do
+  check "/capsule does not name $name" lacks capsule "$name"
+done
 check "/capsule has Insert coin" has capsule 'Insert coin'
 check "/capsule has Turn" has capsule 'Turn'
 check "/capsule has Open" has capsule 'Open'
