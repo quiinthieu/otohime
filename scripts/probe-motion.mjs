@@ -5,6 +5,8 @@
 // cross-document transition). pageswap fires on the old document, so its answer is kept in sessionStorage;
 // pagereveal fires on the new one, before its first frame, and keeps the transition's animations once it is ready.
 // Each /projects -> project hop is that project's first load in its context, as on a visitor's first hop.
+// The site's own pages: a sidebar click /work -> /projects runs page-out and page-in, the eight /projects rows
+// rise 40 ms apart, and /sign-in and the 404 load cleanly; under reduced motion all of it is still.
 import { createRequire } from "node:module";
 import path from "node:path";
 
@@ -58,7 +60,12 @@ async function open(browser, { viewport, reduced, sink = errors }) {
   const phone = viewport === PHONE;
   const context = await browser.newContext({ viewport, isMobile: phone, hasTouch: phone, reducedMotion: reduced ? "reduce" : "no-preference" });
   const page = await context.newPage();
-  page.on("console", (m) => m.type() === "error" && sink.push(`console ${page.url()}: ${m.text()}`));
+  page.on("console", (m) => {
+    if (m.type() !== "error") return;
+    // A failed subresource names itself; the document's own load does not.
+    const from = m.location().url;
+    sink.push(`console ${page.url()}: ${m.text()}${from && from !== page.url() ? ` (${from})` : ""}`);
+  });
   page.on("pageerror", (e) => sink.push(`pageerror ${page.url()}: ${e.message}`));
   await page.addInitScript(watchHops);
   return { context, page };
@@ -95,6 +102,18 @@ const loadAnimations = (page) =>
       .filter((a) => !(a.animationName ?? "").startsWith("-ua-"))
       .map((a) => ({ name: a.animationName ?? a.transitionProperty ?? a.constructor.name, duration: Number(a.effect?.getComputedTiming().duration), state: a.playState })),
   );
+// The rise animation on each /projects row: its name, delay and duration, and the computed animation-delay.
+const rowRises = (page) =>
+  page.evaluate(() =>
+    [...document.querySelectorAll("main li.rise")].map((li) => {
+      const a = li.getAnimations().find((x) => x.animationName === "rise");
+      const t = a?.effect.getComputedTiming();
+      const css = getComputedStyle(li).animationDelay;
+      const cssDelay = css.endsWith("ms") ? parseFloat(css) : parseFloat(css) * 1000;
+      return { name: a?.animationName ?? "none", delay: t ? t.delay : 0, duration: t ? Number(t.duration) : 0, cssDelay };
+    }),
+  );
+const siteErrors = [];
 const still = (anims) => anims.filter((a) => !(a.duration <= 1 || a.state === "finished"));
 const show = (anims) =>
   anims
@@ -139,11 +158,20 @@ function watchSameDocument() {
     const vt = start.apply(this, args);
     vt.ready
       .then(() => {
-        const root = document.documentElement
+        const anims = document.documentElement
           .getAnimations({ subtree: true })
-          .filter((a) => /^::view-transition-(?:old|new)\(root\)$/.test(a.effect?.pseudoElement ?? ""))
+          .filter((a) => a.effect?.pseudoElement?.startsWith("::view-transition"));
+        const root = anims
+          .filter((a) => /^::view-transition-(?:old|new)\(root\)$/.test(a.effect.pseudoElement))
           .map((a) => `${a.effect.pseudoElement} ${a.animationName}`);
-        window.__same.push({ types: [...vt.types], root });
+        // page-out and page-in only reach a wrapped page's own groups: fade-out on an old one, fade-in on a new one.
+        const page = anims
+          .filter((a) => /^::view-transition-(?:old|new)\((?!root\))/.test(a.effect.pseudoElement))
+          .map((a) => {
+            const t = a.effect.getComputedTiming();
+            return { pseudo: a.effect.pseudoElement, name: a.animationName, duration: Number(t.duration), delay: t.delay };
+          });
+        window.__same.push({ types: [...vt.types], root, page });
       })
       .catch(() => {});
     return vt;
@@ -211,10 +239,55 @@ try {
       check("site: a same-document page change runs a view transition", same.length > 0, JSON.stringify(same));
       const faded = same.filter((t) => t.types.includes("hop") || t.root.some((r) => / (?:vt-)?fade-(?:in|out)$/.test(r)));
       check("site: the hop's fade stays off the site's own page changes", faded.length === 0, JSON.stringify(faded));
+      const pageAnims = same.flatMap((t) => t.page);
+      const out = pageAnims.find((a) => a.pseudo.startsWith("::view-transition-old(") && a.name === "fade-out" && a.duration === 150);
+      const into = pageAnims.find((a) => a.pseudo.startsWith("::view-transition-new(") && a.name === "fade-in" && a.duration === 210 && a.delay === 150);
+      check("site: /work -> /projects runs page-out on /work (fade-out, 150 ms)", Boolean(out), show(pageAnims));
+      check("site: /work -> /projects runs page-in on /projects (fade-in, 210 ms after 150 ms)", Boolean(into), show(pageAnims));
     } finally {
       await context.close();
     }
   }
+
+  // The site's other pages: /projects' rows rise in turn, and the sign-in page and the 404 load cleanly. Under
+  // reduced motion the same pages are still and no row waits.
+  for (const reduced of [false, true]) {
+    const { context, page } = await open(browser, { viewport: DESKTOP, reduced, sink: siteErrors });
+    const label = reduced ? "site reduced motion" : "site";
+    try {
+      await page.goto(`${BASE_URL}/projects`, { waitUntil: "load" });
+      const rows = await rowRises(page);
+      if (!reduced) {
+        const delays = rows.map((r) => r.delay);
+        check(`${label}: /projects has 8 row rise animations`, rows.length === 8 && rows.every((r) => r.name === "rise"), JSON.stringify(rows));
+        check(
+          `${label}: the rows' delays increase, 40 ms apart`,
+          delays.length === 8 && delays.every((d, i) => d === i * 40),
+          delays.join(", "),
+        );
+        const last = rows.at(-1);
+        check(`${label}: the last row is up within 0.7 s`, last !== undefined && last.delay + last.duration < 700, JSON.stringify(last));
+      } else {
+        check(`${label}: every /projects row's effective delay is <= 1 ms`, rows.length === 8 && rows.every((r) => r.delay <= 1 && r.cssDelay <= 1), JSON.stringify(rows));
+        const anims = await loadAnimations(page);
+        check(`${label}: every animation on /projects lasts <= 1 ms or has finished`, still(anims).length === 0, show(still(anims)));
+      }
+      for (const [path, status] of [["/sign-in", 200], ["/does-not-exist", 404]]) {
+        const response = await page.goto(`${BASE_URL}${path}`, { waitUntil: "load" });
+        check(`${label}: ${path} answers ${status}`, response?.status() === status, String(response?.status()));
+        if (reduced) {
+          const anims = await loadAnimations(page);
+          check(`${label}: every animation on ${path} lasts <= 1 ms or has finished`, still(anims).length === 0, show(still(anims)));
+        }
+      }
+    } finally {
+      await context.close();
+    }
+  }
+  // The 404 document's own load is logged as a failed resource; anything else, a 404 subresource included, is an error.
+  const notFoundLoad = (e) => /\/does-not-exist: Failed to load resource: the server responded with a status of 404 \(Not Found\)$/.test(e);
+  const siteReal = siteErrors.filter((e) => !notFoundLoad(e));
+  check("site: /projects, /sign-in and /does-not-exist load with no console error or page error", siteReal.length === 0, siteReal.slice(0, 3).join(" | "));
 
   // Negative: strip @view-transition from everything /shore loads (the inline copy in its HTML and the rule in its
   // CSS), and the hop into it must cut. Its errors are expected: the old page's transition is aborted.

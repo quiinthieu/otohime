@@ -1,13 +1,13 @@
 import { FigTitle } from "@/components/figures";
 import { ResetPasswordForm } from "@/components/password-reset-forms";
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Suspense, ViewTransition } from "react";
 
 export const metadata: Metadata = { title: "New password" };
 
 export default function ResetPasswordPage() {
   return (
-    <>
+    <ViewTransition enter="page-in" exit="page-out" default="none">
       <FigTitle n="03">New password</FigTitle>
       <p className="mt-2 text-muted">
         Choose a new password. Every device signed in to your account will be signed out.
@@ -18,6 +18,6 @@ export default function ResetPasswordPage() {
           <ResetPasswordForm />
         </Suspense>
       </div>
-    </>
+    </ViewTransition>
   );
 }

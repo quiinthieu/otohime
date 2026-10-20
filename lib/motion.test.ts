@@ -5,7 +5,7 @@
 // rule fails here. scripts/probe-motion.sh watches it run in a browser.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join, relative, resolve } from "node:path";
 import { test } from "node:test";
 import { site } from "../content/site.ts";
 
@@ -154,4 +154,63 @@ test("the row titles take their name from --vt, and a theme switch drops it", ()
   assert.match(page, /className="project-title"/);
   assert.match(page, /"--vt": `project-\$\{project\.href\.slice\(1\)\}`/);
   assert.doesNotMatch(page, /viewTransitionName/, "an inline name would beat the :root.theming reset");
+});
+
+// Every site file Next renders as a page, walked from app/(site): page.tsx, not-found.tsx, forbidden.tsx,
+// loading.tsx, and layout.tsx kept apart. Paths are relative to the repo.
+function siteFiles(names: string[]): string[] {
+  const dir = join(ROOT, "app", "(site)");
+  return readdirSync(dir, { recursive: true, withFileTypes: true })
+    .filter((e) => e.isFile() && names.includes(e.name))
+    .map((e) => relative(ROOT, join(e.parentPath, e.name)))
+    .sort();
+}
+
+const CATCH_ALL = join("app", "(site)", "[...rest]", "page.tsx");
+
+test("every site page hands over with a <ViewTransition> of its own", () => {
+  const pages = siteFiles(["page.tsx", "not-found.tsx", "forbidden.tsx", "loading.tsx"]);
+  // The rooms, the auth pages, the public pages, the 404, the 403 and the skeleton (the catch-all is checked below).
+  assert.ok(pages.length >= 18, pages.join(", "));
+  for (const name of ["not-found.tsx", "forbidden.tsx", "loading.tsx"]) {
+    assert.ok(pages.some((p) => p.endsWith(name)), `no ${name} under app/(site)`);
+  }
+  const bare = pages.filter((p) => p !== CATCH_ALL && !readFileSync(join(ROOT, p), "utf8").includes("<ViewTransition"));
+  assert.deepEqual(bare, [], "pages with no <ViewTransition>");
+});
+
+test("the pages fade like /work, and the skeleton only leaves", () => {
+  for (const p of siteFiles(["page.tsx", "not-found.tsx", "forbidden.tsx"]).filter((p) => p !== CATCH_ALL)) {
+    const text = readFileSync(join(ROOT, p), "utf8");
+    assert.match(text, /<ViewTransition enter="page-in" exit="page-out" default="none"/, p);
+    assert.match(text, /import \{[^}]*\bViewTransition\b[^}]*\} from "react";/, p);
+  }
+  const loading = readFileSync(join(ROOT, "app/(site)/(app)/loading.tsx"), "utf8");
+  assert.match(loading, /<ViewTransition exit="page-out" default="none">/);
+});
+
+test("the catch-all only calls notFound(), so not-found.tsx carries its wrapper", () => {
+  const text = readFileSync(join(ROOT, CATCH_ALL), "utf8").replace(/\/\/.*$/gm, "");
+  const body = text.match(/export default function \w+\(\)\s*\{([^}]*)\}/)?.[1].trim();
+  assert.equal(body, "notFound();");
+  assert.doesNotMatch(text, /<ViewTransition/);
+});
+
+test("no site layout wraps its children in a <ViewTransition>", () => {
+  const layouts = siteFiles(["layout.tsx"]);
+  assert.ok(layouts.length >= 4, layouts.join(", "));
+  for (const p of layouts) assert.doesNotMatch(readFileSync(join(ROOT, p), "utf8"), /<ViewTransition/, p);
+});
+
+test("the /projects rows rise one after another, and reduced motion drops the delay", () => {
+  const { css } = SHEETS.find((s) => s.group === "site")!;
+  const page = readFileSync(join(ROOT, "app/(site)/(app)/projects/page.tsx"), "utf8");
+  assert.match(page, /<li\s[^>]*className="rise [^"]*"[^>]*style=\{\{ "--i": i \} as CSSProperties\}/);
+  // .rise sits in a layer, so the stagger rule is matched wherever it is nested. Eight rows of 0.4 s, 40 ms
+  // apart, are all up by 0.68 s.
+  assert.match(css, /\.rise\[style\*="--i"\]\s*\{\s*animation-delay:\s*calc\(var\(--i\) \* 40ms\);\s*\}/);
+  const top = blocks(css);
+  const all = reducedMotion(top).filter((b) => /(?:^|[\s,{])\*\s*,/.test(b.body));
+  assert.equal(all.length, 1, "no reduced-motion rule for *");
+  assert.match(all[0].body, /\*\s*,[^{]*\{[^}]*animation-delay:\s*0s\s*!important/);
 });

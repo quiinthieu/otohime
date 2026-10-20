@@ -744,6 +744,11 @@
     animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
+  /* Rows that rise one after another: each sets --i, its place in the list. */
+  .rise[style*="--i"] {
+    animation-delay: calc(var(--i) * 40ms);
+  }
+
   /*
    * Operable figures (components/machine.tsx), after the reference's stage:
    * controls | figure | readouts, stacked with the figure first when the

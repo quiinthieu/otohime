@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ViewTransition } from "react";
 
 export const metadata: Metadata = { title: "User" };
 
@@ -41,46 +42,48 @@ export default async function UserPage({ params }: PageProps<"/admin/users/[id]"
   );
 
   return (
-    <div className="rise grid gap-6">
-      <Link href="/admin/users" className="link w-fit">
-        ← Users
-      </Link>
-      <div>
-        <FigTitle n="09" hint={user.email}>
-          {user.name}
-        </FigTitle>
-        <p className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="badge" data-role={role}>
-            {role}
-          </span>
-          {user.banned ? (
-            <span className="badge" data-tone="danger">
-              Banned
+    <ViewTransition enter="page-in" exit="page-out" default="none">
+      <div className="rise grid gap-6">
+        <Link href="/admin/users" className="link w-fit">
+          ← Users
+        </Link>
+        <div>
+          <FigTitle n="09" hint={user.email}>
+            {user.name}
+          </FigTitle>
+          <p className="mt-2 flex flex-wrap items-center gap-2">
+            <span className="badge" data-role={role}>
+              {role}
             </span>
-          ) : null}
-          <span className="text-muted">joined {joined.format(new Date(user.createdAt))}</span>
-        </p>
-      </div>
+            {user.banned ? (
+              <span className="badge" data-tone="danger">
+                Banned
+              </span>
+            ) : null}
+            <span className="text-muted">joined {joined.format(new Date(user.createdAt))}</span>
+          </p>
+        </div>
 
-      {manageable ? (
-        <UserActions
-          user={{
-            id: user.id,
-            name: user.name,
-            role,
-            banned: Boolean(user.banned),
-            banReason: user.banReason,
-          }}
-          assignable={assignable}
-          sessions={<SessionList sessions={sessions} empty="Not signed in anywhere." />}
-        />
-      ) : (
-        <p className="alert" data-tone="info">
-          {user.id === me.user.id
-            ? "This is you. Manage your own account from the Account page."
-            : "Their role is at or above yours, so this page is read-only."}
-        </p>
-      )}
-    </div>
+        {manageable ? (
+          <UserActions
+            user={{
+              id: user.id,
+              name: user.name,
+              role,
+              banned: Boolean(user.banned),
+              banReason: user.banReason,
+            }}
+            assignable={assignable}
+            sessions={<SessionList sessions={sessions} empty="Not signed in anywhere." />}
+          />
+        ) : (
+          <p className="alert" data-tone="info">
+            {user.id === me.user.id
+              ? "This is you. Manage your own account from the Account page."
+              : "Their role is at or above yours, so this page is read-only."}
+          </p>
+        )}
+      </div>
+    </ViewTransition>
   );
 }

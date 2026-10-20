@@ -21,8 +21,12 @@ export default function ProjectsPage() {
           </div>
         ) : (
           <ul className="mt-8 grid gap-x-10 sm:grid-cols-2">
-            {site.projectList.map((project) => (
-              <li key={project.title} className="flex items-start gap-3 border-t border-line py-3">
+            {site.projectList.map((project, i) => (
+              <li
+                key={project.title}
+                className="rise flex items-start gap-3 border-t border-line py-3"
+                style={{ "--i": i } as CSSProperties}
+              >
                 <span
                   aria-hidden="true"
                   className="mt-1 size-3 flex-none rounded-full border border-on-swatch"
