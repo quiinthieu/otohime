@@ -270,7 +270,13 @@ check "/orrery title is Orrery" has orrery '<title>Orrery</title>'
 check "/orrery has no site sidebar" lacks orrery 'aria-label="Main"'
 check "/orrery build-sha" build_sha_matches orrery
 check "/orrery has exactly 14 bodies" count_eq orrery 'data-body="' 14
-check "/orrery has the Sun's tile once" count_eq orrery 'data-body="sun"' 1
+check "/orrery has the Sun's disc once" count_eq orrery 'data-body="sun"' 1
+check "/orrery has exactly 2 size rows" count_eq orrery 'data-row="' 2
+check "/orrery has the planets row" has orrery 'data-row="planets"'
+check "/orrery has the stars row" has orrery 'data-row="stars"'
+check "/orrery has exactly 3 edges" count_eq orrery 'data-edge="' 3
+check "/orrery heads the planets row" has orrery 'The planets, to scale'
+check "/orrery heads the stars row" has orrery 'The stars, to scale'
 while read -r slug _; do
   [ -n "$slug" ] && check "/orrery links /orrery/$slug" count_ge orrery "href=\"/orrery/$slug\"" 1
 done <<<"$BODY_LIST"

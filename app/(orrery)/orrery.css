@@ -1,6 +1,6 @@
 /* Orrery's own stylesheet, hand-written: no Tailwind and no site tokens.
    Cream-paper posters in hand lettering: the Sun's (pm-189) and, in the same
-   grid, one for every other body, plus the index of tiles. One column on a phone, two from
+   grid, one for every other body, plus the index of size rows. One column on a phone, two from
    900px. Nothing sets overflow: hidden around the cutaway, and the SVG never
    grows past its column, so a 390px phone has no sideways scroll. The smallest
    text at 390px is 12px or more, SVG labels included. */
@@ -171,7 +171,9 @@ h1 {
   font-size: 22px;
 }
 
-/* The index: one tile per body, wrapping; three to a row on a phone */
+/* The index: two size rows, each at one true scale. A row is never drawn under
+   760px wide, so its 18-unit names stay at 13.7px or more; on a phone it scrolls
+   inside its own box and the page itself never scrolls sideways. */
 .index {
   flex: 1;
   width: 100%;
@@ -184,20 +186,13 @@ h1 {
   align-content: start;
 }
 .index .title { grid-area: auto; }
+.index section { min-width: 0; }
 .index h2 { margin: 0 0 8px; font-family: var(--title); font-weight: 700; font-size: 34px; }
-.tiles {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
-  gap: 12px;
-}
-.tiles a { display: grid; justify-items: center; gap: 4px; text-decoration: none; }
-.tiles svg { width: 100%; max-width: 120px; height: auto; display: block; }
-.tiles span { font-family: var(--title); font-weight: 700; font-size: 24px; text-align: center; }
-.tiles a:hover span { text-decoration: underline; }
-.tiles .also { align-self: center; text-align: center; font-size: 18px; color: var(--ink-soft); }
+.row { overflow-x: auto; overflow-y: hidden; }
+.row svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.row text { font-family: var(--title); font-weight: 700; font-size: 18px; fill: var(--ink); }
+.row a:hover text { fill: var(--sun-orange); text-decoration: underline; }
+.row a:focus-visible { outline: 2px dashed var(--sun-orange); }
 
 /* 404 */
 .missing { flex: 1; max-width: 640px; width: 100%; margin: 0 auto; padding: 32px 16px; }
