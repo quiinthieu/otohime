@@ -26,7 +26,7 @@ cycle: 2
 | JavaScript off, both viewports | `/does-not-exist`, then Go home. `/projects`, `/planisphere`, `/rotor` | 404 with "Fig. 404 — Nothing in this parcel", and Go home reaches `/`. 8 rows at opacity 1, 150 lines at dashoffset 0, Rotor reads AAA with nothing rolled | walk-out |
 | local stack at 872a225, docker Postgres, owner account | sign in through the `/sign-in` form | full load to `/dashboard` that crossfades (type `hop`, root `fade-out` 150, `fade-in` 150+210). **No page error and no console error**, at both viewports, motion on and reduced | walk-in |
 | plain account | sign in with `/sign-in?next=/account` | lands on `/account`, crossfades, no error, both viewports and both motion modes | walk-in |
-| owner, on `/shore` | full load into `/dashboard`, `/account`, `/admin/users`, `/admin/users/<plain id>`, `/admin/roles`, `/work` | 24/24 crossfade with no error. Under reduced motion they are still | walk-in |
+| owner, on `/shore` | full load into `/dashboard`, `/account`, `/admin/users`, `/admin/users/<plain id>`, `/admin/roles`, `/work` | 12/12 crossfade with no error (6 rooms × 2 viewports). The same 12 under reduced motion are still, with no error | walk-in |
 | plain, on `/shore` | full load into `/dashboard` and `/admin/roles` | both are clean. `/admin/roles` is the 403 ("This room is locked") | walk-in |
 | the 403, by `page.goto` and by `router.push` from `/dashboard` | its Go home, the brand mark, the nav's Projects, the nav's Dashboard | 16/16 fade out (`fade-out` 0+150) and in (`fade-in` 150+210) at both viewports. Reduced: 16/16 complete and are still | walk-in; `403-go-home-*.png` |
 | owner | sidebar Dashboard → Account → Users, and the brand mark → `/` | each fades out and in, at both viewports | walk-in |
