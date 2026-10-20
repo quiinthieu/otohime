@@ -7,6 +7,7 @@
 #
 # Env: PORT (4037), BASE_URL (remote mode), EXPECT_SHA (build-sha to expect; defaults to
 # GITHUB_SHA locally, any 40-hex sha remotely), SKIP_BUILD=1.
+# In local mode every request is followed by a check that the server log has no error line.
 # Counts use grep -c and numeric tests only: BSD wc pads its output, so string compares fail.
 # Rendered things are counted by attribute form (data-star=") because App Router repeats the
 # server's text in the inline RSC payload.
@@ -106,6 +107,17 @@ get() {
   out="$(curl -s --max-time 30 -o "$WORK/$1.body" -w '%{http_code} %{size_download}' "$BASE_URL$2")"
   printf '%s' "${out%% *}" >"$WORK/$1.status"
   printf '%s' "${out#* }" >"$WORK/$1.size"
+  if [ "$LOCAL" -eq 1 ]; then
+    check "server log is clean after $2" log_clean
+  fi
+}
+
+# log_clean: the local server's log has no Error, no ⨯ mark and no "unstable value" line yet.
+# Only a local next start has a log to read; a deployed URL gets one note: line instead.
+log_clean() {
+  local hit
+  hit="$(grep -m 1 -E 'Error|⨯|unstable value' "$WORK/server.log" 2>/dev/null)"
+  [ -z "$hit" ] || { echo "$hit"; return 1; }
 }
 
 # status_is <key> <code>
@@ -268,6 +280,10 @@ ink_in_bounds() {
   worst="$(grep -oE ' d="M[^"]*"' "$WORK/$1.wheel" | grep -oE -- '-?[0-9]+(\.[0-9]+)?' | awk 'BEGIN { m = 0 } { v = $1 + 0; if (v < 0) v = -v; if (v > m) m = v } END { print m }')"
   awk -v w="$worst" 'BEGIN { exit !(w <= 340) }' || { echo "an inked coordinate reaches $worst from the wheel's centre, the ring is 316"; return 1; }
 }
+
+if [ "$LOCAL" -ne 1 ]; then
+  echo "note: the server log is not readable at $BASE_URL, so the log check is skipped (neither ok nor failed)"
+fi
 
 TOKYO='/planisphere?city=tokyo&date=2026-10-20&hour=21'
 
