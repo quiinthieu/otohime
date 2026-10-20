@@ -1,61 +1,72 @@
 /* Capsule's own stylesheet, hand-written: no Tailwind and no site tokens.
-   The colours are the art brief's palette roles. Nothing here sets
-   overflow: hidden, so the wobble filter on the cards and the machine is never
-   clipped at its edge. */
+   The page is printed matter, like the cards: grained cream paper, one ink,
+   muted coral, slate and gold, and Fraunces (loaded by next/font in
+   layout.tsx as --font-display) for the title, plates, buttons and status.
+   No text is set under 12px. Nothing here sets overflow: hidden. */
 :root {
-  --ink: #3a2a28;
-  --paper: #f6f1e7;
-  --blush: #f3a6bb;
-  --white: #fffdf8;
-  --coral: #ef8a72;
-  --coral-dark: #d9604a;
-  --gold: #efc64a;
-  --muted: #8a7a6c;
-  --line: #e2d8c6;
-  --hand: "Chalkboard SE", "Comic Neue", "Comic Sans MS", cursive;
+  --paper: #f3ecdd;
+  --paper-deep: #e9dfcb;
+  --white: #fffaf0;
+  --ink: #2b2320;
+  --ink-soft: #6a5c52;
+  --coral: #c9684f;
+  --coral-deep: #a9523c;
+  --slate: #6b7f9e;
+  --gold: #b8862b;
+  --rule: #d8ccb4;
+  --display: var(--font-display, "Fraunces"), "Iowan Old Style", Georgia, serif;
   --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-family: var(--sans);
   color: var(--ink);
   background: var(--paper);
   font-synthesis: none;
+  text-rendering: optimizeLegibility;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--paper); }
+/* The paper grain: fractal noise in ink at a few per cent, tiled. */
+body {
+  margin: 0;
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.17 0 0 0 0 0.14 0 0 0 0 0.13 0 0 0 1.6 -0.4'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.09'/%3E%3C/svg%3E");
+}
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; color: inherit; cursor: pointer; }
-button:focus-visible, a:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
+button:focus-visible, a:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 3px; }
 
 .capsule { min-height: 100vh; display: flex; flex-direction: column; }
 
-/* Top bar */
+/* Top bar: a masthead over a double rule. */
 .topbar {
-  height: 84px;
-  padding: 0 5%;
+  min-height: 84px;
+  padding: 12px 5%;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  border-bottom: 2px solid var(--line);
+  gap: 12px 20px;
+  border-bottom: 3px double var(--ink);
 }
-.brand { display: flex; align-items: center; gap: 12px; font-family: var(--hand); font-size: 26px; }
-.brand-detail { display: block; font: 9px var(--sans); letter-spacing: 1.8px; color: var(--muted); margin-top: 4px; }
+.brand { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-size: 26px; font-weight: 500; letter-spacing: 0.2px; }
+.brand-detail { display: block; font: 600 12px var(--sans); letter-spacing: 1.4px; color: var(--ink-soft); margin-top: 3px; }
 .brand-mark {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
+  flex: none;
   display: block;
-  border: 3px solid var(--ink);
-  border-radius: 52% 48% 50% 46%;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
   background: var(--white);
-  box-shadow: inset 0 14px 0 var(--coral);
+  box-shadow: inset 0 15px 0 var(--coral), inset 0 16.5px 0 var(--ink);
 }
 .ways-out { display: flex; align-items: center; gap: 8px; }
 .home-link {
-  font-size: 12px;
-  color: var(--muted);
+  font-size: 13px;
+  color: var(--ink);
   text-decoration: none;
-  padding: 9px 13px;
-  border: 2px solid var(--line);
-  border-radius: 10px 12px 9px 11px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: var(--paper);
 }
 .home-link:hover { background: var(--white); }
 
@@ -65,82 +76,124 @@ button:focus-visible, a:focus-visible { outline: 2px dashed var(--ink); outline-
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: 36px 5% 20px;
+  padding: 40px 5% 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.eyebrow { font-size: 9px; letter-spacing: 1.6px; font-weight: 600; margin: 0 0 12px; color: var(--muted); }
+.eyebrow { font-size: 12px; letter-spacing: 2.4px; font-weight: 600; margin: 0 0 14px; color: var(--ink-soft); }
 h1 {
-  font-family: var(--hand);
-  font-size: clamp(30px, 3.4vw, 44px);
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 50px);
   font-weight: 400;
-  line-height: 1.15;
+  line-height: 1.08;
+  letter-spacing: -0.4px;
   margin: 0;
   text-align: center;
 }
-h1 em { font-style: normal; color: var(--coral-dark); }
-h2 { font-family: var(--hand); font-weight: 400; font-size: 24px; margin: 0 0 16px; text-align: center; }
+h1 em { font-style: italic; color: var(--coral-deep); }
+h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 26px;
+  margin: 0 0 18px;
+  text-align: center;
+  padding: 0 18px 6px;
+  border-bottom: 1px solid var(--ink);
+}
 
 /* Machine and controls */
 .booth {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 32px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 24px 48px;
 }
-.machine { width: 260px; height: auto; display: block; overflow: visible; }
-.controls { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 280px; }
+.machine { width: 260px; max-width: 100%; height: auto; display: block; overflow: visible; }
+.controls { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 280px; max-width: 100%; }
 
 .reveal { width: 160px; height: 252px; display: flex; align-items: flex-start; justify-content: center; }
 .reveal-card { display: flex; flex-direction: column; align-items: center; animation: rise 0.6s steps(7, end) both; }
-.reveal-card .card { width: 150px; }
-.reveal-name { font-family: var(--hand); font-size: 18px; margin: 6px 0 0; }
-.reveal-film { font-size: 11px; color: var(--muted); margin: 3px 0 0; }
+.reveal-card .card { width: 150px; filter: drop-shadow(0 2px 0 var(--rule)); }
+.reveal-name { font-family: var(--display); font-size: 19px; margin: 8px 0 0; }
+.reveal-film { font-size: 12px; font-style: italic; color: var(--ink-soft); margin: 3px 0 0; }
 .reveal-empty {
   width: 150px;
   height: 200px;
   display: grid;
   place-items: center;
-  border: 3px dashed var(--line);
-  border-radius: 14px 12px 15px 11px;
-  font-family: var(--hand);
-  font-size: 48px;
-  color: var(--line);
+  border: 1px solid var(--rule);
+  outline: 1px solid var(--rule);
+  outline-offset: -5px;
+  border-radius: 4px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 52px;
+  color: var(--rule);
 }
 @keyframes rise {
   from { transform: translateY(40px) scale(0.6); opacity: 0; }
   to { transform: none; opacity: 1; }
 }
 
+/* Letterpress buttons: an ink rule, a paper fill, a bite of shadow, pressed in. */
 .buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .button {
-  font-family: var(--hand);
-  font-size: 16px;
-  padding: 10px 16px;
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 9px 16px 10px;
+  color: var(--ink);
   background: var(--white);
-  border: 3px solid var(--ink);
-  border-radius: 14px 11px 13px 10px;
-  box-shadow: 3px 3px 0 var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px var(--white), inset 0 0 0 2.75px var(--rule), 0 2px 0 var(--ink);
 }
-.button:hover:not(:disabled) { background: #fff4dc; }
-.button:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
-.button:disabled { cursor: default; opacity: 0.4; box-shadow: none; }
+.button:hover:not(:disabled) { background: var(--paper-deep); box-shadow: inset 0 0 0 2px var(--paper-deep), inset 0 0 0 2.75px var(--rule), 0 2px 0 var(--ink); }
+.button:active:not(:disabled) {
+  transform: translateY(2px);
+  background: var(--paper-deep);
+  box-shadow: inset 0 2px 3px rgba(43, 35, 32, 0.28);
+}
+.button:disabled { cursor: default; color: var(--ink-soft); border-color: var(--rule); background: transparent; box-shadow: none; }
 
-.status { font-family: var(--hand); font-size: 15px; margin: 0; min-height: 1.4em; text-align: center; }
+.status { font-family: var(--display); font-style: italic; font-size: 17px; margin: 0; min-height: 1.4em; text-align: center; }
 
-.tray { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
-.coins { display: flex; gap: 4px; }
-.coin { width: 14px; height: 14px; display: block; border: 2px solid var(--ink); border-radius: 50%; background: var(--gold); }
-.coin.spent { background: transparent; border-color: var(--line); }
+/* The coin tray: a ruled box with gold coins. */
+.tray {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.coins { display: flex; gap: 5px; }
+.coin { width: 14px; height: 14px; display: block; border: 1.5px solid var(--ink); border-radius: 50%; background: var(--gold); box-shadow: inset 0 0 0 2px #d4a94f; }
+.coin.spent { background: transparent; border: 1px dashed var(--ink-soft); box-shadow: none; }
 
-.rates { font-size: 12px; color: var(--muted); text-align: center; margin: 32px 0 0; line-height: 1.6; }
+/* The published rates, set like a colophon between two rules. */
+.rates {
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 34px 0 0;
+  padding: 7px 14px;
+  line-height: 1.6;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
 
 /* Album */
-.album-section { width: 100%; margin-top: 40px; display: flex; flex-direction: column; align-items: center; }
+.album-section { width: 100%; margin-top: 44px; display: flex; flex-direction: column; align-items: center; }
 .album {
   list-style: none;
   margin: 0;
@@ -148,15 +201,15 @@ h2 { font-family: var(--hand); font-weight: 400; font-size: 24px; margin: 0 0 16
   width: 100%;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 18px 14px;
+  gap: 20px 14px;
 }
-.slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.slot { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
 .slot .card { width: 100%; max-width: 110px; }
-.count { font-family: var(--hand); font-size: 13px; color: var(--muted); }
+.count { font-family: var(--display); font-size: 14px; color: var(--ink-soft); }
 .slot.owned .count { color: var(--ink); }
-.tally { font-size: 11px; letter-spacing: 1.4px; color: var(--muted); margin: 24px 0 0; text-align: center; }
+.tally { font-size: 12px; letter-spacing: 1.4px; color: var(--ink-soft); margin: 24px 0 0; text-align: center; }
 .album-section h2:focus { outline: none; }
-.album-section h2:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
+.album-section h2:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 4px; }
 
 /* An owned slot is a button that opens the card large; an unowned one is not. */
 .slot-button {
@@ -168,71 +221,99 @@ h2 { font-family: var(--hand); font-weight: 400; font-size: 24px; margin: 0 0 16
   padding: 0;
   background: none;
   border: 0;
-  border-radius: 12px;
+  border-radius: 4px;
 }
-.slot-button:hover .card { transform: rotate(-1.5deg); }
+.slot-button .card { transition: transform 0.15s; }
+.slot-button:hover .card { transform: translateY(-3px); }
+
+/* Card SVG text: the name plates set in Fraunces once it has loaded. */
+.card .plate { font-family: var(--display); }
 
 /* Reset album: the confirm is inline, never a browser prompt. */
-.reset { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 20px; }
+.reset { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 22px; }
 .reset-confirm {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: var(--hand);
-  font-size: 15px;
+  font-family: var(--display);
+  font-size: 16px;
+  text-align: center;
 }
-.button-small { font-size: 13px; padding: 6px 12px; box-shadow: 2px 2px 0 var(--ink); }
-.button-danger { background: var(--coral); }
-.button-danger:hover:not(:disabled) { background: var(--coral-dark); }
-.reset-note { font-size: 12px; color: var(--muted); margin: 0; min-height: 1.4em; }
+.button-small { font-size: 14px; padding: 6px 12px 7px; }
+.button-danger { color: var(--white); background: var(--coral-deep); box-shadow: 0 2px 0 var(--ink); }
+.button-danger:hover:not(:disabled) { background: var(--coral); box-shadow: 0 2px 0 var(--ink); }
+.reset-note { font-size: 12px; color: var(--ink-soft); margin: 0; min-height: 1.4em; }
 
-/* The enlarge view: a native modal <dialog>. */
+/* The enlarge view: a native modal <dialog>, a sheet of paper with a double rule. */
 .enlarge {
   max-width: min(560px, calc(100vw - 32px));
-  padding: 24px;
+  padding: 26px;
   color: var(--ink);
   background: var(--paper);
-  border: 3px solid var(--ink);
-  border-radius: 18px 14px 20px 15px;
-  box-shadow: 5px 5px 0 var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  outline: 0.75px solid var(--ink);
+  outline-offset: -7px;
+  box-shadow: 0 3px 0 var(--ink), 0 18px 40px rgba(43, 35, 32, 0.25);
 }
 .enlarge[open] { animation: rise 0.4s steps(5, end) both; }
-.enlarge::backdrop { background: rgba(58, 42, 40, 0.45); }
-.enlarge-body { display: flex; flex-wrap: wrap; gap: 20px 24px; align-items: center; justify-content: center; }
+.enlarge::backdrop { background: rgba(43, 35, 32, 0.5); }
+.enlarge-body { display: flex; flex-wrap: wrap; gap: 20px 26px; align-items: center; justify-content: center; }
 .card-large { width: 220px; max-width: 70vw; }
 .enlarge-text { flex: 1 1 200px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .enlarge-text p { margin: 0; }
-.enlarge-name { font-family: var(--hand); font-size: 28px; }
-.enlarge-film { font-size: 13px; color: var(--muted); }
-.enlarge-meta { display: flex; gap: 10px; align-items: center; font-family: var(--hand); font-size: 16px; }
-.tier { font: 600 10px var(--sans); letter-spacing: 1.4px; text-transform: uppercase; padding: 3px 8px; border: 2px solid var(--ink); border-radius: 8px 6px 9px 7px; }
-.tier-common { background: #8fcbb8; }
-.tier-rare { background: #97b4ea; }
-.tier-legend { background: var(--gold); }
-.enlarge-note { font-size: 14px; line-height: 1.5; margin-bottom: 8px !important; }
+.enlarge-name { font-family: var(--display); font-size: 30px; line-height: 1.1; }
+.enlarge-film { font-size: 13px; font-style: italic; color: var(--ink-soft); }
+.enlarge-meta { display: flex; gap: 10px; align-items: center; font-family: var(--display); font-size: 16px; }
+/* Tier badges in the cards' edge colours: ink, slate and gold, tinted on paper. */
+.tier {
+  font: 600 12px var(--sans);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+  background: var(--paper);
+}
+.tier-common { border-color: var(--ink); }
+.tier-rare { border-color: var(--slate); background: #dcdcd9; }
+.tier-legend { border-color: var(--gold); background: #ecd9ac; box-shadow: inset 0 0 0 1.5px var(--paper), inset 0 0 0 2.25px var(--gold); }
+.enlarge-note { font-size: 14px; line-height: 1.55; margin-bottom: 8px !important; }
 
 .card { display: block; height: auto; overflow: visible; }
 
-.page-footer { display: flex; justify-content: center; padding: 28px 5%; color: var(--muted); font-size: 11px; text-align: center; }
+.page-footer {
+  display: flex;
+  justify-content: center;
+  margin: 24px 5% 0;
+  padding: 22px 0 28px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  text-align: center;
+  border-top: 3px double var(--rule);
+}
 
 @media (max-width: 720px) {
   .album { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (max-width: 480px) {
-  .topbar { padding: 8px 20px; height: auto; min-height: 72px; }
-  .ways-out { flex-wrap: wrap; justify-content: flex-end; }
-  .brand { font-size: 22px; }
-  .brand-detail { font-size: 8px; letter-spacing: 1.2px; }
-  .stage { padding: 26px 18px; }
-  .album { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .topbar { padding: 12px 18px; min-height: 72px; }
+  .ways-out { flex-wrap: wrap; }
+  .brand { font-size: 23px; }
+  .brand-detail { letter-spacing: 0.8px; }
+  .stage { padding: 28px 18px; }
+  .album { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 12px; }
   .machine { width: 220px; }
+  .enlarge { padding: 20px; }
 }
 
 /* Reduced motion: no keyframes or transitions anywhere (the card's rise, the
-   dialog's entrance), no nudges on press or hover. The crank and the capsule
-   are posed by machine.ts frames, which capsule-app settles at once. */
+   dialog's entrance, the slot's lift), no nudges on press or hover. The crank
+   and the capsule are posed by machine.ts frames, which capsule-app settles at
+   once. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .button:active:not(:disabled) { transform: none; }

@@ -89,7 +89,7 @@ export const site = {
   // Add a project here and it shows up on /projects.
   projectList: [
     { title: "Shore", note: "A focus timer that leaves sea glass behind.", href: "/shore", status: "live", colour: "mint" },
-    { title: "Capsule", note: "A coin, a crank, and a hand-drawn card to keep.", href: "/capsule", status: "live", colour: "coral" },
+    { title: "Capsule", note: "A coin, a crank, and a printed card to keep.", href: "/capsule", status: "live", colour: "coral" },
     { title: "Sun", note: "Our star, cut open and drawn by hand.", href: "/sun", status: "live", colour: "yellow" },
     { title: "Elements", note: "All 118, each with a spinning atom and one surprising fact.", href: "/elements", status: "live", colour: "blue" },
     { title: "Vinyl", note: "Dig the crate, drop the needle, watch it play.", href: "/vinyl", status: "live", colour: "pink" },

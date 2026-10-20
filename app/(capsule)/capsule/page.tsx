@@ -34,7 +34,7 @@ export default function CapsulePage() {
       footer={
         <footer className="page-footer">
           <span>
-            Fan art, drawn by hand. The characters belong to Studio Ghibli. Not affiliated; nothing here is for sale.
+            Fan art, drawn by hand and printed in ink. The characters belong to Studio Ghibli. Not affiliated; nothing here is for sale.
           </span>
         </footer>
       }

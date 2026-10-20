@@ -1,21 +1,32 @@
 import type { Metadata, Viewport } from "next";
+import { Fraunces } from "next/font/google";
 import "./capsule.css";
 
 // Capsule is its own root layout: its own <html>, <body> and stylesheet. It must
 // not import the site's globals.css, Tailwind or anything from the site or Shore.
+// Fraunces is self-hosted by next/font at build time, so the browser never asks
+// Google for it; the serif stack covers a font that fails to load.
+const display = Fraunces({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
+  display: "swap",
+  fallback: ["Iowan Old Style", "Georgia", "serif"],
+});
+
 export const metadata: Metadata = {
   title: { default: "Capsule", template: "%s · Capsule" },
-  description: "A coin, a crank, and a hand-drawn card to keep.",
+  description: "A coin, a crank, and a printed card to keep.",
   other: { "build-sha": process.env.BUILD_SHA ?? "dev" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6f1e7",
+  themeColor: "#f3ecdd",
 };
 
 export default function CapsuleLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
+    <html lang="en" className={display.variable}>
       <body>{children}</body>
     </html>
   );

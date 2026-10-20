@@ -162,6 +162,10 @@ capsule_stylesheet() {
       return 1
     fi
   done
+  # Fraunces comes from next/font in the same stylesheet; reduced motion is honoured.
+  for want in Fraunces prefers-reduced-motion; do
+    grep -qF -- "$want" "$WORK/capsule.css" || { echo "stylesheet $href lacks '$want'"; return 1; }
+  done
 }
 
 manifest_lists_capsule() {
@@ -195,6 +199,11 @@ check "/capsule slots are numbers, not card ids" lacks capsule 'data-slot="totor
 check "/capsule has no tier hint on a slot" lacks capsule 'Not found yet: a'
 for name in Totoro Calcifer No-Face 'Robot soldier'; do
   check "/capsule does not name $name" lacks capsule "$name"
+done
+# Every capsule is the same shell: the eight in the dome, none coloured by tier.
+check "/capsule has exactly 8 capsule shells" count_eq capsule 'data-shell' 8
+for colour in '#8fcbb8' '#97b4ea' '#efc64a'; do
+  check "/capsule lacks the old tier colour $colour" lacks capsule "$colour"
 done
 check "/capsule has Insert coin" has capsule 'Insert coin'
 check "/capsule has Turn" has capsule 'Turn'

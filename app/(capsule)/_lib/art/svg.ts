@@ -143,13 +143,18 @@ function face(card: Card): string {
   return out;
 }
 
-// A paper grain over the whole card, about 7 %: id must be unique in the document.
+// The paper grain filter, shared by the cards and the machine: id must be
+// unique in the document. Lay it over art as a rect at about 7 % opacity.
+export const grainFilter = (id: string): string =>
+  `<filter id="${id}" x="0" y="0" width="100%" height="100%">` +
+  `<feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" stitchTiles="stitch"/>` +
+  `<feColorMatrix type="matrix" values="0 0 0 0 0.17 0 0 0 0 0.14 0 0 0 0 0.13 0 0 0 1.6 -0.4"/>` +
+  `</filter>`;
+
+// A paper grain over the whole card.
 function grainSvg(id: string): string {
   return (
-    `<filter id="${id}" x="0" y="0" width="100%" height="100%">` +
-    `<feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" stitchTiles="stitch"/>` +
-    `<feColorMatrix type="matrix" values="0 0 0 0 0.17 0 0 0 0 0.14 0 0 0 0 0.13 0 0 0 1.6 -0.4"/>` +
-    `</filter>` +
+    grainFilter(id) +
     `<rect x="1" y="1" width="${VIEW_W - 2}" height="${VIEW_H - 2}" rx="4" filter="url(#${id})" opacity="0.07" pointer-events="none"/>`
   );
 }

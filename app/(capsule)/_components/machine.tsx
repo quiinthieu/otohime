@@ -1,40 +1,99 @@
 import { useId } from "react";
-import type { Tier } from "../_lib/cards.ts";
+import { inkEllipse, inkLine, inkPath, type InkOptions, type InkPath } from "../_lib/art/ink.ts";
+import { CORAL, EDGE, grainFilter, mix } from "../_lib/art/svg.ts";
+import { PALETTE } from "../_lib/art/types.ts";
 import { OPEN_FRAMES, TURN_FRAMES, type Machine as MachineState } from "../_lib/machine.ts";
 
-// The capsule machine, drawn by hand in SVG and posed from machine.ts state:
-// a glass dome of capsules, a coin slot, a crank that turns on twos and a chute.
-// Every frame is a pure function of (phase, frame), so reduced motion just
-// skips to the last one.
+// The capsule machine, printed in the cards' ink and posed from machine.ts
+// state: a glass dome of capsules, a coin slot, a crank that turns on twos and
+// a chute. The ink is drawn once, at module level, with fixed seeds (so the
+// server and the browser draw the same bytes); a pose is only a transform on a
+// group, so no frame redraws it. Every frame is a pure function of (phase,
+// frame), so reduced motion just skips to the last one.
+//
+// Every capsule is the same shell, coral over paper, in the dome and out of it:
+// its colour says nothing about the card inside.
 
-const INK = "#3a2a28";
-const line = { stroke: INK, strokeWidth: 3.5, strokeLinejoin: "round", strokeLinecap: "round" } as const;
+const { ink: INK, paper: PAPER, white: WHITE } = PALETTE;
+const SLATE = EDGE.rare;
+const GOLD = EDGE.legend;
+const CORAL_SHADE = mix(CORAL, "#000000", 0.3);
+const COLLAR = mix(CORAL, INK, 0.28);
+const GLASS = mix(PAPER, SLATE, 0.1);
+const CHUTE = mix(INK, PAPER, 0.18);
 
-// The capsule's top half hints at the tier inside.
-const CAPSULE: Record<Tier, string> = { common: "#8fcbb8", rare: "#97b4ea", legend: "#efc64a" };
+const hatch = (d: string, colour: string, o: InkOptions = {}) =>
+  inkPath(d, { stroke: "none", fill: colour, fillStyle: "hachure", hachureGap: 2.4, hachureAngle: -48, fillWeight: 0.9, roughness: 0.7, ...o });
 
-// Capsules waiting in the dome: x, y, colour.
-const DOME: [number, number, string][] = [
-  [68, 104, "#8fcbb8"],
-  [94, 110, "#f3a6bb"],
-  [122, 104, "#97b4ea"],
-  [134, 80, "#8fcbb8"],
-  [80, 80, "#efc64a"],
-  [108, 86, "#f3a6bb"],
-  [60, 78, "#97b4ea"],
-  [100, 62, "#8fcbb8"],
-];
+// The shapes, in the machine's 0 0 200 262 space.
+const DOME = { cx: 100, cy: 80, w: 126, h: 122 };
+const COLLAR_D = "M 62 134 Q 100 140 138 134 L 140 150 Q 100 154 60 150 Z";
+const BODY_D = "M 46 150 Q 100 146 154 150 C 158 180 158 216 155 248 Q 100 252 45 248 C 42 216 42 180 46 150 Z";
+const SLOT_D = "M 124 162 Q 134 161 140 163 L 139 186 Q 132 187 125 186 Z";
+const COIN_D = "M 126 171 C 126 163 138 163 138 171 Z";
+const CHUTE_D = "M 70 214 Q 100 211 130 214 L 131 242 Q 100 244 69 242 Z";
+const HANDLE_D = "M 66 183 Q 82 181 98 183 L 98 189 Q 82 191 66 189 Z";
+// The shell's halves, centred on 0 0 and parting along y = 0.
+const TOP_D = "M -12 0 C -12 -16 12 -16 12 0 Z";
+const BOTTOM_D = "M -12 0 C -12 16 12 16 12 0 Z";
 
-function Capsule({ x, y, colour, tilt = 0 }: { x: number; y: number; colour: string; tilt?: number }) {
-  return (
-    <g transform={`rotate(${tilt} ${x} ${y})`}>
-      <path d={`M ${x - 12} ${y} C ${x - 12} ${y - 16} ${x + 12} ${y - 16} ${x + 12} ${y} Z`} fill={colour} {...line} />
-      <path d={`M ${x - 12} ${y} C ${x - 12} ${y + 16} ${x + 12} ${y + 16} ${x + 12} ${y} Z`} fill="#fffdf8" {...line} />
-    </g>
+const ART = {
+  shadow: hatch("M 30 252 C 30 244 170 244 170 252 C 170 260 30 260 30 252 Z", INK, { hachureGap: 3.2, fillWeight: 0.6, hachureAngle: -30, seed: "machine:shadow" }),
+  dome: inkEllipse(DOME.cx, DOME.cy, DOME.w, DOME.h, { seed: "machine:dome", strokeWidth: 1.7 }),
+  reflection: hatch("M 50 74 C 50 50 68 32 94 27 C 76 38 64 54 62 76 Z", SLATE, { hachureGap: 2.2, fillWeight: 0.8, hachureAngle: 40, seed: "machine:shine" }),
+  glint: inkLine(132, 40, 140, 50, { seed: "machine:glint", stroke: WHITE, strokeWidth: 2.4 }),
+  collar: inkPath(COLLAR_D, { seed: "machine:collar" }),
+  body: inkPath(BODY_D, { seed: "machine:body" }),
+  bodyShade: hatch("M 140 153 C 145 184 145 216 142 245 L 154 247 C 157 216 157 182 153 151 Z", CORAL_SHADE, { seed: "machine:edge" }),
+  seam: inkLine(52, 206, 148, 206, { seed: "machine:seam", strokeWidth: 0.8 }),
+  slot: inkPath(SLOT_D, { seed: "machine:slot", strokeWidth: 1.5 }),
+  slotMouth: inkLine(132, 167, 132, 181, { seed: "machine:mouth", strokeWidth: 2.2 }),
+  coin: inkPath(COIN_D, { seed: "machine:coin", strokeWidth: 1.2 }),
+  dial: inkEllipse(82, 186, 40, 40, { seed: "machine:dial" }),
+  dialRing: inkEllipse(82, 186, 31, 31, { seed: "machine:ring", strokeWidth: 0.7 }),
+  handle: inkPath(HANDLE_D, { seed: "machine:handle", strokeWidth: 1.5 }),
+  chute: inkPath(CHUTE_D, { seed: "machine:chute" }),
+  chuteLip: inkLine(73, 219, 127, 219, { seed: "machine:lip", stroke: mix(INK, PAPER, 0.45), strokeWidth: 0.8 }),
+  shellTop: inkPath(TOP_D, { seed: "shell:top", strokeWidth: 1.5 }),
+  shellBottom: inkPath(BOTTOM_D, { seed: "shell:bottom", strokeWidth: 1.5 }),
+};
+
+function Ink({ paths }: { paths: InkPath[] }) {
+  return paths.map((p, i) =>
+    p.fill ? (
+      <path key={i} d={p.d} fill={p.fill} />
+    ) : (
+      <path key={i} d={p.d} fill="none" stroke={p.stroke} strokeWidth={p.strokeWidth} />
+    ),
   );
 }
 
-export function Machine({ state, tier, coinIn }: { state: MachineState; tier: Tier | null; coinIn: boolean }) {
+const Top = () => (
+  <>
+    <path d={TOP_D} fill={CORAL} />
+    <Ink paths={ART.shellTop} />
+  </>
+);
+const Bottom = () => (
+  <>
+    <path d={BOTTOM_D} fill={WHITE} />
+    <Ink paths={ART.shellBottom} />
+  </>
+);
+
+// Capsules waiting in the dome: x, y, tilt.
+const WAITING: [number, number, number][] = [
+  [68, 104, -25],
+  [94, 110, 0],
+  [122, 104, 25],
+  [134, 80, -25],
+  [80, 80, 0],
+  [108, 86, 25],
+  [60, 78, -25],
+  [100, 62, 0],
+];
+
+export function Machine({ state, coinIn }: { state: MachineState; coinIn: boolean }) {
   const { phase, frame } = state;
   const turning = phase === "turning";
   // On twos: the pose changes every other frame, a sixth of a turn each time.
@@ -45,80 +104,84 @@ export function Machine({ state, tier, coinIn }: { state: MachineState; tier: Ti
   const out = phase === "ready" || phase === "opening" || phase === "revealed";
   const capsuleY = dropping ? 204 + (frame - (TURN_FRAMES - 4)) * 6 : 226;
   const part = phase === "opening" ? (frame + 1) / OPEN_FRAMES : phase === "revealed" ? 1 : 0;
-  const colour = tier ? CAPSULE[tier] : CAPSULE.common;
-  const filterId = `wobble${useId().replace(/[^A-Za-z0-9_-]/g, "")}`;
+  // useId may contain characters a url(#...) reference does not like.
+  const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
+  const grain = `grain${id}`;
+  const clip = `machine${id}`;
 
   return (
     <svg className="machine" viewBox="0 0 200 262" role="img" aria-label={`Capsule machine, ${phase}`}>
-      <defs>
-        <filter id={filterId} x="-4%" y="-4%" width="108%" height="108%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves={2} seed={3} result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale={2.6} xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </defs>
-      <g filter={`url(#${filterId})`}>
-      {/* the glass dome and what waits inside */}
-      <path
-        d="M 100 18 C 138 17 164 46 163 82 C 163 116 136 142 100 141 C 63 142 37 116 37 81 C 38 46 63 18 100 18 Z"
-        fill="#e6f1ee"
-        {...line}
-      />
-      <g transform={`translate(0 ${jiggle})`}>
-        {DOME.map(([x, y, c], i) => (
-          <Capsule key={i} x={x} y={y} colour={c} tilt={(i % 3) * 25 - 25 + (turning ? jiggle * 4 : 0)} />
-        ))}
-      </g>
-      <path d="M 58 52 C 66 38 80 31 94 30" fill="none" stroke="#fffdf8" strokeWidth={5} strokeLinecap="round" />
+      <defs dangerouslySetInnerHTML={{ __html: grainFilter(grain) }} />
+      <clipPath id={clip}>
+        <ellipse cx={DOME.cx} cy={DOME.cy} rx={DOME.w / 2} ry={DOME.h / 2} />
+        <path d={COLLAR_D} />
+        <path d={BODY_D} />
+      </clipPath>
+      <g strokeLinejoin="round" strokeLinecap="round">
+        <Ink paths={ART.shadow} />
 
-      {/* collar and body */}
-      <path d="M 62 134 Q 100 140 138 134 L 140 150 Q 100 154 60 150 Z" fill="#d9604a" {...line} />
-      <path
-        d="M 46 150 Q 100 146 154 150 C 158 180 158 216 155 248 Q 100 252 45 248 C 42 216 42 180 46 150 Z"
-        fill="#ef8a72"
-        {...line}
-      />
-      <path d="M 146 156 C 150 184 150 216 147 244 L 154 246 C 157 216 157 182 153 152 Z" fill="#d9604a" />
-
-      {/* coin slot, with the coin showing once it is in */}
-      <path d="M 124 162 Q 134 161 140 163 L 139 186 Q 132 187 125 186 Z" fill="#fffdf8" {...line} />
-      <path d="M 130 167 L 131 181" fill="none" {...line} />
-      {coinIn && <path d="M 126 170 C 126 162 136 162 136 170 Z" fill="#efc64a" {...line} />}
-
-      {/* the crank */}
-      <path
-        d="M 82 166 C 94 166 102 175 102 186 C 102 198 93 206 82 206 C 70 206 62 197 62 186 C 62 175 71 166 82 166 Z"
-        fill="#fffdf8"
-        {...line}
-      />
-      <g transform={`rotate(${crank} 82 186)`}>
-        <path d="M 66 183 Q 82 181 98 183 L 98 189 Q 82 191 66 189 Z" fill="#efc64a" {...line} />
-        <path d="M 93 186 C 93 180 101 180 101 186 C 101 192 93 192 93 186 Z" fill="#d9604a" {...line} />
-      </g>
-
-      {/* the chute */}
-      <path d="M 70 214 Q 100 211 130 214 L 131 242 Q 100 244 69 242 Z" fill="#5b4542" {...line} />
-
-      {(dropping || out) && (
-        <g>
-          <g
-            transform={`translate(${-14 * part} ${-22 * part}) rotate(${-30 * part} 100 ${capsuleY})`}
-            className="capsule-half"
-          >
-            <path
-              d={`M 88 ${capsuleY} C 88 ${capsuleY - 16} 112 ${capsuleY - 16} 112 ${capsuleY} Z`}
-              fill={colour}
-              {...line}
-            />
-          </g>
-          <g transform={`translate(${14 * part} ${6 * part}) rotate(${24 * part} 100 ${capsuleY})`} className="capsule-half">
-            <path
-              d={`M 88 ${capsuleY} C 88 ${capsuleY + 16} 112 ${capsuleY + 16} 112 ${capsuleY} Z`}
-              fill="#fffdf8"
-              {...line}
-            />
-          </g>
+        {/* the glass dome and what waits inside */}
+        <ellipse cx={DOME.cx} cy={DOME.cy} rx={DOME.w / 2} ry={DOME.h / 2} fill={GLASS} />
+        <g transform={`translate(0 ${jiggle})`}>
+          {WAITING.map(([x, y, tilt], i) => (
+            <g key={i} data-shell="" transform={`translate(${x} ${y}) rotate(${tilt + (turning ? jiggle * 4 : 0)})`}>
+              <Top />
+              <Bottom />
+            </g>
+          ))}
         </g>
-      )}
+        <Ink paths={ART.reflection} />
+        <Ink paths={ART.glint} />
+        <Ink paths={ART.dome} />
+
+        {/* collar and body */}
+        <path d={COLLAR_D} fill={COLLAR} />
+        <Ink paths={ART.collar} />
+        <path d={BODY_D} fill={CORAL} />
+        <Ink paths={ART.bodyShade} />
+        <Ink paths={ART.seam} />
+        <Ink paths={ART.body} />
+
+        {/* coin slot, with the coin showing once it is in */}
+        <path d={SLOT_D} fill={PAPER} />
+        <Ink paths={ART.slot} />
+        <Ink paths={ART.slotMouth} />
+        {coinIn && (
+          <>
+            <path d={COIN_D} fill={GOLD} />
+            <Ink paths={ART.coin} />
+          </>
+        )}
+
+        {/* the crank */}
+        <circle cx={82} cy={186} r={20} fill={PAPER} />
+        <Ink paths={ART.dial} />
+        <Ink paths={ART.dialRing} />
+        <g transform={`rotate(${crank} 82 186)`}>
+          <path d={HANDLE_D} fill={PAPER} />
+          <Ink paths={ART.handle} />
+          <circle cx={97} cy={186} r={4} fill={INK} />
+          <circle cx={82} cy={186} r={2.6} fill={INK} />
+        </g>
+
+        {/* the chute */}
+        <path d={CHUTE_D} fill={CHUTE} />
+        <Ink paths={ART.chuteLip} />
+        <Ink paths={ART.chute} />
+
+        {/* the paper grain over the machine, not the page around it */}
+        <rect x="0" y="0" width="200" height="262" filter={`url(#${grain})`} clipPath={`url(#${clip})`} opacity={0.07} pointerEvents="none" />
+
+        {(dropping || out) && (
+          <g data-shell="" transform={`translate(100 ${capsuleY})`}>
+            <g transform={`translate(${-14 * part} ${-22 * part}) rotate(${-30 * part})`} className="capsule-half">
+              <Top />
+            </g>
+            <g transform={`translate(${14 * part} ${6 * part}) rotate(${24 * part})`} className="capsule-half">
+              <Bottom />
+            </g>
+          </g>
+        )}
       </g>
     </svg>
   );

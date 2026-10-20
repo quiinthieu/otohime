@@ -154,7 +154,7 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
         </h1>
 
         <section className="booth" aria-label="Machine">
-          <Machine state={machine} tier={drawn?.tier ?? null} coinIn={coinIn} />
+          <Machine state={machine} coinIn={coinIn} />
 
           <div className="controls">
             <div className="reveal">
