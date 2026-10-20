@@ -28,7 +28,8 @@ jobs:
   checks:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # The signed-in motion probe adds about 3 minutes (Playwright and its Chromium shell, then the probe).
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:17-alpine
@@ -75,6 +76,16 @@ jobs:
           npm start &
           curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
           npm run test:e2e
+      # Signs in through the form against the same server and database, so a page error on the hop into a
+      # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
+      - name: Motion probe, signed in
+        run: |
+          # The server the e2e step left running; start one again if it has gone.
+          curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
+            npm start &
+            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
+          }
+          bash scripts/probe-motion-signed-in.sh
 
   preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository

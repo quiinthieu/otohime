@@ -19,6 +19,11 @@ export const viewport: Viewport = {
 // Applies a pinned theme (components/theme-toggle.tsx) before first paint.
 const pinTheme = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
+// A full load arrives inside the hop's transition, and React's streamed reveal would start its own while the hop
+// is still active, which Chromium skips with an uncaught "Transition was skipped". React waits for
+// document.__reactViewTransition to finish first, so the hop is handed to it until it ends.
+const holdForHop = `addEventListener("pagereveal",function(e){var v=e.viewTransition;if(!v)return;document.__reactViewTransition=v;var c=function(){if(document.__reactViewTransition===v)document.__reactViewTransition=null};v.finished.then(c,c)})`;
+
 // suppressHydrationWarning: the script adds data-theme before React hydrates.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -28,6 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
            globals.css can arrive too late on a first visit (an inline script behind a loading stylesheet), so the opt-in is
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
+        <script dangerouslySetInnerHTML={{ __html: holdForHop }} />
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
       </head>
       <body className="min-h-full">{children}</body>

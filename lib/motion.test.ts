@@ -130,6 +130,24 @@ test("every root layout also opts in inline, so a first visit's hop does not wai
   }
 });
 
+test("the site root layout hands the hop to React from an inline <head> script, so a streamed reveal waits for it", () => {
+  // A full load into a streamed site page (a sign-in, a hop from a project) would otherwise start React's reveal
+  // transition inside the hop, and Chromium skips it with an uncaught "Transition was skipped".
+  // scripts/probe-motion-signed-in.sh watches it, and strips this script by its opening to prove it can fail.
+  const layout = readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8");
+  const head = layout.match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? "";
+  const inline = [...head.matchAll(/<script dangerouslySetInnerHTML=\{\{ __html: (\w+) \}\} \/>/g)].map(
+    ([, name]) => layout.match(new RegExp(`const ${name} = \`([^\`]*)\`;`))?.[1] ?? "",
+  );
+  const guard = inline.filter((s) => s.includes("pagereveal"));
+  assert.equal(guard.length, 1, "no single inline <head> script listens for pagereveal");
+  assert.match(guard[0], /^addEventListener\("pagereveal",function\((\w)\)\{var (\w)=\1\.viewTransition;/);
+  assert.match(guard[0], /document\.__reactViewTransition=(\w);/);
+  // It clears only its own hop, and never hides a rejection (finished.then(c, c) adds no unhandled one).
+  assert.match(guard[0], /if\(document\.__reactViewTransition===(\w)\)document\.__reactViewTransition=null/);
+  assert.doesNotMatch(guard[0], /unhandledrejection|preventDefault|\.catch\(|\.finally\(/);
+});
+
 test("every project row on /projects has a project that names its h1 after it", () => {
   const named = SHEETS.flatMap(({ css }) => [...css.matchAll(/view-transition-name:\s*project-([\w-]+)/g)].map((m) => m[1]));
   assert.deepEqual(named.sort(), [...HREFS].sort());

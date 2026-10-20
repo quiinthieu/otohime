@@ -5,6 +5,8 @@
 // cross-document transition). pageswap fires on the old document, so its answer is kept in sessionStorage;
 // pagereveal fires on the new one, before its first frame, and keeps the transition's animations once it is ready.
 // Each /projects -> project hop is that project's first load in its context, as on a visitor's first hop.
+// A location.assign from /shore into the streamed site pages (/work, /play, /notes, /music, /sign-in,
+// /forgot-password) carries the hop and logs no page error.
 // The site's own pages: a sidebar click /work -> /projects runs page-out and page-in, the eight /projects rows
 // rise 40 ms apart, and /sign-in and the 404 load cleanly; under reduced motion all of it is still.
 // The instruments: Barometer's four parts settle 0.15 s apart, Planisphere's lines draw on and its stars fade up
@@ -131,6 +133,9 @@ const show = (anims) =>
  */
 async function hop(page, from, to, via = null) {
   await page.goto(`${BASE_URL}${from}`, { waitUntil: "load" });
+  // A document that has not painted yet has nothing to capture, and its hop cuts: a cached page can fire load
+  // before its first frame. Measured: 10 of 40 hops from /shore with no wait, 0 of 120 after two frames.
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
   await page.evaluate(() => sessionStorage.removeItem("probe:pageswap"));
   const fromNames = await projectNames(page);
   const target = (u) => new URL(u).pathname === to;
@@ -259,6 +264,31 @@ try {
       } finally {
         await context.close();
       }
+    }
+  }
+
+  // A full load from a project into the site's streamed pages: React's Suspense reveal waits for the hop (the root
+  // layout's pagereveal guard), so the hop runs and nothing is skipped. Watched until the hop has finished, no
+  // Suspense template is left and no transition of React's is in flight.
+  for (const [size, viewport] of [["1366x768", DESKTOP], ["390x844", PHONE]]) {
+    const sink = [];
+    const { context, page } = await open(browser, { viewport, reduced: false, sink });
+    try {
+      for (const to of ["/work", "/play", "/notes", "/music", "/sign-in", "/forgot-password"]) {
+        const label = `${size} /shore -> ${to} (location.assign, signed out)`;
+        const from = sink.length;
+        const r = await hop(page, "/shore", to, (t) => location.assign(t));
+        const settled = await page
+          .waitForFunction(() => !document.querySelector('template[id^="B:"]') && !document.__reactViewTransition, null, { timeout: 10_000 })
+          .then(() => true, () => false);
+        await page.waitForTimeout(300);
+        check(`${label}: pagereveal carries a view transition of type hop`, r.reveal === true && r.types.includes("hop"), `${r.reveal} ${r.types}`);
+        check(`${label}: every streamed reveal settles`, settled);
+        const mine = sink.slice(from);
+        check(`${label}: no page error and no console error`, mine.length === 0, mine.slice(0, 3).join(" | "));
+      }
+    } finally {
+      await context.close();
     }
   }
 
