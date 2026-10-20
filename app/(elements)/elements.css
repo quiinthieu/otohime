@@ -76,6 +76,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-o
 .home-link {
   display: inline-flex;
   align-items: center;
+  gap: 0.3em;
   min-height: 44px;
   padding: 0 14px;
   font-size: 0.875rem;

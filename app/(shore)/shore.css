@@ -31,6 +31,7 @@ svg { width: 20px; height: 20px; stroke-width: 1.7; }
   flex-direction: column;
   background: radial-gradient(ellipse at 50% 22%, #fbfcf7 0%, #edf0e9 80%);
   color: var(--ink);
+  overflow-x: clip; /* the glass canvas bleeds PAD past its button; never let it widen the page */
   transition: background 0.25s, color 0.25s;
 }
 .shore.dark-scene {
@@ -188,7 +189,7 @@ h1 em { font-weight: 400; color: #71867a; }
 .dark-scene .page-footer { color: #a8b9a7; }
 
 @media (max-width: 480px) {
-  .topbar { padding: 0 20px; height: 79px; }
+  .topbar { padding: 8px 20px; height: auto; min-height: 79px; }
   .ways-out { flex-wrap: wrap; justify-content: flex-end; }
   .brand { gap: 8px; font-size: 22px; }
   .brand-detail { font-size: 8px; letter-spacing: 1.4px; }

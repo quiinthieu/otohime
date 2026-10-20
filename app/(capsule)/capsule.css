@@ -221,7 +221,7 @@ h2 { font-family: var(--hand); font-weight: 400; font-size: 24px; margin: 0 0 16
   .album { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (max-width: 480px) {
-  .topbar { padding: 0 20px; height: 72px; }
+  .topbar { padding: 8px 20px; height: auto; min-height: 72px; }
   .ways-out { flex-wrap: wrap; justify-content: flex-end; }
   .brand { font-size: 22px; }
   .brand-detail { font-size: 8px; letter-spacing: 1.2px; }
