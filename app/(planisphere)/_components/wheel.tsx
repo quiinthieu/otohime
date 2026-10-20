@@ -13,6 +13,9 @@ import { placeName, type State } from "../_lib/wheel.ts";
 // Ink (rough.js, seed 203) draws only the frame, the rims and the compass
 // marks; the stars, lines, ecliptic and markers are plain SVG. Everything
 // takes its colour from planisphere.css, so it reads on cream and in the dark.
+// Each constellation line measures 1 (pathLength), so the stylesheet draws it
+// on with one dash whatever its length; the stars carry no style of their own
+// and fade up as one group.
 
 export const VIEW = { w: 720, h: 760 };
 const CX = VIEW.w / 2;
@@ -207,7 +210,7 @@ export function Wheel({ state, daylight }: { state: State; daylight: boolean }) 
             </g>
             <g aria-hidden="true" className="line-layer">
               {lines.map((l, i) => (
-                <polyline key={i} data-line="" className={`rank-${l.rank}`} points={pointText(l.pts)} />
+                <polyline key={i} data-line="" className={`rank-${l.rank}`} pathLength="1" points={pointText(l.pts)} />
               ))}
             </g>
             <g aria-hidden="true" className="star-layer">

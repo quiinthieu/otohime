@@ -4,8 +4,8 @@
    layout's script sets data-theme). The chart and the controls sit side by
    side from 900px and stack below it. Nothing is wider than the viewport at
    320px: the SVG shrinks with its column, the top bar wraps and long lines
-   break. The page has no animation of its own; the reduced-motion rule keeps
-   it that way when the wheel learns to turn. */
+   break. The sky draws on once at load and the disc turns in 0.4 s; the
+   reduced-motion rule at the end turns both off. */
 :root {
   color-scheme: light;
   --paper: #f6f1e7;
@@ -145,6 +145,21 @@ h2 { margin: 0 0 8px; font-family: var(--title); font-weight: 700; font-size: 30
 [data-daylight] .star-layer,
 [data-daylight] .line-layer,
 [data-daylight] .name-layer { opacity: 0.25; }
+
+/* The sky draws on once per document, in ink: the constellation lines over
+   0.9 s (wheel.tsx gives each pathLength="1", so a dash of 1 is the whole
+   line), the stars as one group from 0.4 s, then the names, the ecliptic, the
+   Sun and the Moon from 1.3 s. From-only, so the base style is the finished
+   chart, and the daylight dimming is where the fade ends. The island repaints
+   the disc in place and never remounts it, so a turn does not replay this. */
+.line-layer [data-line] { stroke-dasharray: 1; animation: sky-draw 0.9s ease-out; }
+.star-layer { animation: sky-fade 0.6s ease-out 0.4s backwards; }
+.ecliptic-layer,
+.name-layer,
+.wheel [data-sun],
+.wheel [data-moon] { animation: sky-fade 0.5s ease-out 1.3s backwards; }
+@keyframes sky-draw { from { stroke-dashoffset: 1; } }
+@keyframes sky-fade { from { opacity: 0; } }
 
 /* The island: it wraps the page's content without a box of its own. The disc is
    the slider; only it opts out of touch scrolling, and it turns in 0.4 s (the

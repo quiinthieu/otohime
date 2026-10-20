@@ -25,6 +25,18 @@ const isTyping = (t: EventTarget | null) =>
   t instanceof HTMLElement && (t.isContentEditable || t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT");
 const letterOf = (key: string) => (/^[a-z]$/i.test(key) ? key.toUpperCase() : null);
 
+// A rotor window's letter. Whether it rolls in is fixed when it mounts: a letter
+// that arrives after the first press rolls, and the ones already showing when
+// typing starts stay put, so the server render and the first paint never roll.
+function WindowLetter({ slot, letter, x, y, rolls }: { slot: number; letter: string; x: number; y: number; rolls: boolean }) {
+  const [rolled] = useState(rolls);
+  return (
+    <text data-window={slot} data-rolled={rolled ? "" : undefined} className="window-letter" x={x} y={y} dy="0.36em" textAnchor="middle">
+      {letter}
+    </text>
+  );
+}
+
 export function RotorApp({
   settings,
   message,
@@ -43,6 +55,8 @@ export function RotorApp({
   const [touched, setTouched] = useState(false);
   // The plugboard as typed, while it is not yet a whole board; null shows the machine's.
   const [plugDraft, setPlugDraft] = useState<string | null>(null);
+  // The windows roll only once a key has been pressed, never at first paint.
+  const [rolled, setRolled] = useState(false);
 
   const act = (action: MachineAction) => {
     setTouched(true);
@@ -50,6 +64,7 @@ export function RotorApp({
   };
   const press = (letter: string) => {
     setTouched(true);
+    setRolled(true);
     dispatch({ type: "motion", reduced: reducedNow() });
     dispatch({ type: "press", letter });
   };
@@ -62,6 +77,7 @@ export function RotorApp({
       if (!letter || e.repeat || e.ctrlKey || e.altKey || e.metaKey || isTyping(e.target)) return;
       e.preventDefault();
       setTouched(true);
+      setRolled(true);
       dispatch({ type: "motion", reduced: reducedNow() });
       dispatch({ type: "press", letter });
     };
@@ -124,9 +140,8 @@ export function RotorApp({
           <g data-windows={s.positions}>
             {WINDOWS.map((w, i) => (
               <g key={i}>
-                <text data-window={i} className="window-letter" x={w.x} y={w.y} dy="0.36em" textAnchor="middle">
-                  {s.positions[i]}
-                </text>
+                {/* keyed on its letter, so a step remounts it and it rolls in */}
+                <WindowLetter key={`${i}-${s.positions[i]}`} slot={i} letter={s.positions[i]} x={w.x} y={w.y} rolls={rolled} />
                 <text className="rotor-name" x={w.x} y={w.y + 48} textAnchor="middle">
                   {s.settings.rotors[i]}
                 </text>

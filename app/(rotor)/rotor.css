@@ -127,6 +127,12 @@ h2 { margin: 0 0 8px; font-family: var(--title); font-weight: 700; font-size: 30
 .box .ink path { stroke: var(--ink); }
 .box text { font-family: var(--title); fill: var(--ink); }
 .window-letter { font-size: 34px; font-weight: 700; }
+/* A window rolls up to its new letter on twos, like the key and the lamp:
+   rotor-app.tsx keys each letter on itself, so a step remounts it, and marks
+   data-rolled only on a letter that mounts after the first press, so the
+   first paint never rolls and the windows that did not step stay put. */
+.window-letter[data-rolled] { transform-box: fill-box; animation: roll 170ms steps(2); }
+@keyframes roll { from { transform: translateY(0.35em); opacity: 0; } }
 .rotor-name { font-size: 18px; fill: var(--ink-soft); }
 .lamp text { font-size: 22px; font-weight: 700; }
 .lamp .glass { fill: var(--glass); }

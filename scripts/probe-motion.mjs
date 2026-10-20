@@ -7,6 +7,10 @@
 // Each /projects -> project hop is that project's first load in its context, as on a visitor's first hop.
 // The site's own pages: a sidebar click /work -> /projects runs page-out and page-in, the eight /projects rows
 // rise 40 ms apart, and /sign-in and the 404 load cleanly; under reduced motion all of it is still.
+// The instruments: Barometer's four parts settle 0.15 s apart, Planisphere's lines draw on and its stars fade up
+// (a turn of the wheel adds only the disc's transform transition and replays nothing), and Rotor's windows roll
+// only once a key is pressed. Under reduced motion none of it runs, and with JavaScript off each page still
+// ends at its resting pose.
 import { createRequire } from "node:module";
 import path from "node:path";
 
@@ -178,6 +182,39 @@ function watchSameDocument() {
   };
 }
 
+// Every animationstart in the document, with the animation's own timing: its start on the timeline, its delay and
+// its duration. Animation events bubble, so one listener on window hears every part.
+function watchStarts() {
+  window.__starts = [];
+  addEventListener("animationstart", (e) => {
+    const el = e.target;
+    const a = el.getAnimations().find((x) => x.animationName === e.animationName);
+    const t = a?.effect.getTiming();
+    window.__starts.push({
+      name: e.animationName,
+      tag: el.tagName.toLowerCase(),
+      cls: el.getAttribute("class") ?? "",
+      data: [...el.attributes].map((x) => x.name).filter((n) => n.startsWith("data-")).join(" "),
+      start: a?.startTime ?? null,
+      delay: t?.delay ?? null,
+      duration: t ? Number(t.duration) : null,
+    });
+  });
+}
+const starts = (page) => page.evaluate(() => window.__starts ?? []);
+const BAROMETER_NAMES = ["swing", "rise", "vane-swing"];
+const BAROMETER_PARTS = ["needle", "mercury", "arrow", "water"];
+// React has hydrated the island once the node carries its fiber; give its effects a beat to attach their listeners.
+async function hydrated(page, selector) {
+  await page
+    .waitForFunction((sel) => {
+      const el = document.querySelector(sel);
+      return Boolean(el) && Object.keys(el).some((k) => k.startsWith("__react"));
+    }, selector, { timeout: 10_000 })
+    .catch(() => {});
+  await page.waitForTimeout(200);
+}
+
 const browser = await chromium.launch();
 try {
   for (const [size, viewport] of [["1366x768", DESKTOP], ["390x844", PHONE]]) {
@@ -289,6 +326,181 @@ try {
   const notFoundLoad = (e) => /\/does-not-exist: Failed to load resource: the server responded with a status of 404 \((?:Not Found)?\)$/.test(e);
   const siteReal = siteErrors.filter((e) => !notFoundLoad(e));
   check("site: /projects, /sign-in and /does-not-exist load with no console error or page error", siteReal.length === 0, siteReal.slice(0, 3).join(" | "));
+
+  // The instruments' own load motion. animationstart is recorded as it happens, with the animation's timing, so
+  // a part that has already finished by the load event still counts.
+  for (const reduced of [false, true]) {
+    const { context, page } = await open(browser, { viewport: DESKTOP, reduced });
+    const label = reduced ? "instruments reduced motion" : "instruments";
+    try {
+      await page.addInitScript(watchStarts);
+
+      // Barometer: the needle, the mercury, the vane and the water, one after another.
+      await page.goto(`${BASE_URL}/barometer?city=tokyo`, { waitUntil: "load" });
+      const face = await page.locator("svg.station").getAttribute("data-face");
+      const atLoad = await loadAnimations(page);
+      await page.waitForTimeout(1800);
+      const parts = (await starts(page)).filter((a) => BAROMETER_NAMES.includes(a.name)).map((a) => ({ ...a, part: BAROMETER_PARTS.find((p) => a.cls.split(" ").includes(p)) ?? a.cls }));
+      console.log(`# ${label}: /barometer?city=tokyo shows the ${face} face`);
+      if (reduced) {
+        check(`${label}: /barometer starts none of its instrument animations`, parts.length === 0, show(parts));
+        check(`${label}: every animation on /barometer lasts <= 1 ms or has finished`, still(atLoad).length === 0, show(still(atLoad)));
+      } else if (face === "reading") {
+        const order = parts.map((p) => p.part).join(", ");
+        check(`${label}: /barometer starts its 4 instrument animations, one per part`, order === BAROMETER_PARTS.join(", "), order || "none");
+        check(
+          `${label}: /barometer's parts settle in turn, 0.15 s apart, each over 1.1 s`,
+          parts.length === 4 && parts.every((p, i) => p.delay === i * 150 && p.duration === 1100),
+          parts.map((p) => `${p.part} ${p.name} ${p.delay}+${p.duration}ms`).join(", "),
+        );
+        check(`${label}: /barometer's four start together and differ only by their delay`, parts.length === 4 && parts.every((p) => Math.abs(p.start - parts[0].start) <= 50), parts.map((p) => p.start).join(", "));
+        const running = atLoad.filter((a) => BAROMETER_NAMES.includes(a.name));
+        check(`${label}: /barometer's instrument animations at load are its own, none longer than 1.1 s`, running.every((a) => a.duration === 1100), show(running));
+      } else {
+        // The feed is live; when it is down the quiet face is drawn, and it must stand still.
+        check(`${label}: /barometer's quiet face starts none of the instrument animations`, parts.length === 0, show(parts));
+      }
+
+      // Planisphere: the lines draw on, then the stars, then the names and the markers.
+      await page.goto(`${BASE_URL}/planisphere`, { waitUntil: "load" });
+      await hydrated(page, "[data-disc]");
+      await page.waitForTimeout(1900);
+      const sky = (await starts(page)).filter((a) => a.name.startsWith("sky-"));
+      const lineCount = await page.locator("[data-line]").count();
+      const draws = sky.filter((a) => a.name === "sky-draw");
+      const fades = sky.filter((a) => a.name === "sky-fade");
+      const fadeOf = (pick) => fades.filter(pick).map((a) => `${a.delay}+${a.duration}`);
+      if (reduced) {
+        check(`${label}: /planisphere starts no draw-on or fade`, sky.length === 0, show(sky));
+      } else {
+        check(`${label}: /planisphere draws every one of its ${lineCount} lines on over 0.9 s`, lineCount >= 80 && draws.length === lineCount && draws.every((a) => a.tag === "polyline" && a.duration === 900 && a.delay === 0), `${draws.length} draws, ${show(draws)}`);
+        check(`${label}: /planisphere's stars fade up as one group 0.4 s in`, fadeOf((a) => a.cls === "star-layer").join() === "400+600", fadeOf((a) => a.cls === "star-layer").join() || "none");
+        const late = fades.filter((a) => a.cls !== "star-layer");
+        const lateWho = late.map((a) => a.cls || a.data).sort().join(", ");
+        check(`${label}: /planisphere's names, ecliptic, Sun and Moon fade up from 1.3 s`, lateWho === "data-moon, data-sun, ecliptic-layer, name-layer" && late.every((a) => a.delay === 1300), `${lateWho}: ${late.map((a) => a.delay).join(", ")}`);
+        check(`${label}: no single star animates on its own`, sky.every((a) => a.tag !== "circle"), show(sky.filter((a) => a.tag === "circle")));
+      }
+      // A turn of the wheel: only the transform transition is new, and the draw-on does not restart.
+      await page.evaluate(() => {
+        window.__before = new Set(document.getAnimations());
+        for (const el of document.querySelectorAll("[data-line]")) el.__probe = true;
+        window.__value = document.querySelector("[data-disc]").getAttribute("aria-valuenow");
+      });
+      await page.focus("[data-disc]");
+      await page.keyboard.press("ArrowRight");
+      await page.waitForTimeout(120);
+      const turn = await page.evaluate(() => {
+        const disc = document.querySelector("[data-disc]");
+        const fresh = document.getAnimations().filter((a) => !window.__before.has(a));
+        const describe = (a) => ({ kind: a.constructor.name, name: a.animationName ?? a.transitionProperty, target: [...(a.effect?.target?.attributes ?? [])].map((x) => x.name).filter((n) => n.startsWith("data-")).join(" "), duration: Number(a.effect?.getComputedTiming().duration), state: a.playState });
+        return {
+          turned: disc.getAttribute("aria-valuenow") !== window.__value,
+          fresh: fresh.map(describe),
+          disc: disc.getAnimations().map(describe),
+          kept: [...document.querySelectorAll("[data-line]")].every((el) => el.__probe === true),
+        };
+      });
+      const drawsAfter = (await starts(page)).filter((a) => a.name === "sky-draw").length;
+      check(`${label}: ArrowRight turns the wheel`, turn.turned, JSON.stringify(turn));
+      if (reduced) {
+        check(`${label}: the turn adds no animation or transition`, turn.fresh.length === 0, show(turn.fresh));
+      } else {
+        check(`${label}: after ArrowRight the disc runs only its transform transition`, turn.disc.length >= 1 && turn.disc.every((a) => a.kind === "CSSTransition" && a.name === "transform" && a.duration === 400), show(turn.disc));
+        check(`${label}: after ArrowRight only transform transitions on the disc and rim are new`, turn.fresh.length >= 1 && turn.fresh.every((a) => a.kind === "CSSTransition" && a.name === "transform" && /\bdata-(?:disc|rim)\b/.test(a.target)), show(turn.fresh));
+      }
+      check(`${label}: the turn replays no line draw and remounts no line`, turn.kept && drawsAfter === draws.length, `${draws.length} -> ${drawsAfter} draws, kept ${turn.kept}`);
+
+      // Rotor: still at load; pressing A steps the right rotor and rolls that one window.
+      await page.goto(`${BASE_URL}/rotor`, { waitUntil: "load" });
+      await hydrated(page, "[data-windows]");
+      await page.waitForTimeout(300);
+      const rollsAtLoad = (await starts(page)).filter((a) => a.name === "roll");
+      const rollingAtLoad = (await loadAnimations(page)).filter((a) => a.name === "roll");
+      check(`${label}: /rotor rolls no window at load`, rollsAtLoad.length === 0 && rollingAtLoad.length === 0, show([...rollsAtLoad, ...rollingAtLoad]));
+      const before = await page.locator("[data-windows]").getAttribute("data-windows");
+      await page.keyboard.press("a");
+      await page.waitForFunction((b) => document.querySelector("[data-windows]")?.getAttribute("data-windows") !== b, before, { timeout: 3000 }).catch(() => {});
+      const afterPress = await loadAnimations(page);
+      await page.waitForTimeout(400);
+      const after = await page.locator("[data-windows]").getAttribute("data-windows");
+      check(`${label}: pressing A on /rotor steps the windows ${before} -> AAB`, before === "AAA" && after === "AAB", `${before} -> ${after}`);
+      const rolls = (await starts(page)).filter((a) => a.name === "roll");
+      if (reduced) {
+        check(`${label}: pressing A rolls no window`, rolls.length === 0, show(rolls));
+        check(`${label}: after pressing A every animation lasts <= 1 ms or has finished`, still(afterPress).length === 0, show(still(afterPress)));
+      } else {
+        check(`${label}: pressing A rolls exactly one window, on twos in 170 ms`, rolls.length === 1 && rolls[0].data.includes("data-window") && rolls[0].duration === 170, show(rolls));
+        const marked = await page.evaluate(() => [...document.querySelectorAll("[data-window][data-rolled]")].map((el) => `${el.getAttribute("data-window")} ${el.textContent}`));
+        check(`${label}: the window that rolled is the right rotor's, now B`, marked.join() === "2 B", marked.join() || "none");
+      }
+    } finally {
+      await context.close();
+    }
+  }
+
+  // JavaScript off: no island, and each instrument still ends at its resting pose.
+  {
+    const context = await browser.newContext({ viewport: DESKTOP, javaScriptEnabled: false });
+    const page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(`pageerror ${page.url()}: ${e.message}`));
+    const settle = () => page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => null))).then(() => true));
+    const noReact = () => page.evaluate(() => ![...document.querySelectorAll("*")].some((el) => Object.keys(el).some((k) => k.startsWith("__react"))));
+    try {
+      await page.goto(`${BASE_URL}/barometer?city=tokyo`, { waitUntil: "load" });
+      await settle();
+      check("no-JS: /barometer is not hydrated", await noReact());
+      const rest = await page.evaluate(() =>
+        [".needle", "rect.mercury", ".arrow", ".water"].map((sel) => {
+          const el = document.querySelector(`svg.station ${sel}`);
+          // counted first: clearing and restoring the animation below restarts it
+          const running = el.getAnimations().length;
+          const now = getComputedStyle(el).transform;
+          el.style.animation = "none";
+          const still = getComputedStyle(el).transform;
+          el.style.animation = "";
+          return { sel, now, still, running };
+        }),
+      );
+      check("no-JS: /barometer's four parts end at their resting transform", rest.every((r) => r.now === r.still && r.running === 0), JSON.stringify(rest));
+
+      await page.goto(`${BASE_URL}/planisphere`, { waitUntil: "load" });
+      await settle();
+      check("no-JS: /planisphere is not hydrated", await noReact());
+      const chart = await page.evaluate(() => {
+        // counted first: clearing and restoring an animation below restarts it
+        const running = document.getAnimations().length;
+        const lines = [...document.querySelectorAll("[data-line]")];
+        const restOpacity = (el) => {
+          const now = getComputedStyle(el).opacity;
+          el.style.animation = "none";
+          const still = getComputedStyle(el).opacity;
+          el.style.animation = "";
+          return now === still;
+        };
+        return {
+          lines: lines.length,
+          offsets: [...new Set(lines.map((el) => getComputedStyle(el).strokeDashoffset))],
+          length: [...new Set(lines.map((el) => el.getAttribute("pathLength")))],
+          layers: [".star-layer", ".name-layer", ".ecliptic-layer", "[data-sun]", "[data-moon]"].every((sel) => restOpacity(document.querySelector(`.wheel ${sel}`))),
+          running,
+        };
+      });
+      check("no-JS: /planisphere's lines end drawn (stroke-dashoffset 0)", chart.lines >= 80 && chart.offsets.every((o) => parseFloat(o) === 0) && chart.length.join() === "1", JSON.stringify(chart));
+      check("no-JS: /planisphere's stars, names and markers end at their resting opacity", chart.layers && chart.running === 0, JSON.stringify(chart));
+
+      await page.goto(`${BASE_URL}/rotor`, { waitUntil: "load" });
+      await settle();
+      check("no-JS: /rotor is not hydrated", await noReact());
+      const windows = await page.evaluate(() => ({
+        rolled: [...document.querySelectorAll("[data-window]")].some((el) => el.hasAttribute("data-rolled")),
+        letters: [...document.querySelectorAll("[data-window]")].map((el) => `${el.textContent} ${getComputedStyle(el).opacity} ${getComputedStyle(el).transform}`),
+        running: document.getAnimations().length,
+      }));
+      check("no-JS: /rotor's windows stand still, reading AAA", windows.rolled === false && windows.letters.join() === "A 1 none,A 1 none,A 1 none" && windows.running === 0, JSON.stringify(windows));
+    } finally {
+      await context.close();
+    }
+  }
 
   // Negative: strip @view-transition from everything /shore loads (the inline copy in its HTML and the rule in its
   // CSS), and the hop into it must cut. Its errors are expected: the old page's transition is aborted.

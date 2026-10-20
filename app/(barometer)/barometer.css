@@ -4,8 +4,9 @@
    layout's script sets data-theme). The instruments are always light objects,
    so they keep a fixed dark ink; only the wood and the page change. The form
    and the board stack in one column and stay inside the viewport at 320px: the
-   SVG shrinks with its column and long lines break. The needle swings once on
-   load; the reduced-motion rule at the end turns that off. */
+   SVG shrinks with its column and long lines break. The four instruments
+   settle once on load, in turn; the reduced-motion rule at the end turns that
+   off. */
 :root {
   color-scheme: light;
   --paper: #efe3c8;
@@ -201,6 +202,22 @@ select {
 .arrow { transform-box: view-box; transform-origin: 524px 104px; }
 .needle { animation: swing 1.1s ease-out; }
 @keyframes swing { from { transform: rotate(-135deg); } }
+/* The other three follow the needle 0.15 s apart, from where they would sit
+   empty: the mercury grows from the bulb, the vane swings from north and the
+   water rises from the cup's floor. From-only, so the base style is the
+   reading; backwards holds each at its start until its turn. */
+rect.mercury,
+.water { transform-box: fill-box; transform-origin: bottom; }
+rect.mercury { animation: rise 1.1s ease-out 0.15s backwards; }
+.arrow { animation: vane-swing 1.1s ease-out 0.3s backwards; }
+.water { animation: rise 1.1s ease-out 0.45s backwards; }
+@keyframes rise { from { transform: scaleY(0); } }
+@keyframes vane-swing { from { transform: rotate(0deg); } }
+/* The quiet face is already at rest: nothing swings or fills to nowhere. */
+[data-face="quiet"] .needle,
+[data-face="quiet"] rect.mercury,
+[data-face="quiet"] .arrow,
+[data-face="quiet"] .water { animation: none; }
 /* The set hand is hidden until the visitor has set one for this city. */
 [data-station]:not([data-hand="set"]) [data-set-hand] { display: none; }
 [data-face="quiet"] .dial,
