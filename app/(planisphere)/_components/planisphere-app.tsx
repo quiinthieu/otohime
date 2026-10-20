@@ -16,7 +16,9 @@ import { placeName, reducer, toQuery, type State } from "../_lib/wheel.ts";
 // change of hour or date rewrites the few things that follow from the time
 // (the disc's rotate(), the Sun and Moon, the daylight flag, the Moon corner,
 // the "up now" line, the form) straight in the server's markup, and the URL
-// through history.replaceState. A new place needs a new window, so a city
+// through history.replaceState. The disc is the page's one slider (wheel.tsx
+// serves role="slider" on it, so it works as a control before hydration too);
+// the island keeps its aria-valuenow and aria-valuetext current. A new place needs a new window, so a city
 // change and "Use my location" navigate and the server inks it again.
 
 const UP_SHOWN = 14;
@@ -69,6 +71,7 @@ function paint(root: HTMLElement, state: State, named: readonly StarLike[], spin
   for (const el of root.querySelectorAll<SVGElement>("[data-disc], [data-rim]")) {
     el.style.transform = `rotate(${r1(spin.angle)}deg)`;
   }
+  // the slider's value follows the hour
   const disc = root.querySelector("[data-disc]");
   disc?.setAttribute("aria-valuenow", String(state.hour));
   disc?.setAttribute("aria-valuetext", clock(state.hour));
