@@ -47,7 +47,9 @@ a:focus-visible { outline: 2px dashed var(--sun-orange); outline-offset: 3px; bo
 
 /* Top bar: the way home */
 .topbar { padding: 14px 16px 0; max-width: 1180px; width: 100%; margin: 0 auto; }
+.ways-out { display: flex; align-items: center; gap: 8px; }
 .home-link { font-family: var(--title); font-size: 22px; }
+.ways-out .home-link + .home-link { font-size: 18px; }
 
 /* The poster grid */
 .poster {

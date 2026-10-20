@@ -195,6 +195,7 @@ check "/capsule has the rates line" has capsule 'Legend 5%'
 check "/capsule has Reset album" has capsule 'Reset album'
 check "/capsule has the disclaimer" has capsule 'Not affiliated'
 check "/capsule links home" has capsule 'href="/"'
+check "/capsule links the project list" has capsule 'href="/projects"'
 check "/capsule stylesheet is Capsule's own" capsule_stylesheet
 
 check "/projects returns 200" status_is projects 200

@@ -236,6 +236,7 @@ check "/sun has no tour" lacks sun 'data-tour'
 check "/sun has at most $WORD_CAP visible words (counted $WORDS)" words_within_cap
 check "/sun links NASA's Sun facts" has sun 'href="https://science.nasa.gov/sun/facts/"'
 check "/sun links home" has sun 'href="/"'
+check "/sun links the project list" has sun 'href="/projects"'
 check "/sun stylesheet is Sun's own" sun_stylesheet
 check "/sun has exactly 3 ink loops" count_eq sun 'data-loop="' 3
 check "/sun stylesheet draws the ink on" stylesheet_draws

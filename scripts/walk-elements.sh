@@ -285,6 +285,7 @@ check "/elements links the CC BY-SA licence" has elements 'href="https://creativ
 check "/elements links the dataset" has elements 'href="https://github.com/Bowserinator/Periodic-Table-JSON"'
 check "/elements has a closed dialog" has elements '<dialog'
 check "/elements links home" has elements 'href="/"'
+check "/elements links the project list" has elements 'href="/projects"'
 check "/elements names no three chunk" no_three_chunk
 check "/elements loads no 3D code" no_three_code
 check "/elements preloads no three chunk" no_three_preload

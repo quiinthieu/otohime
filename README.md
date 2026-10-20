@@ -69,6 +69,8 @@ db/                  Drizzle schema, client, and migrations
 
 A page with its own design gets its own route group with a `layout.tsx` (its own `<html>` and stylesheet), so it does not inherit the site's CSS. Moving between root layouts is a full page load.
 
+Every project's top bar links home and to `/projects`, both plain `<a>` because they cross root layouts.
+
 The site follows the OS's light or dark setting until someone presses the theme toggle. Their choice is kept in `localStorage.theme`.
 
 The browser talks only to this Next.js server. `lib/` and `db/` are the only code that opens Postgres.

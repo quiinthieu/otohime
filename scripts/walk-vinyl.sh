@@ -251,6 +251,7 @@ check "/vinyl title is Vinyl" has vinyl '<title>Vinyl</title>'
 check "/vinyl has no site sidebar" lacks vinyl 'aria-label="Main"'
 check "/vinyl build-sha" build_sha_matches
 check "/vinyl links home" has vinyl 'href="/"'
+check "/vinyl links the project list" has vinyl 'href="/projects"'
 check "/vinyl has exactly 12 records in the crate" count_eq vinyl 'data-record="' 12
 check "/vinyl has exactly 1 monitor" count_eq vinyl 'data-monitor' 1
 check "/vinyl has exactly 1 player host" count_eq vinyl 'data-player-host' 1

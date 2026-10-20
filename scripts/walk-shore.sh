@@ -189,6 +189,8 @@ check "/shore has no site sidebar" lacks shore 'aria-label="Main"'
 check "/shore build-sha" build_sha_matches
 check "/shore has the Dark scene toggle" has shore 'aria-label="Dark scene"'
 check "/shore has Finish now" has shore 'Finish now'
+check "/shore links home" has shore 'href="/"'
+check "/shore links the project list" has shore 'href="/projects"'
 check "/shore stylesheet is Shore's own" shore_stylesheet
 
 check "/projects returns 200" status_is projects 200

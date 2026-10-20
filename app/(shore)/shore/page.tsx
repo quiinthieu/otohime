@@ -20,11 +20,17 @@ export default function ShorePage() {
               <span className="brand-detail">A FOCUS TIMER</span>
             </span>
           </span>
-          {/* A plain <a>: / is in another root layout, which needs a full page load. */}
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a className="home-link" href="/">
-            otohime.dev
-          </a>
+          <nav className="ways-out" aria-label="Site">
+            {/* A plain <a>: / is in another root layout, which needs a full page load. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a className="home-link" href="/">
+              otohime.dev
+            </a>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a className="home-link" href="/projects">
+              <span aria-hidden="true">←</span> All projects
+            </a>
+          </nav>
         </header>
       }
       footer={

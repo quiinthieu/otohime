@@ -93,31 +93,41 @@ test("the projects page sits in the sidebar and lists Shore, Capsule, Sun, Eleme
 test("Shore is its own page, without the site's sidebar", async () => {
   const res = await page("/shore");
   assert.equal(res.status, 200);
-  assert.doesNotMatch(await res.text(), /aria-label="Main"/);
+  const html = await res.text();
+  assert.doesNotMatch(html, /aria-label="Main"/);
+  assert.match(html, /href="\/projects"/);
 });
 
 test("Capsule is its own page, without the site's sidebar", async () => {
   const res = await page("/capsule");
   assert.equal(res.status, 200);
-  assert.doesNotMatch(await res.text(), /aria-label="Main"/);
+  const html = await res.text();
+  assert.doesNotMatch(html, /aria-label="Main"/);
+  assert.match(html, /href="\/projects"/);
 });
 
 test("Sun is its own page, without the site's sidebar", async () => {
   const res = await page("/sun");
   assert.equal(res.status, 200);
-  assert.doesNotMatch(await res.text(), /aria-label="Main"/);
+  const html = await res.text();
+  assert.doesNotMatch(html, /aria-label="Main"/);
+  assert.match(html, /href="\/projects"/);
 });
 
 test("Elements is its own page, without the site's sidebar", async () => {
   const res = await page("/elements");
   assert.equal(res.status, 200);
-  assert.doesNotMatch(await res.text(), /aria-label="Main"/);
+  const html = await res.text();
+  assert.doesNotMatch(html, /aria-label="Main"/);
+  assert.match(html, /href="\/projects"/);
 });
 
 test("Vinyl is its own page, without the site's sidebar", async () => {
   const res = await page("/vinyl");
   assert.equal(res.status, 200);
-  assert.doesNotMatch(await res.text(), /aria-label="Main"/);
+  const html = await res.text();
+  assert.doesNotMatch(html, /aria-label="Main"/);
+  assert.match(html, /href="\/projects"/);
 });
 
 test("a plain user can't list users or raise their own role", async () => {
