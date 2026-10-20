@@ -1,4 +1,6 @@
-// Shore owes nothing to the site's design, and the site owes nothing to Shore.
+// Shore owes nothing to the site's design or another project, and none of them
+// owes anything to Shore. The groups are read from app/, so a new project is
+// guarded without editing this file.
 // This reads import specifiers only, so prose that mentions a name is fine.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
@@ -27,15 +29,23 @@ const under = (dir: string) => filesUnder(join(ROOT, dir));
 const SELF = import.meta.filename;
 const shoreFiles = under("app/(shore)").filter((f) => f !== SELF);
 
-// Anything that resolves into the site's code or styles, by alias or by ../
-const SITE_DIRS = ["components", "content", "lib", join("app", "(site)")].map((d) => join(ROOT, d));
+const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
+  .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name) && e.name !== "(shore)")
+  .map((e) => e.name)
+  .sort();
+const SITE_DIRS = ["components", "content", "lib", ...GROUPS.map((g) => join("app", g))].map((d) => join(ROOT, d));
+
+// Anything that resolves into the site's or another project's code or styles, by alias or by ../
 function reachesSite(file: string, spec: string): string | null {
   if (/globals\.css/.test(spec)) return "globals.css";
   if (/^@?tailwindcss(\/|$)/.test(spec) || /^@tailwindcss\//.test(spec)) return "tailwindcss";
   for (const alias of ["components", "content", "lib"]) {
     if (spec === `@/${alias}` || spec.startsWith(`@/${alias}/`)) return `@/${alias}`;
   }
-  if (spec.startsWith("@/app/(site)")) return "app/(site)";
+  for (const g of GROUPS) {
+    const name = g.slice(1, -1);
+    if (spec.startsWith(`@/app/${g}`) || new RegExp(`(^|/)${name}\\.css$`).test(spec)) return `app/${g}`;
+  }
   if (spec.startsWith(".")) {
     const target = resolve(dirname(file), spec);
     const hit = SITE_DIRS.find((d) => target === d || target.startsWith(d + sep));
@@ -49,7 +59,7 @@ test("the scan finds Shore's files", () => {
   assert.ok(shoreFiles.some((f) => f.endsWith("shore.css")));
 });
 
-test("nothing under app/(shore)/ imports the site's CSS, Tailwind or code", () => {
+test("nothing under app/(shore)/ imports the site's CSS, Tailwind, code or another project", () => {
   for (const file of shoreFiles) {
     for (const spec of specifiers(file)) {
       const bad = reachesSite(file, spec);
@@ -58,9 +68,10 @@ test("nothing under app/(shore)/ imports the site's CSS, Tailwind or code", () =
   }
 });
 
-test("nothing under app/(site)/, components/ or lib/ imports Shore", () => {
-  const siteFiles = [...under("app/(site)"), ...under("components"), ...under("lib")];
+test("nothing outside app/(shore)/ imports Shore", () => {
+  const siteFiles = [...GROUPS.flatMap((g) => under(`app/${g}`)), ...under("components"), ...under("lib")];
   assert.ok(siteFiles.length > 10);
+  assert.ok(siteFiles.some((f) => f.endsWith("orrery.css")));
   for (const file of siteFiles) {
     for (const spec of specifiers(file)) {
       assert.ok(
@@ -69,6 +80,15 @@ test("nothing under app/(site)/, components/ or lib/ imports Shore", () => {
       );
     }
   }
+});
+
+test("GROUPS is read from app/: the site and every other project, never Shore", () => {
+  assert.ok(GROUPS.includes("(site)"), "(site)");
+  assert.ok(GROUPS.includes("(capsule)"), "(capsule)");
+  assert.ok(GROUPS.includes("(orrery)"), "(orrery)");
+  assert.ok(GROUPS.includes("(elements)"), "(elements)");
+  assert.ok(GROUPS.includes("(vinyl)"), "(vinyl)");
+  assert.ok(!GROUPS.includes("(shore)"));
 });
 
 test("the checker flags what it should", () => {
@@ -80,6 +100,8 @@ test("the checker flags what it should", () => {
   assert.equal(reachesSite(f, "../../(site)/globals.css"), "globals.css");
   assert.equal(reachesSite(f, "../../lib/auth"), "lib");
   assert.equal(reachesSite(f, "../(site)/layout"), "app/(site)");
+  assert.equal(reachesSite(f, "../(capsule)/_lib/cards"), "app/(capsule)");
+  assert.equal(reachesSite(f, "@/app/(orrery)/_lib/sun"), "app/(orrery)");
   assert.equal(reachesSite(f, "./shore.css"), null);
   assert.equal(reachesSite(f, "react"), null);
 });

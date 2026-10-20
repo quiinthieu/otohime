@@ -1,5 +1,5 @@
-// Vinyl owes nothing to the site or another project, and none of them owes
-// anything to Vinyl. _lib/ stays free of React; nothing offers a download, and
+// Vinyl owes nothing to the site or another project (the groups are read from
+// app/), and none of them owes anything to Vinyl. _lib/ stays free of React; nothing offers a download, and
 // only crackle.ts may open an AudioContext, so the YouTube player's sound is
 // never touched. This reads import specifiers and source text, so it is
 // modelled on app/(elements)/_lib/isolation.test.ts, not shared with it.
@@ -36,7 +36,10 @@ const under = (dir: string) => filesUnder(join(ROOT, dir));
 const SELF = import.meta.filename;
 const vinylFiles = under("app/(vinyl)").filter((f) => f !== SELF);
 
-const GROUPS = ["(site)", "(shore)", "(capsule)", "(orrery)", "(elements)"];
+const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
+  .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name) && e.name !== "(vinyl)")
+  .map((e) => e.name)
+  .sort();
 const OUTSIDE = ["components", "content", "lib", ...GROUPS.map((g) => join("app", g))].map((d) => join(ROOT, d));
 
 // Anything that resolves into the site's or another project's code or styles, by alias or by ../
@@ -130,6 +133,15 @@ test("touch-action: none is set on the tonearm and nowhere else", () => {
   }
 });
 
+test("GROUPS is read from app/: the site and every other project, never Vinyl", () => {
+  assert.ok(GROUPS.includes("(site)"), "(site)");
+  assert.ok(GROUPS.includes("(shore)"), "(shore)");
+  assert.ok(GROUPS.includes("(capsule)"), "(capsule)");
+  assert.ok(GROUPS.includes("(orrery)"), "(orrery)");
+  assert.ok(GROUPS.includes("(elements)"), "(elements)");
+  assert.ok(!GROUPS.includes("(vinyl)"));
+});
+
 test("the checkers flag what they should", () => {
   const f = join(ROOT, "app/(vinyl)/_lib/x.ts");
   assert.equal(reachesOutside(f, "@/components/television"), "@/components");
@@ -145,6 +157,7 @@ test("the checkers flag what they should", () => {
   assert.equal(reachesOutside(f, "../../(orrery)/_lib/sun"), join("app", "(orrery)"));
   assert.equal(reachesOutside(f, "@/app/(elements)/_lib/grid"), "app/(elements)");
   assert.equal(reachesOutside(f, "../../(elements)/_lib/grid"), join("app", "(elements)"));
+  assert.equal(reachesOutside(f, "../../(shore)/_lib/ledger"), join("app", "(shore)"));
   assert.equal(reachesOutside(f, "./deck.ts"), null);
   assert.equal(reachesOutside(f, "../vinyl.css"), null);
   assert.equal(reachesOutside(f, "react"), null);

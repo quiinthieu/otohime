@@ -1,5 +1,5 @@
-// Orrery owes nothing to the site, Shore or Capsule, and none of them owes anything
-// to Orrery. This reads import specifiers only, so prose that mentions a name is
+// Orrery owes nothing to the site or another project (the groups are read from
+// app/), and none of them owes anything to Orrery. This reads import specifiers only, so prose that mentions a name is
 // fine. Modelled on app/(capsule)/_lib/isolation.test.ts, not shared with it.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
@@ -28,19 +28,23 @@ const under = (dir: string) => filesUnder(join(ROOT, dir));
 const SELF = import.meta.filename;
 const orreryFiles = under("app/(orrery)").filter((f) => f !== SELF);
 
-// Anything that resolves into the site's, Shore's or Capsule's code or styles, by alias or by ../
-const OUTSIDE = ["components", "content", "lib", join("app", "(site)"), join("app", "(shore)"), join("app", "(capsule)")].map((d) =>
-  join(ROOT, d),
-);
+const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
+  .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name) && e.name !== "(orrery)")
+  .map((e) => e.name)
+  .sort();
+const OUTSIDE = ["components", "content", "lib", ...GROUPS.map((g) => join("app", g))].map((d) => join(ROOT, d));
+
+// Anything that resolves into the site's or another project's code or styles, by alias or by ../
 function reachesOutside(file: string, spec: string): string | null {
   if (/globals\.css/.test(spec)) return "globals.css";
   if (/^@?tailwindcss(\/|$)/.test(spec) || /^@tailwindcss\//.test(spec)) return "tailwindcss";
   for (const alias of ["components", "content", "lib"]) {
     if (spec === `@/${alias}` || spec.startsWith(`@/${alias}/`)) return `@/${alias}`;
   }
-  if (spec.startsWith("@/app/(site)")) return "app/(site)";
-  if (spec.startsWith("@/app/(shore)") || /shore\.css/.test(spec)) return "app/(shore)";
-  if (spec.startsWith("@/app/(capsule)") || /capsule\.css/.test(spec)) return "app/(capsule)";
+  for (const g of GROUPS) {
+    const name = g.slice(1, -1);
+    if (spec.startsWith(`@/app/${g}`) || new RegExp(`(^|/)${name}\\.css$`).test(spec)) return `app/${g}`;
+  }
   if (spec.startsWith(".")) {
     const target = resolve(dirname(file), spec);
     const hit = OUTSIDE.find((d) => target === d || target.startsWith(d + sep));
@@ -55,7 +59,7 @@ test("the scan finds Orrery's files", () => {
   assert.ok(orreryFiles.some((f) => f.endsWith("orrery.css")));
 });
 
-test("nothing under app/(orrery)/ imports the site, Tailwind, Shore or Capsule", () => {
+test("nothing under app/(orrery)/ imports the site, Tailwind or another project", () => {
   for (const file of orreryFiles) {
     for (const spec of specifiers(file)) {
       const bad = reachesOutside(file, spec);
@@ -64,8 +68,8 @@ test("nothing under app/(orrery)/ imports the site, Tailwind, Shore or Capsule",
   }
 });
 
-test("nothing under app/(site)/, app/(shore)/, app/(capsule)/, components/ or lib/ imports Orrery", () => {
-  const others = [...under("app/(site)"), ...under("app/(shore)"), ...under("app/(capsule)"), ...under("components"), ...under("lib")];
+test("nothing outside app/(orrery)/ imports Orrery", () => {
+  const others = [...GROUPS.flatMap((g) => under(`app/${g}`)), ...under("components"), ...under("lib")];
   assert.ok(others.length > 10);
   assert.ok(others.some((f) => f.endsWith("shore.css")));
   assert.ok(others.some((f) => f.endsWith("capsule.css")));
@@ -77,6 +81,15 @@ test("nothing under app/(site)/, app/(shore)/, app/(capsule)/, components/ or li
       );
     }
   }
+});
+
+test("GROUPS is read from app/: the site and every other project, never Orrery", () => {
+  assert.ok(GROUPS.includes("(site)"), "(site)");
+  assert.ok(GROUPS.includes("(shore)"), "(shore)");
+  assert.ok(GROUPS.includes("(capsule)"), "(capsule)");
+  assert.ok(GROUPS.includes("(elements)"), "(elements)");
+  assert.ok(GROUPS.includes("(vinyl)"), "(vinyl)");
+  assert.ok(!GROUPS.includes("(orrery)"));
 });
 
 test("the checker flags what it should", () => {
@@ -95,6 +108,7 @@ test("the checker flags what it should", () => {
   assert.equal(reachesOutside(f, "../../(capsule)/_lib/cards"), join("app", "(capsule)"));
   assert.equal(reachesOutside(f, "@/app/(capsule)/_lib/cards"), "app/(capsule)");
   assert.equal(reachesOutside(f, "../../(capsule)/capsule.css"), "app/(capsule)");
+  assert.equal(reachesOutside(f, "../../(elements)/_lib/grid"), join("app", "(elements)"));
   assert.equal(reachesOutside(f, "./sun.ts"), null);
   assert.equal(reachesOutside(f, "../orrery.css"), null);
   assert.equal(reachesOutside(f, "react"), null);

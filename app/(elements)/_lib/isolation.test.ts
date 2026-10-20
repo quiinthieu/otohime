@@ -1,5 +1,5 @@
-// Elements owes nothing to the site, Shore, Capsule or Orrery, and none of them owes
-// anything to Elements. Inside Elements, only _components/atom-3d.tsx may import
+// Elements owes nothing to the site or another project (the groups are read from
+// app/), and none of them owes anything to Elements. Inside Elements, only _components/atom-3d.tsx may import
 // three, @react-three/fiber or @react-three/drei, so the table page can never pull
 // the 3D chunk, and _lib/ stays free of React. This reads import specifiers only,
 // so prose that mentions a name is fine. Modelled on app/(orrery)/_lib/isolation.test.ts.
@@ -30,7 +30,10 @@ const under = (dir: string) => filesUnder(join(ROOT, dir));
 const SELF = import.meta.filename;
 const elementsFiles = under("app/(elements)").filter((f) => f !== SELF);
 
-const GROUPS = ["(site)", "(shore)", "(capsule)", "(orrery)"];
+const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
+  .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name) && e.name !== "(elements)")
+  .map((e) => e.name)
+  .sort();
 const OUTSIDE = ["components", "content", "lib", ...GROUPS.map((g) => join("app", g))].map((d) => join(ROOT, d));
 
 // Anything that resolves into the site's or another project's code or styles, by alias or by ../
@@ -93,6 +96,15 @@ test("nothing outside app/(elements)/ imports Elements", () => {
   }
 });
 
+test("GROUPS is read from app/: the site and every other project, never Elements", () => {
+  assert.ok(GROUPS.includes("(site)"), "(site)");
+  assert.ok(GROUPS.includes("(shore)"), "(shore)");
+  assert.ok(GROUPS.includes("(capsule)"), "(capsule)");
+  assert.ok(GROUPS.includes("(orrery)"), "(orrery)");
+  assert.ok(GROUPS.includes("(vinyl)"), "(vinyl)");
+  assert.ok(!GROUPS.includes("(elements)"));
+});
+
 test("the checkers flag what they should", () => {
   const f = join(ROOT, "app/(elements)/_lib/x.ts");
   assert.equal(reachesOutside(f, "@/components/figures"), "@/components");
@@ -106,6 +118,7 @@ test("the checkers flag what they should", () => {
   assert.equal(reachesOutside(f, "../../(capsule)/capsule.css"), "app/(capsule)");
   assert.equal(reachesOutside(f, "../../(orrery)/_lib/sun"), join("app", "(orrery)"));
   assert.equal(reachesOutside(f, "@/app/(orrery)/_lib/words"), "app/(orrery)");
+  assert.equal(reachesOutside(f, "../../(vinyl)/_lib/deck"), join("app", "(vinyl)"));
   assert.equal(reachesOutside(f, "./grid.ts"), null);
   assert.equal(reachesOutside(f, "../elements.css"), null);
   assert.equal(reachesOutside(f, "react"), null);
