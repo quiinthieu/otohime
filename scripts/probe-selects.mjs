@@ -57,6 +57,75 @@ async function probeSelect({ page, label, select, input, picker, checkedBackgrou
   check(`${label}: closed height ${sh} matches the input's ${ih} within 1px`, Math.abs(sh - ih) <= 1);
 }
 
+async function probeVinylKeys(browser, viewport) {
+  const tag = `/vinyl keys ${viewport.width}x${viewport.height}`;
+  const page = await browser.newPage({ viewport });
+  const genre = page.locator(".crate-filters select");
+  const deck = page.locator(".deck");
+  const state = async () => ({
+    phase: await deck.getAttribute("data-phase"),
+    record: await page.locator('.turntable svg[role="group"]').first().getAttribute("aria-label"),
+  });
+  const same = (a, b) => a.phase === b.phase && a.record === b.record;
+  const round = async () => {
+    await page.goto(`${BASE_URL}/vinyl`, { waitUntil: "networkidle" });
+    await genre.waitFor();
+    await page.locator("button.place").first().click();
+    await page.waitForTimeout(600);
+    const start = await state();
+    await genre.click();
+    await page.waitForTimeout(150);
+    return start;
+  };
+  const show = (a, b) => `${JSON.stringify(a)} -> ${JSON.stringify(b)}`;
+  try {
+    let start = await round();
+    check(`${tag}: a record is on the platter`, start.phase !== "empty" && !!start.record, JSON.stringify(start));
+    check(`${tag}: click opens the picker`, await isOpen(genre));
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(150);
+    let end = await state();
+    check(`${tag}: Escape closes the picker`, !(await isOpen(genre)));
+    check(`${tag}: Escape leaves the value on All`, (await genre.inputValue()) === "", JSON.stringify(await genre.inputValue()));
+    check(`${tag}: Escape leaves the record and phase alone`, same(start, end), show(start, end));
+
+    start = await round();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Space");
+    await page.waitForTimeout(150);
+    end = await state();
+    check(`${tag}: ArrowDown+Space changes the value`, (await genre.inputValue()) !== "", JSON.stringify(await genre.inputValue()));
+    check(`${tag}: ArrowDown+Space closes the picker`, !(await isOpen(genre)));
+    check(`${tag}: ArrowDown+Space leaves the phase alone`, same(start, end), show(start, end));
+
+    for (const key of ["ArrowRight", "ArrowLeft"]) {
+      start = await round();
+      await page.keyboard.press(key);
+      await page.waitForTimeout(150);
+      end = await state();
+      check(`${tag}: ${key} leaves the record and phase alone`, same(start, end), show(start, end));
+      await page.keyboard.press("Escape");
+      await page.waitForTimeout(150);
+      check(`${tag}: Escape after ${key} closes the picker`, !(await isOpen(genre)));
+    }
+
+    start = await round();
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(150);
+    await page.locator(".turntable-cell").focus();
+    await page.keyboard.press("ArrowRight");
+    await page.waitForTimeout(300);
+    end = await state();
+    check(`${tag}: control: ArrowRight on the turntable changes the record`, end.record !== start.record, show(start, end));
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(300);
+    end = await state();
+    check(`${tag}: control: Escape on the turntable empties the deck`, end.phase === "empty", JSON.stringify(end));
+  } finally {
+    await page.close();
+  }
+}
+
 const browser = await chromium.launch({ ignoreDefaultArgs: ["--hide-scrollbars"] });
 try {
   const page = await browser.newPage({ viewport: { width: 420, height: 600 } });
@@ -105,6 +174,9 @@ try {
       shot: `select-site-${theme}.png`,
     });
   }
+
+  await probeVinylKeys(browser, { width: 1366, height: 768 });
+  await probeVinylKeys(browser, { width: 390, height: 844 });
 } finally {
   await browser.close();
 }

@@ -316,12 +316,13 @@ export function VinylApp({ records }: { records: VinylRecord[] }) {
   const toggle = () => dispatch(active ? { type: "pause", user: true } : { type: "play", user: true });
 
   // Space, the arrows and Escape anywhere in the deck, except where the
-  // focused control needs the key itself (text, selects, sliders, radios,
-  // and Space on a button).
+  // focused control needs the key itself: anything inside a form control (an
+  // open base-select picker puts focus on an <option>, so test closest(), not
+  // the tag), sliders, radios, and Space on a button.
   function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
     const el = e.target as HTMLElement;
-    if (["INPUT", "SELECT", "TEXTAREA"].includes(el.tagName) || el.isContentEditable) return;
+    if (el.closest("input, select, textarea, [contenteditable]") || el.isContentEditable) return;
     if (e.key === " " && el.tagName === "BUTTON") return;
     switch (e.key) {
       case " ":

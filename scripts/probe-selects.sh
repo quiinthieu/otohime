@@ -5,6 +5,10 @@
 #   SKIP_BUILD=1 PORT=4034 bash scripts/probe-selects.sh           # reuse an existing .next build
 #   BASE_URL=https://otohime.dev bash scripts/probe-selects.sh     # probe a deployed URL, no build or start
 #
+# With a record on the platter it also presses Escape, ArrowDown+Space, ArrowRight and ArrowLeft inside the
+# open Vinyl genre picker at 1366x768 and 390x844: the picker must take them and the deck's phase and record
+# must not move. A control with the picker closed checks the turntable still takes ArrowRight and Escape.
+#
 # Env: PORT (4033; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1,
 # ARTIFACTS_DIR (screenshots of each open picker; defaults to TMPDIR).
 # Playwright is installed into a temp prefix at run time; package.json stays unchanged.
