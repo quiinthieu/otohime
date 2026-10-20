@@ -4,9 +4,15 @@
 #   bash scripts/walk-barometer.sh                                   # build + next start on :4051, walk it
 #   SKIP_BUILD=1 PORT=4052 bash scripts/walk-barometer.sh            # reuse an existing .next build
 #   BASE_URL=https://otohime.dev bash scripts/walk-barometer.sh      # walk a deployed URL, no build or start
+#   QUIET=1 bash scripts/walk-barometer.sh                           # prove the quiet face: a dead feed host, then a feed that hangs 10 s
+#
+# QUIET=1 builds once (or SKIP_BUILD=1), then runs two servers in turn on PORT: BAROMETER_HOST on a
+# dead port (127.0.0.1:9; every page is the quiet face, 200, under 3 s) and on a Node fake on
+# 127.0.0.1:4057 that answers after 10 s (a city not asked before is the quiet face in 3.5-6.5 s: the
+# 4 s timeout fired, and the fake's log shows the request reached it). Local only.
 #
 # Env: PORT (4051), BASE_URL (remote mode), EXPECT_SHA (build-sha to expect; defaults to
-# GITHUB_SHA locally, any 40-hex sha remotely), SKIP_BUILD=1.
+# GITHUB_SHA locally, any 40-hex sha remotely), SKIP_BUILD=1, QUIET=1, FAKE_PORT (4057).
 # Counts use grep -c and numeric tests only: BSD wc pads its output, so string compares fail.
 # Rendered things are counted by attribute form (data-face=") because App Router repeats the
 # server's text in the inline RSC payload.
@@ -19,20 +25,28 @@ PORT="${PORT:-4051}"
 BASE_URL="${BASE_URL:-}"
 EXPECT_SHA="${EXPECT_SHA:-}"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/walk-barometer.XXXXXX")"
+QUIET="${QUIET:-}"
+FAKE_PORT="${FAKE_PORT:-4057}"
+DEAD_HOST="http://127.0.0.1:9"
 SERVER_PID=""
+FAKE_PID=""
 OK=0
 FAILED=0
 
+# kill_group <pid>: the process was started under job control, so its pid is its process group id.
+kill_group() {
+  [ -n "$1" ] || return 0
+  kill -TERM -- "-$1" 2>/dev/null
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    kill -0 -- "-$1" 2>/dev/null || break
+    sleep 0.5
+  done
+  kill -KILL -- "-$1" 2>/dev/null
+}
+
 cleanup() {
-  if [ -n "$SERVER_PID" ]; then
-    # The server was started under job control, so its pid is its process group id.
-    kill -TERM -- "-$SERVER_PID" 2>/dev/null
-    for _ in 1 2 3 4 5 6 7 8 9 10; do
-      kill -0 -- "-$SERVER_PID" 2>/dev/null || break
-      sleep 0.5
-    done
-    kill -KILL -- "-$SERVER_PID" 2>/dev/null
-  fi
+  kill_group "$SERVER_PID"
+  kill_group "$FAKE_PID"
   rm -rf "$WORK"
 }
 trap cleanup EXIT
@@ -48,6 +62,42 @@ check() {
   else
     FAILED=$((FAILED + 1))
     echo "not ok - $name: $(printf '%s' "$out" | tr '\n' ' ' | cut -c1-300)"
+  fi
+}
+
+if [ "$QUIET" = "1" ] && [ -n "$BASE_URL" ]; then
+  echo "not ok - quiet: QUIET=1 starts its own servers, so it cannot walk BASE_URL"
+  exit 2
+fi
+
+# start_server [feed-host]: next start on $PORT in its own process group; with a host argument the
+# server gets BAROMETER_HOST set to it, without one it inherits the environment as it is.
+start_server() {
+  set -m
+  if [ $# -gt 0 ]; then
+    env BAROMETER_HOST="$1" ./node_modules/.bin/next start -p "$PORT" >"$WORK/server.log" 2>&1 &
+  else
+    ./node_modules/.bin/next start -p "$PORT" >"$WORK/server.log" 2>&1 &
+  fi
+  SERVER_PID=$!
+  set +m
+}
+
+# wait_ready: the site answers at $BASE_URL/ within READY_TRIES seconds.
+wait_ready() {
+  local ready=0
+  for _ in $(seq 1 "$READY_TRIES"); do
+    if curl -s -o /dev/null --max-time 5 "$BASE_URL/"; then
+      ready=1
+      break
+    fi
+    sleep 1
+  done
+  if [ "$ready" -ne 1 ]; then
+    echo "not ok - ready: nothing answered at $BASE_URL after $READY_TRIES tries"
+    [ "$LOCAL" -eq 1 ] && [ -s "$WORK/server.log" ] && tail -n 20 "$WORK/server.log"
+    echo "walk: $OK ok, $((FAILED + 1)) failed"
+    exit 1
   fi
 }
 
@@ -74,38 +124,29 @@ if [ -z "$BASE_URL" ]; then
     fi
   fi
 
-  set -m
-  ./node_modules/.bin/next start -p "$PORT" >"$WORK/server.log" 2>&1 &
-  SERVER_PID=$!
-  set +m
+  # The quiet walk starts its own servers once the helpers below are defined.
+  if [ "$QUIET" != "1" ]; then
+    start_server
+  fi
 else
   LOCAL=0
   BASE_URL="${BASE_URL%/}"
   READY_TRIES=5
 fi
 
-READY=0
-for _ in $(seq 1 "$READY_TRIES"); do
-  if curl -s -o /dev/null --max-time 5 "$BASE_URL/"; then
-    READY=1
-    break
-  fi
-  sleep 1
-done
-if [ "$READY" -ne 1 ]; then
-  echo "not ok - ready: nothing answered at $BASE_URL after $READY_TRIES tries"
-  [ "$LOCAL" -eq 1 ] && [ -s "$WORK/server.log" ] && tail -n 20 "$WORK/server.log"
-  echo "walk: 0 ok, 1 failed"
-  exit 1
+if [ "$QUIET" != "1" ]; then
+  wait_ready
 fi
 
 # get <key> <path>: fetch once, never following a redirect; status in $WORK/<key>.status,
-# body in $WORK/<key>.body, bytes in $WORK/<key>.size.
+# body in $WORK/<key>.body, bytes in $WORK/<key>.size, seconds in $WORK/<key>.time.
 get() {
-  local out
-  out="$(curl -s --max-time 30 -o "$WORK/$1.body" -w '%{http_code} %{size_download}' "$BASE_URL$2")"
+  local out rest
+  out="$(LC_ALL=C curl -s --max-time 30 -o "$WORK/$1.body" -w '%{http_code} %{size_download} %{time_total}' "$BASE_URL$2")"
+  rest="${out#* }"
   printf '%s' "${out%% *}" >"$WORK/$1.status"
-  printf '%s' "${out#* }" >"$WORK/$1.size"
+  printf '%s' "${rest%% *}" >"$WORK/$1.size"
+  printf '%s' "${rest#* }" >"$WORK/$1.time"
 }
 
 # status_is <key> <code>
@@ -275,6 +316,109 @@ no_feed_host_in_chunks() {
   done
   [ "$i" -ge 1 ] || { echo "no script chunks found"; return 1; }
 }
+
+# time_between <key> <min> <max>: the answer took min..max seconds (awk compares the floats).
+time_between() {
+  local t
+  t="$(cat "$WORK/$1.time" 2>/dev/null)"
+  [ -n "$t" ] || { echo "no time"; return 1; }
+  awk -v t="$t" -v lo="$2" -v hi="$3" 'BEGIN { exit !(t >= lo && t <= hi) }' || { echo "took ${t}s, want ${2}-${3}s"; return 1; }
+}
+
+# quiet_face <key>: exactly one data-face, and it is quiet.
+quiet_face() {
+  one_face "$1" || return 1
+  [ "$(face_of "$1")" = "quiet" ] || { echo "the face is '$(face_of "$1")', want quiet"; return 1; }
+}
+
+# quiet_page <key> <label>: everything the quiet face owes a visitor, whatever the feed did.
+quiet_page() {
+  check "$2 returns 200" status_is "$1" 200
+  check "$2 is the quiet face" quiet_face "$1"
+  check "$2 says the station is quiet" sentence_matches_face "$1"
+  check "$2 credits Open-Meteo once" count_eq "$1" 'href="https://open-meteo.com/"' 1
+  check "$2 names CC BY 4.0" has "$1" 'CC BY 4.0'
+  check "$2 build-sha" build_sha_matches "$1"
+}
+
+# stop_server: end the current server's process group so the next one can take the port.
+stop_server() {
+  kill_group "$SERVER_PID"
+  SERVER_PID=""
+}
+
+# port_open <port>: something accepts a connection on 127.0.0.1 (no request is sent).
+port_open() {
+  (exec 3<>"/dev/tcp/127.0.0.1/$1") 2>/dev/null
+}
+
+# The fake feed: accepts a request, logs its URL, and answers only after 10 s.
+FAKE_JS='const http = require("node:http");
+const fs = require("node:fs");
+http.createServer((req, res) => {
+  fs.appendFileSync(process.env.FAKE_LOG, req.url + "\n");
+  setTimeout(() => { res.setHeader("content-type", "application/json"); res.end("{}"); }, 10000);
+}).listen(Number(process.env.FAKE_PORT), "127.0.0.1");'
+
+fake_saw_forecast() {
+  grep -F '/v1/forecast?' "$WORK/fake.log" | grep -qF 'pressure_msl' || { echo "the fake saw: $(tr '\n' ' ' <"$WORK/fake.log" 2>/dev/null | cut -c1-200)"; return 1; }
+}
+
+quiet_walk() {
+  if port_open "$FAKE_PORT"; then
+    echo "not ok - port: something already listens on port $FAKE_PORT; set FAKE_PORT to a free port"
+    exit 1
+  fi
+
+  echo "# dead feed: BAROMETER_HOST=$DEAD_HOST"
+  start_server "$DEAD_HOST"
+  wait_ready
+  get dead /barometer
+  get dead_tokyo '/barometer?city=tokyo'
+  quiet_page dead "dead feed: /barometer"
+  quiet_page dead_tokyo "dead feed: ?city=tokyo"
+  check "dead feed: /barometer answers in under 3 s" time_between dead 0 3
+  check "dead feed: ?city=tokyo answers in under 3 s" time_between dead_tokyo 0 3
+  stop_server
+
+  echo "# slow feed: a fake on 127.0.0.1:$FAKE_PORT answering after 10 s"
+  : >"$WORK/fake.log"
+  set -m
+  FAKE_LOG="$WORK/fake.log" FAKE_PORT="$FAKE_PORT" node -e "$FAKE_JS" >"$WORK/fake.out" 2>&1 &
+  FAKE_PID=$!
+  set +m
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    port_open "$FAKE_PORT" && break
+    sleep 0.5
+  done
+  if ! port_open "$FAKE_PORT"; then
+    echo "not ok - fake: nothing listens on 127.0.0.1:$FAKE_PORT: $(cat "$WORK/fake.out")"
+    echo "walk: $OK ok, $((FAILED + 1)) failed"
+    exit 1
+  fi
+  start_server "http://127.0.0.1:$FAKE_PORT"
+  wait_ready
+  get slow '/barometer?city=paris'
+  quiet_page slow "slow feed: ?city=paris"
+  check "slow feed: ?city=paris answers in 3.5-6.5 s (the 4 s timeout fired)" time_between slow 3.5 6.5
+  check "slow feed: the fake saw a /v1/forecast? request with pressure_msl" fake_saw_forecast
+  stop_server
+  kill_group "$FAKE_PID"
+  FAKE_PID=""
+  check "the server's port is free again" test_port_free
+  check "the fake's port is free again" test_fake_free
+
+  echo "walk: $OK ok, $FAILED failed"
+  [ "$FAILED" -eq 0 ]
+}
+
+test_port_free() { ! port_open "$PORT" || { echo "port $PORT still answers"; return 1; }; }
+test_fake_free() { ! port_open "$FAKE_PORT" || { echo "port $FAKE_PORT still answers"; return 1; }; }
+
+if [ "$QUIET" = "1" ]; then
+  quiet_walk
+  exit $?
+fi
 
 get barometer /barometer
 get tokyo '/barometer?city=tokyo'
