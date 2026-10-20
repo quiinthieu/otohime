@@ -207,6 +207,7 @@ for colour in '#8fcbb8' '#97b4ea' '#efc64a'; do
 done
 # The round is staged: the booth names its stage, and the server renders it at rest.
 check "/capsule booth starts at the idle stage" has capsule 'data-stage="idle"'
+check "/capsule has a crank to pull by hand" has capsule 'data-crank'
 check "/capsule has Insert coin" has capsule 'Insert coin'
 check "/capsule has Turn" has capsule 'Turn'
 check "/capsule has Open" has capsule 'Open'

@@ -1,7 +1,8 @@
-import { useId } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { inkEllipse, inkLine, inkPath, type InkOptions, type InkPath } from "../_lib/art/ink.ts";
 import { CORAL, EDGE, grainFilter, mix } from "../_lib/art/svg.ts";
 import { PALETTE } from "../_lib/art/types.ts";
+import { angleAt, crankDrag, crankStart, type CrankDrag } from "../_lib/crank.ts";
 import { DROP_FRAMES, type Machine as MachineState } from "../_lib/machine.ts";
 import { revealView } from "../_lib/reveal.ts";
 
@@ -16,6 +17,14 @@ import { revealView } from "../_lib/reveal.ts";
 //
 // Every capsule is the same shell, coral over paper, in the dome and out of it:
 // its colour says nothing about the card inside.
+//
+// With a coin in, the crank can be pulled by hand (_lib/crank.ts): the handle
+// follows the pointer clockwise, and once it has gone a quarter turn it calls
+// onCrank, the same crank() as the Turn button, and the seeded turn carries on
+// from where the hand left it. Let go early and it springs back (capsule.css).
+// Pointer capture keeps the drag when the pointer leaves the handle, and a
+// non-passive touchstart listener stops a finger panning the page: React's
+// onTouchStart is passive, and touch-action does not apply inside an <svg>.
 
 const { ink: INK, paper: PAPER, white: WHITE } = PALETTE;
 const SLATE = EDGE.rare;
@@ -139,8 +148,73 @@ const Shell = ({ x, y, r }: { x: number; y: number; r: number }) => (
   </g>
 );
 
-export function Machine({ state, coinIn }: { state: MachineState; coinIn: boolean }) {
+const HUB = { x: 82, y: 186 };
+const VIEW_W = 200;
+
+export function Machine({ state, coinIn, onCrank }: { state: MachineState; coinIn: boolean; onCrank: () => void }) {
   const { phase, frame, length, drop } = state;
+  const svgRef = useRef<SVGSVGElement>(null);
+  const crankRef = useRef<SVGGElement>(null);
+  const grab = useRef<(CrankDrag & { pointer: number }) | null>(null);
+  const [held, setHeld] = useState<number | null>(null); // degrees pulled while the handle is held
+  const [lead, setLead] = useState(0); // where the hand let go of a turn it started
+  const grabbable = phase === "loaded";
+  // A pulled turn is over (or never started): the next round starts from rest.
+  if (lead !== 0 && phase !== "turning") setLead(0);
+  if (held !== null && !grabbable) setHeld(null);
+
+  // Stop the pan a finger on the handle would start, so its pointer is not
+  // cancelled. Outside `loaded` the handle lets the page scroll.
+  useEffect(() => {
+    const el = crankRef.current;
+    if (!el) return;
+    const hold = (e: TouchEvent) => {
+      if (e.cancelable && el.hasAttribute("data-grab")) e.preventDefault();
+    };
+    el.addEventListener("touchstart", hold, { passive: false });
+    return () => el.removeEventListener("touchstart", hold);
+  }, []);
+
+  // The pointer's angle round the hub, in view units: the SVG keeps the view's
+  // shape, so one scale fits both axes.
+  function pointerAngle(e: PointerEvent) {
+    const box = svgRef.current?.getBoundingClientRect();
+    if (!box || box.width === 0) return null;
+    const k = VIEW_W / box.width;
+    return angleAt(HUB.x, HUB.y, (e.clientX - box.left) * k, (e.clientY - box.top) * k);
+  }
+  function onPointerDown(e: PointerEvent<SVGGElement>) {
+    if (!grabbable || !e.isPrimary || (e.pointerType === "mouse" && e.button !== 0)) return;
+    const a = pointerAngle(e);
+    if (a === null) return;
+    e.preventDefault(); // no text selection or native drag from a mouse
+    e.currentTarget.setPointerCapture(e.pointerId);
+    grab.current = { pointer: e.pointerId, ...crankStart(a) };
+    setHeld(0);
+  }
+  function onPointerMove(e: PointerEvent<SVGGElement>) {
+    const g = grab.current;
+    if (!g || e.pointerId !== g.pointer || !grabbable) return;
+    const a = pointerAngle(e);
+    if (a === null) return;
+    const next = crankDrag(g, a);
+    grab.current = { pointer: g.pointer, last: next.last, total: next.total };
+    if (!next.fire) {
+      setHeld(next.total);
+      return;
+    }
+    release(e);
+    setLead(next.total);
+    onCrank();
+  }
+  function release(e: PointerEvent<SVGGElement>) {
+    const g = grab.current;
+    if (!g || e.pointerId !== g.pointer) return;
+    grab.current = null;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+    setHeld(null); // short of a quarter turn: it springs back
+  }
+
   const view = revealView(state);
   const turning = phase === "turning";
   const dropAt = length - DROP_FRAMES;
@@ -150,7 +224,10 @@ export function Machine({ state, coinIn }: { state: MachineState; coinIn: boolea
   const poses = Math.max(1, Math.ceil(dropAt / 2));
   const turns = Math.max(1, Math.round(poses / 6));
   const pose = Math.floor(frame / 2);
-  const crank = cranking ? Math.round(((pose + 1) / poses) * turns * 360) : 0;
+  // A turn pulled by hand starts where the hand let go and lands on the same whole turn.
+  const crank = cranking
+    ? Math.round(lead + ((pose + 1) / poses) * (turns * 360 - lead))
+    : (held ?? 0);
   const jiggle = cranking ? (pose % 2 === 0 ? -2 : 2) : 0;
   // The capsule that falls leaves a gap in the dome until the next Insert.
   const gone = turning ? frame >= dropAt : phase === "ready" || phase === "opening" || phase === "revealed";
@@ -164,7 +241,7 @@ export function Machine({ state, coinIn }: { state: MachineState; coinIn: boolea
   const clip = `machine${id}`;
 
   return (
-    <svg className="machine" viewBox="0 0 200 262" role="img" aria-label={`Capsule machine, ${phase}`}>
+    <svg ref={svgRef} className="machine" viewBox="0 0 200 262" role="img" aria-label={`Capsule machine, ${phase}`}>
       <defs dangerouslySetInnerHTML={{ __html: grainFilter(grain) }} />
       <clipPath id={clip}>
         <ellipse cx={DOME.cx} cy={DOME.cy} rx={DOME.w / 2} ry={DOME.h / 2} />
@@ -212,7 +289,21 @@ export function Machine({ state, coinIn }: { state: MachineState; coinIn: boolea
         <circle cx={82} cy={186} r={20} fill={PAPER} />
         <Ink paths={ART.dial} />
         <Ink paths={ART.dialRing} />
-        <g transform={`rotate(${crank} 82 186)`}>
+        <g
+          ref={crankRef}
+          className="crank"
+          data-crank=""
+          data-grab={grabbable ? "" : undefined}
+          data-held={held === null ? undefined : ""}
+          style={{ transform: `rotate(${crank}deg)` } as CSSProperties}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={release}
+          onPointerCancel={release}
+          onLostPointerCapture={release}
+        >
+          {/* the whole dial is the grip, so a finger need not find the knob */}
+          <circle cx={HUB.x} cy={HUB.y} r={24} fill="transparent" />
           <path d={HANDLE_D} fill={PAPER} />
           <Ink paths={ART.handle} />
           <circle cx={97} cy={186} r={4} fill={INK} />

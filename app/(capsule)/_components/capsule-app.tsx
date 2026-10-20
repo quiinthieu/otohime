@@ -129,7 +129,7 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
 
   const status =
     phase === "loaded"
-      ? "Coin in. Turn the crank."
+      ? "Coin in. Pull the crank or press Turn."
       : phase === "turning"
         ? "Turning…"
         : phase === "ready"
@@ -189,7 +189,7 @@ export function CapsuleApp({ header, rates, footer }: { header: ReactNode; rates
 
         <section className="booth" aria-label="Machine" data-stage={view.stage}>
           <div className="machine-wrap">
-            <Machine state={machine} coinIn={coinIn} />
+            <Machine state={machine} coinIn={coinIn} onCrank={crank} />
             {riser}
           </div>
 
