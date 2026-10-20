@@ -5,7 +5,7 @@
 #   SKIP_BUILD=1 PORT=4032 bash scripts/walk-vinyl.sh           # reuse an existing .next build
 #   BASE_URL=https://otohime.dev bash scripts/walk-vinyl.sh     # walk a deployed URL, no build or start
 #
-# Env: PORT (4031), BASE_URL (remote mode), EXPECT_SHA (build-sha to expect; defaults to
+# Env: PORT (4031; a port Next reserves is bumped by 10), BASE_URL (remote mode), EXPECT_SHA (build-sha to expect; defaults to
 # GITHUB_SHA locally, any 40-hex sha remotely), SKIP_BUILD=1.
 # Counts use grep -c and numeric tests only: BSD wc pads its output, so string compares fail.
 # No `set -e`: every check runs, and the summary names the ones that failed.
@@ -14,6 +14,13 @@ set -u
 cd "$(dirname "$0")/.." || exit 2
 
 PORT="${PORT:-4031}"
+# `next start` refuses the ports browsers block (4045 is "npp"), so a walk asked to use one serves 10 higher.
+case "$PORT" in
+  1719|1720|1723|2049|3659|4045|5060|5061|6000|6566|6665|6666|6667|6668|6669|6697|10080)
+    echo "note: next refuses port $PORT as reserved; serving on $((PORT + 10)) instead"
+    PORT=$((PORT + 10))
+    ;;
+esac
 BASE_URL="${BASE_URL:-}"
 EXPECT_SHA="${EXPECT_SHA:-}"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/walk-vinyl.XXXXXX")"
