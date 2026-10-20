@@ -56,6 +56,8 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--paper); line-height: 1.5; font-size: 1rem; }
+/* A classic scrollbar vanishing under overflow:hidden would reflow the fluid grid on every open and close. */
+html { scrollbar-gutter: stable; }
 html:has(dialog[open]) { overflow: hidden; }
 a { color: inherit; }
 button { font: inherit; color: inherit; cursor: pointer; }
@@ -165,6 +167,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-o
   box-shadow: 0 6px 16px var(--shadow);
   z-index: 1;
 }
+.table[data-settle] .cell:hover { transform: none; box-shadow: none; }
 .cell-number { font-size: 0.6875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .cell-symbol { font-size: 1.25rem; font-weight: 700; color: var(--cat); align-self: center; }
 .cell-name, .cell-mass { font-size: 0.6875rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

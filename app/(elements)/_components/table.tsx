@@ -22,7 +22,9 @@ const numberOf = (a: HTMLAnchorElement) => Number(a.dataset.element);
 // move between elements, skipping gaps, Home and End go to the ends of the row.
 // A plain click, Enter or Space opens the dialog; a click with a modifier or a
 // middle click follows the link as usual. The legend sets data-focus on the
-// table, and elements.css dims the other categories.
+// table, and elements.css dims the other categories. When the dialog closes the
+// table is marked settling (data-settle) until the pointer next moves, so a cell
+// that only became hovered because the backdrop went away does not lift.
 export function Table() {
   const hydrated = useSyncExternalStore(
     noop,
@@ -32,6 +34,7 @@ export function Table() {
   const [active, setActive] = useState(1);
   const [preview, setPreview] = useState<CategoryId | null>(null);
   const [pinned, setPinned] = useState<CategoryId | null>(null);
+  const [settle, setSettle] = useState(false);
   const [state, dispatch] = useReducer(view, closed);
   const grid = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLAnchorElement | null>(null);
@@ -78,6 +81,7 @@ export function Table() {
 
   const onClosed = () => {
     dispatch({ type: "close" });
+    setSettle(true);
     opener.current?.focus();
   };
 
@@ -91,6 +95,8 @@ export function Table() {
           ref={grid}
           className="table"
           data-focus={focus ?? undefined}
+          data-settle={settle || undefined}
+          onPointerMove={settle ? () => setSettle(false) : undefined}
           onClick={onClick}
           onKeyDown={onKeyDown}
           onKeyUp={onKeyUp}
