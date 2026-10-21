@@ -2,7 +2,9 @@
 // read from app/), and none of them owes anything to Design system: the
 // "Right here" pins are data, and only siblings.test.ts reads the sister
 // sheets, as text. _lib/ stays free of React and Next and reads no files;
-// only ink.ts and stamps.ts may import roughjs; there is at most one client
+// only ink.ts and stamps.ts may import roughjs, and scenes.ts (which the
+// island will import) reaches neither, even through another file; the
+// figures reach the engine only through _lib/; there is at most one client
 // file (the use client directive), and if present it is
 // _components/board-app.tsx and reaches no ink, stamps, kit, figures or
 // roughjs (task 3 makes it exactly one); only layout.tsx reads process.env;
@@ -84,7 +86,22 @@ const CLIENT = /^\s*["']use client["']/m;
 const MAY_INK = new Set([lib("ink.ts"), lib("stamps.ts")]);
 
 test("the scan finds Design system's files", () => {
-  for (const name of ["board.ts", "contrast.ts", "siblings.ts", "copy.ts", "readability.ts", "words.ts"]) {
+  for (const name of [
+    "board.ts",
+    "contrast.ts",
+    "siblings.ts",
+    "copy.ts",
+    "readability.ts",
+    "words.ts",
+    "ink.ts",
+    "paper.ts",
+    "kit.ts",
+    "stamps.ts",
+    "scenes.ts",
+    "figures/box.ts",
+    "figures/follow.ts",
+    "figures/here.ts",
+  ]) {
     assert.ok(group.some((f) => f === lib(name)), name);
   }
   assert.ok(!libCode.some(isTest));
@@ -139,6 +156,23 @@ function reach(file: string, seen = new Set<string>()): Set<string> {
   for (const spec of specifiers(file)) if (spec.startsWith(".")) reach(resolve(dirname(file), spec), seen);
   return seen;
 }
+
+test("scenes.ts reaches neither ink.ts nor stamps.ts, nor roughjs, even through another file", () => {
+  const reached = [...reach(lib("scenes.ts"))].map((f) => relative(ROOT, f).replace(/\\/g, "/"));
+  assert.ok(reached.includes("app/(design-system)/_lib/board.ts") && reached.includes("app/(design-system)/_lib/paper.ts"), "and the walk sees its imports");
+  for (const file of reach(lib("scenes.ts"))) {
+    assert.ok(!MAY_INK.has(file), `scenes.ts reaches ${relative(ROOT, file)}`);
+    assert.ok(!/(^|\/)(kit|figures)(\.ts|\/|$)/.test(relative(ROOT, file).replace(/\\/g, "/")), `scenes.ts reaches ${relative(ROOT, file)}`);
+    for (const spec of specifiers(file)) assert.ok(!ROUGH.test(spec), `${relative(ROOT, file)} imports ${spec}`);
+  }
+  assert.ok([...reach(lib("stamps.ts"))].includes(lib("ink.ts")), "and the walk would see ink.ts");
+});
+
+test("the ink is drawn in ink.ts: it imports roughjs, and every other importer is stamps.ts", () => {
+  const importers = libCode.filter((f) => !f.endsWith(".d.ts") && specifiers(f).some((s) => ROUGH.test(s)));
+  assert.ok(importers.includes(lib("ink.ts")), "ink.ts draws with roughjs");
+  for (const f of importers) assert.ok(MAY_INK.has(f), `${relative(ROOT, f)} imports roughjs`);
+});
 
 const ISLAND = join(ROOT, "app/(design-system)/_components/board-app.tsx");
 const NO_INK = /(^|\/)(ink|stamps|kit|figures)(\.ts|\/|$)/;
