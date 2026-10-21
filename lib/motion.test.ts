@@ -4,15 +4,17 @@
 // imported. The groups are read from app/, so a new project that forgets the
 // rule fails here. scripts/probe-motion.sh watches it run in a browser.
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { test } from "node:test";
 import { site } from "../content/site.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 
+// A group is a document once it has a root layout; one that holds only its
+// engine (_lib/) serves nothing yet, so it has no hop to check.
 const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
-  .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name))
+  .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name) && existsSync(join(ROOT, "app", e.name, "layout.tsx")))
   .map((e) => e.name.slice(1, -1))
   .sort();
 const PROJECTS = GROUPS.filter((g) => g !== "site");
