@@ -97,6 +97,7 @@ export const site = {
     { title: "Planisphere", note: "Tonight's sky for your city, on a star wheel drawn in ink.", href: "/planisphere", status: "live", colour: "blue" },
     { title: "Barometer", note: "A brass weather station for your city, read every quarter hour.", href: "/barometer", status: "live", colour: "yellow" },
     { title: "Gazette", note: "A small newspaper: six short pieces on everyday science, each with a drawn infographic.", href: "/articles", status: "live", colour: "pink" },
+    { title: "Structures", note: "Eight ways to keep things, drawn by hand so you can poke them.", href: "/structures", status: "live", colour: "mint" },
   ] as Project[],
   // TODO(otohime)
   music: "Songs on repeat, one channel each. Tune in.",

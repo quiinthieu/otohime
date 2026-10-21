@@ -298,3 +298,25 @@ export function sceneFor(slug: string, state: unknown): Scene {
   if (!draw) throw new Error(`no scene for ${slug}`);
   return draw(state as never);
 }
+
+// The stamps each machine draws with, so a page ships only those: its placed
+// kinds, "arrow" when it draws arrows or lines (a line is the arrow's shaft),
+// and "hand" when it has hands.
+export const SCENE_KINDS: Record<string, readonly StampKind[]> = {
+  array: ["box"],
+  "linked-list": ["box", "arrow", "hand"],
+  stack: ["plate", "hand"],
+  queue: ["tile", "hand"],
+  "hash-table": ["bucket", "box", "arrow"],
+  "binary-search-tree": ["node", "arrow"],
+  heap: ["node", "box", "arrow"],
+  graph: ["station", "arrow"],
+};
+
+/** Every stamp kind a scene uses. */
+export function kindsIn(s: Scene): Set<StampKind> {
+  const kinds = new Set<StampKind>(s.stamps.map((p) => p.kind));
+  if (s.arrows.length) kinds.add("arrow");
+  if (s.pointers.length) kinds.add("hand");
+  return kinds;
+}

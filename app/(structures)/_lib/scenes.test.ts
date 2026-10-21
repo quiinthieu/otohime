@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { type Action, type Structure } from "./machine.ts";
 import { labelBox, SMALL, STAMP_SIZE, stampBounds, WIDTH, type Label } from "./paper.ts";
-import { arrowEnds, placedText, pointerText, sceneFor, TEXT, type Pointer, type Scene } from "./scenes.ts";
+import { arrowEnds, kindsIn, placedText, pointerText, SCENE_KINDS, sceneFor, TEXT, type Pointer, type Scene } from "./scenes.ts";
 import { STRUCTURES, bySlug } from "./structures/index.ts";
 import { bucketOf } from "./structures/hash-table.ts";
 
@@ -186,6 +186,12 @@ for (const s of STRUCTURES) {
     const heights = new Set([...example, full].map((state) => sceneFor(s.slug, state).height));
     assert.equal(heights.size, 1);
     assert.deepEqual(sceneFor(s.slug, full), sceneFor(s.slug, full));
+  });
+
+  test(`${s.slug}: SCENE_KINDS names every stamp kind its drawings use, and no more`, () => {
+    const used = new Set<string>();
+    for (const state of [s.empty(), ...example, full, ...walk(s, randomRun(s, 214))]) for (const k of kindsIn(sceneFor(s.slug, state))) used.add(k);
+    assert.deepEqual([...used].sort(), [...SCENE_KINDS[s.slug]].sort());
   });
 
   test(`${s.slug}: what the drawing writes is what labels() says`, () => {

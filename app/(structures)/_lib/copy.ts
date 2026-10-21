@@ -17,6 +17,7 @@ export type Page = {
   title: string; // ≤ 4 words
   deck: string; // one sentence, ≤ 30 words
   caption: string; // the In life drawing's rule, one sentence
+  picture: string; // what the In life drawing shows, for a reader who cannot see it
   parts: Parts;
   sources: readonly Source[]; // ≥ 2
 };
@@ -53,6 +54,7 @@ const ARRAY: Page = {
   title: "The array",
   deck: "A row of numbered drawers: you can open any one at once, but a new thing near the front makes the rest move up.",
   caption: "Every drawer has a number, so you can open any one at once.",
+  picture: "A chest of eight drawers on short legs, numbered 0 to 7, with drawer 5 standing open.",
   parts: {
     what: [
       "Think of a chest of eight drawers with a number on each. The first drawer is number 0, the next is 1, and so on up to 7. Each drawer holds one thing.",
@@ -78,6 +80,7 @@ const LINKED_LIST: Page = {
   title: "The linked list",
   deck: "A chain of notes, each saying where the next one is, so adding at the front is quick but reaching the end means walking.",
   caption: "To reach the fifth note you read the four before it.",
+  picture: "A treasure hunt: five notes left about the place, each with an arrow to the next one, and the treasure after the fifth.",
   parts: {
     what: [
       "Picture a treasure hunt. Each note tells you where to find the next one. You cannot skip ahead, because only the note before it knows where the next one is hidden.",
@@ -103,6 +106,7 @@ const STACK: Page = {
   title: "The stack",
   deck: "A pile of plates where you only ever touch the top one, so every move takes a single step.",
   caption: "The last plate on is the first plate off.",
+  picture: "A pile of plates by the sink: the last plate put on is the first one taken off.",
   parts: {
     what: [
       "Think of a pile of clean plates by the sink. You put a new plate on the top. When you need a plate, you take the one on the top. You never pull one from the middle.",
@@ -127,6 +131,7 @@ const QUEUE: Page = {
   title: "The queue",
   deck: "A line at a counter where people join at the back and leave from the front, each in two quick steps.",
   caption: "First in line is first served.",
+  picture: "A line of people at a bakery counter, standing on a ring of eight floor tiles; the first in line is served first.",
   parts: {
     what: [
       "Think of a line at a bakery. New people join at the back. The person at the front is served and leaves. Nobody cuts in.",
@@ -152,6 +157,7 @@ const HASH_TABLE: Page = {
   title: "The hash table",
   deck: "A coat check that works out each coat's hook from the coat itself, so you can go straight to it.",
   caption: "Work out the hook from the coat, and go straight there.",
+  picture: "A coat check: a rail of eight numbered hooks, and a coat whose hook, number 5, is worked out from the coat itself.",
   parts: {
     what: [
       "Picture a coat check with 8 hooks. Instead of a ticket, the clerk works out a hook number from your coat. When you come back, the clerk works it out again and goes straight to the right hook.",
@@ -177,6 +183,7 @@ const SEARCH_TREE: Page = {
   title: "The search tree",
   deck: "A guessing game made into a shape: at each number you go left for smaller and right for bigger.",
   caption: "Each guess throws away half of what is left.",
+  picture: "A game of higher or lower for a secret number from 1 to 16: each guess throws away half of the numbers left.",
   parts: {
     what: [
       "Think of the game where a friend picks a number and you guess. After each guess they say higher or lower. A good guess throws away half of what is left.",
@@ -202,6 +209,7 @@ const HEAP: Page = {
   title: "The heap",
   deck: "A ladder of matches where the smaller number always wins, so the smallest of all waits at the top.",
   caption: "The winner is always at the top.",
+  picture: "A tournament ladder where the smaller number wins each match, 1 at the top, with the same numbers in a row of boxes underneath.",
   parts: {
     what: [
       "Picture a ladder of matches in a game. In each match the smaller number wins and moves up. Whoever is at the top has beaten everyone, so the smallest number is always there.",
@@ -227,6 +235,7 @@ const GRAPH: Page = {
   title: "The graph",
   deck: "A map of stations and lines, where a ripple from one station finds the shortest way to all the others.",
   caption: "Two routes can reach the same station.",
+  picture: "A metro map of eight stations, A to H, joined by nine lines; two routes meet at H.",
   parts: {
     what: [
       "Picture a metro map. Stations are joined by lines, and a station can have many lines. There is no top and no bottom, and there may be more than one way between two stations.",

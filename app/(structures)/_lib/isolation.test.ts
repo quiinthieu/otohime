@@ -3,7 +3,8 @@
 // of React and Next; only ink.ts and stamps.ts may import roughjs, and
 // scenes.ts (which the island will lay out every beat with) reaches neither,
 // even through another file, so rough.js never reaches the browser; there is
-// at most one "use client" file, and it imports no ink, stamps or roughjs;
+// exactly one client file (the use client directive), _components/machine-app.tsx, which reaches no
+// ink, stamps, kit, life, costs or roughjs; only layout.tsx reads process.env;
 // and _lib/ makes no network call, keeps
 // no storage, rolls no dice and reads no clock, so every move replays the
 // same. This reads import specifiers and source text, so it is modelled on
@@ -95,6 +96,7 @@ test("the scan finds Structures' files", () => {
     "costs.ts",
     "life/index.ts",
     "life/graph.ts",
+    "play.ts",
   ]) {
     assert.ok(group.some((f) => f === lib(name)), name);
   }
@@ -155,14 +157,34 @@ test("_lib/ makes no network call, keeps no storage, rolls no dice and reads no 
   }
 });
 
-test('at most one "use client" file in the group, and it imports no ink, stamps or roughjs', () => {
+const ISLAND = join(ROOT, "app/(structures)/_components/machine-app.tsx");
+// What the island may import: React, and the parts of _lib/ that lay out and play a move.
+const ISLAND_MAY = /^(?:react|\.\.\/_lib\/(?:machine|play|scenes)\.ts|\.\.\/_lib\/structures\/[a-z-]+\.ts)$/;
+
+test('exactly one client file in the group, _components/machine-app.tsx, and it reaches no ink', () => {
   const clients = group.filter((f) => CLIENT.test(readFileSync(f, "utf8")));
-  assert.ok(clients.length <= 1, clients.map((f) => relative(ROOT, f)).join(", "));
-  for (const file of clients) {
-    for (const spec of specifiers(file)) {
-      assert.ok(!ROUGH.test(spec) && !/(^|\/)(ink|stamps)(\.ts)?$/.test(spec), `the island imports ${spec}`);
-    }
+  assert.deepEqual(
+    clients.map((f) => relative(ROOT, f)),
+    [relative(ROOT, ISLAND)],
+  );
+  for (const spec of specifiers(ISLAND)) {
+    assert.ok(!ROUGH.test(spec) && !/(^|\/)(ink|stamps|kit|life|costs)(\.ts|\/|$)/.test(spec), `the island imports ${spec}`);
+    assert.match(spec, ISLAND_MAY, `the island imports ${spec}`);
   }
+  const reached = reach(ISLAND);
+  assert.ok(reached.has(lib("scenes.ts")) && reached.has(lib("play.ts")), "the walk follows the island's imports");
+  for (const name of ["ink.ts", "stamps.ts", "kit.ts", "costs.ts", "copy.ts", "life/index.ts"]) assert.ok(!reached.has(lib(name)), `the island reaches ${name}`);
+  for (const file of reached) {
+    for (const spec of specifiers(file)) assert.ok(!ROUGH.test(spec), `${relative(ROOT, file)} imports ${spec}`);
+  }
+});
+
+test("only layout.tsx reads process.env", () => {
+  const readers = group.filter((f) => /\bprocess\.env\b/.test(readFileSync(f, "utf8")));
+  assert.deepEqual(
+    readers.map((f) => relative(ROOT, f)),
+    ["app/(structures)/layout.tsx"],
+  );
 });
 
 test("nothing outside app/(structures)/ imports Structures", () => {
@@ -205,6 +227,8 @@ test("the checkers flag what they should", () => {
   assert.ok(STORAGE.test("local" + "Storage.getItem") && !STORAGE.test("storage"));
   assert.ok(DICE.test("Math." + "random()") && !DICE.test("Math.floor(x)"));
   assert.ok(CLOCK.test("new " + "Date()") && CLOCK.test("Da" + "te.now()") && !CLOCK.test("update") && !CLOCK.test("dated"));
+  assert.ok(ISLAND_MAY.test("react") && ISLAND_MAY.test("../_lib/play.ts") && ISLAND_MAY.test("../_lib/structures/index.ts"));
+  assert.ok(!ISLAND_MAY.test("../_lib/stamps.ts") && !ISLAND_MAY.test("../_lib/life/index.ts") && !ISLAND_MAY.test("react-dom"));
   assert.ok(CLIENT.test("'use cli" + "ent';\nimport x") && CLIENT.test('"use cli' + 'ent"') && !CLIENT.test("// says use client"));
   assert.deepEqual(specifiers(lib("structures/index.ts")).sort(), [
     "../machine.ts",

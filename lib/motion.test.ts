@@ -64,9 +64,9 @@ const SHEETS = GROUPS.map((g) => ({ group: g, ...stylesheet(g) }));
 // The /projects rows that link to a project, as slugs: "/shore" -> "shore".
 const HREFS = site.projectList.flatMap((p) => (p.href?.startsWith("/") ? [p.href.slice(1)] : []));
 
-test("the scan finds the site and the nine projects", () => {
+test("the scan finds the site and the ten projects", () => {
   assert.ok(GROUPS.includes("site"));
-  assert.equal(PROJECTS.length, 9, PROJECTS.join(", "));
+  assert.equal(PROJECTS.length, 10, PROJECTS.join(", "));
   assert.equal(SHEETS.find((s) => s.group === "site")!.file, "app/(site)/globals.css");
 });
 
@@ -260,8 +260,8 @@ test("the /projects rows rise one after another, and reduced motion drops the de
   const { css } = SHEETS.find((s) => s.group === "site")!;
   const page = readFileSync(join(ROOT, "app/(site)/(app)/projects/page.tsx"), "utf8");
   assert.match(page, /<li\s[^>]*className="rise [^"]*"[^>]*style=\{\{ "--i": i \} as CSSProperties\}/);
-  // .rise sits in a layer, so the stagger rule is matched wherever it is nested. Nine rows of 0.4 s, 40 ms
-  // apart, are all up by 0.72 s.
+  // .rise sits in a layer, so the stagger rule is matched wherever it is nested. Ten rows of 0.4 s, 40 ms
+  // apart, are all up by 0.76 s.
   assert.match(css, /\.rise\[style\*="--i"\]\s*\{\s*animation-delay:\s*calc\(var\(--i\) \* 40ms\);\s*\}/);
   const top = blocks(css);
   const all = reducedMotion(top).filter((b) => /(?:^|[\s,{])\*\s*,/.test(b.body));

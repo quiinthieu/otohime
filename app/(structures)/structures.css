@@ -1,0 +1,303 @@
+/* Structures' own stylesheet, hand-written: no Tailwind and no site tokens.
+   A notebook: ink on squared paper (a 24 px grid of two linear-gradients), one
+   blue (--spot) for the thing each drawing is about and one red (--hot) for
+   the thing a machine is looking at right now. Dark from the OS unless
+   localStorage.theme pinned light, or always when it pinned dark (the
+   layout's script sets data-theme). One 760 px spread that stacks in one
+   column and stays inside the viewport at 320 px. The In life drawing inks
+   itself on once at load; a machine's stamps glide to their new places; the
+   reduced-motion block at the end turns all of it off, and the resting pose is
+   the whole drawing. */
+:root {
+  color-scheme: light;
+  --paper: #f6f3ea;
+  --grid: #dcd6c6;
+  --ink: #1d1b17;
+  --muted: #57524a;
+  --spot: #2456b3;
+  --hot: #c8402f;
+  --hot-wash: rgb(200 64 47 / 0.14);
+  --rule: #b9b1a0;
+  --hand-face: var(--font-hand, "Comic Sans MS", "Segoe Print", cursive);
+  --title-face: var(--font-title, "Bradley Hand", "Segoe Print", cursive);
+  font-family: var(--hand-face);
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  font-synthesis: none;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #161513;
+  --grid: #2a2722;
+  --ink: #ebe5d6;
+  --muted: #b1a993;
+  --spot: #7aa2ff;
+  --hot: #ff8a73;
+  --hot-wash: rgb(255 138 115 / 0.16);
+  --rule: #4a443b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #161513;
+    --grid: #2a2722;
+    --ink: #ebe5d6;
+    --muted: #b1a993;
+    --spot: #7aa2ff;
+    --hot: #ff8a73;
+    --hot-wash: rgb(255 138 115 / 0.16);
+    --rule: #4a443b;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: var(--spot); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--hot); }
+:focus-visible {
+  outline: 3px solid var(--spot);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The spread: one page of the notebook, 760 px at most. */
+.notebook {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px 24px;
+  overflow-wrap: break-word;
+}
+
+/* The top bar: the ways out. Wraps rather than overflowing at 320 px. */
+.topbar { padding: 12px 0 0; }
+.ways-out { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; min-width: 0; font-size: 17px; }
+.ways-out a { color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+.home-link { font-family: var(--title-face); font-weight: 700; font-size: 22px; }
+
+/* Titles in Caveat, everything else in Patrick Hand. */
+.page-head { margin-top: 12px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+.title {
+  margin: 0;
+  font-family: var(--title-face);
+  font-weight: 700;
+  font-size: clamp(44px, 11vw, 68px);
+  line-height: 1.05;
+}
+.deck { margin: 6px 0 0; font-size: 21px; line-height: 1.35; }
+.byline, .crumbs, .page-number { margin: 6px 0 0; font-size: 16px; color: var(--muted); }
+.crumbs a { color: var(--ink); display: inline-flex; align-items: center; min-height: 44px; }
+
+/* The index: the eight as a ruled list, each with its thumbnail. */
+.pages { list-style: none; margin: 8px 0 0; padding: 0; }
+.pages > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px 18px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+}
+@media (min-width: 560px) {
+  .pages > li { grid-template-columns: 160px minmax(0, 1fr); align-items: start; }
+}
+.thumb { display: block; width: 160px; max-width: 100%; height: auto; }
+.page-row { min-width: 0; }
+.page-row .page-number { margin: 0; }
+.row-title { margin: 0; font-family: var(--title-face); font-weight: 700; font-size: 34px; line-height: 1.1; }
+.row-title a { color: var(--ink); }
+.row-title a:hover { color: var(--spot); }
+.row-deck { margin: 4px 0 0; }
+.dots { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 16px; }
+.dots li { display: inline-flex; align-items: center; gap: 6px; }
+.dot-row { display: inline-flex; gap: 3px; }
+.dot { width: 11px; height: 11px; border: 2px solid var(--ink); border-radius: 50%; }
+.dot.on { background: var(--ink); }
+.dots li[data-band="one"] .dot.on { background: var(--spot); border-color: var(--spot); }
+.key { margin: 14px 0 0; font-size: 16px; color: var(--muted); }
+
+/* Figures: full width under 640 px, 640 px at most in the spread. */
+.figure { margin: 22px 0 0; min-width: 0; }
+.figure svg { display: block; width: 100%; height: auto; max-width: 640px; margin: 0 auto; }
+.figure figcaption {
+  max-width: 640px;
+  margin: 8px auto 0;
+  padding-top: 6px;
+  border-top: 1px dashed var(--rule);
+  font-size: 16px;
+  color: var(--muted);
+}
+.ink { color: var(--ink); }
+.spot { color: var(--spot); }
+svg text { font-family: var(--hand-face); fill: var(--ink); }
+svg text.spot-label { fill: var(--spot); }
+
+/* The machine: the stamps in --ink, the one being looked at in --hot, washed
+   and lifted 2 px. A stamp keeps its element from state to state, so moving
+   it is a 150 ms transform transition. */
+.machine-app { min-width: 0; }
+.stamp-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.machine-svg { color: var(--ink); }
+.machine-svg use,
+.machine-svg .stamp-text { transition: transform 150ms ease-out, translate 150ms ease-out; transform-box: fill-box; }
+.machine-svg use.hand { transform-box: view-box; }
+.machine-svg use[data-hot] { color: var(--hot); fill: var(--hot-wash); translate: 0 -2px; }
+.machine-svg .stamp-text[data-hot] { translate: 0 -2px; font-weight: 700; }
+.machine-svg .arrow[data-hot] { color: var(--hot); }
+.machine-svg .scene-label, .machine-svg .hand-text { fill: var(--muted); }
+
+.narration-box {
+  max-width: 640px;
+  margin: 10px auto 0;
+  padding: 8px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+}
+.narration { display: block; min-height: 1.5em; font-size: 20px; }
+.count { margin: 2px 0 0; font-size: 16px; color: var(--muted); }
+
+/* The controls: wrap on a phone, every target 44 px or more. Greyed until the
+   island wakes them up (and for good with JavaScript off). */
+.controls {
+  max-width: 640px;
+  margin: 10px auto 0;
+  padding: 8px 12px 12px;
+  border: 1px dashed var(--rule);
+  border-radius: 6px;
+  min-width: 0;
+}
+.controls legend { padding: 0 4px; font-size: 16px; color: var(--muted); }
+.controls:disabled { opacity: 0.55; }
+.boxes, .moves, .clock { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.boxes label { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 17px; }
+.controls input {
+  min-height: 44px;
+  width: 9.5em;
+  max-width: 100%;
+  padding: 6px 8px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+}
+.controls button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 6px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px 7px 5px 8px;
+  cursor: pointer;
+}
+.controls button:hover { border-color: var(--spot); color: var(--spot); }
+.controls button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.controls button[aria-disabled="true"] { opacity: 0.5; cursor: default; }
+.controls:disabled button, .controls:disabled input { cursor: default; }
+
+.steps { max-width: 640px; margin: 10px auto 0; }
+.steps-title { margin: 0; font-family: var(--title-face); font-weight: 700; font-size: 26px; }
+.trace { margin: 4px 0 0; padding-left: 1.8em; font-size: 17px; }
+.trace li + li { margin-top: 2px; }
+.trace li:last-child { font-weight: 700; }
+
+/* The words. */
+.parts h2, .sources h2 { margin: 22px 0 4px; font-family: var(--title-face); font-weight: 700; font-size: 32px; line-height: 1.1; }
+.parts p { margin: 0 0 10px; }
+.sources {
+  margin: 24px 0 0;
+  padding: 4px 16px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  font-size: 17px;
+}
+.sources h2 { margin-top: 6px; font-size: 26px; }
+.sources ol { margin: 0; padding-left: 1.6em; }
+.sources li + li { margin-top: 4px; }
+.sources a { display: inline-block; min-height: 30px; }
+
+.turn {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 24px;
+  margin-top: 24px;
+  padding-top: 10px;
+  border-top: 2px solid var(--ink);
+}
+.turn a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); }
+
+.missing { padding: 32px 0; text-align: center; }
+.missing .title { font-size: clamp(40px, 10vw, 60px); }
+.missing a { display: inline-flex; align-items: center; min-height: 44px; }
+
+.colophon {
+  margin-top: 28px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  font-size: 16px;
+  color: var(--muted);
+  text-align: center;
+}
+.colophon p { margin: 2px 0; }
+.colophon a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* The In life drawing inks itself on once at load, 600 ms; the dash lives only
+   inside @keyframes, so a still (reduced motion, print, CSS that never loads)
+   is the whole drawing. */
+.life path { animation: ink-draw 600ms ease-out both; }
+@keyframes ink-draw {
+  from { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  to { stroke-dasharray: 1; stroke-dashoffset: 0; }
+}
+
+/* The hop to or from another root layout (the site, another project)
+   crossfades instead of cutting, and the title travels from its row on
+   /projects to this h1. Both documents must carry this rule; the type keeps
+   the fade on the hop alone. */
+@view-transition { navigation: auto; types: hop; }
+::view-transition { pointer-events: none; }
+:root:active-view-transition-type(hop)::view-transition-old(root) { animation: 150ms ease-in both fade-out; }
+:root:active-view-transition-type(hop)::view-transition-new(root) { animation: 210ms ease-out 150ms both fade-in; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+h1 { view-transition-name: project-structures; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .machine-svg use,
+  .machine-svg .stamp-text,
+  .life path {
+    transition: none !important;
+    animation: none !important;
+  }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
