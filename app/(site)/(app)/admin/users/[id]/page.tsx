@@ -48,7 +48,7 @@ export default async function UserPage({ params }: PageProps<"/admin/users/[id]"
           ← Users
         </Link>
         <div>
-          <FigTitle n="09" hint={user.email}>
+          <FigTitle n="10" hint={user.email}>
             {user.name}
           </FigTitle>
           <p className="mt-2 flex flex-wrap items-center gap-2">

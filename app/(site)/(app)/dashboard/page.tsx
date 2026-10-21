@@ -29,7 +29,7 @@ export default async function DashboardPage() {
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
         <FigTitle
-          n="07"
+          n="08"
           hint={
             <>
               signed in as {user.email}{" "}
