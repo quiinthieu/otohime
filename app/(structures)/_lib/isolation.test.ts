@@ -1,8 +1,10 @@
 // Structures owes nothing to the site or another project (the groups are read
 // from app/), and none of them owes anything to Structures. _lib/ stays free
-// of React and Next; only ink.ts and stamps.ts may import roughjs (so rough.js
-// never reaches the browser); there is at most one "use client" file, and it
-// imports no ink, stamps or roughjs; and _lib/ makes no network call, keeps
+// of React and Next; only ink.ts and stamps.ts may import roughjs, and
+// scenes.ts (which the island will lay out every beat with) reaches neither,
+// even through another file, so rough.js never reaches the browser; there is
+// at most one "use client" file, and it imports no ink, stamps or roughjs;
+// and _lib/ makes no network call, keeps
 // no storage, rolls no dice and reads no clock, so every move replays the
 // same. This reads import specifiers and source text, so it is modelled on
 // app/(rotor)/_lib/isolation.test.ts, not shared with it.
@@ -78,7 +80,22 @@ const CLIENT = /^\s*["']use client["']/m;
 const MAY_INK = new Set([lib("ink.ts"), lib("stamps.ts")]);
 
 test("the scan finds Structures' files", () => {
-  for (const name of ["machine.ts", "copy.ts", "readability.ts", "words.ts", "structures/index.ts", "structures/heap.ts"]) {
+  for (const name of [
+    "machine.ts",
+    "copy.ts",
+    "readability.ts",
+    "words.ts",
+    "structures/index.ts",
+    "structures/heap.ts",
+    "ink.ts",
+    "stamps.ts",
+    "paper.ts",
+    "scenes.ts",
+    "kit.ts",
+    "costs.ts",
+    "life/index.ts",
+    "life/graph.ts",
+  ]) {
     assert.ok(group.some((f) => f === lib(name)), name);
   }
   assert.equal(libCode.filter((f) => f.includes(`${sep}structures${sep}`)).length, 9, "eight structures and their index");
@@ -103,10 +120,29 @@ test("_lib/ imports no React and nothing from Next", () => {
   }
 });
 
-test("at most ink.ts and stamps.ts import roughjs", () => {
+test("only ink.ts and stamps.ts import roughjs, and ink.ts does", () => {
   for (const file of group.filter((f) => !MAY_INK.has(f) && !f.endsWith(".d.ts"))) {
     for (const spec of specifiers(file)) assert.ok(!ROUGH.test(spec), `${relative(ROOT, file)} imports ${spec}`);
   }
+  assert.ok(specifiers(lib("ink.ts")).some((spec) => ROUGH.test(spec)));
+});
+
+// Every file a file reaches by relative imports, itself included.
+function reach(file: string, seen = new Set<string>()): Set<string> {
+  if (seen.has(file)) return seen;
+  seen.add(file);
+  for (const spec of specifiers(file)) if (spec.startsWith(".")) reach(resolve(dirname(file), spec), seen);
+  return seen;
+}
+
+test("scenes.ts reaches neither ink.ts nor stamps.ts (nor kit.ts, which inks), even through another file", () => {
+  const reached = reach(lib("scenes.ts"));
+  assert.ok(reached.has(lib("paper.ts")) && reached.has(lib("structures/queue.ts")), "the walk follows imports");
+  for (const name of ["ink.ts", "stamps.ts", "kit.ts"]) assert.ok(!reached.has(lib(name)), `scenes.ts reaches ${name}`);
+  for (const file of reached) {
+    for (const spec of specifiers(file)) assert.ok(!ROUGH.test(spec), `${relative(ROOT, file)} imports ${spec}`);
+  }
+  assert.ok(reach(lib("stamps.ts")).has(lib("ink.ts")), "and the check would see it");
 });
 
 test("_lib/ makes no network call, keeps no storage, rolls no dice and reads no clock", () => {
