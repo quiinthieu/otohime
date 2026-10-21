@@ -85,6 +85,13 @@ app/(barometer)/     Barometer, a brass weather station for a chosen city: its o
                      the city on change and keeps the set hand in localStorage; its engine is in _lib/ (cities,
                      codes, dial, reading, hand, station, ink, words); station.ts holds the only fetch;
                      `npm test` covers its _lib/*.test.ts
+app/(articles)/      The Otohime Gazette, a small newspaper of six short illustrated explainers: its own root layout
+                     and CSS (no Tailwind, no client island); layout.tsx (three newspaper faces via next/font) and
+                     articles.css are its root layout; articles/page.tsx is the front page /articles and
+                     articles/[slug]/page.tsx the six static stories (/articles/why-ice-floats), with not-found.tsx
+                     for an unknown one; _components/ holds the masthead, the story card and the figure, all server
+                     components; its engine is in _lib/ (articles, readability, edition, figures/, ink, words);
+                     `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -155,6 +162,8 @@ Walk Planisphere and the site with `bash scripts/walk-planisphere.sh` (builds, s
 Probe turning the Planisphere wheel by finger in headless Chromium with `bash scripts/probe-planisphere-touch.sh` (builds, serves on :4043, installs Playwright and axe-core into a temp prefix; at 390x844 a real-touch quarter-turn drag (CDP `Input.dispatchTouchEvent`) on the disc moves the hour by 6 h each way on Tokyo and Sydney with no `pointercancel` and no page scroll, a 60 degree arc moves 4 h, a finger still scrolls the page on the explainer and, with JavaScript off, on the chart; at 1366x768 the mouse drag and ArrowRight are unchanged; axe finds no `nested-interactive` and nothing serious), or against production with `BASE_URL=https://otohime.dev bash scripts/probe-planisphere-touch.sh`. Chrome reads `touch-action` from the svg's box, so the island marks `svg.wheel` `data-turnable` once hydrated and the CSS puts `touch-action: none` there; with JavaScript off a finger scrolls the chart.
 
 Walk Barometer and the site the same way with `bash scripts/walk-barometer.sh` (`QUIET=1` instead proves the quiet face against a dead and a slow feed, see Live data; builds, serves on :4051; `/barometer`, `?city=tokyo`, `?city=mexico-city` and `?city=nope` each draw exactly one face, `reading` or `quiet`, and the walk prints which, since the feed may be down: 200, the build-sha, one GET form, 24 cities, the Open-Meteo and CC BY 4.0 credit once, no `B:` templates or `$RC`, a body under 200 KB, and on the reading face a pressure of 900-1100 hPa (which rejects the 785 hPa surface pressure at altitude); `nope` and the bare page select Ho Chi Minh City, Tokyo selects Tokyo; `api.open-meteo.com` appears in no HTML and no client chunk; the page links only its own stylesheet; the explainer is at most 120 words; one `"use client"` file without rough.js; `/projects` links `/barometer` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-barometer.sh`.
+
+Walk the Gazette and the site the same way with `bash scripts/walk-articles.sh` (builds, serves on :4065: `/articles` has one `<h1>` naming the Gazette, the dateline's Wednesday, 21 October 2026, exactly six `data-article` stories and six story links, no `B:` templates or `$RC` and only its own stylesheet; each of the six stories has one `<h1>`, one figure with `role="img"` and a caption, a sources box of at least two `https` links all on the allowlist, its date and reading time, Previous / Next in edition order, at most 600 visible words and under 150 KB; `/articles/nope` is a 404 saying "Not in this edition"; `/projects` links `/articles` once; no `"use client"` file under `app/(articles)` and a print stylesheet), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-articles.sh`.
 
 Walk Rotor and the site the same way with `bash scripts/walk-rotor.sh` (builds, serves on :4035: 26 lamps, 26 keys, three windows and one GET form; `?m=AAAAA` prints `BDZGO` on the tape, also as the no-JS form submits it; `?pos=ADU&m=AAAA` shows `BFY` in the windows (the double step); bad fields fall back to the defaults with a 200; `?m=BDZGO` decodes to `AAAAA`; a rings-and-plugs vector matches the engine; one `"use client"` file, no rough.js in any client chunk, an explainer of at most 120 words, both wiring sources linked and `/projects` linking `/rotor` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-rotor.sh`.
 
@@ -230,6 +239,18 @@ Planisphere (`/planisphere`, `app/(planisphere)/`) draws the sky for a city, a d
 Barometer (`/barometer`, `app/(barometer)/`) draws a brass weather station for one of 24 cities: an aneroid dial with a black needle (Stormy, Rain, Change, Fair, Very Dry), a glass thermometer, a wind vane and a tin rain cup, all in rough.js ink, with one sentence under them ("Ho Chi Minh City, 17:30 local, 26.9 °C, 1011.2 hPa, drizzle."). The city is a plain GET form checked against the vendored list in `_lib/cities.ts`; an unknown city draws Ho Chi Minh City with a 200. With JavaScript on, the select reads on change, and **Set** moves the dial's second brass hand to the needle and keeps it in `localStorage` (`barometer.hand`), so the next visit shows whether the pressure rose or fell; **Clear** removes it.
 
 The readings are from [Open-Meteo](https://open-meteo.com/) (CC BY 4.0, no key), credited on every render. They are fetched only on the server, in `_lib/station.ts`: a `"use cache"` function whose `cacheLife` is 900 s after a good reading (the feed's own interval) and 60 s after a failure, with a 4 s `AbortSignal.timeout`. The dial reads `pressure_msl`, never `surface_pressure` (Mexico City answers 785 hPa for the second and about 1020 for the first). If the feed is down or slow the board still draws at rest, "The station is quiet.", with a 200. `BAROMETER_HOST` (an http(s) origin, read once at module load) points the server elsewhere for tests.
+
+## Gazette
+
+The Otohime Gazette (`/articles`, `app/(articles)/`) is a small newspaper: a front page with a blackletter masthead, a dateline, the lead story above the fold and the rest in ruled columns, and one static page per story with a drawn infographic, two justified columns with a drop cap from 720 px, numbered sources and Previous / Next. Every page is HTML built ahead of time, with no client island, so it reads with JavaScript off and prints cleanly.
+
+To add an article:
+
+1. Add an `Article` to `app/(articles)/_lib/articles.ts` and put it in `ARTICLES` (front-page order; the first is the lead): a `slug` (`[a-z-]+`, the URL), a `kicker` (`Sky`, `Calendar`, `Numbers` or `Earth`), a `headline`, a one-sentence `deck`, `published` (`YYYY-MM-DD`; the newest is the edition's date), the `body` as plain-text paragraphs (no HTML, no markdown), its `facts` and `sources`, and the figure's `caption` and `alt`.
+2. Write to the caps `articles.test.ts` enforces: a body of 180 to 350 words with no paragraph over 90, a Flesch-Kincaid grade of 8 or under (`fkGrade` in `_lib/readability.ts`), a mean sentence of 20 words or fewer and none over 35; a headline of at most 8 words and a deck of at most 30. If a piece runs over, split sentences; never loosen a cap.
+3. Every number in the body is a `fact` naming a source key. Give at least two sources, each `https` on the allowlist: `en.wikipedia.org`, `www.gps.gov`, and `nasa.gov`, `noaa.gov`, `usgs.gov` or `nist.gov` and their subdomains.
+4. Draw its figure in `_lib/figures/<slug>.ts` and register it in `figures/index.ts`: ink paths from `_lib/ink.ts` (rough.js, `SEED = 213`), the subject in `spot`, and `<text>` labels whose numbers come from the facts by id (a fact left out goes in `UNDRAWN` with the reason). `figures.test.ts` keeps it inside its frame with labels of 12 px or more at 390 px.
+5. Add the slug to `SLUGS` in `scripts/walk-articles.sh` and update the six-story counts there and in `e2e/rbac.test.ts`.
 
 ## Live data
 

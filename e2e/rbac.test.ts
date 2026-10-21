@@ -80,7 +80,7 @@ test("the front page is an entrance, without the sidebar", async () => {
   assert.match(await (await page("/work")).text(), /aria-label="Main"/);
 });
 
-test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor, Planisphere and Barometer", async () => {
+test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor, Planisphere, Barometer and Gazette", async () => {
   const html = await (await page("/projects")).text();
   assert.match(html, /aria-label="Main"/);
   assert.match(html, /href="\/shore"/);
@@ -92,6 +92,7 @@ test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, El
   assert.match(html, /href="\/rotor"/);
   assert.match(html, /href="\/planisphere"/);
   assert.match(html, /href="\/barometer"/);
+  assert.match(html, /href="\/articles"/);
 });
 
 test("Shore is its own page, without the site's sidebar", async () => {
@@ -164,6 +165,15 @@ test("Barometer is its own page, without the site's sidebar", async () => {
   assert.match(html, /href="\/projects"/);
   assert.equal(html.match(/data-face="/g)?.length, 1);
   assert.match(html, /href="https:\/\/open-meteo\.com\/"/);
+});
+
+test("The Gazette is its own page, without the site's sidebar", async () => {
+  const res = await page("/articles");
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  assert.doesNotMatch(html, /aria-label="Main"/);
+  assert.match(html, /href="\/projects"/);
+  assert.equal(html.match(/data-article="/g)?.length, 6);
 });
 
 test("a plain user can't list users or raise their own role", async () => {

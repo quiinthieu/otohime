@@ -1,0 +1,369 @@
+/* The Gazette's own stylesheet, hand-written: no Tailwind and no site tokens.
+   Newsprint: ink on warm paper with a faint grain, rules for structure and one
+   printer's red (--spot) for the thing each figure is about. Dark from the OS
+   unless localStorage.theme pinned light, or always when it pinned dark (the
+   layout's script sets data-theme). Everything stacks in one column and stays
+   inside the viewport at 320px; story bodies set in two justified columns
+   from 720px. A figure draws itself on once at load; the reduced-motion rule
+   at the end turns that off, and the resting pose is the whole drawing. */
+:root {
+  color-scheme: light;
+  --paper: #f3eee3;
+  --ink: #1a1816;
+  --muted: #5d564c;
+  --rule: #c9c1b2;
+  --spot: #b23a2f;
+  /* paper grain: a faint noise of dots, drawn inline so nothing is fetched */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%231a1816' fill-opacity='.06'%3E%3Ccircle cx='13' cy='21' r='.8'/%3E%3Ccircle cx='71' cy='9' r='.6'/%3E%3Ccircle cx='102' cy='44' r='.9'/%3E%3Ccircle cx='37' cy='66' r='.7'/%3E%3Ccircle cx='88' cy='93' r='.6'/%3E%3Ccircle cx='19' cy='104' r='.9'/%3E%3Ccircle cx='58' cy='112' r='.5'/%3E%3C/g%3E%3C/svg%3E");
+  --serif: Georgia, "Times New Roman", serif;
+  --masthead-face: var(--font-masthead, "Old English Text MT", var(--serif));
+  --headline-face: var(--font-headline, var(--serif));
+  --body-face: var(--font-body, var(--serif));
+  font-family: var(--body-face);
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: var(--grain);
+  font-synthesis: none;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #171513;
+  --ink: #e8e1d4;
+  --muted: #a39a8c;
+  --rule: #3d3730;
+  --spot: #e07a6a;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%23e8e1d4' fill-opacity='.04'%3E%3Ccircle cx='13' cy='21' r='.8'/%3E%3Ccircle cx='71' cy='9' r='.6'/%3E%3Ccircle cx='102' cy='44' r='.9'/%3E%3Ccircle cx='37' cy='66' r='.7'/%3E%3Ccircle cx='88' cy='93' r='.6'/%3E%3Ccircle cx='19' cy='104' r='.9'/%3E%3Ccircle cx='58' cy='112' r='.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #171513;
+    --ink: #e8e1d4;
+    --muted: #a39a8c;
+    --rule: #3d3730;
+    --spot: #e07a6a;
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%23e8e1d4' fill-opacity='.04'%3E%3Ccircle cx='13' cy='21' r='.8'/%3E%3Ccircle cx='71' cy='9' r='.6'/%3E%3Ccircle cx='102' cy='44' r='.9'/%3E%3Ccircle cx='37' cy='66' r='.7'/%3E%3Ccircle cx='88' cy='93' r='.6'/%3E%3Ccircle cx='19' cy='104' r='.9'/%3E%3Ccircle cx='58' cy='112' r='.5'/%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--spot); }
+a:focus-visible {
+  outline: 2px solid var(--spot);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.gazette {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px 24px;
+  overflow-wrap: break-word;
+}
+
+/* Top bar: the ways out. Wraps rather than overflowing at 320px. */
+.topbar { padding: 12px 0 0; }
+.ways-out { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; min-width: 0; font-size: 16px; }
+.home-link { text-decoration: none; }
+.home-link:first-child { font-family: var(--headline-face); font-weight: 700; }
+
+/* The masthead: the nameplate between a double rule and a single one, the
+   dateline in small caps under it. */
+.masthead {
+  margin-top: 12px;
+  padding: 10px 0 6px;
+  border-top: 3px double var(--ink);
+  border-bottom: 1px solid var(--ink);
+  text-align: center;
+}
+.nameplate {
+  margin: 0;
+  font-family: var(--masthead-face);
+  font-weight: 400;
+  font-size: clamp(34px, 10vw, 88px);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+.dateline {
+  margin: 6px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--rule);
+  font-variant-caps: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 15px;
+  color: var(--muted);
+  text-wrap: balance;
+}
+.masthead-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding: 8px 0 6px;
+  text-align: left;
+}
+.masthead-line .nameplate { font-size: 26px; }
+.masthead-line .nameplate a { text-decoration: none; }
+.front-link { font-size: 16px; }
+
+/* Headlines, kickers, decks and bylines: the same on every page. */
+.kicker {
+  margin: 0 0 4px;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--spot);
+}
+.headline {
+  margin: 0;
+  font-family: var(--headline-face);
+  font-weight: 900;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+.deck { margin: 8px 0 0; font-style: italic; font-size: 19px; line-height: 1.35; color: var(--ink); }
+.byline {
+  margin: 8px 0 0;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.05em;
+  font-size: 15px;
+  color: var(--muted);
+}
+.read-on { margin: 10px 0 0; font-weight: 700; }
+
+/* The front page: the lead above the fold, the fold as a double rule, then
+   the other five in a grid with 1px rules between its columns. */
+.front { padding-top: 18px; }
+.lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 3px double var(--ink);
+}
+.lead .headline { font-size: clamp(32px, 7vw, 46px); }
+.lead-body p { margin: 0; text-indent: 1.4em; }
+.lead-body p:first-child { text-indent: 0; }
+.lead-body .read-on { margin-top: 10px; text-indent: 0; }
+/* Narrow: headline, figure, then the opening. Wide: the text beside the
+   figure, so both sit above the fold at 1366x768. */
+@media (min-width: 960px) {
+  .lead {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas: "head figure" "body figure";
+    grid-template-rows: auto 1fr;
+    column-gap: 32px;
+    row-gap: 14px;
+  }
+  .lead-head { grid-area: head; }
+  .lead > .figure { grid-area: figure; }
+  .lead-body { grid-area: body; text-align: justify; hyphens: auto; }
+}
+
+.stories {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 33px;
+  overflow: hidden;
+}
+.card {
+  position: relative;
+  min-width: 0;
+  padding: 18px 0 20px;
+  border-top: 1px solid var(--rule);
+}
+/* The rule left of every card; the first column's falls outside and is clipped. */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  bottom: 20px;
+  left: -17px;
+  border-left: 1px solid var(--rule);
+}
+.card .headline { font-size: 26px; }
+.card .deck { font-size: 17px; }
+.opening { margin: 10px 0 0; font-size: 17px; }
+@media (min-width: 640px) {
+  .stories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .opening { text-align: justify; hyphens: auto; }
+}
+@media (min-width: 960px) {
+  .stories { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* A story: one column below 720px, left-aligned (narrow justified columns
+   make rivers); two justified columns with a rule between them from 720px.
+   Paragraphs are indented, with no space between them. */
+.story { max-width: 880px; margin: 0 auto; padding-top: 18px; }
+.story-head { padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+.story-head .headline { font-size: clamp(34px, 8vw, 54px); }
+.body { margin-top: 18px; }
+.body p { margin: 0; text-indent: 1.4em; }
+.body p:first-child { text-indent: 0; }
+@media (min-width: 720px) {
+  .body {
+    columns: 2;
+    column-gap: 32px;
+    column-rule: 1px solid var(--rule);
+    text-align: justify;
+    hyphens: auto;
+  }
+}
+/* The drop cap: three lines tall where initial-letter is known, a floated
+   letter where it is not (Firefox). */
+.body p:first-child::first-letter {
+  initial-letter: 3 2;
+  margin-right: 0.12em;
+  font-family: var(--headline-face);
+  font-weight: 900;
+  color: var(--spot);
+}
+@supports not (initial-letter: 3) {
+  .body p:first-child::first-letter {
+    float: left;
+    font-size: 3.9em;
+    line-height: 0.82;
+    padding: 0.06em 0.1em 0 0;
+  }
+}
+
+/* The sources: a boxed, numbered list. */
+.sources {
+  margin: 24px 0 0;
+  padding: 12px 16px;
+  border: 1px solid var(--ink);
+  font-size: 16px;
+}
+.sources h2 {
+  margin: 0 0 6px;
+  font-family: var(--headline-face);
+  font-size: 18px;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+}
+.sources ol { margin: 0; padding-left: 1.6em; }
+.sources li + li { margin-top: 4px; }
+
+.turn {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 24px;
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 3px double var(--ink);
+  font-weight: 700;
+}
+
+.missing { padding: 32px 0; text-align: center; }
+.missing .headline { font-size: clamp(32px, 8vw, 52px); }
+
+.colophon {
+  margin-top: 28px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ink);
+  font-size: 15px;
+  color: var(--muted);
+  text-align: center;
+}
+.colophon p { margin: 2px 0; }
+
+/* A figure: ink in --ink, the subject in --spot, labels in the body face.
+   Strokes draw on over 600 ms and the labels rise after them; the dash and
+   the hidden starts live only inside @keyframes, so a still (reduced motion,
+   print, CSS that never loads) is the whole drawing. */
+.figure { margin: 18px 0 0; min-width: 0; }
+.figure svg { display: block; width: 100%; height: auto; max-width: 640px; margin: 0 auto; }
+.figure .ink { color: var(--ink); }
+.figure .spot { color: var(--spot); }
+.figure text { font-family: var(--body-face); fill: var(--ink); }
+.figure text.spot-label { fill: var(--spot); font-weight: 700; }
+.figure figcaption {
+  max-width: 640px;
+  margin: 8px auto 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--rule);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--muted);
+}
+.lead > .figure { margin-top: 0; }
+.figure path { animation: ink-draw 600ms ease-out both; }
+.figure text { animation: label-rise 300ms ease-out 600ms both; }
+@keyframes ink-draw {
+  from { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  to { stroke-dasharray: 1; stroke-dashoffset: 0; }
+}
+@keyframes label-rise { from { opacity: 0; transform: translateY(6px); } }
+
+/* Print: black on white, no grain, no ways out, every figure still. */
+@media print {
+  :root,
+  :root:not([data-theme="light"]),
+  :root[data-theme="dark"] {
+    color-scheme: light;
+    --paper: #fff;
+    --ink: #000;
+    --muted: #333;
+    --rule: #888;
+    --spot: #b23a2f;
+    --grain: none;
+    background: #fff;
+  }
+  .gazette { max-width: none; padding: 0; }
+  .topbar,
+  .turn,
+  .read-on,
+  .front-link { display: none; }
+  a { color: inherit; text-decoration: none; }
+  .sources a::after { content: " (" attr(href) ")"; overflow-wrap: anywhere; }
+  .figure, .card, .sources { break-inside: avoid; }
+  .figure path, .figure text { animation: none; }
+}
+
+/* The hop to or from another root layout (the site, another project)
+   crossfades instead of cutting, and the title travels from its row on
+   /projects to this h1. Both documents must carry this rule; the type keeps
+   the fade on the hop alone. */
+@view-transition { navigation: auto; types: hop; }
+::view-transition { pointer-events: none; }
+:root:active-view-transition-type(hop)::view-transition-old(root) { animation: 150ms ease-in both fade-out; }
+:root:active-view-transition-type(hop)::view-transition-new(root) { animation: 210ms ease-out 150ms both fade-in; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+h1 { view-transition-name: project-articles; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
