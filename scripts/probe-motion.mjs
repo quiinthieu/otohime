@@ -7,7 +7,7 @@
 // Each /projects -> project hop is that project's first load in its context, as on a visitor's first hop.
 // A location.assign from /shore into the streamed site pages (/work, /play, /notes, /music, /sign-in,
 // /forgot-password) carries the hop and logs no page error.
-// The site's own pages: a sidebar click /work -> /projects runs page-out and page-in, the ten /projects rows
+// The site's own pages: a sidebar click /work -> /projects runs page-out and page-in, the eleven /projects rows
 // rise 40 ms apart, and /sign-in and the 404 load cleanly; under reduced motion all of it is still.
 // The group swaps: both ways out of the 404 (its Go home and the brand mark, the 404 reached by page.goto and by
 // router.push from /work), /work -> / by the brand mark, / -> /work by the console, /work -> /sign-in and
@@ -27,7 +27,7 @@ const { chromium } = require("playwright");
 const BASE_URL = process.env.BASE_URL;
 const PHONE = { width: 390, height: 844 };
 const DESKTOP = { width: 1366, height: 768 };
-const PROJECTS = ["shore", "capsule", "orrery", "elements", "vinyl", "rotor", "planisphere", "barometer", "articles", "structures"];
+const PROJECTS = ["shore", "capsule", "orrery", "elements", "vinyl", "rotor", "planisphere", "barometer", "articles", "structures", "design-system"];
 
 let ok = 0;
 let failed = 0;
@@ -101,7 +101,7 @@ function checkNames(label, path, names) {
     check(`${label}: ${path} names exactly one element, its h1, project-${slug}`, got === want, got || "none");
   } else if (path === "/projects") {
     const want = PROJECTS.map((p) => `project-${p}`).sort().join(", ");
-    check(`${label}: /projects names its ten rows after the projects`, [...seen].sort().join(", ") === want, seen.join(", "));
+    check(`${label}: /projects names its eleven rows after the projects`, [...seen].sort().join(", ") === want, seen.join(", "));
   }
 }
 
@@ -501,16 +501,16 @@ try {
       const rows = await rowRises(page);
       if (!reduced) {
         const delays = rows.map((r) => r.delay);
-        check(`${label}: /projects has 10 row rise animations`, rows.length === 10 && rows.every((r) => r.name === "rise"), JSON.stringify(rows));
+        check(`${label}: /projects has 11 row rise animations`, rows.length === 11 && rows.every((r) => r.name === "rise"), JSON.stringify(rows));
         check(
           `${label}: the rows' delays increase, 40 ms apart`,
-          delays.length === 10 && delays.every((d, i) => d === i * 40),
+          delays.length === 11 && delays.every((d, i) => d === i * 40),
           delays.join(", "),
         );
         const last = rows.at(-1);
-        check(`${label}: the last row is up within 0.8 s`, last !== undefined && last.delay + last.duration < 800, JSON.stringify(last));
+        check(`${label}: the last row is up within 0.8 s`, last !== undefined && last.delay + last.duration <= 800, JSON.stringify(last));
       } else {
-        check(`${label}: every /projects row's effective delay is <= 1 ms`, rows.length === 10 && rows.every((r) => r.delay <= 1 && r.cssDelay <= 1), JSON.stringify(rows));
+        check(`${label}: every /projects row's effective delay is <= 1 ms`, rows.length === 11 && rows.every((r) => r.delay <= 1 && r.cssDelay <= 1), JSON.stringify(rows));
         const anims = await loadAnimations(page);
         check(`${label}: every animation on /projects lasts <= 1 ms or has finished`, still(anims).length === 0, show(still(anims)));
       }

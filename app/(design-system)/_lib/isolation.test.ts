@@ -4,10 +4,10 @@
 // sheets, as text. _lib/ stays free of React and Next and reads no files;
 // only ink.ts and stamps.ts may import roughjs, and scenes.ts (which the
 // island will import) reaches neither, even through another file; the
-// figures reach the engine only through _lib/; there is at most one client
-// file (the use client directive), and if present it is
-// _components/board-app.tsx and reaches no ink, stamps, kit, figures or
-// roughjs (task 3 makes it exactly one); only layout.tsx reads process.env;
+// figures reach the engine only through _lib/; there is exactly one client
+// file (the use client directive), _components/board-app.tsx, which imports
+// only React, board.ts, contrast.ts, scenes.ts and siblings.ts and reaches no
+// ink, stamps, kit, figures or roughjs; only layout.tsx reads process.env;
 // and _lib/ makes no network call, keeps no storage, rolls no dice and reads
 // no clock, so every turn replays the same. Modelled on
 // app/(structures)/_lib/isolation.test.ts, not shared with it.
@@ -104,6 +104,9 @@ test("the scan finds Design system's files", () => {
   ]) {
     assert.ok(group.some((f) => f === lib(name)), name);
   }
+  for (const name of ["layout.tsx", "design-system.css", "design-system/page.tsx", "_components/board.tsx", "_components/board-app.tsx", "_components/chrome.tsx", "_components/figure.tsx"]) {
+    assert.ok(group.includes(join(ROOT, "app/(design-system)", name)), name);
+  }
   assert.ok(!libCode.some(isTest));
 });
 
@@ -177,17 +180,29 @@ test("the ink is drawn in ink.ts: it imports roughjs, and every other importer i
 const ISLAND = join(ROOT, "app/(design-system)/_components/board-app.tsx");
 const NO_INK = /(^|\/)(ink|stamps|kit|figures)(\.ts|\/|$)/;
 
-test("at most one client file, _components/board-app.tsx, and it reaches no ink", () => {
+// What the island may import: React, and the engine it plays (never the ink).
+const ISLAND_IMPORTS = new Set(["react", "../_lib/board.ts", "../_lib/contrast.ts", "../_lib/scenes.ts", "../_lib/siblings.ts"]);
+
+test("exactly one client file, _components/board-app.tsx, importing only React and the engine, reaching no ink", () => {
   const clients = group.filter((f) => CLIENT.test(readFileSync(f, "utf8")));
-  assert.ok(clients.length <= 1, clients.map((f) => relative(ROOT, f)).join(", "));
-  for (const client of clients) {
-    assert.equal(relative(ROOT, client), relative(ROOT, ISLAND));
-    for (const spec of specifiers(client)) assert.ok(!ROUGH.test(spec) && !NO_INK.test(spec), `the island imports ${spec}`);
-    for (const file of reach(client)) {
-      assert.ok(!NO_INK.test(relative(ROOT, file).replace(/\\/g, "/")), `the island reaches ${relative(ROOT, file)}`);
-      for (const spec of specifiers(file)) assert.ok(!ROUGH.test(spec), `${relative(ROOT, file)} imports ${spec}`);
-    }
+  assert.deepEqual(
+    clients.map((f) => relative(ROOT, f)),
+    [relative(ROOT, ISLAND)],
+  );
+  const specs = specifiers(ISLAND);
+  assert.ok(specs.includes("react") && specs.includes("../_lib/board.ts"), "and the scan sees its imports");
+  for (const spec of specs) assert.ok(ISLAND_IMPORTS.has(spec), `the island imports ${spec}`);
+  for (const spec of specs) assert.ok(!ROUGH.test(spec) && !NO_INK.test(spec), `the island imports ${spec}`);
+  for (const file of reach(ISLAND)) {
+    assert.ok(!NO_INK.test(relative(ROOT, file).replace(/\\/g, "/")), `the island reaches ${relative(ROOT, file)}`);
+    for (const spec of specifiers(file)) assert.ok(!ROUGH.test(spec), `${relative(ROOT, file)} imports ${spec}`);
   }
+});
+
+test("only the server board inks the stamps, and the page, not the island, draws the figures", () => {
+  const inkers = group.filter((f) => !inLib(f) && specifiers(f).some((s) => /(^|\/)stamps\.ts$/.test(s)));
+  assert.deepEqual(inkers.map((f) => relative(ROOT, f)), ["app/(design-system)/_components/board.tsx"]);
+  assert.match(readFileSync(join(ROOT, "app/(design-system)/design-system/page.tsx"), "utf8"), /export const ensureStatic = "navigation";/);
 });
 
 test("only layout.tsx reads process.env", () => {

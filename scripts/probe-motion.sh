@@ -5,7 +5,7 @@
 #   SKIP_BUILD=1 PORT=4062 bash scripts/probe-motion.sh           # reuse an existing .next build
 #   BASE_URL=https://otohime.dev bash scripts/probe-motion.sh     # probe a deployed URL, no build or start
 #
-# At 1366x768 and at 390x844 (isMobile, hasTouch) it clicks the real links /projects -> each of the ten
+# At 1366x768 and at 390x844 (isMobile, hasTouch) it clicks the real links /projects -> each of the eleven
 # projects, /shore -> /projects and /orrery/sun -> /planisphere (Orrery's "Next door"). pageswap on the old page
 # and pagereveal on the new one must both carry a viewTransition, and each document names at most one element
 # project-*. Under reduced motion the same hops complete, and every animation at load lasts at most 1 ms or has

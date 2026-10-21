@@ -99,6 +99,11 @@ app/(structures)/    Structures, eight drawn pages on data structures you can po
                      chrome, the figure and the server machine.tsx, which inks the stamps and renders the one client
                      island, machine-app.tsx; its engine is in _lib/ (machine, play, structures/, copy, scenes,
                      stamps, ink, life/, costs, words); `npm test` covers its _lib/*.test.ts
+app/(design-system)/ Design system, one drawn page at /design-system: a box of decisions made once and a board of nine
+                     parts you can turn knobs on. Its own root layout and CSS (no Tailwind); layout.tsx and
+                     design-system.css are its root layout; design-system/page.tsx is the static page;
+                     _components/ holds board.tsx (server: inks the 27 stamps) and board-app.tsx (the one client
+                     island); its engine and ink are in _lib/; `npm test` covers its _lib/*.test.ts
 content/site.ts      the words on the public pages
 lib/pages.ts         the public pages (sidebar and console menu); add a project as an entry in `site.projectList` in content/site.ts
 lib/auth.ts          Better Auth, plus the role-hierarchy guard
@@ -175,6 +180,10 @@ Walk the Gazette and the site the same way with `bash scripts/walk-articles.sh` 
 Walk Structures and the site the same way with `bash scripts/walk-structures.sh` (builds, serves on :4069: `/structures` has one `<h1>` naming Structures, exactly eight `data-page` rows in teaching order with thumbnails and cost dots, eight page links, no `B:` templates, `$RC` or Tailwind; each of the eight pages has one `<h1>`, one each of the life, machine and costs figures, a disabled control fieldset, a narration, an `<ol data-trace>` of at least two steps, the worked example's end-state labels drawn (from the engine's own `labels()`), a sources box of at least two allowlisted `https` links, Previous / Next in series order, at most 700 visible words and under 200 KB; `/structures/nope` is a 404 saying "Not in this series"; `/projects` links `/structures` once; no script chunk `/structures/stack` loads holds rough.js; exactly one `"use client"` file under `app/(structures)`), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-structures.sh`.
 
 Probe Structures' machines in headless Chromium with `bash scripts/probe-structures.sh` (builds, serves on :4073, installs Playwright and axe-core into a temp prefix; at 390x844 and 1366x768 the stack's controls wake after hydration, Push 9 says "9 goes on top.", Pop lists its beats, a full pile refuses with a sentence and an unchanged drawing; the search tree's Find 6 says "Found 6 in 3 steps." no sooner than 1000 ms after the press, or within 250 ms under reduced motion; Step mode shows a beat a press; "Insert 1, 2, 3, 4, 5" draws five nodes going down; Reset restores the example; Tab, 4 and Enter run the default move; nothing scrolls sideways at 320 px; axe finds nothing serious on `/structures` and `/structures/heap`, light and dark; no console error), or against production with `BASE_URL=https://otohime.dev bash scripts/probe-structures.sh`.
+
+Walk Design system and the site the same way with `bash scripts/walk-design-system.sh` (builds, serves on :4075: `/design-system` has one `<h1>` naming Design system, the four figures once each, 27 stamps, nine `data-part`, one disabled fieldset of seven knobs, six dresses, eleven `data-sheet` scraps, two `<output>`s with the start sentences, at least three allowlisted sources, at most 700 words and 200 KB, no `B:` templates, `$RC` or Tailwind; `/projects` links it once; no rough.js in its script chunks; exactly one client file; with nothing listening on :4077 the walk fails).
+
+Probe Design system's board in headless Chromium with `bash scripts/probe-design-system.sh` (builds, serves on :4079, installs Playwright and axe-core into a temp prefix; at 390x844 and 1366x768 the knobs wake after hydration, Spot coral says "1 knob turned. 9 parts followed." and fails the rule, No system with Spot mint follows nothing, Corner round swaps all nine stamps, Paper night fails for blue and passes for yellow, Dress as Gazette paints `rgb(243, 238, 227)`, Reset, the glide is 0.15s, 0s with Speed still and 0s under reduced motion, keyboard ArrowRight in Spot, JavaScript off, no sideways scroll at 320, no console errors, axe clean in light and dark).
 
 Walk Rotor and the site the same way with `bash scripts/walk-rotor.sh` (builds, serves on :4035: 26 lamps, 26 keys, three windows and one GET form; `?m=AAAAA` prints `BDZGO` on the tape, also as the no-JS form submits it; `?pos=ADU&m=AAAA` shows `BFY` in the windows (the double step); bad fields fall back to the defaults with a 200; `?m=BDZGO` decodes to `AAAAA`; a rings-and-plugs vector matches the engine; one `"use client"` file, no rough.js in any client chunk, an explainer of at most 120 words, both wiring sources linked and `/projects` linking `/rotor` once), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-rotor.sh`.
 
@@ -275,6 +284,17 @@ To add a structure:
 4. Lay it out in `_lib/scenes.ts` (`sceneFor`, 480 wide, a fixed height; every state in frame with no overlaps, letters 17 or more) and name its stamp kinds in `SCENE_KINDS`; draw its In life picture in `_lib/life/<slug>.ts` (at most 10 labels, one spot) and register it in `life/index.ts`.
 5. Write its page in `_lib/copy.ts` to the caps `copy.test.ts` enforces: a title of at most 4 words, a one-sentence deck of at most 30, a body of 180 to 350 words at Flesch-Kincaid grade 8 or under (mean sentence 20 or under, longest 35), every step count in *How a move works* one the machine takes, no Big-O, code, `<`, `>` or `http` in the prose, and at least two sources, each `https` on `en.wikipedia.org`, `developer.mozilla.org`, `docs.python.org` or `en.cppreference.com`.
 6. Add the slug to `SLUGS` in `scripts/walk-structures.sh` and update the eight-page counts there and in `e2e/rbac.test.ts`.
+
+## Design system
+
+Design system (`/design-system`, `app/(design-system)/`) explains the idea on one page of squared notebook paper in the Structures look: a box of eight pots (paper, ink, spot, corner, gap, size, speed, face), nine parts built only from them and three patterns, with a rulebook on the lid. Its board draws the nine parts; seven knobs, a No system switch and six Dress as buttons change the pots, and a counter says how many parts followed. With the system on every knob moves all nine parts; with it off nothing follows and nine are left to fix by hand. The rule line reads ink and spot against paper as WCAG ratios. The "Right here" card audits this site's eleven other stylesheets. With JavaScript off the board is a finished drawing at the start values with greyed knobs. The page is built ahead of time; the only client code is `_components/board-app.tsx`, and rough.js never reaches it: the server inks the 27 stamps and the island places them with `<use>`, colouring them from `--board-*` custom properties on the svg root.
+
+The "Right here" numbers are pinned in `_lib/siblings.ts` and checked by `siblings.test.ts`, which reads the other stylesheets as text. To re-pin when a sister stylesheet changes or a new project lands:
+
+1. Run `npm test`. A mismatch prints the new value (paper, ink, count of custom properties, `--paper`/`--ink` flags, or an unpinned group stylesheet).
+2. Edit that row in `SIBLINGS` (or add a row for a new group with its group, file, light paper, first ink, decision count and flags; add a dress if you want one).
+3. If the prose quotes a changed count (sheets, papers, inks, creams), `copy.test.ts` fails too: fix the sentence in `_lib/copy.ts` with it.
+4. Add the project's name to the motion probe and walk counts if it is a new project, as the other projects do.
 
 ## Live data
 

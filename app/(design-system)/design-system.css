@@ -1,0 +1,268 @@
+/* Design system's own stylesheet, hand-written: no Tailwind and no site tokens.
+   Structures' notebook, so the two explainers read as one series: ink on
+   squared paper (a 24 px grid of two linear-gradients), one blue (--spot) for
+   the thing each drawing is about and one red (--hot) for the parts a turn
+   just moved. Dark from the OS unless localStorage.theme pinned light, or
+   always when it pinned dark (the layout's script sets data-theme). One 760 px
+   article that stacks in one column and stays inside the viewport at 320 px.
+   The board is the lesson in CSS: its pots are custom properties on the
+   board's <svg> (--board-paper, --board-ink, --board-spot, --board-face,
+   --board-speed), and with the system on every part is painted from them, so
+   one change repaints all nine. Its own paper is a pot, not the page's theme.
+   The figures ink themselves on once at load; a turn glides at the Speed pot;
+   the reduced-motion block at the end turns all of it off, and the resting
+   pose is the whole drawing. */
+:root {
+  color-scheme: light;
+  --paper: #f6f3ea;
+  --grid: #dcd6c6;
+  --ink: #1d1b17;
+  --muted: #57524a;
+  --spot: #2456b3;
+  --hot: #c8402f;
+  --rule: #b9b1a0;
+  --hand-face: var(--font-hand, "Comic Sans MS", "Segoe Print", cursive);
+  --title-face: var(--font-title, "Bradley Hand", "Segoe Print", cursive);
+  font-family: var(--hand-face);
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  font-synthesis: none;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #161513;
+  --grid: #2a2722;
+  --ink: #ebe5d6;
+  --muted: #b1a993;
+  --spot: #7aa2ff;
+  --hot: #ff8a73;
+  --rule: #4a443b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #161513;
+    --grid: #2a2722;
+    --ink: #ebe5d6;
+    --muted: #b1a993;
+    --spot: #7aa2ff;
+    --hot: #ff8a73;
+    --rule: #4a443b;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: var(--spot); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--hot); }
+:focus-visible {
+  outline: 3px solid var(--spot);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* The page: one sheet of the notebook, 760 px at most. */
+.notebook {
+  min-height: 100vh;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px 24px;
+  overflow-wrap: break-word;
+}
+
+/* The top bar: the ways out. Wraps rather than overflowing at 320 px. */
+.topbar { padding: 12px 0 0; }
+.ways-out { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; min-width: 0; font-size: 17px; }
+.ways-out a { color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+.home-link { font-family: var(--title-face); font-weight: 700; font-size: 22px; }
+
+/* Titles in Caveat, everything else in Patrick Hand. */
+.page-head { margin-top: 12px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+.title {
+  margin: 0;
+  font-family: var(--title-face);
+  font-weight: 700;
+  font-size: clamp(44px, 11vw, 68px);
+  line-height: 1.05;
+}
+.deck { margin: 6px 0 0; font-size: 21px; line-height: 1.35; }
+.byline { margin: 6px 0 0; font-size: 16px; color: var(--muted); }
+
+/* Figures: full width under 640 px, 640 px at most on the sheet. */
+.figure { margin: 22px 0 0; min-width: 0; }
+.figure svg { display: block; width: 100%; height: auto; max-width: 640px; margin: 0 auto; }
+.figure figcaption {
+  max-width: 640px;
+  margin: 8px auto 0;
+  padding-top: 6px;
+  border-top: 1px dashed var(--rule);
+  font-size: 16px;
+  color: var(--muted);
+}
+.ink { color: var(--ink); }
+.spot { color: var(--spot); }
+svg text { font-family: var(--hand-face); fill: var(--ink); }
+svg text.spot-label { fill: var(--spot); }
+
+/* The board: a small screen in its own paper, the nine parts drawn from the
+   pots on the <svg>. A part keeps its <use> from turn to turn, so a change of
+   colour or gap glides at the Speed pot; the parts a turn moved are marked in
+   --hot for 500 ms and lifted 2 px. */
+.board-app { min-width: 0; }
+.stamp-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.figure .board-svg { border: 2px solid var(--ink); border-radius: 6px; }
+.board-svg symbol { overflow: visible; }
+.board-svg .screen { fill: var(--part-paper); transition: fill var(--board-speed) ease-out; }
+/* A part paints its body in color, its outline in stroke and its spot mark in
+   fill; each is a --part-* the island sets: var(--board-*) with the system on,
+   the part's own hex with it off. */
+.board-svg use {
+  color: var(--part-body);
+  stroke: var(--part-ink);
+  fill: var(--part-accent);
+  transition-property: fill, stroke, color, transform, translate;
+  transition-duration: var(--board-speed);
+  transition-timing-function: ease-out;
+  transform-box: fill-box;
+}
+.board-svg use[data-hot] { stroke: var(--hot); translate: 0 -2px; }
+.board-svg .word { fill: var(--part-ink); font-family: var(--part-face); transition: fill var(--board-speed) ease-out, transform var(--board-speed) ease-out, translate var(--board-speed) ease-out; }
+.board-svg .word[data-hot] { translate: 0 -2px; }
+
+.readout {
+  max-width: 640px;
+  margin: 10px auto 0;
+  padding: 8px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+}
+.readout output { display: block; min-height: 1.5em; }
+.counter { font-size: 20px; }
+.rule { margin-top: 2px; font-size: 17px; color: var(--muted); }
+.rule[data-passes="false"] { color: var(--hot); }
+
+/* The knobs: two columns of groups, wrapping inside each, every target 44 px
+   or more, a visible focus ring. Greyed until the island wakes them up (and
+   for good with JavaScript off). */
+.knobs {
+  max-width: 640px;
+  margin: 10px auto 0;
+  padding: 8px 12px 12px;
+  border: 1px dashed var(--rule);
+  border-radius: 6px;
+  min-width: 0;
+}
+.knobs > legend { padding: 0 4px; font-size: 16px; color: var(--muted); }
+.knobs:disabled { opacity: 0.55; }
+.knob-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; }
+.knob { min-width: 0; margin: 0; padding: 0; border: 0; }
+.knob > legend { padding: 0; font-family: var(--title-face); font-weight: 700; font-size: 22px; line-height: 1.2; }
+.knob.wide { grid-column: 1 / -1; }
+.choices { display: flex; flex-wrap: wrap; gap: 0 6px; }
+.choice, .switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: 17px;
+  cursor: pointer;
+}
+.choice input, .switch input { width: 20px; height: 20px; margin: 0; accent-color: var(--spot); cursor: pointer; }
+.choice:has(input:focus-visible), .switch:has(input:focus-visible) { outline: 3px solid var(--spot); outline-offset: 0; border-radius: 4px; }
+.knobs:disabled .choice, .knobs:disabled .switch, .knobs:disabled input, .knobs:disabled button { cursor: default; }
+.dot { width: 14px; height: 14px; border: 2px solid var(--ink); border-radius: 50%; flex: none; }
+.system { margin-top: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
+.dresses { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.knobs button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 17px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px 7px 5px 8px;
+  cursor: pointer;
+}
+.knobs button:hover { border-color: var(--spot); color: var(--spot); }
+.knobs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.reset { margin-top: 8px; }
+
+/* The words. */
+.parts h2, .sources h2 { margin: 22px 0 4px; font-family: var(--title-face); font-weight: 700; font-size: 32px; line-height: 1.1; }
+.parts p { margin: 0 0 10px; }
+.sources {
+  margin: 24px 0 0;
+  padding: 4px 16px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  font-size: 17px;
+}
+.sources h2 { margin-top: 6px; font-size: 26px; }
+.sources ol { margin: 0; padding-left: 1.6em; }
+.sources li + li { margin-top: 4px; }
+.sources a { display: inline-block; min-height: 30px; }
+
+.colophon {
+  margin-top: 28px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  font-size: 16px;
+  color: var(--muted);
+  text-align: center;
+}
+.colophon p { margin: 2px 0; }
+.colophon a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* The box, the follow card and the here card ink themselves on once at load,
+   600 ms: the ink first, then the spot (pots, then what follows them). The
+   dash lives only inside @keyframes, so a still (reduced motion, print, CSS
+   that never loads) is the whole drawing. */
+.draw .ink path { animation: ink-draw 600ms ease-out both; }
+.draw .spot path { animation: ink-draw 600ms ease-out 300ms both; }
+@keyframes ink-draw {
+  from { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  to { stroke-dasharray: 1; stroke-dashoffset: 0; }
+}
+
+/* The hop to or from another root layout (the site, another project)
+   crossfades instead of cutting, and the title travels from its row on
+   /projects to this h1. Both documents must carry this rule; the type keeps
+   the fade on the hop alone. */
+@view-transition { navigation: auto; types: hop; }
+::view-transition { pointer-events: none; }
+:root:active-view-transition-type(hop)::view-transition-old(root) { animation: 150ms ease-in both fade-out; }
+:root:active-view-transition-type(hop)::view-transition-new(root) { animation: 210ms ease-out 150ms both fade-in; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+h1 { view-transition-name: project-design-system; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .board-svg use,
+  .board-svg .word,
+  .board-svg .screen,
+  .draw path {
+    transition: none !important;
+    animation: none !important;
+  }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
