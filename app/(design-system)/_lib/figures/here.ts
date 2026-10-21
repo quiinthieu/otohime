@@ -5,7 +5,7 @@
 // name a --paper and an --ink, and how many creams they choose. Every number
 // is SIBLINGS', so the card and the pins cannot disagree. The scraps carry
 // their group, so the page can mark each one data-sheet="<group>".
-import { inkLine, inkRect, type InkPath } from "../ink.ts";
+import { INK, inkLine, inkRect, type InkPath } from "../ink.ts";
 import { label, SMALL, WIDTH, type Figure } from "../kit.ts";
 import { CREAMS, INK_COUNT, PAPER_COUNT, SIBLINGS } from "../siblings.ts";
 
@@ -21,6 +21,13 @@ const HEIGHT = ROW.top + SIBLINGS.length * ROW.pitch + 52;
 
 export const NO_PAPER = "no paper";
 
+// One small decision box, w x h at x, y, as a closed path in ink.
+const box = (x: number, y: number): InkPath => ({
+  d: `M${x} ${y} L${x + BOX.w} ${y} L${x + BOX.w} ${y + BOX.h} L${x} ${y + BOX.h} Z`,
+  stroke: INK,
+  strokeWidth: 1.2,
+});
+
 export function hereFigure(): HereFigure {
   const paths: InkPath[] = [];
   const scraps: Scrap[] = [];
@@ -35,9 +42,9 @@ export function hereFigure(): HereFigure {
       paths.push(...inkRect(scrap.x, scrap.y, scrap.w, scrap.h, o("scrap")));
       paths.push(...inkLine(scrap.x + 6, scrap.y + 5, scrap.x + scrap.w - 6, scrap.y + scrap.h - 5, { ...o("cross"), strokeWidth: 1.4 }));
     }
-    for (let k = 0; k < s.decisions; k++) {
-      paths.push(...inkRect(BOX.x + k * BOX.pitch, mid - BOX.h / 2, BOX.w, BOX.h, { ...o(`box${k}`), strokeWidth: 1.2 }));
-    }
+    // The decision boxes are plain, not inked: 150-odd rough rects would weigh
+    // 76 KB of path data, and the page ships every path twice (HTML and payload).
+    for (let k = 0; k < s.decisions; k++) paths.push(box(BOX.x + k * BOX.pitch, mid - BOX.h / 2));
     const baseline = mid + 6;
     return [label(NAME_X, baseline, s.group, { size: SMALL }), label(HEX_X, baseline, s.paper ?? NO_PAPER, { size: SMALL })];
   });

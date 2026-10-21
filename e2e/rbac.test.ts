@@ -80,7 +80,7 @@ test("the front page is an entrance, without the sidebar", async () => {
   assert.match(await (await page("/work")).text(), /aria-label="Main"/);
 });
 
-test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor, Planisphere, Barometer, Gazette and Structures", async () => {
+test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor, Planisphere, Barometer, Gazette, Structures and Design system", async () => {
   const html = await (await page("/projects")).text();
   assert.match(html, /aria-label="Main"/);
   assert.match(html, /href="\/shore"/);
@@ -94,6 +94,7 @@ test("the projects page sits in the sidebar and lists Shore, Capsule, Orrery, El
   assert.match(html, /href="\/barometer"/);
   assert.match(html, /href="\/articles"/);
   assert.match(html, /href="\/structures"/);
+  assert.match(html, /href="\/design-system"/);
 });
 
 test("Shore is its own page, without the site's sidebar", async () => {
@@ -184,6 +185,15 @@ test("Structures is its own page, without the site's sidebar", async () => {
   assert.doesNotMatch(html, /aria-label="Main"/);
   assert.match(html, /href="\/projects"/);
   assert.equal(html.match(/data-page="/g)?.length, 8);
+});
+
+test("Design system is its own page, without the site's sidebar", async () => {
+  const res = await page("/design-system");
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  assert.doesNotMatch(html, /aria-label="Main"/);
+  assert.match(html, /href="\/projects"/);
+  assert.equal(html.match(/data-figure="/g)?.length, 4);
 });
 
 test("a plain user can't list users or raise their own role", async () => {

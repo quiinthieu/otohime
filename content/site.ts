@@ -98,6 +98,7 @@ export const site = {
     { title: "Barometer", note: "A brass weather station for your city, read every quarter hour.", href: "/barometer", status: "live", colour: "yellow" },
     { title: "Gazette", note: "A small newspaper: six short pieces on everyday science, each with a drawn infographic.", href: "/articles", status: "live", colour: "pink" },
     { title: "Structures", note: "Eight ways to keep things, drawn by hand so you can poke them.", href: "/structures", status: "live", colour: "mint" },
+    { title: "Design system", note: "A box of decisions made once, drawn so you can turn the knobs.", href: "/design-system", status: "live", colour: "coral" },
   ] as Project[],
   // TODO(otohime)
   music: "Songs on repeat, one channel each. Tune in.",
