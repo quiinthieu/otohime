@@ -12,7 +12,17 @@ test("the console menu is the public pages minus Home, in order", () => {
     CONSOLE_MENU,
     PUBLIC_PAGES.filter((page) => page.href !== "/"),
   );
-  assert.equal(CONSOLE_MENU.length, 5);
+  assert.equal(CONSOLE_MENU.length, 6);
+});
+
+test("/sketches is the seventh public page", () => {
+  assert.equal(PUBLIC_PAGES[6].href, "/sketches");
+});
+
+test("the sketches collection is in site", () => {
+  assert.equal(site.sketches.length, 12);
+  assert.equal(typeof site.sketchesIntro, "string");
+  assert.ok(site.sketchesIntro.length > 0);
 });
 
 test("every console menu line fits inside the LCD", () => {

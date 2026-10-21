@@ -13,6 +13,7 @@ export type Game = { title: string; note: string; colour: Swatch };
 export type Line = { label: string; handle: string; href: string; code: string; colour: Swatch };
 // video: the song's YouTube upload, the id after watch?v= in its link.
 export type Song = { title: string; artist: string; note: string; colour: Swatch; video: string };
+export type Sketch = { src: string; title: string; kind: "place" | "object"; note: string };
 
 // The words on the public pages, in one place. A first draft: everything
 // marked TODO(otohime) is invented and waits for the real thing.
@@ -130,4 +131,20 @@ export const site = {
       video: "vR49dHUwMUA",
     },
   ] satisfies Song[],
+  // TODO(otohime)
+  sketchesIntro: "Twelve studies from one sketchbook. Places first, then the things that sit still.",
+  sketches: [
+    { src: "/sketches/01-cove.jpg", title: "Cove", kind: "place", note: "A path that ends where the light does." },
+    { src: "/sketches/02-alley.jpg", title: "Alley", kind: "place", note: "One lantern, and the street does the rest." },
+    { src: "/sketches/03-lake.jpg", title: "Lake", kind: "place", note: "The water kept the mountain's outline." },
+    { src: "/sketches/04-terraces.jpg", title: "Terraces", kind: "place", note: "After the rain, every step held a sky." },
+    { src: "/sketches/05-cafe.jpg", title: "Cafe street", kind: "place", note: "Wet cobbles, one awning, nobody in a hurry." },
+    { src: "/sketches/06-canyon.jpg", title: "Canyon", kind: "place", note: "A thin line of water at the bottom." },
+    { src: "/sketches/07-cup.jpg", title: "Cup", kind: "object", note: "The chip is older than the tea." },
+    { src: "/sketches/08-key.jpg", title: "Key", kind: "object", note: "Left on the sill, with something green." },
+    { src: "/sketches/09-glasses.jpg", title: "Glasses", kind: "object", note: "Closed, on a page that can wait." },
+    { src: "/sketches/10-flower.jpg", title: "Jam jar", kind: "object", note: "One stem, in a jar that used to hold jam." },
+    { src: "/sketches/11-peach.jpg", title: "Peach", kind: "object", note: "Lunch, and the knife that came with it." },
+    { src: "/sketches/12-wallet.jpg", title: "Wallet", kind: "object", note: "A ticket still sticking out." },
+  ] satisfies Sketch[],
 };

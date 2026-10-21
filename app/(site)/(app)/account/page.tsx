@@ -22,7 +22,7 @@ export default async function AccountPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise grid gap-6">
-        <FigTitle n="08" hint={user.email}>
+        <FigTitle n="09" hint={user.email}>
           Account
         </FigTitle>
         <section className="card grid gap-4 p-5">

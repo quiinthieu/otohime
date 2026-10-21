@@ -35,7 +35,7 @@ export default async function UsersPage({ searchParams }: PageProps<"/admin/user
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <FigTitle n="09" hint={`${total} ${total === 1 ? "person" : "people"}${q ? ` matching “${q}”` : ""}`}>
+        <FigTitle n="10" hint={`${total} ${total === 1 ? "person" : "people"}${q ? ` matching “${q}”` : ""}`}>
           Users
         </FigTitle>
         <form role="search" className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-end">
