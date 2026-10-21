@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useSyncExternalStore, type CSSProperties } from "react";
-import { describe, KNOBS, PAPERS, SAY, SPOTS, turn, type Board, type Face, type Knob, type Part, type Pots, type Turn } from "../_lib/board.ts";
+import { describe, DRIFT, KNOBS, PAPERS, SAY, SPOTS, turn, type Board, type Face, type Knob, type Part, type Pots, type Turn } from "../_lib/board.ts";
 import { rule } from "../_lib/contrast.ts";
 import { scene, wordOf } from "../_lib/scenes.ts";
 import { DRESSES } from "../_lib/siblings.ts";
@@ -23,7 +23,13 @@ import { DRESSES } from "../_lib/siblings.ts";
 // A part's stamps as the server inked them: one body a corner (the closed
 // shape the fill goes on, under its <symbol> id), and the ink details and the
 // spot mark its three corners share.
-export type Stamp = { part: string; bodies: { id: string; d: string }[]; details: string; accent: string };
+export type Stamp = {
+  part: string;
+  bodies: { id: string; fill: string; d: string }[];
+  details: string;
+  accentFill: string;
+  accentStroke: string;
+};
 
 type State = { board: Board; say: string; hot: readonly Part[]; beat: number };
 type Event = { type: "turn"; turn: Turn } | { type: "cool"; beat: number };
@@ -87,6 +93,7 @@ function Drawing({ board, hot }: { board: Board; hot: ReadonlySet<Part> }) {
       ))}
       {s.parts.map((part) => {
         const l = wordOf(part);
+        const isButton = part.part === "button";
         return (
           <text
             key={`word-${part.part}`}
@@ -99,7 +106,9 @@ function Drawing({ board, hot }: { board: Board; hot: ReadonlySet<Part> }) {
             textAnchor={l.anchor}
             style={vars({
               transform: `translate(${l.x}px, ${l.y}px)`,
-              ...(on ? { "--part-ink": "var(--board-ink)", "--part-face": "var(--board-face)" } : { "--part-ink": part.stroke, "--part-face": stack(part.label.face), "--board-speed": `${part.speed}ms` }),
+              ...(on
+                ? { "--part-ink": isButton ? "var(--board-paper)" : "var(--board-ink)", "--part-face": "var(--board-face)" }
+                : { "--part-ink": isButton ? DRIFT.button.paper : part.stroke, "--part-face": stack(part.label.face), "--board-speed": `${part.speed}ms` }),
             })}
           >
             {l.text}
@@ -137,13 +146,15 @@ export function BoardApp({ stamps, initial }: { stamps: Stamp[]; initial: Board 
           {stamps.map((s) => (
             <g key={s.part} id={`marks-${s.part}`}>
               {s.details && <path d={s.details} fill="none" strokeWidth={1.4} strokeLinecap="round" />}
-              <path d={s.accent} strokeWidth={1} strokeLinejoin="round" />
+              {s.accentFill && <path d={s.accentFill} stroke="none" />}
+              {s.accentStroke && <path d={s.accentStroke} fill="none" strokeWidth={1} strokeLinejoin="round" />}
             </g>
           ))}
           {stamps.flatMap((s) =>
             s.bodies.map((b) => (
               <symbol key={b.id} id={b.id} overflow="visible">
-                <path d={b.d} fill="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" />
+                <path d={b.fill} fill="currentColor" stroke="none" />
+                <path d={b.d} fill="none" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" />
                 <use href={`#marks-${s.part}`} />
               </symbol>
             )),

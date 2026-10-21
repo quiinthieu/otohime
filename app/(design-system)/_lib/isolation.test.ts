@@ -205,6 +205,22 @@ test("only the server board inks the stamps, and the page, not the island, draws
   assert.match(readFileSync(join(ROOT, "app/(design-system)/design-system/page.tsx"), "utf8"), /export const ensureStatic = "navigation";/);
 });
 
+test("no <path> in the island's <defs> has both a fill and a rough stroke d", () => {
+  const text = readFileSync(ISLAND, "utf8");
+  const defsMatch = text.match(/<defs>([\s\S]*?)<\/defs>/);
+  assert.ok(defsMatch, "defs block found in board-app.tsx");
+  const paths = defsMatch[1].match(/<path[^>]*\/>/g) ?? [];
+  assert.ok(paths.length > 0, "paths found in defs");
+  for (const p of paths) {
+    if (/strokeWidth/.test(p)) {
+      assert.match(p, /fill="none"/, `stroke path must have fill="none": ${p}`);
+    }
+    if (/fill="currentColor"/.test(p)) {
+      assert.match(p, /stroke="none"/, `fill path must have stroke="none": ${p}`);
+    }
+  }
+});
+
 test("only layout.tsx reads process.env", () => {
   const readers = group.filter((f) => /\bprocess\.env\b/.test(readFileSync(f, "utf8")));
   for (const f of readers) assert.equal(relative(ROOT, f), "app/(design-system)/layout.tsx");

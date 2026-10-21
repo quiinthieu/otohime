@@ -12,7 +12,7 @@ import { boxPath, CORNER_RADIUS, inkStamps, radiusOf, STAMP_IDS, STAMP_SIZE, sta
 const WOBBLE = 4;
 
 // A changed value means the kit was redrawn. Update it only on purpose.
-const KIT_SHA256 = "7bf3396916bc1aaaa48fdc8d9f950a2a87ba19e2b86b00f19186c25c40e6b5fc";
+const KIT_SHA256 = "e001a12ab10925d4e49507b382c18ae82189ebd21dd691f8028c908c2ba2d6ab";
 
 const stamps = inkStamps();
 
@@ -28,13 +28,21 @@ test(`${PARTS.length * CORNERS.length} stamps: ${PARTS.length} parts by ${CORNER
 });
 
 for (const s of stamps) {
-  test(`${s.id}: an outline and an accent, every point within its size + ${WOBBLE}, about its own origin`, () => {
+  test(`${s.id}: a closed fill, outline and accent, every point within its size + ${WOBBLE}, about its own origin`, () => {
+    assert.ok(s.fill, "a fill");
+    assert.equal(s.fill.match(/M/g)?.length, 1, "exactly one M in fill");
+    assert.match(s.fill, /Z$/, "fill ends in Z");
     assert.ok(s.outline.length > 0, "an outline");
-    assert.ok(s.accent.length > 0, "an accent");
+    assert.ok(s.accentFill.length > 0, "an accent fill");
+    for (const af of s.accentFill) {
+      assert.equal(af.match(/M/g)?.length, 1, "exactly one M in accentFill");
+      assert.match(af, /Z$/, "accentFill ends in Z");
+    }
+    assert.ok(s.accentStroke.length > 0, "an accent stroke");
     const [left, top, right, bottom] = stampBounds(s.part);
     assert.equal(left, -right);
     assert.equal(top, -bottom);
-    for (const d of [...s.outline, ...s.accent]) {
+    for (const d of [s.fill, ...s.outline, ...s.accentFill, ...s.accentStroke]) {
       assert.match(d, /^M/);
       assert.doesNotMatch(d, /NaN|undefined|Infinity/);
       for (const [axis, v] of pathCoordinates(d)) {
@@ -49,10 +57,13 @@ test("a part's three stamps differ only in the corner: the same details and acce
   for (const part of PARTS) {
     const [sharp, soft, round] = CORNERS.map((c) => stamps.find((s) => s.part === part && s.corner === c)!);
     for (const other of [soft, round]) {
-      assert.deepEqual(other.accent, sharp.accent, `${part}: the accent`);
+      assert.deepEqual(other.accentFill, sharp.accentFill, `${part}: the accentFill`);
+      assert.deepEqual(other.accentStroke, sharp.accentStroke, `${part}: the accentStroke`);
       assert.equal(other.outline.length, sharp.outline.length, `${part}: the outline's paths`);
       assert.deepEqual(other.outline.slice(1), sharp.outline.slice(1), `${part}: the ink details`);
     }
+    assert.notEqual(sharp.fill, soft.fill, `${part}: sharp and soft fills`);
+    assert.notEqual(soft.fill, round.fill, `${part}: soft and round fills`);
     assert.notEqual(sharp.outline[0], soft.outline[0], `${part}: sharp and soft bodies`);
     assert.notEqual(soft.outline[0], round.outline[0], `${part}: soft and round bodies`);
   }

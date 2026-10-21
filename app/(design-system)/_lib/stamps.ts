@@ -15,9 +15,32 @@ import { radiusOf, STAMP_SIZE, stampId } from "./paper.ts";
 
 export { CORNER_RADIUS, radiusOf, STAMP_IDS, STAMP_SIZE, stampBounds, stampId } from "./paper.ts";
 
-export type Stamp = { id: string; part: Part; corner: Corner; outline: string[]; accent: string[] };
+export type Stamp = {
+  id: string;
+  part: Part;
+  corner: Corner;
+  fill: string;
+  outline: string[];
+  accentFill: string[];
+  accentStroke: string[];
+};
 
 const round = (n: number) => Math.round(n * 100) / 100;
+
+const KAPPA = 0.5522847498;
+
+/** A w x h rectangle at x, y as closed SVG path data. */
+export function rectPath(x: number, y: number, w: number, h: number): string {
+  const p = (px: number, py: number) => `${round(px)} ${round(py)}`;
+  return `M${p(x, y)} L${p(x + w, y)} L${p(x + w, y + h)} L${p(x, y + h)} Z`;
+}
+
+/** A circle centred at cx, cy with radius r as closed SVG path data. */
+export function circlePath(cx: number, cy: number, r: number): string {
+  const k = r * KAPPA;
+  const p = (px: number, py: number) => `${round(px)} ${round(py)}`;
+  return `M${p(cx, cy - r)} C${p(cx + k, cy - r)} ${p(cx + r, cy - k)} ${p(cx + r, cy)} C${p(cx + r, cy + k)} ${p(cx + k, cy + r)} ${p(cx, cy + r)} C${p(cx - k, cy + r)} ${p(cx - r, cy + k)} ${p(cx - r, cy)} C${p(cx - r, cy - k)} ${p(cx - k, cy - r)} ${p(cx, cy - r)} Z`;
+}
 
 /** A w x h box centred on the origin with corners of radius r, as SVG path data. */
 export function boxPath(w: number, h: number, r: number): string {
@@ -41,7 +64,7 @@ export function boxPath(w: number, h: number, r: number): string {
 
 // The ink details and the spot mark of each part, about its origin. Neither
 // reads the corner, so a part's three stamps share them exactly.
-function details(part: Part): { ink: InkPath[]; spot: InkPath[] } {
+function details(part: Part): { ink: InkPath[]; accentFill: string[]; accentStroke: InkPath[] } {
   const { w, h } = STAMP_SIZE[part];
   const o = (s: string) => ({ seed: `${part}:${s}` });
   const thin = (s: string) => ({ ...o(s), strokeWidth: 1.4 });
@@ -50,50 +73,92 @@ function details(part: Part): { ink: InkPath[]; spot: InkPath[] } {
       // a title underlined in spot, and two lines of body text
       return {
         ink: [...inkLine(-w / 2 + 16, 14, w / 2 - 90, 14, thin("line1")), ...inkLine(-w / 2 + 16, 28, w / 2 - 150, 28, thin("line2"))],
-        spot: inkRect(-w / 2 + 16, -4, 84, 5, o("underline")),
+        accentFill: [rectPath(-w / 2 + 16, -4, 84, 5)],
+        accentStroke: inkRect(-w / 2 + 16, -4, 84, 5, o("underline")),
       };
     case "bar":
       // a spot dot at the left, a three-line menu at the right
       return {
         ink: [-7, 0, 7].flatMap((y, k) => inkLine(w / 2 - 34, y, w / 2 - 14, y, thin(`menu${k}`))),
-        spot: inkCircle(-w / 2 + 18, 0, 6, o("dot")),
+        accentFill: [circlePath(-w / 2 + 18, 0, 6)],
+        accentStroke: inkCircle(-w / 2 + 18, 0, 6, o("dot")),
       };
     case "field":
       // a caret near the right end
-      return { ink: [], spot: inkRect(w / 2 - 24, -11, 3, 22, o("caret")) };
+      return {
+        ink: [],
+        accentFill: [rectPath(w / 2 - 24, -11, 3, 22)],
+        accentStroke: inkRect(w / 2 - 24, -11, 3, 22, o("caret")),
+      };
     case "ring":
       // a radio ring with its spot dot, the word to its right
-      return { ink: inkCircle(-16, 0, 11, thin("ring")), spot: inkCircle(-16, 0, 6, o("dot")) };
+      return {
+        ink: inkCircle(-16, 0, 11, thin("ring")),
+        accentFill: [circlePath(-16, 0, 6)],
+        accentStroke: inkCircle(-16, 0, 6, o("dot")),
+      };
     case "button":
       // a small arrowhead after the word
-      return { ink: [], spot: inkPath(`M${w / 2 - 30} -6 L${w / 2 - 18} 0 L${w / 2 - 30} 6 Z`, o("go")) };
+      {
+        const arrow = `M${round(w / 2 - 30)} -6 L${round(w / 2 - 18)} 0 L${round(w / 2 - 30)} 6 Z`;
+        return {
+          ink: [],
+          accentFill: [arrow],
+          accentStroke: inkPath(arrow, o("go")),
+        };
+      }
     case "ghost":
       // no fill of its own: a spot underline under the word
-      return { ink: [], spot: inkRect(-34, 13, 68, 4, o("underline")) };
+      return {
+        ink: [],
+        accentFill: [rectPath(-34, 13, 68, 4)],
+        accentStroke: inkRect(-34, 13, 68, 4, o("underline")),
+      };
     case "tag":
-      return { ink: [], spot: inkCircle(-w / 2 + 16, 0, 5, o("dot")) };
+      return {
+        ink: [],
+        accentFill: [circlePath(-w / 2 + 16, 0, 5)],
+        accentStroke: inkCircle(-w / 2 + 16, 0, 5, o("dot")),
+      };
     case "note":
       // a spot bar down its left edge
-      return { ink: [], spot: inkRect(-w / 2 + 10, -h / 2 + 10, 6, h - 20, o("bar")) };
+      return {
+        ink: [],
+        accentFill: [rectPath(-w / 2 + 10, -h / 2 + 10, 6, h - 20)],
+        accentStroke: inkRect(-w / 2 + 10, -h / 2 + 10, 6, h - 20, o("bar")),
+      };
     case "switch":
       // the knob, at the "on" end
-      return { ink: [], spot: inkCircle(16, 0, 10, o("knob")) };
+      return {
+        ink: [],
+        accentFill: [circlePath(16, 0, 10)],
+        accentStroke: inkCircle(16, 0, 10, o("knob")),
+      };
   }
 }
 
-function draw(part: Part, corner: Corner): { outline: InkPath[]; accent: InkPath[] } {
+function draw(part: Part, corner: Corner): { fill: string; outline: InkPath[]; accentFill: string[]; accentStroke: InkPath[] } {
   const { w, h } = STAMP_SIZE[part];
-  const { ink, spot } = details(part);
-  const body = inkPath(boxPath(w, h, radiusOf(part, corner)), { seed: `${part}:body` });
-  return { outline: [...body, ...ink], accent: spot };
+  const { ink, accentFill, accentStroke } = details(part);
+  const fill = boxPath(w, h, radiusOf(part, corner));
+  const body = inkPath(fill, { seed: `${part}:body` });
+  return { fill, outline: [...body, ...ink], accentFill, accentStroke };
 }
 
 /** All 27 stamps, part by part, corners sharp, soft, round. Pure: the same paths every call. */
 export function inkStamps(): Stamp[] {
   return PARTS.flatMap((part) =>
     CORNERS.map((corner) => {
-      const { outline, accent } = draw(part, corner);
-      return { id: stampId(part, corner), part, corner, outline: outline.map((p) => p.d), accent: accent.map((p) => p.d) };
+      const { fill, outline, accentFill, accentStroke } = draw(part, corner);
+      return {
+        id: stampId(part, corner),
+        part,
+        corner,
+        fill,
+        outline: outline.map((p) => p.d),
+        accentFill,
+        accentStroke: accentStroke.map((p) => p.d),
+      };
     }),
   );
 }

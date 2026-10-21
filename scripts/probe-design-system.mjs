@@ -7,10 +7,85 @@
 // sampling frames: deterministic on a shared runner.
 import { createRequire } from "node:module";
 import path from "node:path";
+import zlib from "node:zlib";
 
 const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
 const { chromium } = require("playwright");
 const AXE_PATH = require.resolve("axe-core/axe.min.js");
+
+function decodePng(buf) {
+  let offset = 8;
+  let width = 0;
+  let height = 0;
+  let colorType = 0;
+  const idats = [];
+  while (offset < buf.length) {
+    const len = buf.readUInt32BE(offset);
+    const type = buf.toString("ascii", offset + 4, offset + 8);
+    const data = buf.subarray(offset + 8, offset + 8 + len);
+    if (type === "IHDR") {
+      width = data.readUInt32BE(0);
+      height = data.readUInt32BE(4);
+      colorType = data[9];
+    } else if (type === "IDAT") {
+      idats.push(data);
+    } else if (type === "IEND") {
+      break;
+    }
+    offset += 12 + len;
+  }
+  const decompressed = zlib.inflateSync(Buffer.concat(idats));
+  const bpp = colorType === 6 ? 4 : colorType === 2 ? 3 : 4;
+  const out = Buffer.alloc(width * height * 4);
+  let srcOffset = 0;
+  for (let y = 0; y < height; y++) {
+    const filter = decompressed[srcOffset++];
+    const prevRow = y > 0 ? (y - 1) * width * 4 : null;
+    const curRow = y * width * 4;
+    for (let x = 0; x < width; x++) {
+      for (let c = 0; c < bpp; c++) {
+        let val = decompressed[srcOffset++];
+        const left = x > 0 ? out[curRow + (x - 1) * 4 + (c < 3 ? c : 3)] : 0;
+        const up = prevRow !== null ? out[prevRow + x * 4 + (c < 3 ? c : 3)] : 0;
+        const upLeft = x > 0 && prevRow !== null ? out[prevRow + (x - 1) * 4 + (c < 3 ? c : 3)] : 0;
+        if (filter === 1) val = (val + left) & 0xff;
+        else if (filter === 2) val = (val + up) & 0xff;
+        else if (filter === 3) val = (val + Math.floor((left + up) / 2)) & 0xff;
+        else if (filter === 4) {
+          const p = left + up - upLeft;
+          const pa = Math.abs(p - left);
+          const pb = Math.abs(p - up);
+          const pc = Math.abs(p - upLeft);
+          const pr = pa <= pb && pa <= pc ? left : pb <= pc ? up : upLeft;
+          val = (val + pr) & 0xff;
+        }
+        out[curRow + x * 4 + (c < 3 ? c : 3)] = val;
+      }
+      if (bpp === 3) out[curRow + x * 4 + 3] = 255;
+    }
+  }
+  return { width, height, data: out };
+}
+
+function getPixel(img, x, y) {
+  const idx = (y * img.width + x) * 4;
+  return [img.data[idx], img.data[idx + 1], img.data[idx + 2]];
+}
+
+function pixelMatches(rgb, target, tol = 20) {
+  return Math.abs(rgb[0] - target[0]) <= tol && Math.abs(rgb[1] - target[1]) <= tol && Math.abs(rgb[2] - target[2]) <= tol;
+}
+
+function fractionMatching(img, target, tol = 20) {
+  let matched = 0;
+  const total = img.width * img.height;
+  for (let i = 0; i < img.data.length; i += 4) {
+    if (Math.abs(img.data[i] - target[0]) <= tol && Math.abs(img.data[i + 1] - target[1]) <= tol && Math.abs(img.data[i + 2] - target[2]) <= tol) {
+      matched++;
+    }
+  }
+  return total > 0 ? matched / total : 0;
+}
 
 const BASE_URL = process.env.BASE_URL;
 const URL = `${BASE_URL}/design-system`;
@@ -126,6 +201,12 @@ async function board(browser, viewport, size) {
     check(`${size} Spot coral: so does the bar's, a part nobody touched`, bar === CORAL, bar);
     check(`${size} Spot coral: the drawing's label names coral`, /\bcoral\b/.test((await label(page)) ?? ""), (await label(page)) ?? "none");
     check(`${size} Spot coral: the rule line fails`, /Spot on paper 2\.8 to 1, fails\./.test(await ruleLine(page)), await ruleLine(page));
+    const buttonShot = decodePng(await root(page).locator('use[data-part="button"]').screenshot());
+    const bPx = getPixel(buttonShot, Math.floor(buttonShot.width * 0.18), Math.floor(buttonShot.height * 0.5));
+    check(`${size} Spot coral: the button body centre-left is coral`, pixelMatches(bPx, [239, 106, 76]), `rgb(${bPx.join(", ")})`);
+    const noteShot = decodePng(await root(page).locator('use[data-part="note"]').screenshot());
+    const noteRatio = fractionMatching(noteShot, [239, 106, 76]);
+    check(`${size} Spot coral: at least 0.2% of the note's pixels are coral`, noteRatio >= 0.002, `${(noteRatio * 100).toFixed(2)}%`);
 
     // No system: a knob moves nothing.
     await turn(noSystem(page));
@@ -159,6 +240,13 @@ async function board(browser, viewport, size) {
     await turn(radio(page, "spot", "yellow"));
     const yellow = await ruleLine(page);
     check(`${size} Paper night, Spot yellow: the rule line passes`, /Spot on paper 10\.2 to 1, passes\./.test(yellow) && !/fails/.test(yellow), yellow);
+    const yellowButtonShot = decodePng(await root(page).locator('use[data-part="button"]').screenshot());
+    const ybPx = getPixel(yellowButtonShot, Math.floor(yellowButtonShot.width * 0.18), Math.floor(yellowButtonShot.height * 0.5));
+    check(`${size} Paper night, Spot yellow: the button body centre-left is yellow`, pixelMatches(ybPx, [244, 184, 41]), `rgb(${ybPx.join(", ")})`);
+
+    await turn(radio(page, "paper", "white"));
+    const buttonWordWhite = await computed(page, 'text[data-word="button"]', "fill");
+    check(`${size} Paper white: the button's word computes to rgb(255, 255, 255)`, buttonWordWhite === "rgb(255, 255, 255)", buttonWordWhite);
 
     // Dress as the Gazette: its own paper.
     await root(page).locator('button[data-dress="articles"]').click();

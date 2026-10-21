@@ -22,10 +22,13 @@ function kit(): Stamp[] {
   const out = new Map<string, Stamp>();
   for (const s of inkStamps()) {
     const details = s.outline.slice(1).map(whole).join(" ");
-    const accent = s.accent.map(whole).join(" ");
-    const part = out.get(s.part) ?? { part: s.part, bodies: [], details, accent };
-    if (part.details !== details || part.accent !== accent) throw new Error(`${s.id}: a corner changed more than the body`);
-    part.bodies.push({ id: s.id, d: whole(s.outline[0]) });
+    const accentFill = s.accentFill.map(whole).join(" ");
+    const accentStroke = s.accentStroke.map(whole).join(" ");
+    const part = out.get(s.part) ?? { part: s.part, bodies: [], details, accentFill, accentStroke };
+    if (part.details !== details || part.accentFill !== accentFill || part.accentStroke !== accentStroke) {
+      throw new Error(`${s.id}: a corner changed more than the body`);
+    }
+    part.bodies.push({ id: s.id, fill: whole(s.fill), d: whole(s.outline[0]) });
     out.set(s.part, part);
   }
   return [...out.values()];
