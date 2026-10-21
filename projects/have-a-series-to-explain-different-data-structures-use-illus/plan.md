@@ -212,7 +212,8 @@ lib/motion.test.ts · scripts/probe-motion.mjs · e2e/rbac.test.ts · package.js
 ### 2. The ink: stamps, scenes, In life drawings and the costs card
 
 - **Role:** software_engineer, `qa: skip`. Depends on 1. Only
-  `app/(structures)/_lib/`. No route: visitors see no change.
+  `app/(structures)/_lib/` and one README sentence. No route: visitors see
+  no change.
 - **Problem:** The machines have no pictures. Each state needs a drawing
   that fits a phone without overlaps, drawn in hand ink that must stay on the
   server, plus the eight everyday drawings and a costs infographic whose
@@ -255,7 +256,9 @@ lib/motion.test.ts · scripts/probe-motion.mjs · e2e/rbac.test.ts · package.js
      card equals `costs()`'s; same output twice); `ink.test.ts` as the
      Gazette's with `SEED = 214`. `isolation.test.ts`: only `ink.ts` and
      `stamps.ts` import `roughjs`, and `scenes.ts` imports neither.
-- **Interfaces:** `app/(structures)/_lib/`.
+  8. README: extend the Structures sentence in the `npm test` paragraph to
+     name the ink, stamp, scene, life and costs tests.
+- **Interfaces:** `app/(structures)/_lib/`; `README.md`.
 - **Non-goals:** the route, the island and the CSS (task 3); animation;
   changing any reducer's behaviour (a layout need that would is raised as a
   decision, not done).
