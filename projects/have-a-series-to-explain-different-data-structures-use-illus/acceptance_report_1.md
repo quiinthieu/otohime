@@ -34,7 +34,7 @@ cited_sha: fa501d665456c83e3d6712b4857807ab68659e92
 
 ## Deployed sha and identity
 
-- **Deployed:** `fa501d665456c83e3d6712b4857807ab68659e92`, read from `<meta name="build-sha">` on https://otohime.dev/ and /structures on 2026-10-21T07:4xZ. It is t-1222's delivery sha and contains t-1220 (db59176) and t-1221 (045f87c), which have no deployable surface of their own: the whole plan is one Vercel deployment of otohime.dev.
+- **Deployed:** `fa501d665456c83e3d6712b4857807ab68659e92`, read from `<meta name="build-sha">` on https://otohime.dev/ and /structures on 2026-10-21T07:4xZ. By 08:00Z the meta on `/`, `/projects` and `/structures` read `62eb0d71d7c67892d6d78b6544cd2d2eb2e0dcb3`, this report's own commit, which adds only this Markdown on top of fa501d6 (`git merge-base --is-ancestor` ok); the re-walk below ran against it. It is t-1222's delivery sha and contains t-1220 (db59176) and t-1221 (045f87c), which have no deployable surface of their own: the whole plan is one Vercel deployment of otohime.dev.
 - **Author:** `git log` shows every plan commit (db59176, 045f87c, fa501d6, 4b06a5f) authored and committed by `Otohime <quiinthieu@gmail.com>` with no Co-Authored-By trailer. No author.txt came with the delivery evidence; the identity is read from git.
 - **Logs:** otohime.dev is a static Vercel deployment and this lease holds no Vercel or GitHub credentials, so the browser's page and console errors across every page walked stand in for service logs: none.
 
@@ -46,3 +46,26 @@ Playwright 1.64 (headless Chromium shell) from a scratch prefix in `/tmp/acc214`
 
 - The walk-structures self-check `the rough.js pattern matches rough.js` needs `node_modules` even with `BASE_URL`, so a fresh checkout without `npm ci` reports 194/1. Cosmetic, same family as the QA's `linkednonelist` nit.
 - Advisory questions on the plan: none open.
+
+## Re-walk after the run was relaunched (08:00Z to 08:1xZ, this lease)
+
+The run's first session submitted the report above and pushed it, then ended
+without closing the run. The second session walked production again, now at
+build-sha `62eb0d7`, from a fresh `npm ci` and a copy of `walk.mjs` in
+`/tmp/acc214b` (the JS-off fieldset check now reads `fieldset.disabled` from
+the DOM). Everything held:
+
+| Starting state | Action | Observable result | Evidence |
+| --- | --- | --- | --- |
+| otohime.dev, 1366x768 and 390x844, light | `/projects` → Structures → index → stack → Push 9, Pop, five pushes and a push on a full pile → Next → queue Join 4, Leave → `← All pages` → graph Ripple from A → `/structures/nope` | Same results as the table above: mint dot `#93d3b0` once; eight rows in order with drawings and dots; "9 goes on top." after 524 ms desk / 719 ms phone with 2 elements lit mid-move, "Counted: 1 step", trace of 2 beats; Pop drops the 9; "The pile has 7 plates and is full, so 42 would overflow it." with the drawing unchanged; the queue's Join and Leave count 2 steps each; the ripple counts 8 and the card shows 8; the 404 says "Not in this series." | `/tmp/acc214b/mywalk.log`: 78 ok, 0 failed; `shots/desk-02-index.png`, `phone-04-stack-after-push.png` read by eye |
+| 320x640 | `/structures`, `/structures/stack`, `/structures/heap` | `scrollWidth` 320 on all three | `mywalk.log` |
+| JS off, both viewports | `/structures/heap`; click Next | `fieldset.disabled === true` and the input `:disabled`; 5-step trace; "The smallest, 1, is out in 3 steps."; the row 3 4 8 5; Next reaches the graph | `mywalk.log` |
+| dark, reduced motion, keyboard only | `/structures/binary-search-tree`: type 6, Enter; Step mode Find 7, Next step twice | paper `rgb(22, 21, 19)`; In life paths `stroke-dashoffset: 0`, `animation: none`; "Found 6 in 3 steps." in 3 ms; the trace grows 1 → 2 → 3 | `mywalk.log` |
+| console, every page above | | 0 page errors, 0 console errors apart from Chrome's resource-404 line on the 404 page | `mywalk.log` |
+| the plan's Acceptance lines, `BASE_URL=https://otohime.dev` | `walk-structures.sh` with `EXPECT_SHA=62eb0d7…`; `probe-structures.sh`; `probe-motion.sh` | `walk: 195 ok, 0 failed`; `probe: 62 ok, 0 failed` (Find 6 ≥ 1,000 ms with motion, ≤ 250 ms reduced, axe clean on `/structures` and `/structures/heap` at both sizes, light and dark); `probe: 486 ok, 0 failed` | `/tmp/acc214b/walk.log`, `probe.log`, `motion.log` |
+
+Identity, re-read from `git log fa501d6~3..HEAD`: every commit (db59176, 045f87c,
+fa501d6, 4b06a5f, 62eb0d7) has author and committer `Otohime <quiinthieu@gmail.com>`
+and zero `Co-Authored-By` lines. This lease has no GitHub or Vercel login
+(`gh auth status`: not logged in), so the deploy is judged by the build-sha
+meta the site serves.
