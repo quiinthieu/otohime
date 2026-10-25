@@ -63,6 +63,8 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+      # public/ask-index.json is built from content/site.ts and the Gazette; a content edit must regenerate it.
+      - run: npm run ask:check
       - name: Migrations match db/schema.ts
         run: |
           npx drizzle-kit check
