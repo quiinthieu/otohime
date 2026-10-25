@@ -1,9 +1,9 @@
 // Ask the console, offline: a pure answerer over public/ask-index.json, which
 // scripts/ask-index.ts builds from content/site.ts and the Gazette. No network,
 // no model. It ranks passages with BM25, forgives one typo in a long word,
-// answers a few stock questions by rule, and says NO MATCH when nothing scores.
-// Every reply line is a passage's text or one of TEMPLATES, so the console can
-// only ever repeat the site.
+// answers a few stock questions by rule with canned answers that cite their
+// page, and says NO MATCH when nothing scores. Every reply line is a passage's
+// text or one of TEMPLATES, so the console can only ever repeat the site.
 
 export type PassageKind = "bio" | "now" | "note" | "stack" | "work" | "page" | "game" | "project" | "article" | "line";
 export type Passage = { id: string; title: string; href: string; kind: PassageKind; text: string; tokens: string[] };
@@ -11,7 +11,8 @@ export type AskIndex = { version: 1; passages: Passage[] };
 
 export type Hit = { passage: Passage; score: number };
 export type Source = { title: string; href: string };
-export type Reply = { intent: "bio" | "now" | "projects" | "contact" | "search" | "none"; lines: string[]; sources: Source[] };
+export type StockIntent = "contact" | "now" | "projects" | "bio" | "work" | "notes";
+export type Reply = { intent: StockIntent | "search" | "none"; lines: string[]; sources: Source[] };
 
 // The only words the console says on its own.
 export const TEMPLATES = {
@@ -21,6 +22,8 @@ export const TEMPLATES = {
   now: "NOW:",
   projects: "PROJECTS:",
   contact: "LINES OPEN:",
+  work: "WORK:",
+  notes: "NOTES:",
   found: "FOUND:",
 } as const;
 
@@ -149,11 +152,29 @@ export function search(index: AskIndex, query: string): Hit[] {
   return hits.sort((a, b) => b.score - a.score);
 }
 
-const INTENTS: { intent: "contact" | "now" | "projects" | "bio"; trigger: RegExp; allowed: Set<string> }[] = [
-  { intent: "contact", trigger: /\b(?:contact|email|reach|message|dm)\b/, allowed: new Set(["contact", "email", "reach", "message", "dm", "get", "touch"]) },
-  { intent: "now", trigger: /\b(?:now|playing|currently)\b/, allowed: new Set(["now", "play", "currently", "right", "day"]) },
-  { intent: "projects", trigger: /\bprojects?\b/, allowed: new Set(["project", "list", "built", "build", "made", "make", "all"]) },
-  { intent: "bio", trigger: /\b(?:who|do)\b/, allowed: new Set(["otohime", "job", "yourself", "living"]) },
+// The stock questions: a trigger word, and nothing else in the question but allowed words. Each canned answer
+// is its head template over every passage of its kinds, and cites the page those passages live on: the
+// first passage's page, each passage's own page, or a named page.
+type Cite = "first" | "each" | Source;
+const INTENTS: { intent: StockIntent; trigger: RegExp; allowed: Set<string>; kinds: PassageKind[]; cite: Cite }[] = [
+  { intent: "contact", trigger: /\b(?:contact|email|reach|message|dm)\b/, allowed: new Set(["contact", "email", "reach", "message", "dm", "get", "touch"]), kinds: ["line"], cite: "each" },
+  { intent: "now", trigger: /\b(?:now|playing|currently)\b/, allowed: new Set(["now", "play", "currently", "right", "day"]), kinds: ["now"], cite: "first" },
+  { intent: "projects", trigger: /\bprojects?\b/, allowed: new Set(["project", "list", "built", "build", "made", "make", "all"]), kinds: ["project"], cite: "each" },
+  { intent: "bio", trigger: /\b(?:who|do)\b/, allowed: new Set(["otohime", "job", "yourself", "living"]), kinds: ["bio"], cite: "first" },
+  {
+    intent: "work",
+    trigger: /\b(?:work|stack|tools?|tech)\b/,
+    allowed: new Set(["work", "stack", "tool", "tech", "use", "data", "engineer", "day"]),
+    kinds: ["work", "stack"],
+    cite: "first",
+  },
+  {
+    intent: "notes",
+    trigger: /\b(?:notes?|write|writing|written|wrote)\b/,
+    allowed: new Set(["note", "write", "writ", "written", "wrote", "read", "list", "all", "latest"]),
+    kinds: ["note"],
+    cite: { title: "Notes", href: "/notes" },
+  },
 ];
 
 const sourcesOf = (passages: Passage[]): Source[] => {
@@ -161,22 +182,24 @@ const sourcesOf = (passages: Passage[]): Source[] => {
   return passages.flatMap((p) => (seen.has(p.href) ? [] : (seen.add(p.href), [{ title: p.title, href: p.href }])));
 };
 
-function byKind(index: AskIndex, kind: PassageKind): Passage[] {
-  return index.passages.filter((p) => p.kind === kind);
+function byKinds(index: AskIndex, kinds: PassageKind[]): Passage[] {
+  return index.passages.filter((p) => kinds.includes(p.kind));
+}
+
+function cited(passages: Passage[], cite: Cite): Source[] {
+  if (cite === "each") return sourcesOf(passages);
+  if (cite === "first") return sourcesOf(passages.slice(0, 1));
+  return [cite];
 }
 
 export function answer(index: AskIndex, query: string): Reply {
   const raw = words(query).join(" ");
   const content = tokenize(query);
-  for (const { intent, trigger, allowed } of INTENTS) {
+  for (const { intent, trigger, allowed, kinds, cite } of INTENTS) {
     if (!trigger.test(raw) || !content.every((t) => allowed.has(t))) continue;
-    const kind = ({ contact: "line", now: "now", projects: "project", bio: "bio" } as const)[intent];
-    const passages = byKind(index, kind);
+    const passages = byKinds(index, kinds);
     if (passages.length === 0) continue;
-    const head = TEMPLATES[intent];
-    // Projects and lines all link out; the bio and now lines all live on the home page.
-    const sources = intent === "projects" || intent === "contact" ? sourcesOf(passages) : sourcesOf(passages.slice(0, 1));
-    return { intent, lines: [head, ...passages.map((p) => p.text)], sources };
+    return { intent, lines: [TEMPLATES[intent], ...passages.map((p) => p.text)], sources: cited(passages, cite) };
   }
   const hits = search(index, query);
   if (hits.length === 0 || hits[0].score < SCORE_FLOOR) return { intent: "none", lines: [TEMPLATES.noMatch, TEMPLATES.hint], sources: [] };

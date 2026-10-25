@@ -3,7 +3,8 @@
 // at most 60 words, each with the page it came from. It lives in scripts/
 // because nothing in lib/ or components/ may import the Gazette.
 //   npm run ask:index   write the index
-//   npm run ask:check   exit 1 if the committed index differs from a fresh build
+//   npm run ask:check   exit 1 if the committed index differs from a fresh build or
+//                       does not cover Work, Projects and Notes; prints the coverage
 // --file=<path> reads or writes another file (the tests check a tampered copy).
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -74,6 +75,24 @@ export function buildIndex(): AskIndex {
   return { version: 1, passages };
 }
 
+// The pages Ask must be able to answer from: at least one passage on the page itself, and for Projects at
+// least one project too (a project's passage links to the project, not to /projects).
+export const REQUIRED_SOURCES: { name: string; href: string; items?: PassageKind }[] = [
+  { name: "Work", href: "/work" },
+  { name: "Projects", href: "/projects", items: "project" },
+  { name: "Notes", href: "/notes" },
+];
+
+export type Coverage = { name: string; href: string; passages: number; ok: boolean };
+
+export function coverage(index: AskIndex): Coverage[] {
+  return REQUIRED_SOURCES.map(({ name, href, items }) => {
+    const onPage = index.passages.filter((p) => p.href === href).length;
+    const itemCount = items ? index.passages.filter((p) => p.kind === items && p.href !== href).length : 0;
+    return { name, href, passages: onPage + itemCount, ok: onPage > 0 && (!items || index.passages.some((p) => p.kind === items)) };
+  });
+}
+
 // One passage per line, so a content change is a readable diff.
 export function serialize(index: AskIndex): string {
   return `{"version":${index.version},"passages":[\n${index.passages.map((p) => JSON.stringify(p)).join(",\n")}\n]}\n`;
@@ -91,6 +110,20 @@ function main(argv: string[]): number {
       console.error(`ask:check: ${file} is missing; run npm run ask:index`);
       return 1;
     }
+    let parsed: AskIndex;
+    try {
+      parsed = JSON.parse(committed);
+    } catch {
+      console.error(`ask:check: ${file} is not JSON; run npm run ask:index`);
+      return 1;
+    }
+    const covered = coverage(parsed);
+    const missing = covered.filter((c) => !c.ok);
+    if (missing.length > 0) {
+      console.error(`ask:check: ${file} does not cover ${missing.map((c) => `${c.name} (${c.href})`).join(", ")}`);
+      return 1;
+    }
+    console.log(`ask:check: covers ${covered.map((c) => `${c.name} ${c.href} (${c.passages} passages)`).join(", ")}`);
     if (committed !== fresh) {
       console.error(`ask:check: ${file} is stale; run npm run ask:index and commit it`);
       return 1;

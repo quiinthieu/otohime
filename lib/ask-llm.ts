@@ -12,7 +12,8 @@ import { answer, search, type AskIndex, type Passage, type Reply, type Source } 
 type CreateParams = Anthropic.Beta.Messages.MessageCreateParamsNonStreaming;
 type Message = Anthropic.Beta.Messages.BetaMessage;
 
-export const MODEL = "claude-opus-5-5";
+// Haiku: a visitor oracle answering from six short passages needs a cheap, fast model, not Opus.
+export const MODEL = "claude-haiku-5-5";
 export const MAX_PASSAGES = 6;
 export const ASK_LIMITS = { hour: 10, day: 150 } as const;
 export const MAX_BODY_BYTES = 1024;
@@ -74,7 +75,8 @@ export function topPassages(index: AskIndex, question: string): Passage[] {
     .map((h) => h.passage);
 }
 
-// The whole request: no sampling knobs and no cache_control, by design.
+// The whole request: no sampling knobs and no cache_control, by design. No `fallbacks` either: Haiku has
+// no server-side fallback, and a refusal already prints the offline answer.
 export function buildPrompt(question: string, passages: Passage[]): CreateParams {
   const docs = passages
     .map((p) => `<passage id="${escapeXml(p.id)}" title="${escapeXml(p.title)}">${escapeXml(p.text)}</passage>`)
@@ -82,8 +84,6 @@ export function buildPrompt(question: string, passages: Passage[]): CreateParams
   return {
     model: MODEL,
     max_tokens: MAX_TOKENS,
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default",
     output_config: { effort: "low", format: { type: "json_schema", schema: ANSWER_SCHEMA } },
     system: SYSTEM,
     messages: [
