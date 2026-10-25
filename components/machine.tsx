@@ -2,7 +2,18 @@
 
 import { SwatchPicker } from "@/components/figure-playground";
 import { Inked, swatches, type Swatch } from "@/components/figures";
-import { useEffect, useId, useRef, useState, type ComponentProps, type RefObject } from "react";
+import { site } from "@/content/site";
+import { boilOwner, HANDS, INK, ink, type Hand } from "@/lib/ink-modes";
+import {
+  useEffect,
+  useId,
+  useReducer,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ComponentProps,
+  type RefObject,
+} from "react";
 
 // Frames on twos: 12 a second, like hand-drawn animation. Pages hidden by
 // <Activity> run effect cleanups, so nothing ticks off screen.
@@ -72,14 +83,64 @@ function useTilt(ref: RefObject<HTMLDivElement | null>, enabled: boolean) {
   }, [ref, enabled]);
 }
 
+// Boiling lines: the figure's strokes re-roll six times a second on the 12 fps
+// clock, while its Boil chip is pressed. One figure on the page boils at a
+// time; pressing another hands it over. It holds off while the figure is
+// scrolled away or the page is hidden, lets go when the figure unmounts (or
+// <Activity> hides its page), and is never on under reduced motion: a live
+// switch to it lets go too. Hand and Re-roll still work without it.
+const boiling = boilOwner();
+const REDUCED = "(prefers-reduced-motion: reduce)";
+const onReducedChange = (listener: () => void) => {
+  const query = matchMedia(REDUCED);
+  query.addEventListener("change", listener);
+  return () => query.removeEventListener("change", listener);
+};
+
+function useBoil(ref: RefObject<HTMLDivElement | null>, id: string) {
+  const owned = useSyncExternalStore(boiling.subscribe, () => boiling.get() === id, () => false);
+  const reduced = useSyncExternalStore(onReducedChange, () => matchMedia(REDUCED).matches, () => false);
+  // nothing boils until the observer has seen the figure on screen
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    if (reduced) boiling.release(id);
+  }, [reduced, id]);
+  useEffect(() => () => boiling.release(id), [id]);
+  useEffect(() => {
+    const el = ref.current;
+    if (!owned || !el) return;
+    let onscreen = true;
+    const update = () => setSeen(onscreen && !document.hidden);
+    const view = new IntersectionObserver(([entry]) => {
+      onscreen = entry.isIntersecting;
+      update();
+    });
+    view.observe(el);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      view.disconnect();
+      document.removeEventListener("visibilitychange", update);
+      setSeen(false);
+    };
+  }, [ref, owned]);
+  const toggle = () => {
+    if (!reduced) boiling.toggle(id);
+  };
+  return { owned, reduced, running: owned && !reduced && seen, toggle };
+}
+
+// The hand a machine is drawn in, for a figure that draws its own Inked.
+export type Pen = { hand: Hand; seed: number };
+
 // The figure is line work in an Inked, or, when it needs its own markup
 // (the television holds an iframe), whatever `figure` draws at a wobble.
 type Figure =
   | { viewBox: string; children: React.ReactNode; figure?: never }
-  | { figure: (wobble: number) => React.ReactNode; viewBox?: never; children?: never };
+  | { figure: (wobble: number, pen: Pen) => React.ReactNode; viewBox?: never; children?: never };
 
 // The reference's stage: controls on the left, the figure, readouts on the
-// right, then the wobble slider and the swatches under a hairline.
+// right, then the wobble slider, the hand, re-roll and boil, and the swatches
+// under a hairline.
 export function Machine({
   label,
   caption,
@@ -104,14 +165,20 @@ export function Machine({
 } & Figure) {
   const [fig, setFig] = useState(colour);
   const [wobble, setWobble] = useState(3.5);
+  const [state, dispatchInk] = useReducer(ink, INK);
+  const pen: Pen = { hand: state.hand, seed: state.seed };
   const wobbleId = useId();
+  const handName = useId();
+  const stillId = useId();
   const figureRef = useRef<HTMLDivElement>(null);
   useTilt(figureRef, tilt);
+  const boil = useBoil(figureRef, wobbleId);
+  useTick(boil.running, dispatchInk);
 
   const drawing = art.figure ? (
-    art.figure(wobble)
+    art.figure(wobble, pen)
   ) : (
-    <Inked viewBox={art.viewBox} wobble={wobble} className="block w-full">
+    <Inked viewBox={art.viewBox} wobble={wobble} hand={pen.hand} seed={pen.seed} className="block w-full">
       {art.children}
     </Inked>
   );
@@ -121,6 +188,9 @@ export function Machine({
       aria-label={label}
       className="machine"
       style={{ "--fig": swatches[fig] } as React.CSSProperties}
+      data-hand={pen.hand}
+      data-seed={pen.seed}
+      data-boil={boil.running ? "on" : boil.owned ? "held" : undefined}
     >
       <div className="machine-stage">
         <div className="machine-controls">
@@ -150,6 +220,46 @@ export function Machine({
             value={wobble}
             onChange={(event) => setWobble(Number(event.target.value))}
           />
+        </div>
+        <div className="machine-pen">
+          <fieldset>
+            <legend className="caption mb-2">{site.ink.hand}</legend>
+            <div className="flex flex-wrap gap-2">
+              {HANDS.map((hand) => (
+                <label key={hand} className="chip">
+                  <input
+                    type="radio"
+                    name={handName}
+                    value={hand}
+                    checked={pen.hand === hand}
+                    onChange={() => dispatchInk({ type: "hand", hand })}
+                    className="sr-only"
+                  />
+                  {site.ink.hands[hand]}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div className="flex gap-2">
+            <Chip aria-label={site.ink.rerollLabel} onClick={() => dispatchInk("reroll")}>
+              <span aria-hidden="true">↻{"\u00a0"}</span>
+              {site.ink.reroll}
+            </Chip>
+            <Chip
+              aria-label={site.ink.boilLabel}
+              aria-pressed={boil.owned && !boil.reduced}
+              aria-disabled={boil.reduced || undefined}
+              aria-describedby={boil.reduced ? stillId : undefined}
+              onClick={boil.toggle}
+            >
+              {site.ink.boil}
+            </Chip>
+          </div>
+          {boil.reduced ? (
+            <p id={stillId} className="sr-only">
+              {site.ink.still}
+            </p>
+          ) : null}
         </div>
         <SwatchPicker value={fig} onChange={setFig} />
       </div>

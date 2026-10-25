@@ -1,7 +1,7 @@
 "use client";
 
 import { Inked, swatches } from "@/components/figures";
-import { Chip, Machine, Stat } from "@/components/machine";
+import { Chip, Machine, Stat, type Pen } from "@/components/machine";
 import type { Song } from "@/content/site";
 import { useEffect, useRef, useState } from "react";
 
@@ -147,8 +147,8 @@ export function Television({ songs, playlist }: { songs: Song[]; playlist: strin
         colour="coral"
         busy={s.playing}
         readout={readout}
-        figure={(wobble) => (
-          <TVSet wobble={wobble} channel={s.index + 1} lamp={s.ready ? swatches[song.colour] : undefined}>
+        figure={(wobble, pen) => (
+          <TVSet wobble={wobble} pen={pen} channel={s.index + 1} lamp={s.ready ? swatches[song.colour] : undefined}>
             <div ref={host} className="size-full" />
           </TVSet>
         )}
@@ -198,18 +198,20 @@ const pct = (n: number, of: number) => `${(n / of) * 100}%`;
 // and the first knob points at the channel.
 function TVSet({
   wobble,
+  pen,
   channel,
   lamp,
   children,
 }: {
   wobble: number;
+  pen?: Pen;
   channel: number;
   lamp?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="relative mx-auto w-full max-w-[440px]">
-      <Inked viewBox={`0 0 ${SET.w} ${SET.h}`} wobble={wobble} className="block w-full">
+      <Inked viewBox={`0 0 ${SET.w} ${SET.h}`} wobble={wobble} {...pen} className="block w-full">
         <ellipse cx={200} cy={410} rx={180} ry={10} className="fig-shade" />
         <rect x={52} y={392} width={18} height={16} rx={3} className="fig-shaded" />
         <rect x={330} y={392} width={18} height={16} rx={3} className="fig-shaded" />

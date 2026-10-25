@@ -1,4 +1,5 @@
-import { useId } from "react";
+import { inkFilter, MATERIALS, type Hand } from "@/lib/ink-modes";
+import { createElement, useId } from "react";
 
 // The reference's colour swatches. Figures take one; FigurePlayground and
 // Machine swap it.
@@ -118,16 +119,22 @@ function Parcel() {
 }
 
 // Hand-inked, isometric and grainy. Decorative: hidden from assistive tech.
-// wobble is how far the line work strays, the reference's slider.
+// wobble is how far the line work strays, the reference's slider. hand picks
+// the material and seed re-rolls its strokes (lib/ink-modes.ts); left out,
+// they draw the house ink.
 export function Inked({
   viewBox,
   wobble = 3.5,
+  hand = "ink",
+  seed = 0,
   className = "",
   style,
   children,
 }: {
   viewBox: string;
   wobble?: number;
+  hand?: Hand;
+  seed?: number;
   className?: string;
   style?: React.CSSProperties;
   children: React.ReactNode;
@@ -137,20 +144,22 @@ export function Inked({
     <svg viewBox={viewBox} aria-hidden="true" className={`figure ${className}`} style={style}>
       <filter id={id} x="-5%" y="-5%" width="110%" height="110%">
         {/* wobble the line work, then speckle it like a riso print */}
-        <feTurbulence type="turbulence" baseFrequency="0.035" numOctaves="2" seed="3" result="warp" />
-        <feDisplacementMap in="SourceGraphic" in2="warp" scale={wobble} xChannelSelector="R" yChannelSelector="G" result="inked" />
-        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="8" result="noise" />
-        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 0 0 0 -0.82" result="specks" />
-        <feComposite in="specks" in2="inked" operator="in" result="grain" />
-        <feMerge>
-          <feMergeNode in="inked" />
-          <feMergeNode in="grain" />
-        </feMerge>
+        {inkFilter(hand, seed, wobble).map((p, i) =>
+          p.tag === "feMerge" ? (
+            <feMerge key={i}>
+              {p.nodes.map((node) => (
+                <feMergeNode key={node} in={node} />
+              ))}
+            </feMerge>
+          ) : (
+            createElement(p.tag, { key: i, ...p.attrs })
+          ),
+        )}
       </filter>
       <g
         filter={`url(#${id})`}
         stroke="currentColor"
-        strokeWidth={2.4}
+        strokeWidth={MATERIALS[hand].stroke}
         strokeLinejoin="round"
         strokeLinecap="round"
       >

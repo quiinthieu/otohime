@@ -68,6 +68,17 @@ export const site = {
     // TODO(otohime): a first draft
     { label: "Email", handle: "hello@otohime.dev", href: "mailto:hello@otohime.dev", code: "@", colour: "coral" },
   ] satisfies Line[],
+  // The knobs under every machine: the material it is drawn in, a fresh set
+  // of strokes, and boiling lines (off unless pressed, never under reduced motion).
+  ink: {
+    hand: "Hand",
+    hands: { ink: "Ink", pencil: "Pencil", crayon: "Crayon", watercolour: "Watercolour" },
+    reroll: "Re-roll",
+    rerollLabel: "Re-roll the strokes",
+    boil: "Boil",
+    boilLabel: "Boil the lines",
+    still: "Boiling is off: your system asks for less motion.",
+  },
   // The switchboard's plug, carried by hand to a jack.
   switchboard: { held: "Plug in hand. Let go over a jack to connect." },
   // TODO(otohime)

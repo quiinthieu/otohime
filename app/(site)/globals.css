@@ -1992,6 +1992,28 @@
   }
 }
 
+/* A machine's hand, re-roll and boil (components/machine.tsx): the hands are chips that hold a radio. */
+.machine-pen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem 1rem;
+}
+
+.machine-pen label.chip {
+  cursor: pointer;
+}
+
+.machine-pen label.chip:has(:checked) {
+  background: var(--fig, var(--yellow));
+  color: var(--on-swatch);
+}
+
+.machine-pen label.chip:has(:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
 @keyframes fade-out {
   to {
     opacity: 0;
