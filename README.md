@@ -318,6 +318,15 @@ The "Right here" numbers are pinned in `_lib/siblings.ts` and checked by `siblin
 3. If the prose quotes a changed count (sheets, papers, inks, creams), `copy.test.ts` fails too: fix the sentence in `_lib/copy.ts` with it.
 4. Add the project's name to the motion probe and walk counts if it is a new project, as the other projects do.
 
+## Work pipeline (simulation)
+
+`lib/pipeline.ts` is the state for the Work page's source → queue → warehouse → dashboard figure: a pure reducer `pipeline(state, action)`, tested by `lib/pipeline.test.ts`. It is an illustrative simulation, not telemetry: it reads no clock, random source or service, so the same actions always give the same frames.
+
+- **State** (`Pipeline`, starting from `initialPipeline`): `packets` (every live packet, in id order, each `{ id, place, t }` where `t` is the frames it has spent in that place), `paused`, `nextId` (also the count ever emitted), `shown`, the two gate counters `sourceWait` and `drainWait`, and `frame`. A packet's `place` is one of `PLACES`, in order: `source`, `to-queue`, `queue`, `to-warehouse`, `warehouse`, `to-dashboard`. A tick moves a packet at most one place, so no packet skips a leg. When it arrives at the dashboard it stops being a packet and adds one to `shown`.
+- **Actions** (`PipelineAction`): `"emit"` sends one packet. `"backfill"` sends `BACKFILL` (8), released from the source `SPACING` (3) frames apart. `"pause"` holds the queue's consumer: the source keeps sending, the queue fills, and packets already past the queue still arrive. `"resume"` drains the queue in order, one packet every `DRAIN` (3) frames. `"tick"` is one 12 fps frame. The pipes take `LEG` frames (6, 8, 6) and the warehouse holds a packet `DWELL` (2) frames. `"settle"` jumps straight to the rest that ticking would reach: unpaused, it shows every pending packet; paused, it keeps the queued packets where they are, lands everything upstream behind them, shows everything downstream and stops all work. At most `CAP` (32) packets are live. An emit at the cap returns the same state, and a backfill sends only what fits.
+- **Reading it**: `counters(state)` gives `emitted`, `waiting`, `inFlight`, `queued`, `stored`, `shown`, `lag` (emitted but not yet shown) and `busy`. `emitted` always equals `waiting + inFlight + queued + stored + shown`. `busy(state)` is false once nothing will change, including a paused queue with nothing else live. A tick at rest returns the very same object, so the figure stops its clock when `busy` is false. `progress(packet)` is how far along its pipe a packet is, from 0 to 1 (0 at a station), for drawing it.
+- **Reduced motion** dispatches `"settle"` after each input instead of running the clock.
+
 ## Live data
 
 The rules every page on this site that reads a live feed follows. Barometer (`app/(barometer)/`) is the worked example; copy its shape inside your own route group (the isolation tests forbid sharing code across groups, so there is no shared library).
