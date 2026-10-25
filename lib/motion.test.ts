@@ -248,15 +248,50 @@ test("the site layout loads the season tints after its root sheet, and only the 
   assert.ok(page.includes('import "./(site)/seasons.css";'), "the 404 does not load the tints");
 });
 
-test("seasons.css tints only under data-season: no hop, no bare rule, nothing for reduced motion to undo", () => {
+test("seasons.css tints only under data-season, and the ambient layer moves only where motion is welcome", () => {
   const css = readFileSync(join(ROOT, "app/(site)/seasons.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
   const top = blocks(css);
-  const rules = top.filter((b) => !b.prelude.startsWith("@keyframes "));
+  const tints = top.filter((b) => b.prelude.startsWith(":root"));
   assert.deepEqual(
-    rules.map((b) => b.prelude),
+    tints.map((b) => b.prelude),
     SEASONS.map((s) => `:root[${SEASON_ATTR}="${s}"]`),
   );
-  for (const { body } of rules) assert.doesNotMatch(body, /\b(animation|transition)\b/);
+  // Besides the tints, the keyframes and two motion queries, only the layer's own resting rules: no hop, no other
+  // selector, and nothing at rest that animates or transitions.
+  const rest = top.filter((b) => !b.prelude.startsWith(":root") && !b.prelude.startsWith("@keyframes "));
+  assert.deepEqual(rest.map((b) => b.prelude), [
+    ".season-layer",
+    ".season-layer > .almanac-bit",
+    "@media (prefers-reduced-motion: no-preference)",
+    "@media (prefers-reduced-motion: reduce)",
+  ]);
+  for (const { body } of [...tints, ...rest.slice(0, 2)]) assert.doesNotMatch(body, /\b(animation|transition)\b/);
+  assert.match(rest[0].body, /position:\s*fixed;[\s\S]*z-index:\s*-1;[\s\S]*pointer-events:\s*none;/);
+  assert.match(rest[1].body, /opacity:\s*0;/, "a bit at rest is invisible");
+  // Animation lives only under no-preference, on the layer's bits, with the season's keyframes.
+  const moving = blocks(rest[2].body);
+  for (const b of moving) assert.ok(selectors(b).every((sel) => sel.startsWith(".season-layer")), b.prelude);
+  const named = moving.flatMap((b) => [...b.body.matchAll(/animation-name:\s*([\w-]+);/g)].map((m) => m[1]));
+  assert.deepEqual(named.sort(), ["almanac-leaf", "almanac-petal", "almanac-rain", "almanac-snow"]);
+  assert.match(rule(moving, ".season-layer[data-paused] > .almanac-bit")[0]?.body ?? "", /animation-play-state:\s*paused;/);
+  // Reduced motion takes animation away outright: none, not the site-wide 0.01ms run.
+  const still = blocks(rest[3].body);
+  assert.deepEqual(still.map((b) => [b.prelude, b.body.trim()]), [[".season-layer > *", "animation: none;"]]);
+});
+
+test("the site root layout mounts the season layer first in <body>, ahead of every group's masthead", () => {
+  const src = readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8");
+  assert.match(src, /^import \{ SeasonLayer \} from "@\/components\/season-layer";$/m);
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*\{children\}\s*<\/body>/);
+  assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
+  // Mounted once, in the root layout only: no group layout or page mounts a second one.
+  const others = siteFiles(["layout.tsx", "page.tsx", "not-found.tsx"]).filter((p) => p !== join("app", "(site)", "layout.tsx"));
+  assert.deepEqual(others.filter((p) => readFileSync(join(ROOT, p), "utf8").includes("SeasonLayer")), []);
+  const layer = readFileSync(join(ROOT, "components/season-layer.tsx"), "utf8");
+  assert.match(layer, /^"use client";/);
+  assert.match(layer, /<svg className="season-layer" aria-hidden="true"/);
+  assert.match(layer, /addEventListener\("visibilitychange"/);
+  assert.match(layer, /useSyncExternalStore\(subscribeHidden, hidden, \(\) => false\)/);
 });
 
 test("both documents pin data-season in <head> before first paint, beside the theme pin", () => {

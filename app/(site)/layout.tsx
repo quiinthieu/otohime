@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { SeasonLayer } from "@/components/season-layer";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
 import { seasonScript } from "@/lib/seasons";
@@ -43,7 +44,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: seasonScript }} />
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {/* The season's ambient bits, fixed behind every page and ahead of each group's masthead; mounted here once,
+           so a move between groups does not restart them. */}
+        <SeasonLayer />
+        {children}
+      </body>
     </html>
   );
 }

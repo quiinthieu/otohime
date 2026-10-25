@@ -33,9 +33,72 @@
 }
 
 /*
+ * The ambient layer (components/season-layer.tsx): one fixed SVG behind the
+ * page, so text and paper surfaces sit over it, never under. Each bit rests
+ * invisible at the top of its column (translate scatters it; nothing animates
+ * that) and only the keyframes below show and move it.
+ */
+.season-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--ink);
+}
+
+.season-layer > .almanac-bit {
+  transform-box: fill-box;
+  transform-origin: center;
+  translate: var(--x) 0;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .season-layer > .almanac-bit {
+    animation-duration: var(--d);
+    animation-delay: var(--delay);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .season-layer > .almanac-petal {
+    animation-name: almanac-petal;
+  }
+
+  .season-layer > .almanac-leaf {
+    animation-name: almanac-leaf;
+  }
+
+  .season-layer > .almanac-rain {
+    animation-name: almanac-rain;
+  }
+
+  .season-layer > .almanac-snow {
+    animation-name: almanac-snow;
+  }
+
+  /* A hidden tab holds every bit where it is (document.hidden, read in the layer). */
+  .season-layer[data-paused] > .almanac-bit {
+    animation-play-state: paused;
+  }
+}
+
+/*
+ * The layer renders no bits under reduced motion; should one be drawn, it has
+ * no animation at all (not the site-wide 0.01ms run) and stays at opacity 0.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .season-layer > * {
+    animation: none;
+  }
+}
+
+/*
  * The ambient layer's motions: ink-drawn petals, falling leaves, rain streaks
- * and snow specks. Declared here, used by the ambient layer; transform and
- * opacity only. The layer stands still under prefers-reduced-motion.
+ * and snow specks. Transform and opacity only.
  */
 @keyframes almanac-petal {
   from {
