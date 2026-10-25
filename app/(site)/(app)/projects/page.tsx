@@ -1,4 +1,5 @@
-import { FigTitle, Notice, swatches } from "@/components/figures";
+import { Cartridge } from "@/components/cartridge";
+import { FigTitle, Notice } from "@/components/figures";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
 import { type CSSProperties, ViewTransition } from "react";
@@ -20,19 +21,10 @@ export default function ProjectsPage() {
             </Notice>
           </div>
         ) : (
-          <ul className="mt-8 grid gap-x-10 sm:grid-cols-2">
+          <ul className="cartridges mt-8 grid grid-cols-2 gap-x-3 gap-y-5 sm:gap-x-6 sm:gap-y-7 lg:grid-cols-3">
             {site.projectList.map((project, i) => (
-              <li
-                key={project.title}
-                className="rise flex items-start gap-3 border-t border-line py-3"
-                style={{ "--i": i } as CSSProperties}
-              >
-                <span
-                  aria-hidden="true"
-                  className="mt-1 size-3 flex-none rounded-full border border-on-swatch"
-                  style={{ background: swatches[project.colour] }}
-                />
-                <span>
+              <li key={project.title} className="rise cartridge-slot" style={{ "--i": i } as CSSProperties}>
+                <Cartridge project={project}>
                   <span className="block">
                     <span className="font-semibold">
                       {project.href ? (
@@ -50,8 +42,8 @@ export default function ProjectsPage() {
                     </span>{" "}
                     <span className="badge">{project.status}</span>
                   </span>
-                  <span className="text-muted">{project.note}</span>
-                </span>
+                  <span className="cartridge-note">{project.note}</span>
+                </Cartridge>
               </li>
             ))}
           </ul>
