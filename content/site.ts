@@ -40,6 +40,8 @@ const sketchesCollection = resolveSketchesCollection();
 // marked TODO(otohime) is invented and waits for the real thing.
 export const site = {
   tagline: "Data engineer. Plays games.",
+  // The masthead's speaker: the console beeps only once it is on.
+  sound: { label: "Console sounds" },
   // TODO(otohime): the rest is a first draft
   bio: [
     "I move data from where it lands to where people can use it, and keep it honest on the way.",

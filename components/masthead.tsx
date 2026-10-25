@@ -1,6 +1,8 @@
 import { BrandMark } from "@/components/brand-mark";
 import { SignOutButton, StopImpersonatingButton } from "@/components/nav-links";
+import { SoundToggle } from "@/components/sound-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { site } from "@/content/site";
 import { getSession } from "@/lib/dal";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -23,6 +25,7 @@ export function Masthead() {
           <Suspense fallback={null}>
             <Account />
           </Suspense>
+          <SoundToggle label={site.sound.label} />
           <ThemeToggle />
         </div>
       </header>

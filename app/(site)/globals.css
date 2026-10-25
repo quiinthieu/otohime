@@ -934,6 +934,12 @@
     }
   }
 
+  /* The speaker: waves when on, a cross when off, same box either way. */
+  .sound-toggle[aria-pressed="true"] .sound-off,
+  .sound-toggle:not([aria-pressed="true"]) .sound-waves {
+    display: none;
+  }
+
   /*
    * Console save-point footer ("The End of the Internet"):
    * static line work in Inked, ambient loops and LCD eyes in .end-sky outside

@@ -4,6 +4,7 @@ import { box } from "@/components/figures";
 import { Chip, Machine, useTick } from "@/components/machine";
 import { CONSOLE_MENU, LCD, menuBaseline } from "@/lib/pages";
 import { newPad, pad, type Button } from "@/lib/machines";
+import { play } from "@/lib/sound-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent, useReducer } from "react";
@@ -25,8 +26,15 @@ export function Handheld() {
   const item = MENU[s.cursor];
   const lit = (button: Button) => (s.pressed === button ? "fig-lamp" : "fig-dark");
 
+  // Only the console beeps, and only once the masthead's speaker is on.
+  function move(button: "up" | "down") {
+    dispatch(button);
+    play("move");
+  }
+
   function open() {
     dispatch("a");
+    play("open");
     // let the press show first, unless motion is reduced
     const wait = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 180;
     setTimeout(() => router.push(item.href), wait);
@@ -43,7 +51,7 @@ export function Handheld() {
     if (scrollY > 0) return;
     if (event.key === "ArrowUp" || event.key === "ArrowDown") {
       event.preventDefault();
-      dispatch(event.key === "ArrowUp" ? "up" : "down");
+      move(event.key === "ArrowUp" ? "up" : "down");
     } else if (event.key === "a" || event.key === "A" || (event.key === "Enter" && !target?.closest("a, button"))) {
       open();
     }
@@ -78,8 +86,8 @@ export function Handheld() {
       }
       controls={
         <>
-          <Chip onClick={() => dispatch("up")}>▲ Up</Chip>
-          <Chip onClick={() => dispatch("down")}>▼ Down</Chip>
+          <Chip onClick={() => move("up")}>▲ Up</Chip>
+          <Chip onClick={() => move("down")}>▼ Down</Chip>
           <Chip onClick={open}>A Open</Chip>
         </>
       }
