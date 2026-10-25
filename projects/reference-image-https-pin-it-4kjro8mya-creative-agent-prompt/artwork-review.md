@@ -2,7 +2,7 @@
 
 - **Plan**: `pm-240` (*Ink & Watercolour Portraits*)
 - **Task**: `t-1472` (*Publish and activate ten reviewed portraits*)
-- **Runs**: `run-8312` (attempt 1, parked on `esc-371`), `run-8320` (attempt 2, parked on `esc-372`), `run-8329` (attempt 3, stop state per `esc-372` decider resolution), `run-8341` (attempt 4, `fix_cycle: 1` after green gate `ver-3313` on `dd1e8e1`), `run-8364` (attempt 5, `fix_cycle: 2` after green gate `ver-3322` on `51cf311`)
+- **Runs**: `run-8312` (attempt 1, parked on `esc-371`), `run-8320` (attempt 2, parked on `esc-372`), `run-8329` (attempt 3, stop state per `esc-372` decider resolution), `run-8341` (attempt 4, `fix_cycle: 1` after green gate `ver-3313` on `dd1e8e1`), `run-8364` (attempt 5, `fix_cycle: 2` after green gate `ver-3322` on `51cf311`), `run-8381` (attempt 6, `fix_cycle: 2` after green gate `ver-3330` on `de193a7`)
 - **Collection Activation Status**: **NOT ACTIVATED (`content/portraits.json` = `[]`)** — blocked on human operator credential/master provisioning (`esc-371` `provision-xai-image-key:otohime` and `esc-372` `generate-portraits:grok-imagine`). Per `t-1472` contract and `esc-372`, no synthetic/fixture images, code-drawn substitutes, or `flux2-klein` outputs are used, fewer than ten portraits are never activated, and live `--require-people` verification gates remain visibly red until all ten reviewed paintings are published to permanent `https://files-cdn.x.ai/` URLs.
 
 ---
@@ -76,6 +76,14 @@
      - `task_manager_list_accounts`: `grok-main` remains `status: "auth_expired"` (`cooling_reason: "auth failure reported by a run"`, `updated_at: "2026-10-25T16:39:26.97379Z"`).
      - Worker check on `avietidol-mac-mini`: no `XAI_API_KEY`, no `.grok/user-settings.json`, and no operator-supplied `01_Quiet_Reader.png`..`10_Letter_Writer.png` files exist.
      - Per `esc-371` and `esc-372` decider resolution (`run-8328`), `run-8364` does not re-raise `operator_action`, does not synthesize or draw replacement images in code, does not route portraits through `flux2-klein`, and leaves `content/portraits.json` at `[]` so the `--require-people` gates remain visibly red and advance `fix_cycle` to `fix_cycles_exhausted`.
+6. **`run-8370` (Green Gate `ver-3330` on `de193a7`) & `run-8381` (`avietidol-Z490-GAMING-X`, Node `v22.23.3`, `fix_cycle: 2`)**:
+   - Green gate `ver-3330` (`run-8370`) on `de193a7`: `npm test` (1,490 pass), typecheck, lint and build passed. `npm run sketches:check -- --live --require-people` and `SKIP_BUILD=1 EXPECT_PEOPLE=10 bash scripts/walk-sketches.sh` failed (`1`) because `content/portraits.json` is `[]` (probe `13 ok, 20 failed`; walk `8 ok, 15 failed`).
+   - Direct verification on `avietidol-Z490-GAMING-X` after `npm ci`:
+     - `scripts/sketches-paint.ts preflight --offline` -> `sharpVersion: "0.35.5"`, `credentialAvailable: false`, `credentialSource: "none"`, `promptPackConcepts: 10`, `existingBaseSketchesVerified: 12`, `manifestRecordsCount: 0`.
+     - `scripts/sketches-paint.ts generate --concept 01_Quiet_Reader` exits `1` before any network call (`XAI_API_KEY or mounted .grok/user-settings.json credential is not available`). `npm run sketches:check -- --live --require-people` exits `1` (`manifest contains 0 records`).
+     - `task_manager_list_accounts`: `grok-main` is still `status: "auth_expired"` (`updated_at: "2026-10-25T16:39:26.97379Z"`) and its `repos` list is now `[]`. The `["otohime"]` binding recorded in `plan.md` is gone, so re-signing `grok-main` alone will not lease it to otohime. It must also be re-bound to `otohime`.
+     - No `XAI_*`/`GROK_*` environment variable names, no `~/.grok` or `~/.config/grok`, and no `01_Quiet_Reader.png`..`10_Letter_Writer.png` files on the host.
+     - As in attempts 3 to 5, `run-8381` does not re-raise `operator_action`, synthesize images or activate partial content.
 
 ---
 
