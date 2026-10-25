@@ -1,0 +1,230 @@
+{
+ "caseInsensitive": true,
+ "cases": [
+  {
+   "action": "export --output-dir \"Content/new-kit\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"CONTENT/x\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"cOnTeNt/existing\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"Content/existing/deeper\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"PUBLIC/x\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"App/x\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"LIB/x\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"Scripts/x\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"ſcripts/x\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \".GIT/x\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \".Git\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"Content\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"./lib/../Content/./y/\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"content/existing/\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export --output-dir \"projects/../CONTENT/z\"",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  {
+   "action": "export with hard-linked manifest.json -> content/portraits.json",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null,
+   "portraits": "[]\n"
+  },
+  {
+   "action": "export with hard-linked 06_Violinist.md",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null,
+   "portraits": "[]\n",
+   "kitFiles": [
+    "06_Violinist.md"
+   ]
+  },
+  {
+   "action": "export alias/new-kit (alias->content)",
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  }
+ ],
+ "protectedUnchanged": true,
+ "positive": {
+  "e1": {
+   "status": 0,
+   "reason": null,
+   "ok": true,
+   "concept": null
+  },
+  "e2": {
+   "status": 0,
+   "reason": null,
+   "ok": true,
+   "concept": null
+  },
+  "aEqualsCommitted": true,
+  "bEqualsCommitted": true,
+  "reexport": {
+   "status": 0,
+   "reason": null,
+   "ok": true,
+   "concept": null,
+   "still": true,
+   "tmpLeft": []
+  }
+ },
+ "check": {
+  "valid": {
+   "status": 0,
+   "reason": null,
+   "ok": true,
+   "concept": null
+  },
+  "coordinatedTamper": {
+   "status": 1,
+   "reason": "prompt_mismatch",
+   "ok": false,
+   "concept": "01-quiet-reader",
+   "manifestKeys": [
+    "index",
+    "conceptId",
+    "title",
+    "caption",
+    "masterFilename",
+    "derivativeFilename",
+    "promptFile",
+    "fullPromptSha256",
+    "promptFileByteLength",
+    "promptFileSha256"
+   ]
+  },
+  "missing": {
+   "status": 1,
+   "reason": "missing_file",
+   "ok": false,
+   "concept": "03-rainy-afternoon"
+  },
+  "extra": {
+   "status": 1,
+   "reason": "extra_file",
+   "ok": false,
+   "concept": null
+  },
+  "falseStatus": {
+   "status": 1,
+   "reason": "invalid_status",
+   "ok": false,
+   "concept": null
+  },
+  "duplicate": {
+   "status": 1,
+   "reason": "duplicate_mapping",
+   "ok": false,
+   "concept": "02-flower-girl"
+  },
+  "symlinkPrompt": {
+   "status": 1,
+   "reason": "invalid_path",
+   "ok": false,
+   "concept": null
+  },
+  "badCli": {
+   "status": 2,
+   "reason": "invalid_cli",
+   "ok": false,
+   "concept": null
+  },
+  "committed": {
+   "status": 0,
+   "reason": null,
+   "ok": true,
+   "concept": null
+  },
+  "committedUnchanged": true
+ }
+}

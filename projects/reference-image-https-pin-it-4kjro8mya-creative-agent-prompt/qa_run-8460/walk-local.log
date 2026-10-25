@@ -1,0 +1,122 @@
+ok - /sketches returns 200
+ok - /sketches build-sha
+ok - /sketches retains Fig. 07
+ok - /sketches has Places section
+ok - /sketches has Small things section
+ok - /sketches wraps each of 12 pictures in one sheet
+ok - /sketches gives each sheet one paper wash
+ok - /sketches gives each sheet one pathLength=1 ink frame
+ok - /sketches stands the sheets still without JavaScript
+ok - /sketches/download/99_Unknown.png returns 404
+ok - /sketches/download rejects arbitrary external URL parameters with 400
+ok - /sketches hint is places and small things
+ok - /sketches intro is twelve studies
+ok - /sketches has no People section before activation
+ok - /sketches has 12 figures before activation
+ok - /sketches/download/01_Quiet_Reader.png returns 404 before activation
+ok - probe 1366x768: /sketches status 200
+ok - probe 1366x768: meta build-sha valid
+ok - probe 1366x768: rendered section count is 2
+ok - probe 1366x768: rendered figure count is 12
+ok - probe 1366x768: Places has 6 figures and Small things has 6 figures
+ok - probe 1366x768: all 12 images finish loading with nonzero natural dimensions
+ok - probe 1366x768: People section is absent when EXPECT_PEOPLE=0
+ok - probe 1366x768: no horizontal overflow
+ok - probe 1366x768: no console or page errors
+ok - probe 390x844: /sketches status 200
+ok - probe 390x844: meta build-sha valid
+ok - probe 390x844: rendered section count is 2
+ok - probe 390x844: rendered figure count is 12
+ok - probe 390x844: Places has 6 figures and Small things has 6 figures
+ok - probe 390x844: all 12 images finish loading with nonzero natural dimensions
+ok - probe 390x844: People section is absent when EXPECT_PEOPLE=0
+ok - probe 390x844: no horizontal overflow
+ok - probe 390x844: no console or page errors
+ok - reveal 1366x768 light: Chromium supports view timelines
+ok - reveal 1366x768 light: each of 12 figures has one sheet, one wash and one unfiltered pathLength=1 frame inside its picture
+ok - reveal 1366x768 light: every wash and frame runs on its sheet's view timeline
+ok - reveal 1366x768 light: each frame covers its picture exactly
+ok - reveal 1366x768 light: below the fold the last sheet waits washed (scale 1, full width) and undrawn (dashoffset 1)
+ok - reveal 1366x768 light: a third in, the wash is part way off and the frame not yet drawn past the wash
+ok - reveal 1366x768 light: four fifths in, the wash is gone and the frame part drawn
+ok - reveal 1366x768 light: at the end of the page every sheet is whole (wash scale 0, width 0; dashoffset 0)
+ok - reveal 1366x768 light: the wash is the page's paper and the frame the page's ink
+ok - reveal 1366x768 light: the frame adds no horizontal overflow
+ok - reveal 1366x768 light: negative control: a wash pinned over the art fails the whole-at-end check
+ok - reveal 1366x768 light: no console or page errors
+ok - reveal 1366x768 dark: Chromium supports view timelines
+ok - reveal 1366x768 dark: each of 12 figures has one sheet, one wash and one unfiltered pathLength=1 frame inside its picture
+ok - reveal 1366x768 dark: every wash and frame runs on its sheet's view timeline
+ok - reveal 1366x768 dark: each frame covers its picture exactly
+ok - reveal 1366x768 dark: below the fold the last sheet waits washed (scale 1, full width) and undrawn (dashoffset 1)
+ok - reveal 1366x768 dark: a third in, the wash is part way off and the frame not yet drawn past the wash
+ok - reveal 1366x768 dark: four fifths in, the wash is gone and the frame part drawn
+ok - reveal 1366x768 dark: at the end of the page every sheet is whole (wash scale 0, width 0; dashoffset 0)
+ok - reveal 1366x768 dark: the wash is the page's paper and the frame the page's ink
+ok - reveal 1366x768 dark: the frame adds no horizontal overflow
+ok - reveal 1366x768 dark: no console or page errors
+ok - reveal 390x844 light: Chromium supports view timelines
+ok - reveal 390x844 light: each of 12 figures has one sheet, one wash and one unfiltered pathLength=1 frame inside its picture
+ok - reveal 390x844 light: every wash and frame runs on its sheet's view timeline
+ok - reveal 390x844 light: each frame covers its picture exactly
+ok - reveal 390x844 light: below the fold the last sheet waits washed (scale 1, full width) and undrawn (dashoffset 1)
+ok - reveal 390x844 light: a third in, the wash is part way off and the frame not yet drawn past the wash
+ok - reveal 390x844 light: four fifths in, the wash is gone and the frame part drawn
+ok - reveal 390x844 light: at the end of the page every sheet is whole (wash scale 0, width 0; dashoffset 0)
+ok - reveal 390x844 light: the wash is the page's paper and the frame the page's ink
+ok - reveal 390x844 light: the frame adds no horizontal overflow
+ok - reveal 390x844 light: no console or page errors
+ok - reveal 390x844 dark: Chromium supports view timelines
+ok - reveal 390x844 dark: each of 12 figures has one sheet, one wash and one unfiltered pathLength=1 frame inside its picture
+ok - reveal 390x844 dark: every wash and frame runs on its sheet's view timeline
+ok - reveal 390x844 dark: each frame covers its picture exactly
+ok - reveal 390x844 dark: below the fold the last sheet waits washed (scale 1, full width) and undrawn (dashoffset 1)
+ok - reveal 390x844 dark: a third in, the wash is part way off and the frame not yet drawn past the wash
+ok - reveal 390x844 dark: four fifths in, the wash is gone and the frame part drawn
+ok - reveal 390x844 dark: at the end of the page every sheet is whole (wash scale 0, width 0; dashoffset 0)
+ok - reveal 390x844 dark: the wash is the page's paper and the frame the page's ink
+ok - reveal 390x844 dark: the frame adds no horizontal overflow
+ok - reveal 390x844 dark: no console or page errors
+ok - reveal 1366x768: light and dark draw in different paper and ink
+ok - reveal 390x844: light and dark draw in different paper and ink
+ok - reduced 1366x768: no wash or frame has an animation
+ok - reduced 1366x768: below the fold every sheet is already whole
+ok - reduced 1366x768: scrolling in changes nothing
+ok - reduced 1366x768: all 12 images load
+ok - reduced 1366x768: captions show and downloads are unchanged
+ok - reduced 1366x768: no console or page errors
+ok - reduced 390x844: no wash or frame has an animation
+ok - reduced 390x844: below the fold every sheet is already whole
+ok - reduced 390x844: scrolling in changes nothing
+ok - reduced 390x844: all 12 images load
+ok - reduced 390x844: captions show and downloads are unchanged
+ok - reduced 390x844: no console or page errors
+ok - reduced live 1366x768: the last sheet waits washed before the switch
+ok - reduced live 1366x768: switching to reduce drops every animation and shows every sheet whole
+ok - reduced live 1366x768: switching back restores the waiting wash and frame (the check above can fail)
+ok - unsupported 1366x768: the served stylesheet's view-timeline @supports was rewritten
+ok - unsupported 1366x768: no wash or frame animates
+ok - unsupported 1366x768: below the fold every sheet is whole and every caption shows
+ok - unsupported 1366x768: all 12 images load
+ok - unsupported 390x844: the served stylesheet's view-timeline @supports was rewritten
+ok - unsupported 390x844: no wash or frame animates
+ok - unsupported 390x844: below the fold every sheet is whole and every caption shows
+ok - unsupported 390x844: all 12 images load
+ok - no-JS 1366x768: /sketches answers 200
+ok - no-JS 1366x768: 12 sheets, none animating
+ok - no-JS 1366x768: below the fold every sheet is whole with its caption
+ok - no-JS 1366x768: downloads are unchanged
+ok - no-JS 1366x768: all 12 images load
+ok - no-JS 390x844: /sketches answers 200
+ok - no-JS 390x844: 12 sheets, none animating
+ok - no-JS 390x844: below the fold every sheet is whole with its caption
+ok - no-JS 390x844: downloads are unchanged
+ok - no-JS 390x844: all 12 images load
+ok - client nav 1366x768: no <noscript> style is live after the navigation
+ok - client nav 1366x768: the sheets run on view timelines and the last waits washed
+ok - probe negative control: intercepting a sketch image with 404 causes naturalWidth=0 failure detection
+ok - probe download negative control: unknown filename returns 404
+ok - probe download negative control: external URL query parameter returns 400
+probe: 103 ok, 0 failed
+ok - no server left on port 4081
+walk: 17 ok, 0 failed
