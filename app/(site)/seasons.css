@@ -1,0 +1,100 @@
+/*
+ * The paper almanac: the paper and ink follow the visitor's season
+ * (lib/seasons.ts picks it; data-season on <html> pins it). Each season tints
+ * --paper, --paper-2 and --ink as light / dark pairs, kept close to the house
+ * paper so every page still reads as paper and ink. lib/seasons-contrast.test.ts
+ * holds --ink at 4.5:1 or better on both papers in every season and scheme.
+ *
+ * Spring is a fresh green-cream, summer a warm straw, autumn a russet and
+ * winter a cool grey-blue.
+ */
+:root[data-season="spring"] {
+  --paper: light-dark(#eff0e4, #191c16);
+  --paper-2: light-dark(#e6e9d8, #232820);
+  --ink: light-dark(#1f2a1c, #e5ebdb);
+}
+
+:root[data-season="summer"] {
+  --paper: light-dark(#f4eedc, #1d1912);
+  --paper-2: light-dark(#ece3cb, #29231a);
+  --ink: light-dark(#2a1f12, #efe6d1);
+}
+
+:root[data-season="autumn"] {
+  --paper: light-dark(#f2e9de, #1e1712);
+  --paper-2: light-dark(#eee3d5, #2a2019);
+  --ink: light-dark(#2b1a12, #eedfd2);
+}
+
+:root[data-season="winter"] {
+  --paper: light-dark(#eef0f1, #171a1e);
+  --paper-2: light-dark(#e3e7ea, #20252b);
+  --ink: light-dark(#1b2128, #e3e8ee);
+}
+
+/*
+ * The ambient layer's motions: ink-drawn petals, falling leaves, rain streaks
+ * and snow specks. Declared here, used by the ambient layer; transform and
+ * opacity only. The layer stands still under prefers-reduced-motion.
+ */
+@keyframes almanac-petal {
+  from {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  to {
+    transform: translate3d(12vw, 110vh, 0) rotate(260deg);
+    opacity: 0;
+  }
+}
+
+@keyframes almanac-leaf {
+  from {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(-6vw, 50vh, 0) rotate(180deg);
+  }
+  to {
+    transform: translate3d(4vw, 110vh, 0) rotate(400deg);
+    opacity: 0;
+  }
+}
+
+@keyframes almanac-rain {
+  from {
+    transform: translate3d(0, -20vh, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.5;
+  }
+  to {
+    transform: translate3d(-4vw, 110vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes almanac-snow {
+  from {
+    transform: translate3d(0, -10vh, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(3vw, 50vh, 0);
+  }
+  to {
+    transform: translate3d(-2vw, 110vh, 0);
+    opacity: 0;
+  }
+}
