@@ -2344,6 +2344,135 @@
   }
 }
 
+/* The 404's lost sheet (app/(site)/not-found.tsx). Crumpled as the server draws it; components/lost-sheet.tsx sets
+   --crumple from 1 (unset) to 0 as it is rubbed (data-progress marks it live). Under reduced motion it lies flat
+   and still. */
+.lost-sheet {
+  width: 15rem;
+  max-width: 100%;
+  color: var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.lost-sheet[data-progress] {
+  touch-action: none;
+  cursor: grab;
+}
+
+.lost-sheet[data-progress]:active {
+  cursor: grabbing;
+}
+
+.lost-sheet svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.lost-page {
+  transform-box: fill-box;
+  transform-origin: center;
+  rotate: calc(var(--crumple, 1) * -4deg);
+  scale: calc(1 - var(--crumple, 1) * 0.06);
+  transition:
+    rotate 0.3s ease-out,
+    scale 0.3s ease-out;
+}
+
+.lost-shade {
+  fill: var(--shade);
+}
+
+.lost-torn {
+  fill: var(--field);
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.lost-rule {
+  stroke: var(--blue);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.lost-margin {
+  stroke: var(--coral);
+  stroke-width: 1.2;
+}
+
+.lost-404 {
+  fill: currentColor;
+  font-family: var(--font-mono);
+  font-size: 56px;
+  font-weight: 700;
+}
+
+.lost-crease {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: calc(var(--crumple, 1) * 0.7);
+}
+
+.lost-sheet[data-smoothed] .lost-crumpled {
+  filter: none;
+}
+
+.lost-tools {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+}
+
+.lost-ways {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lost-page {
+    animation: lost-flutter 3.2s ease-in-out infinite alternate;
+  }
+
+  .lost-sheet[data-smoothed] .lost-page {
+    animation: none;
+  }
+}
+
+@keyframes lost-flutter {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -4px;
+  }
+}
+
+/* Flat and still: no filter, no creases, no tilt. */
+@media (prefers-reduced-motion: reduce) {
+  .lost-page {
+    animation: none;
+    rotate: none;
+    scale: none;
+    transition: none;
+  }
+
+  .lost-crumpled {
+    filter: none;
+  }
+
+  .lost-crease {
+    display: none;
+  }
+}
+
 /* ponytail: one global reset rather than per-animation opt-outs */
 @media (prefers-reduced-motion: reduce) {
   *,

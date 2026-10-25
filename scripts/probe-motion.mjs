@@ -14,7 +14,7 @@
 // LCD as it fades in, and the label morphs into the h1), /work -> /sign-in and
 // /sign-in -> / each fade the old page out and the new one in, read once a frame from getAnimations(); moves
 // inside one group still do, with the sidebar and the masthead out of the fading groups. A location.assign from
-// /shore into the 404 carries the hop. With JavaScript off the 404 is the parcel page and its Go home goes to /.
+// /shore into the 404 carries the hop. With JavaScript off the 404 is the lost sheet and its Go home goes to /.
 // The instruments: Barometer's four parts settle 0.15 s apart, Planisphere's lines draw on and its stars fade up
 // (a turn of the wheel adds only the disc's transform transition and replays nothing), and Rotor's windows roll
 // only once a key is pressed. Under reduced motion none of it runs, and with JavaScript off each page still
@@ -491,7 +491,7 @@ try {
         const response = await page.goto(`${BASE_URL}/does-not-exist`, { waitUntil: "load" });
         check("no-JS: /does-not-exist answers 404", response?.status() === 404, String(response?.status()));
         const heading = await page.locator("h1").filter({ visible: true }).allTextContents();
-        check("no-JS: /does-not-exist shows the parcel page", heading.some((h) => h.includes("Nothing in this parcel")), heading.join(" | ") || "no h1");
+        check("no-JS: /does-not-exist shows the lost sheet", heading.some((h) => h.includes("This page got lost")), heading.join(" | ") || "no h1");
         const home = page.locator('a[href="/"]', { hasText: "Go home" }).filter({ visible: true }).first();
         await Promise.all([page.waitForURL((u) => u.pathname === "/", { timeout: 10_000 }), home.click({ timeout: 5000 })]);
         check("no-JS: the 404's Go home navigates to /", new URL(page.url()).pathname === "/", page.url());
