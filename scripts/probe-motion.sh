@@ -15,7 +15,7 @@
 # /work -> /sign-in and /sign-in -> / each fade the old page out and the new one in; a hop from /shore into the
 # 404 carries the transition with no page error; with JavaScript off the 404's Go home goes to /.
 #
-# Env: PORT (4061; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1.
+# Env: PORT (4061, or a free port when that default is busy; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1.
 # Playwright is installed into a temp prefix at run time; package.json stays unchanged.
 # No `set -e`: every check runs, and the summary names the ones that failed.
 set -u
@@ -23,6 +23,7 @@ set -u
 cd "$(dirname "$0")/.." || exit 2
 ROOT="$(pwd)"
 
+PORT_SET="${PORT:+1}"
 PORT="${PORT:-4061}"
 case "$PORT" in
   1719|1720|1723|2049|3659|4045|5060|5061|6000|6566|6665|6666|6667|6668|6669|6697|10080)
@@ -57,9 +58,17 @@ if [ -z "$BASE_URL" ]; then
   export GITHUB_SHA="${GITHUB_SHA:-0123456789abcdef0123456789abcdef01234567}"
   READY_TRIES=60
 
+  # A busy default port (another probe on a shared host) falls back to a free one; an explicit PORT is refused.
   if curl -s -o /dev/null --max-time 2 "$BASE_URL/"; then
-    echo "not ok - port: something already listens on port $PORT; set PORT to a free port"
-    exit 1
+    if [ -n "$PORT_SET" ]; then
+      echo "not ok - port: something already listens on port $PORT; set PORT to a free port"
+      exit 1
+    fi
+    FREE="$(node -e 'const s=require("net").createServer().listen(0,"127.0.0.1",()=>{console.log(s.address().port);s.close()})')"
+    echo "note: default port $PORT is busy; serving on free port $FREE instead"
+    [ "$BETTER_AUTH_URL" = "$BASE_URL" ] && export BETTER_AUTH_URL="http://localhost:$FREE"
+    PORT="$FREE"
+    BASE_URL="http://localhost:$PORT"
   fi
 
   if [ "${SKIP_BUILD:-}" != "1" ]; then
@@ -91,6 +100,13 @@ done
 if [ "$READY" -ne 1 ]; then
   echo "not ok - ready: nothing answered at $BASE_URL after $READY_TRIES tries"
   [ "$LOCAL" -eq 1 ] && [ -s "$WORK/server.log" ] && tail -n 20 "$WORK/server.log"
+  echo "probe: 0 ok, 1 failed"
+  exit 1
+fi
+# The answer must come from our own server, not one that won the port first.
+if [ "$LOCAL" -eq 1 ] && ! kill -0 "$SERVER_PID" 2>/dev/null; then
+  echo "not ok - ready: our next start on port $PORT exited; another server answered. log:"
+  tail -n 20 "$WORK/server.log"
   echo "probe: 0 ok, 1 failed"
   exit 1
 fi
