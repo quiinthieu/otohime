@@ -2,15 +2,17 @@
 //   node --experimental-strip-types scripts/sketches-handoff.ts export [--output-dir <dir>] [--prompts <path>]
 //   node --experimental-strip-types scripts/sketches-handoff.ts check [--input-dir <dir>] [--prompts <path>]
 import {
-  existsSync,
   lstatSync,
   mkdirSync,
   readdirSync,
   readFileSync,
   realpathSync,
+  type Stats,
+  statSync,
   writeFileSync,
 } from "node:fs";
-import { isAbsolute, join, relative, resolve } from "node:path";
+import { tmpdir } from "node:os";
+import { basename, dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { DEFAULT_PROMPTS_REL_PATH, parsePromptPack, type PromptPack } from "../lib/sketches.ts";
 import {
@@ -70,6 +72,16 @@ export type HandoffCheckResult =
       message: string;
     };
 
+const PROTECTED_TREES = [
+  "content",
+  "public",
+  "app",
+  "lib",
+  "scripts",
+  ".git",
+  "node_modules",
+] as const;
+
 function safeLstat(targetPath: string) {
   try {
     return lstatSync(targetPath);
@@ -78,26 +90,185 @@ function safeLstat(targetPath: string) {
   }
 }
 
-function safeRealpath(targetPath: string): string {
-  try {
-    return realpathSync(targetPath);
-  } catch {
-    return resolve(targetPath);
-  }
-}
-
 function isSubpathOrSame(parentDir: string, candidatePath: string): boolean {
   const rel = relative(parentDir, candidatePath);
   return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
 }
 
+type PhysicalPathResolution =
+  | {
+      ok: true;
+      lexicalPath: string;
+      existingAncestor: string;
+      existingStat: Stats;
+      canonicalAncestor: string;
+      canonicalTarget: string;
+      missingSegments: string[];
+    }
+  | {
+      ok: false;
+      offendingPath: string;
+      message: string;
+    };
+
+function resolvePhysicalTargetPath(targetPath: string): PhysicalPathResolution {
+  if (!targetPath || typeof targetPath !== "string" || targetPath.includes("\0")) {
+    return {
+      ok: false,
+      offendingPath: targetPath || "",
+      message: "Invalid path",
+    };
+  }
+
+  const lexicalPath = resolve(targetPath);
+  const missingSegments: string[] = [];
+  let current = lexicalPath;
+  let existingStat: Stats;
+
+  while (true) {
+    try {
+      existingStat = lstatSync(current);
+      break;
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException)?.code;
+      if (code !== "ENOENT") {
+        return {
+          ok: false,
+          offendingPath: lexicalPath,
+          message: `Cannot resolve path "${lexicalPath}" at "${current}": ${err instanceof Error ? err.message : String(err)}`,
+        };
+      }
+      const parent = dirname(current);
+      if (parent === current) {
+        return {
+          ok: false,
+          offendingPath: lexicalPath,
+          message: `No existing ancestor found for "${lexicalPath}"`,
+        };
+      }
+      missingSegments.unshift(basename(current));
+      current = parent;
+    }
+  }
+
+  let canonicalAncestor: string;
+  try {
+    canonicalAncestor = realpathSync(current);
+  } catch (err) {
+    return {
+      ok: false,
+      offendingPath: lexicalPath,
+      message: `Failed to resolve canonical realpath for "${current}": ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+
+  let canonicalAncestorStat: Stats;
+  try {
+    canonicalAncestorStat = statSync(canonicalAncestor);
+  } catch (err) {
+    return {
+      ok: false,
+      offendingPath: lexicalPath,
+      message: `Failed to stat canonical ancestor "${canonicalAncestor}": ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+
+  if (missingSegments.length > 0 && !canonicalAncestorStat.isDirectory()) {
+    return {
+      ok: false,
+      offendingPath: lexicalPath,
+      message: `Existing ancestor "${current}" is not a directory for "${lexicalPath}"`,
+    };
+  }
+
+  const canonicalTarget =
+    missingSegments.length > 0
+      ? resolve(canonicalAncestor, ...missingSegments)
+      : canonicalAncestor;
+
+  return {
+    ok: true,
+    lexicalPath,
+    existingAncestor: current,
+    existingStat,
+    canonicalAncestor,
+    canonicalTarget,
+    missingSegments,
+  };
+}
+
+function collectAllowedBaseAncestors(rootDir: string): Set<string> {
+  const allowed = new Set<string>();
+  const resolvedRoot = resolve(rootDir);
+  const baseRoots = [resolve(REPO_ROOT), resolve(tmpdir()), resolve("/tmp"), resolvedRoot];
+  const rootPhysical = resolvePhysicalTargetPath(resolvedRoot);
+  if (rootPhysical.ok) {
+    baseRoots.push(rootPhysical.canonicalTarget);
+  }
+  const repoPhysical = resolvePhysicalTargetPath(REPO_ROOT);
+  if (repoPhysical.ok) {
+    baseRoots.push(repoPhysical.canonicalTarget);
+  }
+  const tmpPhysical = resolvePhysicalTargetPath(tmpdir());
+  if (tmpPhysical.ok) {
+    baseRoots.push(tmpPhysical.canonicalTarget);
+  }
+  for (const base of baseRoots) {
+    let curr = base;
+    while (true) {
+      allowed.add(curr);
+      const parent = dirname(curr);
+      if (parent === curr) break;
+      curr = parent;
+    }
+  }
+  return allowed;
+}
+
+function findSymlinkInAncestorChain(
+  resolved: Extract<PhysicalPathResolution, { ok: true }>,
+  rootDir: string,
+): string | null {
+  if (resolved.missingSegments.length === 0 && resolved.existingStat.isSymbolicLink()) {
+    return resolved.existingAncestor;
+  }
+
+  const allowedBaseAncestors = collectAllowedBaseAncestors(rootDir);
+  let curr = resolved.existingAncestor;
+  while (!allowedBaseAncestors.has(curr)) {
+    const st = safeLstat(curr);
+    if (!st) {
+      return curr;
+    }
+    if (st.isSymbolicLink()) {
+      return curr;
+    }
+    const parent = dirname(curr);
+    if (parent === curr) break;
+    curr = parent;
+  }
+  return null;
+}
+
 function isForbiddenExportTarget(resolvedOutDir: string, rootDir: string): boolean {
-  const roots = Array.from(new Set([resolve(rootDir), safeRealpath(rootDir)]));
-  const candidates = Array.from(
+  const rootResolved = resolvePhysicalTargetPath(rootDir);
+  const repoRootResolved = resolvePhysicalTargetPath(REPO_ROOT);
+  const outResolved = resolvePhysicalTargetPath(resolvedOutDir);
+
+  if (!rootResolved.ok || !repoRootResolved.ok || !outResolved.ok) {
+    return true;
+  }
+
+  const roots = Array.from(
     new Set([
-      resolve(resolvedOutDir),
-      existsSync(resolvedOutDir) ? safeRealpath(resolvedOutDir) : resolve(resolvedOutDir),
+      rootResolved.lexicalPath,
+      rootResolved.canonicalTarget,
+      repoRootResolved.lexicalPath,
+      repoRootResolved.canonicalTarget,
     ]),
+  );
+  const candidates = Array.from(
+    new Set([outResolved.lexicalPath, outResolved.canonicalTarget]),
   );
 
   for (const r of roots) {
@@ -106,7 +277,7 @@ function isForbiddenExportTarget(resolvedOutDir: string, rootDir: string): boole
       if (c === resolve(r, "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt")) {
         return true;
       }
-      for (const protectedTree of ["content", "public", "app", "lib", "scripts", ".git", "node_modules"]) {
+      for (const protectedTree of PROTECTED_TREES) {
         if (isSubpathOrSame(resolve(r, protectedTree), c)) {
           return true;
         }
@@ -118,6 +289,7 @@ function isForbiddenExportTarget(resolvedOutDir: string, rootDir: string): boole
 
 function loadCanonicalPromptPack(
   promptsPath: string,
+  rootDir: string,
 ): { ok: true; pack: PromptPack } | { ok: false; reason: HandoffErrorReason; message: string } {
   if (!promptsPath || promptsPath.includes("\0")) {
     return {
@@ -126,15 +298,30 @@ function loadCanonicalPromptPack(
       message: "Invalid prompts file path",
     };
   }
-  const stat = safeLstat(promptsPath);
-  if (!stat) {
+  const physical = resolvePhysicalTargetPath(promptsPath);
+  if (!physical.ok) {
+    return {
+      ok: false,
+      reason: "invalid_path",
+      message: physical.message,
+    };
+  }
+  const symlinkInChain = findSymlinkInAncestorChain(physical, rootDir);
+  if (symlinkInChain) {
+    return {
+      ok: false,
+      reason: "invalid_path",
+      message: `Prompts pack path traverses symbolic link "${symlinkInChain}": ${promptsPath}`,
+    };
+  }
+  if (physical.missingSegments.length > 0) {
     return {
       ok: false,
       reason: "missing_file",
       message: `Prompts pack file not found: ${promptsPath}`,
     };
   }
-  if (stat.isSymbolicLink() || !stat.isFile()) {
+  if (physical.existingStat.isSymbolicLink() || !physical.existingStat.isFile()) {
     return {
       ok: false,
       reason: "invalid_path",
@@ -142,7 +329,7 @@ function loadCanonicalPromptPack(
     };
   }
   try {
-    const raw = readFileSync(promptsPath, "utf8");
+    const raw = readFileSync(physical.canonicalTarget, "utf8");
     const pack = parsePromptPack(raw);
     return { ok: true, pack };
   } catch (err) {
@@ -163,19 +350,47 @@ export function exportHandoffDirectory(options: {
   const outputDir = resolve(rootDir, options.outputDir ?? DEFAULT_HANDOFF_DIR_REL_PATH);
   const promptsPath = resolve(rootDir, options.promptsPath ?? DEFAULT_PROMPTS_REL_PATH);
 
-  if (!outputDir || outputDir.includes("\0") || isForbiddenExportTarget(outputDir, rootDir)) {
+  if (!outputDir || outputDir.includes("\0")) {
     return {
       ok: false,
       command: "export",
       reason: "invalid_path",
       offendingConcept: null,
       offendingPath: outputDir,
-      message: `Refusing to export handoff kit into protected or invalid path: ${outputDir}`,
+      message: `Refusing to export handoff kit into invalid path: ${outputDir}`,
     };
   }
 
-  const existingOutStat = safeLstat(outputDir);
-  if (existingOutStat && (existingOutStat.isSymbolicLink() || !existingOutStat.isDirectory())) {
+  const outPhysical = resolvePhysicalTargetPath(outputDir);
+  if (!outPhysical.ok) {
+    return {
+      ok: false,
+      command: "export",
+      reason: "invalid_path",
+      offendingConcept: null,
+      offendingPath: outputDir,
+      message: outPhysical.message,
+    };
+  }
+
+  const symlinkAncestor = findSymlinkInAncestorChain(outPhysical, rootDir);
+  if (symlinkAncestor || isForbiddenExportTarget(outputDir, rootDir)) {
+    return {
+      ok: false,
+      command: "export",
+      reason: "invalid_path",
+      offendingConcept: null,
+      offendingPath: outputDir,
+      message: symlinkAncestor
+        ? `Refusing to export handoff kit through symbolic link "${symlinkAncestor}": ${outputDir}`
+        : `Refusing to export handoff kit into protected or invalid path: ${outputDir}`,
+    };
+  }
+
+  if (
+    outPhysical.missingSegments.length === 0 &&
+    (outPhysical.existingStat.isSymbolicLink() || !outPhysical.existingStat.isDirectory())
+  ) {
     return {
       ok: false,
       command: "export",
@@ -186,7 +401,7 @@ export function exportHandoffDirectory(options: {
     };
   }
 
-  const loaded = loadCanonicalPromptPack(promptsPath);
+  const loaded = loadCanonicalPromptPack(promptsPath, rootDir);
   if (!loaded.ok) {
     return {
       ok: false,
@@ -202,6 +417,31 @@ export function exportHandoffDirectory(options: {
   const kit = handoff.buildKit(loaded.pack);
 
   mkdirSync(outputDir, { recursive: true });
+
+  const postMkdirStat = safeLstat(outputDir);
+  let postMkdirRealpath: string | null = null;
+  try {
+    postMkdirRealpath = realpathSync(outputDir);
+  } catch {
+    postMkdirRealpath = null;
+  }
+  if (
+    !postMkdirStat ||
+    postMkdirStat.isSymbolicLink() ||
+    !postMkdirStat.isDirectory() ||
+    !postMkdirRealpath ||
+    postMkdirRealpath !== outPhysical.canonicalTarget ||
+    isForbiddenExportTarget(postMkdirRealpath, rootDir)
+  ) {
+    return {
+      ok: false,
+      command: "export",
+      reason: "invalid_path",
+      offendingConcept: null,
+      offendingPath: outputDir,
+      message: `Physical export directory verification failed for: ${outputDir}`,
+    };
+  }
 
   // Verify no existing symlinks exist at target file paths before writing
   const filesToWrite: Array<{ filename: string; content: string }> = [
@@ -220,7 +460,7 @@ export function exportHandoffDirectory(options: {
         message: `Unsafe export filename "${item.filename}"`,
       };
     }
-    const targetPath = join(outputDir, item.filename);
+    const targetPath = join(postMkdirRealpath, item.filename);
     const st = safeLstat(targetPath);
     if (st && (st.isSymbolicLink() || !st.isFile())) {
       return {
@@ -235,7 +475,7 @@ export function exportHandoffDirectory(options: {
   }
 
   for (const item of filesToWrite) {
-    writeFileSync(join(outputDir, item.filename), item.content, "utf8");
+    writeFileSync(join(postMkdirRealpath, item.filename), item.content, "utf8");
   }
 
   return {
@@ -273,7 +513,31 @@ export function checkHandoffDirectory(options: {
     };
   }
 
-  const loaded = loadCanonicalPromptPack(promptsPath);
+  const inPhysical = resolvePhysicalTargetPath(inputDir);
+  if (!inPhysical.ok) {
+    return {
+      ok: false,
+      command: "check",
+      reason: "invalid_path",
+      offendingConcept: null,
+      offendingPath: inputDir,
+      message: inPhysical.message,
+    };
+  }
+
+  const inSymlink = findSymlinkInAncestorChain(inPhysical, rootDir);
+  if (inSymlink) {
+    return {
+      ok: false,
+      command: "check",
+      reason: "invalid_path",
+      offendingConcept: null,
+      offendingPath: inputDir,
+      message: `Handoff input path traverses symbolic link "${inSymlink}": ${inputDir}`,
+    };
+  }
+
+  const loaded = loadCanonicalPromptPack(promptsPath, rootDir);
   if (!loaded.ok) {
     return {
       ok: false,
@@ -285,8 +549,7 @@ export function checkHandoffDirectory(options: {
     };
   }
 
-  const dirStat = safeLstat(inputDir);
-  if (!dirStat) {
+  if (inPhysical.missingSegments.length > 0) {
     return {
       ok: false,
       command: "check",
@@ -296,7 +559,7 @@ export function checkHandoffDirectory(options: {
       message: `Handoff input directory does not exist: ${inputDir}`,
     };
   }
-  if (dirStat.isSymbolicLink() || !dirStat.isDirectory()) {
+  if (inPhysical.existingStat.isSymbolicLink() || !inPhysical.existingStat.isDirectory()) {
     return {
       ok: false,
       command: "check",
@@ -512,7 +775,7 @@ export function runHandoffCli(
 ): number {
   const out = io.stdout ?? ((msg: string) => console.log(msg));
   const err = io.stderr ?? ((msg: string) => console.error(msg));
-  const rootDir = resolve(io.cwd ?? REPO_ROOT);
+  const rootDir = resolve(io.cwd ?? process.cwd());
 
   const parsed = parseHandoffCliArgs(args);
   if (!parsed.ok) {
@@ -599,9 +862,13 @@ export function runHandoffCli(
   return 0;
 }
 
+const argv1Physical = process.argv[1] ? resolvePhysicalTargetPath(process.argv[1]) : null;
+const selfPhysical = resolvePhysicalTargetPath(fileURLToPath(import.meta.url));
 const isMainModule =
-  Boolean(process.argv[1]) &&
-  safeRealpath(resolve(process.argv[1])) === safeRealpath(fileURLToPath(import.meta.url));
+  argv1Physical !== null &&
+  argv1Physical.ok &&
+  selfPhysical.ok &&
+  argv1Physical.canonicalTarget === selfPhysical.canonicalTarget;
 
 if (isMainModule) {
   process.exitCode = runHandoffCli(process.argv.slice(2));

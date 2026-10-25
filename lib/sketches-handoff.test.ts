@@ -4,7 +4,9 @@ import { createHash } from "node:crypto";
 import {
   existsSync,
   lstatSync,
+  mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   statSync,
@@ -387,7 +389,7 @@ test("path escape, symlinks, false completion status, and invalid CLI usage are 
       assert.equal(statusRes.reason, "invalid_status");
     }
 
-    // 4. Refuses to export over production content/ directory
+    // 4. Refuses to export over production content/ directory, including via ancestor symlinks
     const prodOverwriteRes = exportHandoffDirectory({
       outputDir: resolve(ROOT, "content"),
       promptsPath: PROMPTS_PATH,
@@ -396,6 +398,145 @@ test("path escape, symlinks, false completion status, and invalid CLI usage are 
     if (!prodOverwriteRes.ok) {
       assert.equal(prodOverwriteRes.reason, "invalid_path");
     }
+
+    // 4a. Ancestor-symlink export confinement (QA-8430-01): nonexistent child or multi-segment suffix under symlink
+    const isolatedRepo = join(work, "isolated-repo");
+    const protectedContent = join(isolatedRepo, "content");
+    mkdirSync(protectedContent, { recursive: true });
+    symlinkSync(protectedContent, join(isolatedRepo, "alias"));
+
+    const singleSuffixTarget = join(isolatedRepo, "alias", "new-kit");
+    const singleSuffixRes = exportHandoffDirectory({
+      rootDir: isolatedRepo,
+      outputDir: singleSuffixTarget,
+      promptsPath: PROMPTS_PATH,
+    });
+    assert.equal(singleSuffixRes.ok, false, "must reject nonexistent child under symlink to protected content/");
+    if (!singleSuffixRes.ok) {
+      assert.equal(singleSuffixRes.reason, "invalid_path");
+      assert.match(singleSuffixRes.offendingPath ?? "", /alias[\\/]new-kit$/);
+    }
+    assert.equal(existsSync(join(protectedContent, "new-kit")), false);
+    assert.deepEqual(readdirSync(protectedContent), []);
+
+    const multiSuffixTarget = join(isolatedRepo, "alias", "deep", "nested", "new-kit");
+    const multiSuffixRes = exportHandoffDirectory({
+      rootDir: isolatedRepo,
+      outputDir: multiSuffixTarget,
+      promptsPath: PROMPTS_PATH,
+    });
+    assert.equal(multiSuffixRes.ok, false, "must reject multi-segment nonexistent path under symlink to content/");
+    if (!multiSuffixRes.ok) {
+      assert.equal(multiSuffixRes.reason, "invalid_path");
+      assert.match(multiSuffixRes.offendingPath ?? "", /alias[\\/]deep[\\/]nested[\\/]new-kit$/);
+    }
+    assert.equal(existsSync(join(protectedContent, "deep")), false);
+    assert.deepEqual(readdirSync(protectedContent), []);
+
+    // Exercise real CLI behavior (in-process runHandoffCli and subprocess spawnSync) for symlinked ancestor
+    const cliErrs: string[] = [];
+    const cliSymlinkTarget = join(isolatedRepo, "alias", "cli-new-kit");
+    const cliExitCode = runHandoffCli(
+      ["export", "--output-dir", cliSymlinkTarget, "--prompts", PROMPTS_PATH],
+      {
+        cwd: isolatedRepo,
+        stdout: () => undefined,
+        stderr: (msg) => cliErrs.push(msg),
+      },
+    );
+    assert.equal(cliExitCode, 1);
+    const cliErrPayload = JSON.parse(cliErrs.join("\n")) as Record<string, unknown>;
+    assert.equal(cliErrPayload.ok, false);
+    assert.equal(cliErrPayload.reason, "invalid_path");
+    assert.match(String(cliErrPayload.offendingPath ?? ""), /alias[\\/]cli-new-kit$/);
+    assert.deepEqual(readdirSync(protectedContent), []);
+
+    const cliScript = resolve(ROOT, "scripts/sketches-handoff.ts");
+    const subprocTarget = join(isolatedRepo, "alias", "subproc-new-kit");
+    const subprocRun = spawnSync(
+      process.execPath,
+      [
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        cliScript,
+        "export",
+        "--output-dir",
+        subprocTarget,
+        "--prompts",
+        PROMPTS_PATH,
+      ],
+      { cwd: isolatedRepo, encoding: "utf8" },
+    );
+    assert.equal(subprocRun.status, 1, `expected exit 1, got ${subprocRun.status}: ${subprocRun.stdout}`);
+    const subprocErr = JSON.parse(subprocRun.stderr.trim()) as Record<string, unknown>;
+    assert.equal(subprocErr.ok, false);
+    assert.equal(subprocErr.reason, "invalid_path");
+    assert.match(String(subprocErr.offendingPath ?? ""), /alias[\\/]subproc-new-kit$/);
+    assert.deepEqual(readdirSync(protectedContent), []);
+
+    // Ancestor-symlink check coverage for inputDir and promptsPath
+    const externalParent = join(work, "external-parent");
+    const externalSubKit = join(externalParent, "sub-kit");
+    exportHandoffDirectory({ outputDir: externalSubKit, promptsPath: PROMPTS_PATH });
+    const externalPrompts = join(externalParent, "prompts.md");
+    writeFileSync(externalPrompts, readFileSync(PROMPTS_PATH, "utf8"), "utf8");
+    symlinkSync(externalParent, join(isolatedRepo, "parent-link"));
+
+    const ancestorInputRes = checkHandoffDirectory({
+      rootDir: isolatedRepo,
+      inputDir: join(isolatedRepo, "parent-link", "sub-kit"),
+      promptsPath: PROMPTS_PATH,
+    });
+    assert.equal(ancestorInputRes.ok, false);
+    if (!ancestorInputRes.ok) {
+      assert.equal(ancestorInputRes.reason, "invalid_path");
+      assert.match(ancestorInputRes.offendingPath ?? "", /parent-link[\\/]sub-kit$/);
+    }
+
+    const ancestorPromptsRes = checkHandoffDirectory({
+      rootDir: isolatedRepo,
+      inputDir: kitDir,
+      promptsPath: join(isolatedRepo, "parent-link", "prompts.md"),
+    });
+    assert.equal(ancestorPromptsRes.ok, false);
+    if (!ancestorPromptsRes.ok) {
+      assert.equal(ancestorPromptsRes.reason, "invalid_path");
+      assert.match(ancestorPromptsRes.offendingPath ?? "", /parent-link[\\/]prompts\.md$/);
+    }
+
+    // Positive control: normal nonexistent nested output directory succeeds, including under a symlinked lease root
+    const leaseRoot = join(work, "lease-root-link");
+    symlinkSync(isolatedRepo, leaseRoot);
+    const leaseProtectedEscape = exportHandoffDirectory({
+      rootDir: leaseRoot,
+      outputDir: join(leaseRoot, "alias", "from-lease"),
+      promptsPath: PROMPTS_PATH,
+    });
+    assert.equal(leaseProtectedEscape.ok, false);
+    if (!leaseProtectedEscape.ok) {
+      assert.equal(leaseProtectedEscape.reason, "invalid_path");
+    }
+    assert.deepEqual(readdirSync(protectedContent), []);
+
+    const validNestedOut = join(leaseRoot, "exports", "nested", "valid-kit");
+    const validNestedLogs: string[] = [];
+    const validNestedExit = runHandoffCli(
+      ["export", "--output-dir", validNestedOut, "--prompts", PROMPTS_PATH],
+      {
+        cwd: leaseRoot,
+        stdout: (msg) => validNestedLogs.push(msg),
+        stderr: () => undefined,
+      },
+    );
+    assert.equal(validNestedExit, 0);
+    assert.equal(readdirSync(validNestedOut).length, 11);
+    const validNestedCheck = checkHandoffDirectory({
+      rootDir: leaseRoot,
+      inputDir: validNestedOut,
+      promptsPath: PROMPTS_PATH,
+    });
+    assert.equal(validNestedCheck.ok, true);
 
     // 5. Invalid CLI usage returns exit code 2 with invalid_cli
     for (const badArgs of [
