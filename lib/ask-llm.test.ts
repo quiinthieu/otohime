@@ -2,8 +2,9 @@ import Anthropic from "@anthropic-ai/sdk";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { test } from "node:test";
+import { after, test as nodeTest } from "node:test";
 import { answer, type AskIndex } from "./ask.ts";
+import { askUsage } from "../db/schema.ts";
 import {
   ASK_LIMITS,
   buckets,
@@ -66,6 +67,36 @@ function post(body: unknown, { origin = ORIGIN, ip = "203.0.113.7" }: { origin?:
 }
 
 const BROAD = "shore games notes stack";
+
+// A run that skips or loses tests must not pass: every test registered here has to run to its end,
+// and the acceptance cases have to be among them.
+const ACCEPTANCE = [
+  "off unless ASK_LLM=1 and ANTHROPIC_API_KEY: GET and POST are 404 and the model is never called",
+  "GET reports enabled when both are set",
+  "POST answers 200 with links mapped from cited ids only",
+  "the 11th request in an hour is 429 with the offline answer marked (OFFLINE)",
+];
+const registered: string[] = [];
+const finished = new Set<string>();
+function test(name: string, fn: () => void | Promise<void>) {
+  registered.push(name);
+  nodeTest(name, async () => {
+    await fn();
+    finished.add(name);
+  });
+}
+after(() => {
+  for (const name of ACCEPTANCE) assert.ok(registered.includes(name), `acceptance test missing: ${name}`);
+  assert.deepEqual(registered.filter((name) => !finished.has(name)), [], "every test ran to its end");
+});
+
+// Type-level checks, held by `npm run typecheck`.
+// @ts-expect-error a store returns the bucket's new count, a number
+const badStore: AskUsageStore = { hit: async () => "1" };
+// @ts-expect-error the key never takes a NEXT_PUBLIC_ name
+const leakyEnv: AskEnv = { NEXT_PUBLIC_ANTHROPIC_API_KEY: "k" };
+void badStore;
+void leakyEnv;
 
 test("off unless ASK_LLM=1 and ANTHROPIC_API_KEY: GET and POST are 404 and the model is never called", async () => {
   for (const env of [{}, { ANTHROPIC_API_KEY: "k" }, { ASK_LLM: "1" }, { ASK_LLM: "true", ANTHROPIC_API_KEY: "k" }, { ASK_LLM: "1", ANTHROPIC_API_KEY: "" }]) {
@@ -251,4 +282,27 @@ test("a question nothing on the site matches gets the offline answer without a m
   assert.deepEqual((await res.json()).lines, [OFFLINE, ...answer(index, "zzqx").lines]);
   assert.equal(fake.calls.length, 0);
   assert.equal(store.counts.size, 0);
+});
+
+test("migrations from 0003 on are expand-only, and 0003 creates ask_usage as the schema has it", () => {
+  const dir = join(ROOT, "db/migrations");
+  const journal: { entries: { idx: number; tag: string }[] } = JSON.parse(readFileSync(join(dir, "meta/_journal.json"), "utf8"));
+  const tags = journal.entries.map((e) => e.tag);
+  assert.ok(tags.includes("0003_petite_omega_flight"), "the journal lists 0003");
+  const later = journal.entries.filter((e) => e.idx >= 3);
+  assert.ok(later.length > 0);
+  for (const { tag } of later) {
+    const sql = readFileSync(join(dir, `${tag}.sql`), "utf8");
+    for (const word of [/\bDROP\b/i, /\bRENAME\b/i, /\bTRUNCATE\b/i, /\bDELETE\b/i, /\bALTER\s+COLUMN\b/i, /\bSET\s+NOT\s+NULL\b/i]) {
+      assert.doesNotMatch(sql, word, `${tag} is expand-only`);
+    }
+  }
+  const sql = readFileSync(join(dir, "0003_petite_omega_flight.sql"), "utf8");
+  assert.match(sql, /^CREATE TABLE "ask_usage" \(/);
+  const columns = Object.values(askUsage)
+    .filter((c): c is { name: string } => typeof c === "object" && c !== null && "name" in c && typeof (c as { name: unknown }).name === "string")
+    .map((c) => c.name);
+  assert.deepEqual(columns.sort(), ["bucket", "count", "updated_at"]);
+  for (const name of columns) assert.match(sql, new RegExp(`"${name}"`), name);
+  assert.match(sql, /"bucket" text PRIMARY KEY NOT NULL/);
 });

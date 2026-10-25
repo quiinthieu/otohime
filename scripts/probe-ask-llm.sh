@@ -4,9 +4,10 @@
 #   bash scripts/probe-ask-llm.sh                    # build, then next start on a free port, probe it
 #   SKIP_BUILD=1 PORT=4093 bash scripts/probe-ask-llm.sh
 #
-# With ASK_LLM and ANTHROPIC_API_KEY unset, GET /api/ask and a well-formed same-origin POST /api/ask both
-# answer 404. Negative control: a second start with ASK_LLM=1 and a fake key answers GET 200 with
-# "enabled":true (so the 404s come from the switch, not a missing route), and a cross-origin POST is 403.
+# The build being probed holds the /api/ask handler. With ASK_LLM and ANTHROPIC_API_KEY unset, GET /api/ask
+# and a well-formed same-origin POST /api/ask both answer 404. Negative control: a second start with ASK_LLM=1
+# and a fake key answers GET 200 with "enabled":true (so the 404s come from the switch, not a missing route),
+# and a cross-origin POST is 403. The probe passes only if all 6 checks pass.
 # That start points ANTHROPIC_BASE_URL at a closed local port and sends no POST that passes the origin check,
 # so nothing ever reaches Anthropic. No database is needed: the disabled route never touches one.
 #
@@ -110,6 +111,11 @@ status() { # method, path, [origin], [body] -> prints "<code> <body>"
   echo "$code $(head -c 300 "$WORK/body" | tr -d '\n')"
 }
 
+# The build being probed has the route: the 404s below come from the switch, not a missing handler.
+route_built=0
+[ -f .next/server/app/api/ask/route.js ] && grep -q '"/api/ask"' .next/app-path-routes-manifest.json 2>/dev/null && route_built=1
+check "build: the output holds the /api/ask route handler" "$route_built" "no .next/server/app/api/ask/route.js in the manifest"
+
 QUESTION='{"question":"what is shore"}'
 
 if start disabled; then
@@ -136,5 +142,11 @@ else
 fi
 stop_server
 
+# Passing means every check ran and passed, not merely that none failed.
+EXPECTED=6
 echo "probe: $OK ok, $FAILED failed${FAILURES[*]:+ (${FAILURES[*]})}"
+if [ "$OK" -ne "$EXPECTED" ]; then
+  echo "not ok - probe: expected $EXPECTED passing checks, got $OK"
+  exit 1
+fi
 [ "$FAILED" -eq 0 ]
