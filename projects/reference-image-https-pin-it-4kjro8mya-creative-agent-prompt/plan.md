@@ -1,271 +1,203 @@
 # Ink & Watercolour Portraits
 
-Plan **pm-240** · product-owner run **run-8299** · 2026-10-25
-Repository baseline: `ad778f1`. Product deliverable: ten original adult-woman
-ink-and-watercolour portraits, published as the third section of `/sketches`,
-with ten separate named PNG master downloads.
+Plan **pm-240** · revision **2** · product-owner run **run-8397**
 
-## Outcome and boundaries
+Repository baseline: `bc9137c1ff01c145fa96cdfd6ae65ac23ab61c2c`. This revision replaces
+only superseded **t-1472**. Completed **t-1471** remains done and is not re-proposed.
 
-A visitor sees Places, Small things and People in one sketchbook: twenty-two
-figures, including the ten concepts in [prompts.md](prompts.md). Each portrait
-uses a different pose, outfit and restrained palette but shares expressive black
-ink, transparent irregular washes, off-white negative space and incomplete edges.
-The collection must be visually inspected; metadata and test doubles cannot
-certify anatomy, painterly quality or consistency.
+## Deliverable for this revision
 
-This PO run delivers the plan, prompt pack and the verbatim prior report
-[research.md](research.md), not generated paintings. The research is historical
-evidence from run-8296; the overrides below govern implementation.
+Deliver a **portable portrait production kit**: ten independently usable complete
+ink-and-watercolour prompts, the exact return filenames, captions, style and review
+requirements, a deterministic provenance manifest, and a credential-free export/check
+command. Keep the original ten-painting goal visible as **undelivered: 0 of 10**.
 
-Only text enters git. Keep the PNG masters, JPEG derivatives and optional contact
-sheet in durable external storage. Exactly these PNG download names are required:
+This is the nearest deliverable that can pass now under the operator's change
+request. A kit is creative direction and a production handoff, not an illustration
+collection. This revision's completion must never be reported as ten delivered
+paintings. All original image requirements remain in [prompts.md](prompts.md);
+[research.md](research.md) preserves rep-4789 verbatim. It is already committed
+and was compared byte-for-byte with the report body in this run.
 
-1. `01_Quiet_Reader.png`
-2. `02_Flower_Girl.png`
-3. `03_Rainy_Afternoon.png`
-4. `04_Cafe_Dreamer.png`
-5. `05_Autumn_Wanderer.png`
-6. `06_Violinist.png`
-7. `07_Morning_by_the_Window.png`
-8. `08_Painter.png`
-9. `09_Spring_Breeze.png`
-10. `10_Letter_Writer.png`
+The new task has no credential, external-capacity, human-response or previous-task
+dependency. No new paid account, storage provider, public UI or runtime is introduced.
 
-Generate at native 3:4, preferably at least 1536×2048. Record an API's actual
-largest supported native size if lower; do not upscale and label it native.
-A lower resolution is an explicit limitation in the final product report.
-Derivatives are exactly 1152×1536 JPEG, less than 600,000 bytes, with no crop that
-removes hands or meaningful clothing. Names, captions, palettes, gestures and
-focal points are specified in prompts.md.
+## Failure evidence and what changes
 
-## Decisions and corrections to research
+| Evidence inspected | Observed result | Consequence |
+|---|---|---|
+| Board task t-1471; QA rep-4798 | Done; tooling accepted for integration readiness only | Preserve processor, adapter, validators, download route, prompt pack and conditional gallery |
+| Board task t-1472 | Superseded after six SWE attempts on agy-argon-high and claude-opus-high | Do not retry its unchanged output-dependent contract |
+| Latest gate ver-3339 / run-8389 at a6bce33 | Tests, lint, typecheck and production build pass; real-file check and 22-figure walk fail | These failures demonstrate missing product; they are not evidence of broken offline tooling |
+| Raw task log 267d873e-7bce-47dc-ba6f-59bc0b08d67e | grok-4.7/high on billie-mac exits 1: Not signed in | A profile switch does not provision authentication |
+| Current account registry read in run-8397 | grok-main enabled, auth_expired, repos=[] | Re-sign-in alone also does not restore repo eligibility |
+| Current locked preflight in run-8397 | sharp 0.35.5 runs; adapter constructs; ten prompts parse; credentialAvailable=false; manifestRecordsCount=0 | Offline execution is demonstrated; image generation/publication is not |
+| Current production manifest | content/portraits.json is [] | Keep twelve studies and no empty People section |
 
-- **Keep the existing page.** `lib/pages.test.ts` enforces six console menu lines.
-  Add People on figure 07; add neither a public route entry nor a menu line.
-- **Original Reader composition.** Seated, frontal three-quarter view, book low in
-  her lap, loosely tied hair without the reference's headscarf. This keeps the
-  concept and teal/ochre palette while changing the reference's profile pose.
-- **Preserve the masters.** The research proposed omitting PNGs and committing
-  JPEGs. The user's PNG deliverables and no-binaries instruction take priority.
-  Upload masters and derivatives to the already relevant vendor's Files storage;
-  commit a typed manifest of permanent public URLs, file ids and checksums.
-- **Current API contract.** The primary docs describe
-  `grok-imagine-image-2.0`, `aspect_ratio: "3:4"`, `resolution: "2k"` and JSON
-  image editing. Do not implement the research's unsupported multipart/seed
-  assumptions or select the retiring quality alias. Check the official contract
-  at implementation time and record actual request settings and resolved model.
-- **Durability.** xAI's ordinary generation URLs are temporary. Files and their
-  public URLs must both have no expiration. Anonymous downloads must work before
-  activation. Keep the native candidate hash and encoded master hash separately.
-- **No capacity dependency on a GPU recipe.** The platform's flux2-klein runner
-  is a sprite pipeline, so this plan uses the hosted xAI image API. It introduces
-  no local model, GPU job, polling loop, schedule or new queue. A runtime elsewhere
-  may not be substituted merely to bypass a failed image API.
-- **Credentials are not proven.** grok-main is active and has now been bound to
-  otohime with its previous empty repo binding preserved by replacement with
-  `["otohime"]`. That eligibility does not authenticate an image call or mount
-  .grok on an agy lease. Do not alter the operator's selected agent profile.
-- **Order independent work first.** Task 1 needs neither credentials nor real
-  output. It delivers the processor, adapter, validator, download route and
-  fixture-proven gallery. Task 2 obtains, reviews and publishes real output and
-  activates all ten records atomically. No partial collection is published.
+The operator describes exhausted QA cycles. The fetched record more precisely
+locates the final failure in the **green verification gate before QA**. Repeated
+checks of absent inputs consumed cycles even though code checks were green.
 
-The named platform standing documents are absent from otohime. They were read
-from `/data/build-worker/repo/mono-v2/projects/20260921222547_plan_manager_chief_of_staff_extraction.md`
-and `/data/build-worker/repo/mono-v2/docs/claude/software-development.md`.
-Do not copy their platform-specific staging deployment instructions into this
-GitHub/Vercel repository. Follow otohime's AGENTS.md, installed Next.js guides and
-existing CI. Product-owner changes remain under projects/.
+The failed task combined obtaining externally authenticated images, reviewing,
+publishing, and activating them. The replacement exports a reviewable text product
+with acceptance entirely inside a clean checkout. It adds only the missing
+portable handoff capability, reusing the existing prompt parser. No task depends
+on a person supplying images; no fixture becomes a portrait; no image-delivery
+assertion is weakened. A second tooling or activation task would duplicate
+finished work or recreate the same unavailable-input dependency.
 
-## Interface and data flow
+This session exposes an image-generation tool, but tool availability alone does
+not establish durable anonymous publication to the implemented xAI-only
+manifest/download path. We make no claim that image creation is universally
+impossible. Changing publication infrastructure is outside this recovery scope;
+this revision deliberately claims only the production kit.
 
-`prompts.md → ImagePublisher → candidate ledger → visual review → PNG/JPEG
-processor → xAI Files → public URL/hash check → content/portraits.json →
-content/site.ts → /sketches`
+## Creative direction and return contract
 
-The generator is an explicit CLI, separate from the application request path.
-Page loads, builds, CI and verification never purchase images.
-Generation and publication share the same port for real and fake adapters.
-Download routes accept only exact committed master filenames, stream the
-corresponding public PNG and send a named attachment header; user-supplied URLs
-never become fetch targets.
+The kit preserves all ten concepts and exact mappings from prompts.md:
 
-The manifest is a text-only record of ten selected artworks. It stores
-concept identity, filenames, master/derivative public URLs and ids, actual
-dimensions, MIME types, bytes, SHA-256 hashes, full prompt or prompt-pack hash,
-settings and reference hashes, model and attempt identity, and review status.
-Keep secrets and private request URLs out of it. It begins empty after task 1;
-only ten complete reviewed records activate People. A nonempty partial or
-invalid manifest is an error, not a silently hidden failure.
+| Standalone prompt file | Native PNG master | Gallery JPEG derivative |
+|---|---|---|
+| 01_Quiet_Reader.md | 01_Quiet_Reader.png | 13-reader.jpg |
+| 02_Flower_Girl.md | 02_Flower_Girl.png | 14-flowers.jpg |
+| 03_Rainy_Afternoon.md | 03_Rainy_Afternoon.png | 15-rain.jpg |
+| 04_Cafe_Dreamer.md | 04_Cafe_Dreamer.png | 16-cafe.jpg |
+| 05_Autumn_Wanderer.md | 05_Autumn_Wanderer.png | 17-leaves.jpg |
+| 06_Violinist.md | 06_Violinist.png | 18-violin.jpg |
+| 07_Morning_by_the_Window.md | 07_Morning_by_the_Window.png | 19-window.jpg |
+| 08_Painter.md | 08_Painter.png | 20-painter.jpg |
+| 09_Spring_Breeze.md | 09_Spring_Breeze.png | 21-breeze.jpg |
+| 10_Letter_Writer.md | 10_Letter_Writer.png | 22-letter.jpg |
 
-Use files-cdn.x.ai as the sole new remote image host, with exact HTTPS/path
-validation and the installed Next.js remotePatterns API. Existing local
-`/sketches/*.jpg` remain local. For portraits, reserve intrinsic 1152×1536 space
-and use responsive sizes; the People grid follows the existing two/three-column
-pattern. Keep `alt=""` and meaningful figcaptions consistent with the gallery.
-Provide a plainly labeled master download beside each caption.
+Every prompt repeats the shared expressive, nonuniform black ink and loose
+transparent washes, restrained palette, off-white #faf8f3 negative space and
+unfinished edges. Exactly one original adult woman, age 20–30, appears per
+painting; no text, signature, border, watermark or polished digital rendering.
+The Reader stays seated in a frontal three-quarter view, book low in her lap,
+without the reference's headscarf. This avoids copying the reference composition.
 
-No binary fixture enters git: tests create fixtures in temporary directories.
-Hermetic loopback HTTP tests remove both lowercase and uppercase proxy variables
-and provider/MCP environment variables before starting their fake.
+The future artwork return contract is unchanged: ten native 3:4 PNG masters,
+preferably >=1536×2048 without upscaling, and ten 1152×1536 JPEG derivatives
+under 600000 bytes. Actual lower native dimensions must be declared honestly.
+Each file needs permanent anonymous public storage, exact byte count and SHA-256,
+MIME and dimensions, prompt/settings provenance, and full-size visual review.
+The existing adapter/allowlist accepts non-expiring files-cdn.x.ai publication.
+No image binaries or signed URLs enter git. A candidate URL or a queued job is
+not delivery. None of those image files exists in this revision's kit.
 
-## Execution contracts
+## Data and command contract
 
-These JSON objects are the exact task definitions submitted to plan-manager.
-Their verification commands execute at each delivered SHA inside a checkout;
-none purchases images or changes shared infrastructure. The walk creates and
-cleans up only its own local server/browser processes. A read-only remote mode
-is used by QA against the deployment after CI.
+The source is prompts.md, parsed by the existing lib/sketches.ts parsePromptPack.
+The new isolated handoff module exports/validates plain text values; its filesystem
+CLI does not enter content/site.ts or the App Router dependency graph.
+
+`node --experimental-strip-types scripts/sketches-handoff.ts export --output-dir <dir>`
+writes ten .md prompts plus manifest.json; `check --input-dir <dir>` validates without
+rewriting anything. Both commands accept `--prompts <path>`; their default directory
+is this plan folder's production-kit/. Package aliases are portraits:handoff:export
+and portraits:handoff:check. Success is exit 0; invalid kit is exit 1 with a stable
+reason and offending path/concept; invalid CLI usage is exit 2.
+
+manifest.json has schemaVersion=1 and status=production_required. It records source
+pack hash, reference URL and **referenceUrlSha256**, ten ordered concept rows with
+mapping/caption, full-prompt hash and exact prompt-file bytes/hash, review checklist
+and image requirements. The existing parser's referenceSha256 hashes the URL text,
+not downloaded reference bytes: name it accurately. Generation settings are
+**unverified guidance**, not an actual model execution record. No accepted images,
+file ids or completion status are fabricated.
+
+Export is deterministic: no current timestamps, host paths, secrets or run-specific
+values in its output. Check compares against the canonical source as well as the
+stored hashes, so coordinated prompt/hash tampering is rejected. Constrain file
+reads/writes to the declared output/input tree, reject escaping paths/symlinks and
+unexpected files. Tests use temporary directories; only final text kit files are
+committed.
+
+Use stable reasons: missing_file, extra_file, prompt_mismatch, source_mismatch,
+metadata_mismatch, duplicate_mapping, invalid_path, invalid_status and invalid_cli.
+The ten review checklist items are: one adult subject; natural face/proportions;
+plausible visible hands (occlusion allowed); varied expressive ink; organic loose
+washes; three-to-five-colour palette; sparse off-white paper; original distinct
+pose; absence of digital polish/anime/photorealism; absence of text, frame,
+signature and watermark. These are future viewing criteria, not kit review passes.
+
+## Remaining task DAG
+
+Only the following task is proposed, numbered from 1. It has no dependencies;
+t-1471 remains completed outside this proposal. QA is required despite the limited
+scope so an independent role verifies the recovery deliverable and its boundaries.
 
 ```json
 [
   {
     "sequence": 1,
-    "title": "Build portrait tooling and gallery support",
+    "title": "Export and verify the portable portrait production kit",
     "role": "software_engineer",
     "depends_on": [],
     "qa": "required",
-    "problem": "The gallery supports only place/object studies, and there is no tested image-generation, durable-publication or validation path. Real API credentials must not block the work that fixtures can prove.",
-    "acceptance_criteria": "A credential-free fake proves generation/publication/import failures and success; the portrait gallery renders ten fixture people correctly while production keeps its twelve studies until a reviewed real manifest is supplied. No image binaries or credentials enter git. This task proves integration readiness only; real generation and product delivery remain unproven.",
+    "problem": "The ten paintings cannot currently be generated and durably published through the provisioned xAI path: grok-main is auth_expired, its repo binding is empty, and no masters exist. t-1471 already supplies gallery tooling and a combined prompt pack, but an external producer still has to manually assemble ten prompts and a return checklist. Replace only the exhausted t-1472 with a useful, credential-free production handoff; do not claim artwork delivery.",
+    "acceptance_criteria": "A clean npm ci checkout can export and check a portable text-only production kit without credentials or network access. The committed production-kit directory contains ten separately usable complete prompts and manifest.json with the exact ten PNG/JPEG filename pairs, captions, prompt/source hashes, review checklist and explicit production_required status. Missing, altered, duplicate or extra prompt files fail check with a stable reason. Production content/portraits.json remains [], the twelve existing sketches remain intact, and artwork-delivery checks still reject the absent collection. QA independently verifies the kit and its rejection behavior. This task delivers a production kit, not the ten paintings.",
     "action_items": [
-      "Read AGENTS.md and the installed Next.js image/testing guides. Use this plan and prompts.md as the build contract; write failing interface-level tests first.",
-      "Declare an ImagePublisher port in lib/sketches-generation.ts with generate, publish and fetch-artifact operations. Implement the xAI REST adapter behind the port using the current official JSON contract; Node 22 and a directly locked sharp dependency handle image decoding/conversion. Keep credentials in memory from XAI_API_KEY or an already mounted provider settings file; do not print credentials or alter shared secret configuration.",
-      "Add scripts/sketches-paint.ts with on-demand preflight, generate, import and publish commands. Preflight must actually import the processor and construct the adapter in npm ci's locked environment, parse all ten prompts and validate reference/fixture assets without requiring a paid call. Generation produces separate concepts, uses 3:4/2k, bounds attempts to four per concept, records exact native resolution, and never fabricates unsupported seeds.",
-      "Make publication persist named PNG masters and JPEG derivatives through xAI Files with no file expiration and non-expiring anonymous public URLs. Resume from saved attempts rather than repurchasing successful images. Persist a redacted JSON attempt ledger immediately after each API response; separate failed requests, decoded images, published assets and activated gallery content. Never treat temporary imgen URLs as delivery.",
-      "Implement scripts/sketches-check.ts, a typed content/portraits.json manifest initially containing zero records, and npm run sketches:check. A portrait record includes concept id, filename, permanent master/derivative URLs and file ids, content hashes, MIME, bytes, native and derivative dimensions, prompt/settings/reference fingerprints, actual model and review disposition. Validate exact required filename mapping, 3:4, derivative 1152x1536 and <600000 bytes, uniqueness, HTTPS CDN allowlist and non-expiring provenance. Default mode is offline; --live is a read-only download/hash/decode check; --require-people requires ten complete real records. Reject missing, extra, partial and fake records in delivery mode.",
-      "Extend Sketch.kind with person, consume the portrait manifest in content/site.ts, and add a conditional People section on /sketches with 1152x1536 intrinsic dimensions and responsive sizes. Retain FigTitle 07 and the six-line console menu. Use only the exact files-cdn.x.ai remote pattern in next.config.ts, validate URLs against that host in the manifest, and expose named master downloads with a manifest-only filename lookup route at app/(site)/(app)/sketches/download/[filename]/route.ts. Stream the public PNG with correct Content-Type and Content-Disposition; unknown names return 404, upstream failures return a controlled 502, and arbitrary external URL parameters are rejected.",
-      "Keep production's existing twelve entries and intro until the ten-record reviewed manifest exists. Derive intro/counts from activated content. Captions come from prompts.md. Add lib/sketches.test.ts and lib/sketches-generation.test.ts to the existing npm test discovery; create image fixtures at test time from text so no fixture binaries are committed. Use a loopback fake HTTP server with proxy env scrubbed to prove request serialization, PNG/JPEG processing, public publication, resume, 401/429/5xx, malformed payloads, wrong dimensions, duplicate bytes, expiry and download-route failures. Rendering tests pass fixture records directly, without a public fixture mode.",
-      "Add scripts/walk-sketches.sh and a browser probe supporting a local production server or read-only BASE_URL mode with EXPECT_PEOPLE. Assert build-sha, section/figure counts from rendered DOM, responsive loaded images and named PNG download behavior. Document commands and the durable manifest lifecycle in README.md. Run tests, build and push; deployment checks belong to verification and QA."
+      "Read otohime AGENTS.md, this revision of plan.md, prompts.md and artwork-review.md. Keep completed t-1471 unchanged. Reuse parsePromptPack from lib/sketches.ts; do not repeat account probes or dispatch credential-dependent generation. This task needs no person-only prerequisite and does not consume or re-raise esc-371/esc-372.",
+      "Declare a small pure PortraitHandoff export/validation interface in lib/sketches-handoff.ts; implement scripts/sketches-handoff.ts export --output-dir <directory> and check --input-dir <directory>, with --prompts <path> for a source-pack override. Default both paths to projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/. Add package scripts portraits:handoff:export and portraits:handoff:check using Node 22 strip-types. Do not import this filesystem CLI or any new module into content/site.ts or the App Router.",
+      "Export ten UTF-8 Markdown files named with the exact master basename and .md extension, e.g. 01_Quiet_Reader.md through 10_Letter_Writer.md. Each contains the full shared style plus its concept composition as one copyable prompt, exact master/derivative names, caption, 3:4 orientation, preferred native >=1536x2048, and a note to report a lower native size honestly rather than upscale. Preserve the seated frontal three-quarter Reader, original adult subjects and all ten distinct poses, palettes and focal points. Treat prompts.md as the only creative source.",
+      "Export deterministic manifest.json with schemaVersion=1, status=production_required, source prompt-pack SHA-256, reference URL and referenceUrlSha256 (the existing parser hashes the URL, not downloaded image bytes), and ten ordered concept records containing conceptId, title, caption, masterFilename, derivativeFilename, promptFile, fullPromptSha256 and exact UTF-8 prompt-file byteLength/SHA-256. Record generationSettings as unverified guidance from prompts.md, never as an executed model/seed. Include the ten-item visual review checklist and derivative requirement 1152x1536 JPEG <600000 bytes. Do not invent candidate ids, image hashes, accepted reviews, public URLs or completion claims.",
+      "The check command reads without rewriting files. Verify exact filenames and order against parsePromptPack, full prompt equality, captions, manifest metadata, UTF-8 byte lengths/hashes and production_required status. Reject missing/extra files, duplicate filename mappings, tampered content or hashes, traversal/symlink escape, and status implying completed paintings. Return exit 0 with a concise structured summary on success; exit 1 with a stable reason and offending concept/path for invalid input; invalid CLI usage exits 2. Export may write only its explicitly resolved output directory, never production portrait content.",
+      "Write failing interface/CLI tests in lib/sketches-handoff.test.ts before implementation. Use isolated temporary directories and no network: valid ten-concept round trip, deterministic repeated exports, Unicode captions/byte lengths, one-file tamper, missing/extra prompt, duplicate mapping, changed source pack, path escape and false completion status. Prove export/check do not resolve credentials or call a vendor even with an unusable key and network functions stubbed to throw. Include a negative control proving the existing delivery validator still rejects zero artwork records. Keep fixtures as text or generated test data outside production.",
+      "Commit the generated production-kit text files and a handoff.md in the plan folder. The handoff explains the offline commands, the exact physical artifact return contract (ten named native PNGs plus ten named derivatives at non-expiring public URLs with byte/hash/dimension evidence), the full-size per-image and collection review requirements, and the current 0/10 delivery gap. Document existing import/publish/live-check commands accurately, including that xAI publication still needs a usable API key and repo/account provisioning. Link esc-371/esc-372 as existing advisory chores; never make completion depend on a reply. A producer can use each prompt in an image tool of their choice; that alone does not prove publication or activation.",
+      "Run the contract checks, commit every task change with pm-240/<assigned_task_id>: prefix and push with git push origin HEAD. Keep content/portraits.json, gallery code, the twelve base assets and --require-people/EXPECT_PEOPLE=10 assertions unchanged. SWE stops at the push; QA checks the delivered text kit independently. Record actual results and explicit artwork non-delivery in the report."
     ],
     "interfaces": [
-      "lib/sketches-generation.ts",
-      "lib/sketches-generation.test.ts",
-      "lib/sketches.ts",
-      "lib/sketches.test.ts",
-      "lib/pages.test.ts",
-      "scripts/sketches-paint.ts",
-      "scripts/sketches-check.ts",
-      "scripts/walk-sketches.sh",
-      "scripts/probe-sketches.mjs",
-      "content/portraits.json",
-      "content/site.ts",
-      "app/(site)/(app)/sketches/",
-      "next.config.ts",
+      "lib/sketches-handoff.ts",
+      "lib/sketches-handoff.test.ts",
+      "scripts/sketches-handoff.ts",
       "package.json",
-      "package-lock.json",
-      "README.md",
-      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/prompts.md"
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/handoff.md"
     ],
     "non_goals": [
-      "Real image generation or a claim of completed artworks in this task",
-      "New public page or console menu line",
-      "A general GPU runner, queue, model training or flux2-klein changes",
-      "Committed image binaries, paid API calls in verification, secrets in manifests",
-      "Changes to the existing twelve paintings"
+      "Generating, importing, publishing or visually accepting paintings in this task",
+      "Activating People or modifying content/portraits.json, gallery rendering, existing artwork or delivery gates",
+      "Rebuilding completed t-1471 tooling or changing prompt-pack creative direction",
+      "Changing agent profiles, account bindings, shared credentials, paid providers, storage or GPU/runtime infrastructure",
+      "Image binaries, synthetic paintings, signed URLs or secrets in git",
+      "A public UI, extra page, menu entry, schedule, poller or capacity-dependent task"
     ],
     "verification": [
       {
-        "name": "Repository tests including fake publisher and renderer",
+        "name": "Repository tests including handoff contract and negative controls",
         "cwd": ".",
         "cmd": "npm test",
         "expect": "exit0",
         "timeout_s": 300
       },
       {
-        "name": "Locked processor and adapter preflight",
+        "name": "Read-only committed production kit verification",
+        "cwd": ".",
+        "cmd": "npm run portraits:handoff:check",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Real locked processor and adapter construction; no paid request",
         "cwd": ".",
         "cmd": "node --experimental-strip-types scripts/sketches-paint.ts preflight --offline",
         "expect": "exit0",
         "timeout_s": 300
       },
       {
-        "name": "Offline manifest and existing asset validation",
+        "name": "Existing artwork remains valid in offline scope",
         "cwd": ".",
         "cmd": "npm run sketches:check",
         "expect": "exit0",
         "timeout_s": 300
       },
       {
-        "name": "Type safety",
+        "name": "Original artwork gap remains explicit",
         "cwd": ".",
-        "cmd": "npm run typecheck",
+        "cmd": "node --input-type=module -e 'import assert from \"node:assert/strict\"; import {readFileSync} from \"node:fs\"; import {spawnSync} from \"node:child_process\"; assert.deepEqual(JSON.parse(readFileSync(\"content/portraits.json\",\"utf8\")),[]); const r=spawnSync(\"npm\",[\"run\",\"sketches:check\",\"--\",\"--require-people\"],{encoding:\"utf8\"}); assert.equal(r.status,1); assert.match(r.stdout+r.stderr,/manifest contains 0 records/); console.log(\"Artwork delivery still fails explicitly: 0 of 10\");'",
         "expect": "exit0",
         "timeout_s": 300
-      },
-      {
-        "name": "Lint",
-        "cwd": ".",
-        "cmd": "npm run lint",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "Production build",
-        "cwd": ".",
-        "cmd": "BETTER_AUTH_SECRET=ci-placeholder-not-a-real-secret-0123456789abcdef npm run build",
-        "expect": "exit0",
-        "timeout_s": 600
-      },
-      {
-        "name": "Production gallery walk before activation",
-        "cwd": ".",
-        "cmd": "SKIP_BUILD=1 EXPECT_PEOPLE=0 bash scripts/walk-sketches.sh",
-        "expect": "exit0",
-        "timeout_s": 300
-      }
-    ]
-  },
-  {
-    "sequence": 2,
-    "title": "Publish and activate ten reviewed portraits",
-    "role": "software_engineer",
-    "depends_on": [
-      "1"
-    ],
-    "qa": "required",
-    "problem": "Tooling and fixture tests do not deliver the requested paintings. Ten individually reviewed masters and public derivatives must exist durably before the People section is activated.",
-    "acceptance_criteria": "The real manifest contains ten distinct reviewed paintings, with the exact 01_Quiet_Reader.png through 10_Letter_Writer.png mapping in prompts.md and working anonymous PNG downloads. /sketches shows twenty-two figures in three sections, including ten responsive portraits. Each published derivative is 1152x1536 JPEG under 600000 bytes; native master resolution is recorded honestly. Independent QA accepts each image and the collection.",
-    "action_items": [
-      "At task start, inspect secure XAI_API_KEY availability or an already provisioned .grok settings mount without printing secrets. Binding grok-main to otohime is already done but does not guarantee an API key on an agy lease. If obtaining a usable key needs a person's sign-in/provisioning, immediately call plan_manager_ask_user kind=operator_action fingerprint=provision-xai-image-key:otohime with the exact environment provisioning chore, report the task as parked and end; do not burn a fix cycle. Do not change the operator's role profile.",
-      "Use the locked npm ci environment and the task-1 preflight to prove real sharp imports, adapter construction, prompts and assets. Retrieve and view the Pinterest original as style-only reference. Consult current official xAI docs and capture actual model/settings, not the research's old defaults. Make one real initial concept call as the authentication/output smoke test; retain a usable output as a candidate. On a definitive credential rejection, raise the stable fallback chore generate-portraits:grok-imagine to generate/upload the exact named masters from the committed pack and provide durable file ids/URLs, then report and end.",
-      "Run the on-demand paint command for ten separate concepts, starting with one candidate each and generating replacements only for observed defects, at most forty candidates total. Choose a consistent documented model/settings set. Use the frontal seated Reader composition. Never draw replacement pictures with code or route portraits through the sprite-only flux2-klein recipe. Keep native PNG masters and review contact sheet outside git.",
-      "Inspect every candidate and each keeper at full size against prompts.md. Regenerate any rejected anatomy, digital gloss, style drift, copying, text, watermark or composition defect; record per-image rejection reasons and final acceptance in projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/artwork-review.md with public evidence URLs and actual resolutions. Different file hashes alone are not visual originality.",
-      "Publish all ten named PNG masters and ten labeled JPEG derivatives to non-expiring xAI Files public URLs through the tested path. Import operator-produced masters through that same processor/validator if necessary. Persist attempts and file ids durably before scratch is lost. Verify public downloads and hashes before committing a complete ten-entry content/portraits.json. Never commit image binaries or temporary/signed source URLs.",
-      "Activate the ten real content records together, preserve the twelve existing studies, update intro/hint to twenty-two studies and places, small things and people, and use the researched titles/captions. Update lib/pages.test.ts to require 22 entries, exactly ten people, unique titles/URLs and a six-line menu. The gallery must offer the exact named master downloads.",
-      "Update the read-only walk/probe delivery assertions to require twenty-two figures, ten loaded portrait images and ten named master downloads; do not use image generation in verification. Keep failures visible if real output is missing. Run checks, commit with pm-240/<assigned_task_id>: prefix and push. SWE stops at the push; QA performs deployed review."
-    ],
-    "interfaces": [
-      "content/portraits.json",
-      "content/site.ts",
-      "lib/pages.test.ts",
-      "lib/sketches.test.ts",
-      "scripts/walk-sketches.sh",
-      "scripts/probe-sketches.mjs",
-      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/artwork-review.md",
-      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/prompts.md"
-    ],
-    "non_goals": [
-      "Synthetic fixture images as final deliverables",
-      "Activation with fewer than ten accepted images",
-      "Generation or shared-state writes in verification",
-      "Expiring download links or image binaries in git",
-      "Changing platform scheduling, agent profile pins or GPU recipes"
-    ],
-    "verification": [
-      {
-        "name": "Repository tests and activated collection invariants",
-        "cwd": ".",
-        "cmd": "npm test",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "Real published files, dimensions and checksums",
-        "cwd": ".",
-        "cmd": "npm run sketches:check -- --live --require-people",
-        "expect": "exit0",
-        "timeout_s": 600
       },
       {
         "name": "Type safety",
@@ -282,16 +214,9 @@ is used by QA against the deployment after CI.
         "timeout_s": 300
       },
       {
-        "name": "Production build",
+        "name": "Production build regression",
         "cwd": ".",
         "cmd": "BETTER_AUTH_SECRET=ci-placeholder-not-a-real-secret-0123456789abcdef npm run build",
-        "expect": "exit0",
-        "timeout_s": 600
-      },
-      {
-        "name": "Production collection and downloads",
-        "cwd": ".",
-        "cmd": "SKIP_BUILD=1 EXPECT_PEOPLE=10 bash scripts/walk-sketches.sh",
         "expect": "exit0",
         "timeout_s": 600
       }
@@ -300,106 +225,92 @@ is used by QA against the deployment after CI.
 ]
 ```
 
-## Operator and environment handling
+## Independent QA and acceptance
 
-The first task works without people or external generation. The second task's
-first action checks whether usable credentials are already provisioned. If a
-person must sign in or provision the key, raise
-`kind=operator_action`, fingerprint `provision-xai-image-key:otohime`,
-with the exact credential-installation chore and end the run with a parked report.
-Never print the key or ask someone to choose an implementation policy.
+QA reads the actual delivered diff and the kit, not only the SWE summary.
+Independently parse all ten Markdown outputs and manifest rows using a short
+separate script or direct inspection, then compare with prompts.md: full shared
+style, composition, captions, filenames and actual UTF-8 byte lengths/hashes.
+Review the Reader originality change and the other nine poses, palettes and focal
+points as **directions**, never certify nonexistent art. Reconstruct an export in
+a temporary directory and compare it to the committed kit.
 
-If a real credential check is definitively rejected, raise the fallback chore
-`generate-portraits:grok-imagine`: generate the ten separate artworks using
-prompts.md, upload the named native PNGs to persistent Files storage, and return
-their file ids/public URLs for the importer. This is a physical fallback chore,
-not a style approval gate. The agent performs the visual review after import.
-There is no known readiness HTTP URL for either chore, so do not invent a
-ready_probe; include one only when an actual reachable readiness endpoint exists.
+Exercise a negative control outside the supplied tests: alter one prompt and
+update its manifest file hash to match; check must still fail against prompts.md.
+Also remove a concept and verify rejection. Independently inspect that the live
+portrait manifest stays empty, the existing twelve assets remain unchanged and
+the original require-people assertion still reports the missing collection.
+A green kit gate proves the kit only.
 
-Network/429/5xx is an environment failure, not evidence that a person must start
-a runtime. Capture the bounded raw response, actual request id and saved ledger,
-then report the missing output and owner without polling. If a durable deferred
-vendor request already exists, record its exact id, result-retrieval endpoint,
-retention deadline and ingestion owner in the report; acceptance/watch can perform
-one on-demand retrieval and import with the same code path. Do not create
-duplicate billable requests to disguise missing results. A queued request alone
-does not satisfy task 2, which remains incomplete until the named public files
-exist. This plan requires no GPU runtime; if a subsequent scope change introduces
-one, it must use the platform's durable queue/callback and fake orchestration
-proof, with capacity-only checks assigned to watch and actual output still pending.
+Acceptance walkthrough:
 
-## QA and acceptance
+| Starting state | Action | Observable result |
+|---|---|---|
+| Clean checkout with npm ci, no provider key | Run handoff check | Ten complete prompt files and truthful production_required metadata pass |
+| Empty temporary output directory | Run export then compare bytes | Exactly ten prompts plus manifest.json reproduce the committed kit |
+| Temporary copy with a modified prompt and recomputed file hash | Run check | Stable rejection against canonical source |
+| Temporary copy with one missing concept | Run check | Stable missing-file rejection |
+| Production portrait manifest [] | Run original --require-people checker | Nonzero exit and 0-record gap; no fabricated gallery activation |
 
-Both tasks require QA. Task 1 is assessed against its limited integration scope:
-inspect the actual diff, run a separately constructed malformed-publication and
-unknown-download-name negative control, and exercise a fixture renderer and the
-twelve-study production page. Report explicitly that no real paintings were
-delivered by this task.
+The revision may pass acceptance only for the production kit and retained
+integration-readiness scope. Its report must explicitly say **paintings delivered:
+0/10; gallery portraits activated: 0/10**. Do not claim the original visual objective
+has been achieved. A full-collection claim requires the original full-size visual
+review and twenty real artifact checks in a later output-delivery amendment.
 
-Task 2 QA independently fetches all twenty public artifacts, decodes and hashes
-them outside the supplied checker, views all ten native masters at full size,
-and compares a contact sheet with the reference and prompt pack. Check facial
-proportions, convincing visible hands/violin grip, single adult subject, varied
-ink strokes, organic washes, limited palette, negative space, distinct poses,
-and no text/watermark/frame/signature. A single defective image fails delivery
-until replaced. An occluded hand is assessed as drawn; do not require five
-visible fingers when the pose hides them.
+## Deferred product gap and ownership
 
-After GitHub checks and the Vercel deployment, QA opens /sketches at 1366×768 and
-390×844. Count twenty-two rendered figures and ten People figures, verify all
-ten images finish loading with nonzero natural size, check no horizontal
-overflow, retain surrounding sections/menu, and download the ten named PNGs.
-Use a read-only BASE_URL walk with the deployed build-sha, then independently
-exercise one unknown filename (404) and intercept one portrait response with
-a 404 in the browser to confirm the loaded-image assertion fails. A probe that
-cannot fail when an image is broken proves nothing.
+Existing advisory chores remain esc-371 (provision-xai-image-key:otohime) and
+esc-372 (generate-portraits:grok-imagine). They are already waived by the decider;
+this revision neither re-raises them nor uses their replies as gates.
 
-Acceptance traverses each concept: starting state → visit/scroll/download →
-observed painting and named native PNG → evidence URL/hash. Check each done
-task's green gate and actual delivered SHA. Use the real deployed page and file
-responses rather than repeating only the SWE proof script. Missing output is
-pending/incomplete, never converted to pass by fake tests.
+Owner of the absent external artifacts/credential: the operator. Exact resumption
+evidence is either ten native named masters available for import plus usable
+durable publication access, or ten masters and ten derivatives already anonymously
+available at supported non-expiring URLs with file ids, byte counts, hashes,
+dimensions and producer provenance. API-key availability by itself is not proof
+that art exists. If account leasing is used, grok-main also needs otohime repo
+eligibility; there is no authorization here to change role pins.
 
-Each report distinguishes **integration deployed**, **execution demonstrated**
-and **product delivered**. If capacity is deferred, add **capacity pending**
-with exact ids, owner, deadline and failure condition. State the actual run's
-agent profile/model/effort and executable fingerprint (code, lock, settings,
-prompt/reference and asset hashes); never substitute a newer unrelated SHA.
+Owner of the next delivery amendment: plan-manager product owner after actual
+readiness evidence is supplied. It must retain finished tasks and propose real
+production/review/publication and activation only when the corresponding inputs
+are executable. That future work is **not scheduled in this DAG**. The gap fails
+any claim of the original collection if any required master/derivative is missing,
+unreachable, temporary, malformed, duplicated, stylistically rejected or not
+correlated to its review evidence.
 
-For the relevant saved attempt ledger, enumerate bounded FAILED and COMPLETED
-history as well as current requests; inspect raw failures and publication/import
-receipts and report counts, page bounds and whether history is complete.
-Unavailable or truncated history is inconclusive. xAI is an HTTP vendor here,
-not the platform GPU runner: do not imply task-manager generation history proves
-its execution. Follow every retained candidate through selection, Files upload,
-anonymous download and committed manifest. Repeated deterministic processor or
-adapter failures remain defects even if a replacement request is pending.
+There is no durable generation job to track, no capacity-only deferral and no
+dated readiness event. Do not invent queue ids, polling deadlines or a watch date.
+No run idles or proves success by an unanswered chore or elapsed time.
 
-No soak or future natural event is needed. Any genuine deferred request is
-owned by the publishing task and then acceptance/watch, with its actual deadline;
-the collection cannot be called delivered until the real artifacts are observed.
+## Evidence discipline and saving
 
-## Validation and saving this plan
+The latest plan run listing contains 16 records (15 finished, this PO run running):
+one research, two PO including this run, seven SWE including t-1471, one QA for
+t-1471, and five verifier runs. This is complete for the returned plan-run listing.
+The raw failed Grok job log was independently read. Vendor history is limited to
+the saved attempt ledger: zero failed vendor HTTP requests, zero decoded candidates,
+zero published assets and zero activated records; no credential allowed the HTTP
+workflow to begin. That is not an audited account-wide vendor history.
 
-Run the repository's own tests, lint, typecheck, production build and local e2e
-harness before the PO commit. Record actual results in the summary report.
-Commit the plan, prompts and research with subject prefix `pm-240/product_owner:`
-and push using `git push origin HEAD`. On non-fast-forward rejection, rebase,
-rerun the checks and push without force. Submit this committed plan path and
-SHA with the short product title, then submit a summary report.
-The proposed task ids are assigned by plan-manager; subsequent commits use the
-actual assigned task id.
+Reports distinguish integration deployed, real locked offline execution,
+fake HTTP tests and product delivered. Cite actual profile/model/effort, relevant
+code/lock/prompt hashes and history coverage; truncated or missing evidence is
+inconclusive. Do not attribute output to an unrelated newer commit. Synthetic
+fixtures demonstrate code only. Known executable failures are defects, never
+excused by missing capacity.
 
-## Sources and provenance
+The current PO run is codex-sol-6-1-high, gpt-6.1-sol, high effort, codex-main on
+avietidol-z490 per run-8397. It changes plan Markdown only. Standing guidance was
+read from otohime/AGENTS.md and the locally available mono-v2 copies of
+projects/20260921222547_plan_manager_chief_of_staff_extraction.md and
+docs/claude/software-development.md; their platform staging recipes do not replace
+otohime's GitHub/Vercel CI. No claim/other-role tool is called by this PO.
 
-- Prior report rep-4789, preserved verbatim in [research.md](research.md).
-- [Reference pin](https://www.pinterest.com/pin/248120260716380781/).
-- [Official xAI image generation](https://docs.x.ai/developers/model-capabilities/images/generation).
-- [Official xAI image editing](https://docs.x.ai/developers/model-capabilities/images/editing).
-- [Official xAI Files public URLs](https://docs.x.ai/developers/files/public-urls).
-- [Persisting generated output](https://docs.x.ai/developers/model-capabilities/imagine/files/outputs).
-- [Quality alias retirement](https://docs.x.ai/developers/migration/imagine-image-quality-nov-2).
-- Current repository: `app/(site)/(app)/sketches/page.tsx`, `content/site.ts`,
-  `lib/pages.test.ts`, `next.config.ts`, `scripts/e2e-local.sh`,
-  `.github/workflows/ci.yml`.
+Run npm ci and the project's unit tests, lint, typecheck, production build, offline
+sketch checks and local E2E harness. Record observed results in the PO summary.
+Commit with subject prefix pm-240/product_owner: and push with git push origin HEAD.
+On non-fast-forward, pull --rebase, rerun tests, push without force. Submit this
+committed plan path/SHA via plan_manager_propose_tasks with the title
+**Ink & Watercolour Portraits**, then plan_manager_submit_report(kind=summary).
