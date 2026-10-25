@@ -1,10 +1,12 @@
 import { AddChannelForm } from "@/components/add-channel-form";
+import { NowPlayingShelf } from "@/components/cassette";
 import { FigTitle, swatches } from "@/components/figures";
 import { InkRadioLoader } from "@/components/ink-radio-loader";
 import { RemoveChannelButton } from "@/components/remove-channel-button";
 import { Television } from "@/components/television";
 import { site, type Song } from "@/content/site";
 import { getSession } from "@/lib/dal";
+import { QUIET } from "@/lib/now-playing-data";
 import { peekMark } from "@/lib/peek-marks";
 import { peekSlug } from "@/lib/peeks";
 import { can } from "@/lib/permissions";
@@ -29,6 +31,7 @@ export default function MusicPage() {
         <Suspense fallback={<Channels songs={site.songs} />}>
           <LiveChannels />
         </Suspense>
+        <NowPlayingShelf reading={QUIET} />
         <InkRadio />
         <Suspense fallback={null}>
           <OwnerTools />

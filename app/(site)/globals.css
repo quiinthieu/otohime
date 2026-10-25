@@ -2148,6 +2148,202 @@
   }
 }
 
+/*
+ * Music's Now playing shelf (components/cassette.tsx): a paper cassette and a game cartridge, printed objects like
+ * the project cartridges, so the same dark line work and light labels on either paper. Each label keeps a fixed
+ * minimum height, so a long title wraps inside the space it already had. The reels turn, on twos, only while a track
+ * plays; at rest and under reduced motion they stand still. No filter.
+ */
+.now-playing-shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 2rem 2.5rem;
+  max-width: 720px;
+}
+
+.tape,
+.game-cart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  isolation: isolate;
+  color: var(--on-swatch);
+}
+
+.tape {
+  gap: 8px;
+  padding: 18px 18px 22px;
+}
+
+.game-cart {
+  padding: 24px 12px 30px;
+}
+
+.np-shell {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  stroke: var(--on-swatch);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.np-shadow {
+  fill: var(--shade);
+  stroke: none;
+}
+
+.np-body {
+  fill: color-mix(in srgb, var(--fig, var(--pink)) 55%, #efe9dc);
+}
+
+.np-screw,
+.np-hole {
+  fill: #faf8f3;
+}
+
+.np-head {
+  fill: color-mix(in srgb, var(--fig, var(--pink)) 62%, var(--on-swatch));
+}
+
+.np-ridges {
+  stroke-width: 1.25;
+  opacity: 0.6;
+}
+
+.np-cut {
+  fill: var(--paper);
+  stroke: none;
+}
+
+.np-notch {
+  fill: color-mix(in srgb, var(--fig, var(--mint)) 62%, var(--on-swatch));
+}
+
+.np-pins {
+  stroke: #d9d3c4;
+}
+
+.np-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  min-height: 12rem;
+  padding: 8px 12px 10px;
+  border: 1px solid var(--on-swatch);
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+.tape-label {
+  background: #faf8f3;
+  background-image: repeating-linear-gradient(transparent 0 19px, rgb(35 30 22 / 0.12) 19px 20px);
+}
+
+.game-label {
+  flex: 1;
+  background: var(--fig, var(--mint));
+}
+
+.np-side {
+  color: #4b453b;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.np-status {
+  color: #4b453b;
+  font-size: 12px;
+}
+
+.np-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.np-sub {
+  line-height: 1.4;
+}
+
+.np-link {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 4px 0;
+  color: var(--on-swatch);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.now-playing .np-link:focus-visible {
+  outline-color: var(--on-swatch);
+}
+
+.tape-reels {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  margin: 0 auto;
+  overflow: visible;
+  stroke: var(--on-swatch);
+  stroke-width: 1.5;
+}
+
+.tape-window {
+  fill: #2b2722;
+}
+
+.tape-band {
+  stroke: #6b4a2f;
+  stroke-width: 3;
+}
+
+.tape-spool {
+  fill: #6b4a2f;
+  stroke: none;
+}
+
+.tape-hub {
+  fill: #faf8f3;
+}
+
+.tape-teeth {
+  stroke-width: 2;
+}
+
+.reel {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tape[data-spin] .reel {
+    animation: reel-spin 2s steps(24) infinite;
+  }
+}
+
+@keyframes reel-spin {
+  from {
+    rotate: 0deg;
+  }
+
+  to {
+    rotate: 360deg;
+  }
+}
+
 /* ponytail: one global reset rather than per-animation opt-outs */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -2181,6 +2377,11 @@
   /* A scroll-driven animation ignores its duration, so the sketches' wash and frame are switched off outright. */
   .sheet-wash,
   .sheet-frame path {
+    animation: none !important;
+  }
+
+  /* The cassette's reels stand still, however long the track plays. */
+  .reel {
     animation: none !important;
   }
 

@@ -182,6 +182,26 @@ export const site = {
   // The same songs on Spotify, linked under the player: the id after
   // /playlist/ in Share → Copy link.
   playlist: "609w1YzsoSy1zuHmyBhYwu",
+  // Music's cassette and game cartridge (components/cassette.tsx). At rest they print the playlist and the
+  // "Playing" line of site.now; a reading from Spotify or Steam (lib/now-playing.ts) only swaps the words.
+  nowPlaying: {
+    heading: "Now playing",
+    tape: "Side A · Spotify",
+    cart: "Cartridge · Steam",
+    playing: "On the deck",
+    paused: "Paused on the deck",
+    quiet: "Quiet",
+    quietTape: "Nothing on the deck right now.",
+    quietTapeNote: "The playlist is always on.",
+    playlist: "The playlist on Spotify",
+    track: "The track on Spotify",
+    inGame: "In a game now",
+    game: "The game on Steam",
+    quietGame: "From my Now list, not read live.",
+    read: "Read",
+    unread: "Not read live: the labels are the static ones.",
+    credit: { spotify: "Track details from Spotify", steam: "game details from Steam" },
+  },
   // The songs in play order, each with why it's there.
   // TODO(otohime): the reasons are a first draft; make them yours
   songs: [
