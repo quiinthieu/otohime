@@ -2,7 +2,7 @@
 
 - **Plan**: `pm-240` (*Ink & Watercolour Portraits*)
 - **Task**: `t-1472` (*Publish and activate ten reviewed portraits*)
-- **Runs**: `run-8312` (attempt 1, parked on `esc-371`), `run-8320` (attempt 2, parked on `esc-372`), `run-8329` (attempt 3, stop state per `esc-372` decider resolution)
+- **Runs**: `run-8312` (attempt 1, parked on `esc-371`), `run-8320` (attempt 2, parked on `esc-372`), `run-8329` (attempt 3, stop state per `esc-372` decider resolution), `run-8341` (attempt 4, `fix_cycle: 1` after green gate `ver-3313` on `dd1e8e1`)
 - **Collection Activation Status**: **NOT ACTIVATED (`content/portraits.json` = `[]`)** — blocked on human operator credential/master provisioning (`esc-371` `provision-xai-image-key:otohime` and `esc-372` `generate-portraits:grok-imagine`). Per `t-1472` contract and `esc-372`, no synthetic/fixture images, code-drawn substitutes, or `flux2-klein` outputs are used, fewer than ten portraits are never activated, and live `--require-people` verification gates remain visibly red until all ten reviewed paintings are published to permanent `https://files-cdn.x.ai/` URLs.
 
 ---
@@ -62,6 +62,13 @@
      - Host `/Users/avietidol/.grok/` on `billie-mac`: contains no `user-settings.json` API key; `auth.json` contains an OIDC session (`auth_mode: "oidc"`, `create_time: "2026-09-18T00:23:27.257858Z"`, `expires_at: "2026-09-18T06:23:27.257858Z"`).
      - Testing `/Users/avietidol/.grok/bin/grok` (`grok 1.0.13 (5e9a58528b76)`) with a lease-local copy of `auth.json` exits `1` (`Error: Not signed in`), and `POST https://auth.x.ai/oauth2/token` (`grant_type=refresh_token`) returns HTTP `400` `{"error": "invalid_grant", "error_description": "Invalid or unknown refresh token"}`.
      - No operator-supplied portrait masters exist on `billie-mac`.
+4. **`run-8338` (Green Gate `ver-3313` on `dd1e8e1`) & `run-8341` (`avietidol-Z490-GAMING-X` / `avietidol-z490`, `billie-agy`, `agy-argon-high`, `fix_cycle: 1`)**:
+   - Green gate `ver-3313` (`run-8338`) ran against commit `dd1e8e108598fd41cfdf7a87e4e132bd8e61d664`: `npm test` (1,449 pass), `npm run typecheck`, `npm run lint`, and `npm run build` passed (`0`), while `npm run sketches:check -- --live --require-people` and `SKIP_BUILD=1 EXPECT_PEOPLE=1 bash scripts/walk-sketches.sh` failed (`1`) as expected because `content/portraits.json` is `[]`.
+   - Direct verification on `avietidol-Z490-GAMING-X` (`tm_task_id: c9bd68ad-7588-4902-810c-0fe6498268ea`):
+     - `node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sketches-paint.ts preflight --offline` -> `sharpVersion: "0.35.5"`, `credentialAvailable: false`, `credentialSource: "none"`, `promptPackConcepts: 10`, `existingBaseSketchesVerified: 12`, `manifestRecordsCount: 0`.
+     - `task_manager_list_accounts`: `grok-main` remains `status: "auth_expired"` (`cooling_reason: "auth failure reported by a run"`, `updated_at: "2026-10-25T16:39:26.97379Z"`).
+     - Host/worker check on `avietidol-Z490-GAMING-X`: no `XAI_API_KEY`, no `.grok/user-settings.json`, and no operator-supplied `01_Quiet_Reader.png`..`10_Letter_Writer.png` files exist.
+     - Per `esc-371` and `esc-372` decider resolution (`run-8328`), `run-8341` does not re-raise `operator_action` (which would only re-park `t-1472` without advancing `fix_cycle` toward the `fix_cycles_exhausted` stop where `decider` has `action="decide"`), does not synthesize or draw replacement images in code, does not route portraits through `flux2-klein`, and leaves `content/portraits.json` at `[]` so the `--require-people` gates remain visibly red.
 
 ---
 
