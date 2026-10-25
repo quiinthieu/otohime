@@ -450,63 +450,23 @@
   },
   {
     "sequence": 7,
-    "title": "Model pipeline snake",
-    "role": "software_engineer",
-    "qa": "skip",
-    "depends_on": [],
-    "problem": "The console mini-game needs a deterministic, independently verifiable engine.",
-    "action_items": [
-      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
-      "Implement lib/snake.ts on a 16 by 14 grid with seeded food placement, direction/start/restart/step/tick actions, growth, wall/self collision, score and a bounded speed table. Prevent reverse direction and handle filling the board.",
-      "Add a pure prefix matcher for the in-console Konami sequence; debug mode wraps walls, with achievement state exposed separately from any footer achievement.",
-      "Test known seeded food, no food on the body, tail-cell movement legality, reverse input, collisions, growth, speed floor, full-board completion, bad/correct code, wrapping and immutability. A direction-step action must support turn-based reduced motion without timers."
-    ],
-    "interfaces": [
-      "lib/snake.ts",
-      "lib/snake.test.ts"
-    ],
-    "non_goals": [
-      "Console rendering or pad changes",
-      "Storage or audio",
-      "Global keyboard listener"
-    ],
-    "acceptance_criteria": "Deterministic traces prove snake movement, scoring, loss, restart, food placement and debug wrapping; the same reducer supports timed and explicit step play.",
-    "verification": [
-      {
-        "name": "Unit regressions",
-        "cwd": ".",
-        "cmd": "npm test",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "Lint",
-        "cwd": ".",
-        "cmd": "npm run lint",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "Next generated types",
-        "cwd": ".",
-        "cmd": "npm run typecheck",
-        "expect": "exit0",
-        "timeout_s": 300
-      }
-    ]
-  },
-  {
-    "sequence": 8,
-    "title": "Draw the quiet cassette",
+    "title": "Add the cached Now Playing cassette",
     "role": "software_engineer",
     "qa": "required",
     "depends_on": [],
-    "problem": "Music has no cassette label or safe data model for listening/game status.",
+    "problem": "Music has no readable cassette/game label or safe provider integration.",
     "action_items": [
       "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
       "Create pure unknown-input parsers/types for Spotify current track and Steam current game; strip unneeded fields, validate external URLs, cap display lengths and return null for malformed, private, empty and error fixtures.",
-      "Add a server-rendered cassette and game cartridge below the music television using site.now and the existing playlist as the quiet face. Include ordinary text/links, provider credits, reserved label space and an explicit quiet state. Do not fetch yet.",
-      "Keep current TV, owner channel controls and authorization unchanged. Add scripts/walk-now-playing.sh in QUIET_ONLY=1 mode for local production HTML and scripts/probe-cassette.sh/.mjs for long fixture text, no-JS, contrast, responsive fit and reduced-motion still reels."
+      "Add a server-rendered cassette and game cartridge below the music television using site.now and the existing playlist as the quiet face. Include ordinary text/links, provider credits, reserved label space and an explicit quiet state. Build the quiet rendering first, then add the server adapter in a separate focused commit.",
+      "Keep current TV, owner channel controls and authorization unchanged. Add scripts/walk-now-playing.sh in QUIET_ONLY=1 mode for local production HTML and scripts/probe-cassette.sh/.mjs for long fixture text, no-JS, contrast, responsive fit and reduced-motion still reels.",
+      "Read installed caching, cacheLife, route-handler and request-time docs plus README Live data. Add one server-only adapter holding all provider fetches/env access. Inject host overrides only through validated server env; never accept a user-supplied upstream URL.",
+      "Implement Spotify refresh/current-track and optional public Steam current-game adapters with four-second aborts, independent provider failures, pure parsing, no retries and no network at build. Never log or serialize credentials. Missing configuration yields quiet/static labels without network.",
+      "Make /music request-time with the documented boundary before awaiting the cached reader, retaining existing television and owner tools. Use use cache/cacheLife with roughly 60 s revalidation and expire >=300; stamp read time visibly. Prove a no-JS live-fixture response instead of leaving it in Suspense fallback.",
+      "Add GET /api/now-playing as an on-demand read of the identical cached reader used by /music; return only sanitized display data and state with 200 for quiet/failure. No cron, separate collector or unprotected cache-purge endpoint.",
+      "Extend walk-now-playing.sh with temporary loopback token/Spotify/Steam providers and ephemeral env values: first call, cache reuse, forced fixture-clock/invalidation through a checkout-only test seam, 204/401/429/malformed/private data, dead/slow upstream, independent partial failure and no requests during build. Production paths must not expose fixture or bypass controls.",
+      "Document env names/placeholders, setup scopes, optional current-game privacy and the activation handoff. This build uses fixtures and requires no person prerequisite. The first later run actually needing account setup raises operator_action at its start using spotify-app:now-playing or steam-key:current-game and ends that run; live output remains unproven until independently observed.",
+      "Extend cassette probe to live fixtures, long labels, reduced-motion reels, no-JS content and a secret-sentinel scan of HTTP responses/client chunks. Preserve all current auth and channel e2e behavior."
     ],
     "interfaces": [
       "lib/now-playing-data.ts",
@@ -517,14 +477,19 @@
       "app/(site)/globals.css",
       "scripts/walk-now-playing.sh",
       "scripts/probe-cassette.sh",
-      "scripts/probe-cassette.mjs"
+      "scripts/probe-cassette.mjs",
+      "lib/now-playing.ts",
+      "lib/now-playing.test.ts",
+      "app/api/now-playing/route.ts",
+      ".env.example",
+      "README.md"
     ],
     "non_goals": [
-      "Provider network access",
-      "Credentials or OAuth UI",
-      "Recent listening history"
+      "Production OAuth consent or secret installation",
+      "Scheduled polling jobs",
+      "Playback control or listening history"
     ],
-    "acceptance_criteria": "Music gains one readable paper cassette/game label with quiet copy and playlist links; malformed provider fixtures parse safely, and the complete quiet display works without JavaScript.",
+    "acceptance_criteria": "Music gains one readable paper cassette/game label with the quiet fallback and unchanged television/owner controls. The exact cached reader serves /music and GET /api/now-playing; local fake-provider success, partial failure, absent credentials and outage cases produce bounded safe output, no-JS receives the fixture reading, and builds/client output contain no network calls or secrets. Real provider activation is explicitly outside this task's proven integration scope.",
     "verification": [
       {
         "name": "Unit regressions",
@@ -557,7 +522,7 @@
       {
         "name": "Feature browser matrix",
         "cwd": ".",
-        "cmd": "SKIP_BUILD=1 QUIET_ONLY=1 bash scripts/walk-now-playing.sh && SKIP_BUILD=1 bash scripts/probe-cassette.sh",
+        "cmd": "SKIP_BUILD=1 bash scripts/walk-now-playing.sh && SKIP_BUILD=1 bash scripts/probe-cassette.sh",
         "expect": "exit0",
         "timeout_s": 900
       },
@@ -578,7 +543,7 @@
     ]
   },
   {
-    "sequence": 9,
+    "sequence": 8,
     "title": "Make the boot session-aware",
     "role": "software_engineer",
     "qa": "required",
@@ -661,12 +626,12 @@
     ]
   },
   {
-    "sequence": 10,
+    "sequence": 9,
     "title": "Morph console choices into pages",
     "role": "software_engineer",
     "qa": "required",
     "depends_on": [
-      "9"
+      "8"
     ],
     "problem": "Console navigation currently fades with no spatial link between LCD label and destination heading.",
     "action_items": [
@@ -746,7 +711,7 @@
     ]
   },
   {
-    "sequence": 11,
+    "sequence": 10,
     "title": "Draw the interactive work pipeline",
     "role": "software_engineer",
     "qa": "required",
@@ -830,30 +795,32 @@
     ]
   },
   {
-    "sequence": 12,
+    "sequence": 11,
     "title": "Play snake inside Pocket",
     "role": "software_engineer",
     "qa": "required",
     "depends_on": [
       "1",
-      "7",
-      "9"
+      "8"
     ],
-    "problem": "The console B button is inert and there is no playable pocket game.",
+    "problem": "The console B button is inert; a deterministic engine and accessible screen are needed for pipeline snake.",
     "action_items": [
       "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
-      "Integrate task 7's reducer on the existing LCD; B enters/exits game, A starts/restarts, four labelled d-pad directions drive it. Extend pad state additively and retain the six-line menu and screen-reader links.",
+      "Implement lib/snake.ts on a 16 by 14 grid with seeded food placement, direction/start/restart/step/tick actions, growth, wall/self collision, score and a bounded speed table. Prevent reverse direction and handle filling the board.",
+      "Add a pure prefix matcher for the in-console Konami sequence; debug mode wraps walls, with achievement state exposed separately from any footer achievement.",
+      "Test known seeded food, no food on the body, tail-cell movement legality, reverse input, collisions, growth, speed floor, full-board completion, bad/correct code, wrapping and immutability. A direction-step action must support turn-based reduced motion without timers.",
+      "Integrate the pure snake reducer built in this contract on the existing LCD; B enters/exits game, A starts/restarts, four labelled d-pad directions drive it. Extend pad state additively and retain the six-line menu and screen-reader links.",
       "Persist guarded pocket:high and pocket:achievement through hydration-safe effects/store, restore high scores on reload, and route move/eat/burst cues through task 1's mute preference.",
       "Limit keyboard handling to the active console without stealing editable-target/modifier inputs. Match Konami only on scoped console input, consume its game inputs safely, keep footer end:achievement independent and prevent footer unlocking from the same handled input.",
       "Under reduced motion disable the automatic tick and advance one cell per direction; pause on hidden/offscreen, stop on loss/menu/unmount, bound SVG work by board size and announce score/state without flooding live regions.",
       "Add scripts/probe-pocket-game.sh/.mjs for real B/A/arrows, deterministic food/scoring through a checkout-only fixture, collision/restart/menu, high-score restore, corrupt/blocked storage, correct/wrong scoped code, footer isolation and reduced-motion explicit-step-only play."
     ],
     "interfaces": [
+      "lib/snake.ts",
+      "lib/snake.test.ts",
       "components/handheld.tsx",
       "lib/machines.ts",
       "lib/machines.test.ts",
-      "lib/snake.ts",
-      "lib/snake.test.ts",
       "content/site.ts",
       "app/(site)/globals.css",
       "scripts/probe-pocket-game.sh",
@@ -864,7 +831,7 @@
       "Global cheat listener",
       "Online leaderboard"
     ],
-    "acceptance_criteria": "B opens pipeline snake inside the LCD; A/restart/d-pad, scoring, collisions and persisted best score work. Scoped Konami unlocks wrapping independently of the footer; reduced motion is turn-based and menu navigation survives.",
+    "acceptance_criteria": "Deterministic reducer traces prove movement, seeded food, scoring, loss, restart and debug wrapping. B opens pipeline snake inside the LCD; A/restart/d-pad, scoring, collisions and persisted best score work. Scoped Konami unlocks wrapping independently of the footer; reduced motion is turn-based and menu navigation survives.",
     "verification": [
       {
         "name": "Unit regressions",
@@ -918,7 +885,7 @@
     ]
   },
   {
-    "sequence": 13,
+    "sequence": 12,
     "title": "Draw gallery frames on scroll",
     "role": "software_engineer",
     "qa": "required",
@@ -977,97 +944,6 @@
         "name": "Feature browser matrix",
         "cwd": ".",
         "cmd": "SKIP_BUILD=1 bash scripts/walk-sketches.sh",
-        "expect": "exit0",
-        "timeout_s": 900
-      },
-      {
-        "name": "Existing motion and root hops",
-        "cwd": ".",
-        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
-        "expect": "exit0",
-        "timeout_s": 900
-      },
-      {
-        "name": "Isolated HTTP/RBAC suite",
-        "cwd": ".",
-        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
-        "expect": "exit0",
-        "timeout_s": 900
-      }
-    ]
-  },
-  {
-    "sequence": 14,
-    "title": "Connect cassette to cached providers",
-    "role": "software_engineer",
-    "qa": "required",
-    "depends_on": [
-      "8"
-    ],
-    "problem": "The cassette currently has only a quiet face; safe request-time provider integration is missing.",
-    "action_items": [
-      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
-      "Read installed caching, cacheLife, route-handler and request-time docs plus README Live data. Add one server-only adapter holding all provider fetches/env access. Inject host overrides only through validated server env; never accept a user-supplied upstream URL.",
-      "Implement Spotify refresh/current-track and optional public Steam current-game adapters with four-second aborts, independent provider failures, pure parsing, no retries and no network at build. Never log or serialize credentials. Missing configuration yields quiet/static labels without network.",
-      "Make /music request-time with the documented boundary before awaiting the cached reader, retaining existing television and owner tools. Use use cache/cacheLife with roughly 60 s revalidation and expire >=300; stamp read time visibly. Prove a no-JS live-fixture response instead of leaving it in Suspense fallback.",
-      "Add GET /api/now-playing as an on-demand read of the identical cached reader used by /music; return only sanitized display data and state with 200 for quiet/failure. No cron, separate collector or unprotected cache-purge endpoint.",
-      "Extend walk-now-playing.sh with temporary loopback token/Spotify/Steam providers and ephemeral env values: first call, cache reuse, forced fixture-clock/invalidation through a checkout-only test seam, 204/401/429/malformed/private data, dead/slow upstream, independent partial failure and no requests during build. Production paths must not expose fixture or bypass controls.",
-      "Document env names/placeholders, setup scopes, optional current-game privacy and the activation handoff. This build uses fixtures and requires no person prerequisite. The first later run actually needing account setup raises operator_action at its start using spotify-app:now-playing or steam-key:current-game and ends that run; live output remains unproven until independently observed.",
-      "Extend cassette probe to live fixtures, long labels, reduced-motion reels, no-JS content and a secret-sentinel scan of HTTP responses/client chunks. Preserve all current auth and channel e2e behavior."
-    ],
-    "interfaces": [
-      "lib/now-playing.ts",
-      "lib/now-playing.test.ts",
-      "lib/now-playing-data.ts",
-      "components/cassette.tsx",
-      "app/(site)/(app)/music/page.tsx",
-      "app/api/now-playing/route.ts",
-      "content/site.ts",
-      "app/(site)/globals.css",
-      ".env.example",
-      "README.md",
-      "scripts/walk-now-playing.sh",
-      "scripts/probe-cassette.mjs"
-    ],
-    "non_goals": [
-      "Production OAuth consent or secret installation",
-      "Scheduled polling jobs",
-      "Playback control or listening history"
-    ],
-    "acceptance_criteria": "The exact cached reader serves /music and GET /api/now-playing; local fake-provider success, partial failure, absent credentials and outage cases produce bounded safe output, no-JS receives the fixture reading, and builds/client output contain no network calls or secrets. Real provider activation is explicitly outside this task's proven integration scope.",
-    "verification": [
-      {
-        "name": "Unit regressions",
-        "cwd": ".",
-        "cmd": "npm test",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "Lint",
-        "cwd": ".",
-        "cmd": "npm run lint",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "Next generated types",
-        "cwd": ".",
-        "cmd": "npm run typecheck",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "Production build",
-        "cwd": ".",
-        "cmd": "npm run build",
-        "expect": "exit0",
-        "timeout_s": 900
-      },
-      {
-        "name": "Feature browser matrix",
-        "cwd": ".",
-        "cmd": "SKIP_BUILD=1 bash scripts/walk-now-playing.sh && SKIP_BUILD=1 bash scripts/probe-cassette.sh",
         "expect": "exit0",
         "timeout_s": 900
       },

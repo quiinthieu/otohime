@@ -18,16 +18,16 @@ all motion respectful of the visitor's preference.
 
 | Original idea | Delivery |
 | --- | --- |
-| 1 Boot cartridge | Task 9; session split, finite native animation; chime only after eligible gesture |
+| 1 Boot cartridge | Task 8; session split, finite native animation; chime only after eligible gesture |
 | 2 Ink-wipe theme | Already implemented in theme-toggle.tsx and ink-spread CSS; retain and independently check during acceptance |
-| 3 Screen-to-title zoom | Task 10; named HTML pair and typed React transition with fallback |
-| 4 Pipeline doodle | Tasks 6 + 11; deterministic simulation, explicitly not live production telemetry |
-| 5 Pocket game | Tasks 7 + 12; pipeline snake, local best score, scoped Konami |
+| 3 Screen-to-title zoom | Task 9; named HTML pair and typed React transition with fallback |
+| 4 Pipeline doodle | Tasks 6 + 10; deterministic simulation, explicitly not live production telemetry |
+| 5 Pocket game | Task 11; pipeline snake, local best score, scoped Konami |
 | 6 UI sounds | Task 1; synthesised WebAudio, default muted |
 | 7 Console tilt | Task 2; bounded pointer tilt; touch still |
 | 8 Drawing materials | Task 5; ink, pencil, crayon, watercolour, re-roll, optional bounded boil |
-| 9 Now Playing | Tasks 8 + 14; quiet label then cached provider integration; real activation separately evidenced |
-| 10 Sketch entrances | Task 13; frame/wash around current raster artwork |
+| 9 Now Playing | Task 7; quiet label then cached provider integration; real activation separately evidenced |
+| 10 Sketch entrances | Task 12; frame/wash around current raster artwork |
 | 11 Switchboard | Task 4; add drag to existing connection/ring flow |
 | 12 Cartridges | Task 3; retain routes, list semantics and title morphs |
 
@@ -55,24 +55,26 @@ Sequences are proposal-local identifiers, not platform task ids.
 
 ```mermaid
 flowchart LR
-  S1["1 Sounds"] --> S9["9 Session boot"]
-  S9 --> S10["10 Console zoom"]
-  S1 --> S12["12 Snake screen"]
-  S9 --> S12
-  S7["7 Snake engine"] --> S12
-  S6["6 Pipeline engine"] --> S11["11 Work pipeline"]
-  S8["8 Quiet cassette"] --> S14["14 Provider integration"]
+  S1["1 Sounds"] --> S8["8 Session boot"]
+  S8 --> S9["9 Console zoom"]
+  S1 --> S11["11 Snake engine and screen"]
+  S8 --> S11
+  S6["6 Pipeline engine"] --> S10["10 Work pipeline"]
+  S7["7 Cassette and providers"]
   S2["2 Tilt"]
   S3["3 Cartridges"]
   S4["4 Cable drag"]
   S5["5 Ink tools"]
-  S13["13 Scroll frames"]
+  S12["12 Scroll frames"]
 ```
 
-Start independent small slices first. Only engine/UI and sound/boot consumers
+Start independent small slices first. Only pipeline engine/UI and sound/boot consumers
 have dependencies. Path conflicts use the platform's normal scheduling and
 a rebase, not a person or cross-plan gate. Each commit is reviewable and
-reversible by feature.
+reversible by feature. The platform caps proposals at twelve tasks. Snake's
+engine and screen share one contract, with engine and UI as separate focused
+commits; quiet cassette and cached provider integration likewise share a
+contract. The pipeline keeps its separate internal engine task.
 
 ## Shared delivery contract
 
@@ -113,8 +115,8 @@ These rules apply to every task in addition to its explicit contract.
   same assertion (e.g. disabled handler, wrong href, altered counter or
   denied provider response), then restores/reloads and passes. A fake proves
   integration, never browser quality or real-provider delivery.
-- Unit-only engine tasks set `qa=skip` because their verification fully
-  covers internal deterministic behavior. Every UI/integration task requires
+- The unit-only pipeline engine task sets `qa=skip` because its verification
+  fully covers internal deterministic behavior. Every UI/integration task requires
   independent QA. No migration is part of this plan.
 - Run all listed commands, fix failures, commit with
   `pm-242/<task_id>: <imperative subject>`, author
@@ -376,52 +378,25 @@ These rules apply to every task in addition to its explicit contract.
 | Lint | `npm run lint` | 300s |
 | Next generated types | `npm run typecheck` | 300s |
 
-### 7. Model pipeline snake
-
-**Role:** software_engineer. **QA:** skip. **Depends on:** none.
-
-**Problem.** The console mini-game needs a deterministic, independently verifiable engine.
-
-**Action items**
-
-1. Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.
-2. Implement lib/snake.ts on a 16 by 14 grid with seeded food placement, direction/start/restart/step/tick actions, growth, wall/self collision, score and a bounded speed table. Prevent reverse direction and handle filling the board.
-3. Add a pure prefix matcher for the in-console Konami sequence; debug mode wraps walls, with achievement state exposed separately from any footer achievement.
-4. Test known seeded food, no food on the body, tail-cell movement legality, reverse input, collisions, growth, speed floor, full-board completion, bad/correct code, wrapping and immutability. A direction-step action must support turn-based reduced motion without timers.
-
-**Interfaces**
-
-- `lib/snake.ts`
-- `lib/snake.test.ts`
-
-**Non-goals**
-
-- Console rendering or pad changes
-- Storage or audio
-- Global keyboard listener
-
-**Acceptance criteria.** Deterministic traces prove snake movement, scoring, loss, restart, food placement and debug wrapping; the same reducer supports timed and explicit step play.
-
-**Verification** (checkout-local; cwd `.`; expect exit 0)
-
-| Check | Command | Timeout |
-| --- | --- | --- |
-| Unit regressions | `npm test` | 300s |
-| Lint | `npm run lint` | 300s |
-| Next generated types | `npm run typecheck` | 300s |
-
-### 8. Draw the quiet cassette
+### 7. Add the cached Now Playing cassette
 
 **Role:** software_engineer. **QA:** required. **Depends on:** none.
 
-**Problem.** Music has no cassette label or safe data model for listening/game status.
+**Problem.** Music has no readable cassette/game label or safe provider integration.
 
 **Action items**
 
 1. Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.
 2. Create pure unknown-input parsers/types for Spotify current track and Steam current game; strip unneeded fields, validate external URLs, cap display lengths and return null for malformed, private, empty and error fixtures.
-3. Add a server-rendered cassette and game cartridge below the music television using site.now and the existing playlist as the quiet face. Include ordinary text/links, provider credits, reserved label space and an explicit quiet state. Do not fetch yet.
+3. Add a server-rendered cassette and game cartridge below the music television using site.now and the existing playlist as the quiet face. Include ordinary text/links, provider credits, reserved label space and an explicit quiet state. Build the quiet rendering first, then add the server adapter in a separate focused commit.
 4. Keep current TV, owner channel controls and authorization unchanged. Add scripts/walk-now-playing.sh in QUIET_ONLY=1 mode for local production HTML and scripts/probe-cassette.sh/.mjs for long fixture text, no-JS, contrast, responsive fit and reduced-motion still reels.
+5. Read installed caching, cacheLife, route-handler and request-time docs plus README Live data. Add one server-only adapter holding all provider fetches/env access. Inject host overrides only through validated server env; never accept a user-supplied upstream URL.
+6. Implement Spotify refresh/current-track and optional public Steam current-game adapters with four-second aborts, independent provider failures, pure parsing, no retries and no network at build. Never log or serialize credentials. Missing configuration yields quiet/static labels without network.
+7. Make /music request-time with the documented boundary before awaiting the cached reader, retaining existing television and owner tools. Use use cache/cacheLife with roughly 60 s revalidation and expire >=300; stamp read time visibly. Prove a no-JS live-fixture response instead of leaving it in Suspense fallback.
+8. Add GET /api/now-playing as an on-demand read of the identical cached reader used by /music; return only sanitized display data and state with 200 for quiet/failure. No cron, separate collector or unprotected cache-purge endpoint.
+9. Extend walk-now-playing.sh with temporary loopback token/Spotify/Steam providers and ephemeral env values: first call, cache reuse, forced fixture-clock/invalidation through a checkout-only test seam, 204/401/429/malformed/private data, dead/slow upstream, independent partial failure and no requests during build. Production paths must not expose fixture or bypass controls.
+10. Document env names/placeholders, setup scopes, optional current-game privacy and the activation handoff. This build uses fixtures and requires no person prerequisite. The first later run actually needing account setup raises operator_action at its start using spotify-app:now-playing or steam-key:current-game and ends that run; live output remains unproven until independently observed.
+11. Extend cassette probe to live fixtures, long labels, reduced-motion reels, no-JS content and a secret-sentinel scan of HTTP responses/client chunks. Preserve all current auth and channel e2e behavior.
 
 **Interfaces**
 
@@ -434,14 +409,19 @@ These rules apply to every task in addition to its explicit contract.
 - `scripts/walk-now-playing.sh`
 - `scripts/probe-cassette.sh`
 - `scripts/probe-cassette.mjs`
+- `lib/now-playing.ts`
+- `lib/now-playing.test.ts`
+- `app/api/now-playing/route.ts`
+- `.env.example`
+- `README.md`
 
 **Non-goals**
 
-- Provider network access
-- Credentials or OAuth UI
-- Recent listening history
+- Production OAuth consent or secret installation
+- Scheduled polling jobs
+- Playback control or listening history
 
-**Acceptance criteria.** Music gains one readable paper cassette/game label with quiet copy and playlist links; malformed provider fixtures parse safely, and the complete quiet display works without JavaScript.
+**Acceptance criteria.** Music gains one readable paper cassette/game label with the quiet fallback and unchanged television/owner controls. The exact cached reader serves /music and GET /api/now-playing; local fake-provider success, partial failure, absent credentials and outage cases produce bounded safe output, no-JS receives the fixture reading, and builds/client output contain no network calls or secrets. Real provider activation is explicitly outside this task's proven integration scope.
 
 **Verification** (checkout-local; cwd `.`; expect exit 0)
 
@@ -451,11 +431,11 @@ These rules apply to every task in addition to its explicit contract.
 | Lint | `npm run lint` | 300s |
 | Next generated types | `npm run typecheck` | 300s |
 | Production build | `npm run build` | 900s |
-| Feature browser matrix | `SKIP_BUILD=1 QUIET_ONLY=1 bash scripts/walk-now-playing.sh && SKIP_BUILD=1 bash scripts/probe-cassette.sh` | 900s |
+| Feature browser matrix | `SKIP_BUILD=1 bash scripts/walk-now-playing.sh && SKIP_BUILD=1 bash scripts/probe-cassette.sh` | 900s |
 | Existing motion and root hops | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
 | Isolated HTTP/RBAC suite | `SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh` | 900s |
 
-### 9. Make the boot session-aware
+### 8. Make the boot session-aware
 
 **Role:** software_engineer. **QA:** required. **Depends on:** 1.
 
@@ -499,9 +479,9 @@ These rules apply to every task in addition to its explicit contract.
 | Existing motion and root hops | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
 | Isolated HTTP/RBAC suite | `SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh` | 900s |
 
-### 10. Morph console choices into pages
+### 9. Morph console choices into pages
 
-**Role:** software_engineer. **QA:** required. **Depends on:** 9.
+**Role:** software_engineer. **QA:** required. **Depends on:** 8.
 
 **Problem.** Console navigation currently fades with no spatial link between LCD label and destination heading.
 
@@ -545,7 +525,7 @@ These rules apply to every task in addition to its explicit contract.
 | Existing motion and root hops | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
 | Isolated HTTP/RBAC suite | `SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh` | 900s |
 
-### 11. Draw the interactive work pipeline
+### 10. Draw the interactive work pipeline
 
 **Role:** software_engineer. **QA:** required. **Depends on:** 6.
 
@@ -590,28 +570,31 @@ These rules apply to every task in addition to its explicit contract.
 | Existing motion and root hops | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
 | Isolated HTTP/RBAC suite | `SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh` | 900s |
 
-### 12. Play snake inside Pocket
+### 11. Play snake inside Pocket
 
-**Role:** software_engineer. **QA:** required. **Depends on:** 1, 7, 9.
+**Role:** software_engineer. **QA:** required. **Depends on:** 1, 8.
 
-**Problem.** The console B button is inert and there is no playable pocket game.
+**Problem.** The console B button is inert; a deterministic engine and accessible screen are needed for pipeline snake.
 
 **Action items**
 
 1. Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.
-2. Integrate task 7's reducer on the existing LCD; B enters/exits game, A starts/restarts, four labelled d-pad directions drive it. Extend pad state additively and retain the six-line menu and screen-reader links.
-3. Persist guarded pocket:high and pocket:achievement through hydration-safe effects/store, restore high scores on reload, and route move/eat/burst cues through task 1's mute preference.
-4. Limit keyboard handling to the active console without stealing editable-target/modifier inputs. Match Konami only on scoped console input, consume its game inputs safely, keep footer end:achievement independent and prevent footer unlocking from the same handled input.
-5. Under reduced motion disable the automatic tick and advance one cell per direction; pause on hidden/offscreen, stop on loss/menu/unmount, bound SVG work by board size and announce score/state without flooding live regions.
-6. Add scripts/probe-pocket-game.sh/.mjs for real B/A/arrows, deterministic food/scoring through a checkout-only fixture, collision/restart/menu, high-score restore, corrupt/blocked storage, correct/wrong scoped code, footer isolation and reduced-motion explicit-step-only play.
+2. Implement lib/snake.ts on a 16 by 14 grid with seeded food placement, direction/start/restart/step/tick actions, growth, wall/self collision, score and a bounded speed table. Prevent reverse direction and handle filling the board.
+3. Add a pure prefix matcher for the in-console Konami sequence; debug mode wraps walls, with achievement state exposed separately from any footer achievement.
+4. Test known seeded food, no food on the body, tail-cell movement legality, reverse input, collisions, growth, speed floor, full-board completion, bad/correct code, wrapping and immutability. A direction-step action must support turn-based reduced motion without timers.
+5. Integrate the pure snake reducer built in this contract on the existing LCD; B enters/exits game, A starts/restarts, four labelled d-pad directions drive it. Extend pad state additively and retain the six-line menu and screen-reader links.
+6. Persist guarded pocket:high and pocket:achievement through hydration-safe effects/store, restore high scores on reload, and route move/eat/burst cues through task 1's mute preference.
+7. Limit keyboard handling to the active console without stealing editable-target/modifier inputs. Match Konami only on scoped console input, consume its game inputs safely, keep footer end:achievement independent and prevent footer unlocking from the same handled input.
+8. Under reduced motion disable the automatic tick and advance one cell per direction; pause on hidden/offscreen, stop on loss/menu/unmount, bound SVG work by board size and announce score/state without flooding live regions.
+9. Add scripts/probe-pocket-game.sh/.mjs for real B/A/arrows, deterministic food/scoring through a checkout-only fixture, collision/restart/menu, high-score restore, corrupt/blocked storage, correct/wrong scoped code, footer isolation and reduced-motion explicit-step-only play.
 
 **Interfaces**
 
+- `lib/snake.ts`
+- `lib/snake.test.ts`
 - `components/handheld.tsx`
 - `lib/machines.ts`
 - `lib/machines.test.ts`
-- `lib/snake.ts`
-- `lib/snake.test.ts`
 - `content/site.ts`
 - `app/(site)/globals.css`
 - `scripts/probe-pocket-game.sh`
@@ -623,7 +606,7 @@ These rules apply to every task in addition to its explicit contract.
 - Global cheat listener
 - Online leaderboard
 
-**Acceptance criteria.** B opens pipeline snake inside the LCD; A/restart/d-pad, scoring, collisions and persisted best score work. Scoped Konami unlocks wrapping independently of the footer; reduced motion is turn-based and menu navigation survives.
+**Acceptance criteria.** Deterministic reducer traces prove movement, seeded food, scoring, loss, restart and debug wrapping. B opens pipeline snake inside the LCD; A/restart/d-pad, scoring, collisions and persisted best score work. Scoped Konami unlocks wrapping independently of the footer; reduced motion is turn-based and menu navigation survives.
 
 **Verification** (checkout-local; cwd `.`; expect exit 0)
 
@@ -637,7 +620,7 @@ These rules apply to every task in addition to its explicit contract.
 | Existing motion and root hops | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
 | Isolated HTTP/RBAC suite | `SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh` | 900s |
 
-### 13. Draw gallery frames on scroll
+### 12. Draw gallery frames on scroll
 
 **Role:** software_engineer. **QA:** required. **Depends on:** none.
 
@@ -679,58 +662,6 @@ These rules apply to every task in addition to its explicit contract.
 | Existing motion and root hops | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
 | Isolated HTTP/RBAC suite | `SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh` | 900s |
 
-### 14. Connect cassette to cached providers
-
-**Role:** software_engineer. **QA:** required. **Depends on:** 8.
-
-**Problem.** The cassette currently has only a quiet face; safe request-time provider integration is missing.
-
-**Action items**
-
-1. Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.
-2. Read installed caching, cacheLife, route-handler and request-time docs plus README Live data. Add one server-only adapter holding all provider fetches/env access. Inject host overrides only through validated server env; never accept a user-supplied upstream URL.
-3. Implement Spotify refresh/current-track and optional public Steam current-game adapters with four-second aborts, independent provider failures, pure parsing, no retries and no network at build. Never log or serialize credentials. Missing configuration yields quiet/static labels without network.
-4. Make /music request-time with the documented boundary before awaiting the cached reader, retaining existing television and owner tools. Use use cache/cacheLife with roughly 60 s revalidation and expire >=300; stamp read time visibly. Prove a no-JS live-fixture response instead of leaving it in Suspense fallback.
-5. Add GET /api/now-playing as an on-demand read of the identical cached reader used by /music; return only sanitized display data and state with 200 for quiet/failure. No cron, separate collector or unprotected cache-purge endpoint.
-6. Extend walk-now-playing.sh with temporary loopback token/Spotify/Steam providers and ephemeral env values: first call, cache reuse, forced fixture-clock/invalidation through a checkout-only test seam, 204/401/429/malformed/private data, dead/slow upstream, independent partial failure and no requests during build. Production paths must not expose fixture or bypass controls.
-7. Document env names/placeholders, setup scopes, optional current-game privacy and the activation handoff. This build uses fixtures and requires no person prerequisite. The first later run actually needing account setup raises operator_action at its start using spotify-app:now-playing or steam-key:current-game and ends that run; live output remains unproven until independently observed.
-8. Extend cassette probe to live fixtures, long labels, reduced-motion reels, no-JS content and a secret-sentinel scan of HTTP responses/client chunks. Preserve all current auth and channel e2e behavior.
-
-**Interfaces**
-
-- `lib/now-playing.ts`
-- `lib/now-playing.test.ts`
-- `lib/now-playing-data.ts`
-- `components/cassette.tsx`
-- `app/(site)/(app)/music/page.tsx`
-- `app/api/now-playing/route.ts`
-- `content/site.ts`
-- `app/(site)/globals.css`
-- `.env.example`
-- `README.md`
-- `scripts/walk-now-playing.sh`
-- `scripts/probe-cassette.mjs`
-
-**Non-goals**
-
-- Production OAuth consent or secret installation
-- Scheduled polling jobs
-- Playback control or listening history
-
-**Acceptance criteria.** The exact cached reader serves /music and GET /api/now-playing; local fake-provider success, partial failure, absent credentials and outage cases produce bounded safe output, no-JS receives the fixture reading, and builds/client output contain no network calls or secrets. Real provider activation is explicitly outside this task's proven integration scope.
-
-**Verification** (checkout-local; cwd `.`; expect exit 0)
-
-| Check | Command | Timeout |
-| --- | --- | --- |
-| Unit regressions | `npm test` | 300s |
-| Lint | `npm run lint` | 300s |
-| Next generated types | `npm run typecheck` | 300s |
-| Production build | `npm run build` | 900s |
-| Feature browser matrix | `SKIP_BUILD=1 bash scripts/walk-now-playing.sh && SKIP_BUILD=1 bash scripts/probe-cassette.sh` | 900s |
-| Existing motion and root hops | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
-| Isolated HTTP/RBAC suite | `SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh` | 900s |
-
 ## Provider boundaries and activation handoff
 
 The quiet cassette and fake-provider integration are deliverable now. The
@@ -754,7 +685,7 @@ Document the provider's ongoing account requirements; the current Spotify
 migration guide requires an active Premium app owner. The exact scopes and
 provider terms must be revalidated when implementing the adapter.
 
-Task 14 adds sanitized on-demand `GET /api/now-playing`, backed by the
+Task 7 adds sanitized on-demand `GET /api/now-playing`, backed by the
 same cached function as the page. It is a read, not a cache purge or cron.
 Fresh/expiry behavior is proven with local clocks/fixtures/invalidation test
 seams; no real-minute waiting. Operator readiness can use
@@ -766,7 +697,7 @@ be idle. A real authenticated empty result can mark connected; the widget
 must still say quiet. Fakes cannot set a public production live state.
 
 Now Playing's research proposed a Suspense-only widget. README Live data
-warns that no-JS visitors can stay on the fallback. Task 14 must add the
+warns that no-JS visitors can stay on the fallback. Task 7 must add the
 documented request-time boundary before provider access and test completed
 HTML without JavaScript. The existing music page currently uses Suspense for
 channels and owner tools; preserve those controls while adding this boundary.
@@ -813,7 +744,7 @@ fake tests. Inspect bounded relevant attempt history if a runtime platform
 is introduced, with counts, pagination completeness and raw failures.
 Known deterministic failures remain defects beside pending replacements.
 
-Real Spotify/Steam output is unproven by task 14's fake integration. When
+Real Spotify/Steam output is unproven by task 7's fake integration. When
 credentials are available, acceptance triggers the real sanitized read now
 and checks the same build's cassette independently. If missing, report that
 exact activation chore and owner through the platform mechanism; request a
@@ -848,7 +779,7 @@ were reverted, and the existing browser assertions were not weakened.
 Changed implementation paths are app/(site)/(app)/layout.tsx, the deleted
 group loading.tsx, the three account/admin/dashboard loading.tsx files and
 lib/motion.test.ts. This is an observed regression repair required for green
-delivery, separate from the fourteen future build contracts.
+delivery, separate from the twelve future build contracts.
 
 ## Evidence, source freshness and rule gap
 
