@@ -152,7 +152,17 @@ scope so an independent role verifies the recovery deliverable and its boundarie
       "lib/sketches-handoff.test.ts",
       "scripts/sketches-handoff.ts",
       "package.json",
-      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/manifest.json",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/01_Quiet_Reader.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/02_Flower_Girl.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/03_Rainy_Afternoon.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/04_Cafe_Dreamer.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/05_Autumn_Wanderer.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/06_Violinist.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/07_Morning_by_the_Window.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/08_Painter.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/09_Spring_Breeze.md",
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/10_Letter_Writer.md",
       "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/handoff.md"
     ],
     "non_goals": [
