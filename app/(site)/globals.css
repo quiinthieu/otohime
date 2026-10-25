@@ -1506,8 +1506,7 @@
     display: block;
     width: max-content;
     max-width: 100%;
-    height: calc(1.5em + var(--gap, 0em));
-    padding-top: var(--gap, 0em);
+    height: 1.5em;
     overflow: hidden;
     white-space: pre;
     animation:
@@ -1517,7 +1516,8 @@
 
   .ask-receipt p + p > .ask-row:first-child,
   .ask-sep .ask-row {
-    --gap: 0.5em;
+    height: 2em;
+    padding-top: 0.5em;
   }
 
   .ask-sep {
