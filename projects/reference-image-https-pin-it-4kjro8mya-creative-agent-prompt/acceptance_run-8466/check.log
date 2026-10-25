@@ -1,0 +1,5 @@
+
+> otohime@0.1.0 portraits:handoff:check
+> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sketches-handoff.ts check
+
+{"ok":true,"command":"check","status":"production_required","inputDir":"/Users/avietidol/Library/Application Support/build-worker/leases/444ba7bc-44db-4020-91aa-dbe2ec6b79f9-1f987ce55fb2ecec2f3c5bc43698c469/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit","promptPackSha256":"195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f","referenceUrlSha256":"baadd08727c729821832757e884dd0db07cdd01a8b14bb02b207377ca3ff4255","conceptCount":10,"verifiedPromptFiles":10,"paintingsDelivered":0,"galleryPortraitsActivated":0}

@@ -1,0 +1,61 @@
+[
+ {
+  "viewport": "1366x768",
+  "status": 200,
+  "sha": "ef8035cc950f54a58f3bd714f49415f3c79e2dbc",
+  "h2": [
+   "Places",
+   "Small things",
+   "You've reached the end of the internet."
+  ],
+  "figures": 12,
+  "loaded": 12,
+  "tall": 0,
+  "people": false,
+  "portraitText": false,
+  "overflowX": false,
+  "downloads": 0,
+  "errors": []
+ },
+ {
+  "viewport": "390x844",
+  "status": 200,
+  "sha": "ef8035cc950f54a58f3bd714f49415f3c79e2dbc",
+  "h2": [
+   "Places",
+   "Small things",
+   "You've reached the end of the internet."
+  ],
+  "figures": 12,
+  "loaded": 10,
+  "tall": 0,
+  "people": false,
+  "portraitText": false,
+  "overflowX": false,
+  "downloads": 0,
+  "errors": []
+ },
+ {
+  "download": "01_Quiet_Reader.png",
+  "status": 404
+ },
+ {
+  "download": "10_Letter_Writer.png",
+  "status": 404
+ },
+ {
+  "asset": "13-reader.jpg",
+  "status": 404,
+  "type": "text/html; charset=utf-8"
+ },
+ {
+  "asset": "22-letter.jpg",
+  "status": 404,
+  "type": "text/html; charset=utf-8"
+ },
+ {
+  "asset": "01-cove.jpg",
+  "status": 200,
+  "type": "image/jpeg"
+ }
+]

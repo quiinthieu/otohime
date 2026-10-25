@@ -1,0 +1,147 @@
+ok - /sketches returns 200
+ok - /sketches build-sha
+ok - /sketches retains Fig. 07
+ok - /sketches has Places section
+ok - /sketches has Small things section
+not ok - /sketches wraps each of 22 pictures in one sheet: found 12 of 'class="sheet"', want exactly 22
+not ok - /sketches gives each sheet one paper wash: found 12 of 'class="sheet-wash"', want exactly 22
+not ok - /sketches gives each sheet one pathLength=1 ink frame: found 12 of 'pathLength="1"', want exactly 22
+ok - /sketches stands the sheets still without JavaScript
+ok - /sketches/download/99_Unknown.png returns 404
+ok - /sketches/download rejects arbitrary external URL parameters with 400
+not ok - /sketches hint is places, small things and people: missing: places, small things and people
+not ok - /sketches intro is twenty-two studies: missing: Twenty-two studies from one sketchbook.
+not ok - /sketches has People section: missing: id="people"
+not ok - /sketches has 22 figures when activated: found 12 of '<figure>', want exactly 22
+not ok - /sketches links /sketches/download/01_Quiet_Reader.png: missing: /sketches/download/01_Quiet_Reader.png
+not ok - /sketches links /sketches/download/02_Flower_Girl.png: missing: /sketches/download/02_Flower_Girl.png
+not ok - /sketches links /sketches/download/03_Rainy_Afternoon.png: missing: /sketches/download/03_Rainy_Afternoon.png
+not ok - /sketches links /sketches/download/04_Cafe_Dreamer.png: missing: /sketches/download/04_Cafe_Dreamer.png
+not ok - /sketches links /sketches/download/05_Autumn_Wanderer.png: missing: /sketches/download/05_Autumn_Wanderer.png
+not ok - /sketches links /sketches/download/06_Violinist.png: missing: /sketches/download/06_Violinist.png
+not ok - /sketches links /sketches/download/07_Morning_by_the_Window.png: missing: /sketches/download/07_Morning_by_the_Window.png
+not ok - /sketches links /sketches/download/08_Painter.png: missing: /sketches/download/08_Painter.png
+not ok - /sketches links /sketches/download/09_Spring_Breeze.png: missing: /sketches/download/09_Spring_Breeze.png
+not ok - /sketches links /sketches/download/10_Letter_Writer.png: missing: /sketches/download/10_Letter_Writer.png
+ok - probe 1366x768: /sketches status 200
+ok - probe 1366x768: meta build-sha valid
+not ok - probe 1366x768: rendered section count is 3: got 2
+not ok - probe 1366x768: rendered figure count is 22: got 12
+ok - probe 1366x768: Places has 6 figures and Small things has 6 figures
+not ok - probe 1366x768: all 22 images finish loading with nonzero natural dimensions: []
+not ok - probe 1366x768: all 10 People images have 1152x1536 intrinsic size, responsive sizes/srcset and loaded pixels
+not ok - probe 1366x768: People captions expose all 10 named PNG download links: []
+ok - probe 1366x768: no horizontal overflow
+ok - probe 1366x768: no console or page errors
+ok - probe 390x844: /sketches status 200
+ok - probe 390x844: meta build-sha valid
+not ok - probe 390x844: rendered section count is 3: got 2
+not ok - probe 390x844: rendered figure count is 22: got 12
+ok - probe 390x844: Places has 6 figures and Small things has 6 figures
+not ok - probe 390x844: all 22 images finish loading with nonzero natural dimensions: []
+not ok - probe 390x844: all 10 People images have 1152x1536 intrinsic size, responsive sizes/srcset and loaded pixels
+not ok - probe 390x844: People captions expose all 10 named PNG download links: []
+ok - probe 390x844: no horizontal overflow
+ok - probe 390x844: no console or page errors
+ok - reveal 1366x768 light: Chromium supports view timelines
+not ok - reveal 1366x768 light: each of 22 figures has one sheet, one wash and one unfiltered pathLength=1 frame inside its picture: []
+ok - reveal 1366x768 light: every wash and frame runs on its sheet's view timeline
+ok - reveal 1366x768 light: each frame covers its picture exactly
+ok - reveal 1366x768 light: below the fold the last sheet waits washed (scale 1, full width) and undrawn (dashoffset 1)
+ok - reveal 1366x768 light: a third in, the wash is part way off and the frame not yet drawn past the wash
+ok - reveal 1366x768 light: four fifths in, the wash is gone and the frame part drawn
+ok - reveal 1366x768 light: at the end of the page every sheet is whole (wash scale 0, width 0; dashoffset 0)
+ok - reveal 1366x768 light: the wash is the page's paper and the frame the page's ink
+ok - reveal 1366x768 light: the frame adds no horizontal overflow
+ok - reveal 1366x768 light: negative control: a wash pinned over the art fails the whole-at-end check
+ok - reveal 1366x768 light: no console or page errors
+ok - reveal 1366x768 dark: Chromium supports view timelines
+not ok - reveal 1366x768 dark: each of 22 figures has one sheet, one wash and one unfiltered pathLength=1 frame inside its picture: []
+ok - reveal 1366x768 dark: every wash and frame runs on its sheet's view timeline
+ok - reveal 1366x768 dark: each frame covers its picture exactly
+ok - reveal 1366x768 dark: below the fold the last sheet waits washed (scale 1, full width) and undrawn (dashoffset 1)
+ok - reveal 1366x768 dark: a third in, the wash is part way off and the frame not yet drawn past the wash
+ok - reveal 1366x768 dark: four fifths in, the wash is gone and the frame part drawn
+ok - reveal 1366x768 dark: at the end of the page every sheet is whole (wash scale 0, width 0; dashoffset 0)
+ok - reveal 1366x768 dark: the wash is the page's paper and the frame the page's ink
+ok - reveal 1366x768 dark: the frame adds no horizontal overflow
+ok - reveal 1366x768 dark: no console or page errors
+ok - reveal 390x844 light: Chromium supports view timelines
+not ok - reveal 390x844 light: each of 22 figures has one sheet, one wash and one unfiltered pathLength=1 frame inside its picture: []
+ok - reveal 390x844 light: every wash and frame runs on its sheet's view timeline
+ok - reveal 390x844 light: each frame covers its picture exactly
+ok - reveal 390x844 light: below the fold the last sheet waits washed (scale 1, full width) and undrawn (dashoffset 1)
+ok - reveal 390x844 light: a third in, the wash is part way off and the frame not yet drawn past the wash
+ok - reveal 390x844 light: four fifths in, the wash is gone and the frame part drawn
+ok - reveal 390x844 light: at the end of the page every sheet is whole (wash scale 0, width 0; dashoffset 0)
+ok - reveal 390x844 light: the wash is the page's paper and the frame the page's ink
+ok - reveal 390x844 light: the frame adds no horizontal overflow
+ok - reveal 390x844 light: no console or page errors
+ok - reveal 390x844 dark: Chromium supports view timelines
+not ok - reveal 390x844 dark: each of 22 figures has one sheet, one wash and one unfiltered pathLength=1 frame inside its picture: []
+ok - reveal 390x844 dark: every wash and frame runs on its sheet's view timeline
+ok - reveal 390x844 dark: each frame covers its picture exactly
+ok - reveal 390x844 dark: below the fold the last sheet waits washed (scale 1, full width) and undrawn (dashoffset 1)
+ok - reveal 390x844 dark: a third in, the wash is part way off and the frame not yet drawn past the wash
+ok - reveal 390x844 dark: four fifths in, the wash is gone and the frame part drawn
+ok - reveal 390x844 dark: at the end of the page every sheet is whole (wash scale 0, width 0; dashoffset 0)
+ok - reveal 390x844 dark: the wash is the page's paper and the frame the page's ink
+ok - reveal 390x844 dark: the frame adds no horizontal overflow
+ok - reveal 390x844 dark: no console or page errors
+ok - reveal 1366x768: light and dark draw in different paper and ink
+ok - reveal 390x844: light and dark draw in different paper and ink
+not ok - reduced 1366x768: no wash or frame has an animation: [0,0,0,0,0,0,0,0,0,0,0,0]
+ok - reduced 1366x768: below the fold every sheet is already whole
+ok - reduced 1366x768: scrolling in changes nothing
+not ok - reduced 1366x768: all 22 images load: loaded 12
+not ok - reduced 1366x768: captions show and downloads are unchanged
+ok - reduced 1366x768: no console or page errors
+not ok - reduced 390x844: no wash or frame has an animation: [0,0,0,0,0,0,0,0,0,0,0,0]
+ok - reduced 390x844: below the fold every sheet is already whole
+ok - reduced 390x844: scrolling in changes nothing
+not ok - reduced 390x844: all 22 images load: loaded 12
+not ok - reduced 390x844: captions show and downloads are unchanged
+ok - reduced 390x844: no console or page errors
+ok - reduced live 1366x768: the last sheet waits washed before the switch
+ok - reduced live 1366x768: switching to reduce drops every animation and shows every sheet whole
+ok - reduced live 1366x768: switching back restores the waiting wash and frame (the check above can fail)
+ok - unsupported 1366x768: the served stylesheet's view-timeline @supports was rewritten
+not ok - unsupported 1366x768: no wash or frame animates: [0,0,0,0,0,0,0,0,0,0,0,0]
+ok - unsupported 1366x768: below the fold every sheet is whole and every caption shows
+not ok - unsupported 1366x768: all 22 images load: loaded 12
+ok - unsupported 390x844: the served stylesheet's view-timeline @supports was rewritten
+not ok - unsupported 390x844: no wash or frame animates: [0,0,0,0,0,0,0,0,0,0,0,0]
+ok - unsupported 390x844: below the fold every sheet is whole and every caption shows
+not ok - unsupported 390x844: all 22 images load: loaded 12
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+TargetClosedError2: "route.fetch: Request context disposed.
+Call log:
+  - → GET https://otohime.dev/_next/static/chunks/16wr9l826lhc6.css
+    - user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36
+    - accept: text/css,*/*;q=0.1
+    - accept-encoding: gzip,deflate,br
+    - referer: https://otohime.dev/sketches
+    - sec-ch-ua: "Not:A-Brand";v="8", "Chromium";v="156", "HeadlessChrome";v="156"
+    - sec-ch-ua-mobile: ?0
+    - sec-ch-ua-platform: "macOS"
+" while running route callback.
+Consider awaiting `await page.unrouteAll({ behavior: 'ignoreErrors' })`
+before the end of the test to ignore remaining routes in flight.
+    at /Users/avietidol/Library/Application Support/build-worker/leases/444ba7bc-44db-4020-91aa-dbe2ec6b79f9-1f987ce55fb2ecec2f3c5bc43698c469/work/otohime/scripts/probe-sketches.mjs:408:31 {
+  log: [
+    '  - → GET https://otohime.dev/_next/static/chunks/16wr9l826lhc6.css',
+    '    - user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36',
+    '    - accept: text/css,*/*;q=0.1',
+    '    - accept-encoding: gzip,deflate,br',
+    '    - referer: https://otohime.dev/sketches',
+    '    - sec-ch-ua: "Not:A-Brand";v="8", "Chromium";v="156", "HeadlessChrome";v="156"',
+    '    - sec-ch-ua-mobile: ?0',
+    '    - sec-ch-ua-platform: "macOS"'
+  ]
+}
+
+Node.js v22.23.3
+walk: 8 ok, 18 failed

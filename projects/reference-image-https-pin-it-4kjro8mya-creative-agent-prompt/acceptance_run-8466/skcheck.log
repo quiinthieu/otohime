@@ -1,0 +1,5 @@
+
+> otohime@0.1.0 sketches:check
+> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sketches-check.ts
+
+12 base sketches, 0 portraits, 0 errors (offline)

@@ -1,0 +1,20 @@
+## export to empty temp dir
+exit 0
+11
+byte-identical to committed production-kit/
+## coordinated tamper (prompt edited, manifest hash recomputed)
+{"ok":false,"command":"check","reason":"prompt_mismatch","offendingConcept":"04-cafe-dreamer","offendingPath":"<tmp>/tamper/04_Cafe_Dreamer.md","message":"Prompt file \"04_Cafe_Dreamer.md\" content, byteLength, or SHA-256 does not match canonical prompts.md"}
+exit 1
+## missing concept
+{"ok":false,"command":"check","reason":"missing_file","offendingConcept":"09-spring-breeze","offendingPath":"<tmp>/missing/09_Spring_Breeze.md","message":"Missing required prompt file \"09_Spring_Breeze.md\" for concept \"09-spring-breeze\""}
+exit 1
+## false completion status
+{"ok":false,"command":"check","reason":"invalid_status","offendingConcept":null,"offendingPath":"<tmp>/status/manifest.json","message":"manifest.status must be \"production_required\" (got \"delivered\")"}
+exit 1
+## case-variant protected export Content/acc-x
+{"ok":false,"command":"export","reason":"invalid_path","offendingConcept":null,"offendingPath":"<repo>/Content/acc-x","message":"Refusing to export handoff kit into protected or invalid path: <repo>/Content/acc-x"}
+exit 1
+git status lines: 0
+## bad subcommand
+{"ok":false,"reason":"invalid_cli","offendingConcept":null,"offendingPath":null,"message":"Unknown subcommand \"frobnicate\" (expected 'export' or 'check')"}
+exit 2
