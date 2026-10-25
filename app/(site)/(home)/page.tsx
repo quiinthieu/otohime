@@ -1,9 +1,11 @@
 import { Handheld } from "@/components/handheld";
+import { InkHeroLoader } from "@/components/ink-hero-loader";
 import { Switchboard } from "@/components/switchboard";
 import { site } from "@/content/site";
 import { ViewTransition } from "react";
 
-// The front page: a pocket console boots up and its menu is the way in.
+// The front page: a pocket console boots up and its menu is the way in. The name is signed under the h1 in
+// ink specks that a pointer blows apart (components/ink-hero-loader.tsx, loaded when idle).
 // The sidebar waits on the pages behind it; the rest is below the fold.
 export default function HomePage() {
   return (
@@ -13,6 +15,8 @@ export default function HomePage() {
           <div>
             <p className="caption">Fig. 01 — Home</p>
             <h1 className="mt-3 text-[clamp(2.5rem,8vw,4.5rem)] leading-none">Otohime</h1>
+            {/* the name signed in ink specks under it; decoration only, the h1 stays the text */}
+            <InkHeroLoader />
             <p className="mt-4 text-[15px] font-semibold">{site.tagline}</p>
             <p className="mt-6 max-w-sm text-muted">
               Pick a page on the console: ▲ ▼ or the arrow keys, then A or Enter.

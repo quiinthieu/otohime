@@ -1398,6 +1398,32 @@
       animation: none;
     }
   }
+
+  /* The ink hero (components/ink-hero-loader.tsx): a fixed-ratio box, so the canvas arriving shifts nothing. The
+     SVG mark shows until the canvas has drawn, then fades under it. pan-y keeps a vertical swipe scrolling. */
+  .ink-hero {
+    position: relative;
+    aspect-ratio: 300 / 120;
+    width: min(100%, 22rem);
+    color: var(--ink);
+    touch-action: pan-y;
+  }
+
+  .ink-hero-mark,
+  .ink-hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ink-hero-mark {
+    transition: opacity 300ms ease-out;
+  }
+
+  .ink-hero[data-ink="live"] .ink-hero-mark {
+    opacity: 0;
+  }
 }
 
 @keyframes rise {
@@ -1790,5 +1816,14 @@
   .stamp-marks,
   .stamp-block {
     transition: none;
+  }
+
+  /* No specks: the loader never mounts the canvas, and this hides one caught mid-switch behind the static mark. */
+  .ink-hero-canvas {
+    display: none;
+  }
+
+  .ink-hero .ink-hero-mark {
+    opacity: 1;
   }
 }
