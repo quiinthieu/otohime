@@ -1082,7 +1082,7 @@
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .end-canvas:has(.end-console:hover) .end-eyes {
+    .end-canvas:has(.end-console:hover, .end-console:focus-visible) .end-eyes {
       transform: scale(1.06);
     }
   }
@@ -1128,6 +1128,9 @@
   }
 
   .end-knobs-summary {
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
     list-style: none;
   }
 

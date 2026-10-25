@@ -74,15 +74,15 @@ const PACKETS: readonly { x: number; y: number; swatch: Swatch; delay: string }[
 
 export function EndStage() {
   const [s, dispatch] = useReducer(end, site.end.lines.length, newEnd);
+  const [reduced, setReduced] = useState(false);
   const busy = endBusy(s);
-  useTick(busy, dispatch);
+  useTick(busy && !reduced, dispatch);
 
   const [fig, setFig] = useState<Swatch>("mint");
   const [wobble, setWobble] = useState(3.5);
   const [seen, setSeen] = useState(false);
   const [inView, setInView] = useState(false);
   const [docHidden, setDocHidden] = useState(false);
-  const [reduced, setReduced] = useState(false);
   const [eye, setEye] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const stageRef = useRef<HTMLDivElement>(null);
@@ -213,6 +213,10 @@ export function EndStage() {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
     if (event.key === "Shift" || event.key === "CapsLock") return;
     if (event.shiftKey && event.key.length !== 1) return;
+    const node = stageRef.current;
+    if (node && typeof node.checkVisibility === "function" && !node.checkVisibility()) {
+      return;
+    }
     const target = event.target instanceof Element ? event.target : null;
     if (
       target?.closest("input, textarea, select, [contenteditable]:not([contenteditable='false'])") ||
@@ -240,6 +244,7 @@ export function EndStage() {
     if (rafRef.current !== null) return;
     rafRef.current = window.requestAnimationFrame(() => {
       rafRef.current = null;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const pt = pointerRef.current;
       const btn = consoleBtnRef.current;
       if (!pt || !btn) return;
@@ -389,8 +394,8 @@ export function EndStage() {
                 r={star.r}
                 data-end-star={i}
                 className="end-star"
-                fill={s.unlocked ? swatches[star.swatch] : "currentColor"}
-                stroke={s.unlocked ? "currentColor" : "none"}
+                fill={s.unlocked ? swatches[star.swatch] : "var(--ink)"}
+                stroke={s.unlocked ? "var(--on-swatch)" : "none"}
                 strokeWidth={s.unlocked ? 1.2 : 0}
                 style={{ animationDelay: star.delay }}
               />
@@ -593,7 +598,11 @@ export function EndTop() {
         event.preventDefault();
         const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
-        const main = document.getElementById("main");
+        const mains = Array.from(document.querySelectorAll<HTMLElement>("main#main"));
+        const main =
+          mains.find((el) =>
+            typeof el.checkVisibility === "function" ? el.checkVisibility() : el.offsetParent !== null,
+          ) ?? document.getElementById("main");
         main?.focus({ preventScroll: true });
       }}
     >

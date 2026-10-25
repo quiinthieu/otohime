@@ -220,3 +220,19 @@ test("lib/end.ts is pure and imports no browser or DOM APIs", () => {
   const src = readFileSync(resolve(import.meta.dirname, "end.ts"), "utf8");
   assert.doesNotMatch(src, /\b(window|document|localStorage|matchMedia|IntersectionObserver|requestAnimationFrame)\b/);
 });
+
+test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite", () => {
+  const root = resolve(import.meta.dirname, "..");
+  const walkSh = readFileSync(resolve(root, "scripts/walk-end.sh"), "utf8");
+  const probeSh = readFileSync(resolve(root, "scripts/probe-end.sh"), "utf8");
+  const probeMjs = readFileSync(resolve(root, "scripts/probe-end.mjs"), "utf8");
+  const ci = readFileSync(resolve(root, ".github/workflows/ci.yml"), "utf8");
+
+  assert.match(walkSh, /PORT="\$\{PORT:-4081\}"/);
+  assert.match(probeSh, /PORT="\$\{PORT:-4083\}"/);
+  assert.match(probeSh, /playwright@1\.64\.0/);
+  assert.match(probeMjs, /verifyCanonicalLinks/);
+  assert.match(probeMjs, /negative control:/);
+  assert.match(ci, /bash scripts\/walk-end\.sh/);
+  assert.match(ci, /bash scripts\/probe-end\.sh/);
+});
