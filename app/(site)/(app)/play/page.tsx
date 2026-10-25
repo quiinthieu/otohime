@@ -1,5 +1,6 @@
 import { ClawMachine } from "@/components/claw-machine";
-import { FigTitle, swatches } from "@/components/figures";
+import { swatches } from "@/components/figures";
+import { StampHeading } from "@/components/stamp-heading";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
@@ -10,9 +11,9 @@ export default function PlayPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <FigTitle n="03" hint="rigged in your favour">
+        <StampHeading n="03" hint="rigged in your favour">
           Play
-        </FigTitle>
+        </StampHeading>
         <p className="mt-2 text-muted">{site.play}</p>
         <div className="mt-8">
           <ClawMachine games={site.games} />

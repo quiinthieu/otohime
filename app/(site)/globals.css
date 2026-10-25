@@ -890,6 +890,102 @@
     color: var(--on-swatch);
   }
 
+  /*
+   * The rubber-stamp board on /play (components/stamp-board.tsx). While the
+   * letters are loose the heading keeps its words, in transparent ink, so it
+   * still reads as "Play"; the wrapper grows into a tray that holds them, and
+   * only the blocks and the Tidy chip take the pointer.
+   */
+  .stamp-heading {
+    position: relative;
+  }
+
+  .stamp-heading[data-stamped] {
+    min-height: 20rem;
+  }
+
+  .stamp-heading[data-stamped] .stamp-text {
+    color: transparent;
+  }
+
+  .stamp-title {
+    -webkit-touch-callout: none;
+  }
+
+  .stamp-title[data-pressing] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .stamp-board {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .stamp-marks {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 300ms ease-out;
+  }
+
+  .stamp-board[data-state="tidying"] .stamp-marks {
+    opacity: 0;
+  }
+
+  .stamp-block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1.5px solid var(--on-swatch);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--fig, var(--mint)) 55%, white);
+    box-shadow: 1px 1px 0 var(--on-swatch);
+    color: var(--on-swatch);
+    line-height: 1;
+    letter-spacing: 0;
+    transform-origin: center;
+    cursor: grab;
+    pointer-events: auto;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    will-change: transform;
+  }
+
+  .stamp-block[data-held] {
+    z-index: 1;
+    box-shadow: 3px 3px 0 var(--on-swatch);
+    cursor: grabbing;
+  }
+
+  .stamp-board[data-state="tidying"] .stamp-block {
+    pointer-events: none;
+  }
+
+  .stamp-foot {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    height: 44px;
+    border-top: 1px dashed var(--line);
+  }
+
+  .stamp-foot .chip {
+    pointer-events: auto;
+  }
+
   .stat dt {
     color: var(--muted);
     font-size: 11px;
@@ -1688,5 +1784,11 @@
   ::view-transition-new(*) {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
+  }
+
+  /* the stamp board places, drops and tidies without moving: no marks fade, no glide */
+  .stamp-marks,
+  .stamp-block {
+    transition: none;
   }
 }
