@@ -44,14 +44,17 @@ function rootFace(text: string): Face | null {
   return ([...families].reverse().find((f) => (FACES as readonly string[]).includes(f)) as Face | undefined) ?? null;
 }
 
-// Every top-level stylesheet of every route group but this one.
+// The root stylesheet of every route group but this one: each top-level sheet its layout.tsx imports. A
+// feature's own sheet imported further down (the site's peeks.css) names no paper or ink of its own.
 const SHEETS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
   .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name) && e.name !== SELF)
-  .flatMap((e) =>
-    readdirSync(join(ROOT, "app", e.name))
-      .filter((f) => f.endsWith(".css"))
-      .map((f) => `app/${e.name}/${f}`),
-  )
+  .flatMap((e) => {
+    const layout = join(ROOT, "app", e.name, "layout.tsx");
+    const imported = existsSync(layout) ? readFileSync(layout, "utf8") : "";
+    return readdirSync(join(ROOT, "app", e.name))
+      .filter((f) => f.endsWith(".css") && imported.includes(`import "./${f}";`))
+      .map((f) => `app/${e.name}/${f}`);
+  })
   .sort();
 
 test("eleven sister stylesheets: the site's and ten projects', never this group's own", () => {

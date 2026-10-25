@@ -19,6 +19,8 @@ export type PeekCandidate = { id: PeekKey; item: PeekItem; text: string; order: 
 export type PeekTarget = { key: PeekKey; text: string };
 
 export const PEEK_COUNT = 3;
+// The id of the one hint components/peek-layer.tsx renders, read out after a marked link's name.
+export const PEEK_HINT_ID = "peek-hint";
 export const KIND_ORDER: readonly PeekKind[] = ["sketch", "note", "project", "article"];
 const KEY = /^(sketch|note|project|article|tag|credit):[a-z0-9]+(?:-[a-z0-9]+)*$/;
 

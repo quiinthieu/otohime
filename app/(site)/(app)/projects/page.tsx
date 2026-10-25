@@ -1,7 +1,10 @@
 import { Cartridge } from "@/components/cartridge";
 import { FigTitle, Notice } from "@/components/figures";
 import { site } from "@/content/site";
+import { peekMark, peekTags } from "@/lib/peek-marks";
+import { peekSlug } from "@/lib/peeks";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { type CSSProperties, ViewTransition } from "react";
 
 export const metadata: Metadata = { title: "Projects" };
@@ -33,6 +36,7 @@ export default function ProjectsPage() {
                           href={project.href}
                           className="project-title"
                           style={{ "--vt": `project-${project.href.slice(1)}` } as CSSProperties}
+                          {...peekMark(`project:${peekSlug(project.title)}`)}
                         >
                           {project.title}
                         </a>
@@ -48,7 +52,30 @@ export default function ProjectsPage() {
             ))}
           </ul>
         )}
+        <GazetteDesks />
       </div>
     </ViewTransition>
+  );
+}
+
+// The Gazette's desks as tags: each goes to the paper's front page and peeks at three pieces near it.
+function GazetteDesks() {
+  const tags = peekTags();
+  if (tags.length === 0) return null;
+  return (
+    <section aria-labelledby="desks" className="mt-10">
+      <h2 id="desks" className="caption">
+        Gazette desks
+      </h2>
+      <ul className="peek-tags mt-2">
+        {tags.map(({ key, label }) => (
+          <li key={key}>
+            <Link href="/articles" className="badge" {...peekMark(key)}>
+              {label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

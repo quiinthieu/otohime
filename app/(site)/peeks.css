@@ -1,0 +1,182 @@
+/*
+ * Fan-out peeks (components/peek-layer.tsx): three paper cards fan out from
+ * under the pointer and tuck back into it. The layer places the fan and sets
+ * each card's transform-origin on the anchor, so the tilt pivots on the
+ * pointer like a hand of cards. Kept out of globals.css, whose named
+ * decisions are pinned; the layout imports this sheet.
+ */
+
+.peek-layer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.25rem;
+}
+
+.peek-card {
+  --tilt: 0deg;
+  --lift: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: min(9rem, calc((100vw - 2.5rem) / 3));
+  padding: 0.5rem 0.55rem 0.6rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background: var(--field);
+  box-shadow: 3px 3px 0 var(--ink);
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.35;
+  text-decoration: none;
+  transform: translateY(var(--lift)) rotate(var(--tilt));
+  transition: transform 160ms ease-out;
+  animation: peek-fan 260ms cubic-bezier(0.2, 0.9, 0.3, 1.15) backwards;
+  animation-delay: calc(var(--k, 0) * 45ms);
+}
+
+.peek-card:nth-child(1) {
+  --tilt: -6deg;
+  --lift: 6px;
+}
+
+.peek-card:nth-child(3) {
+  --tilt: 6deg;
+  --lift: 6px;
+}
+
+.peek-card:hover,
+.peek-card:focus-visible {
+  z-index: 1;
+  transform: translateY(-4px) rotate(0deg);
+}
+
+.peek-card[data-kind="sketch"] {
+  background: light-dark(#fffdf6, #2a261f);
+}
+
+.peek-thumb {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  margin-bottom: 4px;
+  border: 1px solid var(--line);
+  object-fit: cover;
+}
+
+.peek-kind {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.peek-title {
+  font-weight: 600;
+}
+
+.peek-blurb {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.peek-layer[data-state="closing"] {
+  pointer-events: none;
+}
+
+.peek-layer[data-state="closing"] .peek-card {
+  animation: peek-tuck 170ms ease-in forwards;
+  animation-delay: calc((2 - var(--k, 0)) * 30ms);
+}
+
+@keyframes peek-fan {
+  from {
+    opacity: 0;
+    transform: scale(0.25) rotate(0deg);
+  }
+}
+
+@keyframes peek-tuck {
+  to {
+    opacity: 0;
+    transform: scale(0.25) rotate(0deg);
+  }
+}
+
+/* Following a card: the fan leaves with the old page, inside the page's own view transition. */
+::view-transition-old(.peek-out) {
+  animation: 160ms ease-in both peek-vt-out;
+}
+
+@keyframes peek-vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+}
+
+/* A credit that peeks: still reads as part of the line it sits in. */
+.peek-credit {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.peek-credit[aria-expanded="true"] {
+  color: var(--ink);
+  text-decoration-style: solid;
+}
+
+.peek-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.peek-tags a {
+  text-decoration: none;
+}
+
+.peek-tags a:hover,
+.peek-tags a[aria-expanded="true"] {
+  background: var(--yellow);
+  color: var(--on-swatch);
+}
+
+/* A long-press opens the fan, so touch gets no callout or text selection on a marked element. */
+@media (pointer: coarse) {
+  [data-peek] {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* No fanning, no stagger, no tuck: the cards lie flat and come and go at once. */
+@media (prefers-reduced-motion: reduce) {
+  .peek-card,
+  .peek-card:hover,
+  .peek-card:focus-visible {
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+
+  .peek-layer[data-state="closing"] {
+    display: none;
+  }
+}

@@ -19,11 +19,13 @@ const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
   .sort();
 const PROJECTS = GROUPS.filter((g) => g !== "site");
 
-// Each group's one top-level stylesheet, comments stripped.
+// Each group's one root stylesheet, the one its layout.tsx imports, comments stripped. A group may keep a
+// feature's rules in a sheet of their own (the site's peeks.css), imported further down.
 function stylesheet(group: string): { file: string; css: string } {
   const dir = join(ROOT, "app", `(${group})`);
-  const files = readdirSync(dir).filter((f) => f.endsWith(".css"));
-  assert.equal(files.length, 1, `app/(${group}) has ${files.length} top-level stylesheets`);
+  const layout = readFileSync(join(dir, "layout.tsx"), "utf8");
+  const files = [...layout.matchAll(/^import "\.\/([\w.-]+\.css)";/gm)].map((m) => m[1]);
+  assert.equal(files.length, 1, `app/(${group})/layout.tsx imports ${files.length} stylesheets`);
   const file = `app/(${group})/${files[0]}`;
   return { file, css: readFileSync(join(dir, files[0]), "utf8").replace(/\/\*[\s\S]*?\*\//g, "") };
 }

@@ -4,6 +4,8 @@ import { RemoveChannelButton } from "@/components/remove-channel-button";
 import { Television } from "@/components/television";
 import { site, type Song } from "@/content/site";
 import { getSession } from "@/lib/dal";
+import { peekMark } from "@/lib/peek-marks";
+import { peekSlug } from "@/lib/peeks";
 import { can } from "@/lib/permissions";
 import { listSongs } from "@/lib/songs-store";
 import type { Metadata } from "next";
@@ -55,7 +57,9 @@ function Channels({ songs }: { songs: Song[] }) {
               <span className="caption block">{ch(i)}</span>
               <span className="block">
                 <span className="font-semibold">{song.title}</span>{" "}
-                <span className="text-muted">· {song.artist}</span>
+                <span className="text-muted">
+                  · <Credit artist={song.artist} />
+                </span>
               </span>
               <span className="text-muted">{song.note}</span>
             </span>
@@ -95,5 +99,16 @@ async function OwnerTools() {
         </>
       ) : null}
     </section>
+  );
+}
+
+// A credit the peek index knows is a button that fans out three related items; any other stays text.
+function Credit({ artist }: { artist: string }) {
+  const mark = peekMark(`credit:${peekSlug(artist)}`);
+  if (!mark) return artist;
+  return (
+    <button type="button" className="peek-credit" {...mark}>
+      {artist}
+    </button>
   );
 }

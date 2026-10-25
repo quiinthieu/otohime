@@ -1,11 +1,13 @@
 import { EndFooter } from "@/components/end-footer";
 import { Masthead } from "@/components/masthead";
 import { NavLinks, NavList, type NavItem } from "@/components/nav-links";
+import { PeekLayer } from "@/components/peek-layer";
 import { site } from "@/content/site";
 import { getSession } from "@/lib/dal";
 import { PUBLIC_PAGES } from "@/lib/pages";
 import { can } from "@/lib/permissions";
 import { Suspense, ViewTransition } from "react";
+import "../peeks.css";
 
 // Public pages for everyone; signed-in people also get their own rooms.
 const PUBLIC: NavItem[] = [...PUBLIC_PAGES];
@@ -31,6 +33,8 @@ const ADMIN: NavItem[] = [
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      {/* Outside <main> and the pages' wrappers: the fan is fixed to the viewport and leaves with its page. */}
+      <PeekLayer />
       <Masthead />
       <ViewTransition enter="page-in" exit="page-out" default="none">
         <div className="lg:grid lg:grid-cols-[220px_1fr]">
