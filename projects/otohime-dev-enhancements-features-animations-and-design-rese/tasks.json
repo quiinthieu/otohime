@@ -1,0 +1,1090 @@
+[
+  {
+    "sequence": 1,
+    "title": "Add opt-in console sounds",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [],
+    "problem": "Console input is silent and has no user-controlled audio preference.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Create a pure tested cue/envelope table and a site-local lazy WebAudio adapter; square waves, short attack/decay, capped gain at -18 dB. Export move/open/back/chime/eat/burst cues for later tasks.",
+      "Add a fixed-size accessible speaker toggle beside the theme toggle; off by default, aria-pressed and storage key sound. Use a hydration-safe external store and handle denied storage.",
+      "Create/resume AudioContext only in a user gesture, reuse it, handle rejected resume safely and close on pagehide. Wire menu movement and A activation; do not add audio to other figures.",
+      "Add scripts/probe-sound.sh and .mjs using the existing temporary pinned Playwright pattern. Prove no constructor before gesture/off, one context after enable, persistence, toggle-off silence, blocked storage/autoplay fallback and no masthead shift. Inspect both themes at desktop and mobile."
+    ],
+    "interfaces": [
+      "lib/sound.ts",
+      "lib/sound.test.ts",
+      "lib/sound-client.ts",
+      "components/sound-toggle.tsx",
+      "components/masthead.tsx",
+      "components/handheld.tsx",
+      "content/site.ts",
+      "app/(site)/globals.css",
+      "scripts/probe-sound.sh",
+      "scripts/probe-sound.mjs"
+    ],
+    "non_goals": [
+      "Audio files or dependencies",
+      "Automatic sound on load",
+      "Changing Vinyl audio"
+    ],
+    "acceptance_criteria": "Sound starts muted; enable, move and open produce short cues only after a gesture. Mute and blocked autoplay remain usable, preference survives reload when storage works, and the masthead stays stable.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-sound.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Tilt the pocket console",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [],
+    "problem": "The console has no subtle pointer depth response.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Add an optional tilt prop to Machine and opt Handheld in; preserve all callers. Map pointer position to bounded +/-6 degree CSS perspective rotation and opposite shadow shift; restore the base transform on leave.",
+      "Enable only on hover-capable pointers with no reduced-motion preference, react to preference changes and reset on hidden/unmount. Keep pointer work event-driven and animate the outer compositor transform, outside the filtered ink.",
+      "Add scripts/probe-tilt.sh/.mjs: pointer changes transform, leave resets within 500 ms; touch and reduced motion stay still, including mid-hover preference change; controls, boot and focus still work. Inspect desktop/mobile and both themes."
+    ],
+    "interfaces": [
+      "components/machine.tsx",
+      "components/handheld.tsx",
+      "app/(site)/globals.css",
+      "scripts/probe-tilt.sh",
+      "scripts/probe-tilt.mjs"
+    ],
+    "non_goals": [
+      "Gyroscope permissions",
+      "Drag rotation or new back faces",
+      "Tilting other machines"
+    ],
+    "acceptance_criteria": "A hover pointer tilts only the console within six degrees; leave returns to the original pose, and touch/reduced-motion users see the still console with working controls.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-tilt.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Shelve projects as cartridges",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [],
+    "problem": "Project rows do not yet use the requested cartridge metaphor.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Add a server-rendered cartridge SVG component with a swatch label, notch, shadow and status stamp. Keep the original title, description, destinations and semantic list/link structure.",
+      "Keep every li.rise, --i, .project-title and project-* --vt identity; size the grid for two readable columns at 390 px without overflow. Hover/focus lifts six pixels; active inserts two pixels; reduced motion suppresses movement.",
+      "Add scripts/probe-cartridges.sh/.mjs to compare hrefs/count to current content, measure overflow and text fit, exercise hover/focus/active, reduced motion and cross-root title morph. Use no per-card filters; inspect light/dark desktop/mobile."
+    ],
+    "interfaces": [
+      "components/cartridge.tsx",
+      "app/(site)/(app)/projects/page.tsx",
+      "app/(site)/globals.css",
+      "scripts/probe-cartridges.sh",
+      "scripts/probe-cartridges.mjs"
+    ],
+    "non_goals": [
+      "New projects or changed URLs",
+      "Client island",
+      "Changing project root layouts"
+    ],
+    "acceptance_criteria": "All existing projects remain normal links and morph into their destinations; two mobile columns show legible cartridge labels, hover/focus lifts, click inserts and reduced motion stays still.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-cartridges.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 4,
+    "title": "Drag the switchboard plug",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [],
+    "problem": "The switchboard has connect/ring controls but its cable cannot be dragged.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Extend the pure switchboard state machine with drag, release, cancel and six-frame spring return. Release within fourteen figure units of a jack connects through the existing flow; release elsewhere or pointercancel returns safely.",
+      "Use pointer capture, touch-action on the handle only, getScreenCTM inverse for coordinates and a length-aware cord sag. Keep all labelled chip controls and Open contact links; preserve any concurrent footer away helper.",
+      "Add reducer tests for snap radius boundary, missed release, cancellation, reduced-motion settle and spring termination. Add scripts/probe-switchboard-drag.sh/.mjs for real mouse/touch drag to Telegram, miss/cancel, keyboard chips, no accidental external navigation and readout/focus. Inspect both themes."
+    ],
+    "interfaces": [
+      "components/switchboard.tsx",
+      "lib/machines.ts",
+      "lib/machines.test.ts",
+      "content/site.ts",
+      "app/(site)/globals.css",
+      "scripts/probe-switchboard-drag.sh",
+      "scripts/probe-switchboard-drag.mjs"
+    ],
+    "non_goals": [
+      "Changing owner contact destinations",
+      "Replacing keyboard controls",
+      "Footer scene redesign"
+    ],
+    "acceptance_criteria": "Dragging onto a jack selects the existing contact action; a miss/cancel returns in six frames or immediately under reduced motion, and mouse, touch and keyboard all retain normal contact links.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-switchboard-drag.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 5,
+    "title": "Add ink tools and re-roll",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [],
+    "problem": "The figures expose wobble and swatch but only one drawing material.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Add a pure tested mode table for ink, pencil, crayon and watercolour. Extend Inked with optional mode/seed props whose defaults preserve the current filter exactly; keep crisp strokes and bounded material parameters.",
+      "Add per-figure Hand picker and Re-roll control through Machine's existing knobs. Add explicit off-by-default Boil at six seed changes per second through the existing tick machinery; only one figure boils at a time and stop when hidden/offscreen.",
+      "Disable boiling under reduced motion, including a live preference change, while keeping static material selection/re-roll functional. Preserve existing figure reducer and swatch behavior; avoid persistence and continuous idle work.",
+      "Add scripts/probe-ink-modes.sh/.mjs checking actual filter attributes and material distinction, seed re-roll, bounded boil rate, off/hidden stop, multiple-figure ownership and reduced-motion stop. Inspect contrast and line quality at both viewport sizes and themes."
+    ],
+    "interfaces": [
+      "lib/ink-modes.ts",
+      "lib/ink-modes.test.ts",
+      "components/figures.tsx",
+      "components/machine.tsx",
+      "content/site.ts",
+      "app/(site)/globals.css",
+      "scripts/probe-ink-modes.sh",
+      "scripts/probe-ink-modes.mjs"
+    ],
+    "non_goals": [
+      "Replacing the default ink look",
+      "Persisting figure cosmetics",
+      "New motion libraries"
+    ],
+    "acceptance_criteria": "Four visibly distinct materials and Re-roll work on machine figures without changing default ink. Optional boiling updates at six Hz only while eligible and stops under reduced motion, hidden pages and offscreen figures.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-ink-modes.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 6,
+    "title": "Model the data pipeline",
+    "role": "software_engineer",
+    "qa": "skip",
+    "depends_on": [],
+    "problem": "A source-to-dashboard simulation needs deterministic state before adding a figure.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Implement a pure pipeline reducer and exported initial state/types in lib/pipeline.ts: emit, backfill of eight spaced packets, pause/resume queue drain, tick and settle; expose counters and bounded busy state.",
+      "Test leg ordering, conservation of emitted/queued/in-flight/stored/shown counts, paused queue accumulation, resume drain, eight-packet backfill, id uniqueness, immutable input and finite settle. Use explicit frames/fixtures; no wall clock, random source or live service.",
+      "Document the state and action interface for the figure task. Settle must preserve paused queued packets and stop busy work; an unpaused settle delivers all pending packets."
+    ],
+    "interfaces": [
+      "lib/pipeline.ts",
+      "lib/pipeline.test.ts"
+    ],
+    "non_goals": [
+      "Rendered UI",
+      "Real telemetry",
+      "Continuous live input"
+    ],
+    "acceptance_criteria": "Seeded action traces conserve packets, never skip a pipeline leg, queue during pause, drain on resume and settle deterministically with no unbounded work.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      }
+    ]
+  },
+  {
+    "sequence": 7,
+    "title": "Model pipeline snake",
+    "role": "software_engineer",
+    "qa": "skip",
+    "depends_on": [],
+    "problem": "The console mini-game needs a deterministic, independently verifiable engine.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Implement lib/snake.ts on a 16 by 14 grid with seeded food placement, direction/start/restart/step/tick actions, growth, wall/self collision, score and a bounded speed table. Prevent reverse direction and handle filling the board.",
+      "Add a pure prefix matcher for the in-console Konami sequence; debug mode wraps walls, with achievement state exposed separately from any footer achievement.",
+      "Test known seeded food, no food on the body, tail-cell movement legality, reverse input, collisions, growth, speed floor, full-board completion, bad/correct code, wrapping and immutability. A direction-step action must support turn-based reduced motion without timers."
+    ],
+    "interfaces": [
+      "lib/snake.ts",
+      "lib/snake.test.ts"
+    ],
+    "non_goals": [
+      "Console rendering or pad changes",
+      "Storage or audio",
+      "Global keyboard listener"
+    ],
+    "acceptance_criteria": "Deterministic traces prove snake movement, scoring, loss, restart, food placement and debug wrapping; the same reducer supports timed and explicit step play.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      }
+    ]
+  },
+  {
+    "sequence": 8,
+    "title": "Draw the quiet cassette",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [],
+    "problem": "Music has no cassette label or safe data model for listening/game status.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Create pure unknown-input parsers/types for Spotify current track and Steam current game; strip unneeded fields, validate external URLs, cap display lengths and return null for malformed, private, empty and error fixtures.",
+      "Add a server-rendered cassette and game cartridge below the music television using site.now and the existing playlist as the quiet face. Include ordinary text/links, provider credits, reserved label space and an explicit quiet state. Do not fetch yet.",
+      "Keep current TV, owner channel controls and authorization unchanged. Add scripts/walk-now-playing.sh in QUIET_ONLY=1 mode for local production HTML and scripts/probe-cassette.sh/.mjs for long fixture text, no-JS, contrast, responsive fit and reduced-motion still reels."
+    ],
+    "interfaces": [
+      "lib/now-playing-data.ts",
+      "lib/now-playing-data.test.ts",
+      "components/cassette.tsx",
+      "app/(site)/(app)/music/page.tsx",
+      "content/site.ts",
+      "app/(site)/globals.css",
+      "scripts/walk-now-playing.sh",
+      "scripts/probe-cassette.sh",
+      "scripts/probe-cassette.mjs"
+    ],
+    "non_goals": [
+      "Provider network access",
+      "Credentials or OAuth UI",
+      "Recent listening history"
+    ],
+    "acceptance_criteria": "Music gains one readable paper cassette/game label with quiet copy and playlist links; malformed provider fixtures parse safely, and the complete quiet display works without JavaScript.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 QUIET_ONLY=1 bash scripts/walk-now-playing.sh && SKIP_BUILD=1 bash scripts/probe-cassette.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 9,
+    "title": "Make the boot session-aware",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "1"
+    ],
+    "problem": "The existing LCD splash repeats on every visit and lacks the requested cartridge boot treatment.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Read installed Next layout/script guidance. Keep the intro inside the console: brief stepped flicker, scan, OTOHIME print and small cartridge click-in; encode the finite sequence as tested data with total duration at most 2.4 s and each movement at most 400 ms.",
+      "Use guarded sessionStorage console:booted and a pre-paint html attribute to skip animation delays as well as durations on returning visits. Mark completion from the finite sequence and handle interrupted boot/denied storage without hiding the menu.",
+      "Integrate the shared chime only if sound is on and this document already has an unlocked gesture context; cold loads remain silent. Reduced motion shows the final usable menu immediately; essential menu links remain in initial HTML.",
+      "Add scripts/probe-boot.sh/.mjs for fresh session, same-session route return/reload, new session, interrupted intro, blocked storage, no-JS, reduced motion and audio eligibility. Compare reserved layout bounds across the sequence in both themes and sizes."
+    ],
+    "interfaces": [
+      "lib/boot.ts",
+      "lib/boot.test.ts",
+      "components/handheld.tsx",
+      "app/(site)/layout.tsx",
+      "app/(site)/globals.css",
+      "scripts/probe-boot.sh",
+      "scripts/probe-boot.mjs"
+    ],
+    "non_goals": [
+      "Fullscreen overlay",
+      "GSAP",
+      "Autoplay on cold load"
+    ],
+    "acceptance_criteria": "First session visit shows a finite in-console boot, subsequent visits skip all intro delays, and blocked storage/no-JS/reduced motion preserve a usable menu. Chime obeys explicit audio opt-in and browser gesture policy.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-boot.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 10,
+    "title": "Morph console choices into pages",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "9"
+    ],
+    "problem": "Console navigation currently fades with no spatial link between LCD label and destination heading.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Follow the installed Next view-transition guide. Pair an HTML console label with FigTitle through a unique named React ViewTransition; prove the source is captured in the old snapshot before navigation, without depending on a simultaneous uncommitted overlay update.",
+      "Use typed console navigation and bounded zoom from the measured LCD centre, at most 400 ms. Preserve masthead/group wrappers, normal page fades, root hops, plain links, keyboard navigation and prefetch behavior.",
+      "Handle unsupported transition APIs and a destination that suspends by retaining complete navigation and a simple fallback. Do not add duplicate page-title names or weaken motion invariants merely to make checks green.",
+      "Extend lib/motion.test.ts and scripts/probe-motion.mjs; add scripts/probe-console-zoom.sh/.mjs for pointer A/Enter, actual captured group and zoom animations, destination title, back navigation, fallback under delayed navigation, no-JS and reduced motion."
+    ],
+    "interfaces": [
+      "components/handheld.tsx",
+      "components/figures.tsx",
+      "app/(site)/(app)/layout.tsx",
+      "app/(site)/(app)",
+      "app/(site)/globals.css",
+      "lib/motion.test.ts",
+      "scripts/probe-motion.mjs",
+      "scripts/probe-console-zoom.sh",
+      "scripts/probe-console-zoom.mjs"
+    ],
+    "non_goals": [
+      "SVG text transition naming",
+      "New root layouts",
+      "Changing destination URLs"
+    ],
+    "acceptance_criteria": "Console A/Enter visibly morphs the selected label into the matching page heading and opens from the LCD; unsupported/delayed paths navigate normally, other fades and project hops still work, and reduced motion has no zoom.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-console-zoom.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 11,
+    "title": "Draw the interactive work pipeline",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "6"
+    ],
+    "problem": "Work shows individual machines but not the whole source-to-dashboard path.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Compose a Pipeline Machine from task 6's tested reducer with source, queue, warehouse and dashboard boxes, pipes and packets in the existing ink style. Place it after the Work intro and retain Conveyor, Stack and ServerRack content.",
+      "Expose Emit, Backfill and Pause/Resume chips plus in-flight, queue, stored and dashboard-lag stats/readout. Label the drawing as an illustrative simulation; initial state is still and no external service is called.",
+      "Animate packets only through the existing 12 fps clock while busy; settle immediately for reduced motion. A paused non-draining queue must not keep an idle timer running. Omit optional automatic Live trickle from this slice.",
+      "Add scripts/probe-pipeline.sh/.mjs: backfill delivers eight, pause accumulates queue and resume drains, display agrees with counters, reduced-motion settlement works, hidden/offscreen stops work and long runs stay bounded. Inspect 1366/390 and both themes."
+    ],
+    "interfaces": [
+      "components/pipeline.tsx",
+      "lib/pipeline.ts",
+      "lib/pipeline.test.ts",
+      "app/(site)/(app)/work/page.tsx",
+      "content/site.ts",
+      "app/(site)/globals.css",
+      "scripts/probe-pipeline.sh",
+      "scripts/probe-pipeline.mjs"
+    ],
+    "non_goals": [
+      "Production telemetry",
+      "Automatic live trickle",
+      "Removing existing figures"
+    ],
+    "acceptance_criteria": "Work has a readable four-stage simulation with packet flow and truthful counters; Backfill, pause and resume show queue lag/drain, resting/hidden states do no animation work, and reduced motion settles on input.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-pipeline.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 12,
+    "title": "Play snake inside Pocket",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "1",
+      "7",
+      "9"
+    ],
+    "problem": "The console B button is inert and there is no playable pocket game.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Integrate task 7's reducer on the existing LCD; B enters/exits game, A starts/restarts, four labelled d-pad directions drive it. Extend pad state additively and retain the six-line menu and screen-reader links.",
+      "Persist guarded pocket:high and pocket:achievement through hydration-safe effects/store, restore high scores on reload, and route move/eat/burst cues through task 1's mute preference.",
+      "Limit keyboard handling to the active console without stealing editable-target/modifier inputs. Match Konami only on scoped console input, consume its game inputs safely, keep footer end:achievement independent and prevent footer unlocking from the same handled input.",
+      "Under reduced motion disable the automatic tick and advance one cell per direction; pause on hidden/offscreen, stop on loss/menu/unmount, bound SVG work by board size and announce score/state without flooding live regions.",
+      "Add scripts/probe-pocket-game.sh/.mjs for real B/A/arrows, deterministic food/scoring through a checkout-only fixture, collision/restart/menu, high-score restore, corrupt/blocked storage, correct/wrong scoped code, footer isolation and reduced-motion explicit-step-only play."
+    ],
+    "interfaces": [
+      "components/handheld.tsx",
+      "lib/machines.ts",
+      "lib/machines.test.ts",
+      "lib/snake.ts",
+      "lib/snake.test.ts",
+      "content/site.ts",
+      "app/(site)/globals.css",
+      "scripts/probe-pocket-game.sh",
+      "scripts/probe-pocket-game.mjs"
+    ],
+    "non_goals": [
+      "Seventh menu row",
+      "Global cheat listener",
+      "Online leaderboard"
+    ],
+    "acceptance_criteria": "B opens pipeline snake inside the LCD; A/restart/d-pad, scoring, collisions and persisted best score work. Scoped Konami unlocks wrapping independently of the footer; reduced motion is turn-based and menu navigation survives.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-pocket-game.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 13,
+    "title": "Draw gallery frames on scroll",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [],
+    "problem": "Raster sketches cannot reveal their own strokes; the gallery needs a progressive ink-frame entrance.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Inspect the current Sheet markup and preserve all pm-240 portrait manifests, download links, dimensions and sections. Add frame/wash wrappers only; rebase shared paths without making another plan's completion a prerequisite.",
+      "Add a small unfiltered rough SVG frame with pathLength one and a compositor paper-wash transform; apply view-timeline animation only under @supports. Base styles show the complete drawing and caption.",
+      "Add explicit animation:none for these scroll-driven elements in the final reduced-motion block, including preference changes. Keep all images and downloads visible without JavaScript or scroll-timeline support.",
+      "Extend scripts/probe-sketches.mjs and walk-sketches.sh as needed: before/after scroll geometry, complete frame/wash at end, unsupported-mode still, no-JS, reduced-motion no active animations, unchanged portrait downloads and responsive loaded images. Fixture optional portraits locally; do not generate or publish art."
+    ],
+    "interfaces": [
+      "app/(site)/(app)/sketches/page.tsx",
+      "app/(site)/globals.css",
+      "lib/motion.test.ts",
+      "scripts/probe-sketches.mjs",
+      "scripts/walk-sketches.sh"
+    ],
+    "non_goals": [
+      "Regenerating art",
+      "Changing portrait activation",
+      "Cross-plan completion gate"
+    ],
+    "acceptance_criteria": "Every current sketch keeps its image/caption/download and gains a scroll-drawn frame and paper reveal on supported browsers; no-JS, unsupported and reduced-motion views show complete artwork with no active reveal.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/walk-sketches.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 14,
+    "title": "Connect cassette to cached providers",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "8"
+    ],
+    "problem": "The cassette currently has only a quiet face; safe request-time provider integration is missing.",
+    "action_items": [
+      "Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.",
+      "Read installed caching, cacheLife, route-handler and request-time docs plus README Live data. Add one server-only adapter holding all provider fetches/env access. Inject host overrides only through validated server env; never accept a user-supplied upstream URL.",
+      "Implement Spotify refresh/current-track and optional public Steam current-game adapters with four-second aborts, independent provider failures, pure parsing, no retries and no network at build. Never log or serialize credentials. Missing configuration yields quiet/static labels without network.",
+      "Make /music request-time with the documented boundary before awaiting the cached reader, retaining existing television and owner tools. Use use cache/cacheLife with roughly 60 s revalidation and expire >=300; stamp read time visibly. Prove a no-JS live-fixture response instead of leaving it in Suspense fallback.",
+      "Add GET /api/now-playing as an on-demand read of the identical cached reader used by /music; return only sanitized display data and state with 200 for quiet/failure. No cron, separate collector or unprotected cache-purge endpoint.",
+      "Extend walk-now-playing.sh with temporary loopback token/Spotify/Steam providers and ephemeral env values: first call, cache reuse, forced fixture-clock/invalidation through a checkout-only test seam, 204/401/429/malformed/private data, dead/slow upstream, independent partial failure and no requests during build. Production paths must not expose fixture or bypass controls.",
+      "Document env names/placeholders, setup scopes, optional current-game privacy and the activation handoff. This build uses fixtures and requires no person prerequisite. The first later run actually needing account setup raises operator_action at its start using spotify-app:now-playing or steam-key:current-game and ends that run; live output remains unproven until independently observed.",
+      "Extend cassette probe to live fixtures, long labels, reduced-motion reels, no-JS content and a secret-sentinel scan of HTTP responses/client chunks. Preserve all current auth and channel e2e behavior."
+    ],
+    "interfaces": [
+      "lib/now-playing.ts",
+      "lib/now-playing.test.ts",
+      "lib/now-playing-data.ts",
+      "components/cassette.tsx",
+      "app/(site)/(app)/music/page.tsx",
+      "app/api/now-playing/route.ts",
+      "content/site.ts",
+      "app/(site)/globals.css",
+      ".env.example",
+      "README.md",
+      "scripts/walk-now-playing.sh",
+      "scripts/probe-cassette.mjs"
+    ],
+    "non_goals": [
+      "Production OAuth consent or secret installation",
+      "Scheduled polling jobs",
+      "Playback control or listening history"
+    ],
+    "acceptance_criteria": "The exact cached reader serves /music and GET /api/now-playing; local fake-provider success, partial failure, absent credentials and outage cases produce bounded safe output, no-JS receives the fixture reading, and builds/client output contain no network calls or secrets. Real provider activation is explicitly outside this task's proven integration scope.",
+    "verification": [
+      {
+        "name": "Unit regressions",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Next generated types",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Production build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Feature browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/walk-now-playing.sh && SKIP_BUILD=1 bash scripts/probe-cassette.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Existing motion and root hops",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Isolated HTTP/RBAC suite",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 APP_PORT=4099 bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  }
+]
