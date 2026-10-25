@@ -203,8 +203,16 @@ test("the pages fade like /work, and the skeleton only leaves", () => {
     assert.match(text, /<ViewTransition enter="page-in" exit="page-out" default="none"/, p);
     assert.match(text, /import \{[^}]*\bViewTransition\b[^}]*\} from "react";/, p);
   }
-  const loading = readFileSync(join(ROOT, "app/(site)/(app)/loading.tsx"), "utf8");
-  assert.match(loading, /<ViewTransition exit="page-out" default="none">/);
+  const loaders = siteFiles(["loading.tsx"]);
+  assert.deepEqual(loaders, [
+    "app/(site)/(app)/account/loading.tsx",
+    "app/(site)/(app)/admin/loading.tsx",
+    "app/(site)/(app)/dashboard/loading.tsx",
+  ], "public static pages must be present in a cross-document hop snapshot");
+  for (const path of loaders) {
+    const loading = readFileSync(join(ROOT, path), "utf8");
+    assert.match(loading, /<ViewTransition exit="page-out" default="none">/, path);
+  }
 });
 
 test("an unknown address gets app/global-not-found.tsx, drawn on the server with the opt-in in its <head>", () => {

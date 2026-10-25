@@ -19,7 +19,8 @@ const ADMIN: NavItem[] = [
 ];
 
 // The pages with the sidebar. The chrome prerenders; the nav reads the
-// session behind its own boundary, and pages stream behind loading.tsx.
+// session behind its own boundary. Only gated rooms have loading.tsx;
+// public page titles must be visible in the initial cross-document hop snapshot.
 //
 // React runs a <ViewTransition>'s enter and exit only when it sits above every
 // DOM node that is inserted or removed. Moving to or from another group's
