@@ -53,6 +53,13 @@ Nothing waits. Three independent chains start at once: 404, seasons, Ask.
 
 ## Task contracts
 
+The proposal submitted to plan-manager (run-8433, git_sha `8b54cc4`) is the
+authority. Its `interfaces` name the scripts/ probe files each task writes,
+because the platform path gate accepts only its listed roots (scripts/,
+projects/, docs/ and similar). The lib/, app/ and components/ paths are named
+in each task's action_items. [tasks.json](tasks.json) is the first draft of
+the same payload and differs in that one respect.
+
 Each software_engineer task carries problem, action_items, interfaces,
 non_goals and verification[]. Summaries:
 
