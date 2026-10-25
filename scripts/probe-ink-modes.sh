@@ -12,8 +12,9 @@
 # pixels differ from each other while the line work stays dark (>= 4.5:1 on the paper) and present; Re-roll moves
 # every turbulence seed and nothing else; picking Ink again restores the house filter. Boil is off at rest (no
 # seed change, no extra timer); pressed, the first turbulence seed changes about six times a second (counted
-# from attribute mutations, never faster than ~8 Hz); pressing another machine's Boil hands it over (one boiling
-# figure on the page); a hidden document and a scrolled-away figure stop it and it resumes when seen; pressing
+# from attribute mutations: one for every two ticks the 12 fps figure clock runs, at most 6.7 Hz, no two closer
+# than 60 ms); pressing another machine's Boil hands it over (one boiling figure on the page); a hidden document
+# and a scrolled-away figure stop it and it resumes when seen; pressing
 # again stops it and its timer. Under reduced motion (from load and switched on live) Boil is disabled and stops,
 # while Hand and Re-roll still work. The hand radios and Re-roll work by keyboard with a visible focus ring, and
 # nothing scrolls sideways. Negative controls: a doubled figure clock fails the rate bound, two identical Ink
