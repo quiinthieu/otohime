@@ -121,6 +121,26 @@ export const site = {
   ],
   // TODO(otohime)
   work: "I build the pipes between where data lands and where people use it: batch jobs, streams, and the odd 3 a.m. backfill.",
+  // The Work page's source-to-dashboard figure (components/pipeline.tsx, lib/pipeline.ts): made-up packets,
+  // never real data.
+  pipeline: {
+    label: "Pipeline simulation",
+    caption: "Simulation",
+    note: "An illustrative simulation: the packets are made up, and nothing is fetched.",
+    emit: "Emit",
+    backfill: "Backfill",
+    pause: "Pause",
+    resume: "Resume",
+    stations: { source: "SOURCE", queue: "QUEUE", warehouse: "WAREHOUSE", dashboard: "DASHBOARD" },
+    hold: "HOLD",
+    stats: { inFlight: "In flight", queued: "Queue", stored: "Stored", lag: "Lag", emitted: "Sent", shown: "Shown" },
+    idle: "Emit a packet, or backfill eight.",
+    flowing: "Packets are on their way to the dashboard.",
+    filling: "Paused: the source keeps sending and the queue fills.",
+    held: (queued: number) => `Paused with ${queued} in the queue. Resume to drain it.`,
+    caught: (shown: number) => `All ${shown} on the dashboard. No lag.`,
+    full: "The pipes are full. Let some packets land first.",
+  },
   // TODO(otohime): your stack
   stack: [
     { what: "Warehouse", tools: "Snowflake, BigQuery", note: "where the questions get answered" },

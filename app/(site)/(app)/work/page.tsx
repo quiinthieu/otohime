@@ -1,5 +1,6 @@
 import { Conveyor } from "@/components/conveyor";
 import { FigTitle } from "@/components/figures";
+import { Pipeline } from "@/components/pipeline";
 import { ServerRack } from "@/components/server-rack";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
@@ -16,6 +17,9 @@ export default function WorkPage() {
         </FigTitle>
         <p className="mt-2 max-w-prose text-muted">{site.work}</p>
         <div className="mt-8">
+          <Pipeline />
+        </div>
+        <div className="mt-14">
           <Conveyor />
         </div>
         <div className="mt-14 grid items-start gap-12 lg:grid-cols-2">
