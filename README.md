@@ -24,6 +24,8 @@ app/(site)/(home)/   the front page, an entrance with no sidebar
 app/(site)/(app)/    the other pages, with the sidebar
 app/(site)/(app)/music/  /music, a television with one song per channel: the starters live in content/site.ts,
                      signed-in owners add channels from the page (at most 12) and remove them; actions.ts holds the writes
+app/(site)/(app)/sketches/  /sketches, one sketchbook of Places, Small things and (once activated in content/portraits.json)
+                     People, with a manifest-only named PNG download route at download/[filename]/route.ts
 app/(shore)/        Shore, a focus timer: its own root layout and CSS (no Tailwind), with the
                      sea-glass renderer vendored in _lib/ under Apache-2.0; `npm test` covers its _lib/*.test.ts
                      _lib/actions.ts holds the ledger changes behind Shore's buttons; actions.test.ts proves
@@ -196,6 +198,10 @@ The Sun's parts and callouts live in `app/(orrery)/_lib/poster.ts` and every oth
 Orrery's motion is CSS only in `app/(orrery)/orrery.css`: the ink draws itself on, layer by layer; on the Sun's poster three loops then run (convection, photon, wind); all of it is off under reduced motion, and `app/(orrery)/_lib/motion.test.ts` tests it.
 
 Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and serves on :4025: the three starters from `content/site.ts` must still show, with status 200), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-music.sh`.
+
+Walk `/sketches` and run its headless Chromium probe with `bash scripts/walk-sketches.sh` (builds, serves on :4081, checks build-sha, section and figure counts, responsive loaded images at 1366x768 and 390x844, negative-control 404 image interception, and `/sketches/download/[filename]`), or reuse a build with `SKIP_BUILD=1 EXPECT_PEOPLE=0 bash scripts/walk-sketches.sh` (pre-activation, 12 studies) / `SKIP_BUILD=1 EXPECT_PEOPLE=10 bash scripts/walk-sketches.sh` (activated, 22 studies), or against a deployment with `BASE_URL=https://otohime.dev EXPECT_PEOPLE=10 bash scripts/walk-sketches.sh`.
+
+Validate the sketches assets and portrait manifest with `npm run sketches:check` (offline schema, 3:4 aspect ratio, `1152x1536` `< 600 KB` JPEG derivatives, `https://files-cdn.x.ai` allowlist, non-expiring provenance, and hash uniqueness; add `-- --require-people` to require all ten reviewed portrait records and `-- --live` to download, hash, and decode all 20 public URLs). On-demand generation, import, and xAI Files publication live in `scripts/sketches-paint.ts` (`preflight --offline`, `generate`, `import`, `publish`), backed by a redacted attempt ledger and `content/portraits.json` (which stays `[]` until all ten reviewed portraits are published and verified).
 
 A Capsule round is staged so the tier comes last. Turn commits the draw and also deals the round's look from the same seed and draw index on streams of their own (`turnFrames` and `dropIndex` in `app/(capsule)/_lib/gacha.ts`): the crank turns for 16 to 28 frames (1.3 to 2.3 s at 12 fps), and in the last 6 one identical capsule falls out of the dome, through the collar, into the chute. Open then runs shake, part, rise (a plain, numberless card back comes up out of the capsule), edge (the tier rule draws on: ink, slate, or gold), hold (a legend's glow and sparks, legend only) and flip, 6 frames each (part 4). Components read the round only through `revealView` in `app/(capsule)/_lib/reveal.ts`, and `reveal.test.ts` plays every frame of every tier to prove that nothing before the edge stage has an edge or a face. Turn still saves the card at once, so a reload mid-round keeps it, but `albumView` holds that copy and draw back from the album and the tally until the card is revealed. Under reduced motion each press lands on its last pose at once.
 

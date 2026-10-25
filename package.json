@@ -21,7 +21,8 @@
     "elements:vendor": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/vendor-elements.ts",
     "planisphere:vendor": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/vendor-planisphere.ts",
     "capsule:sheet": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/capsule-sheet.ts",
-    "vinyl:check": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/vinyl-check.ts"
+    "vinyl:check": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/vinyl-check.ts",
+    "sketches:check": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sketches-check.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.7.10",
@@ -34,6 +35,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "roughjs": "4.6.6",
+    "sharp": "0.35.5",
     "three": "0.186.1"
   },
   "devDependencies": {
