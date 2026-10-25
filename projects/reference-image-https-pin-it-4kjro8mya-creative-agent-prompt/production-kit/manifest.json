@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "status": "production_required",
+  "sourcePromptsPath": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/prompts.md",
+  "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+  "styleReferenceUrl": "https://www.pinterest.com/pin/248120260716380781/",
+  "referenceUrl": "https://i.pinimg.com/originals/41/9a/49/419a49689748e94025c4a9f00d06347b.jpg",
+  "referenceUrlSha256": "baadd08727c729821832757e884dd0db07cdd01a8b14bb02b207377ca3ff4255",
+  "referenceHashNote": "SHA-256 of the canonical reference image URL string from parsePromptPack(), not downloaded image bytes.",
+  "deliveryStatus": {
+    "paintingsDelivered": 0,
+    "paintingsRequired": 10,
+    "galleryPortraitsActivated": 0
+  },
+  "generationSettings": {
+    "status": "unverified_guidance",
+    "executed": false,
+    "source": "prompts.md",
+    "planningBaselineModel": "grok-imagine-image-2.0",
+    "aspectRatio": "3:4",
+    "preferredResolution": "2k",
+    "preferredMinNativeWidth": 1536,
+    "preferredMinNativeHeight": 2048,
+    "upscalingAllowed": false,
+    "lowerNativeResolutionPolicy": "Preserve exact native 3:4 pixel dimensions as lossless PNG and report actual lower dimensions honestly rather than upscaling.",
+    "maxAttemptsPerConcept": 4,
+    "maxTotalCandidates": 40,
+    "seedPolicy": "Do not pass an undocumented seed; record seed only if actually supported and returned by the vendor, otherwise write 'not supported'.",
+    "note": "Unverified planning guidance from prompts.md only; no model execution, seed, candidate, or vendor request has occurred in this kit."
+  },
+  "artifactRequirements": {
+    "master": {
+      "format": "image/png",
+      "aspectRatio": "3:4",
+      "preferredMinWidth": 1536,
+      "preferredMinHeight": 2048,
+      "allowUpscale": false,
+      "lowerResolutionRule": "Report lower native 3:4 dimensions honestly; never upscale to fake >=1536x2048."
+    },
+    "derivative": {
+      "format": "image/jpeg",
+      "width": 1152,
+      "height": 1536,
+      "maxBytes": 600000,
+      "croppingAllowed": false
+    },
+    "publication": {
+      "allowedHost": "files-cdn.x.ai",
+      "requireHttps": true,
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null,
+      "requireAnonymousHttp200": true,
+      "commitBinariesToGit": false
+    }
+  },
+  "reviewChecklist": [
+    "one adult subject: feature exactly one original young adult woman (age 20-30) as the primary subject",
+    "natural face/proportions: delicate facial features drawn with minimal confident strokes and unified facial anatomy",
+    "plausible visible hands (occlusion allowed): visible anatomical landmarks guide convincing hands; partially occluded fingers need not all be shown",
+    "varied expressive ink: spontaneous black ink contours of varying weight, overlapping/overshooting lines, scribbles and unfinished passages",
+    "organic loose washes: transparent watercolour washes mixed with concentrated pigment, hard irregular wet edges, granulation, bleeding and small splatters",
+    "three-to-five-colour palette: restrained palette of 3-5 dominant colours per illustration with saturated accents against pale washes and deep ink black",
+    "sparse off-white paper: large areas left as bare off-white paper (#faf8f3) with contours dissolving toward the bottom and no detailed background",
+    "original distinct pose: asymmetrical 3:4 portrait composition with distinct pose, palette and focal point (seated frontal three-quarter Reader without headscarf)",
+    "absence of digital polish/anime/photorealism: no clean uniform outlines, polished digital rendering, conventional anime, photorealism, or photographic paper grain overlay",
+    "absence of text, frame, signature and watermark: no decorative border, text, caption, signature or watermark in the artwork"
+  ],
+  "concepts": [
+    {
+      "index": 1,
+      "conceptId": "01-quiet-reader",
+      "title": "Reader",
+      "caption": "Page forty, and the kettle can wait.",
+      "masterFilename": "01_Quiet_Reader.png",
+      "derivativeFilename": "13-reader.jpg",
+      "promptFile": "01_Quiet_Reader.md",
+      "fullPromptSha256": "36a776423e1269e963f0581e7d3ee5edcbe1c0fe047096b50167c72fbe009022",
+      "promptFileByteLength": 3822,
+      "promptFileSha256": "ea763f4f3f125618d18e0aaf8878ed93d31dbecd0b4e3d7717629bca5ec53fdf"
+    },
+    {
+      "index": 2,
+      "conceptId": "02-flower-girl",
+      "title": "Wildflowers",
+      "caption": "Picked on the way, for no one in particular.",
+      "masterFilename": "02_Flower_Girl.png",
+      "derivativeFilename": "14-flowers.jpg",
+      "promptFile": "02_Flower_Girl.md",
+      "fullPromptSha256": "4e3d2f0a87e66fc71d122bb6aab5970df48261eeb4594fedcc8966fa1e7a03ea",
+      "promptFileByteLength": 3743,
+      "promptFileSha256": "ca27b4a7dca87eac4897b2644055b71ad01d0c5d6b43686ebc59e4eb09a61e5b"
+    },
+    {
+      "index": 3,
+      "conceptId": "03-rainy-afternoon",
+      "title": "Rain",
+      "caption": "A clear umbrella keeps the sky in view.",
+      "masterFilename": "03_Rainy_Afternoon.png",
+      "derivativeFilename": "15-rain.jpg",
+      "promptFile": "03_Rainy_Afternoon.md",
+      "fullPromptSha256": "5b669e0510187db15271f734a084bde23eeb5bc9c054af3ddd3077bc479c2010",
+      "promptFileByteLength": 3754,
+      "promptFileSha256": "904e2ae0b97020913cfc4cdd24e1ac7a71cdb1fb7205cb2fd3fe661ff6415e5b"
+    },
+    {
+      "index": 4,
+      "conceptId": "04-cafe-dreamer",
+      "title": "Café",
+      "caption": "The cup went cold while she was elsewhere.",
+      "masterFilename": "04_Cafe_Dreamer.png",
+      "derivativeFilename": "16-cafe.jpg",
+      "promptFile": "04_Cafe_Dreamer.md",
+      "fullPromptSha256": "3fe8fc01cf12bcddf1b1d6ae55bfe40d045ccf251b9b74b057dd5c11355197f4",
+      "promptFileByteLength": 3769,
+      "promptFileSha256": "21f0696069eb60cc50f99ff8374e333a5467f66eabeadd24e9ca9e697ab627a1"
+    },
+    {
+      "index": 5,
+      "conceptId": "05-autumn-wanderer",
+      "title": "Leaves",
+      "caption": "The wind had the last word.",
+      "masterFilename": "05_Autumn_Wanderer.png",
+      "derivativeFilename": "17-leaves.jpg",
+      "promptFile": "05_Autumn_Wanderer.md",
+      "fullPromptSha256": "6e912de3d50226487440ec53ed63c217810db19620531633cce1bdd99e7a7f5f",
+      "promptFileByteLength": 3706,
+      "promptFileSha256": "02e75439b5baa112ca7eea6c876abb144fc506315ef8fa7df37132cfed284d6b"
+    },
+    {
+      "index": 6,
+      "conceptId": "06-violinist",
+      "title": "Violin",
+      "caption": "Eyes closed, the hard bar coming up.",
+      "masterFilename": "06_Violinist.png",
+      "derivativeFilename": "18-violin.jpg",
+      "promptFile": "06_Violinist.md",
+      "fullPromptSha256": "ffe6849d028a5849eef1ec2edd75248eb33b71c5c4efd07a5ce512323be53c09",
+      "promptFileByteLength": 3581,
+      "promptFileSha256": "c4e4ba68028a91ef66b9a6983bcffda82efa108e76b124a02e4eb8ea0161ec49"
+    },
+    {
+      "index": 7,
+      "conceptId": "07-morning-by-the-window",
+      "title": "Window",
+      "caption": "Tea, and a street that is not awake yet.",
+      "masterFilename": "07_Morning_by_the_Window.png",
+      "derivativeFilename": "19-window.jpg",
+      "promptFile": "07_Morning_by_the_Window.md",
+      "fullPromptSha256": "6c414c1d15c75f461defcf7b76016513dcc08772431d721887d5fda2d3a0c576",
+      "promptFileByteLength": 3825,
+      "promptFileSha256": "efcac98b2c8ac657516a20613480099f32bbb72be42e4b4c5fdef0947045bbe4"
+    },
+    {
+      "index": 8,
+      "conceptId": "08-painter",
+      "title": "Painter",
+      "caption": "Cobalt on the sleeve, as usual.",
+      "masterFilename": "08_Painter.png",
+      "derivativeFilename": "20-painter.jpg",
+      "promptFile": "08_Painter.md",
+      "fullPromptSha256": "c367a9e54abc1c9821d925e3270d67dae8cefec70522849af7cde7594a499435",
+      "promptFileByteLength": 3704,
+      "promptFileSha256": "70acd6c394f786d6055f02a4d0bcc33697b169c6aec4224724aa4ff01e4dc612"
+    },
+    {
+      "index": 9,
+      "conceptId": "09-spring-breeze",
+      "title": "Breeze",
+      "caption": "Hair across her face, one stem held still.",
+      "masterFilename": "09_Spring_Breeze.png",
+      "derivativeFilename": "21-breeze.jpg",
+      "promptFile": "09_Spring_Breeze.md",
+      "fullPromptSha256": "ef0b970a41abce5aa5def39f8fe8bdc5d3b64bc9de21803a20a26295e30a819d",
+      "promptFileByteLength": 3619,
+      "promptFileSha256": "041cb4511ea4286b0c4ea3ea49ce46bf8fd9d4a6d0ac4e25ad682abf538bdc4a"
+    },
+    {
+      "index": 10,
+      "conceptId": "10-letter-writer",
+      "title": "Letter",
+      "caption": "Three lines in, and already a second sheet.",
+      "masterFilename": "10_Letter_Writer.png",
+      "derivativeFilename": "22-letter.jpg",
+      "promptFile": "10_Letter_Writer.md",
+      "fullPromptSha256": "c83c0069ea9ebd6546b3c89685d1d73ad85470112596d7ac6565c882a4cb44a8",
+      "promptFileByteLength": 3774,
+      "promptFileSha256": "f79cad1f3c61843090c042acb649087aaf213f5a626011fbe034ee792e6dc9ee"
+    }
+  ]
+}
