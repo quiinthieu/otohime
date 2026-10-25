@@ -1547,9 +1547,9 @@
     outline-offset: 2px;
   }
 
-  /* The receipt: 32 columns of mono on a paper strip with a torn foot. Each row is one unwrapped line (--n chars,
-     starting at --at); it feeds down, then a steps() clip mask types it at 40 chars a second. The gap before a
-     paragraph and the dashed rule are rows too, so nothing takes room on the strip before it prints. */
+  /* The receipt: 32 columns of mono on a paper strip with a torn foot. Each row is one unwrapped line that
+     lib/typewriter.ts types from script; a row mounts when its first character prints and feeds down. The gap
+     before a paragraph and the dashed rule are rows too, so nothing takes room on the strip before it prints. */
   .ask-receipt {
     width: fit-content;
     max-width: 100%;
@@ -1573,9 +1573,7 @@
     height: 1.5em;
     overflow: hidden;
     white-space: pre;
-    animation:
-      ask-feed 120ms ease-out var(--at) both,
-      ask-type calc(var(--n) * 25ms) steps(var(--n), end) var(--at) both;
+    animation: ask-feed 120ms ease-out both;
   }
 
   .ask-receipt p + p > .ask-row:first-child,
@@ -1599,12 +1597,6 @@
     from {
       height: 0;
       padding-top: 0;
-    }
-  }
-
-  @keyframes ask-type {
-    from {
-      clip-path: inset(0 100% 0 0);
     }
   }
 

@@ -2,16 +2,18 @@
 
 // Ask the console: a native modal dialog with a > prompt that answers from public/ask-index.json through
 // lib/ask.ts (offline, no model) and prints the reply on a paper receipt. The receipt is a fixed 32 columns, so
-// each printed row is one unwrapped line of text and a steps() clip mask can type it, 40 chars a second,
-// while the row's height feeds the strip down. The whole answer is in the DOM from the first frame, inside an
-// aria-live region; under reduced motion the CSS drops both animations and it simply shows.
+// each printed row is one unwrapped line of text. lib/typewriter.ts steps through the rows' text from
+// requestAnimationFrame, 40 chars a second; a row takes room on the strip only once it starts, and keeps its
+// final width so the paper does not jitter. A new question remounts the receipt and an unmount cancels the
+// frame. The typed receipt is not live: a screen-reader-only aria-live region gets the whole answer once it is
+// typed. Under reduced motion the stepper returns the whole text at once, so both show on the first render.
 // Loaded on first open by components/ask-console-loader.tsx, its own chunk.
 import { answer, type AskIndex, type Reply } from "@/lib/ask";
+import { due, step } from "@/lib/typewriter";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const COLS = 32;
-const CHAR_MS = 25;
 
 // Greedy word wrap to the receipt's columns; a word longer than a row is cut.
 function wrap(text: string): string[] {
@@ -32,10 +34,10 @@ function wrap(text: string): string[] {
   return rows;
 }
 
-type Printed = { query: string; reply: Reply };
+type Printed = { query: string; reply: Reply; reduced: boolean };
 type Row = { text: string; at: number };
 
-// Each row starts printing when the one before it has finished.
+// Each row starts printing when the one before it has finished: `at` is its offset in the typed text.
 function rows(blocks: string[]): Row[][] {
   let at = 0;
   return blocks.map((block) =>
@@ -47,48 +49,93 @@ function rows(blocks: string[]): Row[][] {
   );
 }
 
-function Rows({ rows }: { rows: Row[] }) {
-  return rows.map(({ text, at }, i) => (
-    <span key={i} className="ask-row" style={{ "--n": text.length, "--at": `${at * CHAR_MS}ms` } as React.CSSProperties}>
-      {text}
-    </span>
-  ));
+// How much of `text` is on paper: steps from requestAnimationFrame until done. The receipt is keyed per
+// question, so `text` and `reduced` never change under one mount; the cleanup cancels the pending frame.
+function useTyped(text: string, reduced: boolean): number {
+  const [typed, setTyped] = useState(() => step(text, 0, reduced, 0).index);
+  useEffect(() => {
+    if (step(text, 0, reduced, 0).done) return;
+    let frame = 0;
+    let start: number | undefined;
+    let index = 0;
+    const tick = (now: number) => {
+      start ??= now;
+      const next = step(text, index, reduced, due(now - start) - index);
+      index = next.index;
+      setTyped(index);
+      if (!next.done) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [text, reduced]);
+  return typed;
 }
 
-function Receipt({ query, reply }: Printed) {
+function Rows({ rows, typed }: { rows: Row[]; typed: number }) {
+  return rows
+    .filter(({ at }) => typed > at)
+    .map(({ text, at }, i) => (
+      <span key={i} className="ask-row" data-n={text.length} style={{ minWidth: `${text.length}ch` }}>
+        {text.slice(0, typed - at)}
+      </span>
+    ));
+}
+
+const started = (block: Row[] | undefined, typed: number) => !!block?.length && typed > block[0].at;
+
+function Receipt({ query, reply, reduced }: Printed) {
   const links = reply.sources.map(({ title }) => `-> ${title}`);
   const rule = links.length > 0 ? ["-".repeat(COLS)] : [];
-  const [echo, ...printed] = rows([`> ${query}`, ...reply.lines, ...rule, ...links]);
+  const blocks = rows([`> ${query}`, ...reply.lines, ...rule, ...links]);
+  const all = blocks.flat();
+  const text = all.map((r) => r.text).join("");
+  const cols = Math.max(0, ...all.map((r) => r.text.length));
+  const typed = useTyped(text, reduced);
+  const done = typed >= text.length;
+
+  const [echo, ...printed] = blocks;
   const lines = printed.slice(0, reply.lines.length);
   const [sep] = printed.slice(reply.lines.length, reply.lines.length + rule.length);
   const sources = printed.slice(reply.lines.length + rule.length);
+  const spoken = [...reply.lines, ...(reply.sources.length > 0 ? [`Sources: ${reply.sources.map((s) => s.title).join(", ")}.`] : [])].join(" ");
   return (
-    <div className="ask-receipt">
-      <p className="ask-echo">
-        <Rows rows={echo} />
-      </p>
-      {lines.map((line, i) => (
-        <p key={i}>
-          <Rows rows={line} />
+    <>
+      <div className="ask-receipt" data-typed={typed} data-total={text.length} style={{ width: `calc(${cols}ch + 2rem)` }}>
+        <p className="ask-echo">
+          <Rows rows={echo} typed={typed} />
         </p>
-      ))}
-      {sep && (
-        <div className="ask-sep" aria-hidden="true">
-          <Rows rows={sep} />
-        </div>
-      )}
-      {sources.length > 0 && (
-        <ul>
-          {reply.sources.map(({ href }, i) => (
-            <li key={href}>
-              <Link href={href} className="ask-link">
-                <Rows rows={sources[i]} />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+        {lines.map(
+          (line, i) =>
+            started(line, typed) && (
+              <p key={i}>
+                <Rows rows={line} typed={typed} />
+              </p>
+            ),
+        )}
+        {started(sep, typed) && (
+          <div className="ask-sep" aria-hidden="true">
+            <Rows rows={sep} typed={typed} />
+          </div>
+        )}
+        {started(sources[0], typed) && (
+          <ul>
+            {reply.sources.map(
+              ({ href }, i) =>
+                started(sources[i], typed) && (
+                  <li key={href}>
+                    <Link href={href} className="ask-link">
+                      <Rows rows={sources[i]} typed={typed} />
+                    </Link>
+                  </li>
+                ),
+            )}
+          </ul>
+        )}
+      </div>
+      <div className="ask-said sr-only" aria-live="polite" aria-atomic="true">
+        {done ? spoken : ""}
+      </div>
+    </>
   );
 }
 
@@ -116,7 +163,8 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
     } catch {
       reply = { intent: "none", lines: ["THE INDEX DID NOT LOAD. CLOSE AND ASK AGAIN."], sources: [] };
     }
-    setPrinted((p) => ({ query, reply, n: (p?.n ?? 0) + 1 }));
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setPrinted((p) => ({ query, reply, reduced, n: (p?.n ?? 0) + 1 }));
   }
 
   // The console's arrow and A keys listen on window; nothing typed or pressed in here reaches them. Tab wraps
@@ -166,8 +214,8 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
           placeholder="shore, now, contact…"
         />
       </form>
-      <div className="ask-out" aria-live="polite">
-        {printed && <Receipt key={printed.n} query={printed.query} reply={printed.reply} />}
+      <div className="ask-out">
+        {printed && <Receipt key={printed.n} query={printed.query} reply={printed.reply} reduced={printed.reduced} />}
       </div>
     </dialog>
   );

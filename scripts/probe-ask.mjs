@@ -79,20 +79,28 @@ async function press(page, phone, locator) {
   else await locator.click();
 }
 
-// The receipt's rows: how many, how many are clipped (still typing), and how many animations run on them.
+// The receipt as printed: the characters on paper (the rows' own text, read from the DOM) against the answer's
+// full length, rows still short of their full text, rows whose box hides text, animations running on rows, and
+// what the screen-reader-only live region says.
 const rowState = (page) =>
   page.evaluate((out) => {
+    const receipt = document.querySelector(`${out} .ask-receipt`);
     const rows = [...document.querySelectorAll(`${out} .ask-row`)];
+    const live = document.querySelector(`${out} [aria-live]`);
     return {
       rows: rows.length,
-      // a row is clipped while its typing mask (clip-path inset from the right) or its feed (height) hides text
-      clipped: rows.filter((r) => {
-        const right = getComputedStyle(r).clipPath.match(/^inset\(\S+ ([\d.]+)(%|px)/);
-        return (right && Number(right[1]) > 0) || r.clientWidth + 0.5 < r.scrollWidth || r.clientHeight + 0.5 < r.scrollHeight;
-      }).length,
+      chars: rows.reduce((n, r) => n + r.textContent.length, 0),
+      total: Number(receipt?.dataset.total ?? -1),
+      short: rows.filter((r) => r.textContent.length < Number(r.dataset.n)).length,
+      hidden: rows.filter((r) => r.clientWidth + 0.5 < r.scrollWidth).length,
       running: rows.reduce((n, r) => n + r.getAnimations().filter((a) => a.playState === "running").length, 0),
+      livePolite: live?.getAttribute("aria-live") === "polite",
+      liveInside: !!live && !!receipt && receipt.contains(live),
+      live: live?.textContent ?? "",
     };
   }, OUT);
+const typedOut = (s) => s.rows > 0 && s.total > 0 && s.chars === s.total && s.short === 0 && s.hidden === 0;
+const saysShore = (s) => !!shorePassage && squash(s.live).includes(squash(shorePassage.text));
 
 async function ask(page) {
   await page.locator("#ask-q").fill(QUERY);
@@ -155,25 +163,50 @@ async function motion(browser, viewport) {
 
     await ask(page);
     const typing = await rowState(page);
-    check(`${size}: the receipt types its rows (some clipped right after Enter)`, typing.rows > 0 && typing.clipped > 0 && typing.running > 0, JSON.stringify(typing));
-    const live = await page.evaluate((out) => {
-      const el = document.querySelector(out);
-      return { polite: el?.getAttribute("aria-live") === "polite", text: el?.textContent ?? "" };
-    }, OUT);
+    await sleep(400);
+    const later = await rowState(page);
     check(
-      `${size}: the whole answer is in the DOM at once, inside aria-live=polite`,
-      live.polite && !!shorePassage && squash(live.text).includes(squash(shorePassage.text)),
-      live.text.slice(0, 120),
+      `${size}: the receipt types the answer out (part of it right after Enter, more 400 ms later)`,
+      typing.total > 0 && typing.chars < typing.total && later.chars > typing.chars && later.chars < later.total,
+      JSON.stringify({ typing, later: { chars: later.chars, total: later.total } }),
     );
-    const hrefs = await page.locator(`${OUT} a[href]`).evaluateAll((as) => as.map((a) => a.getAttribute("href")));
-    check(`${size}: the receipt links only to pages in /ask-index.json`, hrefsOk(hrefs), JSON.stringify(hrefs));
+    check(`${size}: the live region stays empty while it types`, typing.live === "" && later.live === "", JSON.stringify([typing.live, later.live]));
 
-    let done = typing;
-    for (let i = 0; i < 40 && (done.clipped > 0 || done.running > 0); i++) {
+    let done = later;
+    for (let i = 0; i < 80 && !typedOut(done); i++) {
       await sleep(250);
       done = await rowState(page);
     }
-    check(`${size}: the receipt finishes printing every row`, done.rows > 0 && done.clipped === 0, JSON.stringify(done));
+    check(`${size}: the receipt finishes typing every row`, typedOut(done), JSON.stringify(done));
+    check(
+      `${size}: once typed, aria-live=polite (outside the typed receipt) holds the whole answer`,
+      done.livePolite && !done.liveInside && saysShore(done),
+      JSON.stringify(done),
+    );
+    const hrefs = await page.locator(`${OUT} a[href]`).evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+    check(`${size}: each citation is a link, only to pages in /ask-index.json`, hrefsOk(hrefs) && hrefs.includes("/shore"), JSON.stringify(hrefs));
+
+    // A new question cancels the old typing: the receipt starts over and finishes the new answer only.
+    await page.locator("#ask-q").fill("now");
+    await page.locator("#ask-q").press("Enter");
+    await sleep(50);
+    const restart = await rowState(page);
+    check(`${size}: a new question starts a new receipt and clears the live region`, restart.chars < restart.total && restart.live === "", JSON.stringify(restart));
+    let again = restart;
+    for (let i = 0; i < 80 && !typedOut(again); i++) {
+      await sleep(250);
+      again = await rowState(page);
+    }
+    const echo = await page.locator(`${OUT} .ask-echo`).textContent();
+    check(`${size}: the new answer types out in full under its own question`, typedOut(again) && echo === "> now" && again.live !== "", JSON.stringify({ echo, again }));
+    await page.locator("#ask-q").fill(QUERY);
+    await page.locator("#ask-q").press("Enter");
+    await sleep(50);
+    done = await rowState(page);
+    for (let i = 0; i < 80 && !(typedOut(done) && saysShore(done)); i++) {
+      await sleep(250);
+      done = await rowState(page);
+    }
 
     // Focus stays inside: forward from the prompt and back from it.
     const inside = [];
@@ -232,7 +265,10 @@ async function still(browser, viewport) {
     await page.waitForSelector(`${DIALOG}[open]`, { timeout: 10000 }).catch(() => {});
     await ask(page);
     const state = await rowState(page);
-    check(`${size} reduced motion: the full answer shows at once, no typewriter`, state.rows > 0 && state.clipped === 0 && state.running === 0, JSON.stringify(state));
+    check(`${size} reduced motion: the full answer shows at once, no typewriter`, typedOut(state) && state.running === 0, JSON.stringify(state));
+    check(`${size} reduced motion: aria-live holds the whole answer at once`, state.livePolite && saysShore(state), JSON.stringify(state));
+    const hrefs = await page.locator(`${OUT} a[href]`).evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+    check(`${size} reduced motion: every citation link is there at once`, hrefsOk(hrefs) && hrefs.includes("/shore"), JSON.stringify(hrefs));
   } finally {
     await context.close();
   }

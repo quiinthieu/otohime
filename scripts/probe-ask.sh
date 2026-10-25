@@ -8,13 +8,16 @@
 # At 1366x768 and 390x844 (touch): the "Ask the console" chip shows under the console, and with the page left
 # alone (no hover, focus or press) neither /ask-index.json nor a script carrying the dialog is requested. The
 # first press opens a native modal <dialog> with focus in the > prompt (enterkeyhint=send, 16px); "shore" and
-# Enter print a receipt inside an aria-live=polite region whose text is the whole answer and whose links all
-# point at hrefs in /ask-index.json; the rows are typed (clipped, then full) and Tab stays inside the dialog.
-# Escape closes it and focus is back on the chip; a second open fetches nothing again. Below 640 px the dialog
-# is a bottom sheet. Under reduced motion every row is whole at once, with no animation running. Negative
-# controls: the dialog chunk and the index are seen once it opens (the lazy check can fail), the motion run
-# catches clipped rows (the reduced-motion check can fail), and a link rewritten to /not-in-index fails the
-# href check. No console or page error anywhere.
+# Enter type the answer onto a receipt (lib/typewriter.ts from requestAnimationFrame): part of its text right
+# after Enter, more 400 ms later, then all of it, while the screen-reader-only aria-live=polite region beside
+# it stays empty until the answer is typed and then holds the whole answer. Every citation is a link to an
+# href in /ask-index.json. A second question starts a fresh receipt (the old typing is cancelled, the live
+# region cleared) and types it out in full. Tab stays inside the dialog; Escape closes it and focus is back
+# on the chip; a second open fetches nothing again. Below 640 px the dialog is a bottom sheet. Under reduced
+# motion the whole answer, the live region and every link are there on the first read, with no animation
+# running. Negative controls: the dialog chunk and the index are seen once it opens (the lazy check can fail),
+# the motion run catches a half-typed receipt with the same reader (the reduced-motion check can fail), and a
+# link rewritten to /not-in-index fails the href check. No console or page error anywhere.
 #
 # Env: PORT (4091, or a free port when that default is busy; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1, EXPECT_SHA (checked if set).
 # Playwright is installed into a temp prefix at run time; package.json stays unchanged.
