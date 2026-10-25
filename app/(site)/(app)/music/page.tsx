@@ -1,5 +1,6 @@
 import { AddChannelForm } from "@/components/add-channel-form";
 import { FigTitle, swatches } from "@/components/figures";
+import { InkRadioLoader } from "@/components/ink-radio-loader";
 import { RemoveChannelButton } from "@/components/remove-channel-button";
 import { Television } from "@/components/television";
 import { site, type Song } from "@/content/site";
@@ -10,6 +11,8 @@ import { can } from "@/lib/permissions";
 import { listSongs } from "@/lib/songs-store";
 import type { Metadata } from "next";
 import { Suspense, ViewTransition } from "react";
+import stations from "./_lib/stations.json";
+import "./ink-radio.css";
 
 export const metadata: Metadata = { title: "Music" };
 
@@ -26,6 +29,7 @@ export default function MusicPage() {
         <Suspense fallback={<Channels songs={site.songs} />}>
           <LiveChannels />
         </Suspense>
+        <InkRadio />
         <Suspense fallback={null}>
           <OwnerTools />
         </Suspense>
@@ -67,6 +71,32 @@ function Channels({ songs }: { songs: Song[] }) {
         ))}
       </ol>
     </>
+  );
+}
+
+// Outside the channels' Suspense boundary, so a stream started early is not remounted when the songs arrive.
+function InkRadio() {
+  return (
+    <section aria-labelledby="ink-radio" className="mt-12">
+      <h2 id="ink-radio" className="caption">
+        Ink Radio <span className="text-muted">· experimental</span>
+      </h2>
+      <p className="mt-2 text-muted">
+        Spin the globe or turn the dial to tune in to live stations around the world. Nothing plays until you press
+        play.
+      </p>
+      <div className="mt-6">
+        <InkRadioLoader />
+      </div>
+      <p className="mt-4 text-[12px] text-muted" data-radio="credit">
+        {stations.stations.length} stations from{" "}
+        <a href="https://www.radio-browser.info" className="underline" target="_blank" rel="noreferrer">
+          Radio Browser
+        </a>{" "}
+        (public domain), checked <time dateTime={stations.retrieved}>{stations.retrieved.slice(0, 10)}</time>. The
+        streams belong to their stations and may be off air.
+      </p>
+    </section>
   );
 }
 

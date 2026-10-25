@@ -3,6 +3,7 @@
 import { Inked, swatches } from "@/components/figures";
 import { Chip, Machine, Stat, type Pen } from "@/components/machine";
 import type { Song } from "@/content/site";
+import { air } from "@/lib/on-air";
 import { useEffect, useRef, useState } from "react";
 
 // The parts of YouTube's IFrame Player API this page uses:
@@ -36,6 +37,7 @@ declare global {
 }
 
 const PLAYING = 1; // YT.PlayerState.PLAYING
+const BUFFERING = 3; // still on air, between chunks
 
 // YouTube calls a global function once its API has loaded, so the promise is
 // kept for later visits to /music.
@@ -98,6 +100,9 @@ export function Television({ songs, playlist }: { songs: Song[]; playlist: strin
             // Also how the set learns that a song ended and the next began.
             onStateChange: ({ target, data }) => {
               if (!live) return;
+              // One sound at a time: playing here stops Ink Radio.
+              if (data === PLAYING) air.claim("tv");
+              else if (data !== BUFFERING) air.release("tv");
               setS((s) => ({ ...s, index: Math.max(0, target.getPlaylistIndex()), playing: data === PLAYING, error: false }));
             },
             onError: () => {
@@ -110,9 +115,12 @@ export function Television({ songs, playlist }: { songs: Song[]; playlist: strin
         if (live) setS((s) => ({ ...s, failed: true }));
       },
     );
+    // Ink Radio starting pauses the set.
+    const off = air.subscribe("tv", () => player.current?.pauseVideo());
     // Also runs when <Activity> hides the page after a navigation.
     return () => {
       live = false;
+      off();
       created?.destroy();
       player.current = null;
       box.replaceChildren();
