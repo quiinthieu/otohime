@@ -1,0 +1,207 @@
+[
+  {
+    "sequence": 1,
+    "title": "Lost sheet logic",
+    "role": "software_engineer",
+    "qa": "skip",
+    "acceptance_criteria": "A pure, DOM-free lost-sheet model turns pointer strokes into a crumple level from 1 to 0 and reports completion at 0; the model is covered by node:test unit tests and npm test passes.",
+    "depends_on": [],
+    "problem": "The 404 page needs a playful 'smooth the lost sheet' interaction, but no tested logic exists for stroke progress, clamping or completion. Without it the island would embed untested arithmetic in a React component.",
+    "action_items": [
+      "Create lib/lost.ts exporting createLostSheet(), applyStroke(state, stroke), crumpleLevel(state) and isSmoothed(state). State holds progress in [0,1] and the count of strokes; the model is pure and takes no DOM types.",
+      "A stroke is a list of points with a length in CSS px; progress grows with stroke length divided by a fixed constant, is clamped to [0,1], and is monotonic (a stroke never reduces progress).",
+      "Add lib/lost.test.ts with cases: empty stroke is a no-op, progress clamps at 1, crumpleLevel = 1 - progress, isSmoothed only at >= 1, and repeated tiny strokes accumulate.",
+      "Do not touch app/ or components/ in this task."
+    ],
+    "interfaces": ["lib/lost.ts", "lib/lost.test.ts"],
+    "non_goals": ["rendering the sheet", "the mini-game board", "any change to the 404 page"],
+    "verification": [
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 600},
+      {"name": "lost model covered", "cwd": ".", "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/lost.test.ts", "expect": "exit0", "timeout_s": 300}
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Torn sheet 404",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "GET of an unknown path returns HTTP 404 with a server-rendered torn, crumpled sheet and plain links to Home, Work, Projects, Notes and Play that work with JavaScript disabled; with JavaScript, rubbing the sheet smooths it to 100% and the links stay reachable; reduced motion shows a flat sheet.",
+    "depends_on": ["1"],
+    "problem": "app/(site)/not-found.tsx shows a plain Notice figure. The playful lost-page bit has no visual or interaction yet, and must keep its server-rendered, no-JS-safe document and view-transition hop.",
+    "action_items": [
+      "Read node_modules/next/dist/docs for the global-not-found and cacheComponents behaviour before editing (AGENTS.md).",
+      "Replace the Notice figure in app/(site)/not-found.tsx with an inline SVG sheet: a torn edge built from a jittered path and an feTurbulence + feDisplacementMap crumple filter, drawn server-side with no JS dependency.",
+      "Add components/lost-sheet.tsx as a small 'use client' island loaded from the server page (ask-console-loader pattern). It listens to pointer moves over the sheet, feeds lib/lost.ts, and sets a CSS variable for crumple; a keyboard-operable 'Smooth it out' button performs the same progress step.",
+      "Keep Home, Work, Projects, Notes and Play as plain anchors in the server HTML, always visible; the island only decorates and never gates navigation. Keep HTTP 404 and the existing view-transition hop from app/global-not-found.tsx.",
+      "Under prefers-reduced-motion the island is not mounted and the sheet is drawn flat; use animation: none rather than a 0.01ms duration.",
+      "Add scripts/probe-lost.sh and scripts/probe-lost.mjs using the existing pinned temporary Playwright pattern from scripts/probe-pocket-game.sh. The probe asserts: 404 status, links present with JS disabled, progress reaches 1 after synthetic strokes, links focusable, reduced-motion sheet has no running animation."
+    ],
+    "interfaces": ["app/(site)/not-found.tsx", "app/global-not-found.tsx", "components/lost-sheet.tsx", "app/(site)/globals.css", "scripts/probe-lost.sh", "scripts/probe-lost.mjs"],
+    "non_goals": ["shader or WebGL bubbles", "ink-blot wipe", "changes to other route groups' 404s", "any new runtime dependency"],
+    "verification": [
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
+      {"name": "lint changed files", "cwd": ".", "cmd": "npx eslint app/(site)/not-found.tsx app/global-not-found.tsx components/lost-sheet.tsx", "expect": "exit0", "timeout_s": 600},
+      {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800},
+      {"name": "lost probe", "cwd": ".", "cmd": "bash scripts/probe-lost.sh", "expect": "exit0", "timeout_s": 900}
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Season model",
+    "role": "software_engineer",
+    "qa": "skip",
+    "acceptance_criteria": "seasonFor, hemisphereFromZone and resolveSeason are pure and tested for meteorological boundaries, leap years, southern-zone flips and the default north; the season tint CSS parses and every season and scheme has at least 4.5:1 text contrast; npm test passes.",
+    "depends_on": [],
+    "problem": "The almanac seasons need a deterministic, tested mapping from date and timezone to season and hemisphere, plus proof that every tint keeps readable contrast. Nothing exists yet.",
+    "action_items": [
+      "Create lib/seasons.ts with seasonFor(date, hemisphere) using meteorological months (Mar-May spring, Jun-Aug summer, Sep-Nov autumn, Dec-Feb winter) flipped for the southern hemisphere; hemisphereFromZone(tz) using a small static list of southern IANA zones (Australia/*, Pacific/Auckland, America/Sao_Paulo, America/Santiago, America/Argentina/*, Africa/Johannesburg and similar) with default north; resolveSeason(manual, date, tz) returning manual when valid.",
+      "Use the visitor's Intl time zone only; no geolocation and no network request.",
+      "Add lib/seasons.test.ts covering month boundaries at 1st day, leap-year February, southern flips, unknown or empty timezone defaulting to north, and manual override precedence.",
+      "Create app/(site)/seasons.css with a [data-season] block per season overriding --paper, --paper-2 and --ink using light-dark() pairs, and keyframes for the ambient layer declared but not used here.",
+      "Add lib/seasons-contrast.test.ts that reads seasons.css, resolves each season x scheme pair, computes WCAG contrast of --ink on --paper and --paper-2 and asserts at least 4.5:1."
+    ],
+    "interfaces": ["lib/seasons.ts", "lib/seasons.test.ts", "lib/seasons-contrast.test.ts", "app/(site)/seasons.css"],
+    "non_goals": ["wiring the CSS into any layout", "the ambient layer", "the dial UI", "geolocation"],
+    "verification": [
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 600},
+      {"name": "seasons covered", "cwd": ".", "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/seasons.test.ts lib/seasons-contrast.test.ts", "expect": "exit0", "timeout_s": 300}
+    ]
+  },
+  {
+    "sequence": 4,
+    "title": "Season tokens on site",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "The (site) layout and the global not-found document apply data-season before first paint from localStorage season or the resolved clock season; the tints show across the site in both schemes; existing layout and design-system tests are updated and pass; npm run build succeeds.",
+    "depends_on": ["3"],
+    "problem": "The seasonal tints in seasons.css are not applied anywhere, and the pre-paint pinning used for theme must be extended without a flash.",
+    "action_items": [
+      "Extend the pre-paint script in app/(site)/layout.tsx and app/global-not-found.tsx, alongside the existing theme pin, to set data-season on documentElement from localStorage 'season' when valid, else from resolveSeason with the Intl zone and the current date.",
+      "Import app/(site)/seasons.css from app/(site)/layout.tsx. Place no new client component before <Masthead /> except the ones listed in later tasks.",
+      "Update lib/motion.test.ts and the design-system siblings so they read the new sheet each layout imports, keeping the one-top-level-css-per-route-group rule intact.",
+      "Grep for hard-coded paper or ink colours in (site) components and move any that should follow the season onto the tokens; keep changes minimal.",
+      "Run npm run build to confirm cacheComponents accepts the layout change; do not add usePathname to any layout."
+    ],
+    "interfaces": ["app/(site)/layout.tsx", "app/global-not-found.tsx", "app/(site)/seasons.css", "lib/motion.test.ts", "app/(design-system)/_lib"],
+    "non_goals": ["the ambient layer", "the masthead dial", "other root layouts ((shore), (capsule), (orrery) and the rest)"],
+    "verification": [
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 600},
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
+      {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800}
+    ]
+  },
+  {
+    "sequence": 5,
+    "title": "Ambient almanac layer",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "A fixed, aria-hidden, pointer-events-none SVG layer shows petals, leaves, rain or snow for the current season with at most 40 elements, animates only transform and opacity, pauses when the document is hidden, and is static under prefers-reduced-motion; npm run build passes and scripts/probe-seasons.mjs passes its layer checks.",
+    "depends_on": ["4"],
+    "problem": "The paper site has no weather or season texture. The ambient layer must follow the season without hurting readability or motion preference.",
+    "action_items": [
+      "Create components/season-layer.tsx, a client component mounted before <Masthead /> in app/(site)/layout.tsx, rendering one fixed SVG with at most 40 elements for the active season: ink petals in spring, rain streaks in summer, falling leaves in autumn, snow specks in winter; drawn with the ink-modes displacement filter where it exists.",
+      "Animate with plain keyframes declared in app/(site)/seasons.css, transform and opacity only. Pause with animation-play-state when document.hidden; use a visibilitychange listener through a useSyncExternalStore subscription.",
+      "Under prefers-reduced-motion render no animated elements at all (animation: none, not 0.01ms), leaving the static tint from task 4.",
+      "Add the probe scripts/probe-seasons.mjs and scripts/probe-seasons.sh following scripts/probe-pocket-game.sh: count elements <= 40, assert computed animation names only on transform/opacity, reduced-motion has no running animations, and the layer is aria-hidden.",
+      "Update the layout tests if the new client component's position matters to lib/motion.test.ts; keep the test strict about what follows EndFooter and the group ViewTransition."
+    ],
+    "interfaces": ["components/season-layer.tsx", "app/(site)/layout.tsx", "app/(site)/seasons.css", "lib/motion.test.ts", "scripts/probe-seasons.mjs", "scripts/probe-seasons.sh"],
+    "non_goals": ["WebGL or canvas particles", "weather data or network calls", "sound", "the dial"],
+    "verification": [
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 600},
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
+      {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800},
+      {"name": "season layer probe", "cwd": ".", "cmd": "bash scripts/probe-seasons.sh", "expect": "exit0", "timeout_s": 900}
+    ]
+  },
+  {
+    "sequence": 6,
+    "title": "Season dial",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "A radio-group season dial (Auto, Spring, Summer, Autumn, Winter) beside the theme toggle in the masthead sets data-season immediately, persists the choice in localStorage 'season' across reload, is keyboard operable with visible focus, and falls back to Auto when storage is blocked; the probe proves the Australia/Sydney zone maps to the southern season.",
+    "depends_on": ["4"],
+    "problem": "Visitors cannot override the real season, and the hemisphere heuristic can miss.",
+    "action_items": [
+      "Create components/season-dial.tsx: a fixed-size radiogroup with Auto plus the four seasons; reads and writes localStorage 'season' through a useSyncExternalStore store; handles denied or throwing storage by keeping the in-memory choice.",
+      "Place the dial beside ThemeToggle in the masthead component, using the same visual system; do not use usePathname.",
+      "Arrow keys move the selection; Auto clears the stored value and restores the resolved season.",
+      "Extend scripts/probe-seasons.mjs with: tz Australia/Sydney plus a fixed clock gives data-season autumn or spring as the southern mapping dictates; dial change persists across reload; storage blocked falls back to Auto without an error.",
+      "Verify masthead layout does not shift when the dial is added at 390px and 1366px widths."
+    ],
+    "interfaces": ["components/season-dial.tsx", "components/masthead.tsx", "scripts/probe-seasons.mjs", "scripts/probe-seasons.sh"],
+    "non_goals": ["a dial on other root layouts", "the ambient layer changes", "sound"],
+    "verification": [
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
+      {"name": "lint changed files", "cwd": ".", "cmd": "npx eslint components/season-dial.tsx components/masthead.tsx", "expect": "exit0", "timeout_s": 600},
+      {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800},
+      {"name": "season probe", "cwd": ".", "cmd": "bash scripts/probe-seasons.sh", "expect": "exit0", "timeout_s": 900}
+    ]
+  },
+  {
+    "sequence": 7,
+    "title": "Ask model switch",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "The Ask oracle calls claude-haiku-5-5 in ask-llm.ts, its tests pin the new model, canned stock answers cover the common questions from the existing rule-based path, and npm run ask:check shows the index covers Work, Projects and Notes; npm test passes.",
+    "depends_on": [],
+    "problem": "Ask uses claude-opus-5-5, which is not a cheap model for a visitor oracle. Canned answers for common questions are absent or thin when the model tier is off.",
+    "action_items": [
+      "Set MODEL in lib/ask-llm.ts to claude-haiku-5-5 and update every model pin in lib/ask-llm.test.ts.",
+      "Extend the existing rule-based stock questions in lib/ask.ts with canned answers, each citing the page it draws from; do not add a second answer mechanism.",
+      "Confirm scripts/ask-index.ts covers Work, Projects and Notes; if any source is missing, add it to the index builder and regenerate with npm run ask:index.",
+      "Add or extend tests in lib/ask.test.ts for canned answers and offline fallback when no API key is set or the call fails.",
+      "Live model output is not proven in this task: the ANTHROPIC_API_KEY is not present in the pod; the test suite uses fake clients only."
+    ],
+    "interfaces": ["lib/ask-llm.ts", "lib/ask-llm.test.ts", "lib/ask.ts", "lib/ask.test.ts", "scripts/ask-index.ts", "public/ask-index.json"],
+    "non_goals": ["streaming responses", "changing the rate limits", "adding a new provider", "UI typewriter"],
+    "verification": [
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 600},
+      {"name": "ask index drift", "cwd": ".", "cmd": "npm run ask:check", "expect": "exit0", "timeout_s": 300},
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900}
+    ]
+  },
+  {
+    "sequence": 8,
+    "title": "Ask typewriter",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "The Ask console types the answer out character by character inside the console screen, with aria-live updates, instant text under prefers-reduced-motion, and citations rendered as links to the source pages; npm test and npm run build pass and scripts/probe-ask.sh still passes.",
+    "depends_on": ["7"],
+    "problem": "The Ask answer appears all at once, which breaks the hand-inked typewriter feel the console is meant to have.",
+    "action_items": [
+      "Keep the non-streaming POST and type the returned text out client-side; create lib/typewriter.ts as a pure stepper (text, index, reduced flag) with unit tests in lib/typewriter.test.ts.",
+      "Update components/ask-console.tsx to drive the stepper with requestAnimationFrame, cancel on unmount and on new question, and keep the existing aria-live region updated with the full text on completion only.",
+      "Render each citation from the response as an anchor to its page path, removing any non-link citation display.",
+      "Under prefers-reduced-motion show the full text at once."
+    ],
+    "interfaces": ["lib/typewriter.ts", "lib/typewriter.test.ts", "components/ask-console.tsx", "scripts/probe-ask.sh"],
+    "non_goals": ["server-sent events", "changing the model or the rate limits", "voice output"],
+    "verification": [
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 600},
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
+      {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800},
+      {"name": "ask probe", "cwd": ".", "cmd": "bash scripts/probe-ask.sh", "expect": "exit0", "timeout_s": 900}
+    ]
+  },
+  {
+    "sequence": 9,
+    "title": "Season ambient polish",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "The ambient layer and dial share one reduced-motion rule, the season probe passes on desktop and mobile widths, and npm run build passes with the three bits integrated.",
+    "depends_on": ["5", "6"],
+    "problem": "The layer and dial were built in separate tasks; their combined behaviour under reduced motion and narrow widths has not been checked together.",
+    "action_items": [
+      "Run scripts/probe-seasons.sh at 390px and 1366px widths and fix any overlap between the layer and the masthead or dial.",
+      "Ensure only one reduced-motion source (seasons.css) governs both the layer and the dial transitions.",
+      "Check that the layer does not render over the Ask console at its z-index."
+    ],
+    "interfaces": ["components/season-layer.tsx", "components/season-dial.tsx", "app/(site)/seasons.css", "scripts/probe-seasons.mjs"],
+    "non_goals": ["new seasons", "other route groups"],
+    "verification": [
+      {"name": "season probe", "cwd": ".", "cmd": "bash scripts/probe-seasons.sh", "expect": "exit0", "timeout_s": 900},
+      {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800}
+    ]
+  }
+]
