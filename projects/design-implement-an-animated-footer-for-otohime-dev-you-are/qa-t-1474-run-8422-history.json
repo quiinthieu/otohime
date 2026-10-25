@@ -1,0 +1,1302 @@
+{
+  "plan": "pm-241",
+  "task": "t-1474",
+  "run": "run-8422",
+  "source": "Independent MCP reads during QA; prompt bodies and credentials excluded.",
+  "runs": [
+    {
+      "id": "run-8297",
+      "role": "research",
+      "tm_task_id": "2e208029-b0f5-40a7-a177-88c793697522",
+      "status": "succeeded",
+      "profile": "claude-fable-high",
+      "flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8305",
+      "role": "product_owner",
+      "tm_task_id": "0fa68053-89cb-475f-ac5c-b669765262d6",
+      "sha": "cc52f9e",
+      "status": "succeeded",
+      "profile": "codex-sol-6-1-high",
+      "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8307",
+      "role": "software_engineer",
+      "tm_task_id": "41740cfe-cbd9-4fe4-9ce3-dfe1b9e624d2",
+      "sha": "368d15e",
+      "status": "succeeded",
+      "profile": "agy-argon-high",
+      "flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8316",
+      "role": "verify",
+      "tm_task_id": "8803e5a6-4ac8-401f-b804-5ba6993bc32a",
+      "sha": "368d15e",
+      "status": "succeeded",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8318",
+      "role": "quality_engineer",
+      "tm_task_id": "05b53925-8680-43c2-a535-1220ffb3793a",
+      "sha": "016369a",
+      "status": "succeeded",
+      "profile": "claude-sonnet-high",
+      "flags": "--allowedTools all --model claude-sonnet-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8321",
+      "role": "software_engineer",
+      "tm_task_id": "9c0bae95-2c80-4284-a1c7-648f12a8cc62",
+      "sha": "a750f28",
+      "status": "succeeded",
+      "profile": "agy-argon-high",
+      "flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8357",
+      "role": "verify",
+      "tm_task_id": "2b938349-c055-4cc9-b00f-b4a234c7bdfe",
+      "sha": "a750f28",
+      "status": "succeeded",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8366",
+      "role": "quality_engineer",
+      "tm_task_id": "d61b22aa-27f8-45cd-9ec1-40c3aaf5cf93",
+      "sha": "dcd1315",
+      "status": "succeeded",
+      "profile": "codex-sol-6-1-high",
+      "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8373",
+      "role": "software_engineer",
+      "tm_task_id": "40852643-50b4-4a46-a782-ab00d8b326d2",
+      "sha": "6b31607",
+      "status": "succeeded",
+      "profile": "agy-argon-high",
+      "flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8382",
+      "role": "verify",
+      "tm_task_id": "286ac72b-3ffc-4a2c-a4a1-b592cf75f08e",
+      "sha": "6b31607",
+      "status": "succeeded",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8395",
+      "role": "quality_engineer",
+      "tm_task_id": "a9d3d5bc-7977-4e6b-9adb-950a82bd4bf7",
+      "sha": "eca3c4b",
+      "status": "succeeded",
+      "profile": "codex-sol-6-1-high",
+      "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8400",
+      "role": "software_engineer",
+      "tm_task_id": "2ed652b4-6a2e-43df-b497-390dd0c1a90e",
+      "sha": "9612064",
+      "status": "succeeded",
+      "profile": "agy-argon-high",
+      "flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8411",
+      "role": "verify",
+      "tm_task_id": "cffedbc9-6074-4839-bc51-dd081283fb2a",
+      "sha": "9612064",
+      "status": "succeeded",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8422",
+      "role": "quality_engineer",
+      "tm_task_id": "6efaf5d1-5261-48a9-9785-0f34208bd432",
+      "status": "running",
+      "profile": "codex-sol-6-1-high",
+      "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    }
+  ],
+  "history": {
+    "FAILED": {
+      "total": 51,
+      "scanned": 51,
+      "pages": [
+        {
+          "offset": 0,
+          "count": 30
+        },
+        {
+          "offset": 30,
+          "count": 21
+        }
+      ],
+      "rows": [
+        {
+          "id": "76a56c65-4853-4d14-a0c6-3aa2a28fcb27",
+          "status": "FAILED",
+          "plan": "pm-245",
+          "run": "run-8418",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a6506556-907e-4fda-a807-0016513ddcf6",
+          "status": "FAILED",
+          "run": "harvest-heldout",
+          "error": "text_check_input_invalid"
+        },
+        {
+          "id": "73fdb1cb-bcf6-49fd-a156-c3ee49d10bed",
+          "status": "FAILED",
+          "run": "harvest-heldout",
+          "error": "setup_timeout"
+        },
+        {
+          "id": "f1bfa812-5256-4f67-836e-99f92417bcde",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-8207",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dbe59bbf-753b-4ab6-b405-460d4640fda9",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-8174",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8301dc16-11f1-474d-ae67-019dcf770871",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-8168",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b6ec04c3-e183-48eb-8bca-b6c6f3187bf5",
+          "status": "FAILED",
+          "plan": "pm-236",
+          "run": "run-8061",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5fa87125-a6cc-4059-b618-751d1541db82",
+          "status": "FAILED",
+          "plan": "pm-236",
+          "run": "run-8025",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "31491522-15e2-4451-a14d-cf22f6939b23",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7996",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "59d654c5-6e1a-4c9d-8a1a-4a7cbd9bbf8e",
+          "status": "FAILED",
+          "plan": "pm-236",
+          "run": "run-7977",
+          "error": "agent_failed: exit 1",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dac437a9-dd45-4dc5-b871-adc370a225ea",
+          "status": "FAILED",
+          "plan": "pm-235",
+          "run": "run-7973",
+          "error": "agent_failed: exit 1",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "fd5e72ee-34d3-44e5-bfdc-8deb4385cf55",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7957",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "da4056bf-3e19-4a7e-8f8e-3c3bc039f470",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7914",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-kqviet cooling) provider=claude reset_at=2026-10-24T08:00:15Z",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bb9415b2-3856-4f03-8845-fe66494babde",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7895",
+          "error": "agent_failed: exit 1",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "35b12288-7abb-433b-bcb5-3f9eac460982",
+          "status": "FAILED",
+          "plan": "pm-234",
+          "run": "run-7888",
+          "error": "agent_failed: exit 1",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b273a243-dc65-4557-a7f2-5c0e7ffa73fc",
+          "status": "FAILED",
+          "plan": "pm-233",
+          "run": "run-7843",
+          "error": "no_account_available: no codex account is available for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "188711f9-a723-438e-bf50-8a97496a643a",
+          "status": "FAILED",
+          "plan": "pm-235",
+          "run": "run-7784",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-kqviet cooling, claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-24T03:00:05Z",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f77bb78f-3c71-4ff2-acc0-68f6068eb99b",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7786",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3bcb6333-eebd-4666-9da2-ce21b89bc496",
+          "status": "FAILED",
+          "plan": "pm-234",
+          "run": "run-7785",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-kqviet cooling, claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-23T22:00:16Z",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4ea23bd5-2b47-4790-a877-bd35f98758a3",
+          "status": "FAILED",
+          "plan": "pm-235",
+          "run": "run-7783",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-28T13:52:46Z",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "01d357f9-56e4-4323-b51c-58f12005b434",
+          "status": "FAILED",
+          "plan": "pm-234",
+          "run": "run-7771",
+          "error": "agent_failed: exit 1",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "fc4d8496-37b2-457a-8fa7-187c63e5bd97",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7734",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ce31e066-43c7-467a-afb1-c2dddd1eb42c",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7729",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9eea975e-d76b-454e-a149-76e2f6bfb8bf",
+          "status": "FAILED",
+          "plan": "pm-232",
+          "run": "run-7725",
+          "error": "agent_failed: exit 128",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "34fbb7f2-3e1f-4e8d-ac1b-a61ce9bc20c8",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7723",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7df1e5c7-64ef-4fb4-8df0-728ea9645069",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7721",
+          "error": "artifact_upload_failed: unreachable",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "79497631-590b-4b74-bf2e-92ec8a1a53e1",
+          "status": "FAILED",
+          "plan": "pm-232",
+          "run": "run-7715",
+          "error": "artifact_upload_failed: unreachable",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ecfb1df5-98f9-4a1e-999d-c19a1c27dedb",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7710",
+          "error": "job deadline exceeded (SIGTERM) phase=verify",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ae1e852d-5fff-42e1-a68b-3f1c293e36eb",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7703",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9d224806-ffbd-4684-9c5e-8695f44008fe",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7700",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "82d16e32-7436-4f3e-9c63-3ddf9ca63012",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7698",
+          "error": "task exited with code 128 phase=clone",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "19061a79-1114-402c-8a08-e53812109731",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7673",
+          "error": "job deadline exceeded (SIGTERM) phase=verify",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "831efd9c-e5cf-4e70-9863-c8528fb795f7",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7660",
+          "error": "artifact_upload_failed: unreachable",
+          "callback": "delivered",
+          "callbackAttempts": 5
+        },
+        {
+          "id": "5462b8c3-42b9-48ee-8650-b83b8e763543",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7656",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dc427adc-e2c0-43e7-96bd-81f6c24964b0",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7648",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "05fa1136-1320-43eb-ac2e-4d9a3d1e9546",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7646",
+          "error": "job_failed: agent container terminated reason=Error exit_code=137; job condition BackoffLimitExceeded: Job has reached the specified backoff limit (completion was never reported)",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "07d6b0e8-150c-472d-87f1-b2db9cb10bb6",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7644",
+          "error": "job_failed: agent container terminated reason=Error exit_code=137; job condition BackoffLimitExceeded: Job has reached the specified backoff limit (completion was never reported)",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1b23984d-ad7c-4332-98a7-f3620afdbe9a",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7638",
+          "error": "job deadline exceeded (SIGTERM) phase=agent",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a6f205e5-33cb-41d8-9ff7-d28b29063c64",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7631",
+          "error": "job deadline exceeded (SIGTERM) phase=verify",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1bdaaeec-e9cb-4501-803d-779a9d8eefe6",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7625",
+          "error": "job deadline exceeded (SIGTERM) phase=verify",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "291e9a20-a447-4867-bbd1-41b44ea2d5de",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7622",
+          "error": "job_failed: agent container terminated reason=Error exit_code=137; job condition BackoffLimitExceeded: Job has reached the specified backoff limit (completion was never reported)",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "96294327-2b94-4273-96a7-31826e83fb15",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7619",
+          "error": "job deadline exceeded (SIGTERM) phase=agent",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "59a96d5b-4c06-4327-87e8-9f2984b3c5c8",
+          "status": "FAILED",
+          "plan": "pm-209",
+          "run": "run-7618",
+          "error": "task exited with code 1",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "eda02efa-c349-49e9-94db-02c53f80087d",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7615",
+          "error": "queue_ttl_exceeded: no_fit need=4.5 cluster_free=0.0 fleet_headroom=-2.1 after 35m0s",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bfac3013-1a45-4898-8e8a-183ff779621f",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7612",
+          "error": "job deadline exceeded (SIGTERM) phase=verify",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f7905c45-b6e9-40e6-af56-ac742250d57d",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7611",
+          "error": "job_failed: agent container terminated reason=OOMKilled exit_code=137; job condition BackoffLimitExceeded: Job has reached the specified backoff limit (completion was never reported)",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4370b579-ede8-4c43-b0a8-145162c3b32e",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7608",
+          "error": "job_failed: agent container terminated reason=Error exit_code=137; job condition BackoffLimitExceeded: Job has reached the specified backoff limit (completion was never reported)",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "54d977c0-3004-4280-ba02-184c4d7a6598",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7600",
+          "error": "job deadline exceeded (SIGTERM) phase=verify",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4d7b3ebb-08cb-4aed-adba-1aeef4be829e",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7596",
+          "error": "job_failed: agent container terminated reason=ContainerStatusUnknown exit_code=137; job condition BackoffLimitExceeded: Job has reached the specified backoff limit (completion was never reported)",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7ad5e266-5526-4988-82e6-5ae80424d258",
+          "status": "FAILED",
+          "plan": "pm-228",
+          "run": "run-7595",
+          "error": "job_failed: agent container terminated reason=Error exit_code=137; job condition BackoffLimitExceeded: Job has reached the specified backoff limit (completion was never reported)",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2f10f19a-5768-455a-807b-9c84c8c17e95",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "run-7551",
+          "error": "no_account_bound: codex has no account for repo mono-v2",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    "COMPLETED": {
+      "total": 909,
+      "scanned": 60,
+      "pages": [
+        {
+          "offset": 0,
+          "count": 30
+        },
+        {
+          "offset": 30,
+          "count": 30
+        }
+      ],
+      "rows": [
+        {
+          "id": "c7793371-b1f9-4017-b823-5f32d9bacdc4",
+          "status": "COMPLETED",
+          "plan": "pm-245",
+          "run": "run-8420",
+          "callback": "pending"
+        },
+        {
+          "id": "01c2ebb0-3f24-40f2-b891-5be48a489893",
+          "status": "COMPLETED",
+          "plan": "pm-244",
+          "run": "run-8417",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "df6f83b5-a2df-4344-86a1-03d3d20266a3",
+          "status": "COMPLETED",
+          "plan": "pm-244",
+          "run": "run-8416",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "744c30d9-d2cc-43cc-9685-9d5ae88f8631",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8412",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cffedbc9-6074-4839-bc51-dd081283fb2a",
+          "status": "COMPLETED",
+          "plan": "pm-241",
+          "run": "run-8411",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d23e7988-7d37-43b5-bf28-0d2bd38760ae",
+          "status": "COMPLETED",
+          "plan": "pm-245",
+          "run": "run-8410",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "83d28426-32ca-4b23-bed0-626a6fd9ff65",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "harvest-e35bd11605d9aade"
+        },
+        {
+          "id": "68797bae-32ea-4713-982f-46812d03ac8c",
+          "status": "COMPLETED",
+          "plan": "pm-247",
+          "run": "run-8409",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f5938add-d3b5-47aa-b34f-3b4c124020ed",
+          "status": "COMPLETED",
+          "plan": "pm-240",
+          "run": "run-8408",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b87e7855-4ca7-4008-b0ee-23842cc113ee",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8407",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "fab19646-8107-4619-949b-f1277cc8ca8b",
+          "status": "COMPLETED",
+          "plan": "pm-247",
+          "run": "run-8406",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b07c694d-42c0-4f91-9f0f-077486702eea",
+          "status": "COMPLETED",
+          "plan": "pm-247",
+          "run": "run-8405",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9db2f9d0-4cb4-4c4e-a0fb-71bf1db624ce",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "run-7555",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e71ada84-adf4-4403-aace-f5620750385a",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8404",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c6d196cd-705e-4a92-a2c7-16ec680203b1",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8403",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d841b439-a8b6-467d-beab-2a20196b465d",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8402",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "06b394e8-fff6-45e9-988b-e9bf3fda6032",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8401",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2ed652b4-6a2e-43df-b497-390dd0c1a90e",
+          "status": "COMPLETED",
+          "plan": "pm-241",
+          "run": "run-8400",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "96db7787-51a8-4b57-aa34-2b8c2e47c6af",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8399",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8c0fd894-3f93-44fa-857c-1eeb61e7ba87",
+          "status": "COMPLETED",
+          "plan": "pm-246",
+          "run": "run-8398",
+          "callback": "delivered",
+          "callbackAttempts": 4
+        },
+        {
+          "id": "286b87ac-dd12-4cb9-937f-025cf9871b04",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "74a31187-90c6-42f9-be86-64ef4c2db50a",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "harvest-031e788f77247d2c"
+        },
+        {
+          "id": "78feed0e-f4f8-4e08-9519-965430d13677",
+          "status": "COMPLETED",
+          "plan": "pm-240",
+          "run": "run-8397",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d1d2ef99-b7ae-49da-a438-fa91b626fd8a",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "e206b58a-8641-4376-9120-7e10b4d62360",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "harvest-a9dfb06af32b8f62"
+        },
+        {
+          "id": "58626b41-5d7a-4e76-bed9-a5a0cb86cae3",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "can-387",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9ec28f85-02cf-43d6-8403-22db01f5471a",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8396",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a9d3d5bc-7977-4e6b-9adb-950a82bd4bf7",
+          "status": "COMPLETED",
+          "plan": "pm-241",
+          "run": "run-8395",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "52b85426-825a-4846-bd7c-974cfb43eeb1",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8394",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a0a7de19-8ee0-4ece-8bac-cfe8e4066370",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "can-385",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f5e8423d-3953-404b-8578-cd0788ff9228",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8393",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e2eac0a8-4fe8-4c4c-9f80-aadc20c8c5e3",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8392",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f44b72a2-1673-4813-be2c-269ac6f6ff31",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8391",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e8b2428d-5ca9-417b-a9f7-1831826c9233",
+          "status": "COMPLETED",
+          "plan": "pm-244",
+          "run": "run-8390",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b07fce9d-bf85-44ed-a0d1-37b7b2a8bce7",
+          "status": "COMPLETED",
+          "plan": "pm-240",
+          "run": "run-8389",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0566b166-ecab-4818-ab09-cca2d0c6e872",
+          "status": "COMPLETED",
+          "plan": "pm-245",
+          "run": "run-8388",
+          "callback": "delivered",
+          "callbackAttempts": 4
+        },
+        {
+          "id": "188a9366-6124-4628-8c14-ac7065cb6abd",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8387",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a945b9fa-6e15-448d-b6f0-a74b0e6b2ddc",
+          "status": "COMPLETED",
+          "plan": "pm-247",
+          "run": "run-8386",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ecd88564-ad53-4d15-b7d6-5c19367c9a68",
+          "status": "COMPLETED",
+          "plan": "pm-244",
+          "run": "run-8385",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4ac73f68-70c0-4a9c-8b65-122148a33f5a",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "run-8384",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8bd24dd5-c73f-45b9-bbe5-1aa64d7879e1",
+          "status": "COMPLETED",
+          "plan": "pm-247",
+          "run": "run-8383",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "286ac72b-3ffc-4a2c-a4a1-b592cf75f08e",
+          "status": "COMPLETED",
+          "plan": "pm-241",
+          "run": "run-8382",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "51a6787d-dd71-4854-9df5-1ffaf54a7a1f",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "harvest-a69c6d767b5f1a97"
+        },
+        {
+          "id": "dfb2073e-1d4a-48aa-bb33-5682294bc945",
+          "status": "COMPLETED",
+          "plan": "pm-240",
+          "run": "run-8381",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e9b2df04-7dd8-44e7-8959-1b58d3a366b7",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8380",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1e3b6e65-8481-4145-b955-0ecb6ff7885d",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8379",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bffecec4-8cdf-423e-b5f9-11320dce8d5d",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8378",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b51836ac-9675-4687-931c-bb007df99150",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8377",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "99b2e0ce-12a9-4075-88cb-69c144f6f536",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8376",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "08842ef2-852e-4899-8b24-107120d114f7",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8375",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b7902651-8bb2-4da7-86ac-f24500d7fc36",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8374",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "40852643-50b4-4a46-a782-ab00d8b326d2",
+          "status": "COMPLETED",
+          "plan": "pm-241",
+          "run": "run-8373",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1e5f2215-cb12-45f7-a696-5146b357ac1b",
+          "status": "COMPLETED",
+          "plan": "pm-243",
+          "run": "run-8372",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b31b19b3-875c-4eb4-99fe-49a2150f9e38",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8371",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3226e062-1693-4fcb-99af-f02ceaaf2d8a",
+          "status": "COMPLETED",
+          "plan": "pm-240",
+          "run": "run-8370",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "84ed2e0f-c61f-4c5a-9193-ce2bdab7ff3a",
+          "status": "COMPLETED",
+          "plan": "pm-244",
+          "run": "run-8369",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3f3bfc33-53a3-4872-bc05-76652d59bafe",
+          "status": "COMPLETED",
+          "plan": "pm-244",
+          "run": "run-8368",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2bf43983-1399-4669-93b4-86e055590a7f",
+          "status": "COMPLETED",
+          "plan": "pm-242",
+          "run": "run-8367",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d61b22aa-27f8-45cd-9ec1-40c3aaf5cf93",
+          "status": "COMPLETED",
+          "plan": "pm-241",
+          "run": "run-8366",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3df05a17-b8d4-4f14-b303-4e2d2450a3d4",
+          "status": "COMPLETED",
+          "plan": "pm-245",
+          "run": "run-8365",
+          "callback": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    "RUNNING": {
+      "total": 3,
+      "scanned": 3,
+      "pages": [
+        {
+          "offset": 0,
+          "count": 3
+        }
+      ],
+      "rows": [
+        {
+          "id": "8dc51d54-22e0-49ec-ab70-53c9eb0c8a20",
+          "status": "RUNNING",
+          "run": "harvest-heldout"
+        },
+        {
+          "id": "6efaf5d1-5261-48a9-9785-0f34208bd432",
+          "status": "RUNNING",
+          "plan": "pm-241",
+          "run": "run-8422"
+        },
+        {
+          "id": "5b2f598b-727a-4148-ac2b-261cd272c56d",
+          "status": "RUNNING",
+          "plan": "pm-247",
+          "run": "run-8414"
+        }
+      ]
+    },
+    "PENDING": {
+      "total": 4,
+      "scanned": 4,
+      "pages": [
+        {
+          "offset": 0,
+          "count": 4
+        }
+      ],
+      "rows": [
+        {
+          "id": "38066bd2-d433-437d-9aca-ca2db71195b7",
+          "status": "PENDING",
+          "plan": "pm-242",
+          "run": "run-8421"
+        },
+        {
+          "id": "d9dbf5e7-8f89-436c-a026-3703617c73f0",
+          "status": "PENDING",
+          "plan": "pm-240",
+          "run": "run-8419"
+        },
+        {
+          "id": "03909aec-b28d-4c6f-a38d-9c952e1c87b4",
+          "status": "PENDING",
+          "plan": "pm-247",
+          "run": "run-8415"
+        },
+        {
+          "id": "ce277ab7-5619-4a07-874a-e3545bd614b6",
+          "status": "PENDING",
+          "plan": "pm-242",
+          "run": "run-8413"
+        }
+      ]
+    }
+  },
+  "correlated_tasks": [
+    {
+      "id": "2ed652b4-6a2e-43df-b497-390dd0c1a90e",
+      "status": "COMPLETED",
+      "callback": "delivered",
+      "attempts": 1,
+      "exit_code": 0,
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "author.txt",
+          "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+          "size": 44
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "changed-files.txt",
+          "sha256": "c19bd57cf3ddcf2e552990b35b6da2e2505849d228f5676670d937d9d3ed7260",
+          "size": 197
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "changes.patch",
+          "sha256": "bb21582750e5a095ff4a09dce2442982a7fa45571464f17e4ea67ae265c430dd",
+          "size": 16442
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "commits.txt",
+          "sha256": "8719622ac06f9f08269b6314238007b61f7de77a7a84ee8b14fcfd5ee40e27dd",
+          "size": 403
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "diffstat.txt",
+          "sha256": "8b4e8633bd77e882d144c0b73400bc59df5da9c9e3d64de43f16d060c7cf4756",
+          "size": 524
+        },
+        {
+          "content_type": "application/json",
+          "name": "footprint.json",
+          "sha256": "9405a8c39a4fe9dbf515591fe263ef3c5561cff08772785ec7526477de44be5c",
+          "size": 422
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "uncommitted.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "content_type": "application/json",
+          "name": "usage.json",
+          "sha256": "5f37c6f9c6b79b20dce30e3056796577e3c0e4404db8cd4d07a33938881742e7",
+          "size": 230
+        }
+      ]
+    },
+    {
+      "id": "a9d3d5bc-7977-4e6b-9adb-950a82bd4bf7",
+      "status": "COMPLETED",
+      "callback": "delivered",
+      "attempts": 1,
+      "exit_code": 0,
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "author.txt",
+          "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+          "size": 44
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "changed-files.txt",
+          "sha256": "32c438febaf9d020e7776c7b6b2cd378e815b1be0bda371afa1a3be69c53e148",
+          "size": 696
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "changes.patch",
+          "sha256": "381d9abd18409b3b9f4fd4560862543f5409f82798241ee255c845fab1f930b2",
+          "size": 170947
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "commits.txt",
+          "sha256": "82818634303e9af9c23a6c11420cb1aa0d90187f8460b3c2eb75581699ecea3b",
+          "size": 73
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "diffstat.txt",
+          "sha256": "de6b0a616a97bcadaee9bb45bd1a916dcdf6a94d5b6ee2c4326876ec4b916332",
+          "size": 560
+        },
+        {
+          "content_type": "application/json",
+          "name": "footprint.json",
+          "sha256": "7944de81bcf2a263ee8896c8d28ae0dadc1f7b3c726ba98f490ddf9169dfb636",
+          "size": 921
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "uncommitted.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "content_type": "application/json",
+          "name": "usage.json",
+          "sha256": "3e9129e56659f6fb1804f7cca055c0b186a079420855d54222cb63608566164a",
+          "size": 223
+        }
+      ]
+    },
+    {
+      "id": "cffedbc9-6074-4839-bc51-dd081283fb2a",
+      "status": "COMPLETED",
+      "callback": "delivered",
+      "attempts": 1,
+      "exit_code": 0,
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "commits.txt",
+          "sha256": "2de5e2dff80d7615d1c3373c8713276ec7cdfe824d66e7848d45823fb53439d6",
+          "size": 32
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "uncommitted.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "content_type": "application/json",
+          "name": "usage.json",
+          "sha256": "c4b59be25f7e827c2ec9c5b0ea39e19ac8a9d4b7fc7dd4226d46ab20d97cef21",
+          "size": 200
+        },
+        {
+          "content_type": "application/json",
+          "name": "verification.json",
+          "sha256": "4c7a3f2c49a3fa0a395c833cd534b71d6a8b9544371d4c7f5b42f0c235326642",
+          "size": 32165
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3126 @@
+{
+  "delivery": "96120648889ec448fe0ebe380093bff29e9d3593",
+  "deployed": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+  "green_gate": "ver-3353",
+  "local_build_id": "Hrw7Gu0O8mKRuWoZawSIj",
+  "hashes": {
+    "package-lock.json": "9005913dc28933faba4649e30c1b4b45b3ae5c049a6b0110ef1a068997e0ad10",
+    ".github/workflows/ci.yml": "23410d8f1209cceb0959e871e583551118d2430640a3d5f9bf101187de856dfa",
+    "scripts/probe-end.sh": "53fcee4c8e6f3df1049658b18d7c161554eb14622b0099cf603342b3f6d21288",
+    "scripts/probe-end.mjs": "56529d4a44b4935c62fd926409674a68b52d889928310b4377c2203f034e73b8",
+    "scripts/probe-motion-signed-in.mjs": "81bb66df91c67333645a0f9f2d7952333f5128dbda9a0283e1c920a12175c13a",
+    "components/end-stage.tsx": "c423208e47eebea1fdf0821ad9b7bf32df0cc9edc0f3024c9e78b72e82537255",
+    "components/end-footer.tsx": "592bed704dd3ba8793bd98ae39f94b7b9a934c6c0117a5bfaa130d6101b880e6",
+    "lib/end.ts": "0e1cab423c67ed77fc7a1bf065a1e30239238e89a8506bfe7d3ab57faba578b4",
+    "content/site.ts": "536ee343d51d76feb3053c44a994f9c6bf752217d124cb9bd19932c9ef51bf1b",
+    "app/(site)/globals.css": "8207136a3088892fcc61b0c7405892783d75167cb1c29301eb3dd29cb3cac7e5",
+    ".next/BUILD_ID": "4a76b41e960e67348980f6d5f0660000351f802b802da66978ed08d385f0c94e",
+    ".next/routes-manifest.json": "4506f7dd99406c31805fade09489371e1f0cf6c4f71ded0e81ca0bc88742b0ae",
+    ".next/prerender-manifest.json": "d01af80c879ba0c6e8739f761985f18108f88a095a810ae1424956e055e627d6"
+  },
+  "suites": {
+    "unit": {
+      "tail": [
+        "  ...",
+        "1..1538",
+        "# tests 1538",
+        "# suites 0",
+        "# pass 1538",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 4949.434792"
+      ],
+      "failures": []
+    },
+    "lint": {
+      "tail": [
+        "",
+        "/Users/avietidol/Library/Application Support/build-worker/leases/6efaf5d1-5261-48a9-9785-0f34208bd432-65d434cea13d5ce5107b3c06a73d4b11/work/otohime/app/(shore)/shore/page.tsx",
+        "  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')",
+        "",
+        "/Users/avietidol/Library/Application Support/build-worker/leases/6efaf5d1-5261-48a9-9785-0f34208bd432-65d434cea13d5ce5107b3c06a73d4b11/work/otohime/app/(vinyl)/vinyl/page.tsx",
+        "  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')",
+        "",
+        "\u2716 9 problems (0 errors, 9 warnings)",
+        "  0 errors and 9 warnings potentially fixable with the `--fix` option.",
+        ""
+      ],
+      "failures": []
+    },
+    "types": {
+      "tail": [
+        "",
+        "> otohime@0.1.0 typecheck",
+        "> next typegen && tsc --noEmit",
+        "",
+        "Generating route types...",
+        "\u2713 Types generated successfully"
+      ],
+      "failures": []
+    },
+    "build": {
+      "tail": [
+        "\u251c \u25cb /vinyl",
+        "\u2514 \u25d0 /work                                       1d      1w",
+        "",
+        "",
+        "\u0192 Proxy (Middleware)",
+        "",
+        "\u25cb  (Static)             prerendered as static content",
+        "\u25d0  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content",
+        "\u0192  (Dynamic)            server-rendered on demand",
+        ""
+      ],
+      "failures": []
+    },
+    "walk": {
+      "tail": [
+        "ok - /articles stays isolated from the site footer",
+        "ok - /structures returns 200",
+        "ok - /structures build-sha",
+        "ok - /structures stays isolated from the site footer",
+        "ok - /design-system returns 200",
+        "ok - /design-system build-sha",
+        "ok - /design-system stays isolated from the site footer",
+        "ok - local server logged no runtime errors",
+        "ok - no server left on port 4081",
+        "walk: 67 ok, 0 failed"
+      ],
+      "failures": []
+    },
+    "footer": {
+      "tail": [
+        "ok - no-JS: Back to top anchor jumps to #main near top of page",
+        "ok - local 390x844 reduced-motion 403 exit: isolated plain-user sign-up succeeds",
+        "ok - local 390x844 reduced-motion 403 exit: repeated full-load /admin/roles -> /projects -> full-load /admin/roles -> /dashboard preserves access denial, noindex, 1 visible footer, normal navigation, zero abort digests and zero page/console errors",
+        "ok - negative control: verifyCanonicalLinks rejects a corrupted canonical footer href (/broken-play !== /play)",
+        "ok - negative control: after reload, the same verifyCanonicalLinks assertion passes",
+        "ok - errors: zero hydration errors across all contexts",
+        "ok - errors: zero console errors or page errors across all contexts",
+        "ok - network: zero unexpected external network requests from footer pages",
+        "ok - local server: server.log contains no runtime errors",
+        "probe: 166 ok, 0 failed"
+      ],
+      "failures": []
+    },
+    "motion": {
+      "tail": [
+        "ok - no-JS: /barometer's four parts end at their resting transform",
+        "ok - no-JS: /planisphere is not hydrated",
+        "ok - no-JS: /planisphere's lines end drawn (stroke-dashoffset 0)",
+        "ok - no-JS: /planisphere's stars, names and markers end at their resting opacity",
+        "ok - no-JS: /rotor is not hydrated",
+        "ok - no-JS: /rotor's windows stand still, reading AAA",
+        "ok - negative: the probe stripped @view-transition from /shore's HTML and CSS",
+        "ok - negative: /projects -> /shore without the rule reveals with no transition",
+        "ok - no console errors or page errors",
+        "probe: 510 ok, 0 failed"
+      ],
+      "failures": []
+    },
+    "e2e": {
+      "tail": [
+        "  ...",
+        "1..28",
+        "# tests 28",
+        "# suites 0",
+        "# pass 28",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 21952.037542"
+      ],
+      "failures": []
+    },
+    "signed": {
+      "tail": [
+        "ok - 390x844 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: every animation after it lasts <= 1 ms or has finished",
+        "ok - 390x844 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: no page error and no console error",
+        "ok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: completes, with every transition animation 0 ms",
+        "ok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: every animation after it lasts <= 1 ms or has finished",
+        "ok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: no page error and no console error",
+        "ok - no-JS: plain /admin/roles: the brand mark navigates to /",
+        "ok - negative: the probe stripped the pagereveal guard from /dashboard's HTML",
+        "ok - negative: without the guard a sign-in logs \"Transition was skipped\"",
+        "ok - the probe's accounts (*-r179296167579710@probe.test) are deleted",
+        "probe: 356 ok, 0 failed"
+      ],
+      "failures": []
+    },
+    "live-walk-final": {
+      "tail": [
+        "ok - /articles returns 200",
+        "ok - /articles build-sha",
+        "ok - /articles stays isolated from the site footer",
+        "ok - /structures returns 200",
+        "ok - /structures build-sha",
+        "ok - /structures stays isolated from the site footer",
+        "ok - /design-system returns 200",
+        "ok - /design-system build-sha",
+        "ok - /design-system stays isolated from the site footer",
+        "walk: 65 ok, 0 failed"
+      ],
+      "failures": []
+    },
+    "live-probe-final": {
+      "tail": [
+        "ok - Back to top: scrolls to page start (scrollY <= 4) and focuses the visible main#main landmark",
+        "ok - no-JS: renders complete still scene, heading, 6 page links, 4 contact links, credits, year and #main top anchor",
+        "ok - no-JS: clicking footer Work link navigates to /work",
+        "ok - no-JS: Back to top anchor jumps to #main near top of page",
+        "ok - negative control: verifyCanonicalLinks rejects a corrupted canonical footer href (/broken-play !== /play)",
+        "ok - negative control: after reload, the same verifyCanonicalLinks assertion passes",
+        "ok - errors: zero hydration errors across all contexts",
+        "ok - errors: zero console errors or page errors across all contexts",
+        "not ok - network: zero unexpected external network requests from footer pages: /music -> https://googleads.g.doubleclick.net/pagead/id | /music -> https://static.doubleclick.net/instream/ad_status.js",
+        "probe: 161 ok, 2 failed"
+      ],
+      "failures": [
+        "not ok - Konami achievement: unlocks 'Reached the end', updates LCD/readout/badge, stores end:achievement=1, preserves key defaults and stays on /projects: {\"pathname\":\"/projects\",\"prevented\":[],\"stageUnlocked\":\"true\",\"badgeUnlocked\":\"true\",\"badgeVisible\":false,\"badgeText\":\"\u2605 1/1 Reached the end\",\"lcd\":\"REACHED/THE END\",\"readout\":\"Achievement unlocked: Reached the end.\",\"stored\":\"1\"}",
+        "not ok - network: zero unexpected external network requests from footer pages: /music -> https://googleads.g.doubleclick.net/pagead/id | /music -> https://static.doubleclick.net/instream/ad_status.js"
+      ]
+    }
+  },
+  "independent": {
+    "local": {
+      "base": "http://localhost:4095",
+      "browser": "156.0.8078.4",
+      "observations": [
+        {
+          "start": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          },
+          "action": "Click footer /work",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          },
+          "action": "Click footer /projects",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Locked; focused editable fixture",
+          "action": "Type real Konami keys",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Locked",
+          "action": "Real in-view keyboard sequence",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Achievement unlocked: Reached the end.",
+            "unlocked": "true",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Restored badge",
+          "action": "Activate reduced motion live",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Achievement unlocked: Reached the end.",
+            "unlocked": "true",
+            "active": null,
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Footer focused",
+          "action": "Enter on Back to top",
+          "result": {
+            "y": 0,
+            "focus": "main"
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Touch mascot idle",
+          "action": "Tap",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Still scrolling? There is only paper past this edge.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Touch mascot idle",
+          "action": "Tap",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Still scrolling? There is only paper past this edge.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": 4,
+            "ticks": 0
+          },
+          "action": "700 ms visible idle; no callback source exclusions",
+          "result": {
+            "sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": 4,
+            "ticks": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    "live": {
+      "base": "https://otohime.dev",
+      "browser": "156.0.8078.4",
+      "observations": [
+        {
+          "start": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          },
+          "action": "Click footer /work",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          },
+          "action": "Click footer /projects",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Locked",
+          "action": "Real in-view keyboard sequence",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Achievement unlocked: Reached the end.",
+            "unlocked": "true",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Restored badge",
+          "action": "Activate reduced motion live",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Achievement unlocked: Reached the end.",
+            "unlocked": "true",
+            "active": null,
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Footer focused",
+          "action": "Enter on Back to top",
+          "result": {
+            "y": 0,
+            "focus": "main"
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(1.72px, 1.8px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(1.72px, 1.8px)",
+            "accent": "#76a0e2",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop light Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(1.72px, 1.8px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "desktop dark Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet light Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(2.2px, 1.8px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(2.2px, 1.8px)",
+            "accent": "#93d3b0",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(2.2px, 1.8px)",
+            "accent": "#76a0e2",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "tablet dark Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(2.2px, 1.8px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile light Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Touch mascot idle",
+          "action": "Tap",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Still scrolling? There is only paper past this edge.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(242, 239, 231)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select yellow",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f4b829",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select coral",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#ef6a4c",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select mint",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select blue",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#76a0e2",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "mobile dark Music",
+          "action": "Select pink",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": "Touch mascot idle",
+          "action": "Tap",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Still scrolling? There is only paper past this edge.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#f3a6bb",
+            "background": "rgb(28, 25, 21)",
+            "raf": null,
+            "ticks": null
+          }
+        },
+        {
+          "start": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": 3,
+            "ticks": 0
+          },
+          "action": "700 ms visible idle; no callback source exclusions",
+          "result": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "count": 1,
+            "below": true,
+            "overflow": false,
+            "pages": [
+              "/work",
+              "/play",
+              "/notes",
+              "/music",
+              "/projects",
+              "/sketches"
+            ],
+            "lines": 4,
+            "readout": "Save point ready. Poke the console or tap a key sequence.",
+            "unlocked": "false",
+            "active": "true",
+            "eyes": "translate(0px, 0px)",
+            "accent": "#93d3b0",
+            "background": "rgb(242, 239, 231)",
+            "raf": 3,
+            "ticks": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    "403": {
+      "browser": "156.0.8078.4",
+      "errors": [],
+      "responses": [
+        {
+          "url": "http://localhost:4095/admin/roles",
+          "status": 200,
+          "noindex": true,
+          "denied": true,
+          "abortDigests": []
+        },
+        {
+          "url": "http://localhost:4095/admin/roles",
+          "status": 200,
+          "noindex": true,
+          "denied": true,
+          "abortDigests": []
+        },
+        {
+          "url": "http://localhost:4095/admin/roles",
+          "status": 200,
+          "noindex": true,
+          "denied": true,
+          "abortDigests": []
+        },
+        {
+          "url": "http://localhost:4095/admin/roles",
+          "status": 200,
+          "noindex": true,
+          "denied": true,
+          "abortDigests": []
+        },
+        {
+          "url": "http://localhost:4095/admin/roles",
+          "status": 200,
+          "noindex": true,
+          "denied": true,
+          "abortDigests": []
+        },
+        {
+          "url": "http://localhost:4095/admin/roles",
+          "status": 200,
+          "noindex": true,
+          "denied": true,
+          "abortDigests": []
+        }
+      ],
+      "landings": [
+        {
+          "path": "/projects",
+          "mains": 1,
+          "footers": 1
+        },
+        {
+          "path": "/dashboard",
+          "mains": 1,
+          "footers": 1
+        },
+        {
+          "path": "/projects",
+          "mains": 1,
+          "footers": 1
+        },
+        {
+          "path": "/dashboard",
+          "mains": 1,
+          "footers": 1
+        },
+        {
+          "path": "/projects",
+          "mains": 1,
+          "footers": 1
+        },
+        {
+          "path": "/dashboard",
+          "mains": 1,
+          "footers": 1
+        }
+      ]
+    },
+    "network": {
+      "browser": "156.0.8078.4",
+      "runs": [
+        {
+          "blockPlayer": false,
+          "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+          "footer": 1,
+          "iframes": [
+            "https://www.youtube.com"
+          ],
+          "requests": [
+            {
+              "host": "www.youtube.com",
+              "path": "/iframe_api",
+              "type": "script",
+              "frame": "https://otohime.dev/music"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/s/player/cbcfbf2f/www-widgetapi.vflset/www-widgetapi.js",
+              "type": "script",
+              "frame": "https://otohime.dev/music"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/embed/",
+              "type": "document",
+              "frame": "about:blank"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/s/player/cbcfbf2f/www-player.css",
+              "type": "stylesheet",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/s/_/ytembeds/_/ss/k=ytembeds.base.SKK5Z7LAK_Y.L.W.O/am=AAAAQA/d=1/br=1/rs=AGKMywE2gvDaiqpgAAck_AdbYTxiiYoLSQ/m=root,base",
+              "type": "stylesheet",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "fonts.gstatic.com",
+              "path": "/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2",
+              "type": "font",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/s/_/ytembeds/_/js/k=ytembeds.base.en_US.0hpw0gG48bI.es5.O/am=AAAAQA/d=1/excm=base,root/br=1/rs=AGKMywGvGKw2rZYCgNFZJc0Yt-gVyeN-FA/m=root,base",
+              "type": "script",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/s/player/cbcfbf2f/player_embed.vflset/vi_VN/base.js",
+              "type": "script",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "googleads.g.doubleclick.net",
+              "path": "/pagead/id",
+              "type": "xhr",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "static.doubleclick.net",
+              "path": "/instream/ad_status.js",
+              "type": "script",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/s/_/ytembeds/_/js/k=ytembeds.base.en_US.0hpw0gG48bI.es5.O/ck=ytembeds.base.SKK5Z7LAK_Y.L.W.O/am=AAAAQA/d=1/exm=base,root/excm=base,root/ed=1/br=1/rs=AGKMywE6Ef4o6TIRAumrO6VvHIg02eRamQ/m=r78Drb",
+              "type": "script",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "www.google.com",
+              "path": "/js/th/pxwG18Euy-n6Uq6PY9vb4Ohp58yKH_56NpBvs6fBnH8.js",
+              "type": "script",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/youtubei/v1/embedded_player",
+              "type": "fetch",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "i.ytimg.com",
+              "path": "/vi_webp/IXA6bQsVNjs/sddefault.webp",
+              "type": "image",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "googleads.g.doubleclick.net",
+              "path": "/pagead/id",
+              "type": "xhr",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/generate_204",
+              "type": "image",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "jnn-pa.googleapis.com",
+              "path": "/$rpc/google.internal.waa.v1.Waa/GenerateIT",
+              "type": "xhr",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "www.youtube.com",
+              "path": "/youtubei/v1/log_event",
+              "type": "xhr",
+              "frame": "https://www.youtube.com/embed/"
+            }
+          ],
+          "ads": [
+            {
+              "host": "googleads.g.doubleclick.net",
+              "path": "/pagead/id",
+              "type": "xhr",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "static.doubleclick.net",
+              "path": "/instream/ad_status.js",
+              "type": "script",
+              "frame": "https://www.youtube.com/embed/"
+            },
+            {
+              "host": "googleads.g.doubleclick.net",
+              "path": "/pagead/id",
+              "type": "xhr",
+              "frame": "https://www.youtube.com/embed/"
+            }
+          ]
+        },
+        {
+          "blockPlayer": true,
+          "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+          "footer": 1,
+          "iframes": [],
+          "requests": [
+            {
+              "host": "www.youtube.com",
+              "path": "/iframe_api",
+              "type": "script",
+              "frame": "https://otohime.dev/music"
+            }
+          ],
+          "ads": []
+        }
+      ]
+    },
+    "badge_timing": {
+      "browser": "156.0.8078.4",
+      "rows": [
+        {
+          "i": 0,
+          "immediate": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "0",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 595.328125,
+            "animations": [
+              {
+                "state": "running",
+                "time": 0,
+                "duration": 150
+              }
+            ]
+          },
+          "after250": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "1",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 675.328125,
+            "animations": []
+          },
+          "settled": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "1",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 675.328125,
+            "animations": []
+          }
+        },
+        {
+          "i": 1,
+          "immediate": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "0",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 595.328125,
+            "animations": [
+              {
+                "state": "running",
+                "time": 0,
+                "duration": 150
+              }
+            ]
+          },
+          "after250": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "1",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 675.328125,
+            "animations": []
+          },
+          "settled": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "1",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 675.328125,
+            "animations": []
+          }
+        },
+        {
+          "i": 2,
+          "immediate": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "0",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 595.328125,
+            "animations": [
+              {
+                "state": "running",
+                "time": 0,
+                "duration": 150
+              }
+            ]
+          },
+          "after250": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "0.741712",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 675.328125,
+            "animations": [
+              {
+                "state": "running",
+                "time": 66.73499999522959,
+                "duration": 150
+              }
+            ]
+          },
+          "settled": {
+            "sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+            "unlocked": "true",
+            "opacity": "0.992904",
+            "visibility": "visible",
+            "hidden": false,
+            "y": 675.328125,
+            "animations": [
+              {
+                "state": "running",
+                "time": 133.30299999522975,
+                "duration": 150
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "ci": {
+    "delivery": [
+      {
+        "id": 121279858534,
+        "name": "checks",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40230128313/job/121279858534"
+      },
+      {
+        "id": 121279859313,
+        "name": "cleanup",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40230128313/job/121279859313"
+      },
+      {
+        "id": 121279896855,
+        "name": "preview",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40230128313/job/121279896855"
+      },
+      {
+        "id": 121281179917,
+        "name": "production",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40230128313/job/121281179917"
+      }
+    ],
+    "deployed": [
+      {
+        "id": 121286821133,
+        "name": "checks",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40231812986/job/121286821133"
+      },
+      {
+        "id": 121286821958,
+        "name": "preview",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40231812986/job/121286821958"
+      },
+      {
+        "id": 121286822050,
+        "name": "cleanup",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40231812986/job/121286822050"
+      },
+      {
+        "id": 121288264646,
+        "name": "production",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40231812986/job/121288264646"
+      }
+    ]
+  },
+  "ci_history": {
+    "scan": "Two 20-row pages; feed advanced between reads; overlap retained and deduplicated count reported. Older history uninspected.",
+    "fetched_rows": 40,
+    "unique_runs": 39,
+    "rows": [
+      {
+        "id": 40231812986,
+        "head_sha": "ced64c1f59210ba8310d4110651c8232bfe0f2ac",
+        "status": "in_progress",
+        "conclusion": null,
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40231812986"
+      },
+      {
+        "id": 40231443837,
+        "head_sha": "1f7490b36849aa2bdbcf8d12c61133a5429a814b",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40231443837"
+      },
+      {
+        "id": 40230962572,
+        "head_sha": "4e8399d76df88f1b332725f7f8b6d9b040b5e99a",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40230962572"
+      },
+      {
+        "id": 40230420183,
+        "head_sha": "dea7f765b6b4e6a300277f69e895b416f6190b9e",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40230420183"
+      },
+      {
+        "id": 40230128313,
+        "head_sha": "96120648889ec448fe0ebe380093bff29e9d3593",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40230128313"
+      },
+      {
+        "id": 40229676108,
+        "head_sha": "b22432ad30f3946fc28d1f3efcd0adb499b90ccd",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40229676108"
+      },
+      {
+        "id": 40228779602,
+        "head_sha": "2ef5249bd25734d25a51ce70dfbd5608bfe0c833",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40228779602"
+      },
+      {
+        "id": 40228746422,
+        "head_sha": "89fc863e02459c295c5cf6aa5e7011c3ee28fc64",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40228746422"
+      },
+      {
+        "id": 40228146832,
+        "head_sha": "17724fd66435bd2dea5727f1f140e40464731592",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40228146832"
+      },
+      {
+        "id": 40228049310,
+        "head_sha": "a3973b8df02edf03903da8c17feeec5c27b6db3c",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40228049310"
+      },
+      {
+        "id": 40227839854,
+        "head_sha": "97167a882d27c607b22140988d2d4a6c693972a0",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40227839854"
+      },
+      {
+        "id": 40227766000,
+        "head_sha": "2fdcd32f0946ccb1ae28bb4c22f719436bec2b8b",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40227766000"
+      },
+      {
+        "id": 40226954908,
+        "head_sha": "bc9137c1ff01c145fa96cdfd6ae65ac23ab61c2c",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40226954908"
+      },
+      {
+        "id": 40226824890,
+        "head_sha": "f35c7741096cb257b275221b7bc5c25945fcf3d9",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40226824890"
+      },
+      {
+        "id": 40225643132,
+        "head_sha": "2b6fdd71676aa7de3a76c79599f26b5474bb063d",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40225643132"
+      },
+      {
+        "id": 40224969086,
+        "head_sha": "61bbd2c871471f05191a63d1359b6d01a6ea5937",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40224969086"
+      },
+      {
+        "id": 40224831793,
+        "head_sha": "a6bce332dddbae8953f7f488aa3e8097045f0b93",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40224831793"
+      },
+      {
+        "id": 40224525063,
+        "head_sha": "7ecbd7a34167d0d57f2831176273c19ee7f0f6e3",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40224525063"
+      },
+      {
+        "id": 40224228174,
+        "head_sha": "6b31607838c312e0942731b970249db005b1e179",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40224228174"
+      },
+      {
+        "id": 40223658059,
+        "head_sha": "e6e5c3eb918731e560bb1cd3d44e023ce6959b19",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40223658059"
+      },
+      {
+        "id": 40223658059,
+        "head_sha": "e6e5c3eb918731e560bb1cd3d44e023ce6959b19",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40223658059"
+      },
+      {
+        "id": 40223552051,
+        "head_sha": "0238226ceaa45a3729ae4ab2505a2925baa6448b",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40223552051"
+      },
+      {
+        "id": 40223431292,
+        "head_sha": "ee66f874b9fa8b95cec4f6dd798651d96a13503a",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40223431292"
+      },
+      {
+        "id": 40222017395,
+        "head_sha": "c1ff967464eac991bfb9c308e6888b3d61cfd8cd",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40222017395"
+      },
+      {
+        "id": 40221955118,
+        "head_sha": "e33f0ee4f6628426a3fef0a15dffe914556b37a3",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40221955118"
+      },
+      {
+        "id": 40221805860,
+        "head_sha": "9baac3d9bdf7afcf0c9bf84a22c57cc83501cf8b",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40221805860"
+      },
+      {
+        "id": 40221264701,
+        "head_sha": "4f2f78702d1f6e54e2a1fc620841debf86c92e92",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40221264701"
+      },
+      {
+        "id": 40221134490,
+        "head_sha": "de193a7376a4ee3d622b31e7c9d6b35f11c243d8",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40221134490"
+      },
+      {
+        "id": 40219528031,
+        "head_sha": "10b7043e654580d5ce0cc0ce515f5cedfb2b3716",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40219528031"
+      },
+      {
+        "id": 40219174749,
+        "head_sha": "c58a037c014353791d32d4ce716d8f933f1b90e1",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40219174749"
+      },
+      {
+        "id": 40218922209,
+        "head_sha": "21bb9ed43c4c8bc2603f09185d5308c91e259783",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40218922209"
+      },
+      {
+        "id": 40218576240,
+        "head_sha": "f82ea2fe0e2030a39b2ce9c7ca6fe2c87911502c",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40218576240"
+      },
+      {
+        "id": 40218042174,
+        "head_sha": "a750f28953d68eaf98f94befaace43e7d7bc9d4b",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40218042174"
+      },
+      {
+        "id": 40217245631,
+        "head_sha": "916f58ff8a5b17e2ba5a87a3b0e76b6aa4b6c743",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40217245631"
+      },
+      {
+        "id": 40216984718,
+        "head_sha": "6b0b2012fea3050d49c2c7f75dc662d664206f14",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40216984718"
+      },
+      {
+        "id": 40216905537,
+        "head_sha": "51cf31138c783c3d10e5ea18649a994d9ef6cafb",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40216905537"
+      },
+      {
+        "id": 40216527659,
+        "head_sha": "d4cb19cdb4fd03e307b4af78127beae9010237e3",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40216527659"
+      },
+      {
+        "id": 40215381851,
+        "head_sha": "dd1e8e108598fd41cfdf7a87e4e132bd8e61d664",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40215381851"
+      },
+      {
+        "id": 40215165695,
+        "head_sha": "284429c8b398e219ebb93ed7f5a7cc8deaf1b3b0",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40215165695"
+      },
+      {
+        "id": 40214649840,
+        "head_sha": "955009388f3327b647bda624520579a386ccf7fa",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40214649840"
+      }
+    ]
+  },
+  "reviewed_visuals": [
+    {
+      "file": "work.png",
+      "sha256": "2c057c24f2d5814b3617ee037c633e4647b7bbde3dac26ad071a5d925a08b437"
+    },
+    {
+      "file": "projects.png",
+      "sha256": "6e821917048f9c78c11cb31bcc3b5d70c705a9ee437c23bd35b819952184da65"
+    },
+    {
+      "file": "home.png",
+      "sha256": "9ef4fdebdd5bb6b109586a9088d4ae95ee06c68bbf2e390417232714cc234ff7"
+    },
+    {
+      "file": "tablet-light.png",
+      "sha256": "42610dfd31d2733e665e880d8640b96716a1655b1b26391d91c0f8794704c66a"
+    },
+    {
+      "file": "mobile-light.png",
+      "sha256": "3ef7c7b2d2bb3eb8f0962b0e3b945a46146090cca64741bae279b9774cb4f51c"
+    },
+    {
+      "file": "mobile-dark.png",
+      "sha256": "e61caf1e3e1b59c314d1c3dc3722d76bef461d3e400d34639fd57f3a5eee7c2a"
+    },
+    {
+      "file": "desktop-light.png",
+      "sha256": "11e6b56bf6028ab28d67b5777d00f9fbc3aa7e20eb84028915111fbb3f4197cd"
+    },
+    {
+      "file": "tablet-dark.png",
+      "sha256": "02a9a56112146a796b203805f86a11d6047fe79f1cf17b17342aa532cbe560d8"
+    },
+    {
+      "file": "desktop-dark.png",
+      "sha256": "d9c3c8d00616948c4799a055dc610647b93e84cf3678e7798052477d1183ef8e"
+    }
+  ]
+}
