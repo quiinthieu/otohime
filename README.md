@@ -112,6 +112,9 @@ lib/auth.ts          Better Auth, plus the role-hierarchy guard
 lib/permissions.ts   roles and what each may do
 lib/songs.ts         the rules for songs owners add (video links, field limits); pure
 lib/songs-store.ts   reads, adds and removes the songs owners add (the only code that touches the `song` table)
+lib/now-playing.ts   Music's Now playing reader: the only code that calls Spotify or Steam or reads their credentials
+                     (one "use cache" function for /music and GET /api/now-playing); its pure parsers are
+                     lib/now-playing-data.ts, and components/cassette.tsx draws the cassette and game cartridge
 lib/machines.ts      state for the figures you can play with
 lib/end.ts           pure reducer for the Internet Save Point footer (poke cycle, 10th-poke breather, Konami sequence)
 components/end-footer.tsx  server semantic footer for (home) and (app), with CONSOLE_MENU, site.lines and cached UTC year
@@ -199,6 +202,8 @@ Probe the hop into the signed-in rooms with `bash scripts/probe-motion-signed-in
 The Sun's parts and callouts live in `app/(orrery)/_lib/poster.ts` and every other body's in `app/(orrery)/_lib/bodies.ts`; the ink is rough.js with a fixed seed in `app/(orrery)/_lib/ink.ts`; `bash scripts/walk-orrery.sh` counts the words on every served page (cap 220, `WORD_CAP` in `app/(orrery)/_lib/words.ts`).
 
 Orrery's motion is CSS only in `app/(orrery)/orrery.css`: the ink draws itself on, layer by layer; on the Sun's poster three loops then run (convection, photon, wind); all of it is off under reduced motion, and `app/(orrery)/_lib/motion.test.ts` tests it.
+
+Walk Music's Now playing shelf with `bash scripts/walk-now-playing.sh` (builds, serves on :4121; `QUIET_ONLY=1` stops after the quiet face; otherwise loopback fakes for Spotify and Steam on :4131-4133 drive the cache, failure and secrecy cases, see Now playing), and probe it in headless Chromium with `bash scripts/probe-cassette.sh` (builds, serves on :4125, fakes on :4135-4137, installs Playwright into a temp prefix; the quiet face and the longest fixture labels at 1366x768 and 390x844 in both themes, fit, contrast, focus, reels and reduced motion, JavaScript off and a sentinel scan of every response). Both take `SKIP_BUILD=1` and `PORT`.
 
 Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and serves on :4025: the three starters from `content/site.ts` must still show, with status 200), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-music.sh`.
 
@@ -344,6 +349,28 @@ The rules every page on this site that reads a live feed follows. Barometer (`ap
 
 Not here, on purpose: retries, circuit breakers, a status page. The short failure life in rule 3 is the whole back-off.
 
+## Now playing (Music)
+
+Under the television's listings, `/music` shows a paper cassette for what the owner is playing on Spotify and a game cartridge for what they are playing on Steam (`components/cassette.tsx`). It follows the Live data rules above, adapted to the site:
+
+- **One reader.** `readNowPlaying()` in `lib/now-playing.ts` is a `"use cache"` function with `cacheLife({ stale: 30, revalidate: 60, expire: 300 })`, for good readings and failures alike. `/music` and `GET /api/now-playing` both `await connection()` and then call it, so they print the same reading and a minute's views cost one read. The page exports `instant = false` and reads before any `<Suspense>`, so the labels are in the first HTML and JavaScript-off visitors see them; the television's channels and the owner tools keep their own boundaries. Nothing is read at build.
+- **Two providers, each on its own.** Spotify refreshes the owner's access token (`POST https://accounts.spotify.com/api/token`) and asks `GET /v1/me/player/currently-playing`. Steam asks `ISteamUser/GetPlayerSummaries/v2` for one SteamID64. They run at once with a 4 s budget each (Spotify's two calls share one) and no retries. Any non-200, abort or unparsable body makes that provider quiet and leaves the other alone.
+- **Pure parsers.** `lib/now-playing-data.ts` takes `unknown`, keeps a track's title, artists, link and whether it plays, and a game's name and store link, caps them (64, 64 and 48 characters) and returns `null` for errors, episodes, ads, private sessions, private profiles and garbage. Links are rebuilt from `open.spotify.com` and `store.steampowered.com` paths only.
+- **States**, in the page's `data-spotify` / `data-steam` and the API's JSON: `*-off` (not configured, nothing asked), `*-quiet` (asked, unusable answer), `*-live` (an authenticated answer from the real provider, which may be "nothing playing": the label then still says Quiet), `*-fixture` (the same through a loopback test host). `GET /api/now-playing` is always 200 with `{spotify, track, steam, game, readAt}` and nothing else. It is a read: there is no purge, refresh or fixture switch, and query strings are ignored.
+- **The quiet face** is the default: the playlist link on the cassette and the "Playing" line of `site.now` on the cartridge, with "Not read live" until a provider is configured. Both credits are always printed, and a reading prints its UTC read time.
+- **Secrets** are read only in `lib/now-playing.ts`, never logged, returned or put in a URL a visitor sees (Steam's key is in the server's request query only). `lib/now-playing.test.ts` checks this and the shape above with a fake fetch.
+
+| Env var | Effect |
+| --- | --- |
+| `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` | The owner's Spotify app (developer.spotify.com/dashboard). Server-only, never `NEXT_PUBLIC_`. |
+| `SPOTIFY_REFRESH_TOKEN` | From one Authorization Code consent by the owner with scope `user-read-currently-playing` (nothing else). |
+| `STEAM_API_KEY`, `STEAM_ID` | Optional. A Steam Web API key (steamcommunity.com/dev/apikey) and the owner's 17-digit SteamID64. |
+| `NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST`, `NOW_PLAYING_SPOTIFY_API_HOST`, `NOW_PLAYING_STEAM_HOST` | Local walks only: a loopback origin (`http://127.0.0.1:<port>`) for a fake provider. Any other value is ignored, and through one the state is `*-fixture`, never `*-live`. Never set them in Vercel. |
+
+Missing or malformed credentials leave that provider off. Spotify's February 2026 migration guide (checked for the plan on 2026-10-25) requires the app's owner to have an active Premium account; recheck the scope and terms when activating. The current game shows only if the owner's Steam profile and its "Game details" are public, which tells everyone what they are playing; leave the Steam variables unset to keep the cartridge on the static line.
+
+**Activation handoff.** This build is proven with fakes only (`scripts/walk-now-playing.sh`, `scripts/probe-cassette.sh`); no person had to do anything for it, and real Spotify or Steam output is unproven until someone independently observes it. The first later run that actually needs the accounts raises `plan_manager_ask_user(kind=operator_action)` at its start, with fingerprint `spotify-app:now-playing` (create or reuse the app, give consent, install the three Spotify variables in Vercel Production) or `steam-key:current-game` (install the two Steam variables, make game details public), and ends that run. Readiness is `GET https://otohime.dev/api/now-playing` with a 200 whose body contains `spotify-live` (or `steam-live`): an authenticated read, not proof that something is playing.
+
 ## Vinyl records
 
 Vinyl (`/vinyl`, `app/(vinyl)/`) plays a crate of records on a turntable, with the music in a visible YouTube player. Its records live in `app/(vinyl)/_lib/records.json`; the rules they must keep are in `validateRecords` in `app/(vinyl)/_lib/records.ts`.
@@ -421,7 +448,7 @@ The jobs need these repo settings:
 
 - **Variables:** `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `NEON_PROJECT_ID`.
 - **Secrets:** `VERCEL_TOKEN`, `NEON_API_KEY`, and `DATABASE_URL_UNPOOLED` (production's direct, unpooled URL, used for migrations).
-- **Vercel Production env:** `DATABASE_URL` (pooled), `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. Optional: `ASK_LLM=1` and `ANTHROPIC_API_KEY` turn on Ask's model tier (see above).
+- **Vercel Production env:** `DATABASE_URL` (pooled), `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. Optional: `ASK_LLM=1` and `ANTHROPIC_API_KEY` turn on Ask's model tier (see above), and the `SPOTIFY_*` and `STEAM_*` variables turn on Music's Now playing (see Now playing).
 - **Vercel Preview env:** only `BETTER_AUTH_SECRET`. CI passes each preview its own Neon branch URL.
 
 Rules that keep this safe:

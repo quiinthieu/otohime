@@ -12,7 +12,14 @@
 # mid-play; Tab reaches the cassette's link with a visible ring in both themes; with JavaScript off the shelf is
 # whole. Negative controls: an unbroken label overflows, grey text fails contrast, a tape not playing is still.
 #
-# Env: PORT (4125, or a free port when that default is busy), SKIP_BUILD=1, SHOTS_DIR.
+# The live pass (FACE=live) serves the same build against loopback fakes (node scripts/probe-cassette.mjs fake)
+# answering the longest track and game the parsers let through, the track playing, with throwaway sentinel
+# credentials: the same matrix on the fixture labels, the reels turning until reduced motion stops them, the fixture
+# reading in the JavaScript-off HTML, and no sentinel in any response the browser received (HTML, RSC, scripts,
+# styles). The fakes are a stand-in for Spotify and Steam: nothing here proves a real account works.
+#
+# Env: PORT (4125, or a free port when that default is busy), FAKE_PORT (4135; the fakes use it and the next two),
+# SKIP_BUILD=1, SHOTS_DIR.
 # Local only: the server is started here. Playwright is installed into a temp prefix at run time; package.json
 # stays unchanged. No `set -e`: every check runs, and the summary names the ones that failed.
 set -u
@@ -24,6 +31,9 @@ PORT_SET="${PORT:+1}"
 PORT="${PORT:-4125}"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/probe-cassette.XXXXXX")"
 SERVER_PID=""
+FAKE_PID=""
+FAKE_DIR="$WORK/fake"
+FAKE_PORT="${FAKE_PORT:-4135}"
 FAILED=0
 
 kill_group() {
@@ -38,6 +48,7 @@ kill_group() {
 
 cleanup() {
   kill_group "$SERVER_PID"
+  kill_group "$FAKE_PID"
   rm -rf "$WORK"
 }
 trap cleanup EXIT
@@ -123,6 +134,46 @@ else
 fi
 kill_group "$SERVER_PID"
 SERVER_PID=""
+
+# --- Live: the fakes, with the longest labels and the track playing ------------------------------------------------
+RUN_ID="$(node -e 'console.log(require("crypto").randomBytes(8).toString("hex"))')"
+CREDS=(SPOTIFY_CLIENT_ID="SentinelId$RUN_ID" SPOTIFY_CLIENT_SECRET="SentinelSecret$RUN_ID" SPOTIFY_REFRESH_TOKEN="Sentinel-Refresh_$RUN_ID" STEAM_API_KEY="SentinelSteamKey$RUN_ID" STEAM_ID="76561197960435530")
+SENTINELS="SentinelId$RUN_ID,SentinelSecret$RUN_ID,Sentinel-Refresh_$RUN_ID,SentinelSteamKey$RUN_ID,76561197960435530,FakeAccessToken0123456789abcdef"
+mkdir -p "$FAKE_DIR"
+printf '{"track":"long","steam":"long"}' >"$FAKE_DIR/mode.json"
+set -m
+env "${CREDS[@]}" FAKE_DIR="$FAKE_DIR" FAKE_TOKEN_PORT="$FAKE_PORT" FAKE_API_PORT="$((FAKE_PORT + 1))" FAKE_STEAM_PORT="$((FAKE_PORT + 2))" \
+  node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
+  "$ROOT/scripts/probe-cassette.mjs" fake >"$WORK/fake.log" 2>&1 &
+FAKE_PID=$!
+set +m
+for _ in $(seq 1 50); do
+  [ -f "$FAKE_DIR/ready" ] && break
+  sleep 0.2
+done
+if [ ! -f "$FAKE_DIR/ready" ]; then
+  echo "not ok - fakes: the loopback providers did not start (FAKE_PORT=$FAKE_PORT); log:"
+  tail -n 20 "$WORK/fake.log"
+  FAILED=$((FAILED + 1))
+elif start_server "${CREDS[@]}" \
+  NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST="http://127.0.0.1:$FAKE_PORT" \
+  NOW_PLAYING_SPOTIFY_API_HOST="http://127.0.0.1:$((FAKE_PORT + 1))" \
+  NOW_PLAYING_STEAM_HOST="http://127.0.0.1:$((FAKE_PORT + 2))"; then
+  probe live "$SENTINELS"
+  if grep -q 'auth=bad' "$FAKE_DIR/requests.log"; then
+    echo "not ok - fakes: a provider saw wrong credentials"
+    FAILED=$((FAILED + 1))
+  fi
+  for s in ${SENTINELS//,/ }; do
+    if grep -qF -- "$s" "$WORK/server.log"; then
+      echo "not ok - server log: holds a sentinel"
+      FAILED=$((FAILED + 1))
+      break
+    fi
+  done
+else
+  FAILED=$((FAILED + 1))
+fi
 
 echo "probe-cassette: $FAILED failed pass(es)"
 [ "$FAILED" -eq 0 ]

@@ -6,21 +6,30 @@ import { RemoveChannelButton } from "@/components/remove-channel-button";
 import { Television } from "@/components/television";
 import { site, type Song } from "@/content/site";
 import { getSession } from "@/lib/dal";
-import { QUIET } from "@/lib/now-playing-data";
+import { readNowPlaying } from "@/lib/now-playing";
+import { sanitize } from "@/lib/now-playing-data";
 import { peekMark } from "@/lib/peek-marks";
 import { peekSlug } from "@/lib/peeks";
 import { can } from "@/lib/permissions";
 import { listSongs } from "@/lib/songs-store";
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Suspense, ViewTransition } from "react";
 import stations from "./_lib/stations.json";
 import "./ink-radio.css";
 
 export const metadata: Metadata = { title: "Music" };
 
+// The cassette prints a live reading, and must with JavaScript off: inside a streamed boundary it would arrive in a
+// hidden <div> only a script swaps in. So the page waits for the request and the cached reading (lib/now-playing.ts,
+// at most 4 s on a miss) before it renders, outside any <Suspense>. The channels and owner tools keep theirs.
+export const instant = false;
+
 const ch = (i: number) => `CH ${String(i + 1).padStart(2, "0")}`;
 
-export default function MusicPage() {
+export default async function MusicPage() {
+  await connection();
+  const nowPlaying = sanitize(await readNowPlaying());
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
@@ -31,7 +40,7 @@ export default function MusicPage() {
         <Suspense fallback={<Channels songs={site.songs} />}>
           <LiveChannels />
         </Suspense>
-        <NowPlayingShelf reading={QUIET} />
+        <NowPlayingShelf reading={nowPlaying} />
         <InkRadio />
         <Suspense fallback={null}>
           <OwnerTools />

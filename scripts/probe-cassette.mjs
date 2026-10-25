@@ -13,13 +13,12 @@
 //
 // Negative controls, each on the same assertion it guards: labels forced to one unbroken line overflow; the label's
 // text greyed out fails contrast; removing data-spin stops the reels. Each is undone and the check passes again.
-import { mkdirSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import http from "node:http";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { LIMITS } from "../lib/now-playing-data.ts";
 
-const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
-const { chromium } = require("playwright");
 
 const BASE_URL = process.env.BASE_URL;
 const FACE = process.env.FACE === "live" ? "live" : "quiet";
@@ -281,29 +280,163 @@ async function noJs(browser) {
   await context.close();
 }
 
-const browser = await chromium.launch();
-try {
-  const runs = [];
-  for (const [vp, label] of [
-    [DESKTOP, "desktop"],
-    [PHONE, "phone"],
-  ])
-    for (const dark of [false, true]) runs.push([`${label} ${dark ? "dark" : "light"}`, (b) => viewing(b, `${label} ${dark ? "dark" : "light"}`, { viewport: vp, dark })]);
-  runs.push(["controls", controls], ["reels", reels], ["keyboard", keyboard], ["no-JS", noJs]);
-  for (const [name, run] of runs) {
-    try {
-      await run(browser);
-    } catch (e) {
-      check(`${name}: ran to the end`, false, e.message.split("\n")[0]);
+async function probe() {
+  const { chromium } = createRequire(path.join(process.env.PW_PREFIX, "package.json"))("playwright");
+  const browser = await chromium.launch();
+  try {
+    const runs = [];
+    for (const [vp, label] of [
+      [DESKTOP, "desktop"],
+      [PHONE, "phone"],
+    ])
+      for (const dark of [false, true]) runs.push([`${label} ${dark ? "dark" : "light"}`, (b) => viewing(b, `${label} ${dark ? "dark" : "light"}`, { viewport: vp, dark })]);
+    runs.push(["controls", controls], ["reels", reels], ["keyboard", keyboard], ["no-JS", noJs]);
+    for (const [name, run] of runs) {
+      try {
+        await run(browser);
+      } catch (e) {
+        check(`${name}: ran to the end`, false, e.message.split("\n")[0]);
+      }
     }
+  } finally {
+    await browser.close();
   }
-} finally {
-  await browser.close();
+
+  const leaks = SENTINELS.flatMap((s) => bodies.filter((b) => b.text.includes(s)).map((b) => b.url));
+  if (SENTINELS.length) check(`no secret in any of the ${bodies.length} responses the browser received`, leaks.length === 0, leaks.slice(0, 3).join(" "));
+  check("scripts were scanned", bodies.some((b) => /\.js(\?|$)/.test(b.url)), `${bodies.length} bodies`);
+  check("no console or page errors", errors.length === 0, errors.slice(0, 5).join(" | "));
+  console.log(`probe: ${ok} ok, ${failed} failed`);
+  process.exit(failed ? 1 : 0);
 }
 
-const leaks = SENTINELS.flatMap((s) => bodies.filter((b) => b.text.includes(s)).map((b) => b.url));
-if (SENTINELS.length) check(`no secret in any of the ${bodies.length} responses the browser received`, leaks.length === 0, leaks.slice(0, 3).join(" "));
-check("scripts were scanned", bodies.some((b) => /\.js(\?|$)/.test(b.url)), `${bodies.length} bodies`);
-check("no console or page errors", errors.length === 0, errors.slice(0, 5).join(" | "));
-console.log(`probe: ${ok} ok, ${failed} failed`);
-process.exit(failed ? 1 : 0);
+// node scripts/probe-cassette.mjs fake: the loopback providers for this probe and scripts/walk-now-playing.sh. Three
+// servers, Spotify's accounts host (FAKE_TOKEN_PORT), its API (FAKE_API_PORT) and Steam's (FAKE_STEAM_PORT), each
+// answering what $FAKE_DIR/mode.json says, read per request. They check the credentials the app must send (the same
+// SPOTIFY_* and STEAM_* values the server was given) and answer 401 to anything else. Every request is one line in
+// $FAKE_DIR/requests.log, "<role> <method> <path> auth=<ok|bad>", never a credential. $FAKE_DIR/ready appears
+// once all three listen.
+//   token: ok | 401 | malformed | slow
+//   track: ok | paused | long | 204 | 401 | 429 | malformed | private | slow   (title: the ok track's name)
+//   steam: ok | long | idle | private | malformed | 500 | slow                  (game: the ok game's name)
+async function fakeProviders() {
+  const dir = process.env.FAKE_DIR;
+  const env = process.env;
+  const ACCESS = "FakeAccessToken0123456789abcdef";
+  const basic = `Basic ${Buffer.from(`${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`).toString("base64")}`;
+  const mode = () => {
+    try {
+      return JSON.parse(readFileSync(path.join(dir, "mode.json"), "utf8"));
+    } catch {
+      return {};
+    }
+  };
+  const send = (res, status, body, type = "application/json") => {
+    if (res.destroyed) return;
+    res.writeHead(status, body === null ? {} : { "content-type": type });
+    res.end(body === null ? undefined : typeof body === "string" ? body : JSON.stringify(body));
+  };
+  const later = (ms, fn) => setTimeout(fn, ms);
+  const track = (m) => ({
+    timestamp: 1761400000000,
+    progress_ms: 1234,
+    context: { type: "playlist", uri: "spotify:playlist:fixture" },
+    currently_playing_type: "track",
+    is_playing: m.track !== "paused",
+    item: {
+      type: "track",
+      name: m.track === "long" ? "W".repeat(300) : (m.title ?? "Fixture Track One"),
+      artists:
+        m.track === "long"
+          ? Array.from({ length: 30 }, (_, i) => ({ name: `Fixture Artist ${i}` }))
+          : [{ name: "Fixture Artist", id: "fixtureartist" }],
+      album: { name: "Fixture Album", images: [{ url: "https://i.scdn.co/image/fixture" }] },
+      external_urls: { spotify: "https://open.spotify.com/track/FixtureTrack0001?si=fixture" },
+      is_local: false,
+      popularity: 1,
+      preview_url: "https://p.scdn.co/mp3-preview/fixture",
+    },
+  });
+  const player = (m) => {
+    const p = {
+      steamid: env.STEAM_ID,
+      communityvisibilitystate: m.steam === "private" ? 1 : 3,
+      personaname: "fixture-persona",
+      realname: "Fixture Real Name",
+      avatar: "https://avatars.steamstatic.com/fixture.jpg",
+      loccountrycode: "VN",
+    };
+    if (m.steam !== "idle" && m.steam !== "private") {
+      p.gameextrainfo = m.steam === "long" ? "M".repeat(200) : (m.game ?? "Fixture Game");
+      p.gameid = "1145350";
+    }
+    return { response: { players: [p] } };
+  };
+  const roles = {
+    token: (req, res, body) => {
+      const params = new URLSearchParams(body);
+      const ok =
+        req.method === "POST" &&
+        req.headers.authorization === basic &&
+        params.get("grant_type") === "refresh_token" &&
+        params.get("refresh_token") === env.SPOTIFY_REFRESH_TOKEN;
+      const m = mode();
+      if (!ok) return [false, () => send(res, 401, { error: "invalid_client" })];
+      if (m.token === "401") return [true, () => send(res, 401, { error: "invalid_grant", error_description: "Refresh token revoked" })];
+      if (m.token === "malformed") return [true, () => send(res, 200, "<html>oops</html>", "text/html")];
+      const answer = () => send(res, 200, { access_token: ACCESS, token_type: "Bearer", expires_in: 3600, scope: "user-read-currently-playing" });
+      return [true, m.token === "slow" ? () => later(10_000, answer) : answer];
+    },
+    api: (req, res) => {
+      const ok = req.headers.authorization === `Bearer ${ACCESS}` && req.url.startsWith("/v1/me/player/currently-playing");
+      const m = mode();
+      if (!ok) return [false, () => send(res, 401, { error: { status: 401, message: "Invalid access token" } })];
+      const t = m.track ?? "ok";
+      if (t === "204") return [true, () => send(res, 204, null)];
+      if (t === "401") return [true, () => send(res, 401, { error: { status: 401, message: "The access token expired" } })];
+      if (t === "429") return [true, () => send(res, 429, { error: { status: 429, message: "API rate limit exceeded" } })];
+      if (t === "malformed") return [true, () => send(res, 200, "{not json")];
+      if (t === "private")
+        return [true, () => send(res, 200, { is_playing: true, currently_playing_type: "unknown", item: null, device: { is_private_session: true } })];
+      const answer = () => send(res, 200, track(m));
+      return [true, t === "slow" ? () => later(10_000, answer) : answer];
+    },
+    steam: (req, res) => {
+      const u = new URL(req.url, "http://fake");
+      const ok =
+        u.pathname === "/ISteamUser/GetPlayerSummaries/v0002/" &&
+        u.searchParams.get("key") === env.STEAM_API_KEY &&
+        u.searchParams.get("steamids") === env.STEAM_ID;
+      const m = mode();
+      if (!ok) return [false, () => send(res, 403, "<html>Forbidden</html>", "text/html")];
+      const s = m.steam ?? "ok";
+      if (s === "malformed") return [true, () => send(res, 200, "<html>not json</html>", "text/html")];
+      if (s === "500") return [true, () => send(res, 500, "<html>Internal Server Error</html>", "text/html")];
+      const answer = () => send(res, 200, player(m));
+      return [true, s === "slow" ? () => later(10_000, answer) : answer];
+    },
+  };
+  const ports = { token: env.FAKE_TOKEN_PORT, api: env.FAKE_API_PORT, steam: env.FAKE_STEAM_PORT };
+  await Promise.all(
+    Object.entries(ports).map(
+      ([role, port]) =>
+        new Promise((resolve, reject) => {
+          const server = http.createServer((req, res) => {
+            let body = "";
+            req.on("data", (c) => (body += c));
+            req.on("end", () => {
+              const [ok, answer] = roles[role](req, res, body);
+              appendFileSync(path.join(dir, "requests.log"), `${role} ${req.method} ${new URL(req.url, "http://fake").pathname} auth=${ok ? "ok" : "bad"}\n`);
+              answer();
+            });
+          });
+          server.on("error", reject);
+          server.listen(Number(port), "127.0.0.1", resolve);
+        }),
+    ),
+  );
+  writeFileSync(path.join(dir, "ready"), "");
+}
+
+if (process.argv[2] === "fake") await fakeProviders();
+else await probe();
