@@ -1,0 +1,300 @@
+{
+  "plan_id": "pm-240",
+  "task_id": "t-1510",
+  "run_id": "run-8430",
+  "scope": "Bounded task-manager history; not vendor account history",
+  "planRuns": {
+    "count": 19,
+    "finished": 18,
+    "current": 1,
+    "completeForReturnedListing": true,
+    "records": [
+      {
+        "id": "run-8296",
+        "tm_task_id": "1e9a3911-2fb9-4a7b-bb50-3ef7c44b3e84",
+        "role": "research",
+        "status": "succeeded",
+        "agent_profile": "claude-fable-high",
+        "profile_flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8299",
+        "tm_task_id": "c75fe1f4-538e-4ffa-b09e-0e0f43e40cbe",
+        "role": "product_owner",
+        "status": "succeeded",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8302",
+        "tm_task_id": "07e489fd-fdfd-460a-998b-034fbbd02d4e",
+        "role": "software_engineer",
+        "status": "succeeded",
+        "agent_profile": "agy-argon-high",
+        "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8309",
+        "tm_task_id": "6a5492e1-f31b-4ca5-b4e4-9a72b2497c2e",
+        "role": "verify",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8310",
+        "tm_task_id": "2c9db199-3c2b-4c08-9fd4-51e5934a0121",
+        "role": "quality_engineer",
+        "status": "succeeded",
+        "agent_profile": "claude-sonnet-high",
+        "profile_flags": "--allowedTools all --model claude-sonnet-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8312",
+        "tm_task_id": "85fc4411-9246-4948-919e-4f6a5842515c",
+        "role": "software_engineer",
+        "status": "succeeded",
+        "agent_profile": "agy-argon-high",
+        "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8320",
+        "tm_task_id": "7a32a592-f77b-4cdc-9a34-2e02a7e652f1",
+        "role": "software_engineer",
+        "status": "succeeded",
+        "agent_profile": "agy-argon-high",
+        "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8329",
+        "tm_task_id": "802e5537-87da-4311-a90b-44ae9ebb9fd8",
+        "role": "software_engineer",
+        "status": "succeeded",
+        "agent_profile": "agy-argon-high",
+        "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8338",
+        "tm_task_id": "9cb526d4-d1b4-439e-8066-9db772fb2fd0",
+        "role": "verify",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8341",
+        "tm_task_id": "c9bd68ad-7588-4902-810c-0fe6498268ea",
+        "role": "software_engineer",
+        "status": "succeeded",
+        "agent_profile": "agy-argon-high",
+        "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8350",
+        "tm_task_id": "a835499c-79aa-4ea8-aff9-33365218548a",
+        "role": "verify",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8364",
+        "tm_task_id": "a40ee404-3724-417d-8800-1046f9fb6f35",
+        "role": "software_engineer",
+        "status": "succeeded",
+        "agent_profile": "agy-argon-high",
+        "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8370",
+        "tm_task_id": "3226e062-1693-4fcb-99af-f02ceaaf2d8a",
+        "role": "verify",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8381",
+        "tm_task_id": "dfb2073e-1d4a-48aa-bb33-5682294bc945",
+        "role": "software_engineer",
+        "status": "succeeded",
+        "agent_profile": "claude-opus-high",
+        "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8389",
+        "tm_task_id": "b07fce9d-bf85-44ed-a0d1-37b7b2a8bce7",
+        "role": "verify",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8397",
+        "tm_task_id": "78feed0e-f4f8-4e08-9519-965430d13677",
+        "role": "product_owner",
+        "status": "succeeded",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8408",
+        "tm_task_id": "f5938add-d3b5-47aa-b34f-3b4c124020ed",
+        "role": "software_engineer",
+        "status": "succeeded",
+        "agent_profile": "agy-argon-high",
+        "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8419",
+        "tm_task_id": "d9dbf5e7-8f89-436c-a026-3703617c73f0",
+        "role": "verify",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-8430",
+        "tm_task_id": "bbbf4d35-5d94-4584-8ac6-7f0c6311826a",
+        "role": "quality_engineer",
+        "status": "running",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      }
+    ]
+  },
+  "taskManager": {
+    "project": "plan-manager",
+    "failed": {
+      "limit": 20,
+      "offsets": [
+        0,
+        20,
+        40
+      ],
+      "total": 54,
+      "read": 54,
+      "complete": true,
+      "matchingPlan": []
+    },
+    "completed": {
+      "limit": 20,
+      "offsets": [
+        0,
+        20,
+        40,
+        60
+      ],
+      "total": 918,
+      "read": 80,
+      "complete": false,
+      "matchingPlan": [
+        {
+          "id": "d9dbf5e7-8f89-436c-a026-3703617c73f0",
+          "run": "run-8419"
+        },
+        {
+          "id": "f5938add-d3b5-47aa-b34f-3b4c124020ed",
+          "run": "run-8408"
+        },
+        {
+          "id": "78feed0e-f4f8-4e08-9519-965430d13677",
+          "run": "run-8397"
+        },
+        {
+          "id": "b07fce9d-bf85-44ed-a0d1-37b7b2a8bce7",
+          "run": "run-8389"
+        },
+        {
+          "id": "dfb2073e-1d4a-48aa-bb33-5682294bc945",
+          "run": "run-8381"
+        },
+        {
+          "id": "3226e062-1693-4fcb-99af-f02ceaaf2d8a",
+          "run": "run-8370"
+        },
+        {
+          "id": "a40ee404-3724-417d-8800-1046f9fb6f35",
+          "run": "run-8364"
+        }
+      ]
+    },
+    "pending": {
+      "read": 3,
+      "total": 3,
+      "matchingPlan": []
+    },
+    "running": {
+      "read": 4,
+      "total": 4,
+      "matchingPlan": [
+        "bbbf4d35-5d94-4584-8ac6-7f0c6311826a"
+      ]
+    }
+  },
+  "askTask": {
+    "failed": {
+      "limit": 20,
+      "offset": 0,
+      "total": 1,
+      "read": 1,
+      "complete": true,
+      "ids": [
+        "267d873e-7bce-47dc-ba6f-59bc0b08d67e"
+      ]
+    },
+    "completed": {
+      "total": 2,
+      "read": 2,
+      "complete": true
+    },
+    "pendingRaw": {},
+    "runningRaw": {}
+  },
+  "callbacks": [
+    {
+      "id": "f5938add-d3b5-47aa-b34f-3b4c124020ed",
+      "state": "delivered",
+      "attempts": 1,
+      "ingestedInPlanRuns": true
+    },
+    {
+      "id": "d9dbf5e7-8f89-436c-a026-3703617c73f0",
+      "state": "delivered",
+      "attempts": 1,
+      "ingestedInPlanRuns": true
+    }
+  ],
+  "rawFailure": {
+    "id": "267d873e-7bce-47dc-ba6f-59bc0b08d67e",
+    "profile": "grok-main account; grok --model grok-4.7 --reasoning-effort high",
+    "clonedCommit": "016369aa663331139f5d73a9505e8fa77289638d",
+    "exit": 1,
+    "error": "Not signed in",
+    "relation": "Historical t-1472 auth failure; predates handoff executable. Not attributed to t-1510.",
+    "tail": [
+      "---",
+      "{\"type\":\"error\",\"message\":\"Not signed in. To authenticate without a browser, run:\\n  grok login --device-code\\n\\nAlternatively, set the XAI_API_KEY environment variable or run `grok login` on a machine with a browser.\"}",
+      "Error: Not signed in. To authenticate without a browser, run:",
+      "  grok login --device-code",
+      "",
+      "Alternatively, set the XAI_API_KEY environment variable or run `grok login` on a machine with a browser.",
+      "---",
+      "Command exited with code: 1",
+      "rescue: workspace has no local work beyond origin/main — nothing to preserve"
+    ]
+  },
+  "limits": [
+    "SWE runner log returned tail only; not a full execution transcript",
+    "No audited account-wide vendor history",
+    "Otohime cluster log query returned null; not proof of clean Vercel server logs",
+    "author.txt raw download denied HTTP 403; 44-byte expected author/trailer content matches artifact SHA-256 exactly"
+  ]
+}

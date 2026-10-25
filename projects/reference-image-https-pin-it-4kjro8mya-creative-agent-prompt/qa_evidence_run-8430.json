@@ -1,0 +1,174 @@
+{
+  "independentParser": "Python stdlib regex/hashlib; no handoff parser/validator used for artifact inspection",
+  "prompts": [
+    {
+      "file": "01_Quiet_Reader.md",
+      "bytes": 3822,
+      "sha256": "ea763f4f3f125618d18e0aaf8878ed93d31dbecd0b4e3d7717629bca5ec53fdf"
+    },
+    {
+      "file": "02_Flower_Girl.md",
+      "bytes": 3743,
+      "sha256": "ca27b4a7dca87eac4897b2644055b71ad01d0c5d6b43686ebc59e4eb09a61e5b"
+    },
+    {
+      "file": "03_Rainy_Afternoon.md",
+      "bytes": 3754,
+      "sha256": "904e2ae0b97020913cfc4cdd24e1ac7a71cdb1fb7205cb2fd3fe661ff6415e5b"
+    },
+    {
+      "file": "04_Cafe_Dreamer.md",
+      "bytes": 3769,
+      "sha256": "21f0696069eb60cc50f99ff8374e333a5467f66eabeadd24e9ca9e697ab627a1"
+    },
+    {
+      "file": "05_Autumn_Wanderer.md",
+      "bytes": 3706,
+      "sha256": "02e75439b5baa112ca7eea6c876abb144fc506315ef8fa7df37132cfed284d6b"
+    },
+    {
+      "file": "06_Violinist.md",
+      "bytes": 3581,
+      "sha256": "c4e4ba68028a91ef66b9a6983bcffda82efa108e76b124a02e4eb8ea0161ec49"
+    },
+    {
+      "file": "07_Morning_by_the_Window.md",
+      "bytes": 3825,
+      "sha256": "efcac98b2c8ac657516a20613480099f32bbb72be42e4b4c5fdef0947045bbe4"
+    },
+    {
+      "file": "08_Painter.md",
+      "bytes": 3704,
+      "sha256": "70acd6c394f786d6055f02a4d0bcc33697b169c6aec4224724aa4ff01e4dc612"
+    },
+    {
+      "file": "09_Spring_Breeze.md",
+      "bytes": 3619,
+      "sha256": "041cb4511ea4286b0c4ea3ea49ce46bf8fd9d4a6d0ac4e25ad682abf538bdc4a"
+    },
+    {
+      "file": "10_Letter_Writer.md",
+      "bytes": 3774,
+      "sha256": "f79cad1f3c61843090c042acb649087aaf213f5a626011fbe034ee792e6dc9ee"
+    }
+  ],
+  "hermeticCLI": "Node fetch, net.Socket.connect, http.request, https.request throw; unusable key; 2 exports byte-identical; committed check preserves bytes and mtimes",
+  "checks": [
+    {
+      "action": "check",
+      "mutation": "none",
+      "exit": 0,
+      "reason": null,
+      "offendingConcept": null
+    },
+    {
+      "action": "export",
+      "mutation": "none",
+      "exit": 0,
+      "reason": null,
+      "offendingConcept": null
+    },
+    {
+      "action": "export",
+      "mutation": "none",
+      "exit": 0,
+      "reason": null,
+      "offendingConcept": null
+    },
+    {
+      "action": "check",
+      "mutation": "none",
+      "exit": 0,
+      "reason": null,
+      "offendingConcept": null
+    },
+    {
+      "action": "check",
+      "mutation": "prompt_mismatch",
+      "exit": 1,
+      "reason": "prompt_mismatch",
+      "offendingConcept": "01-quiet-reader"
+    },
+    {
+      "action": "check",
+      "mutation": "missing_file",
+      "exit": 1,
+      "reason": "missing_file",
+      "offendingConcept": "03-rainy-afternoon"
+    },
+    {
+      "action": "check",
+      "mutation": "extra_file",
+      "exit": 1,
+      "reason": "extra_file",
+      "offendingConcept": null
+    },
+    {
+      "action": "check",
+      "mutation": "duplicate_mapping",
+      "exit": 1,
+      "reason": "duplicate_mapping",
+      "offendingConcept": "02-flower-girl"
+    },
+    {
+      "action": "check",
+      "mutation": "invalid_status",
+      "exit": 1,
+      "reason": "invalid_status",
+      "offendingConcept": null
+    },
+    {
+      "action": "check",
+      "mutation": "invalid_path",
+      "exit": 1,
+      "reason": "invalid_path",
+      "offendingConcept": "01-quiet-reader"
+    },
+    {
+      "action": "check",
+      "mutation": "invalid_path",
+      "exit": 1,
+      "reason": "invalid_path",
+      "offendingConcept": null
+    },
+    {
+      "action": "check",
+      "mutation": "source_mismatch",
+      "exit": 1,
+      "reason": "source_mismatch",
+      "offendingConcept": null
+    },
+    {
+      "action": "check",
+      "mutation": "invalid_cli",
+      "exit": 2,
+      "reason": "invalid_cli",
+      "offendingConcept": null
+    }
+  ],
+  "artworkNegativeControl": {
+    "exit": 1,
+    "records": 0,
+    "reason": "manifest contains 0 records"
+  },
+  "scope": "text kit only; 0/10 paintings; 0/10 activated",
+  "defects": [
+    {
+      "id": "QA-8430-01",
+      "realCLI": true,
+      "isolatedReplica": true,
+      "sourceBytesMatchDelivery": true,
+      "case": "alias symlink targets protected content; output alias/new-kit does not yet exist",
+      "expected": {
+        "exit": 1,
+        "reason": "invalid_path",
+        "writes": 0
+      },
+      "actual": {
+        "exit": 0,
+        "ok": true,
+        "protectedContentFilesWritten": 11
+      }
+    }
+  ]
+}
