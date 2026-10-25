@@ -68,6 +68,8 @@ export const site = {
     // TODO(otohime): a first draft
     { label: "Email", handle: "hello@otohime.dev", href: "mailto:hello@otohime.dev", code: "@", colour: "coral" },
   ] satisfies Line[],
+  // The switchboard's plug, carried by hand to a jack.
+  switchboard: { held: "Plug in hand. Let go over a jack to connect." },
   // TODO(otohime)
   notes: [
     {

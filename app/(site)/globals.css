@@ -686,6 +686,28 @@
     stroke-width: 2.2;
   }
 
+  /* The switchboard plug's handle: invisible at rest, a pencilled ring under
+     a hovering pointer or in hand. touch-action does not apply inside an
+     <svg> (switchboard.tsx's touchstart listener stops the pan); this rule
+     is the declared intent, on the handle only. */
+  .plug-handle {
+    fill: transparent;
+    stroke: none;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .plug-handle:hover,
+  .plug-handle[data-held] {
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-dasharray: 3 4;
+  }
+
+  .plug-handle[data-held] {
+    cursor: grabbing;
+  }
+
   /* Rack lights blink on their own; faster, and the reels turn, on a job. */
   .led {
     animation: blink 1.6s steps(1) infinite;

@@ -31,27 +31,100 @@ export function pad(s: Pad, action: PadAction): Pad {
 }
 
 /* Switchboard: pick a line, the operator swings the cord into its jack, and
-   it rings until someone picks up. */
+   it rings until someone picks up. The plug can also be carried by hand:
+   let go within SNAP of a jack and that line connects (the plug is already
+   in, so the call starts ringing); let go anywhere else, or lose the
+   pointer, and the cord springs back to where the plug was, over SPRING
+   frames. Positions are figure units, the drawing's viewBox. */
 
 export const PLUG = 4; // frames for the cord to reach the jack
 export const RING = 6; // frames of ringing
-export type Board = { line: number | null; t: number; calls: number };
-export type BoardAction = number | Frame;
+export const SNAP = 14; // how near a jack a dropped plug must land
+export const SPRING = 6; // frames for a dropped plug to spring home
+export type XY = readonly [x: number, y: number];
+export type Board = {
+  line: number | null;
+  t: number;
+  calls: number;
+  held?: XY | null; // the plug, in hand
+  from?: XY | null; // where it was let go, springing home
+  back?: number; // spring frames left
+};
+export type BoardDrag =
+  | { type: "grab"; at: XY }
+  | { type: "move"; at: XY }
+  | { type: "release"; at: XY; jacks: readonly XY[] }
+  | { type: "cancel" };
+export type BoardAction = number | Frame | BoardDrag;
 
 export const newBoard = (): Board => ({ line: null, t: 0, calls: 0 });
-export const boardBusy = (s: Board) => s.line !== null && s.t < PLUG + RING;
+const ringing = (s: Board) => s.line !== null && s.t < PLUG + RING;
+export const boardBusy = (s: Board) => ringing(s) || (s.back ?? 0) > 0;
+
+// How far the plug has come home, by spring frame: past it, then back.
+const SPRUNG = [0, 0.45, 0.85, 1.08, 1.03, 0.99, 1];
+export const springAt = (s: Board) => SPRUNG[SPRING - Math.min(SPRING, s.back ?? 0)];
+
+// The jack a plug let go at `at` lands in: the nearest within SNAP, or null.
+export function jackAt(at: XY, jacks: readonly XY[]): number | null {
+  let best: number | null = null;
+  let near = SNAP;
+  for (let i = 0; i < jacks.length; i++) {
+    const d = Math.hypot(jacks[i][0] - at[0], jacks[i][1] - at[1]);
+    if (d <= near) [best, near] = [i, d];
+  }
+  return best;
+}
+
+// The cord is CORD long: slack hangs, roughly a catenary's sag
+// sqrt(3 d (L - d) / 8) for a span d, and a cord pulled its full length
+// runs straight. Returned as the bend's pull below the lower end.
+export const CORD = 230;
+export const cordSag = (span: number) => Math.min(40, Math.sqrt((3 * span * Math.max(0, CORD - span)) / 8) * 0.6);
 
 function boardFrame(s: Board): Board {
   if (!boardBusy(s)) return s;
-  const t = s.t + 1;
-  return { ...s, t, calls: s.calls + (t === PLUG + RING ? 1 : 0) };
+  let next = s;
+  if (ringing(s)) {
+    const t = s.t + 1;
+    next = { ...next, t, calls: s.calls + (t === PLUG + RING ? 1 : 0) };
+  }
+  if ((s.back ?? 0) > 0) {
+    const back = (s.back ?? 0) - 1;
+    next = { ...next, back, from: back ? s.from : null };
+  }
+  return next;
+}
+
+// Let go of the plug: it springs home from where it was.
+const drop = (s: Board, at: XY): Board => ({ ...s, held: null, from: at, back: SPRING });
+
+function drag(s: Board, action: BoardDrag): Board {
+  switch (action.type) {
+    case "grab":
+      return { ...s, held: action.at, from: null, back: 0 };
+    case "move":
+      return s.held ? { ...s, held: action.at } : s;
+    case "cancel":
+      return s.held ? drop(s, s.held) : s;
+    case "release": {
+      if (!s.held) return s;
+      const jack = jackAt(action.at, action.jacks);
+      if (jack === null) return drop(s, action.at);
+      // the same call as picking the line, with the cord already in the jack
+      const next = switchboard({ ...s, held: null, from: null, back: 0 }, jack);
+      return { ...next, t: Math.max(next.t, PLUG) };
+    }
+  }
 }
 
 export function switchboard(s: Board, action: BoardAction): Board {
   if (action === "tick") return boardFrame(s);
   if (action === "settle") return settle(s, boardFrame, boardBusy);
-  // another line, even mid-call: the operator moves the cord
-  return action === s.line ? s : { ...s, line: action, t: 0 };
+  if (typeof action === "object") return drag(s, action);
+  // another line, even mid-call: the operator moves the cord, out of any hand
+  const free = s.held || s.back ? { ...s, held: null, from: null, back: 0 } : s;
+  return action === free.line ? free : { ...free, line: action, t: 0 };
 }
 
 /* Claw machine. Slot 0 is over the prize chute; capsules sit in 1..SLOTS. */
