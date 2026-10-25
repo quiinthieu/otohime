@@ -7,8 +7,10 @@ import {
   readdirSync,
   readFileSync,
   realpathSync,
+  renameSync,
   type Stats,
   statSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -102,6 +104,7 @@ type PhysicalPathResolution =
       existingAncestor: string;
       existingStat: Stats;
       canonicalAncestor: string;
+      canonicalAncestorStat: Stats;
       canonicalTarget: string;
       missingSegments: string[];
     }
@@ -153,7 +156,7 @@ function resolvePhysicalTargetPath(targetPath: string): PhysicalPathResolution {
 
   let canonicalAncestor: string;
   try {
-    canonicalAncestor = realpathSync(current);
+    canonicalAncestor = realpathSync.native(current);
   } catch (err) {
     return {
       ok: false,
@@ -192,6 +195,7 @@ function resolvePhysicalTargetPath(targetPath: string): PhysicalPathResolution {
     existingAncestor: current,
     existingStat,
     canonicalAncestor,
+    canonicalAncestorStat,
     canonicalTarget,
     missingSegments,
   };
@@ -250,6 +254,26 @@ function findSymlinkInAncestorChain(
   return null;
 }
 
+function sameInode(a: Stats, b: Stats): boolean {
+  return a.dev === b.dev && a.ino === b.ino && a.ino !== 0;
+}
+
+function collectExistingAncestorStats(startPath: string): Stats[] {
+  const stats: Stats[] = [];
+  let curr = resolve(startPath);
+  while (true) {
+    try {
+      stats.push(statSync(curr));
+    } catch {
+      // Ignore unreadable or non-existent ancestors
+    }
+    const parent = dirname(curr);
+    if (parent === curr) break;
+    curr = parent;
+  }
+  return stats;
+}
+
 function isForbiddenExportTarget(resolvedOutDir: string, rootDir: string): boolean {
   const rootResolved = resolvePhysicalTargetPath(rootDir);
   const repoRootResolved = resolvePhysicalTargetPath(REPO_ROOT);
@@ -270,16 +294,71 @@ function isForbiddenExportTarget(resolvedOutDir: string, rootDir: string): boole
   const candidates = Array.from(
     new Set([outResolved.lexicalPath, outResolved.canonicalTarget]),
   );
+  const outAncestorStats = [
+    ...collectExistingAncestorStats(outResolved.existingAncestor),
+    ...collectExistingAncestorStats(outResolved.canonicalAncestor),
+  ];
 
   for (const r of roots) {
-    for (const c of candidates) {
-      if (c === r) return true;
-      if (c === resolve(r, "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt")) {
-        return true;
-      }
-      for (const protectedTree of PROTECTED_TREES) {
-        if (isSubpathOrSame(resolve(r, protectedTree), c)) {
+    if (outResolved.missingSegments.length === 0) {
+      try {
+        if (sameInode(statSync(r), outResolved.canonicalAncestorStat)) {
           return true;
+        }
+      } catch {
+        // Ignore if r cannot be stat'd
+      }
+    }
+
+    const planDirLexical = resolve(
+      r,
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt",
+    );
+    const planPhysical = resolvePhysicalTargetPath(planDirLexical);
+    const planTargets = Array.from(
+      new Set([planDirLexical, ...(planPhysical.ok ? [planPhysical.canonicalTarget] : [])]),
+    );
+    if (
+      outResolved.missingSegments.length === 0 &&
+      planPhysical.ok &&
+      planPhysical.missingSegments.length === 0 &&
+      sameInode(planPhysical.canonicalAncestorStat, outResolved.canonicalAncestorStat)
+    ) {
+      return true;
+    }
+
+    for (const c of candidates) {
+      if (c === r || c.toLowerCase() === r.toLowerCase()) return true;
+      for (const planTarget of planTargets) {
+        if (c === planTarget || c.toLowerCase() === planTarget.toLowerCase()) {
+          return true;
+        }
+      }
+    }
+
+    for (const protectedTree of PROTECTED_TREES) {
+      const protectedLexical = resolve(r, protectedTree);
+      const protectedPhysical = resolvePhysicalTargetPath(protectedLexical);
+      const protectedDirs = Array.from(
+        new Set([
+          protectedLexical,
+          ...(protectedPhysical.ok ? [protectedPhysical.canonicalTarget] : []),
+        ]),
+      );
+
+      if (protectedPhysical.ok && protectedPhysical.missingSegments.length === 0) {
+        for (const ancStat of outAncestorStats) {
+          if (sameInode(ancStat, protectedPhysical.canonicalAncestorStat)) {
+            return true;
+          }
+        }
+      }
+
+      for (const p of protectedDirs) {
+        for (const c of candidates) {
+          if (isSubpathOrSame(p, c) || isSubpathOrSame(p.toLowerCase(), c.toLowerCase())) {
+            return true;
+          }
         }
       }
     }
@@ -421,7 +500,7 @@ export function exportHandoffDirectory(options: {
   const postMkdirStat = safeLstat(outputDir);
   let postMkdirRealpath: string | null = null;
   try {
-    postMkdirRealpath = realpathSync(outputDir);
+    postMkdirRealpath = realpathSync.native(outputDir);
   } catch {
     postMkdirRealpath = null;
   }
@@ -443,7 +522,7 @@ export function exportHandoffDirectory(options: {
     };
   }
 
-  // Verify no existing symlinks exist at target file paths before writing
+  // Verify no existing symlinks, non-regular files, or hard-linked targets exist before writing
   const filesToWrite: Array<{ filename: string; content: string }> = [
     { filename: HANDOFF_MANIFEST_FILENAME, content: kit.manifestJson },
     ...kit.promptFiles.map((f) => ({ filename: f.filename, content: f.content })),
@@ -460,22 +539,42 @@ export function exportHandoffDirectory(options: {
         message: `Unsafe export filename "${item.filename}"`,
       };
     }
+    const lexicalTargetPath = join(outputDir, item.filename);
     const targetPath = join(postMkdirRealpath, item.filename);
     const st = safeLstat(targetPath);
-    if (st && (st.isSymbolicLink() || !st.isFile())) {
+    if (st && (st.isSymbolicLink() || !st.isFile() || st.nlink > 1)) {
       return {
         ok: false,
         command: "export",
         reason: "invalid_path",
         offendingConcept: null,
-        offendingPath: targetPath,
-        message: `Refusing to overwrite symlink or non-regular file: ${targetPath}`,
+        offendingPath: lexicalTargetPath,
+        message:
+          st.nlink > 1
+            ? `Refusing to overwrite hard-linked file (nlink=${st.nlink}): ${lexicalTargetPath}`
+            : `Refusing to overwrite symlink or non-regular file: ${lexicalTargetPath}`,
       };
     }
   }
 
-  for (const item of filesToWrite) {
-    writeFileSync(join(postMkdirRealpath, item.filename), item.content, "utf8");
+  for (let i = 0; i < filesToWrite.length; i++) {
+    const item = filesToWrite[i];
+    const targetPath = join(postMkdirRealpath, item.filename);
+    const tempPath = join(
+      postMkdirRealpath,
+      `.handoff-tmp-${process.pid}-${i}-${item.filename}`,
+    );
+    try {
+      writeFileSync(tempPath, item.content, { encoding: "utf8", flag: "wx" });
+      renameSync(tempPath, targetPath);
+    } catch (err) {
+      try {
+        unlinkSync(tempPath);
+      } catch {
+        // Ignore cleanup failure
+      }
+      throw err;
+    }
   }
 
   return {

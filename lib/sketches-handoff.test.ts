@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   existsSync,
+  linkSync,
   lstatSync,
   mkdirSync,
   mkdtempSync,
@@ -504,6 +505,134 @@ test("path escape, symlinks, false completion status, and invalid CLI usage are 
       assert.equal(ancestorPromptsRes.reason, "invalid_path");
       assert.match(ancestorPromptsRes.offendingPath ?? "", /parent-link[\\/]prompts\.md$/);
     }
+
+    // 4b. Case-variant export confinement on case-insensitive filesystems (QA-8446-01)
+    const protectedPublic = join(isolatedRepo, "public");
+    mkdirSync(protectedPublic, { recursive: true });
+    if (existsSync(join(isolatedRepo, "CONTENT"))) {
+      const caseContentTarget = join(isolatedRepo, "Content", "new-kit");
+      const caseContentRes = exportHandoffDirectory({
+        rootDir: isolatedRepo,
+        outputDir: caseContentTarget,
+        promptsPath: PROMPTS_PATH,
+      });
+      assert.equal(caseContentRes.ok, false, "must reject case-variant Content/new-kit on case-insensitive FS");
+      if (!caseContentRes.ok) {
+        assert.equal(caseContentRes.reason, "invalid_path");
+        assert.match(caseContentRes.offendingPath ?? "", /Content[\\/]new-kit$/);
+      }
+      assert.deepEqual(readdirSync(protectedContent), []);
+
+      const casePublicTarget = join(isolatedRepo, "PUBLIC", "x");
+      const casePublicRes = exportHandoffDirectory({
+        rootDir: isolatedRepo,
+        outputDir: casePublicTarget,
+        promptsPath: PROMPTS_PATH,
+      });
+      assert.equal(casePublicRes.ok, false, "must reject case-variant PUBLIC/x on case-insensitive FS");
+      if (!casePublicRes.ok) {
+        assert.equal(casePublicRes.reason, "invalid_path");
+        assert.match(casePublicRes.offendingPath ?? "", /PUBLIC[\\/]x$/);
+      }
+      assert.deepEqual(readdirSync(protectedPublic), []);
+
+      // Real CLI (spawnSync) with case-variant Content/new-kit and PUBLIC/x
+      for (const relCaseTarget of ["Content/new-kit", "PUBLIC/x"]) {
+        const caseCliRun = spawnSync(
+          process.execPath,
+          [
+            "--experimental-strip-types",
+            "--disable-warning=ExperimentalWarning",
+            "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+            cliScript,
+            "export",
+            "--output-dir",
+            relCaseTarget,
+            "--prompts",
+            PROMPTS_PATH,
+          ],
+          { cwd: isolatedRepo, encoding: "utf8" },
+        );
+        assert.equal(
+          caseCliRun.status,
+          1,
+          `expected exit 1 for ${relCaseTarget}, got ${caseCliRun.status}: ${caseCliRun.stdout}`,
+        );
+        const caseCliErr = JSON.parse(caseCliRun.stderr.trim()) as Record<string, unknown>;
+        assert.equal(caseCliErr.ok, false);
+        assert.equal(caseCliErr.reason, "invalid_path");
+      }
+      assert.deepEqual(readdirSync(protectedContent), []);
+      assert.deepEqual(readdirSync(protectedPublic), []);
+    }
+
+    // 4c. Hard-linked manifest.json and prompt .md in output directory (QA-8446-02)
+    const isolatedPortraitsPath = join(protectedContent, "portraits.json");
+    writeFileSync(isolatedPortraitsPath, "[]\n", "utf8");
+    const hardlinkKitDir = join(isolatedRepo, "exports", "kit");
+    mkdirSync(hardlinkKitDir, { recursive: true });
+    const hardlinkedManifestPath = join(hardlinkKitDir, "manifest.json");
+    linkSync(isolatedPortraitsPath, hardlinkedManifestPath);
+    assert.equal(lstatSync(hardlinkedManifestPath).nlink, 2);
+
+    const hardlinkManifestRes = exportHandoffDirectory({
+      rootDir: isolatedRepo,
+      outputDir: hardlinkKitDir,
+      promptsPath: PROMPTS_PATH,
+    });
+    assert.equal(hardlinkManifestRes.ok, false, "must reject hard-linked manifest.json in output directory");
+    if (!hardlinkManifestRes.ok) {
+      assert.equal(hardlinkManifestRes.reason, "invalid_path");
+      assert.match(hardlinkManifestRes.offendingPath ?? "", /exports[\\/]kit[\\/]manifest\.json$/);
+    }
+    assert.equal(readFileSync(isolatedPortraitsPath, "utf8"), "[]\n");
+
+    const hardlinkCliRun = spawnSync(
+      process.execPath,
+      [
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        cliScript,
+        "export",
+        "--output-dir",
+        "exports/kit",
+        "--prompts",
+        PROMPTS_PATH,
+      ],
+      { cwd: isolatedRepo, encoding: "utf8" },
+    );
+    assert.equal(
+      hardlinkCliRun.status,
+      1,
+      `expected exit 1 for hard-linked manifest, got ${hardlinkCliRun.status}: ${hardlinkCliRun.stdout}`,
+    );
+    const hardlinkCliErr = JSON.parse(hardlinkCliRun.stderr.trim()) as Record<string, unknown>;
+    assert.equal(hardlinkCliErr.ok, false);
+    assert.equal(hardlinkCliErr.reason, "invalid_path");
+    assert.equal(readFileSync(isolatedPortraitsPath, "utf8"), "[]\n");
+    unlinkSync(hardlinkedManifestPath);
+
+    const outsideHardlinkTarget = join(work, "outside-hardlink-prompt.md");
+    writeFileSync(outsideHardlinkTarget, "unchanged outside prompt bytes\n", "utf8");
+    const hardlinkedPromptPath = join(hardlinkKitDir, "01_Quiet_Reader.md");
+    linkSync(outsideHardlinkTarget, hardlinkedPromptPath);
+    assert.equal(lstatSync(hardlinkedPromptPath).nlink, 2);
+
+    const hardlinkPromptRes = exportHandoffDirectory({
+      rootDir: isolatedRepo,
+      outputDir: hardlinkKitDir,
+      promptsPath: PROMPTS_PATH,
+    });
+    assert.equal(hardlinkPromptRes.ok, false, "must reject hard-linked prompt .md file in output directory");
+    if (!hardlinkPromptRes.ok) {
+      assert.equal(hardlinkPromptRes.reason, "invalid_path");
+      assert.match(hardlinkPromptRes.offendingPath ?? "", /exports[\\/]kit[\\/]01_Quiet_Reader\.md$/);
+    }
+    assert.equal(readFileSync(outsideHardlinkTarget, "utf8"), "unchanged outside prompt bytes\n");
+    assert.deepEqual(readdirSync(hardlinkKitDir), ["01_Quiet_Reader.md"]);
+    unlinkSync(hardlinkedPromptPath);
+    unlinkSync(isolatedPortraitsPath);
 
     // Positive control: normal nonexistent nested output directory succeeds, including under a symlinked lease root
     const leaseRoot = join(work, "lease-root-link");
