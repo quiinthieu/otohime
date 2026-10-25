@@ -1,7 +1,7 @@
 "use client";
 
 import { bootStyle, booted, chimeAllowed, finishBoot, splashStyle } from "@/lib/boot";
-import { box } from "@/components/figures";
+import { box, CONSOLE_TRANSITION, Inked, TitleMorph } from "@/components/figures";
 import { Chip, Machine, useTick } from "@/components/machine";
 import { site } from "@/content/site";
 import { CONSOLE_MENU, LCD, menuBaseline } from "@/lib/pages";
@@ -34,6 +34,14 @@ const body = box(O, W, D, H, [0, 0, 0], 60);
 const cartridge = box(O, 12, 76, 14, [2, 18, H]);
 const MENU = CONSOLE_MENU;
 const REDUCED = "(prefers-reduced-motion: reduce)";
+const VIEW = { w: 230, h: 310 };
+// The screen face's matrix (a b c d e f), for the HTML label that sits on the LCD over the chosen line.
+const FACE = body.onLit.match(/-?[\d.]+/g)!.map(Number);
+const onFace = (x: number, y: number) => [FACE[0] * x + FACE[2] * y + FACE[4], FACE[1] * x + FACE[3] * y + FACE[5]];
+// A press shows the label this long before the navigation starts, so it is in the old snapshot; it stands down
+// on its own if the navigation never comes.
+const PRESS_MS = 180;
+const LABEL_MS = 3000;
 
 const root = () => document.documentElement;
 const session = () => sessionStorage;
@@ -66,6 +74,8 @@ export function Handheld() {
   const reduced = useSyncExternalStore(onReducedChange, () => matchMedia(REDUCED).matches, () => false);
   const lcdRef = useRef<SVGRectElement>(null);
   const [onscreen, setOnscreen] = useState(true);
+  // The page A is opening: its label shows over the LCD until the navigation takes it (or LABEL_MS passes).
+  const [opening, setOpening] = useState<(typeof MENU)[number]["href"] | null>(null);
   // On its own clock only while it is played, seen and motion is allowed; reduced motion moves a cell an arrow.
   useTick(s.game === true && g.status === "playing" && onscreen && !reduced, dispatchGame);
 
@@ -86,6 +96,22 @@ export function Handheld() {
       document.removeEventListener("visibilitychange", update);
     };
   }, [s.game]);
+
+  // The label stands down after a while, or as soon as Home is hidden (Next keeps it, hidden, for Back).
+  useEffect(() => {
+    if (opening === null) return;
+    const id = setTimeout(() => setOpening(null), LABEL_MS);
+    return () => {
+      clearTimeout(id);
+      setOpening(null);
+    };
+  }, [opening]);
+
+  // The chosen page is prefetched, like a link in view: a navigation into a page not yet fetched commits later,
+  // outside the press's transition, and loses its console type (and its title pair) on the way.
+  useEffect(() => {
+    if (!s.game) router.prefetch(item.href);
+  }, [router, item.href, s.game]);
 
   // The best score and the pocket's achievement come back from storage after hydration; blocked or garbled
   // storage is a first visit. The footer's end:achievement is its own.
@@ -164,13 +190,28 @@ export function Handheld() {
     play("move");
   }
 
+  // A opens the chosen page. With motion, the press first lifts the chosen line off the LCD as an HTML label
+  // (committed now, so it is on screen when React snapshots the old page), and the navigation is typed console:
+  // the label morphs into the page's h1 (TitleMorph) and the page grows out of the LCD's centre, written on
+  // <html> as --zx/--zy relative to where the page below the masthead starts (globals.css). Without view
+  // transitions React just commits, and under reduced motion there is no label, no type and no zoom.
   function open() {
     skipBoot();
     dispatch("a");
     play("open");
-    // let the press show first, unless motion is reduced
-    const wait = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 180;
-    setTimeout(() => router.push(item.href), wait);
+    const href = item.href;
+    if (matchMedia(REDUCED).matches) {
+      setTimeout(() => router.push(href), 0);
+      return;
+    }
+    setOpening(href);
+    const lcd = lcdRef.current?.getBoundingClientRect();
+    const page = document.getElementById("main")?.getBoundingClientRect();
+    if (lcd && page) {
+      root().style.setProperty("--zx", `${Math.round(lcd.left + lcd.width / 2 - page.left)}px`);
+      root().style.setProperty("--zy", `${Math.round(lcd.top + lcd.height / 2 - (page.top + scrollY))}px`);
+    }
+    setTimeout(() => router.push(href, { transitionTypes: [CONSOLE_TRANSITION] }), PRESS_MS);
   }
 
   // B: into the game, a fresh seeded board each time, or back to the menu, the cursor where it was.
@@ -267,48 +308,31 @@ export function Handheld() {
   const banner =
     g.status === "ready" ? [P.title, P.pressA] : g.status === "over" ? [P.over, P.pressA] : g.status === "won" ? [P.won, P.pressA] : null;
 
-  return (
-    <Machine
-      label="Pocket console"
-      caption="Handheld"
-      colour="blue"
-      viewBox="0 0 230 310"
-      busy={s.pressed !== null || (s.game === true && g.status === "playing")}
-      tilt
-      readout={readout}
-      below={
-        // The menu as plain links, for screen readers; they show when tabbed to.
-        <nav aria-label="Pages" className="sr-only focus-within:not-sr-only">
-          <ul className="flex flex-wrap justify-center gap-2 pb-3">
-            {MENU.map(({ label, href }) => (
-              <li key={href}>
-                <Link href={href} className="btn btn-sm">
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      }
-      controls={
-        <>
-          <Chip onClick={() => input("up")}>▲ Up</Chip>
-          <Chip onClick={() => input("down")}>▼ Down</Chip>
-          {s.game ? (
-            <>
-              <Chip onClick={() => input("left")}>{P.left}</Chip>
-              <Chip onClick={() => input("right")}>{P.right}</Chip>
-              <Chip onClick={() => input("a")}>{g.status === "ready" ? P.start : P.restart}</Chip>
-            </>
-          ) : (
-            <Chip onClick={() => input("a")}>A Open</Chip>
-          )}
-          <Chip onClick={() => input("b")} aria-pressed={s.game === true}>
-            {s.game ? P.menu : P.play}
-          </Chip>
-        </>
-      }
-    >
+  // The chosen line as HTML over the drawn one, in the face's own skew (figure units, so it scales with the
+  // drawing). It rests hidden and shows while A opens its page; the SVG text is never named (TitleMorph).
+  const shown = MENU.find((page) => page.href === opening) ?? item;
+  const line = MENU.indexOf(shown);
+  const [lx, ly] = onFace(37, menuBaseline(line) - 7.5);
+  const label = (
+    <TitleMorph key={shown.href} page={shown.href}>
+      <span
+        className="console-label"
+        aria-hidden="true"
+        data-open={opening === shown.href && !s.game ? "" : undefined}
+        style={
+          {
+            left: `${(lx / VIEW.w) * 100}%`,
+            top: `${(ly / VIEW.h) * 100}%`,
+            transform: `matrix(${FACE.slice(0, 4).join(", ")}, 0, 0)`,
+          } as React.CSSProperties
+        }
+      >
+        {shown.label.toUpperCase()}
+      </span>
+    </TitleMorph>
+  );
+  const art = (
+    <>
       <polygon className="fig-shade" points={body.shadow} />
       {/* The boot, once a session (lib/boot.ts; .boot-* in globals.css): the cartridge clicks in, the power
           light comes on, the screen flickers up, a scan line runs down it, the name types out, then the menu. */}
@@ -434,6 +458,57 @@ export function Handheld() {
         <path d="M40 -18l10 -4M56 -18l10 -4" fill="none" strokeWidth={4} />
         <path d="M80 -6l12 -16M86 -6l12 -16M92 -6l12 -16" fill="none" strokeWidth={2} />
       </g>
-    </Machine>
+    </>
+  );
+
+  return (
+    <Machine
+      label="Pocket console"
+      caption="Handheld"
+      colour="blue"
+      figure={(wobble, pen) => (
+        <div className="console-screen">
+          <Inked viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} wobble={wobble} hand={pen.hand} seed={pen.seed} className="block w-full">
+            {art}
+          </Inked>
+          {label}
+        </div>
+      )}
+      busy={s.pressed !== null || (s.game === true && g.status === "playing")}
+      tilt
+      readout={readout}
+      below={
+        // The menu as plain links, for screen readers; they show when tabbed to.
+        <nav aria-label="Pages" className="sr-only focus-within:not-sr-only">
+          <ul className="flex flex-wrap justify-center gap-2 pb-3">
+            {MENU.map(({ label, href }) => (
+              <li key={href}>
+                <Link href={href} className="btn btn-sm">
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      }
+      controls={
+        <>
+          <Chip onClick={() => input("up")}>▲ Up</Chip>
+          <Chip onClick={() => input("down")}>▼ Down</Chip>
+          {s.game ? (
+            <>
+              <Chip onClick={() => input("left")}>{P.left}</Chip>
+              <Chip onClick={() => input("right")}>{P.right}</Chip>
+              <Chip onClick={() => input("a")}>{g.status === "ready" ? P.start : P.restart}</Chip>
+            </>
+          ) : (
+            <Chip onClick={() => input("a")}>A Open</Chip>
+          )}
+          <Chip onClick={() => input("b")} aria-pressed={s.game === true}>
+            {s.game ? P.menu : P.play}
+          </Chip>
+        </>
+      }
+    />
   );
 }

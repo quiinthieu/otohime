@@ -8,6 +8,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { test } from "node:test";
 import { site } from "../content/site.ts";
+import { CONSOLE_MENU } from "./pages.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 
@@ -352,4 +353,75 @@ test("the sketch sheets rest whole and draw on scroll only where view timelines 
   const last = top.at(-1)!;
   assert.equal(last, reducedMotion(top).at(-1));
   assert.match(last.body, /\.sheet-wash,\s*\.sheet-frame path\s*\{\s*animation:\s*none !important;\s*\}/);
+});
+
+// The pocket console's A (components/handheld.tsx): its chosen line, as HTML over the LCD, and the page's h1 are a
+// named pair, title-<page>, and the navigation is typed console, which zooms the arriving page out of the LCD.
+// scripts/probe-console-zoom.sh watches it run.
+test("each console page names its h1 for the console's label, once, and nothing else takes a title name", () => {
+  const pages = siteFiles(["page.tsx"]);
+  const morphs = pages.flatMap((p) => [...readFileSync(join(ROOT, p), "utf8").matchAll(/\bmorph="([^"]+)"/g)].map((m) => `${p} ${m[1]}`));
+  assert.deepEqual(
+    morphs.sort(),
+    CONSOLE_MENU.map(({ href }) => `app/(site)/(app)${href}/page.tsx ${href}`).sort(),
+  );
+  // FigTitle and StampHeading (Play) wrap their h1 alone, and only when asked.
+  for (const p of ["components/figures.tsx", "components/stamp-heading.tsx"]) {
+    const text = readFileSync(join(ROOT, p), "utf8");
+    assert.match(text, /\{morph \? <TitleMorph page=\{morph\}>\{h1\}<\/TitleMorph> : h1\}/, p);
+    assert.match(text, /const h1 = \(\s*<h1\b/, p);
+  }
+  // The names come from one place; no page, stylesheet or component spells one out.
+  const figures = readFileSync(join(ROOT, "components/figures.tsx"), "utf8");
+  assert.match(figures, /export const titleName = \(page: ConsolePage\) => `title-\$\{page\.slice\(1\)\}`;/);
+  assert.match(figures, /<ViewTransition name=\{titleName\(page\)\} share="console-title" default="none">/);
+  assert.match(figures, /export const CONSOLE_TRANSITION = "console";/);
+  for (const p of [...pages, "app/(site)/globals.css", "components/handheld.tsx"]) {
+    assert.doesNotMatch(readFileSync(join(ROOT, p), "utf8"), /["'\s:]title-(?:work|play|notes|music|projects|sketches)\b/, p);
+  }
+});
+
+test("the console's label is the one HTML source of the pair, and only its A carries the console type", () => {
+  const text = readFileSync(join(ROOT, "components/handheld.tsx"), "utf8");
+  const jsx = text.slice(text.indexOf("const label = ("), text.indexOf("const art = ("));
+  assert.match(jsx, /<TitleMorph key=\{shown\.href\} page=\{shown\.href\}>\s*<span\s+className="console-label"\s+aria-hidden="true"/);
+  assert.equal(text.match(/<TitleMorph\b/g)?.length, 1);
+  // The SVG text is never named: the label is the pair's source.
+  assert.doesNotMatch(text.slice(text.indexOf("const art = (")), /<TitleMorph|viewTransitionName|view-transition-name/);
+  const open = text.slice(text.indexOf("function open()"), text.indexOf("// B: into the game"));
+  // Reduced motion: a plain push with no label. Otherwise the label is committed first and the push comes later.
+  assert.match(open, /if \(matchMedia\(REDUCED\)\.matches\) \{\s*setTimeout\(\(\) => router\.push\(href\), 0\);\s*return;\s*\}/);
+  assert.match(open, /setOpening\(href\);[\s\S]*setTimeout\(\(\) => router\.push\(href, \{ transitionTypes: \[CONSOLE_TRANSITION\] \}\), PRESS_MS\);/);
+  assert.equal(text.match(/transitionTypes/g)?.length, 1, "one typed push");
+  const press = Number(/const PRESS_MS = (\d+);/.exec(text)?.[1]);
+  assert.ok(press > 0 && press <= 200, `PRESS_MS ${press}`);
+  // The menu's plain links stay plain.
+  assert.match(text, /<Link href=\{href\} className="btn btn-sm">/);
+});
+
+test("the console zoom is typed, from the LCD, within 400 ms, and the label rests hidden", () => {
+  const { css } = SHEETS.find((s) => s.group === "site")!;
+  const top = blocks(css);
+  const ms = (body: string) => [...body.matchAll(/(\d+)ms/g)].map((m) => Number(m[1]));
+  // The untyped page fade is unchanged.
+  assert.match(rule(top, "::view-transition-new(.page-in)")[0]?.body ?? "", /^\s*animation:\s*210ms ease-out 150ms both fade-in;\s*$/);
+  const zoom = rule(top, ":root:active-view-transition-type(console)::view-transition-new(.page-in)");
+  assert.equal(zoom.length, 1, "no typed console zoom rule");
+  assert.match(zoom[0].body, /transform-origin:\s*var\(--zx, 50%\) var\(--zy, 50%\);/);
+  assert.match(zoom[0].body, /animation:\s*\d+ms (?:cubic-bezier\([^)]*\)|[\w-]+) both console-zoom,\s*\d+ms ease-out both fade-in;/);
+  const zoomTimes = ms(zoom[0].body);
+  assert.ok(zoomTimes.length === 2 && zoomTimes.every((t) => t <= 400), `${zoomTimes}`);
+  assert.ok(!top.some((b) => !b.prelude.startsWith("@") && /console-zoom/.test(b.body) && !selectors(b).every((s) => s.startsWith(":root:active-view-transition-type(console)"))), "an untyped rule runs console-zoom");
+  assert.match(top.find((b) => b.prelude === "@keyframes console-zoom")?.body ?? "", /^\s*from\s*\{\s*transform:\s*scale\(0\.\d+\);\s*\}\s*$/);
+  const morph = rule(top, "::view-transition-group(.console-title)");
+  assert.equal(morph.length, 1);
+  assert.ok(ms(morph[0].body).every((t) => t <= 400) && ms(morph[0].body).length === 1);
+  // The rules sit before the final reduced-motion block, which zeroes every transition animation.
+  assert.equal(top.at(-1), reducedMotion(top).at(-1));
+  // The label: hidden at rest, shown only while A opens, never animated itself.
+  const layer = blocks(top.find((b) => b.prelude === "@layer components")?.body ?? "");
+  const label = layer.find((b) => b.prelude === ".console-label");
+  assert.match(label?.body ?? "", /visibility:\s*hidden;/);
+  assert.match(layer.find((b) => b.prelude === ".console-label[data-open]")?.body ?? "", /^\s*visibility:\s*visible;\s*$/);
+  assert.doesNotMatch(label?.body ?? "", /animation|transition:|view-transition-name/);
 });

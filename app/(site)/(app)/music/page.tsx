@@ -19,7 +19,7 @@ export default function MusicPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <FigTitle n="05" hint="one song per channel">
+        <FigTitle n="05" morph="/music" hint="one song per channel">
           Music
         </FigTitle>
         <p className="mt-2 text-muted">{site.music}</p>

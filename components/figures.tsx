@@ -1,5 +1,6 @@
 import { inkFilter, MATERIALS, type Hand } from "@/lib/ink-modes";
-import { createElement, useId } from "react";
+import type { PublicPage } from "@/lib/pages";
+import { createElement, useId, ViewTransition } from "react";
 
 // The reference's colour swatches. Figures take one; FigurePlayground and
 // Machine swap it.
@@ -191,22 +192,44 @@ export function Figure({
   );
 }
 
-// "Fig. 03 — Users", the reference's heading style. The number is decoration.
+// The pages the pocket console opens. Its chosen label (an HTML line over the LCD, components/handheld.tsx) and
+// the page's h1 share one name, title-<page>, so a console navigation morphs the one into the other. Each name
+// sits on one heading only, and pages with different names never pair, so the sidebar's moves keep their fade.
+// default="none": the pair moves only when it forms; share without it would stop the morph.
+export type ConsolePage = Exclude<PublicPage["href"], "/">;
+export const CONSOLE_TRANSITION = "console";
+export const titleName = (page: ConsolePage) => `title-${page.slice(1)}`;
+
+export function TitleMorph({ page, children }: { page: ConsolePage; children: React.ReactNode }) {
+  return (
+    <ViewTransition name={titleName(page)} share="console-title" default="none">
+      {children}
+    </ViewTransition>
+  );
+}
+
+// "Fig. 03 — Users", the reference's heading style. The number is decoration. morph names the h1 for the
+// console's label (TitleMorph); the gated rooms and the auth pages leave it out.
 export function FigTitle({
   n,
   hint,
+  morph,
   children,
 }: {
   n: string;
   hint?: React.ReactNode;
+  morph?: ConsolePage;
   children: React.ReactNode;
 }) {
+  const h1 = (
+    <h1>
+      <span aria-hidden="true">Fig. {n} — </span>
+      {children}
+    </h1>
+  );
   return (
     <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1">
-      <h1>
-        <span aria-hidden="true">Fig. {n} — </span>
-        {children}
-      </h1>
+      {morph ? <TitleMorph page={morph}>{h1}</TitleMorph> : h1}
       {hint ? <p className="text-muted">{hint}</p> : null}
     </div>
   );

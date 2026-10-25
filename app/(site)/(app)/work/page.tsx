@@ -11,7 +11,7 @@ export default function WorkPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <FigTitle n="02" hint="extract, transform, load">
+        <FigTitle n="02" morph="/work" hint="extract, transform, load">
           Work
         </FigTitle>
         <p className="mt-2 max-w-prose text-muted">{site.work}</p>

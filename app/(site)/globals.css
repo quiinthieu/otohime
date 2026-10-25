@@ -670,6 +670,34 @@
     animation: blink 1s steps(1) infinite;
   }
 
+  /* The console's chosen line as HTML (components/handheld.tsx): left, top and the face's skew are set inline,
+     and its size is in the drawing's units (1cqw / 2.3 is one unit of the 230-wide drawing), so it scales with
+     it. It rests hidden over the SVG text and shows, the LCD's ink and backing swapped like a selected line,
+     while A opens its page, so the old snapshot holds it and the navigation can morph it into the page's h1. */
+  .console-screen {
+    position: relative;
+    container-type: inline-size;
+  }
+
+  .console-label {
+    position: absolute;
+    width: calc(50cqw / 2.3);
+    height: calc(9.5cqw / 2.3);
+    padding-left: calc(3cqw / 2.3);
+    transform-origin: 0 0;
+    background: #2b2722;
+    color: color-mix(in srgb, var(--mint) 45%, #faf8f3);
+    font: 700 calc(8.5cqw / 2.3) / calc(9.5cqw / 2.3) var(--font-mono);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .console-label[data-open] {
+    visibility: visible;
+  }
+
   /* The pocket's game (components/handheld.tsx, lib/snake.ts): the train is solid LCD ink, a record an
      outlined cell. It moves a cell at a time on the 12 fps clock, so nothing here animates. */
   .pocket-food {
@@ -1772,6 +1800,30 @@
 
 ::view-transition-new(.page-in) {
   animation: 210ms ease-out 150ms both fade-in;
+}
+
+/*
+ * The pocket console's A (components/handheld.tsx): a navigation typed console. Its chosen label and the
+ * page's h1 are a named pair (TitleMorph, share="console-title"), and the page arriving below the masthead
+ * grows out of the LCD's centre, --zx/--zy on <html>, under the label. Both are done within 360 ms. An
+ * untyped change (the sidebar, Back, a plain link) keeps the fade above; reduced motion never sets the type.
+ */
+::view-transition-group(.console-title) {
+  animation-duration: 360ms;
+  animation-timing-function: cubic-bezier(0.5, 0, 0.2, 1);
+}
+
+:root:active-view-transition-type(console)::view-transition-new(.page-in) {
+  transform-origin: var(--zx, 50%) var(--zy, 50%);
+  animation:
+    360ms cubic-bezier(0.5, 0, 0.2, 1) both console-zoom,
+    210ms ease-out both fade-in;
+}
+
+@keyframes console-zoom {
+  from {
+    transform: scale(0.06);
+  }
 }
 
 /*

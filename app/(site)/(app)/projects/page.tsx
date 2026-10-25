@@ -13,7 +13,7 @@ export default function ProjectsPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <FigTitle n="06" hint="own time">
+        <FigTitle n="06" morph="/projects" hint="own time">
           Projects
         </FigTitle>
         <p className="mt-2 text-muted">{site.projects}</p>

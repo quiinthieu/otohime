@@ -9,7 +9,7 @@ export default function NotesPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <FigTitle n="04" hint="short ones">
+        <FigTitle n="04" morph="/notes" hint="short ones">
           Notes
         </FigTitle>
         <div className="mt-8 grid items-start gap-10 md:grid-cols-[minmax(0,1fr)_16rem]">

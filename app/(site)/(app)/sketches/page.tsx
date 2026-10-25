@@ -75,7 +75,7 @@ export default function SketchesPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <FigTitle n="07" hint={site.sketchesHint}>
+        <FigTitle n="07" morph="/sketches" hint={site.sketchesHint}>
           Sketches
         </FigTitle>
         <p className="mt-2 max-w-prose text-muted">{site.sketchesIntro}</p>

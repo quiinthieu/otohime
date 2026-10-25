@@ -11,7 +11,7 @@ export default function PlayPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
-        <StampHeading n="03" hint="rigged in your favour">
+        <StampHeading n="03" morph="/play" hint="rigged in your favour">
           Play
         </StampHeading>
         <p className="mt-2 text-muted">{site.play}</p>

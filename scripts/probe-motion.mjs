@@ -10,7 +10,8 @@
 // The site's own pages: a sidebar click /work -> /projects runs page-out and page-in, the eleven /projects rows
 // rise 40 ms apart, and /sign-in and the 404 load cleanly; under reduced motion all of it is still.
 // The group swaps: both ways out of the 404 (its Go home and the brand mark, the 404 reached by page.goto and by
-// router.push from /work), /work -> / by the brand mark, / -> /work by the console, /work -> /sign-in and
+// router.push from /work), /work -> / by the brand mark, / -> /work by the console (its new page zooms out of the
+// LCD as it fades in, and the label morphs into the h1), /work -> /sign-in and
 // /sign-in -> / each fade the old page out and the new one in, read once a frame from getAnimations(); moves
 // inside one group still do, with the sidebar and the masthead out of the fading groups. A location.assign from
 // /shore into the 404 carries the hop. With JavaScript off the 404 is the parcel page and its Go home goes to /.
@@ -259,6 +260,10 @@ async function settleFades(page) {
 }
 const fadedOut = (fades) => fades.some((f) => f.side === "old" && /fade-out$/.test(f.name) && f.duration === 150);
 const fadedIn = (fades) => fades.some((f) => f.side === "new" && /fade-in$/.test(f.name) && f.duration === 210 && f.delay === 150);
+const zoomedIn = (fades) =>
+  fades.some((f) => f.side === "new" && f.name === "console-zoom" && f.delay + f.duration <= 400) &&
+  fades.some((f) => f.side === "new" && /fade-in$/.test(f.name) && f.delay + f.duration <= 400) &&
+  !fades.some((f) => f.delay + f.duration > 400);
 const showFades = (fades) => fades.map((f) => `${f.side}(${f.group}) ${f.name} ${f.delay}+${f.duration}`).join(", ") || "no transition";
 
 // Every animationstart in the document, with the animation's own timing: its start on the timeline, its delay and
@@ -411,7 +416,7 @@ try {
         { label: `404 (${how === "goto" ? "page.goto" : "router.push from /work"}) -> / by the brand mark`, reach, selector: 'header.masthead a[href="/"]', to: "/" },
       ]),
       { label: "/work -> / by the brand mark", from: "/work", selector: 'header.masthead a[href="/"]', to: "/" },
-      { label: "/ -> /work by the console menu", from: "/", selector: 'button.chip:has-text("Open")', to: "/work" },
+      { label: "/ -> /work by the console menu", from: "/", selector: 'button.chip:has-text("Open")', to: "/work", console: true },
       { label: "/work -> /sign-in by the masthead's Sign in", from: "/work", selector: 'header.masthead a[href="/sign-in"]', to: "/sign-in" },
       { label: "/sign-in -> / by the brand mark", from: "/sign-in", selector: 'header.masthead a[href="/"]', to: "/" },
       { label: "/work -> /projects by the sidebar (one group)", from: "/work", selector: 'nav[aria-label="Main"] a[href="/projects"]', to: "/projects", within: true },
@@ -434,7 +439,14 @@ try {
                 check(`${label}: every animation after it lasts <= 1 ms or has finished`, still(anims).length === 0, show(still(anims)));
                 continue;
               }
-              check(`${label}: the old page fades out (150 ms) and the new page fades in (210 ms after 150 ms)`, fadedOut(r.fades) && fadedIn(r.fades), showFades(r.fades));
+              if (m.console) {
+                // The console's A is typed console (scripts/probe-console-zoom.sh): the new page grows out of the
+                // LCD as it fades in, its label morphs into the h1, and all of it is done within 400 ms.
+                check(`${label}: the old page fades out (150 ms) and the new page zooms in from the LCD within 400 ms`, fadedOut(r.fades) && zoomedIn(r.fades), showFades(r.fades));
+                check(`${label}: the console's label morphs into the page's h1 (title-work)`, r.named.some((n) => n.name === "title-work" && n.tag === "span") && r.named.some((n) => n.name === "title-work" && n.tag === "h1"), JSON.stringify(r.named));
+              } else {
+                check(`${label}: the old page fades out (150 ms) and the new page fades in (210 ms after 150 ms)`, fadedOut(r.fades) && fadedIn(r.fades), showFades(r.fades));
+              }
               const held = r.named.filter((n) => n.masthead || (m.within && n.nav));
               check(`${label}: the masthead${m.within ? " and the sidebar stay" : " stays"} out of the fading groups`, held.length === 0, JSON.stringify(held));
             } catch (e) {
