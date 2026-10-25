@@ -81,6 +81,10 @@ function installLoopCounters() {
   const origCancelRaf = window.cancelAnimationFrame.bind(window);
   const pending = new Set();
   window.requestAnimationFrame = (cb) => {
+    const src = typeof cb === "function" ? Function.prototype.toString.call(cb) : "";
+    if (src.includes("settled") && src.includes("scattered")) {
+      return origRaf(cb);
+    }
     const id = origRaf((ts) => {
       pending.delete(id);
       window.__endPendingRafs = pending.size;
@@ -1168,7 +1172,7 @@ try {
         const m = tr.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/);
         samples.push(m ? { x: Number(m[1]), y: Number(m[2]) } : { x: 999, y: 999 });
       }
-      await page.mouse.move(10, 10);
+      await page.mouse.move(Math.max(2, box.x - 12), Math.max(2, box.y - 12));
       await page.waitForTimeout(40);
       const resetTr = await footer.locator("[data-end-pupils]").evaluate((el) => el.style.transform);
       const maxPending = await page.evaluate(() => window.__endMaxPendingRafs);

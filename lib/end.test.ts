@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { execFile } from "node:child_process";
+import { chmodSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { createServer } from "node:http";
 import { resolve } from "node:path";
 import { test } from "node:test";
 import { site } from "../content/site.ts";
@@ -221,18 +223,110 @@ test("lib/end.ts is pure and imports no browser or DOM APIs", () => {
   assert.doesNotMatch(src, /\b(window|document|localStorage|matchMedia|IntersectionObserver|requestAnimationFrame)\b/);
 });
 
-test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite", () => {
+test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR", async () => {
   const root = resolve(import.meta.dirname, "..");
-  const walkSh = readFileSync(resolve(root, "scripts/walk-end.sh"), "utf8");
-  const probeSh = readFileSync(resolve(root, "scripts/probe-end.sh"), "utf8");
+  const walkPath = resolve(root, "scripts/walk-end.sh");
+  const probePath = resolve(root, "scripts/probe-end.sh");
+  const walkSh = readFileSync(walkPath, "utf8");
+  const probeSh = readFileSync(probePath, "utf8");
   const probeMjs = readFileSync(resolve(root, "scripts/probe-end.mjs"), "utf8");
   const ci = readFileSync(resolve(root, ".github/workflows/ci.yml"), "utf8");
 
   assert.match(walkSh, /PORT="\$\{PORT:-4081\}"/);
   assert.match(probeSh, /PORT="\$\{PORT:-4083\}"/);
+  assert.match(probeSh, /export TMPDIR="\$\{TMPDIR:-\/tmp\}"/);
+  assert.ok(
+    probeSh.indexOf('export TMPDIR="${TMPDIR:-/tmp}"') < probeSh.indexOf("${#TMPDIR}"),
+    "TMPDIR must be normalized before expanding ${#TMPDIR} under set -u",
+  );
   assert.match(probeSh, /playwright@1\.64\.0/);
   assert.match(probeMjs, /verifyCanonicalLinks/);
   assert.match(probeMjs, /negative control:/);
   assert.match(ci, /bash scripts\/walk-end\.sh/);
   assert.match(ci, /bash scripts\/probe-end\.sh/);
+
+  // Executable regression: run the real probe-end.sh and walk-end.sh under set -u with TMPDIR unset,
+  // empty, short custom, and >48-char long paths against a busy explicit PORT.
+  const srv = createServer((_req, res) => {
+    res.writeHead(200, { "content-type": "text/plain" });
+    res.end("ok");
+  });
+  await new Promise<void>((resolveListen) => srv.listen(0, "127.0.0.1", resolveListen));
+  const address = srv.address();
+  const busyPort = typeof address === "object" && address ? String(address.port) : "4083";
+  const shortTmp = mkdtempSync("/tmp/end-tmp-");
+
+  try {
+    const baseEnv: NodeJS.ProcessEnv = { ...process.env, NODE_ENV: "test" };
+    delete baseEnv.TMPDIR;
+    delete baseEnv.BASE_URL;
+    delete baseEnv.PORT;
+    const cases: { label: string; env: NodeJS.ProcessEnv; expectedTmp: string }[] = [
+      { label: "unset TMPDIR", env: { ...baseEnv, PORT: busyPort }, expectedTmp: "/tmp" },
+      { label: "empty TMPDIR", env: { ...baseEnv, PORT: busyPort, TMPDIR: "" }, expectedTmp: "/tmp" },
+      { label: "short custom TMPDIR", env: { ...baseEnv, PORT: busyPort, TMPDIR: shortTmp }, expectedTmp: shortTmp },
+      {
+        label: "long TMPDIR (>48 chars)",
+        env: { ...baseEnv, PORT: busyPort, TMPDIR: `/tmp/${"long-lease-segment-".repeat(4)}` },
+        expectedTmp: "/tmp",
+      },
+    ];
+
+    const runScript = (script: string, env: NodeJS.ProcessEnv) =>
+      new Promise<{ code: number | null; stdout: string; stderr: string }>((resolveRun) => {
+        execFile("bash", [script], { cwd: root, env, timeout: 10_000 }, (err, stdout, stderr) => {
+          const code = err && typeof err.code === "number" ? err.code : err ? 1 : 0;
+          resolveRun({ code, stdout, stderr });
+        });
+      });
+
+    for (const c of cases) {
+      for (const script of [probePath, walkPath]) {
+        const res = await runScript(script, c.env);
+        assert.equal(res.code, 1, `${script} (${c.label}) should exit 1 on busy explicit PORT`);
+        assert.doesNotMatch(res.stderr, /unbound variable/, `${script} (${c.label}) stderr: ${res.stderr}`);
+        assert.match(
+          res.stdout,
+          new RegExp(`not ok - port: something already listens on port ${busyPort}`),
+          `${script} (${c.label}) stdout: ${res.stdout}`,
+        );
+      }
+    }
+
+    // Also exercise probe-end.sh in BASE_URL mode (as used by CI) across unset, empty, short and long TMPDIR,
+    // using a stub npm binary to observe the exported TMPDIR without installing Playwright inside unit tests.
+    const binDir = mkdtempSync("/tmp/end-bin-");
+    const npmStub = resolve(binDir, "npm");
+    writeFileSync(npmStub, '#!/usr/bin/env bash\necho "RESOLVED_TMPDIR=$TMPDIR"\nexit 1\n');
+    chmodSync(npmStub, 0o755);
+    try {
+      for (const c of cases) {
+        const ciEnv: NodeJS.ProcessEnv = {
+          ...c.env,
+          BASE_URL: `http://127.0.0.1:${busyPort}`,
+          PATH: `${binDir}:${process.env.PATH ?? "/usr/bin:/bin"}`,
+        };
+        delete ciEnv.PORT;
+        const res = await runScript(probePath, ciEnv);
+        assert.equal(res.code, 1, `probe-end.sh BASE_URL (${c.label}) should stop at stubbed npm`);
+        assert.doesNotMatch(res.stderr, /unbound variable/, `probe-end.sh BASE_URL (${c.label}) stderr: ${res.stderr}`);
+        assert.match(
+          res.stdout,
+          new RegExp(`RESOLVED_TMPDIR=${c.expectedTmp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
+          `probe-end.sh BASE_URL (${c.label}) stdout: ${res.stdout}`,
+        );
+      }
+    } finally {
+      rmSync(binDir, { recursive: true, force: true });
+    }
+
+    assert.deepEqual(
+      readdirSync(shortTmp),
+      [],
+      "cleanup trap must remove temporary work directories on exit",
+    );
+  } finally {
+    rmSync(shortTmp, { recursive: true, force: true });
+    await new Promise<void>((resolveClose) => srv.close(() => resolveClose()));
+  }
 });

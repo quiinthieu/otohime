@@ -31,6 +31,7 @@ case "$PORT" in
 esac
 
 # Keep TMPDIR short so Chromium's SingletonSocket stays within macOS's 104-byte sun_path limit.
+export TMPDIR="${TMPDIR:-/tmp}"
 if [ "${#TMPDIR}" -gt 48 ]; then
   export TMPDIR="/tmp"
 fi
