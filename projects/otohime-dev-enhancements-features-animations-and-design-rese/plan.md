@@ -355,12 +355,13 @@ These rules apply to every task in addition to its explicit contract.
 1. Read AGENTS.md, README and relevant installed Next docs before changes. Preserve concurrent pm-240/pm-241 work, use additive interfaces, and apply the shared delivery and browser-evidence rules in plan.md. Commit and push the finished slice with pm-242/<task_id>: and the owner identity; stop implementation work at the push.
 2. Implement a pure pipeline reducer and exported initial state/types in lib/pipeline.ts: emit, backfill of eight spaced packets, pause/resume queue drain, tick and settle; expose counters and bounded busy state.
 3. Test leg ordering, conservation of emitted/queued/in-flight/stored/shown counts, paused queue accumulation, resume drain, eight-packet backfill, id uniqueness, immutable input and finite settle. Use explicit frames/fixtures; no wall clock, random source or live service.
-4. Document the state and action interface for the figure task. Settle must preserve paused queued packets and stop busy work; an unpaused settle delivers all pending packets.
+4. Document the state and action interface in README.md for the figure task. Settle must preserve paused queued packets and stop busy work; an unpaused settle delivers all pending packets.
 
 **Interfaces**
 
 - `lib/pipeline.ts`
 - `lib/pipeline.test.ts`
+- `README.md`
 
 **Non-goals**
 
