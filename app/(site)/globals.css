@@ -810,6 +810,44 @@
     }
   }
 
+  /* A tilting figure (Machine's tilt prop): pointer moves set --tilt-* and
+     data-tilting on the figure, and only the wrapper around the filtered ink
+     turns. At rest there is no transform and no shadow, the still drawing.
+     The shadow stays flat and slides away from the pointer. */
+  .machine-figure[data-tilt] {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .machine-tilt {
+    transition: transform 0.2s ease-out;
+  }
+
+  .machine-figure[data-tilting] > .machine-tilt {
+    transform: perspective(60rem) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    will-change: transform;
+  }
+
+  .machine-figure[data-tilt]::after {
+    content: "";
+    position: absolute;
+    inset: auto 22% 4%;
+    height: 9%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--shade) 28%, transparent), transparent);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.2s ease-out,
+      translate 0.2s ease-out;
+  }
+
+  .machine-figure[data-tilting]::after {
+    opacity: 1;
+    translate: var(--tilt-shadow-x, 0) var(--tilt-shadow-y, 0);
+  }
+
   .chip {
     display: inline-flex;
     align-items: center;

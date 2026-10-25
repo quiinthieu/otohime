@@ -69,6 +69,7 @@ export function Handheld() {
       colour="blue"
       viewBox="0 0 230 310"
       busy={s.pressed !== null}
+      tilt
       readout={`Press A to open ${item.label.toLowerCase()}.`}
       below={
         // The menu as plain links, for screen readers; they show when tabbed to.
