@@ -155,7 +155,7 @@ is used by QA against the deployment after CI.
       "package.json",
       "package-lock.json",
       "README.md",
-      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/"
+      "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/prompts.md"
     ],
     "non_goals": [
       "Real image generation or a claim of completed artworks in this task",
