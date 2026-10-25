@@ -670,14 +670,42 @@
     animation: blink 1s steps(1) infinite;
   }
 
-  /* The console on the front page boots: each part waits its turn
-     (animation-delay inline), and the splash comes and goes. */
-  .boot {
-    animation: boot 0.01s steps(1) both;
+  /* The console on the front page boots once a session. lib/boot.ts holds each step's delay and duration
+     (set inline); these hold the moves. The base style is the booted console: a returning visit, marked on
+     <html> by the root layout's script before first paint, drops every animation, delays included, and shows
+     the menu at once. Before its step a part is off (fill backwards); the scan line and the name show only
+     during theirs (no fill), so they rest hidden. */
+  .boot-cart {
+    animation: boot-cart 240ms steps(3) both;
+  }
+
+  .boot,
+  .boot-lamp {
+    animation: boot 40ms steps(1) both;
+  }
+
+  .boot-lcd {
+    animation: boot-flicker 320ms steps(1) both;
+  }
+
+  .boot-scan {
+    fill: rgb(43 39 34 / 0.45);
+    opacity: 0;
+    animation: boot-scan 360ms steps(7);
   }
 
   .splash {
-    animation: splash 1.6s steps(1) both;
+    opacity: 0;
+    animation: boot-show 540ms steps(1);
+  }
+
+  .boot-print {
+    animation: boot-print 280ms steps(7) both;
+  }
+
+  :root[data-booted] :is(.boot, .boot-cart, .boot-lamp, .boot-lcd, .boot-scan, .splash, .boot-print),
+  :root[data-booted] .figure:has(.boot-cart) {
+    animation: none;
   }
 
   .fig-belt {
@@ -1612,15 +1640,60 @@
   }
 }
 
-@keyframes splash {
+/* in from above, a hair too far, then home: the click */
+@keyframes boot-cart {
+  from {
+    translate: 0 -10px;
+  }
+  70% {
+    translate: 0 1px;
+  }
+}
+
+@keyframes boot-flicker {
   0% {
     opacity: 0;
   }
-  56% {
+  20% {
+    opacity: 0.8;
+  }
+  40% {
+    opacity: 0.15;
+  }
+  60% {
     opacity: 1;
   }
-  100% {
-    opacity: 0;
+  80% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes boot-scan {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 54px;
+  }
+}
+
+@keyframes boot-show {
+  from,
+  to {
+    opacity: 1;
+  }
+}
+
+/* one letter a step */
+@keyframes boot-print {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  /* explicit: inset() does not step to none */
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 
@@ -1947,6 +2020,12 @@
   ::view-transition-new(*) {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
+  }
+
+  /* the console boots straight to its menu: not even the first frame of a snapped boot shows it dark */
+  :is(.boot, .boot-cart, .boot-lamp, .boot-lcd, .boot-scan, .splash, .boot-print),
+  .figure:has(.boot-cart) {
+    animation: none !important;
   }
 
   /* the stamp board places, drops and tidies without moving: no marks fade, no glide */

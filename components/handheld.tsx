@@ -1,5 +1,6 @@
 "use client";
 
+import { bootStyle, booted, chimeAllowed, finishBoot, splashStyle } from "@/lib/boot";
 import { box } from "@/components/figures";
 import { Chip, Machine, useTick } from "@/components/machine";
 import { CONSOLE_MENU, LCD, menuBaseline } from "@/lib/pages";
@@ -7,7 +8,7 @@ import { newPad, pad, type Button } from "@/lib/machines";
 import { play } from "@/lib/sound-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useEffectEvent, useReducer } from "react";
+import { useEffect, useEffectEvent, useReducer, useRef } from "react";
 
 // A pocket console standing up, its screen a menu of the site. W is its
 // thickness, D the front's width.
@@ -18,6 +19,10 @@ const H = 176;
 const body = box(O, W, D, H, [0, 0, 0], 60);
 const cartridge = box(O, 12, 76, 14, [2, 18, H]);
 const MENU = CONSOLE_MENU;
+const REDUCED = "(prefers-reduced-motion: reduce)";
+
+const root = () => document.documentElement;
+const session = () => sessionStorage;
 
 export function Handheld() {
   const router = useRouter();
@@ -25,14 +30,52 @@ export function Handheld() {
   useTick(s.pressed !== null, dispatch);
   const item = MENU[s.cursor];
   const lit = (button: Button) => (s.pressed === button ? "fig-lamp" : "fig-dark");
+  const menuRef = useRef<SVGGElement>(null);
+  const chime = useRef(false);
+
+  // The console boots once a session (lib/boot.ts). The root layout's script has already marked a returning
+  // visit, whose parts rest booted from the first paint. Otherwise the boot is marked done when the menu's
+  // step finishes, so a reload or a return to Home skips it; it is cancelled (and plays again next time) only
+  // if Home goes away before then. Reduced motion has no boot (globals.css), from the start or turned on
+  // midway, and counts as booted.
+  useEffect(() => {
+    if (booted(root())) return;
+    const reduced = matchMedia(REDUCED);
+    chime.current = chimeAllowed({
+      booted: false,
+      reduced: reduced.matches,
+      activated: navigator.userActivation?.hasBeenActive === true,
+    });
+    const run = menuRef.current?.getAnimations?.()[0];
+    if (!run || reduced.matches) return finishBoot(root(), session);
+    let live = true;
+    const done = () => {
+      if (live) skipBoot();
+    };
+    run.finished.then(done, () => {});
+    reduced.addEventListener("change", done);
+    return () => {
+      live = false;
+      chime.current = false;
+      reduced.removeEventListener("change", done);
+    };
+  }, []);
+
+  // Pressing anything on the console during its boot ends the boot: the menu shows at once.
+  function skipBoot() {
+    chime.current = false;
+    if (!booted(root())) finishBoot(root(), session);
+  }
 
   // Only the console beeps, and only once the masthead's speaker is on.
   function move(button: "up" | "down") {
+    skipBoot();
     dispatch(button);
     play("move");
   }
 
   function open() {
+    skipBoot();
     dispatch("a");
     play("open");
     // let the press show first, unless motion is reduced
@@ -94,7 +137,9 @@ export function Handheld() {
       }
     >
       <polygon className="fig-shade" points={body.shadow} />
-      <g style={{ "--fig": "#a39e93" } as React.CSSProperties}>
+      {/* The boot, once a session (lib/boot.ts; .boot-* in globals.css): the cartridge clicks in, the power
+          light comes on, the screen flickers up, a scan line runs down it, the name types out, then the menu. */}
+      <g className="boot-cart" style={{ "--fig": "#a39e93", ...bootStyle("cart") } as React.CSSProperties}>
         <polygon className="fig-shaded" points={cartridge.shaded} />
         <polygon className="fig-lit" points={cartridge.lit} />
         <polygon className="fig-top" points={cartridge.top} />
@@ -106,15 +151,27 @@ export function Handheld() {
         <path d="M8 -120h8M8 -112h8M8 -104h8" fill="none" strokeWidth={1.6} />
       </g>
       <g transform={body.onLit}>
-        {/* The screen boots once the figure has printed: the power light,
-            a splash, then the menu (.boot and .splash in globals.css). */}
         <rect x={10} y={-166} width={92} height={74} rx={4} className="fig-dark" />
-        <circle cx={17} cy={-140} r={2.4} className="fig-lamp boot" style={{ animationDelay: "0.7s" }} />
-        <rect x={24} y={LCD.y} width={64} height={LCD.h} rx={1.5} className="fig-lcd boot" style={{ animationDelay: "0.8s" }} />
-        <text x={56} y={-127} textAnchor="middle" className="fig-text lcd splash">
-          OTOHIME
-        </text>
-        <g className="boot" style={{ animationDelay: "1.6s" }}>
+        <circle cx={17} cy={-140} r={2.4} className="fig-lamp boot-lamp" style={bootStyle("lamp")} />
+        <rect x={24} y={LCD.y} width={64} height={LCD.h} rx={1.5} className="fig-lcd boot-lcd" style={bootStyle("lcd")} />
+        <rect x={24} y={LCD.y} width={64} height={2} className="boot-scan" stroke="none" style={bootStyle("scan")} />
+        <g className="splash" style={splashStyle()}>
+          <text
+            x={56}
+            y={-127}
+            textAnchor="middle"
+            className="fig-text lcd boot-print"
+            style={bootStyle("print")}
+            onAnimationStart={() => {
+              if (!chime.current) return;
+              chime.current = false;
+              play("chime");
+            }}
+          >
+            OTOHIME
+          </text>
+        </g>
+        <g ref={menuRef} className="boot" style={bootStyle("menu")}>
           {MENU.map(({ label }, i) => (
             <text key={label} x={40} y={menuBaseline(i)} className="fig-text lcd">
               {label.toUpperCase()}

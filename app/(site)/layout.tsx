@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { site } from "@/content/site";
+import { bootScript } from "@/lib/boot";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -24,7 +25,8 @@ const pinTheme = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="d
 // document.__reactViewTransition to finish first, so the hop is handed to it until it ends.
 const holdForHop = `addEventListener("pagereveal",function(e){var v=e.viewTransition;if(!v)return;document.__reactViewTransition=v;var c=function(){if(document.__reactViewTransition===v)document.__reactViewTransition=null};v.finished.then(c,c)})`;
 
-// suppressHydrationWarning: the script adds data-theme before React hydrates.
+// suppressHydrationWarning: the scripts add data-theme and data-booted (lib/boot.ts: the console already booted
+// this session, so Home shows its menu at once) before React hydrates.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
@@ -35,6 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: holdForHop }} />
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
       <body className="min-h-full">{children}</body>
     </html>
