@@ -92,6 +92,14 @@ export const song = pgTable("song", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Ask the console's model tier (lib/ask-llm.ts): one row per rate-limit bucket, "ip:<hmac>:<UTC hour>" or
+// "day:<UTC date>", counting requests let through to it. Rows older than two days are swept by the route.
+export const askUsage = pgTable("ask_usage", {
+  bucket: text("bucket").primaryKey(),
+  count: integer("count").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),

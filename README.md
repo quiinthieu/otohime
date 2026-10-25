@@ -387,6 +387,20 @@ Vinyl (`/vinyl`, `app/(vinyl)/`) plays a crate of records on a turntable, with t
 
 **Licensing notes.** All sleeves and labels are drawn by code from each record's colours; no image, font or audio file is shipped or fetched. These projects were studied for ideas only, and nothing was copied from any of them: shadcn.io's Vinyl Player and Vinyl Collection blocks (shadcn.io's licence forbids redistribution), Fitbert/the-shelf (no licence file, so all rights reserved), thebuggeddev/vinyl (no licence visible; a three.js player, not used) and bitu467/record-player (no licence).
 
+## Ask the console: the model tier
+
+The Ask chip answers offline from `public/ask-index.json` (`lib/ask.ts`). `/api/ask` adds an optional tier on top that answers with Claude. It is off unless both env vars are set:
+
+| Env var | Effect |
+| --- | --- |
+| `ASK_LLM` | `1` turns the tier on. Anything else, or unset, keeps it off. |
+| `ANTHROPIC_API_KEY` | Server-only. Never commit it, and never give it a `NEXT_PUBLIC_` name. |
+
+- **Off** (the default): `GET` and `POST /api/ask` are 404. `bash scripts/probe-ask-llm.sh` builds, starts with both vars unset and checks this.
+- **On:** `GET /api/ask` is `{"enabled":true,"limits":{"hour":10,"day":150}}`. `POST /api/ask` takes `{"question":"..."}`, at most 1 KB, only from the `BETTER_AUTH_URL` origin (403 otherwise). It returns `{mode, lines, sources}`. The model (`claude-opus-5-5`, effort `low`, structured JSON, 8 s timeout, one retry) sees only the top 6 BM25 passages. It may cite only their ids, and `sources` holds only those passages' pages.
+- **Budget:** each IP gets 10 model answers per UTC hour, and the whole site gets 150 per UTC day. These are counted in the `ask_usage` table, keyed by an HMAC of the IP, never the address itself. Past either limit the reply is 429 with the offline answer under an `(OFFLINE)` line. An SDK error, a refusal, a reply that does not parse, or an unreachable database also gives the offline answer (200, `(OFFLINE)`). A question nothing on the site matches never reaches the model. At most 150 short calls a day costs roughly $6/day in the worst case and far less in practice.
+- `lib/ask-llm.test.ts` covers this with a fake client and an in-memory store.
+
 ## Deploying
 
 GitHub Actions (`.github/workflows/ci.yml`) does it all:
@@ -398,7 +412,7 @@ The jobs need these repo settings:
 
 - **Variables:** `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `NEON_PROJECT_ID`.
 - **Secrets:** `VERCEL_TOKEN`, `NEON_API_KEY`, and `DATABASE_URL_UNPOOLED` (production's direct, unpooled URL, used for migrations).
-- **Vercel Production env:** `DATABASE_URL` (pooled), `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`.
+- **Vercel Production env:** `DATABASE_URL` (pooled), `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. Optional: `ASK_LLM=1` and `ANTHROPIC_API_KEY` turn on Ask's model tier (see above).
 - **Vercel Preview env:** only `BETTER_AUTH_SECRET`. CI passes each preview its own Neon branch URL.
 
 Rules that keep this safe:
