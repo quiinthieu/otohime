@@ -1,4 +1,5 @@
 import type { Swatch } from "@/components/figures";
+import { PUBLIC_PAGES } from "../lib/pages.ts";
 import { resolveSketchesCollection, type Sketch } from "../lib/sketches.ts";
 
 export type { Sketch };
@@ -16,6 +17,22 @@ export type Game = { title: string; note: string; colour: Swatch };
 export type Line = { label: string; handle: string; href: string; code: string; colour: Swatch };
 // video: the song's YouTube upload, the id after watch?v= in its link.
 export type Song = { title: string; artist: string; note: string; colour: Swatch; video: string };
+export type EndCue = {
+  lcd: readonly [string, string];
+  readout: string;
+};
+export type EndCopy = {
+  title: string;
+  sub: string;
+  status: string;
+  signature: string;
+  badge: string;
+  achievement: string;
+  idle: EndCue;
+  tenth: EndCue;
+  unlocked: EndCue;
+  lines: readonly EndCue[];
+};
 
 const sketchesCollection = resolveSketchesCollection();
 
@@ -139,4 +156,50 @@ export const site = {
   sketchesHint: sketchesCollection.hint,
   sketchesIntro: sketchesCollection.intro,
   sketches: sketchesCollection.sketches satisfies Sketch[],
+  end: {
+    title: "You've reached the end of the internet.",
+    sub: "Thanks for stopping by. See you on the next level.",
+    status: "SAVE POINT · 12 FPS · DRAWN ON PAPER",
+    signature: "Drawn in SVG, built with Next.js, animated on twos.",
+    badge: "★ 1/1 Reached the end",
+    achievement: "Achievement unlocked: Reached the end.",
+    idle: {
+      lcd: ["SAVE", "POINT"] as const,
+      readout: "Save point ready. Poke the console or tap a key sequence.",
+    },
+    tenth: {
+      lcd: ["STOP", "POKING"] as const,
+      readout: "Ten pokes. The A button needs a breather.",
+    },
+    unlocked: {
+      lcd: ["REACHED", "THE END"] as const,
+      readout: "Achievement unlocked: Reached the end.",
+    },
+    lines: [
+      {
+        lcd: ["SAVE", "POINT"] as const,
+        readout: "Save point ready. Your place on the paper is kept.",
+      },
+      {
+        lcd: ["HI", "THERE"] as const,
+        readout: "Still scrolling? There is only paper past this edge.",
+      },
+      {
+        lcd: [`${PUBLIC_PAGES.length} PAGES`, "INDEXED"] as const,
+        readout: `${PUBLIC_PAGES.length} public pages in the index above.`,
+      },
+      {
+        lcd: ["12 FPS", "ON TWOS"] as const,
+        readout: "Drawn on twos at twelve frames a second.",
+      },
+      {
+        lcd: ["TRY THE", "ARROWS"] as const,
+        readout: "Old muscle memory still works on the keys here.",
+      },
+      {
+        lcd: ["NEXT", "LEVEL"] as const,
+        readout: "Thanks for stopping by. See you on the next level.",
+      },
+    ],
+  } satisfies EndCopy,
 };

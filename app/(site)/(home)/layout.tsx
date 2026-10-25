@@ -1,3 +1,4 @@
+import { EndFooter } from "@/components/end-footer";
 import { Masthead } from "@/components/masthead";
 import { ViewTransition } from "react";
 
@@ -12,6 +13,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
         <main id="main" tabIndex={-1} className="min-w-0 outline-none">
           <div className="mx-auto max-w-5xl px-5 py-6 sm:px-8 lg:py-8">{children}</div>
         </main>
+        <EndFooter />
       </ViewTransition>
     </>
   );

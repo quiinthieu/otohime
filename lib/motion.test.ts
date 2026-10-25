@@ -268,3 +268,33 @@ test("the /projects rows rise one after another, and reduced motion drops the de
   assert.equal(all.length, 1, "no reduced-motion rule for *");
   assert.match(all[0].body, /\*\s*,[^{]*\{[^}]*animation-delay:\s*0s\s*!important/);
 });
+
+test("EndFooter sits inside the group ViewTransition after main on (home) and after the grid on (app), and nowhere else", () => {
+  const homeJsx = returned("app/(site)/(home)/layout.tsx");
+  assert.equal(homeJsx.match(/<EndFooter \/>/g)?.length, 1);
+  assert.match(homeJsx, /<\/main>\s*<EndFooter \/>\s*<\/ViewTransition>/);
+
+  const appJsx = returned("app/(site)/(app)/layout.tsx");
+  assert.equal(appJsx.match(/<EndFooter \/>/g)?.length, 1);
+  assert.match(appJsx, /<\/main>\s*<\/div>\s*<EndFooter \/>\s*<\/ViewTransition>/);
+
+  for (const bare of ["app/(site)/layout.tsx", "app/(site)/(auth)/layout.tsx", "app/(site)/not-found.tsx", "app/global-not-found.tsx"]) {
+    const src = readFileSync(join(ROOT, bare), "utf8");
+    assert.doesNotMatch(src, /EndFooter|<footer\b/, `${bare} must stay footer-free`);
+  }
+  for (const project of PROJECTS) {
+    const src = readFileSync(join(ROOT, "app", `(${project})`, "layout.tsx"), "utf8");
+    assert.doesNotMatch(src, /EndFooter/, `app/(${project})/layout.tsx must stay isolated from site EndFooter`);
+  }
+
+  const { css } = SHEETS.find((s) => s.group === "site")!;
+  const top = blocks(css);
+  const reduced = reducedMotion(top);
+  assert.equal(top.at(-1), reduced.at(-1), "app/(site)/globals.css must keep its reduced-motion block last");
+  const layer = top.find((b) => b.prelude === "@layer components");
+  const endBlocks = blocks(layer?.body ?? "").filter((b) => /\.end\b/.test(b.prelude));
+  assert.ok(endBlocks.length > 0, "missing .end rules in @layer components");
+  for (const b of endBlocks) {
+    assert.doesNotMatch(b.body, /view-transition-name/, `${b.prelude} must not add a view-transition-name`);
+  }
+});

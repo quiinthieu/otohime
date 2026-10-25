@@ -84,6 +84,10 @@
     border: 0;
     border-top: 1px solid var(--line);
   }
+
+  #main {
+    scroll-margin-top: 8rem;
+  }
 }
 
 @layer components {
@@ -929,6 +933,328 @@
       rotate: 180deg;
     }
   }
+
+  /*
+   * Console save-point footer ("The End of the Internet"):
+   * static line work in Inked, ambient loops and LCD eyes in .end-sky outside
+   * the SVG filter, and plain HTML navigation beside the miniature world.
+   */
+  .end {
+    position: relative;
+    margin-top: 3rem;
+    border-top: 1px solid var(--line);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--paper-2) 60%, var(--paper)) 0%,
+      var(--paper) 5rem
+    );
+  }
+
+  .end::before {
+    content: "";
+    display: block;
+    border-top: 1px dashed var(--hairline);
+  }
+
+  .end-inner {
+    padding-block: 2.5rem 2.25rem;
+  }
+
+  .end-grid {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .end-grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: 3rem;
+    }
+  }
+
+  .end-stage {
+    min-width: 0;
+  }
+
+  .end-canvas {
+    position: relative;
+    width: 100%;
+    max-width: 24rem;
+    margin-inline: auto;
+    aspect-ratio: 520 / 310;
+  }
+
+  @media (min-width: 40rem) {
+    .end-canvas {
+      max-width: 32rem;
+    }
+  }
+
+  .end-ground-wrap,
+  .end-console-wrap,
+  .end-sky {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .end-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .end .figure {
+    animation: none;
+  }
+
+  .end-lcd-text {
+    font-size: 7.5px;
+    letter-spacing: 0.08em;
+  }
+
+  .end-eyes {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.15s ease;
+  }
+
+  .end-console {
+    position: absolute;
+    left: 44%;
+    top: 4%;
+    width: 25%;
+    height: 84%;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .end-console:focus-visible {
+    outline: 2px dashed var(--ink);
+    outline-offset: 2px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .end-canvas:has(.end-console:hover) .end-eyes {
+      transform: scale(1.06);
+    }
+  }
+
+  .end-stage-bar {
+    display: grid;
+    justify-items: center;
+    gap: 0.375rem;
+    margin-top: 0.5rem;
+  }
+
+  .end-readout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 2.5rem;
+    margin: 0;
+    padding-inline: 0.5rem;
+  }
+
+  .end-badge {
+    height: 1.5rem;
+    border-color: var(--on-swatch);
+    background: var(--yellow);
+    color: var(--on-swatch);
+    transition: opacity 0.15s ease;
+  }
+
+  .end-badge[data-unlocked="false"] {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .end-badge[data-unlocked="true"] {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .end-knobs-details {
+    margin-top: 0.5rem;
+  }
+
+  .end-knobs-summary {
+    list-style: none;
+  }
+
+  .end-knobs-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (min-width: 40rem) {
+    .end-knobs-summary {
+      display: none;
+    }
+  }
+
+  .end-copy {
+    min-width: 0;
+  }
+
+  .end-title {
+    margin-top: 0.375rem;
+    font-size: clamp(1.5rem, 3.6vw, 2.125rem);
+    line-height: 1.18;
+  }
+
+  .end-title-text {
+    display: inline-block;
+  }
+
+  .end-sub {
+    margin-top: 0.625rem;
+    max-width: 34rem;
+    color: var(--muted);
+  }
+
+  .end-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .end-pages {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .end-page-link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    min-height: 2rem;
+    margin-inline: -0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+  }
+
+  .end-page-link:hover {
+    background: var(--paper-2);
+  }
+
+  .end-page-link small {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  .end-lines {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .end-line-link {
+    gap: 0.45rem;
+  }
+
+  .end-line-code {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.35rem;
+    padding-inline: 0.25rem;
+    border: 1px solid var(--on-swatch);
+    border-radius: 999px;
+    background: var(--fig, var(--yellow));
+    color: var(--on-swatch);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .end-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .end-credits {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .end-dot {
+    margin-inline: 0.5rem;
+  }
+
+  .end[data-seen="true"] .end-ground-wrap {
+    animation: rise 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .end[data-seen="true"] .end-console-wrap {
+    animation: print 0.4s steps(10) 0.08s both;
+  }
+
+  .end[data-seen="true"] .end-title-text {
+    animation: print 0.6s steps(26) 0.16s both;
+  }
+
+  .end[data-seen="true"] .end-rise {
+    animation: rise 0.34s cubic-bezier(0.16, 1, 0.3, 1) calc(0.24s + var(--i, 0) * 40ms) both;
+  }
+
+  .end-cloud {
+    animation: end-drift var(--cloud-dur, 30s) linear var(--cloud-delay, 0s) infinite;
+    animation-play-state: paused;
+  }
+
+  .end-star {
+    animation: blink 1.8s steps(1) infinite;
+    animation-play-state: paused;
+  }
+
+  .end-lamp {
+    animation: breathe 2.2s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+
+  .end-packet {
+    animation: end-packet 3.2s steps(8) infinite;
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .end-stage[data-active="true"] :is(.end-cloud, .end-star, .end-lamp, .end-packet) {
+      animation-play-state: running;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .end :is(.end-cloud, .end-star, .end-lamp, .end-packet) {
+      animation-play-state: running;
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .end-clouds,
+    .end-packets {
+      display: none;
+    }
+
+    .end-cloud,
+    .end-packet {
+      animation: none;
+    }
+  }
 }
 
 @keyframes rise {
@@ -989,6 +1315,35 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes end-drift {
+  0% {
+    translate: -10px 0;
+  }
+  50% {
+    translate: 12px 0;
+  }
+  100% {
+    translate: -10px 0;
+  }
+}
+
+@keyframes end-packet {
+  0% {
+    opacity: 0;
+    translate: -6px -4px;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: 12px 14px;
   }
 }
 

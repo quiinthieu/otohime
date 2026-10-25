@@ -3,6 +3,7 @@
 import { box, screen, swatches, type Point } from "@/components/figures";
 import { Chip, Machine, press, Stat, useTick } from "@/components/machine";
 import type { Line } from "@/content/site";
+import { away } from "@/lib/end";
 import { boardBusy, newBoard, PLUG, switchboard } from "@/lib/machines";
 import { useReducer } from "react";
 
@@ -19,9 +20,6 @@ const JACK_Z = DESK + 58;
 const xy = (point: Point) => screen(O, point);
 const HOLE = xy([54, 192, DESK]); // where the cord comes up through the desk
 const REST = xy([52, 150, DESK]); // where the plug lies between calls
-
-// Mail goes to a mail app; the rest open in a new tab.
-const away = (href: string) => (href.startsWith("mailto:") ? {} : { target: "_blank", rel: "me noreferrer" });
 
 export function Switchboard({ lines }: { lines: Line[] }) {
   const [s, dispatch] = useReducer(switchboard, undefined, newBoard);

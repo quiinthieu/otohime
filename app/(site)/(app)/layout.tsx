@@ -1,3 +1,4 @@
+import { EndFooter } from "@/components/end-footer";
 import { Masthead } from "@/components/masthead";
 import { NavLinks, NavList, type NavItem } from "@/components/nav-links";
 import { site } from "@/content/site";
@@ -45,6 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <div className="mx-auto max-w-5xl px-5 py-6 sm:px-8 lg:py-8">{children}</div>
           </main>
         </div>
+        <EndFooter />
       </ViewTransition>
     </>
   );
