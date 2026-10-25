@@ -1,0 +1,637 @@
+{
+  "history": {
+    "FAILED": {
+      "total": 48,
+      "offsets": [
+        0,
+        30
+      ],
+      "limit": 30,
+      "read": 48,
+      "complete": true,
+      "related": [],
+      "ids": [
+        "f1bfa812-5256-4f67-836e-99f92417bcde",
+        "dbe59bbf-753b-4ab6-b405-460d4640fda9",
+        "8301dc16-11f1-474d-ae67-019dcf770871",
+        "b6ec04c3-e183-48eb-8bca-b6c6f3187bf5",
+        "5fa87125-a6cc-4059-b618-751d1541db82",
+        "31491522-15e2-4451-a14d-cf22f6939b23",
+        "59d654c5-6e1a-4c9d-8a1a-4a7cbd9bbf8e",
+        "dac437a9-dd45-4dc5-b871-adc370a225ea",
+        "fd5e72ee-34d3-44e5-bfdc-8deb4385cf55",
+        "da4056bf-3e19-4a7e-8f8e-3c3bc039f470",
+        "bb9415b2-3856-4f03-8845-fe66494babde",
+        "35b12288-7abb-433b-bcb5-3f9eac460982",
+        "b273a243-dc65-4557-a7f2-5c0e7ffa73fc",
+        "188711f9-a723-438e-bf50-8a97496a643a",
+        "f77bb78f-3c71-4ff2-acc0-68f6068eb99b",
+        "3bcb6333-eebd-4666-9da2-ce21b89bc496",
+        "4ea23bd5-2b47-4790-a877-bd35f98758a3",
+        "01d357f9-56e4-4323-b51c-58f12005b434",
+        "fc4d8496-37b2-457a-8fa7-187c63e5bd97",
+        "ce31e066-43c7-467a-afb1-c2dddd1eb42c",
+        "9eea975e-d76b-454e-a149-76e2f6bfb8bf",
+        "34fbb7f2-3e1f-4e8d-ac1b-a61ce9bc20c8",
+        "7df1e5c7-64ef-4fb4-8df0-728ea9645069",
+        "79497631-590b-4b74-bf2e-92ec8a1a53e1",
+        "ecfb1df5-98f9-4a1e-999d-c19a1c27dedb",
+        "ae1e852d-5fff-42e1-a68b-3f1c293e36eb",
+        "9d224806-ffbd-4684-9c5e-8695f44008fe",
+        "82d16e32-7436-4f3e-9c63-3ddf9ca63012",
+        "19061a79-1114-402c-8a08-e53812109731",
+        "831efd9c-e5cf-4e70-9863-c8528fb795f7",
+        "5462b8c3-42b9-48ee-8650-b83b8e763543",
+        "dc427adc-e2c0-43e7-96bd-81f6c24964b0",
+        "05fa1136-1320-43eb-ac2e-4d9a3d1e9546",
+        "07d6b0e8-150c-472d-87f1-b2db9cb10bb6",
+        "1b23984d-ad7c-4332-98a7-f3620afdbe9a",
+        "a6f205e5-33cb-41d8-9ff7-d28b29063c64",
+        "1bdaaeec-e9cb-4501-803d-779a9d8eefe6",
+        "291e9a20-a447-4867-bbd1-41b44ea2d5de",
+        "96294327-2b94-4273-96a7-31826e83fb15",
+        "59a96d5b-4c06-4327-87e8-9f2984b3c5c8",
+        "eda02efa-c349-49e9-94db-02c53f80087d",
+        "bfac3013-1a45-4898-8e8a-183ff779621f",
+        "f7905c45-b6e9-40e6-af56-ac742250d57d",
+        "4370b579-ede8-4c43-b0a8-145162c3b32e",
+        "54d977c0-3004-4280-ba02-184c4d7a6598",
+        "4d7b3ebb-08cb-4aed-adba-1aeef4be829e",
+        "7ad5e266-5526-4988-82e6-5ae80424d258",
+        "2f10f19a-5768-455a-807b-9c84c8c17e95"
+      ]
+    },
+    "COMPLETED": {
+      "total": 874,
+      "offsets": [
+        0,
+        30
+      ],
+      "limit": 30,
+      "read": 60,
+      "complete": false,
+      "related": [
+        {
+          "id": "286ac72b-3ffc-4a2c-a4a1-b592cf75f08e",
+          "status": "COMPLETED",
+          "run": "run-8382",
+          "callback": "delivered"
+        },
+        {
+          "id": "40852643-50b4-4a46-a782-ab00d8b326d2",
+          "status": "COMPLETED",
+          "run": "run-8373",
+          "callback": "delivered"
+        },
+        {
+          "id": "d61b22aa-27f8-45cd-9ec1-40c3aaf5cf93",
+          "status": "COMPLETED",
+          "run": "run-8366",
+          "callback": "delivered"
+        },
+        {
+          "id": "2b938349-c055-4cc9-b00f-b4a234c7bdfe",
+          "status": "COMPLETED",
+          "run": "run-8357",
+          "callback": "delivered"
+        }
+      ],
+      "ids": [
+        "a0a7de19-8ee0-4ece-8bac-cfe8e4066370",
+        "e2eac0a8-4fe8-4c4c-9f80-aadc20c8c5e3",
+        "188a9366-6124-4628-8c14-ac7065cb6abd",
+        "a945b9fa-6e15-448d-b6f0-a74b0e6b2ddc",
+        "ecd88564-ad53-4d15-b7d6-5c19367c9a68",
+        "4ac73f68-70c0-4a9c-8b65-122148a33f5a",
+        "8bd24dd5-c73f-45b9-bbe5-1aa64d7879e1",
+        "286ac72b-3ffc-4a2c-a4a1-b592cf75f08e",
+        "51a6787d-dd71-4854-9df5-1ffaf54a7a1f",
+        "dfb2073e-1d4a-48aa-bb33-5682294bc945",
+        "1e3b6e65-8481-4145-b955-0ecb6ff7885d",
+        "bffecec4-8cdf-423e-b5f9-11320dce8d5d",
+        "b51836ac-9675-4687-931c-bb007df99150",
+        "99b2e0ce-12a9-4075-88cb-69c144f6f536",
+        "08842ef2-852e-4899-8b24-107120d114f7",
+        "b7902651-8bb2-4da7-86ac-f24500d7fc36",
+        "40852643-50b4-4a46-a782-ab00d8b326d2",
+        "1e5f2215-cb12-45f7-a696-5146b357ac1b",
+        "b31b19b3-875c-4eb4-99fe-49a2150f9e38",
+        "3226e062-1693-4fcb-99af-f02ceaaf2d8a",
+        "84ed2e0f-c61f-4c5a-9193-ce2bdab7ff3a",
+        "3f3bfc33-53a3-4872-bc05-76652d59bafe",
+        "2bf43983-1399-4669-93b4-86e055590a7f",
+        "d61b22aa-27f8-45cd-9ec1-40c3aaf5cf93",
+        "3df05a17-b8d4-4f14-b303-4e2d2450a3d4",
+        "a40ee404-3724-417d-8800-1046f9fb6f35",
+        "b49e1b1d-1d70-4f37-848e-9333f9a359c0",
+        "0bf38679-f249-496e-8c65-553d7466b944",
+        "b87bf13e-11a6-49d3-b5fe-7fe9cff3d9ea",
+        "3295c9e2-4526-4ece-ad29-3f7293e88013",
+        "a3298820-bdb5-4c10-914b-60f10a22f116",
+        "9e768ae5-a4bd-4eb5-9304-94206cd5537b",
+        "159a172e-a770-4903-90dd-8d54165aad15",
+        "db1ef280-d396-4907-9fe6-dc64b353576a",
+        "2b938349-c055-4cc9-b00f-b4a234c7bdfe",
+        "be6456c7-b621-4439-bee3-3118af9a5107",
+        "bebb9441-1177-4aff-a699-b980ad2ac273",
+        "208a7fd9-a614-4a45-b45b-a4214f39a5f4",
+        "cf7db6ab-1ba4-4ca6-97e8-1c4f8a538f2d",
+        "ae8ac3f9-a9db-4bf7-ab8d-4a1e86731dd1",
+        "f6150d0f-70e0-46c7-9330-ddc277fd21ce",
+        "571c1585-465d-457d-b774-8126c0cb7161",
+        "a835499c-79aa-4ea8-aff9-33365218548a",
+        "3387fe72-c4ce-47a3-bd27-cf783bc12c7b",
+        "8fe21809-a37c-4042-82b8-cea3274802d3",
+        "bf1c5fe4-2a51-4401-817c-beb12c488103",
+        "a644c05c-b092-4ed5-83f8-45815ffab944",
+        "e8a1d40f-af81-4e83-8a9d-c545270a3e3b",
+        "284d3076-642f-4e29-9a5a-4acb9033f360",
+        "26a5870b-c05e-49c0-a2c7-26313a8fc56f",
+        "009dfbfd-01ae-4eb7-b7cb-f17d8511e377",
+        "e7ef6f6c-0212-4e73-a895-a7649bd7f14e",
+        "c4d28db9-ce42-4690-9b59-41a3c1bf6cb8",
+        "c9bd68ad-7588-4902-810c-0fe6498268ea",
+        "e2a208ac-3530-4171-b1e1-d6820c2bb491",
+        "af9ace36-9059-40ae-a986-5482d7cbc47e",
+        "10319155-b939-4362-a7e5-1c93d924e525",
+        "93fe9d61-4df8-4a25-9cf0-887a547cfe58",
+        "9cb526d4-d1b4-439e-8066-9db772fb2fd0",
+        "aef96e62-eb15-4699-bce5-593a6616b933"
+      ]
+    },
+    "RUNNING": {
+      "total": 4,
+      "offsets": [
+        0,
+        30
+      ],
+      "limit": 30,
+      "read": 4,
+      "complete": true,
+      "related": [
+        {
+          "id": "a9d3d5bc-7977-4e6b-9adb-950a82bd4bf7",
+          "status": "RUNNING",
+          "run": "run-8395"
+        }
+      ],
+      "ids": [
+        "a9d3d5bc-7977-4e6b-9adb-950a82bd4bf7",
+        "52b85426-825a-4846-bd7c-974cfb43eeb1",
+        "0566b166-ecab-4818-ab09-cca2d0c6e872",
+        "e9b2df04-7dd8-44e7-8959-1b58d3a366b7"
+      ]
+    },
+    "PENDING": {
+      "total": 4,
+      "offsets": [
+        0,
+        30
+      ],
+      "limit": 30,
+      "read": 4,
+      "complete": true,
+      "related": [],
+      "ids": [
+        "f5e8423d-3953-404b-8578-cd0788ff9228",
+        "f44b72a2-1673-4813-be2c-269ac6f6ff31",
+        "e8b2428d-5ca9-417b-a9f7-1831826c9233",
+        "b07fce9d-bf85-44ed-a0d1-37b7b2a8bce7"
+      ]
+    }
+  },
+  "details": [
+    {
+      "id": "40852643-50b4-4a46-a782-ab00d8b326d2",
+      "run": "run-8373",
+      "status": "COMPLETED",
+      "callback": "delivered",
+      "attempts": 1,
+      "resultManifest": {
+        "agent": "agy",
+        "artifacts": [
+          {
+            "content_type": "application/octet-stream",
+            "name": "author.txt",
+            "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+            "size": 44
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changed-files.txt",
+            "sha256": "85241b4b706da4f856550386d8011344f6e1647651ae4551e84532c8edc378e6",
+            "size": 59
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changes.patch",
+            "sha256": "f70b80a19473aebf92f1fe72535f7e1fd5365e3ded3060a81126e0b519ed12e8",
+            "size": 8124
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "commits.txt",
+            "sha256": "a8a3592ca20d2c979d07708f4c6a7bdb3a6c61f46c39e32010d6b96976491b35",
+            "size": 418
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "diffstat.txt",
+            "sha256": "7a6254c4948e471d926362bf47278ce43868e9c5368d7641bcb86a1058b5d372",
+            "size": 276
+          },
+          {
+            "content_type": "application/json",
+            "name": "footprint.json",
+            "sha256": "ae7b180a24918313ba667036945513d89eeeadf57edf4a8a598c4f69dcab00e6",
+            "size": 272
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "uncommitted.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "content_type": "application/json",
+            "name": "usage.json",
+            "sha256": "384d0c045525746ced7bf603d3d0a129be6c18ef53f1cdc9d36810fabd1089be",
+            "size": 230
+          }
+        ],
+        "duration_s": 1924,
+        "exit_code": 0,
+        "recordings": [],
+        "repo_id": "otohime",
+        "usage": {
+          "cpu_cores": 0.05,
+          "cpu_seconds": 553.91,
+          "io_sampler": "proc",
+          "peak_cpu_cores": 5.26,
+          "peak_rss_mb": 4805.31,
+          "read_bytes": 114118656,
+          "rss_mb": 349.7,
+          "sampler": "proc",
+          "samples": 384,
+          "write_bytes": 7836770304
+        },
+        "worker_id": "avietidol-z490"
+      },
+      "logTailRead": true
+    },
+    {
+      "id": "d61b22aa-27f8-45cd-9ec1-40c3aaf5cf93",
+      "run": "run-8366",
+      "status": "COMPLETED",
+      "callback": "delivered",
+      "attempts": 1,
+      "resultManifest": {
+        "agent": "codex",
+        "artifacts": [
+          {
+            "content_type": "application/octet-stream",
+            "name": "author.txt",
+            "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+            "size": 44
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changed-files.txt",
+            "sha256": "8bfcdc95c1f5fa06b426a3a1a56aaa4fea1d4437b79f1f94072dffa0902b71c6",
+            "size": 389
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changes.patch",
+            "sha256": "6e8d389edf32e86271e76c56f9bded66a29e37ca002d015b183ce13d5a42d945",
+            "size": 66052
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "commits.txt",
+            "sha256": "f8ff5b05aed956b6e4885e45bf0355d52a51e9ac42ebdbe1d421b43eea471293",
+            "size": 78
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "diffstat.txt",
+            "sha256": "92a381dc7b2c1447581ca794dfd9a2fbdc0ea386912b73e3c9b75f15935704f4",
+            "size": 384
+          },
+          {
+            "content_type": "application/json",
+            "name": "footprint.json",
+            "sha256": "d527963d6b5b339ff8fe53e17878859cc01a1081f3d91169ce68be82269bd55b",
+            "size": 605
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "uncommitted.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "content_type": "application/json",
+            "name": "usage.json",
+            "sha256": "9107053df9da35f1b79a9680b41399a489b45791a360606df3a8e2e699c30add",
+            "size": 223
+          }
+        ],
+        "duration_s": 628,
+        "exit_code": 0,
+        "recordings": [],
+        "repo_id": "otohime",
+        "usage": {
+          "cpu_cores": 0.02,
+          "cpu_seconds": 292.3,
+          "io_sampler": "proc",
+          "peak_cpu_cores": 9.64,
+          "peak_rss_mb": 3787.14,
+          "read_bytes": 930185216,
+          "rss_mb": 341.47,
+          "sampler": "proc",
+          "samples": 125,
+          "write_bytes": 4622958592
+        },
+        "worker_id": "avietidol-z490"
+      },
+      "logTailRead": true
+    },
+    {
+      "id": "286ac72b-3ffc-4a2c-a4a1-b592cf75f08e",
+      "run": "run-8382",
+      "status": "COMPLETED",
+      "callback": "delivered",
+      "attempts": 1,
+      "resultManifest": {
+        "agent": "shell",
+        "artifacts": [
+          {
+            "content_type": "application/octet-stream",
+            "name": "commits.txt",
+            "sha256": "2de5e2dff80d7615d1c3373c8713276ec7cdfe824d66e7848d45823fb53439d6",
+            "size": 32
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "uncommitted.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "content_type": "application/json",
+            "name": "usage.json",
+            "sha256": "c4b59be25f7e827c2ec9c5b0ea39e19ac8a9d4b7fc7dd4226d46ab20d97cef21",
+            "size": 200
+          },
+          {
+            "content_type": "application/json",
+            "name": "verification.json",
+            "sha256": "db5e9faa9c9a1e42e1a3ae99accd36b4d00d586c511aa98a1a264e1f528c17cf",
+            "size": 32143
+          }
+        ],
+        "duration_s": 284,
+        "exit_code": 0,
+        "recordings": [],
+        "repo_id": "otohime",
+        "usage": {
+          "cpu_cores": 0,
+          "cpu_seconds": 267.76,
+          "io_sampler": "proc",
+          "peak_cpu_cores": 5.63,
+          "peak_rss_mb": 4003.52,
+          "read_bytes": 798720,
+          "rss_mb": 484,
+          "sampler": "proc",
+          "samples": 56,
+          "write_bytes": 3922534400
+        },
+        "worker_id": "avietidol-z490"
+      },
+      "logTailRead": true
+    },
+    {
+      "id": "9c0bae95-2c80-4284-a1c7-648f12a8cc62",
+      "run": "run-8321",
+      "status": "COMPLETED",
+      "callback": "delivered",
+      "attempts": 1,
+      "resultManifest": {
+        "agent": "agy",
+        "artifacts": [
+          {
+            "content_type": "application/octet-stream",
+            "name": "author.txt",
+            "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+            "size": 44
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changed-files.txt",
+            "sha256": "7f1a26da54320ad7474a0d695cd15751224ca962810452df48774accc4d072b0",
+            "size": 142
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changes.patch",
+            "sha256": "4ce1b3ff279fad6d44a7d8752f55471944fc0ef3aeafa197671323b2afa54eb5",
+            "size": 96628
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "commits.txt",
+            "sha256": "8c307cacff3ab248fb4bbcc5c8d1088c83de478640cabbcb508cdaa4c3923826",
+            "size": 837
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "diffstat.txt",
+            "sha256": "14bcc6cc4c11cf476fe649bc14424643e62e0186557b0c7e4c03e837720523e8",
+            "size": 419
+          },
+          {
+            "content_type": "application/json",
+            "name": "footprint.json",
+            "sha256": "ff1fbf6b0e2c1afea6ca0231ac37219474efba0c8759151225e571dafc76833a",
+            "size": 368
+          },
+          {
+            "content_type": "application/json",
+            "name": "red_gate.json",
+            "sha256": "dac4dc5f3ecd3c995c99ed0df71f932ddc2119cf9f0fc42e9c9ddbac04ab59df",
+            "size": 66
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "uncommitted.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "content_type": "application/json",
+            "name": "usage.json",
+            "sha256": "1a4bbdcf5dda664a4666e5acbc2b154b0e76858f8ca5cc6a26957fa182a6ae53",
+            "size": 230
+          },
+          {
+            "content_type": "application/json",
+            "name": "verification.json",
+            "sha256": "782a6315ac4cdb70d5d8b2316bb184631268729bac1a4c812236e3c1fc7d3399",
+            "size": 29588
+          }
+        ],
+        "duration_s": 4458,
+        "exit_code": 0,
+        "recordings": [],
+        "repo_id": "otohime",
+        "usage": {
+          "cpu_cores": 0.07,
+          "cpu_seconds": 661.97,
+          "io_sampler": "rusage",
+          "peak_cpu_cores": 3.28,
+          "peak_rss_mb": 3368.31,
+          "read_bytes": 2706014208,
+          "rss_mb": 253.38,
+          "sampler": "ps",
+          "samples": 891,
+          "write_bytes": 2438066176
+        },
+        "worker_id": "avietidol-mac-mini"
+      },
+      "logTailRead": true
+    },
+    {
+      "id": "f1bfa812-5256-4f67-836e-99f92417bcde",
+      "run": "run-8207",
+      "status": "FAILED",
+      "callback": "delivered",
+      "attempts": 1,
+      "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+      "resultManifest": {
+        "artifacts": [],
+        "recordings": [],
+        "worker_id": "avietidol-z490"
+      },
+      "logTailRead": true
+    }
+  ],
+  "runs": [
+    {
+      "id": "run-8297",
+      "role": "research",
+      "status": "succeeded",
+      "tm_task_id": "2e208029-b0f5-40a7-a177-88c793697522",
+      "agent_profile": "claude-fable-high",
+      "profile_flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8305",
+      "role": "product_owner",
+      "status": "succeeded",
+      "git_sha": "cc52f9e",
+      "tm_task_id": "0fa68053-89cb-475f-ac5c-b669765262d6",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8307",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "368d15e",
+      "tm_task_id": "41740cfe-cbd9-4fe4-9ce3-dfe1b9e624d2",
+      "agent_profile": "agy-argon-high",
+      "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8316",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "368d15e",
+      "tm_task_id": "8803e5a6-4ac8-401f-b804-5ba6993bc32a",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8318",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "016369a",
+      "tm_task_id": "05b53925-8680-43c2-a535-1220ffb3793a",
+      "agent_profile": "claude-sonnet-high",
+      "profile_flags": "--allowedTools all --model claude-sonnet-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8321",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "a750f28",
+      "tm_task_id": "9c0bae95-2c80-4284-a1c7-648f12a8cc62",
+      "agent_profile": "agy-argon-high",
+      "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8357",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "a750f28",
+      "tm_task_id": "2b938349-c055-4cc9-b00f-b4a234c7bdfe",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8366",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "dcd1315",
+      "tm_task_id": "d61b22aa-27f8-45cd-9ec1-40c3aaf5cf93",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8373",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "6b31607",
+      "tm_task_id": "40852643-50b4-4a46-a782-ab00d8b326d2",
+      "agent_profile": "agy-argon-high",
+      "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8382",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "6b31607",
+      "tm_task_id": "286ac72b-3ffc-4a2c-a4a1-b592cf75f08e",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8395",
+      "role": "quality_engineer",
+      "status": "running",
+      "tm_task_id": "a9d3d5bc-7977-4e6b-9adb-950a82bd4bf7",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    }
+  ],
+  "gate": [
+    {
+      "id": "ver-3336",
+      "git_sha": "6b31607",
+      "status": "pass",
+      "run_id": "run-8382"
+    },
+    {
+      "id": "ver-3324",
+      "git_sha": "a750f28",
+      "status": "pass",
+      "run_id": "run-8357"
+    }
+  ]
+}

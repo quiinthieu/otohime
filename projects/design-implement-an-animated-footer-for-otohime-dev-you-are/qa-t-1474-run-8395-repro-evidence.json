@@ -1,0 +1,102 @@
+{
+  "errors": [
+    {
+      "phase": "exit-0-projects",
+      "url": "http://localhost:4095/projects",
+      "message": "Minified React error #419; visit https://react.dev/errors/419 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+      "stack": ""
+    },
+    {
+      "phase": "exit-0-projects",
+      "url": "http://localhost:4095/projects",
+      "message": "Minified React error #419; visit https://react.dev/errors/419 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+      "stack": ""
+    },
+    {
+      "phase": "exit-1-dashboard",
+      "url": "http://localhost:4095/dashboard",
+      "message": "Minified React error #419; visit https://react.dev/errors/419 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+      "stack": ""
+    },
+    {
+      "phase": "exit-1-dashboard",
+      "url": "http://localhost:4095/dashboard",
+      "message": "Minified React error #419; visit https://react.dev/errors/419 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+      "stack": ""
+    },
+    {
+      "phase": "exit-2-dashboard",
+      "url": "http://localhost:4095/dashboard",
+      "message": "Minified React error #419; visit https://react.dev/errors/419 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+      "stack": ""
+    },
+    {
+      "phase": "exit-2-dashboard",
+      "url": "http://localhost:4095/dashboard",
+      "message": "Minified React error #419; visit https://react.dev/errors/419 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+      "stack": ""
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://localhost:4095/admin/roles",
+      "status": 200,
+      "abortDigests": [
+        {
+          "boundary": "B:3",
+          "digest": "NEXT_HTTP_ERROR_FALLBACK;403"
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:4095/admin/roles",
+      "status": 200,
+      "abortDigests": [
+        {
+          "boundary": "B:3",
+          "digest": "NEXT_HTTP_ERROR_FALLBACK;403"
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:4095/admin/roles",
+      "status": 200,
+      "abortDigests": [
+        {
+          "boundary": "B:3",
+          "digest": "NEXT_HTTP_ERROR_FALLBACK;403"
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:4095/admin/roles",
+      "status": 200,
+      "abortDigests": [
+        {
+          "boundary": "B:3",
+          "digest": "NEXT_HTTP_ERROR_FALLBACK;403"
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:4095/admin/roles",
+      "status": 200,
+      "abortDigests": [
+        {
+          "boundary": "B:3",
+          "digest": "NEXT_HTTP_ERROR_FALLBACK;403"
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:4095/admin/roles",
+      "status": 200,
+      "abortDigests": [
+        {
+          "boundary": "B:3",
+          "digest": "NEXT_HTTP_ERROR_FALLBACK;403"
+        }
+      ]
+    }
+  ]
+}
