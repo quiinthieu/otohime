@@ -670,6 +670,14 @@
     animation: blink 1s steps(1) infinite;
   }
 
+  /* The pocket's game (components/handheld.tsx, lib/snake.ts): the train is solid LCD ink, a record an
+     outlined cell. It moves a cell at a time on the 12 fps clock, so nothing here animates. */
+  .pocket-food {
+    fill: none;
+    stroke: #2b2722;
+    stroke-width: 0.8;
+  }
+
   /* The console on the front page boots once a session. lib/boot.ts holds each step's delay and duration
      (set inline); these hold the moves. The base style is the booted console: a returning visit, marked on
      <html> by the root layout's script before first paint, drops every animation, delays included, and shows

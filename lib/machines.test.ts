@@ -184,6 +184,22 @@ test("a console button stays down for two frames, then lets go", () => {
   assert.equal(tap("down", "settle").cursor, 1);
 });
 
+test("B swaps the console to its game and back; the cursor holds meanwhile", () => {
+  assert.equal(tap("b").game, true);
+  assert.equal(tap("b").pressed, "b");
+  assert.equal(tap("b", "b").game, false);
+  assert.equal(newPad(4).game, undefined, "a new pad is on its menu");
+  // in the game the d-pad steers the snake, not the cursor
+  assert.equal(tap("down", "b", "down", "up", "up", "left", "right").cursor, 1);
+  assert.equal(tap("down", "b", "down", "b").cursor, 1);
+  assert.equal(tap("down", "b", "down", "b", "down").cursor, 2);
+  // left and right light their arm and leave the menu alone
+  assert.equal(tap("left").cursor, 0);
+  assert.equal(tap("right").pressed, "right");
+  assert.equal(tap("b", "settle").pressed, null);
+  assert.equal(tap("b", "settle").game, true);
+});
+
 const press = (n: number, action: ClawAction): ClawAction[] => Array(n).fill(action);
 const play = (start = newClaw(6), ...actions: ClawAction[]) => actions.reduce(claw, start);
 

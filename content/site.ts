@@ -81,6 +81,26 @@ export const site = {
   },
   // The switchboard's plug, carried by hand to a jack.
   switchboard: { held: "Plug in hand. Let go over a jack to connect." },
+  // The pocket console's game behind B (lib/snake.ts): chips, LCD lines and the readout.
+  pocket: {
+    play: "B Play",
+    menu: "B Menu",
+    start: "A Start",
+    restart: "A Restart",
+    left: "◀ Left",
+    right: "▶ Right",
+    title: "SNAKE",
+    pressA: "PRESS A",
+    over: "GAME OVER",
+    won: "FULL!",
+    ready: (best: number, reduced: boolean) =>
+      `Pipeline snake. Press A to start; ${reduced ? "each arrow moves one cell" : "the d-pad steers"}. Best ${best}.`,
+    playing: (score: number, best: number) => `Score ${score}. Best ${best}.`,
+    lost: (score: number, best: number) => `Crashed with ${score}. Best ${best}. A plays again, B goes back to the menu.`,
+    full: (score: number) => `The pipeline is full: ${score}! A plays again.`,
+    wrap: "Debug mode: walls wrap.",
+    badge: "★",
+  },
   // TODO(otohime)
   notes: [
     {
