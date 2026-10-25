@@ -306,3 +306,48 @@ test("EndFooter sits inside the group ViewTransition after main on (home) and af
     assert.doesNotMatch(b.body, /view-transition-name/, `${b.prelude} must not add a view-transition-name`);
   }
 });
+
+test("every sketch sheet keeps its picture, caption and download inside one frame and wash", () => {
+  // One Sheet draws Places, Small things and People alike, so a portrait gets the frame the day it is activated.
+  const page = readFileSync(join(ROOT, "app/(site)/(app)/sketches/page.tsx"), "utf8");
+  for (const kind of ["places", "objects", "people"]) {
+    assert.match(page, new RegExp(`\\{${kind}\\.map\\(\\(sketch\\) => \\(\\s*<li key=\\{sketch\\.src\\}>\\s*<Sheet sketch=\\{sketch\\} />\\s*</li>`), kind);
+  }
+  const sheet = page.slice(page.indexOf("function Sheet("), page.indexOf("export default"));
+  // The figure stays bare (walk-sketches.sh counts '<figure>'), and the wrapper holds the art and nothing else.
+  assert.match(sheet, /<figure>\s*(?:\{\/\*[\s\S]*?\*\/\}\s*)?<div className="sheet">\s*<Image\b[\s\S]*?\/>\s*<span className="sheet-wash" aria-hidden="true" \/>\s*<svg className="sheet-frame"[^>]*aria-hidden="true"[^>]*>\s*<path [^>]*pathLength=\{1\}[^>]*\/>\s*<\/svg>\s*<\/div>\s*<figcaption/);
+  assert.match(sheet, /width=\{dims\.width\}\s*height=\{dims\.height\}\s*sizes=\{dims\.sizes\}/);
+  assert.match(sheet, /href=\{sketch\.downloadHref\}\s*download=\{sketch\.downloadFilename\}/);
+  assert.match(sheet, /viewBox=\{`0 0 \$\{dims\.width\} \$\{dims\.height\}`\}/, "the frame's viewBox is the sketch's own size, so it scales evenly");
+  assert.doesNotMatch(sheet, /filter|vectorEffect|Math\.random|"use client"/);
+  // Scroll timelines are CSS, so they would run with JavaScript off; a <noscript> style stands the sheets still.
+  assert.match(page, /<noscript>\s*<style>\{"\.sheet-wash,\.sheet-frame path\{animation:none!important\}"\}<\/style>\s*<\/noscript>/);
+});
+
+test("the sketch sheets rest whole and draw on scroll only where view timelines exist, and never under reduced motion", () => {
+  const { css } = SHEETS.find((s) => s.group === "site")!;
+  const top = blocks(css);
+  const [wash] = rule(top, ".sheet-wash");
+  const [path] = rule(top, ".sheet-frame path");
+  assert.match(rule(top, ".sheet")[0]?.body ?? "", /view-timeline:\s*--sheet block;/);
+  // The resting pose is the base style: the wash scaled away, the frame fully drawn, nothing animating.
+  assert.match(wash?.body ?? "", /transform:\s*scaleX\(0\);/);
+  assert.match(path?.body ?? "", /stroke-dasharray:\s*1;[\s\S]*stroke-dashoffset:\s*0;/);
+  for (const b of [wash, path]) assert.doesNotMatch(b.body, /animation|filter|transition/);
+  // Every scroll-driven rule sits in the one @supports block, after its shorthand so the timeline is not reset.
+  const supports = top.filter((b) => /^@supports \(animation-timeline: view\(\)\)$/.test(b.prelude));
+  assert.equal(supports.length, 1);
+  for (const [sel, name] of [[".sheet-wash", "sheet-wash"], [".sheet-frame path", "sheet-draw"]]) {
+    const inner = blocks(supports[0].body).filter((b) => b.prelude === sel);
+    assert.equal(inner.length, 1, sel);
+    assert.match(inner[0].body, new RegExp(`animation:\\s*${name} linear both;\\s*animation-timeline:\\s*--sheet;\\s*animation-range:\\s*entry \\d+% entry \\d+%;`), sel);
+  }
+  assert.equal(css.match(/animation-timeline:\s*--sheet/g)?.length, 2, "a --sheet timeline outside @supports");
+  // Each keyframe animates from somewhere, back to the base style.
+  assert.match(top.find((b) => b.prelude === "@keyframes sheet-wash")?.body ?? "", /^\s*from\s*\{\s*transform:\s*scaleX\(1\);\s*\}\s*$/);
+  assert.match(top.find((b) => b.prelude === "@keyframes sheet-draw")?.body ?? "", /^\s*from\s*\{\s*stroke-dashoffset:\s*1;\s*\}\s*$/);
+  // A shortened duration does not stop a scroll timeline, so the final reduced-motion block turns them off.
+  const last = top.at(-1)!;
+  assert.equal(last, reducedMotion(top).at(-1));
+  assert.match(last.body, /\.sheet-wash,\s*\.sheet-frame path\s*\{\s*animation:\s*none !important;\s*\}/);
+});

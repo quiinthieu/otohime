@@ -2022,6 +2022,68 @@
   outline-offset: 2px;
 }
 
+/* The sketches' sheets (app/(site)/(app)/sketches/page.tsx): a paper wash over each picture and an ink frame round
+   it. At rest the wash is scaled away and the frame drawn, so without scroll timelines, JavaScript or motion the
+   sketch is whole. Where the browser has view timelines, the wash slides off and then the frame draws as the sheet
+   scrolls in; a sheet already in view at load is past its range, and so complete. Transform and dash only: no
+   filter, no layout. */
+.sheet {
+  position: relative;
+  view-timeline: --sheet block;
+}
+
+.sheet-wash {
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+  transform: scaleX(0);
+  transform-origin: right;
+  pointer-events: none;
+}
+
+.sheet-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sheet-frame path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@supports (animation-timeline: view()) {
+  .sheet-wash {
+    animation: sheet-wash linear both;
+    animation-timeline: --sheet;
+    animation-range: entry 0% entry 60%;
+  }
+
+  .sheet-frame path {
+    animation: sheet-draw linear both;
+    animation-timeline: --sheet;
+    animation-range: entry 30% entry 100%;
+  }
+}
+
+@keyframes sheet-wash {
+  from {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes sheet-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
 @keyframes fade-out {
   to {
     opacity: 0;
@@ -2062,6 +2124,12 @@
   .stamp-marks,
   .stamp-block {
     transition: none;
+  }
+
+  /* A scroll-driven animation ignores its duration, so the sketches' wash and frame are switched off outright. */
+  .sheet-wash,
+  .sheet-frame path {
+    animation: none !important;
   }
 
   /* No specks: the loader never mounts the canvas, and this hides one caught mid-switch behind the static mark. */

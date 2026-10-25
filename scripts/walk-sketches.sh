@@ -159,6 +159,11 @@ check "/sketches build-sha" build_sha_matches
 check "/sketches retains Fig. 07" has sketches '07'
 check "/sketches has Places section" has sketches 'id="places"'
 check "/sketches has Small things section" has sketches 'id="objects"'
+FIGURES=$((12 + ${EXPECT_PEOPLE:-0}))
+check "/sketches wraps each of $FIGURES pictures in one sheet" count_eq sketches 'class="sheet"' "$FIGURES"
+check "/sketches gives each sheet one paper wash" count_eq sketches 'class="sheet-wash"' "$FIGURES"
+check "/sketches gives each sheet one pathLength=1 ink frame" count_eq sketches 'pathLength="1"' "$FIGURES"
+check "/sketches stands the sheets still without JavaScript" has sketches '<noscript><style>.sheet-wash,.sheet-frame path{animation:none!important}</style></noscript>'
 check "/sketches/download/99_Unknown.png returns 404" status_is dl_unknown 404
 check "/sketches/download rejects arbitrary external URL parameters with 400" status_is dl_extparam 400
 
