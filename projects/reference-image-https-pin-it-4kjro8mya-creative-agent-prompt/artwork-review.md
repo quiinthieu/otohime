@@ -2,7 +2,7 @@
 
 - **Plan**: `pm-240` (*Ink & Watercolour Portraits*)
 - **Task**: `t-1472` (*Publish and activate ten reviewed portraits*)
-- **Runs**: `run-8312` (attempt 1, parked on `esc-371`), `run-8320` (attempt 2, parked on `esc-372`), `run-8329` (attempt 3, stop state per `esc-372` decider resolution), `run-8341` (attempt 4, `fix_cycle: 1` after green gate `ver-3313` on `dd1e8e1`)
+- **Runs**: `run-8312` (attempt 1, parked on `esc-371`), `run-8320` (attempt 2, parked on `esc-372`), `run-8329` (attempt 3, stop state per `esc-372` decider resolution), `run-8341` (attempt 4, `fix_cycle: 1` after green gate `ver-3313` on `dd1e8e1`), `run-8364` (attempt 5, `fix_cycle: 2` after green gate `ver-3322` on `51cf311`)
 - **Collection Activation Status**: **NOT ACTIVATED (`content/portraits.json` = `[]`)** — blocked on human operator credential/master provisioning (`esc-371` `provision-xai-image-key:otohime` and `esc-372` `generate-portraits:grok-imagine`). Per `t-1472` contract and `esc-372`, no synthetic/fixture images, code-drawn substitutes, or `flux2-klein` outputs are used, fewer than ten portraits are never activated, and live `--require-people` verification gates remain visibly red until all ten reviewed paintings are published to permanent `https://files-cdn.x.ai/` URLs.
 
 ---
@@ -12,7 +12,7 @@
 - **Source Pin**: `https://pin.it/4KJro8mYA` -> `https://www.pinterest.com/pin/248120260716380781/`
 - **Original Image URL**: `https://i.pinimg.com/originals/41/9a/49/419a49689748e94025c4a9f00d06347b.jpg`
 - **Fetched Artifact**: `/tmp/pinterest-reference-style-only.jpg`
-  - **Format & Resolution**: `JPEG`, `842x1120` (`160,127` bytes)
+  - **Format & Resolution**: `JPEG`, `842x1120` (`163,569` bytes)
   - **SHA-256**: `9bbcdcf85394c695567a0f93114d942b2438c913b5eca0c3976297fed8a04c80`
 - **Visual Characteristics Observed**:
   - Young woman in right-facing profile with head bowed, reading loose sheets held in both hands, wearing a teal-blue headscarf over a low dark bun, a voluminous warm mustard-ochre scarf, and an oversized teal coat with bare white cuffs.
@@ -69,6 +69,13 @@
      - `task_manager_list_accounts`: `grok-main` remains `status: "auth_expired"` (`cooling_reason: "auth failure reported by a run"`, `updated_at: "2026-10-25T16:39:26.97379Z"`).
      - Host/worker check on `avietidol-Z490-GAMING-X`: no `XAI_API_KEY`, no `.grok/user-settings.json`, and no operator-supplied `01_Quiet_Reader.png`..`10_Letter_Writer.png` files exist.
      - Per `esc-371` and `esc-372` decider resolution (`run-8328`), `run-8341` does not re-raise `operator_action` (which would only re-park `t-1472` without advancing `fix_cycle` toward the `fix_cycles_exhausted` stop where `decider` has `action="decide"`), does not synthesize or draw replacement images in code, does not route portraits through `flux2-klein`, and leaves `content/portraits.json` at `[]` so the `--require-people` gates remain visibly red.
+5. **`run-8350` (Green Gate `ver-3322` on `51cf311`) & `run-8364` (`avietidol-mac-mini` / `Mac.lan`, `billie-agy`, `agy-argon-high`, `attempt: 5`, `fix_cycle: 2`)**:
+   - Green gate `ver-3322` (`run-8350`) ran against commit `51cf31138c783c3d10e5ea18649a994d9ef6cafb`: `npm test` (1,459 pass), `npm run typecheck`, `npm run lint`, and `npm run build` passed (`0`), while `npm run sketches:check -- --live --require-people` and `SKIP_BUILD=1 EXPECT_PEOPLE=10 bash scripts/walk-sketches.sh` failed (`1`) as expected because `content/portraits.json` is `[]`.
+   - Direct verification on `avietidol-mac-mini` (`Mac.lan`, Node `v22.23.3`, `tm_task_id: a40ee404-3724-417d-8800-1046f9fb6f35`):
+     - `node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sketches-paint.ts preflight --offline` -> `sharpVersion: "0.35.5"`, `credentialAvailable: false`, `credentialSource: "none"`, `promptPackConcepts: 10`, `existingBaseSketchesVerified: 12`, `manifestRecordsCount: 0`.
+     - `task_manager_list_accounts`: `grok-main` remains `status: "auth_expired"` (`cooling_reason: "auth failure reported by a run"`, `updated_at: "2026-10-25T16:39:26.97379Z"`).
+     - Worker check on `avietidol-mac-mini`: no `XAI_API_KEY`, no `.grok/user-settings.json`, and no operator-supplied `01_Quiet_Reader.png`..`10_Letter_Writer.png` files exist.
+     - Per `esc-371` and `esc-372` decider resolution (`run-8328`), `run-8364` does not re-raise `operator_action`, does not synthesize or draw replacement images in code, does not route portraits through `flux2-klein`, and leaves `content/portraits.json` at `[]` so the `--require-people` gates remain visibly red and advance `fix_cycle` to `fix_cycles_exhausted`.
 
 ---
 
