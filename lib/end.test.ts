@@ -242,8 +242,16 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
   assert.match(probeSh, /playwright@1\.64\.0/);
   assert.match(probeMjs, /verifyCanonicalLinks/);
   assert.match(probeMjs, /negative control:/);
+  assert.match(probeMjs, /local 390x844 reduced-motion 403 exit:/);
   assert.match(ci, /bash scripts\/walk-end\.sh/);
   assert.match(ci, /bash scripts\/probe-end\.sh/);
+
+  const rolesPage = readFileSync(resolve(root, "app/(site)/(app)/admin/roles/page.tsx"), "utf8");
+  const forbiddenPage = readFileSync(resolve(root, "app/(site)/(app)/forbidden.tsx"), "utf8");
+  assert.match(rolesPage, /requireUser\("\/admin\/roles"\)/);
+  assert.match(rolesPage, /if \(!can\(session\.user\.role, \{ user: \["list"\] \}\)\) return <Forbidden \/>;/);
+  assert.doesNotMatch(rolesPage, /\brequirePermission\b|\bforbidden\(\)/);
+  assert.match(forbiddenPage, /<meta name="robots" content="noindex" \/>/);
 
   // Executable regression: run the real probe-end.sh and walk-end.sh under set -u with TMPDIR unset,
   // empty, short custom, and >48-char long paths against a busy explicit PORT.

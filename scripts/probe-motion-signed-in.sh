@@ -240,3 +240,9 @@ fi
 
 export BASE_URL DATABASE_URL PW_PREFIX="$PW" PROBE_RUN="$RUN"
 node "$ROOT/scripts/probe-motion-signed-in.mjs"
+STATUS=$?
+if [ "$STATUS" -ne 0 ] && [ "$LOCAL" -eq 1 ] && [ -s "$WORK/server.log" ]; then
+  echo "# server.log (last 20 lines):"
+  tail -n 20 "$WORK/server.log"
+fi
+exit "$STATUS"

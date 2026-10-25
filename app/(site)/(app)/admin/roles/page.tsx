@@ -1,5 +1,6 @@
+import Forbidden from "@/app/(site)/(app)/forbidden";
 import { FigTitle } from "@/components/figures";
-import { requirePermission } from "@/lib/dal";
+import { requireUser } from "@/lib/dal";
 import { can, roles, statements, type Permissions, type RoleName } from "@/lib/permissions";
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
@@ -9,7 +10,8 @@ export const metadata: Metadata = { title: "Roles" };
 const names = Object.keys(roles) as RoleName[];
 
 export default async function RolesPage() {
-  await requirePermission("/admin/roles", { user: ["list"] });
+  const session = await requireUser("/admin/roles");
+  if (!can(session.user.role, { user: ["list"] })) return <Forbidden />;
 
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">

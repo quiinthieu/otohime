@@ -41,6 +41,18 @@ EXPECT_SHA="${EXPECT_SHA:-}"
 ANY_SHA_OR_DEV=""
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/probe-end.XXXXXX")"
 SERVER_PID=""
+DB_CONTAINER=""
+
+pgq() {
+  node -e '
+    const pg = require("pg");
+    const c = new pg.Client({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 3000 });
+    c.connect()
+      .then(() => c.query(process.argv[1]))
+      .then(() => c.end())
+      .catch(() => process.exit(1));
+  ' "$@"
+}
 
 cleanup() {
   if [ -n "$SERVER_PID" ]; then
@@ -51,6 +63,7 @@ cleanup() {
     done
     kill -KILL -- "-$SERVER_PID" 2>/dev/null
   fi
+  [ -n "$DB_CONTAINER" ] && docker rm -f "$DB_CONTAINER" >/dev/null 2>&1
   rm -rf "$WORK"
 }
 trap cleanup EXIT
@@ -80,6 +93,25 @@ if [ -z "$BASE_URL" ]; then
     [ "$BETTER_AUTH_URL" = "$BASE_URL" ] && export BETTER_AUTH_URL="http://localhost:$FREE"
     PORT="$FREE"
     BASE_URL="http://localhost:$PORT"
+  fi
+
+  if ! pgq 'select 1' >/dev/null 2>&1 && command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+    DB_PORT="$(node -e 'const s=require("net").createServer().listen(0,"127.0.0.1",()=>{console.log(s.address().port);s.close()})')"
+    DB_CONTAINER="otohime-probe-end-$$"
+    if docker run -d --rm --name "$DB_CONTAINER" \
+      -e POSTGRES_USER=otohime -e POSTGRES_PASSWORD=otohime -e POSTGRES_DB=otohime \
+      -p "127.0.0.1:$DB_PORT:5432" postgres:17-alpine >"$WORK/docker.log" 2>&1; then
+      export DATABASE_URL="postgresql://otohime:otohime@127.0.0.1:$DB_PORT/otohime"
+      for _ in $(seq 1 60); do
+        if docker exec "$DB_CONTAINER" pg_isready -U otohime -d otohime >/dev/null 2>&1 && pgq 'select 1' >/dev/null 2>&1; then
+          ./node_modules/.bin/drizzle-kit migrate >"$WORK/migrate.log" 2>&1 || true
+          break
+        fi
+        sleep 0.5
+      done
+    else
+      DB_CONTAINER=""
+    fi
   fi
 
   if [ "${SKIP_BUILD:-}" != "1" ]; then

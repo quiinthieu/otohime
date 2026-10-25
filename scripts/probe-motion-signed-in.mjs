@@ -104,12 +104,28 @@ async function open(browser, { viewport, reduced, cookies = [] }) {
   if (cookies.length) await context.addCookies(cookies);
   const page = await context.newPage();
   const errors = [];
+  let lastAbortDigest = "none";
+  page.on("response", async (res) => {
+    try {
+      const ct = res.headers()["content-type"] ?? "";
+      if (!ct.includes("text/html") && !ct.includes("text/x-component")) return;
+      const body = await res.text();
+      const matches = [...body.matchAll(/\$RX\("(B:\d+)","([^"]+)"/g)].map(([, b, d]) => `${b}:${d}`);
+      if (matches.length) lastAbortDigest = matches.join(",");
+    } catch {}
+  });
   page.on("console", (m) => {
     if (m.type() !== "error") return;
     const from = m.location().url;
     errors.push(`console ${page.url()}: ${m.text()}${from && from !== page.url() ? ` (${from})` : ""}`);
   });
-  page.on("pageerror", (e) => errors.push(`pageerror ${page.url()}: ${e.message}`));
+  page.on("pageerror", (e) => {
+    const firstFrame = e.stack?.split("\n").find((l) => l.trim().startsWith("at "))?.trim() ?? "";
+    const phase = page.__phase ? ` [phase=${page.__phase}]` : "";
+    const abort = ` [abort=${lastAbortDigest}]`;
+    const frame = firstFrame ? ` (${firstFrame})` : "";
+    errors.push(`pageerror ${page.url()}${phase}${abort}: ${e.message}${frame}`);
+  });
   await page.addInitScript(watchHops);
   return { context, page, errors };
 }
@@ -359,6 +375,7 @@ try {
           for (const [how, go] of Object.entries(reach)) {
             for (const [what, selector, to] of EXITS) {
               const label = `${size}${reduced ? " reduced motion" : ""} plain 403 (${how}) -> ${to} by ${what}`;
+              page.__phase = label;
               const from = errors.length;
               try {
                 await go(page);
@@ -387,9 +404,8 @@ try {
       }
     }
 
-    // JavaScript off: the 403 is drawn on the client (forbidden() is thrown inside loading.tsx's Suspense, so the
-    // server sends the skeleton and an errored boundary), like every streamed room. The way home is the masthead's
-    // brand mark, which is in the server's HTML.
+    // JavaScript off: the 403 is rendered on the server as a completed boundary, and the masthead's brand mark
+    // navigates home without client JavaScript.
     const context = await browser.newContext({ viewport: DESKTOP, javaScriptEnabled: false });
     await context.addCookies(users.plain.cookies);
     const page = await context.newPage();

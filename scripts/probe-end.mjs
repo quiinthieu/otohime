@@ -9,6 +9,8 @@ import { CONSOLE_MENU, PUBLIC_PAGES } from "../lib/pages.ts";
 
 const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
 const { chromium } = require("playwright");
+const rootRequire = createRequire(import.meta.url);
+const pg = rootRequire("pg");
 
 const BASE_URL = process.env.BASE_URL;
 const EXPECT_SHA = process.env.EXPECT_SHA ?? "";
@@ -1647,6 +1649,143 @@ try {
         );
       } finally {
         await context.close();
+      }
+    }
+
+    // Local-only repeated plain-user full-load 403 -> /projects -> full-load 403 -> /dashboard at 390x844 reduced motion.
+    // Preserves strictly read-only remote BASE_URL behavior.
+    const isLocalHost = ["localhost", "127.0.0.1"].includes(new URL(BASE_URL).hostname);
+    if ((PROBE_LOCAL || isLocalHost) && process.env.DATABASE_URL) {
+      let dbClient = null;
+      let dbReady = false;
+      try {
+        dbClient = new pg.Client({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 3000 });
+        await dbClient.connect();
+        await dbClient.query("SELECT 1");
+        dbReady = true;
+      } catch {
+        dbReady = false;
+      }
+      if (dbReady && dbClient) {
+        const probeEmail = `end-403-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@probe.test`;
+        const abortDigests = [];
+        let signedUp = false;
+        let cookies = [];
+        try {
+          for (let attempt = 0; attempt < 3; attempt++) {
+            const res = await fetch(`${BASE_URL}/api/auth/sign-up/email`, {
+              method: "POST",
+              headers: { origin: BASE_URL, "content-type": "application/json" },
+              body: JSON.stringify({
+                name: "end-probe",
+                email: probeEmail,
+                password: "end-probe-local-password-123",
+              }),
+            });
+            if (res.status === 429) {
+              await new Promise((r) => setTimeout(r, 1000 * Number(res.headers.get("x-retry-after") ?? 10)));
+              continue;
+            }
+            if (res.status === 200) {
+              signedUp = true;
+              cookies = res.headers.getSetCookie().map((c) => {
+                const [pair] = c.split(";");
+                const at = pair.indexOf("=");
+                return { name: pair.slice(0, at), value: pair.slice(at + 1), url: BASE_URL };
+              });
+            }
+            break;
+          }
+          check(
+            "local 390x844 reduced-motion 403 exit: isolated plain-user sign-up succeeds",
+            signedUp && cookies.length > 0,
+            `signedUp=${signedUp}, cookies=${cookies.length}`,
+          );
+          if (signedUp && cookies.length > 0) {
+            const errorsFrom = errors.length;
+            const { context, page } = await open(browser, {
+              viewport: PHONE,
+              isMobile: true,
+              hasTouch: true,
+              reduced: true,
+            });
+            try {
+              await context.addCookies(cookies);
+              page.on("response", async (response) => {
+                if (!response.url().startsWith(BASE_URL)) return;
+                if (!["document", "fetch"].includes(response.request().resourceType())) return;
+                try {
+                  const body = await response.text();
+                  for (const m of body.matchAll(/\$RX\("([^"]+)","([^"]+)"/g)) {
+                    abortDigests.push(`${m[1]}:${m[2]}`);
+                  }
+                } catch {}
+              });
+
+              const cycleResults = [];
+              for (let cycle = 0; cycle < 2; cycle++) {
+                for (const target of ["projects", "dashboard"]) {
+                  await page.goto(`${BASE_URL}/admin/roles`, { waitUntil: "load" });
+                  await page.getByRole("heading", { name: "This room is locked" }).waitFor({ timeout: 15_000 });
+                  await hydrated(page);
+                  const denied = await page.evaluate(() => {
+                    const isVis = (el) =>
+                      typeof el.checkVisibility === "function" ? el.checkVisibility() : el.offsetParent !== null;
+                    const robots = [...document.querySelectorAll('meta[name="robots"]')].map((m) => m.content);
+                    const visFooters = [...document.querySelectorAll("footer.end")].filter(isVis).length;
+                    return {
+                      h1: document.querySelector("main h1")?.textContent?.trim() ?? "",
+                      noindex: robots.some((c) => c.includes("noindex")),
+                      visFooters,
+                    };
+                  });
+                  await page.locator(`nav[aria-label="Main"] a[href="/${target}"]`).click();
+                  await page.waitForURL(`${BASE_URL}/${target}`, { timeout: 15_000 });
+                  await page.waitForTimeout(450);
+                  await hydrated(page);
+                  const landed = await page.evaluate(() => {
+                    const isVis = (el) =>
+                      typeof el.checkVisibility === "function" ? el.checkVisibility() : el.offsetParent !== null;
+                    return {
+                      pathname: location.pathname,
+                      h1: document.querySelector("main h1")?.textContent?.trim() ?? "",
+                      visMains: [...document.querySelectorAll("main#main")].filter(isVis).length,
+                      visFooters: [...document.querySelectorAll("footer.end")].filter(isVis).length,
+                    };
+                  });
+                  cycleResults.push({ cycle, target, denied, landed });
+                }
+              }
+
+              const local403Errors = errors.slice(errorsFrom);
+              const allDeniedOk = cycleResults.every(
+                (r) =>
+                  r.denied.h1.includes("This room is locked") &&
+                  r.denied.noindex === true &&
+                  r.denied.visFooters === 1,
+              );
+              const allLandedOk = cycleResults.every(
+                (r) =>
+                  r.landed.pathname === `/${r.target}` &&
+                  r.landed.visMains === 1 &&
+                  r.landed.visFooters === 1 &&
+                  (r.target === "dashboard" ? r.landed.h1.includes("Hello,") : r.landed.h1.includes("Projects")),
+              );
+              check(
+                "local 390x844 reduced-motion 403 exit: repeated full-load /admin/roles -> /projects -> full-load /admin/roles -> /dashboard preserves access denial, noindex, 1 visible footer, normal navigation, zero abort digests and zero page/console errors",
+                allDeniedOk && allLandedOk && abortDigests.length === 0 && local403Errors.length === 0,
+                JSON.stringify({ allDeniedOk, allLandedOk, abortDigests, local403Errors, cycleResults }),
+              );
+            } finally {
+              await context.close();
+            }
+          }
+        } finally {
+          await dbClient.query('DELETE FROM "user" WHERE email = $1', [probeEmail]).catch(() => {});
+          await dbClient.end().catch(() => {});
+        }
+      } else if (dbClient) {
+        await dbClient.end().catch(() => {});
       }
     }
   }
