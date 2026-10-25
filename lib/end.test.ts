@@ -243,6 +243,17 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
   assert.match(probeMjs, /verifyCanonicalLinks/);
   assert.match(probeMjs, /negative control:/);
   assert.match(probeMjs, /local 390x844 reduced-motion 403 exit:/);
+  // Network attribution compares parsed hosts and frame owners, never whole-URL substrings, and has its own controls.
+  assert.match(probeMjs, /function classifyExternal\(/);
+  assert.match(probeMjs, /async function verifyPlayerFrame\(/);
+  assert.doesNotMatch(probeMjs, /\/youtube\\\.com\|ytimg\\\.com\|google\\\.com\|gstatic\\\.com\/\.test\(url\)/);
+  assert.match(probeMjs, /network negative control: main-frame ad, path\/query and look-alike host requests/);
+  // The badge is waited for by its observable state, with a held-invisible negative control.
+  assert.match(probeMjs, /async function settleBadge\(/);
+  assert.match(probeMjs, /const unlockSettle = await settleBadge\(page\);/);
+  assert.match(probeMjs, /const restoreSettle = await settleBadge\(page\);/);
+  assert.match(probeMjs, /badge negative control:/);
+  assert.match(probeMjs, />= 0\.99/);
   assert.match(ci, /bash scripts\/walk-end\.sh/);
   assert.match(ci, /bash scripts\/probe-end\.sh/);
 

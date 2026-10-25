@@ -59,6 +59,80 @@ function check(name, pass, detail = "") {
 const errors = [];
 const hydrationErrors = [];
 const footerThirdPartyRequests = [];
+// External requests attributed to /music's existing television (its API bootstrap or its verified embed frame).
+const televisionRequests = [];
+
+// /music's television loads YouTube's iframe API into the page, and the player then lives in its own embed frame.
+// Hosts are compared exactly on parsed URLs, so "youtube.com" in a path, query or lookalike host never matches.
+const PLAYER_HOST = "www.youtube.com";
+const isPlayerBootstrap = (u) =>
+  u.protocol === "https:" &&
+  u.hostname === PLAYER_HOST &&
+  (u.pathname === "/iframe_api" || /^\/s\/player\/[\w-]+\/www-widgetapi\.vflset\/www-widgetapi\.js$/.test(u.pathname));
+
+// Classifies one external request. pagePath is the main frame's path; playerFrame is null for a main-frame request,
+// or else whether the request's top-level child frame was verified as the television's own embed iframe.
+function classifyExternal({ url, pagePath, playerFrame }) {
+  let u;
+  try {
+    u = new URL(url);
+  } catch {
+    return "unexpected";
+  }
+  if (pagePath !== "/music") return "unexpected";
+  if (playerFrame === null) return isPlayerBootstrap(u) ? "television" : "unexpected";
+  return playerFrame === true ? "television" : "unexpected";
+}
+
+// The same assertion the run ends with; the attribution negative control feeds it a separate sink.
+const noUnexpectedExternal = (list) => ({ pass: list.length === 0, detail: list.slice(0, 3).join(" | ") });
+
+// A child frame counts as the television's only if its <iframe> was created with a YouTube embed src inside main,
+// outside the footer, directly in the main frame. The predicate runs in the page, on the iframe element.
+function isPlayerIframe(iframe) {
+  let src;
+  try {
+    src = new URL(iframe.getAttribute("src") ?? "", location.href);
+  } catch {
+    return false;
+  }
+  return (
+    iframe.tagName === "IFRAME" &&
+    src.protocol === "https:" &&
+    src.hostname === "www.youtube.com" &&
+    src.pathname.startsWith("/embed/") &&
+    Boolean(iframe.closest("main#main")) &&
+    !iframe.closest("footer")
+  );
+}
+
+// Init script: report every inserted iframe and its owner as it is inserted, so a frame that is gone before
+// Playwright can read its element (the player is destroyed on leaving /music) still has a recorded owner.
+function recordIframes(player) {
+  const report = (iframe) => window.__endProbeIframe?.({ src: iframe.src, player: player(iframe) });
+  new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      for (const node of m.addedNodes) {
+        if (node.nodeType !== 1) continue;
+        if (node.tagName === "IFRAME") report(node);
+        else node.querySelectorAll("iframe").forEach(report);
+      }
+    }
+  }).observe(document, { childList: true, subtree: true });
+}
+
+// Reads the live element; if the frame has already detached, falls back to the insertion record for the URL it
+// navigated to, which must be unambiguous: every iframe inserted with that src was the player's.
+async function verifyPlayerFrame(frame, recorded) {
+  try {
+    const el = await frame.frameElement();
+    return await el.evaluate(isPlayerIframe);
+  } catch {
+    if (!frame.isDetached()) return false;
+    const same = recorded(frame);
+    return same.length > 0 && same.every((r) => r.player);
+  }
+}
 
 const notFoundLoad = (e) =>
   /\/does-not-exist: Failed to load resource: the server responded with a status of 404/.test(e) ||
@@ -129,6 +203,8 @@ async function open(
     scheme = "light",
     js = true,
     sink = errors,
+    netSink = footerThirdPartyRequests,
+    tvSink = televisionRequests,
   } = {},
 ) {
   const context = await browser.newContext({
@@ -155,23 +231,66 @@ async function open(
     if (/hydrat|did not match/i.test(e.message)) hydrationErrors.push(line);
     sink.push(line);
   });
+  // Each top-level child frame is checked once, when it attaches, so its owner is known before it loads anything.
+  const iframes = [];
+  const navigations = new WeakMap();
+  if (js) {
+    await page.exposeBinding("__endProbeIframe", (_source, record) => iframes.push(record));
+    await page.addInitScript({ content: `(${recordIframes})(${isPlayerIframe});` });
+  }
+  const recorded = (frame) => {
+    const url = navigations.get(frame) ?? frame.url();
+    return iframes.filter((r) => r.src === url);
+  };
+  const playerFrames = new WeakMap();
+  const playerFrame = (frame) => {
+    if (!playerFrames.has(frame)) playerFrames.set(frame, verifyPlayerFrame(frame, recorded));
+    return playerFrames.get(frame);
+  };
+  page.on("frameattached", (frame) => {
+    if (frame.parentFrame() === page.mainFrame()) playerFrame(frame);
+  });
+  const attributions = new Set();
   page.on("request", (req) => {
     const url = req.url();
-    if (url.startsWith("data:") || url.startsWith("blob:")) return;
-    const origin = new URL(BASE_URL).origin;
-    if (!url.startsWith(origin)) {
-      const pagePath = (() => {
-        try {
-          return new URL(page.url()).pathname;
-        } catch {
-          return "";
-        }
-      })();
-      // /music embeds YouTube's player API; no other public page or footer interaction may make external requests.
-      if (pagePath === "/music" && /youtube\.com|ytimg\.com|google\.com|gstatic\.com/.test(url)) return;
-      footerThirdPartyRequests.push(`${pagePath} -> ${url}`);
+    let u;
+    try {
+      u = new URL(url);
+    } catch {
+      netSink.push(`unparsable -> ${url}`);
+      return;
     }
+    if (u.protocol === "data:" || u.protocol === "blob:") return;
+    if (u.origin === new URL(BASE_URL).origin) return;
+    const pagePath = (() => {
+      try {
+        return new URL(page.url()).pathname;
+      } catch {
+        return "";
+      }
+    })();
+    // Walk the request's frame up to the main frame; a request from inside the player belongs to its top-level child.
+    let frame = null;
+    try {
+      frame = req.frame();
+    } catch {}
+    let top = null;
+    for (let f = frame; f && f !== page.mainFrame(); f = f.parentFrame()) top = f;
+    if (top && frame === top && req.isNavigationRequest() && !navigations.has(top)) navigations.set(top, url);
+    const done = (top ? playerFrame(top) : Promise.resolve(null)).then((verified) => {
+      const kind = classifyExternal({ url, pagePath, playerFrame: verified });
+      const line = `${pagePath} [${top ? `frame ${verified ? "television" : "unverified"}` : "main frame"}] -> ${url}`;
+      (kind === "television" ? tvSink : netSink).push(line);
+    });
+    attributions.add(done);
+    done.finally(() => attributions.delete(done));
   });
+  // Settle every pending attribution before the context goes away, so no request is dropped unclassified.
+  const close = context.close.bind(context);
+  context.close = async (...args) => {
+    await Promise.allSettled([...attributions]);
+    return close(...args);
+  };
   if (js) {
     await page.addInitScript(installLoopCounters);
   }
@@ -191,6 +310,54 @@ async function hydrated(page, selector = "[data-end-stage]") {
     )
     .catch(() => {});
   await page.waitForTimeout(120);
+}
+
+// The badge fades in over 0.15 s; wait (bounded) for the visible footer's badge to be unlocked, visible and opaque
+// instead of sampling it after a fixed delay. On timeout, return what it looked like so a stuck badge is diagnosable.
+const BADGE_SETTLE_MS = 2_000;
+async function settleBadge(page, timeout = BADGE_SETTLE_MS) {
+  const settled = await page
+    .waitForFunction(
+      () => {
+        const footer = [...document.querySelectorAll("footer.end")].find((f) => f.checkVisibility());
+        const badge = footer?.querySelector("[data-end-badge]");
+        if (!badge) return false;
+        const s = getComputedStyle(badge);
+        return badge.dataset.unlocked === "true" && s.visibility === "visible" && parseFloat(s.opacity) >= 0.99;
+      },
+      null,
+      { timeout, polling: "raf" },
+    )
+    .then(
+      () => true,
+      () => false,
+    );
+  if (settled) return { settled, diag: null };
+  const diag = await page.evaluate(() => {
+    const footers = [...document.querySelectorAll("footer.end")];
+    const footer = footers.find((f) => f.checkVisibility());
+    const badge = footer?.querySelector("[data-end-badge]");
+    const s = badge ? getComputedStyle(badge) : null;
+    return {
+      sha: document.querySelector('meta[name="build-sha"]')?.content ?? null,
+      visibilityState: document.visibilityState,
+      footers: footers.length,
+      visibleFooters: footers.filter((f) => f.checkVisibility()).length,
+      unlocked: badge?.dataset.unlocked ?? null,
+      visibility: s?.visibility ?? null,
+      opacity: s?.opacity ?? null,
+      transition: s ? `${s.transitionProperty} ${s.transitionDuration}` : null,
+      animations: badge
+        ? badge.getAnimations().map((a) => ({
+            name: a.transitionProperty ?? a.animationName ?? a.constructor.name,
+            state: a.playState,
+            currentTime: a.currentTime,
+            duration: a.effect?.getTiming().duration,
+          }))
+        : [],
+    };
+  });
+  return { settled, diag };
 }
 
 // Canonical link and footer structure verifier shared by all-route checks AND the negative control.
@@ -1356,7 +1523,7 @@ try {
         for (const k of [...KONAMI.slice(0, 8), "B", "A"]) {
           await page.keyboard.press(k);
         }
-        await page.waitForTimeout(250);
+        const unlockSettle = await settleBadge(page);
 
         const unlockResult = await page.evaluate(() => {
           const footer = document.querySelector("footer.end");
@@ -1387,13 +1554,34 @@ try {
             unlockResult.lcd === "REACHED/THE END" &&
             unlockResult.readout === site.end.unlocked.readout &&
             unlockResult.stored === "1",
-          JSON.stringify(unlockResult),
+          JSON.stringify({ ...unlockResult, settle: unlockSettle.diag }),
+        );
+
+        // Badge negative control (this browser's DOM only): hold the unlocked badge at opacity 0 and the same bounded
+        // settling must time out and the same visibility test must fail; lifting the hold must settle again.
+        await page.evaluate(() => {
+          const hold = document.createElement("style");
+          hold.id = "probe-badge-hold";
+          hold.textContent = '.end-badge[data-unlocked="true"] { opacity: 0 !important; transition: none !important; }';
+          document.head.append(hold);
+        });
+        const heldSettle = await settleBadge(page, 600);
+        const heldVisible = await page.evaluate(() => {
+          const s = getComputedStyle(document.querySelector("footer.end [data-end-badge]"));
+          return s.visibility === "visible" && parseFloat(s.opacity) >= 0.99;
+        });
+        await page.evaluate(() => document.getElementById("probe-badge-hold")?.remove());
+        const liftedSettle = await settleBadge(page);
+        check(
+          "badge negative control: a badge held at opacity 0 fails the bounded visibility wait, then settles once released",
+          heldSettle.settled === false && heldVisible === false && heldSettle.diag?.opacity === "0" && liftedSettle.settled === true,
+          JSON.stringify({ held: heldSettle.diag, heldVisible, lifted: liftedSettle.diag }),
         );
 
         // (f) Persistence across reload with no hydration error
         await page.reload({ waitUntil: "load" });
         await hydrated(page);
-        await page.waitForTimeout(220);
+        const restoreSettle = await settleBadge(page);
         const restoredResult = await page.evaluate(() => {
           const footer = document.querySelector("footer.end");
           const stage = footer.querySelector("[data-end-stage]");
@@ -1412,7 +1600,7 @@ try {
             restoredResult.badgeUnlocked === "true" &&
             restoredResult.badgeVisible === true &&
             restoredResult.lcd === "REACHED/THE END",
-          JSON.stringify(restoredResult),
+          JSON.stringify({ ...restoredResult, settle: restoreSettle.diag }),
         );
       } finally {
         await context.close();
@@ -1824,6 +2012,125 @@ try {
     }
   }
 
+  // 8b. Network attribution negative control. The classifier on its own: exact parsed hosts, no substring bypass.
+  {
+    const cases = [
+      ["television API from /music", { url: "https://www.youtube.com/iframe_api", pagePath: "/music", playerFrame: null }, "television"],
+      ["television API from /work", { url: "https://www.youtube.com/iframe_api", pagePath: "/work", playerFrame: null }, "unexpected"],
+      ["youtube.com only in the path", { url: "https://evil.test/www.youtube.com/iframe_api", pagePath: "/music", playerFrame: null }, "unexpected"],
+      ["youtube.com only in the query", { url: "https://evil.test/x?u=https://www.youtube.com/iframe_api", pagePath: "/music", playerFrame: null }, "unexpected"],
+      ["lookalike host", { url: "https://www.youtube.com.evil.test/iframe_api", pagePath: "/music", playerFrame: null }, "unexpected"],
+      ["ads from the main frame", { url: "https://googleads.g.doubleclick.net/pagead/id", pagePath: "/music", playerFrame: null }, "unexpected"],
+      ["ads from the verified player frame", { url: "https://googleads.g.doubleclick.net/pagead/id", pagePath: "/music", playerFrame: true }, "television"],
+      ["ads from an unverified frame", { url: "https://googleads.g.doubleclick.net/pagead/id", pagePath: "/music", playerFrame: false }, "unexpected"],
+    ];
+    const wrong = cases.filter(([, input, want]) => classifyExternal(input) !== want).map(([name]) => name);
+    // A frame whose element can no longer be read is the player's only by an unambiguous insertion record.
+    const EMBED = "https://www.youtube.com/embed/?probe=1";
+    const gone = (detached) => ({
+      frameElement: async () => {
+        throw new Error("frame was detached");
+      },
+      isDetached: () => detached,
+      url: () => EMBED,
+    });
+    const frames = [
+      ["detached player frame with its record", gone(true), [{ src: EMBED, player: true }], true],
+      ["detached frame whose src was also inserted outside the player", gone(true), [{ src: EMBED, player: true }, { src: EMBED, player: false }], false],
+      ["detached frame with no record", gone(true), [], false],
+      ["detached frame recorded outside the player", gone(true), [{ src: EMBED, player: false }], false],
+      ["attached frame whose element cannot be read", gone(false), [{ src: EMBED, player: true }], false],
+    ];
+    for (const [name, frame, records, want] of frames) {
+      if ((await verifyPlayerFrame(frame, () => records)) !== want) wrong.push(name);
+    }
+    check(
+      "network negative control: the classifier keeps the player API and verified player frame apart from main-frame, lookalike, path/query, unverified-frame and ambiguous detached-frame requests",
+      wrong.length === 0,
+      wrong.join(", "),
+    );
+  }
+
+  // In a real browser, with every control URL fulfilled locally by page.route (nothing reaches the network or the
+  // deployed site): a stub player API creates the television's embed iframe, whose ad request must be attributed to
+  // the television, while the same request from the main frame, from a look-alike embed inside the footer, or from
+  // look-alike URLs must make the run's final network assertion fail.
+  {
+    const controlNet = [];
+    const controlTv = [];
+    const { context, page } = await open(browser, { viewport: DESKTOP, netSink: controlNet, tvSink: controlTv, sink: [] });
+    try {
+      const AD = "https://googleads.g.doubleclick.net/pagead/id";
+      await page.route("https://www.youtube.com/iframe_api", (route) =>
+        route.fulfill({
+          contentType: "text/javascript",
+          body: `window.YT = { Player: class {
+            constructor(slot, opts) {
+              const f = document.createElement("iframe");
+              f.src = "https://www.youtube.com/embed/?probe=television";
+              f.dataset.probePlayer = "";
+              slot.replaceWith(f);
+              this.f = f;
+              setTimeout(() => opts.events.onReady({ target: this }));
+            }
+            cuePlaylist() {} playVideo() {} pauseVideo() {} playVideoAt() {}
+            getPlaylistIndex() { return 0; }
+            destroy() { this.f.remove(); }
+          } };
+          window.onYouTubeIframeAPIReady();`,
+        }),
+      );
+      await page.route("https://www.youtube.com/embed/**", (route) =>
+        route.fulfill({ contentType: "text/html", body: `<script>fetch(${JSON.stringify(AD)}, { mode: "no-cors" })</script>` }),
+      );
+      for (const pattern of ["https://googleads.g.doubleclick.net/**", "https://evil.test/**", "https://www.youtube.com.evil.test/**"]) {
+        await page.route(pattern, (route) => route.fulfill({ status: 204, body: "" }));
+      }
+
+      await page.goto(`${BASE_URL}/music`, { waitUntil: "load" });
+      await hydrated(page);
+      await page.locator("iframe[data-probe-player]").waitFor({ state: "attached", timeout: 10_000 });
+      // Wait for the player frame's own ad request, bounded.
+      const deadline = Date.now() + 5_000;
+      while (!controlTv.some((l) => l.includes("doubleclick")) && Date.now() < deadline) await page.waitForTimeout(50);
+      const televisionAttributed = controlTv.filter((l) => l.includes("[frame television]") && l.includes(AD));
+      const beforeInjection = noUnexpectedExternal(controlNet);
+      check(
+        "network negative control: the television's own embed frame request is attributed to the television, and the assertion still passes",
+        televisionAttributed.length > 0 && beforeInjection.pass,
+        JSON.stringify({ controlTv, controlNet }),
+      );
+
+      // Now the same traffic from places the footer or main page could make it.
+      await page.evaluate((ad) => {
+        const footer = [...document.querySelectorAll("footer.end")].find((f) => f.checkVisibility());
+        const lookalike = document.createElement("iframe");
+        lookalike.src = "https://www.youtube.com/embed/?probe=footer";
+        lookalike.dataset.probeFooterFrame = "";
+        footer.append(lookalike);
+        for (const url of [ad, "https://evil.test/www.youtube.com/iframe_api?h=www.youtube.com", "https://www.youtube.com.evil.test/iframe_api"]) {
+          fetch(url, { mode: "no-cors" }).catch(() => {});
+        }
+      }, AD);
+      const want = [
+        `/music [main frame] -> ${AD}`,
+        "/music [main frame] -> https://evil.test/www.youtube.com/iframe_api?h=www.youtube.com",
+        "/music [main frame] -> https://www.youtube.com.evil.test/iframe_api",
+        `/music [frame unverified] -> ${AD}`,
+      ];
+      const injectDeadline = Date.now() + 5_000;
+      while (!want.every((w) => controlNet.includes(w)) && Date.now() < injectDeadline) await page.waitForTimeout(50);
+      const afterInjection = noUnexpectedExternal(controlNet);
+      check(
+        "network negative control: main-frame ad, path/query and look-alike host requests and a footer-side embed frame make the same network assertion fail",
+        afterInjection.pass === false && want.every((w) => controlNet.includes(w)),
+        JSON.stringify({ controlNet, controlTv }),
+      );
+    } finally {
+      await context.close();
+    }
+  }
+
   // 9. Global error and server-log hygiene.
   check(
     "errors: zero hydration errors across all contexts",
@@ -1835,11 +2142,9 @@ try {
     errors.length === 0,
     errors.slice(0, 3).join(" | "),
   );
-  check(
-    "network: zero unexpected external network requests from footer pages",
-    footerThirdPartyRequests.length === 0,
-    footerThirdPartyRequests.slice(0, 3).join(" | "),
-  );
+  const network = noUnexpectedExternal(footerThirdPartyRequests);
+  console.log(`# network: ${televisionRequests.length} external requests attributed to /music's existing television`);
+  check("network: zero unexpected external network requests from footer pages", network.pass, network.detail);
 
   if (PROBE_LOCAL && SERVER_LOG && existsSync(SERVER_LOG)) {
     const serverLog = readFileSync(SERVER_LOG, "utf8");
