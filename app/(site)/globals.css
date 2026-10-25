@@ -1446,6 +1446,121 @@
   .ink-hero[data-ink="live"] .ink-hero-mark {
     opacity: 0;
   }
+
+  /* Ask the console (components/ask-console.tsx): a modal with a > prompt, a bottom sheet on phones. The input
+     is 16px so iOS does not zoom in on focus. */
+  .ask-console {
+    width: min(28rem, 100vw - 2rem);
+    max-height: min(40rem, 100dvh - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .ask-prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--ink);
+    border-radius: 8px;
+    background: var(--field);
+    font-family: var(--font-mono);
+  }
+
+  .ask-prompt input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: 400 16px / 1.4 var(--font-mono);
+    outline: none;
+  }
+
+  .ask-prompt:focus-within {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  /* The receipt: 32 columns of mono on a paper strip with a torn foot. Each row is one unwrapped line (--n chars,
+     starting at --at); it feeds down, then a steps() clip mask types it at 40 chars a second. The gap before a
+     paragraph and the dashed rule are rows too, so nothing takes room on the strip before it prints. */
+  .ask-receipt {
+    width: fit-content;
+    max-width: 100%;
+    margin: 1rem auto 0;
+    padding: 0.75rem 1rem 1.25rem;
+    background: var(--field);
+    color: var(--ink);
+    font: 400 13px / 1.5 var(--font-mono);
+    box-shadow: 0 1px 0 var(--hairline);
+    mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 12px 100%;
+  }
+
+  .ask-echo {
+    color: var(--muted);
+  }
+
+  .ask-row {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    height: calc(1.5em + var(--gap, 0em));
+    padding-top: var(--gap, 0em);
+    overflow: hidden;
+    white-space: pre;
+    animation:
+      ask-feed 120ms ease-out var(--at) both,
+      ask-type calc(var(--n) * 25ms) steps(var(--n), end) var(--at) both;
+  }
+
+  .ask-receipt p + p > .ask-row:first-child,
+  .ask-sep .ask-row {
+    --gap: 0.5em;
+  }
+
+  .ask-sep {
+    color: var(--muted);
+  }
+
+  .ask-link {
+    display: block;
+    width: fit-content;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @keyframes ask-feed {
+    from {
+      height: 0;
+      padding-top: 0;
+    }
+  }
+
+  @keyframes ask-type {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ask-row {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .ask-console {
+      width: 100vw;
+      max-width: 100vw;
+      max-height: 85dvh;
+      margin: auto 0 0;
+      border-width: 1px 0 0;
+      border-radius: 14px 14px 0 0;
+      padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+    }
+  }
 }
 
 @keyframes rise {

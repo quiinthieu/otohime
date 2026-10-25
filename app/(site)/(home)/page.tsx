@@ -1,3 +1,4 @@
+import { AskConsoleLoader } from "@/components/ask-console-loader";
 import { Handheld } from "@/components/handheld";
 import { InkHeroLoader } from "@/components/ink-hero-loader";
 import { Switchboard } from "@/components/switchboard";
@@ -6,6 +7,7 @@ import { ViewTransition } from "react";
 
 // The front page: a pocket console boots up and its menu is the way in. The name is signed under the h1 in
 // ink specks that a pointer blows apart (components/ink-hero-loader.tsx, loaded when idle).
+// Under the console, a chip asks the console about the site (components/ask-console-loader.tsx).
 // The sidebar waits on the pages behind it; the rest is below the fold.
 export default function HomePage() {
   return (
@@ -22,7 +24,11 @@ export default function HomePage() {
               Pick a page on the console: ▲ ▼ or the arrow keys, then A or Enter.
             </p>
           </div>
-          <Handheld />
+          <div>
+            <Handheld />
+            {/* ask the console about the site; the dialog and its index load on the first press */}
+            <AskConsoleLoader />
+          </div>
         </section>
         <section aria-labelledby="about" className="mt-8 grid items-start gap-x-12 gap-y-8 border-t border-line pt-8 lg:grid-cols-2">
           <div>
