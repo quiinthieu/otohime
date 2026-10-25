@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
+import { seasonScript } from "@/lib/seasons";
 import "./globals.css";
+import "./seasons.css";
 
 export const metadata: Metadata = {
   title: { default: "Otohime", template: "%s · Otohime" },
@@ -17,7 +19,8 @@ export const viewport: Viewport = {
   ],
 };
 
-// Applies a pinned theme (components/theme-toggle.tsx) before first paint.
+// Applies a pinned theme (components/theme-toggle.tsx) before first paint; seasonScript (lib/seasons.ts) pins
+// data-season the same way, from the stored choice or the visitor's clock, so seasons.css tints the first frame.
 const pinTheme = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
 // A full load arrives inside the hop's transition, and React's streamed reveal would start its own while the hop
@@ -25,7 +28,7 @@ const pinTheme = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="d
 // document.__reactViewTransition to finish first, so the hop is handed to it until it ends.
 const holdForHop = `addEventListener("pagereveal",function(e){var v=e.viewTransition;if(!v)return;document.__reactViewTransition=v;var c=function(){if(document.__reactViewTransition===v)document.__reactViewTransition=null};v.finished.then(c,c)})`;
 
-// suppressHydrationWarning: the scripts add data-theme and data-booted (lib/boot.ts: the console already booted
+// suppressHydrationWarning: the scripts add data-theme, data-season and data-booted (lib/boot.ts: the console already booted
 // this session, so Home shows its menu at once) before React hydrates.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -37,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: holdForHop }} />
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
+        <script dangerouslySetInnerHTML={{ __html: seasonScript }} />
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
       <body className="min-h-full">{children}</body>

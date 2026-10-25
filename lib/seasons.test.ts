@@ -1,13 +1,16 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  SEASON_ATTR,
   SEASONS,
+  SOUTHERN_PREFIXES,
   SOUTHERN_ZONES,
   hemisphereFromZone,
   isSeason,
   monthIn,
   resolveSeason,
   seasonFor,
+  seasonScript,
   type Season,
 } from "./seasons.ts";
 
@@ -139,4 +142,79 @@ test("an invalid manual value falls back to the clock", () => {
   }
   assert.equal(isSeason("autumn"), true);
   assert.equal(isSeason("fall"), false);
+});
+
+// The layouts' inline script, run with a fixed clock, a reported zone and a stored value in place of the
+// browser's. It returns the attribute it set on <html>.
+function runScript(script: string, now: Date, zone: string | undefined, stored: string | null | Error): string | undefined {
+  const attrs: Record<string, string> = {};
+  const document = { documentElement: { setAttribute: (k: string, v: string) => void (attrs[k] = v) } };
+  const localStorage = {
+    getItem: () => {
+      if (stored instanceof Error) throw stored;
+      return stored;
+    },
+  };
+  const FixedDate = class extends Date {
+    constructor() {
+      super(now.getTime());
+    }
+  };
+  // Intl.DateTimeFormat() reports the zone; with options it is the real formatter. A function, not an arrow, so
+  // the script can call it with new.
+  function DateTimeFormat(locale?: string, options?: Intl.DateTimeFormatOptions) {
+    return options ? new Intl.DateTimeFormat(locale, options) : { resolvedOptions: () => ({ timeZone: zone }) };
+  }
+  new Function("document", "localStorage", "Date", "Intl", script)(document, localStorage, FixedDate, { DateTimeFormat });
+  return attrs[SEASON_ATTR];
+}
+
+const ZONES = [
+  ...SOUTHERN_ZONES,
+  ...SOUTHERN_PREFIXES.map((p) => `${p}X`),
+  "Australia/Sydney",
+  "America/Argentina/Ushuaia",
+  "Europe/London",
+  "America/New_York",
+  "Asia/Tokyo",
+  "Pacific/Honolulu",
+  "Asia/Kolkata",
+  "Not/AZone",
+  " Australia/Perth ",
+  "",
+  undefined,
+];
+// Around each month's turn and the 15th, where the zone's wall clock and UTC can disagree on the month.
+const CLOCKS = Array.from({ length: 12 }, (_, m) => [
+  new Date(Date.UTC(2026, m, 1, 0, 30)),
+  new Date(Date.UTC(2026, m, 15, 12)),
+  new Date(Date.UTC(2026, m + 1, 0, 23, 30)),
+]).flat();
+
+test("the pre-paint script picks what resolveSeason picks, for every zone, month and stored value", () => {
+  let runs = 0;
+  for (const now of CLOCKS) {
+    for (const zone of ZONES) {
+      for (const stored of [null, "", "monsoon", "Summer", ...SEASONS]) {
+        assert.equal(runScript(seasonScript, now, zone, stored), resolveSeason(stored, now, zone), `${now.toISOString()} ${zone} ${stored}`);
+        runs++;
+      }
+    }
+  }
+  assert.ok(runs > 10_000, String(runs));
+});
+
+test("storage that throws falls back to the clock", () => {
+  const now = new Date("2026-01-15T12:00:00Z");
+  assert.equal(runScript(seasonScript, now, "Australia/Sydney", new Error("SecurityError")), "summer");
+  assert.equal(runScript(seasonScript, now, "Europe/London", new Error("SecurityError")), "winter");
+});
+
+test("the comparison catches a script that forgets the south", () => {
+  // Negative control: the same script with the hemisphere flag stuck on north disagrees in Sydney.
+  const north = seasonScript.replace(/south=[^;]+;/, "south=false;").replace(/south=true/, "south=false");
+  assert.notEqual(north, seasonScript);
+  const now = new Date("2026-01-15T12:00:00Z");
+  assert.equal(runScript(north, now, "Australia/Sydney", null), "winter");
+  assert.notEqual(runScript(north, now, "Australia/Sydney", null), resolveSeason(null, now, "Australia/Sydney"));
 });

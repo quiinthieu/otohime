@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { site } from "@/content/site";
+import { seasonScript } from "@/lib/seasons";
 import NotFound from "./(site)/not-found";
 import "./(site)/globals.css";
+import "./(site)/seasons.css";
 
 // An address no route matches. The site and the projects are separate root layouts, so Next renders this whole
 // document instead of a layout (experimental.globalNotFound). A notFound() from a catch-all page cannot do it:
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
   description: `Otohime. ${site.tagline}`,
 };
 
-// The same as app/(site)/layout.tsx: a pinned theme before first paint.
+// The same as app/(site)/layout.tsx: a pinned theme and the season before first paint.
 const pinTheme = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function GlobalNotFound() {
@@ -24,6 +26,7 @@ export default function GlobalNotFound() {
         {/* Parsed with the HTML, so the hop into and out of the 404 crossfades on a first visit (see the site layout). */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
+        <script dangerouslySetInnerHTML={{ __html: seasonScript }} />
       </head>
       <body className="min-h-full">
         <NotFound />

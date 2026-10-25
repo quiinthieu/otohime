@@ -44,9 +44,13 @@ function rootFace(text: string): Face | null {
   return ([...families].reverse().find((f) => (FACES as readonly string[]).includes(f)) as Face | undefined) ?? null;
 }
 
+// The site's season tints: imported by its layout beside globals.css, they re-tint the site's own paper and ink
+// under data-season. The house pin stays the root sheet's, so they are not a sister stylesheet of their own.
+const TINTS = ["app/(site)/seasons.css"];
+
 // The root stylesheet of every route group but this one: each top-level sheet its layout.tsx imports. A
 // feature's own sheet imported further down (the site's peeks.css) names no paper or ink of its own.
-const SHEETS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
+const IMPORTED = readdirSync(join(ROOT, "app"), { withFileTypes: true })
   .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name) && e.name !== SELF)
   .flatMap((e) => {
     const layout = join(ROOT, "app", e.name, "layout.tsx");
@@ -56,6 +60,19 @@ const SHEETS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
       .map((f) => `app/${e.name}/${f}`);
   })
   .sort();
+const SHEETS = IMPORTED.filter((f) => !TINTS.includes(f));
+
+test("the season tints are imported by the site layout and re-tint only the site's own paper and ink", () => {
+  for (const file of TINTS) assert.ok(IMPORTED.includes(file), `${file} is no longer imported: drop it from TINTS`);
+  const site = SIBLINGS.find((s) => s.group === "site")!;
+  assert.equal(site.file, "app/(site)/globals.css");
+  const house = declared(css(site.file));
+  const tinted = declared(css("app/(site)/seasons.css"));
+  assert.deepEqual([...tinted].sort(), ["--ink", "--paper", "--paper-2"]);
+  for (const name of tinted) assert.ok(house.has(name), `seasons.css tints ${name}, which globals.css never declares`);
+  // The house paper the page quotes is still the root sheet's first --paper, untinted.
+  assert.equal(firstHex(first(css(site.file), "--paper")), site.paper);
+});
 
 test("eleven sister stylesheets: the site's and ten projects', never this group's own", () => {
   assert.equal(SIBLINGS.length, 11);

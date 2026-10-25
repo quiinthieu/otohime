@@ -122,3 +122,27 @@ export function visitorZone(): string {
     return "";
   }
 }
+
+// localStorage key for a manual choice (the dial), and the attribute on <html>
+// that app/(site)/seasons.css keys its tints on.
+export const SEASON_KEY = "season";
+export const SEASON_ATTR = "data-season";
+
+// The season of each month, 0 = January, for one hemisphere.
+const byMonth = (hemisphere: Hemisphere) =>
+  Array.from({ length: 12 }, (_, m) => seasonFor(new Date(Date.UTC(2000, m, 15, 12)), hemisphere));
+
+// resolveSeason as an inline script, for the root layouts' <head>: it pins
+// data-season before first paint, so the tints never flash. Built from the
+// lists above, so it cannot drift from them; scripts/probe-seasons.mjs and
+// lib/seasons.test.ts run it against resolveSeason. Storage that throws
+// (blocked, private mode) falls back to the clock.
+export const seasonScript =
+  `(function(){var s;try{s=localStorage.getItem(${JSON.stringify(SEASON_KEY)})}catch(e){}` +
+  `if(${JSON.stringify(SEASONS)}.indexOf(s)<0){var z="",d=new Date(),m=d.getUTCMonth(),i,south;` +
+  `try{z=(Intl.DateTimeFormat().resolvedOptions().timeZone||"").trim()}catch(e){}` +
+  `if(z)try{m=new Intl.DateTimeFormat("en-US",{timeZone:z,month:"numeric"}).format(d)-1}catch(e){}` +
+  `south=${JSON.stringify(SOUTHERN_ZONES)}.indexOf(z)>=0;` +
+  `for(i=0;i<${SOUTHERN_PREFIXES.length};i++)if(z.indexOf(${JSON.stringify(SOUTHERN_PREFIXES)}[i])===0)south=true;` +
+  `s=(south?${JSON.stringify(byMonth("south"))}:${JSON.stringify(byMonth("north"))})[m]}` +
+  `document.documentElement.setAttribute(${JSON.stringify(SEASON_ATTR)},s)})()`;

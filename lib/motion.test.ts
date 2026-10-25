@@ -9,6 +9,7 @@ import { join, relative, resolve } from "node:path";
 import { test } from "node:test";
 import { site } from "../content/site.ts";
 import { CONSOLE_MENU } from "./pages.ts";
+import { SEASON_ATTR, SEASON_KEY, SEASONS, seasonScript } from "./seasons.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 
@@ -20,13 +21,20 @@ const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
   .sort();
 const PROJECTS = GROUPS.filter((g) => g !== "site");
 
+// Sheets a root layout imports beside its root stylesheet, named here so no other second import slips in. The
+// site's season tints (lib/seasons.ts picks the season) hold only rules keyed on data-season, and keyframes.
+const TINTS: Record<string, readonly string[]> = { site: ["seasons.css"] };
+
+// The .css files a layout imports from its own folder, in order.
+const cssImports = (src: string) => [...src.matchAll(/^import "\.\/([\w.-]+\.css)";/gm)].map((m) => m[1]);
+
 // Each group's one root stylesheet, the one its layout.tsx imports, comments stripped. A group may keep a
 // feature's rules in a sheet of their own (the site's peeks.css), imported further down.
 function stylesheet(group: string): { file: string; css: string } {
   const dir = join(ROOT, "app", `(${group})`);
   const layout = readFileSync(join(dir, "layout.tsx"), "utf8");
-  const files = [...layout.matchAll(/^import "\.\/([\w.-]+\.css)";/gm)].map((m) => m[1]);
-  assert.equal(files.length, 1, `app/(${group})/layout.tsx imports ${files.length} stylesheets`);
+  const files = cssImports(layout).filter((f) => !(TINTS[group] ?? []).includes(f));
+  assert.equal(files.length, 1, `app/(${group})/layout.tsx imports ${files.length} root stylesheets`);
   const file = `app/(${group})/${files[0]}`;
   return { file, css: readFileSync(join(dir, files[0]), "utf8").replace(/\/\*[\s\S]*?\*\//g, "") };
 }
@@ -229,6 +237,43 @@ test("an unknown address gets app/global-not-found.tsx, drawn on the server with
   assert.match(page, /import "\.\/\(site\)\/globals\.css";/);
   assert.match(page, /import NotFound from "\.\/\(site\)\/not-found";/);
   assert.match(page, /<body[^>]*>\s*<NotFound \/>\s*<\/body>/);
+});
+
+test("the site layout loads the season tints after its root sheet, and only the site does", () => {
+  // Every tint rule outranks the :root it overrides on specificity; loading after globals.css keeps it so on order too.
+  assert.deepEqual(cssImports(readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8")), ["globals.css", "seasons.css"]);
+  for (const group of PROJECTS) assert.equal(TINTS[group], undefined, group);
+  const page = readFileSync(join(ROOT, "app/global-not-found.tsx"), "utf8");
+  assert.ok(page.indexOf('import "./(site)/globals.css";') < page.indexOf('import "./(site)/seasons.css";'), "the 404 loads the tints after globals.css");
+  assert.ok(page.includes('import "./(site)/seasons.css";'), "the 404 does not load the tints");
+});
+
+test("seasons.css tints only under data-season: no hop, no bare rule, nothing for reduced motion to undo", () => {
+  const css = readFileSync(join(ROOT, "app/(site)/seasons.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+  const top = blocks(css);
+  const rules = top.filter((b) => !b.prelude.startsWith("@keyframes "));
+  assert.deepEqual(
+    rules.map((b) => b.prelude),
+    SEASONS.map((s) => `:root[${SEASON_ATTR}="${s}"]`),
+  );
+  for (const { body } of rules) assert.doesNotMatch(body, /\b(animation|transition)\b/);
+});
+
+test("both documents pin data-season in <head> before first paint, beside the theme pin", () => {
+  for (const p of ["app/(site)/layout.tsx", "app/global-not-found.tsx"]) {
+    const src = readFileSync(join(ROOT, p), "utf8");
+    assert.match(src, /import \{ seasonScript \} from "@\/lib\/seasons";/, p);
+    const head = src.match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? "";
+    const scripts = [...head.matchAll(/<script dangerouslySetInnerHTML=\{\{ __html: (\w+) \}\} \/>/g)].map((m) => m[1]);
+    // Right after the theme pin: both attributes land before any stylesheet-driven paint, in one place.
+    assert.equal(scripts[scripts.indexOf("pinTheme") + 1], "seasonScript", `${p}: ${scripts.join(", ")}`);
+    assert.doesNotMatch(src, /usePathname|"use client"/, p);
+  }
+  // The script is plain inline ES5 that reads the dial's key and writes the attribute the sheet keys on.
+  assert.ok(seasonScript.includes(`localStorage.getItem(${JSON.stringify(SEASON_KEY)})`));
+  assert.ok(seasonScript.includes(`setAttribute(${JSON.stringify(SEASON_ATTR)},s)`));
+  assert.doesNotMatch(seasonScript, /=>|`|\blet\b|\bconst\b|<\/script/i);
+  assert.equal(SEASON_KEY, "season");
 });
 
 // The JSX between a component's `return (` and its closing `);`, comments stripped.
