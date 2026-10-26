@@ -1,3 +1,4 @@
+import { stableSurfaceId } from "@/lib/tactile";
 import { FigTitle, Figure } from "@/components/figures";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
@@ -15,7 +16,7 @@ export default function NotesPage() {
         <div className="mt-8 grid items-start gap-10 md:grid-cols-[minmax(0,1fr)_16rem]">
           <ol>
             {site.notes.map(({ date, title, body }) => (
-              <li key={date} className="border-t border-line py-5">
+              <li key={date} className="border-t border-line py-5" data-paper-id={stableSurfaceId("note", date)} data-tossable="true" data-paper-margin="A thought kept in the margin, for another tide.">
                 <time dateTime={date} className="caption">
                   {date}
                 </time>

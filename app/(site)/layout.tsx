@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { PocketTerminalLoader } from "@/components/pocket-terminal-loader";
+import { TactileLoader } from "@/components/tactile/loader";
 import { PressSound } from "@/components/press-sound";
 import { SeasonLayer } from "@/components/season-layer";
 import { UrashimaKeys } from "@/components/urashima-keys";
@@ -10,6 +11,7 @@ import { seasonScript } from "@/lib/seasons";
 import "./globals.css";
 import "./seasons.css";
 import "./letterpress.css";
+import "./tactile.css";
 
 export const metadata: Metadata = {
   // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
@@ -66,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Typing "urashima" goes down to Ryugu-jo (components/urashima-keys.tsx). Also ahead of the pages: its capture
            listener takes the word's a's before the Pocket console can open a page with them. */}
         <UrashimaKeys />
+        <TactileLoader />
         {children}
       </body>
     </html>
