@@ -33,6 +33,7 @@ const H = 176;
 const body = box(O, W, D, H, [0, 0, 0], 60);
 const cartridge = box(O, 12, 76, 14, [2, 18, H]);
 const MENU = CONSOLE_MENU;
+const MENU_FONT = 7.5;
 const REDUCED = "(prefers-reduced-motion: reduce)";
 const VIEW = { w: 230, h: 310 };
 // The screen face's matrix (a b c d e f), for the HTML label that sits on the LCD over the chosen line.
@@ -378,8 +379,10 @@ export function Handheld() {
           </text>
         </g>
         <g ref={menuRef} className="boot" style={bootStyle("menu")} visibility={s.game ? "hidden" : undefined}>
+          {/* Seven cartridges, the Desk last, at MENU_PITCH: the lines are a size smaller than the LCD's
+              other text so they keep a gap between them. */}
           {MENU.map(({ label }, i) => (
-            <text key={label} x={40} y={menuBaseline(i)} className="fig-text lcd">
+            <text key={label} x={40} y={menuBaseline(i)} className="fig-text lcd" style={{ fontSize: MENU_FONT }}>
               {label.toUpperCase()}
             </text>
           ))}
