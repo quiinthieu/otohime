@@ -84,6 +84,32 @@ test('mouse grip toss, exact click suppression, text selection and native link n
   const link=card.locator('a.project-title');const href=await link.getAttribute('href');await link.click();assert.equal(new URL(page.url()).pathname,href);
 });
 
+test('continuous mouse path across the title and its open Peek reaches a visible Fetch back',async(t)=>{
+  const page=await open(t);const card=page.locator('[data-paper-id^="project:"]').first();
+  const back=card.getByRole('button',{name:'Fetch back',exact:true});const link=card.locator('a.project-title');
+  const before=(await card.boundingBox())!;const href=await link.getAttribute('href');
+  // Dwell on the stretched title link until its real Peek fan opens under the pointer.
+  const start={x:before.x+before.width/2,y:before.y+before.height/2};
+  await page.mouse.move(before.x-20,start.y);await page.mouse.move(start.x,start.y,{steps:6});
+  const fan=page.locator('.peek-layer[data-state="open"]');await fan.waitFor({state:'visible'});
+  // Visiting the open fan and returning to the card must re-measure; no mutation marks that return.
+  let f=(await fan.boundingBox())!;await page.mouse.move(f.x+f.width/2,f.y+f.height/2,{steps:4});
+  await page.mouse.move(start.x,start.y,{steps:4});await fan.waitFor({state:'visible'});
+  f=(await fan.boundingBox())!;const target=(await back.boundingBox())!;
+  assert.ok(target.x>=f.x+f.width||target.x+target.width<=f.x||target.y>=f.y+f.height||target.y+target.height<=f.y,`open fan ${JSON.stringify(f)} leaves Fetch back ${JSON.stringify(target)} clear`);
+  const end={x:target.x+target.width/2,y:target.y+target.height/2};const hits:string[]=[];
+  for(let i=1;i<=12;i++) {
+    await page.mouse.move(start.x+(end.x-start.x)*i/12,start.y+(end.y-start.y)*i/12);
+    hits.push(await page.evaluate(({x,y})=>{const e=document.elementFromPoint(x,y);return e?.closest('.peek-layer')?'peek':e?.closest('.paper-fetch')?'fetch':e?.closest('a.project-title')||e?.closest('[data-paper-id]')?'card':String(e?.className);},{x:start.x+(end.x-start.x)*i/12,y:start.y+(end.y-start.y)*i/12}));
+  }
+  assert.ok(!hits.includes('peek'),`pointer path never lands on Peek: ${hits}`);assert.equal(hits.at(-1),'fetch');
+  assert.equal(await back.evaluate(el=>getComputedStyle(el.parentElement!).opacity),'1');
+  await observe(page);await page.mouse.down();await page.mouse.up();await completed(page);
+  assert.equal(new URL(page.url()).pathname,'/projects');assert.equal(await link.getAttribute('href'),href);
+  await page.mouse.move(5,5);await page.waitForFunction(()=>!document.querySelector('[data-paper-actions]'));
+  await card.evaluate(el=>Promise.all(el.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{}))));sameRect(await card.boundingBox(),before);
+});
+
 test('real mobile CDP grip fetch and card-body scrolling negative control',async(t)=>{
   const page=await open(t,'/notes',{viewport:{width:390,height:844},hasTouch:true,isMobile:true});
   const card=page.locator('[data-paper-id]').first();const grip=card.getByRole('button',{name:'Drag paper',exact:true});await grip.scrollIntoViewIfNeeded();

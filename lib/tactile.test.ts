@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { createGesture, createRouteSession, discoverSurfaces, eligibleRoute, stableSurfaceId, type StoragePort } from "./tactile.ts";
+import { actionsSide, createGesture, createRouteSession, discoverSurfaces, eligibleRoute, stableSurfaceId, type StoragePort } from "./tactile.ts";
 
 function memory(): StoragePort {
   const map = new Map<string, string>();
@@ -97,4 +97,14 @@ test("registry and serialized session reject unbounded or invalid input", () => 
     const session=createRouteSession('/notes',{clock:()=>0,storage,seed:259});
     assert.equal(session.peeled('note:a'),false); session.set('note:a',true); assert.ok(session.peeled('note:a'));
   }
+});
+
+test("hovered actions move above only while an open Peek fan covers them, then stay put", () => {
+  const actions={left:200,top:300,right:320,bottom:344};
+  assert.equal(actionsSide(null,actions,'below'),'below');
+  assert.equal(actionsSide({left:100,top:280,right:560,bottom:440},actions,'below'),'above','fan below the pointer covers the actions');
+  assert.equal(actionsSide({left:100,top:344,right:560,bottom:500},actions,'below'),'below','touching edges leave the button reachable');
+  assert.equal(actionsSide({left:320,top:200,right:600,bottom:400},actions,'below'),'below');
+  assert.equal(actionsSide(null,actions,'above'),'above','a closing fan never moves actions from under the pointer');
+  for(const bad of [NaN,Infinity]) assert.equal(actionsSide({left:bad,top:0,right:1,bottom:1},actions,'below'),'below');
 });

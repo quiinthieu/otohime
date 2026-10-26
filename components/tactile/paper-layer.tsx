@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { createGesture, createRouteSession, discoverSurfaces, type StoragePort } from "@/lib/tactile";
+import { actionsSide, createGesture, createRouteSession, discoverSurfaces, type StoragePort } from "@/lib/tactile";
 import { deckle, tearState } from "@/lib/tear";
 import { createPaperFetch } from "./fetch";
 import { bindPaperReset } from "./reset";
@@ -37,7 +37,16 @@ export default function PaperLayer({ route }: { route: string }) {
       const registry = discoverSurfaces(route, descriptors);
       const cleanups: (() => void)[] = [];
       const resets: (() => void)[] = [];
+      const bars: [HTMLElement, HTMLElement][] = [];
       let cancelActive = () => {};
+      // An open Peek fan covering a hovered card's actions moves them to its clear side.
+      const avoidPeek=() => {
+        const fan=document.querySelector('.peek-layer:not([data-state="closing"])')?.getBoundingClientRect() ?? null;
+        if(fan) for(const [card,bar] of bars) {
+          if(!card.matches(':hover')) continue;
+          if(actionsSide(fan,bar.getBoundingClientRect(),card.dataset.paperActions==='above' ? 'above':'below')==='above') card.dataset.paperActions='above';
+        }
+      };
       const motion = matchMedia('(prefers-reduced-motion: reduce)');
       const fetch = createPaperFetch(gesture, signal, motion);
 
@@ -65,6 +74,9 @@ export default function PaperLayer({ route }: { route: string }) {
         fetch.attach(el, root, actions);
         if (!surface.fetchOnly) actions.append(margin);
         el.dataset.paperActive='true';
+        bars.push([el,actions]);
+        el.addEventListener('pointerenter',avoidPeek,{signal});
+        el.addEventListener('pointerleave',()=>{delete el.dataset.paperActions;},{signal});
         let amount=session.peeled(surface.id) ? 1 : 0;
         let origin: {x:number;y:number;pointer:number} | null=null;
         let suppressClick=false;
@@ -119,7 +131,7 @@ export default function PaperLayer({ route }: { route: string }) {
         for(const type of ['pointercancel','lostpointercapture'] as const) handle.addEventListener(type,e=>{if(origin?.pointer===e.pointerId) cancelActive();},{signal});
         // Focusing original content restores its paper without removing or moving it.
         el.addEventListener('focusin',e=>{if(e.target instanceof Node && !root.contains(e.target)) apply('reset');},{signal});
-        cleanups.push(()=>{release();root.remove();delete el.dataset.paperActive;delete el.dataset.paperState;delete el.dataset.fetchState;});
+        cleanups.push(()=>{release();root.remove();delete el.dataset.paperActive;delete el.dataset.paperState;delete el.dataset.paperActions;delete el.dataset.fetchState;});
       }
       const cancel=()=>{cancelActive();fetch.cancel();};
       const reset=()=>{cancel();for(const clear of resets) clear();};
@@ -136,8 +148,9 @@ export default function PaperLayer({ route }: { route: string }) {
           for(let i=nodes.length-1;i>=0;i--) if(!nodes[i].isConnected) nodes.splice(i,1);
         }
         if(document.querySelector('[aria-modal="true"],dialog[open]')) cancel();
+        avoidPeek();
       });
-      observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["open","aria-modal"]});
+      observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["open","aria-modal","data-side"]});
       teardown=()=>{events.abort();observer.disconnect();fetch.dispose();unbindReset();sticker.remove();for(const clean of cleanups) clean();gesture.cancel();teardown=()=>{};};
     };
     // Navigation API catches client hops, full-root links, history and location changes;

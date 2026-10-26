@@ -1,0 +1,236 @@
+Starting embedded Postgres on 127.0.0.1:34553
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/eef3d4ff-9b2e-48c6-8fd8-103ea80dc38a-a95c52a181dc5112ad2ac97c8c34947c/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Building
+
+> otohime@0.1.0 prebuild
+> node scripts/ledger-fetch.mjs || true; node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts
+
+ledger: kept content/ledger.json (no GITHUB_TOKEN)
+history:index: git (full history): 200 of 440 commits in /data/build-worker/leases/eef3d4ff-9b2e-48c6-8fd8-103ea80dc38a-a95c52a181dc5112ad2ac97c8c34947c/work/otohime/content/history.json, unchanged
+
+> otohime@0.1.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 26ms
+- Cache Components enabled
+- Partial Prefetching enabled
+- Experiments (use with caution):
+  ✓ authInterrupts
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 558ms
+  Running TypeScript ...
+  Finished TypeScript in 3.0s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/200) ...
+  Generating static pages using 19 workers (50/200) 
+  Generating static pages using 19 workers (100/200) 
+  Generating static pages using 19 workers (150/200) 
+✓ Generating static pages using 19 workers (200/200) in 1896ms
+  Finalizing page optimization ...
+
+Route (app)                             Revalidate  Expire
+┌ ◐ /                                           1d      1w
+├ ○ /_not-found
+├ ◐ /account                                    1d      1w
+├ ◐ /admin                                      1d      1w
+├ ◐ /admin/roles                                1d      1w
+├ ◐ /admin/users                                1d      1w
+├   /admin/users/[id]                           1d      1w
+│ └ ◐ /admin/users/[id]                         1d      1w
+├ ƒ /api/ask
+├ ƒ /api/auth/[...all]
+├ ƒ /api/health
+├ ƒ /api/now-playing
+├ ○ /articles
+├   /articles/[slug]
+│ ├ ◐ /articles/[slug]
+│ ├ ○ /articles/why-the-sky-is-blue
+│ ├ ○ /articles/why-we-need-a-leap-day
+│ └ ◐ [+4 more paths]
+├ ƒ /barometer
+├ ○ /capsule
+├ ◐ /dashboard                                  1d      1w
+├ ○ /design-system
+├ ◐ /desk                                       1d      1w
+├ ○ /desk/opengraph-image-blg90x
+├ ○ /elements
+├   /elements/[symbol]
+│ ├ ◐ /elements/[symbol]
+│ ├ ○ /elements/h
+│ ├ ○ /elements/he
+│ └ ◐ [+116 more paths]
+├ ○ /forgot-password
+├ ○ /icon.svg
+├ ◐ /ledger                                     1d      1w
+├ ○ /ledger/opengraph-image-1olq6y
+├ ƒ /music                                      1d      1w
+├ ○ /music/opengraph-image-rp137v
+├ ◐ /notes                                      1d      1w
+├ ○ /notes/opengraph-image-rplwnn
+├ ○ /og
+├ ○ /orrery
+├   /orrery/[body]
+│ ├ ◐ /orrery/[body]
+│ ├ ○ /orrery/sun
+│ ├ ○ /orrery/mercury
+│ └ ◐ [+12 more paths]
+├ ƒ /planisphere
+├ ◐ /play                                       1d      1w
+├ ○ /play/opengraph-image-blpn7k
+├ ◐ /postcard                                   1d      1w
+├ ƒ /postcard/image
+├ ○ /postcard/opengraph-image-1x4cxz
+├ ◐ /postcard/view                              1d      1w
+├ ◐ /projects                                   1d      1w
+├ ○ /projects/opengraph-image-1ndqzi
+├ ○ /reset-password
+├ ƒ /rotor
+├ ○ /ryugu
+├ ○ /shore
+├ ○ /sign-in
+├ ◐ /sketches                                   1d      1w
+├ ƒ /sketches/download/[filename]
+├ ○ /sketches/opengraph-image-t812bo
+├ ○ /structures
+├   /structures/[slug]
+│ ├ ◐ /structures/[slug]
+│ ├ ○ /structures/array
+│ ├ ○ /structures/linked-list
+│ └ ◐ [+6 more paths]
+├ ○ /vinyl
+├ ◐ /work                                       1d      1w
+├ ○ /work/opengraph-image-blv499
+└ ◐ /zine
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+Starting the server on http://localhost:40261
+TAP version 13
+# Subtest: fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+ok 1 - fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+  ---
+  duration_ms: 1587.152068
+  type: 'test'
+  ...
+# Subtest: keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+ok 2 - keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+  ---
+  duration_ms: 3662.73902
+  type: 'test'
+  ...
+# Subtest: mouse grip toss, exact click suppression, text selection and native link navigation
+ok 3 - mouse grip toss, exact click suppression, text selection and native link navigation
+  ---
+  duration_ms: 2281.2023
+  type: 'test'
+  ...
+# Subtest: continuous mouse path across the title and its open Peek reaches a visible Fetch back
+not ok 4 - continuous mouse path across the title and its open Peek reaches a visible Fetch back
+  ---
+  duration_ms: 1333.56177
+  type: 'test'
+  location: '/data/build-worker/leases/eef3d4ff-9b2e-48c6-8fd8-103ea80dc38a-a95c52a181dc5112ad2ac97c8c34947c/work/otohime/e2e/kame-fetch.test.ts:87:1'
+  failureType: 'testCodeFailure'
+  error: 'open fan {"x":194,"y":267,"width":456,"height":182.59375} leaves Fetch back {"x":483.75,"y":327.4375,"width":90.25,"height":44} clear'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///data/build-worker/leases/eef3d4ff-9b2e-48c6-8fd8-103ea80dc38a-a95c52a181dc5112ad2ac97c8c34947c/work/otohime/e2e/kame-fetch.test.ts:96:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: real mobile CDP grip fetch and card-body scrolling negative control
+ok 5 - real mobile CDP grip fetch and card-body scrolling negative control
+  ---
+  duration_ms: 2198.223353
+  type: 'test'
+  ...
+# Subtest: chips and sticker perform real fetch while links and source dimensions stay intact
+ok 6 - chips and sticker perform real fetch while links and source dimensions stay intact
+  ---
+  duration_ms: 2416.71724
+  type: 'test'
+  ...
+# Subtest: Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+ok 7 - Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+  ---
+  duration_ms: 1328.002974
+  type: 'test'
+  ...
+# cancel path: escape
+# cancel path: blur
+# cancel path: hidden
+# cancel path: resize
+# cancel path: modal
+# cancel path: motion
+# cancel path: dismiss
+# cancel path: remove
+# Subtest: pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+ok 8 - pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+  ---
+  duration_ms: 1269.978315
+  type: 'test'
+  ...
+# Subtest: unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+ok 9 - unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+  ---
+  duration_ms: 3825.220971
+  type: 'test'
+  ...
+# Subtest: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+ok 10 - Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+  ---
+  duration_ms: 1627.136415
+  type: 'test'
+  ...
+# Subtest: native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+ok 11 - native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+  ---
+  duration_ms: 1417.69974
+  type: 'test'
+  ...
+# Subtest: peeled mobile cards keep all fetch actions clear of the real margin note
+ok 12 - peeled mobile cards keep all fetch actions clear of the real margin note
+  ---
+  duration_ms: 1383.228571
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 11
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 24724.363781
+The suite failed. The end of the server's log:
+
+> otohime@0.1.0 start
+> next start
+
+▲ Next.js 16.4.2
+- Local:         http://localhost:40261
+- Network:       http://192.168.100.241:40261
+✓ Ready in 95ms
+✓ Running next.config.ts took 28ms
+

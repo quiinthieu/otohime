@@ -37,6 +37,17 @@ export function discoverSurfaces(route: string, surfaces: Surface[]): Surface[] 
     seen.add(s.id); return true;
   }).slice(0, 128).map(s => ({...s, margin:s.margin.trim().slice(0,160)}));
 }
+export interface Box { left: number; top: number; right: number; bottom: number }
+/**
+ * Where a hovered card's actions sit. Peek's fan stacks above paper and opens under a
+ * dwelling pointer, so actions it covers move above the card. The side only changes
+ * while a fan is open; the adapter resets it when the pointer leaves the card.
+ */
+export function actionsSide(fan: Box | null, actions: Box, current: "below" | "above"): "below" | "above" {
+  if (!fan || ![fan.left, fan.top, fan.right, fan.bottom].every(Number.isFinite)) return current;
+  const covered = fan.left < actions.right && fan.right > actions.left && fan.top < actions.bottom && fan.bottom > actions.top;
+  return covered ? "above" : current;
+}
 export function createGesture({clock}: Pick<TactileOptions, "clock">): GesturePort {
   let state: Gesture="idle", owner: PointerStart | null=null, started=0;
   const cancel=()=>{state="idle";owner=null;};

@@ -1,0 +1,8 @@
+not ok - playwright: install chromium --only-shell failed; log:
+Installing dependencies...
+Switching to root user to install dependencies...
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+Failed to install browsers
+Error: Installation process exited with code: 1
+probe: 0 ok, 1 failed
