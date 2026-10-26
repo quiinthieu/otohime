@@ -3,6 +3,18 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-8974 update: board unchanged since run-8971
+
+Read at **14:00 UTC** (run-8974, product owner):
+
+- pm-260 is `drafting` (revision 3); t-1578 superseded, t-1593 done.
+- **pm-267** (mono-v2) is still `paused` (last update 11:53Z): t-1594 and t-1596 `qa_pending`,
+  t-1595 and t-1597 `backlog`. It owns outcomes 1-3. Resuming it is a platform-owner action.
+- Outcome 4 stays met (pm-255 released, t-1557 done).
+- No otohime SWE task exists to propose; the local proposal is the saved empty DAG and is
+  expected to be refused (`missing_acceptance_criteria`). Owners and failure conditions in the
+  run-8878 table below stand.
+
 ## Run-8893 update: outcome 4 is met live
 
 Read at **12:20 UTC** (run-8893, product owner, profile claude-sonnet-5-5):
