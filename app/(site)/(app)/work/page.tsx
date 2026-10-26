@@ -4,6 +4,7 @@ import { Pipeline } from "@/components/pipeline";
 import { ServerRack } from "@/components/server-rack";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ViewTransition } from "react";
 
 export const metadata: Metadata = { title: "Work" };
@@ -16,6 +17,11 @@ export default function WorkPage() {
           Work
         </FigTitle>
         <p className="mt-2 max-w-prose text-muted">{site.work}</p>
+        <p className="mt-2">
+          <Link href="/ledger" className="link">
+            The year in ink stamps
+          </Link>
+        </p>
         <div className="mt-8">
           <Pipeline />
         </div>
