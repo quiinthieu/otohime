@@ -1,0 +1,78 @@
+TAP version 13
+# Subtest: fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+ok 1 - fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+  ---
+  duration_ms: 3678.193417
+  ...
+# Subtest: keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+ok 2 - keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+  ---
+  duration_ms: 6864.69025
+  ...
+# Subtest: mouse grip toss, exact click suppression, text selection and native link navigation
+ok 3 - mouse grip toss, exact click suppression, text selection and native link navigation
+  ---
+  duration_ms: 6377.919792
+  ...
+# Subtest: continuous mouse path across the title and its open Peek reaches a visible Fetch back
+ok 4 - continuous mouse path across the title and its open Peek reaches a visible Fetch back
+  ---
+  duration_ms: 5325.688834
+  ...
+# Subtest: real mobile CDP grip fetch and card-body scrolling negative control
+ok 5 - real mobile CDP grip fetch and card-body scrolling negative control
+  ---
+  duration_ms: 5864.218291
+  ...
+# Subtest: chips and sticker perform real fetch while links and source dimensions stay intact
+ok 6 - chips and sticker perform real fetch while links and source dimensions stay intact
+  ---
+  duration_ms: 3745.646959
+  ...
+# Subtest: Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+ok 7 - Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+  ---
+  duration_ms: 2685.842083
+  ...
+# cancel path: escape
+# cancel path: blur
+# cancel path: hidden
+# cancel path: resize
+# cancel path: modal
+# cancel path: motion
+# cancel path: dismiss
+# cancel path: remove
+# Subtest: pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+ok 8 - pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+  ---
+  duration_ms: 2403.731083
+  ...
+# Subtest: unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+ok 9 - unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+  ---
+  duration_ms: 13849.544584
+  ...
+# Subtest: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+ok 10 - Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+  ---
+  duration_ms: 3753.256875
+  ...
+# Subtest: native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+ok 11 - native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+  ---
+  duration_ms: 3166.078625
+  ...
+# Subtest: peeled mobile cards keep all fetch actions clear of the real margin note
+ok 12 - peeled mobile cards keep all fetch actions clear of the real margin note
+  ---
+  duration_ms: 2220.10575
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 60986.167083
