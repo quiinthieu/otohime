@@ -356,7 +356,8 @@ Acceptance produces a walkthrough table (starting state · action · observable 
       "Add components/print-run-switch.tsx using the AppearanceStore adapter. Mount a compact labeled switch beside the Pocket console controls in components/handheld.tsx and within the existing terminal settings. Reuse existing chips/keys; do not rely on a shortcut as the only visible entry.",
       "Extend lib/terminal.ts state, parser, effect, HELP and suggestions: print run reports the current choice; print run house|sumi|riso|indigo selects; lab and go lab navigate to /lab through PLACES without increasing the seven-item physical LCD menu.",
       "Route switch keyboard handling through the terminal bind() path where required; native radio/button behavior must work even under the loader's capture listener. Selecting a preset clears session Lab overrides and reports the effective choice; denied storage works in memory and indicates that reload will not retain it.",
-      "Write failing lib/terminal.test.ts cases and e2e/print-run-console.test.ts for pointer and keyboard changes, command/control synchronization, invalid ids, reload, blocked local/session storage, Tab/Shift+Tab, Escape and focus return. Preserve existing terminal, adventure, handheld and TitleMorph tests."
+      "Write failing lib/terminal.test.ts cases and e2e/print-run-console.test.ts for pointer and keyboard changes, command/control synchronization, invalid ids, reload, blocked local/session storage, Tab/Shift+Tab, Escape and focus return. Preserve existing terminal, adventure, handheld and TitleMorph tests.",
+      "Document the print-run commands, labels, storage failure messages and capture-key behavior in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/console-contract.md."
     ],
     "interfaces": [
       "components/print-run-switch.tsx",
@@ -365,7 +366,8 @@ Acceptance produces a walkthrough table (starting state · action · observable 
       "components/pocket-terminal.css",
       "lib/terminal.ts",
       "lib/terminal.test.ts",
-      "e2e/print-run-console.test.ts"
+      "e2e/print-run-console.test.ts",
+      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/console-contract.md"
     ],
     "non_goals": [
       "expanding or resizing the physical console LCD menu",
@@ -425,7 +427,8 @@ Acceptance produces a walkthrough table (starting state · action · observable 
       "Build components/riso-heading.tsx and components/riso-heading.css: one plain accessible text copy, aria-hidden per-character visual plates, only the anchor layer selectable, ghost layers user-select:none, accessible anchor ink preserved. Use preset plate tokens and two/three-plate setting; no view-transition-name on plate spans.",
       "Use transform/opacity only for entry, cap total stagger, and animate each mounted heading once as it enters view using one observer. Server/no-JavaScript output is settled and visible. Under reduced motion, forced colors and print media, show readable settled text without sliding, seed animation or blending artifacts.",
       "Integrate into FigTitle, StampHeading, the Home heading and main-site public h2 text. Keep decorative Fig. prefixes hidden, rich-text titles intact, and .stamp-text source text and stamp generation free from duplicated ghosts. Standalone exhibit typography is preserved; its paper/ink still follows task 2.",
-      "Write e2e/riso-headings.test.ts for accessible names, selectable text, plate transforms, reduced motion, no JavaScript, mobile wrapping and heading navigation. Drive the console-to-/work TitleMorph and /play Stamp it negative controls; require no duplicate transition names or page errors. Include representative empty and long headings."
+      "Write e2e/riso-headings.test.ts for accessible names, selectable text, plate transforms, reduced motion, no JavaScript, mobile wrapping and heading navigation. Drive the console-to-/work TitleMorph and /play Stamp it negative controls; require no duplicate transition names or page errors. Include representative empty and long headings.",
+      "Document the RisoHeading/RisoText usage, semantic-copy rules, reduced-motion behavior and TitleMorph/Stamp it integration in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/heading-contract.md."
     ],
     "interfaces": [
       "lib/riso-heading.ts",
@@ -436,7 +439,8 @@ Acceptance produces a walkthrough table (starting state · action · observable 
       "components/stamp-heading.tsx",
       "components/stamp-island.tsx",
       "app/(site)/",
-      "e2e/riso-headings.test.ts"
+      "e2e/riso-headings.test.ts",
+      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/heading-contract.md"
     ],
     "non_goals": [
       "rewriting exhibit headings and type systems",
@@ -590,4 +594,3 @@ Acceptance produces a walkthrough table (starting state · action · observable 
 On this planning checkout: Node v22.23.3, npm ci from package-lock.json; **npm test: 2133 passed, 0 failed, 0 skipped**. **npm run lint: exit 0, 10 existing warnings**. Application code is unchanged; feature/browser/build/deployment acceptance above remains future engineering work. Proposal and report reference the pushed plan commit; this file cannot contain its own eventual commit hash.
 
 The prior research body is preserved unchanged, including its original source-access limitation. This plan's source checks and explicit contracts supersede research suggestions where they differ.
-
