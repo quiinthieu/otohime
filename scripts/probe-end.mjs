@@ -297,6 +297,29 @@ async function open(
   return { context, page };
 }
 
+// Resolves once no scroll event has arrived for quietMs. A scroll event is dispatched on the frame after the scroll, so
+// one can still land after a script scrollIntoView returns; on a site page it makes Kame (components/kame) ask for its
+// edge frame, which a page-wide rAF count would charge to whatever runs next.
+function scrollQuiet(page, quietMs = 200) {
+  return page.evaluate(
+    (quietMs) =>
+      new Promise((resolve) => {
+        let timer = 0;
+        const done = () => {
+          removeEventListener("scroll", arm);
+          resolve();
+        };
+        const arm = () => {
+          clearTimeout(timer);
+          timer = setTimeout(done, quietMs);
+        };
+        addEventListener("scroll", arm, { passive: true });
+        arm();
+      }),
+    quietMs,
+  );
+}
+
 async function hydrated(page, selector = "[data-end-stage]") {
   await page
     .waitForFunction(
@@ -1351,7 +1374,9 @@ try {
       const stage = footer.locator("[data-end-stage]");
       await stage.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
       const box = await stage.boundingBox();
-      // The setup scroll also positions Kame at the edge. Measure pointer work only after it drains.
+      // The setup scroll also positions Kame at the edge. Measure pointer work only after its last scroll event has
+      // landed and the frames it asked for have drained.
+      await scrollQuiet(page);
       await page.waitForFunction(() => window.__endPendingRafs === 0);
       await page.evaluate(() => {
         window.__endMaxPendingRafs = 0;
@@ -1380,6 +1405,24 @@ try {
           resetTr === "translate(0px, 0px)" &&
           maxPending <= 1,
         JSON.stringify({ samples, resetTr, maxPending }),
+      );
+
+      // Negative control for that wait: a scroll landing during pointer work makes Kame's edge frame overlap the eyes'
+      // one, and the same page-wide count sees 2. Kame swims after the pointer moved, and only then takes an edge frame.
+      const overlap = await stage.evaluate(async (el) => {
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        window.__endMaxPendingRafs = 0;
+        const r = el.getBoundingClientRect();
+        el.dispatchEvent(new PointerEvent("pointermove", { bubbles: true, clientX: r.left + 12, clientY: r.top + 12 }));
+        window.dispatchEvent(new Event("scroll"));
+        const seen = window.__endMaxPendingRafs;
+        el.dispatchEvent(new PointerEvent("pointerleave", { bubbles: false }));
+        return seen;
+      });
+      check(
+        "rAF negative control: a scroll during pointer work overlaps Kame's edge frame with the eyes' and the count sees 2",
+        overlap === 2,
+        JSON.stringify({ overlap }),
       );
 
       // Mascot click, Enter, Space

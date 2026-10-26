@@ -89,6 +89,8 @@ async function open(query = "", options: BrowserContextOptions = {}, init?: () =
 }
 
 const poster = (page: Page) => page.locator("[data-press=poster]");
+// The press's own status line, beside its poster: the page holds other live regions (Kame's, in the site layout).
+const pressStatus = (page: Page) => poster(page).locator("xpath=..").getByRole("status");
 const data = (page: Page, key: string) => poster(page).getAttribute(`data-${key}`);
 
 // Scroll the press into view and wait for its poster to dry.
@@ -191,7 +193,7 @@ test("typing, the layouts and Shuffle set the poster, ?s= carries it, and Export
   const stats = await inkStats(png);
   assert.deepEqual([stats.width, stats.height], [1080, 1350]);
   assertInked(stats, "the exported PNG");
-  assert.match((await page.getByRole("status").textContent()) ?? "", new RegExp(`Pulled ${name.replace(/\./g, "\\.")}`));
+  assert.match((await pressStatus(page).textContent()) ?? "", new RegExp(`Pulled ${name.replace(/\./g, "\\.")}`));
 
   // the address opens the same poster
   const again = await open(`?s=${seed}&t=${encodeURIComponent("the broken dag")}`);

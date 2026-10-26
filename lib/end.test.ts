@@ -253,6 +253,10 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
   assert.match(probeMjs, /const unlockSettle = await settleBadge\(page\);/);
   assert.match(probeMjs, /const restoreSettle = await settleBadge\(page\);/);
   assert.match(probeMjs, /badge negative control:/);
+  // The eyes' rAF budget is measured only once the setup scroll's last event has landed (Kame takes an edge frame on
+  // scroll), with a negative control that overlaps the two on purpose.
+  assert.match(probeMjs, /await scrollQuiet\(page\);\n\s+await page\.waitForFunction\(\(\) => window\.__endPendingRafs === 0\);/);
+  assert.match(probeMjs, /rAF negative control: a scroll during pointer work/);
   assert.match(probeMjs, />= 0\.99/);
   assert.match(ci, /bash scripts\/walk-end\.sh/);
   assert.match(ci, /bash scripts\/probe-end\.sh/);

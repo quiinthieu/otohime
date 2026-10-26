@@ -42,6 +42,7 @@ ANY_SHA_OR_DEV=""
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/probe-end.XXXXXX")"
 SERVER_PID=""
 DB_CONTAINER=""
+DB_PID=""
 
 pgq() {
   node -e '
@@ -54,6 +55,36 @@ pgq() {
   ' "$@"
 }
 
+# No database answers and Docker is not there: the throwaway embedded Postgres of scripts/e2e.mjs (--serve-db), its
+# files under $WORK/db. Only this run's own process and files are stopped and removed (stop_embedded_db, rm -rf $WORK).
+start_embedded_db() {
+  node scripts/e2e.mjs --serve-db "$WORK/db" >"$WORK/db.log" 2>&1 &
+  DB_PID=$!
+  local url=""
+  for _ in $(seq 1 120); do
+    url="$(sed -n 's/^DATABASE_URL=//p' "$WORK/db.log" | head -n 1)"
+    [ -n "$url" ] && break
+    kill -0 "$DB_PID" 2>/dev/null || break
+    sleep 0.5
+  done
+  if [ -n "$url" ]; then
+    export DATABASE_URL="$url"
+  else
+    echo "note: the embedded Postgres did not start; log:"
+    tail -n 20 "$WORK/db.log"
+  fi
+}
+
+stop_embedded_db() {
+  [ -n "$DB_PID" ] || return 0
+  kill -TERM "$DB_PID" 2>/dev/null
+  for _ in $(seq 1 20); do
+    kill -0 "$DB_PID" 2>/dev/null || return 0
+    sleep 0.5
+  done
+  kill -KILL "$DB_PID" 2>/dev/null
+}
+
 cleanup() {
   if [ -n "$SERVER_PID" ]; then
     kill -TERM -- "-$SERVER_PID" 2>/dev/null
@@ -63,6 +94,7 @@ cleanup() {
     done
     kill -KILL -- "-$SERVER_PID" 2>/dev/null
   fi
+  stop_embedded_db
   [ -n "$DB_CONTAINER" ] && docker rm -f "$DB_CONTAINER" >/dev/null 2>&1
   rm -rf "$WORK"
 }
@@ -112,6 +144,9 @@ if [ -z "$BASE_URL" ]; then
     else
       DB_CONTAINER=""
     fi
+  fi
+  if ! pgq 'select 1' >/dev/null 2>&1; then
+    start_embedded_db
   fi
 
   if [ "${SKIP_BUILD:-}" != "1" ]; then

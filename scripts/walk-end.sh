@@ -18,6 +18,7 @@ BASE_URL="${BASE_URL:-}"
 EXPECT_SHA="${EXPECT_SHA:-}"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/walk-end.XXXXXX")"
 SERVER_PID=""
+DB_PID=""
 OK=0
 FAILED=0
 
@@ -35,8 +36,50 @@ kill_group() {
   kill -KILL -- "-$1" 2>/dev/null
 }
 
+pgq() {
+  node -e '
+    const pg = require("pg");
+    const c = new pg.Client({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 3000 });
+    c.connect()
+      .then(() => c.query(process.argv[1]))
+      .then(() => c.end())
+      .catch(() => process.exit(1));
+  ' "$@"
+}
+
+# No database answers and Docker is not there: the throwaway embedded Postgres of scripts/e2e.mjs (--serve-db), its
+# files under $WORK/db. Only this run's own process and files are stopped and removed (stop_embedded_db, rm -rf $WORK).
+start_embedded_db() {
+  node scripts/e2e.mjs --serve-db "$WORK/db" >"$WORK/db.log" 2>&1 &
+  DB_PID=$!
+  local url=""
+  for _ in $(seq 1 120); do
+    url="$(sed -n 's/^DATABASE_URL=//p' "$WORK/db.log" | head -n 1)"
+    [ -n "$url" ] && break
+    kill -0 "$DB_PID" 2>/dev/null || break
+    sleep 0.5
+  done
+  if [ -n "$url" ]; then
+    export DATABASE_URL="$url"
+  else
+    echo "note: the embedded Postgres did not start; log:"
+    tail -n 20 "$WORK/db.log"
+  fi
+}
+
+stop_embedded_db() {
+  [ -n "$DB_PID" ] || return 0
+  kill -TERM "$DB_PID" 2>/dev/null
+  for _ in $(seq 1 20); do
+    kill -0 "$DB_PID" 2>/dev/null || return 0
+    sleep 0.5
+  done
+  kill -KILL "$DB_PID" 2>/dev/null
+}
+
 cleanup() {
   kill_group "$SERVER_PID"
+  stop_embedded_db
   rm -rf "$WORK"
 }
 trap cleanup EXIT
@@ -70,6 +113,11 @@ if [ -z "$BASE_URL" ]; then
   if curl -s -o /dev/null --max-time 2 "$BASE_URL/"; then
     echo "not ok - port: something already listens on port $PORT; set PORT to a free port"
     exit 1
+  fi
+
+  # The site layout and /music read the session from the database: give the server one of its own when none answers.
+  if ! pgq 'select 1' >/dev/null 2>&1; then
+    start_embedded_db
   fi
 
   if [ "${SKIP_BUILD:-}" != "1" ]; then

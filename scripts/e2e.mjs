@@ -3,15 +3,24 @@
 // embedded-postgres package, no docker), the migrations, a production build and `next start`, on free ports.
 // The server, the database and its files are removed on exit, however it ends.
 //   SKIP_BUILD  1 reuses the existing .next build
+// The test files run one at a time: several count animation frames (the desk's leaves, the Ink Press's and Ryugu-jo's
+// WebGL loops), and files run side by side starve each other's browsers of them (the leaves turned through 6 poses
+// and the sea drew 7 to 10 frames with eleven files at once), so a correct page fails its frame floor. A later
+// --test-concurrency on the command line still wins.
+//
+// node scripts/e2e.mjs --serve-db <dir> starts only the throwaway database, under <dir>, with the migrations applied;
+// prints DATABASE_URL=... once it is ready, and on SIGTERM or SIGINT stops it and removes <dir>. scripts/walk-end.sh
+// and scripts/probe-end.sh use it when no database answers and Docker is not there.
 import { spawn } from "node:child_process";
-import { mkdtempSync, openSync, readFileSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, openSync, readFileSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
 const ROOT = path.join(import.meta.dirname, "..");
 // The suite is this process's own node flags and arguments (package.json's test:e2e), run in a child.
-const SUITE = [...process.execArgv, ...process.argv.slice(2)];
+const SUITE = [...process.execArgv, "--test-concurrency=1", ...process.argv.slice(2)];
+const SERVE_DB = process.argv[2] === "--serve-db" ? process.argv[3] : "";
 
 const run = (cmd, args, env = process.env) =>
   new Promise((resolve) => {
@@ -20,7 +29,7 @@ const run = (cmd, args, env = process.env) =>
     child.on("exit", (code, signal) => resolve(code ?? (signal ? 1 : 0)));
   });
 
-if (process.env.BASE_URL) process.exit(await run(process.execPath, SUITE));
+if (process.env.BASE_URL && !SERVE_DB) process.exit(await run(process.execPath, SUITE));
 
 // A free port: ask the kernel for one, then hand it on.
 const freePort = () =>
@@ -36,7 +45,8 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 let server = null;
 let db = null;
-const work = mkdtempSync(path.join(tmpdir(), "otohime-e2e-"));
+const work = SERVE_DB ? path.resolve(SERVE_DB) : mkdtempSync(path.join(tmpdir(), "otohime-e2e-"));
+if (SERVE_DB) mkdirSync(work, { recursive: true });
 const log = path.join(work, "server.log");
 
 let cleaning = null;
@@ -52,20 +62,30 @@ function cleanup() {
         process.kill(-server.pid, "SIGKILL");
       } catch {}
     }
-    if (db) await db.stop().catch(() => {});
+    // Bounded: a Ctrl-C reaches Postgres too, and stop() then waits for an exit that has already happened.
+    if (db) await Promise.race([db.stop().catch(() => {}), sleep(10_000)]);
     rmSync(work, { recursive: true, force: true });
   })();
   return cleaning;
 }
-for (const [signal, code] of [
+const SIGNALS = [
   ["SIGINT", 130],
   ["SIGTERM", 143],
-]) {
-  process.on(signal, () => void cleanup().then(() => process.exit(code)));
+];
+// The signals are cleanup()'s alone. embedded-postgres registers its own (async-exit-hook), which stops the database
+// and exits as soon as it is down, before cleanup() has ended the server or removed the work dir; startDb() drops it.
+function ownSignals() {
+  for (const [signal, code] of SIGNALS) {
+    process.removeAllListeners(signal);
+    process.on(signal, () => void cleanup().then(() => process.exit(code)));
+  }
 }
+ownSignals();
 
-async function main() {
+// The throwaway database: embedded Postgres 17 under work/pg on a free port, the otohime database, the migrations.
+async function startDb() {
   const { default: EmbeddedPostgres } = await import("embedded-postgres");
+  ownSignals();
   const dbPort = await freePort();
   console.log(`Starting embedded Postgres on 127.0.0.1:${dbPort}`);
   db = new EmbeddedPostgres({
@@ -79,18 +99,33 @@ async function main() {
   await db.initialise();
   await db.start();
   await db.createDatabase("otohime");
+  const url = `postgresql://otohime:otohime@127.0.0.1:${dbPort}/otohime`;
+  console.log("Applying migrations");
+  if ((await run("npm", ["run", "db:migrate"], { ...process.env, DATABASE_URL: url })) !== 0) return "";
+  return url;
+}
+
+// --serve-db: hold the database until told to stop; the signal handlers above clean it up.
+async function serveDb() {
+  const url = await startDb();
+  if (!url) return 1;
+  // On a line of its own: the migration log above may not end with a newline.
+  process.stdout.write(`\nDATABASE_URL=${url}\n`);
+  await new Promise(() => {});
+}
+
+async function main() {
+  const databaseUrl = await startDb();
+  if (!databaseUrl) return 1;
 
   const appPort = await freePort();
   const base = `http://localhost:${appPort}`;
   const env = {
     ...process.env,
-    DATABASE_URL: `postgresql://otohime:otohime@127.0.0.1:${dbPort}/otohime`,
+    DATABASE_URL: databaseUrl,
     BETTER_AUTH_URL: base,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || "ci-placeholder-not-a-real-secret-0123456789abcdef",
   };
-
-  console.log("Applying migrations");
-  if ((await run("npm", ["run", "db:migrate"], env)) !== 0) return 1;
 
   if (process.env.SKIP_BUILD !== "1") {
     console.log("Building");
@@ -126,7 +161,7 @@ async function main() {
 
 let status = 1;
 try {
-  status = await main();
+  status = await (SERVE_DB ? serveDb() : main());
 } catch (e) {
   console.error(e);
 } finally {
