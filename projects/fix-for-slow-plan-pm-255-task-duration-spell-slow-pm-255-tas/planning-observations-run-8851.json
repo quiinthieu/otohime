@@ -1,0 +1,471 @@
+{
+  "schema": "pm260.planning-observations.v1",
+  "run_id": "run-8851",
+  "observed_at": {
+    "current_time": "2026-10-26 11:05:29 UTC"
+  },
+  "scope": "Planning reads only; not an acceptance capture or execution audit",
+  "plan260": {
+    "plan": {
+      "id": "pm-260",
+      "idea_id": "idea-256",
+      "kind": "fix",
+      "title": "Split Part Recovery",
+      "repo_id": "otohime",
+      "slug": "fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas",
+      "status": "drafting",
+      "current_revision": 3,
+      "approved_at": "2026-10-26T10:33:20.814251Z",
+      "auto_approved_at": "2026-10-26T10:33:20.814251Z",
+      "run_count": 22,
+      "max_runs": null,
+      "draft_failures": 0,
+      "acceptance_cycle": 1,
+      "trace_id": "4156e7859e7efe5c1615958e37b20cbd",
+      "hidden_at": null,
+      "acceptance_not_before": null,
+      "acceptance_pending_until": null,
+      "queue_rank_at": null,
+      "yield_count": 0,
+      "execution_started_at": "2026-10-26T08:40:41.61986Z",
+      "execution_started_source": "promotion",
+      "created_at": "2026-10-26T08:18:09.426992Z",
+      "updated_at": "2026-10-26T10:57:53.478773Z"
+    },
+    "tasks": [
+      {
+        "id": "t-1578",
+        "title": "Verify split part release",
+        "status": "superseded"
+      },
+      {
+        "id": "t-1593",
+        "title": "Certify offline release evidence",
+        "status": "done"
+      }
+    ]
+  },
+  "platform": {
+    "old_plan": {
+      "id": "pm-263",
+      "idea_id": "idea-259",
+      "kind": "project",
+      "title": "After Plan Recovery",
+      "repo_id": "mono-v2",
+      "slug": "after-plan-recovery-correctly-homed-platform-fix-from-pm-260",
+      "status": "abandoned",
+      "current_revision": 1,
+      "approved_at": "2026-10-26T09:03:59.798717Z",
+      "auto_approved_at": "2026-10-26T09:03:59.798717Z",
+      "run_count": 2,
+      "max_runs": null,
+      "draft_failures": 0,
+      "acceptance_cycle": 0,
+      "trace_id": "8ecc36be3d55cf7bb0c17364ef8c4078",
+      "hidden_at": null,
+      "acceptance_not_before": null,
+      "acceptance_pending_until": null,
+      "queue_rank_at": null,
+      "yield_count": 0,
+      "execution_started_at": null,
+      "created_at": "2026-10-26T08:37:10.417615Z",
+      "updated_at": "2026-10-26T10:55:28.964988Z"
+    },
+    "tasks": [
+      {
+        "id": "t-1579",
+        "title": "Release finished predecessor parts",
+        "status": "ready"
+      },
+      {
+        "id": "t-1580",
+        "title": "Explain abandonment effects to deciders",
+        "status": "backlog"
+      },
+      {
+        "id": "t-1581",
+        "title": "Anchor task slowness to execution",
+        "status": "ready"
+      },
+      {
+        "id": "t-1582",
+        "title": "Prove split recovery on demand",
+        "status": "backlog"
+      }
+    ],
+    "latest_decisions": [
+      {
+        "id": "dec-57095",
+        "at": "2026-10-26T10:55:28.980007Z",
+        "type": "decision",
+        "actor": "human",
+        "kind": "abandoned",
+        "summary": "abandoned",
+        "reason": "avietidol@vietky.io.vn",
+        "evidence": {
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "the plan was abandoned and no cause was recorded",
+            "evidence_ref": ""
+          }
+        },
+        "refs": {},
+        "trace_id": "8ecc36be3d55cf7bb0c17364ef8c4078"
+      },
+      {
+        "id": "dec-56953",
+        "at": "2026-10-26T10:12:13.181176Z",
+        "type": "decision",
+        "actor": "human",
+        "kind": "paused",
+        "summary": "paused",
+        "reason": "avietidol@vietky.io.vn",
+        "evidence": {},
+        "refs": {},
+        "trace_id": "8ecc36be3d55cf7bb0c17364ef8c4078"
+      },
+      {
+        "id": "dec-56922",
+        "at": "2026-10-26T10:02:52.276381Z",
+        "type": "decision",
+        "actor": "human",
+        "kind": "resumed",
+        "summary": "queued",
+        "reason": "resume",
+        "evidence": {},
+        "refs": {},
+        "trace_id": "8ecc36be3d55cf7bb0c17364ef8c4078"
+      },
+      {
+        "id": "dec-56732",
+        "at": "2026-10-26T09:04:28.347395Z",
+        "type": "decision",
+        "actor": "human",
+        "kind": "paused",
+        "summary": "paused",
+        "reason": "avietidol@vietky.io.vn",
+        "evidence": {},
+        "refs": {},
+        "trace_id": "8ecc36be3d55cf7bb0c17364ef8c4078"
+      }
+    ],
+    "replacement": {
+      "idea_id": "idea-263",
+      "plan_id": "pm-267",
+      "repo_id": "mono-v2",
+      "role_profiles": [
+        {
+          "role": "research",
+          "profile_id": "claude-fable-high",
+          "model_id": "claude-fable-5-1",
+          "effort": "high",
+          "fallbacks": [
+            "agy-argon-high",
+            "codex-sol",
+            "claude-opus-high"
+          ],
+          "account_id": "",
+          "source": "dashboard",
+          "updated_by": "avietidol@vietky.io.vn",
+          "updated_at": "2026-10-24T07:23:25.415164Z"
+        },
+        {
+          "role": "product_owner",
+          "profile_id": "codex-sol-6-1-high",
+          "model_id": "gpt-6.1-sol",
+          "effort": "high",
+          "fallbacks": [
+            "claude-sonnet-high",
+            "agy-gemini-high",
+            "codex-luna-medium"
+          ],
+          "account_id": "",
+          "source": "dashboard",
+          "updated_by": "avietidol@vietky.io.vn",
+          "updated_at": "2026-10-24T17:59:39.968059Z"
+        },
+        {
+          "role": "software_engineer",
+          "profile_id": "claude-opus-high",
+          "model_id": "claude-opus-5-5",
+          "effort": "high",
+          "fallbacks": [
+            "codex-sol-6-1-high",
+            "claude-sonnet-high"
+          ],
+          "account_id": "",
+          "source": "dashboard",
+          "updated_by": "avietidol@vietky.io.vn",
+          "updated_at": "2026-10-24T18:01:04.682943Z"
+        },
+        {
+          "role": "quality_engineer",
+          "profile_id": "codex-sol-6-1-high",
+          "model_id": "gpt-6.1-sol",
+          "effort": "high",
+          "fallbacks": [
+            "claude-opus-medium",
+            "agy-argon-medium"
+          ],
+          "account_id": "",
+          "source": "dashboard",
+          "updated_by": "avietidol@vietky.io.vn",
+          "updated_at": "2026-10-25T16:45:31.432682Z"
+        },
+        {
+          "role": "acceptance_engineer",
+          "profile_id": "claude-opus-high",
+          "model_id": "claude-opus-5-5",
+          "effort": "high",
+          "fallbacks": [
+            "codex-sol-6-1-high",
+            "agy-gemini-high",
+            "codex-sol",
+            "claude-sonnet-high"
+          ],
+          "account_id": "",
+          "source": "dashboard",
+          "updated_by": "avietidol@vietky.io.vn",
+          "updated_at": "2026-10-24T05:52:01.269168Z"
+        },
+        {
+          "role": "watch",
+          "profile_id": "claude-opus-high",
+          "model_id": "claude-opus-5-5",
+          "effort": "high",
+          "fallbacks": [
+            "codex-sol-6-1-high",
+            "agy-gemini-high"
+          ],
+          "account_id": "",
+          "source": "dashboard",
+          "updated_by": "avietidol@vietky.io.vn",
+          "updated_at": "2026-10-26T10:42:16.229073Z"
+        }
+      ],
+      "status": "drafting"
+    },
+    "runs": [
+      {
+        "id": "run-8855",
+        "role": "research",
+        "status": "running",
+        "tm_task_id": "a2c8a349-51fa-4648-8a1e-a84688f86ee3",
+        "agent_profile": "claude-fable-high",
+        "profile_flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high"
+      }
+    ],
+    "rollout": {
+      "name": "plan-manager",
+      "generation": 366,
+      "observed_generation": 366,
+      "desired": 2,
+      "updated": 2,
+      "ready": 2,
+      "available": 2,
+      "unavailable": 0,
+      "images": {
+        "plan-manager": "registry.gitlab.com/kq.viet/mono-v2/plan-manager:f19db8db"
+      },
+      "complete": true,
+      "conditions": [
+        {
+          "type": "Available",
+          "status": "True",
+          "reason": "MinimumReplicasAvailable",
+          "message": "Deployment has minimum availability."
+        },
+        {
+          "type": "Progressing",
+          "status": "True",
+          "reason": "NewReplicaSetAvailable",
+          "message": "ReplicaSet \"plan-manager-6f5fb69d45\" has successfully progressed."
+        }
+      ]
+    }
+  },
+  "part": {
+    "plan": {
+      "id": "pm-255",
+      "idea_id": "idea-248",
+      "kind": "project",
+      "title": "Paper Almanac Bits · part 2",
+      "repo_id": "otohime",
+      "slug": "otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons",
+      "status": "queued",
+      "current_revision": 1,
+      "approved_at": "2026-10-26T04:27:53.975898Z",
+      "auto_approved_at": "2026-10-26T04:27:53.975898Z",
+      "run_count": 1,
+      "commit_identity": {
+        "name": "Otohime",
+        "email": "quiinthieu@gmail.com"
+      },
+      "max_runs": null,
+      "draft_failures": 0,
+      "acceptance_cycle": 0,
+      "trace_id": "d2b6a7810c26edc93b8d9f448c842a38",
+      "hidden_at": null,
+      "acceptance_not_before": null,
+      "acceptance_pending_until": null,
+      "queue_rank_at": null,
+      "yield_count": 0,
+      "execution_started_at": null,
+      "after_plan_id": "pm-248",
+      "created_at": "2026-10-26T04:28:31.028078Z",
+      "updated_at": "2026-10-26T09:01:22.16176Z"
+    },
+    "progress": {
+      "state": "waiting",
+      "reason": "after_plan",
+      "holders": [
+        {
+          "plan_id": "pm-248"
+        }
+      ],
+      "queue_position": 1,
+      "queue_rank_at": "2026-10-26T04:27:53.975898Z",
+      "yield_count": 0,
+      "never_parks": true
+    },
+    "schedule_progress": {
+      "state": "waiting",
+      "reason": "after_plan",
+      "holders": [
+        {
+          "plan_id": "pm-248"
+        }
+      ],
+      "queue_position": 1,
+      "queue_rank_at": "2026-10-26T04:27:53.975898Z",
+      "yield_count": 0,
+      "never_parks": true
+    },
+    "slots": {
+      "used": 5,
+      "max": 5,
+      "max_per_repo": 0,
+      "free": 0
+    },
+    "runs": [
+      {
+        "id": "run-8771",
+        "role": "investigator",
+        "status": "succeeded",
+        "tm_task_id": "565313df-a594-448d-94a3-70fa9c882f9f"
+      }
+    ],
+    "timeline_count": 15,
+    "timeline_cursor": "idea:idea-248",
+    "release_entries": [],
+    "correction_write_result": "invalid_run: run does not belong to the supplied plan and task; no part receipt written"
+  },
+  "parent": {
+    "decision_limit": 100,
+    "decision_count": 100,
+    "history_complete": false,
+    "relevant_decisions": [
+      {
+        "id": "dec-55807",
+        "at": "2026-10-26T04:49:13.660036Z",
+        "type": "decision",
+        "actor": "decider-agent",
+        "kind": "decision_applied",
+        "summary": "abandon on acceptance_exhausted",
+        "reason": "decider-agent run-8680",
+        "evidence": {
+          "note": "Abandon pm-248 as a plan, not as an accept. Seasons and the torn-sheet 404 were verified live at 1366x768 and 390x844 (probe-seasons 28/28, probe-lost 34/34), and the code for Ask the Ink's model tier is on main (npm test 1909 pass at 303eaa3, fake-model probe 53/53). The only failing outcome is production reach: GET/POST /api/ask are 404 and 0 of 17 deployed chunks carry api/ask. The causes are a stale Vercel deploy (esc-384) and ASK_LLM plus ANTHROPIC_API_KEY unset (esc-383). Both need the account owner, and they are cost and external-account decisions. A replan would add no code, because the product owner cannot set a key or redeploy. It would also duplicate pm-255, which already holds the remaining Ask work: t-1557 deploy-bundle probe and t-1558 tier probe, queued after_plan pm-248. Abandoning frees pm-255 to run. This is not an accept: the Ask production outcome stays unmet until a person sets the env, redeploys, and a later acceptance sees GET /api/ask return 200 with enabled:true. The plan can be reopened with plan_manager_reopen_plan.",
+          "task": null,
+          "answer": "",
+          "option": "abandon",
+          "profile": "",
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "acceptance found the delivered plan does not meet its outcome · acceptance failed 3/3 times · last change request projects/otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons/change_request_4.md · decide: https://apps.vietky.io.vn/plans/inbox/pm-248",
+            "evidence_ref": ""
+          },
+          "stop_reason": "acceptance_exhausted",
+          "escalation_id": "",
+          "change_request": ""
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      },
+      {
+        "id": "dec-55806",
+        "at": "2026-10-26T04:49:13.64095Z",
+        "type": "decision",
+        "actor": "orchestrator",
+        "kind": "after_plan_orphaned",
+        "summary": "pm-248 is abandoned and 1 plan part(s) wait for it: pm-255. They stay held (no research, no promotion) until you reject them or reopen pm-248.",
+        "reason": "abandoned",
+        "evidence": {
+          "parts": [
+            "pm-255"
+          ],
+          "status": "abandoned",
+          "advisory": true
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      },
+      {
+        "id": "dec-55805",
+        "at": "2026-10-26T04:49:13.598897Z",
+        "type": "decision",
+        "actor": "decider-agent",
+        "kind": "abandoned",
+        "summary": "abandoned",
+        "reason": "decider-agent run-8680",
+        "evidence": {
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "the plan was abandoned and no cause was recorded",
+            "evidence_ref": ""
+          }
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      }
+    ]
+  },
+  "operator_action": {
+    "id": "esc-395",
+    "plan_id": "pm-260",
+    "reason": "operator_action",
+    "message": "Privileged platform operator: perform the exact one-plan administrative repair in the pushed pm-260 plan (f6ebc8ed82e2fa1175544a2edcabc614bd42c920), section Immediate pm-255 recovery playbook. Verify pm-248 is still abandoned; conditionally clear only pm-255.after_plan_id=pm-248 using your authorized DB procedure (one row), preserve the old edge plus the actual abandoned decision summary and final dec-55807 note in a pm-255 timeline decision, then resume pm-255 if still paused through the operator API. Preserve the live max_active_plans override of 2 and t-1557/t-1558 contracts/timestamps. Do not reopen pm-248 or use the temporary-cap/reset workaround. Return the administrative receipt and one get_plan/explain_schedule/list_runs readback, including any real t-1557 software_engineer task-manager id. Capacity-only queueing is handled by the scheduler, not another human chore. Existing delivery-role tools explicitly forbid this privileged write. No HTTP ready_probe is attached because the schedule route requires IAM and the probe cannot send auth headers; a login-page 200 would falsely resolve it. Readiness is your recorded outcome plus authenticated MCP readback. The release policy is already decided; this request is the administrative chore only. pm-263 on mono-v2 independently owns the platform code fix.",
+    "blocking": false,
+    "notified_at": "2026-10-26T08:37:53.705418Z",
+    "resolution": "[decider] Cannot be done now. Proceed without it. This chore is a privileged DB write (clear pm-255.after_plan_id=pm-248) followed by a resume of another plan. Only a person with a write login can do it, and the decider may not mutate the board. The chore stays in the daily digest for that person.\n\nLive state, read 08:51Z: pm-255 is paused, waiting/after_plan, held by pm-248. execution_started_at is null and t-1557 is ready with 0 runs. pm-248 is still abandoned (dec-55805, decider-agent run-8680, so it cannot be reopened). Slots: 3 used of max 2.\n\nWhat the work does meanwhile:\n(1) pm-260 t-1578 QA goes ahead on the offline probe at 320a07f. It takes independent live snapshots of pm-255 now and uses them as the negative control: the probe must exit 1 in released mode while the hold persists. QA must not claim release or dispatch.\n(2) pm-263 (mono-v2) delivers the real fix. Its T1 makes afterPlanHold release parts of a terminal predecessor. Once that is deployed, a plain resume of pm-255 by an authorized operator releases it with no SQL, and fillSlots promotes it at its rank when a slot frees.\n(3) pm-260 acceptance reports outcome (4) as pending with owner esc-395/pm-263: pm-255 release and the t-1557 SWE dispatch are not delivered. That is a failure condition of the plan, not a waiver.\n\nDo not do any of these: reopen pm-248; raise max_active_plans or use the cap/reset workaround; resume pm-255 while the hold stands (with 0 free slots it would sit queued and held again, out of the watchdog's sight); write SQL from a delivery role; raise a second operator_action for the same fingerprint.",
+    "resolved_at": "2026-10-26T08:52:07.344493Z",
+    "auto_resolve_at": "0001-01-01T00:00:00Z",
+    "fingerprint": "release-after-plan:pm-255:pm-248",
+    "probed_at": "0001-01-01T00:00:00Z",
+    "waived_at": "2026-10-26T08:52:07.344493Z",
+    "chore_done_at": "0001-01-01T00:00:00Z"
+  },
+  "verification": {
+    "node": "v22.23.3",
+    "npm_ci": "exit0",
+    "npm_test": {
+      "exit_code": 0,
+      "tests": 2127,
+      "passed": 2127,
+      "failed": 0,
+      "skipped": 0
+    },
+    "typecheck": "exit0",
+    "lint": {
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 10
+    }
+  },
+  "boundaries": {
+    "platform_deployed": false,
+    "pm255_released": false,
+    "t1557_dispatched": false,
+    "task_manager_history_audited": false,
+    "new_drills_executed": false
+  }
+}
