@@ -1,0 +1,646 @@
+
+> otohime@0.1.0 test:e2e
+> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/**/*.test.ts'
+
+Starting embedded Postgres on 127.0.0.1:52919
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/private/tmp/qa-8849-delivery/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:52922
+TAP version 13
+# Subtest: a dragged item stays where it was dropped after a reload, and the red string follows a pin live
+ok 1 - a dragged item stays where it was dropped after a reload, and the red string follows a pin live
+  ---
+  duration_ms: 3195.318208
+  type: 'test'
+  ...
+# Subtest: Tidy up springs everything home and square, keeps the stack, and the tidy desk survives a reload
+ok 2 - Tidy up springs everything home and square, keeps the stack, and the tidy desk survives a reload
+  ---
+  duration_ms: 2117.092542
+  type: 'test'
+  ...
+# Subtest: from the keyboard: Tab to an item, arrows nudge it (Shift for more), R turns it, [ and ] restack it, each said aloud
+ok 3 - from the keyboard: Tab to an item, arrows nudge it (Shift for more), R turns it, [ and ] restack it, each said aloud
+  ---
+  duration_ms: 1286.435917
+  type: 'test'
+  ...
+# Subtest: a long press opens the radial menu without following the link; it rotates, sends to back, and Esc closes it
+ok 4 - a long press opens the radial menu without following the link; it rotates, sends to back, and Esc closes it
+  ---
+  duration_ms: 1167.927375
+  type: 'test'
+  ...
+# Subtest: under reduced motion the desk snaps: no spring, no lean, no transition or animation on it or in it, and the notebook opens at once
+ok 5 - under reduced motion the desk snaps: no spring, no lean, no transition or animation on it or in it, and the notebook opens at once
+  ---
+  duration_ms: 2470.58725
+  type: 'test'
+  ...
+# Subtest: with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)
+ok 6 - with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)
+  ---
+  duration_ms: 3022.974208
+  type: 'test'
+  ...
+# Subtest: on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds
+ok 7 - on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds
+  ---
+  duration_ms: 1764.778167
+  type: 'test'
+  ...
+# Subtest: a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+ok 8 - a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+  ---
+  duration_ms: 1627.823708
+  type: 'test'
+  ...
+# Subtest: the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+ok 9 - the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+  ---
+  duration_ms: 5100.617083
+  type: 'test'
+  ...
+# Subtest: typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+ok 10 - typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+  ---
+  duration_ms: 22202.552792
+  type: 'test'
+  ...
+# Subtest: a hidden tab stops the drying clock and showing it again finishes the drying
+ok 11 - a hidden tab stops the drying clock and showing it again finishes the drying
+  ---
+  duration_ms: 7542.47875
+  type: 'test'
+  ...
+# Subtest: reduced motion prints one dried frame and the press never asks for an animation frame
+ok 12 - reduced motion prints one dried frame and the press never asks for an animation frame
+  ---
+  duration_ms: 2944.707167
+  type: 'test'
+  ...
+# Subtest: without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+ok 13 - without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+  ---
+  duration_ms: 2229.780875
+  type: 'test'
+  ...
+# Subtest: a lost WebGL context hands the poster to the SVG fallback
+ok 14 - a lost WebGL context hands the poster to the SVG fallback
+  ---
+  duration_ms: 4400.387083
+  type: 'test'
+  ...
+# Subtest: /music serves the radio's slot under its heading, with the snapshot's credit
+ok 15 - /music serves the radio's slot under its heading, with the snapshot's credit
+  ---
+  duration_ms: 51.378833
+  type: 'test'
+  ...
+# Subtest: the served page plays nothing: no audio element, no autoplay, no stream
+ok 16 - the served page plays nothing: no audio element, no autoplay, no stream
+  ---
+  duration_ms: 0.262625
+  type: 'test'
+  ...
+# Subtest: the stations are lazy: not in the page's first scripts, but in a chunk those scripts load
+ok 17 - the stations are lazy: not in the page's first scripts, but in a chunk those scripts load
+  ---
+  duration_ms: 8.202708
+  type: 'test'
+  ...
+# Subtest: negative control: the Television is unchanged and other pages carry no radio
+ok 18 - negative control: the Television is unchanged and other pages carry no radio
+  ---
+  duration_ms: 26.313125
+  type: 'test'
+  ...
+# Subtest: fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+ok 19 - fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+  ---
+  duration_ms: 1226.094041
+  type: 'test'
+  ...
+# Subtest: keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+ok 20 - keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+  ---
+  duration_ms: 3982.701
+  type: 'test'
+  ...
+# Subtest: mouse grip toss, exact click suppression, text selection and native link navigation
+ok 21 - mouse grip toss, exact click suppression, text selection and native link navigation
+  ---
+  duration_ms: 3498.652
+  type: 'test'
+  ...
+# Subtest: real mobile CDP grip fetch and card-body scrolling negative control
+ok 22 - real mobile CDP grip fetch and card-body scrolling negative control
+  ---
+  duration_ms: 4824.101083
+  type: 'test'
+  ...
+# Subtest: chips and sticker perform real fetch while links and source dimensions stay intact
+ok 23 - chips and sticker perform real fetch while links and source dimensions stay intact
+  ---
+  duration_ms: 2676.1915
+  type: 'test'
+  ...
+# Subtest: Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+ok 24 - Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+  ---
+  duration_ms: 1269.468792
+  type: 'test'
+  ...
+# cancel path: escape
+# cancel path: blur
+# cancel path: hidden
+# cancel path: resize
+# cancel path: modal
+# cancel path: motion
+# cancel path: dismiss
+# cancel path: remove
+# Subtest: pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+ok 25 - pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+  ---
+  duration_ms: 1315.244459
+  type: 'test'
+  ...
+# Subtest: unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+ok 26 - unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+  ---
+  duration_ms: 13806.916333
+  type: 'test'
+  ...
+# Subtest: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+ok 27 - Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+  ---
+  duration_ms: 1911.572875
+  type: 'test'
+  ...
+# Subtest: native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+ok 28 - native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+  ---
+  duration_ms: 1935.327958
+  type: 'test'
+  ...
+# Subtest: peeled mobile cards keep all fetch actions clear of the real margin note
+ok 29 - peeled mobile cards keep all fetch actions clear of the real margin note
+  ---
+  duration_ms: 1437.295334
+  type: 'test'
+  ...
+# Subtest: server baseline has only an inert shell; no JS retains public links
+ok 30 - server baseline has only an inert shell; no JS retains public links
+  ---
+  duration_ms: 386.121833
+  type: 'test'
+  ...
+# Subtest: swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+ok 31 - swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+  ---
+  duration_ms: 1440.923375
+  type: 'test'
+  ...
+# Subtest: local calendar fixture increments once per day, friendly on day three and future-safe
+ok 32 - local calendar fixture increments once per day, friendly on day three and future-safe
+  ---
+  duration_ms: 589.961792
+  type: 'test'
+  ...
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 33 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1415.301834
+  type: 'test'
+  ...
+# Subtest: blocked storage remains usable and Save-Data imports only on explicit enable
+ok 34 - blocked storage remains usable and Save-Data imports only on explicit enable
+  ---
+  duration_ms: 1258.641125
+  type: 'test'
+  ...
+# Subtest: 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+ok 35 - 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+  ---
+  duration_ms: 1122.178833
+  type: 'test'
+  ...
+# Subtest: real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+ok 36 - real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+  ---
+  duration_ms: 1007.237375
+  type: 'test'
+  ...
+# Subtest: optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+ok 37 - optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+  ---
+  duration_ms: 612.137875
+  type: 'test'
+  ...
+# Subtest: a day's receipt opens from the keyboard: Tab to the last day, arrows to an inked one, Enter pins, Escape closes
+ok 38 - a day's receipt opens from the keyboard: Tab to the last day, arrows to an inked one, Enter pins, Escape closes
+  ---
+  duration_ms: 761.646709
+  type: 'test'
+  ...
+# Subtest: Press replays the year in date order, a day per tick, with a stamp thud every seventh day
+ok 39 - Press replays the year in date order, a day per tick, with a stamp thud every seventh day
+  ---
+  duration_ms: 8410.693416
+  type: 'test'
+  ...
+# 365 days in 172 ticks, 53 thuds, 375 transitions
+# Subtest: under reduced motion Press lands the final year at once: no replay, no transition or animation in the ledger
+ok 40 - under reduced motion Press lands the final year at once: no replay, no transition or animation in the ledger
+  ---
+  duration_ms: 964.347833
+  type: 'test'
+  ...
+# Subtest: on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt
+ok 41 - on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt
+  ---
+  duration_ms: 7387.266125
+  type: 'test'
+  ...
+# Subtest: the add form is visible to the owner only
+ok 42 - the add form is visible to the owner only
+  ---
+  duration_ms: 253.795583
+  type: 'test'
+  ...
+# Subtest: a song inserted by SQL shows up for anonymous visitors with its channel number
+ok 43 - a song inserted by SQL shows up for anonymous visitors with its channel number
+  ---
+  duration_ms: 10.861708
+  type: 'test'
+  ...
+# Subtest: an owner adds a channel with a plain form post, and every visitor sees it
+ok 44 - an owner adds a channel with a plain form post, and every visitor sees it
+  ---
+  duration_ms: 38.945792
+  type: 'test'
+  ...
+# Subtest: replayed adds from a plain user and an admin, and a replayed remove, change nothing
+ok 45 - replayed adds from a plain user and an admin, and a replayed remove, change nothing
+  ---
+  duration_ms: 49.0265
+  type: 'test'
+  ...
+# Subtest: duplicate videos and non-YouTube links add no row
+ok 46 - duplicate videos and non-YouTube links add no row
+  ---
+  duration_ms: 41.781791
+  type: 'test'
+  ...
+# Subtest: an owner removes the channel and it leaves every page
+ok 47 - an owner removes the channel and it leaves every page
+  ---
+  duration_ms: 29.43875
+  type: 'test'
+  ...
+# Subtest: the served index has three distinct, known items behind every key
+ok 48 - the served index has three distinct, known items behind every key
+  ---
+  duration_ms: 5.4325
+  type: 'test'
+  ...
+# Subtest: /projects marks each project title and each Gazette desk, and they stay ordinary links
+ok 49 - /projects marks each project title and each Gazette desk, and they stay ordinary links
+  ---
+  duration_ms: 10.588833
+  type: 'test'
+  ...
+# Subtest: /music marks each listed credit as a button, never a link
+ok 50 - /music marks each listed credit as a button, never a link
+  ---
+  duration_ms: 9.851958
+  type: 'test'
+  ...
+# Subtest: negative control: unmarked pages and the nav carry no marker, and no marker names an unknown key
+ok 51 - negative control: unmarked pages and the nav carry no marker, and no marker names an unknown key
+  ---
+  duration_ms: 64.9955
+  type: 'test'
+  ...
+# Subtest: every card goes somewhere real: each destination answers 200 and has its \#section
+ok 52 - every card goes somewhere real: each destination answers 200 and has its \#section
+  ---
+  duration_ms: 1202.04
+  type: 'test'
+  ...
+# Subtest: nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog
+ok 53 - nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog
+  ---
+  duration_ms: 1155.997083
+  type: 'test'
+  ...
+# Subtest: help prints into the live log; Tab stays inside; Escape closes and gives focus back
+ok 54 - help prints into the live log; Tab stays inside; Escape closes and gives focus back
+  ---
+  duration_ms: 1234.723625
+  type: 'test'
+  ...
+# Subtest: a bare page name, and a palette pick, navigate and close the terminal
+ok 55 - a bare page name, and a palette pick, navigate and close the terminal
+  ---
+  duration_ms: 1504.857542
+  type: 'test'
+  ...
+# Subtest: theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens
+ok 56 - theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens
+  ---
+  duration_ms: 1320.081833
+  type: 'test'
+  ...
+# Subtest: adventure: the walk is kept across a reload, the last secret puts the stamp in `stamps`
+ok 57 - adventure: the walk is kept across a reload, the last secret puts the stamp in `stamps`
+  ---
+  duration_ms: 30959.936583
+  type: 'test'
+  ...
+# Subtest: adventure in private mode: storage throws, the walk still plays and says once that it will not keep
+ok 58 - adventure in private mode: storage throws, the walk still plays and says once that it will not keep
+  ---
+  duration_ms: 940.706125
+  type: 'test'
+  ...
+# Subtest: every kind of page names a stamped card, and each card is a 1200x630 PNG
+ok 59 - every kind of page names a stamped card, and each card is a 1200x630 PNG
+  ---
+  duration_ms: 271.938167
+  type: 'test'
+  ...
+# Subtest: /postcard offers the twelve sheets and a note capped at 140; /sketches links to it
+ok 60 - /postcard offers the twelve sheets and a note capped at 140; /sketches links to it
+  ---
+  duration_ms: 33.901417
+  type: 'test'
+  ...
+# Subtest: a postcard's link opens its view: noindex, titled, its own card as og:image, the note as text
+ok 61 - a postcard's link opens its view: noindex, titled, its own card as og:image, the note as text
+  ---
+  duration_ms: 11.960791
+  type: 'test'
+  ...
+# Subtest: /postcard/image draws the postcard as a 1200x630 PNG, cached a day and kept out of the index
+ok 62 - /postcard/image draws the postcard as a 1200x630 PNG, cached a day and kept out of the index
+  ---
+  duration_ms: 471.314417
+  type: 'test'
+  ...
+# Subtest: a bad link is a lost postcard: the view says so (noindex) and the image is a 404
+ok 63 - a bad link is a lost postcard: the view says so (noindex) and the image is a 404
+  ---
+  duration_ms: 37.190208
+  type: 'test'
+  ...
+# Subtest: signed-out visitors are redirected before anything streams
+ok 64 - signed-out visitors are redirected before anything streams
+  ---
+  duration_ms: 10284.088584
+  type: 'test'
+  ...
+# Subtest: the public pages are open to everyone
+ok 65 - the public pages are open to everyone
+  ---
+  duration_ms: 40.788375
+  type: 'test'
+  ...
+# Subtest: the front page is an entrance, without the sidebar
+ok 66 - the front page is an entrance, without the sidebar
+  ---
+  duration_ms: 41.589542
+  type: 'test'
+  ...
+# Subtest: the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor, Planisphere, Barometer, Gazette, Structures and Design system
+ok 67 - the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor, Planisphere, Barometer, Gazette, Structures and Design system
+  ---
+  duration_ms: 8.334083
+  type: 'test'
+  ...
+# Subtest: Shore is its own page, without the site's sidebar
+ok 68 - Shore is its own page, without the site's sidebar
+  ---
+  duration_ms: 2.684625
+  type: 'test'
+  ...
+# Subtest: Capsule is its own page, without the site's sidebar
+ok 69 - Capsule is its own page, without the site's sidebar
+  ---
+  duration_ms: 1.833834
+  type: 'test'
+  ...
+# Subtest: Orrery is its own page, without the site's sidebar
+ok 70 - Orrery is its own page, without the site's sidebar
+  ---
+  duration_ms: 2.23775
+  type: 'test'
+  ...
+# Subtest: /sun is a permanent redirect to the Sun's poster
+ok 71 - /sun is a permanent redirect to the Sun's poster
+  ---
+  duration_ms: 1.083041
+  type: 'test'
+  ...
+# Subtest: Elements is its own page, without the site's sidebar
+ok 72 - Elements is its own page, without the site's sidebar
+  ---
+  duration_ms: 1.626083
+  type: 'test'
+  ...
+# Subtest: Vinyl is its own page, without the site's sidebar
+ok 73 - Vinyl is its own page, without the site's sidebar
+  ---
+  duration_ms: 1.354625
+  type: 'test'
+  ...
+# Subtest: Rotor is its own page, without the site's sidebar
+ok 74 - Rotor is its own page, without the site's sidebar
+  ---
+  duration_ms: 9.143042
+  type: 'test'
+  ...
+# Subtest: Planisphere is its own page, without the site's sidebar
+ok 75 - Planisphere is its own page, without the site's sidebar
+  ---
+  duration_ms: 17.974792
+  type: 'test'
+  ...
+# Subtest: Barometer is its own page, without the site's sidebar
+ok 76 - Barometer is its own page, without the site's sidebar
+  ---
+  duration_ms: 6.686083
+  type: 'test'
+  ...
+# Subtest: The Gazette is its own page, without the site's sidebar
+ok 77 - The Gazette is its own page, without the site's sidebar
+  ---
+  duration_ms: 1.896875
+  type: 'test'
+  ...
+# Subtest: Structures is its own page, without the site's sidebar
+ok 78 - Structures is its own page, without the site's sidebar
+  ---
+  duration_ms: 4.730541
+  type: 'test'
+  ...
+# Subtest: Design system is its own page, without the site's sidebar
+ok 79 - Design system is its own page, without the site's sidebar
+  ---
+  duration_ms: 3.921417
+  type: 'test'
+  ...
+# Subtest: a plain user can't list users or raise their own role
+ok 80 - a plain user can't list users or raise their own role
+  ---
+  duration_ms: 24.035125
+  type: 'test'
+  ...
+# Subtest: the owner lists users and makes an admin
+ok 81 - the owner lists users and makes an admin
+  ---
+  duration_ms: 15.555917
+  type: 'test'
+  ...
+# Subtest: song create and delete are owner-only on /admin/roles
+ok 82 - song create and delete are owner-only on /admin/roles
+  ---
+  duration_ms: 21.225917
+  type: 'test'
+  ...
+# Subtest: an admin can't escalate or touch the owner
+ok 83 - an admin can't escalate or touch the owner
+  ---
+  duration_ms: 16.484917
+  type: 'test'
+  ...
+# Subtest: a ban signs the target out everywhere and blocks sign-in
+ok 84 - a ban signs the target out everywhere and blocks sign-in
+  ---
+  duration_ms: 42.023541
+  type: 'test'
+  ...
+# Subtest: a password reset signs every device out
+ok 85 - a password reset signs every device out
+  ---
+  duration_ms: 44.687375
+  type: 'test'
+  ...
+# Subtest: typing urashima at the top of Home goes down to the palace; a lone A opens the console's page instead
+ok 86 - typing urashima at the top of Home goes down to the palace; a lone A opens the console's page instead
+  ---
+  duration_ms: 5353.550916
+  type: 'test'
+  ...
+# Subtest: typing urashima into a field types it, and goes nowhere
+ok 87 - typing urashima into a field types it, and goes nowhere
+  ---
+  duration_ms: 1561.753333
+  type: 'test'
+  ...
+# Subtest: Pocket: the console's Dive chip goes down to the palace
+ok 88 - Pocket: the console's Dive chip goes down to the palace
+  ---
+  duration_ms: 1217.042708
+  type: 'test'
+  ...
+# Subtest: the waterline: the last thing below the footer links down to the palace, by touch as well
+ok 89 - the waterline: the last thing below the footer links down to the palace, by touch as well
+  ---
+  duration_ms: 1446.221
+  type: 'test'
+  ...
+# Subtest: the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling
+ok 90 - the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling
+  ---
+  duration_ms: 918.927333
+  type: 'test'
+  ...
+# Subtest: with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer
+ok 91 - with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer
+  ---
+  duration_ms: 2411.2175
+  type: 'test'
+  ...
+# Subtest: while the page is hidden the loop stops, and it comes back when the page is seen again
+ok 92 - while the page is hidden the loop stops, and it comes back when the page is seen again
+  ---
+  duration_ms: 1803.150375
+  type: 'test'
+  ...
+# Subtest: without WebGL the sea is static: the served caustic and fish, and no frame runs
+ok 93 - without WebGL the sea is static: the served caustic and fish, and no frame runs
+  ---
+  duration_ms: 1623.173
+  type: 'test'
+  ...
+# Subtest: under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate
+ok 94 - under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate
+  ---
+  duration_ms: 1376.066958
+  type: 'test'
+  ...
+# Subtest: server and no-JS baseline: all cards remain readable links without toy controls
+ok 95 - server and no-JS baseline: all cards remain readable links without toy controls
+  ---
+  duration_ms: 943.947208
+  type: 'test'
+  ...
+# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+ok 96 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+  ---
+  duration_ms: 3232.137875
+  type: 'test'
+  ...
+# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+ok 97 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+  ---
+  duration_ms: 2859.001
+  type: 'test'
+  ...
+# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable
+ok 98 - blocked storage and live reduced motion keep instant keyboard operations usable
+  ---
+  duration_ms: 1496.528292
+  type: 'test'
+  ...
+# Subtest: Save-Data loads paper only after explicit enabling
+ok 99 - Save-Data loads paper only after explicit enabling
+  ---
+  duration_ms: 1166.841208
+  type: 'test'
+  ...
+# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+ok 100 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+  ---
+  duration_ms: 6442.640292
+  type: 'test'
+  ...
+# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload
+ok 101 - renderer import waits for window load and the idle callback; server markup has no toy preload
+  ---
+  duration_ms: 1000.621583
+  type: 'test'
+  ...
+# Subtest: existing desktop desk and stamp gestures keep their own controls
+ok 102 - existing desktop desk and stamp gestures keep their own controls
+  ---
+  duration_ms: 2934.495
+  type: 'test'
+  ...
+1..102
+# tests 102
+# suites 0
+# pass 102
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 215416.481292

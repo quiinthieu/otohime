@@ -1,0 +1,80 @@
+[
+  {
+    "id": "03c16ea7-5c92-43cf-b919-89f1843c1204",
+    "data": {
+      "task": {
+        "id": "03c16ea7-5c92-43cf-b919-89f1843c1204",
+        "projectId": "plan-manager",
+        "taskType": "coding_task",
+        "status": "COMPLETED",
+        "resultUrl": "{\"agent\":\"claude\",\"artifacts\":[{\"content_type\":\"application/octet-stream\",\"name\":\"author.txt\",\"sha256\":\"7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada\",\"size\":44},{\"content_type\":\"application/octet-stream\",\"name\":\"changed-files.txt\",\"sha256\":\"2c3f8269cabf7cb8e5ac805ec5a73e175e595c85eb5ead1e507a873ba3336cb2\",\"size\":203},{\"content_type\":\"application/octet-stream\",\"name\":\"changes.patch\",\"sha256\":\"05db66455401358302565a5673a8900e6bac19d49156faab9f3339e3a2bf0036\",\"size\":23085},{\"content_type\":\"application/octet-stream\",\"name\":\"commits.txt\",\"sha256\":\"c149fc4597bdc8ec8fe8bc016e3fea24133d4fb5e1e816a4ae21158593e87a62\",\"size\":700},{\"content_type\":\"application/octet-stream\",\"name\":\"diffstat.txt\",\"sha256\":\"89417ec13f7da80cb1ce900d21e1fa8aeba340d83dccaea0ce8cdfb4d39e7ce8\",\"size\":578},{\"content_type\":\"application/json\",\"name\":\"footprint.json\",\"sha256\":\"1dbb869db02e02111c57905d196034429cdcb8dbe9853df67dab4a4d80a67cb6\",\"size\":425},{\"content_type\":\"application/octet-stream\",\"name\":\"uncommitted.txt\",\"sha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"size\":0},{\"content_type\":\"application/json\",\"name\":\"usage.json\",\"sha256\":\"e14c59bf8da2ac2a381d1fd7e5b06406d31a670d963679420461f14c24f79784\",\"size\":412}],\"duration_s\":3462,\"exit_code\":0,\"recordings\":[],\"repo_id\":\"otohime\",\"usage\":{\"cpu_cores\":0.01,\"cpu_seconds\":2125.85,\"io_sampler\":\"rusage\",\"peak_cpu_cores\":9.73,\"peak_rss_mb\":6746.89,\"read_bytes\":1283293184,\"rss_mb\":23.89,\"sampler\":\"ps\",\"samples\":692,\"write_bytes\":760270848},\"worker_id\":\"avietidol-mac-mini\"}",
+        "createdBy": "plan-manager",
+        "createdAt": "2026-10-26T09:49:48Z",
+        "updatedAt": "2026-10-26T10:49:17Z",
+        "completedAt": "2026-10-26T10:49:13Z",
+        "title": "Restore the deployment checks gate",
+        "priority": 5,
+        "branch": "main",
+        "startedAt": "2026-10-26T09:51:17Z",
+        "callbackUrl": "http://plan-manager.staging.svc.cluster.local.:8148/internal/v1/task-callback",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "callbackNextAt": "2026-10-26T10:49:29Z",
+        "repoId": "otohime",
+        "accountId": "claude-kqviet",
+        "runner": "fleet",
+        "workerId": "avietidol-mac-mini"
+      }
+    }
+  },
+  {
+    "id": "91152aac-2ffc-4fc1-b721-1a9a28b6f591",
+    "data": {
+      "task": {
+        "id": "91152aac-2ffc-4fc1-b721-1a9a28b6f591",
+        "projectId": "plan-manager",
+        "taskType": "coding_task",
+        "status": "RUNNING",
+        "createdBy": "plan-manager",
+        "createdAt": "2026-10-26T10:56:23Z",
+        "updatedAt": "2026-10-26T10:58:33Z",
+        "title": "Restore the deployment checks gate",
+        "priority": 7,
+        "branch": "main",
+        "startedAt": "2026-10-26T10:56:31Z",
+        "callbackUrl": "http://plan-manager.staging.svc.cluster.local.:8148/internal/v1/task-callback",
+        "repoId": "otohime",
+        "accountId": "codex-main",
+        "runner": "fleet",
+        "workerId": "avietidol-mac-mini"
+      }
+    }
+  },
+  {
+    "id": "bbd3d2b8-f5d4-40d0-8e40-b9bcb3cf23f4",
+    "data": {
+      "task": {
+        "id": "bbd3d2b8-f5d4-40d0-8e40-b9bcb3cf23f4",
+        "projectId": "plan-manager",
+        "taskType": "coding_task",
+        "status": "COMPLETED",
+        "resultUrl": "{\"agent\":\"shell\",\"artifacts\":[{\"content_type\":\"application/octet-stream\",\"name\":\"commits.txt\",\"sha256\":\"2de5e2dff80d7615d1c3373c8713276ec7cdfe824d66e7848d45823fb53439d6\",\"size\":32},{\"content_type\":\"application/octet-stream\",\"name\":\"uncommitted.txt\",\"sha256\":\"10f12daedce525c685b5dd96da5a7915ef20f906f13e334d07dd351fe84655f0\",\"size\":24},{\"content_type\":\"application/json\",\"name\":\"usage.json\",\"sha256\":\"c4b59be25f7e827c2ec9c5b0ea39e19ac8a9d4b7fc7dd4226d46ab20d97cef21\",\"size\":200},{\"content_type\":\"application/json\",\"name\":\"verification.json\",\"sha256\":\"d9c82721f06b5015b8087043200b3ac2b5a838c9f390b274ee9644f4b0a82630\",\"size\":29538}],\"duration_s\":355,\"exit_code\":0,\"recordings\":[],\"repo_id\":\"otohime\",\"usage\":{\"cpu_cores\":0.41,\"cpu_seconds\":241.71,\"io_sampler\":\"rusage\",\"peak_cpu_cores\":4.69,\"peak_rss_mb\":5913.64,\"read_bytes\":253005824,\"rss_mb\":1885,\"sampler\":\"ps\",\"samples\":71,\"write_bytes\":714620928},\"worker_id\":\"avietidol-mac-mini\"}",
+        "createdBy": "plan-manager",
+        "createdAt": "2026-10-26T10:49:17Z",
+        "updatedAt": "2026-10-26T10:55:25Z",
+        "completedAt": "2026-10-26T10:55:23Z",
+        "title": "Restore the deployment checks gate",
+        "priority": 7,
+        "branch": "main",
+        "startedAt": "2026-10-26T10:49:19Z",
+        "callbackUrl": "http://plan-manager.staging.svc.cluster.local.:8148/internal/v1/task-callback",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "callbackNextAt": "2026-10-26T10:55:39Z",
+        "repoId": "otohime",
+        "runner": "fleet",
+        "workerId": "avietidol-mac-mini"
+      }
+    }
+  }
+]

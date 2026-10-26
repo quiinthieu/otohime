@@ -1,0 +1,51 @@
+[
+  {
+    "name": "unit",
+    "cmd": "npm test",
+    "exit": 0,
+    "seconds": 10.78,
+    "sha": "e6e432a6055ac854f6ea64ab33fb187f3629ff27"
+  },
+  {
+    "name": "lint",
+    "cmd": "npm run lint",
+    "exit": 0,
+    "seconds": 6.74,
+    "sha": "e6e432a6055ac854f6ea64ab33fb187f3629ff27"
+  },
+  {
+    "name": "typecheck",
+    "cmd": "npm run typecheck",
+    "exit": 0,
+    "seconds": 1.86,
+    "sha": "e6e432a6055ac854f6ea64ab33fb187f3629ff27"
+  },
+  {
+    "name": "build",
+    "cmd": "npm run build",
+    "exit": 0,
+    "seconds": 5.88,
+    "sha": "e6e432a6055ac854f6ea64ab33fb187f3629ff27"
+  },
+  {
+    "name": "walk",
+    "cmd": "SKIP_BUILD=1 bash scripts/walk-end.sh",
+    "exit": 0,
+    "seconds": 5.93,
+    "sha": "e6e432a6055ac854f6ea64ab33fb187f3629ff27"
+  },
+  {
+    "name": "probe",
+    "cmd": "SKIP_BUILD=1 bash scripts/probe-end.sh",
+    "exit": 0,
+    "seconds": 59.89,
+    "sha": "e6e432a6055ac854f6ea64ab33fb187f3629ff27"
+  },
+  {
+    "name": "e2e",
+    "cmd": "SKIP_BUILD=1 npm run test:e2e",
+    "exit": 0,
+    "seconds": 268.33,
+    "sha": "e6e432a6055ac854f6ea64ab33fb187f3629ff27"
+  }
+]

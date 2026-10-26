@@ -1,0 +1,27 @@
+Starting embedded Postgres on 127.0.0.1:54976
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/private/tmp/qa-8849-delivery/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:54979
+TAP version 13
+# Subtest: independent live HTTP, footer corruption, paused clock and touch drag audit
+ok 1 - independent live HTTP, footer corruption, paused clock and touch drag audit
+  ---
+  duration_ms: 56478.980709
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 56603.077

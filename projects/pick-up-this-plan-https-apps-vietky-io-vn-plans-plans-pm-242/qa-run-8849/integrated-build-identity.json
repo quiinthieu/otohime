@@ -1,0 +1,12 @@
+{
+  "build_id": "yLHdTzpqKWN_TGUNg9eeV",
+  "sha256": {
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "next.config.ts": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+    "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+    ".github/workflows/ci.yml": "823cbca05eb6a6eb58147f616cc84b688ee8bff59e7dd61a8f00398fb4dfaa1f",
+    "app/(site)/(app)/desk/_components/ink-desk.tsx": "012876f0500aadc288ad2f4de791093403cc9d071cd7d6eea528602f6f6ac7f5",
+    "e2e/desk.test.ts": "16503e113249afdc07c923520cece75ca658f28a77a941b62caf36c80fec75ae",
+    "e2e/kame.test.ts": "2c2a7990a8a6e52d91dc3f07c267d04a31bd132cac5f2406b9560f601a03d56c"
+  }
+}

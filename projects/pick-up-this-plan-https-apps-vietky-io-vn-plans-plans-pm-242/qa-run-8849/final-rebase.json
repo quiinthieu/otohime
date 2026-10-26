@@ -1,0 +1,17 @@
+{
+  "tested_sha": "9b6d51b1286d87cc689042d252951a7e84a8654f",
+  "full_suite_sha": "e6e432a6055ac854f6ea64ab33fb187f3629ff27",
+  "source_diff": "",
+  "results": [
+    {
+      "cmd": "npm test",
+      "exit": 0,
+      "seconds": 10.09
+    },
+    {
+      "cmd": "npm run lint",
+      "exit": 0,
+      "seconds": 7.23
+    }
+  ]
+}

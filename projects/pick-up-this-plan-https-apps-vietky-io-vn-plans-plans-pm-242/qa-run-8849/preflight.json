@@ -1,0 +1,29 @@
+{
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "arch": "arm64",
+  "constructed": [
+    "EmbeddedPostgres (not started here)",
+    "pg.Client (not connected here)",
+    "real Chromium browser"
+  ],
+  "browser": "156.0.8078.48",
+  "versions": {
+    "embedded-postgres": "17.10.0-beta.17",
+    "pg": "8.23.1",
+    "playwright-core": "1.64.0",
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "sha256": {
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "next.config.ts": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+    "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+    "scripts/e2e-annotate.mjs": "eca9b90237242d65ec0a45a96f6f72304bfa96680c6d508b5bad5fec0bd108e6",
+    ".github/workflows/ci.yml": "823cbca05eb6a6eb58147f616cc84b688ee8bff59e7dd61a8f00398fb4dfaa1f",
+    "e2e/kame.test.ts": "016317386cc052d2ef977a3669a5c88cfc68b91113f8accdb0c57474615d618f",
+    ".next/BUILD_ID": "fa2f888be8f8e3d5a9cc54a7ffa2d2dc1eb99f169e9b91717eafcc25833592e2"
+  },
+  "buildId": "1mqCkk54ITDWwfqlR--8d"
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/121530268639/logs",
+    "status": 403,
+    "body": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+  },
+  {
+    "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/121423322274/logs",
+    "status": 403,
+    "body": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+  }
+]

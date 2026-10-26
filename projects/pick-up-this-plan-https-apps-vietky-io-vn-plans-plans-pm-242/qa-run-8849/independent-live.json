@@ -1,0 +1,23 @@
+{
+  "fake": false,
+  "checks": [
+    "canonical footer corruption detected, restored value passes",
+    "visitor follows footer Work link with one main landmark"
+  ],
+  "errors": [],
+  "attempts": [],
+  "browser": "156.0.8078.48",
+  "live": true,
+  "health": {
+    "ok": true,
+    "sha": "ae4607dafc28c6f732fdb7ee2ff2f1c7953ed4d3"
+  },
+  "presence": {
+    "spotify": "spotify-off",
+    "track": null,
+    "steam": "steam-off",
+    "game": null,
+    "readAt": "2026-10-26T11:04:18.467Z"
+  },
+  "sha": "ae4607dafc28c6f732fdb7ee2ff2f1c7953ed4d3"
+}

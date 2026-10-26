@@ -1,0 +1,20 @@
+[
+  {
+    "live": false,
+    "sha": "841ca69823a2e71e6a97e5c1d01c12babdccd2ea",
+    "exit": 1,
+    "seconds": 36.31
+  },
+  {
+    "live": true,
+    "sha": "ae4607dafc28c6f732fdb7ee2ff2f1c7953ed4d3",
+    "exit": 0,
+    "seconds": 5.43
+  },
+  {
+    "live": false,
+    "exit": 0,
+    "seconds": 58.86,
+    "fix": "QA probe uses distinct exposeFunction bindings; Playwright has no removeExposedFunction"
+  }
+]

@@ -1,0 +1,47 @@
+Starting embedded Postgres on 127.0.0.1:54612
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/private/tmp/qa-8849-delivery/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:54615
+TAP version 13
+# Subtest: independent live HTTP, footer corruption, paused clock and touch drag audit
+not ok 1 - independent live HTTP, footer corruption, paused clock and touch drag audit
+  ---
+  duration_ms: 33722.861917
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/91152aac-2ffc-4fc1-b721-1a9a28b6f591-560580e35dfa1f61949539e7ea76c458/work/otohime/projects/pick-up-this-plan-https-apps-vietky-io-vn-plans-plans-pm-242/qa-run-8849/independent.mjs:12:1'
+  failureType: 'testCodeFailure'
+  error: 'page.removeExposedFunction is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/91152aac-2ffc-4fc1-b721-1a9a28b6f591-560580e35dfa1f61949539e7ea76c458/work/otohime/projects/pick-up-this-plan-https-apps-vietky-io-vn-plans-plans-pm-242/qa-run-8849/independent.mjs:84:20)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 33886.765875
+The suite failed. The end of the server's log:
+
+> otohime@0.1.0 start
+> next start
+
+▲ Next.js 16.4.2
+- Local:         http://localhost:54615
+- Network:       http://192.168.100.130:54615
+✓ Ready in 83ms
+✓ Running next.config.ts took 17ms
+

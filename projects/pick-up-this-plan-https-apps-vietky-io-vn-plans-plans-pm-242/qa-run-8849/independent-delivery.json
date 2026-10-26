@@ -1,0 +1,233 @@
+{
+  "fake": false,
+  "checks": [
+    "canonical footer corruption detected, restored value passes",
+    "visitor follows footer Work link with one main landmark",
+    "paused hold is 499/500 ms; same not-pet assertion fails with flowing clock",
+    "real touch drag passes, blocked pointermove fails same displacement assertion, fresh page passes"
+  ],
+  "errors": [],
+  "attempts": [
+    {
+      "blocked": false,
+      "result": {
+        "x": 0.425,
+        "width": 960
+      },
+      "events": [
+        {
+          "type": "pointerdown",
+          "x": 603.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 615.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 627.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 639.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 651.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 663.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 675.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 687.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 699.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 711.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 723.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointerup",
+          "x": 723.4121704101562,
+          "target": "music"
+        }
+      ]
+    },
+    {
+      "blocked": true,
+      "result": {
+        "x": 0.3,
+        "width": 960
+      },
+      "events": [
+        {
+          "type": "pointerdown",
+          "x": 603.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 615.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 627.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 639.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 651.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 663.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 675.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 687.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 699.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 711.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 723.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointerup",
+          "x": 723.4121704101562,
+          "target": "music"
+        }
+      ]
+    },
+    {
+      "blocked": false,
+      "result": {
+        "x": 0.425,
+        "width": 960
+      },
+      "events": [
+        {
+          "type": "pointerdown",
+          "x": 603.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 615.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 627.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 639.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 651.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 663.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 675.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 687.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 699.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 711.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointermove",
+          "x": 723.4121704101562,
+          "target": "music"
+        },
+        {
+          "type": "pointerup",
+          "x": 723.4121704101562,
+          "target": "music"
+        }
+      ]
+    }
+  ],
+  "browser": "156.0.8078.48",
+  "live": false,
+  "health": {
+    "ok": true,
+    "sha": "841ca69823a2e71e6a97e5c1d01c12babdccd2ea"
+  },
+  "presence": {
+    "spotify": "spotify-off",
+    "track": null,
+    "steam": "steam-off",
+    "game": null,
+    "readAt": "2026-10-26T11:04:45.038Z"
+  },
+  "sha": "841ca69823a2e71e6a97e5c1d01c12babdccd2ea"
+}

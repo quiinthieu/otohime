@@ -1,0 +1,93 @@
+{
+  "limits": {
+    "pages": [
+      1,
+      2
+    ],
+    "per_page": 50,
+    "total": null,
+    "summaries_read": 0,
+    "conclusions": {},
+    "job_listings_attempted": 8,
+    "job_listings_read": 0,
+    "jobs_read": 0,
+    "older_history_unread": true
+  },
+  "pages": [
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs?branch=main&per_page=50&page=1",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    },
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs?branch=main&per_page=50&page=2",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    }
+  ],
+  "jobs": [
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40310239199/jobs?per_page=100",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    },
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40277024423/jobs?per_page=100",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    },
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40275822192/jobs?per_page=100",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    },
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40277523350/jobs?per_page=100",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    },
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40263545741/jobs?per_page=100",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    },
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40306337481/jobs?per_page=100",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    },
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40303724712/jobs?per_page=100",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    },
+    {
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40303396148/jobs?per_page=100",
+      "status": 403,
+      "data": "{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+    }
+  ],
+  "failed_logs": [],
+  "annotations": [],
+  "live": [
+    {
+      "url": "https://otohime.dev/api/health",
+      "status": 200,
+      "data": {
+        "ok": true,
+        "sha": "ae4607dafc28c6f732fdb7ee2ff2f1c7953ed4d3"
+      }
+    },
+    {
+      "url": "https://otohime.dev/api/now-playing",
+      "status": 200,
+      "data": {
+        "spotify": "spotify-off",
+        "track": null,
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-26T11:00:20.996Z"
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+used as it is
+  ---
+  duration_ms: 168.101875
+  type: 'test'
+  ...
+# Subtest: a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+ok 2121 - a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+  ---
+  duration_ms: 364.631125
+  type: 'test'
+  ...
+# Subtest: a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+ok 2122 - a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+  ---
+  duration_ms: 387.815958
+  type: 'test'
+  ...
+# Subtest: a git log that cannot be parsed falls back instead of failing the build
+ok 2123 - a git log that cannot be parsed falls back instead of failing the build
+  ---
+  duration_ms: 140.789625
+  type: 'test'
+  ...
+# Subtest: --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+ok 2124 - --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+  ---
+  duration_ms: 554.578458
+  type: 'test'
+  ...
+# Subtest: the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+ok 2125 - the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+  ---
+  duration_ms: 449.372291
+  type: 'test'
+  ...
+# Subtest: the committed content/history.json is a well-formed, bounded, canonical index
+ok 2126 - the committed content/history.json is a well-formed, bounded, canonical index
+  ---
+  duration_ms: 0.565541
+  type: 'test'
+  ...
+# Subtest: package.json builds the index before next build and exposes history:index and history:check
+ok 2127 - package.json builds the index before next build and exposes history:index and history:check
+  ---
+  duration_ms: 0.090375
+  type: 'test'
+  ...
+1..2127
+# tests 2127
+# suites 0
+# pass 2127
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10549.230625
