@@ -285,7 +285,7 @@ test("winning puts the stamp in the terminal's list once, beside stamps already 
   assert.deepEqual(saveProgress(storage, step(won, "look").state), { saved: true, stamp: true });
   const stamps = parseStamps(storage.data.get(STAMPS_KEY));
   assert.deepEqual(stamps, ["Old Stamp", STAMP]);
-  const state: TerminalState = { theme: "light", sound: false, season: "auto", stamps };
+  const state: TerminalState = { theme: "light", sound: false, season: "auto", stamps, appearance: { printRun: "house", lab: null } };
   assert.deepEqual(run("stamps", state).lines, ["stamps (2):", "  [*] Old Stamp", `  [*] ${STAMP}`]);
   // a restart after winning starts the walk over and keeps the stamp
   saveProgress(storage, step(won, "restart").state);
@@ -323,7 +323,7 @@ test("stored progress decodes strictly: garbage, unknown rooms, things and secre
 });
 
 test("the terminal's adventure command hands over to the game, and the lazy terminal wires it to storage", () => {
-  assert.deepEqual(run("adventure", { theme: "light", sound: false, season: "auto", stamps: [] }), { lines: [], effect: { kind: "adventure" } });
+  assert.deepEqual(run("adventure", { theme: "light", sound: false, season: "auto", stamps: [], appearance: { printRun: "house", lab: null } }), { lines: [], effect: { kind: "adventure" } });
   const terminal = read("components/pocket-terminal.tsx");
   assert.match(terminal, /from "@\/lib\/adventure";/);
   assert.match(terminal, /effect\?\.kind === "adventure"/);

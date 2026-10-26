@@ -10,12 +10,15 @@
 // keeps React's onKeyDown from firing, so the keys arrive through bind() instead. Enter is the form's submit and
 // typing is the input's change event, neither of them a keydown. Tab wraps inside the dialog; Escape closes it.
 import { begin, loadProgress, moves, saveProgress, step, UNSAVED, type AdventureState, type StoreLike } from "@/lib/adventure";
+import { PrintRunSwitch, printRunKey, selectPrintRun } from "@/components/print-run-switch";
+import { appearanceStore } from "@/lib/appearance-client";
 import { getSound, setSound, subscribeSound, play } from "@/lib/sound-client";
 import { resolveSeason, SEASON_ATTR, SEASON_KEY, visitorZone } from "@/lib/seasons";
 import {
   moveActive,
   parseSeasonChoice,
   parseStamps,
+  printRunStatus,
   run,
   STAMPS_KEY,
   suggest,
@@ -73,7 +76,7 @@ function readState(): TerminalState {
   const off = subscribeSound(() => {});
   const sound = getSound();
   off();
-  return { theme, sound, season: parseSeasonChoice(stored(SEASON_KEY)), stamps: parseStamps(stored(STAMPS_KEY)) };
+  return { theme, sound, season: parseSeasonChoice(stored(SEASON_KEY)), stamps: parseStamps(stored(STAMPS_KEY)), appearance: appearanceStore().getSnapshot() };
 }
 
 // The theme toggle (components/theme-toggle.tsx) watches data-theme, so it follows.
@@ -181,6 +184,7 @@ export default function PocketTerminal({ open, onClose, bind }: TerminalProps) {
       setGame(turn.quit ? null : turn.state);
     } else {
       ({ lines, effect } = run(line, readState()));
+      if (effect?.kind === "print-run") lines = [printRunStatus(selectPrintRun(effect.printRun))];
       if (effect?.kind === "adventure") {
         const state = loadProgress(storage());
         lines = [...lines, ...begin(state)];
@@ -212,8 +216,11 @@ export default function PocketTerminal({ open, onClose, bind }: TerminalProps) {
       event.preventDefault();
       setActive((a) => moveActive(a, items.length, event.key === "ArrowDown" ? 1 : -1));
       play("move");
+    } else if (printRunKey(event)) {
+      // The shared switch handled selection through bind(), before the loader stops propagation.
     } else if (event.key === "Tab") {
-      const stops = [...el.querySelectorAll<HTMLElement>("input, button")];
+      const stops = [...el.querySelectorAll<HTMLElement>("input:not(:disabled), button:not(:disabled)")]
+        .filter((stop) => !(stop instanceof HTMLInputElement) || stop.type !== "radio" || stop.checked);
       const first = stops[0];
       const last = stops[stops.length - 1];
       if (event.shiftKey && document.activeElement === first) {
@@ -249,6 +256,9 @@ export default function PocketTerminal({ open, onClose, bind }: TerminalProps) {
         <button type="button" className="chip" onClick={shut}>
           Esc
         </button>
+      </div>
+      <div className="pt-settings">
+        <PrintRunSwitch onSelect={(result) => setLog((l) => [...l, { id: next.current++, lines: [printRunStatus(result)] }])} />
       </div>
       <div ref={screen} className="pt-screen" role="log" aria-live="polite" aria-label="Terminal output">
         {log.map((entry) => (

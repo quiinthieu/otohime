@@ -1,0 +1,21 @@
+# pm-268/t-1600 — Pocket print-run controls
+
+Visitors can select House, Sumi black, Riso pink + mint and Indigo night from visible native radio chips beside the Pocket controls and in terminal settings. Both controls and `print run [house|sumi|riso|indigo]` use the same appearance adapter, synchronize immediately, clear applied Lab overrides and disclose failed persistence. `lab` and `go lab` navigate to `/lab` without expanding the seven-item LCD menu. Invalid ids have no effect. See [console-contract.md](console-contract.md) for exact labels, messages, capture-key routing and architecture.
+
+Recovered the nine scoped files from the runner's local WIP commit `3fa2f09`; retained all implementation and tests. The previous run ended on model capacity after tests. No unrelated report changes were present to discard. Updated the evidence documentation for this run and restored build-generated history before delivery. The delivery is one commit with the required task prefix and Otohime identity; its full SHA is supplied with the plan-manager summary and local `commits.txt` artifact.
+
+Observed run profile: `run-8948`, `codex-sol-6-1-high`, model `gpt-6.1-sol`, effort `high`, fleet worker `avietidol-mac-mini`. Fresh `npm ci` used package-lock.json; Node 22.23.3, npm 10.9.9, Next.js 16.4.2, React 19.3.0, Playwright 1.64.0. Installed Next.js client-component guidance and the host copies of required process documents were read.
+
+| Local verification | Result |
+| --- | --- |
+| `node --experimental-strip-types --test lib/terminal.test.ts` | 22 passed |
+| `npm test` | 2,232 initially; 2,233 after rebase, zero failures/skips; includes terminal, adventure, handheld/LCD and TitleMorph |
+| `npm run typecheck` | Passed |
+| `npm run lint` | Passed, 10 existing warnings and zero errors |
+| `TMPDIR=/tmp PRINT_RUN_CONSOLE_EVIDENCE=.agent-artifacts/pm-268-t-1600 node --experimental-strip-types scripts/e2e.mjs --test e2e/print-run-console.test.ts e2e/pocket-terminal.test.ts` | 14 passed, zero failures/skips; real production build and all 200 pages compiled |
+
+Execution demonstrated locally: real production imports, embedded PostgreSQL construction/migrations, Next.js server, installed Chrome, appearance adapter and native browser storage. Only failure injection uses throwing browser storage getters/methods and pure-store fake storage ports. Tests exercise pointer/arrows/Space, command synchronization, invalid ids, read-back/reload, blocked local/session storage, stale Lab restoration, retrying a failed same-run save, Tab/Shift+Tab, Escape, focus return, Enter, Lab routing and existing adventure/navigation flows. Negative controls confirm unrelated document keys arrive with the modal shut and are intercepted while open; invalid commands preserve the selected run and persisted value. Desktop, phone and reflow screenshots were opened and inspected; 640×450 is 200% equivalent reflow, not automated browser zoom.
+
+Raw local logs, screenshots, executable Git blob identities and commit identity: `.agent-artifacts/pm-268-t-1600/` (locally excluded, no binaries committed). Fresh local history is complete for this run: all five required checks passed on their first attempt, with the existing terminal browser suite included in the feature run. The first push was rejected because main advanced; `git pull --rebase` integrated the concurrent changes without conflict and the declared checks were rerun before retrying. Earlier red-test details are inherited assertions from run-8934, explicitly identified in the contract; its supplied failure tail was read. No asynchronous executable was changed and no remote failed/completed-job history or callback ingestion is claimed as inspected.
+
+Integration deployed: unproven in this engineering run. Waiting for capacity: none. Product delivery: source implementation locally verified and handed to plan-manager at the pushed SHA; whole-plan/deployed acceptance remains pending. CI was not watched and no deployed system was probed, per the software-engineer stop-at-push contract. Deferred checks belong to plan-manager's green gate and independent QA for `pm-268/t-1600`, triggered by this summary; a failed declared command, inaccessible interaction, false persistence message or deployed mismatch fails that handoff. No known local defect remains.

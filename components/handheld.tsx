@@ -3,6 +3,7 @@
 import { bootStyle, booted, chimeAllowed, finishBoot, splashStyle } from "@/lib/boot";
 import { box, CONSOLE_TRANSITION, Inked, TitleMorph } from "@/components/figures";
 import { Chip, Machine, useTick } from "@/components/machine";
+import { PrintRunSwitch } from "@/components/print-run-switch";
 import { site } from "@/content/site";
 import { CONSOLE_MENU, LCD, menuBaseline } from "@/lib/pages";
 import { newPad, pad, type Button } from "@/lib/machines";
@@ -518,6 +519,7 @@ export function Handheld() {
           <Chip onClick={() => input("b")} aria-pressed={s.game === true}>
             {s.game ? P.menu : P.play}
           </Chip>
+          <PrintRunSwitch />
         </>
       }
     />
