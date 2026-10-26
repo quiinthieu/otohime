@@ -5,7 +5,11 @@
 // click or key press, so the browser's autoplay rule is met; it is reused
 // after that and closed on pagehide. Anything Web Audio refuses (no API, a
 // throwing constructor, a rejected resume) leaves the page silent and working.
-import { CUES, cueGain, envelope, noteEnd, parseSound, SOUND_KEY, storeSound, type Cue, type CueName } from "./sound.ts";
+//
+// The pond's water (startWater / stopWater) is the one looped layer: seeded brown noise under a 500 Hz low-pass,
+// swelling slowly, about -36 dB. It starts only from a click while sound is on and stops when the page is hidden,
+// on pagehide, when sound is switched off, or when the pond asks (out of view, unmounted). No audio files.
+import { CUES, cueGain, dbToGain, envelope, noteEnd, parseSound, SOUND_KEY, storeSound, type Cue, type CueName } from "./sound.ts";
 
 let on = false;
 let loaded = false;
@@ -26,7 +30,10 @@ const emit = () => listeners.forEach((listener) => listener());
 function onStorage(event: StorageEvent) {
   if (event.key !== SOUND_KEY && event.key !== null) return;
   on = parseSound(event.newValue);
-  if (!on) mute();
+  if (!on) {
+    stopWater();
+    mute();
+  }
   emit();
 }
 
@@ -54,7 +61,10 @@ export function setSound(next: boolean) {
   }
   emit();
   if (next) play("open");
-  else mute();
+  else {
+    stopWater();
+    mute();
+  }
 }
 
 let ctx: AudioContext | null = null;
@@ -125,4 +135,119 @@ export function play(name: CueName) {
     },
     () => {},
   );
+}
+
+// The water: a few seconds of brown noise looped, low-passed, its level breathing on a slow sine.
+export const WATER_DB = -36;
+export const WATER_LOWPASS_HZ = 500;
+export const WATER_SWELL_HZ = 0.07; // one slow swell every ~14 s
+export const WATER_SWELL_DEPTH = 0.3; // of the level, up and down
+export const WATER_SECONDS = 4;
+export const WATER_SEED = 0x5e1ca7;
+const WATER_FADE = 1.2; // seconds in
+const WATER_RELEASE = 0.25; // seconds out
+
+// mulberry32: the n-th draw of a seeded sequence, in [-1, 1). No Math.random.
+function white(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), a | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return (((t ^ (t >>> 14)) >>> 0) / 4294967296) * 2 - 1;
+  };
+}
+
+/** Brown noise from a seed: white noise through a leaky integrator, tilted so the last sample meets the first (no
+ * click where the loop wraps), then scaled to a peak of 1. The same seed and length always give the same samples. */
+export function brownNoise(seed: number, length: number): Float32Array {
+  const out = new Float32Array(length);
+  if (length === 0) return out;
+  const next = white(seed);
+  let b = 0;
+  for (let i = 0; i < length; i++) {
+    b = (b + 0.02 * next()) / 1.02;
+    out[i] = b;
+  }
+  const drift = length > 1 ? (out[length - 1] - out[0]) / (length - 1) : 0;
+  let peak = 0;
+  for (let i = 0; i < length; i++) {
+    out[i] -= drift * i;
+    peak = Math.max(peak, Math.abs(out[i]));
+  }
+  if (peak > 0) for (let i = 0; i < length; i++) out[i] /= peak;
+  return out;
+}
+
+type Water = { c: AudioContext; source: AudioBufferSourceNode; swell: OscillatorNode; level: GainNode; nodes: AudioNode[] };
+let water: Water | null = null;
+
+function onVisibility() {
+  if (document.visibilityState === "hidden") stopWater();
+}
+
+/** Starts the pond's water if sound is on and it is not already running; returns whether it is running. Call from a
+ * click or key press only. */
+export function startWater(): boolean {
+  load();
+  if (!on) return false;
+  if (water && water.c === ctx && ctx?.state !== "closed") return true;
+  water = null;
+  const c = unlock();
+  if (!c) return false;
+  try {
+    const length = Math.round(WATER_SECONDS * c.sampleRate);
+    const buffer = c.createBuffer(1, length, c.sampleRate);
+    buffer.getChannelData(0).set(brownNoise(WATER_SEED, length));
+    const source = c.createBufferSource();
+    source.buffer = buffer;
+    source.loop = true;
+    const lowpass = c.createBiquadFilter();
+    lowpass.type = "lowpass";
+    lowpass.frequency.value = WATER_LOWPASS_HZ;
+    // the swell: a gain of 1 that a slow sine pushes WATER_SWELL_DEPTH up and down
+    const breath = c.createGain();
+    breath.gain.value = 1;
+    const swell = c.createOscillator();
+    swell.type = "sine";
+    swell.frequency.value = WATER_SWELL_HZ;
+    const depth = c.createGain();
+    depth.gain.value = WATER_SWELL_DEPTH;
+    swell.connect(depth).connect(breath.gain);
+    // the level: faded in from silence, so the water never starts with a click
+    const level = c.createGain();
+    const t0 = c.currentTime + 0.005;
+    level.gain.setValueAtTime(0, t0);
+    level.gain.linearRampToValueAtTime(dbToGain(WATER_DB), t0 + WATER_FADE);
+    source.connect(lowpass).connect(breath).connect(level).connect(c.destination);
+    source.start(t0);
+    swell.start(t0);
+    water = { c, source, swell, level, nodes: [source, lowpass, breath, swell, depth, level] };
+  } catch {
+    return false; // a context closed under us: the pond stays quiet
+  }
+  document.addEventListener("visibilitychange", onVisibility);
+  addEventListener("pagehide", stopWater);
+  if (c.state !== "running") void c.resume().catch(() => stopWater());
+  return true;
+}
+
+/** Fades the water out and lets it go. Safe to call at any time, as often as you like. */
+export function stopWater() {
+  const w = water;
+  water = null;
+  if (typeof document !== "undefined") document.removeEventListener("visibilitychange", onVisibility);
+  removeEventListener("pagehide", stopWater);
+  if (!w) return;
+  try {
+    const t = w.c.currentTime;
+    w.level.gain.cancelScheduledValues(t);
+    w.level.gain.setValueAtTime(w.level.gain.value, t);
+    w.level.gain.linearRampToValueAtTime(0, t + WATER_RELEASE);
+    w.source.onended = () => w.nodes.forEach((n) => n.disconnect());
+    w.source.stop(t + WATER_RELEASE);
+    w.swell.stop(t + WATER_RELEASE);
+  } catch {
+    // the context is already closed: nothing is playing
+  }
 }

@@ -16,6 +16,10 @@
 // Prints (lib/pond-print.ts): Pull a print lowers a paper sheet over the water, redraws the engine's Marble in
 // Canvas2D at 2400x1800 with the seed's grain and downloads it as suminagashi-<seed>.png. Set as background keeps a
 // 1280x960 JPEG in localStorage and sets --pond-print at once; the root layout's head script sets it on later loads.
+//
+// Water sound (lib/sound-client.ts): with site sound on, a click on the pond (or Space / Enter on it) starts quiet
+// looped water; it stops when the pond leaves view or unmounts, and the client stops it on hidden and pagehide. The
+// pond's controls carry data-own-sound, so components/press-sound.tsx adds no press cue on top.
 import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { INK_HEX, POND_H, POND_W, WATER, pondRecipe } from "@/components/pond-static";
 import { applyOp, createMarble, replay, uForHalf, type Ink, type Marble, type Op, type Refusal } from "@/lib/marble";
@@ -33,6 +37,7 @@ import {
   printSeed,
   printUrl,
 } from "@/lib/pond-print";
+import { startWater, stopWater } from "@/lib/sound-client";
 
 type Tool = "drip" | "comb" | "blow";
 
@@ -447,6 +452,13 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
       kick();
     };
 
+    // The water plays only while the pond is on screen; a click starts it again.
+    const onClick = () => startWater();
+    const seen = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) stopWater();
+    });
+    seen.observe(canvas);
+
     const resize = () => {
       const r = canvas.getBoundingClientRect();
       if (r.width < 1 || r.height < 1) return;
@@ -491,6 +503,7 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     canvas.addEventListener("pointerdown", onDown);
+    canvas.addEventListener("click", onClick);
     canvas.addEventListener("pointermove", onMove);
     canvas.addEventListener("pointerup", onUp);
     canvas.addEventListener("pointercancel", onUp);
@@ -501,6 +514,9 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
       engine.current = null;
       cancelAnimationFrame(raf);
       observer.disconnect();
+      seen.disconnect();
+      stopWater();
+      canvas.removeEventListener("click", onClick);
       canvas.removeEventListener("pointerdown", onDown);
       canvas.removeEventListener("pointermove", onMove);
       canvas.removeEventListener("pointerup", onUp);
@@ -607,6 +623,7 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
     }
     if (e.key !== " " && e.key !== "Enter") return;
     e.preventDefault();
+    startWater();
     const [x, y] = reticle;
     const [hx, hy] = heading.current;
     if (tool === "drip") engine.current?.push({ kind: "drop", x, y, r: DRIP_R, ink });
@@ -620,7 +637,7 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
 
   return (
     <>
-      <div className="pond-stage">
+      <div className="pond-stage" data-own-sound="">
         <canvas
           ref={ref}
           className="pond-canvas"
@@ -638,7 +655,7 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
         />
         {sheet > 0 && <span key={sheet} className="pond-paper" aria-hidden="true" onAnimationEnd={() => setSheet(0)} />}
       </div>
-      <div className="pond-tools">
+      <div className="pond-tools" data-own-sound="">
         <fieldset className="pond-set">
           <legend className="caption">Tool</legend>
           <div className="pond-chips">
