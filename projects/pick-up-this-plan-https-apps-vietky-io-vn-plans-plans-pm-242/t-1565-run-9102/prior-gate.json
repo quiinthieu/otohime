@@ -1,0 +1,30 @@
+{
+  "task_id": "9c4ad5ab-2229-485f-bbbf-4920106ac0ca",
+  "status": "COMPLETED",
+  "branch": "main",
+  "git_sha": "bf4ceb0",
+  "worker_id": "avietidol-z490",
+  "started_at": "2026-10-26T22:59:49Z",
+  "completed_at": "2026-10-26T23:11:26Z",
+  "callback": {
+    "state": "delivered",
+    "attempts": 1,
+    "url": "http://plan-manager.staging.svc.cluster.local.:8148/internal/v1/task-callback"
+  },
+  "persisted": {
+    "verification_id": "ver-3616",
+    "run_id": "run-9100",
+    "run_status": "succeeded",
+    "callback_apply_failures": 0,
+    "gate_status": "fail"
+  },
+  "artifact": {
+    "content_type": "application/json",
+    "name": "verification.json",
+    "sha256": "bd343ff5f2179530e10e44427eb2369e329da1757e413c2d767b3f1f9ecace50",
+    "size": 36018
+  },
+  "history_completeness": "bounded/incomplete; see history.json",
+  "profile": "codex-sol-6-1-high",
+  "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+}

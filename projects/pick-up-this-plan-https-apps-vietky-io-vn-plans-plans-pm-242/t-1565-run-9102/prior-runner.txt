@@ -1,0 +1,72 @@
+progress phase=clone
+=== task-manager coding job starting ===
+  Agent    : shell
+  Command  : true
+  Prompt   : 0 characters from AGENT_PROMPT_FILE
+  Workspace: /home/avietidol/.local/share/build-worker/leases/9c4ad5ab-2229-485f-bbbf-4920106ac0ca-bc1373724be6aaadb23c77a0b2f798b7/work/otohime
+  Repo URL : git@github.com:quiinthieu/otohime.git
+  Repo     : REPO_ID=otohime GIT_MAIN_BRANCH=main PLANS_DIR=projects
+  Account  : ACCOUNT_ID=<none>
+  HOME     : /home/avietidol/.local/share/build-worker/leases/9c4ad5ab-2229-485f-bbbf-4920106ac0ca-bc1373724be6aaadb23c77a0b2f798b7/home
+  User     : uid=1000(avietidol) gid=1000(avietidol) groups=1000(avietidol),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),100(users),114(lpadmin),123(lxd),984(docker),993(kvm)
+  Branch   : main
+  Sidecar  : enabled (shared=/home/avietidol/.local/share/build-worker/leases/9c4ad5ab-2229-485f-bbbf-4920106ac0ca-bc1373724be6aaadb23c77a0b2f798b7/shared)
+=========================================
+  github.com host key refreshed
+  gitlab.com host key refreshed
+  bitbucket.org host key refreshed
+Cloning git@github.com:quiinthieu/otohime.git (branch: main) into /home/avietidol/.local/share/build-worker/leases/9c4ad5ab-2229-485f-bbbf-4920106ac0ca-bc1373724be6aaadb23c77a0b2f798b7/work/otohime...
+  reference clone from /home/avietidol/.local/share/build-worker/repo/otohime (fleet mirror)
+Cloning into '/home/avietidol/.local/share/build-worker/leases/9c4ad5ab-2229-485f-bbbf-4920106ac0ca-bc1373724be6aaadb23c77a0b2f798b7/work/otohime'...
+  Cloned branch: main
+  Cloned commit: bf4ceb0cfb25aebd2869df4262c4a9984cbebfa1
+Checking out sha bf4ceb0
+Note: switching to 'bf4ceb0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at bf4ceb0 pm-272/t-1565: Read the cassette from ListenBrainz
+push guard: skipped (otohime has no scripts/git-push-safe.sh)
+
+progress phase=verify
+=== verify-runner (agent=shell) ===
+npm warmup /home/avietidol/.local/share/build-worker/leases/9c4ad5ab-2229-485f-bbbf-4920106ac0ca-bc1373724be6aaadb23c77a0b2f798b7/work/otohime ci
+npm warmup exit 0
+verify: start item=Project tests timeout_s=300
+verify: item=Project tests status=pass exit=0 duration_ms=16734
+verify: start item=Lint timeout_s=300
+verify: item=Lint status=pass exit=0 duration_ms=19252
+verify: start item=Typecheck timeout_s=300
+verify: item=Typecheck status=pass exit=0 duration_ms=14495
+verify: start item=Build timeout_s=600
+verify: item=Build status=pass exit=0 duration_ms=24634
+verify: start item=Search content index timeout_s=300
+verify: item=Search content index status=pass exit=0 duration_ms=264
+verify: start item=Provider HTTP contract timeout_s=900
+verify: item=Provider HTTP contract status=pass exit=0 duration_ms=44910
+verify: start item=Cassette browser matrix timeout_s=900
+verify: item=Cassette browser matrix status=pass exit=0 duration_ms=37885
+verify: start item=Reduced motion timeout_s=900
+verify: running 60s/900s, last: ok - 390x844 /shore -> /forgot-password (location.assign, signed out): no page error and no console error
+verify: item=Reduced motion status=fail exit=1 duration_ms=111929
+verify: start item=Application end to end timeout_s=900
+verify: running 60s/900s, last:   ...
+verify: running 120s/900s, last:   ...
+verify: running 180s/900s, last:   ...
+verify: running 240s/900s, last:   ...
+verify: running 300s/900s, last:   ...
+verify: running 360s/900s, last:   ...
+verify: item=Application end to end status=pass exit=0 duration_ms=394039

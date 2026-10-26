@@ -1,0 +1,7 @@
+
+> otohime@0.1.0 ask:check
+> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/ask-index.ts --check
+
+ask:check: covers Work /work (7 passages), Projects /projects (12 passages), Notes /notes (3 passages)
+ask:check: model scope Work /work (7 passages), Projects /projects (12 passages), Notes /notes (3 passages)
+ask:check: /Users/avietidol/Library/Application Support/build-worker/leases/ac91ee64-8dae-40c7-b9a9-eec10d7eb9ba-7888bbcd3bed8a3fd39fe2185ca84116/work/otohime/public/ask-index.json is up to date

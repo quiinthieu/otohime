@@ -1,0 +1,109 @@
+{
+  "status": "pass",
+  "scope": "local final-tree contract verification; provider fixtures, no deployed/owner proof",
+  "checks": [
+    {
+      "name": "unit",
+      "cmd": "npm test",
+      "exit_code": 0,
+      "log_sha256": "1a80acf841f156d392a0d71bca4ec1870acafb3afb4b08e3ef837becd54dc99d",
+      "full_log_artifact": "run-9102/unit.txt"
+    },
+    {
+      "name": "lint",
+      "cmd": "npm run lint",
+      "exit_code": 0,
+      "log_sha256": "a4020a68ad96aad5a58b7480fac4a83f6ef3ba6c22e3d6bdc4d872befa2669c9",
+      "full_log_artifact": "run-9102/lint.txt"
+    },
+    {
+      "name": "types",
+      "cmd": "npm run typecheck",
+      "exit_code": 0,
+      "log_sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326",
+      "full_log_artifact": "run-9102/types.txt"
+    },
+    {
+      "name": "build",
+      "cmd": "npm run build",
+      "exit_code": 0,
+      "log_sha256": "5f97d9ae1c737c7b1d688dfc8f90f9414e48845841865da43017fa6d9f682a33",
+      "full_log_artifact": "run-9102/build.txt"
+    },
+    {
+      "name": "ask",
+      "cmd": "npm run ask:check",
+      "exit_code": 0,
+      "duration_s": 0.39,
+      "log_sha256": "de7bd9bc9735ede3845236545c0599ed0e686fb6a1565faa1095ad6621b53ee0",
+      "full_log_artifact": "run-9102/ask.txt"
+    },
+    {
+      "name": "http",
+      "cmd": "SKIP_BUILD=1 bash scripts/walk-now-playing.sh",
+      "exit_code": 0,
+      "duration_s": 58.91,
+      "log_sha256": "010862f711e344390ed347ebbbed095dc2f64a7bd7cebc7a1edc1a38c85e8821",
+      "full_log_artifact": "run-9102/http.txt"
+    },
+    {
+      "name": "browser",
+      "cmd": "SKIP_BUILD=1 bash scripts/probe-cassette.sh",
+      "exit_code": 0,
+      "duration_s": 27.32,
+      "log_sha256": "7d6e72705cc8715cd8c1eb3cd8368b80c87db59ebc8c089927d3fee40a1fac61",
+      "full_log_artifact": "run-9102/browser.txt"
+    },
+    {
+      "name": "motion",
+      "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+      "exit_code": 0,
+      "duration_s": 142.5,
+      "log_sha256": "90b4927380ffb331371f96a35f2954690a676ebc7a74592d40509e2256e9ffbd",
+      "full_log_artifact": "run-9102/motion.txt"
+    },
+    {
+      "name": "e2e",
+      "cmd": "SKIP_BUILD=1 npm run test:e2e",
+      "exit_code": 0,
+      "duration_s": 449.36,
+      "log_sha256": "a3d2f556c446371ade67b1739193c475f8184b00c96b4ab632b206a91190558f",
+      "full_log_artifact": "run-9102/e2e.txt"
+    }
+  ],
+  "counts": {
+    "unit_pass": 2374,
+    "http_pass": 278,
+    "cassette_pass": 193,
+    "motion_pass": 512,
+    "e2e_pass": 178,
+    "e2e_fail": 0,
+    "e2e_skip": 1
+  },
+  "ci": "not observed; stop at push",
+  "full_logs": "Runner artifacts/run-9102; unit/E2E repository copies are bounded summaries, full logs were read locally and copied to artifacts.",
+  "integrated_base_sha": "b3cc5ae8cb454226f7be37943c80fa449c2b06ad",
+  "integrated_checks": [
+    {
+      "name": "unit",
+      "cmd": "npm test",
+      "exit_code": 0,
+      "log_sha256": "8a234861aca9506b0952a83600cfe0d21ac2f42c8a393fc99ae8593e3c908fb6",
+      "full_log_artifact": "run-9102/unit-integrated.txt"
+    },
+    {
+      "name": "lint",
+      "cmd": "npm run lint",
+      "exit_code": 0,
+      "log_sha256": "a4020a68ad96aad5a58b7480fac4a83f6ef3ba6c22e3d6bdc4d872befa2669c9",
+      "full_log_artifact": "run-9102/lint-integrated.txt"
+    },
+    {
+      "name": "types",
+      "cmd": "npm run typecheck",
+      "exit_code": 0,
+      "log_sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326",
+      "full_log_artifact": "run-9102/types-integrated.txt"
+    }
+  ]
+}

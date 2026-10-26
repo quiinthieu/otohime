@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: probe failures survive a verifier's 4KiB output tail after hundreds of successes
+ok 1 - probe failures survive a verifier's 4KiB output tail after hundreds of successes
+  ---
+  duration_ms: 0.737209
+  ...
+# Subtest: probe recap bounds UTF-8 diagnostics, counts every failure and never promotes a red run
+ok 2 - probe recap bounds UTF-8 diagnostics, counts every failure and never promotes a red run
+  ---
+  duration_ms: 1.102917
+  ...
+# Subtest: the motion walk uses the tested reporter for assertions and exit status
+ok 3 - the motion walk uses the tested reporter for assertions and exit status
+  ---
+  duration_ms: 0.434958
+  ...
+# Subtest: a real piped reporter child drains output and exits nonzero with the retained failure
+ok 4 - a real piped reporter child drains output and exits nonzero with the retained failure
+  ---
+  duration_ms: 84.295584
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 193.989083
