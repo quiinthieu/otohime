@@ -1,2 +1,3 @@
-93413db pm-249/t-1521: Stamp every page's Open Graph card and open the Postcard Mailroom  (delivery; message has a forbidden Co-Authored-By trailer, waiver asked)
-<this commit> pm-249/t-1521: Drop the commit trailer and record the mailroom's authorship  (fix; no trailer; its sha is the git_sha of the run-8599 summary report, since a commit cannot name itself)
+93413db pm-249/t-1521: Stamp every page's Open Graph card and open the Postcard Mailroom  (delivery; message has a Co-Authored-By trailer, waived by operator decision)
+2f1680c pm-249/t-1521: Drop the commit trailer and record the mailroom's authorship  (fix; no trailer)
+<this commit> pm-249/t-1521: Record the trailer waiver and re-run the mailroom gates  (evidence only; no trailer; its sha is the git_sha of the run-8615 summary report, since a commit cannot name itself)

@@ -1,3 +1,4 @@
 # Commit identity for t-1521 (check: git log -1 --format='%an <%ae>%n%B' <sha> | grep -c '^Co-Authored-By:')
-93413db  author Otohime <quiinthieu@gmail.com>  committer Otohime <quiinthieu@gmail.com>  Co-Authored-By trailer: 1 (forbidden; waiver asked of the decider, not rewritten)
-fix      author Otohime <quiinthieu@gmail.com>  committer Otohime <quiinthieu@gmail.com>  Co-Authored-By trailer: 0
+93413db  author Otohime <quiinthieu@gmail.com>  committer Otohime <quiinthieu@gmail.com>  Co-Authored-By trailer: 1 (forbidden; WAIVED by operator decision, this message only; not rewritten)
+2f1680c  author Otohime <quiinthieu@gmail.com>  committer Otohime <quiinthieu@gmail.com>  Co-Authored-By trailer: 0
+run-8615 author Otohime <quiinthieu@gmail.com>  committer Otohime <quiinthieu@gmail.com>  Co-Authored-By trailer: 0 (checked before push)

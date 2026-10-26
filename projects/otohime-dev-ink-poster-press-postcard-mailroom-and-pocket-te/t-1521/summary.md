@@ -45,3 +45,14 @@ This follow-up commit is authored by Otohime <quiinthieu@gmail.com> and carries 
 Re-run on HEAD fb11fbd + this commit (Node 22.23.3, Next 16.4.2): `npm ci && npm test` 1756/1756 passed;
 `npm run typecheck && npm run lint` exit 0 (0 errors, the same 10 earlier warnings); `npm run build` exit 0
 (`/og`, `/postcard`, `/postcard/image`, `/postcard/view` present).
+
+## Waiver (run-8615, claude-opus-5-5): no code change
+The operator waived the Co-Authored-By trailer in the message of 93413db, and only that message (fix_plan rep-5001).
+Nothing is rewritten and nothing is force-pushed. Checked on main: 93413db is an ancestor of HEAD and still has 1
+`^Co-Authored-By:` line; 2f1680c and 7a0d917 have 0. This commit is authored by Otohime <quiinthieu@gmail.com>
+and had 0 trailers before the push. The waiver does not cover later tasks: t-1522, t-1523 and t-1524 must have no trailer.
+Gates re-run on HEAD a117f48 + this commit (Node 22.23.3, Next 16.4.2): `npm ci && npm test` 1791/1791 passed;
+`npm run typecheck && npm run lint` exit 0 (0 errors, the same 10 earlier warnings); `npm run build` exit 0
+(`/og`, `/postcard`, `/postcard/image`, `/postcard/view` present).
+Still open, not waived and owned by acceptance: the otohime CI/deploy result for the delivered SHA, plus live fetches of
+`/postcard`, `/postcard/view` and an og:image. Neither has been observed (this pod has no `gh`). Unobserved means unproven.
