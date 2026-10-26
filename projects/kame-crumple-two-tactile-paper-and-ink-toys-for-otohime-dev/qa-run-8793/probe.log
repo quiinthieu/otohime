@@ -1,0 +1,33 @@
+Starting embedded Postgres on 127.0.0.1:46627
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f-2a318e1bb7041af730f8b1ac99025fab/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:43437
+TAP version 13
+# Subtest: paper stays readable without JavaScript and desk remains outside discovery
+ok 1 - paper stays readable without JavaScript and desk remains outside discovery
+  ---
+  duration_ms: 534.887377
+  type: 'test'
+  ...
+# Subtest: keyboard peel exposes text without moving the source or changing its link
+ok 2 - keyboard peel exposes text without moving the source or changing its link
+  ---
+  duration_ms: 1091.574756
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2065.850965

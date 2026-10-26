@@ -1,0 +1,70 @@
+Starting embedded Postgres on 127.0.0.1:45905
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f-2a318e1bb7041af730f8b1ac99025fab/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:34177
+TAP version 13
+# Subtest: the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+ok 1 - the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+  ---
+  duration_ms: 5136.768319
+  type: 'test'
+  ...
+# Subtest: typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+not ok 2 - typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+  ---
+  duration_ms: 16466.409813
+  type: 'test'
+  location: '/data/build-worker/leases/8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f-2a318e1bb7041af730f8b1ac99025fab/work/otohime/e2e/ink-press.test.ts:163:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.textContent: Error: strict mode violation: getByRole('status') resolved to 2 elements:
+        1) <p role="status" class="text-muted">Pulled ink-press-the-broken-dag-brush-6a9e74c9.png</p> aka getByText('Pulled ink-press-the-broken-')
+        2) <p role="status" class="caption"></p> aka getByRole('region', { name: 'Kame companion' }).getByRole('status')
+
+    Call log:
+    [2m  - waiting for getByRole('status')[22m
+
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    TestContext.<anonymous> (/data/build-worker/leases/8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f-2a318e1bb7041af730f8b1ac99025fab/work/otohime/e2e/ink-press.test.ts:194:48)
+  ...
+# Subtest: a hidden tab stops the drying clock and showing it again finishes the drying
+ok 3 - a hidden tab stops the drying clock and showing it again finishes the drying
+  ---
+  duration_ms: 7660.439507
+  type: 'test'
+  ...
+# Subtest: reduced motion prints one dried frame and the press never asks for an animation frame
+ok 4 - reduced motion prints one dried frame and the press never asks for an animation frame
+  ---
+  duration_ms: 2683.285791
+  type: 'test'
+  ...
+# Subtest: without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+ok 5 - without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+  ---
+  duration_ms: 1962.018468
+  type: 'test'
+  ...
+# Subtest: a lost WebGL context hands the poster to the SVG fallback
+ok 6 - a lost WebGL context hands the poster to the SVG fallback
+  ---
+  duration_ms: 4443.350652
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 5
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 38900.235482
