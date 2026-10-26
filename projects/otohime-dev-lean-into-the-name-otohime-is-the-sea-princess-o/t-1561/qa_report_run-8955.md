@@ -25,11 +25,11 @@ Checkout: origin/main `9d0167a`, later `b8e1e2a`, both containing e3852eb.
 | run | id | sha | state |
 |---|---|---|---|
 | 444 | – | 542c620 | success (the live deploy) |
-| 445 | 40328273755 | 5577ec5 (before e3852eb) | in_progress: checks 121591253790 success 13:11:42–13:29:38Z; production 121600218178 started 13:29:40Z |
+| 445 | 40328273755 | 5577ec5 (before e3852eb) | **failure** (read 13:33Z): checks 121591253790 success 13:11:42–13:29:38Z. Production 121600218178 failed at step 8 "Deploy and verify the served sha" (13:31:07–13:31:18Z), annotation `vercel deploy: Error (inspect exited 1) https://otohime-rcix516b1-otohime.vercel.app`. This is the first real run of pm-270/t-1605's `scripts/vercel-deploy.sh`. |
 | 446 | 40328785684 | **e3852eb** | cancelled, replaced as the pending run (designed: `ci.yml:14-24`, one pending run per group) |
 | 447 | 40329228348 | acd85de | cancelled, same reason |
 | 448 | 40330037984 | ec59663 | cancelled, same reason |
-| 449 | 40330477897 | 0740594 (contains e3852eb) | **pending**, created 13:25:44Z |
+| 449 | 40330477897 | 0740594 (contains e3852eb) | pending at 13:25:44Z, **in_progress** at 13:33Z. It will run the same deploy step. |
 
 Scan limits: these are the 15 newest main runs read from the Actions page. The API was rate-limited (60/h, anonymous), so I read run details only for 445–449. Older pages are unread. I did not read raw job logs (no gh session). No run containing e3852eb has executed yet, so there is no FAILED history for this executable.
 
@@ -79,3 +79,4 @@ Real: `npm ci` from the lock, the real `npm test`, lint, `next build`, `next sta
 - **owner:** the next t-1561 QA run.
 - **ready when:** `https://otohime.dev/api/health` `sha` contains e3852eb. Estimate: about 13:52Z, from run 445's 18-minute checks job plus about 2 minutes to deploy.
 - **failure condition:** the deploying run fails, or live `/ryugu` lacks the box or does not match `git show`. See fix_plan_run-8955.md.
+- **Pipeline defect beside it (not t-1561):** run 445's production deploy failed in pm-270/t-1605's new `scripts/vercel-deploy.sh` (`:85` inspect call, `:92` state parse). If run 449 fails the same way, the failure is deterministic and no delivery reaches production until pm-270 repairs the step. Owner: pm-270. Failure condition: run 449 production job conclusion=failure with the same `vercel deploy` annotation.
