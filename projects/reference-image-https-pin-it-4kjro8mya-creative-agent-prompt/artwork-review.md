@@ -1,9 +1,12 @@
-# Artwork Review & Attempt Ledger — `pm-240` / `t-1472`
+# Artwork Review & Attempt Ledger — `pm-240` / `t-1520` (and prior `t-1472`)
 
-- **Plan**: `pm-240` (*Ink & Watercolour Portraits*)
-- **Task**: `t-1472` (*Publish and activate ten reviewed portraits*)
-- **Runs**: `run-8312` (attempt 1, parked on `esc-371`), `run-8320` (attempt 2, parked on `esc-372`), `run-8329` (attempt 3, stop state per `esc-372` decider resolution), `run-8341` (attempt 4, `fix_cycle: 1` after green gate `ver-3313` on `dd1e8e1`), `run-8364` (attempt 5, `fix_cycle: 2` after green gate `ver-3322` on `51cf311`), `run-8381` (attempt 6, `fix_cycle: 2` after green gate `ver-3330` on `de193a7`)
-- **Collection Activation Status**: **NOT ACTIVATED (`content/portraits.json` = `[]`)** — blocked on human operator credential/master provisioning (`esc-371` `provision-xai-image-key:otohime` and `esc-372` `generate-portraits:grok-imagine`). Per `t-1472` contract and `esc-372`, no synthetic/fixture images, code-drawn substitutes, or `flux2-klein` outputs are used, fewer than ten portraits are never activated, and live `--require-people` verification gates remain visibly red until all ten reviewed paintings are published to permanent `https://files-cdn.x.ai/` URLs.
+- **Plan**: `pm-240` (*Ink & Watercolour Portraits*, revision 3)
+- **Task**: `t-1520` (*Generate, review and publish the ten portraits*; preserves prior `t-1472` evidence)
+- **Runs**:
+  - `t-1472`: `run-8312` (attempt 1, parked on `esc-371`), `run-8320` (attempt 2, parked on `esc-372`), `run-8329` (attempt 3, stop state per `esc-372` decider resolution), `run-8341` (attempt 4, `fix_cycle: 1` after green gate `ver-3313` on `dd1e8e1`), `run-8364` (attempt 5, `fix_cycle: 2` after green gate `ver-3322` on `51cf311`), `run-8381` (attempt 6, `fix_cycle: 2` after green gate `ver-3330` on `de193a7`)
+  - Revision 3 (`run-8468` PO & `run-8478` decider on `esc-375`): PO raised `esc-375` (`fingerprint: "provision-xai-image-key:otohime"`); decider `run-8478` (`dec-54428`) waived `esc-375` with instructions to run one safe offline preflight in `t-1520`, stop before any vendor request or application change if `credentialAvailable` remains `false`, not re-raise `provision-xai-image-key:otohime`, and let the required ten-portrait verification fail visibly so the board can close the `0/10` product as undelivered.
+  - `t-1520`: `run-8553` (attempt 1, `fix_cycle: 0` on `billie-mac`, `billie-agy`, `agy-argon-high`, Node `v22.12.0`, `sharp@0.35.5` — offline preflight confirmed `credentialAvailable: false`, `credentialSource: "none"`; stopped before any vendor request per `esc-375` / `dec-54428` and Action Item 7).
+- **Collection Activation Status**: **NOT ACTIVATED (`content/portraits.json` = `[]`, paintings delivered: `0 / 10`, gallery portraits activated: `0 / 10`)** — blocked on human operator credential/master provisioning (`esc-371` / `esc-375` `provision-xai-image-key:otohime` and `esc-372` `generate-portraits:grok-imagine`). Per `t-1520` contract and `esc-375` (`dec-54428`), no synthetic/fixture images, code-drawn substitutes, or `flux2-klein` outputs are used, fewer than ten portraits are never activated, and live `--require-people` verification gates remain visibly red until all ten reviewed paintings are published to permanent `https://files-cdn.x.ai/` URLs.
 
 ---
 
@@ -84,6 +87,16 @@
      - `task_manager_list_accounts`: `grok-main` is still `status: "auth_expired"` (`updated_at: "2026-10-25T16:39:26.97379Z"`) and its `repos` list is now `[]`. The `["otohime"]` binding recorded in `plan.md` is gone, so re-signing `grok-main` alone will not lease it to otohime. It must also be re-bound to `otohime`.
      - No `XAI_*`/`GROK_*` environment variable names, no `~/.grok` or `~/.config/grok`, and no `01_Quiet_Reader.png`..`10_Letter_Writer.png` files on the host.
      - As in attempts 3 to 5, `run-8381` does not re-raise `operator_action`, synthesize images or activate partial content.
+7. **`run-8468` (PO Revision 3, `esc-375`), `run-8478` (Decider Resolution `dec-54428`), & `run-8553` (`t-1520` Attempt 1 on `billie-mac`, `billie-agy`, `agy-argon-high`, Node `v22.12.0`, `sharp@0.35.5`)**:
+   - In `run-8468`, the product owner proposed `t-1520` and raised the deduplicated `operator_action` **`esc-375`** (`fingerprint: "provision-xai-image-key:otohime"`).
+   - At `2026-10-25T22:43:39.769033Z`, decider `run-8478` (`dec-54428`) waived `esc-375`:
+     `[decider] Cannot be done now: proceed without provisioning, and report the original artwork outcome as undelivered. No usable xAI API key has been demonstrated on the pinned agy-argon-high/billie-agy otohime lease; grok-main remains auth_expired with repos=[] and is not that lease's account. This answer waives esc-375, it does not claim credential readiness or authorise another unchanged generation attempt. For t-1520, perform one safe offline preflight only to record credentialAvailable/credentialSource without exposing a value. If it is still false, stop before any vendor request, file publication, or application change; submit the short missing-input outcome and let the required ten-portrait verification fail visibly so the board can close the 0/10 product as undelivered. Do not raise provision-xai-image-key:otohime again, retry the same unprovisioned lease, switch profiles, make another kit, fabricate artwork, activate a partial set, or mark acceptance green.`
+   - Direct verification on `billie-mac` in `run-8553` (`tm_task_id: 614ca119-beba-4eb7-bb92-6af3183c3122`) after clean `npm ci --no-audit --no-fund` (`515` packages):
+     - `node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sketches-paint.ts preflight --offline` -> `ok: true`, `sharpVersion: "0.35.5"`, `processorSmokeTest: { nativeWidth: 768, nativeHeight: 1024, derivativeWidth: 1152, derivativeHeight: 1536, derivativeBytes: 23508 }`, `adapterConstructed: true`, `credentialAvailable: false`, `credentialSource: "none"`, `promptPackConcepts: 10`, `existingBaseSketchesVerified: 12`, `manifestRecordsCount: 0`.
+     - `task_manager_list_accounts`: `grok-main` remains `status: "auth_expired"` (`cooling_reason: "auth failure reported by a run"`, `repos: []`, `updated_at: "2026-10-25T16:39:26.97379Z"`); `billie-agy` is leased on `agy-argon-high` with `credential_path_prefix: ".gemini/"`.
+     - Host/lease check on `billie-mac`: no `XAI_*`/`GROK_*`/`*API_KEY*` environment variables, no `.grok/user-settings.json` or `~/.config/grok/user-settings.json`, and no operator-supplied `01_Quiet_Reader.png`..`10_Letter_Writer.png` files exist on the host.
+     - `task-manager` history check (`project_id: "plan-manager"`): all `63 / 63` `FAILED` jobs across 3 pages (`offset: 0, 25, 50`), `2 / 2` `RUNNING` jobs, `4 / 4` `PENDING` jobs, and recent `COMPLETED` jobs inspected; no portrait generation job has completed, and the only prior `pm-240` `grok-main` probe (`267d873e-7bce-47dc-ba6f-59bc0b08d67e`) failed with `Error: Not signed in`.
+     - Per `esc-375` (`dec-54428`) and `t-1520` Action Item 7, `run-8553` stops before any vendor request or application change, does not re-raise `provision-xai-image-key:otohime`, leaves `content/portraits.json` at `[]` (`0 / 10` delivered, `0 / 10` activated), and lets the required ten-portrait verification (`npm run sketches:check -- --live --require-people` and `SKIP_BUILD=1 EXPECT_PEOPLE=10 bash scripts/walk-sketches.sh`) fail visibly so the board can close the `0/10` artwork outcome as undelivered.
 
 ---
 
@@ -97,28 +110,40 @@ Vendor attempt ledger (`version: 1`):
 
 | # | Concept ID / Master Filename | Derivative Label | Gallery Title | Candidates Generated | Native Resolution | Public Master URL (`files-cdn.x.ai`) | Public Derivative URL (`files-cdn.x.ai`) | Review Disposition & Reason |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `01_Quiet_Reader.png` | `13-reader.jpg` | Reader | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 2 | `02_Flower_Girl.png` | `14-flowers.jpg` | Wildflowers | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 3 | `03_Rainy_Afternoon.png` | `15-rain.jpg` | Rain | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 4 | `04_Cafe_Dreamer.png` | `16-cafe.jpg` | Café | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 5 | `05_Autumn_Wanderer.png` | `17-leaves.jpg` | Leaves | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 6 | `06_Violinist.png` | `18-violin.jpg` | Violin | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 7 | `07_Morning_by_the_Window.png` | `19-window.jpg` | Window | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 8 | `08_Painter.png` | `20-painter.jpg` | Painter | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 9 | `09_Spring_Breeze.png` | `21-breeze.jpg` | Breeze | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
-| 10 | `10_Letter_Writer.png` | `22-letter.jpg` | Letter | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` xAI credential or operator master import |
+| 1 | `01_Quiet_Reader.png` | `13-reader.jpg` | Reader | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 2 | `02_Flower_Girl.png` | `14-flowers.jpg` | Wildflowers | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 3 | `03_Rainy_Afternoon.png` | `15-rain.jpg` | Rain | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 4 | `04_Cafe_Dreamer.png` | `16-cafe.jpg` | Café | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 5 | `05_Autumn_Wanderer.png` | `17-leaves.jpg` | Leaves | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 6 | `06_Violinist.png` | `18-violin.jpg` | Violin | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 7 | `07_Morning_by_the_Window.png` | `19-window.jpg` | Window | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 8 | `08_Painter.png` | `20-painter.jpg` | Painter | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 9 | `09_Spring_Breeze.png` | `21-breeze.jpg` | Breeze | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
+| 10 | `10_Letter_Writer.png` | `22-letter.jpg` | Letter | 0 / 4 | pending | pending | pending | **Pending (`blocked_missing_credential`)** — awaiting `esc-371` / `esc-372` / `esc-375` xAI credential or operator master import |
 
 ---
 
-## 5. Locked Environment & Artifact Fingerprints (SHA-256)
+## 5. Locked Environment & Artifact Fingerprints (`Buffer.length` bytes & SHA-256)
 
-- `package-lock.json`: `ac0edc0da9da7579a0c43c802d1c8b43c75aa0bc7ee3bfde230586346f8a851a` (`sharp@0.35.5`)
-- `projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/prompts.md`: `195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f`
-- `parsePromptPack().referenceSha256`: `baadd08727c729821832757e884dd0db07cdd01a8b14bb02b207377ca3ff4255`
-- `public/sketches/01-cove.jpg` (existing base sketch 01): `2b55cad6a072c4b4a77a764da2aa8e8d098f2d6e011061ea8e62a29bbd216043`
-- `/tmp/pinterest-reference-style-only.jpg` (Pinterest original): `9bbcdcf85394c695567a0f93114d942b2438c913b5eca0c3976297fed8a04c80`
-- `lib/sketches.ts`: `8c28d22034be719f76a16d93d8c642c41ae646ff5d1463858a08d85a3b02a43a`
-- `lib/sketches-generation.ts`: `71a94159e2f5a1ecc70a8fc78e3c3dac65ba4d9fa80cbd7d8e1122968050b216`
-- `scripts/sketches-paint.ts`: `5e745d2edc8a93b98d1bedadc4b3d0753c16a587785a30d99d57b06e41db8d16`
-- `scripts/sketches-check.ts`: `ff65c9231fc90c2f1e1ca614083dbcda0697620f6a7f7abb9ec2270da0d9fac8`
-- `content/portraits.json`: `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570` (`[]\n`)
+- `package.json` (`4488` bytes): `6b15ad3e9d828275cc6f1556faf3754397758b45ffd146212e3fbbe5ccc69923`
+- `package-lock.json` (`352274` bytes, `sharp@0.35.5`): `e7aa5d85635862f956400a2d67338cd661d01d0dcab8cf959ea1d6d58be96877`
+- `projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/plan.md` (`19677` bytes): `55f201d896f207d99bd7517efb965c8c86177e0e96b65e4666aaa4a2a81c43a3`
+- `projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/prompts.md` (`8358` bytes): `195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f`
+- `projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/handoff.md` (`13653` bytes): `2df19492e19f0b8716643234544f9faab95130af06a5a9e02a0babf7842b613c`
+- `projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/production-kit/manifest.json` (`9000` bytes): `3159f95680ecae21d1d12fbb795a47a3bb70113458b63d66f89900b92f026f95`
+- `parsePromptPack().referenceSha256` (URL string hash): `baadd08727c729821832757e884dd0db07cdd01a8b14bb02b207377ca3ff4255`
+- `/tmp/pinterest-reference-style-only.jpg` (Pinterest original source bytes, `163569` bytes): `9bbcdcf85394c695567a0f93114d942b2438c913b5eca0c3976297fed8a04c80`
+- `public/sketches/01-cove.jpg` (existing base sketch 01, `335756` bytes): `2b55cad6a072c4b4a77a764da2aa8e8d098f2d6e011061ea8e62a29bbd216043`
+- `content/site.ts` (`12697` bytes): `c4a98198f970937491b1187c21f574b786e353d5ae258467c8817594e07594cf`
+- `lib/sketches.ts` (`33954` bytes): `8c28d22034be719f76a16d93d8c642c41ae646ff5d1463858a08d85a3b02a43a`
+- `lib/sketches.test.ts` (`13647` bytes): `873aa7852e81fe05cffca662007f2d44610117912fba81704df0dcbf8ae2d981`
+- `lib/sketches-generation.ts` (`44599` bytes): `71a94159e2f5a1ecc70a8fc78e3c3dac65ba4d9fa80cbd7d8e1122968050b216`
+- `lib/sketches-generation.test.ts` (`19915` bytes): `bb615caea3d8d83581555c63b3aa6a7564c423515ceaf3645afde0b9064abfa1`
+- `lib/sketches-handoff.ts` (`30447` bytes): `0cfd42c757ed10e8f141ad2384ae99db5df4622492e9a4244c15c4aa85490d0f`
+- `lib/sketches-handoff.test.ts` (`35271` bytes): `99f551982a538b477536246840e248addb5f327eac33b1596bada62bc9beda0b`
+- `scripts/sketches-paint.ts` (`5078` bytes): `5e745d2edc8a93b98d1bedadc4b3d0753c16a587785a30d99d57b06e41db8d16`
+- `scripts/sketches-check.ts` (`6409` bytes): `ff65c9231fc90c2f1e1ca614083dbcda0697620f6a7f7abb9ec2270da0d9fac8`
+- `scripts/sketches-handoff.ts` (`26831` bytes): `c5c7369cd32b7f9a7ccee18fba09f2f3adfd81ab573e1646180811b62c791402`
+- `scripts/walk-sketches.sh` (`8724` bytes): `ce74875b2d7b64ff36886192b39d1719ebd2b1264bb813a4b29a9b958fe26f43`
+- `scripts/probe-sketches.mjs` (`26875` bytes): `a65727f57f4743ae487ed08919e63b94f5eead484f44d05322bfb48628adfb9f`
+- `content/portraits.json` (`3` bytes): `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570` (`[]\n`)
