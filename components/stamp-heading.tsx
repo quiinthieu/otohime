@@ -1,3 +1,4 @@
+import { RisoText } from "./riso-heading";
 import { TitleMorph, type ConsolePage } from "./figures";
 import { StampIsland } from "./stamp-island";
 
@@ -19,7 +20,7 @@ export function StampHeading({
   const h1 = (
     <h1 className="stamp-title">
       <span aria-hidden="true">Fig. {n} — </span>
-      <span className="stamp-text">{children}</span>
+      <RisoText sourceClassName="stamp-text">{children}</RisoText>
     </h1>
   );
   return (

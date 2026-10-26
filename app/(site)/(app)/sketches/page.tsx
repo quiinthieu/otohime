@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { FigTitle } from "@/components/figures";
 import { site, type Sketch } from "@/content/site";
 import { getSketchDimensions } from "@/lib/sketches";
@@ -90,9 +91,7 @@ export default function SketchesPage() {
           <style>{".sheet-wash,.sheet-frame path{animation:none!important}"}</style>
         </noscript>
         <section aria-labelledby="places" className="mt-8">
-          <h2 id="places" className="caption">
-            Places
-          </h2>
+          <h2 id="places" className="caption"><RisoText>Places</RisoText></h2>
           <ul className="mt-3 grid gap-x-8 gap-y-8 sm:grid-cols-2">
             {places.map((sketch) => (
               <li key={sketch.src}>
@@ -102,9 +101,7 @@ export default function SketchesPage() {
           </ul>
         </section>
         <section aria-labelledby="objects" className="mt-12">
-          <h2 id="objects" className="caption">
-            Small things
-          </h2>
+          <h2 id="objects" className="caption"><RisoText>Small things</RisoText></h2>
           <ul className="mt-3 grid gap-x-8 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
             {objects.map((sketch) => (
               <li key={sketch.src}>
@@ -115,9 +112,7 @@ export default function SketchesPage() {
         </section>
         {people.length > 0 ? (
           <section aria-labelledby="people" className="mt-12">
-            <h2 id="people" className="caption">
-              People
-            </h2>
+            <h2 id="people" className="caption"><RisoText>People</RisoText></h2>
             <ul className="mt-3 grid gap-x-8 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
               {people.map((sketch) => (
                 <li key={sketch.src}>

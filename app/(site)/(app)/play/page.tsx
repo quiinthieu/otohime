@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { ClawMachine } from "@/components/claw-machine";
 import { swatches } from "@/components/figures";
 import { InkPressLoader } from "@/components/ink-press-loader";
@@ -26,9 +27,7 @@ export default function PlayPage() {
           <ClawMachine games={site.games} />
         </div>
         <section className="mt-12" aria-labelledby="pond-heading">
-          <h2 id="pond-heading" className="caption">
-            Suminagashi pond
-          </h2>
+          <h2 id="pond-heading" className="caption"><RisoText>Suminagashi pond</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Float ink on still water, then comb and blow it into rings.</p>
           <PondLoader>
             <PondStatic />
@@ -36,17 +35,17 @@ export default function PlayPage() {
         </section>
         <section className="mt-12" aria-labelledby="press-heading">
           <h2 id="press-heading" className="caption">
-            Ink poster press <span className="text-muted">(experimental)</span>
+            <RisoText>Ink poster press</RisoText>{" "}<span className="text-muted"><RisoText>(experimental)</RisoText></span>
           </h2>
           <p className="mt-2 mb-4 text-muted">Type a word or a short phrase and pull a poster in wet ink: stamp, riso or brush. Shuffle for another print.</p>
           <InkPressLoader />
         </section>
         <section className="peep-box" aria-labelledby="peep-heading">
-          <h2 id="peep-heading" className="caption">Ryugu-jo peep-box</h2>
+          <h2 id="peep-heading" className="caption"><RisoText>Ryugu-jo peep-box</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Peek through a paper window into the sea princess’s palace. Move your pointer, use the direction buttons, or choose tilt.</p>
           <PeepBoxLoader><PeepBoxScene /></PeepBoxLoader>
         </section>
-        <h2 className="caption mt-12">In rotation</h2>
+        <h2 className="caption mt-12"><RisoText>In rotation</RisoText></h2>
         <ul className="mt-3 grid gap-x-10 sm:grid-cols-2">
           {site.games.map((game) => (
             <li key={game.title} className="flex items-start gap-3 border-t border-line py-3">

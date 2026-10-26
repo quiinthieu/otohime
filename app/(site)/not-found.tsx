@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { BrandMark } from "@/components/brand-mark";
 import { LostSheet } from "@/components/lost-sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -80,7 +81,7 @@ export default function NotFound() {
             </div>
             <h1>
               <span aria-hidden="true">Fig. 404 — </span>
-              This page got lost
+              <RisoText>This page got lost</RisoText>
             </h1>
             <p className="text-muted">There&apos;s no page at this address. It was torn out and crumpled up.</p>
             <LostSheet sheet={SHEET_ID} />

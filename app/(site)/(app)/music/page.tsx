@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { AddChannelForm } from "@/components/add-channel-form";
 import { NowPlayingShelf } from "@/components/cassette";
 import { FigTitle, swatches } from "@/components/figures";
@@ -60,7 +61,7 @@ function Channels({ songs }: { songs: Song[] }) {
       <div className="mt-8">
         <Television songs={songs} playlist={site.playlist} />
       </div>
-      <h2 className="caption mt-12">Listings</h2>
+      <h2 className="caption mt-12"><RisoText>Listings</RisoText></h2>
       <ol className="mt-3 grid gap-x-10 sm:grid-cols-2">
         {songs.map((song, i) => (
           <li key={`${i}-${song.video}`} className="flex items-start gap-3 border-t border-line py-3">
@@ -91,7 +92,7 @@ function InkRadio() {
   return (
     <section aria-labelledby="ink-radio" className="mt-12">
       <h2 id="ink-radio" className="caption">
-        Ink Radio <span className="text-muted">· experimental</span>
+        <RisoText>Ink Radio</RisoText>{" "}<span className="text-muted"><RisoText>· experimental</RisoText></span>
       </h2>
       <p className="mt-2 text-muted">
         Spin the globe or turn the dial to tune in to live stations around the world. Nothing plays until you press
@@ -118,11 +119,11 @@ async function OwnerTools() {
   const added = await listSongs();
   return (
     <section className="mt-12">
-      <h2 className="caption">Add a channel</h2>
+      <h2 className="caption"><RisoText>Add a channel</RisoText></h2>
       <AddChannelForm />
       {added.length > 0 ? (
         <>
-          <h2 className="caption mt-10">Added channels</h2>
+          <h2 className="caption mt-10"><RisoText>Added channels</RisoText></h2>
           <ul className="mt-3">
             {added.map((song, i) => (
               <li

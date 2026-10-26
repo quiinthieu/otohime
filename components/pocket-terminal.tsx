@@ -1,5 +1,7 @@
 "use client";
 
+import { RisoText } from "@/components/riso-heading";
+
 // The Pocket Terminal: a small ink-drawn command line in a native modal dialog, loaded by
 // components/pocket-terminal-loader.tsx on the first "/" or Cmd/Ctrl-K. The prompt is a combobox over a palette
 // that filters as you type; the arrows pick a line and Enter runs it, or runs what is typed when nothing is picked.
@@ -250,9 +252,7 @@ export default function PocketTerminal({ open, onClose, bind }: TerminalProps) {
       }}
     >
       <div className="pt-head">
-        <h2 id="pt-title" className="caption">
-          Pocket terminal
-        </h2>
+        <h2 id="pt-title" className="caption"><RisoText>Pocket terminal</RisoText></h2>
         <button type="button" className="chip" onClick={shut}>
           Esc
         </button>

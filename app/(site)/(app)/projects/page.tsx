@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { Cartridge } from "@/components/cartridge";
 import { FigTitle, Notice } from "@/components/figures";
 import { site } from "@/content/site";
@@ -64,9 +65,7 @@ function GazetteDesks() {
   if (tags.length === 0) return null;
   return (
     <section aria-labelledby="desks" className="mt-10">
-      <h2 id="desks" className="caption">
-        Gazette desks
-      </h2>
+      <h2 id="desks" className="caption"><RisoText>Gazette desks</RisoText></h2>
       <ul className="peek-tags mt-2">
         {tags.map(({ key, label }) => (
           <li key={key}>

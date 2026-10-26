@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { swatches } from "@/components/figures";
 import { site } from "@/content/site";
 import { readTime, type Game, type NowPlaying, type Track } from "@/lib/now-playing-data";
@@ -20,9 +21,7 @@ export function NowPlayingShelf({ reading }: { reading: NowPlaying }) {
       data-spotify={reading.spotify}
       data-steam={reading.steam}
     >
-      <h2 id="now-playing" className="caption">
-        {copy.heading}
-      </h2>
+      <h2 id="now-playing" className="caption"><RisoText>{copy.heading}</RisoText></h2>
       <div className="now-playing-shelf mt-6">
         <Cassette track={reading.track} />
         <GameCart game={reading.game} />

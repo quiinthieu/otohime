@@ -1,3 +1,4 @@
+import { RisoText } from "./riso-heading";
 import { appearanceTags } from "@/lib/appearance-client";
 import { inkFilter, MATERIALS, type Hand } from "@/lib/ink-modes";
 import type { ConsoleItem } from "@/lib/pages";
@@ -225,7 +226,7 @@ export function FigTitle({
   const h1 = (
     <h1>
       <span aria-hidden="true">Fig. {n} — </span>
-      {children}
+      {typeof children === "string" ? <RisoText>{children}</RisoText> : children}
     </h1>
   );
   return (
@@ -257,7 +258,7 @@ export function Notice({
       <Figure kind={figure} color={color} className="w-64 max-w-full" />
       <Heading>
         <span aria-hidden="true">Fig. {n} — </span>
-        {title}
+        <RisoText>{title}</RisoText>
       </Heading>
       {children}
     </div>

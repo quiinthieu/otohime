@@ -1,5 +1,7 @@
 "use client";
 
+import { RisoText } from "@/components/riso-heading";
+
 // Ask the console: a native modal dialog with a > prompt that prints its reply on a paper receipt. On mount
 // (the first open) it asks GET /api/ask once whether the model tier is on (lib/ask-tier.ts); when it is, a
 // question is one POST /api/ask and the model's lines and cited pages print. When it is off, or the POST
@@ -203,9 +205,7 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
   return (
     <dialog ref={dialog} className="dialog ask-console" aria-labelledby="ask-title" onClose={onClose} onKeyDown={onKeyDown}>
       <div className="flex items-center justify-between gap-3">
-        <h2 id="ask-title" className="caption">
-          Ask the console
-        </h2>
+        <h2 id="ask-title" className="caption"><RisoText>Ask the console</RisoText></h2>
         <form method="dialog">
           <button type="submit" className="chip">
             Close

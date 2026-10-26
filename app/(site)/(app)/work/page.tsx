@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { Conveyor } from "@/components/conveyor";
 import { FigTitle } from "@/components/figures";
 import { Pipeline } from "@/components/pipeline";
@@ -30,9 +31,7 @@ export default function WorkPage() {
         </div>
         <div className="mt-14 grid items-start gap-12 lg:grid-cols-2">
           <section aria-labelledby="stack">
-            <h2 id="stack" className="caption">
-              Stack
-            </h2>
+            <h2 id="stack" className="caption"><RisoText>Stack</RisoText></h2>
             <dl className="mt-3">
               {site.stack.map(({ what, tools, note }) => (
                 <div key={what} className="grid gap-x-6 border-t border-line py-3 sm:grid-cols-[9rem_1fr]">

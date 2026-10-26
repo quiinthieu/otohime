@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { decodePostcard, postcardPaths, postmarkDate, sketchById } from "@/lib/postcard";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -43,7 +44,7 @@ async function Postcard({ searchParams }: Pick<PageProps<"/postcard/view">, "sea
   if (!postcard) {
     return (
       <div>
-        <h1>A lost postcard</h1>
+        <h1><RisoText>A lost postcard</RisoText></h1>
         <p className="mt-2 max-w-prose text-muted">
           This one got smudged in the post: the link is cut short or was never a postcard.
         </p>
@@ -58,7 +59,7 @@ async function Postcard({ searchParams }: Pick<PageProps<"/postcard/view">, "sea
   const sketch = sketchById(postcard.sketch)!;
   return (
     <article aria-labelledby="postcard-title">
-      <h1 id="postcard-title">A postcard: {sketch.title}</h1>
+      <h1 id="postcard-title"><RisoText>{`A postcard: ${sketch.title}`}</RisoText></h1>
       <div className="mt-6 grid gap-6 border border-ink bg-field p-4 sm:grid-cols-[3fr_2fr] sm:p-6">
         <Image src={sketch.src} alt={`The ${sketch.title} sketch`} width={1248} height={832} className="h-auto w-full border border-line" />
         <div className="flex flex-col gap-4">

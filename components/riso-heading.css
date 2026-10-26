@@ -1,0 +1,65 @@
+/* Scoped to the reusable string heading; standalone exhibit type is untouched. */
+.riso-text {
+  display: inline-block;
+  position: relative;
+  max-width: 100%;
+  vertical-align: baseline;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  isolation: isolate;
+}
+.riso-source {
+  /* Real text geometry, but only visual anchors enter clipboard selections. Opacity keeps the name in AT. */
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.riso-word { display: inline-block; max-width: 100%; }
+.riso-char { display: inline-block; position: relative; }
+.riso-anchor { position: relative; z-index: 1; color: inherit; -webkit-user-select: text; user-select: text; }
+.riso-char::before, .riso-char::after {
+  content: attr(data-char);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* No multiply: the anchor must preserve readable light ink on dark paper. */
+  mix-blend-mode: normal;
+}
+.riso-char::before {
+  color: var(--ap-plate-2, #f3a6bb);
+  transform: translate(var(--riso-x2), var(--riso-y2));
+}
+.riso-char::after {
+  color: var(--ap-plate-3, #93d3b0);
+  opacity: clamp(0, calc(var(--ap-plate-count, 3) - 2), 1);
+  transform: translate(var(--riso-x3), var(--riso-y3));
+}
+.stamp-heading[data-stamped] .riso-visual { visibility: hidden; }
+
+/* JS only opts into a one-shot entry after intersection; SSR is already settled. */
+@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  .riso-text[data-riso-state="printed"] .riso-char::before {
+    animation: riso-second var(--ap-transition, 420ms) ease-out var(--riso-delay) backwards;
+  }
+  .riso-text[data-riso-state="printed"] .riso-char::after {
+    animation: riso-third var(--ap-transition, 420ms) ease-out var(--riso-delay) backwards;
+  }
+  .riso-text[data-riso-state="printed"] .riso-anchor {
+    display: inline-block;
+    animation: riso-anchor var(--ap-transition, 420ms) ease-out var(--riso-delay) backwards;
+  }
+}
+@keyframes riso-second { from { transform: translate(-12px, -6px); opacity: 0; } }
+@keyframes riso-third { from { transform: translate(12px, 6px); opacity: 0; } }
+@keyframes riso-anchor { from { transform: translateY(4px); opacity: 0.6; } }
+
+@media (prefers-reduced-motion: reduce), (forced-colors: active), print {
+  .riso-text .riso-char::before, .riso-text .riso-char::after { display: none; animation: none; }
+  .riso-text .riso-anchor { animation: none; transform: none; opacity: 1; }
+}

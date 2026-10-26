@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { AskConsoleLoader } from "@/components/ask-console-loader";
 import { Handheld } from "@/components/handheld";
 import { InkHeroLoader } from "@/components/ink-hero-loader";
@@ -16,7 +17,7 @@ export default function HomePage() {
         <section className="grid min-h-[calc(100dvh-8rem)] items-center gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
           <div>
             <p className="caption">Fig. 01 — Home</p>
-            <h1 className="mt-3 text-[clamp(2.5rem,8vw,4.5rem)] leading-none">Otohime</h1>
+            <h1 className="mt-3 text-[clamp(2.5rem,8vw,4.5rem)] leading-none"><RisoText>Otohime</RisoText></h1>
             {/* the name signed in ink specks under it; decoration only, the h1 stays the text */}
             <InkHeroLoader />
             <p className="mt-4 text-[15px] font-semibold">{site.tagline}</p>
@@ -32,9 +33,7 @@ export default function HomePage() {
         </section>
         <section aria-labelledby="about" className="mt-8 grid items-start gap-x-12 gap-y-8 border-t border-line pt-8 lg:grid-cols-2">
           <div>
-            <h2 id="about" className="caption">
-              About
-            </h2>
+            <h2 id="about" className="caption"><RisoText>About</RisoText></h2>
             {site.bio.map((line) => (
               <p key={line} className="mt-3 max-w-prose text-muted">
                 {line}
@@ -42,7 +41,7 @@ export default function HomePage() {
             ))}
           </div>
           <div>
-            <h2 className="caption">Now</h2>
+            <h2 className="caption"><RisoText>Now</RisoText></h2>
             <dl className="mt-2">
               {site.now.map(({ what, note }) => (
                 <div key={what} className="grid grid-cols-[6rem_1fr] gap-x-4 border-t border-line py-2.5">
@@ -54,9 +53,7 @@ export default function HomePage() {
           </div>
         </section>
         <section aria-labelledby="elsewhere" className="mt-12">
-          <h2 id="elsewhere" className="caption">
-            Elsewhere
-          </h2>
+          <h2 id="elsewhere" className="caption"><RisoText>Elsewhere</RisoText></h2>
           <div className="mt-4">
             <Switchboard lines={site.lines} />
           </div>

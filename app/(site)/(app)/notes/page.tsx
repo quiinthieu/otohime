@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { stableSurfaceId } from "@/lib/tactile";
 import { FigTitle, Figure } from "@/components/figures";
 import { site } from "@/content/site";
@@ -20,7 +21,7 @@ export default function NotesPage() {
                 <time dateTime={date} className="caption">
                   {date}
                 </time>
-                <h2 className="mt-1">{title}</h2>
+                <h2 className="mt-1"><RisoText>{title}</RisoText></h2>
                 <p className="mt-1 max-w-prose text-muted">{body}</p>
               </li>
             ))}

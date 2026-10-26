@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import { EndStage, EndTop } from "@/components/end-stage";
 import { swatches } from "@/components/figures";
 import { site } from "@/content/site";
@@ -24,7 +25,7 @@ export function EndFooter() {
           <div className="end-copy">
             <p className="caption">{site.end.status}</p>
             <h2 id="end-title" className="end-title">
-              <span className="end-title-text">{site.end.title}</span>
+              <span className="end-title-text"><RisoText>{site.end.title}</RisoText></span>
             </h2>
             <p className="end-sub end-rise" style={{ "--i": 0 } as CSSProperties}>
               {site.end.sub}

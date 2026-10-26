@@ -1,0 +1,69 @@
+{
+  "task": "pm-268/t-1601",
+  "run": "run-8983",
+  "profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "worker": "billie-mac",
+  "baseline_sha": "6ca9652be2515f2c70eab421c5111b40dc49331a",
+  "node": "v22.12.0",
+  "build_id": "m8fE6WbK7OcM4TEVhlmQc",
+  "selected_source_sha256": {
+    "app/(site)/(app)/account/page.tsx": "83e9a232cfd894b30ae1c1b8f12297855d65422f62b0aca0970da7ed88bcea5e",
+    "app/(site)/(app)/music/page.tsx": "a56b0e6a39b382a0424dca306a6e0a93aa47f84b817a9f2294c75bfae93cf5c9",
+    "app/(site)/(app)/notes/page.tsx": "53a54233b8422fe0a640277b3854ffa201706f8ae9d8006b138a83bfcb499c88",
+    "app/(site)/(app)/play/page.tsx": "cc549b2557a435f8cd6343744eb253ba89a5b2049b0e1a0de63b4c07b15ee1e3",
+    "app/(site)/(app)/postcard/_components/desk.tsx": "02a6bef83f77ea4b234d69e12624ede6a311ac01b11b3a83baa9399711d364fe",
+    "app/(site)/(app)/postcard/view/page.tsx": "3c3571893fbfa6b0f07099a2eed49fe6a880376b689aa42582c9700014d1c932",
+    "app/(site)/(app)/projects/page.tsx": "b3ee6cac9542c1b2b0f626f45ba49baa085cb3efffa9b1fd8f2aa3d42b147494",
+    "app/(site)/(app)/sketches/page.tsx": "a2c60e4c22974575e2406658d779e4a9e9ffe9c876a1cded85cec55a1819fb1f",
+    "app/(site)/(app)/work/page.tsx": "5c2955d9c602ab688590da2a231d420c99d1fa49dd3a32bee371c3cd4c9960e9",
+    "app/(site)/(home)/page.tsx": "1b12fd7e0eafe31e82ba532776375f3d16d506417959e34dbfc98bd9e3714a93",
+    "app/(site)/not-found.tsx": "e31801b385c3490436e91e107628a59e89f2a57d73f65fc813be297f46b2b682",
+    "components/ask-console.tsx": "19875beb85842f5280797802273f9b2bf8fb352351027d2f00d799f044069fb7",
+    "components/cassette.tsx": "ece99c49863a5c1cf0e4b7d759b109db511db9cd94752f85f87c72db9533d1b5",
+    "components/end-footer.tsx": "f022a58c921430992ab3b466eb9f720ac8e1eea34b0a9137e655d6f6527f75a7",
+    "components/figures.tsx": "2ecbab901109fb81c9ba9ae254e6c71e765fa62807a58049dab514da335a39ff",
+    "components/pocket-terminal.tsx": "ea1b27d91c630b3b282b07c96fce327a4b4d5b46378ebdcf34d2d7fdcf51ae9a",
+    "components/riso-heading.css": "fd64c5d5386762695074995bf4a66c8a9ec50e784120276da223439f3edad1cd",
+    "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+    "components/stamp-heading.tsx": "275b7a55535adf2c99fa752c16c0b719f0f7da5079c94c7388ad6e473fa04150",
+    "content/site.ts": "64a62e89c7aaa7f839e6c342dda8f991890b0c8031c4c1f1fd7e29f3d13e21ac",
+    "lib/riso-heading.ts": "5c8d025338b6526b2d0073eed306b269e9d80b7ba56355e096ad65ec2082823b",
+    "next.config.ts": "0321d5e23b1a93b09761f2049ef5b9edf2843067e1be089664296063b9fa096b",
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "tsconfig.json": "e1f2b4ec806c55ba0cc71369588733fe427a277990cccfd44ef62c9b6e9fe49d"
+  },
+  "executable_fingerprint": "58cc56a33c53849284cf10082db3c2f51c760e217cdc95447cf94b9174e516e1",
+  "checks": {
+    "feature": {
+      "exit": 0,
+      "passed": 5
+    },
+    "unit": {
+      "exit": 0,
+      "passed": 2274,
+      "skipped": 0
+    },
+    "typecheck": {
+      "exit": 0
+    },
+    "lint": {
+      "exit": 0,
+      "existing_warnings": 10
+    },
+    "production_build": {
+      "exit": 0
+    },
+    "browser": {
+      "exit": 0,
+      "passed": 5
+    }
+  },
+  "deployment": "not checked; owned by plan-manager after push",
+  "history": "complete final local output; overwritten development iterations incomplete; remote CI intentionally not watched",
+  "initial_baseline_sha": "c7e501334bc0b09209de305f93df6cd7adde8586",
+  "rebase_retries": 2,
+  "verification_checkout": "/tmp/otohime-riso-8983-r1",
+  "build_reuse_reason": "Second rebase adds only two projects Markdown files; selected executable fingerprint unchanged. All contract commands rerun, browser uses SKIP_BUILD=1."
+}

@@ -1,5 +1,7 @@
 "use client";
 
+import { RisoText } from "@/components/riso-heading";
+
 import {
   cleanNote,
   encodePostcard,
@@ -133,9 +135,7 @@ export function Desk({ thumbs, initial }: { thumbs: Thumbs; initial?: SketchId }
       </div>
       {stamped ? (
         <section aria-labelledby={`${id}-ready`} className="grid gap-3">
-          <h2 id={`${id}-ready`} className="caption">
-            Your postcard
-          </h2>
+          <h2 id={`${id}-ready`} className="caption"><RisoText>Your postcard</RisoText></h2>
           <a href={postcardPaths(stamped.code).view} className="block max-w-2xl">
             {/* eslint-disable-next-line @next/next/no-img-element -- the route's PNG is already its final size */}
             <img

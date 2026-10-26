@@ -1,3 +1,4 @@
+import { RisoText } from "@/components/riso-heading";
 import {
   PasswordForm,
   ProfileForm,
@@ -26,15 +27,15 @@ export default async function AccountPage() {
           Account
         </FigTitle>
         <section className="card grid gap-4 p-5">
-          <h2 className="caption">Profile</h2>
+          <h2 className="caption"><RisoText>Profile</RisoText></h2>
           <ProfileForm name={user.name} />
         </section>
         <section className="card grid gap-4 p-5">
-          <h2 className="caption">Password</h2>
+          <h2 className="caption"><RisoText>Password</RisoText></h2>
           <PasswordForm />
         </section>
         <section className="card grid gap-4 p-5">
-          <h2 className="caption">Sessions</h2>
+          <h2 className="caption"><RisoText>Sessions</RisoText></h2>
           {sessions ? (
             <SessionList
               sessions={sessions}
