@@ -1,0 +1,308 @@
+Starting embedded Postgres on 127.0.0.1:59720
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/bdbe8697-f2af-4e01-8ce8-0f5422429732-6fc1e80fe259626183909942fd8b4524/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Building
+
+> otohime@0.1.0 prebuild
+> node scripts/ledger-fetch.mjs || true; node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts
+
+ledger: kept content/ledger.json (no GITHUB_TOKEN)
+history:index: git (full history): 200 of 418 commits in /Users/avietidol/Library/Application Support/build-worker/leases/bdbe8697-f2af-4e01-8ce8-0f5422429732-6fc1e80fe259626183909942fd8b4524/work/otohime/content/history.json
+
+> otohime@0.1.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 35ms
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+- Cache Components enabled
+- Partial Prefetching enabled
+- Experiments (use with caution):
+  ✓ authInterrupts
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.3s
+  Running TypeScript ...
+  Finished TypeScript in 9.1s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/200) ...
+  Generating static pages using 11 workers (50/200) 
+  Generating static pages using 11 workers (100/200) 
+  Generating static pages using 11 workers (150/200) 
+✓ Generating static pages using 11 workers (200/200) in 4.3s
+  Finalizing page optimization ...
+
+Route (app)                             Revalidate  Expire
+┌ ◐ /                                           1d      1w
+├ ○ /_not-found
+├ ◐ /account                                    1d      1w
+├ ◐ /admin                                      1d      1w
+├ ◐ /admin/roles                                1d      1w
+├ ◐ /admin/users                                1d      1w
+├   /admin/users/[id]                           1d      1w
+│ └ ◐ /admin/users/[id]                         1d      1w
+├ ƒ /api/ask
+├ ƒ /api/auth/[...all]
+├ ƒ /api/health
+├ ƒ /api/now-playing
+├ ○ /articles
+├   /articles/[slug]
+│ ├ ◐ /articles/[slug]
+│ ├ ○ /articles/why-the-sky-is-blue
+│ ├ ○ /articles/why-we-need-a-leap-day
+│ └ ◐ [+4 more paths]
+├ ƒ /barometer
+├ ○ /capsule
+├ ◐ /dashboard                                  1d      1w
+├ ○ /design-system
+├ ◐ /desk                                       1d      1w
+├ ○ /desk/opengraph-image-blg90x
+├ ○ /elements
+├   /elements/[symbol]
+│ ├ ◐ /elements/[symbol]
+│ ├ ○ /elements/h
+│ ├ ○ /elements/he
+│ └ ◐ [+116 more paths]
+├ ○ /forgot-password
+├ ○ /icon.svg
+├ ◐ /ledger                                     1d      1w
+├ ○ /ledger/opengraph-image-1olq6y
+├ ƒ /music                                      1d      1w
+├ ○ /music/opengraph-image-rp137v
+├ ◐ /notes                                      1d      1w
+├ ○ /notes/opengraph-image-rplwnn
+├ ○ /og
+├ ○ /orrery
+├   /orrery/[body]
+│ ├ ◐ /orrery/[body]
+│ ├ ○ /orrery/sun
+│ ├ ○ /orrery/mercury
+│ └ ◐ [+12 more paths]
+├ ƒ /planisphere
+├ ◐ /play                                       1d      1w
+├ ○ /play/opengraph-image-blpn7k
+├ ◐ /postcard                                   1d      1w
+├ ƒ /postcard/image
+├ ○ /postcard/opengraph-image-1x4cxz
+├ ◐ /postcard/view                              1d      1w
+├ ◐ /projects                                   1d      1w
+├ ○ /projects/opengraph-image-1ndqzi
+├ ○ /reset-password
+├ ƒ /rotor
+├ ○ /ryugu
+├ ○ /shore
+├ ○ /sign-in
+├ ◐ /sketches                                   1d      1w
+├ ƒ /sketches/download/[filename]
+├ ○ /sketches/opengraph-image-t812bo
+├ ○ /structures
+├   /structures/[slug]
+│ ├ ◐ /structures/[slug]
+│ ├ ○ /structures/array
+│ ├ ○ /structures/linked-list
+│ └ ◐ [+6 more paths]
+├ ○ /vinyl
+├ ◐ /work                                       1d      1w
+├ ○ /work/opengraph-image-blv499
+└ ◐ /zine
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+Starting the server on http://localhost:59740
+TAP version 13
+# Subtest: fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+ok 1 - fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+  ---
+  duration_ms: 2054.962833
+  type: 'test'
+  ...
+# Subtest: keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+ok 2 - keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+  ---
+  duration_ms: 4159.030625
+  type: 'test'
+  ...
+# Subtest: mouse grip toss, exact click suppression, text selection and native link navigation
+ok 3 - mouse grip toss, exact click suppression, text selection and native link navigation
+  ---
+  duration_ms: 3505.54225
+  type: 'test'
+  ...
+# Subtest: real mobile CDP grip fetch and card-body scrolling negative control
+ok 4 - real mobile CDP grip fetch and card-body scrolling negative control
+  ---
+  duration_ms: 4848.643083
+  type: 'test'
+  ...
+# Subtest: chips and sticker perform real fetch while links and source dimensions stay intact
+ok 5 - chips and sticker perform real fetch while links and source dimensions stay intact
+  ---
+  duration_ms: 3005.416583
+  type: 'test'
+  ...
+# Subtest: Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+ok 6 - Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+  ---
+  duration_ms: 1387.656166
+  type: 'test'
+  ...
+# cancel path: escape
+# cancel path: blur
+# cancel path: hidden
+# cancel path: resize
+# cancel path: modal
+# cancel path: motion
+# cancel path: dismiss
+# cancel path: remove
+# Subtest: pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+ok 7 - pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+  ---
+  duration_ms: 1374.065625
+  type: 'test'
+  ...
+# Subtest: unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+ok 8 - unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+  ---
+  duration_ms: 13150.495125
+  type: 'test'
+  ...
+# Subtest: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+ok 9 - Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+  ---
+  duration_ms: 2253.265667
+  type: 'test'
+  ...
+# Subtest: native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+ok 10 - native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+  ---
+  duration_ms: 2101.781667
+  type: 'test'
+  ...
+# Subtest: peeled mobile cards keep all fetch actions clear of the real margin note
+ok 11 - peeled mobile cards keep all fetch actions clear of the real margin note
+  ---
+  duration_ms: 1533.013167
+  type: 'test'
+  ...
+# Subtest: server baseline has only an inert shell; no JS retains public links
+ok 12 - server baseline has only an inert shell; no JS retains public links
+  ---
+  duration_ms: 402.819167
+  type: 'test'
+  ...
+# Subtest: swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+ok 13 - swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+  ---
+  duration_ms: 1370.159833
+  type: 'test'
+  ...
+# Subtest: local calendar fixture increments once per day, friendly on day three and future-safe
+ok 14 - local calendar fixture increments once per day, friendly on day three and future-safe
+  ---
+  duration_ms: 669.030042
+  type: 'test'
+  ...
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 15 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1074.133833
+  type: 'test'
+  ...
+# Subtest: blocked storage remains usable and Save-Data imports only on explicit enable
+ok 16 - blocked storage remains usable and Save-Data imports only on explicit enable
+  ---
+  duration_ms: 701.127625
+  type: 'test'
+  ...
+# Subtest: 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+ok 17 - 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+  ---
+  duration_ms: 880.607583
+  type: 'test'
+  ...
+# Subtest: real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+ok 18 - real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+  ---
+  duration_ms: 788.380417
+  type: 'test'
+  ...
+# Subtest: optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+ok 19 - optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+  ---
+  duration_ms: 447.230166
+  type: 'test'
+  ...
+# Subtest: server and no-JS baseline: all cards remain readable links without toy controls
+ok 20 - server and no-JS baseline: all cards remain readable links without toy controls
+  ---
+  duration_ms: 1895.690791
+  type: 'test'
+  ...
+# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+ok 21 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+  ---
+  duration_ms: 3185.282875
+  type: 'test'
+  ...
+# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+ok 22 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+  ---
+  duration_ms: 3360.130375
+  type: 'test'
+  ...
+# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable
+ok 23 - blocked storage and live reduced motion keep instant keyboard operations usable
+  ---
+  duration_ms: 1458.70075
+  type: 'test'
+  ...
+# Subtest: Save-Data loads paper only after explicit enabling
+ok 24 - Save-Data loads paper only after explicit enabling
+  ---
+  duration_ms: 1230.184625
+  type: 'test'
+  ...
+# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+ok 25 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+  ---
+  duration_ms: 6061.0015
+  type: 'test'
+  ...
+# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload
+ok 26 - renderer import waits for window load and the idle callback; server markup has no toy preload
+  ---
+  duration_ms: 974.21525
+  type: 'test'
+  ...
+# Subtest: existing desktop desk and stamp gestures keep their own controls
+ok 27 - existing desktop desk and stamp gestures keep their own controls
+  ---
+  duration_ms: 3125.634291
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 67885.018833

@@ -1,0 +1,1 @@
+PASS: workflow equals parent with only checks timeout 20 -> 35 and its explanatory comment replaced. Every gate, permission, concurrency rule and production dependency is retained.

@@ -1,0 +1,5 @@
+npm run lint && npm run typecheck
+Observed process exit: 0
+ESLint: 0 errors, same 10 existing warnings.
+Next typegen and tsc --noEmit: passed.
+All initial executable file hashes remain unchanged after rebase; upstream changed only planning/evidence and generated history.

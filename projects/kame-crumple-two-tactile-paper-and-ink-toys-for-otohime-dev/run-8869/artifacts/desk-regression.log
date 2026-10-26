@@ -1,0 +1,27 @@
+Starting embedded Postgres on 127.0.0.1:60858
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/bdbe8697-f2af-4e01-8ce8-0f5422429732-6fc1e80fe259626183909942fd8b4524/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:60861
+TAP version 13
+# Subtest: a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+ok 1 - a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+  ---
+  duration_ms: 3353.831083
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3626.635708

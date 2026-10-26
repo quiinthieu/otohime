@@ -1,0 +1,3 @@
+9ddd0840d22564330e6c2554a52591b178909a4c Original fetch implementation delivery (retained).
+868a37d268434b42ebd9813ef5692f1f383dea00 Runner-resumed CI repair validated in run-8869 (may change on normal rebase).
+Run-8869 delivery: the commit containing this file; exact final SHA is recorded in plan-manager summary.git_sha and uploaded artifacts/commits.txt.

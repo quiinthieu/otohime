@@ -1,0 +1,4 @@
+npm run lint && npm run typecheck
+Observed process exit: 0
+ESLint: 0 errors; 10 existing warnings (9 unused disables, 1 unused resolve).
+Next typegen and tsc --noEmit: passed.

@@ -28,8 +28,8 @@ jobs:
   checks:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
-    # The signed-in motion probe adds about 3 minutes (Playwright and its Chromium shell, then the probe).
-    timeout-minutes: 20
+    # Allow cold Playwright/Chromium setup plus every browser gate; the 20-minute budget cancelled run 40307460821.
+    timeout-minutes: 35
     services:
       postgres:
         image: postgres:17-alpine

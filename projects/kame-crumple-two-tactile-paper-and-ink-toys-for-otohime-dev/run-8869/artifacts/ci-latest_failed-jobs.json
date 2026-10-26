@@ -1,0 +1,290 @@
+{
+  "total_count": 4,
+  "jobs": [
+    {
+      "id": 121530268639,
+      "run_id": 40310239199,
+      "workflow_name": "CI",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40310239199",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVNL7kc8AAAAcS8S73w",
+      "head_sha": "841ca69823a2e71e6a97e5c1d01c12babdccd2ea",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/121530268639",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40310239199/job/121530268639",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-10-26T10:50:30Z",
+      "started_at": "2026-10-26T10:50:32Z",
+      "completed_at": "2026-10-26T10:56:50Z",
+      "name": "checks",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-26T10:50:32Z",
+          "completed_at": "2026-10-26T10:50:33Z"
+        },
+        {
+          "name": "Initialize containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-26T10:50:33Z",
+          "completed_at": "2026-10-26T10:50:39Z"
+        },
+        {
+          "name": "Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-26T10:50:39Z",
+          "completed_at": "2026-10-26T10:50:40Z"
+        },
+        {
+          "name": "Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-26T10:50:40Z",
+          "completed_at": "2026-10-26T10:50:42Z"
+        },
+        {
+          "name": "Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-26T10:50:42Z",
+          "completed_at": "2026-10-26T10:50:44Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-26T10:50:44Z",
+          "completed_at": "2026-10-26T10:51:00Z"
+        },
+        {
+          "name": "Run npm run lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-26T10:51:00Z",
+          "completed_at": "2026-10-26T10:51:24Z"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-26T10:51:24Z",
+          "completed_at": "2026-10-26T10:51:41Z"
+        },
+        {
+          "name": "Run npm test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-26T10:51:41Z",
+          "completed_at": "2026-10-26T10:52:13Z"
+        },
+        {
+          "name": "Run npm run ask:check",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-26T10:52:13Z",
+          "completed_at": "2026-10-26T10:52:14Z"
+        },
+        {
+          "name": "Migrations match db/schema.ts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-26T10:52:14Z",
+          "completed_at": "2026-10-26T10:52:15Z"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-26T10:52:15Z",
+          "completed_at": "2026-10-26T10:52:34Z"
+        },
+        {
+          "name": "Run npm run db:migrate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-26T10:52:34Z",
+          "completed_at": "2026-10-26T10:52:35Z"
+        },
+        {
+          "name": "E2E against next start",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 14,
+          "started_at": "2026-10-26T10:52:35Z",
+          "completed_at": "2026-10-26T10:56:47Z"
+        },
+        {
+          "name": "Motion probe, signed in",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-26T10:56:47Z",
+          "completed_at": "2026-10-26T10:56:47Z"
+        },
+        {
+          "name": "Footer walk",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16,
+          "started_at": "2026-10-26T10:56:47Z",
+          "completed_at": "2026-10-26T10:56:47Z"
+        },
+        {
+          "name": "Footer Chromium probe",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17,
+          "started_at": "2026-10-26T10:56:47Z",
+          "completed_at": "2026-10-26T10:56:47Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 31,
+          "started_at": "2026-10-26T10:56:47Z",
+          "completed_at": "2026-10-26T10:56:47Z"
+        },
+        {
+          "name": "Post Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 32,
+          "started_at": "2026-10-26T10:56:47Z",
+          "completed_at": "2026-10-26T10:56:47Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2026-10-26T10:56:47Z",
+          "completed_at": "2026-10-26T10:56:48Z"
+        },
+        {
+          "name": "Stop containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 34,
+          "started_at": "2026-10-26T10:56:48Z",
+          "completed_at": "2026-10-26T10:56:48Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-26T10:56:48Z",
+          "completed_at": "2026-10-26T10:56:48Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121530268639",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000000810,
+      "runner_name": "GitHub Actions 1000000810",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 121530270123,
+      "run_id": 40310239199,
+      "workflow_name": "CI",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40310239199",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVNL7kc8AAAAcS8TBqw",
+      "head_sha": "841ca69823a2e71e6a97e5c1d01c12babdccd2ea",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/121530270123",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40310239199/job/121530270123",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-26T10:50:30Z",
+      "started_at": "2026-10-26T10:50:30Z",
+      "completed_at": "2026-10-26T10:50:30Z",
+      "name": "preview",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121530270123",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 121530329839,
+      "run_id": 40310239199,
+      "workflow_name": "CI",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40310239199",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVNL7kc8AAAAcS8Wq7w",
+      "head_sha": "841ca69823a2e71e6a97e5c1d01c12babdccd2ea",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/121530329839",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40310239199/job/121530329839",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-26T10:50:38Z",
+      "started_at": "2026-10-26T10:50:38Z",
+      "completed_at": "2026-10-26T10:50:30Z",
+      "name": "cleanup",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121530329839",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 121532945623,
+      "run_id": 40310239199,
+      "workflow_name": "CI",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40310239199",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVNL7kc8AAAAcS-2U1w",
+      "head_sha": "841ca69823a2e71e6a97e5c1d01c12babdccd2ea",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/121532945623",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40310239199/job/121532945623",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-26T10:56:50Z",
+      "started_at": "2026-10-26T10:56:50Z",
+      "completed_at": "2026-10-26T10:56:50Z",
+      "name": "production",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121532945623",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    }
+  ]
+}
