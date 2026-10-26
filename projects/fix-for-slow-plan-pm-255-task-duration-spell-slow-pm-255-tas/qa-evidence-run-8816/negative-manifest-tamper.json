@@ -1,0 +1,27 @@
+{
+  "ok": false,
+  "mode": "dispatched",
+  "expected": {
+    "plan_id": "pm-255",
+    "predecessor_id": "pm-248",
+    "task_id": "t-1557",
+    "abandon_decision_ids": [
+      "dec-55805",
+      "dec-55807"
+    ]
+  },
+  "input_errors": [
+    "manifest_plan_sha256_mismatch"
+  ],
+  "manifest": {
+    "provided": true,
+    "completeness": "failed",
+    "captured_at": "2026-10-26T09:36:35.682Z"
+  },
+  "sha256": {
+    "plan": "b66db0d97b957fefbe030e44b87d9f551b7fb2284fc6d8c27af8c5d8c3dd2336",
+    "schedule": "a01fdfd8d24dc9631c69d07f9129fd4aca0cc7fcf003fa184b90f674c5a24d45",
+    "timeline": "50b1905a6b75fd51eccd5fecadcc8b02612a401c3d75d593670ab941cb18c5b2",
+    "runs": "c4239a848caf5ff18dcaf469c9b7a0254596fa95591b282b44148afb9e7473da"
+  }
+}

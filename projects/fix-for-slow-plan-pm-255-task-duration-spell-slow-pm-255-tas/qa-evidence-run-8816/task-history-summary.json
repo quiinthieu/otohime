@@ -1,0 +1,874 @@
+{
+  "captured_at": "2026-10-26T09:39:45.146Z",
+  "pages": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 20,
+      "total": 61,
+      "tasks": [
+        {
+          "id": "0d081765-06f9-4a1e-9de4-28107aa0608b",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f697e2c2aaba is not on origin/main",
+          "repo_id": "otohime",
+          "run_id": "run-8808",
+          "plan_id": "pm-258",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "repo_id": "otohime",
+          "run_id": "run-8793",
+          "plan_id": "pm-259",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ab0601c1-0d1a-4e67-9dcd-6f56661aff53",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "repo_id": "otohime",
+          "run_id": "run-8788",
+          "plan_id": "pm-259",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "66ea35bc-4dda-4c94-9e04-2373c8194bae",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=infra marker=3374166 02:10 codex exec --dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c model_reasoning_effort=\"medium\" -- # Save Work Before Finishing This jo",
+          "repo_id": "otohime",
+          "run_id": "run-8785",
+          "plan_id": "pm-259",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d3133670-fcdd-4712-8637-3470dc32c653",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "repo_id": "otohime",
+          "run_id": "run-8764",
+          "plan_id": "pm-259",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "6aa491b3-d339-4ffa-b628-216aaf055f8b",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "repo_id": "otohime",
+          "run_id": "run-8763",
+          "plan_id": "pm-259",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b3128d45-07a7-4e69-94c1-b964d173900e",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "repo_id": "otohime",
+          "run_id": "run-8761",
+          "plan_id": "pm-256",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c1039357-4ba4-4647-9175-8cb366561de7",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=+ \"error\": \"agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main\",",
+          "repo_id": "otohime",
+          "run_id": "run-8752",
+          "plan_id": "pm-256",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7c2f6e70-50ad-4564-91d6-ca9e7bed9283",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=quota marker=urllib.error.HTTPError: HTTP Error 403: rate limit exceeded",
+          "repo_id": "otohime",
+          "run_id": "run-8749",
+          "plan_id": "pm-256",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cbfb6d6f-f022-4967-8eeb-b79415d8a53e",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "repo_id": "otohime",
+          "run_id": "run-8747",
+          "plan_id": "pm-256",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "97e1589b-213b-44fb-8bd7-6d203e154e34",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "repo_id": "mono-v2",
+          "run_id": "run-8730",
+          "plan_id": "pm-246",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0d1bf426-d806-455f-a22d-35227899f204",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2cf0b57ba573 is not on origin/main",
+          "repo_id": "otohime",
+          "run_id": "run-8712",
+          "plan_id": "pm-258",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ae6896a0-e218-416a-abfc-91c592749ab3",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "repo_id": "otohime",
+          "run_id": "run-8692",
+          "plan_id": "pm-256",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4a7f32b9-94fe-4e4f-b83c-62af4b81dc39",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "repo_id": "otohime",
+          "run_id": "run-8686",
+          "plan_id": "pm-256",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bcf09602-7917-448d-971a-46623a45fe8f",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on origin/main",
+          "repo_id": "otohime",
+          "run_id": "run-8593",
+          "plan_id": "pm-248",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "00341da4-46a5-4b12-be59-0f8d4de156f6",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD dbca71f4ee3b is not on origin/main",
+          "repo_id": "otohime",
+          "run_id": "run-8581",
+          "plan_id": "pm-248",
+          "role": "acceptance_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bc169b77-3237-49be-a88e-01245057e78c",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 88fcbd38213d is not on origin/main",
+          "repo_id": "otohime",
+          "run_id": "run-8575",
+          "plan_id": "pm-248",
+          "role": "acceptance_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "86b79907-defc-4d0a-98e6-43fd17f1b307",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=all_busy all_busy=2 held=1 offline=5 idle=0 workers=8",
+          "repo_id": "otohime",
+          "run_id": "run-8547",
+          "plan_id": "pm-247",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "97a9bbd5-4f02-4178-b6fa-dfbff80648ad",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=1 offline=5 idle=2 workers=9",
+          "repo_id": "otohime",
+          "run_id": "run-8541",
+          "plan_id": "pm-247",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a8671e15-a013-4fd1-a0b9-34bbecb36f31",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-8489",
+          "plan_id": "pm-244",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 20,
+      "limit": 20,
+      "total": 61,
+      "tasks": [
+        {
+          "id": "830924f3-ff1c-4d61-aaac-b25e6324cc40",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "otohime",
+          "run_id": "run-8447",
+          "plan_id": "pm-241",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "76a56c65-4853-4d14-a0c6-3aa2a28fcb27",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-8418",
+          "plan_id": "pm-245",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "03909aec-b28d-4c6f-a38d-9c952e1c87b4",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=2 held=0 offline=5 idle=2 workers=9",
+          "repo_id": "otohime",
+          "run_id": "run-8415",
+          "plan_id": "pm-247",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f1bfa812-5256-4f67-836e-99f92417bcde",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-8207",
+          "plan_id": "pm-209",
+          "role": "acceptance_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dbe59bbf-753b-4ab6-b405-460d4640fda9",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-8174",
+          "plan_id": "pm-209",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8301dc16-11f1-474d-ae67-019dcf770871",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-8168",
+          "plan_id": "pm-209",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b6ec04c3-e183-48eb-8bca-b6c6f3187bf5",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-8061",
+          "plan_id": "pm-236",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5fa87125-a6cc-4059-b618-751d1541db82",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-8025",
+          "plan_id": "pm-236",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "31491522-15e2-4451-a14d-cf22f6939b23",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-7996",
+          "plan_id": "pm-209",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "59d654c5-6e1a-4c9d-8a1a-4a7cbd9bbf8e",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1",
+          "repo_id": "mono-v2",
+          "run_id": "run-7977",
+          "plan_id": "pm-236",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dac437a9-dd45-4dc5-b871-adc370a225ea",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1",
+          "repo_id": "mono-v2",
+          "run_id": "run-7973",
+          "plan_id": "pm-235",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "fd5e72ee-34d3-44e5-bfdc-8deb4385cf55",
+          "status": "FAILED",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "repo_id": "mono-v2",
+          "run_id": "run-7957",
+          "plan_id": "pm-209",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bb9415b2-3856-4f03-8845-fe66494babde",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1",
+          "repo_id": "mono-v2",
+          "run_id": "run-7895",
+          "plan_id": "pm-209",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "35b12288-7abb-433b-bcb5-3f9eac460982",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1",
+          "repo_id": "mono-v2",
+          "run_id": "run-7888",
+          "plan_id": "pm-234",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b273a243-dc65-4557-a7f2-5c0e7ffa73fc",
+          "status": "FAILED",
+          "error": "no_account_available: no codex account is available for repo mono-v2",
+          "repo_id": "mono-v2",
+          "run_id": "run-7843",
+          "plan_id": "pm-233",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "188711f9-a723-438e-bf50-8a97496a643a",
+          "status": "FAILED",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-kqviet cooling, claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-24T03:00:05Z",
+          "repo_id": "mono-v2",
+          "run_id": "run-7784",
+          "plan_id": "pm-235",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3bcb6333-eebd-4666-9da2-ce21b89bc496",
+          "status": "FAILED",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-kqviet cooling, claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-23T22:00:16Z",
+          "repo_id": "mono-v2",
+          "run_id": "run-7785",
+          "plan_id": "pm-234",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4ea23bd5-2b47-4790-a877-bd35f98758a3",
+          "status": "FAILED",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-28T13:52:46Z",
+          "repo_id": "mono-v2",
+          "run_id": "run-7783",
+          "plan_id": "pm-235",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "01d357f9-56e4-4323-b51c-58f12005b434",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1",
+          "repo_id": "mono-v2",
+          "run_id": "run-7771",
+          "plan_id": "pm-234",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9eea975e-d76b-454e-a149-76e2f6bfb8bf",
+          "status": "FAILED",
+          "error": "agent_failed: exit 128",
+          "repo_id": "mono-v2",
+          "run_id": "run-7725",
+          "plan_id": "pm-232",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 20,
+      "total": 1128,
+      "tasks": [
+        {
+          "id": "903b8efd-e0cf-4874-9b60-df1a8faa0e2d",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "harvest-d409a2088358d714",
+          "plan_id": "pm-platform"
+        },
+        {
+          "id": "6fd206ee-f13c-44e3-b72e-62623341b9c6",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "can-428",
+          "plan_id": "pm-platform",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "93ce2092-5bfe-4c95-981f-da2bd3ace8cf",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8815",
+          "plan_id": "pm-260",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c39431b8-0c3b-48d3-a777-2a9fe4ab346e",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8814",
+          "plan_id": "pm-260",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f1706e38-852a-44b7-83ee-144362065f99",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8812",
+          "plan_id": "pm-260",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1ce9d413-e929-4ad3-afd9-6bd0ff084d91",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8810",
+          "plan_id": "pm-260",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "534bb3e6-c6b7-4f3f-ac39-c9fd5f75a411",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "can-427",
+          "plan_id": "pm-platform",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b052244b-fc14-4c54-8287-cb4d6c64d607",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "harvest-9d6ba8d7364a2a4b",
+          "plan_id": "pm-platform"
+        },
+        {
+          "id": "d97bbcf2-59e5-445d-97b4-1ca6bf07c8fd",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "can-426",
+          "plan_id": "pm-platform",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bec3c74b-a910-45f1-8689-2685b6bfb0c8",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8809",
+          "plan_id": "pm-260",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c3f31644-d01e-4841-bb60-9bc3b4b5b469",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8803",
+          "plan_id": "pm-259",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a0cd9b90-0511-419d-bf76-6b6a23b3fba4",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8807",
+          "plan_id": "pm-264",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "17314d72-edaa-4bcb-9595-2aba483cedcc",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8806",
+          "plan_id": "pm-259",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cbc13411-a533-4854-b7db-e88fcfab6d7d",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "harvest-0e38a9b11aae4112",
+          "plan_id": "pm-platform"
+        },
+        {
+          "id": "b960bf5e-5e8e-42a7-acbf-32fa823169da",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8802",
+          "plan_id": "pm-258",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ff8dc637-96fa-4f99-a701-e2aaaf79521f",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8800",
+          "plan_id": "pm-260",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "007deb9b-8033-498d-96f2-5c95e3b203e5",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8799",
+          "plan_id": "pm-253",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5170e115-ee41-421e-a443-49a8510adf66",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8796",
+          "plan_id": "pm-260",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ca0f5fce-62f8-4a0f-b2d2-cecaa56fc7ca",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8795",
+          "plan_id": "pm-263",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "937ed694-b8c3-4ece-9ea1-6fa297ef6c37",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8792",
+          "plan_id": "pm-246",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 20,
+      "limit": 20,
+      "total": 1128,
+      "tasks": [
+        {
+          "id": "407b8032-2605-4426-9fc1-27f54e48eb3c",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8791",
+          "plan_id": "pm-252",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 3
+        },
+        {
+          "id": "41d067dd-e2a5-41f1-aa5f-f4d86ff414cd",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8790",
+          "plan_id": "pm-259",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f2877d39-a399-477b-916e-616c3a38b997",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8789",
+          "plan_id": "pm-260",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9e7ce153-02d0-4b90-9b32-ad0dbb86c144",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8787",
+          "plan_id": "pm-246",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "023a176a-b527-495b-ab70-bb82f40e22a8",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8784",
+          "plan_id": "pm-259",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8a684e3a-2941-4d93-9364-5dcfd7603dcf",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8783",
+          "plan_id": "pm-260",
+          "role": "product_owner",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "13a44f47-af51-4cdc-ad42-1e5c03c10baa",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8781",
+          "plan_id": "pm-246",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "531aa17a-d61f-4b28-83c1-47d9be148ff5",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8780",
+          "plan_id": "pm-252",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7ed988b5-f8f3-4bef-8c96-2ff82e8bacc4",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8777",
+          "plan_id": "pm-246",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "23466f57-01ae-4856-a67d-3052c504dacc",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8768",
+          "plan_id": "pm-259",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "024ba61b-44c0-458c-b09e-93f79bf7cb2d",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8775",
+          "plan_id": "pm-252",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b9a063b4-31d3-40c1-ad54-69dd4380a876",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8774",
+          "plan_id": "pm-253",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f17e26ca-a084-4455-9a4e-e74c19efe316",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "harvest-348e4b85d1ab9741",
+          "plan_id": "pm-platform"
+        },
+        {
+          "id": "2ba43a4e-0d86-41e0-9f69-38c7e5c4eabb",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "can-425",
+          "plan_id": "pm-platform",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5867dddd-1f01-46ab-b8c6-c5251d079434",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8766",
+          "plan_id": "pm-259",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "fc2c7c90-e98e-45ed-a6cd-fb697e002c30",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8765",
+          "plan_id": "pm-246",
+          "role": "software_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7b2df641-5065-4ec4-accc-e85c6775d613",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "harvest-5cf048105c52afa1",
+          "plan_id": "pm-platform"
+        },
+        {
+          "id": "a57738b7-974c-427c-9397-29a784bc5354",
+          "status": "COMPLETED",
+          "repo_id": "otohime",
+          "run_id": "run-8762",
+          "plan_id": "pm-249",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cab53d47-5d42-44a7-857d-78f34ac4f131",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8760",
+          "plan_id": "pm-246",
+          "role": "quality_engineer",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "01884582-886b-453d-996f-38cfcbe00940",
+          "status": "COMPLETED",
+          "repo_id": "mono-v2",
+          "run_id": "run-8759",
+          "plan_id": "pm-246",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 20,
+      "total": 2,
+      "tasks": [
+        {
+          "id": "3a311226-9ba0-408f-bf69-06709cdb7021",
+          "status": "RUNNING",
+          "repo_id": "otohime",
+          "run_id": "run-8816",
+          "plan_id": "pm-260",
+          "role": "quality_engineer"
+        },
+        {
+          "id": "deb9f2ff-5fc9-4632-b7b6-2029f235ed91",
+          "status": "RUNNING",
+          "repo_id": "otohime",
+          "run_id": "run-8813",
+          "plan_id": "pm-258",
+          "role": "quality_engineer"
+        }
+      ]
+    },
+    {
+      "status": "PENDING",
+      "offset": 0,
+      "limit": 20,
+      "total": null,
+      "tasks": null
+    }
+  ],
+  "completeness": "FAILED 40/61; COMPLETED 40/1128; RUNNING 2/2; PENDING empty object, count not asserted. Older histories unread."
+}

@@ -1,0 +1,9 @@
+{
+  "url": "https://otohime.dev/api/health",
+  "captured_at": "2026-10-26T09:37:41.820767+00:00",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "sha": "ee1f6ce6cd7f47c8e7fe1c450b33ff07e922332f"
+  }
+}

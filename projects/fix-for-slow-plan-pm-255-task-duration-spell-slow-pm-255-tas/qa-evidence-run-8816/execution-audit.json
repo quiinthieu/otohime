@@ -1,0 +1,505 @@
+{
+  "qa_run": {
+    "id": "run-8816",
+    "plan_id": "pm-260",
+    "task_id": "t-1578",
+    "role": "quality_engineer",
+    "kind": "role",
+    "template_id": "qa-agent",
+    "tm_task_id": "3a311226-9ba0-408f-bf69-06709cdb7021",
+    "repo_id": "otohime",
+    "account_id": "codex-main",
+    "worker_id": "avietidol-z490",
+    "runner": "fleet",
+    "agent_profile": "codex-sol-6-1-high",
+    "attempt": 3,
+    "status": "running",
+    "started_at": "2026-10-26T09:35:21.001539Z",
+    "finished_at": "0001-01-01T00:00:00Z",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "callback_apply_failures": 0
+  },
+  "swe_run": {
+    "id": "run-8814",
+    "plan_id": "pm-260",
+    "task_id": "t-1578",
+    "role": "software_engineer",
+    "kind": "role",
+    "template_id": "coding-agent",
+    "tm_task_id": "c39431b8-0c3b-48d3-a777-2a9fe4ab346e",
+    "repo_id": "otohime",
+    "account_id": "claude-kqviet",
+    "worker_id": "avietidol-z490",
+    "runner": "fleet",
+    "git_sha": "c2ca9c2",
+    "agent_profile": "claude-opus-high",
+    "attempt": 3,
+    "status": "succeeded",
+    "started_at": "2026-10-26T09:29:10.029822Z",
+    "finished_at": "2026-10-26T09:34:08.045055Z",
+    "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+    "callback_apply_failures": 0
+  },
+  "gate_run": {
+    "id": "run-8815",
+    "plan_id": "pm-260",
+    "task_id": "t-1578",
+    "role": "verify",
+    "kind": "verify",
+    "template_id": "verify-runner",
+    "tm_task_id": "93ce2092-5bfe-4c95-981f-da2bd3ace8cf",
+    "repo_id": "otohime",
+    "worker_id": "avietidol-z490",
+    "runner": "fleet",
+    "git_sha": "c2ca9c2",
+    "attempt": 3,
+    "status": "succeeded",
+    "started_at": "2026-10-26T09:34:08.045055Z",
+    "finished_at": "2026-10-26T09:35:10.153373Z",
+    "callback_apply_failures": 0
+  },
+  "green_gate": {
+    "id": "ver-3523",
+    "plan_id": "pm-260",
+    "task_id": "t-1578",
+    "run_id": "run-8815",
+    "gate": "green",
+    "git_sha": "c2ca9c2",
+    "status": "pass",
+    "items": [
+      {
+        "name": "project unit suite",
+        "cmd": "npm test",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 6600,
+        "stdout_tail": "ys, and loads the palace\nok 2079 - the listener: capture phase on window, skips fields, dialogs, modifiers and handled keys, and loads the palace\n  ---\n  duration_ms: 0.455638\n  type: 'test'\n  ...\n# Subtest: the site root layout mounts the listener once, ahead of the pages, so it runs before the console's\nok 2080 - the site root layout mounts the listener once, ahead of the pages, so it runs before the console's\n  ---\n  duration_ms: 0.460169\n  type: 'test'\n  ...\n# Subtest: Pocket: the console's menu carries a Dive chip, a plain link to the palace\nok 2081 - Pocket: the console's menu carries a Dive chip, a plain link to the palace\n  ---\n  duration_ms: 0.552811\n  type: 'test'\n  ...\n# Subtest: the waterline: the last thing in the site's footer, below its bar, links down to the palace\nok 2082 - the waterline: the last thing in the site's footer, below its bar, links down to the palace\n  ---\n  duration_ms: 1.92689\n  type: 'test'\n  ...\n# Subtest: the sheet has 8 cells, one per page, filling the 2x4 grid once\nok 2083 - the sheet has 8 cells, one per page, filling the 2x4 grid once\n  ---\n  duration_ms: 2.202424\n  type: 'test'\n  ...\n# Subtest: right column reads 5,4,3,2 turned CCW; left column 6,7,8,1 turned CW\nok 2084 - right column reads 5,4,3,2 turned CCW; left column 6,7,8,1 turned CW\n  ---\n  duration_ms: 0.378954\n  type: 'test'\n  ...\n# Subtest: every page's head faces the centre line\nok 2085 - every page's head faces the centre line\n  ---\n  duration_ms: 0.245221\n  type: 'test'\n  ...\n# Subtest: spreads 2|3, 4|5, 6|7 and the cover 8|1 meet across a fold and read left to right\nok 2086 - spreads 2|3, 4|5, 6|7 and the cover 8|1 meet across a fold and read left to right\n  ---\n  duration_ms: 0.361067\n  type: 'test'\n  ...\n# Subtest: the cut is exactly the edges between the middle rows, and those never join a spread\nok 2087 - the cut is exactly the edges between the middle rows, and those never join a spread\n  ---\n  duration_ms: 0.442146\n  type: 'test'\n  ...\n# Subtest: the guides: three across, the centre fold's outer quarters, and the cut in its middle half\nok 2088 - the guides: three across, the centre fold's outer quarters, and the cut in its middle half\n  ---\n  duration_ms: 0.413089\n  type: 'test'\n  ...\n# Subtest: panels are exactly A4 105 x 74.25 mm and Letter 107.95 x 69.85 mm\nok 2089 - panels are exactly A4 105 x 74.25 mm and Letter 107.95 x 69.85 mm\n  ---\n  duration_ms: 0.366143\n  type: 'test'\n  ...\n# Subtest: the paper parser takes a4 or letter and falls back to A4 for anything else\nok 2090 - the paper parser takes a4 or letter and falls back to A4 for anything else\n  ---\n  duration_ms: 0.219945\n  type: 'test'\n  ...\n# Subtest: latestNote picks the newest from unsorted input, skips bad dates, and keeps the first of a tie\nok 2091 - latestNote picks the newest from unsorted input, skips bad dates, and keeps the first of a tie\n  ---\n  duration_ms: 7.957655\n  type: 'test'\n  ...\n# Subtest: fit keeps short text, cuts long text on a word with an ellipsis, and hard-cuts one long word\nok 2092 - fit keeps short text, cuts long text on a word with an ellipsis, and hard-cuts one long word\n  ---\n  duration_ms: 0.633774\n  type: 'test'\n  ...\n# Subtest: site.zine names four real projects and a real sketch\nok 2093 - site.zine names four real projects and a real sketch\n  ---\n  duration_ms: 0.293072\n  type: 'test'\n  ...\n# Subtest: zinePages lays the site out in reading order with the right picks\nok 2094 - zinePages lays the site out in reading order with the right picks\n  ---\n  duration_ms: 0.701376\n  type: 'test'\n  ...\n# Subtest: every page stays inside its budget, even with oversized content\nok 2095 - every page stays inside its budget, even with oversized content\n  ---\n  duration_ms: 1.205309\n  type: 'test'\n  ...\n# Subtest: zinePages refuses a site.zine that names something the site does not have\nok 2096 - zinePages refuses a site.zine that names something the site does not have\n  ---\n  duration_ms: 0.646743\n  type: 'test'\n  ...\n1..2096\n# tests 2096\n# suites 0\n# pass 2096\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 6449.776528\n"
+      },
+      {
+        "name": "release evaluator and CLI fixtures",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/plan-release.test.ts",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 3170,
+        "stdout_tail": "E run without its own source id is not dispatch evidence\n  ---\n  duration_ms: 0.384208\n  type: 'test'\n  ...\n# Subtest: payloads that declare themselves partial are unsupported input\nok 25 - payloads that declare themselves partial are unsupported input\n  ---\n  duration_ms: 0.238769\n  type: 'test'\n  ...\n# Subtest: a failed SWE attempt proves dispatch only and is reported as a failed attempt, never delivery\nok 26 - a failed SWE attempt proves dispatch only and is reported as a failed attempt, never delivery\n  ---\n  duration_ms: 0.142582\n  type: 'test'\n  ...\n# Subtest: evaluation does not mutate its inputs\nok 27 - evaluation does not mutate its inputs\n  ---\n  duration_ms: 0.145166\n  type: 'test'\n  ...\n# Subtest: CLI: dispatched board with a verified manifest exits 0 and keeps run ids and outcome\nok 28 - CLI: dispatched board with a verified manifest exits 0 and keeps run ids and outcome\n  ---\n  duration_ms: 68.105722\n  type: 'test'\n  ...\n# Subtest: CLI: queued/startable board passes --require released and fails the default dispatched mode\nok 29 - CLI: queued/startable board passes --require released and fails the default dispatched mode\n  ---\n  duration_ms: 136.340883\n  type: 'test'\n  ...\n# Subtest: CLI: without a manifest the evaluation is diagnostic only and never exits 0\nok 30 - CLI: without a manifest the evaluation is diagnostic only and never exits 0\n  ---\n  duration_ms: 135.421875\n  type: 'test'\n  ...\n# Subtest: CLI: a runs payload declaring itself partial exits 2 with or without a manifest (QA D5)\nok 31 - CLI: a runs payload declaring itself partial exits 2 with or without a manifest (QA D5)\n  ---\n  duration_ms: 133.945503\n  type: 'test'\n  ...\n# Subtest: CLI: held board, scheduled-only run and failed attempt exit 1 or 0 as the evidence says\nok 32 - CLI: held board, scheduled-only run and failed attempt exit 1 or 0 as the evidence says\n  ---\n  duration_ms: 194.961529\n  type: 'test'\n  ...\n# Subtest: CLI: inherited-key statuses and a missing run id exit 1 with no dispatch outcome (QA D2, D4)\nok 33 - CLI: inherited-key statuses and a missing run id exit 1 with no dispatch outcome (QA D2, D4)\n  ---\n  duration_ms: 265.060838\n  type: 'test'\n  ...\n# Subtest: CLI: negated prose and a foreign release receipt exit 1 with release unrecorded (QA D3)\nok 34 - CLI: negated prose and a foreign release receipt exit 1 with release unrecorded (QA D3)\n  ---\n  duration_ms: 129.607596\n  type: 'test'\n  ...\n# Subtest: CLI: the unmodified live held snapshot set is decoded and reports the hold (QA D1)\nok 35 - CLI: the unmodified live held snapshot set is decoded and reports the hold (QA D1)\n  ---\n  duration_ms: 131.074806\n  type: 'test'\n  ...\n# Subtest: CLI: the unmodified run-8812 live capture, with progress in both reads, still exits 1 on the hold\nok 36 - CLI: the unmodified run-8812 live capture, with progress in both reads, still exits 1 on the hold\n  ---\n  duration_ms: 131.015312\n  type: 'test'\n  ...\n# Subtest: CLI: malformed predecessor or progress evidence exits 2 under a verified manifest (QA D6-D9)\nok 37 - CLI: malformed predecessor or progress evidence exits 2 under a verified manifest (QA D6-D9)\n  ---\n  duration_ms: 1052.213274\n  type: 'test'\n  ...\n# Subtest: CLI: truncated payloads and incomplete or mismatched manifests exit 2\nok 38 - CLI: truncated payloads and incomplete or mismatched manifests exit 2\n  ---\n  duration_ms: 267.760838\n  type: 'test'\n  ...\n# Subtest: CLI: wrong ids exit 2; missing or unsupported arguments exit 2\nok 39 - CLI: wrong ids exit 2; missing or unsupported arguments exit 2\n  ---\n  duration_ms: 333.360493\n  type: 'test'\n  ...\n# Subtest: checkManifest names every missing or mismatched snapshot entry\nok 40 - checkManifest names every missing or mismatched snapshot entry\n  ---\n  duration_ms: 0.233476\n  type: 'test'\n  ...\n# Subtest: the probe script makes no network call and no board write\nok 41 - the probe script makes no network call and no board write\n  ---\n  duration_ms: 0.259171\n  type: 'test'\n  ...\n1..41\n# tests 41\n# suites 0\n# pass 41\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 3095.156692\n"
+      },
+      {
+        "name": "typecheck",
+        "cmd": "npm run typecheck",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 10739,
+        "stdout_tail": "\n> otohime@0.1.0 typecheck\n> next typegen && tsc --noEmit\n\nGenerating route types...\n\u2713 Types generated successfully\n"
+      }
+    ],
+    "created_at": "2026-10-26T09:35:10.153373Z"
+  },
+  "task_manager": {
+    "swe": {
+      "id": "c39431b8-0c3b-48d3-a777-2a9fe4ab346e",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T09:29:16Z",
+      "updatedAt": "2026-10-26T09:34:12Z",
+      "completedAt": "2026-10-26T09:34:06Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackNextAt": "2026-10-26T09:34:23Z",
+      "repoId": "otohime",
+      "workerId": "avietidol-z490",
+      "params": {
+        "plan_id": "pm-260",
+        "run_id": "run-8814",
+        "role": "software_engineer",
+        "template_id": "coding-agent",
+        "agent": "claude",
+        "claimed_by": "avietidol-z490",
+        "trace_id": "4156e7859e7efe5c1615958e37b20cbd"
+      },
+      "result": {
+        "agent": "claude",
+        "artifacts": [
+          {
+            "content_type": "application/octet-stream",
+            "name": "author.txt",
+            "sha256": "087d58aa8df5ecf961bd021492d1349ba6b67e65159d9e4c4e0417379238130e",
+            "size": 59
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changed-files.txt",
+            "sha256": "be9b3933aeb57bc9c14093ad0a06b6429e2f6def81813aba866f6ab5a0d4fc15",
+            "size": 138
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changes.patch",
+            "sha256": "1fcfb437a7a39c8324011b1c860428352478c19d1d625bf97683af4c9374fb2e",
+            "size": 23632
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "commits.txt",
+            "sha256": "a2a45bb6212affc61164a1418c973e5a12ba43bf52fd168ee4cb1dfbaf618c24",
+            "size": 74
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "diffstat.txt",
+            "sha256": "edf14f515aa9b20530bc062d7484746a60adad06b3ef2970842fa94fea806342",
+            "size": 337
+          },
+          {
+            "content_type": "application/json",
+            "name": "footprint.json",
+            "sha256": "8c19f0f001278a0067fdf984cd5ff9d55c00fadac43d6e24f7b737601f689520",
+            "size": 351
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "uncommitted.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "content_type": "application/json",
+            "name": "usage.json",
+            "sha256": "f7e246790726e91fffc2e4321413b3a27635adb3ac2b528576f80896a76e8761",
+            "size": 410
+          }
+        ],
+        "duration_s": 264,
+        "exit_code": 0,
+        "recordings": [],
+        "repo_id": "otohime",
+        "usage": {
+          "cpu_cores": 0.01,
+          "cpu_seconds": 27.95,
+          "io_sampler": "proc",
+          "peak_cpu_cores": 2.14,
+          "peak_rss_mb": 1689.27,
+          "read_bytes": 0,
+          "rss_mb": 316.92,
+          "sampler": "proc",
+          "samples": 52,
+          "write_bytes": 172093440
+        },
+        "worker_id": "avietidol-z490"
+      }
+    },
+    "gate": {
+      "id": "93ce2092-5bfe-4c95-981f-da2bd3ace8cf",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T09:34:12Z",
+      "updatedAt": "2026-10-26T09:35:11Z",
+      "completedAt": "2026-10-26T09:35:09Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackNextAt": "2026-10-26T09:35:25Z",
+      "repoId": "otohime",
+      "workerId": "avietidol-z490",
+      "params": {
+        "plan_id": "pm-260",
+        "run_id": "run-8815",
+        "template_id": "verify-runner",
+        "agent": "shell",
+        "claimed_by": "avietidol-z490",
+        "trace_id": "4156e7859e7efe5c1615958e37b20cbd"
+      },
+      "result": {
+        "agent": "shell",
+        "artifacts": [
+          {
+            "content_type": "application/octet-stream",
+            "name": "commits.txt",
+            "sha256": "2de5e2dff80d7615d1c3373c8713276ec7cdfe824d66e7848d45823fb53439d6",
+            "size": 32
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "uncommitted.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "content_type": "application/json",
+            "name": "usage.json",
+            "sha256": "c4b59be25f7e827c2ec9c5b0ea39e19ac8a9d4b7fc7dd4226d46ab20d97cef21",
+            "size": 200
+          },
+          {
+            "content_type": "application/json",
+            "name": "verification.json",
+            "sha256": "fbb4e05fb7226eb6912323801ae64044b74ed72b01afcf973b3d6311bff7dd54",
+            "size": 9466
+          }
+        ],
+        "duration_s": 45,
+        "exit_code": 0,
+        "recordings": [],
+        "repo_id": "otohime",
+        "usage": {
+          "cpu_cores": 1.6,
+          "cpu_seconds": 35.51,
+          "io_sampler": "proc",
+          "peak_cpu_cores": 1.99,
+          "peak_rss_mb": 1173.13,
+          "read_bytes": 0,
+          "rss_mb": 1173.13,
+          "sampler": "proc",
+          "samples": 9,
+          "write_bytes": 3000102912
+        },
+        "worker_id": "avietidol-z490"
+      }
+    },
+    "failed_comparison": {
+      "id": "0d081765-06f9-4a1e-9de4-28107aa0608b",
+      "status": "FAILED",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f697e2c2aaba is not on origin/main",
+      "createdAt": "2026-10-26T09:04:24Z",
+      "updatedAt": "2026-10-26T09:24:41Z",
+      "completedAt": "2026-10-26T09:24:38Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackNextAt": "2026-10-26T09:24:55Z",
+      "repoId": "otohime",
+      "workerId": "avietidol-z490",
+      "params": {
+        "plan_id": "pm-258",
+        "run_id": "run-8808",
+        "role": "quality_engineer",
+        "template_id": "qa-agent",
+        "agent": "codex",
+        "claimed_by": "avietidol-z490",
+        "trace_id": "f725f9265f9cedc3266c0564dc7d9cfe"
+      },
+      "result": {
+        "agent": "codex",
+        "artifacts": [
+          {
+            "content_type": "application/octet-stream",
+            "name": "author.txt",
+            "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+            "size": 44
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changed-files.txt",
+            "sha256": "e7726eaf93dc33800035d96cdb48705d59b903d95c60990d748520e1ff30d7be",
+            "size": 2531
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "changes.patch",
+            "sha256": "f3ed8fc55e5cc3761cf551db0f24ffe66a62805b025c05ae00157d42ad9f1bc1",
+            "size": 260429
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "commits.txt",
+            "sha256": "19213224418b35316acd06735c4889ad8a7feedc953ff5985f3cd5ef2e11a437",
+            "size": 72
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "diffstat.txt",
+            "sha256": "60df83bcc6b997a4c6445962cac008d5b257184b429387539a06aea2e0fd7223",
+            "size": 1668
+          },
+          {
+            "content_type": "application/json",
+            "name": "failure.json",
+            "sha256": "2cfa0fad6a86004533166a0e48d591f8f2006d38693d6c6db5c3723692bc5457",
+            "size": 2323
+          },
+          {
+            "content_type": "application/json",
+            "name": "footprint.json",
+            "sha256": "9ee1a4820b2988311b60fb5d807c9e45d323ab20c0e93e86d0f02c0e7cb5281c",
+            "size": 2810
+          },
+          {
+            "content_type": "application/json",
+            "name": "rescue.json",
+            "sha256": "b85a94b5dbdbe3e51981898723c6585f8f00f49baa6a97288f7ed650fa7947ef",
+            "size": 3720
+          },
+          {
+            "content_type": "application/octet-stream",
+            "name": "uncommitted.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "content_type": "application/json",
+            "name": "usage.json",
+            "sha256": "301e6179b2a84a0ef713384424a4afddf473421f374a471829b558f1bfea9bd5",
+            "size": 224
+          }
+        ],
+        "duration_s": 1190,
+        "exit_code": 1,
+        "recordings": [],
+        "repo_id": "otohime",
+        "usage": {
+          "cpu_cores": 0.03,
+          "cpu_seconds": 1297.01,
+          "io_sampler": "proc",
+          "peak_cpu_cores": 12.1,
+          "peak_rss_mb": 5968.78,
+          "read_bytes": 89235456,
+          "rss_mb": 25.78,
+          "sampler": "proc",
+          "samples": 238,
+          "write_bytes": 6505353216
+        },
+        "worker_id": "avietidol-z490"
+      }
+    }
+  },
+  "callbacks": [
+    {
+      "id": "ev:11415",
+      "at": "2026-10-26T09:35:10.153373Z",
+      "type": "event",
+      "actor": "callback",
+      "kind": "task-callback",
+      "summary": "applied",
+      "reason": "tm:93ce2092-5bfe-4c95-981f-da2bd3ace8cf:final",
+      "refs": {}
+    },
+    {
+      "id": "ev:11409",
+      "at": "2026-10-26T09:34:08.045055Z",
+      "type": "event",
+      "actor": "callback",
+      "kind": "task-callback",
+      "summary": "applied",
+      "reason": "tm:c39431b8-0c3b-48d3-a777-2a9fe4ab346e:final",
+      "refs": {}
+    }
+  ],
+  "decisions": [
+    {
+      "id": "dec-56834",
+      "at": "2026-10-26T09:35:11.373814Z",
+      "type": "decision",
+      "actor": "orchestrator",
+      "task_id": "t-1578",
+      "kind": "green_gate_pass",
+      "summary": "green gate pass, QA is pending",
+      "reason": "green_gate_pass",
+      "evidence": {
+        "sha": "c2ca9c2",
+        "verification_id": "ver-3523"
+      },
+      "refs": {},
+      "trace_id": "4156e7859e7efe5c1615958e37b20cbd"
+    },
+    {
+      "id": "dec-56832",
+      "at": "2026-10-26T09:34:12.582039Z",
+      "type": "decision",
+      "actor": "orchestrator",
+      "task_id": "t-1578",
+      "run_id": "run-8814",
+      "kind": "green_gate",
+      "summary": "SWE succeeded, green gate is running",
+      "reason": "swe_ok",
+      "evidence": {},
+      "refs": {
+        "run_id": "run-8814"
+      },
+      "trace_id": "4156e7859e7efe5c1615958e37b20cbd"
+    }
+  ],
+  "parent": {
+    "id": "pm-248",
+    "idea_id": "idea-248",
+    "kind": "project",
+    "title": "Paper Almanac Bits",
+    "repo_id": "otohime",
+    "slug": "otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons",
+    "status": "abandoned",
+    "current_revision": 4,
+    "approved_at": "2026-10-26T04:27:53.975898Z",
+    "auto_approved_at": "2026-10-26T04:27:53.975898Z",
+    "run_count": 59,
+    "commit_identity": {
+      "name": "Otohime",
+      "email": "quiinthieu@gmail.com"
+    },
+    "max_runs": null,
+    "draft_failures": 0,
+    "acceptance_cycle": 3,
+    "trace_id": "d2b6a7810c26edc93b8d9f448c842a38",
+    "hidden_at": null,
+    "acceptance_not_before": null,
+    "acceptance_pending_until": null,
+    "queue_rank_at": null,
+    "yield_count": 0,
+    "execution_started_at": "2026-10-25T22:25:13.934186Z",
+    "execution_started_source": "decision",
+    "created_at": "2026-10-25T21:08:35.350983Z",
+    "updated_at": "2026-10-26T04:49:13.554529Z"
+  },
+  "parent_abandon_decisions": [
+    {
+      "id": "dec-55807",
+      "at": "2026-10-26T04:49:13.660036Z",
+      "type": "decision",
+      "actor": "decider-agent",
+      "kind": "decision_applied",
+      "summary": "abandon on acceptance_exhausted",
+      "reason": "decider-agent run-8680",
+      "evidence": {
+        "note": "Abandon pm-248 as a plan, not as an accept. Seasons and the torn-sheet 404 were verified live at 1366x768 and 390x844 (probe-seasons 28/28, probe-lost 34/34), and the code for Ask the Ink's model tier is on main (npm test 1909 pass at 303eaa3, fake-model probe 53/53). The only failing outcome is production reach: GET/POST /api/ask are 404 and 0 of 17 deployed chunks carry api/ask. The causes are a stale Vercel deploy (esc-384) and ASK_LLM plus ANTHROPIC_API_KEY unset (esc-383). Both need the account owner, and they are cost and external-account decisions. A replan would add no code, because the product owner cannot set a key or redeploy. It would also duplicate pm-255, which already holds the remaining Ask work: t-1557 deploy-bundle probe and t-1558 tier probe, queued after_plan pm-248. Abandoning frees pm-255 to run. This is not an accept: the Ask production outcome stays unmet until a person sets the env, redeploys, and a later acceptance sees GET /api/ask return 200 with enabled:true. The plan can be reopened with plan_manager_reopen_plan.",
+        "task": null,
+        "answer": "",
+        "option": "abandon",
+        "profile": "",
+        "root_cause": {
+          "reason": "unknown",
+          "summary": "acceptance found the delivered plan does not meet its outcome \u00b7 acceptance failed 3/3 times \u00b7 last change request projects/otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons/change_request_4.md \u00b7 decide: https://apps.vietky.io.vn/plans/inbox/pm-248",
+          "evidence_ref": ""
+        },
+        "stop_reason": "acceptance_exhausted",
+        "escalation_id": "",
+        "change_request": ""
+      },
+      "refs": {},
+      "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+    },
+    {
+      "id": "dec-55805",
+      "at": "2026-10-26T04:49:13.598897Z",
+      "type": "decision",
+      "actor": "decider-agent",
+      "kind": "abandoned",
+      "summary": "abandoned",
+      "reason": "decider-agent run-8680",
+      "evidence": {
+        "root_cause": {
+          "reason": "unknown",
+          "summary": "the plan was abandoned and no cause was recorded",
+          "evidence_ref": ""
+        }
+      },
+      "refs": {},
+      "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+    }
+  ],
+  "history_bounds": {
+    "pm260_events": 13,
+    "pm260_decisions": 89,
+    "parent_decisions": 200,
+    "global_events": 200
+  },
+  "raw_tail_limits": "Task-manager supplies bounded logs; only selected tails saved; older contents unread."
+}

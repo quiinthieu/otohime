@@ -1,0 +1,387 @@
+{
+  "40297827219": [
+    {
+      "id": 121488109230,
+      "name": "checks",
+      "conclusion": "success",
+      "runner_id": 1000000792,
+      "runner_name": "GitHub Actions 1000000792",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-26T09:12:58Z",
+          "completed_at": "2026-10-26T09:12:59Z"
+        },
+        {
+          "name": "Initialize containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-26T09:12:59Z",
+          "completed_at": "2026-10-26T09:13:08Z"
+        },
+        {
+          "name": "Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-26T09:13:08Z",
+          "completed_at": "2026-10-26T09:13:10Z"
+        },
+        {
+          "name": "Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-26T09:13:10Z",
+          "completed_at": "2026-10-26T09:13:11Z"
+        },
+        {
+          "name": "Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-26T09:13:11Z",
+          "completed_at": "2026-10-26T09:13:12Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-26T09:13:12Z",
+          "completed_at": "2026-10-26T09:13:34Z"
+        },
+        {
+          "name": "Run npm run lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-26T09:13:34Z",
+          "completed_at": "2026-10-26T09:13:57Z"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-26T09:13:57Z",
+          "completed_at": "2026-10-26T09:14:14Z"
+        },
+        {
+          "name": "Run npm test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-26T09:14:14Z",
+          "completed_at": "2026-10-26T09:14:42Z"
+        },
+        {
+          "name": "Run npm run ask:check",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-26T09:14:42Z",
+          "completed_at": "2026-10-26T09:14:43Z"
+        },
+        {
+          "name": "Migrations match db/schema.ts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-26T09:14:43Z",
+          "completed_at": "2026-10-26T09:14:44Z"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-26T09:14:44Z",
+          "completed_at": "2026-10-26T09:15:23Z"
+        },
+        {
+          "name": "Run npm run db:migrate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-26T09:15:23Z",
+          "completed_at": "2026-10-26T09:15:24Z"
+        },
+        {
+          "name": "E2E against next start",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-26T09:15:24Z",
+          "completed_at": "2026-10-26T09:19:40Z"
+        },
+        {
+          "name": "Motion probe, signed in",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-26T09:19:40Z",
+          "completed_at": "2026-10-26T09:22:39Z"
+        },
+        {
+          "name": "Footer walk",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-26T09:22:39Z",
+          "completed_at": "2026-10-26T09:22:41Z"
+        },
+        {
+          "name": "Footer Chromium probe",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-26T09:22:41Z",
+          "completed_at": "2026-10-26T09:23:38Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-26T09:23:38Z",
+          "completed_at": "2026-10-26T09:23:41Z"
+        },
+        {
+          "name": "Post Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32,
+          "started_at": "2026-10-26T09:23:41Z",
+          "completed_at": "2026-10-26T09:24:00Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2026-10-26T09:24:00Z",
+          "completed_at": "2026-10-26T09:24:00Z"
+        },
+        {
+          "name": "Stop containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 34,
+          "started_at": "2026-10-26T09:24:00Z",
+          "completed_at": "2026-10-26T09:24:00Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-26T09:24:00Z",
+          "completed_at": "2026-10-26T09:24:00Z"
+        }
+      ]
+    }
+  ],
+  "40298672101": [
+    {
+      "id": 121493560349,
+      "name": "checks",
+      "conclusion": "failure",
+      "runner_id": 1000000794,
+      "runner_name": "GitHub Actions 1000000794",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-26T09:25:58Z",
+          "completed_at": "2026-10-26T09:25:58Z"
+        },
+        {
+          "name": "Initialize containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-26T09:25:58Z",
+          "completed_at": "2026-10-26T09:26:16Z"
+        },
+        {
+          "name": "Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-26T09:26:16Z",
+          "completed_at": "2026-10-26T09:26:17Z"
+        },
+        {
+          "name": "Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-26T09:26:17Z",
+          "completed_at": "2026-10-26T09:26:18Z"
+        },
+        {
+          "name": "Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-26T09:26:18Z",
+          "completed_at": "2026-10-26T09:26:20Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-26T09:26:20Z",
+          "completed_at": "2026-10-26T09:26:34Z"
+        },
+        {
+          "name": "Run npm run lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-26T09:26:34Z",
+          "completed_at": "2026-10-26T09:26:55Z"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-26T09:26:55Z",
+          "completed_at": "2026-10-26T09:27:09Z"
+        },
+        {
+          "name": "Run npm test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-26T09:27:09Z",
+          "completed_at": "2026-10-26T09:27:34Z"
+        },
+        {
+          "name": "Run npm run ask:check",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-26T09:27:34Z",
+          "completed_at": "2026-10-26T09:27:34Z"
+        },
+        {
+          "name": "Migrations match db/schema.ts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-26T09:27:34Z",
+          "completed_at": "2026-10-26T09:27:35Z"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-26T09:27:35Z",
+          "completed_at": "2026-10-26T09:27:47Z"
+        },
+        {
+          "name": "Run npm run db:migrate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-26T09:27:47Z",
+          "completed_at": "2026-10-26T09:27:47Z"
+        },
+        {
+          "name": "E2E against next start",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 14,
+          "started_at": "2026-10-26T09:27:47Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        },
+        {
+          "name": "Motion probe, signed in",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-26T09:31:32Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        },
+        {
+          "name": "Footer walk",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16,
+          "started_at": "2026-10-26T09:31:32Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        },
+        {
+          "name": "Footer Chromium probe",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17,
+          "started_at": "2026-10-26T09:31:32Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 31,
+          "started_at": "2026-10-26T09:31:32Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        },
+        {
+          "name": "Post Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 32,
+          "started_at": "2026-10-26T09:31:32Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2026-10-26T09:31:32Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        },
+        {
+          "name": "Stop containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 34,
+          "started_at": "2026-10-26T09:31:32Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2026-10-26T09:31:32Z",
+          "completed_at": "2026-10-26T09:31:32Z"
+        }
+      ]
+    }
+  ],
+  "ci_configuration_commits": "",
+  "delivery_configuration_commits": "",
+  "environment_attribution": "not established; raw failing assertions inaccessible, no YAML changes. A newer green same job disproves a permanently broken runner claim."
+}

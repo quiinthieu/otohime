@@ -1,0 +1,44 @@
+{
+  "delivery_sha": "c2ca9c20c6ae527d329ed4263672572ffd7219c9",
+  "node": "v22.23.3",
+  "npm": "10.9.9",
+  "captured_at": "2026-10-26T09:41:04.320326+00:00",
+  "model_or_assets": "none; offline Node builtins only",
+  "files": {
+    "lib/plan-release.ts": {
+      "sha256": "969c4a7cfd4e7c353730be7b9091a2b0506101307d9243b436cf7a663826d289",
+      "delivery_sha256": "969c4a7cfd4e7c353730be7b9091a2b0506101307d9243b436cf7a663826d289",
+      "matches_delivery": true
+    },
+    "scripts/probe-plan-release.mjs": {
+      "sha256": "a2e883c6d69dd2f9e73956a4b13b364c1e1eccb807b679553d5b74d51380948f",
+      "delivery_sha256": "a2e883c6d69dd2f9e73956a4b13b364c1e1eccb807b679553d5b74d51380948f",
+      "matches_delivery": true
+    },
+    "lib/plan-release.test.ts": {
+      "sha256": "2782d29435d179838b6da991e31d934f027d60e852a9a621e51390773498e451",
+      "delivery_sha256": "2782d29435d179838b6da991e31d934f027d60e852a9a621e51390773498e451",
+      "matches_delivery": true
+    },
+    "package.json": {
+      "sha256": "9fdb11f9be330bc0d6bc37c77f8441d1774c3b8acc77b6ac15a1f3755cfde9bb",
+      "delivery_sha256": "9fdb11f9be330bc0d6bc37c77f8441d1774c3b8acc77b6ac15a1f3755cfde9bb",
+      "matches_delivery": true
+    },
+    "package-lock.json": {
+      "sha256": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+      "delivery_sha256": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+      "matches_delivery": true
+    },
+    ".github/workflows/ci.yml": {
+      "sha256": "9dcff7a80fcf598df21d07c4f54e0f88c40a8bbb7dac8acb60f093c987a18a9f",
+      "delivery_sha256": "9dcff7a80fcf598df21d07c4f54e0f88c40a8bbb7dac8acb60f093c987a18a9f",
+      "matches_delivery": true
+    },
+    "next.config.ts": {
+      "sha256": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+      "delivery_sha256": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+      "matches_delivery": true
+    }
+  }
+}
