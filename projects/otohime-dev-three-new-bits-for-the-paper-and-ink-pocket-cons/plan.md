@@ -1,5 +1,90 @@
 # Paper Almanac Bits
 
+## Re-plan: run-8593 (change request 3 on Ask the Ink)
+
+Plan **pm-248**, product-owner run **run-8593**. Input: `change_request_3.md`
+(run-8588, acceptance verdict fail). Seasons and the torn-sheet 404 stay
+delivered and are not re-planned. Done and kept as they are: t-1511, t-1513 to
+t-1519, t-1538.
+
+### What the change request says is missing
+
+Ask the Ink answers only from the offline index in the browser. The console
+(`components/ask-console.tsx`) calls `answer()` from `lib/ask.ts` and never
+calls `POST /api/ask`. The model tier (`app/api/ask/route.ts`,
+`lib/ask-llm.ts`, already on `claude-haiku-5-5`) is 404 in production because
+`ASK_LLM` and `ANTHROPIC_API_KEY` are not set.
+
+Three things are missing, and each maps to a task:
+
+1. The model tier is not grounded in the scope the idea asked for. The index
+   (`public/ask-index.json`, 82 passages) also holds 42 article passages and
+   passages from Play, Shore, Home, Bio and the other project pages. The model
+   sees the top six BM25 passages from all of them.
+2. The console never reaches the model tier. A visitor's question stays
+   offline.
+3. Production has the tier off. The flags are Vercel Production env, which no
+   repository change can set.
+
+### Remaining work
+
+| # | Task | Role | QA | Depends on |
+| --- | --- | --- | --- | --- |
+| 1 | Ask model tier grounded in Work, Projects and Notes | software_engineer | skip | none |
+| 2 | Ask console calls the model tier | software_engineer | required | none |
+| 3 | Fake-model Ask probe at both widths | software_engineer | required | 1, 2 |
+| 4 | Production Ask flags (operator action) | software_engineer | required | 3 |
+
+Tasks 1 and 2 start at once. Task 3 needs both. Task 4 is the only task that
+needs a person, so it is last and does not hold up 1 to 3.
+
+### Decisions taken without a person
+
+- **Grounding scope.** The model may see only passages on `/work`, `/projects`
+  and `/notes`, and passages of kinds `work`, `stack`, `project` and `note`.
+  Articles, Play, Shore, Home, Bio and the other pages are left out of the
+  model's prompt. The offline index keeps them, so the offline answer does not
+  change. Articles are not Notes: Notes is the `/notes` page. Recorded as a
+  decision, reversible in one line.
+- **Client shape.** The console calls `POST /api/ask` with `{question}` and
+  takes the reply as `{mode, intent, lines, sources}`. Any 404, 403, 429, 5xx,
+  network error, timeout or bad shape falls back to the local canned answer,
+  which is what the console prints today. The server's `(OFFLINE)` reply is
+  shown as the server sends it. Non-streaming POST and client-side typing stay,
+  as t-1518 decided.
+- **Proof of the model path without a key.** A local fake Anthropic server
+  (`ANTHROPIC_BASE_URL`) answers the SDK call. The probe starts a throwaway
+  Postgres container for the usage counter, so the positive POST can run. The
+  real model's output quality stays unproven until a key exists.
+- **Production enablement is a chore, not a task of ours.** Setting
+  `ASK_LLM=1` and a server-only `ANTHROPIC_API_KEY` in Vercel Production, and
+  redeploying, is raised as `kind=operator_action` at the start of task 4. The
+  key is provisioned by the site operator. This run neither chooses nor creates
+  a key. The fallback keeps the console working without one.
+- **Watch, not a gate.** The production check (`GET https://otohime.dev/api/ask`
+  returns 200 with `"enabled":true`, and a same-origin POST returns `mode llm`
+  with sources from the index) is owned by acceptance as a watch after the
+  operator acts. It is not in any task's verification.
+- **Cost bound.** The existing limits stand: 10 model answers an hour per IP,
+  150 a day site-wide, on Haiku, with an 8 s timeout and one retry.
+
+### Verification boundaries
+
+- Tasks 1 and 2: unit tests, typecheck, lint and `ask:check`, all inside the
+  checkout.
+- Task 3: the probe builds the app, runs it with the flags set against the
+  fake server and a throwaway Postgres, drives Playwright at 1366x768 and
+  390x844, and runs two negative controls (fake server 500; flags unset).
+- Task 4: its verification re-runs the task 3 probe on the delivered sha. The
+  production state is a watch.
+
+### Not in scope
+
+- Streaming responses, a model badge, changing the offline index or its
+  rules, and the other root layouts.
+- Shader bubbles and the ink-blot wipe (still deferred).
+- Live model quality, which needs a key.
+
 ## Re-plan: run-8566 (change request on t-1512)
 
 Plan **pm-248**, product-owner run **run-8566**. Baseline for this re-plan:
