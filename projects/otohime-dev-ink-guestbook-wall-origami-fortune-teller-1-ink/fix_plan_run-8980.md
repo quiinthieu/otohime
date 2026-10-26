@@ -1,0 +1,9 @@
+# Fix plan — run-8980 / t-1612
+
+Cause: **code/delivery provenance**. The delivered commit `c0368d1` uses `otohime@users.noreply.github.com` instead of the required `quiinthieu@gmail.com`. Local API behavior passed; no runner or third-party failure was established.
+
+1. The software engineer should produce a replacement delivery commit containing the guestbook implementation with `GIT_AUTHOR_NAME=Otohime`, `GIT_AUTHOR_EMAIL=quiinthieu@gmail.com`, matching committer identity, and no Co-Authored-By trailer. Do this through ordinary new commits on main (revert/reapply if needed); do not rewrite or force-push shared history. Update `projects/otohime-dev-ink-guestbook-wall-origami-fortune-teller-1-ink/t-1612/artifacts/commits.txt:1` with the replacement full SHA and verify it with `git show -s --format=fuller` before push.
+2. Add a fail-fast author check immediately after checkout at `.github/workflows/ci.yml:68` so the pipeline rejects a guestbook delivery whose `git show -s --format='%an <%ae>' "$GITHUB_SHA"` differs from `Otohime <quiinthieu@gmail.com>`. This prevents a green pipeline for an undeployable author identity.
+3. Rerun all five build-contract verifications at the replacement SHA, push with `git push origin HEAD`, and obtain a green gate for that SHA. Let the normal main CI migration/deploy pipeline run. Verify `/api/health` names the delivery SHA or a descendant, then exercise deployed guestbook GET and a safe negative-control POST. If the pipeline fails, inspect its raw job logs and compare the last green run plus intervening CI-config git log before classifying environment.
+
+Acceptance condition: correct-author delivery, green gate at that SHA, live deployed descendant with the API path available, and independent QA of the bounded pending/approved contract. A pending CI job or the local isolated tests alone do not meet this condition.
