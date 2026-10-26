@@ -47,6 +47,9 @@ function rootFace(text: string): Face | null {
 // The site's season tints: imported by its layout beside globals.css, they re-tint the site's own paper and ink
 // under data-season. The house pin stays the root sheet's, so they are not a sister stylesheet of their own.
 const TINTS = ["app/(site)/seasons.css"];
+// The site's letterpress keys, imported beside them: they restyle the root sheet's buttons, nav items and cartridge
+// labels and declare no paper or ink (lib/letterpress.test.ts), so they are no sister stylesheet either.
+const KEYS = ["app/(site)/letterpress.css"];
 
 // The root stylesheet of every route group but this one: each top-level sheet its layout.tsx imports. A
 // feature's own sheet imported further down (the site's peeks.css) names no paper or ink of its own.
@@ -60,10 +63,12 @@ const IMPORTED = readdirSync(join(ROOT, "app"), { withFileTypes: true })
       .map((f) => `app/${e.name}/${f}`);
   })
   .sort();
-const SHEETS = IMPORTED.filter((f) => !TINTS.includes(f));
+const SHEETS = IMPORTED.filter((f) => !TINTS.includes(f) && !KEYS.includes(f));
 
 test("the season tints are imported by the site layout and re-tint only the site's own paper and ink", () => {
   for (const file of TINTS) assert.ok(IMPORTED.includes(file), `${file} is no longer imported: drop it from TINTS`);
+  for (const file of KEYS) assert.ok(IMPORTED.includes(file), `${file} is no longer imported: drop it from KEYS`);
+  for (const file of KEYS) assert.ok(!declared(css(file)).has("--paper") && !declared(css(file)).has("--ink"), `${file} declares paper or ink`);
   const site = SIBLINGS.find((s) => s.group === "site")!;
   assert.equal(site.file, "app/(site)/globals.css");
   const house = declared(css(site.file));

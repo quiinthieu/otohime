@@ -1,0 +1,137 @@
+/*
+ * Letterpress keys: buttons, nav items and cartridge labels read as impressions
+ * pressed into the paper. An inset shadow debosses each key, the letters carry a
+ * highlight and a dark edge, and a paper grain sits on the key as a background
+ * image. A press sinks the key 1px into a deeper impression (70 ms in, 120 ms
+ * out). No filter property anywhere (probe-cartridges checks the shelf for one):
+ * the grain is an SVG image, its feTurbulence drawn once by the image decoder.
+ *
+ * The grain is specks of the paper's own extreme, white on light paper and black
+ * on dark, so it only ever moves a key away from its text: ink and muted keep
+ * their 4.5:1 on every paper and season. lib/letterpress.test.ts reads this file
+ * as text and holds that, the 0.06 alpha cap on every grain, and the blocks below.
+ *
+ * The cartridge rules in globals.css are unlayered, so the label's grain needs
+ * !important to win from this layer; its press stays the cartridge's own 2px.
+ */
+@layer components {
+  :root {
+    /* Noise red channel to alpha: 0.14 r - 0.08, so a speck is at most 0.06 opaque. */
+    --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .14 0 0 0 -.08'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .14 0 0 0 -.08'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    --grain: var(--grain-light);
+    --deboss:
+      inset 0 1px 2px light-dark(rgb(35 30 22 / 0.18), rgb(0 0 0 / 0.55)),
+      inset 0 -1px 0 light-dark(rgb(255 255 255 / 0.55), rgb(235 230 218 / 0.06));
+    --deboss-deep:
+      inset 0 2px 4px light-dark(rgb(35 30 22 / 0.32), rgb(0 0 0 / 0.75)),
+      inset 0 -1px 0 light-dark(rgb(255 255 255 / 0.4), rgb(235 230 218 / 0.04));
+    /* Letters on paper: a highlight under each stroke, a dark edge over it. */
+    --letter-edge:
+      0 1px 0 light-dark(rgb(255 255 255 / 0.5), rgb(0 0 0 / 0.5)),
+      0 -1px 0 light-dark(rgb(35 30 22 / 0.08), rgb(0 0 0 / 0.35));
+    /* Letters on an ink-filled key: only the edge over each stroke, so they stay sharp. */
+    --letter-edge-inked: 0 -1px 0 light-dark(rgb(0 0 0 / 0.3), rgb(255 255 255 / 0.3));
+  }
+
+  /* The theme toggle pins a scheme over the OS's; the grain follows whichever wins. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --grain: var(--grain-dark);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --grain: var(--grain-dark);
+  }
+
+  /* Every rule in globals.css that sets a key's background shorthand, so none of them drops the grain. */
+  .btn,
+  .btn:hover:not(:disabled, [aria-disabled="true"]),
+  .btn-primary:hover:not(:disabled),
+  .nav-item,
+  .nav-item:hover,
+  .nav-item[aria-current="page"] {
+    background-image: var(--grain);
+  }
+
+  .btn,
+  .nav-item {
+    box-shadow: var(--deboss);
+    text-shadow: var(--letter-edge);
+    translate: 0 0;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      translate 120ms ease-out,
+      box-shadow 120ms ease-out;
+  }
+
+  .btn-primary,
+  .btn:hover:not(:disabled, [aria-disabled="true"]),
+  .nav-item[aria-current="page"] {
+    text-shadow: var(--letter-edge-inked);
+  }
+
+  /* Coral in both schemes with dark letters, like a cartridge label: the light grain lifts it. */
+  .btn-danger,
+  .btn-danger:hover:not(:disabled, [aria-disabled="true"]) {
+    background-image: var(--grain-light);
+  }
+
+  .btn:active:not(:disabled, [aria-disabled="true"]),
+  .nav-item:active {
+    translate: 0 1px;
+    box-shadow: var(--deboss-deep);
+    transition-duration: 0.15s, 0.15s, 70ms, 70ms;
+  }
+
+  /* Swatch labels in both schemes, dark letters, so always the light grain. */
+  .cartridge-label {
+    background-image: var(--grain-light) !important;
+    box-shadow: var(--deboss);
+    text-shadow: 0 1px 0 rgb(255 255 255 / 0.35);
+    transition: box-shadow 120ms ease-out;
+  }
+
+  .cartridge:has(.project-title:active) .cartridge-label {
+    box-shadow: var(--deboss-deep);
+    transition-duration: 70ms;
+  }
+
+  /* Reduced motion: the key stays put and its impression changes at once; the deeper shadow still marks the press. */
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .nav-item {
+      transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .btn:active:not(:disabled, [aria-disabled="true"]),
+    .nav-item:active {
+      translate: none;
+    }
+
+    .cartridge-label {
+      transition: none;
+    }
+  }
+
+  /* Forced colours: no shadows or grain, only the system's borders and text. */
+  @media (forced-colors: active) {
+    .btn,
+    .btn:hover:not(:disabled, [aria-disabled="true"]),
+    .btn:active:not(:disabled, [aria-disabled="true"]),
+    .nav-item,
+    .nav-item:hover,
+    .nav-item:active,
+    .nav-item[aria-current="page"],
+    .cartridge-label,
+    .cartridge:has(.project-title:active) .cartridge-label {
+      box-shadow: none;
+      text-shadow: none;
+      background-image: none !important;
+    }
+  }
+}

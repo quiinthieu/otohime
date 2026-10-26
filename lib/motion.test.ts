@@ -22,8 +22,9 @@ const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
 const PROJECTS = GROUPS.filter((g) => g !== "site");
 
 // Sheets a root layout imports beside its root stylesheet, named here so no other second import slips in. The
-// site's season tints (lib/seasons.ts picks the season) hold only rules keyed on data-season, and keyframes.
-const TINTS: Record<string, readonly string[]> = { site: ["seasons.css"] };
+// site's season tints (lib/seasons.ts picks the season) hold only rules keyed on data-season, and keyframes; its
+// letterpress keys (lib/letterpress.test.ts) only restyle the root sheet's buttons, nav items and labels.
+const TINTS: Record<string, readonly string[]> = { site: ["seasons.css", "letterpress.css"] };
 
 // The .css files a layout imports from its own folder, in order.
 const cssImports = (src: string) => [...src.matchAll(/^import "\.\/([\w.-]+\.css)";/gm)].map((m) => m[1]);
@@ -241,7 +242,8 @@ test("an unknown address gets app/global-not-found.tsx, drawn on the server with
 
 test("the site layout loads the season tints after its root sheet, and only the site does", () => {
   // Every tint rule outranks the :root it overrides on specificity; loading after globals.css keeps it so on order too.
-  assert.deepEqual(cssImports(readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8")), ["globals.css", "seasons.css"]);
+  // The letterpress keys share globals.css's components layer and win its key rules on order, so they load last.
+  assert.deepEqual(cssImports(readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8")), ["globals.css", "seasons.css", "letterpress.css"]);
   for (const group of PROJECTS) assert.equal(TINTS[group], undefined, group);
   const page = readFileSync(join(ROOT, "app/global-not-found.tsx"), "utf8");
   assert.ok(page.indexOf('import "./(site)/globals.css";') < page.indexOf('import "./(site)/seasons.css";'), "the 404 loads the tints after globals.css");

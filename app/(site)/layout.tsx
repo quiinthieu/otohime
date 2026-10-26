@@ -5,6 +5,7 @@ import { bootScript } from "@/lib/boot";
 import { seasonScript } from "@/lib/seasons";
 import "./globals.css";
 import "./seasons.css";
+import "./letterpress.css";
 
 export const metadata: Metadata = {
   // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
