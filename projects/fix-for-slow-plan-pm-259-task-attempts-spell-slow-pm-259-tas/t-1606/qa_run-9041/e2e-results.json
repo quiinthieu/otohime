@@ -1,0 +1,57 @@
+{
+  "source_sha": "ab348743f001460a066f5233c4d99f95af8b15ba",
+  "command": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
+  "exit_code": 0,
+  "full_build_each_iteration": true,
+  "results": [
+    {
+      "iteration": 1,
+      "sha256": "0444d5c700260de37bf22aaf180e4e1ef4449a7601e5b51ce5d354be2fa907c8",
+      "counts": {
+        "tests": 139,
+        "pass": 138,
+        "fail": 0,
+        "skipped": 1
+      },
+      "desk_controls": [
+        "ok 7 - on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds",
+        "ok 8 - a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk"
+      ],
+      "not_ok": [],
+      "stored_sha256": "0de7b01b6596084439a5da9c75d088fe52990eda6fdceb759f64c9d343dc1d8d"
+    },
+    {
+      "iteration": 2,
+      "sha256": "93ee7b0cc06e61527878b2ea2255c252a4ef1da253f69ac30a08b22eccbba8d0",
+      "counts": {
+        "tests": 139,
+        "pass": 138,
+        "fail": 0,
+        "skipped": 1
+      },
+      "desk_controls": [
+        "ok 7 - on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds",
+        "ok 8 - a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk"
+      ],
+      "not_ok": [],
+      "stored_sha256": "8aedb90774652767417e131617a2ad0172657493818968f69a556a4ac6df3be9"
+    },
+    {
+      "iteration": 3,
+      "sha256": "fdbf7095f548c544fbe8f134661153d9e9634db71fd90a1d61438229f0a0a437",
+      "counts": {
+        "tests": 139,
+        "pass": 138,
+        "fail": 0,
+        "skipped": 1
+      },
+      "desk_controls": [
+        "ok 7 - on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds",
+        "ok 8 - a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk"
+      ],
+      "not_ok": [],
+      "stored_sha256": "6ac7cd0b540dfc7f0663fe4fcdc67ebc38162d9b99785a493bb7674835fba4c6"
+    }
+  ],
+  "stored_log_normalization": "Trailing line whitespace and terminal carriage returns removed; sha256 in each result identifies the original complete stdout/stderr file."
+}

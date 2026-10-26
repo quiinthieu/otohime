@@ -1,0 +1,39 @@
+{
+  "observed_at": "2026-10-26T16:02:13.905943+00:00",
+  "final_api_read": {
+    "run": 40352230491,
+    "status": 403,
+    "reason": "rate limit exceeded"
+  },
+  "last_available_ci_snapshot": "current-at-two-suites.json",
+  "health": {
+    "ok": true,
+    "sha": "074059495faf4bee48e8f655584dfd4487089b41"
+  },
+  "desk_build_meta": "074059495faf4bee48e8f655584dfd4487089b41",
+  "ancestry": {
+    "3ae76a4": 1,
+    "0b349dc": 0,
+    "9ddd084": 0
+  },
+  "public_html_snippets": [
+    "    <span data-favicon-override=\"https://github.githubassets.com/favicons/favicon-failure.svg\"></span>",
+    "    <svg data-component=\"Octicon\" width=\"22\" height=\"22\" class=\"octicon octicon-x-circle-fill color-fg-danger\" aria-label=\"failed: \" viewBox=\"0 0 16 16\" version=\"1.1\" role=\"img\"><path d=\"M2.343 13.657A8 8 0 1 1 13.658 2.343 8 8 0 0 1",
+    "    <svg data-component=\"Octicon\" width=\"16\" height=\"16\" class=\"octicon octicon-x-circle-fill color-fg-danger\" aria-label=\"failed: \" viewBox=\"0 0 16 16\" version=\"1.1\" role=\"img\"><path d=\"M2.343 13.657A8 8 0 1 1 13.658 2.343 8 8 0 0 1",
+    "<svg data-component=\"Octicon\" width=\"16\" height=\"16\" style=\"height: 30px;\" class=\"octicon octicon-x-circle-fill color-fg-danger\" aria-label=\"failed: \" viewBox=\"0 0 16 16\" version=\"1.1\" role=\"img\"><path d=\"M2.343 13.657A8 8 0 1 1 13.658 2.343 8 8 0 0 1",
+    "        <span class=\"h4 color-fg-default\">Failure</span>",
+    "    <svg data-component=\"Octicon\" width=\"16\" height=\"16\" class=\"octicon octicon-x-circle-fill color-fg-danger\" aria-label=\"failed: \" viewBox=\"0 0 16 16\" version=\"1.1\" role=\"img\"><path d=\"M2.343 13.657A8 8 0 1 1 13.658 2.343 8 8 0 0 1",
+    "                    <div><svg data-component=\"Octicon\" class=\"octicon octicon-x-circle-fill mr-2 color-fg-danger\" viewBox=\"0 0 16 16\" version=\"1.1\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"M2.343 13.657A8 8 0 1 1 13.658 2"
+  ],
+  "public_html_verification": {
+    "run_url": "https://github.com/quiinthieu/otohime/actions/runs/40352230491",
+    "job_url": "https://github.com/quiinthieu/otohime/actions/runs/40352230491/job/121675094950",
+    "workflow_status": "Failure",
+    "checks_job_status": "failed",
+    "failed_step": "Footer Chromium probe",
+    "annotation": "Process completed with exit code 1.",
+    "run_page_sha256": "f91b72613ba73f7ac5059bac672eb63e09fd1c57289d31be69b42900dce8deb2",
+    "job_page_sha256": "cecdce562798762c2c46bc330e8dc79ecf543089a6bec29dbb4da1c5d39f67d2",
+    "raw_logs_read": false
+  }
+}

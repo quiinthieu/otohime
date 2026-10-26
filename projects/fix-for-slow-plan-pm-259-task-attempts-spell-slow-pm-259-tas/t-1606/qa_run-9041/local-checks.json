@@ -1,0 +1,56 @@
+{
+  "trace": {
+    "sha256": "3bed2317910210262576f0923d61e9d895e2b7f461fc46af4d804a3b1fb9388a",
+    "lines": 40,
+    "not_ok_lines": [],
+    "tap_totals": [
+      "# tests 5",
+      "# pass 5",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0"
+    ]
+  },
+  "lint": {
+    "sha256": "01796243f62f9c2be1b65345959b82f6310075f36b5bd4f5eda918d7f28cff8d",
+    "lines": 38,
+    "not_ok_lines": [],
+    "tap_totals": []
+  },
+  "types": {
+    "sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326",
+    "lines": 6,
+    "not_ok_lines": [],
+    "tap_totals": []
+  },
+  "unit": {
+    "sha256": "580cb7c299d74d695ac1db6e498c3ca2a8453e78fa8786a2bb679ac022c256b1",
+    "lines": 13958,
+    "not_ok_lines": [],
+    "tap_totals": [
+      "# tests 2321",
+      "# pass 2321",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0"
+    ]
+  },
+  "unit-ci": {
+    "sha256": "73a9e0e77163baa3dee81ad0807bc3a1335c163ad8ec24e7c0da9796a851325f",
+    "lines": 13958,
+    "not_ok_lines": [],
+    "tap_totals": [
+      "# tests 2321",
+      "# pass 2321",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0"
+    ]
+  },
+  "ask-check": {
+    "sha256": "913bcfcffa9ebceb3a0fdd6b16119e1561a0540d85aa2f2065549fc54c8ce2dc",
+    "lines": 7,
+    "not_ok_lines": [],
+    "tap_totals": []
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "base": "http://localhost:4027",
+  "source_sha": "ab348743f001460a066f5233c4d99f95af8b15ba",
+  "browser": "154.0.8037.57",
+  "defective_lines": [
+    "scripts/probe-end.mjs:503",
+    "scripts/probe-end.mjs:1881"
+  ],
+  "results": [
+    {
+      "javaScriptEnabled": true,
+      "expected": "You've reached the end of the internet.",
+      "rawTitle": "You've reached the end of the internet.You've reached the end of the internet.",
+      "plainTitle": "You've reached the end of the internet.",
+      "build": "dev",
+      "exactProbeTitleEqualityWouldPass": false
+    },
+    {
+      "javaScriptEnabled": false,
+      "expected": "You've reached the end of the internet.",
+      "rawTitle": "You've reached the end of the internet.You've reached the end of the internet.",
+      "plainTitle": "You've reached the end of the internet.",
+      "build": "dev",
+      "exactProbeTitleEqualityWouldPass": false
+    }
+  ]
+}

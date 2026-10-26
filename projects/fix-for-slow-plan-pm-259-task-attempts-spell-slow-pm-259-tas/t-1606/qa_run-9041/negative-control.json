@@ -1,0 +1,16 @@
+{
+  "base_url": "https://otohime.dev",
+  "production_sha": "074059495faf4bee48e8f655584dfd4487089b41",
+  "source": "e2e/desk.test.ts on ab34874 (unchanged since 0b349dc)",
+  "temporary_copy": "/tmp/pm270-negative-desk.test.ts",
+  "mutation": "tablet swipe: drags false -> true (single occurrence); import paths made absolute for /tmp execution",
+  "command": "TMPDIR=/tmp BASE_URL=https://otohime.dev node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-name-pattern='a narrow window' /tmp/pm270-negative-desk.test.ts",
+  "expected_exit": 1,
+  "actual_exit": 1,
+  "observed_assertion": "music is dragging after the first move past 6px",
+  "trace": [
+    "+0ms pointerdown touch#2 (892.8,218.4) span.desk-tape",
+    "+29ms pointermove touch#2 (904.8,218.4) span.desk-tape"
+  ],
+  "boundaries": "real production Chrome/CDP; intentionally incorrect tablet expectation, no fake runtime or application mutation"
+}

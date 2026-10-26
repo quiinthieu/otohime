@@ -1,0 +1,123 @@
+{
+  "observed_at": "2026-10-26T15:49:50.900537+00:00",
+  "sha": "074059495faf4bee48e8f655584dfd4487089b41",
+  "html_sha256": "a8104ba1653fc09f912618e0d6f76d4f00bc04fac43d3901c4e48b44be75ceee",
+  "assets": [
+    {
+      "path": "/_next/static/chunks/0_4x0bxtt3m90.js",
+      "sha256": "53f2648ee2450bb47746b0b9e32ea2f70fd4c6916e413f55c9e6f0cb6f65078b",
+      "bytes": 21669
+    },
+    {
+      "path": "/_next/static/chunks/0cz1d0mv5g_q7.js",
+      "sha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683",
+      "bytes": 112594
+    },
+    {
+      "path": "/_next/static/chunks/0m4f_4b_8-sov.css",
+      "sha256": "32ba23e787b87e07312aa421370a62bfd9ba30f9158444da2f303f8f36493ca2",
+      "bytes": 58411
+    },
+    {
+      "path": "/_next/static/chunks/0om590q-tq0l9.js",
+      "sha256": "469b414134e038936d5dea6660fb6b6c2e2ef033d685c1ad30b07803323c7ba3",
+      "bytes": 13492
+    },
+    {
+      "path": "/_next/static/chunks/0uc25mtqppg3i.js",
+      "sha256": "cba6ebe0fbab58bc148feb69840291eabf93b441a7c6089335f55f0a1d449180",
+      "bytes": 8587
+    },
+    {
+      "path": "/_next/static/chunks/108fa2vkx_qrg.css",
+      "sha256": "955be972fea5ba28bbda7438b13a92df0d95a0d4c1189acd7e44a7ec0ce18d6f",
+      "bytes": 5049
+    },
+    {
+      "path": "/_next/static/chunks/1giznluvgo9kn.js",
+      "sha256": "e6fca112179d6d3de1e5e7beca37d0d8c6bdc1fdc0874b40f031a762dcbd6a25",
+      "bytes": 13060
+    },
+    {
+      "path": "/_next/static/chunks/1s37vwjm584j-.js",
+      "sha256": "8fad0bc9f7b40a5b079b47f4e04c98c392e486bebed240b2517b1ca243b240fe",
+      "bytes": 229627
+    },
+    {
+      "path": "/_next/static/chunks/1ucjpr6xais41.js",
+      "sha256": "1b26c0975afe804f386782ebb3411f7039561066bdbc1a2c5d077c63bedec539",
+      "bytes": 30243
+    },
+    {
+      "path": "/_next/static/chunks/2_3bvgus55psa.js",
+      "sha256": "26249c07c1d9800e7a859b2296f038b41a494014bf05df7c0001fd786c5c87c9",
+      "bytes": 502494
+    },
+    {
+      "path": "/_next/static/chunks/2hoi73vy1wqpo.js",
+      "sha256": "a070e193cc6aa2af93f87b93c668ae7fa6039f396007a82104ba7b228d7850ac",
+      "bytes": 27819
+    },
+    {
+      "path": "/_next/static/chunks/2kymltn7pgfpi.css",
+      "sha256": "77257eff4ce03111f16490f2502d328bc7132539b434324e739b716c71d4da92",
+      "bytes": 4962
+    },
+    {
+      "path": "/_next/static/chunks/2p84ae7nhnlp2.js",
+      "sha256": "d63f493b0d167e11a6ab9b6d4f65d00009e968a5240d9c303fddac350e61925d",
+      "bytes": 37672
+    },
+    {
+      "path": "/_next/static/chunks/2vg9178xebqwz.css",
+      "sha256": "93f2dc1e88a166cf22a5671f7db3f308a84eeceade6e630b9504436dd114e107",
+      "bytes": 2490
+    },
+    {
+      "path": "/_next/static/chunks/2y_wjjnipg5nm.js",
+      "sha256": "9ecd5659c3ba5b7b0ac3a02250a2a43b2ae3cf9b70bdfc3b7904dad5aa006ea5",
+      "bytes": 31177
+    },
+    {
+      "path": "/_next/static/chunks/30pqe4rv77bcv.css",
+      "sha256": "c6a77cca8569ff581792b95c4e63ad512f3ff06428434e6254ef56c190cdb6cd",
+      "bytes": 3214
+    },
+    {
+      "path": "/_next/static/chunks/31_6w8v5d7luy.css",
+      "sha256": "c602b374a4ab0170b9f20d3ad48b13fc51a7631515f2b2dbc2da9c3ac2f07b02",
+      "bytes": 1407
+    },
+    {
+      "path": "/_next/static/chunks/39cih7-953ype.js",
+      "sha256": "526f3058e65de3cf2a6c6c8197a7cd4806cf46ec91f24fc3c5dccca8e9301660",
+      "bytes": 33176
+    },
+    {
+      "path": "/_next/static/chunks/3_ovxg0a_m274.js",
+      "sha256": "93b42979da6c9bd05e5787916ac272f34a59879b2971543891328937f63362e1",
+      "bytes": 14089
+    },
+    {
+      "path": "/_next/static/chunks/3d24crz03vqm6.js",
+      "sha256": "3b366fe3bb4d4ad3f2fc9efc5c0ee18bf6dc1b6529f806f0924ebee7e11d8fbd",
+      "bytes": 11778
+    },
+    {
+      "path": "/_next/static/chunks/3dz7s82h34ptz.js",
+      "sha256": "e49b20ed5f11e1601164f2dbc2a3f55c096eb41cdb233ffa42406751b08d3daa",
+      "bytes": 131399
+    },
+    {
+      "path": "/_next/static/chunks/3ynqz-fhc410u.js",
+      "sha256": "6182e42d8be51dfc48d481d075f05f48f606475096812418959b17a562f1a523",
+      "bytes": 32881
+    },
+    {
+      "path": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+      "sha256": "b5f9b5199b99ab6c141f4540f0b7d0fe803c4ecf6956849ecb6e59d3d439272e",
+      "bytes": 11255
+    }
+  ],
+  "scope": "JS scripts and CSS links in initial desk HTML only; no lazy chunks or cross-page assets"
+}

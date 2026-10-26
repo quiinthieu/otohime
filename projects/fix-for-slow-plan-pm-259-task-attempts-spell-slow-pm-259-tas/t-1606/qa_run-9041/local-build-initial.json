@@ -1,0 +1,14 @@
+{
+  ".next/BUILD_ID": {
+    "sha256": "036d1f82507839296ab398a1ea0351c0d1242675ab085e540708cc0a5e02b094",
+    "build_id": "-Ifctzm_Vi3zkkC3T-hyB"
+  },
+  ".next/build-manifest.json": {
+    "sha256": "84f7abf87e7ac68edcfa2433a210af1c0f5e52b75b8c775cfcfbf7e226899881",
+    "build_id": null
+  },
+  ".next/server/app-paths-manifest.json": {
+    "sha256": "2d5a26196c18c29493f8cb3f07f97ee4bf5863166a1656ff5abc36d670b6ef31",
+    "build_id": null
+  }
+}

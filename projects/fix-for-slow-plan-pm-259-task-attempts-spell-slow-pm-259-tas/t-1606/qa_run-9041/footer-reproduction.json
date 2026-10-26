@@ -1,0 +1,9 @@
+{
+  "base": "http://localhost:4027",
+  "oldAssertionText": "You&#x27;ve reached the end of the internet.You&#x27;ve reached the end of the internet.",
+  "plainSource": "You&#x27;ve reached the end of the internet.",
+  "oldCheckFails": true,
+  "fixedWalk": "65 pass 0 fail",
+  "source_sha": "ab348743f001460a066f5233c4d99f95af8b15ba",
+  "served_build_meta": "dev"
+}

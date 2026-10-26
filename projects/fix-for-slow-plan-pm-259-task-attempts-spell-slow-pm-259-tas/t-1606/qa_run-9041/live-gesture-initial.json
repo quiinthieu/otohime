@@ -1,0 +1,42 @@
+{
+  "base": "https://otohime.dev",
+  "browser": "154.0.8037.57",
+  "results": [
+    {
+      "tablet": false,
+      "sha": "074059495faf4bee48e8f655584dfd4487089b41",
+      "width": 960,
+      "start": 0.3,
+      "final": "42.5%",
+      "trace": "+0ms pointerdown touch#2 (603.4,601.7) span.desk-tape\n+23ms pointermove touch#2 (615.4,601.7) span.desk-tape\n+78ms pointermove touch#2 (627.4,601.7) li.desk-item desk-cassette dragging\n+105ms pointermove touch#2 (639.4,601.7) li.desk-item desk-cassette dragging\n+123ms pointermove touch#2 (651.4,601.7) li.desk-item desk-cassette dragging\n+140ms pointermove touch#2 (663.4,601.7) li.desk-item desk-cassette dragging\n+156ms pointermove touch#2 (675.4,601.7) li.desk-item desk-cassette dragging\n+173ms pointermove touch#2 (687.4,601.7) li.desk-item desk-cassette dragging\n+190ms pointermove touch#2 (699.4,601.7) li.desk-item desk-cassette dragging\n+207ms pointermove touch#2 (711.4,601.7) li.desk-item desk-cassette dragging\n+223ms pointermove touch#2 (723.4,601.7) li.desk-item desk-cassette dragging\n+240ms pointerup touch#2 (723.4,601.7) li.desk-item desk-cassette dragging",
+      "negativeControl": null
+    },
+    {
+      "tablet": false,
+      "sha": "074059495faf4bee48e8f655584dfd4487089b41",
+      "width": 960,
+      "start": 0.3,
+      "final": "42.5%",
+      "trace": "+0ms pointerdown touch#2 (603.4,601.7) span.desk-tape\n+9ms pointermove touch#2 (615.4,601.7) span.desk-tape\n+46ms pointermove touch#2 (627.4,601.7) li.desk-item desk-cassette dragging\n+74ms pointermove touch#2 (639.4,601.7) li.desk-item desk-cassette dragging\n+92ms pointermove touch#2 (651.4,601.7) li.desk-item desk-cassette dragging\n+109ms pointermove touch#2 (663.4,601.7) li.desk-item desk-cassette dragging\n+126ms pointermove touch#2 (675.4,601.7) li.desk-item desk-cassette dragging\n+142ms pointermove touch#2 (687.4,601.7) li.desk-item desk-cassette dragging\n+159ms pointermove touch#2 (699.4,601.7) li.desk-item desk-cassette dragging\n+177ms pointermove touch#2 (711.4,601.7) li.desk-item desk-cassette dragging\n+193ms pointermove touch#2 (723.4,601.7) li.desk-item desk-cassette dragging\n+209ms pointerup touch#2 (723.4,601.7) li.desk-item desk-cassette dragging",
+      "negativeControl": null
+    },
+    {
+      "tablet": false,
+      "sha": "074059495faf4bee48e8f655584dfd4487089b41",
+      "width": 960,
+      "start": 0.3,
+      "final": "42.5%",
+      "trace": "+0ms pointerdown touch#2 (603.4,601.7) span.desk-tape\n+22ms pointermove touch#2 (615.4,601.7) span.desk-tape\n+60ms pointermove touch#2 (627.4,601.7) li.desk-item desk-cassette dragging\n+89ms pointermove touch#2 (639.4,601.7) li.desk-item desk-cassette dragging\n+104ms pointermove touch#2 (651.4,601.7) li.desk-item desk-cassette dragging\n+125ms pointermove touch#2 (663.4,601.7) li.desk-item desk-cassette dragging\n+137ms pointermove touch#2 (675.4,601.7) li.desk-item desk-cassette dragging\n+154ms pointermove touch#2 (687.4,601.7) li.desk-item desk-cassette dragging\n+178ms pointermove touch#2 (699.4,601.7) li.desk-item desk-cassette dragging\n+194ms pointermove touch#2 (711.4,601.7) li.desk-item desk-cassette dragging\n+211ms pointermove touch#2 (723.4,601.7) li.desk-item desk-cassette dragging\n+224ms pointerup touch#2 (723.4,601.7) li.desk-item desk-cassette dragging",
+      "negativeControl": null
+    },
+    {
+      "tablet": true,
+      "sha": "074059495faf4bee48e8f655584dfd4487089b41",
+      "width": 740,
+      "start": 0.3,
+      "final": "30%",
+      "trace": "+0ms pointerdown touch#2 (892.8,218.4) span.desk-tape\n+18ms pointermove touch#2 (904.8,218.4) span.desk-tape\n+752ms pointermove touch#2 (916.8,218.4) span.desk-tape\n+782ms pointercancel touch#2 (0,0) span.desk-tape",
+      "negativeControl": "+0ms pointerdown touch#2 (892.8,218.4) span.desk-tape\n+18ms pointermove touch#2 (904.8,218.4) span.desk-tape"
+    }
+  ]
+}

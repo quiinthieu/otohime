@@ -1,0 +1,94 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index fb4b7cd..802ee58 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -3,0 +4,2 @@ on:
++  # Recover a replaced pending main run without another code or report-only push.
++  workflow_dispatch:
+@@ -14,11 +16,2 @@ on:
+-# PRs: a new push cancels the stale run. main: runs queue in order and are
+-# never cancelled mid-flight, so an older commit can't deploy after a newer one.
+-# GitHub keeps at most one pending run per group: a newer push replaces the
+-# pending one (cancelled before it starts, no jobs), so main deploys the newest
+-# commit that reaches the front, not every commit. `queue: max` is rejected: at
+-# ~12 pushes/hour against ~11-minute checks it grows an unbounded backlog of
+-# stale shas. The live sha lags main by report commits that never run, so QA
+-# judges delivery by `git merge-base --is-ancestor <delivery> <live sha>`.
+-concurrency:
+-  group: ci-${{ github.event.pull_request.number || github.ref }}
+-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
++# Concurrency belongs to jobs: a shared main workflow group can replace a
++# pending run before checks even start, including with cancel-in-progress:false.
+@@ -40,0 +34,5 @@ jobs:
++    # PR updates replace stale checks; main pushes and manual recovery each keep
++    # their own checks, independently of the serialized production queue.
++    concurrency:
++      group: ci-checks-${{ github.event.pull_request.number || github.run_id }}
++      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+@@ -43,2 +41,7 @@ jobs:
+-    # Allow cold Playwright/Chromium setup plus every browser gate; the 20-minute budget cancelled run 40307460821.
+-    timeout-minutes: 35
++    # A green job takes 10-11 min (research_run-8877: E2E 230-300 s, signed-in motion probe 171-180 s, footer
++    # probe 55 s, the rest npm ci, lint, typecheck, tests and build). Run 40307460821 hit the old 20 min only
++    # because the motion probe spent 14 min in its network installers (npm i playwright, playwright install
++    # --with-deps); the probes now drive the runner's Chrome with the locked playwright-core and install
++    # nothing in CI, so 20 min is about 9 min of headroom. Each browser probe step also has its own 8-minute
++    # bound, so a stall fails that step by name instead of cancelling the whole job.
++    timeout-minutes: 20
+@@ -63,0 +67,22 @@ jobs:
++        with:
++          # Inspect every commit in a push, including a code commit followed by a report commit.
++          fetch-depth: 0
++      - name: Check guestbook delivery author
++        if: github.event_name == 'push'
++        env:
++          PUSH_BEFORE: ${{ github.event.before }}
++        run: |
++          if [[ "$PUSH_BEFORE" =~ ^0+$ ]]; then
++            commits="$GITHUB_SHA"
++          else
++            commits="$(git rev-list "$PUSH_BEFORE..$GITHUB_SHA")"
++          fi
++          for commit in $commits; do
++            if git diff-tree --no-commit-id --name-only -r "$commit" | grep -Eq '^(app/api/guestbook/|lib/guestbook[^/]*|e2e/guestbook-api\.test\.ts$)'; then
++              author="$(git show -s --format='%an <%ae>' "$commit")"
++              if [ "$author" != 'Otohime <quiinthieu@gmail.com>' ]; then
++                echo "Guestbook delivery $commit has an undeployable author: $author" >&2
++                exit 1
++              fi
++            fi
++          done
+@@ -77 +102,10 @@ jobs:
+-      - run: npm test
++      # The job log needs a token to read: on a red run each failed unit test also becomes an annotation and a step
++      # summary section (scripts/tap-annotate.mjs, from the TAP kept here). pipefail keeps npm test's own status.
++      - name: npm test
++        id: unit
++        run: |
++          set -o pipefail
++          npm test 2>&1 | tee "$RUNNER_TEMP/npm-test.tap"
++      - name: Annotate failed unit tests
++        if: failure() && steps.unit.outcome == 'failure'
++        run: node scripts/tap-annotate.mjs "$RUNNER_TEMP/npm-test.tap"
+@@ -117,0 +152 @@ jobs:
++        timeout-minutes: 8
+@@ -125,0 +161 @@ jobs:
++        timeout-minutes: 8
+@@ -132,0 +169 @@ jobs:
++        timeout-minutes: 8
+@@ -141,0 +179,3 @@ jobs:
++    concurrency:
++      group: ci-preview-${{ github.event.pull_request.number }}
++      cancel-in-progress: true
+@@ -208 +248,7 @@ jobs:
+-    if: github.event_name == 'push'
++    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
++    # Only deploys share a slot. A newer pending deploy can replace an older
++    # pending one; running deploys finish. QA proves delivery by live ancestry,
++    # never by the existence of a queued job or an assumption of commit order.
++    concurrency:
++      group: otohime-production-main
++      cancel-in-progress: false
+@@ -237,0 +284,2 @@ jobs:
++        # Upload 5 + ready 7 is the deploy's own budget; the job's 18 also covers the verify step below.
++        timeout-minutes: 12
