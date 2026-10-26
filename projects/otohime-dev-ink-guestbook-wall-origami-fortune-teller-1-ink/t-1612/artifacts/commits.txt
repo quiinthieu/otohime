@@ -1,1 +1,1 @@
-<run-8970> pm-273/t-1612: Persist moderated guestbook vectors behind bounded API (delivery SHA in run report)
+658f6fc9fe5b1211413fd30ea8331ee77df00fb1 pm-273/t-1612: Guard guestbook delivery provenance (run-8988 replacement delivery)
