@@ -1,0 +1,68 @@
+ok - / returns 200
+ok - / build-sha
+not ok - / has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: + actual - expected  + "You've reached the end of the internet.You've reached the end of the internet." - "You've reached the end of the internet."      at fi
+ok - /work returns 200
+ok - /work build-sha
+not ok - /work has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: + actual - expected  + "You've reached the end of the internet.You've reached the end of the internet." - "You've reached the end of the internet."      at fi
+ok - /play returns 200
+ok - /play build-sha
+not ok - /play has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: + actual - expected  + "You've reached the end of the internet.You've reached the end of the internet." - "You've reached the end of the internet."      at fi
+ok - /notes returns 200
+ok - /notes build-sha
+not ok - /notes has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: + actual - expected  + "You've reached the end of the internet.You've reached the end of the internet." - "You've reached the end of the internet."      at fi
+ok - /music returns 200
+ok - /music build-sha
+not ok - /music has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: + actual - expected  + "You've reached the end of the internet.You've reached the end of the internet." - "You've reached the end of the internet."      at fi
+ok - /projects returns 200
+ok - /projects build-sha
+not ok - /projects has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: + actual - expected  + "You've reached the end of the internet.You've reached the end of the internet." - "You've reached the end of the internet."      at fi
+ok - /sketches returns 200
+ok - /sketches build-sha
+not ok - /sketches has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: + actual - expected  + "You've reached the end of the internet.You've reached the end of the internet." - "You've reached the end of the internet."      at fi
+ok - /sign-in returns 200
+ok - /sign-in build-sha
+ok - /sign-in has no <footer>
+ok - /sign-in has no site footer stage
+ok - /forgot-password returns 200
+ok - /forgot-password has no <footer>
+ok - /forgot-password has no site footer stage
+ok - /does-not-exist returns 404
+ok - /does-not-exist shows the lost sheet 404
+ok - /does-not-exist has no <footer>
+ok - /does-not-exist has no site footer stage
+ok - /shore returns 200
+ok - /shore build-sha
+ok - /shore stays isolated from the site footer
+ok - /capsule returns 200
+ok - /capsule build-sha
+ok - /capsule stays isolated from the site footer
+ok - /orrery returns 200
+ok - /orrery build-sha
+ok - /orrery stays isolated from the site footer
+ok - /elements returns 200
+ok - /elements build-sha
+ok - /elements stays isolated from the site footer
+ok - /vinyl returns 200
+ok - /vinyl build-sha
+ok - /vinyl stays isolated from the site footer
+ok - /rotor returns 200
+ok - /rotor build-sha
+ok - /rotor stays isolated from the site footer
+ok - /planisphere returns 200
+ok - /planisphere build-sha
+ok - /planisphere stays isolated from the site footer
+ok - /barometer returns 200
+ok - /barometer build-sha
+ok - /barometer stays isolated from the site footer
+ok - /articles returns 200
+ok - /articles build-sha
+ok - /articles stays isolated from the site footer
+ok - /structures returns 200
+ok - /structures build-sha
+ok - /structures stays isolated from the site footer
+ok - /design-system returns 200
+ok - /design-system build-sha
+ok - /design-system stays isolated from the site footer
+ok - local server logged no runtime errors
+ok - no server left on port 4081
+walk: 60 ok, 7 failed

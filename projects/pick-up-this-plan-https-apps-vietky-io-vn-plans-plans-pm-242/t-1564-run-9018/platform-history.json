@@ -1,0 +1,922 @@
+{
+  "history": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "total": 1124,
+      "read": 25,
+      "tasks": [
+        {
+          "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+          "status": "FAILED",
+          "plan_id": "pm-277",
+          "run_id": "run-9019",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+          "status": "FAILED",
+          "plan_id": "pm-259",
+          "run_id": "run-8968",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0e2bbe863f6e is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+          "status": "FAILED",
+          "plan_id": "pm-268",
+          "run_id": "run-8934",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+          "status": "FAILED",
+          "plan_id": "pm-270",
+          "run_id": "run-8895",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+          "status": "FAILED",
+          "plan_id": "pm-264",
+          "run_id": "run-8856",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+          "status": "FAILED",
+          "plan_id": "pm-259",
+          "run_id": "run-8848",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+          "status": "FAILED",
+          "plan_id": "pm-256",
+          "run_id": "run-8828",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+          "status": "FAILED",
+          "plan_id": "pm-264",
+          "run_id": "run-8819",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 85b0eb1ae9c6 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0d081765-06f9-4a1e-9de4-28107aa0608b",
+          "status": "FAILED",
+          "plan_id": "pm-258",
+          "run_id": "run-8808",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f697e2c2aaba is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+          "status": "FAILED",
+          "plan_id": "pm-259",
+          "run_id": "run-8793",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ab0601c1-0d1a-4e67-9dcd-6f56661aff53",
+          "status": "FAILED",
+          "plan_id": "pm-259",
+          "run_id": "run-8788",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3b989de4-9c35-45f7-94cd-0fd264cf3a81",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "66ea35bc-4dda-4c94-9e04-2373c8194bae",
+          "status": "FAILED",
+          "plan_id": "pm-259",
+          "run_id": "run-8785",
+          "error": "agent_failed: exit 1 class=infra marker=3374166 02:10 codex exec --dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c model_reasoning_effort=\"medium\" -- # Save Work Before Finishing This jo",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d3133670-fcdd-4712-8637-3470dc32c653",
+          "status": "FAILED",
+          "plan_id": "pm-259",
+          "run_id": "run-8764",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "6aa491b3-d339-4ffa-b628-216aaf055f8b",
+          "status": "FAILED",
+          "plan_id": "pm-259",
+          "run_id": "run-8763",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b3128d45-07a7-4e69-94c1-b964d173900e",
+          "status": "FAILED",
+          "plan_id": "pm-256",
+          "run_id": "run-8761",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c1039357-4ba4-4647-9175-8cb366561de7",
+          "status": "FAILED",
+          "plan_id": "pm-256",
+          "run_id": "run-8752",
+          "error": "agent_failed: exit 1 class=push_failed marker=+ \"error\": \"agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main\",",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7c2f6e70-50ad-4564-91d6-ca9e7bed9283",
+          "status": "FAILED",
+          "plan_id": "pm-256",
+          "run_id": "run-8749",
+          "error": "agent_failed: exit 1 class=quota marker=urllib.error.HTTPError: HTTP Error 403: rate limit exceeded",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cbfb6d6f-f022-4967-8eeb-b79415d8a53e",
+          "status": "FAILED",
+          "plan_id": "pm-256",
+          "run_id": "run-8747",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "97e1589b-213b-44fb-8bd7-6d203e154e34",
+          "status": "FAILED",
+          "plan_id": "pm-246",
+          "run_id": "run-8730",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0d1bf426-d806-455f-a22d-35227899f204",
+          "status": "FAILED",
+          "plan_id": "pm-258",
+          "run_id": "run-8712",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2cf0b57ba573 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ae6896a0-e218-416a-abfc-91c592749ab3",
+          "status": "FAILED",
+          "plan_id": "pm-256",
+          "run_id": "run-8692",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4a7f32b9-94fe-4e4f-b83c-62af4b81dc39",
+          "status": "FAILED",
+          "plan_id": "pm-256",
+          "run_id": "run-8686",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d5d4800d-61da-489d-9b58-769dfe6a1230",
+          "status": "FAILED",
+          "run_id": "a81e9bfc-bb41-52bb-ba1e-0fb71e8c872b",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "99186d6f-b1bd-4051-9d2e-1526ac90c9e6",
+          "status": "FAILED",
+          "run_id": "a307ebbb-066c-5baa-93ec-d6e4a27809b1",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 25,
+      "total": 1124,
+      "read": 25,
+      "tasks": [
+        {
+          "id": "2add0a5a-4649-45ce-941b-e759cfbd5ed5",
+          "status": "FAILED",
+          "run_id": "pack-review-767dc4ee-881f-4d4e-93d6-0aaa707687b5",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f4498de7-4cde-4e82-862e-10e0d402e9cd",
+          "status": "FAILED",
+          "run_id": "pack-review-ab02cf9c-2f6f-421b-b2a6-ba45352e65b6",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e61e0b7e-b8a1-4534-b920-00584c87ff13",
+          "status": "FAILED",
+          "run_id": "pack-review-3746eaf2-fcae-461a-b6ed-272e00b94fdd",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c8e2155d-1dfa-415b-a86b-8d8ac75012c6",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "b291c57d-2985-469c-97d0-d6926aebf1d2",
+          "status": "FAILED",
+          "run_id": "0f03545a-3336-5289-81a7-00852c161c33",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8a347804-44ca-4ddb-bb39-d6419f1ab393",
+          "status": "FAILED",
+          "run_id": "4bc369bc-0325-5aa1-b1b1-70580d67e8a2",
+          "error": "E_RIG_FAILED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b70942e1-4048-485c-b65e-c790f256a803",
+          "status": "FAILED",
+          "run_id": "7402a074-98d7-545a-9f25-c8d4fddfd769",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c60b31d6-fda6-44eb-8c18-098a5a0357a2",
+          "status": "FAILED",
+          "run_id": "f2125ae9-1681-5955-8004-7f7e33f6d8a3",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d1148f11-a972-4979-8278-d654c7ae6683",
+          "status": "FAILED",
+          "run_id": "5fa3bfc3-d7bf-5f17-b955-a8c3369e5242",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9e402e32-09d5-458a-9737-2511a6f51385",
+          "status": "FAILED",
+          "run_id": "dac8a2ca-2122-555d-a7ac-adf8b0a33616",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "da70e804-2fd5-4c91-8b26-3d10fb2b8ef4",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "1a0831cf-433c-4586-bee1-db124eaf593a",
+          "status": "FAILED",
+          "run_id": "ad443dd5-8de5-592a-b39a-e908dbad6278",
+          "error": "E_RIG_FAILED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0de6cba0-053a-417f-8651-9bb7a5838bd9",
+          "status": "FAILED",
+          "run_id": "471826c0-5ff3-52c7-9c43-4db53663a7f1",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2a650075-89cc-4294-89ae-4f612fa984db",
+          "status": "FAILED",
+          "run_id": "524c769f-90d7-5992-a97c-8dbaa63f24fb",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c6c441d6-8119-4ec5-9530-467adf3605e2",
+          "status": "FAILED",
+          "run_id": "61804682-6bf9-5027-bc85-85b2a754f5ab",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bcf09602-7917-448d-971a-46623a45fe8f",
+          "status": "FAILED",
+          "plan_id": "pm-248",
+          "run_id": "run-8593",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "63e2e40d-e560-467c-86e8-d95029b2b041",
+          "status": "FAILED",
+          "run_id": "pack-review-767dc4ee-881f-4d4e-93d6-0aaa707687b5",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5d7573fd-f237-420a-a0dd-d535750c4c6f",
+          "status": "FAILED",
+          "run_id": "pack-review-ab02cf9c-2f6f-421b-b2a6-ba45352e65b6",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "00341da4-46a5-4b12-be59-0f8d4de156f6",
+          "status": "FAILED",
+          "plan_id": "pm-248",
+          "run_id": "run-8581",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD dbca71f4ee3b is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cb564ed1-8a8e-45a2-b810-d3c928192397",
+          "status": "FAILED",
+          "run_id": "pack-review-3746eaf2-fcae-461a-b6ed-272e00b94fdd",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3297f222-f0b2-4c5b-a9f0-03478497cd76",
+          "status": "FAILED",
+          "run_id": "4120bf4b-85be-5cfc-b93b-ea8012b2a5cb",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1f57abf9-4690-4e9e-8229-a95ea1cfb460",
+          "status": "FAILED",
+          "run_id": "f0b205a8-7cb7-518f-b8d4-e33e4f41fbe9",
+          "error": "E_RIG_FAILED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bc169b77-3237-49be-a88e-01245057e78c",
+          "status": "FAILED",
+          "plan_id": "pm-248",
+          "run_id": "run-8575",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 88fcbd38213d is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "95909abf-0b41-4086-ad04-3c0a649a2fff",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "88588dda-94fe-41e1-9975-61392099bfda",
+          "status": "FAILED",
+          "run_id": "ecdc4fed-c793-515e-b760-655e3f918cb5",
+          "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "total": 6289,
+      "read": 25,
+      "tasks": [
+        {
+          "id": "9987d0f4-ef0e-4368-bafc-2aa69dbdb5ad",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "64f0b23f-046c-405f-8d27-d5295236972c",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "77f99611-f0ce-49e8-907c-672f86aafc5c",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f03c3e3a-7180-495c-be6d-d2913dc1bd87",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "81aa419b-e6aa-4fe8-9c42-bfafd179f072",
+          "status": "COMPLETED",
+          "plan_id": "pm-268",
+          "run_id": "run-9020",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "35e8e7d0-2193-4d50-91f7-2836e712b94b",
+          "status": "COMPLETED",
+          "plan_id": "pm-260",
+          "run_id": "run-9014",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "59954b3a-113d-40d5-9e00-9af0d3460974",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "48dadfc1-dd1b-461a-9248-f8da001cfe4a",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "df1c2de2-9c8d-4bff-b70f-600d2d921763",
+          "status": "COMPLETED",
+          "plan_id": "pm-276",
+          "run_id": "run-9016",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "260bc1cf-8cca-4b25-9a76-82da016bac52",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "90d7926b-9534-4526-b609-66d404eb096d",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "24ac0c87-ad1c-49d4-9f3f-35e1bde15bb5",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "fd2226b3-970b-466b-ab3e-2af196edaf9d",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "90894d6f-86e9-4da7-a126-3ebed207e31d",
+          "status": "COMPLETED",
+          "plan_id": "pm-249",
+          "run_id": "run-9013",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1f1ea4ec-d34e-4642-ae1b-689a5477f369",
+          "status": "COMPLETED",
+          "plan_id": "pm-260",
+          "run_id": "run-9010",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "67fa7310-1068-467a-992d-11c6adbeae8d",
+          "status": "COMPLETED",
+          "plan_id": "pm-277",
+          "run_id": "run-9011",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e2351830-ee8a-40c2-8c72-89e70a1e149e",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "df1b1afc-ab47-459d-b128-54ccbad4c22d",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1527adf0-8941-4d2e-955d-5743acd0b45d",
+          "status": "COMPLETED",
+          "plan_id": "pm-258",
+          "run_id": "run-9009",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a5313599-1a0f-4ca6-ad8e-3112acf51089",
+          "status": "COMPLETED",
+          "plan_id": "pm-platform",
+          "run_id": "harvest-80a6a02088f7ac46"
+        },
+        {
+          "id": "5571b04a-2bbe-418f-a23f-abc4d67b1f54",
+          "status": "COMPLETED",
+          "plan_id": "pm-257",
+          "run_id": "run-9008",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9d3d54e9-ee88-453b-8da6-e87351e23dda",
+          "status": "COMPLETED",
+          "plan_id": "pm-268",
+          "run_id": "run-9007",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a395b26a-b355-45c8-b025-78af9e234251",
+          "status": "COMPLETED",
+          "plan_id": "pm-260",
+          "run_id": "run-9000",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9893c588-0b4f-45f9-a89a-893b4c6f6d06",
+          "status": "COMPLETED",
+          "plan_id": "pm-268",
+          "run_id": "run-9005",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "54071d7c-d554-4fd8-89a2-7e44af73dbfa",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 25,
+      "total": 6289,
+      "read": 25,
+      "tasks": [
+        {
+          "id": "ea6fd129-be87-480c-999d-5ab0a11908ef",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "fcc6dbf7-cc08-4955-8f48-78a8b2c79950",
+          "status": "COMPLETED",
+          "plan_id": "pm-257",
+          "run_id": "run-9004",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9139427c-ff53-4364-8020-9ad972c11340",
+          "status": "COMPLETED",
+          "plan_id": "pm-275",
+          "run_id": "run-9003",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "daaaa381-1227-4ec6-a2d7-c83c869c8b3a",
+          "status": "COMPLETED",
+          "plan_id": "pm-276",
+          "run_id": "run-9002",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8d5dc6ca-2180-45f1-9907-499f5cbd50b3",
+          "status": "COMPLETED",
+          "plan_id": "pm-268",
+          "run_id": "run-9001",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ebf2c141-b566-4f43-9985-03ac4001c1df",
+          "status": "COMPLETED",
+          "plan_id": "pm-268",
+          "run_id": "run-8999",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "04aef7e3-9209-4c4d-ad8c-7bac58c1bc2f",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f4552fbc-0df7-44a2-8530-4b2e1b13c3e3",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ed0a1b79-b70d-4740-82a1-91e9f4c39a93",
+          "status": "COMPLETED",
+          "plan_id": "pm-259",
+          "run_id": "run-8998",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3a6b7fdd-07a2-47ce-9dcd-021f7222ab2a",
+          "status": "COMPLETED",
+          "plan_id": "pm-260",
+          "run_id": "run-8996",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bb080f7f-dfa9-445f-8ec9-288657cc07d3",
+          "status": "COMPLETED",
+          "plan_id": "pm-258",
+          "run_id": "run-8997",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b6a82b20-3e60-4358-9af5-a2d069c1c0dd",
+          "status": "COMPLETED",
+          "plan_id": "pm-259",
+          "run_id": "run-8995",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b7821c99-848e-43c5-9c09-dc4af626543b",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3ea594fe-a5f4-4575-9a55-a38bfcebfc30",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "79e38af0-5476-4147-bbae-6fd5a37c8971",
+          "status": "COMPLETED",
+          "plan_id": "pm-273",
+          "run_id": "run-8994",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b6bdc558-2fdf-49f7-bd63-d6949775acb6",
+          "status": "COMPLETED",
+          "plan_id": "pm-273",
+          "run_id": "run-8993",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "600e898a-cce3-4ce8-94b3-21fe498a3683",
+          "status": "COMPLETED",
+          "plan_id": "pm-260",
+          "run_id": "run-8991",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b8fc68b9-7931-434d-8681-7ec67b744c32",
+          "status": "COMPLETED",
+          "plan_id": "pm-273",
+          "run_id": "run-8992",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d959f94b-1256-482d-b78d-b49c6b333213",
+          "status": "COMPLETED",
+          "plan_id": "pm-platform",
+          "run_id": "harvest-d409a2088358d714"
+        },
+        {
+          "id": "db502e14-7c1a-4427-b922-07d0ab2efd5c",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7545684c-fd55-4c51-b445-c35a65a908b7",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f4e4e263-6093-400b-9ca2-af13b7419d20",
+          "status": "COMPLETED",
+          "plan_id": "pm-275",
+          "run_id": "run-8990",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3e21937f-bd2a-475f-a9e4-4fbbd793c5a4",
+          "status": "COMPLETED",
+          "plan_id": "pm-260",
+          "run_id": "run-8987",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5590b921-6d4c-4b6c-9485-175dddeb05c8",
+          "status": "COMPLETED",
+          "plan_id": "pm-271",
+          "run_id": "run-8989",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7f91537c-3e61-4716-9263-6d6dc93f1c31",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "total": 6,
+      "read": 6,
+      "tasks": [
+        {
+          "id": "dd420d80-a953-490a-820a-aafd837869b4",
+          "status": "RUNNING",
+          "plan_id": "pm-258",
+          "run_id": "run-9018"
+        },
+        {
+          "id": "9b7b382b-f672-423f-a9d7-68b5cd5239bf",
+          "status": "RUNNING",
+          "plan_id": "pm-259",
+          "run_id": "run-9017"
+        },
+        {
+          "id": "bbe4ad2d-e243-4da8-b57d-f43294d86ff7",
+          "status": "RUNNING",
+          "plan_id": "pm-278",
+          "run_id": "run-9015"
+        },
+        {
+          "id": "5ab3e44a-d5b8-4456-b7c0-5da249104c58",
+          "status": "RUNNING",
+          "plan_id": "pm-264",
+          "run_id": "run-9012"
+        },
+        {
+          "id": "44073ed7-5d38-4432-a235-6f885563f303",
+          "status": "RUNNING",
+          "plan_id": "pm-270",
+          "run_id": "run-9006"
+        },
+        {
+          "id": "90c4f518-29d9-4fd0-a9aa-69b05ec67415",
+          "status": "RUNNING"
+        }
+      ]
+    },
+    {
+      "status": "PENDING",
+      "offset": 0,
+      "read": 0
+    }
+  ],
+  "run": {
+    "id": "run-9018",
+    "task_id": "t-1564",
+    "tm_task_id": "dd420d80-a953-490a-820a-aafd837869b4",
+    "worker_id": "avietidol-mac-mini",
+    "runner": "fleet",
+    "agent_profile": "codex-sol-6-1-high",
+    "started_at": "2026-10-26T14:50:01.204963Z",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+  },
+  "callbacks": [
+    {
+      "id": "0d081765-06f9-4a1e-9de4-28107aa0608b",
+      "status": "FAILED",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f697e2c2aaba is not on origin/main",
+      "completedAt": "2026-10-26T09:24:38Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackNextAt": "2026-10-26T09:24:55Z"
+    },
+    {
+      "id": "1527adf0-8941-4d2e-955d-5743acd0b45d",
+      "status": "COMPLETED",
+      "completedAt": "2026-10-26T14:48:20Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackNextAt": "2026-10-26T14:48:36Z"
+    },
+    {
+      "id": "bb080f7f-dfa9-445f-8ec9-288657cc07d3",
+      "status": "COMPLETED",
+      "completedAt": "2026-10-26T14:38:32Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackNextAt": "2026-10-26T14:38:47Z"
+    }
+  ],
+  "persisted_gate": {
+    "id": "ver-3586",
+    "run_id": "run-9009",
+    "status": "fail",
+    "git_sha": "d30d3c4",
+    "items": [
+      {
+        "name": "Project tests",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "Lint",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "Typecheck",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "Build",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "Footer HTTP walk",
+        "status": "fail",
+        "exit_code": 1
+      },
+      {
+        "name": "Footer Chromium matrix",
+        "status": "fail",
+        "exit_code": 1
+      },
+      {
+        "name": "Application end to end",
+        "status": "fail",
+        "exit_code": 1
+      }
+    ]
+  }
+}

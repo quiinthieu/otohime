@@ -1,0 +1,27 @@
+Starting embedded Postgres on 127.0.0.1:51204
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/private/tmp/otohime-9018/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[✓] migrations applied successfully!Starting the server on http://localhost:51207
+TAP version 13
+# Subtest: real adapters, footer waterline negative controls and Riso DOM attribution
+ok 1 - real adapters, footer waterline negative controls and Riso DOM attribution
+  ---
+  duration_ms: 527.91925
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 646.057875

@@ -1,0 +1,64 @@
+{
+  "source_sha": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+  "items": [
+    {
+      "name": "unit",
+      "cmd": "npm test",
+      "source_sha": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+      "exit": 0,
+      "seconds": 7.2
+    },
+    {
+      "name": "lint",
+      "cmd": "npm run lint",
+      "source_sha": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+      "exit": 0,
+      "seconds": 8.5
+    },
+    {
+      "name": "typecheck",
+      "cmd": "npm run typecheck",
+      "source_sha": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+      "exit": 0,
+      "seconds": 1.96
+    },
+    {
+      "name": "build",
+      "cmd": "npm run build",
+      "source_sha": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+      "exit": 0,
+      "seconds": 4.57
+    },
+    {
+      "name": "walk",
+      "cmd": "SKIP_BUILD=1 bash scripts/walk-end.sh",
+      "source_sha": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+      "exit": 1,
+      "seconds": 5.89
+    },
+    {
+      "name": "probe",
+      "cmd": "SKIP_BUILD=1 bash scripts/probe-end.sh",
+      "source_sha": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+      "exit": 1,
+      "seconds": 61.54
+    },
+    {
+      "name": "e2e",
+      "cmd": "SKIP_BUILD=1 npm run test:e2e",
+      "source_sha": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+      "exit": 0,
+      "seconds": 291.97
+    }
+  ],
+  "all_seven_pass": false,
+  "passing_commands": 5,
+  "failing_commands": 2,
+  "application_tests": {
+    "tests": 139,
+    "pass": 138,
+    "fail": 0,
+    "skip": 1
+  },
+  "source_changes_in_this_run": false
+}

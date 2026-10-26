@@ -1,0 +1,229 @@
+{
+  "captured_at": "2026-10-26T14:54:47Z to 14:59:25Z",
+  "all_run_summaries": {
+    "read": 100,
+    "total": 440,
+    "window_read": 49,
+    "window_complete": true,
+    "window_conclusions": {
+      "failure": 12,
+      "cancelled": 32,
+      "success": 5
+    }
+  },
+  "failure_listing": {
+    "pages": [
+      {
+        "page": 1,
+        "read": 25,
+        "url": "https://github.com/quiinthieu/otohime/actions?query=branch%3Amain+is%3Afailure&page=1"
+      },
+      {
+        "page": 2,
+        "read": 25,
+        "url": "https://github.com/quiinthieu/otohime/actions?query=branch%3Amain+is%3Afailure&page=2"
+      },
+      {
+        "page": 3,
+        "read": 25,
+        "url": "https://github.com/quiinthieu/otohime/actions?query=branch%3Amain+is%3Afailure&page=3"
+      },
+      {
+        "page": 4,
+        "read": 25,
+        "url": "https://github.com/quiinthieu/otohime/actions?query=branch%3Amain+is%3Afailure&page=4"
+      },
+      {
+        "page": 5,
+        "read": 1,
+        "url": "https://github.com/quiinthieu/otohime/actions?query=branch%3Amain+is%3Afailure&page=5"
+      }
+    ],
+    "distinct_read": 101,
+    "reported_total": 101,
+    "complete": true
+  },
+  "failed_window": {
+    "read": 12,
+    "total": 12,
+    "readable_assertions": 3,
+    "inconclusive": 9,
+    "failed_e2e": 1,
+    "failed_e2e_assertions_read": 1
+  },
+  "runs": [
+    {
+      "run_id": 40343322274,
+      "job_id": 121643535744,
+      "job_name": "checks",
+      "head_sha": "5ad49062c0a3583a70f3c7075e81c324e51adc57",
+      "failed_step": "Run npm test",
+      "annotation_text": "Annotations 1 error and 1 warning checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40343322274",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121643535744/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-275/t-1617",
+      "failure_condition": "Run npm test fails on main containing t-1617 repair; actual CI test name remains unread."
+    },
+    {
+      "run_id": 40340641001,
+      "job_id": 121634081296,
+      "job_name": "checks",
+      "head_sha": "ae6573a10e499b644491bb1f9ac36588cafbb387",
+      "failed_step": "Run npm test",
+      "annotation_text": "Annotations 1 error and 1 warning checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40340641001",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121634081296/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-275/t-1617",
+      "failure_condition": "Run npm test fails on main containing t-1617 repair; actual CI test name remains unread."
+    },
+    {
+      "run_id": 40340021768,
+      "job_id": 121631950491,
+      "job_name": "checks",
+      "head_sha": "c121b20f9687577fbd3118ecc1c64466ab60c9ea",
+      "failed_step": "Run npm test",
+      "annotation_text": "Annotations 1 error and 1 warning checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40340021768",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121631950491/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-275/t-1617",
+      "failure_condition": "Run npm test fails on main containing t-1617 repair; actual CI test name remains unread."
+    },
+    {
+      "run_id": 40339124232,
+      "job_id": 121628642183,
+      "job_name": "checks",
+      "head_sha": "c1b26f10581ccd52cf66cd0c8f09d5e4f94fe868",
+      "failed_step": "Run npm test",
+      "annotation_text": "Annotations 1 error and 1 warning checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40339124232",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121628642183/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-275/t-1617",
+      "failure_condition": "Run npm test fails on main containing t-1617 repair; actual CI test name remains unread."
+    },
+    {
+      "run_id": 40338754295,
+      "job_id": 121627307850,
+      "job_name": "checks",
+      "head_sha": "3c3772b20fb379c962f1c4fde95e036c12821ca6",
+      "failed_step": "Run npm test",
+      "annotation_text": "Annotations 1 error and 1 warning checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40338754295",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121627307850/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-275/t-1617",
+      "failure_condition": "Run npm test fails on main containing t-1617 repair; actual CI test name remains unread."
+    },
+    {
+      "run_id": 40337993898,
+      "job_id": 121624630579,
+      "job_name": "checks",
+      "head_sha": "9ada4e1db31a1e4fca16c14c5018162a7c1682cc",
+      "failed_step": "Run npm test",
+      "annotation_text": "Annotations 1 error and 1 warning checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40337993898",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121624630579/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-275/t-1617",
+      "failure_condition": "Run npm test fails on main containing t-1617 repair; actual CI test name remains unread."
+    },
+    {
+      "run_id": 40335459968,
+      "job_id": 121615705387,
+      "job_name": "checks",
+      "head_sha": "c0368d162ac086b8089a7fd38eeaec1ac107e92f",
+      "failed_step": "Run npm test",
+      "annotation_text": "Annotations 1 error and 1 warning checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40335459968",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121615705387/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-275/t-1617",
+      "failure_condition": "Run npm test fails on main containing t-1617 repair; actual CI test name remains unread."
+    },
+    {
+      "run_id": 40334420077,
+      "job_id": 121613911206,
+      "job_name": "checks",
+      "head_sha": "9d65d9c6f6aecb8946ae71741f27f76568569c2a",
+      "failed_step": "Run npm test",
+      "annotation_text": "Annotations 1 error and 1 warning checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40334420077",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121613911206/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-275/t-1617",
+      "failure_condition": "Run npm test fails on main containing t-1617 repair; actual CI test name remains unread."
+    },
+    {
+      "run_id": 40330477897,
+      "job_id": 121613136055,
+      "job_name": "production",
+      "head_sha": "074059495faf4bee48e8f655584dfd4487089b41",
+      "failed_step": "vercel deploy",
+      "annotation_text": "Annotations 2 errors and 1 warning production Process completed with exit code 1. Show more Show less vercel deploy Error (inspect exited 1) https://otohime-8vfgwc6u4-otohime.vercel.app Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40330477897",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121613136055/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": true,
+      "owner": "pm-270/t-1605",
+      "failure_condition": "Deploy fails or live SHA lacks delivery after production job; current owning repair plan pm-275/t-1617."
+    },
+    {
+      "run_id": 40328273755,
+      "job_id": 121600218178,
+      "job_name": "production",
+      "head_sha": "5577ec5c917811277bef59f126d11b58160aa6a6",
+      "failed_step": "vercel deploy",
+      "annotation_text": "Annotations 2 errors and 1 warning production Process completed with exit code 1. Show more Show less vercel deploy Error (inspect exited 1) https://otohime-rcix516b1-otohime.vercel.app Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40328273755",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121600218178/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": true,
+      "owner": "pm-270/t-1605",
+      "failure_condition": "Deploy fails or live SHA lacks delivery after production job; current owning repair plan pm-275/t-1617."
+    },
+    {
+      "run_id": 40315924641,
+      "job_id": 121549479127,
+      "job_name": "checks",
+      "head_sha": "299240136de7b2d74950b14cff4df5f8745bc62a",
+      "failed_step": "Footer Chromium probe",
+      "annotation_text": "Annotations 1 error, 1 warning, and 1 notice checks Process completed with exit code 1. Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less checks \"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748 \" Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40315924641",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121549479127/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": false,
+      "owner": "pm-270/t-1604",
+      "failure_condition": "Probe step red or checks exceed budget on sources including t-1604 repair."
+    },
+    {
+      "run_id": 40310239199,
+      "job_id": 121530268639,
+      "job_name": "checks",
+      "head_sha": "841ca69823a2e71e6a97e5c1d01c12babdccd2ea",
+      "failed_step": "E2E against next start",
+      "annotation_text": "Annotations 2 errors, 1 warning, and 1 notice checks Process completed with exit code 1. Show more Show less E2E failed: a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk: e2e/desk.test.ts#L576 AssertionError [ERR_ASSERTION]: the swipe dragged music: 0.3 is not 0.425 at near (file:///home/runner/work/otohime/otohime/e2e/desk.test.ts:181:10) at TestContext.<anonymous> (file:///home/runner/work/otohime/otohime/e2e/desk.test.ts:597:3) at async Test.run (node:internal/test_runner/test:1054:7) at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) Show more Show less checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less checks \"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748 \" Show more Show less",
+      "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40310239199",
+      "annotations_api": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121530268639/annotations",
+      "annotation_pages_read": 1,
+      "assertion_readable": true,
+      "owner": "pm-270/t-1606",
+      "failure_condition": "e2e/desk.test.ts:597 red on sources including t-1606 repair."
+    }
+  ],
+  "raw_logs": {
+    "status": 403,
+    "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/121643535744/logs",
+    "conclusion": "Unread; public annotations used, generic exit messages do not identify assertions."
+  }
+}
