@@ -23,11 +23,18 @@ import { readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 const [work, sha] = process.argv.slice(2);
 let transitionReads = 0;
+const lateReads = new Map();
 const server = createServer((req, res) => {
   appendFileSync(join(work, "health.calls"), `${req.url}\n`);
   res.setHeader("Content-Type", "application/json");
   if (req.url === "/transition.health.json") {
     res.end(JSON.stringify({ ok: true, sha: ++transitionReads === 1 ? "old-sha" : sha }));
+    return;
+  }
+  if (["/late-transition.health.json", "/default-transition.health.json"].includes(req.url)) {
+    const reads = (lateReads.get(req.url) ?? 0) + 1;
+    lateReads.set(req.url, reads);
+    res.end(JSON.stringify({ ok: true, sha: reads < 5 ? "old-sha" : sha }));
     return;
   }
   try { res.end(readFileSync(join(work, req.url.slice(1)))); }
@@ -67,6 +74,7 @@ case "$1" in
       diagnostic:1) printf 'Error: build failed at 50%%\r\nmissing required artifact\n::warning::not a workflow command\n' >&2; exit 1 ;;
       diagnostic:0) printf 'Error: earlier request failed\n\033[31m  status\t● Building\033[0m\n  url\t%s\nstate diagnostic tail\n' "$2" >&2; exit 1 ;;
       unavailable:*) echo 'Error: request failed; no deployment state available' >&2; exit 1 ;;
+      user-not-found:*) echo 'Error: User not found' >&2; exit 1 ;;
     esac ;;
 esac
 FAKE
@@ -76,15 +84,17 @@ ok() { echo "ok - $1"; }
 not_ok() { echo "not ok - $1"; failures=$((failures + 1)); }
 check() { if eval "$2"; then ok "$1"; else not_ok "$1"; fi; }
 
-# run NAME DEPLOY INSPECT HEALTH_BODY: runs the script, sets $code, $out, $elapsed and $calls.
+# run NAME DEPLOY INSPECT HEALTH_BODY [ATTEMPTS|default]: sets $code, $out, $elapsed and $calls.
 run() {
   local name=$1
+  local -a attempts_env=("HEALTH_ATTEMPTS=${5:-2}")
+  [ "${5:-}" = default ] && attempts_env=(-u HEALTH_ATTEMPTS)
   export CALLS="$work/$name.calls" FAKE_URL=$URL FAKE_DEPLOY=$2 FAKE_INSPECT=$3
   : >"$CALLS"
   printf '%s' "$4" >"$work/$name.health.json"
   local start=$SECONDS
-  out=$(PATH="$work/bin:$PATH" GITHUB_SHA=$SHA UPLOAD_TIMEOUT=2 READY_TIMEOUT=2 INSPECT_TIMEOUT=5 \
-    HEALTH_URL="$health_base/$name.health.json" HEALTH_RETRIES=0 HEALTH_RETRY_DELAY=1 HEALTH_ATTEMPTS=2 HEALTH_POLL_DELAY=0 \
+  out=$(env "${attempts_env[@]}" PATH="$work/bin:$PATH" GITHUB_SHA=$SHA UPLOAD_TIMEOUT=2 READY_TIMEOUT=2 INSPECT_TIMEOUT=5 \
+    HEALTH_URL="$health_base/$name.health.json" HEALTH_RETRIES=0 HEALTH_RETRY_DELAY=1 HEALTH_POLL_DELAY=0 \
     bash "$here/vercel-deploy.sh" 2>&1)
   code=$?
   elapsed=$((SECONDS - start))
@@ -146,6 +156,13 @@ check "CLI request errors are unknown deployment state, with diagnostic" '[[ "$o
 run transition ok error "$healthy"
 check "inspect exit 1 accepts an old-to-expected alias transition" '[ "$code" -eq 0 ] && [[ "$out" == *"old-sha"* ]] && [[ "$out" == *"attempt 2/2"* ]] && [[ "$out" == *"health: serving $SHA"* ]]'
 check "alias transition makes exactly two real HTTP requests" '[ "$(grep -c "^/transition.health.json$" "$work/health.calls")" -eq 2 ]'
+
+# The production incident needed more than three reads after both inspect calls failed.
+run late-transition ok user-not-found "$healthy" 12
+check "unavailable inspect accepts the exact sha on the fifth of twelve reads" '[ "$code" -eq 0 ] && [[ "$out" == *"Error: User not found"* ]] && [[ "$out" == *"old-sha"* ]] && [[ "$out" == *"attempt 5/12"* ]] && [[ "$out" == *"health: serving $SHA"* ]] && [[ "$out" != *"::error"* ]]'
+check "late alias transition makes one upload, two inspects and five HTTP requests" '[ "$deploys" -eq 1 ] && [ "$(grep -c "^inspect" "$CALLS")" -eq 2 ] && [ "$(grep -c "^/late-transition.health.json$" "$work/health.calls")" -eq 5 ]'
+run default-transition ok user-not-found "$healthy" default
+check "production default allows the fifth-read transition without another upload" '[ "$code" -eq 0 ] && [ "$deploys" -eq 1 ] && [[ "$out" == *"attempt 5/12"* ]] && [[ "$out" == *"health: serving $SHA"* ]] && [ "$(grep -c "^/default-transition.health.json$" "$work/health.calls")" -eq 5 ]'
 
 # (c) Healthy fake: succeeds with one deploy, a waiting inspect on that URL, and the sha served.
 run healthy ok ok "$healthy"

@@ -10,7 +10,7 @@
 # Env: GITHUB_SHA (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
 # diagnostic re-read), HEALTH_URL (https://otohime.dev/api/health), HEALTH_RETRIES (10) and
 # HEALTH_RETRY_DELAY (6 s; curl reads 0 as exponential backoff, so tests use 1),
-# HEALTH_ATTEMPTS (3 reads of the body, HEALTH_POLL_DELAY 10 s apart, for an alias that lags ready).
+# HEALTH_ATTEMPTS (12 reads of the body, HEALTH_POLL_DELAY 10 s apart, for an alias that lags ready).
 #
 # The upload is retried once only when it failed fast with no deployment URL. A timed-out upload is
 # not retried (it may already have created a deployment, and a retry doubles the bound), and nothing
@@ -24,7 +24,7 @@ INSPECT_TIMEOUT=${INSPECT_TIMEOUT:-60}
 HEALTH_URL=${HEALTH_URL:-https://otohime.dev/api/health}
 HEALTH_RETRIES=${HEALTH_RETRIES:-10}
 HEALTH_RETRY_DELAY=${HEALTH_RETRY_DELAY:-6}
-HEALTH_ATTEMPTS=${HEALTH_ATTEMPTS:-3}
+HEALTH_ATTEMPTS=${HEALTH_ATTEMPTS:-12}
 HEALTH_POLL_DELAY=${HEALTH_POLL_DELAY:-10}
 
 log() { printf '[vercel-deploy %s] %s\n' "$(date -u +%H:%M:%SZ)" "$*" >&2; }

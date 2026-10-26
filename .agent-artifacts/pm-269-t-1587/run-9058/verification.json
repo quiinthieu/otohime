@@ -1,0 +1,110 @@
+{
+  "run": "run-9058",
+  "profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "profile_source": "run-9058 profile_flags",
+  "base_sha": "6453315e3d1cb2e0977c5177fe8a48e739115d47",
+  "source_fingerprint_sha256": "47f8a65ce48d454a6b3489c8601d83d85f0ad6baf2f62cf45112e11114bd57de",
+  "files_sha256": {
+    ".github/workflows/ci.yml": "134ea741063c0f5f264b40eb1bf01d42d0273e79c42350552119e598fb58b276",
+    "app/api/admin/bottles/[id]/route.ts": "983d05c9cdd828bd654e38254fdd75e7c261f61ca5963b89e2033bef291d7309",
+    "app/api/admin/bottles/route.ts": "5683683b3ac83d88e0c4bc1ba8d5c3498c7fd26789f753bf7617367958f994c1",
+    "app/api/bottles/route.ts": "e1116787c829f0027371edf38618c1bcbe36e001e6cdb33e82e505a5de167f79",
+    "app/api/bottles/suggestions/route.ts": "84f30e64b6e9e28050a8a741faa82aad8d5b9d107a99127f3f5a31f754692227",
+    "content/bottles.json": "4ac9c4673ec4a60fb7f9e576c0531b4af097b6e6dfb36b9b61e4c19f844202b3",
+    "db/migrations/0000_long_wendigo.sql": "cf8f7eb9bfcead29b618b0ee26d2fb761f72e526f07fc62b1083c2dcff5b7b0e",
+    "db/migrations/0001_swift_ironclad.sql": "0db3178f0a7dcebb746bfbd3c4de4b58c0162d8c8c5278c095c897e005a9c53a",
+    "db/migrations/0002_lively_spacker_dave.sql": "7bc6124a270317a269abbd5048947dbb5f3572f4d14bdd49b5943c43f411927c",
+    "db/migrations/0003_petite_omega_flight.sql": "27d37f6fe9e081285fe4c43b7e50c8c3aeb71cbd8701b2765f67994f42cabb47",
+    "db/migrations/0004_green_scarlet_witch.sql": "87f35d82591bbbc2be57eb64e68fbbe4f67ffce76f6f78ae46117574dcf93cb9",
+    "db/migrations/0005_magenta_william_stryker.sql": "916184939e015fae0a745fcd31572511eede78d7b35f0986fd10f7d3f262aeae",
+    "db/migrations/meta/0000_snapshot.json": "b73eb1d582d4627ce87fffe7e037d34380cc8f90dbda5072427a6f8d2243217b",
+    "db/migrations/meta/0001_snapshot.json": "c604dbd8ad7c77b683f93f40689c2bf904821e50f8392849e1f0bec256fc83ee",
+    "db/migrations/meta/0002_snapshot.json": "faf30ab5f9d4e9c7e696fe10e7c6ef132e9ea1df805cc3873f4d03f8d83cd5c1",
+    "db/migrations/meta/0003_snapshot.json": "cd0b86c31b50bf3df299b9e064792331207e21d57db52f369d86acce6e9fd906",
+    "db/migrations/meta/0004_snapshot.json": "47c7f7e6fac2177d8934dbfe88cde171d606f21ab6ad1c3e726f754cf1091205",
+    "db/migrations/meta/0005_snapshot.json": "d626d18cf732c138d582b123797b144c517aa17156b36275071102260d054329",
+    "db/migrations/meta/_journal.json": "56308d9b89b7da207c698a0a7ed49775e921bb4bbad9cbce6b365ed8ea74e92f",
+    "db/schema.ts": "37941a56665999672e646ab20bb2baef3b9939d590cdaf7d104edc7860264905",
+    "e2e/bottles-api.test.ts": "7d8875b9de71d79b773c2e06e76d2203b6ac00d0eb8f59d90e1b2a7761220291",
+    "lib/bottles-http.test.ts": "b66fef76baa2022ce6ff195335183fdfc9169d34fba1c7d19c312b266d471a6e",
+    "lib/bottles-http.ts": "ad1cb93cd27427d19ab0e19d22976b26ec3fc6c3ae6c765df5648217df12f9df",
+    "lib/bottles-server.ts": "9dccc66500833fcfa8a915520b04867e53e55bc40581b6a754548c64a6abef19",
+    "lib/bottles-service.test.ts": "8f0bee3c6afe8770860067efeb2f7b51190e8f25acec94f568678138833210ae",
+    "lib/bottles-service.ts": "44cc9b65f9c787c26b57562589f9805e73ae0966f0de301750df8dfa147f1d0d",
+    "lib/bottles-store-contract.ts": "ed32355bd154f0bd90b0b0e75c262f1bc72a98902bb1b39884fa32b9e1a6983d",
+    "lib/bottles-store.ts": "5560c733e5510e94a1fb0098e7899adfecab85d97d239860e728a776cdeef5d1",
+    "lib/bottles.test.ts": "908a127e2fde877b72c7cce4bd72cbdc6fce6065f957f9ea17496750575b44c0",
+    "lib/bottles.ts": "d543504cedbd38ad3a4666a49a1f28ed29c5b2813f967be767530c6b01139e01",
+    "next.config.ts": "0321d5e23b1a93b09761f2049ef5b9edf2843067e1be089664296063b9fa096b",
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "scripts/vercel-deploy.sh": "d9007464d32940bc2311f8529c1dea2cced20d97e7d4e520199884227e56d9ba",
+    "scripts/vercel-deploy.test.sh": "28da904c3e893181f3c45ab1c9be0be3b6ec00940aef4d2b3693da1afdb651fb"
+  },
+  "checks": {
+    "deploy_regression": {
+      "red": "production default fifth-read transition fails with original HEALTH_ATTEMPTS=3",
+      "green_checks": 36,
+      "negative_controls": [
+        "wrong SHA",
+        "unreachable health",
+        "hanging upload",
+        "missing GITHUB_SHA"
+      ],
+      "boundaries": "real bash/curl/local HTTP; fake npx/Vercel"
+    },
+    "bottle_contracts": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "skipped": 0,
+      "assertions": [
+        "normalization",
+        "hostile URLs/text",
+        "seed precedence",
+        "no-repeat picking",
+        "atomic cap",
+        "moderation authorization",
+        "service reconstruction",
+        "degraded seed pool"
+      ]
+    },
+    "repository_unit": {
+      "tests": 2344,
+      "pass": 2344,
+      "fail": 0,
+      "skipped": 0
+    },
+    "static": {
+      "lint_errors": 0,
+      "existing_lint_warnings": 10,
+      "typecheck": "route types generated; tsc succeeds",
+      "migration": "10 tables including both Bottle tables; no schema changes; git migration status empty"
+    },
+    "integration": {
+      "tests": 11,
+      "pass": 11,
+      "fail": 0,
+      "skipped": 0,
+      "boundaries": "real isolated production Next server, embedded Postgres 17, migrations, Chromium, sessions and HTTP; memory contract and fetch trap are fakes"
+    },
+    "ci_workflow": {
+      "tests": 10,
+      "pass": 10
+    },
+    "deploy_verifier_self_test": {
+      "checks": 15,
+      "fail": 0
+    }
+  },
+  "deferred": {
+    "owner": "plan-manager pm-269/t-1587",
+    "checks": [
+      "post-push CI checks/production",
+      "independent deployed QA"
+    ],
+    "failure_condition": "failed workflow, wrong served delivery identity or failed Bottle acceptance scenario",
+    "observed_this_run": false
+  }
+}
