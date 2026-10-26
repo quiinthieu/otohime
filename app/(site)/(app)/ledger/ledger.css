@@ -98,9 +98,35 @@
   color: var(--muted);
 }
 
+/* Press: while .ledger has data-pressing a day's marks are bare paper until the replay marks them data-pressed. */
+.ledger-press {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.ledger[data-pressing] .ledger-sheet [data-k]:not([data-pressed]) {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .ledger-receipt {
     animation: ledger-receipt-in 120ms ease-out;
+  }
+
+  /* only the way in fades: hiding the year at the start is instant */
+  .ledger[data-pressing] .ledger-sheet [data-pressed] {
+    transition: opacity 140ms ease-out;
+  }
+}
+
+/* Reduced motion: nothing in the ledger moves, the Press chip included. The site's global reset only shortens
+   transitions to 0.01ms, which still runs them (and fires transitionrun); here they are switched off. */
+@media (prefers-reduced-motion: reduce) {
+  .ledger,
+  .ledger * {
+    transition: none;
+    animation: none;
   }
 }
 

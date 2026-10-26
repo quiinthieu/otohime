@@ -183,3 +183,28 @@ export function receiptLines({ date, day }: { date: string; day: LedgerDay }): s
 }
 
 export const receiptText = (cell: { date: string; day: LedgerDay }) => receiptLines(cell).join("\n");
+
+// The press replay: the year's days pressed again in date order, one every
+// PRESS_MS (365 days in about six seconds), and a stamp thud on every
+// PRESS_SOUND_EVERY-th day, once a week. The component steps it from
+// requestAnimationFrame; under reduced motion it jumps straight to the end.
+export const PRESS_MS = 16;
+export const PRESS_SOUND_EVERY = WEEKDAYS;
+
+// How many of n days should be pressed `elapsedMs` after the press starts: the
+// first on the first frame, then one per stepMs, never more than n.
+export function pressDue(elapsedMs: number, n: number, stepMs: number = PRESS_MS): number {
+  const total = Math.max(0, Math.floor(n) || 0);
+  const due = elapsedMs > 0 ? Math.floor(elapsedMs / stepMs) + 1 : 1;
+  return Math.min(total, due);
+}
+
+// Whether stepping from `from` to `to` pressed days thuds: when one of the days
+// pressed (indices from..to-1) is a multiple of `every`. One thud at most per
+// step however many multiples it skips, so a dropped frame never doubles up.
+export function pressSounds(from: number, to: number, every: number = PRESS_SOUND_EVERY): boolean {
+  const n = Math.max(1, Math.floor(every) || 1);
+  const a = Math.max(0, Math.ceil(from));
+  const b = Math.floor(to);
+  return b > a && Math.ceil(a / n) * n < b;
+}

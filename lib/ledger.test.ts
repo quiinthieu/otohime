@@ -15,6 +15,10 @@ import {
   MAX_ROTATION,
   milestones,
   MIN_SCALE,
+  PRESS_MS,
+  PRESS_SOUND_EVERY,
+  pressDue,
+  pressSounds,
   receiptLines,
   receiptText,
   SMUDGES,
@@ -263,4 +267,57 @@ test("the committed fallback ledger builds a full grid", () => {
     assert.equal(c.total, total(data.days[date]));
     assert.ok(c.level > 0 || c.total === 0);
   }
+});
+
+test("pressDue: the first day on the first frame, then one per PRESS_MS, capped at n", () => {
+  assert.equal(pressDue(0, WINDOW_DAYS), 1);
+  assert.equal(pressDue(-5, WINDOW_DAYS), 1);
+  assert.equal(pressDue(PRESS_MS - 1, WINDOW_DAYS), 1);
+  assert.equal(pressDue(PRESS_MS, WINDOW_DAYS), 2);
+  assert.equal(pressDue(10 * PRESS_MS + 1, WINDOW_DAYS), 11);
+  assert.equal(pressDue(1e9, WINDOW_DAYS), WINDOW_DAYS);
+  assert.equal(pressDue(100, 0), 0);
+  assert.equal(pressDue(0, 0), 0);
+  assert.equal(pressDue(100, Number.NaN), 0);
+  assert.equal(pressDue(50, 10, 10), 6);
+  // The whole year takes (WINDOW_DAYS - 1) steps after the first frame.
+  assert.equal(pressDue((WINDOW_DAYS - 1) * PRESS_MS, WINDOW_DAYS), WINDOW_DAYS);
+  assert.equal(pressDue((WINDOW_DAYS - 1) * PRESS_MS - 1, WINDOW_DAYS), WINDOW_DAYS - 1);
+});
+
+test("pressSounds thuds when a pressed day is a multiple of PRESS_SOUND_EVERY, once a week", () => {
+  assert.equal(PRESS_SOUND_EVERY, WEEKDAYS);
+  assert.equal(pressSounds(0, 1), true, "the first day thuds");
+  assert.equal(pressSounds(1, 2), false);
+  assert.equal(pressSounds(6, 7), false);
+  assert.equal(pressSounds(7, 8), true);
+  assert.equal(pressSounds(3, 3), false, "no step, no thud");
+  assert.equal(pressSounds(5, 3), false, "never backwards");
+  // A step that skips over two multiples still thuds once (the throttle).
+  assert.equal(pressSounds(1, 20), true);
+  assert.equal(pressSounds(8, 14), false, "8..13 hold no multiple of 7");
+  assert.equal(pressSounds(8, 15), true, "14 is pressed");
+  assert.equal(pressSounds(0, 3, 0), true, "a nonsense every thuds every day");
+});
+
+test("one day a frame thuds exactly ceil(n / PRESS_SOUND_EVERY) times; dropped frames only thud less", () => {
+  const thuds = (steps: number[]) => {
+    let from = 0;
+    let count = 0;
+    for (const to of steps) {
+      if (pressSounds(from, to)) count++;
+      from = to;
+    }
+    return count;
+  };
+  const oneByOne = Array.from({ length: WINDOW_DAYS }, (_, i) => i + 1);
+  assert.equal(thuds(oneByOne), Math.ceil(WINDOW_DAYS / PRESS_SOUND_EVERY));
+  // Frames at 60 Hz against a 16 ms step: sometimes two days in a frame.
+  const frames: number[] = [];
+  for (let t = 0; frames.at(-1) !== WINDOW_DAYS; t += 1000 / 60) frames.push(pressDue(t, WINDOW_DAYS));
+  // 351 frames for 365 days: no frame spans two thud days, so all 53 thuds remain.
+  assert.equal(frames.length, 351);
+  assert.equal(thuds(frames), 53);
+  // One giant frame (a backgrounded tab) is one thud, not 53.
+  assert.equal(thuds([WINDOW_DAYS]), 1);
 });

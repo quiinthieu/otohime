@@ -1,7 +1,8 @@
 "use client";
 
 import { inkFilter } from "@/lib/ink-modes";
-import { INK, ledgerGrid, receiptLines, SMUDGES, type LedgerCell } from "@/lib/ledger";
+import { INK, ledgerGrid, pressDue, pressSounds, receiptLines, SMUDGES, type LedgerCell } from "@/lib/ledger";
+import { play } from "@/lib/sound-client";
 import type { Ledger } from "@/lib/ledger-data";
 import { createElement, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { cellLabel, centre, daysOf, longDate, moveIndex, PITCH, rosette, SMUDGE_FILTERS, STAMP, VIEW } from "../_lib/calendar";
@@ -11,8 +12,17 @@ import { cellLabel, centre, daysOf, longDate, moveIndex, PITCH, rosette, SMUDGE_
 // layer of transparent squares in date order are the cells: role=button, one tab stop (roving tabindex), arrow
 // keys to move, and a receipt for the day on hover, focus and tap. The grid is computed here from the sparse ledger
 // (lib/ledger.ts is pure and hash-seeded, so server and client draw the same year).
+//
+// Press replays the year: every mark carries its day's index (data-k), the sheet takes data-pressing, and a
+// requestAnimationFrame loop marks the days pressed (data-pressed, set straight on the DOM, no re-render per
+// frame) in date order, with a stamp thud once a week (lib/ledger.ts pressDue and pressSounds). The box counts
+// data-press-step (days pressed) and data-press-ticks (frames that pressed any). Under reduced motion one press
+// lands the whole year at once: no data-pressing, no frame loop, and ledger.css switches transitions off.
 
 type Open = { i: number; pinned: boolean; x: number; y: number; flip: boolean };
+type Press = "idle" | "pressing" | "done";
+
+const REDUCE = "(prefers-reduced-motion: reduce)";
 
 const WEEKDAY_LABELS = [
   [1, "Mon"],
@@ -29,6 +39,8 @@ export function StampCalendar({ ledger, end }: { ledger: Ledger; end: string }) 
   const [open, setOpen] = useState<Open | null>(null);
   const box = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);
+  const [press, setPress] = useState<Press>("idle");
+  const frame = useRef(0);
 
   const cellAt = (i: number) => svg.current?.querySelector<SVGRectElement>(`[data-i="${i}"]`) ?? null;
   // Where the receipt hangs: under the cell, measured against the box, so the scroller can't clip it.
@@ -75,12 +87,70 @@ export function StampCalendar({ ledger, end }: { ledger: Ledger; end: string }) 
     cellAt(next)?.focus();
   };
 
+  useEffect(() => () => cancelAnimationFrame(frame.current), []);
+
+  // Presses the year again in date order. Call from a click only (the first thud needs the gesture).
+  const startPress = () => {
+    const root = svg.current;
+    const out = box.current;
+    if (!root || !out) return;
+    cancelAnimationFrame(frame.current);
+    const n = cells.length;
+    const marks: Element[][] = Array.from({ length: n }, () => []);
+    root.querySelectorAll("[data-k]").forEach((el) => marks[Number(el.getAttribute("data-k"))]?.push(el));
+    root.querySelectorAll("[data-pressed]").forEach((el) => el.removeAttribute("data-pressed"));
+    let step = 0;
+    let ticks = 0;
+    const advance = (to: number) => {
+      for (let k = step; k < to; k++) marks[k].forEach((el) => el.setAttribute("data-pressed", ""));
+      if (pressSounds(step, to)) play("stamp");
+      step = to;
+      out.dataset.pressStep = String(step);
+      out.dataset.pressTicks = String(++ticks);
+    };
+    out.dataset.pressStep = "0";
+    out.dataset.pressTicks = "0";
+    if (matchMedia(REDUCE).matches || n === 0) {
+      out.removeAttribute("data-pressing");
+      if (n) advance(n);
+      setPress("done");
+      return;
+    }
+    // Set here as well as by the render, so the year is hidden before the first day is pressed.
+    out.setAttribute("data-pressing", "");
+    setPress("pressing");
+    advance(1);
+    const start = performance.now();
+    const tick = (now: number) => {
+      const to = pressDue(now - start, n);
+      if (to > step) advance(to);
+      if (step < n) frame.current = requestAnimationFrame(tick);
+      else setPress("done");
+    };
+    frame.current = requestAnimationFrame(tick);
+  };
+  // Stop lands the rest of the year at once.
+  const stopPress = () => {
+    cancelAnimationFrame(frame.current);
+    svg.current?.querySelectorAll("[data-k]").forEach((el) => el.setAttribute("data-pressed", ""));
+    if (box.current) box.current.dataset.pressStep = String(cells.length);
+    setPress("done");
+  };
+
   const receipt = open ? cells[open.i] : null;
   return (
-    <div ref={box} className="ledger">
+    <div ref={box} className="ledger" data-pressing={press === "pressing" ? "" : undefined}>
       <p id={`${id}-help`} className="sr-only">
         Arrow keys move a day up and down and a week left and right; Home and End go to the first and last day.
       </p>
+      <div className="ledger-press">
+        <button type="button" className="chip" onClick={press === "pressing" ? stopPress : startPress}>
+          {press === "pressing" ? "Stop" : "Press"}
+        </button>
+        <p className="sr-only" aria-live="polite">
+          {press === "pressing" ? "Pressing the year, day by day." : press === "done" ? `Pressed all ${cells.length} days.` : ""}
+        </p>
+      </div>
       <div className="ledger-scroll" onScroll={() => open && setOpen({ ...open, ...place(open.i) })}>
         <svg
           ref={svg}
@@ -142,17 +212,19 @@ export function StampCalendar({ ledger, end }: { ledger: Ledger; end: string }) 
           </g>
 
           <g aria-hidden="true" className="ledger-blanks">
-            {cells.map((c) => (c.level === 0 ? <Mark key={c.date} href={`#${id}-blank`} cell={c} /> : null))}
+            {cells.map((c, i) => (c.level === 0 ? <Mark key={c.date} k={i} href={`#${id}-blank`} cell={c} /> : null))}
           </g>
           {Array.from({ length: SMUDGES }, (_, s) => (
             <g key={s} aria-hidden="true" filter={`url(#${id}-smudge-${s})`}>
-              {cells.map((c) =>
-                c.level > 0 && c.style.smudge === s ? <Mark key={c.date} href={`#${id}-stamp`} cell={c} opacity={c.style.ink} /> : null,
+              {cells.map((c, i) =>
+                c.level > 0 && c.style.smudge === s ? (
+                  <Mark key={c.date} k={i} href={`#${id}-stamp`} cell={c} opacity={c.style.ink} />
+                ) : null,
               )}
             </g>
           ))}
           <g aria-hidden="true" filter={`url(#${id}-smudge-0)`}>
-            {cells.map((c) => <Milestones key={c.date} id={id} cell={c} />)}
+            {cells.map((c, i) => <Milestones key={c.date} k={i} id={id} cell={c} />)}
           </g>
 
           <g>
@@ -212,10 +284,11 @@ export function StampCalendar({ ledger, end }: { ledger: Ledger; end: string }) 
   );
 }
 
-function Mark({ href, cell, opacity }: { href: string; cell: LedgerCell; opacity?: number }) {
+function Mark({ k, href, cell, opacity }: { k: number; href: string; cell: LedgerCell; opacity?: number }) {
   const { x, y } = centre(cell.week, cell.weekday);
   return (
     <use
+      data-k={k}
       href={href}
       x={-STAMP / 2}
       y={-STAMP / 2}
@@ -228,7 +301,7 @@ function Mark({ href, cell, opacity }: { href: string; cell: LedgerCell; opacity
 }
 
 // A release is a rosette over the day's stamp; a new post a small NEW stamp on its corner.
-function Milestones({ id, cell }: { id: string; cell: LedgerCell }) {
+function Milestones({ k, id, cell }: { k: number; id: string; cell: LedgerCell }) {
   if (!cell.milestones.length) return null;
   const { x, y } = centre(cell.week, cell.weekday);
   const release = cell.milestones.some((m) => m.kind === "release");
@@ -236,10 +309,10 @@ function Milestones({ id, cell }: { id: string; cell: LedgerCell }) {
   return (
     <>
       {release ? (
-        <use href={`#${id}-rosette`} x={-6} y={-6} width={12} height={12} transform={`translate(${x} ${y}) rotate(${cell.style.rotation * 2})`} />
+        <use data-k={k} href={`#${id}-rosette`} x={-6} y={-6} width={12} height={12} transform={`translate(${x} ${y}) rotate(${cell.style.rotation * 2})`} />
       ) : null}
       {post ? (
-        <use href={`#${id}-new`} x={-5} y={-2.5} width={10} height={5} transform={`translate(${x + 3} ${y + 5}) rotate(${-8 + cell.style.rotation})`} />
+        <use data-k={k} href={`#${id}-new`} x={-5} y={-2.5} width={10} height={5} transform={`translate(${x + 3} ${y + 5}) rotate(${-8 + cell.style.rotation})`} />
       ) : null}
     </>
   );
