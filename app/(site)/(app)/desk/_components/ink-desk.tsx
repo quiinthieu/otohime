@@ -14,6 +14,8 @@
 // aria-live line says what changed. A pickup and a send-to-back rustle, a drop and an open stamp (sound is
 // off unless the visitor turned it on). The notebook's cover and pages turn about the spine on one spring:
 // it peeks open under a hovering mouse or focus, and opening it turns every leaf before the page changes.
+// Under reduced motion every spring snaps to its target and an open changes page at once. On a narrow or
+// touch-first screen (STACKED) desk.css stacks the same markup as a list and the handlers stand aside.
 import {
   DESK_ITEMS,
   DESK_KEY,
@@ -55,7 +57,20 @@ import {
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { anchor, CORK, dropAt, pastThreshold, PIN_PAIRS, pinHomes, PINS, rebase, turn, type PinSpots, type Size } from "../_lib/drag";
+import {
+  anchor,
+  CORK,
+  dropAt,
+  pastThreshold,
+  PIN_PAIRS,
+  pinHomes,
+  PINS,
+  rebase,
+  STACKED,
+  turn,
+  type PinSpots,
+  type Size,
+} from "../_lib/drag";
 import { longPress } from "../_lib/long-press";
 import { DeskArt, PinCard } from "./desk-art";
 
@@ -111,6 +126,9 @@ function saveLayout(next: DeskLayout) {
 // ---- motion ---------------------------------------------------------------------------------------------
 
 const REDUCED = "(prefers-reduced-motion: reduce)";
+// The stacked desk (desk.css) is a list of links: nothing drags, holds or takes the desk's keys. Read in
+// handlers only, never in render, so the server and the first client render stay the same markup.
+const stacked = () => matchMedia(STACKED).matches;
 const REST: Spring = { x: 0, v: 0 };
 // The frame clock's zero for a loop that starts now (only ever read in event handlers).
 const clock = () => performance.now();
@@ -437,7 +455,7 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
 
   // A focused item's keys (lib/desk.ts deskKey). Modified keys stay the browser's.
   function onItemKey(id: string, event: ReactKeyboardEvent<HTMLElement>) {
-    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.altKey || event.ctrlKey || event.metaKey || stacked()) return;
     const act = deskKey(event.key, event.shiftKey);
     if (!act) return;
     if (act.type === "close") {
@@ -482,6 +500,7 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
 
   // A right click (or a touch browser's own long-press menu) opens the radial menu instead.
   function onContextMenu(id: string, event: ReactMouseEvent<HTMLElement>) {
+    if (stacked()) return;
     event.preventDefault();
     hold.cancel();
     if (menu !== id) openMenu(id);
@@ -493,7 +512,7 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
     swallow.current = false;
     // A hold whose let-go never came back to its item is over.
     if (press.current?.held) press.current = null;
-    if (press.current || !event.isPrimary || event.button !== 0) return;
+    if (press.current || !event.isPrimary || event.button !== 0 || stacked()) return;
     const rect = surfaceOf(key)?.getBoundingClientRect();
     if (!rect) return;
     const m = motion.current.get(key);

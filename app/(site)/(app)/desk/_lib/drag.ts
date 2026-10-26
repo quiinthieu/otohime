@@ -8,6 +8,10 @@ import { relatedPairs, type Point } from "../../../../../lib/desk-string.ts";
 
 export type Size = { w: number; h: number };
 
+// A narrow screen or a touch-first one gets the stacked desk: the same items as a list, no drag, no string.
+// desk.css lays it out under this very media query, so the server's HTML is already stacked there.
+export const STACKED = "(max-width: 40rem), (pointer: coarse)";
+
 // A press that moves less than this is a click on the link; past it, a drag.
 export const DRAG_THRESHOLD = 6;
 

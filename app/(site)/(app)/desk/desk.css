@@ -1,6 +1,7 @@
 /* The Ink Desk (_components/ink-desk.tsx). The desk keeps one aspect, so a spot saved as a fraction lands on
    the same part of it at any width. Objects are placed by their centre (left/top) and moved by transform,
-   which the component writes on every frame of a drag; nothing here transitions it. */
+   which the component writes on every frame of a drag; nothing here transitions it. A narrow or touch-first
+   screen gets the stacked desk at the end of the file. */
 
 .desk-bar {
   display: flex;
@@ -349,8 +350,70 @@
   }
 }
 
+/* Reduced motion: the springs snap (the component) and nothing on the desk, or in it, transitions or animates,
+   the Tidy up chip and the menu included. Scoped and not !important: the site's global reset only shortens
+   transitions, which still run. */
 @media (prefers-reduced-motion: reduce) {
-  .desk-menu {
+  .desk-wrap,
+  .desk-wrap * {
+    transition: none;
     animation: none;
+  }
+}
+
+/* The stacked desk, under _lib/drag.ts STACKED: the same markup laid out as a list in the registry's order,
+   then the pinned projects. No string, no tilt, no spot (the inline left, top and transform are overruled), no
+   menu, nothing to tidy, and a finger scrolls anywhere. */
+@media (max-width: 40rem), (pointer: coarse) {
+  .desk-bar,
+  .desk-string,
+  .desk-menu {
+    display: none;
+  }
+
+  .desk {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    aspect-ratio: auto;
+    padding: 1.25rem 1rem;
+  }
+
+  .desk-items,
+  .desk-pins {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+    gap: 1.75rem 1rem;
+  }
+
+  .desk-item,
+  .desk-pin {
+    position: relative;
+    inset: auto !important;
+    z-index: auto !important;
+    width: auto;
+    transform: none !important;
+    cursor: pointer;
+    touch-action: auto;
+  }
+
+  .desk-item {
+    max-width: 14rem;
+  }
+
+  .desk-console {
+    max-width: 7rem;
+  }
+
+  .desk-tape {
+    touch-action: auto;
+  }
+
+  .desk-cork {
+    position: static;
+    order: 1;
+    width: auto;
+    aspect-ratio: auto;
+    padding: 0.75rem;
   }
 }

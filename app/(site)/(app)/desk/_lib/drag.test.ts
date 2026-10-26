@@ -6,7 +6,7 @@ import { site } from "../../../../../content/site.ts";
 import { DESK_ITEMS } from "../../../../../lib/desk.ts";
 import { stringPath } from "../../../../../lib/desk-string.ts";
 import { CONSOLE_MENU } from "../../../../../lib/pages.ts";
-import { anchor, CORK, DRAG_THRESHOLD, dropAt, pastThreshold, PIN_PAIRS, pinHomes, PINS, rebase, turn } from "./drag.ts";
+import { anchor, CORK, DRAG_THRESHOLD, dropAt, pastThreshold, PIN_PAIRS, pinHomes, PINS, rebase, STACKED, turn } from "./drag.ts";
 
 const DIR = resolve(import.meta.dirname, "..");
 const read = (p: string) => readFileSync(join(DIR, p), "utf8");
@@ -145,8 +145,80 @@ test("touch-action: none is on the drag handles only: the tape and the pins", ()
     // No inline style sets it either (the comments may name it).
     assert.doesNotMatch(read(file).replace(/^\s*\/\/.*$/gm, ""), /touch-?action/i, file);
   }
-  // Nothing on the desk transitions its transform: the frames are the component's.
-  assert.doesNotMatch(sheet, /transition\s*:/);
+  // Nothing on the desk transitions its transform: the frames are the component's. The one transition rule
+  // there is turns them all off.
+  assert.deepEqual([...sheet.matchAll(/transition\s*:\s*([^;]+);/g)].map((m) => m[1]), ["none"]);
+});
+
+// The rules inside one @media block of desk.css, by selector.
+function mediaRules(query: string): Map<string, string> {
+  const sheet = css();
+  const at = sheet.indexOf(`@media ${query} {`);
+  assert.ok(at >= 0, `desk.css has @media ${query}`);
+  let depth = 0;
+  let end = sheet.indexOf("{", at);
+  for (; end < sheet.length; end++) {
+    if (sheet[end] === "{") depth++;
+    else if (sheet[end] === "}" && --depth === 0) break;
+  }
+  const body = sheet.slice(sheet.indexOf("{", at) + 1, end);
+  const rules = new Map<string, string>();
+  for (const m of body.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+    for (const sel of m[1].split(",")) rules.set(sel.trim(), (rules.get(sel.trim()) ?? "") + m[2]);
+  }
+  return rules;
+}
+const has = (rules: Map<string, string>, sel: string, decl: RegExp) => assert.match(rules.get(sel) ?? "", decl, `${sel} ${decl}`);
+
+test("STACKED is a narrow or a coarse-pointer screen, and desk.css stacks the desk under that very query", () => {
+  assert.equal(STACKED, "(max-width: 40rem), (pointer: coarse)");
+  const stack = mediaRules(STACKED);
+  // No string, no menu, nothing to tidy.
+  for (const sel of [".desk-string", ".desk-menu", ".desk-bar"]) has(stack, sel, /display: none;/);
+  // The items and the pins leave their spots: the inline left, top, z-index and transform are overruled.
+  for (const sel of [".desk-item", ".desk-pin"]) {
+    has(stack, sel, /position: relative;/);
+    has(stack, sel, /inset: auto !important;/);
+    has(stack, sel, /z-index: auto !important;/);
+    has(stack, sel, /transform: none !important;/);
+    has(stack, sel, /touch-action: auto;/);
+  }
+  has(stack, ".desk-tape", /touch-action: auto;/);
+  has(stack, ".desk", /aspect-ratio: auto;/);
+  has(stack, ".desk-items", /display: grid;/);
+  has(stack, ".desk-cork", /position: static;/);
+});
+
+test("the stacked desk is the same markup: render never reads the media, only the handlers do", () => {
+  const desk = read("_components/ink-desk.tsx");
+  assert.match(desk, /const stacked = \(\) => matchMedia\(STACKED\)\.matches;/);
+  // Every matchMedia call is inside a function body that runs on an event, none in the JSX.
+  const jsx = desk.slice(desk.indexOf("  return (\n    <div className=\"desk-wrap\">"));
+  assert.ok(jsx.length > 100);
+  assert.doesNotMatch(jsx, /matchMedia|stacked\(\)/);
+  assert.doesNotMatch(desk, /useSyncExternalStore\([^)]*(STACKED|matchMedia)/);
+  // A press, a right click and the desk's keys all stand aside on the stacked desk.
+  const fn = (name: string) => desk.slice(desk.indexOf(`function ${name}(`), desk.indexOf("\n  }\n", desk.indexOf(`function ${name}(`)));
+  assert.match(fn("onPointerDown"), /if \(press\.current \|\| !event\.isPrimary \|\| event\.button !== 0 \|\| stacked\(\)\) return;/);
+  assert.match(fn("onContextMenu"), /^[^]*?\{\n\s*if \(stacked\(\)\) return;\n\s*event\.preventDefault\(\);/);
+  assert.match(fn("onItemKey"), /\|\| stacked\(\)\) return;/);
+});
+
+test("reduced motion: nothing on the desk or in it transitions or animates, and the springs snap", () => {
+  const still = mediaRules("(prefers-reduced-motion: reduce)");
+  for (const sel of [".desk-wrap", ".desk-wrap *"]) {
+    has(still, sel, /transition: none;/);
+    has(still, sel, /animation: none;/);
+    // Not !important: the site's own reset is !important on durations only, so this one stays readable.
+    assert.doesNotMatch(still.get(sel) ?? "", /!important/);
+  }
+  const desk = read("_components/ink-desk.tsx");
+  const kick = desk.slice(desk.indexOf("function kick"), desk.indexOf("if (frame.current) return;"));
+  assert.match(kick, /if \(matchMedia\(REDUCED\)\.matches\)/);
+  assert.match(kick, /m\.x = \{ x: m\.tx, v: 0 \};/);
+  assert.match(kick, /m\.r = REST;/);
+  // An open under way lands at once and changes the page.
+  assert.match(kick, /f\.s = \{ x: f\.to, v: 0 \};[\s\S]*flipLanded\(\);[\s\S]*return;/);
 });
 
 test("the cork keeps the string's aspect, so the SVG scales evenly", () => {
