@@ -1,0 +1,26 @@
+{
+  "run": {
+    "id": "run-9070",
+    "agent_profile": "codex-sol-6-1-high",
+    "role": "quality_engineer",
+    "runner": "fleet",
+    "worker_id": "billie-mac",
+    "attempt": 2,
+    "started_at": "2026-10-26T18:54:16.950129Z",
+    "tm_task_id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+    "account_id": "codex-main"
+  },
+  "profile": {
+    "profile": {
+      "agent": "codex",
+      "consecutive_failures": 0,
+      "default": false,
+      "effort": "high",
+      "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "health": "healthy",
+      "id": "codex-sol-6-1-high",
+      "model": "gpt-6.1-sol high",
+      "model_id": "gpt-6.1-sol"
+    }
+  }
+}

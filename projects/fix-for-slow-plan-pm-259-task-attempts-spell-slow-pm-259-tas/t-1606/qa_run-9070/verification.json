@@ -1,0 +1,98 @@
+{
+  "phase": "checkpoint; third E2E in progress",
+  "source_sha": "5abaebc70f9f4efb627fe9a0e7db81717dc77533",
+  "delivery_sha": "52ec0904d93171262d262a21c0d61cf27d3ae8e2",
+  "verification": [
+    {
+      "name": "trace helper unit test",
+      "cwd": ".",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+      "expect": "exit0",
+      "status": "pass",
+      "exit_code": 0,
+      "log": "trace.log"
+    },
+    {
+      "name": "lint and types",
+      "cwd": ".",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "status": "pass",
+      "exit_code": 0,
+      "logs": [
+        "lint.log",
+        "types.log",
+        "lint-with-probes.log"
+      ]
+    },
+    {
+      "name": "unit tests",
+      "cwd": ".",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "status": "pass",
+      "exit_code": 0,
+      "log": "unit.log",
+      "pass": 2346
+    },
+    {
+      "name": "e2e x3",
+      "cwd": ".",
+      "cmd": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
+      "expect": "exit0",
+      "status": "running",
+      "attempts": [
+        {
+          "log": "e2e-1.log",
+          "status": "pass",
+          "counts": {
+            "tests": "170",
+            "pass": "169",
+            "fail": "0",
+            "skipped": "1",
+            "duration_ms": "405306.595083"
+          }
+        },
+        {
+          "log": "e2e-2.log",
+          "status": "pass",
+          "counts": {
+            "tests": "170",
+            "pass": "169",
+            "fail": "0",
+            "skipped": "1",
+            "duration_ms": "391932.780292"
+          }
+        },
+        {
+          "log": "e2e-3.log",
+          "status": "running",
+          "counts": {}
+        }
+      ]
+    }
+  ],
+  "additional": {
+    "footer": {
+      "pass": 168,
+      "fail": 0,
+      "log": "footer-local.log",
+      "expected_identity": "dev"
+    },
+    "independent_browser": {
+      "local_wide_pass": 3,
+      "live_wide_pass": 3,
+      "negative": "tablet drag persistence expectation rejected"
+    },
+    "delivered_trace_negative": {
+      "exit_code": 1,
+      "expected": true,
+      "log": "delivered-trace-negative.log"
+    },
+    "clock_diagnostic": {
+      "original_premise_fail": 2,
+      "original_premise_trials": 3,
+      "log": "clock-control.log"
+    }
+  }
+}

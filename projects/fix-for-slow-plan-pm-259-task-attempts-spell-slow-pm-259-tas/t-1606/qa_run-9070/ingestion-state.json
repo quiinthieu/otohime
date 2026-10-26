@@ -1,0 +1,38 @@
+{
+  "task": {
+    "id": "t-1606",
+    "status": "qa_running",
+    "fix_cycle": 1,
+    "lease_run_id": "run-9070",
+    "lease_until": "2026-10-26T19:10:07.504089Z",
+    "updated_at": "2026-10-26T18:54:16.950129Z"
+  },
+  "green_gate": {
+    "id": "ver-3605",
+    "run_id": "run-9066",
+    "git_sha": "52ec090",
+    "status": "pass",
+    "created_at": "2026-10-26T18:52:43.972111Z"
+  },
+  "deliveryRun": {
+    "id": "run-9065",
+    "agent_profile": "codex-sol-6-1-high",
+    "role": "software_engineer",
+    "runner": "fleet",
+    "worker_id": "avietidol-mac-mini",
+    "status": "succeeded",
+    "tm_task_id": "763fefd8-0f73-46ca-b677-a7f57f3a545b",
+    "started_at": "2026-10-26T18:10:54.358655Z",
+    "finished_at": "2026-10-26T18:34:42.100388Z"
+  },
+  "verificationRun": {
+    "id": "run-9066",
+    "role": "verify",
+    "runner": "fleet",
+    "worker_id": "avietidol-z490",
+    "status": "succeeded",
+    "tm_task_id": "f0a4f16a-9f0d-4b5f-98fd-25a0aa2eb143",
+    "started_at": "2026-10-26T18:34:42.100388Z",
+    "finished_at": "2026-10-26T18:52:43.972111Z"
+  }
+}

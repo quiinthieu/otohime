@@ -1,0 +1,119 @@
+{
+  "observed_at": "2026-10-26T19:07:08.476772+00:00",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "log",
+        "--oneline",
+        "4b8278a..52ec090",
+        "--",
+        ".github/workflows/ci.yml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "log",
+        "--oneline",
+        "4b8278a..5abaebc",
+        "--",
+        ".github/workflows/ci.yml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "4b8278a..5abaebc",
+        "--",
+        ".github/workflows/ci.yml",
+        "package-lock.json",
+        "e2e/kame.test.ts",
+        "scripts/probe-end.mjs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "52ec090",
+        "4b8278a"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "52ec090",
+        "5abaebc"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "log",
+        "-4",
+        "--oneline",
+        "--",
+        "e2e/desk.test.ts"
+      ],
+      "exit": 0,
+      "stdout": "52ec090 pm-270/t-1606: Drive notebook frames and verify footer title sources\n0b349dc pm-270/t-1606: Make the desk swipe observe its preconditions and carry a gesture trace\n2131b2a pm-250/t-1534: Stack the desk on narrow and touch screens, snap it under reduced motion, add its browser e2e\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "0b349dc",
+        "4b8278a"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "3ae76a4",
+        "4b8278a"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "9ddd084",
+        "4b8278a"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

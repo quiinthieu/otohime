@@ -1,0 +1,77 @@
+{
+  "4b8278a": {
+    "files": {
+      "package.json": "8b8d3b3262167054d7cbf6a4192d2feb703cd9f253049635a6fe1a453cb78b30",
+      "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+      ".github/workflows/ci.yml": "134ea741063c0f5f264b40eb1bf01d42d0273e79c42350552119e598fb58b276",
+      "e2e/desk.test.ts": "e2b221a6abcf9001dc3db8c7ca5c91bd12c414819cdbe5eed3d9c55849e9d903",
+      "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+      "scripts/e2e-gesture-trace.test.ts": "c7e0f4d10b63482538f8ece310917e0eae2be91f592d95ff8ea25fc71bb8b42b",
+      "e2e/kame.test.ts": "2c2a7990a8a6e52d91dc3f07c267d04a31bd132cac5f2406b9560f601a03d56c",
+      "scripts/probe-end.mjs": "958029c7b17fbd50345b1e949ddd6beab7a37ec88455be0e83ee0e21850b70af",
+      "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+      "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+      "app/(site)/(app)/desk/_components/ink-desk.tsx": "012876f0500aadc288ad2f4de791093403cc9d071cd7d6eea528602f6f6ac7f5",
+      "lib/desk.ts": "4d407843762fd5f91cf3f850e28991269cbb86ee9ffe6484d8fb671d5c94dc98",
+      "components/kame/companion.tsx": "014d7cf8b87c9b45c6178b72ee5f65373755d0c644fea4742295759ccf1f10fc",
+      "components/end-footer.tsx": "f022a58c921430992ab3b466eb9f720ac8e1eea34b0a9137e655d6f6527f75a7",
+      "e2e/probe-end.test.ts": null,
+      "scripts/e2e-local.sh": "263cbd935fb5620ea5da39a0ea72ee7ca9447de527354f00386429cd349468f4",
+      "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+      "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+      "components/bottle/button.tsx": null,
+      "components/bottle/panel.tsx": null
+    },
+    "fingerprint": "87e20cd07b155da96592ff01ad267eb1b2ecd8a2be5abcf92f6afc87af7d6713"
+  },
+  "52ec090": {
+    "files": {
+      "package.json": "8b8d3b3262167054d7cbf6a4192d2feb703cd9f253049635a6fe1a453cb78b30",
+      "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+      ".github/workflows/ci.yml": "134ea741063c0f5f264b40eb1bf01d42d0273e79c42350552119e598fb58b276",
+      "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+      "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+      "scripts/e2e-gesture-trace.test.ts": "c7e0f4d10b63482538f8ece310917e0eae2be91f592d95ff8ea25fc71bb8b42b",
+      "e2e/kame.test.ts": "2c2a7990a8a6e52d91dc3f07c267d04a31bd132cac5f2406b9560f601a03d56c",
+      "scripts/probe-end.mjs": "958029c7b17fbd50345b1e949ddd6beab7a37ec88455be0e83ee0e21850b70af",
+      "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+      "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+      "app/(site)/(app)/desk/_components/ink-desk.tsx": "012876f0500aadc288ad2f4de791093403cc9d071cd7d6eea528602f6f6ac7f5",
+      "lib/desk.ts": "4d407843762fd5f91cf3f850e28991269cbb86ee9ffe6484d8fb671d5c94dc98",
+      "components/kame/companion.tsx": "014d7cf8b87c9b45c6178b72ee5f65373755d0c644fea4742295759ccf1f10fc",
+      "components/end-footer.tsx": "f022a58c921430992ab3b466eb9f720ac8e1eea34b0a9137e655d6f6527f75a7",
+      "e2e/probe-end.test.ts": "6473052092c99bb15de816c64ee5097d0a15029dbe75a880d22cf4ec8e7045c4",
+      "scripts/e2e-local.sh": "263cbd935fb5620ea5da39a0ea72ee7ca9447de527354f00386429cd349468f4",
+      "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+      "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+      "components/bottle/button.tsx": null,
+      "components/bottle/panel.tsx": null
+    },
+    "fingerprint": "09b19c6e15ff54ba1b107b75c0d5a1f5857aed5679a335dab428d9c50901e141"
+  },
+  "5abaebc": {
+    "files": {
+      "package.json": "8b8d3b3262167054d7cbf6a4192d2feb703cd9f253049635a6fe1a453cb78b30",
+      "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+      ".github/workflows/ci.yml": "134ea741063c0f5f264b40eb1bf01d42d0273e79c42350552119e598fb58b276",
+      "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+      "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+      "scripts/e2e-gesture-trace.test.ts": "c7e0f4d10b63482538f8ece310917e0eae2be91f592d95ff8ea25fc71bb8b42b",
+      "e2e/kame.test.ts": "2c2a7990a8a6e52d91dc3f07c267d04a31bd132cac5f2406b9560f601a03d56c",
+      "scripts/probe-end.mjs": "958029c7b17fbd50345b1e949ddd6beab7a37ec88455be0e83ee0e21850b70af",
+      "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+      "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+      "app/(site)/(app)/desk/_components/ink-desk.tsx": "012876f0500aadc288ad2f4de791093403cc9d071cd7d6eea528602f6f6ac7f5",
+      "lib/desk.ts": "4d407843762fd5f91cf3f850e28991269cbb86ee9ffe6484d8fb671d5c94dc98",
+      "components/kame/companion.tsx": "014d7cf8b87c9b45c6178b72ee5f65373755d0c644fea4742295759ccf1f10fc",
+      "components/end-footer.tsx": "043707b4ed9eb2b106eae92a30f2e9cb7c576f7d65c1ca6c22b0b160a3adef0d",
+      "e2e/probe-end.test.ts": "6473052092c99bb15de816c64ee5097d0a15029dbe75a880d22cf4ec8e7045c4",
+      "scripts/e2e-local.sh": "263cbd935fb5620ea5da39a0ea72ee7ca9447de527354f00386429cd349468f4",
+      "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+      "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+      "components/bottle/button.tsx": "fd66c503666593d8104ce2f2f9dcc6fa332f40734cc34207aaf063a26dc24c98",
+      "components/bottle/panel.tsx": "a466c2f178d6560a1848f021fd4b7de46986fb3bd40590db77538ad7258618f7"
+    },
+    "fingerprint": "91b1493dc63b92911c976eca004f195625097d6b349990e0451d6ee8bb24138a"
+  }
+}

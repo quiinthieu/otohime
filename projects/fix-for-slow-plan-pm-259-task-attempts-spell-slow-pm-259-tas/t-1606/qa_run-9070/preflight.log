@@ -1,0 +1,5 @@
+(node:89088) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/avietidol/Library/Application%20Support/build-worker/leases/a70403e1-d4fc-4944-8233-2ee4127908b3-ce0699ff503f82370932e672bc10472f/work/otohime/scripts/e2e-gesture-trace.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/avietidol/Library/Application Support/build-worker/leases/a70403e1-d4fc-4944-8233-2ee4127908b3-ce0699ff503f82370932e672bc10472f/work/otohime/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"node":"v22.23.3","chrome":"155.0.8059.86","pgAdapter":true,"query":[{"ready":1}],"traceImport":"no pointer event reached the page"}
