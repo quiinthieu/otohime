@@ -1,0 +1,3 @@
+# Fix plan t-1521 (cause=code)
+Only defect: Co-Authored-By trailer in the message of 93413db. Do not rewrite shared history (never force-push). Fix: add a follow-up commit `pm-249/t-1521: ...` authored by Otohime <quiinthieu@gmail.com> with NO trailer (e.g. an amend to summary.md noting the trailer was a mistake), and make sure all later commits omit trailers. If the board requires a clean sha, the owner (decider) must waive or approve a one-time rewrite of 93413db's message (git commit --amend on the unpushed-by-others tip is not possible now; main already has it).
+Re-verify with: git log -1 --format=%B <sha> | grep -c Co-Authored-By  (expect 0 for new commits).
