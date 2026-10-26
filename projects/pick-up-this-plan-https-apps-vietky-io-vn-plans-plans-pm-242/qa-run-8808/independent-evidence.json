@@ -1,0 +1,120 @@
+{
+  "delivery_run": 40295803050,
+  "delivery_job": 121481439046,
+  "delivery_sha": "15fd171ac7d54027fd1c13a715efe1de13110a6b",
+  "delivery_failed_step": "E2E against next start",
+  "production_job": 121484004029,
+  "production_conclusion": "skipped",
+  "second_run": 40296784613,
+  "second_job": 121484664977,
+  "second_sha": "4059b63f5a43d7184a5f6029ebee654c5e7840bf",
+  "second_steps": [
+    {
+      "name": "Set up job",
+      "conclusion": "success"
+    },
+    {
+      "name": "Initialize containers",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@v7",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/cache@v6",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@v7",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm ci",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm run lint",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm run typecheck",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm test",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm run ask:check",
+      "conclusion": "success"
+    },
+    {
+      "name": "Migrations match db/schema.ts",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm run build",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm run db:migrate",
+      "conclusion": "success"
+    },
+    {
+      "name": "E2E against next start",
+      "conclusion": "failure"
+    },
+    {
+      "name": "Motion probe, signed in",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Footer walk",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Footer Chromium probe",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Run actions/setup-node@v7",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Run actions/cache@v6",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Run actions/checkout@v7",
+      "conclusion": "success"
+    },
+    {
+      "name": "Stop containers",
+      "conclusion": "success"
+    }
+  ],
+  "second_source_scope": "Only unrelated project QA documentation differs from delivery; application, lock and CI fingerprints match.",
+  "raw_delivery_log_api": "HTTP Error 403: rate limit exceeded\n{\"message\":\"API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n",
+  "raw_delivery_step_html": "HTTP Error 404: Not Found",
+  "original_40277024423": "Public HTML failure annotation: Process completed with exit code 1; exact assertion unread.",
+  "original_40275822192": "Public HTML failure annotation: Process completed with exit code 1; exact assertion unread.",
+  "last_green_run": 40263545741,
+  "last_green_sha": "c38f72a6e927800b363769a1de57ee2ceed69470",
+  "last_green_public_html": "Success",
+  "ci_configuration_diff_last_green_to_delivery": "empty",
+  "live_health": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  },
+  "live_build_sha": "c38f72a6e927800b363769a1de57ee2ceed69470",
+  "delivery_is_live_ancestor_exit": 1,
+  "live_function_logs": "Not exposed by public health/presence endpoints; no Vercel log credentials are available.",
+  "author_artifact": {
+    "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+    "bytes": 44,
+    "read_status": "unavailable: HTTP 401/403 from task-manager artifact route; manifest only. Git author/committer were independently read and match; no coauthor trailer."
+  }
+}

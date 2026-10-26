@@ -1,0 +1,196 @@
+[
+  {
+    "run": 40277024423,
+    "url": "https://github.com/quiinthieu/otohime/actions/runs/40277024423/job/121421820314",
+    "failed_steps": [
+      {
+        "name": "E2E against next start",
+        "conclusion": "failure"
+      }
+    ],
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Initialize containers",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v7",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/cache@v6",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-node@v7",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm ci",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run lint",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run typecheck",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm test",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run ask:check",
+        "conclusion": "success"
+      },
+      {
+        "name": "Migrations match db/schema.ts",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run build",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run db:migrate",
+        "conclusion": "success"
+      },
+      {
+        "name": "E2E against next start",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Motion probe, signed in",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Footer walk",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Footer Chromium probe",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Post Run actions/setup-node@v7",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Post Run actions/cache@v6",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Post Run actions/checkout@v7",
+        "conclusion": "success"
+      },
+      {
+        "name": "Stop containers",
+        "conclusion": "success"
+      }
+    ],
+    "raw_log": "unread; authenticated log endpoints unavailable"
+  },
+  {
+    "run": 40275822192,
+    "url": "https://github.com/quiinthieu/otohime/actions/runs/40275822192/job/121418580863",
+    "failed_steps": [
+      {
+        "name": "Footer Chromium probe",
+        "conclusion": "failure"
+      }
+    ],
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Initialize containers",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v7",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/cache@v6",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-node@v7",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm ci",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run lint",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run typecheck",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm test",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run ask:check",
+        "conclusion": "success"
+      },
+      {
+        "name": "Migrations match db/schema.ts",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run build",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run db:migrate",
+        "conclusion": "success"
+      },
+      {
+        "name": "E2E against next start",
+        "conclusion": "success"
+      },
+      {
+        "name": "Motion probe, signed in",
+        "conclusion": "success"
+      },
+      {
+        "name": "Footer walk",
+        "conclusion": "success"
+      },
+      {
+        "name": "Footer Chromium probe",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Post Run actions/setup-node@v7",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Post Run actions/cache@v6",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Post Run actions/checkout@v7",
+        "conclusion": "success"
+      },
+      {
+        "name": "Stop containers",
+        "conclusion": "success"
+      }
+    ],
+    "raw_log": "unread; authenticated log endpoints unavailable"
+  }
+]

@@ -1,0 +1,181 @@
+{
+  "base": "http://localhost:42697",
+  "live": false,
+  "fake": false,
+  "checks": [
+    "real health and no-store presence API",
+    "canonical-link corruption is detected and restoration passes (DOM-only negative control)",
+    "keyboard reaches all seven page links and the final waterline",
+    "old page-wide status locator fails; press-scoped locator resolves (real live-region negative control)"
+  ],
+  "hops": [
+    {
+      "attempt": 1,
+      "from": "/",
+      "errors": []
+    },
+    {
+      "attempt": 2,
+      "from": "/work",
+      "errors": []
+    },
+    {
+      "attempt": 3,
+      "from": "/",
+      "errors": []
+    },
+    {
+      "attempt": 4,
+      "from": "/work",
+      "errors": []
+    },
+    {
+      "attempt": 5,
+      "from": "/",
+      "errors": []
+    },
+    {
+      "attempt": 6,
+      "from": "/work",
+      "errors": []
+    },
+    {
+      "attempt": 7,
+      "from": "/",
+      "errors": []
+    },
+    {
+      "attempt": 8,
+      "from": "/work",
+      "errors": []
+    },
+    {
+      "attempt": 9,
+      "from": "/",
+      "errors": []
+    },
+    {
+      "attempt": 10,
+      "from": "/work",
+      "errors": []
+    },
+    {
+      "attempt": 11,
+      "from": "/",
+      "errors": []
+    },
+    {
+      "attempt": 12,
+      "from": "/work",
+      "errors": []
+    }
+  ],
+  "presence": {
+    "spotify": "spotify-off",
+    "track": null,
+    "steam": "steam-off",
+    "game": null,
+    "readAt": "2026-10-26T09:15:15.881Z"
+  },
+  "browser": "154.0.8037.57",
+  "sha": "15fd171ac7d54027fd1c13a715efe1de13110a6b",
+  "footerPages": [
+    "/work",
+    "/play",
+    "/notes",
+    "/music",
+    "/projects",
+    "/sketches",
+    "/desk"
+  ],
+  "tabStops": [
+    {
+      "href": null,
+      "text": "Poke the save-point console",
+      "waterline": false
+    },
+    {
+      "href": null,
+      "text": "",
+      "waterline": false
+    },
+    {
+      "href": null,
+      "text": "",
+      "waterline": false
+    },
+    {
+      "href": "/work",
+      "text": "Fig. 02Work",
+      "waterline": false
+    },
+    {
+      "href": "/play",
+      "text": "Fig. 03Play",
+      "waterline": false
+    },
+    {
+      "href": "/notes",
+      "text": "Fig. 04Notes",
+      "waterline": false
+    },
+    {
+      "href": "/music",
+      "text": "Fig. 05Music",
+      "waterline": false
+    },
+    {
+      "href": "/projects",
+      "text": "Fig. 06Projects",
+      "waterline": false
+    },
+    {
+      "href": "/sketches",
+      "text": "Fig. 07Sketches",
+      "waterline": false
+    },
+    {
+      "href": "/desk",
+      "text": "Fig. 08Desk",
+      "waterline": false
+    },
+    {
+      "href": "/zine",
+      "text": "PrintPrint a zine",
+      "waterline": false
+    },
+    {
+      "href": "https://t.me/otohime73",
+      "text": "TGTelegram",
+      "waterline": false
+    },
+    {
+      "href": "https://x.com/otohime73",
+      "text": "XX",
+      "waterline": false
+    },
+    {
+      "href": "https://open.spotify.com/user/2rjk8knzs0fyfc7oovb2zezqw",
+      "text": "SPSpotify",
+      "waterline": false
+    },
+    {
+      "href": "mailto:hello@otohime.dev",
+      "text": "@Email",
+      "waterline": false
+    },
+    {
+      "href": "#main",
+      "text": "▲ Back to top",
+      "waterline": false
+    },
+    {
+      "href": "/ryugu",
+      "text": "Below the waterline: Ryugu-jo ↓",
+      "waterline": true
+    }
+  ],
+  "pressStatus": "",
+  "globalStatusCount": 2,
+  "pageErrorsBeforeHops": []
+}
