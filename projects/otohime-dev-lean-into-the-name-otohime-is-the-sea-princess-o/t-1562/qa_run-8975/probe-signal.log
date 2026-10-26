@@ -1,0 +1,6 @@
+A off by default: 0 contexts after a click, 'a' and Enter; aria-pressed = false
+B button on: contexts 1 state running output RMS 2.71e-3 stored on
+C Pocket chip off in another tab: palace RMS 0.00e+0 status off; Home contexts 0
+D Pocket on -> waiting; ArrowUp -> RMS 2.98e-3 ; back to the surface -> context page-replaced
+E no Web Audio: unsupported, aria-disabled = true , stored null, errors 0
+QA PROBE PASS
