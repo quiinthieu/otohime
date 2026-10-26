@@ -23,8 +23,8 @@ Part 2 is Ink ghosts, submitted as a successor idea with `after_plan_id=pm-256`,
 
 - **Role:** software engineer
 - **Problem:** the site has no hidden undersea destination, and the existing cartridge styling must not leak into the new scene.
-- **Action items:** create an isolated palace route and layout; add keyboard, Pocket, and below-waterline entry points; implement water caustics with a static fallback; animate ink fish that flee pointer/tap input; pause when hidden and honor reduced motion; add focused unit/e2e coverage for all entry and fallback behaviors.
-- **Interfaces:** `app/`; `components/`; `components/handheld.tsx`; `components/end-footer.tsx`.
+- **Action items:** create an isolated palace route and layout; add keyboard, Pocket, and below-waterline entry points; implement water caustics with a static fallback; animate ink fish that flee pointer/tap input; pause when hidden and honor reduced motion; add focused unit/e2e coverage for all entry and fallback behaviors and register its test command in `package.json`.
+- **Interfaces:** `components/handheld.tsx`; `components/end-footer.tsx` (new route and palace component paths are specified in the action items).
 - **Non-goals:** history replay, sound, realtime visitors, historical snapshots, new runtime services.
 - **Verification:** `npm test`; `npm run lint`; `npm run build`.
 - **Acceptance:** the palace is reachable through all three entry points, remains isolated from cartridge CSS, and its motion degrades safely without WebGL or under reduced motion.
@@ -34,7 +34,7 @@ Part 2 is Ink ghosts, submitted as a successor idea with `after_plan_id=pm-256`,
 - **Role:** software engineer
 - **Problem:** Tamatebako needs accurate, bounded git-history data without runtime git access.
 - **Action items:** add a build-time history indexer that emits a compact, capped list of dated commits with subject, plan/task prefix, and changed-file summary; add deterministic tests and a `--check` mode; make shallow-clone or git-unavailable builds use the committed JSON fallback without failing.
-- **Interfaces:** `scripts/`; `content/`; `package.json`.
+- **Interfaces:** `scripts/`; `package.json` (the generated `content/history.json` path is specified in the action items).
 - **Non-goals:** rendering snapshots from historical builds, runtime git access, unbounded history output.
 - **Verification:** `node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/history-index.test.ts`; `npm run build`.
 - **Acceptance:** indexing is deterministic and bounded, `--check` detects stale data, and a shallow or unavailable git history still builds from the committed fallback.
@@ -43,8 +43,8 @@ Part 2 is Ink ghosts, submitted as a successor idea with `after_plan_id=pm-256`,
 
 - **Role:** software engineer
 - **Problem:** the palace has no time artifact connecting Otohime's legend to the actual history of otohime.dev.
-- **Action items:** add a lacquered box interaction with a brief smoke reveal; build an accessible scrubber over the static history index; show real commit dates and subjects; map scrubber age to a faded yellow-paper treatment; cover keyboard, touch, reduced-motion, and empty-history behavior.
-- **Interfaces:** `components/`; `app/`; `content/`.
+- **Action items:** add a lacquered box interaction with a brief smoke reveal; build an accessible scrubber over the static history index; show real commit dates and subjects; map scrubber age to a faded yellow-paper treatment; cover keyboard, touch, reduced-motion, and empty-history behavior; register its tests in `package.json`.
+- **Interfaces:** `package.json` (the scrubber, route, and static-data paths are specified in the action items).
 - **Non-goals:** reconstructing old source trees or taking snapshots of prior builds.
 - **Verification:** `npm test`; `npm run lint`; `npm run build`.
 - **Acceptance:** opening the box reveals a scrubber whose positions show actual changelog entries and progressively aged paper, without claiming to render old site versions.
@@ -53,8 +53,8 @@ Part 2 is Ink ghosts, submitted as a successor idea with `after_plan_id=pm-256`,
 
 - **Role:** software engineer
 - **Problem:** ambient sound must be explicit, user-controlled, and compatible with browser autoplay rules.
-- **Action items:** generate a quiet filtered-water ambience with Web Audio after a user gesture; keep it off by default; add a Pocket toggle and persisted preference; stop audio when disabled or the route is left; cover unsupported AudioContext and reduced-motion/accessibility expectations.
-- **Interfaces:** `components/`; `components/handheld.tsx`; `app/`.
+- **Action items:** generate a quiet filtered-water ambience with Web Audio after a user gesture; keep it off by default; add a Pocket toggle and persisted preference; stop audio when disabled or the route is left; cover unsupported AudioContext and reduced-motion/accessibility expectations; register its tests in `package.json`.
+- **Interfaces:** `components/handheld.tsx`; `package.json` (the ambience component and route paths are specified in the action items).
 - **Non-goals:** bundled audio assets, autoplay, sound on other routes, telemetry.
 - **Verification:** `npm test`; `npm run lint`; `npm run build`.
 - **Acceptance:** audio remains silent until enabled by the visitor, can be disabled from Pocket, and degrades without errors when Web Audio is unavailable.
