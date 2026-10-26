@@ -3,6 +3,7 @@
 import { bootStyle, booted, chimeAllowed, finishBoot, splashStyle } from "@/lib/boot";
 import { box, CONSOLE_TRANSITION, Inked, TitleMorph } from "@/components/figures";
 import { Chip, Machine, useTick } from "@/components/machine";
+import { BottleButton } from "@/components/bottle/button";
 import { PrintRunSwitch } from "@/components/print-run-switch";
 import { site } from "@/content/site";
 import { CONSOLE_MENU, LCD, menuBaseline } from "@/lib/pages";
@@ -271,6 +272,7 @@ export function Handheld() {
   // footer's own Konami listener (which skips handled keys) never counts console input.
   const onKey = useEffectEvent((event: KeyboardEvent) => {
     if (event.metaKey || event.ctrlKey || event.altKey || event.defaultPrevented) return;
+    if (document.querySelector("dialog[open]")) return;
     const target = event.target instanceof Element ? event.target : null;
     if (
       target?.closest("input, textarea, select, [contenteditable]:not([contenteditable='false'])") ||
@@ -527,6 +529,7 @@ export function Handheld() {
             {s.game ? P.menu : P.play}
           </Chip>
           <PrintRunSwitch />
+          <BottleButton entry="pocket" />
         </>
       }
     />

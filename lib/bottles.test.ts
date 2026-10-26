@@ -145,3 +145,39 @@ test("untrusted enum objects never coerce or throw; canonical expansion stays bo
     });
   }
 });
+
+test("draw history normalizes unknown ids, resets exhaustion without immediate repeats and bounds storage", async () => {
+  const { bottleDraw, normalizeBottleHistory } = await import("./bottles.ts");
+  const pool = Array.from({ length: 105 }, (_, n) => ({ ...input, id: String(n), kind: "site" as const }));
+  assert.deepEqual(normalizeBottleHistory(pool, null), []);
+  assert.deepEqual(normalizeBottleHistory(pool, ["old", "1", 1, "2", "1"]), ["2", "1"]);
+  assert.equal(normalizeBottleHistory(pool, pool.map((b) => b.id)).length, 100);
+  assert.deepEqual(bottleDraw([], ["old"], () => 0), { bottle: null, seen: [] });
+  assert.equal(bottleDraw(pool.slice(0, 1), ["0"], () => 1).bottle?.id, "0");
+  const pair = pool.slice(0, 2);
+  assert.equal(bottleDraw(pair, ["1", "0"], () => 0).bottle?.id, "1");
+  let seen: string[] = [];
+  const draws: string[] = [];
+  for (let i = 0; i < 205; i++) {
+    const next = bottleDraw(pool, seen, () => 0);
+    seen = next.seen;
+    draws.push(next.bottle!.id);
+    assert.ok(seen.length <= 100);
+  }
+  assert.equal(new Set(draws.slice(0, 100)).size, 100);
+  assert.equal(new Set(draws.slice(100, 200)).size, 100);
+  for (let i = 1; i < draws.length; i++) assert.notEqual(draws[i], draws[i - 1]);
+});
+
+test("browser snapshots fail closed on hostile links, markup and duplicate identities", async () => {
+  const { parseBottlePool } = await import("./bottles.ts");
+  const bottle = { ...input, id: "one" };
+  assert.equal(parseBottlePool(null), null);
+  assert.equal(parseBottlePool({ bottles: [{ ...bottle, url: "javascript:alert(1)" }] }), null);
+  assert.equal(parseBottlePool({ bottles: [{ ...bottle, title: "<b>ink</b>" }] }), null);
+  assert.equal(parseBottlePool({ bottles: [bottle, bottle] }), null);
+  assert.equal(parseBottlePool({ bottles: [bottle, { ...bottle, id: "two" }] }), null);
+  assert.deepEqual(parseBottlePool({ bottles: [], degraded: true }), { bottles: [], degraded: true });
+  const many = Array.from({ length: 105 }, (_, n) => ({ ...bottle, id: String(n), url: `https://indie.org/${n}` }));
+  assert.equal(parseBottlePool({ bottles: many })!.bottles.length, 100);
+});

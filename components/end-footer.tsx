@@ -1,3 +1,4 @@
+import { BottleButton } from "@/components/bottle/button";
 import { RisoText } from "@/components/riso-heading";
 import { EndStage, EndTop } from "@/components/end-stage";
 import { swatches } from "@/components/figures";
@@ -20,7 +21,10 @@ export function EndFooter() {
     <footer className="end" aria-labelledby="end-title">
       <div className="end-inner mx-auto max-w-5xl px-5 sm:px-8">
         <div className="end-grid">
-          <EndStage />
+          <div className="relative min-w-0">
+            <BottleButton entry="footer" />
+            <EndStage />
+          </div>
 
           <div className="end-copy">
             <p className="caption">{site.end.status}</p>

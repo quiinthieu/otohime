@@ -220,3 +220,35 @@ After the first push was rejected (concurrent main changes), git pull --rebase -
 Both Read all cards controls set an explicit pending focus ref before leaving Theatre. A layout effect consumes it only after `active` becomes false, when React has revealed the server-rendered list heading. The previous animation-frame callback could run before that commit; it did not define a reliable focus boundary. Initial render and motion-preference changes do not steal focus. Stage/audio loading, transition names and sound lifecycle are unchanged.
 
 The production browser suite now includes a red/green regression that withholds application rAF callbacks and returns through each control. The original build failed that control; the repaired production build `AgKAOICVeqFrQ5Xf0izHl` passes all seven cases, alongside 27 focused and 2344 repository tests, lint and typecheck. Conservative measured Theatre budgets are 22773, 22773, 22773 gzip bytes across desktop, touch and 200%-equivalent reflow. Full identities, real/fake boundaries, history completeness and push-only delivery limits: [run-9061-summary.md](run-9061-summary.md).
+
+## Bottle entry and paper card · pm-269/t-1588
+
+`BottleButton` is the only eager Bottle component. Footer and homepage Pocket controls share it; the footer entry uses the reserved top padding beside the scene console, outside its pointer hit area and before the mascot in DOM/focus order, so the original mascot-to-waterline Tab sequence remains unchanged. Its label, source SVG background and isolated image-local ink filter add no inline SVG layer to the footer. Existing scene SVGs, navigation, credits, console geometry and game controls remain intact. The button is disabled in server HTML with a no-JavaScript explanation, then enabled after hydration. Hover and focus do not import content or request the API. A press imports `components/bottle/panel.tsx`; a small module owner token prevents competing entries and cancels late import results after Escape/unmount. Import errors leave a retryable button and an announced explanation.
+
+```mermaid
+sequenceDiagram
+  Visitor->>Entry: Click, touch or Enter Bottle
+  Entry->>Panel: Lazy import, mount one native modal in body
+  Panel->>API: GET /api/bottles (opening only)
+  API-->>Panel: Validated public snapshot
+  Note over Panel: Failed/malformed snapshot uses bundled curated JSON and offline notice
+  Panel->>Picker: Normalize bottles:v1 history; draw explicitly
+  Picker-->>Visitor: Kind, original title/note and safe Visit anchor
+  Visitor->>Panel: Another bottle / Suggest a site
+  Panel->>API: POST /api/bottles/suggestions
+  API-->>Visitor: Pending review or accessible reason with retained input
+  Visitor->>Panel: Close / Escape / route departure
+  Panel->>Entry: Close native modal, abort requests, restore originating focus
+```
+
+The modal uses existing paper/ink tokens, reserves its notice and 17rem card area before fetching, and scrolls long card text internally. Visit is a deliberate HTTPS anchor with `target="_blank" rel="noopener noreferrer"`; drawing never navigates or opens a window. The native modal makes the page inert; explicit Tab/Shift-Tab wrapping keeps focus inside its visible controls. Closing the native modal precedes restoring focus, including touch. Pocket keyboard handling and Terminal opening ignore another open dialog, preserving one focus owner with Ask. The panel is unmounted on close, cancels pending fetches and its 240ms transform/opacity wash-up, and observes live reduced-motion changes to cancel motion immediately. Route observation stays inside the lazy panel so the persistent shared footer cannot leave an overlay after browser Back.
+
+`parseBottlePool` validates snapshot shape, public HTTPS URLs, plain-text fields and unique ids/URLs before rendering. The active collection is capped at 100. `bottleDraw` normalizes stale/unknown ids, stores at most the active collection size (maximum 100), draws unseen ids first, and resets an exhausted cycle while excluding the immediately preceding bottle when at least two exist. Empty and single pools remain usable. Storage is read once on first opening and written only on draws, behind exception guards; module memory preserves the visit across both entries even when reads or writes are blocked. No new server persistence/auth semantics are introduced.
+
+The labelled URL/title/note/kind form includes a non-tabbable honeypot, announces validation and returned API reasons as inert text, prevents concurrent submissions, retains input on failures and honors numeric Retry-After after 429. Failure never disables browsing. A successful POST says pending review; the existing moderation service alone publishes approved entries.
+
+`e2e/bottle-ui.test.ts` drives actual production Chromium, keyboard and mobile touch. It verifies real API/Postgres pending state and public-pool exclusion; failure, edge-pool and blocked-storage controls are explicit browser fixtures. It checks lazy network requests, safe explicit external navigation with a locally fulfilled destination, modal/Terminal/Ask coexistence, Back cleanup, no-JS links, repeat exhaustion, accessible errors and live reduced motion. At desktop and mobile it enforces <=3KiB incremental eager module, emitted Pocket/keyboard glue and conservative scoped icon CSS gzip, <=25KiB activation-requested UI/CSS gzip, and <=0.001 open/close CLS including recent-input shifts. Emitted module/chunk hashes and browser identity are printed. Existing runtime/layout modules are excluded by actual Turbopack module boundaries, rather than by subtracting estimates from a whole page chunk.
+
+`scripts/verify-bottle-footer.mjs` reuses `scripts/e2e.mjs` for a migrated disposable Postgres database, production build, free-port server and cleanup. It forces CI=true, GITHUB_SHA/EXPECT_SHA=local HEAD, clears caller BASE_URL/SKIP_BUILD and invokes the unchanged walk-end.sh and probe-end.sh against that isolated server in remote mode. Signal forwarding covers the worker process group; the existing runner owns server/database cleanup. Production builds and browser gates run sequentially because they share `.next`.
+
+Verification receipts, executable fingerprints, real/fixture boundaries, historical evidence limits and final command results are recorded in `run-9064-summary.md` and the run artifacts. This engineering task demonstrates local execution; plan-manager owns subsequent CI, deployed green gate and independent QA. No pipeline watch or deployed-system check is claimed here.

@@ -37,6 +37,7 @@ export function PocketTerminalLoader() {
         else if (event.key === "Escape") close(); // still loading
         return;
       }
+      if (document.querySelector("dialog[open]")) return;
       if (!opensTerminal(event, editing(event.target))) return;
       event.preventDefault();
       event.stopPropagation();

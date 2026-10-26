@@ -141,7 +141,8 @@ export function pickBottle(
   if (!pool.length) return null;
   const seen = new Set(seenIds);
   const fresh = pool.filter((b) => !seen.has(b.id));
-  const choices = fresh.length ? fresh : pool;
+  const previous = seenIds.filter((id) => pool.some((b) => b.id === id)).at(-1);
+  const choices = fresh.length ? fresh : pool.length > 1 ? pool.filter((b) => b.id !== previous) : pool;
   const draw = rng();
   const index = Math.min(
     choices.length - 1,
@@ -151,4 +152,37 @@ export function pickBottle(
     ),
   );
   return choices[index];
+}
+
+/** History is oldest first; cap the active collection and history at 100 entries. */
+export function normalizeBottleHistory(pool: readonly Bottle[], value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const ids = new Set(pool.slice(0, 100).map((b) => b.id));
+  return [...new Set(value.filter((id): id is string => typeof id === "string" && ids.has(id)).reverse())]
+    .reverse().slice(-Math.min(pool.length, 100));
+}
+export function bottleDraw(pool: readonly Bottle[], history: unknown, rng: () => number): { bottle: Bottle | null; seen: string[] } {
+  const active = pool.slice(0, 100);
+  const seen = normalizeBottleHistory(active, history);
+  const bottle = pickBottle(active, seen, rng);
+  if (!bottle) return { bottle: null, seen: [] };
+  const exhausted = active.every((b) => seen.includes(b.id));
+  return { bottle, seen: [...(exhausted ? [] : seen), bottle.id].slice(-Math.min(active.length, 100)) };
+}
+
+/** Validate an API snapshot before rendering links; malformed snapshots use the offline collection. */
+export function parseBottlePool(value: unknown): { bottles: Bottle[]; degraded: boolean } | null {
+  if (!object(value) || !Array.isArray(value.bottles)) return null;
+  const ids = new Set<string>();
+  const urls = new Set<string>();
+  const bottles: Bottle[] = [];
+  for (const entry of value.bottles) {
+    if (!object(entry) || typeof entry.id !== "string" || !entry.id || entry.id.length > 100 || ids.has(entry.id)) return null;
+    const parsed = parseBottle({ url: entry.url, title: entry.title, note: entry.note, kind: entry.kind });
+    if (!parsed.ok || urls.has(parsed.value.url)) return null;
+    ids.add(entry.id);
+    urls.add(parsed.value.url);
+    if (bottles.length < 100) bottles.push({ id: entry.id, ...parsed.value });
+  }
+  return { bottles, degraded: value.degraded === true };
 }

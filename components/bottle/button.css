@@ -1,0 +1,6 @@
+.bottle-entry { gap: .35rem; min-height: 36px; }
+/* An isolated SVG image keeps its ink filter local and preserves the footer's three scene layers. */
+.bottle-icon { display: inline-block; width: 18px; height: 24px; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cdefs%3E%3Cfilter id='bottle-button-ink'%3E%3CfeTurbulence baseFrequency='.08' numOctaves='2' seed='4' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='.6'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23bottle-button-ink)' stroke='%23564d40' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath fill='%23c7a97b' d='M8 2h8v5H8z'/%3E%3Cpath fill='%23ece7d5' d='M8 7h8v6l4 5v11H4V18l4-5z'/%3E%3Cpath fill='%23faf6e9' d='M7 19h10v6H7z'/%3E%3Cpath fill='none' d='m9 22 2-1 4 2'/%3E%3C/g%3E%3C/svg%3E"); }
+
+/* Use the footer’s reserved top padding, outside the scene’s pointer hit area and legacy Tab chain. */
+.bottle-footer-entry { position: absolute; inset-block-start: -2.4rem; inset-inline-start: 0; z-index: 1; }
