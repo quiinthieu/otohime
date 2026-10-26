@@ -176,10 +176,17 @@ test("the waterline: the last thing below the footer links down to the palace, b
 test("the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling", async () => {
   const { page } = await open("/ryugu");
   const sheets = await page.$$eval("link[rel=stylesheet]", (ls) => ls.map((l) => (l as HTMLLinkElement).href));
-  assert.equal(sheets.length, 1, sheets.join(", "));
-  const css = await (await page.request.get(sheets[0])).text();
+  const texts = await Promise.all(sheets.map(async (href) => (await page.request.get(href)).text()));
+  // The one exception: the shared print-run sheet (components/appearance.css, mounted by the root layout's boundary),
+  // recognised by its own layer and holding nothing of the site's or the palace's.
+  const appearance = texts.filter((css) => /--ap-speck-light/.test(css) && !/\.fish-body/.test(css));
+  assert.ok(appearance.length <= 1, sheets.join(", "));
+  for (const css of appearance) assert.doesNotMatch(css, /\.[a-z][\w-]*\s*[{,]/i, "the print-run sheet styles no class");
+  const own = texts.filter((css) => !appearance.includes(css));
+  assert.equal(own.length, 1, sheets.join(", "));
+  const css = own[0];
   assert.match(css, /\.fish-body/);
-  assert.doesNotMatch(css, /--tw-|\.machine\b|\.cartridge\b|\.chip\b/);
+  for (const sheet of texts) assert.doesNotMatch(sheet, /--tw-|\.machine\b|\.cartridge\b|\.chip\b/);
   assert.equal(await page.locator(".machine, .chip, footer.end").count(), 0);
   assert.equal(await page.getAttribute("meta[name=robots]", "content"), "noindex, nofollow");
 });

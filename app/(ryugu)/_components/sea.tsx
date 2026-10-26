@@ -115,7 +115,8 @@ export function Sea() {
           {/* Still caustics: turbulence whose middle values (the contours where it crosses one half) are lit, so
              the lines meet in the net that light leaves on a sea floor. No animation: this is the fallback. */}
           <filter id="ryugu-caustic" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-            <feTurbulence type="fractalNoise" baseFrequency="0.009 0.016" numOctaves={2} seed={7} />
+            {/* data-ap-frequency: the source value, which the layout's shared print-run runtime rescales; nothing imported. */}
+            <feTurbulence type="fractalNoise" baseFrequency="0.009 0.016" data-ap-frequency="0.009 0.016" numOctaves={2} seed={7} />
             <feColorMatrix type="matrix" values="0 0 0 0 0.84  0 0 0 0 0.91  0 0 0 0 0.93  1 0 0 0 0" />
             <feComponentTransfer>
               <feFuncA type="table" tableValues="0 0 0 0.04 0.55 0.04 0 0 0" />

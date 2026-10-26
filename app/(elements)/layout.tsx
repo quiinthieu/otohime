@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { PAPER } from "./_lib/categories.ts";
 import "./elements.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Elements is its own root layout: its own <html>, <body> and stylesheet. It must
 // not import the site's globals.css, Tailwind or anything from the site or another
@@ -37,8 +39,9 @@ export default function ElementsLayout({ children }: LayoutProps<"/">) {
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
+        <AppearanceBoot root="elements" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

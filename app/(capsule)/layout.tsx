@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces } from "next/font/google";
 import "./capsule.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Capsule is its own root layout: its own <html>, <body> and stylesheet. It must
 // not import the site's globals.css, Tailwind or anything from the site or Shore.
@@ -29,14 +31,15 @@ export const viewport: Viewport = {
 
 export default function CapsuleLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={display.variable}>
+    <html lang="en" className={display.variable} suppressHydrationWarning>
       <head>
         {/* The hop between root layouts crossfades only if this document opts in before its first frame. The copy in
            capsule.css can arrive too late on a first visit (an inline script behind a loading stylesheet), so the opt-in is
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
+        <AppearanceBoot root="capsule" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

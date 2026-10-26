@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./ryugu.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Ryugu-jo is its own root layout: its own <html>, <body> and stylesheet, so none of the site's globals.css,
 // Tailwind, cartridge styling, masthead or footer reaches the palace, and the palace reaches nothing of the site. The
@@ -22,13 +24,14 @@ export const viewport: Viewport = {
 
 export default function RyuguLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* The hop between root layouts crossfades only if this document opts in before its first frame; ryugu.css
            carries the same rule, which can arrive too late on a first visit. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
+        <AppearanceBoot root="ryugu" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

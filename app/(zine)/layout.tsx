@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./zine.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Fold-a-Zine is its own root layout: its own <html>, <body> and stylesheet, so the printed sheet carries nothing of
 // the site's globals.css, Tailwind, masthead or footer. The type is the system's serif: no font file to wait for
@@ -20,13 +22,14 @@ export const viewport: Viewport = {
 
 export default function ZineLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* The hop between root layouts crossfades only if this document opts in before its first frame; zine.css
            carries the same rule, which can arrive too late on a first visit. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
+        <AppearanceBoot root="zine" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

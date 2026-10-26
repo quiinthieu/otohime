@@ -1,0 +1,925 @@
+{
+  "base": "http://localhost:44447",
+  "started": "2026-10-26T12:19:19.566Z",
+  "browser": "154.0.8037.57",
+  "house": {
+    "/": {
+      "aliases": {
+        "--paper": "#f2e9de",
+        "--paper-2": "#eee3d5",
+        "--field": "#faf8f3",
+        "--ink": "#2b1a12",
+        "--muted": "#6b6456",
+        "--line": "#ddd6c8"
+      },
+      "htmlBg": "rgba(0, 0, 0, 0)",
+      "bodyBg": "rgb(242, 233, 222)",
+      "tagged": 10
+    },
+    "/articles": {
+      "aliases": {
+        "--paper": "#f3eee3",
+        "--ink": "#1a1816",
+        "--muted": "#5d564c",
+        "--rule": "#c9c1b2"
+      },
+      "htmlBg": "rgb(243, 238, 227)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 0
+    },
+    "/barometer": {
+      "aliases": {
+        "--paper": "#efe3c8",
+        "--panel": "#e6d6b4",
+        "--field": "#fffaf0",
+        "--ink": "#3a2a28",
+        "--ink-soft": "#6b5a50"
+      },
+      "htmlBg": "rgb(239, 227, 200)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 0
+    },
+    "/capsule": {
+      "aliases": {
+        "--paper": "#f3ecdd",
+        "--paper-deep": "#e9dfcb",
+        "--white": "#fffaf0",
+        "--ink": "#2b2320",
+        "--ink-soft": "#6a5c52",
+        "--rule": "#d8ccb4"
+      },
+      "htmlBg": "rgb(243, 236, 221)",
+      "bodyBg": "rgb(243, 236, 221)",
+      "tagged": 0
+    },
+    "/design-system": {
+      "aliases": {
+        "--paper": "#f6f3ea",
+        "--ink": "#1d1b17",
+        "--muted": "#57524a",
+        "--rule": "#b9b1a0",
+        "--grid": "#dcd6c6"
+      },
+      "htmlBg": "rgb(246, 243, 234)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 0
+    },
+    "/elements": {
+      "aliases": {
+        "--paper": "#faf8f3",
+        "--card": "#fff",
+        "--ink": "#1c1d21",
+        "--muted": "#565a63",
+        "--line": "#e1dcd0"
+      },
+      "htmlBg": "rgb(250, 248, 243)",
+      "bodyBg": "rgb(250, 248, 243)",
+      "tagged": 0
+    },
+    "/orrery": {
+      "aliases": {
+        "--paper": "#f6f1e7",
+        "--paper-edge": "#ebe2cf",
+        "--ink": "#3a2a28",
+        "--ink-soft": "#6b5a50"
+      },
+      "htmlBg": "rgb(246, 241, 231)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 0
+    },
+    "/planisphere": {
+      "aliases": {
+        "--paper": "#f6f1e7",
+        "--panel": "#efe6d3",
+        "--field": "#fffaf0",
+        "--ink": "#3a2a28",
+        "--ink-soft": "#6b5a50"
+      },
+      "htmlBg": "rgb(246, 241, 231)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 0
+    },
+    "/rotor": {
+      "aliases": {
+        "--paper": "#f6f1e7",
+        "--panel": "#efe6d3",
+        "--field": "#fffaf0",
+        "--ink": "#3a2a28",
+        "--ink-soft": "#6b5a50"
+      },
+      "htmlBg": "rgb(246, 241, 231)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 0
+    },
+    "/ryugu": {
+      "aliases": {
+        "--deep": "#070b0f",
+        "--sea": "#1b2c38",
+        "--ink": "#e6e1d3",
+        "--muted": "#9fb0b6"
+      },
+      "htmlBg": "rgb(7, 11, 15)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 1
+    },
+    "/shore": {
+      "aliases": {
+        "--paper": "#f4f5f0",
+        "--stage": "#edf0ea",
+        "--ink": "#253d36",
+        "--muted": "#5d7064",
+        "--line": "#dce2da"
+      },
+      "htmlBg": "rgb(244, 245, 240)",
+      "bodyBg": "rgb(244, 245, 240)",
+      "tagged": 0
+    },
+    "/structures": {
+      "aliases": {
+        "--paper": "#f6f3ea",
+        "--ink": "#1d1b17",
+        "--muted": "#57524a",
+        "--rule": "#b9b1a0",
+        "--grid": "#dcd6c6"
+      },
+      "htmlBg": "rgb(246, 243, 234)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 0
+    },
+    "/vinyl": {
+      "aliases": {
+        "--bg": "#1b1714",
+        "--card": "#2a231e",
+        "--ink": "#f3ece2",
+        "--muted": "#cdbfae",
+        "--line": "#8a7a68"
+      },
+      "htmlBg": "rgb(27, 23, 20)",
+      "bodyBg": "rgb(27, 23, 20)",
+      "tagged": 0
+    },
+    "/zine": {
+      "aliases": {
+        "--paper": "#f2efe7",
+        "--sheet": "#fff",
+        "--ink": "#231e16",
+        "--muted": "#5f584b",
+        "--line": "#ddd6c8"
+      },
+      "htmlBg": "rgb(242, 239, 231)",
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "tagged": 0
+    },
+    "/no-such-page-for-print-runs": {
+      "aliases": {
+        "--paper": "#f2e9de",
+        "--paper-2": "#eee3d5",
+        "--field": "#faf8f3",
+        "--ink": "#2b1a12",
+        "--muted": "#6b6456",
+        "--line": "#ddd6c8"
+      },
+      "htmlBg": "rgba(0, 0, 0, 0)",
+      "bodyBg": "rgb(242, 233, 222)",
+      "tagged": 2
+    }
+  },
+  "firstFrames": {
+    "riso /": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--paper-2": "#f2e5d8",
+        "--field": "#fff4e8",
+        "--ink": "#292522",
+        "--muted": "#696154",
+        "--line": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /articles": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--ink": "#292522",
+        "--muted": "#696154",
+        "--rule": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /barometer": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--panel": "#f2e5d8",
+        "--field": "#fff4e8",
+        "--ink": "#292522",
+        "--ink-soft": "#696154"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /capsule": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--paper-deep": "#f2e5d8",
+        "--white": "#fff4e8",
+        "--ink": "#292522",
+        "--ink-soft": "#696154",
+        "--rule": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /design-system": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--ink": "#292522",
+        "--muted": "#696154",
+        "--rule": "#696154",
+        "--grid": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /elements": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--card": "#fff4e8",
+        "--ink": "#292522",
+        "--muted": "#696154",
+        "--line": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /orrery": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--paper-edge": "#f2e5d8",
+        "--ink": "#292522",
+        "--ink-soft": "#696154"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /planisphere": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--panel": "#f2e5d8",
+        "--field": "#fff4e8",
+        "--ink": "#292522",
+        "--ink-soft": "#696154"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /rotor": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--panel": "#f2e5d8",
+        "--field": "#fff4e8",
+        "--ink": "#292522",
+        "--ink-soft": "#696154"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /ryugu": {
+      "aliases": {
+        "--deep": "#201e1c",
+        "--sea": "#2a2724",
+        "--ink": "#f3ebdf",
+        "--muted": "#b1a598"
+      },
+      "htmlBg": "rgb(32, 30, 28)",
+      "layer": {
+        "content": "none",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /shore": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--stage": "#f2e5d8",
+        "--ink": "#292522",
+        "--muted": "#696154",
+        "--line": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /structures": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--ink": "#292522",
+        "--muted": "#696154",
+        "--rule": "#696154",
+        "--grid": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /vinyl": {
+      "aliases": {
+        "--bg": "#201e1c",
+        "--card": "#2a2724",
+        "--ink": "#f3ebdf",
+        "--muted": "#b1a598",
+        "--line": "#b1a598"
+      },
+      "htmlBg": "rgb(32, 30, 28)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /zine": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--sheet": "#fff4e8",
+        "--ink": "#292522",
+        "--muted": "#696154",
+        "--line": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "riso /no-such-page-for-print-runs": {
+      "aliases": {
+        "--paper": "#fff4e8",
+        "--paper-2": "#f2e5d8",
+        "--field": "#fff4e8",
+        "--ink": "#292522",
+        "--muted": "#696154",
+        "--line": "#ddd1c4"
+      },
+      "htmlBg": "rgb(255, 244, 232)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.04",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--paper-2": "#19203b",
+        "--field": "#10152d",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--line": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /articles": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--rule": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /barometer": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--panel": "#19203b",
+        "--field": "#10152d",
+        "--ink": "#f2edff",
+        "--ink-soft": "#b4b8d3"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /capsule": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--paper-deep": "#19203b",
+        "--white": "#10152d",
+        "--ink": "#f2edff",
+        "--ink-soft": "#b4b8d3",
+        "--rule": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /design-system": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--rule": "#b4b8d3",
+        "--grid": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /elements": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--card": "#10152d",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--line": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /orrery": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--paper-edge": "#19203b",
+        "--ink": "#f2edff",
+        "--ink-soft": "#b4b8d3"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /planisphere": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--panel": "#19203b",
+        "--field": "#10152d",
+        "--ink": "#f2edff",
+        "--ink-soft": "#b4b8d3"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /rotor": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--panel": "#19203b",
+        "--field": "#10152d",
+        "--ink": "#f2edff",
+        "--ink-soft": "#b4b8d3"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /ryugu": {
+      "aliases": {
+        "--deep": "#10152d",
+        "--sea": "#19203b",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "none",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /shore": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--stage": "#19203b",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--line": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /structures": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--rule": "#b4b8d3",
+        "--grid": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /vinyl": {
+      "aliases": {
+        "--bg": "#10152d",
+        "--card": "#19203b",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--line": "#b4b8d3"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /zine": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--sheet": "#10152d",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--line": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    },
+    "indigo /no-such-page-for-print-runs": {
+      "aliases": {
+        "--paper": "#10152d",
+        "--paper-2": "#19203b",
+        "--field": "#10152d",
+        "--ink": "#f2edff",
+        "--muted": "#b4b8d3",
+        "--line": "#363d59"
+      },
+      "htmlBg": "rgb(16, 21, 45)",
+      "layer": {
+        "content": "\"\"",
+        "opacity": "0.03",
+        "pointer": "none",
+        "display": "block"
+      }
+    }
+  },
+  "combinations": {
+    "house light spring": "#eff0e4 / #1f2a1c",
+    "sumi light spring": "#f2efe7 / #231e16",
+    "riso light spring": "#fff4e8 / #292522",
+    "indigo light spring": "#10152d / #f2edff",
+    "house light summer": "#f4eedc / #2a1f12",
+    "sumi light summer": "#f2efe7 / #231e16",
+    "riso light summer": "#fff4e8 / #292522",
+    "indigo light summer": "#10152d / #f2edff",
+    "house light autumn": "#f2e9de / #2b1a12",
+    "sumi light autumn": "#f2efe7 / #231e16",
+    "riso light autumn": "#fff4e8 / #292522",
+    "indigo light autumn": "#10152d / #f2edff",
+    "house light winter": "#eef0f1 / #1b2128",
+    "sumi light winter": "#f2efe7 / #231e16",
+    "riso light winter": "#fff4e8 / #292522",
+    "indigo light winter": "#10152d / #f2edff",
+    "house dark spring": "#191c16 / #e5ebdb",
+    "sumi dark spring": "#1c1915 / #ebe6da",
+    "riso dark spring": "#201e1c / #f3ebdf",
+    "indigo dark spring": "#10152d / #f2edff",
+    "house dark summer": "#1d1912 / #efe6d1",
+    "sumi dark summer": "#1c1915 / #ebe6da",
+    "riso dark summer": "#201e1c / #f3ebdf",
+    "indigo dark summer": "#10152d / #f2edff",
+    "house dark autumn": "#1e1712 / #eedfd2",
+    "sumi dark autumn": "#1c1915 / #ebe6da",
+    "riso dark autumn": "#201e1c / #f3ebdf",
+    "indigo dark autumn": "#10152d / #f2edff",
+    "house dark winter": "#171a1e / #e3e8ee",
+    "sumi dark winter": "#1c1915 / #ebe6da",
+    "riso dark winter": "#201e1c / #f3ebdf",
+    "indigo dark winter": "#10152d / #f2edff",
+    "house os-dark spring": "#191c16 / #e5ebdb",
+    "sumi os-dark spring": "#1c1915 / #ebe6da",
+    "riso os-dark spring": "#201e1c / #f3ebdf",
+    "indigo os-dark spring": "#10152d / #f2edff",
+    "house os-dark summer": "#1d1912 / #efe6d1",
+    "sumi os-dark summer": "#1c1915 / #ebe6da",
+    "riso os-dark summer": "#201e1c / #f3ebdf",
+    "indigo os-dark summer": "#10152d / #f2edff",
+    "house os-dark autumn": "#1e1712 / #eedfd2",
+    "sumi os-dark autumn": "#1c1915 / #ebe6da",
+    "riso os-dark autumn": "#201e1c / #f3ebdf",
+    "indigo os-dark autumn": "#10152d / #f2edff",
+    "house os-dark winter": "#171a1e / #e3e8ee",
+    "sumi os-dark winter": "#1c1915 / #ebe6da",
+    "riso os-dark winter": "#201e1c / #f3ebdf",
+    "indigo os-dark winter": "#10152d / #f2edff"
+  },
+  "labHops": {
+    "/ryugu": [
+      {
+        "id": "ryugu-caustic",
+        "frequency": [
+          "0.009 0.016",
+          "0.018 0.032"
+        ],
+        "scale": [
+          null,
+          null
+        ],
+        "seed": [
+          null,
+          "7"
+        ]
+      }
+    ],
+    "/no-such-page-for-print-runs": [
+      {
+        "id": "lost-crumple",
+        "frequency": [
+          "0.03",
+          "0.06"
+        ],
+        "scale": [
+          null,
+          null
+        ],
+        "seed": [
+          null,
+          "4"
+        ]
+      },
+      {
+        "id": "lost-crumple",
+        "frequency": [
+          null,
+          null
+        ],
+        "scale": [
+          "14",
+          "28"
+        ],
+        "seed": [
+          null,
+          null
+        ]
+      }
+    ],
+    "/shore": [],
+    "/vinyl": [],
+    "/music": [
+      {
+        "id": "almanac_R_6ivb_",
+        "frequency": [
+          "0.035",
+          "0.07"
+        ],
+        "scale": [
+          null,
+          null
+        ],
+        "seed": [
+          "3",
+          "3"
+        ]
+      },
+      {
+        "id": "almanac_R_6ivb_",
+        "frequency": [
+          null,
+          null
+        ],
+        "scale": [
+          "2",
+          "4"
+        ],
+        "seed": [
+          null,
+          null
+        ]
+      },
+      {
+        "id": "fig_R_oqnav5ufiuuivb_",
+        "frequency": [
+          "0.035",
+          "0.07"
+        ],
+        "scale": [
+          null,
+          null
+        ],
+        "seed": [
+          "3",
+          "3"
+        ]
+      },
+      {
+        "id": "fig_R_oqnav5ufiuuivb_",
+        "frequency": [
+          null,
+          null
+        ],
+        "scale": [
+          "3.5",
+          "7"
+        ],
+        "seed": [
+          null,
+          null
+        ]
+      },
+      {
+        "id": "fig_R_mlniuuivb_",
+        "frequency": [
+          "0.035",
+          "0.07"
+        ],
+        "scale": [
+          null,
+          null
+        ],
+        "seed": [
+          "3",
+          "3"
+        ]
+      },
+      {
+        "id": "fig_R_mlniuuivb_",
+        "frequency": [
+          null,
+          null
+        ],
+        "scale": [
+          "3.5",
+          "7"
+        ],
+        "seed": [
+          null,
+          null
+        ]
+      },
+      {
+        "id": "fig_R_16lniuuivb_",
+        "frequency": [
+          "0.035",
+          "0.07"
+        ],
+        "scale": [
+          null,
+          null
+        ],
+        "seed": [
+          "3",
+          "3"
+        ]
+      },
+      {
+        "id": "fig_R_16lniuuivb_",
+        "frequency": [
+          null,
+          null
+        ],
+        "scale": [
+          "3.5",
+          "7"
+        ],
+        "seed": [
+          null,
+          null
+        ]
+      },
+      {
+        "id": "fig_R_oqnav5ufiuuivb_",
+        "frequency": [
+          "0.035",
+          "0.07"
+        ],
+        "scale": [
+          null,
+          null
+        ],
+        "seed": [
+          "3",
+          "3"
+        ]
+      },
+      {
+        "id": "fig_R_oqnav5ufiuuivb_",
+        "frequency": [
+          null,
+          null
+        ],
+        "scale": [
+          "3.5",
+          "7"
+        ],
+        "seed": [
+          null,
+          null
+        ]
+      }
+    ]
+  },
+  "finished": "2026-10-26T12:20:06.418Z"
+}

@@ -56,8 +56,9 @@ export default function NotFound() {
             <div id={SHEET_ID} className="lost-sheet">
               <svg viewBox="0 0 240 300" aria-hidden="true" focusable="false">
                 <filter id="lost-crumple" x="-10%" y="-10%" width="120%" height="120%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4" result="noise" />
-                  <feDisplacementMap in="SourceGraphic" in2="noise" scale={CRUMPLE_SCALE} xChannelSelector="R" yChannelSelector="G" />
+                  {/* Tagged with their source values, which a print run rescales after hydration (lib/appearance-client.ts). */}
+                  <feTurbulence type="fractalNoise" baseFrequency="0.03" data-ap-frequency="0.03" numOctaves="2" seed="4" result="noise" />
+                  <feDisplacementMap in="SourceGraphic" in2="noise" scale={CRUMPLE_SCALE} data-ap-scale={CRUMPLE_SCALE} xChannelSelector="R" yChannelSelector="G" />
                 </filter>
                 <g className="lost-page">
                   <g className="lost-crumpled" filter="url(#lost-crumple)">

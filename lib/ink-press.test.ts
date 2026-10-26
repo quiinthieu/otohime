@@ -226,7 +226,8 @@ test("the loader brings the press through next/dynamic with ssr: false and holds
 });
 
 test("the press is plain WebGL2 and React: no three, and only the site's own ink libraries", () => {
-  assert.deepEqual(imports(PRESS).sort(), ["@/lib/ink-modes", "@/lib/ink-press", "react"]);
+  // appearance-client: only appearanceTags, which tags the warp for the print run's filter scale.
+  assert.deepEqual(imports(PRESS).sort(), ["@/lib/appearance-client", "@/lib/ink-modes", "@/lib/ink-press", "react"]);
   assert.doesNotMatch(PRESS, /three|@react-three/);
   assert.match(PRESS, /getContext\("webgl2"/);
   assert.match(PRESS, /^\/\/ ink-press poster$/m, "the chunk's marker for e2e/ink-press.test.ts");

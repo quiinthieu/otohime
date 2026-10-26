@@ -4,6 +4,8 @@ import { seasonScript } from "@/lib/seasons";
 import NotFound from "./(site)/not-found";
 import "./(site)/globals.css";
 import "./(site)/seasons.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // An address no route matches. The site and the projects are separate root layouts, so Next renders this whole
 // document instead of a layout (experimental.globalNotFound). A notFound() from a catch-all page cannot do it:
@@ -29,9 +31,11 @@ export default function GlobalNotFound() {
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
         <script dangerouslySetInnerHTML={{ __html: seasonScript }} />
+        <AppearanceBoot root="site" />
       </head>
       <body className="min-h-full">
         <NotFound />
+        <AppearanceRuntime />
       </body>
     </html>
   );

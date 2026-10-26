@@ -1,3 +1,4 @@
+import { appearanceTags } from "@/lib/appearance-client";
 import { inkFilter, MATERIALS, type Hand } from "@/lib/ink-modes";
 import type { ConsoleItem } from "@/lib/pages";
 import { createElement, useId, ViewTransition } from "react";
@@ -144,7 +145,7 @@ export function Inked({
   return (
     <svg viewBox={viewBox} aria-hidden="true" className={`figure ${className}`} style={style}>
       <filter id={id} x="-5%" y="-5%" width="110%" height="110%">
-        {/* wobble the line work, then speckle it like a riso print */}
+        {/* wobble the line work, then speckle it like a riso print; the warp is tagged for the print run's scale */}
         {inkFilter(hand, seed, wobble).map((p, i) =>
           p.tag === "feMerge" ? (
             <feMerge key={i}>
@@ -153,7 +154,7 @@ export function Inked({
               ))}
             </feMerge>
           ) : (
-            createElement(p.tag, { key: i, ...p.attrs })
+            createElement(p.tag, { key: i, ...p.attrs, ...appearanceTags(p) })
           ),
         )}
       </filter>

@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Patrick_Hand } from "next/font/google";
 import "./design-system.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Design system is its own root layout: its own <html>, <body> and stylesheet.
 // It must not import the site's globals.css, Tailwind or anything from the
@@ -53,8 +55,9 @@ export default function DesignSystemLayout({ children }: LayoutProps<"/">) {
            design-system.css can arrive too late on a first visit, so the opt-in is also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
+        <AppearanceBoot root="design-system" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

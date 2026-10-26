@@ -428,7 +428,8 @@ function RadioSet({
         <svg viewBox={`0 0 ${ART.w} ${ART.h}`} aria-hidden="true" className="radio-overlay">
           <defs>
             <filter id={`${id}-hiss`} x="0" y="0" width="100%" height="100%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={1} seed={seedOf(station.id) % 997} />
+              {/* data-ap-frequency: the print run rescales the hiss's grain (lib/appearance-client.ts); its seed stays the station's */}
+              <feTurbulence type="fractalNoise" baseFrequency="0.85" data-ap-frequency="0.85" numOctaves={1} seed={seedOf(station.id) % 997} />
               <feColorMatrix type="matrix" values="0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0 0.09  0 0 0 -2.4 1.4" />
             </filter>
             <clipPath id={`${id}-disc`}>

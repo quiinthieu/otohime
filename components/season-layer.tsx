@@ -10,6 +10,7 @@
 // and opacity only. The bits run only while the tab is visible, and under
 // prefers-reduced-motion there are no bits at all, only the tint.
 // scripts/probe-seasons.sh checks all of this in a browser.
+import { appearanceTags } from "@/lib/appearance-client";
 import { inkFilter } from "@/lib/ink-modes";
 import { isSeason, SEASON_ATTR, type Season } from "@/lib/seasons";
 import { createElement, useId, useSyncExternalStore, type CSSProperties } from "react";
@@ -83,7 +84,7 @@ export function SeasonLayer() {
           <filter id={id} filterUnits="userSpaceOnUse" x="-24" y="-24" width="48" height="60">
             {inkFilter("ink", 0, 2)
               .slice(0, 2)
-              .map((p, i) => p.tag !== "feMerge" && createElement(p.tag, { key: i, ...p.attrs }))}
+              .map((p, i) => p.tag !== "feMerge" && createElement(p.tag, { key: i, ...p.attrs, ...appearanceTags(p) }))}
           </filter>
           {Array.from({ length: bit.count }, (_, i) => {
             const { tag, ...attrs } = shape(bit.kind, i);

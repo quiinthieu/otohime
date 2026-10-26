@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Old_Standard_TT, Playfair_Display, UnifrakturMaguntia } from "next/font/google";
 import "./articles.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // The Gazette is its own root layout: its own <html>, <body> and stylesheet. It must
 // not import the site's globals.css, Tailwind or anything from the site or another
@@ -60,8 +62,9 @@ export default function ArticlesLayout({ children }: LayoutProps<"/">) {
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
+        <AppearanceBoot root="articles" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

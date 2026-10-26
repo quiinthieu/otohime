@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Patrick_Hand } from "next/font/google";
 import "./structures.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Structures is its own root layout: its own <html>, <body> and stylesheet. It
 // must not import the site's globals.css, Tailwind or anything from the site or
@@ -52,8 +54,9 @@ export default function StructuresLayout({ children }: LayoutProps<"/">) {
            structures.css can arrive too late on a first visit, so the opt-in is also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
+        <AppearanceBoot root="structures" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

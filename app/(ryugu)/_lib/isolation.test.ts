@@ -60,10 +60,32 @@ test("the scan finds the palace's files", () => {
   assert.ok(palaceFiles.some((f) => f.endsWith("sea.tsx")));
 });
 
+// The one exception: the root layout mounts the shared print-run boundary (components/appearance-boot.tsx in <head>,
+// components/appearance-runtime.tsx in <body>), these two specifiers exactly and in layout.tsx alone. The checker
+// itself still flags them, and every other file and specifier, so _lib/ and the components stay as isolated as before.
+const APPEARANCE = new Set(["@/components/appearance-boot", "@/components/appearance-runtime"]);
+const ROOT_LAYOUT = join(ROOT, "app/(ryugu)/layout.tsx");
+const rootAppearance = (file: string, spec: string) => file === ROOT_LAYOUT && APPEARANCE.has(spec);
+
+test("the root layout mounts the shared appearance boundary and nothing else of the site", () => {
+  const layout = readFileSync(ROOT_LAYOUT, "utf8");
+  const shared = specifiers(ROOT_LAYOUT).filter((spec) => reachesSite(ROOT_LAYOUT, spec) !== null);
+  assert.deepEqual(shared.sort(), [...APPEARANCE].sort());
+  assert.match(layout, /<AppearanceBoot root="ryugu" \/>\s*<\/head>/);
+  assert.match(layout, /<AppearanceRuntime \/><\/body>/);
+  assert.ok(rootAppearance(ROOT_LAYOUT, "@/components/appearance-boot") && rootAppearance(ROOT_LAYOUT, "@/components/appearance-runtime"));
+  assert.ok(!rootAppearance(join(ROOT, "app/(ryugu)/_lib/x.ts"), "@/components/appearance-boot"), "only the layout");
+  assert.ok(!rootAppearance(join(ROOT, "app/(ryugu)/_components/x.tsx"), "@/components/appearance-runtime"), "only the layout");
+  for (const spec of ["@/components/appearance.css", "@/lib/appearance-client", "@/lib/ink-lab", "@/components/figures", "@/components/appearance-boot.tsx", "../../(site)/globals.css"]) {
+    assert.ok(!rootAppearance(ROOT_LAYOUT, spec), spec);
+  }
+  assert.notEqual(reachesSite(ROOT_LAYOUT, "@/components/appearance-boot"), null, "the checker still flags the boundary");
+});
+
 test("nothing under app/(ryugu)/ imports the site's CSS, Tailwind, code or another project", () => {
   for (const file of palaceFiles) {
     for (const spec of specifiers(file)) {
-      const bad = reachesSite(file, spec);
+      const bad = rootAppearance(file, spec) ? null : reachesSite(file, spec);
       assert.equal(bad, null, `${relative(ROOT, file)} imports ${spec} (${bad})`);
     }
   }
@@ -113,8 +135,10 @@ test("the checker flags what it should", () => {
 test("the palace's root layout is its own document: its own <html> and <body>, one sheet, no theme or site script", () => {
   const layout = readFileSync(join(ROOT, "app/(ryugu)/layout.tsx"), "utf8");
   assert.deepEqual([...layout.matchAll(/^import "([^"]+)";/gm)].map((m) => m[1]), ["./ryugu.css"]);
-  assert.match(layout, /<html lang="en">/);
-  assert.match(layout, /<body>\{children\}<\/body>/);
+  // suppressHydrationWarning: the shared print-run boot script (the one exception above) may mark <html> before React
+  // hydrates; the body holds the page and that runtime only.
+  assert.match(layout, /<html lang="en" suppressHydrationWarning>/);
+  assert.match(layout, /<body>\{children\}<AppearanceRuntime \/><\/body>/);
   assert.doesNotMatch(layout, /dangerouslySetInnerHTML|data-theme|className=/);
   // a secret: kept out of search
   assert.match(layout, /robots: \{ index: false, follow: false \}/);

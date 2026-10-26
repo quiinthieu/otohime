@@ -13,6 +13,8 @@ import { seasonScript } from "@/lib/seasons";
 import "./globals.css";
 import "./seasons.css";
 import "./letterpress.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 export const metadata: Metadata = {
   // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
@@ -56,6 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: seasonScript }} />
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         <script dangerouslySetInnerHTML={{ __html: pondPrintScript }} />
+        <AppearanceBoot root="site" />
       </head>
       <body className="min-h-full">
         {/* The season's ambient bits, fixed behind every page and ahead of each group's masthead; mounted here once,
@@ -72,6 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Suspense fallback={null}><KameLoader /></Suspense>
         <Suspense fallback={null}><TactileLoader /></Suspense>
         {children}
+        <AppearanceRuntime />
       </body>
     </html>
   );

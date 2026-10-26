@@ -1,0 +1,49 @@
+/*
+ * The print run's shared layer, loaded by every root layout through components/appearance-boot.tsx. Each root's own
+ * token aliases are generated beside it (appearanceStyle in lib/appearance-client.ts); this sheet holds only what is
+ * the same everywhere, and none of it changes a root's own tokens: House sets no attribute, so no layer shows.
+ *
+ * The texture: one static layer fixed behind the page (z-index -1, over the canvas and under every glyph), shown only
+ * when a root's generated rules give it content. Specks peak at alpha 1 in the image and the layer's opacity is the
+ * run's total grain (at most 0.06, lib/ink-lab.ts), so specks and halftone dots together never pass it. It takes no
+ * pointer, never moves, and leaves forced colors and print alone.
+ */
+:root {
+  /* Decorative plates for the riso headings and the Lab preview; the anchor is the readable ink. */
+  --ap-plate-1: currentColor;
+  --ap-plate-2: #f3a6bb;
+  --ap-plate-3: #93d3b0;
+  --ap-plate-count: 3;
+  --ap-transition: 420ms;
+  /* Noise red channel to alpha: 2.5 r - 1.25, so only the noise's peaks speck, at full alpha before the layer's opacity. */
+  --ap-speck-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 2.5 0 0 0 -1.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --ap-speck-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.5 0 0 0 -1.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+html::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--ap-speck, none);
+  background-size: 160px 160px;
+  opacity: var(--ap-grain, 0);
+}
+
+html[data-ap-halftone]::before {
+  background-image: var(--ap-speck, none), radial-gradient(circle, var(--ap-tone, #fff) 0 1px, transparent 1.5px);
+  background-size: 160px 160px, 6px 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ap-transition: 0ms !important;
+  }
+}
+
+@media (forced-colors: active), print {
+  html::before {
+    content: none !important;
+    display: none !important;
+  }
+}

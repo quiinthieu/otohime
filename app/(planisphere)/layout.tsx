@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Patrick_Hand } from "next/font/google";
 import "./planisphere.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Planisphere is its own root layout: its own <html>, <body> and stylesheet. It must
 // not import the site's globals.css, Tailwind or anything from the site or another
@@ -53,8 +55,9 @@ export default function PlanisphereLayout({ children }: LayoutProps<"/">) {
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
+        <AppearanceBoot root="planisphere" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

@@ -244,7 +244,7 @@ test("an unknown address gets app/global-not-found.tsx, drawn on the server with
   assert.match(page, /<head>[\s\S]*<style>\{"@view-transition\{navigation:auto;types:hop\}"\}<\/style>[\s\S]*<\/head>/);
   assert.match(page, /import "\.\/\(site\)\/globals\.css";/);
   assert.match(page, /import NotFound from "\.\/\(site\)\/not-found";/);
-  assert.match(page, /<body[^>]*>\s*<NotFound \/>\s*<\/body>/);
+  assert.match(page, /<body[^>]*>\s*<NotFound \/>\s*<AppearanceRuntime \/>\s*<\/body>/);
 });
 
 test("the site layout loads the season tints after its root sheet, and only the site does", () => {
@@ -302,7 +302,7 @@ test("the site root layout mounts the season layer first in <body>, ahead of eve
   // (components/urashima-keys.tsx) renders nothing either. Kame and the paper loader render null
   // before load/idle; their null Suspense boundaries keep dynamic routes prerenderable.
   // Kame's ink is fixed and its controls portal into the reserved footer slot. Seasons remain first.
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*\{children\}\s*<\/body>/);
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*\{children\}\s*<AppearanceRuntime \/>\s*<\/body>/);
   assert.equal(src.match(/<TactileLoader\b/g)?.length, 1);
   assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
   assert.equal(src.match(/<PressSound\b/g)?.length, 1);

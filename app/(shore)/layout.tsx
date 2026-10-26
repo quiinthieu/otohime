@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./shore.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Shore is its own root layout: its own <html>, <body> and stylesheet. It must
 // not import the site's globals.css, Tailwind or anything from the site.
@@ -18,14 +20,15 @@ export const viewport: Viewport = {
 
 export default function ShoreLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* The hop between root layouts crossfades only if this document opts in before its first frame. The copy in
            shore.css can arrive too late on a first visit (an inline script behind a loading stylesheet), so the opt-in is
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
+        <AppearanceBoot root="shore" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { appearanceTags } from "@/lib/appearance-client";
 import { inkFilter } from "@/lib/ink-modes";
 import { INK, ledgerGrid, pressDue, pressSounds, receiptLines, SMUDGES, type LedgerCell } from "@/lib/ledger";
 import { play } from "@/lib/sound-client";
@@ -174,7 +175,7 @@ export function StampCalendar({ ledger, end }: { ledger: Ledger; end: string }) 
                       ))}
                     </feMerge>
                   ) : (
-                    createElement(p.tag, { key: k, ...p.attrs })
+                    createElement(p.tag, { key: k, ...p.attrs, ...appearanceTags(p) })
                   ),
                 )}
               </filter>

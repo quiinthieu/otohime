@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Patrick_Hand } from "next/font/google";
 import "./orrery.css";
+import { AppearanceBoot } from "@/components/appearance-boot";
+import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Orrery is its own root layout: its own <html>, <body> and stylesheet. It must
 // not import the site's globals.css, Tailwind or anything from the site, Shore or Capsule.
@@ -36,14 +38,15 @@ export const viewport: Viewport = {
 
 export default function OrreryLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${title.variable} ${hand.variable}`}>
+    <html lang="en" className={`${title.variable} ${hand.variable}`} suppressHydrationWarning>
       <head>
         {/* The hop between root layouts crossfades only if this document opts in before its first frame. The copy in
            orrery.css can arrive too late on a first visit (an inline script behind a loading stylesheet), so the opt-in is
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
+        <AppearanceBoot root="orrery" />
       </head>
-      <body>{children}</body>
+      <body>{children}<AppearanceRuntime /></body>
     </html>
   );
 }

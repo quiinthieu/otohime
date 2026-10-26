@@ -1,0 +1,18 @@
+pm-268/t-1599 local verification (run-8886, lease worker avietidol-z490; Node v22.23.3; Chrome 154.0.8037.57; Next 16.4.2 production build via scripts/e2e.mjs with embedded Postgres)
+
+node --experimental-strip-types --test lib/appearance-client.test.ts   -> 22 pass, 0 fail
+npm test                                                               -> 2189 pass, 0 fail
+npm run typecheck                                                      -> exit 0
+npm run lint                                                           -> exit 0 (0 errors, 10 pre-existing warnings)
+scripts/e2e.mjs --test e2e/print-runs.test.ts (APPEARANCE_EVIDENCE set) -> 8 pass, 0 fail (incl. evidence-only hydrated screenshot pass)
+scripts/e2e.mjs --test 'e2e/**/*.test.ts' (whole CI glob, same build)  -> 116 pass, 1 fail, 1 skipped
+   fail: e2e/ryugu.test.ts "the palace loads its own stylesheet only" (2 sheets: palace + components/appearance.css)
+   fix: exact allowance for the shared print-run sheet; rerun e2e/ryugu.test.ts -> 9 pass, 0 fail
+Negative control (unit): disabling the boot script's canonical-number check turns "corrupt, partial, noncanonical and hostile stored values" red.
+
+Real/fake boundary: lib/appearance-client.test.ts uses fake storage, a vm global and a fake DOM/MutationObserver (adapter logic only).
+e2e/print-runs.test.ts is the real browser against the real production build (persistence, first paint, SVG attributes, navigation).
+Deployment is not claimed here: plan-manager's green gate and QA own it.
+
+Screenshots (first frame with scripts aborted, and hydrated, for sumi/riso/indigo on all 15 documents) were inspected locally and are not committed (binaries).
+print-runs.json: measured aliases/backgrounds/layer per document, 48 run x theme x season values, Lab hop SVG attributes.

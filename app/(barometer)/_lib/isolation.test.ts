@@ -87,10 +87,32 @@ test("the scan finds Barometer's files", () => {
   assert.ok(!libCode.some((f) => f.endsWith(".test.ts")));
 });
 
+// The one exception: the root layout mounts the shared print-run boundary (components/appearance-boot.tsx in <head>,
+// components/appearance-runtime.tsx in <body>), these two specifiers exactly and in layout.tsx alone. The checker
+// itself still flags them, and every other file and specifier, so _lib/ and the components stay as isolated as before.
+const APPEARANCE = new Set(["@/components/appearance-boot", "@/components/appearance-runtime"]);
+const ROOT_LAYOUT = join(ROOT, "app/(barometer)/layout.tsx");
+const rootAppearance = (file: string, spec: string) => file === ROOT_LAYOUT && APPEARANCE.has(spec);
+
+test("the root layout mounts the shared appearance boundary and nothing else of the site", () => {
+  const layout = readFileSync(ROOT_LAYOUT, "utf8");
+  const shared = specifiers(ROOT_LAYOUT).filter((spec) => reachesOutside(ROOT_LAYOUT, spec) !== null);
+  assert.deepEqual(shared.sort(), [...APPEARANCE].sort());
+  assert.match(layout, /<AppearanceBoot root="barometer" \/>\s*<\/head>/);
+  assert.match(layout, /<AppearanceRuntime \/><\/body>/);
+  assert.ok(rootAppearance(ROOT_LAYOUT, "@/components/appearance-boot") && rootAppearance(ROOT_LAYOUT, "@/components/appearance-runtime"));
+  assert.ok(!rootAppearance(join(ROOT, "app/(barometer)/_lib/x.ts"), "@/components/appearance-boot"), "only the layout");
+  assert.ok(!rootAppearance(join(ROOT, "app/(barometer)/_components/x.tsx"), "@/components/appearance-runtime"), "only the layout");
+  for (const spec of ["@/components/appearance.css", "@/lib/appearance-client", "@/lib/ink-lab", "@/components/figures", "@/components/appearance-boot.tsx", "../../(site)/globals.css"]) {
+    assert.ok(!rootAppearance(ROOT_LAYOUT, spec), spec);
+  }
+  assert.notEqual(reachesOutside(ROOT_LAYOUT, "@/components/appearance-boot"), null, "the checker still flags the boundary");
+});
+
 test("nothing under app/(barometer)/ imports the site, Tailwind or another project", () => {
   for (const file of group) {
     for (const spec of specifiers(file)) {
-      const bad = reachesOutside(file, spec);
+      const bad = rootAppearance(file, spec) ? null : reachesOutside(file, spec);
       assert.equal(bad, null, `${relative(ROOT, file)} imports ${spec} (${bad})`);
     }
   }

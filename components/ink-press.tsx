@@ -17,6 +17,7 @@
 // data-frames the animation frames run so far, data-layout and data-seed the poster's. Loaded only by
 // components/ink-press-loader.tsx.
 import { createElement, useEffect, useId, useRef, useState } from "react";
+import { appearanceTags } from "@/lib/appearance-client";
 import { inkFilter, wrapSeed } from "@/lib/ink-modes";
 import {
   DEFAULT_PHRASE,
@@ -333,7 +334,7 @@ function PressSvg({ d, phrase, label }: { d: Design; phrase: string; label: stri
               ))}
             </feMerge>
           ) : (
-            createElement(p.tag, { key: i, ...p.attrs })
+            createElement(p.tag, { key: i, ...p.attrs, ...appearanceTags(p) })
           ),
         )}
       </filter>
