@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync, statSync } from "node:fs";
 import { test } from "node:test";
 import {
   bundleCarriesAskCall,
@@ -8,8 +9,11 @@ import {
   chunkLinks,
   collectChunks,
   inTierScope,
+  probeTierLive,
   tierOrigin,
+  TIER_QUESTION,
   type Fetched,
+  type TierRequest,
 } from "./ask-deploy.ts";
 
 // Shaped like the minified chunk lib/ask-tier.ts lands in.
@@ -152,4 +156,130 @@ test("the probe's Origin is the site's own origin, as the route compares it", ()
   assert.equal(inTierScope("/work"), true);
   assert.equal(inTierScope("/notes/ink"), true);
   assert.equal(inTierScope("/"), false);
+});
+
+// A server shaped like app/api/ask/route.ts with the tier on: GET says enabled, POST answers only the site's own
+// Origin (403 otherwise), and pages answer 200. `reply` and `get` override the tier's answers; every call is kept.
+function fakeTier(opts: { get?: Fetched; reply?: Fetched; pages?: Record<string, number>; origin?: string } = {}) {
+  const calls: { method: string; url: string; origin?: string; body?: string }[] = [];
+  const request: TierRequest = async (method, url, o = {}) => {
+    calls.push({ method, url, origin: o.origin, body: o.body });
+    const path = new URL(url).pathname;
+    if (path === "/api/ask" && method === "GET") return opts.get ?? { status: 200, text: JSON.stringify({ enabled: true, limits: { hour: 10, day: 150 } }) };
+    if (path === "/api/ask") {
+      if (o.origin !== (opts.origin ?? "https://otohime.dev")) return { status: 403, text: JSON.stringify({ error: "origin" }) };
+      return opts.reply ?? { status: 200, text: JSON.stringify(LLM) };
+    }
+    return { status: opts.pages?.[path] ?? 200, text: "<html></html>" };
+  };
+  return { request, calls, posts: () => calls.filter((c) => c.method === "POST") };
+}
+const named = (r: { checks: { name: string; ok: boolean }[] }) => r.checks.map((c) => `${c.ok ? "ok" : "not ok"} - ${c.name}`);
+
+test("probeTierLive, tier on: GET, exactly one POST with the site's Origin and the fixed question, then each cited page", async () => {
+  const site = fakeTier();
+  const r = await probeTierLive("https://otohime.dev/", site.request);
+  assert.deepEqual(named(r), [
+    "ok - GET /api/ask is 200 with enabled:true",
+    "ok - POST /api/ask (Origin https://otohime.dev) answers with cited model lines",
+    "ok - the cited page /work answers 200",
+  ]);
+  assert.deepEqual(site.calls.map((c) => `${c.method} ${c.url}`), [
+    "GET https://otohime.dev/api/ask",
+    "POST https://otohime.dev/api/ask",
+    "GET https://otohime.dev/work",
+  ]);
+  assert.equal(site.posts().length, 1);
+  assert.equal(r.posts, 1);
+  assert.equal(site.posts()[0].origin, "https://otohime.dev");
+  assert.deepEqual(JSON.parse(site.posts()[0].body ?? ""), { question: TIER_QUESTION });
+  assert.equal(r.lines, 2);
+  assert.equal(r.cited, 1);
+
+  // Duplicate citations are fetched once; a cited page that 404s is a miss.
+  const dup = { ...LLM, sources: [{ title: "W", href: "/work" }, { title: "W2", href: "/work" }, { title: "N", href: "/notes/ink" }] };
+  const site2 = fakeTier({ reply: { status: 200, text: JSON.stringify(dup) }, pages: { "/notes/ink": 404 } });
+  const r2 = await probeTierLive("https://otohime.dev", site2.request);
+  assert.deepEqual(site2.calls.filter((c) => c.method === "GET").map((c) => new URL(c.url).pathname), ["/api/ask", "/work", "/notes/ink"]);
+  assert.deepEqual(named(r2).slice(2), ["ok - the cited page /work answers 200", "not ok - the cited page /notes/ink answers 200"]);
+  assert.equal(r2.cited, 3);
+});
+
+test("probeTierLive, tier off or unreachable: the GET misses and no POST is sent", async () => {
+  for (const get of [{ status: 404, text: "Not Found" }, { status: 200, text: JSON.stringify({ enabled: false }) }, { status: 503, text: "{}" }]) {
+    const site = fakeTier({ get });
+    const r = await probeTierLive("https://otohime.dev", site.request);
+    assert.equal(site.posts().length, 0, get.text);
+    assert.equal(r.posts, 0);
+    assert.deepEqual(named(r), ["not ok - GET /api/ask is 200 with enabled:true", "not ok - POST /api/ask answers with cited model lines"]);
+    assert.match(r.checks[1].detail, /^not sent/);
+  }
+  const down: TierRequest = async () => {
+    throw new Error("connect ECONNREFUSED");
+  };
+  const r = await probeTierLive("https://otohime.dev", down);
+  assert.equal(r.checks[0].ok, false);
+  assert.match(r.checks[0].detail, /ECONNREFUSED/);
+  assert.equal(r.posts, 0);
+});
+
+test("probeTierLive misses on an (OFFLINE) reply, an off-site citation, a 429, a wrong Origin or a POST that throws", async () => {
+  const offline = { ...LLM, mode: "offline", lines: ["(OFFLINE)", "SHORE."] };
+  const cases: [string, Parameters<typeof fakeTier>[0], RegExp][] = [
+    ["(OFFLINE)", { reply: { status: 200, text: JSON.stringify(offline) } }, /mode "offline"/],
+    ["off-site", { reply: { status: 200, text: JSON.stringify({ ...LLM, sources: [{ title: "X", href: "https://evil.example/work" }] }) } }, /outside/],
+    ["429", { reply: { status: 429, text: JSON.stringify(offline) } }, /status 429/],
+    ["origin", { origin: "https://www.otohime.dev" }, /status 403/],
+  ];
+  for (const [name, opts, why] of cases) {
+    const site = fakeTier(opts);
+    const r = await probeTierLive("https://otohime.dev", site.request);
+    assert.equal(site.posts().length, 1, name);
+    assert.deepEqual(named(r), ["ok - GET /api/ask is 200 with enabled:true", "not ok - POST /api/ask (Origin https://otohime.dev) answers with cited model lines"], name);
+    assert.match(r.checks[1].detail, why, name);
+    assert.equal(site.calls.length, 2, `${name}: no cited page is fetched after a miss`);
+  }
+  const site = fakeTier();
+  const throwing: TierRequest = (method, url, o) => (method === "POST" ? Promise.reject(new Error("socket hang up")) : site.request(method, url, o));
+  const r = await probeTierLive("https://otohime.dev", throwing);
+  assert.equal(r.checks[1].ok, false);
+  assert.equal(r.posts, 1);
+});
+
+// The scripts run what is tested above, and the checks that gate this task cover these files.
+const repo = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+
+test("probe-ask-tier runs probeTierLive for its live requests, read-only, from an executable wrapper", () => {
+  const mjs = repo("scripts/probe-ask-tier.mjs");
+  assert.match(mjs, /import \{[^}]*\bprobeTierLive\b[^}]*\} from "\.\.\/lib\/ask-deploy\.ts"/);
+  assert.match(mjs, /probeTierLive\(BASE_URL, request, ORIGIN\)/);
+  assert.doesNotMatch(mjs, /request\("POST"/, "the only POST is probeTierLive's");
+  assert.match(mjs, /process\.exit\(failed === 0 && ok > 0 \? 0 : 1\)/);
+  const sh = repo("scripts/probe-ask-tier.sh");
+  assert.ok((statSync(new URL("../scripts/probe-ask-tier.sh", import.meta.url)).mode & 0o111) !== 0, "probe-ask-tier.sh is not executable");
+  assert.match(sh, /scripts\/probe-ask-tier\.mjs/);
+  const code = (text: string, comment: string) => text.split("\n").filter((l) => !l.trimStart().startsWith(comment)).join("\n");
+  for (const text of [code(mjs, "//"), code(sh, "#")]) assert.doesNotMatch(text, /\bvercel\b|ASK_LLM|ANTHROPIC_API_KEY/, "the probe never sets env or deploys");
+});
+
+test("probe-ask-llm-fake runs the tier probe on, on with a non-JSON fake, and off, with fixed tallies", () => {
+  const sh = repo("scripts/probe-ask-llm-fake.sh");
+  for (const phase of ["on", "on-control", "off"]) assert.equal(sh.split(`tier_probe ${phase}\n`).length - 1, 1, phase);
+  assert.match(sh, /scripts\/probe-ask-tier\.sh/);
+  assert.match(sh, /fake_mode nonjson\n\s*tier_probe on-control/);
+  assert.match(sh, /TIER_VERDICTS_WANT=\d+/);
+  for (const summary of ["30 ok, 0 failed", "28 ok, 1 failed", "27 ok, 2 failed"]) assert.ok(sh.includes(`"${summary}"`), summary);
+});
+
+test("npm test and the typecheck cover lib/ask-deploy.ts and its tests, with nothing skipped", () => {
+  const pkg = JSON.parse(repo("package.json")) as { scripts: Record<string, string> };
+  assert.ok(pkg.scripts.test.includes("'lib/**/*.test.ts'"), pkg.scripts.test);
+  assert.match(pkg.scripts.typecheck, /tsc --noEmit/);
+  const ts = JSON.parse(repo("tsconfig.json")) as { compilerOptions: { strict?: boolean }; include: string[]; exclude?: string[] };
+  assert.equal(ts.compilerOptions.strict, true);
+  assert.ok(ts.include.includes("**/*.ts"));
+  assert.deepEqual(ts.exclude ?? [], ["node_modules"]);
+  const self = repo("lib/ask-deploy.test.ts");
+  const banned = ["test" + ".only(", "test" + ".skip(", "test" + ".todo(", "{ skip" + ":", "{ only" + ":", "@ts-" + "ignore", "@ts-" + "nocheck"];
+  for (const file of [self, repo("lib/ask-deploy.ts")]) for (const b of banned) assert.ok(!file.includes(b), b);
 });

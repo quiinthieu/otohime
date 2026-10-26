@@ -230,12 +230,24 @@ tier_probe() {
   printf '%s\n' "$TIER_OUT" | sed "s/^/#   tier $1| /"
 }
 
+# Every tier verdict below is counted; the run fails unless all TIER_VERDICTS_WANT of them were reached.
+TIER_VERDICTS=0
+TIER_VERDICTS_WANT=8
 tier_ok() { # name, condition result
+  TIER_VERDICTS=$((TIER_VERDICTS + 1))
   if [ "$2" -eq 0 ]; then echo "ok - $1"; else note_fail "$1"; fi
 }
 
 has() { printf '%s\n' "$TIER_OUT" | grep -q -- "$1"; }
-lacks_fallback_miss() { ! printf '%s\n' "$TIER_OUT" | grep -q '^not ok - .*forced'; }
+count() { printf '%s\n' "$TIER_OUT" | grep -c -- "$1"; }
+# The forced failures, 3 cases at 2 sizes: all 6 print the canned answer and show no error, and the probe's own
+# summary is exactly `want` (e.g. "30 ok, 0 failed"), so a section that never ran cannot pass.
+fallback_and_tally() { # want
+  [ "$(count '^ok - .*, forced .*: the receipt prints the canned answer')" -eq 6 ] &&
+    [ "$(count '^ok - .*, forced .*: no visible error element or error text')" -eq 6 ] &&
+    [ "$(count '^not ok - .*forced')" -eq 0 ] &&
+    has "^probe-ask-tier: $1\$"
+}
 
 if start on ASK_LLM=1 ANTHROPIC_API_KEY="$FAKE_KEY" ANTHROPIC_BASE_URL="$FAKE_URL"; then
   run_probe on || note_fail "on: the model-tier checks failed (above)"
@@ -245,13 +257,15 @@ if start on ASK_LLM=1 ANTHROPIC_API_KEY="$FAKE_KEY" ANTHROPIC_BASE_URL="$FAKE_UR
   tier_ok "on: tier probe passes: GET enabled, one POST with the fake's lines citing /work (exit $TIER_EXIT)" $?
   [ "$TIER_CALLS" -eq 1 ]
   tier_ok "on: tier probe: its one POST reached the fake model exactly once ($TIER_CALLS)" $?
-  has '^ok - 390x844 touch, forced a 429 with no reply: the receipt prints the canned answer' && lacks_fallback_miss
-  tier_ok "on: tier probe: every forced failure prints the canned answer with no error" $?
+  fallback_and_tally "30 ok, 0 failed"
+  tier_ok "on: tier probe: all 6 forced failures print the canned answer with no error; 30 ok, 0 failed" $?
   fake_mode nonjson
   tier_probe on-control
   fake_mode json
   [ "$TIER_EXIT" -eq 1 ] && has '^ok - GET /api/ask is 200 with enabled:true' && has '^not ok - POST /api/ask .*: mode "offline"' && [ "$TIER_CALLS" -eq 1 ]
   tier_ok "on: control: with the fake answering non-JSON, the tier probe's POST check fails and it exits 1 (exit $TIER_EXIT)" $?
+  fallback_and_tally "28 ok, 1 failed"
+  tier_ok "on: control: the POST is its only miss; 28 ok, 1 failed" $?
 else
   note_fail "on: server started"
 fi
@@ -265,12 +279,18 @@ if start off ANTHROPIC_API_KEY="$FAKE_KEY" ANTHROPIC_BASE_URL="$FAKE_URL"; then
   tier_ok "off: tier probe fails on GET /api/ask 404 and sends no POST (exit $TIER_EXIT)" $?
   [ "$TIER_CALLS" -eq 0 ]
   tier_ok "off: tier probe: the fake model saw no request ($TIER_CALLS)" $?
-  has '^ok - 1366x768, forced the tier off (GET 404): the receipt prints the canned answer' && lacks_fallback_miss
-  tier_ok "off: tier probe: every forced failure prints the canned answer with no error" $?
+  fallback_and_tally "27 ok, 2 failed"
+  tier_ok "off: tier probe: all 6 forced failures print the canned answer with no error; 27 ok, 2 failed (GET and POST)" $?
 else
   note_fail "off: server started"
 fi
 stop_server
+
+if [ "$TIER_VERDICTS" -eq "$TIER_VERDICTS_WANT" ]; then
+  echo "ok - tier verdicts: $TIER_VERDICTS of $TIER_VERDICTS_WANT reached"
+else
+  note_fail "tier verdicts: $TIER_VERDICTS of $TIER_VERDICTS_WANT reached"
+fi
 
 if [ "$FAILED" -ne 0 ]; then
   echo "probe: failed ($FAILED part(s))"

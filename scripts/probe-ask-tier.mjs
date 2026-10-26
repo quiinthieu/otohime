@@ -2,6 +2,7 @@
 // server-only ANTHROPIC_API_KEY are set there. Run by scripts/probe-ask-tier.sh (node --experimental-strip-types,
 // so lib/ask-deploy.ts and lib/ask.ts import as they are), which passes BASE_URL and PW_PREFIX in.
 //
+// Steps 1 and 2 are probeTierLive in lib/ask-deploy.ts, unit-tested there.
 // 1. GET /api/ask is 200 with enabled:true (checkTierGet).
 // 2. One POST /api/ask with TIER_QUESTION and the site's own Origin (the route compares it to BETTER_AUTH_URL's)
 //    answers 200 in mode llm with model lines and citations, every one to /work, /projects or /notes
@@ -17,7 +18,7 @@ import http from "node:http";
 import https from "node:https";
 import { createRequire } from "node:module";
 import { answer } from "../lib/ask.ts";
-import { checkTierGet, checkTierPost, TIER_QUESTION, tierOrigin } from "../lib/ask-deploy.ts";
+import { probeTierLive, TIER_QUESTION, tierOrigin } from "../lib/ask-deploy.ts";
 
 const BASE_URL = (process.env.BASE_URL || "http://127.0.0.1:3000").replace(/\/+$/, "");
 const ORIGIN = process.env.ASK_ORIGIN || tierOrigin(BASE_URL);
@@ -62,35 +63,12 @@ function request(method, url, { origin, body } = {}) {
 }
 
 async function live() {
-  let get;
-  try {
-    get = await request("GET", `${BASE_URL}${API}`);
-  } catch (error) {
-    check("GET /api/ask is 200 with enabled:true", false, String(error?.message ?? error));
-    return;
+  const r = await probeTierLive(BASE_URL, request, ORIGIN);
+  if (r.posts > 0) {
+    console.log(`model lines: ${r.lines}`);
+    console.log(`citations: ${r.cited}`);
   }
-  const g = checkTierGet(get.status, get.text);
-  check("GET /api/ask is 200 with enabled:true", g.ok, g.detail);
-  if (!g.ok) {
-    check("POST /api/ask answers with cited model lines", false, "not sent: GET /api/ask does not say the tier is on");
-    return;
-  }
-
-  let post;
-  try {
-    post = await request("POST", `${BASE_URL}${API}`, { origin: ORIGIN, body: JSON.stringify({ question: TIER_QUESTION }) });
-  } catch (error) {
-    check("POST /api/ask answers with cited model lines", false, String(error?.message ?? error));
-    return;
-  }
-  const p = checkTierPost(post.status, post.text);
-  console.log(`model lines: ${p.lines}`);
-  console.log(`citations: ${p.cited.length}`);
-  check(`POST /api/ask (Origin ${ORIGIN}) answers with cited model lines`, p.ok, p.detail);
-  for (const href of p.ok ? [...new Set(p.cited)] : []) {
-    const page = await request("GET", new URL(href, `${BASE_URL}/`).href).catch((e) => ({ status: 0, text: String(e) }));
-    check(`the cited page ${href} answers 200`, page.status === 200, String(page.status));
-  }
+  for (const c of r.checks) check(c.name, c.ok, c.detail);
 }
 
 // One page with /api/ask answered by fixtures: `get` and `post` are route handlers. Asks TIER_QUESTION and

@@ -129,3 +129,38 @@ export function checkTierPost(status: number, text: string): TierPostCheck {
                 : "";
   return { ok: miss === "", lines: lines.length, cited, detail: miss || `${lines.length} line(s), cites ${cited.join(", ")}` };
 }
+
+export type TierRequest = (method: "GET" | "POST", url: string, opts?: { origin?: string; body?: string }) => Promise<Fetched>;
+export type TierLive = { checks: { name: string; ok: boolean; detail: string }[]; lines: number; cited: number; posts: number };
+
+// The probe's requests to the live server, in order: GET /api/ask; only if it says the tier is on, one POST with
+// TIER_QUESTION and `origin`; then a GET of each distinct cited page. The POST is the one request that spends a
+// model call and a daily answer, so it is sent at most once. A request that throws is a miss, not a crash.
+export async function probeTierLive(baseUrl: string, request: TierRequest, origin = tierOrigin(baseUrl)): Promise<TierLive> {
+  const base = baseUrl.replace(/\/+$/, "");
+  const out: TierLive = { checks: [], lines: 0, cited: 0, posts: 0 };
+  const check = (name: string, ok: boolean, detail: string) => out.checks.push({ name, ok, detail });
+  const attempt = (method: "GET" | "POST", url: string, opts?: { origin?: string; body?: string }) =>
+    request(method, url, opts).catch((error: unknown) => ({ status: 0, text: String((error as Error)?.message ?? error) }));
+  const POST_NAME = "POST /api/ask answers with cited model lines";
+
+  const get = await attempt("GET", `${base}/api/ask`);
+  const g = checkTierGet(get.status, get.text);
+  check("GET /api/ask is 200 with enabled:true", g.ok, g.detail);
+  if (!g.ok) {
+    check(POST_NAME, false, "not sent: GET /api/ask does not say the tier is on");
+    return out;
+  }
+
+  out.posts++;
+  const post = await attempt("POST", `${base}/api/ask`, { origin, body: JSON.stringify({ question: TIER_QUESTION }) });
+  const p = checkTierPost(post.status, post.text);
+  out.lines = p.lines;
+  out.cited = p.cited.length;
+  check(`POST /api/ask (Origin ${origin}) answers with cited model lines`, p.ok, p.detail);
+  for (const href of p.ok ? [...new Set(p.cited)] : []) {
+    const page = await attempt("GET", new URL(href, `${base}/`).href);
+    check(`the cited page ${href} answers 200`, page.status === 200, String(page.status));
+  }
+  return out;
+}
