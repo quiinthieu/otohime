@@ -3,6 +3,15 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-9021 update: board unchanged since run-9014
+
+Read live in run-9021 (product owner, claude-sonnet-5-5), 2026-10-26: pm-260 `drafting`; pm-267
+(mono-v2) `paused` since 11:53Z (t-1594, t-1596 `qa_pending`; t-1595, t-1597 `backlog`; no open
+escalations) and owns outcomes 1-3; outcome 4 stays met. A grep of the otohime checkout finds
+`after_plan_orphaned`, `slow_task_duration` and `execution_started_at` only in `lib/plan-release.ts`
+(the offline release probe), so no otohime software_engineer task is proposed. The proposal is the
+empty DAG. Deferred, owner pm-267; failure conditions as in run-9000.
+
 ## Run-9014 update: board unchanged since run-9010
 
 Read live in run-9014 (product owner, claude-sonnet-5-5), 2026-10-26 ~14:52 UTC via list_plans:
