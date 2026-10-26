@@ -29,6 +29,7 @@ Three independent additions to the paper-and-ink otohime.dev site:
 
 ## Decisions
 - Vector closed-form marbling over stable fluids: exact rings, deterministic, testable, resolution-free.
+- Marble model (t-1547, `lib/marble.ts`): the pond is an immutable stack of ink rings. `applyOp` returns `{ok:false, reason}` with the untouched pond on a cap (`max_drops`, `max_verts`) or a malformed op. Long image edges are split at the pre-image midpoint, so new vertices sit on the true curve. The renderer, Worker and print should consume `Marble` / `toSvgPaths` as they are.
 - Grain as background-image, not filter: keeps probe-cartridges' no-filter check and its negative control valid.
 - Portrait 2x4 imposition: avoids the iOS landscape `@page` regression.
 - Background wash capped at 6% by a contrast unit test with a 20% negative control.
