@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { PocketTerminalLoader } from "@/components/pocket-terminal-loader";
 import { PressSound } from "@/components/press-sound";
 import { SeasonLayer } from "@/components/season-layer";
 import { site } from "@/content/site";
@@ -58,6 +59,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SeasonLayer />
         {/* The letterpress keys' press cue (components/press-sound.tsx): one document listener for every page. */}
         <PressSound />
+        {/* "/" or Cmd/Ctrl-K opens the Pocket Terminal (components/pocket-terminal.tsx, its own chunk). Ahead of the
+           pages, so its capture-phase key listener is added before the handheld's and can stop keys while open. */}
+        <PocketTerminalLoader />
         {children}
       </body>
     </html>

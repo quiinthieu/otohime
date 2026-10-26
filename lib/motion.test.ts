@@ -289,8 +289,10 @@ test("seasons.css tints only under data-season, and the ambient layer and dial m
 test("the site root layout mounts the season layer first in <body>, ahead of every group's masthead", () => {
   const src = readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8");
   assert.match(src, /^import \{ SeasonLayer \} from "@\/components\/season-layer";$/m);
-  // The press cue's listener (components/press-sound.tsx) renders nothing, so it may follow the layer.
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?\{children\}\s*<\/body>/);
+  // The press cue's listener (components/press-sound.tsx) renders nothing, so it may follow the layer. The Pocket
+  // Terminal's loader (components/pocket-terminal-loader.tsx) renders nothing until "/" or Cmd/Ctrl-K, and its dialog
+  // opens in the top layer, so it stands between the layer and the pages without moving either.
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*\{children\}\s*<\/body>/);
   assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
   assert.equal(src.match(/<PressSound\b/g)?.length, 1);
   // Mounted once, in the root layout only: no group layout or page mounts a second one.
@@ -513,4 +515,29 @@ test("the console zoom is typed, from the LCD, within 400 ms, and the label rest
   assert.match(label?.body ?? "", /visibility:\s*hidden;/);
   assert.match(layer.find((b) => b.prelude === ".console-label[data-open]")?.body ?? "", /^\s*visibility:\s*visible;\s*$/);
   assert.doesNotMatch(label?.body ?? "", /animation|transition:|view-transition-name/);
+});
+
+// The Pocket Terminal's sheet, named here: imported only by the lazy terminal (components/pocket-terminal.tsx), so
+// no root layout carries it and no page pays for it before the first "/" or Cmd/Ctrl-K. Its one motion, the ink
+// settling as the dialog opens, stops under reduced motion.
+const TERMINAL_SHEET = "components/pocket-terminal.css";
+
+test(`${TERMINAL_SHEET} rides the lazy terminal only, and its open animation stops under reduced motion`, () => {
+  const importers = ["components", ...GROUPS.map((g) => `app/(${g})`)].flatMap((dir) =>
+    readdirSync(join(ROOT, dir), { recursive: true, encoding: "utf8" })
+      .filter((f) => /\.tsx?$/.test(f) && readFileSync(join(ROOT, dir, f), "utf8").includes("pocket-terminal.css"))
+      .map((f) => `${dir}/${f}`),
+  );
+  assert.deepEqual(importers, ["components/pocket-terminal.tsx"]);
+  for (const group of GROUPS) {
+    const imports = cssImports(readFileSync(join(ROOT, "app", `(${group})`, "layout.tsx"), "utf8"));
+    assert.ok(!imports.some((f) => f.includes("pocket-terminal")), `app/(${group})/layout.tsx`);
+  }
+  const top = blocks(readFileSync(join(ROOT, TERMINAL_SHEET), "utf8").replace(/\/\*[\s\S]*?\*\//g, ""));
+  const animated = top.filter((b) => !b.prelude.startsWith("@") && /\banimation:\s*(?!none)/.test(b.body));
+  assert.deepEqual(animated.map((b) => b.prelude), [".pocket-terminal[open]"]);
+  const reduced = reducedMotion(top);
+  assert.equal(reduced.length, 1);
+  assert.equal(top.at(-1), reduced[0], "the reduced-motion block comes last, so it wins on order");
+  assert.match(reduced[0].body, /\.pocket-terminal\[open\]\s*\{\s*animation:\s*none;/);
 });
