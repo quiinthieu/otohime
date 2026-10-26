@@ -164,3 +164,125 @@ export function parseDesk(raw: string | null | undefined, registry: readonly Des
     }),
   );
 }
+
+// ---- the keyboard, the radial menu and the notebook -------------------------------------------------------
+
+// One arrow press moves an item this many px; with Shift, NUDGE_FAST.
+export const NUDGE = 16;
+export const NUDGE_FAST = 64;
+
+// Move one item by px on a desk of this size, kept on the desk. A desk with no
+// size yet (not laid out) leaves the layout alone.
+export function nudge(layout: DeskLayout, id: string, dx: number, dy: number, size: { w: number; h: number }): DeskLayout {
+  const item = layout.find((it) => it.id === id);
+  if (!item || !(size.w > 0) || !(size.h > 0)) return layout;
+  return moveTo(layout, id, item.x + dx / size.w, item.y + dy / size.h);
+}
+
+export type DeskKeyAction =
+  | { type: "nudge"; dx: number; dy: number }
+  | { type: "rotate"; by: number }
+  | { type: "back" }
+  | { type: "front" }
+  | { type: "menu" }
+  | { type: "close" };
+
+// What a key does to a focused desk item: arrows nudge (Shift for a big step),
+// R rotates (Shift+R the other way), [ sends it to the back, ] brings it to the
+// front, Shift+F10 or the menu key opens its radial menu, Esc closes it.
+// Anything else is the browser's (Enter still follows the link).
+export function deskKey(key: string, shift = false): DeskKeyAction | null {
+  const step = shift ? NUDGE_FAST : NUDGE;
+  switch (key) {
+    case "ArrowLeft":
+      return { type: "nudge", dx: -step, dy: 0 };
+    case "ArrowRight":
+      return { type: "nudge", dx: step, dy: 0 };
+    case "ArrowUp":
+      return { type: "nudge", dx: 0, dy: -step };
+    case "ArrowDown":
+      return { type: "nudge", dx: 0, dy: step };
+    case "r":
+    case "R":
+      return { type: "rotate", by: shift ? -ROTATE_STEP : ROTATE_STEP };
+    case "[":
+      return { type: "back" };
+    case "]":
+      return { type: "front" };
+    case "ContextMenu":
+      return { type: "menu" };
+    case "F10":
+      return shift ? { type: "menu" } : null;
+    case "Escape":
+      return { type: "close" };
+    default:
+      return null;
+  }
+}
+
+export type MenuAction = "open" | "rotate" | "back";
+
+// The radial menu's choices, clockwise from the top.
+export const MENU: readonly { action: MenuAction; label: string }[] = [
+  { action: "open", label: "Open" },
+  { action: "rotate", label: "Rotate" },
+  { action: "back", label: "Send to back" },
+];
+
+// Where each of n choices sits around the menu's centre, in px: evenly spaced,
+// clockwise, the first straight up. Rounded to a hundredth so the server and
+// the client print the same style.
+export function menuSpots(n: number, radius: number): { x: number; y: number }[] {
+  const r2 = (v: number) => Math.round(v * 100) / 100 || 0;
+  return Array.from({ length: Math.max(0, n) }, (_, i) => {
+    const a = (i / n) * 2 * Math.PI;
+    return { x: r2(Math.sin(a) * radius), y: r2(-Math.cos(a) * radius) };
+  });
+}
+
+// What the aria-live region says after a desk change.
+export type DeskNews =
+  | { type: "moved"; x: number; y: number }
+  | { type: "rotated"; rot: number }
+  | { type: "back" }
+  | { type: "front" }
+  | { type: "menu" }
+  | { type: "closed" }
+  | { type: "tidied" };
+
+export function deskSay(label: string, news: DeskNews): string {
+  switch (news.type) {
+    case "moved":
+      return `${label} moved to ${Math.round(news.x * 100)}% across, ${Math.round(news.y * 100)}% down.`;
+    case "rotated":
+      return `${label} turned to ${Math.round(normalizeRot(news.rot))} degrees.`;
+    case "back":
+      return `${label} sent to the back.`;
+    case "front":
+      return `${label} brought to the front.`;
+    case "menu":
+      return `${label} menu: ${MENU.map((m) => m.label.toLowerCase()).join(", ")}.`;
+    case "closed":
+      return `${label} menu closed.`;
+    case "tidied":
+      return "Desk tidied up.";
+  }
+}
+
+// The notebook's leaves (the cover, then its pages), turned by one spring:
+// p is how many leaves have turned, so leaf i is turning while p is in [i, i+1].
+// Hovered or focused, the cover is open (p = 1); opened, every leaf turns over.
+export const NOTEBOOK_LEAVES = 3;
+export const NOTEBOOK_SHUT = 0;
+export const NOTEBOOK_PEEK = 1;
+export const NOTEBOOK_OPEN = NOTEBOOK_LEAVES;
+
+// Leaf i's pose at p: its turn about the spine in degrees (0 shut, -180 lying
+// open on the left) and its stacking rank. An unturned leaf lies above the
+// leaves after it, a turned one above the leaves before it, so the pile reads
+// right from either side. An overshoot past the ends only lifts the next leaf.
+export function leafPose(p: number, i: number, n: number = NOTEBOOK_LEAVES): { deg: number; z: number } {
+  const t = Number.isFinite(p) ? Math.min(1, Math.max(0, p - i)) : 0;
+  const deg = Math.round(-180 * t * 100) / 100 || 0;
+  return { deg, z: t > 0.5 ? i + 1 : n - i };
+}

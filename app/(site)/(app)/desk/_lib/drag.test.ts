@@ -103,7 +103,7 @@ test("the objects are real links in the registry's order, and the stack order is
   const desk = read("_components/ink-desk.tsx");
   assert.match(desk, /^"use client";/);
   assert.match(desk, /\{DESK_ITEMS\.map\(\(entry\) => \{/);
-  assert.match(desk, /<Link href=\{entry\.href\} className="desk-link" draggable=\{false\} onClick=\{onClick\}>/);
+  assert.match(desk, /<Link\s+href=\{entry\.href\}\s+className="desk-link"\s+draggable=\{false\}[^>]*?onClick=\{\(event\) => onItemClick\(entry\.id, event\)\}\s*>/);
   assert.match(desk, /zIndex: item\.z \+ 1/);
   // The layout's order is never what the list renders.
   assert.doesNotMatch(desk, /\bdesk\.map\(\(item\) => \(?\s*<li/);

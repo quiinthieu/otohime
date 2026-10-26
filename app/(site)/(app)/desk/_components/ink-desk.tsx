@@ -8,12 +8,55 @@
 // back, garbled or blocked storage is a fresh desk). Tidy up springs everything home. In the cork corner the
 // projects that share a tag are joined by a red string (lib/desk-string.ts), redrawn on every frame of a
 // drag. Only the washi tape and the pins take touch-action: none, so a finger elsewhere still scrolls.
-import { DESK_ITEMS, DESK_KEY, bringToFront, defaultLayout, moveTo, parseDesk, serializeDesk, tidy, type DeskLayout } from "@/lib/desk";
+// Holding an item still for LONG_PRESS_MS (or a right click, Shift+F10, the menu key) opens a small radial
+// menu: open, rotate, send to back; Esc closes it. A focused item also takes keys (lib/desk.ts deskKey):
+// arrows nudge it NUDGE px (Shift: NUDGE_FAST), R rotates, [ and ] send it back or bring it front, and an
+// aria-live line says what changed. A pickup and a send-to-back rustle, a drop and an open stamp (sound is
+// off unless the visitor turned it on). The notebook's cover and pages turn about the spine on one spring:
+// it peeks open under a hovering mouse or focus, and opening it turns every leaf before the page changes.
+import {
+  DESK_ITEMS,
+  DESK_KEY,
+  MENU,
+  NOTEBOOK_OPEN,
+  NOTEBOOK_PEEK,
+  NOTEBOOK_SHUT,
+  bringToFront,
+  defaultLayout,
+  deskKey,
+  deskSay,
+  leafPose,
+  menuSpots,
+  moveTo,
+  nudge,
+  parseDesk,
+  rotate,
+  ROTATE_STEP,
+  sendToBack,
+  serializeDesk,
+  tidy,
+  type DeskLayout,
+  type DeskNews,
+  type MenuAction,
+} from "@/lib/desk";
 import { stringPath, type Point } from "@/lib/desk-string";
+import { play } from "@/lib/sound-client";
 import { advance, wobble, type Spring } from "@/lib/spring";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from "react";
+import { useRouter } from "next/navigation";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { anchor, CORK, dropAt, pastThreshold, PIN_PAIRS, pinHomes, PINS, rebase, turn, type PinSpots, type Size } from "../_lib/drag";
+import { longPress } from "../_lib/long-press";
 import { DeskArt, PinCard } from "./desk-art";
 
 // ---- the stored layout, shared by every tab -------------------------------------------------------------
@@ -87,7 +130,23 @@ type Press = {
   baseY: number;
   size: Size;
   moved: boolean;
+  // held still past the long press: the menu is open and the click this press ends with goes nowhere
+  held: boolean;
 };
+
+// The notebook's leaves: how many have turned (a spring), what they are pulled to, whether frames are still
+// needed, and what to do once the last leaf is over (the page change after an open).
+type Flip = { s: Spring; to: number; live: boolean; then: (() => void) | null };
+
+// The radial menu's choices sit this far from its centre, in px.
+const MENU_RADIUS = 64;
+const MENU_SPOTS = menuSpots(MENU.length, MENU_RADIUS);
+// An open turns the leaves, then changes page once the last one is this close to over, or after FLIP_NAV_MS
+// whatever the frames did (a throttled tab still gets there).
+const FLIP_NAV_AT = 0.1;
+const FLIP_NAV_MS = 900;
+
+const labelOf = (id: string) => DESK_ITEMS.find((entry) => entry.id === id)?.label ?? id;
 
 const itemKey = (id: string) => `item:${id}`;
 const pinKey = (id: string) => `pin:${id}`;
@@ -118,6 +177,30 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
   const swallow = useRef(false);
   const frame = useRef(0);
   const last = useRef(0);
+  const router = useRouter();
+  const hintId = useId();
+  // The item whose radial menu is open, if any.
+  const [menu, setMenu] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  // The aria-live line.
+  const [said, setSaid] = useState("");
+  const flip = useRef<Flip>({ s: REST, to: NOTEBOOK_SHUT, live: false, then: null });
+  const leaves = useRef<(HTMLElement | null)[]>([]);
+  // Fires LONG_PRESS_MS into a press on an item that has not moved; reads only refs and setters.
+  const [hold] = useState(() =>
+    longPress(() => {
+      const p = press.current;
+      if (!p || p.moved || !p.key.startsWith("item:")) return;
+      p.held = true;
+      // The menu opens under the pointer: keep its let-go on the item, so the press ends and its click is eaten.
+      try {
+        bodies.current.get(p.key)?.setPointerCapture(p.pointerId);
+      } catch {
+        // the pointer is already gone: its let-go was missed, and the next press starts over (onPointerDown)
+      }
+      openMenu(p.key.slice(5));
+    }),
+  );
 
   const motionOf = (key: string): Motion => {
     let m = motion.current.get(key);
@@ -148,9 +231,34 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
     return anchor(spot, m ? { x: m.x.x, y: m.y.x } : { x: 0, y: 0 }, corkPx.current);
   }
 
+  function paintLeaves() {
+    leaves.current.forEach((el, i) => {
+      if (!el) return;
+      const pose = leafPose(flip.current.s.x, i);
+      el.style.transform = `perspective(1200px) rotateY(${pose.deg}deg)`;
+      el.style.zIndex = String(pose.z);
+    });
+  }
+
+  // The open's last leaf is (nearly) over: change page, once.
+  function flipLanded() {
+    const f = flip.current;
+    const then = f.then;
+    f.then = null;
+    then?.();
+  }
+
   function tick(now: number) {
     const dt = (now - last.current) / 1000;
     last.current = now;
+    const f = flip.current;
+    if (f.live) {
+      const s = advance(f.s, f.to, dt);
+      f.s = s.state;
+      f.live = !s.done;
+      paintLeaves();
+      if (f.then && (s.done || f.s.x >= f.to - FLIP_NAV_AT)) flipLanded();
+    }
     const held = press.current?.moved ? press.current.key : null;
     for (const [key, m] of motion.current) {
       const x = advance(m.x, m.tx, dt);
@@ -164,7 +272,7 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
       if (x.done && y.done && r.done && m.tx === 0 && m.ty === 0 && key !== held) motion.current.delete(key);
     }
     paintStrings();
-    frame.current = motion.current.size > 0 ? requestAnimationFrame(tick) : 0;
+    frame.current = motion.current.size > 0 || f.live ? requestAnimationFrame(tick) : 0;
   }
 
   function kick() {
@@ -178,6 +286,13 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
         if (m.tx === 0 && m.ty === 0 && press.current?.key !== key) motion.current.delete(key);
       }
       paintStrings();
+      const f = flip.current;
+      if (f.live) {
+        f.s = { x: f.to, v: 0 };
+        f.live = false;
+        paintLeaves();
+        flipLanded();
+      }
       return;
     }
     if (frame.current) return;
@@ -198,13 +313,186 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
 
   useEffect(() => {
     const raf = frame;
-    return () => cancelAnimationFrame(raf.current);
-  }, []);
+    return () => {
+      cancelAnimationFrame(raf.current);
+      hold.cancel();
+    };
+  }, [hold]);
+
+  // An open menu takes the focus, and a press anywhere outside it closes it.
+  useEffect(() => {
+    if (!menu) return;
+    menuRef.current?.querySelector("button")?.focus();
+    const outside = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) setMenu(null);
+    };
+    document.addEventListener("pointerdown", outside, true);
+    return () => document.removeEventListener("pointerdown", outside, true);
+  }, [menu]);
+
+  // A repeated line is still read out: it alternates a trailing no-break space.
+  function say(id: string, news: DeskNews) {
+    const line = deskSay(labelOf(id), news);
+    setSaid((was) => (was === line ? `${line}\u00a0` : line));
+  }
+
+  // Turn the notebook's leaves toward a pose; then runs once the last leaf is over.
+  function flipTo(to: number, then: (() => void) | null = null) {
+    const f = flip.current;
+    if (f.then && !then) return; // an open is under way: a hover or a blur does not undo it
+    f.to = to;
+    f.then = then;
+    f.live = true;
+    kick();
+  }
+
+  // Hover and focus only peek when motion is welcome: a cover snapping open under the mouse is just noise.
+  function peek(open: boolean) {
+    if (matchMedia(REDUCED).matches) return;
+    flipTo(open ? NOTEBOOK_PEEK : NOTEBOOK_SHUT);
+  }
+
+  function openMenu(id: string) {
+    setMenu(id);
+    say(id, { type: "menu" });
+  }
+
+  // Close the menu; from the keyboard, the focus goes back to its item.
+  function closeMenu(id: string, refocus: boolean) {
+    setMenu(null);
+    say(id, { type: "closed" });
+    if (refocus) bodies.current.get(itemKey(id))?.querySelector<HTMLElement>(".desk-link")?.focus();
+  }
+
+  // Open an item: a stamp, then the page. The notebook turns its leaves first (at once if motion is reduced).
+  function openItem(id: string) {
+    const entry = DESK_ITEMS.find((e) => e.id === id);
+    if (!entry) return;
+    play("stamp");
+    if (entry.kind !== "notebook") return router.push(entry.href);
+    let gone = false;
+    const go = () => {
+      if (gone) return;
+      gone = true;
+      router.push(entry.href);
+    };
+    setTimeout(go, FLIP_NAV_MS);
+    flipTo(NOTEBOOK_OPEN, go);
+  }
+
+  // Rotate an item by a step: the committed angle moves now and the body springs round to it from where it is.
+  function turnItem(id: string, by: number) {
+    const item = layout.find((it) => it.id === id);
+    if (!item) return;
+    const next = rotate(layout, id, by);
+    const rot = next.find((it) => it.id === id)?.rot ?? item.rot;
+    const m = motionOf(itemKey(id));
+    m.r = { x: m.r.x + turn(item.rot, rot), v: m.r.v };
+    saveLayout(next);
+    kick();
+    say(id, { type: "rotated", rot });
+  }
+
+  // Nudge an item by px: the spot moves now and the body springs into it, the way a drop does.
+  function nudgeItem(id: string, dx: number, dy: number) {
+    const rect = deskRef.current?.getBoundingClientRect();
+    const from = layout.find((it) => it.id === id);
+    if (!rect || !from) return;
+    const size = { w: rect.width, h: rect.height };
+    const next = nudge(layout, id, dx, dy, size);
+    const to = next.find((it) => it.id === id) ?? from;
+    const m = motionOf(itemKey(id));
+    const now = rebase({ x: m.x.x, y: m.y.x }, from, to, size);
+    m.x = { x: now.x, v: m.x.v };
+    m.y = { x: now.y, v: m.y.v };
+    m.tx = 0;
+    m.ty = 0;
+    saveLayout(next);
+    kick();
+    say(id, { type: "moved", x: to.x, y: to.y });
+  }
+
+  function backItem(id: string) {
+    play("rustle");
+    saveLayout(sendToBack(layout, id));
+    say(id, { type: "back" });
+  }
+
+  function frontItem(id: string) {
+    saveLayout(bringToFront(layout, id));
+    say(id, { type: "front" });
+  }
+
+  function choose(id: string, action: MenuAction) {
+    if (action === "open") {
+      setMenu(null);
+      openItem(id);
+    } else if (action === "rotate") {
+      turnItem(id, ROTATE_STEP);
+    } else {
+      backItem(id);
+      closeMenu(id, true);
+    }
+  }
+
+  // A focused item's keys (lib/desk.ts deskKey). Modified keys stay the browser's.
+  function onItemKey(id: string, event: ReactKeyboardEvent<HTMLElement>) {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    const act = deskKey(event.key, event.shiftKey);
+    if (!act) return;
+    if (act.type === "close") {
+      if (menu) closeMenu(menu, true);
+      return;
+    }
+    event.preventDefault();
+    if (act.type === "nudge") nudgeItem(id, act.dx, act.dy);
+    else if (act.type === "rotate") turnItem(id, act.by);
+    else if (act.type === "back") backItem(id);
+    else if (act.type === "front") frontItem(id);
+    else openMenu(id);
+  }
+
+  // The menu's keys: arrows go round it, Esc or Tab close it and hand the focus back to its item.
+  function onMenuKey(id: string, event: ReactKeyboardEvent<HTMLElement>) {
+    const buttons = [...(menuRef.current?.querySelectorAll<HTMLButtonElement>("button") ?? [])];
+    const at = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    const go = (i: number) => buttons[(i + buttons.length) % buttons.length]?.focus();
+    switch (event.key) {
+      case "Escape":
+      case "Tab":
+        event.preventDefault();
+        closeMenu(id, true);
+        return;
+      case "ArrowRight":
+      case "ArrowDown":
+        event.preventDefault();
+        return go(at + 1);
+      case "ArrowLeft":
+      case "ArrowUp":
+        event.preventDefault();
+        return go(at - 1);
+      case "Home":
+        event.preventDefault();
+        return go(0);
+      case "End":
+        event.preventDefault();
+        return go(-1);
+    }
+  }
+
+  // A right click (or a touch browser's own long-press menu) opens the radial menu instead.
+  function onContextMenu(id: string, event: ReactMouseEvent<HTMLElement>) {
+    event.preventDefault();
+    hold.cancel();
+    if (menu !== id) openMenu(id);
+  }
 
   const surfaceOf = (key: string) => (key.startsWith("pin:") ? corkRef.current : deskRef.current);
 
   function onPointerDown(key: string, event: ReactPointerEvent<HTMLElement>) {
     swallow.current = false;
+    // A hold whose let-go never came back to its item is over.
+    if (press.current?.held) press.current = null;
     if (press.current || !event.isPrimary || event.button !== 0) return;
     const rect = surfaceOf(key)?.getBoundingClientRect();
     if (!rect) return;
@@ -218,21 +506,29 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
       baseY: m?.ty ?? 0,
       size: { w: rect.width, h: rect.height },
       moved: false,
+      held: false,
     };
     if (key.startsWith("pin:")) corkPx.current = rect.width;
+    else hold.start(event.clientX, event.clientY);
   }
 
   function onPointerMove(key: string, event: ReactPointerEvent<HTMLElement>) {
     const p = press.current;
-    if (!p || p.key !== key || p.pointerId !== event.pointerId) return;
+    if (!p || p.key !== key || p.pointerId !== event.pointerId || p.held) return;
+    hold.move(event.clientX, event.clientY);
     const dx = event.clientX - p.startX;
     const dy = event.clientY - p.startY;
     if (!p.moved) {
       if (!pastThreshold(dx, dy)) return;
       p.moved = true;
+      hold.cancel();
       event.currentTarget.setPointerCapture(event.pointerId);
       event.currentTarget.dataset.dragging = "";
-      if (key.startsWith("item:")) saveLayout(bringToFront(layout, key.slice(5)));
+      play("rustle");
+      if (key.startsWith("item:")) {
+        saveLayout(bringToFront(layout, key.slice(5)));
+        if (key === itemKey("notes")) flipTo(NOTEBOOK_SHUT);
+      }
     }
     const m = motionOf(key);
     m.tx = p.baseX + dx;
@@ -246,8 +542,14 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
     const p = press.current;
     if (!p || p.key !== key || p.pointerId !== event.pointerId) return;
     press.current = null;
-    if (!p.moved) return;
+    hold.cancel();
     // The click that follows this pointerup, if any, comes in the same task; nothing after it is swallowed.
+    if (p.held) {
+      swallow.current = true;
+      setTimeout(() => (swallow.current = false), 0);
+      return;
+    }
+    if (!p.moved) return;
     swallow.current = dropped;
     setTimeout(() => (swallow.current = false), 0);
     delete event.currentTarget.dataset.dragging;
@@ -261,6 +563,7 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
     const id = key.slice(key.indexOf(":") + 1);
     const from = key.startsWith("pin:") ? pinsRef.current[id] : layout.find((item) => item.id === id);
     if (!from) return;
+    play("stamp");
     const to = dropAt(from, m.tx, m.ty, p.size);
     const now = rebase({ x: m.x.x, y: m.y.x }, from, to, p.size);
     // The spring now pulls toward the spot itself, so a throw past the edge comes back onto the desk.
@@ -309,6 +612,7 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
     saveLayout(next);
     setPins(homes);
     kick();
+    setSaid(deskSay("", { type: "tidied" }));
   }
 
   const bind = (key: string) => ({
@@ -322,14 +626,27 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
     onPointerCancel: (event: ReactPointerEvent<HTMLElement>) => onPointerEnd(key, event, false),
   });
 
-  // The click a drag ends with goes nowhere.
-  const onClick = (event: React.MouseEvent) => {
-    if (!swallow.current) return;
+  // The click a drag or a long press ends with goes nowhere; any other click opens, with a stamp.
+  const onClick = (event: ReactMouseEvent) => {
+    if (!swallow.current) return play("stamp");
     swallow.current = false;
     event.preventDefault();
   };
 
+  // An item's own click: as above, but a plain click on the notebook turns its leaves before the page changes.
+  const onItemClick = (id: string, event: ReactMouseEvent) => {
+    const plain = event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+    if (swallow.current || !plain || id !== "notes") return onClick(event);
+    event.preventDefault();
+    openItem(id);
+  };
+
+  const setLeaf = (i: number, el: HTMLElement | null) => {
+    leaves.current[i] = el;
+  };
+
   const byId = new Map(desk.map((item) => [item.id, item]));
+  const menuItem = menu ? byId.get(menu) : undefined;
   const heads = (id: string) => anchor(pins[id], { x: 0, y: 0 }, 0);
 
   return (
@@ -378,6 +695,16 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
               <li
                 key={entry.id}
                 {...bind(itemKey(entry.id))}
+                onKeyDown={(event) => onItemKey(entry.id, event)}
+                onContextMenu={(event) => onContextMenu(entry.id, event)}
+                {...(entry.kind === "notebook"
+                  ? {
+                      onPointerEnter: (event: ReactPointerEvent<HTMLElement>) => event.pointerType === "mouse" && peek(true),
+                      onPointerLeave: () => peek(false),
+                      onFocus: () => peek(true),
+                      onBlur: () => peek(false),
+                    }
+                  : {})}
                 className={`desk-item desk-${entry.kind}`}
                 data-desk-item={entry.id}
                 style={{
@@ -388,15 +715,60 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
                 }}
               >
                 <span className="desk-tape" aria-hidden="true" />
-                <Link href={entry.href} className="desk-link" draggable={false} onClick={onClick}>
-                  <DeskArt kind={entry.kind} id={entry.id} label={entry.label} />
+                <Link
+                  href={entry.href}
+                  className="desk-link"
+                  draggable={false}
+                  aria-describedby={hintId}
+                  aria-haspopup="menu"
+                  aria-expanded={menu === entry.id}
+                  onClick={(event) => onItemClick(entry.id, event)}
+                >
+                  <DeskArt kind={entry.kind} id={entry.id} label={entry.label} leafRef={entry.kind === "notebook" ? setLeaf : undefined} />
                   <span className="sr-only">{entry.label}</span>
                 </Link>
               </li>
             );
           })}
         </ul>
+        {menu && menuItem && (
+          <div
+            ref={menuRef}
+            className="desk-menu"
+            role="menu"
+            aria-label={`${labelOf(menu)} menu`}
+            data-desk-menu={menu}
+            // kept far enough in that its choices are not clipped at the desk's edge
+            style={{
+              left: `clamp(5.5rem, ${menuItem.x * 100}%, calc(100% - 5.5rem))`,
+              top: `clamp(4.5rem, ${menuItem.y * 100}%, calc(100% - 4.5rem))`,
+            }}
+            onKeyDown={(event) => onMenuKey(menu, event)}
+          >
+            {MENU.map((choice, i) => (
+              <button
+                key={choice.action}
+                type="button"
+                role="menuitem"
+                tabIndex={-1}
+                className="btn btn-sm desk-menu-item"
+                data-menu={choice.action}
+                style={{ transform: `translate(-50%, -50%) translate(${MENU_SPOTS[i].x}px, ${MENU_SPOTS[i].y}px)` }}
+                onClick={() => choose(menu, choice.action)}
+              >
+                {choice.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
+      <p id={hintId} className="sr-only">
+        Arrow keys move it, with Shift for bigger steps. R rotates it, open bracket sends it to the back, close bracket
+        brings it to the front, and Shift F10 opens its menu.
+      </p>
+      <p className="sr-only" aria-live="polite" data-desk-said="">
+        {said}
+      </p>
     </div>
   );
 }

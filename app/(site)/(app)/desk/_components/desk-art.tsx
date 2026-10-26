@@ -1,13 +1,16 @@
-import type { DeskKind } from "@/lib/desk";
+import { NOTEBOOK_LEAVES, type DeskKind } from "@/lib/desk";
 
 // The desk's objects, seen from above, drawn in the site's ink and swatches
 // (desk.css). Each is decoration inside its link: the link's text is the label.
 // Every object carries a strip of washi tape, the drag handle on touch.
 
-export function DeskArt({ kind, id, label }: { kind: DeskKind; id: string; label: string }) {
+// The notebook hands each leaf's element to leafRef, which turns it (ink-desk.tsx).
+type LeafRef = (i: number, el: HTMLElement | null) => void;
+
+export function DeskArt({ kind, id, label, leafRef }: { kind: DeskKind; id: string; label: string; leafRef?: LeafRef }) {
   switch (kind) {
     case "notebook":
-      return <Notebook label={label} />;
+      return <Notebook label={label} leafRef={leafRef} />;
     case "polaroid":
       return <Polaroid label={label} tone={id === "sketches" ? "pink" : "blue"} />;
     case "cassette":
@@ -17,10 +20,42 @@ export function DeskArt({ kind, id, label }: { kind: DeskKind; id: string; label
   }
 }
 
-function Notebook({ label }: { label: string }) {
+// The first page lies under the leaves: the cover, then plain pages. Each leaf hinges on the spine (desk.css)
+// with a face for each side; the back of a turned leaf lies open on the left.
+function Notebook({ label, leafRef }: { label: string; leafRef?: LeafRef }) {
   return (
-    <svg viewBox="0 0 240 170" className="desk-art" aria-hidden="true">
-      <rect x={6} y={8} width={228} height={156} rx={6} className="desk-shadow" />
+    <span className="desk-book">
+      <svg viewBox="0 0 240 170" className="desk-art" aria-hidden="true">
+        <rect x={6} y={8} width={228} height={156} rx={6} className="desk-shadow" />
+        <rect x={2} y={2} width={228} height={156} rx={6} className="desk-paper" />
+        <text x={126} y={56} textAnchor="middle" className="desk-hand">
+          {label}
+        </text>
+        <path d="M44 84h164M44 102h164M44 120h164M44 138h110" className="desk-rule desk-faint" />
+      </svg>
+      {Array.from({ length: NOTEBOOK_LEAVES }, (_, i) => (
+        <span
+          key={i}
+          ref={(el) => leafRef?.(i, el)}
+          className="desk-leaf"
+          data-leaf={i}
+          style={{ zIndex: NOTEBOOK_LEAVES - i }}
+          aria-hidden="true"
+        >
+          {/* the cover's inside is plain; the first page, seen when the cover peeks open, carries the title */}
+          <span className="desk-leaf-face">{i === 0 ? <Cover label={label} /> : <Page title={i === 1 ? label : undefined} />}</span>
+          <span className="desk-leaf-face desk-leaf-back">
+            <Page ruled={i > 0} />
+          </span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function Cover({ label }: { label: string }) {
+  return (
+    <svg viewBox="0 0 240 170" className="desk-art">
       <rect x={2} y={2} width={228} height={156} rx={6} className="desk-cover" />
       <rect x={2} y={2} width={22} height={156} rx={4} className="desk-spine" />
       <path d="M190 2v156" className="desk-band" />
@@ -29,6 +64,25 @@ function Notebook({ label }: { label: string }) {
         {label}
       </text>
       <path d="M78 104h104M78 116h80" className="desk-rule" />
+    </svg>
+  );
+}
+
+function Page({ title, ruled = true }: { title?: string; ruled?: boolean }) {
+  return (
+    <svg viewBox="0 0 240 170" className="desk-art">
+      <rect x={2} y={2} width={228} height={156} rx={6} className="desk-paper" />
+      {title && (
+        <text x={126} y={44} textAnchor="middle" className="desk-hand">
+          {title}
+        </text>
+      )}
+      {ruled && (
+        <path
+          d={title ? "M30 76h180M30 94h180M30 112h180M30 130h120" : "M30 40h180M30 58h180M30 76h180M30 94h180M30 112h180M30 130h120"}
+          className="desk-rule desk-faint"
+        />
+      )}
     </svg>
   );
 }

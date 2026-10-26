@@ -274,3 +274,83 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
+
+/* The notebook: the first page, and over it the leaves, each hinged on the spine (its left edge) and turned by
+   the component's spring with an inline perspective rotateY. Each leaf has a face per side. */
+.desk-book {
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+
+.desk-leaf {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform: perspective(1200px) rotateY(0deg);
+  transform-origin: 1% 50%;
+  transform-style: preserve-3d;
+}
+
+.desk-leaf-face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.desk-leaf-back {
+  transform: rotateY(180deg);
+}
+
+.desk-faint {
+  opacity: 0.35;
+}
+
+/* The radial menu: a dot at the item's centre with its choices around it (offsets come from menuSpots). */
+.desk-menu {
+  position: absolute;
+  z-index: 20;
+  width: 0;
+  height: 0;
+  animation: desk-menu-in 160ms ease-out;
+}
+
+.desk-menu::before {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--coral);
+  content: "";
+  translate: -50% -50%;
+}
+
+.desk-menu-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--field);
+  white-space: nowrap;
+  box-shadow: 1px 2px 0 rgb(35 30 22 / 0.18);
+}
+
+.desk-menu-item:focus-visible {
+  outline: 2px solid var(--shade);
+  outline-offset: 2px;
+}
+
+@keyframes desk-menu-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desk-menu {
+    animation: none;
+  }
+}
