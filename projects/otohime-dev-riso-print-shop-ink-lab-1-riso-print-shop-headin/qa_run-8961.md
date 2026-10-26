@@ -1,0 +1,33 @@
+# QA — pm-268/t-1600 Pocket print-run control
+
+Run: `run-8961`; delivery: `074059495faf4bee48e8f655584dfd4487089b41`; green gate: `ver-3568` passed at that delivery SHA. QA verdict and deployed identity are recorded in the plan-manager report for this run.
+
+## Identity and scope
+
+The delivered commit is authored `Otohime <quiinthieu@gmail.com>`, has subject `pm-268/t-1600: Add Pocket print-run controls and commands`, and has no `Co-Authored-By` trailer. The software-engineer task-manager result for `4b8b8af6-a894-4d8f-8197-eb029e86ab77` lists `author.txt` (44 bytes, SHA-256 `7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada`) and `commits.txt`. The artifact bytes could not be read through this role's exposed task-manager tools; Git commit metadata independently confirms the required author and trailer rule. The engineer run was `run-8948`, profile `codex-sol-6-1-high`, model `gpt-6.1-sol`, effort `high`, fleet worker `avietidol-mac-mini`. This QA run records profile `codex-sol-medium`, model `gpt-6-sol`, effort `medium`, worker `avietidol-z490`.
+
+`0740594` is an ancestor of the QA checkout. The relevant Pocket, terminal, appearance and lockfile paths have no changes between delivery and this checkout. A concurrent `pm-270/t-1604` commit changed only the CI workflow among these paths; the delivery run uses the delivered workflow blob, while the rebased QA checkout has workflow blob `9a833a77fbb3e325605be4855b3d301d78e0f386`. The executable fingerprint includes the delivered `components/print-run-switch.tsx` blob `eaf1e7623e62ec15866a05dc5ca5bbdab83e94f0`, `lib/terminal.ts` blob `51d1944a85ec3e2d78c1f7d709767d288530dea8`, lockfile blob `d26e248aaf46031124031236b0f084eee98cd6b9`, and workflow blob `fb4b7cd094c5a52221f2673169465aa3fa13da2e`. There are no changed model or binary artifacts in this UI task.
+
+## Local executable and browser verification
+
+`npm ci` installed 521 packages from the committed lock in Node 22. The installed Next.js Server and Client Components guide was read; the required host process documents were consulted because their copies are absent in Otohime. The real browser harness built the production Next app, started embedded PostgreSQL and migrations, launched `next start` and installed Google Chrome. This proves real imports and runtime construction of the changed React/Next executable and browser appearance adapter; no fake server or fake command runner stands in for it. Storage-denial cases inject throwing browser storage accessors/methods, and pure unit cases use fake storage ports.
+
+| Required verification, rerun in this QA checkout | Result |
+| --- | --- |
+| `node --experimental-strip-types --test lib/terminal.test.ts` | 22 passed, 0 failed/skipped |
+| `npm test` | 2,233 passed initially; 2,240 passed after the required non-fast-forward rebase, 0 failed/skipped |
+| `npm run typecheck` | Passed |
+| `npm run lint` | Passed with 10 existing warnings, 0 errors |
+| `TMPDIR=/tmp node --experimental-strip-types scripts/e2e.mjs --test e2e/print-run-console.test.ts e2e/pocket-terminal.test.ts` | 14 passed, 0 failed/skipped |
+
+The first QA report push was rejected as non-fast-forward. `git pull --rebase` integrated concurrent main changes, then the declared tests, typecheck, lint and browser suite were rerun before retrying the push.
+
+The feature/browser suite covers visible labels, pointer and keyboard selection, command/control synchronization, actual localStorage and sessionStorage behavior, reload, blocked and quota-denied writes, Lab routing, modal Tab and Shift+Tab containment, Escape/focus return and existing terminal journeys. An independent Chrome 154 probe against the real local production server passed (1/1) after targeting the visible label and waiting for storage hydration on reload. Its 390×844 Pocket and terminal screenshots were opened and inspected: all four labels, selected state, terminal status, command output and prompt are legible and reachable. The public-browser probe is recorded in the plan-manager QA report. Its invalid `print run purple` command is a negative control: storage and selected preset must remain Indigo. The terminal parser unit test separately rejects extra tokens and partial ids.
+
+## Bounded history and evidence boundary
+
+The task-manager history scan read two 20-row pages each for FAILED (40/87 rows) and COMPLETED (40/1,369 rows) in project `plan-manager`, plus current PENDING and RUNNING views. Relevant records in the scanned window: failed `7744f3fc-a925-4d82-b519-df41899c4c45` (`run-8934`, model-capacity exit; callback delivered once, no callback apply failures), completed `4b8b8af6-a894-4d8f-8197-eb029e86ab77` (`run-8948`, callback delivered once), and green verification `ver-3568`. The supplied failure tail and task-manager failure marker were read; the task-manager log tool for the older failed attempt returned an error. The engineer report supplies earlier red-test assertions, which this QA did not replay. A current plan-manager run is RUNNING; no runtime job is queued for this browser feature.
+
+GitHub Actions history was scanned in two 30-run pages of the main branch: 60/430 runs, including 10 failed, 7 successful and 42 cancelled, plus the in-progress delivery run `40330477897`. Those historical runs have different executable fingerprints; the scan is bounded and the remaining 370 runs are unread, so no complete-history conclusion is claimed. The last preceding production success in the viewed window was run `40325669520` at `542c62068564fafaf7045560135064cbdb866f91`. Run `40328273755` at `5577ec5c917811277bef59f126d11b58160aa6a6` had successful checks and a failed `Deploy and verify the served sha` step. The public job page annotation says `Error (inspect exited 1)` for the failed deploy step. GitHub's API logs endpoint returned 403 and its step-log URL returned 404 without authentication, so the full raw historical CI log could not be read. These runs are not evidence of a deterministic defect in the delivered Pocket executable.
+
+This task has no model, external processor, durable product job, callback-driven ingestion, capacity deferral or scheduled output. Integration deployment is determined by public `/api/health` and GitHub production job identity. Execution is demonstrated by the real local build/browser and the independent public path when the cited deployed build serves it. Product delivery for this task means the interactive Pocket control and commands are observed on that deployed build; whole-plan Riso headings and Ink Lab remain separate tasks. Deferred checks, if any, are named in the plan-manager report with exact owner and failure condition.
