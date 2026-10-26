@@ -1,0 +1,216 @@
+Starting embedded Postgres on 127.0.0.1:39757
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/85e42098-1bc2-4d5b-b75b-78d8e65fbd17-54c6b30b2b4a8225686dab6fd74fa516/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:43795
+Focused repetition 1/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1800.923573
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2284.342743
+Focused repetition 2/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 2114.637822
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2645.675806
+Focused repetition 3/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1950.071295
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2576.535705
+Focused repetition 4/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 2330.553915
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2907.125597
+Focused repetition 5/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1907.423561
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2417.493012
+Focused repetition 6/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1639.572181
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2140.897898
+Focused repetition 7/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1663.49085
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2179.731783
+Focused repetition 8/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1698.412371
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2154.573844
+Focused repetition 9/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1653.82042
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2130.775138
+Focused repetition 10/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1693.164964
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2194.378425
+Negative control: blur the held key after keydown
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+not ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1335.749844
+  type: 'test'
+  location: '/data/build-worker/leases/85e42098-1bc2-4d5b-b75b-78d8e65fbd17-54c6b30b2b4a8225686dab6fd74fa516/work/otohime/e2e/.kame-negative-run-9082.test.ts:86:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the focused key remains held beyond the 500ms threshold
+    
+    'swim' !== 'pet'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'pet'
+  actual: 'swim'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///data/build-worker/leases/85e42098-1bc2-4d5b-b75b-78d8e65fbd17-54c6b30b2b4a8225686dab6fd74fa516/work/otohime/e2e/.kame-negative-run-9082.test.ts:107:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1824.724163
+
+

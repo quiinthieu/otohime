@@ -1,0 +1,54 @@
+[
+  {
+    "cls": 0,
+    "lazyBytes": 4966,
+    "bootstrapBytes": 1612,
+    "glueGzip": 177,
+    "chunks": [
+      {
+        "file": ".next/static/chunks/199hh8689mj_p.js",
+        "gzip": 4378,
+        "sha256": "e4b166ce41b6aa0e4172bf530d9dd20593d3a6f0fffa02a896fe9b48567ea167"
+      },
+      {
+        "file": ".next/static/chunks/3zvc0i9-car40.css",
+        "gzip": 588,
+        "sha256": "f16c4d552e8f62e4858d07bc747b97b16b181f80512f6f220fc3ceb01a362be2"
+      }
+    ],
+    "bootstrapModules": [
+      {
+        "file": ".next/static/chunks/1icj9jl_jb0ar.js",
+        "gzip": 776,
+        "sha256": "26c8dc23530c6fdf6007d71e1cecb8bb79b2680ce9e3afde5aced0ca3eea02bc"
+      }
+    ],
+    "browser": "154.0.8037.57"
+  },
+  {
+    "cls": 0,
+    "lazyBytes": 4966,
+    "bootstrapBytes": 1612,
+    "glueGzip": 177,
+    "chunks": [
+      {
+        "file": ".next/static/chunks/199hh8689mj_p.js",
+        "gzip": 4378,
+        "sha256": "e4b166ce41b6aa0e4172bf530d9dd20593d3a6f0fffa02a896fe9b48567ea167"
+      },
+      {
+        "file": ".next/static/chunks/3zvc0i9-car40.css",
+        "gzip": 588,
+        "sha256": "f16c4d552e8f62e4858d07bc747b97b16b181f80512f6f220fc3ceb01a362be2"
+      }
+    ],
+    "bootstrapModules": [
+      {
+        "file": ".next/static/chunks/1icj9jl_jb0ar.js",
+        "gzip": 776,
+        "sha256": "26c8dc23530c6fdf6007d71e1cecb8bb79b2680ce9e3afde5aced0ca3eea02bc"
+      }
+    ],
+    "browser": "154.0.8037.57"
+  }
+]

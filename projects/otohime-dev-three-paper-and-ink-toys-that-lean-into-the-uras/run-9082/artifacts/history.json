@@ -1,0 +1,241 @@
+[
+  {
+    "status": "FAILED",
+    "offset": 0,
+    "total": 1127,
+    "count": 5,
+    "tasks": [
+      {
+        "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+        "title": "Desk swipe observes its preconditions",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main"
+      },
+      {
+        "id": "980c6385-7c10-4d4b-a913-43e9c9333678",
+        "title": "Desk swipe observes its preconditions",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4088d29ec0d9 is not on origin/main"
+      },
+      {
+        "id": "30fd1015-8571-485d-a7b3-c88008526b4b",
+        "title": "Batched delivery P4: dependency readiness and implemented tasks",
+        "status": "FAILED",
+        "repo": "mono-v2",
+        "error": "agent_timeout"
+      },
+      {
+        "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+        "title": "product_owner pm-277",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+        "title": "Complete safe Kame fetch on the landed paper registry",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0e2bbe863f6e is not on origin/main"
+      }
+    ]
+  },
+  {
+    "status": "FAILED",
+    "offset": 5,
+    "total": 1127,
+    "count": 5,
+    "tasks": [
+      {
+        "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+        "title": "Add the Pocket print-run switch and commands",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+        "title": "Desk swipe observes its preconditions",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 143 class=unknown marker=none"
+      },
+      {
+        "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+        "title": "Build the pointer and gyro Peep-box",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main"
+      },
+      {
+        "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+        "title": "Complete safe Kame fetch on the landed paper registry",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main"
+      },
+      {
+        "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+        "title": "Enter Ryugu-jo",
+        "status": "FAILED",
+        "repo": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 143 class=unknown marker=none"
+      }
+    ]
+  },
+  {
+    "status": "COMPLETED",
+    "offset": 0,
+    "total": 6394,
+    "count": 5,
+    "tasks": [
+      {
+        "id": "44507975-10d1-4ea5-af3d-23dad23af500",
+        "title": "reclaim viet-mac",
+        "status": "COMPLETED"
+      },
+      {
+        "id": "064b5f8b-3717-4dbe-870d-94da33f299d7",
+        "title": "linego forge run ffb20f5d-4cc9-4482-a316-02a2a58cae26",
+        "status": "COMPLETED",
+        "repo": "mono-v2",
+        "callbackState": "delivered",
+        "callbackAttempts": 1
+      },
+      {
+        "id": "f0705ec5-95ac-41ac-816e-c0e080e79c36",
+        "title": "linego forge run 75a8a37a-ced5-4325-9296-aa42f61aa3d9",
+        "status": "COMPLETED",
+        "repo": "mono-v2",
+        "callbackState": "delivered",
+        "callbackAttempts": 1
+      },
+      {
+        "id": "ce0497c4-678a-42a0-a972-683ec25d5531",
+        "title": "fleet canary billie-mac",
+        "status": "COMPLETED",
+        "repo": "mono-v2"
+      },
+      {
+        "id": "cb946508-6332-4eee-a1ed-aaf981063cb2",
+        "title": "linego forge run 6e3d4118-e35a-4c15-89f4-9ae7949fa5ba",
+        "status": "COMPLETED",
+        "repo": "mono-v2",
+        "callbackState": "delivered",
+        "callbackAttempts": 1
+      }
+    ]
+  },
+  {
+    "status": "COMPLETED",
+    "offset": 5,
+    "total": 6394,
+    "count": 5,
+    "tasks": [
+      {
+        "id": "5367bfc5-f148-4364-b5ea-b094842926e1",
+        "title": "linego forge run 88beca9c-4de3-4f51-9b9e-d935e58e811a",
+        "status": "COMPLETED",
+        "repo": "mono-v2",
+        "callbackState": "delivered",
+        "callbackAttempts": 1
+      },
+      {
+        "id": "a83e774f-da37-4bb8-a95e-d7933e4a1dcb",
+        "title": "reclaim viet-mac",
+        "status": "COMPLETED"
+      },
+      {
+        "id": "1920b839-dfa4-4a3f-ac99-74a48377f28c",
+        "title": "issue harvest doc sync git_push:07604ef4e4c2f8a1",
+        "status": "COMPLETED",
+        "repo": "mono-v2"
+      },
+      {
+        "id": "17c5723c-27da-4322-9e18-ac9ad77cd630",
+        "title": "environment canary deploy can-451",
+        "status": "COMPLETED",
+        "repo": "mono-v2",
+        "callbackState": "delivered",
+        "callbackAttempts": 1
+      },
+      {
+        "id": "1c54c417-867d-49a6-9a4b-5762a6b187ef",
+        "title": "linego forge run d5d289ff-120d-48dd-9a78-e2844881d912",
+        "status": "COMPLETED",
+        "repo": "mono-v2",
+        "callbackState": "delivered",
+        "callbackAttempts": 1
+      }
+    ]
+  },
+  {
+    "status": "RUNNING",
+    "offset": 0,
+    "total": 8,
+    "count": 5,
+    "tasks": [
+      {
+        "id": "a0979e76-a389-49ce-b895-b887e366fa9f",
+        "title": "linego forge run 334f76f3-7d57-439e-a6a5-5e1f0c09e735",
+        "status": "RUNNING",
+        "repo": "mono-v2"
+      },
+      {
+        "id": "be5157c3-22f4-4d30-9105-5df1f37a9e35",
+        "title": "linego forge run 3dcd5f43-4cbe-44a2-80d1-4aaa5c8641e4",
+        "status": "RUNNING",
+        "repo": "mono-v2"
+      },
+      {
+        "id": "b6bb8088-337d-4a27-9e98-619569880b77",
+        "title": "finance-vn-index-daily - 2026-10-26 20:30:02",
+        "status": "RUNNING"
+      },
+      {
+        "id": "3cdd55f5-5dea-4e9c-b1a9-6e44cbb70f7f",
+        "title": "Desk swipe observes its preconditions",
+        "status": "RUNNING",
+        "repo": "otohime"
+      },
+      {
+        "id": "85e42098-1bc2-4d5b-b75b-78d8e65fbd17",
+        "title": "Wash up Bottles from footer and Pocket",
+        "status": "RUNNING",
+        "repo": "otohime"
+      }
+    ]
+  },
+  {
+    "status": "PENDING",
+    "offset": 0,
+    "total": 1,
+    "count": 1,
+    "tasks": [
+      {
+        "id": "dfd4968b-2d12-4210-8f59-31ed282e5d2a",
+        "title": "self_update avietidol-mac-mini"
+      }
+    ]
+  }
+]

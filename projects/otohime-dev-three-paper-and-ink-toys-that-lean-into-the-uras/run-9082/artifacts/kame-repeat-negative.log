@@ -1,0 +1,121 @@
+Starting embedded Postgres on 127.0.0.1:46261
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/85e42098-1bc2-4d5b-b75b-78d8e65fbd17-54c6b30b2b4a8225686dab6fd74fa516/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:34915
+Focused repetition 1/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1955.702914
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2464.16091
+Focused repetition 2/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1691.792679
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2183.296343
+Focused repetition 3/10
+TAP version 13
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+not ok 1 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1796.080405
+  type: 'test'
+  location: '/data/build-worker/leases/85e42098-1bc2-4d5b-b75b-78d8e65fbd17-54c6b30b2b4a8225686dab6fd74fa516/work/otohime/e2e/kame.test.ts:86:1'
+  failureType: 'hookFailed'
+  error: |-
+    no browser exceptions
+    + actual - expected
+    
+    + [
+    +   'Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///data/build-worker/leases/85e42098-1bc2-4d5b-b75b-78d8e65fbd17-54c6b30b2b4a8225686dab6fd74fa516/work/otohime/e2e/kame.test.ts:21:24)
+    TestHook.runInAsyncScope (node:async_hooks:214:14)
+    TestHook.run (node:internal/test_runner/test:1047:25)
+    TestHook.run (node:internal/test_runner/test:1354:18)
+    TestHook.run (node:internal/util:580:20)
+    Test.runHook (node:internal/test_runner/test:965:20)
+    async after (node:internal/test_runner/test:1005:9)
+    async Test.run (node:internal/test_runner/test:1070:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2304.597032
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at file:///tmp/otohime-run-9082-repeat.mjs:8:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3
+The suite failed. The end of the server's log:
+
+> otohime@0.1.0 start
+> next start
+
+▲ Next.js 16.4.2
+- Local:         http://localhost:34915
+- Network:       http://192.168.100.241:34915
+✓ Ready in 126ms
+✓ Running next.config.ts took 39ms
+

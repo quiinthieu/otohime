@@ -93,18 +93,17 @@ test("keyboard hold threshold, focus loss, live reduced motion and Pocket pause"
   assert.notEqual(await state(page), "pet");
   await page.clock.runFor(1); assert.equal(await state(page), "pet");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
-  // Prove the resumed page clock actually advanced before adding virtual time.
-  // 400ms alone is below the threshold; measured real time supplies the rest.
+  // Measure the entire resumed hold on the flowing page clock. Host/protocol
+  // delay and a second virtual advance cannot stand in for an elapsed hold.
   await page.clock.resume();
   await pet.focus();
   assert.equal(await pet.evaluate((button) => document.activeElement === button), true);
   await page.keyboard.down("Space");
   const started = await page.evaluate(() => Date.now());
-  await page.waitForFunction((started) => Date.now() - started >= 150, started, { timeout: 2_000 });
+  await page.waitForFunction((started) => Date.now() - started >= 600, started, { timeout: 5_000 });
   const elapsed = await page.evaluate(() => Date.now()) - started;
-  assert.ok(elapsed >= 150 && elapsed < 5_000, `resumed page clock advanced ${elapsed}ms`);
-  await page.clock.runFor(400);
-  assert.equal(await state(page), "pet", "a flowing clock adds real time to runFor");
+  assert.ok(elapsed >= 600, `resumed page clock advanced ${elapsed}ms`);
+  assert.equal(await state(page), "pet", "the focused key remains held beyond the 500ms threshold");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
   await page.keyboard.down("Enter"); await page.clock.runFor(500); assert.equal(await state(page), "pet");
