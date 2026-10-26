@@ -24,7 +24,12 @@ test("configuration, quota, read and invalid cursor have stable statuses", async
   deps.env = { DATABASE_URL: "db" };
   assert.equal((await post(JSON.stringify(payload))).status, 503);
   deps.env = saved;
-  const savedStore = deps.store;
+  const configuredStore = deps.store;
+  deps.store = undefined;
+  assert.equal((await post(JSON.stringify(payload))).status, 503);
+  assert.equal((await guestbookGet(new Request("https://example.dev/api/guestbook"), deps)).status, 503);
+  deps.store = configuredStore;
+  const savedStore = deps.store!;
   deps.store = { ...savedStore, async admit() { return { kind: "hour_limit" }; } };
   const limited = await post(JSON.stringify(payload));
   assert.equal(limited.status, 429);

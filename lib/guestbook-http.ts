@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { buckets, clientIp, decodeCursor, validateGuestbook, type GuestbookStore } from "./guestbook.ts";
 
 export type GuestbookEnv = { DATABASE_URL?: string; BETTER_AUTH_SECRET?: string; BETTER_AUTH_URL?: string };
-export type GuestbookDeps = { store: GuestbookStore; env: GuestbookEnv; now?: () => Date; id?: () => string; decoration?: () => { tilt: number; tape: number }; log?: (reason: string, requestId: string) => void };
+export type GuestbookDeps = { store?: GuestbookStore; env: GuestbookEnv; now?: () => Date; id?: () => string; decoration?: () => { tilt: number; tape: number }; log?: (reason: string, requestId: string) => void };
 const headers = { "cache-control": "no-store" };
 const json = (value: unknown, status = 200, extra: Record<string, string> = {}) => Response.json(value, { status, headers: { ...headers, ...extra } });
 const messages: Record<string, string> = {
@@ -27,7 +27,7 @@ async function readCapped(request: Request): Promise<string | null> {
 }
 export async function guestbookPost(request: Request, deps: GuestbookDeps): Promise<Response> {
   const requestId = randomUUID();
-  if (!deps.env.DATABASE_URL || !deps.env.BETTER_AUTH_SECRET) return fail("unavailable", 503);
+  if (!deps.env.DATABASE_URL || !deps.env.BETTER_AUTH_SECRET || !deps.store) return fail("unavailable", 503);
   if (!/^application\/json(?:\s*;\s*charset=utf-8)?$/i.test(request.headers.get("content-type") ?? "")) return fail("media_type", 415);
   const origin = request.headers.get("origin");
   if (origin) {
@@ -58,7 +58,7 @@ export async function guestbookGet(request: Request, deps: GuestbookDeps): Promi
   const params = new URL(request.url).searchParams;
   const raw = params.getAll("cursor");
   if (raw.length > 1 || (raw.length === 1 && !decodeCursor(raw[0]))) return fail("cursor", 400);
-  if (!deps.env.DATABASE_URL) return fail("unavailable", 503);
+  if (!deps.env.DATABASE_URL || !deps.store) return fail("unavailable", 503);
   try { return json(await deps.store.list(raw.length ? decodeCursor(raw[0]) : null)); }
   catch { deps.log?.("read_failed", requestId); return fail("unavailable", 503); }
 }

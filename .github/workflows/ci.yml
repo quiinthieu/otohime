@@ -66,6 +66,28 @@ jobs:
       BASE_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Inspect every commit in a push, including a code commit followed by a report commit.
+          fetch-depth: 0
+      - name: Check guestbook delivery author
+        if: github.event_name == 'push'
+        env:
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          if [[ "$PUSH_BEFORE" =~ ^0+$ ]]; then
+            commits="$GITHUB_SHA"
+          else
+            commits="$(git rev-list "$PUSH_BEFORE..$GITHUB_SHA")"
+          fi
+          for commit in $commits; do
+            if git diff-tree --no-commit-id --name-only -r "$commit" | grep -Eq '^(app/api/guestbook/|lib/guestbook[^/]*|e2e/guestbook-api\.test\.ts$)'; then
+              author="$(git show -s --format='%an <%ae>' "$commit")"
+              if [ "$author" != 'Otohime <quiinthieu@gmail.com>' ]; then
+                echo "Guestbook delivery $commit has an undeployable author: $author" >&2
+                exit 1
+              fi
+            fi
+          done
       # Restored before npm ci so hashFiles never walks node_modules.
       - uses: actions/cache@v6
         with:
