@@ -163,7 +163,16 @@ test("readable but unwritable storage keeps visit history across both entries", 
 
 test("touch, blocked storage, offline pool and live reduced motion stay usable", async () => {
   const { c, p } = await open({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-  await c.addInitScript(() => { Object.defineProperty(window, "localStorage", { get() { throw new Error("blocked"); } }); });
+  await c.addInitScript(() => {
+    Object.defineProperty(window, "localStorage", { get() { throw new Error("blocked"); } });
+    // Keep the real WAAPI animation running so natural completion cannot stand in for cancellation.
+    const animate = Element.prototype.animate;
+    Element.prototype.animate = function(...args) {
+      const animation = animate.apply(this, args);
+      if (this.matches(".bottle-card")) animation.effect?.updateTiming({ duration: 60_000 });
+      return animation;
+    };
+  });
   await c.route("**/api/bottles", (r) => r.abort("failed"));
   await home(p);
   await p.locator('[data-bottle-entry="pocket"]').tap();
@@ -172,6 +181,7 @@ test("touch, blocked storage, offline pool and live reduced motion stay usable",
   const first = await cardId(p);
   await panel(p).getByRole("button", { name: "Another bottle" }).tap();
   assert.notEqual(await cardId(p), first);
+  assert.equal(await p.locator(".bottle-card").evaluate((el) => el.getAnimations().length), 1, "cancellation starts with an active native animation");
   // Observe cancellation at the media-query event, not before Chromium dispatches it.
   await p.evaluate(() => {
     const w = window as unknown as { bottleMotionChange: Promise<number> };
