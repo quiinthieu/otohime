@@ -16,6 +16,7 @@ export type Effect =
   | { kind: "sound"; on: boolean }
   | { kind: "season"; season: SeasonChoice }
   | { kind: "clear" }
+  | { kind: "adventure" }
   | { kind: "close" };
 
 export type Reply = { lines: string[]; effect?: Effect };
@@ -29,7 +30,7 @@ export const PLACES: readonly Place[] = [
   { name: "postcard", href: "/postcard", label: "Postcard" },
 ];
 
-// The adventure's stamps, kept by lib/adventure.ts (a later task) as a JSON array of names.
+// The stamps won, kept by lib/adventure.ts as a JSON array of names.
 export const STAMPS_KEY = "terminal-stamps";
 
 export function parseStamps(stored: string | null | undefined): string[] {
@@ -113,12 +114,13 @@ export function run(line: string, state: TerminalState): Reply {
     case "stamps":
       return state.stamps.length
         ? { lines: [`stamps (${state.stamps.length}):`, ...state.stamps.map((s) => `  [*] ${s}`)] }
-        : { lines: ["no stamps yet. the adventure hides a few."] };
+        : { lines: ["no stamps yet. the adventure hides one."] };
     case "clear":
     case "cls":
       return { lines: [], effect: { kind: "clear" } };
+    // The terminal hands every line to lib/adventure.ts until its quit.
     case "adventure":
-      return { lines: ["the warehouse door is still padlocked.", "the adventure opens soon; try again later."] };
+      return { lines: [], effect: { kind: "adventure" } };
     case "exit":
     case "quit":
     case "close":
@@ -144,7 +146,7 @@ export const SUGGESTIONS: readonly Suggestion[] = [
   { line: "sound", label: "Flip sound", hint: "on / off" },
   ...(["auto", ...SEASONS] as const).map((s) => ({ line: `season ${s}`, label: `Season: ${s}`, hint: "season" })),
   { line: "stamps", label: "Stamps", hint: "your collection" },
-  { line: "adventure", label: "Adventure", hint: "soon" },
+  { line: "adventure", label: "Adventure", hint: "the data world" },
   { line: "help", label: "Help", hint: "every command" },
   { line: "clear", label: "Clear screen", hint: "clear" },
 ];

@@ -1,0 +1,1 @@
+<this commit> pm-249/t-1523: Hide a data-engineering text adventure in the Pocket Terminal; four secrets unlock a stamp and the walk is kept  (delivery; no trailer; its sha is the git_sha of the run-8718 summary report, since a commit cannot name itself)

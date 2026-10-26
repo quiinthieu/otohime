@@ -181,3 +181,56 @@ test("theme, sound and season set the page, and / in a field types a slash while
   assert.equal(await page.isChecked("input[name=season-dial][value=auto]"), true);
   assert.deepEqual(errors, []);
 });
+
+// Types each line into the prompt and runs it.
+async function enter(page: Page, ...lines: string[]) {
+  for (const line of lines) {
+    await page.keyboard.type(line);
+    await page.keyboard.press("Enter");
+  }
+}
+
+const WIN = ["take lantern", "w", "take schema", "e", "s", "take key", "n", "e", "use schema", "e", "use key", "w", "n", "take net", "w", "use net", "n", "use lantern"];
+
+test("adventure: the walk is kept across a reload, the last secret puts the stamp in `stamps`", async () => {
+  const { page, errors } = await open("/notes");
+  await page.keyboard.press("/");
+  await terminal(page).waitFor({ state: "visible" });
+  await enter(page, "adventure");
+  const log = () => page.textContent("[role=log]").then((t) => t ?? "");
+  assert.match(await log(), /> adventure[\s\S]*== The Warehouse ==/);
+  assert.equal(await page.getAttribute("#pt-in", "placeholder"), "look, go north, take…");
+  await enter(page, "take lantern", "n");
+  assert.match(await log(), /taken: an index lantern\.[\s\S]*== The Lake ==/);
+  await page.keyboard.press("Escape");
+
+  await page.reload({ waitUntil: "networkidle" });
+  await page.keyboard.press("/");
+  await terminal(page).waitFor({ state: "visible" });
+  await enter(page, "adventure", "inventory");
+  assert.match(await log(), /welcome back\. secrets: 0 of 4\.\s*== The Lake ==[\s\S]*you carry an index lantern\./);
+
+  await enter(page, "s", ...WIN.slice(1));
+  assert.match(await log(), /a stamp is yours: Keeper of the Pipeline/);
+  await enter(page, "quit", "stamps");
+  assert.match(await log(), /stamps \(1\):\s*\[\*\] Keeper of the Pipeline/);
+  assert.deepEqual(JSON.parse((await page.evaluate(() => localStorage.getItem("terminal-stamps"))) ?? "null"), ["Keeper of the Pipeline"]);
+  assert.deepEqual(errors, []);
+});
+
+test("adventure in private mode: storage throws, the walk still plays and says once that it will not keep", async () => {
+  const { page, errors } = await open("/notes");
+  await page.evaluate(() => {
+    Storage.prototype.setItem = () => {
+      throw new DOMException("The quota has been exceeded.", "QuotaExceededError");
+    };
+  });
+  await page.keyboard.press("/");
+  await terminal(page).waitFor({ state: "visible" });
+  await enter(page, "adventure", ...WIN);
+  const out = (await page.textContent("[role=log]")) ?? "";
+  assert.equal(out.split("storage is blocked here").length - 1, 1, "the note shows once");
+  assert.match(out, /a stamp is yours: Keeper of the Pipeline/);
+  assert.equal(await page.evaluate(() => localStorage.getItem("terminal-adventure")), null);
+  assert.deepEqual(errors, []);
+});

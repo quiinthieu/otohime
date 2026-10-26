@@ -136,7 +136,7 @@ test("season pins a season or auto; bare, it reports the choice", () => {
 });
 
 test("stamps lists what is won, or says there are none", () => {
-  assert.deepEqual(run("stamps", STATE), { lines: ["no stamps yet. the adventure hides a few."] });
+  assert.deepEqual(run("stamps", STATE), { lines: ["no stamps yet. the adventure hides one."] });
   const won = run("stamps", { ...STATE, stamps: ["The Lake", "The Broken DAG"] });
   assert.deepEqual(won.lines, ["stamps (2):", "  [*] The Lake", "  [*] The Broken DAG"]);
   assert.equal(won.effect, undefined);
@@ -148,13 +148,11 @@ test("stored stamps parse from a JSON array of names, and anything else is none"
   for (const bad of [null, undefined, "", "{", '{"a":1}', "42"]) assert.deepEqual(parseStamps(bad), [], String(bad));
 });
 
-test("clear, exit and the adventure stub", () => {
+test("clear, exit and adventure, which hands the prompt to lib/adventure.ts", () => {
   assert.deepEqual(run("clear", STATE), { lines: [], effect: { kind: "clear" } });
   assert.deepEqual(run("cls", STATE).effect, { kind: "clear" });
   for (const c of ["exit", "quit", "close", "q"]) assert.deepEqual(run(c, STATE).effect, { kind: "close" }, c);
-  const adventure = run("adventure", STATE);
-  assert.equal(adventure.effect, undefined);
-  assert.match(adventure.lines.join(" "), /warehouse/);
+  assert.deepEqual(run("Adventure", STATE), { lines: [], effect: { kind: "adventure" } });
 });
 
 test("the palette shows everything when empty, and filters by line start first, then by word", () => {

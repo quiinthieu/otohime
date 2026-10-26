@@ -3,11 +3,13 @@
 // The Pocket Terminal: a small ink-drawn command line in a native modal dialog, loaded by
 // components/pocket-terminal-loader.tsx on the first "/" or Cmd/Ctrl-K. The prompt is a combobox over a palette
 // that filters as you type; the arrows pick a line and Enter runs it, or runs what is typed when nothing is picked.
-// lib/terminal.ts reads the line; this file applies its effect and prints its lines into a live log.
+// lib/terminal.ts reads the line; this file applies its effect and prints its lines into a live log. After
+// `adventure`, lines go to lib/adventure.ts instead until its quit, and the walk is saved after every one.
 //
 // Keys: the loader stops every keydown at window while this is open (so nothing behind it reacts), which also
 // keeps React's onKeyDown from firing, so the keys arrive through bind() instead. Enter is the form's submit and
 // typing is the input's change event, neither of them a keydown. Tab wraps inside the dialog; Escape closes it.
+import { begin, loadProgress, moves, saveProgress, step, UNSAVED, type AdventureState, type StoreLike } from "@/lib/adventure";
 import { getSound, setSound, subscribeSound, play } from "@/lib/sound-client";
 import { resolveSeason, SEASON_ATTR, SEASON_KEY, visitorZone } from "@/lib/seasons";
 import {
@@ -39,6 +41,15 @@ const GREETING = ["pocket terminal. type a page name, or help."];
 function stored(key: string): string | null {
   try {
     return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+// localStorage itself, or null where even reaching for it throws (storage blocked).
+function storage(): StoreLike | null {
+  try {
+    return localStorage;
   } catch {
     return null;
   }
@@ -87,12 +98,16 @@ export default function PocketTerminal({ open, onClose, bind }: TerminalProps) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(-1);
   const [log, setLog] = useState<Entry[]>([{ id: 0, lines: GREETING }]);
+  // the adventure while it is being played, else null
+  const [game, setGame] = useState<AdventureState | null>(null);
+  // the walk could not be saved and the visitor has been told so
+  const warned = useRef(false);
   const next = useRef(1);
   const screen = useRef<HTMLDivElement>(null);
   // set while shut() closes the dialog, so its late close event is not a second close
   const quiet = useRef(false);
 
-  const items = suggest(query);
+  const items = game ? moves(game, query) : suggest(query);
 
   useEffect(() => {
     const el = dialog.current;
@@ -149,14 +164,34 @@ export default function PocketTerminal({ open, onClose, bind }: TerminalProps) {
     }
   }
 
+  // Save the walk (and the stamp, once won); say once if storage will not keep it.
+  function keep(state: AdventureState): string[] {
+    if (saveProgress(storage(), state).saved || warned.current) return [];
+    warned.current = true;
+    return [UNSAVED];
+  }
+
   function execute(line: string) {
     if (!line.trim()) return;
-    const reply = run(line, readState());
-    if (reply.effect?.kind !== "clear") setLog((l) => [...l, { id: next.current++, input: line, lines: reply.lines }]);
+    let lines: string[];
+    let effect: Effect | undefined;
+    if (game) {
+      const turn = step(game, line);
+      lines = [...turn.lines, ...keep(turn.state)];
+      setGame(turn.quit ? null : turn.state);
+    } else {
+      ({ lines, effect } = run(line, readState()));
+      if (effect?.kind === "adventure") {
+        const state = loadProgress(storage());
+        lines = [...lines, ...begin(state)];
+        setGame(state);
+      }
+    }
+    if (effect?.kind !== "clear") setLog((l) => [...l, { id: next.current++, input: line, lines }]);
     setQuery("");
     setActive(-1);
     play("press");
-    apply(reply.effect);
+    apply(effect);
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -246,7 +281,7 @@ export default function PocketTerminal({ open, onClose, bind }: TerminalProps) {
           autoCapitalize="off"
           spellCheck={false}
           maxLength={80}
-          placeholder="notes, theme, help…"
+          placeholder={game ? "look, go north, take…" : "notes, theme, help…"}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
