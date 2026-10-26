@@ -50,6 +50,9 @@ const TINTS = ["app/(site)/seasons.css"];
 // The site's letterpress keys, imported beside them: they restyle the root sheet's buttons, nav items and cartridge
 // labels and declare no paper or ink (lib/letterpress.test.ts), so they are no sister stylesheet either.
 const KEYS = ["app/(site)/letterpress.css"];
+// The fold zine's sheet: the site's own words printed on one page, in the site's own light paper and ink, so it is
+// the house printed, not a sister with a paper of its own (pinned to the site's below).
+const PRINTS = ["app/(zine)/zine.css"];
 
 // The root stylesheet of every route group but this one: each top-level sheet its layout.tsx imports. A
 // feature's own sheet imported further down (the site's peeks.css) names no paper or ink of its own.
@@ -63,7 +66,7 @@ const IMPORTED = readdirSync(join(ROOT, "app"), { withFileTypes: true })
       .map((f) => `app/${e.name}/${f}`);
   })
   .sort();
-const SHEETS = IMPORTED.filter((f) => !TINTS.includes(f) && !KEYS.includes(f));
+const SHEETS = IMPORTED.filter((f) => !TINTS.includes(f) && !KEYS.includes(f) && !PRINTS.includes(f));
 
 test("the season tints are imported by the site layout and re-tint only the site's own paper and ink", () => {
   for (const file of TINTS) assert.ok(IMPORTED.includes(file), `${file} is no longer imported: drop it from TINTS`);
@@ -77,6 +80,15 @@ test("the season tints are imported by the site layout and re-tint only the site
   for (const name of tinted) assert.ok(house.has(name), `seasons.css tints ${name}, which globals.css never declares`);
   // The house paper the page quotes is still the root sheet's first --paper, untinted.
   assert.equal(firstHex(first(css(site.file), "--paper")), site.paper);
+});
+
+test("the zine's sheet prints the site's own paper and ink, so it is no sister of its own", () => {
+  const site = SIBLINGS.find((s) => s.group === "site")!;
+  for (const file of PRINTS) {
+    assert.ok(IMPORTED.includes(file), `${file} is no longer imported: drop it from PRINTS`);
+    assert.equal(firstHex(first(css(file), "--paper")), site.paper, `${file} has a paper of its own: pin it as a sister`);
+    assert.equal(firstHex(first(css(file), "--ink")), firstHex(first(css(site.file), "--ink")), `${file} has an ink of its own`);
+  }
 });
 
 test("eleven sister stylesheets: the site's and ten projects', never this group's own", () => {

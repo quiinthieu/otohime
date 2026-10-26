@@ -48,6 +48,12 @@ export function EndFooter() {
                     </li>
                   ))}
                 </ul>
+                {/* A plain <a>: /zine is its own root layout, so it is a full page load. Not in CONSOLE_MENU: it is a
+                   sheet to print, not a room. */}
+                <a href="/zine" data-end-zine="" className="end-page-link mt-1">
+                  <small aria-hidden="true">Print</small>
+                  <span>Print a zine</span>
+                </a>
               </nav>
 
               <div className="end-rise" style={{ "--i": 2 } as CSSProperties}>

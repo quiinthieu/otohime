@@ -19,7 +19,10 @@ const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
   .filter((e) => e.isDirectory() && /^\(.+\)$/.test(e.name) && existsSync(join(ROOT, "app", e.name, "layout.tsx")))
   .map((e) => e.name.slice(1, -1))
   .sort();
-const PROJECTS = GROUPS.filter((g) => g !== "site");
+// Documents that are neither the site nor a /projects row: they hop like the rest, but have no row to name an h1
+// after. The fold zine (/zine) is a sheet to print, linked from the site's footer.
+const SHEETS_ONLY = ["zine"];
+const PROJECTS = GROUPS.filter((g) => g !== "site" && !SHEETS_ONLY.includes(g));
 
 // Sheets a root layout imports beside its root stylesheet, named here so no other second import slips in. The
 // site's season tints (lib/seasons.ts picks the season) hold only rules keyed on data-season, and keyframes; its
@@ -76,8 +79,9 @@ const SHEETS = GROUPS.map((g) => ({ group: g, ...stylesheet(g) }));
 // The /projects rows that link to a project, as slugs: "/shore" -> "shore".
 const HREFS = site.projectList.flatMap((p) => (p.href?.startsWith("/") ? [p.href.slice(1)] : []));
 
-test("the scan finds the site and the eleven projects", () => {
+test("the scan finds the site, the eleven projects and the zine", () => {
   assert.ok(GROUPS.includes("site"));
+  assert.deepEqual(GROUPS.filter((g) => SHEETS_ONLY.includes(g)), SHEETS_ONLY);
   assert.equal(PROJECTS.length, 11, PROJECTS.join(", "));
   assert.equal(SHEETS.find((s) => s.group === "site")!.file, "app/(site)/globals.css");
 });
@@ -120,12 +124,14 @@ for (const { group, file, css } of SHEETS) {
 
   if (group === "site") continue;
 
-  test(`${file} names its h1 project-${group}, a row on /projects`, () => {
-    const h1 = rule(top, "h1").filter((b) => /view-transition-name/.test(b.body));
-    assert.equal(h1.length, 1, "no single h1 rule with a view-transition-name");
-    assert.match(h1[0].body, new RegExp(`view-transition-name:\\s*project-${group}\\s*;`));
-    assert.ok(HREFS.includes(group), `/projects has no row linking /${group}`);
-  });
+  if (!SHEETS_ONLY.includes(group)) {
+    test(`${file} names its h1 project-${group}, a row on /projects`, () => {
+      const h1 = rule(top, "h1").filter((b) => /view-transition-name/.test(b.body));
+      assert.equal(h1.length, 1, "no single h1 rule with a view-transition-name");
+      assert.match(h1[0].body, new RegExp(`view-transition-name:\\s*project-${group}\\s*;`));
+      assert.ok(HREFS.includes(group), `/projects has no row linking /${group}`);
+    });
+  }
 
   test(`${file} keeps its reduced-motion block last`, () => {
     const reduced = reducedMotion(top);

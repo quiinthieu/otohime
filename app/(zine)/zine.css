@@ -1,0 +1,511 @@
+/* Fold-a-Zine's own stylesheet, hand-written: no Tailwind and no site tokens. On screen, the sheet is a scaled
+   preview beside its controls; in print, only the sheet is left, at 0,0 and at its true size in mm, and the page's
+   inline @page rule (one per paper, margin 0) makes the paper the sheet. Type is in pt so it prints the size it
+   says. The sheet is always paper and ink, whatever the OS theme. */
+:root {
+  color-scheme: light;
+  --paper: #f2efe7;
+  --sheet: #ffffff;
+  --ink: #231e16;
+  --muted: #5f584b;
+  --line: #ddd6c8;
+  --fold: #8a8170;
+  --coral: #b03a22;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--ink);
+  background-color: var(--paper);
+  font-synthesis: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+/* Screen ----------------------------------------------------------------------------------------------------- */
+
+/* The gutters sit on the blocks, not on <main>: with JavaScript off the sheet's layout is shown where React's
+   holder lies, outside <main>, and must look the same. */
+.zine {
+  padding-top: 1.25rem;
+}
+
+.zine-head,
+.zine-wait,
+.zine-layout {
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.ways-out a {
+  font-size: 15px;
+  text-underline-offset: 3px;
+}
+
+h1 {
+  margin: 0.75rem 0 0.25rem;
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+.lead {
+  max-width: 40rem;
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+}
+
+.zine-layout {
+  padding-bottom: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+/* The sheet at its true size in mm, shrunk with zoom so its box (not just its paint) is the preview's size. */
+.preview {
+  zoom: 0.42;
+  flex: none;
+  box-shadow: 0 2px 0 var(--line), 0 12px 32px rgb(35 30 22 / 0.14);
+}
+
+@media (min-width: 30rem) {
+  .preview {
+    zoom: 0.55;
+  }
+}
+
+@media (min-width: 64rem) {
+  .preview {
+    zoom: 0.75;
+  }
+}
+
+.controls {
+  flex: 1 1 20rem;
+  max-width: 34rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.zine-form {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: var(--sheet);
+}
+
+fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  margin-bottom: 0.4rem;
+  padding: 0;
+  font-weight: 600;
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+}
+
+.choice input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0;
+  accent-color: var(--ink);
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+select,
+button {
+  font: inherit;
+  min-height: 2.75rem;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+}
+
+select {
+  padding: 0 0.6rem;
+  background: var(--sheet);
+  color: var(--ink);
+  font-weight: 400;
+}
+
+button {
+  padding: 0 1.1rem;
+  background: var(--sheet);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--ink);
+}
+
+button:active {
+  translate: 0 2px;
+  box-shadow: none;
+}
+
+button:disabled {
+  cursor: progress;
+}
+
+.zine-form button {
+  justify-self: start;
+}
+
+.print-button {
+  background: var(--ink);
+  color: var(--sheet);
+  box-shadow: 0 2px 0 var(--coral);
+}
+
+:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 2px;
+}
+
+.print-row {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+}
+
+.hint,
+.zine-wait {
+  margin-block: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.fold-diagram {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.fold-diagram svg {
+  width: 100%;
+  height: auto;
+}
+
+.fold-diagram .diagram-sheet {
+  fill: var(--sheet);
+  stroke: var(--ink);
+  stroke-width: 0.8;
+}
+
+.fold-diagram .fold {
+  stroke: var(--fold);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 2.5;
+}
+
+.fold-diagram .cut {
+  stroke: var(--ink);
+  stroke-width: 1.6;
+}
+
+.fold-diagram text {
+  fill: var(--ink);
+  font-family: var(--serif);
+  font-size: 22px;
+}
+
+.fold-diagram figcaption {
+  font-size: 15px;
+}
+
+.fold-diagram ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+/* The sheet -------------------------------------------------------------------------------------------------- */
+
+.sheet {
+  position: relative;
+  overflow: hidden;
+  background: var(--sheet);
+  color: var(--ink);
+  font-size: 8pt;
+  line-height: 1.32;
+}
+
+.cell {
+  position: absolute;
+  overflow: hidden;
+}
+
+/* A page is the panel turned a quarter: it sits at the cell's centre, so turning it fills the cell exactly. */
+.page {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  overflow: hidden;
+  transform: translate(-50%, -50%) rotate(var(--turn));
+}
+
+.page-body {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+:where(.page) :where(h2, p) {
+  margin: 0;
+}
+
+.kicker {
+  color: var(--muted);
+  font-size: 6.5pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin-top: 1.5mm;
+  font-size: 13pt;
+  line-height: 1.15;
+  font-weight: 600;
+}
+
+.prose {
+  margin-top: 2.5mm;
+  text-wrap: pretty;
+}
+
+.prose + .prose {
+  margin-top: 1.6mm;
+}
+
+.href {
+  margin-top: auto;
+  padding-top: 2mm;
+  font-size: 7pt;
+  color: var(--muted);
+}
+
+.folio {
+  position: absolute;
+  right: 6mm;
+  bottom: 6mm;
+  font-size: 7pt;
+  color: var(--muted);
+}
+
+.page-project .href {
+  margin-bottom: 6mm;
+}
+
+.page-cover {
+  text-align: center;
+}
+
+.page-cover .page-body {
+  align-items: center;
+}
+
+.masthead {
+  margin-top: 1.5mm;
+  font-size: 28pt;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  margin-top: 3mm;
+  font-size: 9pt;
+  font-style: italic;
+}
+
+.enso {
+  width: 30mm;
+  height: 30mm;
+  margin: auto 0;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+}
+
+.issue {
+  font-size: 7.5pt;
+  color: var(--muted);
+}
+
+.page-sketch img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 2mm;
+  border: 0.25mm solid var(--ink);
+}
+
+/* Page 8: a right float shaped like the lower triangle keeps the note above the diagonal rule. */
+.rule-shape {
+  float: right;
+  width: 100%;
+  height: 100%;
+  shape-outside: polygon(100% 0, 100% 100%, 0 100%);
+  shape-margin: 2.5mm;
+}
+
+.page-back .page-body {
+  display: block;
+}
+
+.page-back .page-title {
+  font-size: 11pt;
+}
+
+.rule {
+  position: absolute;
+  overflow: visible;
+  stroke: var(--ink);
+  stroke-width: 0.25;
+  stroke-linecap: square;
+}
+
+.rule circle {
+  fill: var(--ink);
+  stroke: none;
+}
+
+.rule text {
+  fill: var(--ink);
+  stroke: none;
+  font-family: var(--serif);
+  font-size: 2.2px;
+}
+
+.back-url {
+  position: absolute;
+  right: 6mm;
+  bottom: 6mm;
+  font-size: 9pt;
+  font-weight: 600;
+}
+
+.guides {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.guides .fold {
+  stroke: var(--fold);
+  stroke-width: 0.25;
+  stroke-dasharray: 2 1.5;
+}
+
+.guides .cut {
+  stroke: var(--ink);
+  stroke-width: 0.3;
+}
+
+.scissors {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.3;
+  stroke-linecap: round;
+}
+
+.scissors .scissors-gap {
+  fill: var(--sheet);
+  stroke: none;
+}
+
+/* Print ------------------------------------------------------------------------------------------------------ */
+
+@media print {
+  :root {
+    background: var(--sheet);
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+
+  .zine,
+  .zine-layout {
+    display: block;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .preview {
+    zoom: 1;
+    box-shadow: none;
+  }
+
+  .sheet {
+    break-inside: avoid;
+    print-color-adjust: exact;
+  }
+}
+
+/* The hop to or from another root layout (the site) crossfades instead of cutting. Both documents must carry this
+   rule; the type keeps the fade on the hop alone. */
+@view-transition { navigation: auto; types: hop; }
+::view-transition { pointer-events: none; }
+:root:active-view-transition-type(hop)::view-transition-old(root) { animation: 150ms ease-in both fade-out; }
+:root:active-view-transition-type(hop)::view-transition-new(root) { animation: 210ms ease-out 150ms both fade-in; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

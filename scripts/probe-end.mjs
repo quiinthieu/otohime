@@ -1735,14 +1735,27 @@ try {
           else if (el.hasAttribute("data-end-wobble")) kind = "wobble";
           else if (el.matches('input[type="radio"]')) kind = `swatch:${el.getAttribute("value")}`;
           else if (el.hasAttribute("data-end-page")) kind = `page:${el.getAttribute("data-end-page")}`;
+          else if (el.hasAttribute("data-end-zine")) kind = "zine";
           else if (el.hasAttribute("data-end-line")) kind = `line:${el.getAttribute("data-end-line")}`;
           else if (el.hasAttribute("data-end-top")) kind = "top";
           return { inFooter, kind, focusRing };
         });
 
+      // Every stop the footer should hold, in order: the pages, then the zine link under them (/zine, a sheet to print,
+      // not a CONSOLE_MENU room), then the contact lines. The walk takes one Tab per stop, so a new page or line
+      // lengthens it instead of leaving the last stops unvisited.
+      const expectedKinds = [
+        "mascot",
+        "wobble",
+        "swatch:mint",
+        ...CONSOLE_MENU.map((m) => `page:${m.href}`),
+        "zine",
+        ...site.lines.map((l) => `line:${l.label}`),
+        "top",
+      ];
       const firstStop = await describeActive();
       if (firstStop) tabStops.push(firstStop);
-      for (let i = 0; i < 13; i++) {
+      for (let i = 1; i < expectedKinds.length; i++) {
         await page.keyboard.press("Tab");
         const stop = await describeActive();
         if (stop) tabStops.push(stop);
@@ -1751,19 +1764,11 @@ try {
       await page.keyboard.press("Tab");
       const afterFooter = await describeActive();
 
-      const expectedKinds = [
-        "mascot",
-        "wobble",
-        "swatch:mint",
-        ...CONSOLE_MENU.map((m) => `page:${m.href}`),
-        ...site.lines.map((l) => `line:${l.label}`),
-        "top",
-      ];
       const gotKinds = tabStops.map((s) => s.kind);
       const allRingsVisible = tabStops.every((s) => s.inFooter && s.focusRing);
 
       check(
-        "keyboard Tab progression: visits mascot, wobble, swatch group, 6 pages, 4 contact lines and Back to top in order with visible focus rings and no trap",
+        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines and Back to top in order with visible focus rings and no trap`,
         JSON.stringify(gotKinds) === JSON.stringify(expectedKinds) &&
           allRingsVisible &&
           afterFooter?.inFooter === false,
