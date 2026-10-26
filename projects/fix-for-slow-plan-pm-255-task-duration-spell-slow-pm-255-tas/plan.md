@@ -1,7 +1,58 @@
 # Split Part Recovery
 
-Plan **pm-260**, revision 4 planning handoff · product owner **run-8851** · 2026-10-26.
+Plan **pm-260**, current-revision planning handoff · product owner **run-8862** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
+
+## Current execution handoff
+
+[Fresh bounded observations](planning-observations-run-8862.json) supersede the
+run-8851 status snapshots below. The board is still revision 3, drafting;
+the prior document's “revision 4” was a proposed handoff, never an admitted DAG.
+Previous summary **rep-5164 exists**; its empty proposal was refused, not missing.
+
+**mono-v2 pm-267 owns the four build contracts below.** Research run-8855 has
+succeeded with report **rep-5165**; product owner **run-8863 is running**, durable
+task-manager id **b106ddac-9cff-4d24-9a6a-28c0f0602e8c**. Its actual profile is
+codex-sol-6-1-high / gpt-6.1-sol / high. Do not file another replacement or
+propose mono-v2 paths to an otohime checkout. The active owner can build without
+the privileged release chore. Preserve its research findings: current default
+slowness cases include platform_shadow_to_live, its platform counter is 2,
+the watchdog manifest gained six names, and observeStageTiming must stay green.
+Transactional drill fixture ids are reused after rollback; identify proof by
+fixture case, build identity and assertions rather than treating fixture ids
+as live plans.
+
+**pm-255 remains queued, waiting/after_plan pm-248, execution_started_at=null.**
+Its complete 15-entry timeline ends at idea:idea-248 and has no release record;
+its unfiltered runs list contains only investigator run-8771. Slots are 5 used
+of 5. The independent parent hold persists regardless of capacity. The deployed
+plan-manager is still f19db8db, rollout complete with 2/2 replicas ready.
+No platform release, t-1557 execution or Ask output is delivered by this plan
+update. Keep the original acceptance outcomes below.
+
+**esc-405 is the current existing chore**, using fingerprint
+release-after-plan:pm-255:pm-248; esc-395 is its waived historical predecessor.
+Do not open another copy. The operator executes the conditional repair below
+under valid authority and attaches the real parent note on pm-255. A waived
+action is not completed work. No generic health/login probe demonstrates this
+private board mutation. The scheduler owns capacity placement and callbacks.
+
+The handoff chooses retained-edge terminal release in pm-267 and the existing
+one-edge administrative repair as the optional earlier recovery. Reopening
+pm-248 is unsupported for this abandonment; increasing caps bypasses the
+defective predicate; more local evidence-tool tasks cannot release the part.
+Those alternatives are rejected. No new service, library, UI or external
+dependency is needed. Standing policy files were read through the host mono-v2
+git mirror because their requested paths do not exist in otohime.
+
+There are **zero remaining otohime SWE tasks**. Re-proposing t-1593 creates new
+work rather than referencing its done record: proposal seeding allocates fresh
+task ids. ValidateProposedIn also rejects an empty proposal before recording
+it. Call the required proposal tool with the saved empty DAG and the pushed
+SHA, preserve its exact result in the summary, and report the workflow conflict
+without claiming admission. The platform owner proceeds independently; pm-260
+acceptance retains live recovery proof. No delivery-role board bypass or
+manufactured execution contract is authorized by this limitation.
 
 ## Preserve the delivered tool; route the remaining work
 
@@ -17,7 +68,7 @@ docs/claude/software-development.md. The Chief of Staff plan and development
 policy were read from the host mono-v2 checkout because those files are absent
 here; this document does not replace them.
 
-## Fresh reads change the platform handoff
+## Previous run-8851 platform handoff
 
 | Item | Observed during run-8851 | Consequence |
 | --- | --- | --- |
@@ -32,11 +83,11 @@ here; this document does not replace them.
 An all-visibility plan list showed no other live After Plan Recovery plan.
 The newer operator request explicitly requires the platform work to run.
 Restoring a human-abandoned row is not supported by the delivery APIs.
-This run therefore refiled the preserved scope through supported mono-v2 intake
+Run-8851 therefore refiled the preserved scope through supported mono-v2 intake
 as **pm-267 / idea-263**, with neither after_plan_id nor parent_plan_id.
 
-The replacement has actually dispatched research **run-8855**, durable
-task-manager id **a2c8a349-51fa-4648-8a1e-a84688f86ee3**: running,
+The replacement dispatched research **run-8855**, durable
+task-manager id **a2c8a349-51fa-4648-8a1e-a84688f86ee3**: now succeeded,
 profile claude-fable-high, model claude-fable-5-1, effort high.
 This proves intake and research dispatch only, not a SWE attempt or deployment.
 This PO's actual profile is codex-sol-6-1-high, model gpt-6.1-sol, effort high.
@@ -72,7 +123,7 @@ live role-p50 estimate and proposal response are authoritative. If size admissio
 refuses, split only genuine platform scope into size-bounded parts. Never chain
 this work after pm-260 or the abandoned pm-263.
 
-## Immediate live recovery: reuse esc-395
+## Immediate live recovery: reuse esc-405, preserving esc-395 history
 
 The privileged operator can perform the existing one-edge repair before platform
 delivery. Reuse fingerprint **release-after-plan:pm-255:pm-248** rather than opening
@@ -160,9 +211,10 @@ tasks and refuses zero tasks as missing_acceptance_criteria (“proposal has no
 tasks”). Preserve the actual response. Do not invent a task or duplicate
 t-1593 to force admission. This workflow limitation is separate from ownership.
 
-Locked npm ci used Node v22.23.3. npm test passed **2127/2127**, zero skipped;
-typecheck exited 0; lint exited 0 with ten existing warnings. No application,
-evaluator, lockfile or policy changes. Commit and push origin HEAD; if main
+Run-8862 used locked npm ci with Node v22.23.3. npm test passed **2133/2133**,
+zero skipped or failed. The final summary records typecheck, lint and observed
+CI separately. No application, evaluator, lockfile or policy changes.
+Commit and push origin HEAD; if main
 moves, pull --rebase, rerun npm test and push again without force.
 The summary names actual branch, SHA, proposal result, chore reuse and observed
 CI. No task idles on another owner or a natural schedule.

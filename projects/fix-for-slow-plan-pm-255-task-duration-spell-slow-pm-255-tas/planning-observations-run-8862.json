@@ -1,0 +1,139 @@
+{
+  "schema": "pm260.planning-observations.v1",
+  "run_id": "run-8862",
+  "captured_at": "2026-10-26T11:15:33.547Z",
+  "plan_id": "pm-260",
+  "pm255": {
+    "plan": {
+      "id": "pm-255",
+      "idea_id": "idea-248",
+      "kind": "project",
+      "title": "Paper Almanac Bits · part 2",
+      "repo_id": "otohime",
+      "slug": "otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons",
+      "status": "queued",
+      "current_revision": 1,
+      "approved_at": "2026-10-26T04:27:53.975898Z",
+      "auto_approved_at": "2026-10-26T04:27:53.975898Z",
+      "run_count": 1,
+      "commit_identity": {
+        "name": "Otohime",
+        "email": "quiinthieu@gmail.com"
+      },
+      "max_runs": null,
+      "draft_failures": 0,
+      "acceptance_cycle": 0,
+      "trace_id": "d2b6a7810c26edc93b8d9f448c842a38",
+      "hidden_at": null,
+      "acceptance_not_before": null,
+      "acceptance_pending_until": null,
+      "queue_rank_at": null,
+      "yield_count": 0,
+      "execution_started_at": null,
+      "after_plan_id": "pm-248",
+      "created_at": "2026-10-26T04:28:31.028078Z",
+      "updated_at": "2026-10-26T09:01:22.16176Z"
+    },
+    "progress": {
+      "state": "waiting",
+      "reason": "after_plan",
+      "holders": [
+        {
+          "plan_id": "pm-248"
+        }
+      ],
+      "queue_position": 1,
+      "queue_rank_at": "2026-10-26T04:27:53.975898Z",
+      "yield_count": 0,
+      "never_parks": true
+    },
+    "slots": {
+      "used": 5,
+      "max": 5,
+      "max_per_repo": 0,
+      "free": 0
+    },
+    "timeline": {
+      "entries": 15,
+      "cursor": "idea:idea-248",
+      "complete": true,
+      "release_decisions": []
+    },
+    "runs": [
+      {
+        "id": "run-8771",
+        "role": "investigator",
+        "status": "succeeded",
+        "tm_task_id": "565313df-a594-448d-94a3-70fa9c882f9f"
+      }
+    ],
+    "run_history_complete": true
+  },
+  "platform": {
+    "plan": {
+      "id": "pm-267",
+      "idea_id": "idea-263",
+      "kind": "project",
+      "title": "After Plan Recovery — replacement for human-abandoned…",
+      "repo_id": "mono-v2",
+      "slug": "after-plan-recovery-replacement-for-human-abandoned-pm-263-r",
+      "status": "drafting",
+      "current_revision": 1,
+      "approved_at": "0001-01-01T00:00:00Z",
+      "auto_approved_at": "0001-01-01T00:00:00Z",
+      "run_count": 2,
+      "max_runs": null,
+      "draft_failures": 0,
+      "acceptance_cycle": 0,
+      "trace_id": "a0b225bb603dd25bce6ca3ac5c6e1709",
+      "hidden_at": null,
+      "acceptance_not_before": null,
+      "acceptance_pending_until": null,
+      "queue_rank_at": null,
+      "yield_count": 0,
+      "execution_started_at": null,
+      "created_at": "2026-10-26T11:01:26.055774Z",
+      "updated_at": "2026-10-26T11:12:55.515065Z"
+    },
+    "runs": [
+      {
+        "id": "run-8855",
+        "role": "research",
+        "status": "succeeded",
+        "tm_task_id": "a2c8a349-51fa-4648-8a1e-a84688f86ee3",
+        "profile": "claude-fable-high",
+        "flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high"
+      },
+      {
+        "id": "run-8863",
+        "role": "product_owner",
+        "status": "running",
+        "tm_task_id": "b106ddac-9cff-4d24-9a6a-28c0f0602e8c",
+        "profile": "codex-sol-6-1-high",
+        "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+      }
+    ],
+    "research_report": "rep-5165",
+    "rollout": {
+      "image": "registry.gitlab.com/kq.viet/mono-v2/plan-manager:f19db8db",
+      "ready": 2,
+      "desired": 2,
+      "complete": true
+    }
+  },
+  "scope": {
+    "completed": "t-1593",
+    "superseded": "t-1578",
+    "remaining_otohime_tasks": [],
+    "operator_action": "esc-405",
+    "previous_operator_action": "esc-395",
+    "fingerprint": "release-after-plan:pm-255:pm-248"
+  },
+  "evidence_limits": [
+    "No new platform executable, drill or callback proof collected by this PO.",
+    "pm-255 run listing unfiltered and complete; timeline ends at its idea.",
+    "pm-267 state is a point-in-time planning observation, not an executed platform fix.",
+    "No current task-manager FAILED/COMPLETED executable-history audit; no executable delivery claim.",
+    "Research rep-5107 is already committed as research.md; rep-5165 belongs to pm-267."
+  ]
+}
