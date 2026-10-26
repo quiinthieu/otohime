@@ -1,0 +1,15 @@
+# pm-285 research: Ink Loom and Hanko Press
+
+Preserved from research report rep-5330 (run-9071). The research found Next.js 16.4.2 breaking conventions; read the installed `node_modules/next/dist/docs` guide before implementation and run `npm ci` on a fresh checkout.
+
+Routes are under `app/(site)/(app)`. `/play` exists, so add `/play/loom` and `/play/hanko` below it and link from Play. Do not add nav entries: `lib/pages.ts` pins the labels. The one audio context is in `lib/sound-client.ts`; the switch uses `localStorage.sound`, starts off, and creates a context only on a click/key press. Pure cues are in `lib/sound.ts`, capped at `MAX_DB=-18`. Reuse that context and switch for Loom and the existing stamp cue for Hanko.
+
+Ink SVG filters use tagged `feTurbulence` and `feDisplacementMap` through the `appearanceTags` createElement pattern. `lib/appearance-client.test.ts` pins source patterns and needs additions for new filtered SVGs. Reduced motion already stops the appearance runtime. Notes renders `site.notes` from `content/site.ts`; `components/end-footer.tsx` is a server component with `cacheLife`, so visitor state belongs in a client island.
+
+`npm test` includes `lib/**/*.test.ts` and explicitly listed route `_lib` directories. Add a new `_lib` glob if needed. Browser suite is `npm run test:e2e`; use semantic role/name for `RisoText` headings because the DOM duplicates text.
+
+Loom proposal: eight 16-bit masks; strict hash codec `#t=<tempo>&s=<swing>&p=<8 hex4>`; debounced `history.replaceState`. A 25 ms timer schedules about 100 ms ahead from `AudioContext.currentTime`, applies swing to offbeats, and pauses while hidden. Provide square chip, sine-decay marimba, filtered-noise brush snare and high-pass paper crinkle using a seeded reusable noise buffer; respect the existing gain ceiling. Blots use a tagged ink SVG filter; reduced motion uses a static step marker. Accessible range inputs are styled as paper dials. A pure canvas layout draws a score-like PNG via `toBlob`. Cover round trips, malformed hashes, timing and score layout with tests; browser checks restore after reload, audio creation timing and reduced motion.
+
+Hanko proposal: NFKC-normalized, trimmed, lowercased name seeds a deterministic PRNG for round/square form, wobbly border and carved edge. Use a serif/mincho system font stack covering CJK, cap names at about 12 characters and strip controls. SVG output is byte-identical for the same name and self-contained for download. PNG draws glyphs on canvas directly because fonts may not load when an SVG is embedded as an image. Existing `stamp` cue remains sound-gated; reduced motion stamps instantly. Cover determinism, bounds, downloads and repeated loads. Research suggested a static site-owner seal for Notes/footer; the plan resolves the explicit visitor-own-seal requirement with local visitor state and a static fallback.
+
+Original research noted `/shared/artifacts` was unwritable in that lease; the report body was its deliverable. This file preserves its findings in the repository.
