@@ -3,6 +3,20 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-8991 update: board unchanged since run-8987
+
+Read live in run-8991 (product owner, claude-sonnet-5-5), 2026-10-26:
+
+- pm-260 `drafting` (otohime): t-1578 superseded, t-1593 done. pm-267 (mono-v2) still `paused`
+  (last update 11:53Z): t-1594 and t-1596 `qa_pending`, t-1595 and t-1597 `backlog`; no open
+  escalations. It owns outcomes 1-3. Resuming it is a platform-owner action.
+- Outcome 4 stays met (pm-255 released, t-1557 done).
+- The otohime checkout holds no orchestrator or watchdog code, so no otohime software_engineer
+  task is proposed; a duplicate would fork pm-267's contracts. The proposal is the empty DAG.
+- Deferred, owner pm-267. Failure conditions: abandon text still says abandoning frees parts;
+  a part with execution_started_at=null still breaches task_duration; an abandoned parent
+  leaves a part held with only an advisory line.
+
 ## Run-8979 update: board unchanged since run-8974
 
 Read at **14:05 UTC** (run-8979, product owner):
