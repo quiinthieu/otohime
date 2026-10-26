@@ -18,9 +18,10 @@ import {
 } from "./sound.ts";
 import { play, setSound } from "./sound-client.ts";
 
-const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle"];
+const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle", "press"];
+const OLD = NAMES.filter((name) => name !== "press");
 
-test("the eight cues the console and the ink toys need are all there", () => {
+test("the nine cues the console and the ink toys need are all there", () => {
   assert.deepEqual(Object.keys(CUES).sort(), [...NAMES].sort());
 });
 
@@ -30,7 +31,7 @@ test("every cue is short, audible and quick to start and stop", () => {
     assert.ok(cue.notes.length > 0, name);
     assert.ok(cueLength(cue) <= (name === "chime" ? 0.5 : 0.3), `${name} lasts ${cueLength(cue)} s`);
     for (const n of cue.notes) {
-      assert.ok(n.hz >= 100 && n.hz <= 2000, `${name} ${n.hz} Hz`);
+      assert.ok(n.hz >= (name === "press" ? 80 : 100) && n.hz <= 2000, `${name} ${n.hz} Hz`);
       assert.ok(n.at >= 0, name);
       assert.ok(n.attack > 0 && n.attack <= 0.01, `${name} attack ${n.attack}`);
       assert.ok(n.decay > 0 && n.decay <= 0.2, `${name} decay ${n.decay}`);
@@ -92,6 +93,21 @@ test("a stamp is a low falling thud and a rustle is quiet high ticks", () => {
   const gaps = rustle.notes.slice(1).map((n, i) => +(n.at - rustle.notes[i].at).toFixed(3));
   assert.ok(new Set(gaps).size > 1, `rustle ticks are unevenly spaced: ${gaps}`);
   assert.ok(cueGain(rustle) < cueGain(stamp), "a rustle sits under a stamp");
+});
+
+test("a press is a soft falling thunk, quieter than every other cue", () => {
+  const { press } = CUES;
+  assert.ok(press.db <= MAX_DB, `asks for ${press.db} dB`);
+  assert.equal(press.db, -28);
+  assert.ok(cueGain(press) < cueGain(CUES.move), "a press sits under a cursor tick");
+  for (const name of OLD) assert.ok(cueGain(press) < cueGain(CUES[name]), `a press sits under ${name}`);
+  assert.ok(press.wave === "sine" || press.wave === "triangle", `press is ${press.wave}`);
+  assert.deepEqual(press.notes, [
+    { hz: 140, at: 0, attack: 0.003, decay: 0.07 },
+    { hz: 90, at: 0.015, attack: 0.003, decay: 0.07 },
+  ]);
+  // The old cues name no wave, so they stay square.
+  for (const name of OLD) assert.equal(CUES[name].wave, undefined, name);
 });
 
 // A Web Audio stand-in: each oscillator it makes remembers its pitch, wave and
@@ -166,6 +182,7 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
   // Off by default: nothing is made and nothing sounds.
   play("stamp");
   play("rustle");
+  play("press");
   assert.equal(FakeAudioContext.made, 0);
   assert.deepEqual(heard(), []);
 
@@ -184,6 +201,29 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
   assert.deepEqual(rustle.map((v) => v.hz), CUES.rustle.notes.map((n) => n.hz));
   assert.equal(peakOf(rustle), dbToGain(CUES.rustle.db));
 
+  // A press plays its own wave, quietly; every old cue is still square.
+  play("press");
+  const press = heard();
+  assert.deepEqual(press.map((v) => v.hz), [140, 90]);
+  assert.ok(press.every((v) => v.wave === CUES.press.wave && v.wave !== "square"), `press is ${press.map((v) => v.wave)}`);
+  assert.equal(peakOf(press), dbToGain(-28));
+  assert.ok(peakOf(press) <= dbToGain(MAX_DB));
+  for (const name of OLD) {
+    play(name);
+    const voices = heard();
+    assert.equal(voices.length, CUES[name].notes.length, name);
+    assert.ok(voices.every((v) => v.wave === "square"), `${name} is ${voices.map((v) => v.wave)}`);
+  }
+  // The wave comes from the cue: take it away and the press falls back to square.
+  const realPress = CUES.press;
+  CUES.press = { ...realPress, wave: undefined };
+  try {
+    play("press");
+    assert.ok(heard().every((v) => v.wave === "square"));
+  } finally {
+    CUES.press = realPress;
+  }
+
   // A cue asking for full volume still plays at MAX_DB.
   const real = CUES.stamp;
   CUES.stamp = { ...real, db: 0 };
@@ -199,6 +239,7 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
   assert.equal(stored.get(SOUND_KEY), "off");
   play("stamp");
   play("rustle");
+  play("press");
   await new Promise((r) => setImmediate(r));
   assert.deepEqual(heard(), []);
 
@@ -216,7 +257,7 @@ const source = (file: string) => readFileSync(resolve(import.meta.dirname, "..",
 test("only the client adapter opens an AudioContext, and only from unlock", () => {
   const client = source("lib/sound-client.ts");
   assert.equal(client.match(/new AudioContext\(/g)?.length, 1);
-  assert.match(client, /type: "square"|\.type = "square"/);
+  assert.match(client, /\.type = cue\.wave \?\? "square"/);
   assert.match(client, /addEventListener\("pagehide"/);
   assert.ok(!/AudioContext/.test(source("lib/sound.ts").replace(/^\/\/.*$/gm, "")), "lib/sound.ts stays pure");
   for (const file of ["components/sound-toggle.tsx", "components/handheld.tsx"]) {

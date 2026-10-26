@@ -1,5 +1,5 @@
-// The console's beeps, and the ink toys' stamp and rustle, as data: each cue
-// is a few square-wave notes with a short attack and decay. Pure, so a test can read every envelope without a
+// The console's beeps, and the ink toys' stamp, rustle and press, as data: each
+// cue is a few notes (square unless the cue names another wave) with a short attack and decay. Pure, so a test can read every envelope without a
 // browser; lib/sound-client.ts plays them on Web Audio.
 
 export type Note = {
@@ -8,8 +8,8 @@ export type Note = {
   attack: number; // seconds from silence to the peak
   decay: number; // seconds from the peak back to silence
 };
-export type Cue = { db: number; notes: readonly Note[] };
-export type CueName = "move" | "open" | "back" | "chime" | "eat" | "burst" | "stamp" | "rustle";
+export type Cue = { db: number; notes: readonly Note[]; wave?: OscillatorType };
+export type CueName = "move" | "open" | "back" | "chime" | "eat" | "burst" | "stamp" | "rustle" | "press";
 
 // Nothing plays louder than this, whatever a cue asks for.
 export const MAX_DB = -18;
@@ -46,6 +46,8 @@ export const CUES: Record<CueName, Cue> = {
       note(1560, 0.1, 0.002, 0.03),
     ],
   },
+  // a letterpress key pushed down: a soft paper thunk, the quietest cue
+  press: { db: -28, wave: "triangle", notes: [note(140, 0, 0.003, 0.07), note(90, 0.015, 0.003, 0.07)] },
 };
 
 export const dbToGain = (db: number) => 10 ** (db / 20);

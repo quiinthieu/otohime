@@ -88,7 +88,7 @@ function schedule(c: AudioContext, cue: Cue) {
     const t0 = c.currentTime + 0.005;
     for (const n of cue.notes) {
       const osc = c.createOscillator();
-      osc.type = "square";
+      osc.type = cue.wave ?? "square";
       osc.frequency.value = n.hz;
       const gain = c.createGain();
       envelope(n, t0, peak).forEach(([t, v], i) => {
