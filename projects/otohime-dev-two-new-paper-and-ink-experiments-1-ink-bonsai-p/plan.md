@@ -43,11 +43,12 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** The same week and contribution snapshot always produce identical bounded tree geometry; quiet weeks leave bare twigs and every pruneable branch has a stable subtree identity.
 
-**Interfaces:** lib/bonsai.ts; lib/bonsai.test.ts
+**Interfaces:** lib/bonsai.ts; lib/bonsai.test.ts; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-1-evidence.md
 
 **Actions:**
 - Read the relevant installed Next guide before touching route code in later tasks; implement a pure bracketed L-system in lib/bonsai.ts using ISO-week plus counts as the seed, tapered strokes, stable branch IDs, parent links, node cap, and log-scaled branch/leaf density.
 - Make zero-count weeks add bare twigs and prevent a quiet week from deleting prior growth; add unit fixtures for identical seeds, differing weeks, empty weeks, branch ancestry and node cap.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** SVG UI; network data collection.
 
@@ -59,16 +60,17 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** Running the refresh command updates a validated owner weekly-count snapshot from public activity; offline builds use the committed snapshot with its as-of date and never fetch on page load.
 
-**Interfaces:** scripts/fetch-contributions.mjs; scripts/fetch-contributions.test.mjs; content/contributions.json; package.json; README.md
+**Interfaces:** scripts/fetch-contributions.mjs; scripts/fetch-contributions.test.mjs; content/contributions.json; package.json; README.md; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-2-evidence.md
 
 **Actions:**
 - Implement an on-demand scripts/fetch-contributions.mjs command that reads public activity for the pinned owner quiinthieu, aggregates by ISO week, validates count/date bounds, writes only counts and provenance, and exits usefully on malformed data.
 - Commit a real baseline content/contributions.json captured from public activity and make the build use it when refresh fails; a failed network request must not make page load perform a fetch or fabricate current activity.
 - Test the parser and refresh path with local fixtures including zero weeks, incomplete current week, invalid response and network failure; document the explicit refresh command and snapshot age.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** visitor tracking; runtime GitHub token; scheduled refresh.
 
-**Verification:** `npm test`, `npm run typecheck`, `npm run lint`, `npm run build` in the checkout, with exit 0.
+**Verification:** `npm test`, `node --test scripts/fetch-contributions.test.mjs`, `npm run typecheck`, `npm run lint`, `npm run build` in the checkout, with exit 0.
 
 ### 3. Interactive seasonal Ink Bonsai
 
@@ -76,13 +78,14 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** The Bonsai page shows deterministic owner growth and four seasonal treatments; a visitor can prune and regrow by pointer or keyboard, with gated sound and a static reduced-motion outcome.
 
-**Interfaces:** app/(site)/(app)/play/bonsai/; app/(site)/(app)/play/page.tsx; components/bonsai/; e2e/bonsai.test.ts
+**Interfaces:** app/(site)/(app)/play/bonsai/; app/(site)/(app)/play/page.tsx; components/bonsai/; e2e/bonsai.test.ts; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-3-evidence.md
 
 **Actions:**
 - Read installed Next route guidance; build /play/bonsai and a Play entry using the committed snapshot and lib/bonsai output, existing SVG ink filters, responsive light/dark styling and site data-season.
 - Render spring blossom, summer green leaves, autumn red leaves and winter bare/snow states; expose week/count/source and an honest snapshot age.
 - Make branch targets at least 24px with mouse, touch, Enter and Space pruning; remove the selected subtree, animate falling ink leaves only when motion is allowed, synthesize a gesture-gated snip through the existing sound setting, and offer Regrow.
 - Add browser coverage for zero-week twig, one-branch pruning/regrowth, keyboard focus, all seasons, reduced motion and mute; ensure no request to GitHub on page load.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** editing source activity; server-persisted pruning.
 
@@ -94,12 +97,13 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** A valid week URL serves a shareable deterministic OG image, and the Bonsai page downloads a nonblank matching PNG postcard; invalid weeks fail safely.
 
-**Interfaces:** app/og/bonsai/; components/bonsai/; lib/bonsai-postcard.ts; e2e/bonsai-postcard.test.ts
+**Interfaces:** app/og/bonsai/; components/bonsai/; lib/bonsai-postcard.ts; e2e/bonsai-postcard.test.ts; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-4-evidence.md
 
 **Actions:**
 - Read the installed Next image route guide; implement /og/bonsai?week=YYYY-Www using the same pure tree model and snapshot, a bounded week parser, and flat ink style compatible with next/og without relying on SVG filter support.
 - Add a postcard PNG download from the browser using the visible week's tree, date, count and source; make unsupported canvas/export fail with a useful message rather than a broken link.
 - Add tests for identical image content at the same week, invalid-week fallback, nonblank PNG, and no cross-origin assets.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** server-side visitor uploads; unbounded archive generation.
 
@@ -111,11 +115,12 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** The pinned local model and runtime assets pass hash and license checks, construct with the locked MediaPipe package, and a corrupt asset fails verification.
 
-**Interfaces:** scripts/vendor-hand-landmarker.mjs; content/hand-landmarker-assets.json; public/models/hand-landmarker/; lib/hand-landmarker-assets.test.ts; package.json
+**Interfaces:** scripts/vendor-hand-landmarker.mjs; content/hand-landmarker-assets.json; public/models/hand-landmarker/; lib/hand-landmarker-assets.test.ts; package.json; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-5-evidence.md
 
 **Actions:**
 - Follow the existing Peep Box vendor pattern for the pinned @mediapipe/tasks-vision 0.10.32 Hand Landmarker model: immutable source, SHA256, byte size, license and local public URL; vendor only the required model and wasm assets.
 - Add fail-closed manifest/hash checks and verify an actual HandLandmarker import and asset/adapter construction with the pinned package in the locked npm environment, plus a wrong-hash negative control.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** runtime CDN dependency; camera UI.
 
@@ -127,12 +132,13 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** Camera access begins only after a visitor opts in; tracking stays in-browser, uses local assets, handles CPU fallback and releases tracks on every exit path.
 
-**Interfaces:** components/shadows/hand-tracker.ts; components/shadows/hand-worker.ts; lib/hand-tracker.test.ts
+**Interfaces:** components/shadows/hand-tracker.ts; components/shadows/hand-worker.ts; lib/hand-tracker.test.ts; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-6-evidence.md
 
 **Actions:**
 - Implement an opt-in only controller around getUserMedia({audio:false}) and MediaPipe VIDEO mode for up to two hands, with worker execution, GPU attempt and CPU fallback, bounded detection near 20Hz, mirrored coordinates, cleanup on stop/unmount/hidden/revoke and no retained frames.
 - Keep the permission request behind an explicit user button; expose start/stop/error states and a fallback signal. Use local model/wasm URLs only.
 - Test camera never starts on import, denied permission, GPU failure/CPU success, aborted startup, visibility loss, track stop and cleanup using fakes; run a real import/adapter preflight against locked assets.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** video upload; recording; continuous background camera.
 
@@ -144,11 +150,12 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** All four requested poses resolve from landmark fixtures with stable transitions, while ambiguous or missing hands remain neutral.
 
-**Interfaces:** lib/shadow-poses.ts; lib/shadow-poses.test.ts; lib/fixtures/shadow-poses/
+**Interfaces:** lib/shadow-poses.ts; lib/shadow-poses.test.ts; lib/fixtures/shadow-poses/; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-7-evidence.md
 
 **Actions:**
 - Implement mirrored landmark normalization, bounded One Euro smoothing, geometry-based pose scores for rabbit/dog/bird/deer (one or two hands as appropriate), six-frame debounce and exit hysteresis; emit neutral when confidence is low.
 - Add recorded or synthetic 21-point landmark fixtures for all four poses, left/right mirror, rapid transitions, missing hand, ambiguous hand and negative controls; keep classifier pure and deterministic.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** cloud recognition; training a custom model.
 
@@ -160,13 +167,14 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** After explicit consent, four poses appear as ink creatures on the paper stage, carry working Projects/Notes links, and Stop releases the camera; reduced motion stays static.
 
-**Interfaces:** app/(site)/(app)/play/shadows/; app/(site)/(app)/play/page.tsx; components/shadows/; e2e/shadows.test.ts
+**Interfaces:** app/(site)/(app)/play/shadows/; app/(site)/(app)/play/page.tsx; components/shadows/; e2e/shadows.test.ts; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-8-evidence.md
 
 **Actions:**
 - Read installed Next client/route guidance; build /play/shadows and its Play entry with a clear pre-consent privacy notice: local processing, no upload or saving, and a Stop control.
 - Draw landmark-derived palm/finger ink silhouettes on a paper stage with candle glow; morph matched-point SVG creatures for rabbit, dog, bird and deer, and give each a bounded hop plus a paper tag carrying a Projects or Notes link. Keep semantic anchors below the stage.
 - Respect site light/dark styling and reduced motion with static candle and in-place creature swap; never render webcam video or start/fetch model before opt-in.
 - Add browser checks for notice-before-permission, each creature via fixture injection, Stop releasing camera, keyboard link access, reduced motion, and absence of frame/network upload.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** recording; server inference; public camera stream.
 
@@ -178,12 +186,13 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** All four cutout puppets can be moved by mouse, touch or keyboard and carry the same links; camera denial or model failure lands in a usable fallback.
 
-**Interfaces:** components/shadows/paper-puppets.tsx; components/shadows/shadows.css; e2e/shadow-puppets.test.ts
+**Interfaces:** components/shadows/paper-puppets.tsx; components/shadows/shadows.css; e2e/shadow-puppets.test.ts; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-9-evidence.md
 
 **Actions:**
 - Add an always-selectable paper cutout mode using the same four creature assets and links, with pointer/touch drag constrained to the stage plus arrow-key movement and visible focus.
 - Automatically enter this mode on denial, insecure context, unsupported browser or model failure; offer a mode switch without requesting permission.
 - Test pointer and keyboard placement, each failure path, no camera call in cutout mode, touch behavior, and reduced-motion state.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** requiring camera permission; separate creature artwork.
 
@@ -195,12 +204,13 @@ The revision's `platform.plan-prerequisites.v1` manifest declares the existing G
 
 **Acceptance:** CI names and runs the new privacy, interaction, fallback and share checks; a renamed required test makes gate closure fail, and the complete project checks pass.
 
-**Interfaces:** e2e/bonsai.test.ts; e2e/bonsai-postcard.test.ts; e2e/shadows.test.ts; e2e/shadow-puppets.test.ts; scripts/check-gate-closure.mjs; lib/gate-closure.test.ts
+**Interfaces:** e2e/bonsai.test.ts; e2e/bonsai-postcard.test.ts; e2e/shadows.test.ts; e2e/shadow-puppets.test.ts; scripts/check-gate-closure.mjs; lib/gate-closure.test.ts; projects/otohime-dev-two-new-paper-and-ink-experiments-1-ink-bonsai-p/task-10-evidence.md
 
 **Actions:**
 - Extend e2e for initial zero camera prompts, no cross-origin model/frame requests, opt-in with Chromium fake camera, model/permission denial, four fixture poses, cutout fallback, both link destinations, Bonsai seasonal/prune/postcard paths and reduced motion.
 - Name the added e2e tests in scripts/check-gate-closure.mjs and demonstrate the gate rejects a temporarily renamed required test, restoring the tree afterward.
 - Run project unit, lint, typecheck, build and browser gates at the delivery SHA; record local fake-device limits, locked model hash and independent browser observations for QA.
+- Record verification results, executable/model identity where relevant, and real versus fake proof boundaries in the task evidence Markdown.
 
 **Non-goals:** live camera recognition as CI proof; visitor analytics.
 
