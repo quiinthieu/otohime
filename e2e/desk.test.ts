@@ -10,8 +10,9 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { after, before, test } from "node:test";
 import { chromium, type Browser, type BrowserContext, type Page } from "playwright-core";
-import { STACKED, PINS, PIN_PAIRS, dropAt } from "../app/(site)/(app)/desk/_lib/drag.ts";
+import { DRAG_THRESHOLD, STACKED, PINS, PIN_PAIRS, dropAt } from "../app/(site)/(app)/desk/_lib/drag.ts";
 import { LONG_PRESS_MS } from "../app/(site)/(app)/desk/_lib/long-press.ts";
+import { formatTrace, hasGesture, traceOf, type GestureRecord } from "../scripts/e2e-gesture-trace.ts";
 import {
   DESK_ITEMS,
   DESK_KEY,
@@ -45,6 +46,8 @@ type Probe = {
   // every transform an item or a leaf took, in order, by data-desk-item id or leaf index
   items: Record<string, string[]>;
   leaves: Record<string, string[]>;
+  // the pointer events since the last swipe began (swipe() empties it), for its trace
+  gestures: GestureRecord[];
 };
 
 declare global {
@@ -55,7 +58,7 @@ declare global {
 
 // Runs in the page before any of its scripts.
 function instrument() {
-  const probe: Probe = { transitions: [], animations: [], items: {}, leaves: {} };
+  const probe: Probe = { transitions: [], animations: [], items: {}, leaves: {}, gestures: [] };
   window.__desk = probe;
   const name = (t: EventTarget | null) =>
     t instanceof Element ? `${t.tagName.toLowerCase()}${typeof t.className === "string" && t.className ? `.${t.className.split(" ").join(".")}` : ""}` : "";
@@ -74,6 +77,27 @@ function instrument() {
       }
     }
   }).observe(document, { subtree: true, attributes: true, attributeFilter: ["style"] });
+  // Before the page's own handlers (React listens on its root): what arrived, where, and whether the item under it
+  // was already dragging. Capped here too; scripts/e2e-gesture-trace.ts keeps the last 40 for a message.
+  for (const type of ["pointerdown", "pointermove", "pointerup", "pointercancel"] as const) {
+    document.addEventListener(
+      type,
+      (e) => {
+        if (probe.gestures.length >= 400) probe.gestures.shift();
+        probe.gestures.push({
+          type,
+          t: e.timeStamp,
+          x: e.clientX,
+          y: e.clientY,
+          pointerId: e.pointerId,
+          pointerType: e.pointerType,
+          target: name(e.target),
+          dragging: e.target instanceof Element && e.target.closest("[data-desk-item]")?.hasAttribute("data-dragging") === true,
+        });
+      },
+      true,
+    );
+  }
 }
 
 let browser: Browser;
