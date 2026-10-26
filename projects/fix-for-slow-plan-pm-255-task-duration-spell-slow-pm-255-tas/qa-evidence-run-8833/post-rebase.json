@@ -1,0 +1,26 @@
+{
+  "captured_at": "2026-10-26T10:21:18.499633+00:00",
+  "tested_sha": "5b00aaf8df92a839afa7cd6a2cd9f96abc9ae8c9",
+  "rebased_over": "ae4607dafc28c6f732fdb7ee2ff2f1c7953ed4d3",
+  "incoming_changes": "Three QA-only artifacts from pm-256; no application, lock, workflow or probe changes",
+  "checks": {
+    "unit": {
+      "exit_code": 0,
+      "tail": "nything else\n  ---\n  duration_ms: 0.068709\n  type: 'test'\n  ...\n# Subtest: latestNote picks the newest from unsorted input, skips bad dates, and keeps the first of a tie\nok 2094 - latestNote picks the newest from unsorted input, skips bad dates, and keeps the first of a tie\n  ---\n  duration_ms: 87.830084\n  type: 'test'\n  ...\n# Subtest: fit keeps short text, cuts long text on a word with an ellipsis, and hard-cuts one long word\nok 2095 - fit keeps short text, cuts long text on a word with an ellipsis, and hard-cuts one long word\n  ---\n  duration_ms: 0.396875\n  type: 'test'\n  ...\n# Subtest: site.zine names four real projects and a real sketch\nok 2096 - site.zine names four real projects and a real sketch\n  ---\n  duration_ms: 0.111958\n  type: 'test'\n  ...\n# Subtest: zinePages lays the site out in reading order with the right picks\nok 2097 - zinePages lays the site out in reading order with the right picks\n  ---\n  duration_ms: 0.223333\n  type: 'test'\n  ...\n# Subtest: every page stays inside its budget, even with oversized content\nok 2098 - every page stays inside its budget, even with oversized content\n  ---\n  duration_ms: 0.370125\n  type: 'test'\n  ...\n# Subtest: zinePages refuses a site.zine that names something the site does not have\nok 2099 - zinePages refuses a site.zine that names something the site does not have\n  ---\n  duration_ms: 8.679958\n  type: 'test'\n  ...\n1..2099\n# tests 2099\n# suites 0\n# pass 2099\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7849.65475\n"
+    },
+    "focused": {
+      "exit_code": 0,
+      "tail": "ports the hold (QA D1)\n  ---\n  duration_ms: 280.202958\n  type: 'test'\n  ...\n# Subtest: CLI: the unmodified run-8812 live capture, with progress in both reads, still exits 1 on the hold\nok 36 - CLI: the unmodified run-8812 live capture, with progress in both reads, still exits 1 on the hold\n  ---\n  duration_ms: 207.162125\n  type: 'test'\n  ...\n# Subtest: CLI: malformed predecessor or progress evidence exits 2 under a verified manifest (QA D6-D9)\nok 37 - CLI: malformed predecessor or progress evidence exits 2 under a verified manifest (QA D6-D9)\n  ---\n  duration_ms: 1675.046125\n  type: 'test'\n  ...\n# Subtest: CLI: truncated payloads and incomplete or mismatched manifests exit 2\nok 38 - CLI: truncated payloads and incomplete or mismatched manifests exit 2\n  ---\n  duration_ms: 486.348625\n  type: 'test'\n  ...\n# Subtest: CLI: wrong ids exit 2; missing or unsupported arguments exit 2\nok 39 - CLI: wrong ids exit 2; missing or unsupported arguments exit 2\n  ---\n  duration_ms: 554.363\n  type: 'test'\n  ...\n# Subtest: checkManifest names every missing or mismatched snapshot entry\nok 40 - checkManifest names every missing or mismatched snapshot entry\n  ---\n  duration_ms: 0.210041\n  type: 'test'\n  ...\n# Subtest: the probe script makes no network call and no board write\nok 41 - the probe script makes no network call and no board write\n  ---\n  duration_ms: 0.276209\n  type: 'test'\n  ...\n1..41\n# tests 41\n# suites 0\n# pass 41\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 5170.220333\n"
+    },
+    "typecheck": {
+      "exit_code": 0,
+      "tail": "\n> otohime@0.1.0 typecheck\n> next typegen && tsc --noEmit\n\nGenerating route types...\n\u2713 Types generated successfully\n"
+    },
+    "adversarial": {
+      "exit_code": 0,
+      "met": 20,
+      "total": 20
+    }
+  },
+  "fingerprints_still_equal_delivery": true
+}

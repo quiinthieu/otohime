@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/quiinthieu/otohime/actions/runs/40303396148/job/121506990908",
+  "captured_at": "2026-10-26T10:16:52.439745+00:00",
+  "visible_text": "checks\npm-260/t-1578: Record verified probe and deployment handoff\npm-260/t-1578: Record verified probe and deployment handoff\n#403\nUh oh!\nThere was an error while loading.\nPlease reload this page\n.\nAnnotations\n1 error, 1 warning, and 1 notice\nE2E against next start\nProcess completed with exit code 1.\nShow more\nShow less\nRun npm run lint:\nprojects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2\n'resolve' is defined but never used\nShow more\nShow less\n\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see\nhttps://github.com/actions/runner-images/issues/14748\n\"\nShow more\nShow less\nchecks\nchecks\nfailed\nOct 26, 2026\nin 5m 48s\nbackground\nwait\nwait-all\ncancel\nparallel\nLoading\nRe-running jobs...\nYou can\u2019t perform that action at this time.",
+  "raw_logs": "not accessible without sign in"
+}

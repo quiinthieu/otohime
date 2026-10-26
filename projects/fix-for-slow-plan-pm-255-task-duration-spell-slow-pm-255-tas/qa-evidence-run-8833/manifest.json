@@ -1,0 +1,52 @@
+{
+  "captured_at": "2026-10-26T10:13:17.758Z",
+  "captured_by": "run-8833 (quality_engineer)",
+  "delivery_sha": "b73d93ca825ae4c56a7931c22e2280a960b535e8",
+  "collector_sha": "9d0fba4ea2bb52b8b31461f82dca4a4ddaf95bbe",
+  "board_build_sha": "unobserved",
+  "snapshots": {
+    "plan": {
+      "tool": "plan_manager_get_plan",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T10:13:17.758Z",
+      "complete": true,
+      "sha256": "9f9a38a6157fe813f87f95d3f95b9874c3574d40b31a3c63fe94edfc9a77db9d"
+    },
+    "schedule": {
+      "tool": "plan_manager_explain_schedule",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T10:13:18.038Z",
+      "complete": true,
+      "sha256": "a799c46d3bd8be0f2019b01cb03224d04f29f9f322266b55b7b74803092f8a84"
+    },
+    "timeline": {
+      "tool": "plan_manager_get_timeline",
+      "args": {
+        "plan_id": "pm-255",
+        "limit": 200
+      },
+      "captured_at": "2026-10-26T10:13:18.200Z",
+      "complete": true,
+      "pages": 1,
+      "entries": 15,
+      "cursor": "idea:idea-248",
+      "completeness_basis": "15 entries < limit 200, oldest idea:idea-248",
+      "sha256": "4cd5a60e625387d3fc816f4d4bf4a81bf15f6c6a05b0fda4635b8cf089474bb9"
+    },
+    "runs": {
+      "tool": "plan_manager_list_runs",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T10:13:18.339Z",
+      "complete": true,
+      "entries": 1,
+      "completeness_basis": "Unfiltered tool returns all plan runs with no pagination",
+      "sha256": "c4239a848caf5ff18dcaf469c9b7a0254596fa95591b282b44148afb9e7473da"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40300404091",
+  "status": "cancelled",
+  "visible_text": "Triggered via push\nOctober 26, 2026 09:32\nquiinthieu\npushed\nc2ca9c2\nmain\nStatus\nCancelled\nTotal duration\n12m 56s\nArtifacts\n\u2013\nci.yml\non: push\nchecks\nchecks\ncleanup\ncleanup\npreview\npreview\nproduction\nproduction\nOh hello! Nice to see you.\nMade with \u2764\ufe0f by\nhumans.txt\nFit to window\nZoom out\nZoom in\nAnnotations\n1 error\nCI\nCanceling since a higher priority waiting request for ci-refs/heads/main exists\nShow more\nShow less\nYou can\u2019t perform that action at this time."
+}

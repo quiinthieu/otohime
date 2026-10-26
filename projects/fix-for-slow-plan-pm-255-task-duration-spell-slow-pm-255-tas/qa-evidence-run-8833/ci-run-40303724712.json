@@ -1,0 +1,12 @@
+{
+  "source_url": "https://github.com/quiinthieu/otohime/actions/runs/40303724712",
+  "captured_at": "2026-10-26T10:16:25.800945+00:00",
+  "html_sha256": "fe3ae2acaa2962983c8f5be1186c7337ebdd80273b20f06d497b7d638c1f2e24",
+  "visible_text": "Triggered via push\nOctober 26, 2026 09:58\nquiinthieu\npushed\n9d0fba4\nmain\nStatus\nFailure\nTotal duration\n10m 4s\nArtifacts\n\u2013\nci.yml\non: push\nchecks\n5m 32s\nchecks\npreview\npreview\ncleanup\ncleanup\nproduction\n0s\nproduction\nOh hello! Nice to see you.\nMade with \u2764\ufe0f by\nhumans.txt\nFit to window\nZoom out\nZoom in\nAnnotations\n1 error, 1 warning, and 1 notice\nchecks\nProcess completed with exit code 1.\nShow more\nShow less\nchecks:\nprojects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2\n'resolve' is defined but never used\nShow more\nShow less\nchecks\n\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see\nhttps://github.com/actions/runner-images/issues/14748\n\"\nShow more\nShow less\nYou can\u2019t perform that action at this time",
+  "job_ids": [
+    "121509554244",
+    "121509555826",
+    "121509556195",
+    "121512001257"
+  ]
+}

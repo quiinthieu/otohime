@@ -1,0 +1,44 @@
+[
+  {
+    "path": "lib/plan-release.ts",
+    "sha256": "969c4a7cfd4e7c353730be7b9091a2b0506101307d9243b436cf7a663826d289",
+    "delivery_sha256": "969c4a7cfd4e7c353730be7b9091a2b0506101307d9243b436cf7a663826d289",
+    "equals_delivery": true
+  },
+  {
+    "path": "scripts/probe-plan-release.mjs",
+    "sha256": "a2e883c6d69dd2f9e73956a4b13b364c1e1eccb807b679553d5b74d51380948f",
+    "delivery_sha256": "a2e883c6d69dd2f9e73956a4b13b364c1e1eccb807b679553d5b74d51380948f",
+    "equals_delivery": true
+  },
+  {
+    "path": "lib/plan-release.test.ts",
+    "sha256": "2782d29435d179838b6da991e31d934f027d60e852a9a621e51390773498e451",
+    "delivery_sha256": "2782d29435d179838b6da991e31d934f027d60e852a9a621e51390773498e451",
+    "equals_delivery": true
+  },
+  {
+    "path": "package.json",
+    "sha256": "9fdb11f9be330bc0d6bc37c77f8441d1774c3b8acc77b6ac15a1f3755cfde9bb",
+    "delivery_sha256": "9fdb11f9be330bc0d6bc37c77f8441d1774c3b8acc77b6ac15a1f3755cfde9bb",
+    "equals_delivery": true
+  },
+  {
+    "path": "package-lock.json",
+    "sha256": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "delivery_sha256": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "equals_delivery": true
+  },
+  {
+    "path": ".github/workflows/ci.yml",
+    "sha256": "9dcff7a80fcf598df21d07c4f54e0f88c40a8bbb7dac8acb60f093c987a18a9f",
+    "delivery_sha256": "9dcff7a80fcf598df21d07c4f54e0f88c40a8bbb7dac8acb60f093c987a18a9f",
+    "equals_delivery": true
+  },
+  {
+    "path": "next.config.ts",
+    "sha256": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+    "delivery_sha256": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+    "equals_delivery": true
+  }
+]

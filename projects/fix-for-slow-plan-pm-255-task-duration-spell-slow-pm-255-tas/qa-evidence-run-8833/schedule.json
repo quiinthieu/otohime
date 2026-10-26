@@ -1,0 +1,219 @@
+{
+  "plan_id": "pm-255",
+  "status": "queued",
+  "scheduled": true,
+  "progress": {
+    "state": "waiting",
+    "reason": "after_plan",
+    "holders": [
+      {
+        "plan_id": "pm-248"
+      }
+    ],
+    "queue_position": 1,
+    "queue_rank_at": "2026-10-26T04:27:53.975898Z",
+    "yield_count": 0,
+    "never_parks": true
+  },
+  "yield_due": false,
+  "inputs": {
+    "now": "2026-10-26T10:13:17.890220524Z",
+    "slots": {
+      "used": 5,
+      "max": 5,
+      "max_per_repo": 0,
+      "free": 0
+    },
+    "caps": {
+      "max_live_runs": 0,
+      "max_live_runs_per_plan": 1,
+      "live_runs": 8
+    },
+    "settings": {
+      "yield_after": "5m0s",
+      "max_yields_before_notice": 3,
+      "park_blocked_after": "1h0m0s",
+      "path_turn_after": "15m0s",
+      "conflict_cost_max": "10m0s",
+      "yield_patience": 50,
+      "learn_mode_override": "none"
+    },
+    "live_runs": [
+      {
+        "run_id": "run-8819",
+        "plan_id": "pm-264",
+        "task_id": "t-1590",
+        "role": "software_engineer",
+        "status": "running",
+        "plan_status": "executing",
+        "paths": [
+          "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/architecture.md"
+        ],
+        "holds_paths": true,
+        "awaits_resume": false
+      },
+      {
+        "run_id": "run-8821",
+        "plan_id": "pm-259",
+        "task_id": "t-1583",
+        "role": "software_engineer",
+        "status": "running",
+        "plan_status": "executing",
+        "paths": [
+          "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/fetch-contract.md"
+        ],
+        "holds_paths": true,
+        "awaits_resume": false
+      },
+      {
+        "run_id": "run-8822",
+        "plan_id": "pm-258",
+        "task_id": "t-1564",
+        "role": "software_engineer",
+        "status": "running",
+        "plan_status": "executing",
+        "paths": [
+          "e2e/ink-press.test.ts",
+          "lib/e2e-runner.test.ts",
+          "lib/end.test.ts",
+          "projects/pick-up-this-plan-https-apps-vietky-io-vn-plans-plans-pm-242/t-1564-summary.md",
+          "scripts/e2e.mjs",
+          "scripts/probe-end.mjs",
+          "scripts/probe-end.sh",
+          "scripts/walk-end.sh"
+        ],
+        "holds_paths": true,
+        "awaits_resume": false
+      },
+      {
+        "run_id": "run-8801",
+        "plan_id": "pm-246",
+        "task_id": "t-1570",
+        "role": "quality_engineer",
+        "status": "running",
+        "plan_status": "paused",
+        "paths": [],
+        "holds_paths": false,
+        "awaits_resume": false
+      },
+      {
+        "run_id": "run-8830",
+        "plan_id": "pm-252",
+        "task_id": "t-1505",
+        "role": "verify",
+        "status": "running",
+        "plan_status": "paused",
+        "paths": [],
+        "holds_paths": false,
+        "awaits_resume": false
+      },
+      {
+        "run_id": "run-8831",
+        "plan_id": "pm-253",
+        "task_id": "t-1537",
+        "role": "quality_engineer",
+        "status": "running",
+        "plan_status": "paused",
+        "paths": [],
+        "holds_paths": false,
+        "awaits_resume": false
+      },
+      {
+        "run_id": "run-8833",
+        "plan_id": "pm-260",
+        "task_id": "t-1578",
+        "role": "quality_engineer",
+        "status": "running",
+        "plan_status": "executing",
+        "paths": [],
+        "holds_paths": false,
+        "awaits_resume": false
+      },
+      {
+        "run_id": "run-8834",
+        "plan_id": "pm-256",
+        "task_id": "t-1559",
+        "role": "quality_engineer",
+        "status": "running",
+        "plan_status": "executing",
+        "paths": [],
+        "holds_paths": false,
+        "awaits_resume": false
+      },
+      {
+        "run_id": "run-7204",
+        "plan_id": "pm-218",
+        "task_id": "t-1244",
+        "role": "software_engineer",
+        "status": "scheduled",
+        "plan_status": "paused",
+        "paths": [
+          "rtools/allow.yaml",
+          "servers/english-practice-fleet/README.md",
+          "servers/english-practice-fleet/scripts/test-wrapper.sh",
+          "servers/task-manager/internal/config/allowlist_test.go",
+          "tools/README.md",
+          "tools/english-practice/.gitignore",
+          "tools/english-practice/content/README.md",
+          "tools/english-practice/deploy/README.md",
+          "tools/english-practice/mobile/README.md",
+          "tools/english-practice/server/cmd/english-practice/main.go",
+          "tools/english-practice/server/go.mod",
+          "tools/english-practice/server/internal/api/api.go",
+          "tools/english-practice/server/internal/api/api_test.go",
+          "tools/english-practice/server/internal/app/app.go",
+          "tools/english-practice/server/internal/app/app_test.go",
+          "tools/english-practice/server/internal/config/config.go",
+          "tools/english-practice/server/internal/config/config_test.go",
+          "tools/english-practice/speech/.python-version",
+          "tools/english-practice/speech/pyproject.toml",
+          "tools/english-practice/speech/src/english_speech/__init__.py",
+          "tools/english-practice/speech/src/english_speech/server.py",
+          "tools/english-practice/speech/tests/test_server.py",
+          "tools/english-practice/speech/uv.lock",
+          "tools/english-practice/web/README.md"
+        ],
+        "holds_paths": false,
+        "awaits_resume": true
+      }
+    ],
+    "claims": [],
+    "tasks": [
+      {
+        "task_id": "t-1557",
+        "status": "ready",
+        "paths_from": "interfaces",
+        "paths": [
+          "scripts/probe-ask-deploy.mjs",
+          "scripts/probe-ask-deploy.sh"
+        ]
+      },
+      {
+        "task_id": "t-1558",
+        "status": "backlog",
+        "paths_from": "interfaces",
+        "paths": [
+          "scripts/probe-ask-tier.mjs",
+          "scripts/probe-ask-tier.sh",
+          "scripts/probe-ask-llm-fake.sh",
+          "scripts/probe-ask-llm-fake.mjs"
+        ]
+      }
+    ],
+    "own_runs": [],
+    "open_escalations": [],
+    "line": [
+      {
+        "plan_id": "pm-255",
+        "position": 1,
+        "rank_at": "2026-10-26T04:27:53.975898Z"
+      },
+      {
+        "plan_id": "pm-249",
+        "position": 2,
+        "rank_at": "2026-10-26T07:56:45.816175Z"
+      }
+    ]
+  },
+  "terms": []
+}

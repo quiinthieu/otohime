@@ -1,0 +1,41 @@
+{
+  "captured_at": "2026-10-26T10:18:00.065571+00:00",
+  "tested_sha": "9d0fba4ea2bb52b8b31461f82dca4a4ddaf95bbe",
+  "delivery_sha": "b73d93ca825ae4c56a7931c22e2280a960b535e8",
+  "platform": "darwin/arm64, fleet avietidol-mac-mini",
+  "node": "v22.23.3",
+  "npm": "10.9.9",
+  "installation": "npm ci exit 0, committed package-lock.json",
+  "checks": {
+    "unit": {
+      "exit_code": 0,
+      "tail": "95 x 69.85 mm\nok 2092 - panels are exactly A4 105 x 74.25 mm and Letter 107.95 x 69.85 mm\n  ---\n  duration_ms: 0.243666\n  type: 'test'\n  ...\n# Subtest: the paper parser takes a4 or letter and falls back to A4 for anything else\nok 2093 - the paper parser takes a4 or letter and falls back to A4 for anything else\n  ---\n  duration_ms: 0.11075\n  type: 'test'\n  ...\n# Subtest: latestNote picks the newest from unsorted input, skips bad dates, and keeps the first of a tie\nok 2094 - latestNote picks the newest from unsorted input, skips bad dates, and keeps the first of a tie\n  ---\n  duration_ms: 40.330708\n  type: 'test'\n  ...\n# Subtest: fit keeps short text, cuts long text on a word with an ellipsis, and hard-cuts one long word\nok 2095 - fit keeps short text, cuts long text on a word with an ellipsis, and hard-cuts one long word\n  ---\n  duration_ms: 10.920083\n  type: 'test'\n  ...\n# Subtest: site.zine names four real projects and a real sketch\nok 2096 - site.zine names four real projects and a real sketch\n  ---\n  duration_ms: 0.358333\n  type: 'test'\n  ...\n# Subtest: zinePages lays the site out in reading order with the right picks\nok 2097 - zinePages lays the site out in reading order with the right picks\n  ---\n  duration_ms: 0.416792\n  type: 'test'\n  ...\n# Subtest: every page stays inside its budget, even with oversized content\nok 2098 - every page stays inside its budget, even with oversized content\n  ---\n  duration_ms: 1.510542\n  type: 'test'\n  ...\n# Subtest: zinePages refuses a site.zine that names something the site does not have\nok 2099 - zinePages refuses a site.zine that names something the site does not have\n  ---\n  duration_ms: 0.519208\n  type: 'test'\n  ...\n1..2099\n# tests 2099\n# suites 0\n# pass 2099\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8115.334208\n"
+    },
+    "focused": {
+      "exit_code": 0,
+      "tail": "negated prose and a foreign release receipt exit 1 with release unrecorded (QA D3)\n  ---\n  duration_ms: 222.741583\n  type: 'test'\n  ...\n# Subtest: CLI: the unmodified live held snapshot set is decoded and reports the hold (QA D1)\nok 35 - CLI: the unmodified live held snapshot set is decoded and reports the hold (QA D1)\n  ---\n  duration_ms: 283.80175\n  type: 'test'\n  ...\n# Subtest: CLI: the unmodified run-8812 live capture, with progress in both reads, still exits 1 on the hold\nok 36 - CLI: the unmodified run-8812 live capture, with progress in both reads, still exits 1 on the hold\n  ---\n  duration_ms: 208.975833\n  type: 'test'\n  ...\n# Subtest: CLI: malformed predecessor or progress evidence exits 2 under a verified manifest (QA D6-D9)\nok 37 - CLI: malformed predecessor or progress evidence exits 2 under a verified manifest (QA D6-D9)\n  ---\n  duration_ms: 1799.129542\n  type: 'test'\n  ...\n# Subtest: CLI: truncated payloads and incomplete or mismatched manifests exit 2\nok 38 - CLI: truncated payloads and incomplete or mismatched manifests exit 2\n  ---\n  duration_ms: 432.904917\n  type: 'test'\n  ...\n# Subtest: CLI: wrong ids exit 2; missing or unsupported arguments exit 2\nok 39 - CLI: wrong ids exit 2; missing or unsupported arguments exit 2\n  ---\n  duration_ms: 644.475375\n  type: 'test'\n  ...\n# Subtest: checkManifest names every missing or mismatched snapshot entry\nok 40 - checkManifest names every missing or mismatched snapshot entry\n  ---\n  duration_ms: 0.224625\n  type: 'test'\n  ...\n# Subtest: the probe script makes no network call and no board write\nok 41 - the probe script makes no network call and no board write\n  ---\n  duration_ms: 0.273708\n  type: 'test'\n  ...\n1..41\n# tests 41\n# suites 0\n# pass 41\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 5383.153625\n"
+    },
+    "typecheck": {
+      "exit_code": 0,
+      "tail": "\n> otohime@0.1.0 typecheck\n> next typegen && tsc --noEmit\n\nGenerating route types...\n\u2713 Types generated successfully\n"
+    },
+    "adversarial": {
+      "exit_code": 0,
+      "contract_met": 20,
+      "cases": 20
+    }
+  },
+  "health": {
+    "url": "https://otohime.dev/api/health",
+    "status": 200,
+    "body": {
+      "ok": true,
+      "sha": "ee1f6ce6cd7f47c8e7fe1c450b33ff07e922332f"
+    },
+    "captured_at": "2026-10-26T10:13:34.396119+00:00"
+  },
+  "home_build_sha": "ee1f6ce6cd7f47c8e7fe1c450b33ff07e922332f",
+  "deployed_ancestry_exit": 1,
+  "real_imports": "Focused tests and actual CLI import lib/plan-release.ts in locked Node environment; no processor/adapter/model/assets used",
+  "real_fake_boundary": "Fresh authenticated MCP snapshot files are real; all adversarial/unit positive fixtures are synthetic. Tampering changes temporary copies only. No scheduler or board mutation."
+}

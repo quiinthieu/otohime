@@ -1,0 +1,913 @@
+{
+  "scans": [
+    {
+      "name": "failed0",
+      "offset": 0,
+      "limit": 20,
+      "total": 62,
+      "returned": 20,
+      "tasks": [
+        {
+          "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+          "status": "FAILED",
+          "title": "Enter Ryugu-jo",
+          "plan_id": "pm-256",
+          "run_id": "run-8828",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0d081765-06f9-4a1e-9de4-28107aa0608b",
+          "status": "FAILED",
+          "title": "Restore the deployment checks gate",
+          "plan_id": "pm-258",
+          "run_id": "run-8808",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f697e2c2aaba is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+          "status": "FAILED",
+          "title": "Peel paper corners with a shared gesture contract",
+          "plan_id": "pm-259",
+          "run_id": "run-8793",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ab0601c1-0d1a-4e67-9dcd-6f56661aff53",
+          "status": "FAILED",
+          "title": "Give Kame a persistent accessible ink companion",
+          "plan_id": "pm-259",
+          "run_id": "run-8788",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "66ea35bc-4dda-4c94-9e04-2373c8194bae",
+          "status": "FAILED",
+          "title": "Give Kame a persistent accessible ink companion",
+          "plan_id": "pm-259",
+          "run_id": "run-8785",
+          "error": "agent_failed: exit 1 class=infra marker=3374166 02:10 codex exec --dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c model_reasoning_effort=\"medium\" -- # Save Work Before Finishing This jo",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d3133670-fcdd-4712-8637-3470dc32c653",
+          "status": "FAILED",
+          "title": "Give Kame a persistent accessible ink companion",
+          "plan_id": "pm-259",
+          "run_id": "run-8764",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "6aa491b3-d339-4ffa-b628-216aaf055f8b",
+          "status": "FAILED",
+          "title": "Peel paper corners with a shared gesture contract",
+          "plan_id": "pm-259",
+          "run_id": "run-8763",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b3128d45-07a7-4e69-94c1-b964d173900e",
+          "status": "FAILED",
+          "title": "Enter Ryugu-jo",
+          "plan_id": "pm-256",
+          "run_id": "run-8761",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c1039357-4ba4-4647-9175-8cb366561de7",
+          "status": "FAILED",
+          "title": "Enter Ryugu-jo",
+          "plan_id": "pm-256",
+          "run_id": "run-8752",
+          "error": "agent_failed: exit 1 class=push_failed marker=+ \"error\": \"agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main\",",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7c2f6e70-50ad-4564-91d6-ca9e7bed9283",
+          "status": "FAILED",
+          "title": "Enter Ryugu-jo",
+          "plan_id": "pm-256",
+          "run_id": "run-8749",
+          "error": "agent_failed: exit 1 class=quota marker=urllib.error.HTTPError: HTTP Error 403: rate limit exceeded",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cbfb6d6f-f022-4967-8eeb-b79415d8a53e",
+          "status": "FAILED",
+          "title": "Enter Ryugu-jo",
+          "plan_id": "pm-256",
+          "run_id": "run-8747",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "97e1589b-213b-44fb-8bd7-6d203e154e34",
+          "status": "FAILED",
+          "title": "product_owner pm-246",
+          "plan_id": "pm-246",
+          "run_id": "run-8730",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0d1bf426-d806-455f-a22d-35227899f204",
+          "status": "FAILED",
+          "title": "product_owner pm-258",
+          "plan_id": "pm-258",
+          "run_id": "run-8712",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2cf0b57ba573 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ae6896a0-e218-416a-abfc-91c592749ab3",
+          "status": "FAILED",
+          "title": "product_owner pm-256",
+          "plan_id": "pm-256",
+          "run_id": "run-8692",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4a7f32b9-94fe-4e4f-b83c-62af4b81dc39",
+          "status": "FAILED",
+          "title": "product_owner pm-256",
+          "plan_id": "pm-256",
+          "run_id": "run-8686",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bcf09602-7917-448d-971a-46623a45fe8f",
+          "status": "FAILED",
+          "title": "product_owner pm-248",
+          "plan_id": "pm-248",
+          "run_id": "run-8593",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "00341da4-46a5-4b12-be59-0f8d4de156f6",
+          "status": "FAILED",
+          "title": "acceptance_engineer pm-248",
+          "plan_id": "pm-248",
+          "run_id": "run-8581",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD dbca71f4ee3b is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bc169b77-3237-49be-a88e-01245057e78c",
+          "status": "FAILED",
+          "title": "acceptance_engineer pm-248",
+          "plan_id": "pm-248",
+          "run_id": "run-8575",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 88fcbd38213d is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "86b79907-defc-4d0a-98e6-43fd17f1b307",
+          "status": "FAILED",
+          "title": "Ship Fan-out Peeks",
+          "plan_id": null,
+          "run_id": null,
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=all_busy all_busy=2 held=1 offline=5 idle=0 workers=8",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "97a9bbd5-4f02-4178-b6fa-dfbff80648ad",
+          "status": "FAILED",
+          "title": "Ship Ink Radio",
+          "plan_id": null,
+          "run_id": null,
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=1 offline=5 idle=2 workers=9",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "name": "failed20",
+      "offset": 20,
+      "limit": 20,
+      "total": 62,
+      "returned": 20,
+      "tasks": [
+        {
+          "id": "a8671e15-a013-4fd1-a0b9-34bbecb36f31",
+          "status": "FAILED",
+          "title": "Add audited held-review resume",
+          "plan_id": "pm-244",
+          "run_id": "run-8489",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "830924f3-ff1c-4d61-aaac-b25e6324cc40",
+          "status": "FAILED",
+          "title": "Prove footer interactions and polish the scene",
+          "plan_id": "pm-241",
+          "run_id": "run-8447",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "76a56c65-4853-4d14-a0c6-3aa2a28fcb27",
+          "status": "FAILED",
+          "title": "Reject off-main deliveries",
+          "plan_id": "pm-245",
+          "run_id": "run-8418",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "03909aec-b28d-4c6f-a38d-9c952e1c87b4",
+          "status": "FAILED",
+          "title": "Vendor radio stations and tuning logic",
+          "plan_id": null,
+          "run_id": null,
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=2 held=0 offline=5 idle=2 workers=9",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f1bfa812-5256-4f67-836e-99f92417bcde",
+          "status": "FAILED",
+          "title": "acceptance_engineer pm-209",
+          "plan_id": "pm-209",
+          "run_id": "run-8207",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dbe59bbf-753b-4ab6-b405-460d4640fda9",
+          "status": "FAILED",
+          "title": "Review the final forged model revision",
+          "plan_id": "pm-209",
+          "run_id": "run-8174",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8301dc16-11f1-474d-ae67-019dcf770871",
+          "status": "FAILED",
+          "title": "Review the final forged model revision",
+          "plan_id": "pm-209",
+          "run_id": "run-8168",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b6ec04c3-e183-48eb-8bca-b6c6f3187bf5",
+          "status": "FAILED",
+          "title": "W5 Release workers and prove observe collection",
+          "plan_id": "pm-236",
+          "run_id": "run-8061",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5fa87125-a6cc-4059-b618-751d1541db82",
+          "status": "FAILED",
+          "title": "W4 Explanation surfaces and proof fixtures",
+          "plan_id": "pm-236",
+          "run_id": "run-8025",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "31491522-15e2-4451-a14d-cf22f6939b23",
+          "status": "FAILED",
+          "title": "Recover terminal reviewer failures and expose retry reasons",
+          "plan_id": "pm-209",
+          "run_id": "run-7996",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "59d654c5-6e1a-4c9d-8a1a-4a7cbd9bbf8e",
+          "status": "FAILED",
+          "title": "W1 Admission, model and permit contracts",
+          "plan_id": "pm-236",
+          "run_id": "run-7977",
+          "error": "agent_failed: exit 1",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dac437a9-dd45-4dc5-b871-adc370a225ea",
+          "status": "FAILED",
+          "title": "Analysis and prompts on fleet",
+          "plan_id": "pm-235",
+          "run_id": "run-7973",
+          "error": "agent_failed: exit 1",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "fd5e72ee-34d3-44e5-bfdc-8deb4385cf55",
+          "status": "FAILED",
+          "title": "Distinct Vietnamese takes and automatic capped-line recovery",
+          "plan_id": "pm-209",
+          "run_id": "run-7957",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bb9415b2-3856-4f03-8845-fe66494babde",
+          "status": "FAILED",
+          "title": "Distinct Vietnamese takes and automatic capped-line recovery",
+          "plan_id": "pm-209",
+          "run_id": "run-7895",
+          "error": "agent_failed: exit 1",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "35b12288-7abb-433b-bcb5-3f9eac460982",
+          "status": "FAILED",
+          "title": "Remove the cluster executor; z490 serves cluster",
+          "plan_id": "pm-234",
+          "run_id": "run-7888",
+          "error": "agent_failed: exit 1",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b273a243-dc65-4557-a7f2-5c0e7ffa73fc",
+          "status": "FAILED",
+          "title": "Components live proof off-host",
+          "plan_id": "pm-233",
+          "run_id": "run-7843",
+          "error": "no_account_available: no codex account is available for repo mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "188711f9-a723-438e-bf50-8a97496a643a",
+          "status": "FAILED",
+          "title": "product_owner pm-235",
+          "plan_id": "pm-235",
+          "run_id": "run-7783",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-kqviet cooling, claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-24T03:00:05Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3bcb6333-eebd-4666-9da2-ce21b89bc496",
+          "status": "FAILED",
+          "title": "CI jobs tagged by need",
+          "plan_id": "pm-234",
+          "run_id": "run-7785",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-kqviet cooling, claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-23T22:00:16Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4ea23bd5-2b47-4790-a877-bd35f98758a3",
+          "status": "FAILED",
+          "title": "product_owner pm-235",
+          "plan_id": "pm-235",
+          "run_id": "run-7783",
+          "error": "no_account_available: no claude account is available for repo mono-v2 (claude-vietkyx reserve (manual budget 7d 6000 min)) provider=claude reset_at=2026-10-28T13:52:46Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "01d357f9-56e4-4323-b51c-58f12005b434",
+          "status": "FAILED",
+          "title": "CI jobs tagged by need",
+          "plan_id": "pm-234",
+          "run_id": "run-7771",
+          "error": "agent_failed: exit 1",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "name": "completed0",
+      "offset": 0,
+      "limit": 20,
+      "total": 1140,
+      "returned": 20,
+      "tasks": [
+        {
+          "id": "7553112b-537d-4a9c-9a5b-4e63e400759f",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8829",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "964cb7be-c36d-4c2d-ab43-17214291b04e",
+          "status": "COMPLETED",
+          "title": "Enter Ryugu-jo",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f3074d81-6028-497b-978b-5e0c9d51d49c",
+          "status": "COMPLETED",
+          "title": "issue harvest doc sync quota:80a6a02088f7ac46",
+          "plan_id": null,
+          "run_id": null,
+          "error": null
+        },
+        {
+          "id": "3a08338f-73ed-40c9-a494-30e3bbf7a7a3",
+          "status": "COMPLETED",
+          "title": "environment canary deploy can-430",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a98c281a-1e9c-4803-91a0-754df0021eb6",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e6da1063-d2f0-4028-b99d-877c0827f271",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8823",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "049b2414-5c44-4da5-816c-8db0de23eabd",
+          "status": "COMPLETED",
+          "title": "Enter Ryugu-jo",
+          "plan_id": "pm-256",
+          "run_id": "run-8820",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "95b72164-974c-4192-b2f0-1cad6427b621",
+          "status": "COMPLETED",
+          "title": "Complete safe Kame fetch on the landed paper registry",
+          "plan_id": "pm-259",
+          "run_id": "run-8818",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5cd62f87-3a3a-4b86-91c2-f70c1bd3a4d6",
+          "status": "COMPLETED",
+          "title": "Enter Ryugu-jo",
+          "plan_id": "pm-256",
+          "run_id": "run-8817",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d39e83e0-0006-4e41-bc86-15fe41d75188",
+          "status": "COMPLETED",
+          "title": "environment canary deploy can-429",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "903b8efd-e0cf-4874-9b60-df1a8faa0e2d",
+          "status": "COMPLETED",
+          "title": "issue harvest doc sync ci_status:d409a2088358d714",
+          "plan_id": null,
+          "run_id": null,
+          "error": null
+        },
+        {
+          "id": "3a311226-9ba0-408f-bf69-06709cdb7021",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8816",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "6fd206ee-f13c-44e3-b72e-62623341b9c6",
+          "status": "COMPLETED",
+          "title": "environment canary deploy can-428",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "93ce2092-5bfe-4c95-981f-da2bd3ace8cf",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c39431b8-0c3b-48d3-a777-2a9fe4ab346e",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8814",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "deb9f2ff-5fc9-4632-b7b6-2029f235ed91",
+          "status": "COMPLETED",
+          "title": "Restore the deployment checks gate",
+          "plan_id": "pm-258",
+          "run_id": "run-8813",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f1706e38-852a-44b7-83ee-144362065f99",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8812",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1ce9d413-e929-4ad3-afd9-6bd0ff084d91",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "534bb3e6-c6b7-4f3f-ac39-c9fd5f75a411",
+          "status": "COMPLETED",
+          "title": "environment canary deploy can-427",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b052244b-fc14-4c54-8287-cb4d6c64d607",
+          "status": "COMPLETED",
+          "title": "issue harvest doc sync quota:9d6ba8d7364a2a4b",
+          "plan_id": null,
+          "run_id": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "completed20",
+      "offset": 20,
+      "limit": 20,
+      "total": 1140,
+      "returned": 20,
+      "tasks": [
+        {
+          "id": "d97bbcf2-59e5-445d-97b4-1ca6bf07c8fd",
+          "status": "COMPLETED",
+          "title": "environment canary deploy can-426",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bec3c74b-a910-45f1-8689-2685b6bfb0c8",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8809",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c3f31644-d01e-4841-bb60-9bc3b4b5b469",
+          "status": "COMPLETED",
+          "title": "Peel paper corners with a shared gesture contract",
+          "plan_id": "pm-259",
+          "run_id": "run-8803",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a0cd9b90-0511-419d-bf76-6b6a23b3fba4",
+          "status": "COMPLETED",
+          "title": "product_owner pm-264",
+          "plan_id": "pm-264",
+          "run_id": "run-8807",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "17314d72-edaa-4bcb-9595-2aba483cedcc",
+          "status": "COMPLETED",
+          "title": "product_owner pm-259",
+          "plan_id": "pm-259",
+          "run_id": "run-8806",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cbc13411-a533-4854-b7db-e88fcfab6d7d",
+          "status": "COMPLETED",
+          "title": "issue harvest doc sync agent_auth:0e38a9b11aae4112",
+          "plan_id": null,
+          "run_id": null,
+          "error": null
+        },
+        {
+          "id": "b960bf5e-5e8e-42a7-acbf-32fa823169da",
+          "status": "COMPLETED",
+          "title": "Restore the deployment checks gate",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ff8dc637-96fa-4f99-a701-e2aaaf79521f",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8800",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "007deb9b-8033-498d-96f2-5c95e3b203e5",
+          "status": "COMPLETED",
+          "title": "Ship separately guarded enforcement activation",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "5170e115-ee41-421e-a443-49a8510adf66",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ca0f5fce-62f8-4a0f-b2d2-cecaa56fc7ca",
+          "status": "COMPLETED",
+          "title": "product_owner pm-263",
+          "plan_id": "pm-263",
+          "run_id": "run-8795",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "937ed694-b8c3-4ece-9ea1-6fa297ef6c37",
+          "status": "COMPLETED",
+          "title": "Repair CI measurement and timely running evidence",
+          "plan_id": "pm-246",
+          "run_id": "run-8792",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "407b8032-2605-4426-9fc1-27f54e48eb3c",
+          "status": "COMPLETED",
+          "title": "Investigate slowness without pause storms",
+          "plan_id": "pm-252",
+          "run_id": "run-8791",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 3
+        },
+        {
+          "id": "41d067dd-e2a5-41f1-aa5f-f4d86ff414cd",
+          "status": "COMPLETED",
+          "title": "Peel paper corners with a shared gesture contract",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f2877d39-a399-477b-916e-616c3a38b997",
+          "status": "COMPLETED",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8789",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9e7ce153-02d0-4b90-9b32-ad0dbb86c144",
+          "status": "COMPLETED",
+          "title": "Repair CI measurement and timely running evidence",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "023a176a-b527-495b-ab70-bb82f40e22a8",
+          "status": "COMPLETED",
+          "title": "Give Kame a persistent accessible ink companion",
+          "plan_id": null,
+          "run_id": null,
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8a684e3a-2941-4d93-9364-5dcfd7603dcf",
+          "status": "COMPLETED",
+          "title": "product_owner pm-260",
+          "plan_id": "pm-260",
+          "run_id": "run-8783",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "13a44f47-af51-4cdc-ad42-1e5c03c10baa",
+          "status": "COMPLETED",
+          "title": "Repair CI measurement and timely running evidence",
+          "plan_id": "pm-246",
+          "run_id": "run-8781",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "531aa17a-d61f-4b28-83c1-47d9be148ff5",
+          "status": "COMPLETED",
+          "title": "Investigate slowness without pause storms",
+          "plan_id": "pm-252",
+          "run_id": "run-8780",
+          "error": null,
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "name": "pending",
+      "offset": 0,
+      "limit": 20,
+      "total": null,
+      "returned": null
+    },
+    {
+      "name": "running",
+      "offset": 0,
+      "limit": 20,
+      "total": 8,
+      "returned": 8,
+      "tasks": [
+        {
+          "id": "8202df54-5b25-4dc7-b269-079aa3972e62",
+          "status": "RUNNING",
+          "title": "Verify split part release",
+          "plan_id": "pm-260",
+          "run_id": "run-8833",
+          "error": null
+        },
+        {
+          "id": "fa0643b4-f27f-4f2f-8fb5-b8f9df710a49",
+          "status": "RUNNING",
+          "title": "Enter Ryugu-jo",
+          "plan_id": "pm-256",
+          "run_id": "run-8834",
+          "error": null
+        },
+        {
+          "id": "b7d71e1c-dc3b-43f0-ab60-55a2c52a2735",
+          "status": "RUNNING",
+          "title": "Ship separately guarded enforcement activation",
+          "plan_id": "pm-253",
+          "run_id": "run-8831",
+          "error": null
+        },
+        {
+          "id": "98b60b45-e11c-430e-9500-008c040cb597",
+          "status": "RUNNING",
+          "title": "Investigate slowness without pause storms",
+          "plan_id": null,
+          "run_id": null,
+          "error": null
+        },
+        {
+          "id": "aea4d6e5-a4f3-4e90-a6b6-5d6fbbcc7eaf",
+          "status": "RUNNING",
+          "title": "Repair CI measurement and timely running evidence",
+          "plan_id": "pm-246",
+          "run_id": "run-8801",
+          "error": null
+        },
+        {
+          "id": "03c16ea7-5c92-43cf-b919-89f1843c1204",
+          "status": "RUNNING",
+          "title": "Restore the deployment checks gate",
+          "plan_id": "pm-258",
+          "run_id": "run-8822",
+          "error": null
+        },
+        {
+          "id": "7a228952-702c-43b7-a10b-84be186d53c1",
+          "status": "RUNNING",
+          "title": "Complete safe Kame fetch on the landed paper registry",
+          "plan_id": "pm-259",
+          "run_id": "run-8821",
+          "error": null
+        },
+        {
+          "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+          "status": "RUNNING",
+          "title": "Build the pointer and gyro Peep-box",
+          "plan_id": "pm-264",
+          "run_id": "run-8819",
+          "error": null
+        }
+      ]
+    }
+  ],
+  "complete": false
+}

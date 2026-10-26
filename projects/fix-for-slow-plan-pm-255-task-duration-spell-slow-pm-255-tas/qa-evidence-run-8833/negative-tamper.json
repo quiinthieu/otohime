@@ -1,0 +1,30 @@
+{
+  "exit_code": 2,
+  "output": {
+    "ok": false,
+    "mode": "released",
+    "expected": {
+      "plan_id": "pm-255",
+      "predecessor_id": "pm-248",
+      "task_id": "t-1557",
+      "abandon_decision_ids": [
+        "dec-55805",
+        "dec-55807"
+      ]
+    },
+    "input_errors": [
+      "manifest_plan_sha256_mismatch"
+    ],
+    "manifest": {
+      "provided": true,
+      "completeness": "failed",
+      "captured_at": "2026-10-26T10:13:17.758Z"
+    },
+    "sha256": {
+      "plan": "5fa160a427cfbd8a0ad3d0c4e83924e96a7666ddb62c4800f786738ca090a9a3",
+      "schedule": "a799c46d3bd8be0f2019b01cb03224d04f29f9f322266b55b7b74803092f8a84",
+      "timeline": "4cd5a60e625387d3fc816f4d4bf4a81bf15f6c6a05b0fda4635b8cf089474bb9",
+      "runs": "c4239a848caf5ff18dcaf469c9b7a0254596fa95591b282b44148afb9e7473da"
+    }
+  }
+}

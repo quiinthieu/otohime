@@ -1,0 +1,171 @@
+{
+  "parent": {
+    "id": "pm-248",
+    "idea_id": "idea-248",
+    "kind": "project",
+    "title": "Paper Almanac Bits",
+    "repo_id": "otohime",
+    "slug": "otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons",
+    "status": "abandoned",
+    "current_revision": 4,
+    "approved_at": "2026-10-26T04:27:53.975898Z",
+    "auto_approved_at": "2026-10-26T04:27:53.975898Z",
+    "run_count": 59,
+    "commit_identity": {
+      "name": "Otohime",
+      "email": "quiinthieu@gmail.com"
+    },
+    "max_runs": null,
+    "draft_failures": 0,
+    "acceptance_cycle": 3,
+    "trace_id": "d2b6a7810c26edc93b8d9f448c842a38",
+    "hidden_at": null,
+    "acceptance_not_before": null,
+    "acceptance_pending_until": null,
+    "queue_rank_at": null,
+    "yield_count": 0,
+    "execution_started_at": "2026-10-25T22:25:13.934186Z",
+    "execution_started_source": "decision",
+    "created_at": "2026-10-25T21:08:35.350983Z",
+    "updated_at": "2026-10-26T04:49:13.554529Z"
+  },
+  "parent_decisions": {
+    "limit": 200,
+    "count": 200,
+    "cursor": "dec-54783",
+    "entries": [
+      {
+        "id": "dec-55807",
+        "at": "2026-10-26T04:49:13.660036Z",
+        "type": "decision",
+        "actor": "decider-agent",
+        "kind": "decision_applied",
+        "summary": "abandon on acceptance_exhausted",
+        "reason": "decider-agent run-8680",
+        "evidence": {
+          "note": "Abandon pm-248 as a plan, not as an accept. Seasons and the torn-sheet 404 were verified live at 1366x768 and 390x844 (probe-seasons 28/28, probe-lost 34/34), and the code for Ask the Ink's model tier is on main (npm test 1909 pass at 303eaa3, fake-model probe 53/53). The only failing outcome is production reach: GET/POST /api/ask are 404 and 0 of 17 deployed chunks carry api/ask. The causes are a stale Vercel deploy (esc-384) and ASK_LLM plus ANTHROPIC_API_KEY unset (esc-383). Both need the account owner, and they are cost and external-account decisions. A replan would add no code, because the product owner cannot set a key or redeploy. It would also duplicate pm-255, which already holds the remaining Ask work: t-1557 deploy-bundle probe and t-1558 tier probe, queued after_plan pm-248. Abandoning frees pm-255 to run. This is not an accept: the Ask production outcome stays unmet until a person sets the env, redeploys, and a later acceptance sees GET /api/ask return 200 with enabled:true. The plan can be reopened with plan_manager_reopen_plan.",
+          "task": null,
+          "answer": "",
+          "option": "abandon",
+          "profile": "",
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "acceptance found the delivered plan does not meet its outcome · acceptance failed 3/3 times · last change request projects/otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons/change_request_4.md · decide: https://apps.vietky.io.vn/plans/inbox/pm-248",
+            "evidence_ref": ""
+          },
+          "stop_reason": "acceptance_exhausted",
+          "escalation_id": "",
+          "change_request": ""
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      },
+      {
+        "id": "dec-55805",
+        "at": "2026-10-26T04:49:13.598897Z",
+        "type": "decision",
+        "actor": "decider-agent",
+        "kind": "abandoned",
+        "summary": "abandoned",
+        "reason": "decider-agent run-8680",
+        "evidence": {
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "the plan was abandoned and no cause was recorded",
+            "evidence_ref": ""
+          }
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      }
+    ]
+  },
+  "timeline_bounds": {
+    "limit": 200,
+    "count": 178,
+    "cursor": "ev:11131"
+  },
+  "entries": [
+    {
+      "id": "dec-56942",
+      "at": "2026-10-26T10:08:50.405176Z",
+      "type": "decision",
+      "actor": "orchestrator",
+      "task_id": "t-1578",
+      "run_id": "run-8833",
+      "kind": "run_scheduled",
+      "summary": "attempt 5/3 on codex-sol-6-1-high at 10:10 UTC",
+      "reason": "work: QA callback without qa_report",
+      "evidence": {
+        "class": "work",
+        "marker": "QA callback without qa_report",
+        "profile": "codex-sol-6-1-high",
+        "failed_run": "run-8829",
+        "not_before": "2026-10-26T10:10:49.313216084Z"
+      },
+      "refs": {
+        "run_id": "run-8833"
+      },
+      "trace_id": "4156e7859e7efe5c1615958e37b20cbd"
+    },
+    {
+      "id": "dec-56905",
+      "at": "2026-10-26T09:57:49.854968Z",
+      "type": "decision",
+      "actor": "orchestrator",
+      "task_id": "t-1578",
+      "kind": "green_gate_pass",
+      "summary": "green gate pass, QA is pending",
+      "reason": "green_gate_pass",
+      "evidence": {
+        "sha": "b73d93c",
+        "verification_id": "ver-3526"
+      },
+      "refs": {},
+      "trace_id": "4156e7859e7efe5c1615958e37b20cbd"
+    },
+    {
+      "id": "ev:11480",
+      "at": "2026-10-26T09:57:48.788932Z",
+      "type": "event",
+      "actor": "callback",
+      "kind": "task-callback",
+      "summary": "applied",
+      "reason": "tm:a98c281a-1e9c-4803-91a0-754df0021eb6:final",
+      "refs": {}
+    },
+    {
+      "id": "ev:11471",
+      "at": "2026-10-26T09:56:49.851504Z",
+      "type": "event",
+      "actor": "callback",
+      "kind": "task-callback",
+      "summary": "applied",
+      "reason": "tm:e6da1063-d2f0-4028-b99d-877c0827f271:final",
+      "refs": {}
+    },
+    {
+      "id": "dec-56898",
+      "at": "2026-10-26T09:56:27.358069Z",
+      "type": "decision",
+      "actor": "orchestrator",
+      "task_id": "t-1578",
+      "run_id": "run-8823",
+      "kind": "report_submitted",
+      "summary": "Preserved repaired c2ca9c2 evaluator per fix_plan_run-8816 and pushed containing documentation/evidence commit b73d93c on main. Required checks pass: 2096 unit, 41 focused, typecheck; QA adversarial 20/20. Saved run-8816 snapshots correctly exit 1; tampering exits 2. Deployment/release/dispatch remain unproven; CI/deployed checks handed back under SWE stop-at-push contract. Reused esc-395.",
+      "reason": "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/release-walkthrough.md",
+      "evidence": {
+        "sha": "b73d93ca825ae4c56a7931c22e2280a960b535e8",
+        "path": "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/release-walkthrough.md",
+        "cause": "",
+        "verdict": "",
+        "cited_sha": ""
+      },
+      "refs": {
+        "run_id": "run-8823"
+      },
+      "trace_id": "4156e7859e7efe5c1615958e37b20cbd"
+    }
+  ],
+  "platform_logs": null
+}

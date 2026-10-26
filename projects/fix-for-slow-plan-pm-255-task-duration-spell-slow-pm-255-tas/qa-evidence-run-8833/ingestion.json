@@ -1,0 +1,25 @@
+{
+  "database": "plan_manager",
+  "columns": [
+    "id",
+    "source",
+    "outcome",
+    "payload"
+  ],
+  "rows": [
+    [
+      "11471",
+      "callback",
+      "applied",
+      "{\"error\": \"\", \"plan_id\": \"pm-260\", \"success\": true, \"tm_task_id\": \"e6da1063-d2f0-4028-b99d-877c0827f271\"}"
+    ],
+    [
+      "11480",
+      "callback",
+      "applied",
+      "{\"error\": \"\", \"plan_id\": \"pm-260\", \"success\": true, \"tm_task_id\": \"a98c281a-1e9c-4803-91a0-754df0021eb6\"}"
+    ]
+  ],
+  "row_count": 2,
+  "truncated": false
+}
