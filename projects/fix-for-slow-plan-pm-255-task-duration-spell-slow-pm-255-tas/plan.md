@@ -1,21 +1,39 @@
 # Split Part Recovery
 
-Plan **pm-260**, current-revision planning handoff · product owner **run-8862** · 2026-10-26.
+Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
 ## Current execution handoff
 
-[Fresh bounded observations](planning-observations-run-8862.json) supersede the
-run-8851 status snapshots below. The board is still revision 3, drafting;
-the prior document's “revision 4” was a proposed handoff, never an admitted DAG.
-Previous summary **rep-5164 exists**; its empty proposal was refused, not missing.
+[Fresh bounded observations](planning-observations-run-8866.json), captured at
+**11:25:17 UTC**, supersede the earlier status snapshots below. pm-260 is still
+revision 3, drafting. Both previous summaries **rep-5164 and rep-5171 exist**;
+their empty local proposals were refused. The repeated missing-report prompt
+does not mean either report or the platform proposal disappeared.
 
-**mono-v2 pm-267 owns the four build contracts below.** Research run-8855 has
-succeeded with report **rep-5165**; product owner **run-8863 is running**, durable
-task-manager id **b106ddac-9cff-4d24-9a6a-28c0f0602e8c**. Its actual profile is
-codex-sol-6-1-high / gpt-6.1-sol / high. Do not file another replacement or
-propose mono-v2 paths to an otohime checkout. The active owner can build without
-the privileged release chore. Preserve its research findings: current default
+**mono-v2 pm-267 is executing its accepted four-task DAG.** Product owner
+run-8863 succeeded with **rep-5173**, and **dec-57246** admitted the contracts
+at source SHA **67882dcd8fc7a8b99a0a7e4acbc41571c61e1481**. The pushed platform
+plan/report SHA is **2c4b5cae88931b5ea18bd7405316104f44d3e445**; plan path:
+projects/after-plan-recovery-replacement-for-human-abandoned-pm-263-r/20261026111255_after_plan_recovery.md.
+The [accepted contract archive](platform-contracts-run-8866.json) preserves every
+problem, action item, repository interface, non-goal, verification command and
+QA requirement read from the live tasks. These are existing execution records,
+not a new proposal to otohime.
+
+| Sequence | Existing task | Dependencies | Observed status |
+| --- | --- | --- | --- |
+| 1 | t-1594 Release finished predecessor parts | none | running |
+| 2 | t-1595 Explain abandonment effects to deciders | 1 | backlog |
+| 3 | t-1596 Anchor task slowness to execution | none | ready |
+| 4 | t-1597 Prove split recovery on demand | 2, 3 | backlog |
+
+t-1594 has real SWE **run-8870**, durable task-manager id
+**51636328-89fa-4ffe-b5ce-ccc4d39cf536**, profile **claude-opus-high**, actual
+model **claude-opus-5-5**, effort **high**. Dispatch demonstrates execution of
+the platform contract has started; it demonstrates neither a finished build
+nor deployed repair nor pm-255 recovery. No replacement intake or duplicated
+platform proposal is needed. Preserve its research findings: current default
 slowness cases include platform_shadow_to_live, its platform counter is 2,
 the watchdog manifest gained six names, and observeStageTiming must stay green.
 Transactional drill fixture ids are reused after rollback; identify proof by
@@ -24,35 +42,47 @@ as live plans.
 
 **pm-255 remains queued, waiting/after_plan pm-248, execution_started_at=null.**
 Its complete 15-entry timeline ends at idea:idea-248 and has no release record;
-its unfiltered runs list contains only investigator run-8771. Slots are 5 used
-of 5. The independent parent hold persists regardless of capacity. The deployed
-plan-manager is still f19db8db, rollout complete with 2/2 replicas ready.
+its unfiltered runs list contains only investigator run-8771. Slots were 5 used
+of 5. The independent parent hold persists regardless of capacity. Research's
+last deployed build observation was f19db8db; this run did not reread deployment
+or execute deployed drills and makes no current rollout claim.
 No platform release, t-1557 execution or Ask output is delivered by this plan
 update. Keep the original acceptance outcomes below.
 
-**esc-405 is the current existing chore**, using fingerprint
-release-after-plan:pm-255:pm-248; esc-395 is its waived historical predecessor.
-Do not open another copy. The operator executes the conditional repair below
-under valid authority and attaches the real parent note on pm-255. A waived
-action is not completed work. No generic health/login probe demonstrates this
-private board mutation. The scheduler owns capacity placement and callbacks.
+**esc-405 is the existing waived chore**, using fingerprint
+release-after-plan:pm-255:pm-248; esc-395 is its historical predecessor.
+The decider waived esc-405 at **11:21:14 UTC**, with chore_done_at unset, and
+assigned recovery to deployed pm-267 or the existing privileged repair.
+Do not open another copy. Its waiver is not release evidence. The authenticated
+operator can execute the conditional repair below and attach the real parent
+note on pm-255 before the code lands; otherwise pm-267's deployed reconciliation
+must release the existing edge. No generic health/login probe demonstrates this
+private board mutation. Capacity placement and callbacks belong to the scheduler.
 
 The handoff chooses retained-edge terminal release in pm-267 and the existing
 one-edge administrative repair as the optional earlier recovery. Reopening
 pm-248 is unsupported for this abandonment; increasing caps bypasses the
 defective predicate; more local evidence-tool tasks cannot release the part.
-Those alternatives are rejected. No new service, library, UI or external
+Those alternatives remain rejected. No new service, library, UI or external
 dependency is needed. Standing policy files were read through the host mono-v2
 git mirror because their requested paths do not exist in otohime.
 
 There are **zero remaining otohime SWE tasks**. Re-proposing t-1593 creates new
-work rather than referencing its done record: proposal seeding allocates fresh
-task ids. ValidateProposedIn also rejects an empty proposal before recording
-it. Call the required proposal tool with the saved empty DAG and the pushed
-SHA, preserve its exact result in the summary, and report the workflow conflict
-without claiming admission. The platform owner proceeds independently; pm-260
-acceptance retains live recovery proof. No delivery-role board bypass or
-manufactured execution contract is authorized by this limitation.
+work rather than referencing its done record. ValidateProposed rejects an empty
+proposal before recording it. Call the required local proposal tool once with
+the saved empty DAG and pushed SHA, then submit a summary preserving the actual
+result. The accepted execution-complete proposal is dec-57246 on pm-267. Report
+the remaining local workflow conflict honestly instead of claiming admission.
+The next useful pm-260 step is independent acceptance of the deployed repair
+and live release, not another planning or offline-tool delivery. The platform
+continues independently; no task waits on it. No board bypass or manufactured
+execution contract is authorized by this limitation.
+
+The original outcomes remain **unmet and deferred**, owner **pm-267 / esc-405**,
+failure condition **pm-255 still waiting/after_plan once pm-267 is deployed**.
+Dispatch additionally requires a real t-1557 SWE run and durable task-manager
+id, with execution_started_at set; product output follows pm-255's own gates.
+Existing t-1593, fixtures and green checks cannot discharge those criteria.
 
 ## Preserve the delivered tool; route the remaining work
 
@@ -117,11 +147,12 @@ test-manifest targets. SWE stops at its tested commit and push. Platform QA and
 acceptance own deployed HTTP/MCP drill evidence. A fake launcher cannot prove
 real t-1557 execution or product output.
 
-The previous four-contract admission estimated about 2h43m below 6h.
-Current max_plan_elapsed is 6h and max_live_runs_per_plan is 1. The replacement's
-live role-p50 estimate and proposal response are authoritative. If size admission
-refuses, split only genuine platform scope into size-bounded parts. Never chain
-this work after pm-260 or the abandoned pm-263.
+Actual **dec-57246** admission is **9775.622884 seconds** (about 2h43m), below
+**21600 seconds / 6h**. SWE p50 is 2443.905721 seconds from 35 samples; all four
+tasks overlap, so their weighted sum is 9775.622884 seconds at the current
+max_live_runs_per_plan=1. Critical path 1→2→4 is 7331.717163 seconds; the maximum
+of those terms passes. The admitted DAG needs no split and has no dependency
+on pm-260 or abandoned pm-263. Preserve live runtime settings.
 
 ## Immediate live recovery: reuse esc-405, preserving esc-395 history
 
@@ -181,7 +212,7 @@ inspect raw assertions independently.
 | Supported reopen/retry | Retained edge, released unstarted part, supported reopen/retry, one tick | Hold not restored or running work cancelled: pm-267 |
 | Honest watchdog | Old-ready/null-execution fixture past threshold; executed below/equal/above controls; correct Since/spell/ReadyFor | Local task breach before execution or wrong anchor: pm-267 |
 | Negative controls | Unfinished predecessor still holds; deficient fixture/auth is refused; old build missing cases fails | Unconditional success or missing cases: pm-267 |
-| Real pm-255 release | Fresh four-tool capture, progress off after_plan, genuine dec-55805/dec-55807 receipt | Waived chore or narrative-only release: esc-395 / scheduler |
+| Real pm-255 release | Fresh four-tool capture, progress off after_plan, genuine dec-55805/dec-55807 receipt | Waived chore or narrative-only release: pm-267 / esc-405 / scheduler |
 | Real t-1557 dispatch | execution_started_at set; matching SWE run and durable tm_task_id | Scheduled-only, wrong task or missing ids: scheduler, observed by pm-260 acceptance |
 | Ask product output | Original t-1557/t-1558 locked executable gates and independent QA | A dispatch id alone is insufficient: pm-255 contracts |
 
@@ -200,7 +231,11 @@ complete (one run); the initial timeline was complete at 15 entries ending in
 idea:idea-248. The pm-248 decisions read was bounded to 100, incomplete overall,
 and included dec-55805/55806/55807. No new platform drill success is claimed.
 Run-8846's site CI/deploy discrepancies remain historical open evidence;
-this planning push proves no deployment repair.
+this planning push proves no deployment repair. Run-8866 read the complete
+15-entry pm-255 timeline and one-run pm-255 listing, and the three-run pm-267
+listing (research, PO, current SWE). It did not audit task-manager FAILED or
+COMPLETED pages, raw runner tails or callbacks; execution success and product
+delivery remain unproven rather than inferred from these limited listings.
 
 ## Proposal and planning delivery
 
@@ -211,9 +246,11 @@ tasks and refuses zero tasks as missing_acceptance_criteria (“proposal has no
 tasks”). Preserve the actual response. Do not invent a task or duplicate
 t-1593 to force admission. This workflow limitation is separate from ownership.
 
-Run-8862 used locked npm ci with Node v22.23.3. npm test passed **2133/2133**,
-zero skipped or failed. The final summary records typecheck, lint and observed
-CI separately. No application, evaluator, lockfile or policy changes.
+Run-8862 used locked npm ci with Node v22.23.3. Its npm test passed **2133/2133**,
+zero skipped or failed. Run-8866 installs the same lock on Node v22.23.3 and runs
+the project suite, typecheck and lint; its own summary records actual results,
+proposal response, branch/SHA and observed CI separately. This run's profile is
+codex-sol-6-1-high / gpt-6.1-sol / high. No application, evaluator, lockfile or policy changes.
 Commit and push origin HEAD; if main
 moves, pull --rebase, rerun npm test and push again without force.
 The summary names actual branch, SHA, proposal result, chore reuse and observed

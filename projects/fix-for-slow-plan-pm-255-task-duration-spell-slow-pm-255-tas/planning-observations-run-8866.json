@@ -1,0 +1,325 @@
+{
+  "run_id": "run-8866",
+  "captured_at": "2026-10-26T11:25:17.769589079Z",
+  "repository": "otohime",
+  "run_profile": {
+    "id": "codex-sol-6-1-high",
+    "model": "gpt-6.1-sol",
+    "effort": "high"
+  },
+  "plan": {
+    "id": "pm-260",
+    "idea_id": "idea-256",
+    "kind": "fix",
+    "title": "Split Part Recovery",
+    "repo_id": "otohime",
+    "slug": "fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas",
+    "status": "drafting",
+    "current_revision": 3,
+    "approved_at": "2026-10-26T10:33:20.814251Z",
+    "auto_approved_at": "2026-10-26T10:33:20.814251Z",
+    "run_count": 24,
+    "max_runs": null,
+    "draft_failures": 2,
+    "acceptance_cycle": 1,
+    "trace_id": "4156e7859e7efe5c1615958e37b20cbd",
+    "hidden_at": null,
+    "acceptance_not_before": null,
+    "acceptance_pending_until": null,
+    "queue_rank_at": null,
+    "yield_count": 0,
+    "execution_started_at": "2026-10-26T08:40:41.61986Z",
+    "execution_started_source": "promotion",
+    "created_at": "2026-10-26T08:18:09.426992Z",
+    "updated_at": "2026-10-26T11:19:32.15739Z",
+    "tasks": [
+      {
+        "id": "t-1578",
+        "title": "Verify split part release",
+        "status": "superseded"
+      },
+      {
+        "id": "t-1593",
+        "title": "Certify offline release evidence",
+        "status": "done"
+      }
+    ]
+  },
+  "platform": {
+    "id": "pm-267",
+    "idea_id": "idea-263",
+    "kind": "project",
+    "title": "After Plan Recovery",
+    "repo_id": "mono-v2",
+    "slug": "after-plan-recovery-replacement-for-human-abandoned-pm-263-r",
+    "status": "executing",
+    "current_revision": 1,
+    "approved_at": "2026-10-26T11:22:15.118283Z",
+    "auto_approved_at": "2026-10-26T11:22:15.118283Z",
+    "run_count": 3,
+    "max_runs": null,
+    "draft_failures": 0,
+    "acceptance_cycle": 0,
+    "trace_id": "a0b225bb603dd25bce6ca3ac5c6e1709",
+    "hidden_at": null,
+    "acceptance_not_before": null,
+    "acceptance_pending_until": null,
+    "queue_rank_at": null,
+    "yield_count": 0,
+    "execution_started_at": "2026-10-26T11:23:01.418493Z",
+    "execution_started_source": "promotion",
+    "created_at": "2026-10-26T11:01:26.055774Z",
+    "updated_at": "2026-10-26T11:23:01.418493Z",
+    "tasks": [
+      {
+        "id": "t-1594",
+        "sequence": 1,
+        "title": "Release finished predecessor parts",
+        "status": "running"
+      },
+      {
+        "id": "t-1595",
+        "sequence": 2,
+        "title": "Explain abandonment effects to deciders",
+        "status": "backlog",
+        "depends_on": [
+          "t-1594"
+        ]
+      },
+      {
+        "id": "t-1596",
+        "sequence": 3,
+        "title": "Anchor task slowness to execution",
+        "status": "ready"
+      },
+      {
+        "id": "t-1597",
+        "sequence": 4,
+        "title": "Prove split recovery on demand",
+        "status": "backlog",
+        "depends_on": [
+          "t-1595",
+          "t-1596"
+        ]
+      }
+    ],
+    "runs": [
+      {
+        "id": "run-8855",
+        "tm_task_id": "a2c8a349-51fa-4648-8a1e-a84688f86ee3",
+        "role": "research",
+        "status": "succeeded",
+        "agent_profile": "claude-fable-high",
+        "profile_flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high"
+      },
+      {
+        "id": "run-8863",
+        "tm_task_id": "b106ddac-9cff-4d24-9a6a-28c0f0602e8c",
+        "role": "product_owner",
+        "status": "succeeded",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+      },
+      {
+        "id": "run-8870",
+        "task_id": "t-1594",
+        "tm_task_id": "51636328-89fa-4ffe-b5ce-ccc4d39cf536",
+        "role": "software_engineer",
+        "status": "running",
+        "agent_profile": "claude-opus-high",
+        "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high"
+      }
+    ],
+    "admission": {
+      "id": "dec-57246",
+      "n": 4,
+      "sha": "67882dcd8fc7a8b99a0a7e4acbc41571c61e1481",
+      "path": "projects/after-plan-recovery-replacement-for-human-abandoned-pm-263-r/20261026111255_after_plan_recovery.md",
+      "estimate": {
+        "roles": {
+          "software_engineer": {
+            "role": "software_engineer",
+            "p50_s": 2443.905721,
+            "source": "samples",
+            "samples": 35,
+            "estimate_s": 2443.905721,
+            "legacy_source": "earliest_run",
+            "legacy_excluded": 7
+          }
+        },
+        "terms": [
+          {
+            "role": "software_engineer",
+            "weight": 1,
+            "overlaps": [
+              2,
+              3,
+              4
+            ],
+            "sequence": 1,
+            "duration_s": 2443.905721
+          },
+          {
+            "role": "software_engineer",
+            "weight": 1,
+            "overlaps": [
+              1
+            ],
+            "sequence": 2,
+            "duration_s": 2443.905721
+          },
+          {
+            "role": "software_engineer",
+            "weight": 1,
+            "overlaps": [
+              1,
+              4
+            ],
+            "sequence": 3,
+            "duration_s": 2443.905721
+          },
+          {
+            "role": "software_engineer",
+            "weight": 1,
+            "overlaps": [
+              1,
+              3
+            ],
+            "sequence": 4,
+            "duration_s": 2443.905721
+          }
+        ],
+        "limit_s": 21600,
+        "too_large": false,
+        "estimate_s": 9775.622884,
+        "weighted_s": 9775.622884,
+        "critical_path": [
+          1,
+          2,
+          4
+        ],
+        "critical_path_s": 7331.717163,
+        "max_live_runs_per_plan": 1
+      }
+    },
+    "report": {
+      "id": "rep-5173",
+      "plan_id": "pm-267",
+      "run_id": "run-8863",
+      "kind": "summary",
+      "path": "projects/after-plan-recovery-replacement-for-human-abandoned-pm-263-r/20261026111255_after_plan_recovery.md",
+      "git_sha": "2c4b5cae88931b5ea18bd7405316104f44d3e445",
+      "summary": "Proposed and pushed After Plan Recovery: four preserved QA-required build contracts accepted by dec-57246 at 9775.622884s (~2h43m) under 6h; no split, cap change or pm-260/pm-263 dependency. Plan, verbatim rep-5165 research, contracts and raw admission receipt are on main. Documentation-only pipeline 2989351629 skipped with zero bridges.",
+      "body": "Delivered projects/after-plan-recovery-replacement-for-human-abandoned-pm-263-r/20261026111255_after_plan_recovery.md, mono-v2-contracts.json, research.md (rep-5165 verbatim), and admission.json. Proposal title: After Plan Recovery. dec-57246 admitted four tasks with all weights 1, SWE p50 2443.905721s from 35 samples (7 legacy excluded), estimate 9775.622884s, critical path 1→2→4 at 7331.717163s, ceiling 21600s, max_live_runs_per_plan=1. No chaining needed. No task ids are seeded yet at this drafting revision; normal approval owns that.\n\nPreserved every verification item, QA-required flag, interface, acceptance criterion and dependency from pinned 406f07877e618a90b3270a53356e5036b591933f. Explicitly retained all 24 TestPM263AfterPlan_ groups, twelve new drill cases, platform_shadow_to_live, both newer watchdog groups, the proof client's platform counter ==2, and observeStageTiming. Corrected the archived pm-263 commit-prefix sentence to assigned pm-267/<task_id>:. Existing-stack bug fix: no new library, external API, screen, migration, paid provider or human planning gate. Settings refreshed; current cap 5 and per-plan runs 1 preserved.\n\nValidation before commit/push: pinned-contract comparison, exact groups/cases and fixture references, checkout-only required verification and timeout budgets, stable DAG, verbatim research equality and git diff --check all passed. No service code changed. Both focused commits use pm-267/run-8863: subjects. Safe push exited 0 on attempt 1, branch main, final SHA 2c4b5cae88931b5ea18bd7405316104f44d3e445; proposal source SHA 67882dcd8fc7a8b99a0a7e4acbc41571c61e1481 is included in its history. Pipeline https://gitlab.com/kq.viet/mono-v2/-/pipelines/2989351629 is skipped with zero bridges and manual-only jobs; no rollout for documentation artifacts.\n\nBoundaries: planning integration delivered; changed service execution and product recovery not yet demonstrated. QA/acceptance must independently exercise HTTP and MCP default drills on the build containing T4 and preceding fixes, with exact cases/counts/notes, negative controls, cleanup and real-store observations. Fake launcher results do not prove real SWE execution. Historical defect build f19db8db is insufficient. pm-260 acceptance retains fresh pm-255 scheduler reconciliation, genuine dec-55805/dec-55807 release receipt, and t-1557 durable dispatch; this proposal does not mutate or gate on those plans, resume them, change caps, or touch completed t-1593. Prior research's otohime archive availability remains unverified and nonblocking. No runtime history scan or deployed recovery claim is made in this PO run.\n\nActual board run profile is codex-sol-6-1-high, run-8863, fleet avietidol-z490, account codex-main. Decisions recorded throughout; lessons include replacement commit identity versus immutable proof names, and exposed propose_tasks schema requiring objects despite its string-array declaration. Summary completes this product-owner handoff only.",
+      "created_at": "2026-10-26T11:21:47.254418Z"
+    }
+  },
+  "part": {
+    "id": "pm-255",
+    "idea_id": "idea-248",
+    "kind": "project",
+    "title": "Paper Almanac Bits · part 2",
+    "repo_id": "otohime",
+    "slug": "otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons",
+    "status": "queued",
+    "current_revision": 1,
+    "approved_at": "2026-10-26T04:27:53.975898Z",
+    "auto_approved_at": "2026-10-26T04:27:53.975898Z",
+    "run_count": 1,
+    "commit_identity": {
+      "name": "Otohime",
+      "email": "quiinthieu@gmail.com"
+    },
+    "max_runs": null,
+    "draft_failures": 0,
+    "acceptance_cycle": 0,
+    "trace_id": "d2b6a7810c26edc93b8d9f448c842a38",
+    "hidden_at": null,
+    "acceptance_not_before": null,
+    "acceptance_pending_until": null,
+    "queue_rank_at": null,
+    "yield_count": 0,
+    "execution_started_at": null,
+    "after_plan_id": "pm-248",
+    "created_at": "2026-10-26T04:28:31.028078Z",
+    "updated_at": "2026-10-26T09:01:22.16176Z",
+    "tasks": [
+      {
+        "id": "t-1557",
+        "title": "Ask deploy bundle probe",
+        "status": "ready"
+      },
+      {
+        "id": "t-1558",
+        "title": "Ask tier production probe",
+        "status": "backlog"
+      }
+    ],
+    "progress": {
+      "state": "waiting",
+      "reason": "after_plan",
+      "holders": [
+        {
+          "plan_id": "pm-248"
+        }
+      ],
+      "queue_position": 1,
+      "queue_rank_at": "2026-10-26T04:27:53.975898Z",
+      "yield_count": 0,
+      "never_parks": true
+    },
+    "slots": {
+      "used": 5,
+      "max": 5,
+      "max_per_repo": 0,
+      "free": 0
+    },
+    "runs": [
+      {
+        "id": "run-8771",
+        "role": "investigator",
+        "status": "succeeded",
+        "tm_task_id": "565313df-a594-448d-94a3-70fa9c882f9f"
+      }
+    ],
+    "timeline": {
+      "limit": 100,
+      "count": 15,
+      "cursor": "idea:idea-248",
+      "complete": true,
+      "release_entries": []
+    }
+  },
+  "chore": {
+    "id": "esc-405",
+    "plan_id": "pm-260",
+    "reason": "operator_action",
+    "message": "Reuse existing esc-395; its waiver is not completion. Privileged board operator: execute the one-edge repair in the pushed run-8851 plan at 45129f9898ca4cd5c47a6745d95423c6d81d0b63. Fresh reads show pm-255 QUEUED, waiting/after_plan pm-248, execution_started_at=null; preserve CURRENT settings (5 active slots maximum at this read), task contracts and timestamps. Verify pm-248 is still abandoned; conditionally clear only pm-255.after_plan_id=pm-248 with your authorized procedure, audit the old edge, and write a genuine after_plan_released receipt on pm-255 with actual dec-55805/dec-55807 provenance and parent_note after the mutation. Correct the false claim that abandonment already freed the part. Resume only if pm-255 is paused at action time; if queued, the scheduler promotes it and submits t-1557 through its durable queue/callback. Return fresh get_plan/explain_schedule/get_timeline/list_runs plus actual release, execution start, t-1557 SWE run and durable task-manager ids. Do not reopen pm-248, use cap/reset or resume-bypass. pm-263 was human-abandoned dec-57095; platform scope is now independently dispatched as mono-v2 pm-267, research run-8855. No ready_probe: this route needs IAM headers unavailable to the HTTP probe; login-page/health 200 does not show release. This request is the existing administrative chore, not a policy choice or a runtime-capacity chore.",
+    "blocking": false,
+    "notified_at": "2026-10-26T11:07:19.065817Z",
+    "resolution": "[decider] Waived: the work goes on without this chore; it stays in the daily digest for a person with board-write authority. The decider cannot clear pm-255.after_plan_id, and fresh reads (explain_schedule 11:21 UTC) confirm pm-255 queued, waiting/after_plan on abandoned pm-248, t-1557 ready, 2 of 5 slots free. Meanwhile: (1) do NOT reopen pm-248, use cap/reset or resume-bypass, and do not claim pm-255 is released; the false 'abandon frees pm-255' note on dec-55807 stays recorded as incorrect in the pm-260 reports. (2) pm-260's code outcome is carried by pm-267 (research run-8855/PO run-8863): after_plan release on abandon, true decider text, and task_duration measured from execution start. Once pm-267 deploys, the orchestrator's own release path frees pm-255 (parts of an abandoned parent re-enter the promotion line), so no manual write is then needed. (3) Report pm-255 release/t-1557 dispatch as an unmet, deferred criterion with owner pm-267 / esc-405 and failure condition 'pm-255 still waiting/after_plan once pm-267 is deployed'; do not mark the plan delivered on it. (4) Any further task for this plan must not wait on the release: order work that does not need it first.",
+    "resolved_at": "2026-10-26T11:21:14.608355Z",
+    "auto_resolve_at": "0001-01-01T00:00:00Z",
+    "fingerprint": "release-after-plan:pm-255:pm-248",
+    "probed_at": "0001-01-01T00:00:00Z",
+    "waived_at": "2026-10-26T11:21:14.608355Z",
+    "chore_done_at": "0001-01-01T00:00:00Z"
+  },
+  "preceding_reports": [
+    {
+      "id": "rep-5171",
+      "run_id": "run-8862",
+      "summary": "Pushed current Split Part Recovery handoff and bounded observations on main at fe0dd82. Required proposal called and refused: zero remaining otohime tasks. pm-267 PO run-8863 owns platform contracts; esc-405 owns privileged release. pm-255 still held with no SWE dispatch. Tests 2133 pass; CI pending."
+    },
+    {
+      "id": "rep-5164",
+      "run_id": "run-8851",
+      "summary": "Pushed revised ownership plan; refiled human-abandoned pm-263 as active mono-v2 pm-267 (run-8855). Preserved done t-1593; empty local proposal refused. Same-fingerprint release chore returned esc-405; pm-255 release/dispatch remain unmet. Tests 2133 pass; CI pending."
+    }
+  ],
+  "evidence_limits": [
+    "Plan-manager runs/timeline are read-only snapshots, not task-manager FAILED/COMPLETED history or callback execution audits.",
+    "No new deployed drill or live release is demonstrated.",
+    "Capacity snapshot is bounded to the captured instant; no settings changed."
+  ]
+}

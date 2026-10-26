@@ -1,0 +1,259 @@
+{
+  "source_plan": "pm-267",
+  "admission_decision": "dec-57246",
+  "source_sha": "67882dcd8fc7a8b99a0a7e4acbc41571c61e1481",
+  "source_path": "projects/after-plan-recovery-replacement-for-human-abandoned-pm-263-r/20261026111255_after_plan_recovery.md",
+  "tasks": [
+    {
+      "id": "t-1594",
+      "sequence": 1,
+      "title": "Release finished predecessor parts",
+      "role": "software_engineer",
+      "acceptance_criteria": "One tick releases existing queued/drafting parts of done, abandoned, rejected or failed_draft predecessors, retains AfterPlanID, and copies the final terminal note to each nonterminal direct part. Supported budget-abandon reopen and failed_draft retry restore the hold on unstarted parts; an unfinished predecessor holds resume as well as promotion. Existing running work is not cancelled.",
+      "contract": {
+        "problem": "afterPlanHold releases only on done, terminal handling emits advisory-only orphan evidence, and continuePausedPlan bypasses the unfinished-predecessor hold.",
+        "action_items": [
+          "Refresh current main and read this replacement handoff plus the pinned 406f07877e618a90b3270a53356e5036b591933f source before implementation. Use assigned pm-267/<task_id>: commit subjects, preserve the TestPM263AfterPlan_ names and all previous required targets. This SWE run stops at the safe push; deployed proof belongs to independent QA/acceptance.",
+          "Write failing table and engine tests first in pm245_split_test.go using forEachBackend/cwEngine. Cover done/abandoned/rejected/failed_draft one-tick queued promotion with a free slot, full-cap eligibility without an after_plan reason, exactly one research run for a held draft, an executing predecessor remaining held, supported budget-abandoned reopen restoring an unstarted queued hold, failed_draft retry restoring that hold, and no cancellation of existing running work.",
+          "Use orchestrator isTerminalPlanStatus in afterPlanHold; do not widen board.IsFinishedPlanStatus (decision/amendment authority) or confuse TaskSuperseded with plan delivery. Retain AfterPlanID and existing validateAfterPlan intake refusals. Route continuePausedPlan through the same after_plan predicate before direct execution; unfinished-parent resume stays queued, terminal-parent resume remains eligible subject to existing caps. Preserve normal no-task drafting and finishing paths.",
+          "Replace advisory-only orphan handling with transactional, idempotent after_plan_released evidence on the parent and each nonterminal direct part, including paused/hidden parts. Evidence carries after_plan_id/predecessor id and status, terminal decision id, final summary/note, released_parts ids, advisory:false and the actual eligibility effect. Use board.Store.RecordEvent unique keys keyed by terminal transition and child, plus one transition-level notification key; callbacks, repeated ticks, restarts and two engines produce no duplicate decisions or notification. Do not use timestamps alone as transition identity.",
+          "Wire both finishPlanBy and the failed_draft terminal path in autonomy.go, and reconcile already-terminal predecessors in the tick so preexisting queued and drafting parts receive release provenance within one tick. In decision.go pass the applied abandon note into finishPlanBy evidence because decision_applied is appended later; cover other terminal entry points and a genuinely late terminal note without permanently claiming an incomplete release. Copy the actual final note atomically with evidence, not an earlier unrelated timeline entry. Test late-note ordering, a second tick, terminal/reopen/terminal cycles and two-engine races on memory and PostgreSQL.",
+          "Release held drafts through releaseHeldDraft/relaunchDraft. Include predecessor status in draft_released and carry real predecessor status/terminal note into executor/prompt.go: done builds on current main; abandoned/rejected/failed_draft plans from current main and explicitly names undelivered assumptions. No automatic resume of paused parts; a predecessor reopening/retrying restores a hold for unstarted work and blocks new dispatch through Progress while already running work continues.",
+          "Create tests/required/after-plan-release.txt and Makefile target test-after-plan-release using tests/with-postgres.sh and tests/run_required.py with nonempty exact names and memory/postgres subtests. Add it to ci-gates. Use TestPM263AfterPlan_ for new tests with the required group names in 20261026085239_after_plan_recovery.md. Rename the old TestPM245Split_AbandonedPredecessorHoldsPartsWithOneNotice together with every legacy manifest and Makefile -run selector that references it; maintain test-pm245-split and test-scheduling coverage.",
+          "Update ARCHITECTURE.md chained-parts, Progress and supported reopen/retry sections and relevant Mermaid sequences; update the now-stale chained-parts rule in service CLAUDE.md. Add a unique timestamped entry at root changelogs/ describing root cause, files, validation and deployment ownership. Run all verification items, commit with the assigned pm-267/<task_id>: prefix, and push through git-push-safe; the SWE run ends at push. QA/acceptance own deployed evidence. Also run the affected legacy compatibility gates named in the handoff and keep their ci-gates wiring; these are implementation checks, not duplicated verification items.",
+          "Required exact groups: TestPM263AfterPlan_ReleaseFinishedPredecessors, TestPM263AfterPlan_FullCapEligibility, TestPM263AfterPlan_DraftReleaseOnce, TestPM263AfterPlan_ResumeHold, TestPM263AfterPlan_ReopenAndRetry, TestPM263AfterPlan_ReleaseProvenance, TestPM263AfterPlan_ReleaseRace, TestPM263AfterPlan_ExecutorPrompt. The release target must select the new prefix on orchestrator/executor as appropriate; the pm245 regex alone misses it. Run make test-pm245-split and make test-scheduling as compatibility checks. Legacy terminal-note reconciliation binds the terminal decision and its own later decision_applied by transition identity/id ordering; include the dec-55805/dec-55807 ordering as a fixture without mutating pm-255."
+        ],
+        "interfaces": "servers/plan-manager/internal/orchestrator/schedule.go; servers/plan-manager/internal/orchestrator/after_plan.go; servers/plan-manager/internal/orchestrator/engine.go; servers/plan-manager/internal/orchestrator/autonomy.go; servers/plan-manager/internal/orchestrator/decision.go; servers/plan-manager/internal/orchestrator/failure_apply.go; servers/plan-manager/internal/orchestrator/pm245_split_test.go; servers/plan-manager/internal/executor/prompt.go; servers/plan-manager/internal/executor/prompt_test.go; servers/plan-manager/internal/executor/testdata/prompt_research.txt; servers/plan-manager/internal/executor/testdata/prompt_product_owner.txt; servers/plan-manager/tests/required/after-plan-release.txt; servers/plan-manager/tests/required/pm245-split.txt; servers/plan-manager/tests/required/scheduling.txt; servers/plan-manager/Makefile; servers/plan-manager/CLAUDE.md; servers/plan-manager/ARCHITECTURE.md; changelogs/",
+        "non_goals": [
+          "Clearing provenance edges as normal scheduler policy",
+          "Automatically resuming paused parts or cancelling running part work",
+          "Broadening reopen authorization or changing intake validation",
+          "Changing active-plan caps, schema, retry budgets or thresholds",
+          "Repairing/resuming pm-255 or gating on pm-260"
+        ],
+        "verification": [
+          {
+            "name": "build",
+            "cwd": "servers/plan-manager",
+            "cmd": "make build",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "service tests",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "test-postgres",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-postgres",
+            "expect": "exit0",
+            "timeout_s": 1800
+          },
+          {
+            "name": "test-conditional-writes",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-conditional-writes",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "test-after-plan-release",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-after-plan-release",
+            "expect": "match:run_required: PASS \\([1-9][0-9]* required tests,",
+            "timeout_s": 1800
+          }
+        ],
+        "qa": "required"
+      }
+    },
+    {
+      "id": "t-1595",
+      "sequence": 2,
+      "title": "Explain abandonment effects to deciders",
+      "role": "software_engineer",
+      "acceptance_criteria": "A decider packet names every open direct part, including hidden/paused parts, with its status and open-task count. Prompts and applied abandon/reject responses describe scheduling eligibility honestly and carry released_parts; terminal decisions and per-part timelines contain the actual final note. No-parts packets render no parts section.",
+      "depends_on": [
+        "t-1594"
+      ],
+      "contract": {
+        "problem": "Deciders see no direct after_plan parts and have claimed abandonment frees a part while the scheduler held it; they need the deployed eligibility policy and actual effects.",
+        "action_items": [
+          "Refresh current main and read this replacement handoff plus the pinned 406f07877e618a90b3270a53356e5036b591933f source before implementation. Use assigned pm-267/<task_id>: commit subjects, preserve the TestPM263AfterPlan_ names and all previous required targets. This SWE run stops at the safe push; deployed proof belongs to independent QA/acceptance.",
+          "Declare executor.DeciderPart and DeciderPacket.Parts with ID, title, status and open task count. Populate via ListPlans(PlanFilter{AfterPlanID:p.ID, Visibility:VisibilityAll}), exclude terminal parts using the existing orchestrator predicate and sort ids deterministically. Count open tasks with the same done/superseded semantics as existing hasOpenTasks; do not count superseded tasks as open.",
+          "Render a parts section only when parts exist. Say abandon/reject releases existing parts into their own promotion line within one tick subject to caps, guarantees neither immediate execution nor auto-resume of paused parts, and uses current main without assuming undelivered predecessor output. Replan/nonterminal predecessors retain the hold, accept releases only when the predecessor actually becomes terminal, and supported reopen/retry restores an unstarted hold without cancelling already running work.",
+          "Through decision.go and existing reject/terminal command paths in engine.go, attach deterministic released_parts ids and real release policy to applied abandon/reject responses and terminal decision evidence. List paused parts as eligibility released but still paused. Pass the actual decider note to T1's terminal helper before the status/evidence transaction finishes; use that helper for atomic/idempotent per-part evidence. No new policy choice or authorization edge.",
+          "Write failing packet, prompt/snapshot and applied-decision tests for one/no parts, hidden part, terminal exclusion, paused part, done/superseded open-task counts, stable ordering and actual note/evidence/result round trip on both stores. Create internal/executor/decider_prompt_test.go (absent at the planning base) and update relevant testdata snapshots; add the exact group names from 20261026085239_after_plan_recovery.md. Create the exact snapshot fixtures internal/executor/testdata/decider_parts.txt and decider_no_parts.txt.",
+          "Create tests/required/after-plan-decider.txt and Makefile test-after-plan-decider via with-postgres.sh/run_required.py with exact backend subtests and prompt tests, nonempty positive completion output, and ci-gates wiring. Preserve all T1 and legacy targets.",
+          "Update architecture and a unique timestamped root changelog. Run the verification items, commit with the assigned plan/task prefix and push via git-push-safe; SWE ends at push and QA/acceptance own staging proof. Also run the affected legacy compatibility gates named in the handoff and keep their ci-gates wiring; these are implementation checks, not duplicated verification items.",
+          "Required exact groups: TestPM263AfterPlan_DeciderPacket, TestPM263AfterPlan_DeciderEffects, TestPM263AfterPlan_DeciderPrompt. hasOpenTasks is in decision.go; preserve done/superseded counting. Run make test-after-plan-release, make test-pm245-split and make test-scheduling as compatibility checks."
+        ],
+        "interfaces": "servers/plan-manager/internal/executor/decider_prompt.go; servers/plan-manager/internal/executor/decider_prompt_test.go; servers/plan-manager/internal/executor/testdata/decider_parts.txt; servers/plan-manager/internal/executor/testdata/decider_no_parts.txt; servers/plan-manager/internal/orchestrator/decider.go; servers/plan-manager/internal/orchestrator/decision.go; servers/plan-manager/internal/orchestrator/engine.go; servers/plan-manager/internal/orchestrator/after_plan.go; servers/plan-manager/internal/orchestrator/decider_test.go; servers/plan-manager/tests/required/after-plan-decider.txt; servers/plan-manager/Makefile; servers/plan-manager/ARCHITECTURE.md; changelogs/",
+        "non_goals": [
+          "New decider choices or human policy gates",
+          "Changing abandon/reopen authorization",
+          "Guaranteeing runtime capacity or auto-resuming paused plans",
+          "Changing pm-255 state or max_active_plans"
+        ],
+        "verification": [
+          {
+            "name": "build",
+            "cwd": "servers/plan-manager",
+            "cmd": "make build",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "service tests",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "test-postgres",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-postgres",
+            "expect": "exit0",
+            "timeout_s": 1800
+          },
+          {
+            "name": "test-after-plan-decider",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-after-plan-decider",
+            "expect": "match:run_required: PASS \\([1-9][0-9]* required tests,",
+            "timeout_s": 1800
+          }
+        ],
+        "qa": "required"
+      }
+    },
+    {
+      "id": "t-1596",
+      "sequence": 3,
+      "title": "Anchor task slowness to execution",
+      "role": "software_engineer",
+      "acceptance_criteria": "A queued plan with execution_started_at=null produces neither task_duration nor task_attempts measures, pauses or investigators despite old ready timestamps. For executed, unheld plans task duration, Since/spell identity and investigator ReadyFor use max(first-ready, execution start). Held parts suppress local task rules while independent CI/platform evidence remains attributable.",
+      "contract": {
+        "problem": "The watchdog uses inherited tasks.started_at before a split part ever executes, can flag zero-attempt tasks and gives investigators the same misleading duration.",
+        "action_items": [
+          "Refresh current main and read this replacement handoff plus the pinned 406f07877e618a90b3270a53356e5036b591933f source before implementation. Use assigned pm-267/<task_id>: commit subjects, preserve the TestPM263AfterPlan_ names and all previous required targets. This SWE run stops at the safe push; deployed proof belongs to independent QA/acceptance.",
+          "Write controlled-clock regressions first in pm245_speed_test.go and the existing pm245_watchdog_test.go harness. Cover an abandoned-parent part, an unfinished-parent part and a plan without after_plan, all never-executed with old first-ready: no task_duration, task_attempts, pause or investigator. Include a zero-real-attempt negative control and an executing real-attempt positive control on memory and PostgreSQL.",
+          "Export/reuse board.sampleStart rather than duplicating arithmetic. Skip both local task rules when ExecutionStartedAt is nil. For a started task on an executed plan use max(task.StartedAt, plan.ExecutionStartedAt) consistently for duration, Since, spell key and slownessPacket ReadyFor; missing task start cannot invent a duration and ReadyFor stays zero. Preserve actual attempt counting and free-failure exclusions; a legacy attempt measurement without task first-ready may use execution start for identity but must not fabricate a task-duration measurement.",
+          "Use Progress's existing after_plan evaluation to suppress local task_duration/task_attempts on held parts, including a previously executing part held after supported predecessor reopen/retry. Preserve independent CI-wait/platform incident behavior; evidence on a held part explicitly names reason=after_plan and predecessor holder id. Leave normal idle gating and existing modes/budgets unchanged.",
+          "Test earlier/later first-ready relative to execution, exact/below/above duration threshold (strictly above breaches, equality does not), real-attempt threshold/exclusions, missing-start packet output, held suppression, idle/CI controls, and dedupe after release with the correct execution-anchored spell. Keep historical tasks.started_at and samples unchanged.",
+          "Add a nil-execution-start option to drill_slowness.go slowFixture and preserve the legitimate rules positive case (execution start 4h ago, first-ready 3h ago remains a 3h duration). Update affected old watchdog/speed assertions and required manifests together without deleting their positive controls.",
+          "Create tests/required/after-plan-clock.txt and Makefile test-after-plan-clock using with-postgres.sh/run_required.py, nonempty exact tests and both backend subtests, with ci-gates wiring. Implement the exact new group names from 20261026085239_after_plan_recovery.md and cover board anchor unit tests. Create internal/board/types_test.go for the pure shared-anchor cases; this test file is absent at the planning base.",
+          "Update slow_task_duration setting help, internal/appconfig/defaults.yaml comments/descriptions, service CLAUDE.md and ARCHITECTURE.md to explain execution-qualified first-ready semantics. Keep threshold defaults, storage schema, metrics labels and deployment configuration unchanged. Add a unique root timestamped changelog; run verification, commit with assigned plan/task prefix and push with git-push-safe. SWE ends at push. Also run the affected legacy compatibility gates named in the handoff and keep their ci-gates wiring; these are implementation checks, not duplicated verification items.",
+          "Required exact groups: TestPM263AfterPlan_NeverExecuted, TestPM263AfterPlan_TaskClock, TestPM263AfterPlan_TaskAttempts, TestPM263AfterPlan_HeldTaskRules, TestPM263AfterPlan_PacketClock, TestPM263AfterPlan_ClockDedupe, TestPM263AfterPlan_SampleStart. Keep PlanQueued in slowStatuses so executed yielded plans still measure CI. Preserve platform_shadow_to_live, the TestPM245Watchdog_PlatformShadowToLive and TestPM245Watchdog_PlatformModeTransitions groups with both backend subtests, and observeStageTiming/internal/timing behavior. Run make test-pm245-speed, make test-pm245-watchdog and make test-scheduling as compatibility checks."
+        ],
+        "interfaces": "servers/plan-manager/internal/board/types.go; servers/plan-manager/internal/board/types_test.go; servers/plan-manager/internal/orchestrator/slowness.go; servers/plan-manager/internal/orchestrator/pm245_speed_test.go; servers/plan-manager/internal/orchestrator/pm245_watchdog_test.go; servers/plan-manager/internal/orchestrator/drill_slowness.go; servers/plan-manager/internal/orchestrator/settings.go; servers/plan-manager/internal/appconfig/defaults.yaml; servers/plan-manager/tests/required/after-plan-clock.txt; servers/plan-manager/tests/required/pm245-speed.txt; servers/plan-manager/tests/required/pm245-watchdog.txt; servers/plan-manager/Makefile; servers/plan-manager/CLAUDE.md; servers/plan-manager/ARCHITECTURE.md; changelogs/",
+        "non_goals": [
+          "Rewriting tasks.started_at or historical samples",
+          "Changing thresholds, modes, metrics cardinality or retry budgets",
+          "Automatically resuming slow plans",
+          "Suppressing independent CI/platform failure evidence",
+          "Changing runtime caps or repairing pm-255"
+        ],
+        "verification": [
+          {
+            "name": "build",
+            "cwd": "servers/plan-manager",
+            "cmd": "make build",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "service tests",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "test-postgres",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-postgres",
+            "expect": "exit0",
+            "timeout_s": 1800
+          },
+          {
+            "name": "test-after-plan-clock",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-after-plan-clock",
+            "expect": "match:run_required: PASS \\([1-9][0-9]* required tests,",
+            "timeout_s": 1800
+          }
+        ],
+        "qa": "required"
+      }
+    },
+    {
+      "id": "t-1597",
+      "sequence": 4,
+      "title": "Prove split recovery on demand",
+      "role": "software_engineer",
+      "acceptance_criteria": "The existing HTTP/local and MCP split/slowness drill surfaces exercise deployed shared scheduler/watchdog code with controlled clocks, isolated real-store fixtures and a fake launcher. Required named cases prove terminal-parent release/note provenance, supported reopen/retry, unfinished-parent hold, never-executed suppression and execution-clock thresholds; responses contain build identity, exact counts and cleanup. Live plans and settings remain unchanged.",
+      "depends_on": [
+        "t-1595",
+        "t-1596"
+      ],
+      "contract": {
+        "problem": "Unit success alone cannot show the on-demand deployed surfaces exercise the repair; existing drills encode the orphan and inherited-clock defects.",
+        "action_items": [
+          "Refresh current main and read this replacement handoff plus the pinned 406f07877e618a90b3270a53356e5036b591933f source before implementation. Use assigned pm-267/<task_id>: commit subjects, preserve the TestPM263AfterPlan_ names and all previous required targets. This SWE run stops at the safe push; deployed proof belongs to independent QA/acceptance.",
+          "Extend drill_plan_split with the 20261026085239_after_plan_recovery.md named recovery cases: abandoned one-tick release with final note on part timeline, done release, full-cap released eligibility, supported budget reopen restoring an unstarted hold, failed_draft retry restoring the hold and executing-predecessor negative control. Use the real Engine tick in one rolled-back fixture transaction, fake launcher and private metrics. Assert exact decisions, statuses, one launch where eligible, retained AfterPlanID and no fixture-row leaks or live setting/plan changes.",
+          "Extend default drill_slowness with the 20261026085239_after_plan_recovery.md named recovery cases: old ready/null execution start produces zero local breaches, real promotion sets execution start, controlled below/equal/above threshold advances produce correct Since/ReadyFor, executing real-attempt positive breach and unfinished/reopened predecessor negative controls. Call the same tick/watchdog functions with no wall-clock delays or live runtime submissions. Preserve existing legitimate CI/idle/platform cases.",
+          "Reuse repairDrillStore.Transact joining the outer transaction and hide live settings/profile-health reads so scenario bounds survive callbacks. Do not copy the engine or introduce a nested PostgreSQL transaction. Verify cleanup and live settings/plan snapshots before/after, including error paths; the documented pm-platform drill audit decision is the only durable mutation.",
+          "Keep POST /api/v1/drills/plan-split and /api/v1/drills/slowness, local shared mux and MCP tools invoking the same methods. Update descriptions and conformance/handler tests to require every new exact case name, build identity, real/fake boundary, counts, completeness and cleanup. Missing cases or an old build fail even when pass=true. Add unauthenticated/wrong-token refusals and a deliberately deficient/refusing fixture negative control. Use default slowness input, not live_submit.",
+          "Add tests/required/after-plan-recovery.txt and Makefile target test-after-plan-recovery with with-postgres.sh/run_required.py, exact nonempty union of T1–T3 cases and new drill/HTTP/MCP cases, both memory and PostgreSQL subtests, and ci-gates wiring. Assert every required case ran and no tests skipped. Keep previous targets/manifests working; update scripts/pm245_proof.py offline tests if its split/watchdog response validation changes. Do not invoke legacy staging targets that alter a bootstrap setting or submit a real investigator.",
+          "Update architecture with the named case/evidence contract, shared path and rollback boundary, plus a unique root timestamped changelog. Run all verification, commit with assigned plan/task prefix and push via git-push-safe. SWE ends at push. Independent deployed HTTP/MCP drills, negative controls, raw persisted evidence and build/run identities are QA/acceptance work. Also run the affected legacy compatibility gates named in the handoff and keep their ci-gates wiring; these are implementation checks, not duplicated verification items.",
+          "Required exact groups: TestPM263AfterPlan_SplitDrill, TestPM263AfterPlan_SlownessDrill, TestPM263AfterPlan_DrillCleanup, TestPM263AfterPlan_DrillHTTP, TestPM263AfterPlan_DrillMCP, TestPM263AfterPlan_DrillNegativeControl. Exact new split cases: terminal_abandoned_release, terminal_done_release, terminal_full_cap_eligible, supported_reopen_hold, failed_draft_retry_hold, unfinished_predecessor_hold. Exact new slowness cases: never_executed_tasks, promotion_execution_anchor, task_clock_thresholds, executing_task_breach, unfinished_predecessor_tasks_held, reopened_predecessor_tasks_held. Keep platform_shadow_to_live, its outbox counts, pm245_proof.py's ci_wait/platform counter == 2, and observeStageTiming. Rolled-back drill ids can be reused; compare fixture names/prefixes, counts, decisions and build.GitCommit rather than treating returned ids as live plans. Run make test-pm245-split, make test-pm245-speed, make test-pm245-watchdog, make test-pm245-acceptance-repair, make test-scheduling and all three preceding after-plan targets as compatibility checks; use no legacy staging targets."
+        ],
+        "interfaces": "servers/plan-manager/internal/orchestrator/drill_plan_split.go; servers/plan-manager/internal/orchestrator/drill_slowness.go; servers/plan-manager/internal/orchestrator/pm245_split_test.go; servers/plan-manager/internal/orchestrator/pm245_speed_test.go; servers/plan-manager/internal/orchestrator/pm245_watchdog_test.go; servers/plan-manager/internal/api/http.go; servers/plan-manager/internal/api/pm245_slowness_test.go; servers/plan-manager/internal/mcp/drill.go; servers/plan-manager/internal/mcp/pm245_slowness_test.go; servers/plan-manager/internal/mcp/tools_test.go; servers/plan-manager/tests/required/after-plan-recovery.txt; servers/plan-manager/tests/required/pm245-split.txt; servers/plan-manager/tests/required/pm245-watchdog.txt; servers/plan-manager/Makefile; servers/plan-manager/scripts/pm245_proof.py; servers/plan-manager/ARCHITECTURE.md; changelogs/",
+        "non_goals": [
+          "Using real pm-255 or pm-248 as destructive drill fixtures",
+          "Changing live settings, provisioning runtimes or making real investigator submissions",
+          "New scheduler, cron, soak or natural-run proof",
+          "Claiming fake-launcher output proves real SWE product delivery",
+          "Taking pm-260's one-edge administrative repair or t-1557 dispatch proof"
+        ],
+        "verification": [
+          {
+            "name": "build",
+            "cwd": "servers/plan-manager",
+            "cmd": "make build",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "service tests",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test",
+            "expect": "exit0",
+            "timeout_s": 900
+          },
+          {
+            "name": "test-after-plan-recovery",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-after-plan-recovery",
+            "expect": "match:run_required: PASS \\([1-9][0-9]* required tests,",
+            "timeout_s": 1800
+          },
+          {
+            "name": "test-conditional-writes",
+            "cwd": "servers/plan-manager",
+            "cmd": "make test-conditional-writes",
+            "expect": "exit0",
+            "timeout_s": 900
+          }
+        ],
+        "qa": "required"
+      }
+    }
+  ]
+}
