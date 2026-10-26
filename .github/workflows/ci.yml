@@ -5,9 +5,20 @@ on:
     types: [opened, synchronize, reopened, closed]
   push:
     branches: [main]
+    # Report-only pushes (plan reports, *.md) never enter the main queue. A push
+    # that also touches code still runs, because every changed file must match.
+    paths-ignore:
+      - "projects/**"
+      - "**.md"
 
 # PRs: a new push cancels the stale run. main: runs queue in order and are
 # never cancelled mid-flight, so an older commit can't deploy after a newer one.
+# GitHub keeps at most one pending run per group: a newer push replaces the
+# pending one (cancelled before it starts, no jobs), so main deploys the newest
+# commit that reaches the front, not every commit. `queue: max` is rejected: at
+# ~12 pushes/hour against ~11-minute checks it grows an unbounded backlog of
+# stale shas. The live sha lags main by report commits that never run, so QA
+# judges delivery by `git merge-base --is-ancestor <delivery> <live sha>`.
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -27,7 +38,8 @@ env:
 jobs:
   checks:
     if: github.event.action != 'closed'
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
+    runs-on: ubuntu-24.04
     # Allow cold Playwright/Chromium setup plus every browser gate; the 20-minute budget cancelled run 40307460821.
     timeout-minutes: 35
     services:
@@ -190,7 +202,7 @@ jobs:
   production:
     needs: checks
     if: github.event_name == 'push'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

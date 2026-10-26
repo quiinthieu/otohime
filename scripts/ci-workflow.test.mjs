@@ -1,0 +1,87 @@
+// Guards the main lane in .github/workflows/ci.yml: report-only pushes stay out of the queue,
+// pull requests keep running on every change, and the jobs that ship run on a pinned runner.
+// Dependency-free (no npm ci needed): reads the YAML by indentation, which is all this file uses.
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { test } from "node:test";
+
+const workflow = readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
+const lines = workflow.split("\n");
+const indent = (line) => line.length - line.trimStart().length;
+const significant = (line) => line.trim() !== "" && !line.trim().startsWith("#");
+
+// Lines of the mapping under `path` (e.g. ["on", "push"]), or null when the key is absent.
+// Only direct children of the enclosing key are matched, so a nested key of the same name is not.
+function block(path, from = 0, to = lines.length) {
+  const [key, ...rest] = path;
+  const first = lines.slice(from, to).find(significant);
+  if (first === undefined) return null;
+  const own = indent(first);
+  for (let i = from; i < to; i++) {
+    const line = lines[i];
+    if (!significant(line) || indent(line) !== own) continue;
+    if (line.trim().split(":")[0].replace(/["']/g, "") !== key) continue;
+    let end = i + 1;
+    while (end < to && (!significant(lines[end]) || indent(lines[end]) > own)) end++;
+    return rest.length ? block(rest, i + 1, end) : { start: i, end, value: line.slice(line.indexOf(":") + 1).trim() };
+  }
+  return null;
+}
+
+// Scalar list under a key, block (`- "x"`) or flow (`[x, y]`) style.
+function list(path) {
+  const found = block(path);
+  if (!found) return null;
+  const unquote = (s) => s.trim().replace(/\s+#.*$/, "").replace(/^["']|["']$/g, "");
+  if (found.value.startsWith("[")) return found.value.slice(1, found.value.lastIndexOf("]")).split(",").map(unquote).filter(Boolean);
+  return lines.slice(found.start + 1, found.end).filter(significant).map((l) => unquote(l.trim().replace(/^-\s*/, "")));
+}
+
+const scalar = (path) => block(path)?.value.replace(/\s+#.*$/, "").replace(/^["']|["']$/g, "");
+
+// GitHub's filter glob: `**` crosses directories, `*` does not.
+const globRe = (glob) =>
+  new RegExp(`^${glob.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*\/?|\*/g, (m) => (m === "*" ? "[^/]*" : ".*"))}$`);
+// A push runs unless every changed file matches an ignore pattern.
+const pushRuns = (ignore, files) => files.some((f) => !ignore.some((g) => globRe(g).test(f)));
+
+test("push to main ignores report-only paths", () => {
+  assert.deepEqual(list(["on", "push", "branches"]), ["main"]);
+  const ignore = list(["on", "push", "paths-ignore"]);
+  assert.ok(ignore, "on.push.paths-ignore is missing");
+  assert.ok(ignore.includes("projects/**"), `paths-ignore lacks projects/**: ${ignore}`);
+  assert.ok(ignore.includes("**.md"), `paths-ignore lacks **.md: ${ignore}`);
+  assert.equal(block(["on", "push", "paths"]), null, "push must not also set paths (GitHub rejects paths with paths-ignore)");
+});
+
+test("report-only pushes skip, code pushes still run", () => {
+  const ignore = list(["on", "push", "paths-ignore"]);
+  // Negative controls: a report commit and a README edit create no run.
+  assert.equal(pushRuns(ignore, ["projects/fix-x/qa_run-1.md", "projects/fix-x/artifacts/run.log"]), false);
+  assert.equal(pushRuns(ignore, ["README.md", "agent/skills/neon/references/x.md"]), false);
+  // Code, generated content and the workflow itself still run, alone or beside a report.
+  assert.equal(pushRuns(ignore, ["app/page.tsx"]), true);
+  assert.equal(pushRuns(ignore, ["projects/fix-x/plan.md", "lib/motion.ts"]), true);
+  assert.equal(pushRuns(ignore, ["content/history.json"]), true);
+  assert.equal(pushRuns(ignore, [".github/workflows/ci.yml"]), true);
+  // The ignore must not reach app routes that merely contain "projects".
+  assert.equal(pushRuns(ignore, ["app/(site)/(app)/projects/page.tsx"]), true);
+});
+
+test("pull_request has no path filter", () => {
+  const pr = block(["on", "pull_request"]);
+  assert.ok(pr, "on.pull_request is missing");
+  assert.equal(block(["on", "pull_request", "paths-ignore"]), null);
+  assert.equal(block(["on", "pull_request", "paths"]), null);
+});
+
+test("checks and production run on ubuntu-24.04", () => {
+  for (const job of ["checks", "production"]) {
+    assert.equal(scalar(["jobs", job, "runs-on"]), "ubuntu-24.04", `jobs.${job}.runs-on`);
+  }
+});
+
+test("main keeps cancel-in-progress off and no queue: max", () => {
+  assert.equal(scalar(["concurrency", "cancel-in-progress"]), "${{ github.event_name == 'pull_request' }}");
+  assert.equal(block(["concurrency", "queue"]), null);
+});
