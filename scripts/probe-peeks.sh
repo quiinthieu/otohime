@@ -131,3 +131,16 @@ fi
 
 export BASE_URL PW_PREFIX="$PW"
 node "$ROOT/scripts/probe-peeks.mjs"
+STATUS=$?
+# A failed run says whether our server is still up, with its log, so a server that died mid-run (a refused
+# connection) is told apart from a check that failed; the log goes with $WORK otherwise.
+if [ "$STATUS" -ne 0 ] && [ "$LOCAL" -eq 1 ]; then
+  if kill -0 "$SERVER_PID" 2>/dev/null; then
+    echo "# server: next start (pid $SERVER_PID) on port $PORT is still running; its log ends:"
+  else
+    wait "$SERVER_PID" 2>/dev/null
+    echo "# server: next start (pid $SERVER_PID) on port $PORT exited with status $? during the run; its log ends:"
+  fi
+  tail -n 30 "$WORK/server.log" | sed 's/^/#   /'
+fi
+exit "$STATUS"
