@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { PocketTerminalLoader } from "@/components/pocket-terminal-loader";
+import { TactileLoader } from "@/components/tactile/loader";
 import { PressSound } from "@/components/press-sound";
 import { SeasonLayer } from "@/components/season-layer";
 import { UrashimaKeys } from "@/components/urashima-keys";
 import { KameLoader } from "@/components/kame/loader";
-import { Suspense } from "react";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
 import { pondPrintScript } from "@/lib/pond-print";
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
            listener takes the word's a's before the Pocket console can open a page with them. */}
         <UrashimaKeys />
         <Suspense fallback={null}><KameLoader /></Suspense>
+        <Suspense fallback={null}><TactileLoader /></Suspense>
         {children}
       </body>
     </html>

@@ -1,3 +1,4 @@
+import { stableSurfaceId } from "@/lib/tactile";
 import { swatches } from "@/components/figures";
 import type { Project } from "@/content/site";
 import type { CSSProperties } from "react";
@@ -12,6 +13,9 @@ export function Cartridge({ project, children }: { project: Project; children: R
   return (
     <div
       className="cartridge"
+      data-paper-id={stableSurfaceId("project", project.href || project.title)}
+      data-tossable="true"
+      data-paper-margin="A small invention starts with a little wonder."
       data-status={project.status}
       style={{ "--fig": swatches[project.colour] } as CSSProperties}
     >
