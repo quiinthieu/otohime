@@ -1,0 +1,127 @@
+{
+  "plan_id": "pm-270",
+  "task_id": "t-1606",
+  "run_id": "run-9065",
+  "verification": [
+    {
+      "cwd": ".",
+      "cmd": "npm ci",
+      "expect": "exit0",
+      "exit_code": 0,
+      "log": "npm-ci.log"
+    },
+    {
+      "cwd": ".",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+      "expect": "exit0",
+      "exit_code": 0,
+      "result": {
+        "tests": "5",
+        "pass": "5",
+        "fail": "0",
+        "skipped": "0",
+        "duration_ms": "51.10725"
+      },
+      "log": "trace.log"
+    },
+    {
+      "cwd": ".",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "exit_code": 0,
+      "logs": [
+        "lint.log",
+        "typecheck.log"
+      ],
+      "warnings": "10 existing lint warnings, zero errors"
+    },
+    {
+      "cwd": ".",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "exit_code": 0,
+      "result": {
+        "tests": "2344",
+        "pass": "2344",
+        "fail": "0",
+        "skipped": "0",
+        "duration_ms": "7352.635459"
+      },
+      "log": "unit.log"
+    },
+    {
+      "cwd": ".",
+      "cmd": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
+      "expect": "exit0",
+      "exit_code": 0,
+      "result": [
+        {
+          "tests": "159",
+          "pass": "158",
+          "fail": "0",
+          "skipped": "1",
+          "duration_ms": "327956.533375"
+        },
+        {
+          "tests": "159",
+          "pass": "158",
+          "fail": "0",
+          "skipped": "1",
+          "duration_ms": "336517.153333"
+        },
+        {
+          "tests": "159",
+          "pass": "158",
+          "fail": "0",
+          "skipped": "1",
+          "duration_ms": "333926.285084"
+        }
+      ],
+      "logs": [
+        "e2e-1.log",
+        "e2e-2.log",
+        "e2e-3.log"
+      ],
+      "existing_skip": "evidence: every root hydrated under each colored run"
+    },
+    {
+      "cwd": ".",
+      "cmd": "PATH=\"/tmp/pm270-run9065-bin:$PATH\" TMPDIR=/tmp CI=true SKIP_BUILD=1 EXPECT_SHA=dev bash scripts/probe-end.sh",
+      "expect": "exit0",
+      "exit_code": 0,
+      "pass": 171,
+      "fail": 0,
+      "log": "footer-probe.log",
+      "chrome_launcher": "exec /Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    }
+  ],
+  "source_fingerprint": "338aa24310455e08a5987195dcf5add09bea17c314b438cc001b9239c93325ef",
+  "final_build_fingerprint": "fbe82dc99de0c636945f8c8b85310b90b7057cc8e4497465d6421c85d2eeabc6",
+  "final_build_id": "X6SGBWet8HIIi9fwP7Dbq",
+  "source_and_build_unchanged_after_verification": true,
+  "generated_history_restored": true,
+  "execution_demonstrated": "local production build, real Chrome/CDP and throwaway Docker Postgres",
+  "integration_deployed": "unobserved by software engineer; plan-manager owns the post-push gate",
+  "waiting_for_capacity": false,
+  "product_delivered": "pending independent deployment/QA evidence",
+  "history": {
+    "local_production_e2e": {
+      "completed": 3,
+      "failed": 0,
+      "completeness": "all three complete raw logs saved"
+    },
+    "remote_ci": "not queried per stop-at-push role contract; no current run/job ids claimed"
+  },
+  "negative_controls": [
+    "narrow mouse/phone/tablet no-drag versus wide 120px swipe",
+    "wrong accessible footer source with correct decorative and unrelated text, in JS on/off real production DOM",
+    "full footer probe built-in network and accessibility controls"
+  ],
+  "deferred": [
+    {
+      "identity": "CI main push event at submitted report git_sha; .github/workflows/ci.yml",
+      "owner": "plan-manager QA and pm-270 acceptance",
+      "failure_condition": "checks or production fails; independently served sha omits 3ae76a4 or 9ddd084; deployed wide swipe fails; or strict footer source check rejects correct title"
+    }
+  ]
+}

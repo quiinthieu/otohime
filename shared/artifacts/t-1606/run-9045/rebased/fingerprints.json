@@ -1,0 +1,78 @@
+{
+  "sourceBase": "9bb1daea85c600788c8209819e5c4d69e08b3a46",
+  "verificationHead": "b91135e27ad55f46b9e2cf70b1e57b41169dec35",
+  "profile": {
+    "agent": "Codex (GPT-6)",
+    "role": "software_engineer",
+    "run": "run-9045",
+    "effort": "not exposed"
+  },
+  "node": "v22.12.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "next": "16.4.2",
+  "playwrightCore": "1.64.0",
+  "chrome": "Google Chrome 155.0.8059.86",
+  "postgresImage": [
+    "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24"
+  ],
+  "chromeCliLauncher": {
+    "path": "/tmp/otohime-run-9045-bin/google-chrome",
+    "exec": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "reason": "expose the real macOS Chrome to the shell wrapper by its expected CLI name; the browser still launches via channel chrome"
+  },
+  "files": {
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "next.config.ts": "0321d5e23b1a93b09761f2049ef5b9edf2843067e1be089664296063b9fa096b",
+    "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+    "scripts/probe-end.mjs": "958029c7b17fbd50345b1e949ddd6beab7a37ec88455be0e83ee0e21850b70af",
+    "e2e/probe-end.test.ts": "6473052092c99bb15de816c64ee5097d0a15029dbe75a880d22cf4ec8e7045c4",
+    "e2e/desk.test.ts": "e2b221a6abcf9001dc3db8c7ca5c91bd12c414819cdbe5eed3d9c55849e9d903",
+    "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+    "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+    "app/(site)/(app)/desk/_components/ink-desk.tsx": "012876f0500aadc288ad2f4de791093403cc9d071cd7d6eea528602f6f6ac7f5",
+    "components/end-footer.tsx": "f022a58c921430992ab3b466eb9f720ac8e1eea34b0a9137e655d6f6527f75a7",
+    "content/site.ts": "64a62e89c7aaa7f839e6c342dda8f991890b0c8031c4c1f1fd7e29f3d13e21ac",
+    "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+    "scripts/e2e-local.sh": "263cbd935fb5620ea5da39a0ea72ee7ca9447de527354f00386429cd349468f4",
+    "scripts/probe-end-dom.mjs": "8af95772dc3723dd61b2b9cc69d66da3fa1ffeae2c28380ff388727adb5562c1",
+    "scripts/probe-end-dom.test.mjs": "018ba333057332f46c67d667f91cd5c1e31e1074dbbe4372c660e32a5ed67d4e",
+    "package.json": "8b8d3b3262167054d7cbf6a4192d2feb703cd9f253049635a6fe1a453cb78b30",
+    "components/riso-heading.css": "fd64c5d5386762695074995bf4a66c8a9ec50e784120276da223439f3edad1cd",
+    "app/(site)/globals.css": "06ddbe30668c4456062cf103a9c4cb0f64d7771f9a96296d3807f467d0dfc3f7",
+    "app/(site)/(app)/desk/desk.css": "a883b639a7fe37cb9a0b13414c720b2de3e0ee3d5094dcd25a3dd651471c8cc2"
+  },
+  "executableFingerprint": "20725cc78a364d669087ed15942676cfdb0d67ca8c80a2efaaf9a5abfc1844b0",
+  "sourceAncestry": {
+    "0b349dc": "ancestor",
+    "3ae76a4": "ancestor",
+    "9ddd084": "ancestor",
+    "scope": "source tree only; deployed ancestry is unobserved"
+  },
+  "productionBuilds": [
+    {
+      "suite": 1,
+      "buildId": "sjx7eHlbzJFYRg9PifbzD",
+      "manifestHashes": [
+        "8db4a9eb14740fb0b9607f8393e2af2c52f4c7a5e8e4403285c84d897c236fde  .next/prerender-manifest.json",
+        "718ddc684931977c410d12e9ce6c2fcedb2d71ec9aa761794da1670d190be82e  .next/build-manifest.json"
+      ]
+    },
+    {
+      "suite": 2,
+      "buildId": "1YgtGYpuH5SxLAf5YSG6X",
+      "manifestHashes": [
+        "8db4a9eb14740fb0b9607f8393e2af2c52f4c7a5e8e4403285c84d897c236fde  .next/prerender-manifest.json",
+        "1efe74174b0be34e393973b7969626fccc89c2e39316ec399dd3d043d4fe8f0e  .next/build-manifest.json"
+      ]
+    },
+    {
+      "suite": 3,
+      "buildId": "beaB0gjzn3hkEwVn2qKI6",
+      "manifestHashes": [
+        "8db4a9eb14740fb0b9607f8393e2af2c52f4c7a5e8e4403285c84d897c236fde  .next/prerender-manifest.json",
+        "0fb7420a295de52d76b7a5282395713b80f0838ede155f1606167f89024b1a55  .next/build-manifest.json"
+      ]
+    }
+  ]
+}

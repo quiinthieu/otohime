@@ -1,0 +1,54 @@
+Starting embedded Postgres on 127.0.0.1:52269
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/980c6385-7c10-4d4b-a913-43e9c9333678-5f7135afde1553acd4a14064a1164be7/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:52272
+TAP version 13
+# \# notebook controlled clock: 3 observed poses
+# Subtest: with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)
+not ok 1 - with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)
+  ---
+  duration_ms: 5752.472458
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/980c6385-7c10-4d4b-a913-43e9c9333678-5f7135afde1553acd4a14064a1164be7/work/otohime/e2e/desk-motion-negative.fixture.ts:596:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the leaves turn through many poses (3, controlled clock)
+    perspective(1200px) rotateY(-180deg)
+    perspective(1200px) rotateY(-180deg)
+    perspective(1200px) rotateY(-180deg)
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/980c6385-7c10-4d4b-a913-43e9c9333678-5f7135afde1553acd4a14064a1164be7/work/otohime/e2e/desk-motion-negative.fixture.ts:603:10)
+    async Test.run (node:internal/test_runner/test:935:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6215.624833
+The suite failed. The end of the server's log:
+
+> otohime@0.1.0 start
+> next start
+
+▲ Next.js 16.4.2
+- Local:         http://localhost:52272
+- Network:       http://192.168.100.68:52272
+✓ Ready in 142ms
+✓ Running next.config.ts took 32ms
+
