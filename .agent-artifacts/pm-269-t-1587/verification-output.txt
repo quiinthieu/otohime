@@ -7,7 +7,7 @@ Repository npm test: 2337 passed, 0 failed.
 Lint: exit 0, 10 existing warnings. Typecheck: exit 0.
 Production build and isolated Bottle HTTP/Postgres/migration/Chromium: 11 passed, 0 failed.
 Drizzle check: exit 0. db:generate: no schema changes.
-Exact clean migration-status gate must run on the delivery commit before push.
+Exact clean migration-status gate: exit 0 after implementation commit; rerun before the final delivery push.
 Additional existing RBAC HTTP suite: 22 passed, 0 failed (same production build, fresh Postgres).
 Red-before-green: missing initial exports/HTTP module; later coercion and canonical-expansion regressions failed (2 cases) before correction.
 
