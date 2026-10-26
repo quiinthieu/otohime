@@ -1,389 +1,304 @@
-# Kame and Crumple
+# Kame Fetch Recovery
 
-Plan: pm-259 · Revision: 2 · Product owner: run-8806 · 2026-10-26
-Planning base: `15fd171`; delivery SHA is the commit containing this revision.
-Actual run: `codex-sol-6-1-high` / `gpt-6.1-sol` / `high`, fleet worker `avietidol-z490` (run record).
-Research: [rep-5095 preserved verbatim](research.md).
+Plan pm-259 · Revision 3 · Product owner run-9038 · 2026-10-26.
+Planning base: `21a8f6edb7a3bed1ec1e505917a522df1f653468`.
+Actual profile/model/effort: codex-sol-6-1-high / gpt-6.1-sol / high; fleet worker billie-mac.
+Research [rep-5095](research.md) is already preserved verbatim. Previous revision is retained in Git history.
 
-## Outcome and revision boundary
+## Outcome and retained deliveries
 
-Kame is an optional ink turtle companion; Crumple makes existing paper peel, fold, fly into a basket and iron flat again. Content remains readable, links keep working and every gesture has a keyboard action. Both features remain lazy progressive enhancements with no new dependency.
+Ship the already implemented Kame, peeling and safe fetch through the actual full CI and production path. Preserve existing code and tests; do not rebuild the toys. Original folding, basket physics, ironing and final performance composition become **Part 2: Crumple Paper Play**, filed with after_plan_id=pm-259 and drafted against this recovery after it lands.
 
-Revision 1 delivered Kame at `dd21add9d4badb1af46a1f3affea59058d6418c2` and tear/registry at `a46ad8e496467183a5ed938dc5100e563a0e330b`, both ancestors of the planning base. Their board tasks t-1572/t-1573 are superseded, not proof that their code is missing. t-1574/t-1575 were also superseded. This revision retains delivered code and its tests, replaces the unfinished fetch and oversized final task with four smaller contracts, and explicitly re-verifies the foundation in composition. Old reports describe local execution; CI/deployed acceptance is still required and is not inferred from them.
+| Work | Preserve | Evidence boundary |
+| --- | --- | --- |
+| Kame companion | dd21add9d4badb1af46a1f3affea59058d6418c2 and later fixes | Real local/native-input QA; do not recreate |
+| Paper registry and corner peel | a46ad8e496467183a5ed938dc5100e563a0e330b and later fixes | Real local/native-input QA; do not recreate |
+| Safe fetch, actual arrival/return and Peek/input fixes | Source in 17bca22d109414873c566d676f63696907c2f2d4 ancestry | Feature subset 28/28; independent live ancestor paths pass |
+| Unit-environment and TAP diagnostic fixes | 17bca22 | Latest local repository suite 2320/2320 |
+| Board tasks t-1572–t-1575 and t-1583 | Retain history and landed code | Superseded status does not mean code is missing |
 
-The operator authorized changing the implementation approach. Canvas 2D seeded paper triangles/ink creases plus small deterministic physics preserve the requested appearance with less dependency and WebGL-context risk. A broad card-body drag can conflict with links, selection and scrolling; deliberate 44px grips provide the guaranteed drag route on mouse/touch, with optional blank-paper input only where safe. Stationary blank-paper/grip holds and keyboard buttons retain the crumple experience.
+The board currently has no done rows to replace. Add only the remaining recovery contracts and retain all completed implementation. Do not resurrect the old unfinished-feature descriptions that say fetch is absent.
 
-## Scope and interaction
+## What changes after three failed fix cycles
 
-Paper cards are project cartridges on /projects and public note entries on /notes. Fetch additionally includes footer Lines chips through noninteractive wrappers and a small lazy decorative sticker on those two routes. Fetch-only surfaces do not need a margin layer. Other plain paper can opt in later; “any card” means any explicitly registered paper card, never account/admin forms selected by a global CSS class.
+The [latest QA](qa_report_t-1583_run-9033.md) and [fix plan](fix_plan_t-1583_run-9033.md) describe distinct problems:
+- Exact delivery run 40345114517: checks job 121649860247 failed E2E against next start after unit/build/migration passed; production skipped.
+- Run 40346324813 passed E2E but failed Footer walk, on another executable/configuration.
+- Historical inspect job 121600218178 (run 40328273755, SHA 5577ec5) passed Vercel pull/build/migration, then failed Deploy and verify the served sha. Raw cause remains unread.
+- Fresh live health still serves 074059495faf4bee48e8f655584dfd4487089b41; it does not contain delivery 17bca22.
 
-Kame keeps the current public-route allowlist: /, /work, /play, /notes, /music, /projects, /sketches. Signed-in/auth/admin pages, independent exhibit roots, /desk, stamp boards, live canvases and editable/nested controls retain existing inputs. The SVG artwork stays aria-hidden and pointer-transparent; real labelled footer controls operate it.
+Prior attempts proved a feature subset or repaired the unit gate before the next opaque failure. Replace that broad loop with three independent contracts:
+1. **Diagnostic wiring** captures full E2E output, startup/pre-reporter failures and bounded public evidence while retaining failure status.
+2. **Full browser repair** immediately reproduces all browser/footer/motion contracts, identifies the actual failing line and fixes only observed defects.
+3. **Production adapter proof** retains existing deploy repairs, covers missing fail-closed diagnostics and records current executable identity.
 
-Keep existing Kame behavior: slow edge swimming beside scroll, zZ after injected 45s idle, Call or unmodified K outside fields/dialogs to follow, 500ms hold-to-pet with existing sound-toggle-gated bounded synthesized purr, inline name trimmed to 24 Unicode code points, shell dismissal/restoration. Local hours 00–05/06–11/12–18/19–23 give sleepy/bright/calm/drowsy; a streak of three dates adds a friendly greeting. Guard `kame:v1` name/lastVisit/streak/dismissed storage, count once per local date and tolerate invalid/future/blocked storage.
+All have depends_on=[]: a diagnostics-only task can itself remain red on the pre-existing E2E defect, so making repair depend on its green gate would deadlock. Max live runs=2 allows independent starts; nobody starts a runtime by hand. Task 1 owns ci.yml, task 2 browser/probe/application paths, task 3 deploy shell adapters. Reads across interfaces are allowed. Record a concrete named-source defect before expanding an interface.
 
-Peel remains a 24px visual corner with 44px accessible hit area, seeded deckle and real margin DOM. Peel corner and Reset use the same state transitions. Fetch animates one proxy to the turtle and back. Crumple draws a roughly 400ms paper fold into a ball; a pointer flick can land it in the footer basket. Crumple, Fetch back, Toss to basket, Read card, Reset and Iron flat are real labelled keyboard actions. Reduced motion keeps a stationary sleeping turtle and instant paper recovery/toss without follow/fetch/physics animation; petting responds statically and sound stays opt-in.
+pm-275/t-1617 is paused at drafting time. Task 3 reads its contract and reuses anything already landed, without waiting for that plan or duplicating its repairs. The three tasks share final acceptance but have separate local proof obligations. CI-only/internal tasks 1 and 3 use qa=skip; visible browser behavior task 2 requires independent QA.
 
-## Architecture and interfaces
+## Product constraints
 
-Read [the landed gesture contract](tactile-contract.md) and [the Kame port](kame-contract.md) before implementation. Extend them; do not mount a second gesture manager. The planning rules and standing software rules were recovered read-only from `/home/avietidol/codes/mono-v2/projects/20260921222547_plan_manager_chief_of_staff_extraction.md` and `/home/avietidol/codes/mono-v2/docs/claude/software-development.md`, absent in this repo. Standing rules stay in their source documents and AGENTS.md.
+Preserve [tactile-contract.md](tactile-contract.md), [kame-contract.md](kame-contract.md) and [fetch-contract.md](fetch-contract.md). Opt-in project/note paper, footer chip wrappers and lazy sticker remain scoped; existing Kame public-route allowlist and protected/desk/stamp/form/canvas exclusions stay intact. Keep one gesture owner, stable ids, native anchors/selection/scroll, 44px deliberate grips and accessible deckled peel.
 
-The installed Next guide `node_modules/next/dist/docs/01-app/02-guides/lazy-loading.md` was read: client dynamic boundaries provide lazy loading and `ssr:false` belongs in a Client Component. Preserve current null-fallback Suspense mounting in the existing site layout and feature CSS imports from loaders. Do not add root layouts/stylesheets or duplicate motion/sibling classifications.
+Kame retains slow edge swim, fixture-driven 45s nap, Call/K outside fields/dialogs, 500ms pet, sound-toggle-gated purr, guarded name/streak/dismissal storage and footer shell. Reduced motion stays asleep with accessible static controls and no animated fetch/follow. Save-Data defers optional renderers to explicit enable. Content, names, hrefs, text and geometry survive every action and cancellation. Preserve lifecycle/capture/modal/route teardown.
 
-| Interface | Contract |
-| --- | --- |
-| `lib/tactile.ts` + mounted PaperLayer | Stable typed registry, one gesture owner and route-session state; extend discovery for fetch-only wrappers without making anchors draggable. |
-| `components/kame/commands.ts` | Local typed command/acknowledgement port. Existing boolean means acceptance only; task 1 adds actual arrival/completion/cancel observation. No window test API. |
-| `lib/kame-fetch.ts` | Pure bounded velocity, original rectangle, toss/return and exact-once click-suppression policy. |
-| `lib/crumple.ts` | Seeded folding lifecycle first; task 3 adds fixed-step bounded physics and hit/rest outcomes. |
-| `components/tactile/` | Sole browser adapter, real controls, lazy Canvas module, proxy lifecycle, recovery and teardown. |
-| `components/end-footer.tsx` | Existing shell, fetch-only wrappers and stable basket slot; preserve waterline, navigation and Ryugu-jo entry. |
-| `scripts/tactile-budget.mjs` | Actual production chunk attribution/gzip accounting; fixture-tested refusal of empty/ambiguous evidence. |
+Retain load+idle dynamic boundaries, null interactive server render, existing stylesheet placement and no new LCP request. No new dependency, backend, binary asset, root layout or global event API. Read relevant installed Next docs before code; this PO read node_modules/next/dist/docs/01-app/02-guides/lazy-loading.md after npm ci.
 
-Gesture arbitration is explicit: peel handle owns peel; nested controls and excluded roots own their input. A stationary primary hold reaches crumple at 600ms. Mouse blank-paper/grip movement above 6px claims fetch and cancels hold; touch body movement above 8px cancels hold for native scrolling. At exact thresholds no transition occurs. Touch-action:none is applied before pointerdown only to explicit grips/handles, never card bodies or document. Wrong-pointer events cannot release ownership. No event activates two toys.
+Standing rules stay in AGENTS.md and docs/claude/software-development.md. The requested extraction document and software-development.md are absent here; matching mono-v2 paths under /Users/avietidol/codes return Operation not permitted. The decision records this limitation without inventing rules or imposing a human gate.
 
-All sources remain in DOM and the accessibility tree at their original geometry/hrefs. Visual proxies are aria-hidden; optional paint-only opacity on source children must restore before source focus, Read, Reset or failure completes. Never hide original content via visibility/display/inert/aria-hidden. Controls sit outside clipping/opacity. The only persistent identity is existing Kame memory; paper session data is bounded and route-scoped. Route departure clears paper cosmetics. Iron flat clears all paper state but preserves Kame identity/dismissal.
+## Prerequisites and scheduling
 
-Use existing theme ink/paper variables and stacking below Peek/Pocket/dialogs. Pause or cancel behind modals. Cancel fetch/fold/flight and restore content on interruption; teardown releases captures, subscriptions, observers, frames, audio and canvas resources. Cap balls at eight, DPR at two, elapsed deltas and flight at five active seconds. rAF stops when resting/hidden. If a module/context is unavailable, source reading and reset still work. No backend, scheduled work, external runtime job, paid API or binary asset is needed.
+[prerequisites.json](prerequisites.json) is the exact platform.plan-prerequisites.v1 declaration: git host, Node22/Chrome/Postgres placement, GitHub Actions, Vercel and existing production Neon. Existing operator-owned accounts and allowances suffice; no new account/billing/runtime is requested. Provider secret names appear only as configuration references; no values or invented managed-secret keys are stored.
 
-## Delivery order and admission
+[prerequisite-probe.json](prerequisite-probe.json) preserves the final manifest_generation=3 probe:
+- Git host missing: registered otohime has no ci_token for authenticated control-plane read.
+- Runner unknown: accounts/rank adapter HTTP400, repo/provider required.
+- GitHub/https/Neon service probes failed: service not allowlisted.
 
-```mermaid
-flowchart LR
-  F["1 · Fetch with foundation regression"] --> C["2 · Canvas fold and per-card recovery"]
-  C --> B["3 · Basket physics and global ironing"]
-  B --> V["4 · Performance budgets and composition"]
-```
+These results neither prove runner context nor establish a physical setup chore. This is legacy_v1/shadow admission, not a readiness waiver. A batched enforcement refusal would retain the declaration and end with a summary. Existing public CI plus repository-owned diagnostics avoid making authenticated historical log export a human prerequisite. A task that establishes an actually required person-only chore raises operator_action at its start, with exact action/fingerprint/readiness signal and no secret value, and reports the limitation rather than idling.
 
-Current settings read on run-8806: max_plan_elapsed=6h0m0s, max_live_runs_per_plan=1, qa_mode=auto. All tasks require QA because each affects visible behavior. Four serial SWE tasks have a 4h fallback estimate (1h each); the admission server's measured role p50 is authoritative. Tasks name overlapping paths deliberately. If admission exceeds the ceiling, submit only tasks 1–2 and file tasks 3–4 as a later part using after_plan_id=pm-259, naming this document; later drafting occurs against landed code, without pre-planning unlanded implementations. No parent_plan_id for parts.
+Settings: max_plan_elapsed=6h; max_live_runs_per_plan=2; qa_mode=auto. Three SWE contracts estimate at most 3h using fallback 1h/task (1.5h if interfaces count as entirely disjoint); the server's role p50 and overlap calculation are authoritative. No dependencies on another plan or calendar. Task commands prove claims now with local fixtures or production execution; no soak, natural-run criterion or polling task step.
 
-No contract depends on a human choice or timed observation. Any newly discovered physical/sign-in chore is raised by the first task that needs it, at its start, via advisory plan_manager_ask_user kind=operator_action with a stable fingerprint and readiness probe only when meaningful. Record judgement calls and surprises as decisions/lessons. Engineering proves locally, commits with pm-259/<assigned-task-id>: and pushes; green gate, CI/deployed QA and acceptance belong to the platform. This product-owner run uses pm-259/run-8806: because it has no claimed task id.
+## Evidence and proof boundaries
 
-## Verification protocol
+Fresh [planning-ci-evidence.json](planning-ci-evidence.json) reads two FAILED pages (40/103), two COMPLETED pages (40/442), current in-progress (1/1), queued (0/0). Filters overlap; older pages unread, so history completeness is inconclusive. Job metadata is now readable; raw E2E/historical deploy log endpoints return 403. Do not repeat the older blanket API-403 claim. Python CA lookup failed locally; verified system curl succeeded without disabling TLS verification.
 
-Each JSON contract below is the exact proposal. New verifier files are implementation obligations: missing/no-match/skipped/zero-test results cannot pass. Start with a failing feature assertion, preserve existing tests and fix regressions. Run npm ci in the locked Node 22 checkout. Pure clock/calendar/seed/storage fixtures prove policy, not rendering. Real production Next imports and Chromium Canvas/Web Audio construction plus CDP touch prove the browser path. No test mutates a shared deployment.
+This PO ran npm ci and npm test: 2320 passed, zero failed/skipped. It changed planning artifacts only and makes no new browser/deployment success claim. There is no async feature executable, model, callback or ingestion job. Real browser construction requires production Next, locked Chrome and migrated Postgres; shell npx/health fixtures prove only adapter policy. CI and independent live observation alone prove delivery.
 
-Use scripts/e2e.mjs without BASE_URL for an isolated temporary PostgreSQL and production build/server; it runs test files serially. Do not override concurrency upward. Use short TMPDIR=/tmp for Chromium on lease paths. The footer walk/probe have their own isolated local database path. Task 4's commands clear BASE_URL and database overrides and build with CI=true and GITHUB_SHA equal to the delivery commit to reproduce CI identity. Independent QA reads the actual served build/chunk identity rather than trusting state attributes or supplied summary scripts.
+Nearest deliverable when historical authenticated logs cannot be read: reproducible repository controls and actionable current diagnostic output. This is not product delivery. Historical root cause may remain explicitly unknown, while successful current checks+production and served ancestry remain required. No pending replacement erases a known repeated defect.
 
-Performance acceptance at task 4:
+## Independent acceptance and deferred ownership
 
-1. Enforce combined loader bootstrap <=2KiB gzip, incremental Kame <15KiB gzip, combined tear/fetch/crumple paper code <20KiB gzip. Assign shared new code once to paper and show the union total; exclude existing framework runtime, never omit a new helper. Traverse actual emitted dependencies and record contributing chunks; source-file gzip alone is insufficient.
-2. Parse initial server HTML: no interactive toy controls, proxies or Canvas; inert paper metadata and reserved shell/basket slots are allowed. No toy renderer/module preload is critical-path. Kame/paper modules request only after load plus idle; Canvas requests only after first action. Hold the idle callback to demonstrate absence before release and presence afterward. Save-Data keeps optional renderers unloaded until explicit enable.
-3. Run five paired cold navigations at each 1280×860 and 390×844 viewport on one production build with identical browser/CPU/network settings. Enabled and control differ only by browser-side blocking of identified toy chunks. Record every LCP sample, final LCP element and request timing. Enabled median minus control median <=max(100ms, 5% of control median), and no toy is a final LCP candidate.
-4. Observe toy-attributable layout shifts <=0.001 and source bounding boxes before/action/reset within 1 CSS pixel. Inspect shift source nodes and overlay geometry; aggregate CLS or state strings alone cannot prove this.
-5. Fault injection is explicit: malformed/blocked storage, failed import/Canvas, reduced motion toggled mid-action, Save-Data, source removal and lifecycle interruptions. Relevant negative controls must fail under an intentional budget breach/eager-request fixture and pass normally.
+Engineering finishes at tested commit/push. Platform drives normal main CI or existing workflow_dispatch for a replaced code run; report-only PO pushes are intentionally ignored. No empty code change is needed.
 
-Independent per-task QA and final acceptance inspect delivered diffs plus real served build-sha/build id/chunk hashes, then obtain separate observations through keyboard, mouse and CDP touch. Walk: flat paper → peel → fetch → crumple → basket hit/miss → Iron flat → intact readable source; repeat under reduced motion, Save-Data and blocked storage. Preserve accessible names/hrefs/text/focus and geometry. Challenge normal link navigation, text selection, card scrolling, k in a field, sound-off, modal layering and excluded desk/stamp input. Footer walk/probe remain required alongside full e2e.
+Acceptance independently obtains:
+1. Successful checks **and** production for one current main executable containing 17bca22 and all replacement code. Red, skipped, cancelled or unrelated green jobs fail. Report-only descendants require full relevant executable/config/lock equivalence and ancestry.
+2. A one-shot /api/health read, fetch of the served commit if absent, and git merge-base ancestry for feature plus recovery code. Preserve exact build/chunk/source/config hashes. Existing report-only exceptions cannot conceal an undeployed code change. Stale health is a rejection control.
+3. /projects and /notes keyboard Fetch back, continuous real pointer approach/drag past Peek, CDP touch grip versus body scroll, actual turtle/proxy arrival-return rectangles, peel/reset and intact source names/text/hrefs/geometry. Native link navigation remains normal. Repeat reduced motion (zero animated fetch proxies), Save-Data, blocked storage, dismissal and route/capture cancellation.
+4. Entire serial browser, both footer probes and signed-in motion results; independent observations outside supplied proof scripts. Controls include pre-test crash, deliberately immobilized turtle, and failed inspect despite matching health/off-branch SHA.
+5. Historical inspect cause when accessible. If unread, retain job 121600218178 as cause unknown and require a current complete production success plus live ancestry at the repaired fingerprint. A repeated inspect failure stays a defect.
 
-Reports distinguish local execution, deployed integration and product acceptance; name real/fake boundaries, exact build/executable identities, raw evidence, defects, independent negative controls and any deferred check's id/owner/failure condition. No asynchronous runtime history/callback scan applies to this browser-only change. The actual deployment topology is GitHub Actions plus Vercel in .github/workflows/ci.yml; generic mono-v2 GitLab/k3s instructions do not describe this repo. CI or deployment unreadability is reported as unobserved and never relabelled success. Future dated observations use acceptance/watch; no contract proves itself by elapsed idle time.
+Deferred owners: platform green gate owns exact replacement-delivery CI; QA owns independent served behavior/negative controls; acceptance owns production+ancestry and the historical inspect record. Failure conditions: red/skipped production or checks, missing feature/recovery ancestry, content/input/geometry regression or repeated deploy error. Required product delivery stays pending until observed; no waiting or timer proves it.
 
-## Build contracts
+## Part 2: Crumple Paper Play
 
-### 1. Complete safe Kame fetch on the landed paper registry
+File after_plan_id=pm-259; draft only against landed recovery. Preserve original scope:
+- Seeded Canvas2D mesh/ink creases (~400ms), 600ms hold cancelled by >8px movement, keyboard Crumple/Read/Reset. Original DOM and reserved box remain accessible; restore paint before link focus. No visibility:hidden/display:none/inert/aria-hidden on content. Lazy Canvas only on action and immediate recovery on renderer failure.
+- Fixed-step gravity/restitution/friction/rim physics, injected clock/seed, max eight balls, DPR2, bounded flight, sleep at rest, pointer toss and keyboard Toss to basket. Deterministic fixtures prove settling without elapsed external time.
+- Footer SVG basket, per-card Reset/global Iron flat with optional ironing sweep, route/lifecycle recovery, instant reduced-motion paths; keep Kame identity separate from paper state.
+- Actual emitted chunk attribution/gzip: combined bootstrap <=2KiB, Kame <15KiB, combined paper <20KiB, new shared code counted once. No interactive toy server markup or critical preload; demonstrate absence before load/idle/action and presence after explicit release.
+- Five paired desktop/mobile cold navigations with identical CPU/network, only toy chunks blocked in control: median LCP delta <=max(100ms,5%), toy never final LCP; toy CLS <=0.001 and source rectangles <=1px. Intentional eager-request/budget-breach controls and full serial browser/footer/motion tests.
 
-```json
-{
-  "sequence": 1,
-  "title": "Complete safe Kame fetch on the landed paper registry",
-  "role": "software_engineer",
-  "depends_on": [],
-  "qa": "required",
-  "problem": "Kame and peeling are on main, but commandKame acknowledges acceptance rather than arrival, and paper has no complete toss/return path. Rebuilding the foundation would discard validated fixes.",
-  "action_items": [
-    "Read the landed tactile-contract.md and kame-contract.md; retain a46ad8e and dd21add behavior and regression tests. Add failing fetch unit/browser tests first, and extend the existing PaperLayer's single createGesture owner instead of adding competing document-wide body listeners. Preserve current loaders, route eligibility and stylesheet placement.",
-    "Declare lib/kame-fetch.ts pure velocity/proxy/return lifecycle and a typed completion subscription in components/kame/commands.ts. Acceptance, arrival, return and cancellation are distinct. Emit arrival from the rendered turtle's actual bounded position; cap each operation at 5s of active elapsed time and cancel safely if arrival never occurs. No guessed sleep proves completion; unit tests drive time, browser tests inspect geometry.",
-    "Add 44px explicit drag grips and Fetch back buttons to registered project/note cards. Mouse blank-paper dragging is allowed only outside links, selectable text and controls; touch body scrolling wins. Register footer Lines chips via noninteractive wrappers, and one small lazy decorative sticker, with stable ids. Fetch-only chip/sticker entries need no margin note and no peel actions; extend discovery explicitly while keeping paper eligibility exclusions.",
-    "Use one aria-hidden fixed proxy with bounded velocity on release. Kame reaches it and returns it to its measured source; source DOM, hrefs and layout stay intact. Suppress exactly the completed drag's pointer click, never a later real click or keyboard/modified activation. A rejected fetch restores immediately with a scoped accessible response.",
-    "Cancel on Escape, pointercancel, capture loss, blur, hidden page, route departure, source removal, resize, modal opening, dismissal or motion change. Reduced motion never animates fetch; Fetch back restores instantly. Save-Data downloads only after explicit enable. Cleanup all subscriptions, frames and captures. Keep reset callable by later crumple work.",
-    "Run existing tear/Kame plus new fetch production browser checks, including initial sprite placement, actual arrival/return geometry, mobile CDP grip input, native link navigation and card-body scroll negative controls. Write fetch-contract.md with lifecycle/arbitration and evidence identity. Commit with the assigned pm-259/task-id prefix and push; engineering ends at push."
-  ],
-  "interfaces": [
-    "lib/tactile.ts",
-    "lib/tactile.test.ts",
-    "lib/kame-fetch.ts",
-    "lib/kame-fetch.test.ts",
-    "lib/kame.ts",
-    "lib/kame.test.ts",
-    "components/tactile/",
-    "components/kame/",
-    "components/end-footer.tsx",
-    "app/(site)/tactile.css",
-    "app/(site)/kame.css",
-    "e2e/kame-fetch.test.ts",
-    "e2e/kame.test.ts",
-    "e2e/tactile-tear.test.ts",
-    "e2e/tactile-helpers.ts",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/fetch-contract.md"
-  ],
-  "non_goals": [
-    "recreating landed Kame or peel features",
-    "crumple rendering or basket physics",
-    "new dependencies, route groups, global event APIs or backend writes"
-  ],
-  "acceptance_criteria": "On /projects and /notes, cards, footer Lines chips and a decorative sticker can be tossed with an explicit touch/mouse grip or Fetch back button. The visible turtle reaches the proxy and returns it within 5s active time; source text, links and geometry remain intact. Cancel/reduced-motion/dismissed paths restore immediately. Ordinary links, text selection, touch scrolling, peel, Pet and existing desk/stamp gestures still work.",
-  "verification": [
-    {
-      "name": "fetch policy and existing foundation",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/kame-fetch.test.ts lib/tactile.test.ts lib/kame.test.ts lib/tear.test.ts",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "repository suite",
-      "cwd": ".",
-      "cmd": "npm test",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "lint and type contracts",
-      "cwd": ".",
-      "cmd": "npm run lint && npm run typecheck",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "production fetch, companion and peel",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/kame-fetch.test.ts e2e/kame.test.ts e2e/tactile-tear.test.ts",
-      "expect": "exit0",
-      "timeout_s": 900
-    }
-  ]
-}
-```
+These are future deliverables, not existing implementation claims. That PO makes admitted contracts using current role durations and actual landed interfaces.
 
-### 2. Fold paper into reversible Canvas balls
+## Exact replacement build contracts
+
+New test/helper files named below are implementation obligations; missing/zero/skipped tests fail. Verification runs inside the checkout and does not mutate shared infrastructure.
 
 ```json
-{
-  "sequence": 2,
-  "title": "Fold paper into reversible Canvas balls",
-  "role": "software_engineer",
-  "depends_on": [
-    "1"
-  ],
-  "qa": "required",
-  "problem": "The shared gesture layer can fetch but cannot turn a card into a tactile paper ball; rendering and restoration need a bounded, independently provable implementation before adding basket physics.",
-  "action_items": [
-    "Declare lib/crumple.ts seeded fold mesh and intact/folding/ball/reset lifecycle using injected seed/elapsed clock. Add failing tests for finite bounded geometry, deterministic creases, completion, cancellation and invalid input before implementing.",
-    "Load a small Canvas 2D renderer only on the first Crumple action after the existing load/idle activation. Draw vector paper triangles and ink creases into an approximately 400ms fold-to-ball proxy. Do not screenshot DOM, use WebGL or add dependencies. Cap DPR at 2 and active balls at 8; extra actions leave the source unchanged and announce the limit.",
-    "Add per-card Crumple, Read card and Reset controls outside the animated source area. A primary stationary grip or noninteractive blank-paper hold at 600ms uses the same createGesture owner; touch movement above 8px cancels for scrolling, grip/mouse movement above 6px gives fetch precedence, and corner peel never becomes a hold. Do not intercept text selection, links, nested controls or browser context menus; keyboard Crumple is the equivalent.",
-    "Preserve source DOM, accessibility names, hrefs and its reserved layout box. Paint-only opacity may conceal original visual children while the proxy represents the card; never remove content or apply display:none, visibility:hidden, inert or aria-hidden to original content. Focus of any original link, Read card or Reset synchronously restores visible paper. Controls remain visible/focusable while crumpled.",
-    "On import/canvas/context failure, restore the source immediately and keep Read/Reset functional. Reduced motion uses an instant ball/static state with no running animation. Cancel active folds on Escape, pointer cancellation, blur/hide, source removal, resize, route departure, motion change and modal opening; release resources. Ordinary per-card Reset also clears the peel/fetch state through task 1's shared lifecycle.",
-    "Add real production-browser mouse/touch/keyboard tests for fold output, retained accessible content/geometry, renderer failure and recovery; assert actual nonempty canvas paint plus source focus restoration, not data-state alone. Preserve all foundation tests. Document the renderer port for basket work in crumple-contract.md, then test, commit and push."
-  ],
-  "interfaces": [
-    "lib/crumple.ts",
-    "lib/crumple.test.ts",
-    "lib/tactile.ts",
-    "lib/tactile.test.ts",
-    "components/tactile/",
-    "app/(site)/tactile.css",
-    "e2e/crumple.test.ts",
-    "e2e/tactile-helpers.ts",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/crumple-contract.md"
-  ],
-  "non_goals": [
-    "ball flight, rim collision or basket scoring",
-    "global Iron flat animation",
-    "HTML capture, new physics/rendering dependencies, content persistence"
-  ],
-  "acceptance_criteria": "Every opted-in project/note paper card crumples through the same keyboard, 600ms hold or button action into a seeded ink-creased Canvas ball. Read card, focus and Reset restore the original immediately without content loss or geometry change. Reduced motion is static; blocked imports/canvas, scroll cancellation, route departure and the ninth-ball limit leave readable content.",
-  "verification": [
-    {
-      "name": "fold geometry and gesture boundaries",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/crumple.test.ts lib/tactile.test.ts lib/tear.test.ts lib/kame-fetch.test.ts",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "repository suite",
-      "cwd": ".",
-      "cmd": "npm test",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "lint and type contracts",
-      "cwd": ".",
-      "cmd": "npm run lint && npm run typecheck",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "production crumple and fetch coexistence",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts e2e/kame-fetch.test.ts e2e/tactile-tear.test.ts",
-      "expect": "exit0",
-      "timeout_s": 900
-    }
-  ]
-}
-```
-
-### 3. Toss balls into the basket and iron paper flat
-
-```json
-{
-  "sequence": 3,
-  "title": "Toss balls into the basket and iron paper flat",
-  "role": "software_engineer",
-  "depends_on": [
-    "2"
-  ],
-  "qa": "required",
-  "problem": "Crumpled paper has no toss destination, and visitors need a single reliable way to recover every cosmetic state without resetting Kame's memory.",
-  "action_items": [
-    "Extend the pure crumple port with fixed-step 2D circle/segment physics: gravity, friction, bounded restitution, basket rim collision, in-opening detection, finite/clamped delta and resting-state detection. Write tests first; drive seed/time directly to prove hit, rim miss, high velocity, resize and rest without wall-clock idle.",
-    "Add an ink SVG footer basket in a stable reserved slot. Ball grips support captured pointer flicks; Toss to basket offers the keyboard equivalent. Use one owner and no conflicting card/fetch listeners. Convert viewport/source/basket coordinates explicitly; pointer tossing targets the visible basket, and keyboard Toss places the ball directly in the basket when it is offscreen without automatic page scrolling. Read/Reset remain usable.",
-    "Bound physics to eight balls and DPR 2; stop rAF at rest and while hidden. Document and test the maximum 5s active simulation: a ball still moving is settled safely at a bounded location, not simulated forever. A basket hit is an observable state but never removes the source content or creates persisted score.",
-    "Implement global Iron flat plus the existing per-card Reset: cancel fetch/fold/flight, clear tear/crumple session state and proxies, restore original paint/focus and run one short iron-sweep decoration. Reduced motion restores instantly and Toss places directly in the basket. Kame's name, visit streak and dismissal survive recovery.",
-    "Route departure, Escape, modal opening, live reduced-motion change, source removal and renderer failure synchronously restore source paint and release active resources; pagehide cleans adapters and no duplicate mounts appear on pageshow. Per-card actions affect only that card; global reset covers every registered paper card.",
-    "Add deterministic physics tests and real production-browser basket hit/miss, touch flick, keyboard toss, interruption and full reset checks. Verify footer navigation, waterline, shell, notes/projects geometry and accessible source content. Document recovery ownership in recovery-contract.md; test, commit and push."
-  ],
-  "interfaces": [
-    "lib/crumple.ts",
-    "lib/crumple.test.ts",
-    "lib/tactile.ts",
-    "lib/tactile.test.ts",
-    "components/tactile/",
-    "components/end-footer.tsx",
-    "app/(site)/tactile.css",
-    "e2e/crumple.test.ts",
-    "e2e/tactile-recovery.test.ts",
-    "e2e/tactile-helpers.ts",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/recovery-contract.md"
-  ],
-  "non_goals": [
-    "server scores, achievements or discarded-content storage",
-    "resetting Kame identity or changing unrelated footer toys",
-    "new libraries, CI topology changes or unbounded simulation"
-  ],
-  "acceptance_criteria": "A real pointer flick produces bounded ball flight, rim misses and basket hits; Toss to basket works by keyboard and reduced motion places instantly. Iron flat and per-card Reset restore tears, folds, fetched proxies and original focus/geometry, including interruptions. Animation stops at rest or by 5s active simulation. Footer links, shell controls and Kame memory survive every reset.",
-  "verification": [
-    {
-      "name": "physics and shared lifecycle",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/crumple.test.ts lib/tactile.test.ts lib/kame-fetch.test.ts",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "repository suite",
-      "cwd": ".",
-      "cmd": "npm test",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "lint and type contracts",
-      "cwd": ".",
-      "cmd": "npm run lint && npm run typecheck",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "production basket, recovery and companion",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts e2e/tactile-recovery.test.ts e2e/kame.test.ts e2e/tactile-tear.test.ts",
-      "expect": "exit0",
-      "timeout_s": 900
-    }
-  ]
-}
-```
-
-### 4. Enforce loading budgets and complete composition checks
-
-```json
-{
-  "sequence": 4,
-  "title": "Enforce loading budgets and complete composition checks",
-  "role": "software_engineer",
-  "depends_on": [
-    "3"
-  ],
-  "qa": "required",
-  "problem": "Individual toy checks cannot prove combined lazy-loading, LCP, layout and existing site interactions; previous site-wide additions passed focused tests but broke footer and frame-count gates.",
-  "action_items": [
-    "Add scripts/tactile-budget.mjs with tests using miniature built-chunk fixtures: traverse real production chunk dependencies, enforce the plan's incremental gzip budgets, reject missing/ambiguous attribution or an empty chunk set and count shared toy modules once. Report build id, lock hash, contributing chunks and per-feature totals. Fix actual loader/import boundaries if the budgets fail, retaining the existing route and motion contracts.",
-    "Add e2e/tactile-performance.test.ts against the exact production build: parse server DOM separately from Flight text, inspect actual response bytes/network requests for toy modules, and prove load-plus-idle gating, Save-Data explicit opt-in and first-action-only Canvas import. Scope markers/roles and rAF counters to the feature they observe so multiple legitimate status regions/animations coexist; preserve assertion strength.",
-    "Run the performance protocol below on demand with held-idle and network-blocked negative controls; enforce LCP/CLS/geometry thresholds. Include a fixture that intentionally breaches a budget and a browser control that would detect an eager module request. Never relax thresholds or accept a skipped/no-test run to close the task.",
-    "Complete composed browser checks for no-JS, blocked storage, light/dark, 390px touch, keyboard focus, reduced motion changed mid-action, open Pocket/Peek layering, excluded desk/stamp gestures, normal footer links and sound-off. Use real production imports/Canvas/Web Audio and real CDP touch; clock/seed/storage/media/network fixtures only control policy and failure paths.",
-    "Run the entire repository e2e suite serially plus the existing footer walk and Chromium probe using the local-only commands in verification. Fix any defects in changed components and keep existing assertions. Record raw sample rows, negative-control outputs, build/executable/chunk identities and real/fake boundaries in execution-evidence.md; commit and push. Deployment and independent QA are owned by the platform after delivery."
-  ],
-  "interfaces": [
-    "scripts/tactile-budget.mjs",
-    "lib/tactile-budget.test.ts",
-    "e2e/tactile-performance.test.ts",
-    "e2e/tactile-helpers.ts",
-    "e2e/kame-fetch.test.ts",
-    "e2e/crumple.test.ts",
-    "e2e/tactile-recovery.test.ts",
-    "components/kame/",
-    "components/tactile/",
-    "app/(site)/kame.css",
-    "app/(site)/tactile.css",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/execution-evidence.md"
-  ],
-  "non_goals": [
-    "broadening eligible routes or adding features",
-    "weakening footer/motion/sibling assertions",
-    "shared infrastructure writes or changing dependency locks"
-  ],
-  "acceptance_criteria": "Actual built chunks meet bootstrap <=2KiB, Kame <15KiB and combined paper <20KiB gzip budgets with explicit shared-code accounting. Toy requests start only after load+idle, Canvas only after action, and server HTML has no interactive toy markup. Paired desktop/mobile runs meet the specified LCP tolerance, toy CLS <=0.001 and source geometry <=1px. Full serial e2e, footer walk/probe and negative controls pass with no skips.",
-  "verification": [
-    {
-      "name": "budget verifier positive and negative fixtures",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/tactile-budget.test.ts",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "repository suite",
-      "cwd": ".",
-      "cmd": "npm test",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "lint and type contracts",
-      "cwd": ".",
-      "cmd": "npm run lint && npm run typecheck",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "all production browser tests",
-      "cwd": ".",
-      "cmd": "env -u BASE_URL -u SKIP_BUILD CI=true GITHUB_SHA=$(git rev-parse HEAD) npm run test:e2e",
-      "expect": "exit0",
-      "timeout_s": 1500
-    },
-    {
-      "name": "built incremental gzip budgets",
-      "cwd": ".",
-      "cmd": "node scripts/tactile-budget.mjs",
-      "expect": "exit0",
-      "timeout_s": 120
-    },
-    {
-      "name": "CI-equivalent footer walk on isolated local server",
-      "cwd": ".",
-      "cmd": "env -u BASE_URL -u DATABASE_URL -u EXPECT_SHA CI=true GITHUB_SHA=$(git rev-parse HEAD) bash scripts/walk-end.sh",
-      "expect": "exit0",
-      "timeout_s": 900
-    },
-    {
-      "name": "CI-equivalent footer browser probe on isolated local server",
-      "cwd": ".",
-      "cmd": "env -u BASE_URL -u DATABASE_URL -u EXPECT_SHA CI=true GITHUB_SHA=$(git rev-parse HEAD) bash scripts/probe-end.sh",
-      "expect": "exit0",
-      "timeout_s": 900
-    }
-  ]
-}
+[
+  {
+    "sequence": 1,
+    "title": "Expose complete failing browser gate diagnostics",
+    "role": "software_engineer",
+    "depends_on": [],
+    "qa": "skip",
+    "problem": "checks job 121649860247 failed before useful public E2E output; per-assertion reporters alone do not expose pre-test crashes and restricted logs make repeated repairs speculative.",
+    "action_items": [
+      "At start, read AGENTS.md and the installed relevant Next guides, inspect fresh main and preserve all landed Kame/peel/fetch fixes. Raise any genuinely required person-only sign-in/setup immediately via plan_manager_ask_user(kind=operator_action, stable fingerprint, exact action/readiness signal); otherwise use the repository-owned diagnostic path and existing platform placement without a human gate.",
+      "Capture full npm run test:e2e combined output at the CI E2E step with pipefail and tee; preserve its exact exit status. Add a repository helper for bounded escaped failure tails, commit/build/Node/Chrome identity and next-start tail in a public annotation and step summary, including pre-test startup failures. Retain existing per-assertion annotations and gate ordering.",
+      "Write tests using real subprocess stdout/stderr and failing/successful fixture commands: annotated assertion, pre-test crash without reporter output, startup failure, missing/empty file, successful run, percent/CR/LF/ANSI/Markdown escaping and original nonzero exit propagation. Never emit environment dumps or secret values. Include workflow wiring coverage without copying implementation assertions.",
+      "Apply the same bounded fallback mechanism to signed-in motion/footer steps where their existing output is opaque, without changing probe behavior, budgets, dependencies, concurrency or production conditions. This task owns CI wiring; browser repair and deploy adapter tasks do not edit ci.yml.",
+      "Install the unchanged npm lock on Node 22. Record relevant code/lock/config hashes, actual tool versions, real versus fake boundaries, negative controls, unread evidence and deferred owners. Commit with pm-259/<assigned-task-id>: and push origin HEAD; engineering stops at the push. Never weaken checks, discard unrelated fixes or force-push."
+    ],
+    "interfaces": [
+      ".github/workflows/ci.yml",
+      "scripts/browser-gate-diagnostics.mjs",
+      "lib/browser-gate-diagnostics.test.ts",
+      "scripts/e2e-annotate.mjs",
+      "lib/e2e-annotate.test.ts",
+      "scripts/ci-workflow.test.mjs"
+    ],
+    "non_goals": [
+      "changing fetch behavior or browser assertions",
+      "changing workflow budgets/concurrency or deployment policy",
+      "proving live feature delivery from a fixture"
+    ],
+    "acceptance_criteria": "Every failing E2E/motion/footer command exposes a bounded actionable tail and executable identity even before a reporter starts, while keeping its original red status. Success produces no failure annotation. Escaping/empty-output/startup negative controls and workflow wiring tests pass.",
+    "verification": [
+      {
+        "name": "real subprocess diagnostic controls",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/browser-gate-diagnostics.test.ts lib/e2e-annotate.test.ts scripts/ci-workflow.test.mjs",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "repository suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "lint and type contracts",
+        "cwd": ".",
+        "cmd": "npm run lint && npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      }
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Repair the complete production browser contract",
+    "role": "software_engineer",
+    "depends_on": [],
+    "qa": "required",
+    "problem": "The prior task repeatedly proved only 28 feature tests while the actual full CI suite or Footer walk stayed red on a different step. Feature geometry is landed; the failing full composition must be reproduced without guessing its assertion.",
+    "action_items": [
+      "At start, read AGENTS.md and the installed relevant Next guides, inspect fresh main and preserve all landed Kame/peel/fetch fixes. Raise any genuinely required person-only sign-in/setup immediately via plan_manager_ask_user(kind=operator_action, stable fingerprint, exact action/readiness signal); otherwise use the repository-owned diagnostic path and existing platform placement without a human gate.",
+      "Begin immediately with the full serial production browser suite under CI=true, short TMPDIR=/tmp, actual locked Chrome, migrated PostgreSQL and GITHUB_SHA=HEAD; then run both footer probes and signed-in motion against isolated local production. Do not depend on task 1 becoming green or on pm-275 landing; diagnostics can be incorporated normally when present.",
+      "Read available raw output for jobs 121649860247 and the newer Footer walk failure 40346324813; if inaccessible, use the local full reproduction and the new current CI annotation, citing which evidence is unavailable. Identify each failing test/runner line before changing it. Retain application behavior and fix the smallest observed assertion, runner or source defect; extend interfaces only to the specifically named failing repository path and record that judgement.",
+      "Preserve actual rendered turtle/proxy arrival-return geometry, continuous native mouse approach past Peek, CDP touch grip versus card scrolling, exact-once click suppression and native navigation. Keep original source DOM/hrefs/text/geometry, reduced motion, Save-Data, dismissal, modal/route/capture cancellation, Kame/peel foundation and desk/stamp exclusions. Preserve sound-off and keyboard controls.",
+      "Add a focused regression and relevant intentional failure control for each observed defect. An assertion may change only to measure the intended behavior more accurately (for example RisoText accessible-name semantics); do not skip/quarantine, lower geometry floors, add arbitrary delays or replace full-suite proof with the 28-test subset. Missing/zero/skipped tests cannot pass.",
+      "Record local build ID, native dependency construction and full-suite results in browser-recovery-evidence.md. Distinguish local execution from deployment; CI and independent live QA belong to the platform. If all current contracts already pass, preserve them and add the missing full-composition regression/evidence rather than rewriting fetch.",
+      "Install the unchanged npm lock on Node 22. Record relevant code/lock/config hashes, actual tool versions, real versus fake boundaries, negative controls, unread evidence and deferred owners. Commit with pm-259/<assigned-task-id>: and push origin HEAD; engineering stops at the push. Never weaken checks, discard unrelated fixes or force-push."
+    ],
+    "interfaces": [
+      "e2e/",
+      "scripts/e2e.mjs",
+      "scripts/e2e-gesture-trace.ts",
+      "scripts/e2e-gesture-trace.test.ts",
+      "scripts/walk-end.sh",
+      "scripts/probe-end.sh",
+      "scripts/probe-end.mjs",
+      "scripts/probe-motion-signed-in.sh",
+      "scripts/probe-motion-signed-in.mjs",
+      "lib/end.test.ts",
+      "components/tactile/",
+      "components/kame/",
+      "components/peek-layer.tsx",
+      "app/(site)/tactile.css",
+      "app/(site)/kame.css",
+      "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/browser-recovery-evidence.md"
+    ],
+    "non_goals": [
+      "new crumple/basket features or widening eligible routes",
+      "CI wiring or Vercel adapter changes owned by tasks 1 and 3",
+      "waiting for another plan, deployment or natural event"
+    ],
+    "acceptance_criteria": "The entire production browser suite, both footer probes, signed-in motion, 21 foundation tests, repository suite and lint/typecheck pass on the delivered checkout with no skipped browser tests. Actual geometry/native-input and one defect-specific negative control are observed; original content and accessibility survive interactions. Live delivery is separately required by plan acceptance.",
+    "verification": [
+      {
+        "name": "foundation policy",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/kame.test.ts lib/tactile.test.ts lib/tear.test.ts",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "repository suite under CI",
+        "cwd": ".",
+        "cmd": "CI=true npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "lint and type contracts",
+        "cwd": ".",
+        "cmd": "npm run lint && npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "entire isolated production browser suite",
+        "cwd": ".",
+        "cmd": "env -u BASE_URL -u SKIP_BUILD CI=true TMPDIR=/tmp GITHUB_SHA=$(git rev-parse HEAD) npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1800
+      },
+      {
+        "name": "isolated footer walk",
+        "cwd": ".",
+        "cmd": "env -u BASE_URL -u DATABASE_URL -u EXPECT_SHA CI=true TMPDIR=/tmp GITHUB_SHA=$(git rev-parse HEAD) bash scripts/walk-end.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "isolated footer Chrome probe",
+        "cwd": ".",
+        "cmd": "env -u BASE_URL -u DATABASE_URL -u EXPECT_SHA CI=true TMPDIR=/tmp GITHUB_SHA=$(git rev-parse HEAD) bash scripts/probe-end.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "isolated signed-in motion",
+        "cwd": ".",
+        "cmd": "env -u BASE_URL -u DATABASE_URL CI=true TMPDIR=/tmp GITHUB_SHA=$(git rev-parse HEAD) bash scripts/probe-motion-signed-in.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Prove fail-closed production deployment diagnostics",
+    "role": "software_engineer",
+    "depends_on": [],
+    "qa": "skip",
+    "problem": "Historical Vercel inspect job 121600218178 remains unread and live serves 0740594; a local fetch pass or pending deployment does not prove the repaired executable was delivered.",
+    "action_items": [
+      "At start, read AGENTS.md and the installed relevant Next guides, inspect fresh main and preserve all landed Kame/peel/fetch fixes. Raise any genuinely required person-only sign-in/setup immediately via plan_manager_ask_user(kind=operator_action, stable fingerprint, exact action/readiness signal); otherwise use the repository-owned diagnostic path and existing platform placement without a human gate.",
+      "Inspect fresh main and read pm-275/t-1617 plus pm-270's landed deployment policy. pm-275 is paused at planning time, so do not wait for it or duplicate an already landed fix: retain its source and add only missing production diagnostic/regression proof. This task owns scripts/vercel-deploy* and scripts/verify-deploy.sh; task 1 owns CI wiring.",
+      "Inspect bounded FAILED and COMPLETED CI history plus current jobs; request raw historical inspect failure 121600218178 and the last green production job 121590440426, comparing executable/lock/workflow fingerprints. Preserve HTTP status and history completeness. If the raw historical cause remains inaccessible, state it as unknown; prove current failure diagnostics using fixtures rather than inventing a Vercel error cause.",
+      "Extend subprocess tests only for uncovered behavior: inspect stderr/state reread/readyStateReason retained with exit codes, generic Error text distinct from a labelled failed state, bounded upload/inspect timeouts, red checks cannot reach production, failed inspect cannot be rescued by matching health, stale/off-branch executable rejected. Correct a concrete adapter defect if reproduced. Preserve real status propagation, existing bounds and main-only checks-before-production policy; no remote deploy from a verification command.",
+      "Run the actual pinned-major Vercel CLI command used by CI in help mode to preflight flag/import construction, record exact resolved version and CI configuration hash. Fake npx/health tests prove adapter policy only; authenticated deploy/inspection, production database migrations and served identity remain CI/acceptance obligations. Do not use login as a prerequisite for repository-only tests.",
+      "Document a one-shot read-only acceptance procedure using GitHub jobs and /api/health plus git ancestry for 17bca22 and all three replacement deliveries. It must reject red/skipped production, an unrelated green SHA or stale live source. Engineering ends at push; platform CI runs existing main production path or on-demand workflow_dispatch when a code run was replaced. Required live output stays unproven until observed.",
+      "Install the unchanged npm lock on Node 22. Record relevant code/lock/config hashes, actual tool versions, real versus fake boundaries, negative controls, unread evidence and deferred owners. Commit with pm-259/<assigned-task-id>: and push origin HEAD; engineering stops at the push. Never weaken checks, discard unrelated fixes or force-push."
+    ],
+    "interfaces": [
+      "scripts/vercel-deploy.sh",
+      "scripts/vercel-deploy.test.sh",
+      "scripts/verify-deploy.sh",
+      "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/delivery-recovery-evidence.md"
+    ],
+    "non_goals": [
+      "changing provider secrets, accounts, billing, production schema or infrastructure",
+      "CI workflow wiring or browser-feature repair",
+      "claiming authenticated production success from fake adapters or a health response alone"
+    ],
+    "acceptance_criteria": "Local shell controls prove bounded actionable diagnostics and fail-closed inspect/health/ancestry policy, with current real CLI construction and source identity documented. Unread historical logs remain explicitly inconclusive. CI production success and live ancestry are independent plan acceptance obligations, never inferred from the fake fixtures.",
+    "verification": [
+      {
+        "name": "deployment adapter positive and negative controls",
+        "cwd": ".",
+        "cmd": "bash scripts/vercel-deploy.test.sh",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "served ancestry rejection controls",
+        "cwd": ".",
+        "cmd": "bash scripts/verify-deploy.sh --self-test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "repository suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "shell syntax",
+        "cwd": ".",
+        "cmd": "bash -n scripts/vercel-deploy.sh scripts/vercel-deploy.test.sh scripts/verify-deploy.sh",
+        "expect": "exit0",
+        "timeout_s": 60
+      }
+    ]
+  }
+]
 ```
