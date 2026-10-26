@@ -1,9 +1,12 @@
 import { ClawMachine } from "@/components/claw-machine";
 import { swatches } from "@/components/figures";
+import { PondLoader } from "@/components/pond-loader";
+import { PondStatic } from "@/components/pond-static";
 import { StampHeading } from "@/components/stamp-heading";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
+import "../../pond.css";
 
 export const metadata: Metadata = { title: "Play" };
 
@@ -18,6 +21,15 @@ export default function PlayPage() {
         <div className="mt-8">
           <ClawMachine games={site.games} />
         </div>
+        <section className="mt-12" aria-labelledby="pond-heading">
+          <h2 id="pond-heading" className="caption">
+            Suminagashi pond
+          </h2>
+          <p className="mt-2 mb-4 text-muted">Float ink on still water, then comb and blow it into rings.</p>
+          <PondLoader>
+            <PondStatic />
+          </PondLoader>
+        </section>
         <h2 className="caption mt-12">In rotation</h2>
         <ul className="mt-3 grid gap-x-10 sm:grid-cols-2">
           {site.games.map((game) => (
