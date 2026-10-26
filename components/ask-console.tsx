@@ -1,7 +1,10 @@
 "use client";
 
-// Ask the console: a native modal dialog with a > prompt that answers from public/ask-index.json through
-// lib/ask.ts (offline, no model) and prints the reply on a paper receipt. The receipt is a fixed 32 columns, so
+// Ask the console: a native modal dialog with a > prompt that prints its reply on a paper receipt. On mount
+// (the first open) it asks GET /api/ask once whether the model tier is on (lib/ask-tier.ts); when it is, a
+// question is one POST /api/ask and the model's lines and cited pages print. When it is off, or the POST
+// fails, times out or sends back something unusable, the answer comes from public/ask-index.json through
+// lib/ask.ts (offline, no model), with no error shown. The receipt is a fixed 32 columns, so
 // each printed row is one unwrapped line of text. lib/typewriter.ts steps through the rows' text from
 // requestAnimationFrame, 40 chars a second; a row takes room on the strip only once it starts, and keeps its
 // final width so the paper does not jitter. A new question remounts the receipt and an unmount cancels the
@@ -9,6 +12,7 @@
 // typed. Under reduced motion the stepper returns the whole text at once, so both show on the first render.
 // Loaded on first open by components/ask-console-loader.tsx, its own chunk.
 import { answer, type AskIndex, type Reply } from "@/lib/ask";
+import { askModel, tierEnabled } from "@/lib/ask-tier";
 import { due, step } from "@/lib/typewriter";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -143,6 +147,13 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const [printed, setPrinted] = useState<(Printed & { n: number }) | null>(null);
+  const tier = useRef<Promise<boolean> | null>(null);
+  const latest = useRef(0);
+
+  // Once per mount: the loader mounts this on the first open and keeps it, so a reopen asks nothing again.
+  useEffect(() => {
+    tier.current ??= tierEnabled();
+  }, []);
 
   useEffect(() => {
     const el = dialog.current;
@@ -157,12 +168,17 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
     event.preventDefault();
     const query = input.current?.value.trim() ?? "";
     if (!query) return;
-    let reply: Reply;
-    try {
-      reply = answer(await index, query);
-    } catch {
-      reply = { intent: "none", lines: ["THE INDEX DID NOT LOAD. CLOSE AND ASK AGAIN."], sources: [] };
+    // Only the latest question prints; an earlier one still waiting on the model is dropped.
+    const asked = ++latest.current;
+    let reply = (await tier.current) ? await askModel(query) : null;
+    if (!reply) {
+      try {
+        reply = answer(await index, query);
+      } catch {
+        reply = { intent: "none", lines: ["THE INDEX DID NOT LOAD. CLOSE AND ASK AGAIN."], sources: [] };
+      }
     }
+    if (asked !== latest.current) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     setPrinted((p) => ({ query, reply, reduced, n: (p?.n ?? 0) + 1 }));
   }

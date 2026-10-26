@@ -4,6 +4,14 @@
 // The dialog's chunk is told apart by its marker (the receipt's class name, which only components/ask-console.tsx
 // carries); every script body the page receives is searched for it. The index hrefs come from /ask-index.json
 // fetched by the probe itself, outside the page, so the page's own request count stays clean.
+//
+// The model tier: the server under probe has ASK_LLM unset, so GET /api/ask is 404, the console asks it once
+// per mount and sends no POST. The tier's paths are then driven in the page with page.route fakes of
+// /api/ask (the server itself is never asked): an llm reply types its lines and links its pages after one
+// POST, the server's offline reply keeps its (OFFLINE) line, and an aborted POST, a non-JSON reply or a POST
+// with no answer in 10 s each print the offline canned answer with no error on screen. Chromium logs a 404 or
+// aborted fetch as a console error ("Failed to load resource"); for /api/ask that is the off switch working,
+// so only those lines are left out of the error check.
 import { createRequire } from "node:module";
 import path from "node:path";
 
@@ -33,6 +41,13 @@ function check(name, pass, detail = "") {
 }
 
 const errors = [];
+const API = "/api/ask";
+const FAKE = {
+  mode: "llm",
+  intent: "search",
+  lines: ["FAKE MODEL: I BUILD BATCH AND STREAM PIPELINES.", "FAKE MODEL: SEE THE WORK PAGE."],
+  sources: [{ title: "Work", href: "/work" }],
+};
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const index = await (await fetch(`${BASE_URL}/ask-index.json`)).json();
@@ -51,12 +66,22 @@ async function open(browser, { viewport, reduced = false }) {
   });
   const page = await context.newPage();
   page.on("console", (m) => {
-    if (m.type() === "error") errors.push(`console ${page.url()}: ${m.text()}`);
+    if (m.type() !== "error") return;
+    const at = m.location()?.url ?? "";
+    const api = at.startsWith("http") && new URL(at).pathname === API;
+    if (api && m.text().startsWith("Failed to load resource")) return;
+    errors.push(`console ${page.url()}: ${m.text()}`);
   });
   page.on("pageerror", (e) => errors.push(`pageerror ${page.url()}: ${e.message}`));
-  const net = { index: 0, scripts: new Map() };
+  const net = { index: 0, apiGet: 0, apiPost: 0, posted: [], scripts: new Map() };
   page.on("request", (r) => {
-    if (new URL(r.url()).pathname === "/ask-index.json") net.index++;
+    const { pathname } = new URL(r.url());
+    if (pathname === "/ask-index.json") net.index++;
+    if (pathname === API && r.method() === "GET") net.apiGet++;
+    if (pathname === API && r.method() === "POST") {
+      net.apiPost++;
+      net.posted.push(r.postData());
+    }
   });
   page.on("response", (r) => {
     if (r.request().resourceType() === "script") net.scripts.set(r.url(), r.text().catch(() => ""));
@@ -153,6 +178,7 @@ async function motion(browser, viewport) {
     const late = await markedScripts(net);
     check(`${size}: control: the dialog's chunk is seen once it opens`, late.length >= 1, JSON.stringify(late));
     check(`${size}: the first open fetches /ask-index.json once`, net.index === 1, `${net.index} requests`);
+    check(`${size}: the first open asks GET /api/ask once`, net.apiGet === 1, `${net.apiGet} GETs`);
 
     const sheet = await page.locator(DIALOG).evaluate((d) => {
       const r = d.getBoundingClientRect();
@@ -240,7 +266,8 @@ async function motion(browser, viewport) {
 
     await press(page, phone, chip);
     await page.waitForSelector(`${DIALOG}[open]`, { timeout: 5000 }).catch(() => {});
-    check(`${size}: a second open fetches nothing again`, net.index === 1, `${net.index} requests`);
+    check(`${size}: a second open fetches nothing again`, net.index === 1 && net.apiGet === 1, JSON.stringify({ index: net.index, apiGet: net.apiGet }));
+    check(`${size}: with ASK_LLM unset, three questions send no POST /api/ask`, net.apiPost === 0, `${net.apiPost} POSTs`);
 
     // Negative control: a link outside the index fails the same href check.
     const tampered = await page.locator(`${OUT} a[href]`).evaluateAll((as) => [...as.map((a) => a.getAttribute("href")), "/not-in-index"]);
@@ -274,6 +301,87 @@ async function still(browser, viewport) {
   }
 }
 
+// The receipt's answer lines (not the echo, the rule or the links) and the whole dialog's text.
+const printedLines = (page) =>
+  page.evaluate((out) => [...document.querySelectorAll(`${out} .ask-receipt > p:not(.ask-echo)`)].map((p) => p.textContent), OUT);
+const looksLikeError = (text) => /error|fail|did not load|went wrong|try again/i.test(text);
+
+// One page with /api/ask answered by `post` in the page (GET says enabled); asks `query`, waits up to `wait` ms
+// for the receipt to finish typing, and reports what printed.
+async function faked(browser, viewport, { post, query = QUERY, wait = 20000, reduced = false }) {
+  const { context, page, net, phone } = await open(browser, { viewport, reduced });
+  try {
+    await page.route(`${BASE_URL}${API}`, (route) => {
+      if (route.request().method() === "GET") return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ enabled: true, limits: { hour: 10, day: 150 } }) });
+      return post(route);
+    });
+    await press(page, phone, chipOf(page));
+    await page.waitForSelector(`${DIALOG}[open]`, { timeout: 10000 }).catch(() => {});
+    await page.locator("#ask-q").fill(query);
+    const sent = performance.now();
+    await page.locator("#ask-q").press("Enter");
+    let state = { rows: 0 };
+    let first = null;
+    for (let t = 0; t < wait && !typedOut(state); t += 100) {
+      await sleep(100);
+      state = await rowState(page);
+      if (first === null && state.rows > 0) first = performance.now() - sent;
+    }
+    const lines = await printedLines(page);
+    const hrefs = await page.locator(`${OUT} a[href]`).evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+    const text = (await page.locator(DIALOG).textContent()) ?? "";
+    return { state, lines, hrefs, text, first, net: { apiGet: net.apiGet, apiPost: net.apiPost, posted: net.posted } };
+  } finally {
+    await context.close();
+  }
+}
+
+async function tier(browser, viewport) {
+  const size = viewport === PHONE ? "390x844 touch" : "1366x768";
+  const json = (body) => (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+
+  // On: one POST of {question}; the fake model's lines type out and its page is a link.
+  const on = await faked(browser, viewport, { post: json(FAKE), query: "what do you build?" });
+  check(`${size} tier on: the first open asks GET /api/ask once`, on.net.apiGet === 1, `${on.net.apiGet} GETs`);
+  check(`${size} tier on: one question sends exactly one POST /api/ask with {question}`, on.net.apiPost === 1 && on.net.posted[0] === JSON.stringify({ question: "what do you build?" }), JSON.stringify(on.net));
+  check(`${size} tier on: the receipt types out the model's lines, and only those`, typedOut(on.state) && JSON.stringify(on.lines.map(squash)) === JSON.stringify(FAKE.lines.map(squash)), JSON.stringify(on.lines));
+  check(`${size} tier on: each cited page is a link to that page`, JSON.stringify(on.hrefs) === JSON.stringify(["/work"]), JSON.stringify(on.hrefs));
+  check(`${size} tier on: aria-live says the model's answer`, squash(on.state.live).includes(squash(FAKE.lines[0])), on.state.live);
+
+  // The server's own offline reply (a 429, a model error): printed as sent, (OFFLINE) line first.
+  const busy = await faked(browser, viewport, {
+    post: (route) => route.fulfill({ status: 429, contentType: "application/json", body: JSON.stringify({ mode: "offline", intent: "search", lines: ["(OFFLINE)", "SERVER OFFLINE LINE."], sources: [{ title: "Shore", href: "/shore" }] }) }),
+    reduced: true,
+  });
+  check(`${size} tier on, server offline: the (OFFLINE) line stays`, busy.lines[0] === "(OFFLINE)" && squash(busy.lines.join("")).includes("SERVEROFFLINELINE."), JSON.stringify(busy.lines));
+
+  // Off paths: each prints the local canned answer, which is what the server-off run printed for "shore".
+  for (const [name, post] of [
+    ["an aborted POST", (route) => route.abort("failed")],
+    ["a non-JSON reply", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<html>not json</html>" })],
+    ["a reply with a link off the site", json({ ...FAKE, sources: [{ title: "Elsewhere", href: "https://example.com/" }] })],
+  ]) {
+    const r = await faked(browser, viewport, { post, reduced: true });
+    check(
+      `${size} tier on, ${name}: the offline canned answer prints, with no error shown`,
+      r.net.apiPost === 1 && typedOut(r.state) && saysShore(r.state) && r.lines[0] !== "(OFFLINE)" && !looksLikeError(r.text) && hrefsOk(r.hrefs),
+      JSON.stringify({ net: r.net, lines: r.lines, text: r.text.slice(0, 200) }),
+    );
+  }
+  // Negative control for the check above: the fake model's lines are not the canned answer.
+  check(`${size} control: the fake model's receipt fails the canned-answer check`, !saysShore(on.state), on.state.live);
+
+  if (viewport === DESKTOP) {
+    // A POST with no answer: nothing for about 10 s, then the canned answer.
+    const hang = await faked(browser, viewport, { post: () => {}, reduced: true, wait: 16000 });
+    check(
+      `${size} tier on, a POST with no answer: the canned answer prints after the 10 s timeout`,
+      hang.net.apiPost === 1 && typedOut(hang.state) && saysShore(hang.state) && hang.first !== null && hang.first >= 9500 && hang.first < 14000 && !looksLikeError(hang.text),
+      JSON.stringify({ first: hang.first, net: hang.net, live: hang.state.live?.slice(0, 80) }),
+    );
+  }
+}
+
 const browser = await chromium.launch();
 try {
   if (EXPECT_SHA) {
@@ -282,9 +390,12 @@ try {
     check(`build-sha is ${EXPECT_SHA}`, sha === EXPECT_SHA, sha);
   }
   check("/ask-index.json has a /shore passage", !!shorePassage);
+  const off = await fetch(`${BASE_URL}${API}`);
+  check("GET /api/ask is 404: the model tier is off (ASK_LLM unset)", off.status === 404, `${off.status}; with the tier on, use scripts/probe-ask-llm-fake.sh`);
   for (const viewport of [DESKTOP, PHONE]) {
     await motion(browser, viewport);
     await still(browser, viewport);
+    await tier(browser, viewport);
   }
   check("no console errors or page errors", errors.length === 0, errors.slice(0, 3).join(" | "));
 } finally {

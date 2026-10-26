@@ -19,6 +19,11 @@
 # the motion run catches a half-typed receipt with the same reader (the reduced-motion check can fail), and a
 # link rewritten to /not-in-index fails the href check. No console or page error anywhere.
 #
+# The model tier: the local server runs with ASK_LLM and ANTHROPIC_API_KEY unset, so GET /api/ask is 404; the
+# console asks it once per mount and three questions send no POST /api/ask. The tier's own paths are faked
+# in the page (scripts/probe-ask.mjs has the list); the fake model's receipt failing the canned-answer
+# check is their negative control.
+#
 # Env: PORT (4091, or a free port when that default is busy; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1, EXPECT_SHA (checked if set).
 # Playwright is installed into a temp prefix at run time; package.json stays unchanged.
 # No `set -e`: every check runs, and the summary names the ones that failed.
@@ -61,6 +66,8 @@ if [ -z "$BASE_URL" ]; then
   export BETTER_AUTH_URL="${BETTER_AUTH_URL:-http://localhost:$PORT}"
   export DATABASE_URL="${DATABASE_URL:-postgresql://otohime:otohime@127.0.0.1:9/otohime}"
   export GITHUB_SHA="${GITHUB_SHA:-0123456789abcdef0123456789abcdef01234567}"
+  # The model tier stays off here: GET /api/ask is 404 and the console must send no POST.
+  unset ASK_LLM ANTHROPIC_API_KEY
   READY_TRIES=60
 
   # A busy default port (another probe on a shared host) falls back to a free one; an explicit PORT is refused.
