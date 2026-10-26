@@ -1,0 +1,2 @@
+ae6573a pm-257/t-1607: Build bounded ghost rooms and Worker adapter  (delivery, run-8976; the git_sha of the run-8976 summary report)
+<this commit> pm-257/t-1607: Record run-8976 commits  (report only)
