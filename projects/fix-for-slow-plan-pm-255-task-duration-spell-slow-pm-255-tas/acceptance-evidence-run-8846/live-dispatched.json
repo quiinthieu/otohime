@@ -1,0 +1,73 @@
+{
+  "delivery_proven": false,
+  "ok": false,
+  "mode": "dispatched",
+  "unmet": [
+    "hold_released",
+    "release_recorded",
+    "execution_started",
+    "dispatch_proven"
+  ],
+  "expected": {
+    "plan_id": "pm-255",
+    "predecessor_id": "pm-248",
+    "task_id": "t-1557",
+    "abandon_decision_ids": [
+      "dec-55805",
+      "dec-55807"
+    ]
+  },
+  "input_errors": [],
+  "hold_released": false,
+  "queued_startable": false,
+  "execution_started": false,
+  "release_recorded": false,
+  "dispatch_proven": false,
+  "reasons": {
+    "hold_released": [
+      "hold_after_plan",
+      "held_by_predecessor",
+      "progress_waiting"
+    ],
+    "queued_startable": [
+      "progress_not_startable"
+    ],
+    "execution_started": [
+      "execution_started_at_missing",
+      "plan_status_not_executing"
+    ],
+    "release_recorded": [
+      "release_decision_missing"
+    ],
+    "dispatch_proven": [
+      "swe_run_missing"
+    ]
+  },
+  "evidence": {
+    "plan_status": "queued",
+    "after_plan_id": "pm-248",
+    "execution_started_at": null,
+    "progress": {
+      "state": "waiting",
+      "reason": "after_plan",
+      "holders": [
+        "pm-248"
+      ]
+    },
+    "release_decision_id": null,
+    "dispatch_runs": [],
+    "failed_attempts": [],
+    "ignored_runs": []
+  },
+  "manifest": {
+    "provided": true,
+    "completeness": "verified",
+    "captured_at": "2026-10-26T10:48:49Z"
+  },
+  "sha256": {
+    "plan": "4630d9d9d40c5c571508a5b8fb55bc3bbc5f0a1b95226c3f4ab5da08e0ffbb97",
+    "schedule": "e7a1c538b006fba485448214ccbff0e1ca031aa84a992ca87567365dc500febd",
+    "timeline": "f75326bf732315b51f31282b84567aca1b2f0e06b88ea0948d0ec01503e10c2f",
+    "runs": "fca3cb7882c85a3346518d673f555eb3adcc9f4c33bd70e7a6d79b1962af4635"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "delivery_proven": false,
+  "ok": true,
+  "mode": "released",
+  "unmet": [],
+  "expected": {
+    "plan_id": "pm-255",
+    "predecessor_id": "pm-248",
+    "task_id": "t-1557",
+    "abandon_decision_ids": [
+      "dec-55805",
+      "dec-55807"
+    ]
+  },
+  "input_errors": [],
+  "hold_released": true,
+  "queued_startable": false,
+  "execution_started": true,
+  "release_recorded": true,
+  "dispatch_proven": true,
+  "reasons": {
+    "hold_released": [],
+    "queued_startable": [
+      "plan_not_queued",
+      "progress_not_startable"
+    ],
+    "execution_started": [],
+    "release_recorded": [],
+    "dispatch_proven": []
+  },
+  "evidence": {
+    "plan_status": "executing",
+    "after_plan_id": "pm-248",
+    "execution_started_at": "2026-10-26T11:00:00Z",
+    "progress": {
+      "state": "live",
+      "reason": null,
+      "holders": []
+    },
+    "release_decision_id": "dec-acc-ctl",
+    "dispatch_runs": [
+      {
+        "run_id": "run-ctl",
+        "tm_task_id": "ctl-durable",
+        "status": "running",
+        "outcome": "running",
+        "failed": false
+      }
+    ],
+    "failed_attempts": [],
+    "ignored_runs": []
+  },
+  "manifest": {
+    "provided": true,
+    "completeness": "verified",
+    "captured_at": "2026-10-26T10:48:49Z"
+  },
+  "sha256": {
+    "plan": "7d0043ae299453d90878715b01604846962db663db22063f3358ef9542d0a2f8",
+    "schedule": "5a6fcb164c2b75eed9fa810045cd48adbbc0dbd687c8523073067106dfea400f",
+    "timeline": "d031e27dfe95f428ab088d71fd368c7fff20c62abea2802e5eefba53732d9919",
+    "runs": "5355e0a28467f26641ee19e1a9a92e1220ca3957a76ca8b6a9768ebbe19e6d54"
+  }
+}

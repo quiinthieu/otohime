@@ -1,0 +1,47 @@
+{
+  "captured_at": "2026-10-26T10:48:49Z",
+  "captured_by": "run-8846 (acceptance_engineer)",
+  "board_build_sha": "unobserved",
+  "delivery_sha": "0c4a25d6eb0209b6e8673c832d2ba2f023966901",
+  "redactions": "Long prose fields the probe never reads were replaced with bracketed placeholders: runs[0].prompt, timeline dec-56704 evidence.task, dec-56482 evidence.idea/cause, rev:pm-255:1 reason, idea:idea-248 summary. All entries, ids, kinds, statuses, evidence keys read by the probe are verbatim.",
+  "snapshots": {
+    "plan": {
+      "tool": "plan_manager_get_plan",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T10:48:49Z",
+      "complete": true,
+      "sha256": "4630d9d9d40c5c571508a5b8fb55bc3bbc5f0a1b95226c3f4ab5da08e0ffbb97"
+    },
+    "schedule": {
+      "tool": "plan_manager_explain_schedule",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T10:48:49Z",
+      "complete": true,
+      "sha256": "e7a1c538b006fba485448214ccbff0e1ca031aa84a992ca87567365dc500febd"
+    },
+    "timeline": {
+      "tool": "plan_manager_get_timeline",
+      "args": {
+        "plan_id": "pm-255",
+        "limit": 200
+      },
+      "captured_at": "2026-10-26T10:48:49Z",
+      "complete": true,
+      "sha256": "f75326bf732315b51f31282b84567aca1b2f0e06b88ea0948d0ec01503e10c2f",
+      "pages": 1
+    },
+    "runs": {
+      "tool": "plan_manager_list_runs",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T10:48:49Z",
+      "complete": true,
+      "sha256": "fca3cb7882c85a3346518d673f555eb3adcc9f4c33bd70e7a6d79b1962af4635"
+    }
+  }
+}

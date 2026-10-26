@@ -1,0 +1,66 @@
+{
+  "run": {"id": "run-8846", "role": "acceptance_engineer", "agent_profile": "claude-opus-high", "model": "claude-opus-5-5", "effort": "high", "worker": "avietidol-mac-mini", "tm_task_id": "9699a5e1-f501-419e-856a-f7af8ca0ad51"},
+  "checkout": {"sha": "0c4a25d6eb0209b6e8673c832d2ba2f023966901", "node": "v22.23.3", "npm": "10.9.9", "tsc": "5.9.3", "install": "npm ci exit 0 (committed lockfile)"},
+  "fingerprints_sha256": {
+    "lib/plan-release.ts": "969c4a7cfd4e7c353730be7b9091a2b0506101307d9243b436cf7a663826d289",
+    "lib/plan-release.test.ts": "075a44cefed039479020c60f8d299080dc1fd41bf2f23dc422ff19cb6474077f",
+    "scripts/probe-plan-release.mjs": "f60adbb95f50e7420b53ecef0f5bbd1423ee6b8b9bd41ae467c1cfcb066c9ac2",
+    "qa-adversarial.mjs": "133de542ffb2247900577a2302f7d3f5a9a1af7a407f25f03ad81608f2af6234",
+    "package.json": "7693c52090cb362fa7085a3d4812d2ea1d85f7004584a346b2c8acaa34b84bcf",
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "tsconfig.json": "e1f2b4ec806c55ba0cc71369588733fe427a277990cccfd44ef62c9b6e9fe49d"
+  },
+  "verification": {
+    "npm test": {"exit": 0, "tests": 2125, "pass": 2125, "fail": 0, "skipped": 0, "cancelled": 0},
+    "focused lib/plan-release.test.ts": {"exit": 0, "tests": 45, "pass": 45, "fail": 0, "skipped": 0},
+    "qa-adversarial.mjs": {"exit": 0, "count": 20, "complete": true, "contract_met_true": 20},
+    "npm run typecheck": {"exit": 0}
+  },
+  "probe_on_fresh_board": {
+    "captured_at": "2026-10-26T10:48:49Z",
+    "released": {"exit": 1, "unmet": ["hold_released", "release_recorded", "queued_startable|execution_started"], "input_errors": []},
+    "dispatched": {"exit": 1, "unmet": ["hold_released", "release_recorded", "execution_started", "dispatch_proven"], "input_errors": []},
+    "manifest": "verified"
+  },
+  "controls": {
+    "negative_tamper_plan_status_executing_no_rehash": {"exit": 2, "input_errors": ["manifest_plan_sha256_mismatch"], "delivery_proven": false},
+    "positive_synthetic_release_and_dispatch_rehashed": {"released_exit": 0, "dispatched_exit": 0, "delivery_proven": false, "note": "synthetic mutation of this run's real bytes: progress live, executing, after_plan_released receipt tied to dec-55805/dec-55807, running t-1557 SWE run; proves the probe can say yes, so its live no is discriminating"}
+  },
+  "deployment": {
+    "otohime_production": {"url": "https://otohime.dev/api/health", "status": 200, "sha": "ae4607dafc28c6f732fdb7ee2ff2f1c7953ed4d3", "home_build_sha": "ae4607dafc28c6f732fdb7ee2ff2f1c7953ed4d3", "contains_0c4a25d": false, "contains_c2ca9c2_evaluator": true},
+    "otohime_ci_main_first_page": {"read": 10, "total": 392, "runs": [
+      {"id": 40310239199, "sha": "841ca69", "state": "in_progress", "jobs": {"checks": "121530268639 in_progress"}},
+      {"id": 40309492875, "sha": "0c4a25d", "state": "cancelled", "jobs": "none"},
+      {"id": 40308983810, "sha": "b0befb6", "state": "cancelled"},
+      {"id": 40308084794, "sha": "750947b", "state": "cancelled"},
+      {"id": 40307460821, "sha": "9ddd084", "state": "cancelled"},
+      {"id": 40306767130, "sha": "922b210", "state": "cancelled"},
+      {"id": 40306337481, "sha": "ae4607d", "state": "success", "jobs": {"checks": "121516259788 success", "production": "121520661524 success"}},
+      {"id": 40303724712, "sha": "9d0fba4", "state": "failure"},
+      {"id": 40303396148, "sha": "b73d93c", "state": "failure"},
+      {"id": 40302228872, "sha": "ff527a1", "state": "cancelled"}
+    ]},
+    "plan_manager": {"deployment": "plan-manager", "image": "registry.gitlab.com/kq.viet/mono-v2/plan-manager:f19db8db", "replicaset": "plan-manager-6f5fb69d45", "rollout_complete": true, "pm_263_delivered": false},
+    "board_claim_contradicted": "dec-57069 qa_skipped says '0c4a25d is deployed'; production serves ae4607d, which does not contain 0c4a25d (git merge-base --is-ancestor exit 1)"
+  },
+  "board": {
+    "pm-255": {"status": "queued", "after_plan_id": "pm-248", "progress": "waiting/after_plan", "holders": ["pm-248"], "execution_started_at": null, "t-1557": "ready", "runs": [{"id": "run-8771", "role": "investigator", "status": "succeeded"}], "timeline_entries": 15, "timeline_complete": true, "latest": "dec-56850 promotion_skipped after_plan 09:45:53Z"},
+    "pm-248": {"latest_15_read": true, "newest": "dec-55807 decision_applied abandon 04:49:13Z", "note_claim": "Abandoning frees pm-255 to run", "orphan_line": "dec-55806 after_plan_orphaned advisory=true"},
+    "pm-263": {"status": "paused", "execution_started_at": null, "tasks": {"t-1579": "ready", "t-1580": "backlog", "t-1581": "ready", "t-1582": "backlog"}},
+    "slots": {"max_active_plans": 5, "source": "dashboard", "used": 5, "fix_used": 1, "max_active_fix_plans": 1},
+    "esc-395": {"fingerprint": "release-after-plan:pm-255:pm-248", "waived_at": "2026-10-26T08:52:07Z", "chore_done_at": null}
+  },
+  "delivery_chain_t1593": {
+    "swe": {"run": "run-8841", "tm_task_id": "ff6a5a00-91fc-4317-9315-878924018766", "profile": "claude-opus-high", "model": "claude-opus-5-5", "effort": "high", "worker": "avietidol-z490", "status": "succeeded", "callback": "ev:11661 applied", "callback_apply_failures": 0},
+    "swe_attempt_1": {"run": "run-8840", "tm_task_id": "d7322e5f-74e8-42e1-b5ae-6d9bcea2e584", "callback": "ev:11649 applied"},
+    "gate": {"run": "run-8845", "tm_task_id": "bbdad136-3436-4a27-8799-bd175aa765dd", "agent": "shell", "git_sha": "0c4a25d", "exit": 0, "callbackState": "delivered", "callbackAttempts": 1, "ingestion": "ev:11666 applied", "verification": "ver-3534", "decision": "dec-57063 green_gate_pass"},
+    "qa": "dec-57069 qa_skipped (qa_mode=auto)"
+  },
+  "task_manager_history": {
+    "scope": "project=plan-manager task_type=coding_task",
+    "FAILED": {"read": 20, "total": 63, "offset": 0, "pm_260_entries": 0, "pm_255_entries": 0, "older": "unread/inconclusive"},
+    "COMPLETED": {"read": 20, "total": 1145, "offset": 0, "pm_260_entries": ["bbdad136 run-8845", "ff6a5a00 run-8841", "d7322e5f run-8840", "e2ca0f05 run-8836", "8202df54 run-8833", "7553112b run-8829", "a98c281a run-8826", "e6da1063 run-8823"], "pm_255_entries": 0, "older": "unread/inconclusive"},
+    "raw_tail_read": "run-8841 log tail via get_run(include_logs, 25 lines): edits to lib/plan-release.test.ts only"
+  },
+  "logs": {"plan-manager_contains_pm-255_90m": "null (no lines)", "plan-manager_contains_error_30m": "10 lines, all 'WARN learning export failed ... answered 403' every ~6 min, unrelated to this plan"}
+}
