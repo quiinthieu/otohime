@@ -261,6 +261,19 @@ The live reduced-motion check retains the QA repair from `01dfe6b`: register a m
 
 The blocking Kame keyboard test now measures the complete resumed hold: refocus and assert the pet button, finish Space keydown, then observe at least 600ms of flowing page-clock advance within a bounded browser predicate before asserting `pet`. The paused 499/500ms boundary, release, focus-loss, reduced-motion and Pocket checks remain. This follows `fix_plan_run-9078.md` without combining real time with another virtual advance. Ten focused production-browser repetitions and a blur-after-keydown negative control exercise the assertion; complete verification and the separately observed hydration-error limitation are recorded in [run-9082-summary.md](run-9082-summary.md). CI/deployment and independent deployed QA remain plan-manager's responsibility after push.
 
+### Signed-in motion probe repair · run-9091
+
+Follows `fix_plan_run-9088.md`. `/dashboard` has a `loading.tsx`, so leaving the 403 by the nav's Dashboard is two React transitions. First the 403 gives way to the skeleton: the 403 page-out fade runs, and the nav pill's 320ms `nav-current` fade-in runs. Then, once the dynamic page has streamed, the page fades in over the skeleton with 210ms after 150ms. `settleFades` in `scripts/probe-motion-signed-in.mjs` used to accept any `fade-in`, so it could return before the second transition began. That is QA's recorded `old(_t_) 0+150, new(nav-current) 0+320` signature. With motion on, it now waits, bounded at 10s, for the page's own 210ms-after-150ms fade-in. A page that never fades in still fails the unchanged check. `swap` also waits for any in-flight view transition before resetting the fade record. Otherwise a router.push way in could leave the 403's own still-running `page-in` to be re-read as the Dashboard's. Product code, the assertion, durations and the missing-guard negative are unchanged. The forbidden/CSS fallback in the fix plan was not needed, because the page fade is present once observed correctly.
+
+Controls ran against real production builds and disposable docker Postgres, with temporary probe or page changes that are not delivered:
+
+- With the streamed `/dashboard` RSC response delayed by 1.5s, HEAD's probe reproduces QA's failure 2/2 (354 ok, 2 failed). The repaired probe passes, 356 ok.
+- A 12s delay, beyond the bound, fails explicitly (353 ok, 3 failed).
+- A build of the Dashboard without `enter="page-in"` fails all four Dashboard exits (352 ok, 4 failed). Before the reset wait was added, it falsely passed 390×844 router.push.
+- Unmodified, the probe passes repeatedly with both viewports, in Playwright Chromium and in CI-style Google Chrome (`CI=true`, locked playwright-core).
+
+GitHub checks, production and served-SHA QA remain plan-manager's after push.
+
 ## Opt-in on-device head tracking · pm-269/t-1591
 
 `HeadTracker` exposes `start`, `stop`, `status`, `pose` and `error`. Status is a discriminated idle/loading/active/fallback union with cancellation generation ids. `createHeadTracker` owns the permission promise, stream, abortable video preparation, worker, timers and one in-flight transferable frame. Every await/result checks the generation. Stop invalidates pending work, aborts preparation, clears the detached video's srcObject, ends all tracks and terminates the worker realm. Late permission grants end their tracks immediately; late ImageBitmaps close without reaching a worker. Loading and nonresponsive inference have bounded timeouts. Ended tracks trigger fallback. Lost faces emit neutral while retaining the stream for recovery; direction/tilt controls relinquish camera ownership.
