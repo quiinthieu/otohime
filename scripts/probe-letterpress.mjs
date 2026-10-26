@@ -185,10 +185,23 @@ async function presses(browser) {
         await key.hover();
         const rest = await key.evaluate((el) => getComputedStyle(el).translate);
         await page.mouse.down();
-        await page.waitForTimeout(200);
-        const held = await key.evaluate((el) => ({ t: getComputedStyle(el).translate, active: el.matches(":active") }));
-        await page.mouse.up();
         const want = reduced ? 0 : 1;
+        const sample = () => key.evaluate((el) => ({ t: getComputedStyle(el).translate, active: el.matches(":active") }));
+        let held;
+        if (reduced) {
+          // Nothing should move: let two frames pass, so a transition would have started, then read once.
+          await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+          held = await sample();
+        } else {
+          // The press is a 70 ms transition; a loaded host can start or finish it late, so wait for it to land.
+          const until = Date.now() + 2000;
+          held = await sample();
+          while (!(held.active && ty(held.t) === want) && Date.now() < until) {
+            await page.waitForTimeout(25);
+            held = await sample();
+          }
+        }
+        await page.mouse.up();
         check(`${name}: a held ${sel} sits ${want}px down (rest ${rest}, held ${held.t})`, held.active && ty(rest) === 0 && ty(held.t) === want, JSON.stringify({ rest, held }));
       }
     } finally {
