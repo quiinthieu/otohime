@@ -1,1 +1,2 @@
-<this commit> pm-249/t-1568: Make CI checks green: teach the footer walk and probe the waterline, and wait for the sea's frames  (delivery; its sha is the git_sha of the run-8758 summary report, since a commit cannot name itself)
+3351f78 pm-249/t-1568: Make CI checks green: teach the footer walk and probe the waterline, and wait for the sea's frames  (run-8758 delivery)
+<this commit> pm-249/t-1568: Record checks green on main with the embedded-Postgres runners  (run-8852 delivery, evidence only: the peep-box fix is pm-264's b80d942; its sha is the git_sha of the run-8852 summary report, since a commit cannot name itself)

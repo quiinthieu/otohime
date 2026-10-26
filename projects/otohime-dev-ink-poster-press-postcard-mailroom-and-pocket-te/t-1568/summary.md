@@ -53,3 +53,63 @@ Repetition and negative controls:
 - Not observed: the GitHub Actions run itself. The repo is private and this lease has no `gh` or token. Linux
   runner timing was not reproduced.
 - Not done here: the deploy and the live `/api/health` sha check (task 3, plan-manager's green gate).
+
+# Fix cycle: run-8852 (claude-opus-5-5)
+
+## Why the gate was red
+The gate failed on both 3351f78 and the plan sha with the same error: `curl: (22) ... 500` and
+`ECONNREFUSED 127.0.0.1:5432`. Its e2e item ran a bare `next start` and curled `/api/health`. That route queries
+Postgres, and the verify runner has no Postgres on :5432 (in ci.yml it comes from the job's `services:` block).
+This is an environment problem, not a code defect. The contract now names the repo's own runners, which start their
+own throwaway database: `scripts/e2e.mjs` without BASE_URL, and walk-end/probe-end with SKIP_BUILD=1.
+
+Negative control: `next start` with DATABASE_URL at localhost:5432 and nothing listening there gives
+`/api/health` = 500 with `ECONNREFUSED 127.0.0.1:5432`. This reproduces the gate's failure, so the database the
+runners start is what makes the server healthy.
+
+## What was still red: a flaky peep-box e2e (new on main in 28d4542, pm-264/t-1590)
+On 28d4542 every step was green the first time (e2e 110/110). After rebasing onto 4a87fc4 the full e2e run failed
+at `e2e/peep-box.test.ts:225`, where the eye has not moved after "Look right" + Enter. Repeated against one
+server, the file failed 3 of 6 runs, at both 390 and 1366.
+
+Cause: `activate()` waited only for `[data-peep-controller]` to mount. The controls do nothing until the effect has
+set `control.current` and the IntersectionObserver's first callback has set `running`, which is what
+`data-running="true"` marks. An Enter pressed in that gap is dropped (`look()` returns early), `settle()` passes at
+once and the eye is still at neutral. Ruled out: the pointer source (only the activation click's pointermove was
+seen). Any extra round trip before Enter hid the failure (12/12 pass).
+
+Fix: pm-264/t-1590 landed b80d942 with the same diagnosis while this run was pushing. Its `activate()` waits for
+`data-running="true"` and `data-source="pointer"`, adds failure diagnostics and also steadies the touch-pan test.
+This run had written the same wait (10/10 after the fix, and the wait timed out as a negative control when the box
+cannot run). It took b80d942's superset unchanged instead of a conflicting duplicate. Independent check of b80d942
+on its own build and a throwaway database: the peep-box file passed 10 of 10 runs (before: 3 of 6 failed).
+
+## Result on the final tree (main b80d942 + this commit; macOS lease, Node 22.12.0, Next 16.4.2, nothing on :5432)
+
+| step (CI order) | how | result |
+| --- | --- | --- |
+| npm ci, lint, typecheck | as in CI | exit 0 (lint: 0 errors, pre-existing warnings only) |
+| npm test | as in CI (now includes scripts/ci-workflow.test.mjs) | 2160/2160 pass |
+| ask:check | as in CI | up to date |
+| drizzle-kit check, db:generate, `git status db/migrations` | as in CI | no schema changes, no diff |
+| npm run build | BETTER_AUTH_SECRET placeholder | exit 0 |
+| db:migrate + test:e2e | `SKIP_BUILD=1 npm run test:e2e` (embedded Postgres 17, migrations, next start) | 110/110 pass, exit 0 |
+| probe-motion-signed-in.sh | SKIP_BUILD=1 (its own docker Postgres), on 28d4542 | 356 ok, 0 failed |
+| walk-end.sh | SKIP_BUILD=1 (embedded Postgres) | 67 ok, 0 failed |
+| probe-end.sh | SKIP_BUILD=1 (docker Postgres) | 171 ok, 0 failed |
+| probe-end.sh, docker stubbed to fail, on 28d4542 | SKIP_BUILD=1, `docker` shim exits 1, so the embedded Postgres is used | 171 ok, 0 failed |
+
+The e2e glob `e2e/**/*.test.ts` includes `e2e/pocket-terminal.test.ts` and `e2e/ink-press.test.ts`. Both ran:
+"nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog" and
+"the press loads lazily in a small chunk, prints a WebGL2 poster ..." passed, along with their other tests.
+
+This commit changes only `projects/**`, which ci.yml's new `paths-ignore` (2eaada2) keeps out of the main queue.
+The checks and production run for main come from b80d942, which touches `e2e/`.
+
+The build's prebuild step rewrites `content/history.json` (the history index, by design). That file was reverted
+and not committed.
+
+## Boundaries
+- Real: Next build and `next start`, embedded Postgres 17 and docker Postgres 17, Playwright Chromium.
+- Not observed: the GitHub Actions run (private repo, no `gh` or token on the lease) and Linux runner timing.
+- Not done here: the deploy and the live sha check (t-1569).
