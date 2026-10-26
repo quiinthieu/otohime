@@ -1,6 +1,109 @@
 # Paper Almanac Bits
 
-Plan **pm-248**, product-owner run **run-8433**. Baseline: `d9562c2` (main).
+## Re-plan: run-8566 (change request on t-1512)
+
+Plan **pm-248**, product-owner run **run-8566**. Baseline for this re-plan:
+`f86fcad` (main). The original proposal below (run-8433) stays as the record of
+finished tasks.
+
+### What failed
+
+t-1512 (Torn sheet 404) failed its green gate three times and was superseded
+(fix cycles 1 to 3). Every failing run had the same cause, and it sat in the
+board contract, not in the code:
+
+- The item `lint changed files` holds the command
+  `npx eslint app/(site)/not-found.tsx app/global-not-found.tsx components/lost-sheet.tsx`
+  with the route-group path unquoted. The gate runs it through `bash -c`, which
+  parses the parentheses and exits 2 in about 1 ms, before ESLint starts
+  (ver-3390, ver-3391, ver-3409, ver-3418).
+- The fix was recorded as a decision (esc-376, esc-379) but never applied to the
+  board, so each software-engineer cycle reran a command that could not pass.
+- The 404 code is correct and is already on main at `c06a430`. Typecheck,
+  `next build` and `probe-lost` (34 of 34) pass at that code, and `npm test`
+  passes 1723 of 1723.
+
+### Remaining work
+
+Only t-1512 is open in this plan. t-1511 and t-1513 to t-1519 are done and are
+kept as they are. The proposal has one task.
+
+| # | Task | Replaces | Role | QA |
+| --- | --- | --- | --- | --- |
+| 1 | Torn sheet 404 (gate fix) | t-1512 | software_engineer | required |
+
+### What the new task does differently
+
+1. **The commands are right in the contract.** The lint item is written as
+   `npx eslint 'app/(site)/not-found.tsx' app/global-not-found.tsx components/lost-sheet.tsx`,
+   the form the decider chose on esc-376 and esc-379. I parse-checked it before
+   proposing: on a fresh `npm ci` checkout at `f86fcad`, the quoted form exits 0
+   with ESLint actually running, and the unquoted form is the `bash -c` parse
+   error above. The other three items are unchanged.
+2. **No application code change.** The 404 sources are already on main. A
+   software-engineer fix cycle cannot repair a contract defect, so the task
+   runs the gates on the delivered sha and changes nothing that is not needed.
+3. **Failures are reported, not worked around.** A bash parse error, a missing
+   binary, or a nonzero item goes into the summary with its exact stderr. The
+   engineer does not edit application code to get around it, and does not edit
+   the contract (the board, not the repo, holds the contract).
+4. **No summary-only commit.** esc-379 rules out summary-only pushes. The
+   result goes through `plan_manager_submit_report`. A commit is made only if a
+   file changes.
+5. **Clean start.** The task begins with `npm ci` and a clean `.next`, because
+   a fresh checkout has no `node_modules` (the lesson from earlier QA runs).
+6. **No dependency on t-1511 in the proposal.** Remaining tasks may depend only
+   on each other, and t-1511 is already done, so `depends_on` is empty. That is
+   the same as the decider's `depends_on: [t-1511]`.
+
+### Acceptance and gap
+
+All acceptance criteria can be met on this platform. The probe starts the built
+app, drives it in pinned Playwright Chromium, and covers no-JS links, rubbing
+to 100%, keyboard, reduced motion and mobile width. No fake runner is involved.
+
+Gap, recorded as a decision: this task proves the sheet locally (`next build`
+and `next start`). It does not observe the deployed site or CI. The green gate
+(CI deploy probe) and acceptance cover that after delivery, and this task does
+not claim it.
+
+### Replacement task contract (proposal payload)
+
+```json
+[
+  {
+    "sequence": 1,
+    "title": "Torn sheet 404 (gate fix)",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "GET of an unknown path returns HTTP 404 with a server-rendered torn crumpled sheet and plain links to Home, Work, Projects, Notes and Play that work with JavaScript disabled; with JavaScript, rubbing the sheet smooths it to 100% and links stay reachable; reduced motion shows a flat sheet.",
+    "depends_on": [],
+    "problem": "t-1512 failed three fix cycles on its lint item: the board command leaves the route-group path unquoted, so bash -c exits 2 before ESLint runs. The 404 at c06a430 on main is correct and passes its other gates. The task has to prove the 404 on the delivered sha with commands bash can parse.",
+    "action_items": [
+      "Run npm ci and remove .next before any gate, because a fresh checkout has no node_modules.",
+      "Confirm that the 404 sources equal c06a430: git diff --quiet c06a430 HEAD -- 'app/(site)/not-found.tsx' app/global-not-found.tsx components/lost-sheet.tsx lib/lost.ts scripts/probe-lost.sh scripts/probe-lost.mjs. Make no application code change unless that diff is non-empty, and then report it instead of editing.",
+      "Run the four verification items in order through bash -c. Record each exit code and any stderr in the summary.",
+      "If an item fails with a bash parse error, a missing binary or a nonzero exit, report it with its stderr and stop. Do not change application code to work around it, and do not edit the board contract.",
+      "Do not create a summary-only commit. Submit the result with plan_manager_submit_report. Commit only a file that actually changed, and then push it."
+    ],
+    "interfaces": ["app/(site)/not-found.tsx", "app/global-not-found.tsx", "components/lost-sheet.tsx", "app/(site)/globals.css", "scripts/probe-lost.sh", "scripts/probe-lost.mjs"],
+    "non_goals": ["any application code change", "editing the board contract or its verification commands", "shader or WebGL bubbles", "ink-blot wipe", "other route groups' 404s", "new runtime dependencies", "claiming the deployed site or CI result"],
+    "verification": [
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
+      {"name": "lint changed files", "cwd": ".", "cmd": "npx eslint 'app/(site)/not-found.tsx' app/global-not-found.tsx components/lost-sheet.tsx", "expect": "exit0", "timeout_s": 600},
+      {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800},
+      {"name": "lost probe", "cwd": ".", "cmd": "bash scripts/probe-lost.sh", "expect": "exit0", "timeout_s": 900}
+    ]
+  }
+]
+```
+
+The `interfaces` list is the verified footprint, the same as t-1512's. The
+engineer should not change those files.
+
+### Earlier proposal (run-8433)
+
+Baseline: `d9562c2` (main).
 Research: `rep-4881`, captured verbatim in [research.md](research.md). The
 exact task payload is [tasks.json](tasks.json); the contracts below render it.
 
