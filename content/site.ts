@@ -29,6 +29,8 @@ export type EndCopy = {
   signature: string;
   badge: string;
   achievement: string;
+  // the link under the footer's waterline, down to Ryugu-jo
+  below: string;
   idle: EndCue;
   tenth: EndCue;
   unlocked: EndCue;
@@ -101,6 +103,8 @@ export const site = {
     full: (score: number) => `The pipeline is full: ${score}! A plays again.`,
     wrap: "Debug mode: walls wrap.",
     badge: "★",
+    // The way down to Ryugu-jo (app/(ryugu)/), beside the menu's chips.
+    dive: "▽ Dive",
   },
   // TODO(otohime)
   notes: [
@@ -246,6 +250,8 @@ export const site = {
     signature: "Drawn in SVG, built with Next.js, animated on twos.",
     badge: "★ 1/1 Reached the end",
     achievement: "Achievement unlocked: Reached the end.",
+    // The link under the footer's waterline, down to Ryugu-jo (components/end-footer.tsx).
+    below: "Below the waterline: Ryugu-jo ↓",
     idle: {
       lcd: ["SAVE", "POINT"] as const,
       readout: "Save point ready. Poke the console or tap a key sequence.",

@@ -3,6 +3,7 @@ import { swatches } from "@/components/figures";
 import { site } from "@/content/site";
 import { away } from "@/lib/end";
 import { CONSOLE_MENU } from "@/lib/pages";
+import { PALACE_HREF } from "@/lib/urashima";
 import { cacheLife } from "next/cache";
 import Link from "next/link";
 import type { CSSProperties } from "react";
@@ -93,6 +94,19 @@ export function EndFooter() {
           </p>
           <EndTop />
         </div>
+      </div>
+
+      {/* Below the waterline, past everything else: the way down to Ryugu-jo. A plain <a>: the palace is its own root
+         layout (app/(ryugu)/), so it is a full page load. */}
+      <div className="end-waterline" data-end-waterline="">
+        <svg className="end-wave" viewBox="0 0 1000 16" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 8Q25 0 50 8T100 8T150 8T200 8T250 8T300 8T350 8T400 8T450 8T500 8T550 8T600 8T650 8T700 8T750 8T800 8T850 8T900 8T950 8T1000 8V16H0Z" />
+        </svg>
+        <p className="end-deep">
+          <a href={PALACE_HREF} data-end-ryugu="" className="end-ryugu-link">
+            {site.end.below}
+          </a>
+        </p>
       </div>
     </footer>
   );

@@ -1510,6 +1510,39 @@
     margin-inline: 0.5rem;
   }
 
+  /* Below the footer's bar, the waterline: the paper ends in a wave and a strip of sumi sea holds the way down to
+     Ryugu-jo. The sea is dark in both themes, like the palace (app/(ryugu)/ryugu.css). */
+  .end-waterline {
+    margin-top: 0.5rem;
+    color: #d6e8ed;
+  }
+
+  .end-wave {
+    display: block;
+    width: 100%;
+    height: 16px;
+    fill: #1b2c38;
+  }
+
+  .end-deep {
+    margin: 0;
+    padding: 1.25rem 1.25rem 1.75rem;
+    background: linear-gradient(to bottom, #1b2c38, #0e161d);
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+  }
+
+  .end-ryugu-link {
+    color: inherit;
+    text-underline-offset: 3px;
+  }
+
+  .end-ryugu-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
   .end[data-seen="true"] .end-ground-wrap {
     animation: rise 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
   }

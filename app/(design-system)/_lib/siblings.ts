@@ -1,5 +1,5 @@
-// "Right here": the eleven other top-level stylesheets on this site (the
-// site's and ten projects', not this group's own), pinned from the files.
+// "Right here": the twelve other top-level stylesheets on this site (the
+// site's, ten projects' and the palace's, not this group's own), pinned from the files.
 // Each row holds the sheet's light paper (the first hex of --paper; Vinyl
 // has none), its first ink hex, how many distinct custom properties it
 // declares (its named decisions), and whether it names a --paper and an
@@ -93,6 +93,9 @@ export const SIBLINGS: readonly Sibling[] = [
     hasInk: true,
     dress: { name: "Structures", spot: "#2456b3", spotFrom: "app/(structures)/structures.css", radius: 6, face: "cursive" },
   },
+  // Ryugu-jo's sea: its --paper is the house paper, floating as the surface above the waterline; its ink is pale,
+  // for lines drawn on a dark sea.
+  { group: "ryugu", file: "app/(ryugu)/ryugu.css", paper: "#f2efe7", ink: "#e6e1d3", decisions: 8, hasPaper: true, hasInk: true },
 ];
 
 export const PAPER_COUNT = SIBLINGS.filter((s) => s.hasPaper).length;

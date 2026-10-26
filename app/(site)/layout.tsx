@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { PocketTerminalLoader } from "@/components/pocket-terminal-loader";
 import { PressSound } from "@/components/press-sound";
 import { SeasonLayer } from "@/components/season-layer";
+import { UrashimaKeys } from "@/components/urashima-keys";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
 import { pondPrintScript } from "@/lib/pond-print";
@@ -62,6 +63,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* "/" or Cmd/Ctrl-K opens the Pocket Terminal (components/pocket-terminal.tsx, its own chunk). Ahead of the
            pages, so its capture-phase key listener is added before the handheld's and can stop keys while open. */}
         <PocketTerminalLoader />
+        {/* Typing "urashima" goes down to Ryugu-jo (components/urashima-keys.tsx). Also ahead of the pages: its capture
+           listener takes the word's a's before the Pocket console can open a page with them. */}
+        <UrashimaKeys />
         {children}
       </body>
     </html>

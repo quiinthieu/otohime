@@ -20,8 +20,9 @@ const GROUPS = readdirSync(join(ROOT, "app"), { withFileTypes: true })
   .map((e) => e.name.slice(1, -1))
   .sort();
 // Documents that are neither the site nor a /projects row: they hop like the rest, but have no row to name an h1
-// after. The fold zine (/zine) is a sheet to print, linked from the site's footer.
-const SHEETS_ONLY = ["zine"];
+// after. The fold zine (/zine) is a sheet to print, linked from the site's footer; Ryugu-jo (/ryugu) is a secret,
+// reached by typing "urashima", the Pocket console or the waterline under the footer.
+const SHEETS_ONLY = ["ryugu", "zine"];
 const PROJECTS = GROUPS.filter((g) => g !== "site" && !SHEETS_ONLY.includes(g));
 
 // Sheets a root layout imports beside its root stylesheet, named here so no other second import slips in. The
@@ -79,7 +80,7 @@ const SHEETS = GROUPS.map((g) => ({ group: g, ...stylesheet(g) }));
 // The /projects rows that link to a project, as slugs: "/shore" -> "shore".
 const HREFS = site.projectList.flatMap((p) => (p.href?.startsWith("/") ? [p.href.slice(1)] : []));
 
-test("the scan finds the site, the eleven projects and the zine", () => {
+test("the scan finds the site, the eleven projects, the palace and the zine", () => {
   assert.ok(GROUPS.includes("site"));
   assert.deepEqual(GROUPS.filter((g) => SHEETS_ONLY.includes(g)), SHEETS_ONLY);
   assert.equal(PROJECTS.length, 11, PROJECTS.join(", "));
@@ -297,8 +298,9 @@ test("the site root layout mounts the season layer first in <body>, ahead of eve
   assert.match(src, /^import \{ SeasonLayer \} from "@\/components\/season-layer";$/m);
   // The press cue's listener (components/press-sound.tsx) renders nothing, so it may follow the layer. The Pocket
   // Terminal's loader (components/pocket-terminal-loader.tsx) renders nothing until "/" or Cmd/Ctrl-K, and its dialog
-  // opens in the top layer, so it stands between the layer and the pages without moving either.
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*\{children\}\s*<\/body>/);
+  // opens in the top layer, so it stands between the layer and the pages without moving either. The urashima listener
+  // (components/urashima-keys.tsx) renders nothing either.
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?\{children\}\s*<\/body>/);
   assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
   assert.equal(src.match(/<PressSound\b/g)?.length, 1);
   // Mounted once, in the root layout only: no group layout or page mounts a second one.

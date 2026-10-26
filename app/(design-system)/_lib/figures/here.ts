@@ -1,4 +1,4 @@
-// Right here: this site's eleven other stylesheets as paper scraps, one row a
+// Right here: this site's twelve other stylesheets as paper scraps, one row a
 // sheet. Each row has the sheet's group, a scrap in its light paper (an empty
 // scrap with a cross for a sheet that names none), the paper's hex, and a row
 // of small boxes, one a named decision. Under them, in spot, how many sheets

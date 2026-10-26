@@ -20,6 +20,7 @@ import {
   type PocketKey,
 } from "@/lib/snake";
 import { play } from "@/lib/sound-client";
+import { PALACE_HREF } from "@/lib/urashima";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent, useReducer, useRef, useState, useSyncExternalStore } from "react";
@@ -506,7 +507,13 @@ export function Handheld() {
               <Chip onClick={() => input("a")}>{g.status === "ready" ? P.start : P.restart}</Chip>
             </>
           ) : (
-            <Chip onClick={() => input("a")}>A Open</Chip>
+            <>
+              <Chip onClick={() => input("a")}>A Open</Chip>
+              {/* Down to Ryugu-jo: a plain <a>, since the palace is its own root layout (a full page load). */}
+              <a href={PALACE_HREF} className="chip" data-pocket-ryugu="">
+                {P.dive}
+              </a>
+            </>
           )}
           <Chip onClick={() => input("b")} aria-pressed={s.game === true}>
             {s.game ? P.menu : P.play}

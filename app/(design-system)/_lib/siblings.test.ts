@@ -91,9 +91,9 @@ test("the zine's sheet prints the site's own paper and ink, so it is no sister o
   }
 });
 
-test("eleven sister stylesheets: the site's and ten projects', never this group's own", () => {
-  assert.equal(SIBLINGS.length, 11);
-  assert.equal(new Set(SIBLINGS.map((s) => s.group)).size, 11);
+test("twelve sister stylesheets: the site's, ten projects' and Ryugu-jo's, never this group's own", () => {
+  assert.equal(SIBLINGS.length, 12);
+  assert.equal(new Set(SIBLINGS.map((s) => s.group)).size, 12);
   assert.ok(!SIBLINGS.some((s) => s.file.includes(SELF)));
   for (const s of SIBLINGS) {
     assert.ok(existsSync(join(ROOT, s.file)), `${s.file} is pinned but gone: drop its row`);
@@ -127,13 +127,13 @@ for (const s of SIBLINGS) {
   });
 }
 
-test("the counts the page quotes are what the files give: 10 name a paper, 11 an ink, 8 creams", () => {
+test("the counts the page quotes are what the files give: 11 name a paper, 12 an ink, 8 creams", () => {
   const files = SHEETS.map(css);
   const papers = files.map((c) => firstHex(first(c, "--paper")));
   assert.equal(PAPER_COUNT, files.filter((c) => first(c, "--paper") !== null).length);
   assert.equal(INK_COUNT, files.filter((c) => first(c, "--ink") !== null).length);
   assert.equal(CREAMS, new Set(papers.filter((p) => p !== null)).size);
-  assert.deepEqual([PAPER_COUNT, INK_COUNT, CREAMS], [10, 11, 8]);
+  assert.deepEqual([PAPER_COUNT, INK_COUNT, CREAMS], [11, 12, 8]);
 });
 
 test("six dresses, named for pinned groups", () => {
