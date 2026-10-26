@@ -34,6 +34,10 @@ const SCRIPT = join(import.meta.dirname, "history-index.ts");
 const TMP = mkdtempSync(join(tmpdir(), "history-index-"));
 after(() => rmSync(TMP, { recursive: true, force: true }));
 
+// Fixtures make hundreds of quick commits, and git's detached auto-maintenance (gc --auto, maintenance run --auto)
+// would repack and prune their objects under a running test ("bad tree object HEAD"). It is turned off through the
+// environment, and on process.env too, because the code under test runs git with the inherited environment.
+Object.assign(process.env, { GIT_CONFIG_COUNT: "2", GIT_CONFIG_KEY_0: "gc.auto", GIT_CONFIG_VALUE_0: "0", GIT_CONFIG_KEY_1: "maintenance.auto", GIT_CONFIG_VALUE_1: "false" });
 // No user or system config, so a signing hook or a log.* setting on the machine cannot change the fixtures.
 const GIT_ENV = { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1", GIT_AUTHOR_NAME: "Fixture", GIT_AUTHOR_EMAIL: "fixture@example.test", GIT_COMMITTER_NAME: "Fixture", GIT_COMMITTER_EMAIL: "fixture@example.test" };
 const sh = (cwd: string, ...args: string[]) => execFileSync("git", args, { cwd, env: GIT_ENV, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });

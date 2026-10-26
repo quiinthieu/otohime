@@ -1,8 +1,15 @@
 {
   "version": 1,
-  "head": "9ddd0840d22564330e6c2554a52591b178909a4c",
-  "total": 401,
+  "head": "3673c506308dcb1da124bdb97d517a2261d76961",
+  "total": 408,
   "entries": [
+    {"sha":"3673c50630","date":"2026-10-26T10:55:58Z","plan":"pm-260","task":"acceptance","subject":"Record acceptance fail, pm-255 still held behind abandoned pm-248","files":13,"added":534,"removed":0,"areas":["projects"]},
+    {"sha":"96be45a7f9","date":"2026-10-26T10:54:49Z","plan":"pm-256","task":"t-1560","subject":"Record QA failure on the flaky history fixture and its fix plan","files":2,"added":88,"removed":0,"areas":["projects"]},
+    {"sha":"5ef9b8adbe","date":"2026-10-26T10:51:58Z","plan":"pm-259","task":"t-1583","subject":"Record independent fetch QA","files":2,"added":43,"removed":0,"areas":["projects"]},
+    {"sha":"841ca69823","date":"2026-10-26T10:47:44Z","plan":"pm-258","task":"t-1564","subject":"Annotate failed E2E tests in CI and add a flowing-clock control to Kame's hold thres…","files":6,"added":246,"removed":4,"areas":["scripts",".github","e2e"]},
+    {"sha":"0c4a25d6eb","date":"2026-10-26T10:42:23Z","plan":"pm-260","task":"t-1593","subject":"Certify offline release evidence with positive assertions","files":4,"added":162,"removed":3,"areas":["projects","lib","scripts"]},
+    {"sha":"b0befb6d43","date":"2026-10-26T10:37:57Z","plan":"pm-256","task":"t-1560","subject":"Build the static git history index for Tamatebako","files":6,"added":928,"removed":3,"areas":["projects","scripts","content"]},
+    {"sha":"750947bbe3","date":"2026-10-26T10:31:25Z","plan":"pm-260","task":"t-1578","subject":"Re-scope recovery verification into offline certification","files":5,"added":499,"removed":97,"areas":["projects"]},
     {"sha":"9ddd0840d2","date":"2026-10-26T10:26:37Z","plan":"pm-259","task":"t-1583","subject":"Complete safe Kame paper fetch","files":16,"added":666,"removed":24,"areas":["components","lib","e2e"]},
     {"sha":"922b210904","date":"2026-10-26T10:21:18Z","plan":"pm-260","task":"t-1578","subject":"Record independent QA and recurring deployment gate failure","files":29,"added":3452,"removed":0,"areas":["projects"]},
     {"sha":"ae4607dafc","date":"2026-10-26T10:18:06Z","plan":"pm-256","task":"t-1559","subject":"Record QA pass with an independent production probe","files":3,"added":247,"removed":0,"areas":["projects"]},
@@ -195,13 +202,6 @@
     {"sha":"dd1e8e1085","date":"2026-10-25T17:12:31Z","plan":"pm-240","task":"t-1472","subject":"Record blocked portrait review ledger and keep manifest unactivated","files":1,"added":102,"removed":0,"areas":["projects"]},
     {"sha":"284429c8b3","date":"2026-10-25T17:06:10Z","plan":"pm-242","task":"t-1476","subject":"Tilt the pocket console toward a hovering pointer","files":5,"added":684,"removed":9,"areas":["components","scripts","app/(site)"]},
     {"sha":"955009388f","date":"2026-10-25T17:03:50Z","plan":"pm-242","task":"t-1475","subject":"Add opt-in console sounds","files":10,"added":828,"removed":3,"areas":["components","lib","scripts"]},
-    {"sha":"6c2f013bff","date":"2026-10-25T16:47:35Z","plan":"pm-242","task":"product_owner","subject":"Name the pipeline documentation interface","files":2,"added":5,"removed":3,"areas":["projects"]},
-    {"sha":"67d37435ff","date":"2026-10-25T16:46:52Z","plan":"pm-242","task":"product_owner","subject":"Fit contracts to the twelve-task limit","files":2,"added":100,"removed":293,"areas":["projects"]},
-    {"sha":"1e618e28d5","date":"2026-10-25T16:44:17Z","plan":"pm-242","task":"product_owner","subject":"Plan Pocket Console Encore","files":3,"added":2131,"removed":0,"areas":["projects"]},
-    {"sha":"70c9b0a5ac","date":"2026-10-25T16:43:25Z","plan":"pm-242","task":"product_owner","subject":"Preserve project title return transitions","files":6,"added":60,"removed":19,"areas":["app/(site)","lib"]},
-    {"sha":"016369aa66","date":"2026-10-25T16:31:39Z","plan":"pm-241","task":"t-1473","subject":"Add the QA report for the console save-point footer","files":1,"added":84,"removed":0,"areas":["projects"]},
-    {"sha":"368d15ef6f","date":"2026-10-25T16:20:20Z","plan":"pm-241","task":"t-1473","subject":"Build the console save-point footer","files":11,"added":1845,"removed":3,"areas":["app/(site)","components","lib"]},
-    {"sha":"dc2f302695","date":"2026-10-25T16:05:51Z","plan":"pm-240","task":"t-1471","subject":"Add the QA report for portrait tooling","files":1,"added":36,"removed":0,"areas":["projects"]},
-    {"sha":"702c5dd82d","date":"2026-10-25T15:58:40Z","plan":"pm-240","task":"t-1471","subject":"Build portrait tooling and gallery support","files":16,"added":3836,"removed":25,"areas":["lib","scripts","app/(site)"]}
+    {"sha":"6c2f013bff","date":"2026-10-25T16:47:35Z","plan":"pm-242","task":"product_owner","subject":"Name the pipeline documentation interface","files":2,"added":5,"removed":3,"areas":["projects"]}
   ]
 }

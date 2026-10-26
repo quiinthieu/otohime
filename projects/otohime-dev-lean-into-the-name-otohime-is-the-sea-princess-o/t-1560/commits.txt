@@ -1,1 +1,2 @@
-<this commit> pm-256/t-1560: Build the static git history index for Tamatebako  (delivery, run-8838; its sha is the git_sha of the run-8838 summary report)
+b0befb6d438d04d0c7541acffc0c51618fcad148 pm-256/t-1560: Build the static git history index for Tamatebako  (delivery, run-8838)
+<this commit> pm-256/t-1560: Turn off git auto-maintenance in the history index fixtures  (fix cycle, run-8850; its sha is the git_sha of the run-8850 summary report)
