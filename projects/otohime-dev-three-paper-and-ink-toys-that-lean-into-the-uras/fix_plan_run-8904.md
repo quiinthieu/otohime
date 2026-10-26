@@ -1,0 +1,12 @@
+# Fix plan · pm-264/t-1590 · run-8904
+
+**Cause: environment — GitHub Actions workflow concurrency prevents reliable main delivery.** `b80d942` passed green gate `ver-3551`, fresh locked local contracts, and independent live product controls. Its CI run `40319533832` was cancelled before jobs under the shared `ci-refs/heads/main` pending group. Live SHA `0abec76` predates the fixed verifier. Last green checks/production run `40314442551` at `0abec76` succeeded; the intervening CI edits `2992401` and `2eaada2` change runner/timeout and path filters, respectively, but leave the shared group unchanged. The later `40315924641` failed a different Footer Chromium probe with unread raw logs; it does not explain `b80d942`'s pre-job cancellation.
+
+Owner: CI maintainer, tracked by plan `pm-270` and `pm-264/t-1590`.
+
+1. In `.github/workflows/ci.yml:22-24`, remove the workflow-level `concurrency` block for main. Keep PR cancellation via a PR-specific checks-job group if needed. This lets each main push finish checks rather than replacing a pending workflow before it starts.
+2. At `.github/workflows/ci.yml:202-206`, give `production` a job-level `concurrency` group such as `otohime-production-main` with `cancel-in-progress: false`, retaining `needs: checks`. Production deploys then serialize while each SHA's checks remain observable. Keep the `paths-ignore` at lines 8–12 so report-only QA pushes do not create extra main runs.
+3. Push the workflow repair on main, run the full `checks` job (including the focused Peep-box browser contract) and `production` job on a descendant of `b80d942`, and read the terminal job steps and raw failure tail if anything fails. A pending run or green local suite is insufficient.
+4. Read live `GET https://otohime.dev/api/health`, verify `git merge-base --is-ancestor b80d942 <live-sha>` exits 0, and repeat the live Look inside, distinct layer motion, Disable, native touch and no-camera controls at 390×844 and 1366×768. Return the successful run/checks/production IDs and deployed SHA to QA.
+
+Failure condition: any declared check fails; a descendant CI is cancelled or cannot deploy; or live health remains before `b80d942`. Run `40319672622` at descendant `bca260a` was pending at the QA snapshot, so it may supply the required deploy if it completes successfully; do not poll for it or infer success from its pending state. The prior verifier races are repaired in `b80d942`; the 0.1px analytic check and real CDP native-scroll control must remain.
