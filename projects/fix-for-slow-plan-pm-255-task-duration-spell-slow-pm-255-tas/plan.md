@@ -3,6 +3,15 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-9014 update: board unchanged since run-9010
+
+Read live in run-9014 (product owner, claude-sonnet-5-5), 2026-10-26 ~14:52 UTC via list_plans:
+pm-267 (mono-v2) still `paused` (last update 11:53Z) and owns outcomes 1-3; pm-248 `abandoned`;
+pm-255 `accepting` (outcome 4 met). pm-260 `drafting`. No otohime software_engineer task is
+proposed: the otohime checkout holds no orchestrator or watchdog code. The proposal is the empty DAG
+(propose_tasks with tasks=[] was refused on earlier runs as missing_acceptance_criteria, with
+dec-57246 already accepted as pm-267). Deferred, owner pm-267; failure conditions as in run-9000.
+
 ## Run-9010 update: board unchanged since run-9000
 
 Read live in run-9010 (product owner), 2026-10-26 14:44 UTC: pm-267 still `paused` (t-1594, t-1596
