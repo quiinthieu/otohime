@@ -85,3 +85,21 @@ test("main keeps cancel-in-progress off and no queue: max", () => {
   assert.equal(scalar(["concurrency", "cancel-in-progress"]), "${{ github.event_name == 'pull_request' }}");
   assert.equal(block(["concurrency", "queue"]), null);
 });
+
+// Lines of a job's `steps:` list, joined, comments dropped.
+const steps = (job) => {
+  const found = block(["jobs", job, "steps"]);
+  assert.ok(found, `jobs.${job}.steps is missing`);
+  return lines.slice(found.start + 1, found.end).filter(significant).join("\n");
+};
+
+test("production proves the deployed sha, terminal and press after the deploy", () => {
+  const prod = steps("production");
+  const verify = prod.indexOf('EXPECT_SHA="$GITHUB_SHA" bash scripts/verify-deploy.sh https://otohime.dev');
+  assert.notEqual(verify, -1, "production must run scripts/verify-deploy.sh with EXPECT_SHA=$GITHUB_SHA against otohime.dev");
+  const deploy = prod.indexOf("bash scripts/vercel-deploy.sh");
+  assert.ok(deploy !== -1 && deploy < verify, "verify-deploy must run after the deploy step");
+  // Negative control: a bare 200-only health curl is not proof of the served commit.
+  assert.doesNotMatch(prod, /curl\b[^\n]*otohime\.dev\/api\/health/, "production must not smoke-test with a bare health curl");
+  assert.match(steps("checks"), /bash scripts\/verify-deploy\.sh --self-test/, "checks must run the verify-deploy self-test");
+});

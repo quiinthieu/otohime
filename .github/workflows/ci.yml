@@ -77,6 +77,8 @@ jobs:
       - run: npm test
       # The production deploy script against a fake npx, here so GNU timeout (not the macOS fallback) is exercised.
       - run: bash scripts/vercel-deploy.test.sh
+      # verify-deploy.sh against a local fake /api/health: a sha mismatch must exit nonzero without running the e2e.
+      - run: bash scripts/verify-deploy.sh --self-test
       # public/ask-index.json is built from content/site.ts and the Gazette; a content edit must regenerate it.
       - run: npm run ask:check
       - name: Migrations match db/schema.ts
@@ -206,8 +208,9 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-24.04
     # Setup + pull + build + migrate take about 2 minutes (run 40311256064: pull 13 s, build 31 s, migrate 3 s);
-    # the deploy script bounds the upload at 5 and readiness at 7, so this is only a backstop.
-    timeout-minutes: 12
+    # the deploy script bounds the upload at 5 and readiness at 7, and the terminal/press e2e after it takes
+    # about 2 (107 s against otohime.dev), so this is only a backstop.
+    timeout-minutes: 18
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
@@ -233,6 +236,10 @@ jobs:
       # report this commit; a hang ends in a public ::error with the deployment state instead of a timeout.
       - name: Deploy and verify the served sha
         run: bash scripts/vercel-deploy.sh
+      # The live site must serve this commit (bounded poll) and still have the Pocket Terminal and the /play
+      # Ink Poster Press: their e2e files run read-only against https://otohime.dev (runner's Google Chrome).
+      - name: Verify the deployed sha, terminal and press
+        run: EXPECT_SHA="$GITHUB_SHA" bash scripts/verify-deploy.sh https://otohime.dev
 
   cleanup:
     if: github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository

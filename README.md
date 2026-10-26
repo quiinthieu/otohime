@@ -442,7 +442,7 @@ The Ask chip answers offline from `public/ask-index.json` (`lib/ask.ts`). `/api/
 GitHub Actions (`.github/workflows/ci.yml`) does it all:
 
 - **Every PR** runs lint, typecheck, a migration drift check and a build. It also gets a preview on Vercel backed by its own Neon branch (`preview/pr-<n>`, a copy of production that is migrated first). The branch is deleted when the PR closes.
-- **Every push to `main`** runs the same checks, then builds, migrates production, deploys to Vercel and smoke-tests `https://otohime.dev/api/health`.
+- **Every push to `main`** runs the same checks, then builds, migrates production and deploys to Vercel (`scripts/vercel-deploy.sh`). Then `scripts/verify-deploy.sh` proves the live site: `/api/health` must report this commit's sha, and the Pocket Terminal and Ink Poster Press e2e must pass against `https://otohime.dev`.
 
 The jobs need these repo settings:
 
@@ -456,6 +456,7 @@ Rules that keep this safe:
 - Production migrates before the new code goes live, and the old code keeps serving if the deploy fails. So migrations must be expand-only: add first, drop in a later PR.
 - `drizzle-kit migrate` runs every pending migration in one transaction, so `CREATE INDEX CONCURRENTLY` won't work.
 - `<meta name="build-sha">` on any page names the commit the live site was built from, and `/api/health` answers `{ok: true, sha}` with the same commit (`dev` locally), so `curl -s https://otohime.dev/api/health` shows which commit production serves.
+- `bash scripts/verify-deploy.sh BASE_URL EXPECT_SHA` (or set `BASE_URL` and `EXPECT_SHA`) checks a deployment on demand, e.g. `bash scripts/verify-deploy.sh https://otohime.dev "$(git rev-parse HEAD)"`. It polls `/api/health` until `sha` equals the full 40-hex `EXPECT_SHA` (`VERIFY_TIMEOUT`, default 300 s and never more than 590 s, every `VERIFY_INTERVAL` 10 s). Then it runs `e2e/pocket-terminal.test.ts` and `e2e/ink-press.test.ts` against `BASE_URL`; both are read-only and need Google Chrome or `CHROME_PATH`. A sha that never matches, a non-200 answer or a failing e2e exits 1, and bad arguments exit 2. `bash scripts/verify-deploy.sh --self-test` runs it against a local fake `/api/health` (no browser). A sha mismatch must exit nonzero without reaching the e2e, and the controls also cover a sha that turns right mid-poll, HTTP 500, nothing listening, and a failing e2e.
 - Commits to `main` must be authored by the site owner's GitHub email, or Vercel Hobby will not deploy them.
 - Don't run `vercel --prod` from a laptop; it skips the migration.
 - Keep the Vercel Git integration disconnected, or Vercel deploys before CI migrates.
