@@ -1746,6 +1746,8 @@ try {
           else if (el.hasAttribute("data-end-page")) kind = `page:${el.getAttribute("data-end-page")}`;
           else if (el.hasAttribute("data-end-zine")) kind = "zine";
           else if (el.hasAttribute("data-end-line")) kind = `line:${el.getAttribute("data-end-line")}`;
+          else if (el.hasAttribute("data-kame-action")) kind = `kame:${el.getAttribute("data-kame-action")}`;
+          else if (el.matches('input[aria-label="Kame name"]')) kind = "kame:name";
           else if (el.hasAttribute("data-end-top")) kind = "top";
           else if (el.hasAttribute("data-end-ryugu")) kind = "ryugu";
           return { inFooter, kind, focusRing };
@@ -1761,6 +1763,7 @@ try {
         ...CONSOLE_MENU.map((m) => `page:${m.href}`),
         "zine",
         ...site.lines.map((l) => `line:${l.label}`),
+        "kame:call", "kame:pet", "kame:hide", "kame:name",
         "top",
         "ryugu",
       ];
@@ -1779,7 +1782,7 @@ try {
       const allRingsVisible = tabStops.every((s) => s.inFooter && s.focusRing);
 
       check(
-        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines, Back to top and the waterline in order with visible focus rings and no trap`,
+        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines, Kame controls, Back to top and the waterline in order with visible focus rings and no trap`,
         JSON.stringify(gotKinds) === JSON.stringify(expectedKinds) &&
           allRingsVisible &&
           afterFooter?.inFooter === false,

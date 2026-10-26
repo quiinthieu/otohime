@@ -9,7 +9,7 @@
 // The pond's water (startWater / stopWater) is the one looped layer: seeded brown noise under a 500 Hz low-pass,
 // swelling slowly, about -36 dB. It starts only from a click while sound is on and stops when the page is hidden,
 // on pagehide, when sound is switched off, or when the pond asks (out of view, unmounted). No audio files.
-import { CUES, cueGain, dbToGain, envelope, noteEnd, parseSound, SOUND_KEY, storeSound, type Cue, type CueName } from "./sound.ts";
+import { CUES, cueGain, dbToGain, envelope, noteEnd, parseSound, PURR, SOUND_KEY, storeSound, type Cue, type CueName } from "./sound.ts";
 
 let on = false;
 let loaded = false;
@@ -31,6 +31,7 @@ function onStorage(event: StorageEvent) {
   if (event.key !== SOUND_KEY && event.key !== null) return;
   on = parseSound(event.newValue);
   if (!on) {
+    stopPurr();
     stopWater();
     mute();
   }
@@ -62,6 +63,7 @@ export function setSound(next: boolean) {
   emit();
   if (next) play("open");
   else {
+    stopPurr();
     stopWater();
     mute();
   }
@@ -70,6 +72,7 @@ export function setSound(next: boolean) {
 let ctx: AudioContext | null = null;
 
 function close() {
+  stopPurr();
   const c = ctx;
   ctx = null;
   void c?.close().catch(() => {});
@@ -92,15 +95,17 @@ function unlock(): AudioContext | null {
   return ctx;
 }
 
-function schedule(c: AudioContext, cue: Cue) {
+function schedule(c: AudioContext, cue: Cue, delay = 0) {
+  const voices: { osc: OscillatorNode; gain: GainNode }[] = [];
   try {
     const peak = cueGain(cue);
-    const t0 = c.currentTime + 0.005;
+    const t0 = c.currentTime + 0.005 + delay;
     for (const n of cue.notes) {
       const osc = c.createOscillator();
       osc.type = cue.wave ?? "square";
       osc.frequency.value = n.hz;
       const gain = c.createGain();
+      voices.push({ osc, gain });
       envelope(n, t0, peak).forEach(([t, v], i) => {
         if (i === 0) gain.gain.setValueAtTime(v, t);
         else gain.gain.linearRampToValueAtTime(v, t);
@@ -116,6 +121,37 @@ function schedule(c: AudioContext, cue: Cue) {
   } catch {
     // a context closed under us: skip the beep
   }
+  return () => voices.forEach(({ osc, gain }) => {
+    try { gain.disconnect(); osc.stop(); osc.disconnect(); } catch { /* already ended */ }
+  });
+}
+
+let cancelPurr: (() => void) | null = null;
+let purrGeneration = 0;
+function hiddenPurr() { if (document.hidden) stopPurr(); }
+export function stopPurr() {
+  purrGeneration++;
+  cancelPurr?.(); cancelPurr = null;
+  if (typeof document !== "undefined") document.removeEventListener("visibilitychange", hiddenPurr);
+}
+
+// Called at gesture-down, so unlocking stays inside the browser's user activation.
+// Schedule the quiet cue after the hold threshold; release cancels even pending resumes/notes.
+export function startPurr(delay = 0.5): boolean {
+  stopPurr(); load();
+  if (!on || (typeof document !== "undefined" && document.hidden)) return false;
+  const c = unlock();
+  if (!c) return false;
+  const generation = purrGeneration;
+  const asked = performance.now();
+  const begin = () => {
+    if (generation !== purrGeneration || !on || ctx !== c) return;
+    cancelPurr = schedule(c, PURR, Math.max(0, Math.min(0.5, delay)));
+  };
+  if (typeof document !== "undefined") document.addEventListener("visibilitychange", hiddenPurr);
+  if (c.state === "running") begin();
+  else void c.resume().then(() => { if (performance.now() - asked < 250) begin(); }, () => stopPurr());
+  return true;
 }
 
 // Plays a cue if sound is on. Call from a click or key press only.
