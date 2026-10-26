@@ -236,7 +236,10 @@ assert.match(footerHtml, /<nav\b[^>]*\baria-label="Footer"/, "missing footer nav
 // Heading and copy
 const h2 = footerHtml.match(/<h2\b[^>]*\bid="end-title"[^>]*>([\s\S]*?)<\/h2>/);
 assert.ok(h2, "missing h2#end-title");
-assert.equal(stripTags(h2[1]), site.end.title);
+// RisoText adds aria-hidden character plates after its uninterrupted plain source.
+// Stay inside this h2: decorative copies or text elsewhere cannot satisfy its title.
+const source = h2[1].match(/<span\b[^>]*\bclass="(?:[^"]*\s)?riso-source(?:\s[^"]*)?"[^>]*>([\s\S]*?)<\/span>/);
+assert.equal(stripTags(source ? source[1] : h2[1]), site.end.title);
 assert.ok(decode(footerHtml).includes(site.end.sub), "missing secondary copy");
 
 // Six canonical page links in CONSOLE_MENU order

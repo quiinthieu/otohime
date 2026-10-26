@@ -4,6 +4,7 @@ import { chmodSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSyn
 import { createServer } from "node:http";
 import { resolve } from "node:path";
 import { test } from "node:test";
+import { runInNewContext } from "node:vm";
 import { site } from "../content/site.ts";
 import {
   end,
@@ -221,6 +222,27 @@ test("site.end copy matches the required sentences, LCD bounds, and PUBLIC_PAGES
 test("lib/end.ts is pure and imports no browser or DOM APIs", () => {
   const src = readFileSync(resolve(import.meta.dirname, "end.ts"), "utf8");
   assert.doesNotMatch(src, /\b(window|document|localStorage|matchMedia|IntersectionObserver|requestAnimationFrame)\b/);
+});
+
+test("Footer walk reads the exact plain heading source, ignoring nested Riso plates", () => {
+  const walk = readFileSync(resolve(import.meta.dirname, "../scripts/walk-end.sh"), "utf8");
+  // Execute the actual verifier block, not a second implementation of its matcher.
+  const helpers = walk.slice(walk.indexOf("const decode ="), walk.indexOf("const mainTags ="));
+  const heading = walk.slice(walk.indexOf("// Heading and copy"), walk.indexOf("assert.ok(decode(footerHtml).includes(site.end.sub)"));
+  assert.ok(helpers && heading, "the shell verifier must retain its heading check");
+  const verify = (footerHtml: string) => runInNewContext(`${helpers}\n${heading}`, { assert, site, footerHtml });
+  const title = site.end.title.replaceAll("'", "&#x27;");
+  // Mirrors RisoText: one plain source, then deeply nested, aria-hidden character plates.
+  const riso = (source: string, visual = title) => `<h2 id="end-title"><span class="riso-text"><span class="riso-source ">${source}</span><span class="riso-visual" aria-hidden="true"><span class="riso-word"><span class="riso-char"><span class="riso-anchor">${visual}</span></span></span></span></span></h2>`;
+  verify(riso(title));
+  verify(riso(title).replace('class="riso-source "', 'class="plain riso-source footer-copy"'));
+  verify(riso(title, "decorative ink"));
+  verify(`<h2 id="end-title">${title}</h2>`);
+  assert.throws(() => verify(riso("Wrong accessible source")), { code: "ERR_ASSERTION" });
+  assert.throws(() => verify(riso(`${title} extra`)), { code: "ERR_ASSERTION" });
+  assert.throws(() => verify(riso(title).replace('id="end-title"', 'id="another-title"')), /missing h2#end-title/);
+  assert.throws(() => verify(`<span class="riso-source">${title}</span>${riso("Wrong source")}`), { code: "ERR_ASSERTION" });
+  assert.throws(() => verify(riso(title).replace('class="riso-source "', 'class="riso-source-imitation"')), { code: "ERR_ASSERTION" });
 });
 
 test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR", async () => {
