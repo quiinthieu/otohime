@@ -1,0 +1,1 @@
+<this commit> pm-249/t-1567: Report the build sha from /api/health  (delivery; its sha is the git_sha of the run-8734 summary report, since a commit cannot name itself)

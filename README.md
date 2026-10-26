@@ -455,7 +455,7 @@ Rules that keep this safe:
 
 - Production migrates before the new code goes live, and the old code keeps serving if the deploy fails. So migrations must be expand-only: add first, drop in a later PR.
 - `drizzle-kit migrate` runs every pending migration in one transaction, so `CREATE INDEX CONCURRENTLY` won't work.
-- `<meta name="build-sha">` on any page names the commit the live site was built from.
+- `<meta name="build-sha">` on any page names the commit the live site was built from, and `/api/health` answers `{ok: true, sha}` with the same commit (`dev` locally), so `curl -s https://otohime.dev/api/health` shows which commit production serves.
 - Commits to `main` must be authored by the site owner's GitHub email, or Vercel Hobby will not deploy them.
 - Don't run `vercel --prod` from a laptop; it skips the migration.
 - Keep the Vercel Git integration disconnected, or Vercel deploys before CI migrates.
