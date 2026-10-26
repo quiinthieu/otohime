@@ -75,6 +75,13 @@ test("pull_request has no path filter", () => {
   assert.equal(block(["on", "pull_request", "paths"]), null);
 });
 
+test("manual recovery runs the same checks and production gates as a main push", () => {
+  assert.ok(block(["on", "workflow_dispatch"]), "queue replacement recovery needs workflow_dispatch");
+  assert.equal(block(["jobs", "checks", "if"]).value, "github.event.action != 'closed'");
+  assert.equal(scalar(["jobs", "production", "needs"]), "checks");
+  assert.equal(scalar(["jobs", "production", "if"]), "github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')");
+});
+
 test("checks and production run on ubuntu-24.04", () => {
   for (const job of ["checks", "production"]) {
     assert.equal(scalar(["jobs", job, "runs-on"]), "ubuntu-24.04", `jobs.${job}.runs-on`);

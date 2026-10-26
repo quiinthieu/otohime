@@ -28,7 +28,12 @@ HEALTH_POLL_DELAY=${HEALTH_POLL_DELAY:-10}
 
 log() { printf '[vercel-deploy %s] %s\n' "$(date -u +%H:%M:%SZ)" "$*" >&2; }
 fail() {
-  echo "::error title=vercel deploy::$*"
+  # One workflow command, even when a vendor diagnostic contains newlines or command-like text.
+  local message=$*
+  message=${message//'%'/'%25'}
+  message=${message//$'\r'/'%0D'}
+  message=${message//$'\n'/'%0A'}
+  echo "::error title=vercel deploy::$message"
   exit 1
 }
 
@@ -50,8 +55,18 @@ fi
 
 deploy_url() { grep -Eo 'https://[A-Za-z0-9.-]+\.vercel\.app' "$1" | tail -n 1 || true; }
 
-upload_log=$(mktemp)
-trap 'rm -f "$upload_log"' EXIT
+work=$(mktemp -d)
+upload_log=$work/upload.log
+wait_log=$work/wait.log
+state_log=$work/state.log
+trap 'rm -rf "$work"' EXIT
+
+# Strip CLI colouring before parsing or publishing diagnostics. A generic "Error:" in a request
+# failure is not a deployment's status. Only the labelled field may name deployment state.
+plain() { sed -E $'s/\033\\[[0-9;]*[[:alpha:]]//g' "$1"; }
+deployment_state() {
+  plain "$1" | sed -nE 's/^[[:space:]]*status[[:space:]]+[^[:alnum:]]*(Ready|Building|Queued|Initializing|Error|Canceled|Cancelled)[[:space:]]*$/\1/p' | head -n 1
+}
 
 upload() {
   log "upload: vercel deploy --prebuilt --prod --no-wait (bound ${UPLOAD_TIMEOUT}s)"
@@ -82,19 +97,20 @@ echo "deployment: $url"
 
 log "ready: vercel inspect --wait (bound ${READY_TIMEOUT}s)"
 status=0
-bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --wait --timeout 6m --logs || status=$?
+bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
+cat "$wait_log" >&2
 if [ "$status" -ne 0 ]; then
   log "inspect --wait exited $status; reading the deployment state once more"
-  state_log=$(mktemp)
-  bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" >"$state_log" 2>&1 || true
+  state_status=0
+  bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" >"$state_log" 2>&1 || state_status=$?
   cat "$state_log" >&2
-  # `vercel inspect` prints a "status  ● Ready|Building|Queued|Error|Canceled" line.
-  state=$(grep -Eiow '(ready|building|queued|initializing|error|canceled|cancelled)' "$state_log" | head -n 1 || true)
-  rm -f "$state_log"
+  state=$(deployment_state "$state_log")
+  diagnostic=$(printf '\ninspect --wait output (exit %s):\n%s\nstate re-read output (exit %s):\n%s' \
+    "$status" "$(plain "$wait_log")" "$state_status" "$(plain "$state_log")")
   if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
-    fail "${state:-unknown} after ${READY_TIMEOUT}s $url"
+    fail "${state:-unknown} after ${READY_TIMEOUT}s $url$diagnostic"
   fi
-  fail "${state:-unknown} (inspect exited $status) $url"
+  fail "${state:-unknown} (inspect exited $status) $url$diagnostic"
 fi
 
 expect="\"sha\":\"$GITHUB_SHA\""

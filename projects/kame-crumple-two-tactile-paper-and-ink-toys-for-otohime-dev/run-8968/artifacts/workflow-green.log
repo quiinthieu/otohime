@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: push to main ignores report-only paths
+ok 1 - push to main ignores report-only paths
+  ---
+  duration_ms: 2.094385
+  type: 'test'
+  ...
+# Subtest: report-only pushes skip, code pushes still run
+ok 2 - report-only pushes skip, code pushes still run
+  ---
+  duration_ms: 0.391187
+  type: 'test'
+  ...
+# Subtest: pull_request has no path filter
+ok 3 - pull_request has no path filter
+  ---
+  duration_ms: 0.148627
+  type: 'test'
+  ...
+# Subtest: manual recovery runs the same checks and production gates as a main push
+ok 4 - manual recovery runs the same checks and production gates as a main push
+  ---
+  duration_ms: 0.409576
+  type: 'test'
+  ...
+# Subtest: checks and production run on ubuntu-24.04
+ok 5 - checks and production run on ubuntu-24.04
+  ---
+  duration_ms: 0.351284
+  type: 'test'
+  ...
+# Subtest: main keeps cancel-in-progress off and no queue: max
+ok 6 - main keeps cancel-in-progress off and no queue: max
+  ---
+  duration_ms: 0.124085
+  type: 'test'
+  ...
+# Subtest: production proves the deployed sha, terminal and press after the deploy
+ok 7 - production proves the deployed sha, terminal and press after the deploy
+  ---
+  duration_ms: 1.160058
+  type: 'test'
+  ...
+# Subtest: verify-deploy treats exactly the push paths-ignore as report-only
+ok 8 - verify-deploy treats exactly the push paths-ignore as report-only
+  ---
+  duration_ms: 0.20481
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 54.306021

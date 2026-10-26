@@ -39,6 +39,9 @@ case "$1" in
       hang:1) echo "waiting for deployment" >&2; sleep 6011 ;;
       hang:0) printf '  status\t● Building\n  url\t%s\n' "$2" >&2 ;;
       error:*) printf '  status\t● Error\n  url\t%s\n' "$2" >&2; exit 1 ;;
+      diagnostic:1) printf 'Error: build failed at 50%%\r\nmissing required artifact\n::warning::not a workflow command\n' >&2; exit 1 ;;
+      diagnostic:0) printf 'Error: earlier request failed\n\033[31m  status\t● Building\033[0m\n  url\t%s\nstate diagnostic tail\n' "$2" >&2; exit 1 ;;
+      unavailable:*) echo 'Error: request failed; no deployment state available' >&2; exit 1 ;;
     esac ;;
 esac
 FAKE
@@ -90,13 +93,24 @@ check "upload with a URL is not retried (got $deploys deploys)" '[ "$deploys" -e
 run hang-inspect ok hang "$healthy"
 check "hanging inspect exits non-zero" '[ "$code" -ne 0 ]'
 check "hanging inspect fails within the bound (${elapsed}s <= 20s)" '[ "$elapsed" -le 20 ]'
-check "hanging inspect prints ::error with state and URL" 'grep -q "^::error title=vercel deploy::Building after 2s $URL$" <<<"$out"'
+check "hanging inspect prints ::error with state and URL" 'grep -q "^::error title=vercel deploy::Building after 2s $URL%0A" <<<"$out"'
 check "hanging inspect makes one deploy and two inspects" '[ "$deploys" -eq 1 ] && [ "$(grep -c "^inspect" "$CALLS")" -eq 2 ]'
 check "hanging inspect leaves no child running" '! pgrep -f "sleep 6011" >/dev/null'
 
 # A deployment that errors publishes the Error state.
 run error-inspect ok error "$healthy"
-check "errored deployment prints ::error with Error state" '[ "$code" -ne 0 ] && grep -q "^::error title=vercel deploy::Error (inspect exited 1) $URL$" <<<"$out"'
+check "errored deployment prints ::error with Error state" '[ "$code" -ne 0 ] && grep -q "^::error title=vercel deploy::Error (inspect exited 1) $URL%0A" <<<"$out"'
+
+# Public annotations must retain both command outputs, not mistake CLI errors for deployment state,
+# and encode arbitrary multiline output as one workflow command. Never reach health after failure.
+run diagnostic-inspect ok diagnostic "$healthy"
+annotation=$(grep '^::error title=vercel deploy::' <<<"$out")
+check "failed inspect retains its full diagnostic in one escaped annotation" '[[ "$annotation" == *"Error: build failed at 50%25%0D%0Amissing required artifact%0A::warning::not a workflow command"* ]]'
+check "state re-read diagnostic is retained in that annotation" '[[ "$annotation" == *"state diagnostic tail"* ]]'
+check "deployment state comes only from the status field, without ANSI" '[[ "$annotation" == *"Building (inspect exited 1) $URL"* ]] && [[ "$annotation" != *$'"'"'\033'"'"'* ]]'
+check "failed inspect stops before health even for a matching sha" '[ "$code" -ne 0 ] && ! grep -q "health:" <<<"$out"'
+run unavailable-inspect ok unavailable "$healthy"
+check "CLI request errors are unknown deployment state, with diagnostic" 'grep -q "^::error title=vercel deploy::unknown (inspect exited 1) $URL" <<<"$out" && [[ "$out" == *"no deployment state available"* ]]'
 
 # (c) Healthy fake: succeeds with one deploy, a waiting inspect on that URL, and the sha served.
 run healthy ok ok "$healthy"
