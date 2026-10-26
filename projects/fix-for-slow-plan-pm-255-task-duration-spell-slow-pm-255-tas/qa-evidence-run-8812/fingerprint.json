@@ -1,0 +1,26 @@
+{
+  "captured_at": "2026-10-26T09:22:13.159023+00:00",
+  "head": "095c8991683ba5c2fa01a84325e8305c8e87fbbd",
+  "delivery": "4e5377c51713a6c31535e4815e52117d32c41b61",
+  "node": "v22.23.3",
+  "npm": "10.9.9",
+  "sha256": {
+    "lib/plan-release.ts": "90bdaeeda89494af356f2c0a9440b735c37a51da0dca394a999ced5bbf983ec1",
+    "scripts/probe-plan-release.mjs": "a2e883c6d69dd2f9e73956a4b13b364c1e1eccb807b679553d5b74d51380948f",
+    "lib/plan-release.test.ts": "f700940ab78ddd36a1ea52f6bbd76017bd1593004d39234ec075378fd23efa4f",
+    "package.json": "9fdb11f9be330bc0d6bc37c77f8441d1774c3b8acc77b6ac15a1f3755cfde9bb",
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    ".github/workflows/ci.yml": "9dcff7a80fcf598df21d07c4f54e0f88c40a8bbb7dac8acb60f093c987a18a9f",
+    "next.config.ts": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-adversarial.mjs": "6b5a2a5edb5e8854341475f620f80a2555d411cf34ba543f11834ebd18c45955"
+  },
+  "delivery_match": {
+    "lib/plan-release.ts": true,
+    "scripts/probe-plan-release.mjs": true,
+    "lib/plan-release.test.ts": true,
+    "package.json": true,
+    "package-lock.json": true,
+    ".github/workflows/ci.yml": true,
+    "next.config.ts": true
+  }
+}

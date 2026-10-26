@@ -1,0 +1,48 @@
+{
+  "captured_at": "2026-10-26T09:18:55.789Z",
+  "snapshots": {
+    "plan": {
+      "captured_at": "2026-10-26T09:18:54.328Z",
+      "tool": "plan_manager_get_plan",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "complete": true,
+      "sha256": "9f9a38a6157fe813f87f95d3f95b9874c3574d40b31a3c63fe94edfc9a77db9d"
+    },
+    "schedule": {
+      "captured_at": "2026-10-26T09:18:54.865Z",
+      "tool": "plan_manager_explain_schedule",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "complete": true,
+      "sha256": "00680613859aa65cd1af921ff1e1d2d271d953c5a22f68121a729c23c36e2bae"
+    },
+    "timeline": {
+      "captured_at": "2026-10-26T09:18:55.357Z",
+      "tool": "plan_manager_get_timeline",
+      "args": {
+        "plan_id": "pm-255",
+        "limit": 200
+      },
+      "complete": true,
+      "sha256": "50b1905a6b75fd51eccd5fecadcc8b02612a401c3d75d593670ab941cb18c5b2",
+      "scan": {
+        "limit": 200,
+        "count": 14,
+        "oldest_id": "idea:idea-248",
+        "complete": true
+      }
+    },
+    "runs": {
+      "captured_at": "2026-10-26T09:18:55.789Z",
+      "tool": "plan_manager_list_runs",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "complete": true,
+      "sha256": "c4239a848caf5ff18dcaf469c9b7a0254596fa95591b282b44148afb9e7473da"
+    }
+  }
+}

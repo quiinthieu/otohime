@@ -1,0 +1,26 @@
+{
+  "url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs?head_sha=4e5377c51713a6c31535e4815e52117d32c41b61&per_page=20",
+  "status": 200,
+  "body": {
+    "total_count": 1,
+    "workflow_runs": [
+      {
+        "id": 40297944292,
+        "name": "CI",
+        "head_sha": "4e5377c51713a6c31535e4815e52117d32c41b61",
+        "run_number": 395,
+        "event": "push",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "workflow_id": 388286889,
+        "check_suite_id": 109215401956,
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40297944292",
+        "created_at": "2026-10-26T09:13:52Z",
+        "updated_at": "2026-10-26T09:15:00Z",
+        "run_started_at": "2026-10-26T09:13:52Z",
+        "jobs_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40297944292/jobs",
+        "logs_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40297944292/logs"
+      }
+    ]
+  }
+}

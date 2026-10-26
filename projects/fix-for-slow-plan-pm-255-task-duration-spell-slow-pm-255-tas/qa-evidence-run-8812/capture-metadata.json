@@ -1,0 +1,31 @@
+{
+  "plan": {
+    "captured_at": "2026-10-26T09:18:54.328Z",
+    "tool": "plan_manager_get_plan",
+    "args": {
+      "plan_id": "pm-255"
+    }
+  },
+  "schedule": {
+    "captured_at": "2026-10-26T09:18:54.865Z",
+    "tool": "plan_manager_explain_schedule",
+    "args": {
+      "plan_id": "pm-255"
+    }
+  },
+  "timeline": {
+    "captured_at": "2026-10-26T09:18:55.357Z",
+    "tool": "plan_manager_get_timeline",
+    "args": {
+      "plan_id": "pm-255",
+      "limit": 200
+    }
+  },
+  "runs": {
+    "captured_at": "2026-10-26T09:18:55.789Z",
+    "tool": "plan_manager_list_runs",
+    "args": {
+      "plan_id": "pm-255"
+    }
+  }
+}

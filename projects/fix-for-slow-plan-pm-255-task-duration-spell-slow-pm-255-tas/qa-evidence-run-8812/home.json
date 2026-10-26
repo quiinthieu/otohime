@@ -1,0 +1,10 @@
+{
+  "url": "https://otohime.dev/",
+  "status": 200,
+  "body": {
+    "build_sha": [
+      "c38f72a6e927800b363769a1de57ee2ceed69470"
+    ],
+    "bytes": 108705
+  }
+}

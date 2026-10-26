@@ -1,0 +1,664 @@
+{
+  "synthetic": true,
+  "results": [
+    {
+      "name": "valid-baseline",
+      "mode": "dispatched",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "contract_met": true,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "held-negative-control",
+      "mode": "dispatched",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": false,
+      "reasons": {
+        "hold_released": [
+          "hold_after_plan",
+          "held_by_predecessor",
+          "progress_waiting"
+        ],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "scheduled-negative-control",
+      "mode": "dispatched",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": [
+          "swe_run_scheduled_only"
+        ]
+      },
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "unknown-status-constructor",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": [
+          "swe_run_status_unsupported"
+        ]
+      },
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "unrelated-negative-release-note",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": false,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [
+          "release_decision_missing"
+        ],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "foreign-release-with-one-local-trace",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": false,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [
+          "release_plan_id_missing"
+        ],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "missing-source-run-id",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": [
+          "swe_run_id_missing"
+        ]
+      },
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "explicit-incomplete-without-manifest",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 2,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [
+        "runs_incomplete",
+        "runs_has_more"
+      ],
+      "release_recorded": false,
+      "hold_released": false,
+      "reasons": {
+        "hold_released": [
+          "input_unsupported"
+        ],
+        "queued_startable": [
+          "input_unsupported"
+        ],
+        "execution_started": [
+          "input_unsupported"
+        ],
+        "release_recorded": [
+          "input_unsupported"
+        ],
+        "dispatch_proven": [
+          "input_unsupported"
+        ]
+      },
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "unverified",
+      "delivery_proven": false
+    },
+    {
+      "name": "missing-progress",
+      "mode": "dispatched",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": false,
+      "reasons": {
+        "hold_released": [
+          "plan_progress_missing"
+        ],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "wrong-task",
+      "mode": "dispatched",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": [
+          "swe_run_missing"
+        ]
+      },
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "wrong-plan",
+      "mode": "dispatched",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [
+        "runs_plan_mismatch"
+      ],
+      "release_recorded": false,
+      "hold_released": false,
+      "reasons": {
+        "hold_released": [
+          "input_unsupported"
+        ],
+        "queued_startable": [
+          "input_unsupported"
+        ],
+        "execution_started": [
+          "input_unsupported"
+        ],
+        "release_recorded": [
+          "input_unsupported"
+        ],
+        "dispatch_proven": [
+          "input_unsupported"
+        ]
+      },
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "missing-parent-note",
+      "mode": "dispatched",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": false,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [
+          "release_note_missing"
+        ],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "valid-without-manifest",
+      "mode": "dispatched",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": true,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "unverified",
+      "delivery_proven": false
+    },
+    {
+      "name": "failed-attempt-is-dispatch-only",
+      "mode": "dispatched",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "contract_met": true,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "failed",
+          "outcome": "finished",
+          "failed": true
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "queued-startable-release",
+      "mode": "released",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "contract_met": true,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [],
+        "execution_started": [
+          "execution_started_at_missing",
+          "plan_status_not_executing"
+        ],
+        "release_recorded": [],
+        "dispatch_proven": [
+          "swe_run_missing"
+        ]
+      },
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "queued-is-not-dispatch",
+      "mode": "dispatched",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [],
+        "execution_started": [
+          "execution_started_at_missing",
+          "plan_status_not_executing"
+        ],
+        "release_recorded": [],
+        "dispatch_proven": [
+          "swe_run_missing"
+        ]
+      },
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "unsupported-predecessor-type",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "unsupported-progress-reason",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "unsupported-progress-holders",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "unsupported-holder-identity",
+      "mode": "dispatched",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "hold_released": true,
+      "reasons": {
+        "hold_released": [],
+        "queued_startable": [
+          "plan_not_queued",
+          "progress_not_startable"
+        ],
+        "execution_started": [],
+        "release_recorded": [],
+        "dispatch_proven": []
+      },
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    }
+  ]
+}

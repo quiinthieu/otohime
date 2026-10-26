@@ -1,0 +1,320 @@
+{
+  "captured_at": "2026-10-26T09:23:20.880Z",
+  "tasks": [
+    {
+      "id": "bec3c74b-a910-45f1-8689-2685b6bfb0c8",
+      "status": "COMPLETED",
+      "repo_id": "otohime",
+      "run_id": "run-8809",
+      "created_at": "2026-10-26T09:07:33Z",
+      "completed_at": "2026-10-26T09:14:59Z",
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "worker": "avietidol-mac-mini"
+    },
+    {
+      "id": "1ce9d413-e929-4ad3-afd9-6bd0ff084d91",
+      "status": "COMPLETED",
+      "repo_id": "otohime",
+      "run_id": "run-8810",
+      "created_at": "2026-10-26T09:15:02Z",
+      "completed_at": "2026-10-26T09:16:03Z",
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "worker": "avietidol-mac-mini"
+    }
+  ],
+  "runs": [
+    {
+      "id": "run-8776",
+      "role": "research",
+      "status": "succeeded",
+      "tm_task_id": "2ba59fd6-4676-4d27-8279-8cb23ee039fb",
+      "agent_profile": "claude-fable-high",
+      "profile_flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "worker_id": "avietidol-mac-mini",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8783",
+      "role": "product_owner",
+      "status": "succeeded",
+      "git_sha": "f6ebc8e",
+      "tm_task_id": "8a684e3a-2941-4d93-9364-5dcfd7603dcf",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "worker_id": "avietidol-z490",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8789",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "320a07f",
+      "tm_task_id": "f2877d39-a399-477b-916e-616c3a38b997",
+      "agent_profile": "claude-opus-high",
+      "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "worker_id": "avietidol-mac-mini",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8796",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "320a07f",
+      "tm_task_id": "5170e115-ee41-421e-a443-49a8510adf66",
+      "worker_id": "avietidol-mac-mini",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8800",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "4059b63",
+      "tm_task_id": "ff8dc637-96fa-4f99-a701-e2aaaf79521f",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "worker_id": "avietidol-z490",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8809",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "4e5377c",
+      "tm_task_id": "bec3c74b-a910-45f1-8689-2685b6bfb0c8",
+      "agent_profile": "claude-opus-high",
+      "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "worker_id": "avietidol-mac-mini",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8810",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "4e5377c",
+      "tm_task_id": "1ce9d413-e929-4ad3-afd9-6bd0ff084d91",
+      "worker_id": "avietidol-mac-mini",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8811",
+      "role": "investigator",
+      "status": "succeeded",
+      "tm_task_id": "811cf276-1fcb-4f47-9d7d-400ae70a1e22",
+      "agent_profile": "claude-fable-high",
+      "profile_flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "worker_id": "avietidol-z490",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8812",
+      "role": "quality_engineer",
+      "status": "running",
+      "tm_task_id": "f1706e38-852a-44b7-83ee-144362065f99",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    }
+  ],
+  "verification": [
+    {
+      "id": "ver-3522",
+      "plan_id": "pm-260",
+      "task_id": "t-1578",
+      "run_id": "run-8810",
+      "gate": "green",
+      "git_sha": "4e5377c",
+      "status": "pass",
+      "items": [
+        {
+          "name": "project unit suite",
+          "cmd": "npm test",
+          "cwd": ".",
+          "expect": "exit0",
+          "exit_code": 0,
+          "status": "pass",
+          "duration_ms": 6326
+        },
+        {
+          "name": "release evaluator and CLI fixtures",
+          "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/plan-release.test.ts",
+          "cwd": ".",
+          "expect": "exit0",
+          "exit_code": 0,
+          "status": "pass",
+          "duration_ms": 1259
+        },
+        {
+          "name": "typecheck",
+          "cmd": "npm run typecheck",
+          "cwd": ".",
+          "expect": "exit0",
+          "exit_code": 0,
+          "status": "pass",
+          "duration_ms": 4673
+        }
+      ],
+      "created_at": "2026-10-26T09:16:04.475822Z"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "dec-56785",
+      "at": "2026-10-26T09:16:05.637043Z",
+      "type": "decision",
+      "actor": "orchestrator",
+      "task_id": "t-1578",
+      "kind": "green_gate_pass",
+      "summary": "green gate pass, QA is pending",
+      "reason": "green_gate_pass",
+      "evidence": {
+        "sha": "4e5377c",
+        "verification_id": "ver-3522"
+      },
+      "refs": {},
+      "trace_id": "4156e7859e7efe5c1615958e37b20cbd"
+    }
+  ],
+  "events": [
+    {
+      "id": 11376,
+      "source": "callback",
+      "type": "task-callback",
+      "dedupe_key": "tm:1ce9d413-e929-4ad3-afd9-6bd0ff084d91:final",
+      "payload": {
+        "error": "",
+        "plan_id": "pm-260",
+        "success": true,
+        "tm_task_id": "1ce9d413-e929-4ad3-afd9-6bd0ff084d91"
+      },
+      "received_at": "2026-10-26T09:16:04.475822Z",
+      "processed_at": "2026-10-26T09:16:04.475822Z",
+      "outcome": "applied"
+    },
+    {
+      "id": 11370,
+      "source": "callback",
+      "type": "task-callback",
+      "dedupe_key": "tm:bec3c74b-a910-45f1-8689-2685b6bfb0c8:final",
+      "payload": {
+        "error": "",
+        "plan_id": "pm-260",
+        "success": true,
+        "tm_task_id": "bec3c74b-a910-45f1-8689-2685b6bfb0c8"
+      },
+      "received_at": "2026-10-26T09:15:00.078396Z",
+      "processed_at": "2026-10-26T09:15:00.078396Z",
+      "outcome": "applied"
+    }
+  ],
+  "event_scan": {
+    "limit": 200,
+    "count": 200,
+    "complete": false
+  },
+  "logs": {
+    "sweLogs": {
+      "line_count": 43,
+      "tail": [
+        "{\"type\":\"assistant\",\"message\":{\"model\":\"claude-opus-5-5\",\"id\":\"msg_011CgQbMQqejzQLUSs8zrbnY\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"type\":\"tool_use\",\"id\":\"toolu_01Uo8U4see5PX7B7vAzFzGG2\",\"name\":\"mcp__plan-manager__plan_manager_record_decision\",\"input\":{\"plan_id\":\"pm-260\",\"run_id\":\"run-8809\",\"task_id\":\"t-1578\",\"kind\":\"lesson\",\"scope\":\"global\",\"summary\":\"When an evidence probe moves to the real API shape, QA's committed adversarial script can start failing its own positive baseline. qa-adversarial.mjs still builds explain_schedule with a top-level tasks list, so on 4e5377c its baseline and two controls exit 2 (schedule_shape_unsupported). With the schedule moved to inputs.tasks, all 8 cases meet contract_met. Also, otohime leases can arrive without node_modules (npx eslint fetches eslint 10 and crashes); run npm ci first.\",\"reason\":\"This surprised me in run-8809. Next QA should rerun qa-adversarial.mjs only after changing its schedule fixture to inputs.tasks, otherwise valid-baseline reports contract_met=false for a correct fail-closed reason.\"},\"caller\":{\"type\":\"direct\"}}],\"container\":null,\"stop_reason\":null,\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":477,\"cache_read_input_tokens\":130982,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":477},\"output_tokens\":8,\"service_tier\":\"standard\",\"inference_geo\":\"global\",\"speed\":\"standard\"},\"input_transformations\":[],\"diagnostics\":null,\"context_management\":null},\"parent_tool_use_id\":null,\"session_id\":\"95cb1a4b-4a00-414a-8e2d-298e748e80ee\",\"uuid\":\"90d1c4f4-856f-4d88-b486-87b893f466b2\",\"timestamp\":\"2026-10-26T09:14:06.879Z\",\"request_id\":\"req_011CgQbMQYoNhxjNyqz5BkZe\",\"wire_tool_inputs\":{\"toolu_01Uo8U4see5PX7B7vAzFzGG2\":{\"plan_id\":\"pm-260\",\"run_id\":\"run-8809\",\"task_id\":\"t-1578\",\"kind\":\"lesson\",\"scope\":\"global\",\"summary\":\"When an evidence probe moves to the real API shape, QA's committed adversarial script can start failing its own positive baseline. qa-adversarial.mjs still builds explain_schedule with a top-level tasks list, so on 4e5377c its baseline and two controls exit 2 (schedule_shape_unsupported). With the schedule moved to inputs.tasks, all 8 cases meet contract_met. Also, otohime leases can arrive without node_modules (npx eslint fetches eslint 10 and crashes); run npm ci first.\",\"reason\":\"This surprised me in run-8809. Next QA should rerun qa-adversarial.mjs only after changing its schedule fixture to inputs.tasks, otherwise valid-baseline reports contract_met=false for a correct fail-closed reason.\"}},\"tool_use_meta\":[{\"id\":\"toolu_01Uo8U4see5PX7B7vAzFzGG2\",\"display_name\":\"Plan Manager Record Decision\",\"server_display_name\":\"plan-manager\",\"tool_name\":\"plan_manager_record_decision\"}]}",
+        "{\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":[{\"tool_use_id\":\"toolu_01Uo8U4see5PX7B7vAzFzGG2\",\"type\":\"tool_result\",\"content\":[{\"type\":\"text\",\"text\":\"ok\"}]}]},\"parent_tool_use_id\":null,\"session_id\":\"95cb1a4b-4a00-414a-8e2d-298e748e80ee\",\"uuid\":\"610589b0-eb3e-4054-9b10-b9f87ec03eb0\",\"timestamp\":\"2026-10-26T09:14:07.141Z\",\"tool_use_result\":{\"content\":[{\"type\":\"text\",\"text\":\"ok\"}],\"_meta\":{\"io.modelcontextprotocol/serverInfo\":{\"name\":\"plan-manager\",\"version\":\"1.0.0\"}}},\"tool_result_meta\":[{\"id\":\"toolu_01Uo8U4see5PX7B7vAzFzGG2\",\"permission_decision\":{\"decision\":\"accept\",\"source\":\"config\",\"reason_type\":\"mode\"}}]}",
+        "{\"type\":\"assistant\",\"message\":{\"model\":\"claude-opus-5-5\",\"id\":\"msg_011CgQbMpr347C7u5NZAe2GD\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"type\":\"tool_use\",\"id\":\"toolu_01EgM3np9NVwd3B9yhXMoBfZ\",\"name\":\"mcp__plan-manager__plan_manager_submit_report\",\"input\":{\"plan_id\":\"pm-260\",\"run_id\":\"run-8809\",\"task_id\":\"t-1578\",\"kind\":\"summary\",\"git_sha\":\"4e5377c51713a6c31535e4815e52117d32c41b61\",\"path\":\"projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/release-walkthrough.md\",\"summary\":\"Fixed all five QA false positives (D1\u2013D5) in the pm-255 release probe. Pushed 4e5377c on main. npm test passes 2089/2089, the focused suite 34/34, typecheck and eslint are clean. QA's live held snapshot now decodes and exits 1. Live release and dispatch are still unproven.\",\"body\":\"Integration delivered in the checkout only. The real pm-255 release, the t-1557 dispatch and t-1557 product delivery are all unproven.\\n\\nBranch main, commit 4e5377c51713a6c31535e4815e52117d32c41b61 \\\"pm-260/t-1578: Fail the release probe closed on QA's five false positives\\\". The first push was rejected as non-fast-forward. I ran git pull --rebase, which brought in ee1f6ce (pm-259 docs), reran npm ci and all three checks green, then pushed ee1f6ce..4e5377c. origin/main readback equals HEAD. commits.txt is in shared/artifacts. GitHub Actions status was not read: gh is absent and the unauthenticated API returned rate-limit-exceeded. The earlier E2E failure (run 40294920931) belongs to its separate owner, and I made no CI changes.\\n\\nOperator chore: esc-395 (release-after-plan:pm-255:pm-248) was reused. I did not raise a new one and made no board writes.\\n\\nFixes, following fix_plan_run-8800:\\n- D1, schedule shape: the evaluator reads explain_schedule tasks only from inputs.tasks. The test fixtures now mirror the real capture: schedule tasks, own_runs and open_escalations sit under inputs, and get_plan of the paused part carries no progress. A top-level legacy task list is rejected. A new CLI regression runs the unmodified qa-evidence/{plan,schedule,timeline,runs}.json with its manifest. In both modes it exits 1 with input_errors=[], completeness verified, and reasons plan_progress_missing, hold_after_plan, held_by_predecessor, progress_waiting, release_decision_missing and swe_run_missing. Missing progress still blocks a release.\\n- D2, inherited status keys: RUN_OUTCOME is now a Map over exactly pending\u2192submitted, running\u2192running, succeeded\u2192finished and failed\u2192finished. scheduled, cancelled and superseded are named as ignored. Any other value, including constructor, toString, __proto__ and hasOwnProperty, is reported as ignored with status_unsupported, keeps the raw status, and gives reason swe_run_status_unsupported. Covered by evaluator and CLI tests (exit 1, no dispatch_runs).\\n- D3, release recognition: the keyword blacklist is gone. Only a decision of kind after_plan_released with its own id counts, and its evidence must carry plan_id equal to the part exactly, predecessor_id, predecessor_status=abandoned and a non-empty parent_note. This is the receipt shape from plan.md playbook step 3. When --abandon-decision ids are supplied, abandon_decision_id and note_decision_id are compared to them by exact identity (a test shows dec-558050 is rejected), and at least one must be present. Prose is never read, and a shared trace does not authenticate a receipt. Each gap has a stable reason: release_plan_id_missing/mismatch, release_predecessor_missing/mismatch, release_predecessor_not_abandoned, release_note_missing, abandon_decision_ref_missing/mismatch, release_decision_id_missing, release_evidence_missing, release_decision_missing. QA's two D3 cases are regressions in both the evaluator and the CLI. A future mono-v2 receipt in another shape fails until the probe is taught that shape; I did not guess its schema.\\n- D4, missing run id: a matching SWE run without a non-empty id is reported as ignored run_id_missing with run_id null and reason swe_run_id_missing. \\\"?\\\" is never substituted. A second identified failed run still proves dispatch under its own id, and delivery_proven stays false.\\n- D5, completeness: the CLI exits 0 only when --manifest verifies all four snapshots. Without a manifest it reports a diagnosis, adds completeness_verified to unmet and exits 1. The evaluator rejects payloads that declare themselves partial (complete not true, has_more not false, truncated not false, or a non-empty next_cursor) as exit 2, with or without a manifest. get_timeline's own cursor does not count as a partial marker, and no list_runs pagination was introduced. The walkthrough documents all of this.\\n\\nVerification on the macOS lease (node v22.23.3, after npm ci from the lockfile):\\n- npm test: exit 0, 2089 tests, 2089 passed, 0 failed, 0 skipped. Rerun after the rebase with the same result.\\n- node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/plan-release.test.ts: exit 0, 34 passed.\\n- npm run typecheck: exit 0.\\n- eslint on the three code files: exit 0. git diff --check: clean.\\n- QA's qa-adversarial.mjs as committed: all five defect cases now exit nonzero. Its valid-baseline and two negative controls also exit 2 with schedule_shape_unsupported, because its synthetic schedule uses the old top-level tasks list (fixture drift that D1 now rejects). I made a temporary copy that changed only that one line to inputs.tasks. In that copy all 8 cases have contract_met=true: baseline 0, held 1, scheduled 1, constructor 1, negated note 1, foreign receipt 1, missing run id 1, explicit-incomplete 2. QA should update its fixture in the same way. I did not edit QA's files.\\n\\nReal vs fake: every test fixture is synthetic. The only real input is QA's run-8800 capture (08:57Z), which is a negative result: pm-255 is held, there are 0 SWE runs, and run-8771 is an investigator. This executable uses Node builtins only, with no adapter, model or asset.\\n\\nDeferred items, owners and failure conditions:\\n- esc-395: the privileged operator clears the edge, writes the after_plan_released receipt per the playbook, and resumes pm-255. Failure: the hold persists, or the receipt lacks the fields above.\\n- pm-263, mono-v2: the scheduler fix. If its receipt kind or fields differ, release_recorded fails until the probe adopts that shape.\\n- Acceptance: real snapshots with a manifest proving release, then execution plus a t-1557 SWE tm_task_id, then a separate check of product output. A failed SWE attempt proves dispatch only and stays a defect.\\n- E2E CI blocker: its own owner.\\n\\nRun identity: run-8809, profile claude-opus-high, model claude-opus-5-5, effort high.\"},\"caller\":{\"type\":\"direct\"}}],\"container\":null,\"stop_reason\":null,\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":522,\"cache_read_input_tokens\":131459,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":522},\"output_tokens\":32,\"service_tier\":\"standard\",\"inference_geo\":\"global\",\"speed\":\"standard\"},\"input_transformations\":[],\"diagnostics\":null,\"context_management\":null},\"parent_tool_use_id\":null,\"session_id\":\"95cb1a4b-4a00-414a-8e2d-298e748e80ee\",\"uuid\":\"1a4516ac-bb89-41e5-874e-842300790342\",\"timestamp\":\"2026-10-26T09:14:30.471Z\",\"request_id\":\"req_011CgQbMpZv2Ybo6t4iybYr1\",\"wire_tool_inputs\":{\"toolu_01EgM3np9NVwd3B9yhXMoBfZ\":{\"plan_id\":\"pm-260\",\"run_id\":\"run-8809\",\"task_id\":\"t-1578\",\"kind\":\"summary\",\"git_sha\":\"4e5377c51713a6c31535e4815e52117d32c41b61\",\"path\":\"projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/release-walkthrough.md\",\"summary\":\"Fixed all five QA false positives (D1\u2013D5) in the pm-255 release probe. Pushed 4e5377c on main. npm test passes 2089/2089, the focused suite 34/34, typecheck and eslint are clean. QA's live held snapshot now decodes and exits 1. Live release and dispatch are still unproven.\",\"body\":\"Integration delivered in the checkout only. The real pm-255 release, the t-1557 dispatch and t-1557 product delivery are all unproven.\\n\\nBranch main, commit 4e5377c51713a6c31535e4815e52117d32c41b61 \\\"pm-260/t-1578: Fail the release probe closed on Q",
+        "{\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":[{\"tool_use_id\":\"toolu_01EgM3np9NVwd3B9yhXMoBfZ\",\"type\":\"tool_result\",\"content\":[{\"type\":\"text\",\"text\":\"ok\"}]}]},\"parent_tool_use_id\":null,\"session_id\":\"95cb1a4b-4a00-414a-8e2d-298e748e80ee\",\"uuid\":\"8bd9e270-5b26-4385-ba5e-64002c98d942\",\"timestamp\":\"2026-10-26T09:14:31.027Z\",\"tool_use_result\":{\"content\":[{\"type\":\"text\",\"text\":\"ok\"}],\"_meta\":{\"io.modelcontextprotocol/serverInfo\":{\"name\":\"plan-manager\",\"version\":\"1.0.0\"}}},\"tool_result_meta\":[{\"id\":\"toolu_01EgM3np9NVwd3B9yhXMoBfZ\",\"permission_decision\":{\"decision\":\"accept\",\"source\":\"config\",\"reason_type\":\"mode\"}}]}",
+        "{\"type\":\"assistant\",\"message\":{\"model\":\"claude-opus-5-5\",\"id\":\"msg_011CgQbPb4skHEP32mxthBfK\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"type\":\"text\",\"text\":\"I fixed all five false positives QA found in the pm-255 release probe (D1\u2013D5) and pushed the fix to `main` as **4e5377c**.\\n\\n**Checks:** `npm test` passed 2089/2089, the focused `lib/plan-release.test.ts` suite passed 34/34, and `npm run typecheck` exited 0. I reran all three after rebasing onto a concurrent push. I couldn't see the GitHub Actions result: `gh` isn't installed on this lease and the GitHub API returned a rate-limit error.\\n\\n**Fixes:**\\n- **D1 \u2013 real schedule shape:** the probe now reads the schedule's tasks from `inputs.tasks`, which is where the live data puts them; an extra top-level task list is rejected. QA's saved live snapshots now pass the input checks and exit 1 instead of 2. The reasons are that pm-255's own plan read has no progress field, its schedule shows it still held by pm-248, there is no release record, and there is no software_engineer run for t-1557. A test runs those saved files as they are. Missing progress still blocks a release.\\n- **D2 \u2013 fake run statuses:** only `pending`, `running`, `succeeded` and `failed` count as a dispatch. Values like `constructor` or `__proto__` are reported as unsupported.\\n- **D3 \u2013 release record:** the keyword matching is gone. Only an `after_plan_released` decision counts, and it must name pm-255, name pm-248 as its predecessor, mark pm-248 abandoned, and carry the parent's note. When the abandonment decision ids are passed in, the record's ids must match them exactly. Wording in the summary is never read, so QA's \\\"Do not release\u2026\\\" entry and their entry from another plan both fail now.\\n- **D4 \u2013 missing run id:** a matching run without its own id no longer counts as dispatch and is reported as `run_id_missing`.\\n- **D5 \u2013 completeness:** the script exits 0 only when the manifest file confirms all four saved snapshots are complete and unchanged. Without one it reports its findings but exits 1. A snapshot that marks itself partial exits 2.\\n\\n**QA's own test script:** its baseline still builds the schedule the old way, so as committed its positive case now fails on the input checks. In a temporary copy with only that line moved to `inputs.tasks`, all 8 cases behave as QA expected. QA should make that one-line change; I didn't edit their files.\\n\\n**Choices I made:** the release record's required format comes from step 3 of the plan's operator steps, because no real one exists yet. If the scheduler fix in pm-263 writes a different format, the probe will report no release until it's updated. The abandonment ids stay optional, as the fix plan says, and the walkthrough always passes them.\\n\\n**Still open:** pm-255 is still held, t-1557 has never been dispatched, and nothing is delivered. Releasing it depends on the operator action esc-395, which I reused rather than raising a new one, or on pm-263. The earlier end-to-end CI failure is a separate issue with its own owner; I didn't change CI.\\n\\nI recorded my decisions and one lesson on the board, wrote `commits.txt` to the shared artifacts folder, and submitted the summary report with the commit sha.\"}],\"container\":null,\"stop_reason\":null,\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":2649,\"cache_read_input_tokens\":131981,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":2649},\"output_tokens\":715,\"service_tier\":\"standard\",\"inference_geo\":\"global\",\"speed\":\"standard\"},\"input_transformations\":[],\"diagnostics\":null,\"context_management\":null},\"parent_tool_use_id\":null,\"session_id\":\"95cb1a4b-4a00-414a-8e2d-298e748e80ee\",\"uuid\":\"479cb09f-bb07-4ba4-9eee-375bdef23b7e\",\"timestamp\":\"2026-10-26T09:14:43.113Z\",\"request_id\":\"req_011CgQbPak2LUF6vT6XKdm8B\"}",
+        "{\"duration_api_ms\":332052,\"stop_reason\":\"end_turn\",\"session_id\":\"95cb1a4b-4a00-414a-8e2d-298e748e80ee\",\"total_cost_usd\":2.4395702,\"usage\":{\"input_tokens\":66,\"cache_creation_input_tokens\":123413,\"cache_read_input_tokens\":3566711,\"output_tokens\":36933,\"output_tokens_details\":{\"thinking_tokens\":8173},\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":123413,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"global\",\"iterations\":[{\"input_tokens\":2,\"output_tokens\":1062,\"cache_read_input_tokens\":131981,\"cache_creation_input_tokens\":2649,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":2649},\"type\":\"message\"}],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{\"claude-opus-5-5\":{\"inputTokens\":66,\"outputTokens\":36933,\"cacheReadInputTokens\":3566711,\"cacheCreationInputTokens\":123413,\"webSearchRequests\":0,\"costUSD\":2.4395702,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":8173,\"canonicalModel\":\"claude-opus-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"}},\"permission_denials\":[],\"terminal_reason\":\"completed\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":false,\"num_turns\":36,\"subtype\":\"success\",\"api_error_status\":null,\"result\":\"I fixed all five false positives QA found in the pm-255 release probe (D1\u2013D5) and pushed the fix to `main` as **4e5377c**.\\n\\n**Checks:** `npm test` passed 2089/2089, the focused `lib/plan-release.test.ts` suite passed 34/34, and `npm run typecheck` exited 0. I reran all three after rebasing onto a concurrent push. I couldn't see the GitHub Actions result: `gh` isn't installed on this lease and the GitHub API returned a rate-limit error.\\n\\n**Fixes:**\\n- **D1 \u2013 real schedule shape:** the probe now reads the schedule's tasks from `inputs.tasks`, which is where the live data puts them; an extra top-level task list is rejected. QA's saved live snapshots now pass the input checks and exit 1 instead of 2. The reasons are that pm-255's own plan read has no progress field, its schedule shows it still held by pm-248, there is no release record, and there is no software_engineer run for t-1557. A test runs those saved files as they are. Missing progress still blocks a release.\\n- **D2 \u2013 fake run statuses:** only `pending`, `running`, `succeeded` and `failed` count as a dispatch. Values like `constructor` or `__proto__` are reported as unsupported.\\n- **D3 \u2013 release record:** the keyword matching is gone. Only an `after_plan_released` decision counts, and it must name pm-255, name pm-248 as its predecessor, mark pm-248 abandoned, and carry the parent's note. When the abandonment decision ids are passed in, the record's ids must match them exactly. Wording in the summary is never read, so QA's \\\"Do not release\u2026\\\" entry and their entry from another plan both fail now.\\n- **D4 \u2013 missing run id:** a matching run without its own id no longer counts as dispatch and is reported as `run_id_missing`.\\n- **D5 \u2013 completeness:** the script exits 0 only when the manifest file confirms all four saved snapshots are complete and unchanged. Without one it reports its findings but exits 1. A snapshot that marks itself partial exits 2.\\n\\n**QA's own test script:** its baseline still builds the schedule the old way, so as committed its positive case now fails on the input checks. In a temporary copy with only that line moved to `inputs.tasks`, all 8 cases behave as QA expected. QA should make that one-line change; I didn't edit their files.\\n\\n**Choices I made:** the release record's required format comes from step 3 of the plan's operator steps, because no real one exists yet. If the scheduler fix in pm-263 writes a different format, the probe will report no release until it's updated. The abandonment ids stay optional, as the fix plan says, and the walkthrough always passes them.\\n\\n**Still open:** pm-255 is still held, t-1557 has never been dispatched, and nothing is delivered. Releasing it depends on the operator action esc-395, which I reused rather than raising a new one, or on pm-263. The earlier end-to-end CI failure is a separate issue with its own owner; I didn't change CI.\\n\\nI recorded my decisions and one lesson on the board, wrote `commits.txt` to the shared artifacts folder, and submitted the summary report with the commit sha.\",\"ttft_ms\":1783,\"type\":\"result\",\"duration_ms\":394725,\"uuid\":\"f9081b98-c3de-4e66-be04-c55207242ad6\",\"ttft_stream_ms\":1526,\"time_to_request_ms\":42,\"first_content_frame_ms\":1526,\"queued_turn_count\":0,\"result_index\":0,\"model_usage_since_last_result\":{\"claude-opus-5-5\":{\"inputTokens\":66,\"outputTokens\":36933,\"cacheReadInputTokens\":3566711,\"cacheCreationInputTokens\":123413,\"webSearchRequests\":0,\"costUSD\":2.4395702,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":8173,\"canonicalModel\":\"claude-opus-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"}}}",
+        "---",
+        "Command exited with code: 0"
+      ],
+      "complete": false
+    },
+    "gateLogs": {
+      "line_count": 53,
+      "tail": [
+        "npm warmup /Users/avietidol/Library/Application Support/build-worker/leases/1ce9d413-e929-4ad3-afd9-6bd0ff084d91-a0f817308f0dda07ad170c5545b1ab8c/work/otohime ci",
+        "npm warmup exit 0",
+        "verify: start item=project unit suite timeout_s=900",
+        "verify: item=project unit suite status=pass exit=0 duration_ms=6326",
+        "verify: start item=release evaluator and CLI fixtures timeout_s=300",
+        "verify: item=release evaluator and CLI fixtures status=pass exit=0 duration_ms=1259",
+        "verify: start item=typecheck timeout_s=900",
+        "verify: item=typecheck status=pass exit=0 duration_ms=4673"
+      ],
+      "complete": false
+    },
+    "failureLogs": {
+      "line_count": 563,
+      "tail": [
+        "remote:",
+        "remote: Create a pull request for 'task-rescue/8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f' on GitHub by visiting:",
+        "remote:      https://github.com/quiinthieu/otohime/pull/new/task-rescue/8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+        "remote:",
+        "To github.com:quiinthieu/otohime.git",
+        " * [new branch]      HEAD -> task-rescue/8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+        "rescue: pushed working state to branch task-rescue/8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+        "=== rescue: done ==="
+      ],
+      "complete": false,
+      "diagnosis": "Raw tail of unrelated run-8793/8e93fb33: selected model capacity failures, exit 1, rescue pushed separate task branch; not attributed to release probe."
+    }
+  },
+  "parent": {
+    "status": "abandoned",
+    "abandon_decisions": [
+      {
+        "id": "dec-55807",
+        "at": "2026-10-26T04:49:13.660036Z",
+        "type": "decision",
+        "actor": "decider-agent",
+        "kind": "decision_applied",
+        "summary": "abandon on acceptance_exhausted",
+        "reason": "decider-agent run-8680",
+        "evidence": {
+          "note": "Abandon pm-248 as a plan, not as an accept. Seasons and the torn-sheet 404 were verified live at 1366x768 and 390x844 (probe-seasons 28/28, probe-lost 34/34), and the code for Ask the Ink's model tier is on main (npm test 1909 pass at 303eaa3, fake-model probe 53/53). The only failing outcome is production reach: GET/POST /api/ask are 404 and 0 of 17 deployed chunks carry api/ask. The causes are a stale Vercel deploy (esc-384) and ASK_LLM plus ANTHROPIC_API_KEY unset (esc-383). Both need the account owner, and they are cost and external-account decisions. A replan would add no code, because the product owner cannot set a key or redeploy. It would also duplicate pm-255, which already holds the remaining Ask work: t-1557 deploy-bundle probe and t-1558 tier probe, queued after_plan pm-248. Abandoning frees pm-255 to run. This is not an accept: the Ask production outcome stays unmet until a person sets the env, redeploys, and a later acceptance sees GET /api/ask return 200 with enabled:true. The plan can be reopened with plan_manager_reopen_plan.",
+          "task": null,
+          "answer": "",
+          "option": "abandon",
+          "profile": "",
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "acceptance found the delivered plan does not meet its outcome \u00b7 acceptance failed 3/3 times \u00b7 last change request projects/otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons/change_request_4.md \u00b7 decide: https://apps.vietky.io.vn/plans/inbox/pm-248",
+            "evidence_ref": ""
+          },
+          "stop_reason": "acceptance_exhausted",
+          "escalation_id": "",
+          "change_request": ""
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      },
+      {
+        "id": "dec-55805",
+        "at": "2026-10-26T04:49:13.598897Z",
+        "type": "decision",
+        "actor": "decider-agent",
+        "kind": "abandoned",
+        "summary": "abandoned",
+        "reason": "decider-agent run-8680",
+        "evidence": {
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "the plan was abandoned and no cause was recorded",
+            "evidence_ref": ""
+          }
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      }
+    ],
+    "timeline_limit": 200,
+    "timeline_count": 200,
+    "complete": false
+  },
+  "qa_task": {
+    "id": "f1706e38-852a-44b7-83ee-144362065f99",
+    "worker_id": "avietidol-mac-mini",
+    "runner": "fleet",
+    "repo_id": "otohime",
+    "status": "RUNNING"
+  }
+}

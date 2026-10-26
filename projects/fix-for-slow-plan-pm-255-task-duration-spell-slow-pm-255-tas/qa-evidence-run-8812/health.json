@@ -1,0 +1,7 @@
+{
+  "url": "https://otohime.dev/api/health",
+  "status": 200,
+  "body": {
+    "ok": true
+  }
+}
