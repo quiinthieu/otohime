@@ -1,5 +1,6 @@
 import { ClawMachine } from "@/components/claw-machine";
 import { swatches } from "@/components/figures";
+import { InkPressLoader } from "@/components/ink-press-loader";
 import { PondLoader } from "@/components/pond-loader";
 import { PondStatic } from "@/components/pond-static";
 import { StampHeading } from "@/components/stamp-heading";
@@ -29,6 +30,13 @@ export default function PlayPage() {
           <PondLoader>
             <PondStatic />
           </PondLoader>
+        </section>
+        <section className="mt-12" aria-labelledby="press-heading">
+          <h2 id="press-heading" className="caption">
+            Ink poster press <span className="text-muted">(experimental)</span>
+          </h2>
+          <p className="mt-2 mb-4 text-muted">Type a word or a short phrase and pull a poster in wet ink: stamp, riso or brush. Shuffle for another print.</p>
+          <InkPressLoader />
         </section>
         <h2 className="caption mt-12">In rotation</h2>
         <ul className="mt-3 grid gap-x-10 sm:grid-cols-2">

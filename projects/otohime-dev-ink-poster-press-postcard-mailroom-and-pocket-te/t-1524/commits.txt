@@ -1,0 +1,1 @@
+<this commit> pm-249/t-1524: Add the Ink Poster Press to Play: a lazy WebGL2 wet-ink poster in stamp, riso and brush with shuffle, ?s= seed and PNG export  (delivery; no trailer; its sha is the git_sha of the run-8711 summary report, since a commit cannot name itself)
