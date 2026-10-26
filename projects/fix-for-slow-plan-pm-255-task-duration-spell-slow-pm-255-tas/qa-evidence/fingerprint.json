@@ -1,0 +1,14 @@
+{
+  "delivery_sha": "320a07f621804187c44a9ffb2ca704908750c2b2",
+  "node": "v22.23.3",
+  "npm": "10.9.9",
+  "sha256": {
+    "lib/plan-release.ts": "bfabf24177efeef8f241e1f7890df503cb09022fb3f1ce4cc61020466ec1a0f6",
+    "lib/plan-release.test.ts": "8b5318a2d69ad8d1c367513b4a7cfbe7b3b0134f7919fac11dcae5face7ebadd",
+    "scripts/probe-plan-release.mjs": "a9ab64790db65a33dbe4c0158555940d9e43823764b423b76d0bd538536042e6",
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "package.json": "9fdb11f9be330bc0d6bc37c77f8441d1774c3b8acc77b6ac15a1f3755cfde9bb",
+    ".github/workflows/ci.yml": "9dcff7a80fcf598df21d07c4f54e0f88c40a8bbb7dac8acb60f093c987a18a9f"
+  },
+  "runtime_dependencies": "Node builtins only; no model, external artifacts, processor or service adapter"
+}

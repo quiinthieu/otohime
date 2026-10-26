@@ -1,0 +1,212 @@
+{
+  "qa_run": {
+    "id": "run-8800",
+    "profile": "codex-sol-6-1-high",
+    "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "worker": "avietidol-z490"
+  },
+  "software_engineer_run": {
+    "id": "run-8789",
+    "profile": "claude-opus-high",
+    "flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+    "git_sha": "320a07f",
+    "callback_apply_failures": 0,
+    "tm_task_id": "f2877d39-a399-477b-916e-616c3a38b997"
+  },
+  "swe_task": {
+    "id": "f2877d39-a399-477b-916e-616c3a38b997",
+    "status": "COMPLETED",
+    "callback_state": "delivered",
+    "callback_attempts": 1
+  },
+  "gate_task": {
+    "id": "5170e115-ee41-421e-a443-49a8510adf66",
+    "status": "COMPLETED",
+    "git_sha": "320a07f",
+    "verification": [
+      {
+        "name": "project unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "release evaluator and CLI fixtures",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/plan-release.test.ts",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "typecheck",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ],
+    "callback_state": "delivered",
+    "callback_attempts": 1,
+    "result": {
+      "agent": "shell",
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "commits.txt",
+          "sha256": "2de5e2dff80d7615d1c3373c8713276ec7cdfe824d66e7848d45823fb53439d6",
+          "size": 32
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "uncommitted.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "content_type": "application/json",
+          "name": "usage.json",
+          "sha256": "c4b59be25f7e827c2ec9c5b0ea39e19ac8a9d4b7fc7dd4226d46ab20d97cef21",
+          "size": 200
+        },
+        {
+          "content_type": "application/json",
+          "name": "verification.json",
+          "sha256": "faca3565d91994ad8e49fc08c2a7d8757c12bfd7849c8cfafae5b21ea12f6c31",
+          "size": 9471
+        }
+      ],
+      "duration_s": 39,
+      "exit_code": 0,
+      "recordings": [],
+      "repo_id": "otohime",
+      "usage": {
+        "cpu_cores": 1.3,
+        "cpu_seconds": 15.06,
+        "io_sampler": "rusage",
+        "peak_cpu_cores": 1.3,
+        "peak_rss_mb": 1203.73,
+        "read_bytes": 90112,
+        "rss_mb": 794.8,
+        "sampler": "ps",
+        "samples": 7,
+        "write_bytes": 589189120
+      },
+      "worker_id": "avietidol-mac-mini"
+    }
+  },
+  "gate_run": {
+    "id": "run-8796",
+    "status": "succeeded",
+    "git_sha": "320a07f",
+    "callback_apply_failures": 0
+  },
+  "ingestion_events": [
+    {
+      "id": "dec-56657",
+      "kind": "green_gate_pass",
+      "summary": "green gate pass, QA is pending",
+      "evidence": {
+        "sha": "320a07f",
+        "verification_id": "ver-3518"
+      }
+    },
+    {
+      "id": "ev:11308",
+      "kind": "task-callback",
+      "summary": "applied"
+    },
+    {
+      "id": "dec-56650",
+      "kind": "green_gate",
+      "summary": "SWE succeeded, green gate is running",
+      "evidence": {}
+    },
+    {
+      "id": "dec-56649",
+      "kind": "red_gate_failed_as_expected",
+      "summary": "inline red gate fail, the agent ran",
+      "evidence": {
+        "inline": true,
+        "verification_id": "ver-3517"
+      }
+    },
+    {
+      "id": "ev:11300",
+      "kind": "task-callback",
+      "summary": "applied"
+    },
+    {
+      "id": "dec-56594",
+      "kind": "red_gate",
+      "summary": "red gate for t-1578 inside run-8789",
+      "evidence": {}
+    },
+    {
+      "id": "ev:11272",
+      "kind": "task-callback",
+      "summary": "applied"
+    },
+    {
+      "id": "ev:11251",
+      "kind": "task-callback",
+      "summary": "applied"
+    }
+  ],
+  "parent": {
+    "history_limit": 200,
+    "history_complete": false,
+    "decisions": [
+      {
+        "id": "dec-55807",
+        "at": "2026-10-26T04:49:13.660036Z",
+        "type": "decision",
+        "actor": "decider-agent",
+        "kind": "decision_applied",
+        "summary": "abandon on acceptance_exhausted",
+        "reason": "decider-agent run-8680",
+        "evidence": {
+          "note": "Abandon pm-248 as a plan, not as an accept. Seasons and the torn-sheet 404 were verified live at 1366x768 and 390x844 (probe-seasons 28/28, probe-lost 34/34), and the code for Ask the Ink's model tier is on main (npm test 1909 pass at 303eaa3, fake-model probe 53/53). The only failing outcome is production reach: GET/POST /api/ask are 404 and 0 of 17 deployed chunks carry api/ask. The causes are a stale Vercel deploy (esc-384) and ASK_LLM plus ANTHROPIC_API_KEY unset (esc-383). Both need the account owner, and they are cost and external-account decisions. A replan would add no code, because the product owner cannot set a key or redeploy. It would also duplicate pm-255, which already holds the remaining Ask work: t-1557 deploy-bundle probe and t-1558 tier probe, queued after_plan pm-248. Abandoning frees pm-255 to run. This is not an accept: the Ask production outcome stays unmet until a person sets the env, redeploys, and a later acceptance sees GET /api/ask return 200 with enabled:true. The plan can be reopened with plan_manager_reopen_plan.",
+          "task": null,
+          "answer": "",
+          "option": "abandon",
+          "profile": "",
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "acceptance found the delivered plan does not meet its outcome · acceptance failed 3/3 times · last change request projects/otohime-dev-three-new-bits-for-the-paper-and-ink-pocket-cons/change_request_4.md · decide: https://apps.vietky.io.vn/plans/inbox/pm-248",
+            "evidence_ref": ""
+          },
+          "stop_reason": "acceptance_exhausted",
+          "escalation_id": "",
+          "change_request": ""
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      },
+      {
+        "id": "dec-55805",
+        "at": "2026-10-26T04:49:13.598897Z",
+        "type": "decision",
+        "actor": "decider-agent",
+        "kind": "abandoned",
+        "summary": "abandoned",
+        "reason": "decider-agent run-8680",
+        "evidence": {
+          "root_cause": {
+            "reason": "unknown",
+            "summary": "the plan was abandoned and no cause was recorded",
+            "evidence_ref": ""
+          }
+        },
+        "refs": {},
+        "trace_id": "d2b6a7810c26edc93b8d9f448c842a38"
+      }
+    ]
+  },
+  "operator_action": {
+    "id": "esc-395",
+    "fingerprint": "release-after-plan:pm-255:pm-248",
+    "waived_at": "2026-10-26T08:52:07.344493Z",
+    "chore_done_at": null
+  }
+}

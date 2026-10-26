@@ -1,0 +1,64 @@
+{
+  "ok": false,
+  "mode": "dispatched",
+  "unmet": [
+    "input_supported",
+    "hold_released",
+    "release_recorded",
+    "execution_started",
+    "dispatch_proven"
+  ],
+  "expected": {
+    "plan_id": "pm-255",
+    "predecessor_id": "pm-248",
+    "task_id": "t-1557",
+    "abandon_decision_ids": []
+  },
+  "input_errors": [
+    "schedule_shape_unsupported"
+  ],
+  "hold_released": false,
+  "queued_startable": false,
+  "execution_started": false,
+  "release_recorded": false,
+  "dispatch_proven": false,
+  "delivery_proven": false,
+  "reasons": {
+    "hold_released": [
+      "input_unsupported"
+    ],
+    "queued_startable": [
+      "input_unsupported"
+    ],
+    "execution_started": [
+      "input_unsupported"
+    ],
+    "release_recorded": [
+      "input_unsupported"
+    ],
+    "dispatch_proven": [
+      "input_unsupported"
+    ]
+  },
+  "evidence": {
+    "plan_status": null,
+    "after_plan_id": null,
+    "execution_started_at": null,
+    "progress": null,
+    "release_decision_id": null,
+    "dispatch_runs": [],
+    "failed_attempts": [],
+    "ignored_runs": []
+  },
+  "manifest": {
+    "provided": true,
+    "completeness": "verified",
+    "captured_at": "2026-10-26T08:57:18Z"
+  },
+  "sha256": {
+    "plan": "41a904e6beab0f3f41a7a7d0b17ca4c66d94a5519e3fe7e106f1e3c48c9fd5b2",
+    "schedule": "3e6b516b3685e57a72c7deea0e1c8c65ba805e4832236de32bc2fded265fa811",
+    "timeline": "f5411cd7757e919558b7b994d8ca23d83cc57ce5da9be30212a098442605d5ea",
+    "runs": "ebc13e0e4902a9ecc414d29471815e428bfca50c8ff6c4d74a803fc55f6093ca"
+  }
+}

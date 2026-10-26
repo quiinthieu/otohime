@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-10-26T08:57:18Z",
+  "captured_by": "run-8800 (quality_engineer)",
+  "delivery_sha": "320a07f621804187c44a9ffb2ca704908750c2b2",
+  "board_build_sha": null,
+  "snapshots": {
+    "plan": {
+      "tool": "plan_manager_get_plan",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T08:57:18Z",
+      "complete": true,
+      "sha256": "41a904e6beab0f3f41a7a7d0b17ca4c66d94a5519e3fe7e106f1e3c48c9fd5b2"
+    },
+    "schedule": {
+      "tool": "plan_manager_explain_schedule",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T08:57:18Z",
+      "complete": true,
+      "sha256": "3e6b516b3685e57a72c7deea0e1c8c65ba805e4832236de32bc2fded265fa811"
+    },
+    "timeline": {
+      "tool": "plan_manager_get_timeline",
+      "args": {
+        "plan_id": "pm-255",
+        "limit": 200
+      },
+      "captured_at": "2026-10-26T08:57:18Z",
+      "complete": true,
+      "pages": 1,
+      "entries": 13,
+      "terminal_cursor": "idea:idea-248",
+      "sha256": "f5411cd7757e919558b7b994d8ca23d83cc57ce5da9be30212a098442605d5ea"
+    },
+    "runs": {
+      "tool": "plan_manager_list_runs",
+      "args": {
+        "plan_id": "pm-255"
+      },
+      "captured_at": "2026-10-26T08:57:19Z",
+      "complete": true,
+      "runs": 1,
+      "pagination": "tool has no pagination",
+      "sha256": "ebc13e0e4902a9ecc414d29471815e428bfca50c8ff6c4d74a803fc55f6093ca"
+    }
+  }
+}

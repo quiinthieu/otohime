@@ -1,0 +1,172 @@
+{
+  "synthetic": true,
+  "results": [
+    {
+      "name": "valid-baseline",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "contract_met": true,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "held-negative-control",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "scheduled-negative-control",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "contract_met": true,
+      "direct_ok": false,
+      "ok": false,
+      "input_errors": [],
+      "release_recorded": true,
+      "dispatch_proven": false,
+      "dispatch_runs": [],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "unknown-status-constructor",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "constructor",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "unrelated-negative-release-note",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "foreign-release-with-one-local-trace",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "missing-source-run-id",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "?",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "verified",
+      "delivery_proven": false
+    },
+    {
+      "name": "explicit-incomplete-without-manifest",
+      "expected_exit": "nonzero",
+      "actual_exit": 0,
+      "contract_met": false,
+      "direct_ok": true,
+      "ok": true,
+      "input_errors": [],
+      "release_recorded": true,
+      "dispatch_proven": true,
+      "dispatch_runs": [
+        {
+          "run_id": "qa-swe",
+          "tm_task_id": "qa-durable-id",
+          "status": "running",
+          "outcome": "running",
+          "failed": false
+        }
+      ],
+      "completeness": "unverified",
+      "delivery_proven": false
+    }
+  ]
+}

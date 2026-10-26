@@ -1,0 +1,38 @@
+{
+  "npm test": {
+    "exit": 0,
+    "pass": 2076,
+    "fail": 0,
+    "skip": 0
+  },
+  "focused": {
+    "exit": 0,
+    "pass": 23,
+    "fail": 0,
+    "skip": 0
+  },
+  "typecheck": {
+    "exit": 0
+  },
+  "qa_adversarial_eslint": {
+    "exit": 0
+  },
+  "after_rebase": {
+    "incorporated_sha": "15fd171",
+    "npm test": {
+      "exit": 0,
+      "pass": 2078,
+      "fail": 0,
+      "skip": 0
+    },
+    "focused": {
+      "exit": 0,
+      "pass": 23,
+      "fail": 0,
+      "skip": 0
+    },
+    "typecheck": {
+      "exit": 0
+    }
+  }
+}
