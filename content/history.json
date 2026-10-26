@@ -1,8 +1,14 @@
 {
   "version": 1,
-  "head": "3673c506308dcb1da124bdb97d517a2261d76961",
-  "total": 408,
+  "head": "fe0dd82eb86ccaa17fac015a881f1daf7ab8873e",
+  "total": 414,
   "entries": [
+    {"sha":"fe0dd82eb8","date":"2026-10-26T11:17:18Z","plan":"pm-260","task":"run-8862","subject":"Refresh split recovery ownership and proposal evidence","files":2,"added":200,"removed":9,"areas":["projects"]},
+    {"sha":"f44915be71","date":"2026-10-26T11:16:26Z","plan":"pm-258","task":"t-1564","subject":"Record the disclosed desk gate failure and QA fix plan","files":49,"added":10675,"removed":0,"areas":["projects"]},
+    {"sha":"4a87fc440c","date":"2026-10-26T11:13:01Z","plan":"pm-256","task":"t-1560","subject":"Record QA fail, delivery verified but not yet deployed","files":2,"added":95,"removed":0,"areas":["projects"]},
+    {"sha":"45129f9898","date":"2026-10-26T11:06:04Z","plan":"pm-260","task":"run-8851","subject":"Route split recovery to the platform and board owners","files":4,"added":867,"removed":141,"areas":["projects"]},
+    {"sha":"543ba68fb1","date":"2026-10-26T11:02:18Z","plan":"pm-256","task":"t-1560","subject":"Turn off git auto-maintenance in the history index fixtures","files":4,"added":37,"removed":11,"areas":["projects","content","scripts"]},
+    {"sha":"28d4542dcc","date":"2026-10-26T10:58:42Z","plan":"pm-264","task":"t-1590","subject":"Build the pointer and tilt Ryugu peep-box","files":12,"added":1743,"removed":3,"areas":["components","projects","e2e"]},
     {"sha":"3673c50630","date":"2026-10-26T10:55:58Z","plan":"pm-260","task":"acceptance","subject":"Record acceptance fail, pm-255 still held behind abandoned pm-248","files":13,"added":534,"removed":0,"areas":["projects"]},
     {"sha":"96be45a7f9","date":"2026-10-26T10:54:49Z","plan":"pm-256","task":"t-1560","subject":"Record QA failure on the flaky history fixture and its fix plan","files":2,"added":88,"removed":0,"areas":["projects"]},
     {"sha":"5ef9b8adbe","date":"2026-10-26T10:51:58Z","plan":"pm-259","task":"t-1583","subject":"Record independent fetch QA","files":2,"added":43,"removed":0,"areas":["projects"]},
@@ -196,12 +202,6 @@
     {"sha":"f82ea2fe0e","date":"2026-10-25T17:49:08Z","plan":"pm-242","task":"t-1477","subject":"Shelve projects as cartridges","files":5,"added":829,"removed":15,"areas":["app/(site)","scripts","components"]},
     {"sha":"a750f28953","date":"2026-10-25T17:45:58Z","plan":"pm-241","task":"t-1474","subject":"Prove footer interactions and polish the scene","files":7,"added":1916,"removed":6,"areas":["scripts",".github","README.md"]},
     {"sha":"916f58ff8a","date":"2026-10-25T17:35:39Z","plan":"pm-242","task":"t-1475","subject":"Fall back to a free port when a probe's default is busy","files":2,"added":38,"removed":6,"areas":["scripts"]},
-    {"sha":"6b0b2012fe","date":"2026-10-25T17:32:34Z","plan":"pm-242","task":"t-1476","subject":"Record QA report for console tilt","files":1,"added":16,"removed":0,"areas":["projects"]},
-    {"sha":"51cf31138c","date":"2026-10-25T17:31:35Z","plan":"pm-240","task":"t-1472","subject":"Record run-8341 verification in blocked portrait review ledger","files":1,"added":8,"removed":1,"areas":["projects"]},
-    {"sha":"d4cb19cdb4","date":"2026-10-25T17:27:03Z","plan":"pm-243","task":"t-1489","subject":"Add the Ask index and offline answerer","files":6,"added":529,"removed":1,"areas":["lib",".github","package.json"]},
-    {"sha":"dd1e8e1085","date":"2026-10-25T17:12:31Z","plan":"pm-240","task":"t-1472","subject":"Record blocked portrait review ledger and keep manifest unactivated","files":1,"added":102,"removed":0,"areas":["projects"]},
-    {"sha":"284429c8b3","date":"2026-10-25T17:06:10Z","plan":"pm-242","task":"t-1476","subject":"Tilt the pocket console toward a hovering pointer","files":5,"added":684,"removed":9,"areas":["components","scripts","app/(site)"]},
-    {"sha":"955009388f","date":"2026-10-25T17:03:50Z","plan":"pm-242","task":"t-1475","subject":"Add opt-in console sounds","files":10,"added":828,"removed":3,"areas":["components","lib","scripts"]},
-    {"sha":"6c2f013bff","date":"2026-10-25T16:47:35Z","plan":"pm-242","task":"product_owner","subject":"Name the pipeline documentation interface","files":2,"added":5,"removed":3,"areas":["projects"]}
+    {"sha":"6b0b2012fe","date":"2026-10-25T17:32:34Z","plan":"pm-242","task":"t-1476","subject":"Record QA report for console tilt","files":1,"added":16,"removed":0,"areas":["projects"]}
   ]
 }
