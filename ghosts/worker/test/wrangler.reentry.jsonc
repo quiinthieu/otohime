@@ -1,0 +1,14 @@
+// Test-only configuration: the real Worker routing and GhostRoom code, wrapped
+// so a test can rebuild GhostRoom on the same live DurableObjectState (what a
+// hibernation wake does) and inspect it. Never deployed; bundle:check rejects __test.
+{
+  "name": "otohime-ghosts-reentry-test",
+  "main": "reentry-entry.ts",
+  "compatibility_date": "2026-10-15",
+  "observability": { "enabled": false },
+  "vars": { "ALLOWED_ORIGINS": "https://otohime.dev" },
+  "durable_objects": {
+    "bindings": [{ "name": "GHOST_ROOMS", "class_name": "TestGhostRoom" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["TestGhostRoom"] }]
+}

@@ -278,7 +278,8 @@ test("npm test and the typecheck cover lib/ask-deploy.ts and its tests, with not
   const ts = JSON.parse(repo("tsconfig.json")) as { compilerOptions: { strict?: boolean }; include: string[]; exclude?: string[] };
   assert.equal(ts.compilerOptions.strict, true);
   assert.ok(ts.include.includes("**/*.ts"));
-  assert.deepEqual(ts.exclude ?? [], ["node_modules"]);
+  // ghosts/worker is the Cloudflare Worker package, typechecked against workerd types by its own `npm run typecheck`.
+  assert.deepEqual(ts.exclude ?? [], ["node_modules", "ghosts/worker"]);
   const self = repo("lib/ask-deploy.test.ts");
   const banned = ["test" + ".only(", "test" + ".skip(", "test" + ".todo(", "{ skip" + ":", "{ only" + ":", "@ts-" + "ignore", "@ts-" + "nocheck"];
   for (const file of [self, repo("lib/ask-deploy.ts")]) for (const b of banned) assert.ok(!file.includes(b), b);

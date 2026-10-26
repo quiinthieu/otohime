@@ -1,0 +1,22 @@
+// Ink ghosts fan-out Worker. Deploy, secrets and activation belong to the
+// workflow and runbook (pm-257 task 4/5); this file is the whole configuration.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "otohime-ghosts",
+  "main": "src/index.ts",
+  // Pinned; move deliberately (workerd 1.20261019.1 in package-lock.json supports it).
+  "compatibility_date": "2026-10-15",
+  "workers_dev": true,
+  // No visitor telemetry: Workers Logs, traces and logpush stay off.
+  "observability": { "enabled": false, "logs": { "enabled": false, "invocation_logs": false } },
+  "logpush": false,
+  "vars": {
+    // Exact origins only, comma separated. Production: https://otohime.dev.
+    "ALLOWED_ORIGINS": "https://otohime.dev"
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "GHOST_ROOMS", "class_name": "GhostRoom" }]
+  },
+  // SQLite-backed namespace (the only kind new namespaces may use); the class never touches storage.
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["GhostRoom"] }]
+}

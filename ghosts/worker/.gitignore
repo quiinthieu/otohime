@@ -1,0 +1,6 @@
+# Local Wrangler/Miniflare state, dependencies and bundles never enter git.
+/node_modules/
+/.wrangler/
+/dist/
+/.dev.vars*
+*.tsbuildinfo

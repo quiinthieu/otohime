@@ -986,7 +986,8 @@ test("npm test and typecheck cover the evaluator, CLI tests and adversarial cont
   const tsconfig = JSON.parse(readFileSync(join(ROOT, "tsconfig.json"), "utf8"));
   assert.equal(tsconfig.compilerOptions.strict, true);
   assert.ok(tsconfig.include.includes("**/*.ts"));
-  assert.deepEqual(tsconfig.exclude, ["node_modules"]);
+  // ghosts/worker is the Cloudflare Worker package, typechecked against workerd types by its own `npm run typecheck`.
+  assert.deepEqual(tsconfig.exclude, ["node_modules", "ghosts/worker"]);
   for (const f of ["lib/plan-release.ts", "lib/plan-release.test.ts"]) {
     assert.doesNotMatch(readFileSync(join(ROOT, f), "utf8"), /@ts-(nocheck|ignore|expect-error)/, f);
   }

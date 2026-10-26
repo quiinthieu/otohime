@@ -1,0 +1,19 @@
+{
+  "name": "otohime-ghosts-worker",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test:local": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 'test/*.test.mjs'",
+    "bundle:check": "node scripts/bundle-check.mjs",
+    "fingerprint": "node scripts/fingerprint.mjs"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261026.1",
+    "typescript": "5.9.3",
+    "wrangler": "4.152.0"
+  }
+}

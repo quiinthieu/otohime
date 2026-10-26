@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Vendored verbatim from sea-glass (Apache-2.0).
     "app/(shore)/_lib/sea-glass.mjs",
+    // The Cloudflare Worker package: its own lock, types (workerd) and typecheck (npm run typecheck there).
+    "ghosts/worker/**",
   ]),
 ]);
 
