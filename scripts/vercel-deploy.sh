@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Production deploy for the CI `production` job: upload the prebuilt output, wait for the deployment
-# to become ready, then prove https://otohime.dev serves this commit. Each wait is bounded so a hang
+# Production deploy for the CI `production` job: upload the prebuilt output, inspect the deployment,
+# then prove https://otohime.dev serves this commit. Public health decides even if inspect fails.
+# Each wait is bounded so a hang
 # fails with a public ::error annotation instead of silently running into the job timeout
 # (run 40311256064: the old blocking `vercel deploy` hung 850 s and the health check never ran).
 #
@@ -97,6 +98,7 @@ echo "deployment: $url"
 
 log "ready: vercel inspect --wait (bound ${READY_TIMEOUT}s)"
 status=0
+inspect_failure=""
 bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
 cat "$wait_log" >&2
 if [ "$status" -ne 0 ]; then
@@ -108,9 +110,12 @@ if [ "$status" -ne 0 ]; then
   diagnostic=$(printf '\ninspect --wait output (exit %s):\n%s\nstate re-read output (exit %s):\n%s' \
     "$status" "$(plain "$wait_log")" "$state_status" "$(plain "$state_log")")
   if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
-    fail "${state:-unknown} after ${READY_TIMEOUT}s $url$diagnostic"
+    inspect_failure="${state:-unknown} after ${READY_TIMEOUT}s $url$diagnostic"
+  else
+    inspect_failure="${state:-unknown} (inspect exited $status) $url$diagnostic"
   fi
-  fail "${state:-unknown} (inspect exited $status) $url$diagnostic"
+  log "$inspect_failure"
+  log "inspect could not confirm readiness; checking the public commit before deciding"
 fi
 
 expect="\"sha\":\"$GITHUB_SHA\""
@@ -122,4 +127,4 @@ for attempt in $(seq 1 "$HEALTH_ATTEMPTS"); do
   case "$body" in *"$expect"*) log "health: serving $GITHUB_SHA"; exit 0 ;; esac
   [ "$attempt" -lt "$HEALTH_ATTEMPTS" ] && sleep "$HEALTH_POLL_DELAY"
 done
-fail "health check at $HEALTH_URL does not report $GITHUB_SHA (last body: ${body:-none}) $url"
+fail "health check at $HEALTH_URL does not report $GITHUB_SHA (last body: ${body:-none}) $url${inspect_failure:+$'\n'}$inspect_failure"

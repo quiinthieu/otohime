@@ -394,15 +394,15 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
       {
         "name": "feature contract tests",
         "cwd": ".",
-        "cmd": "node --experimental-strip-types --test lib/terminal.test.ts",
-        "expect": "exit0",
+        "cmd": "node --experimental-strip-types --test --test-reporter=tap lib/terminal.test.ts",
+        "expect": "match:ok [0-9]+ - print run selects only exact validated ids; malformed commands have no effect",
         "timeout_s": 300
       },
       {
         "name": "project unit suite",
         "cwd": ".",
         "cmd": "npm test",
-        "expect": "exit0",
+        "expect": "match:# pass [1-9][0-9]*",
         "timeout_s": 300
       },
       {
@@ -422,9 +422,16 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
       {
         "name": "real-browser feature contract",
         "cwd": ".",
-        "cmd": "node --experimental-strip-types scripts/e2e.mjs --test e2e/print-run-console.test.ts",
-        "expect": "exit0",
+        "cmd": "node --experimental-strip-types scripts/e2e.mjs --test --test-reporter=tap e2e/print-run-console.test.ts",
+        "expect": "match:ok [0-9]+ - visible Pocket chips, commands and terminal settings agree, clear Lab and survive reload",
         "timeout_s": 900
+      },
+      {
+        "name": "deploy inspect fallback regression",
+        "cwd": ".",
+        "cmd": "bash scripts/vercel-deploy.test.sh",
+        "expect": "match:ok - inspect exit 1 passes when public health serves the exact sha",
+        "timeout_s": 300
       }
     ]
   },

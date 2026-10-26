@@ -78,9 +78,11 @@ test("visible Pocket chips, commands and terminal settings agree, clear Lab and 
   await command(page, "print run indigo");
   await selected(page, "indigo");
   assert.match((await output(page)) ?? "", /Saved for reload; Ink Lab override cleared/);
-  for (const line of ["print run wrong", "print run riso extra", "print riso"]) await command(page, line);
-  await selected(page, "indigo");
-  assert.equal(await page.evaluate((key) => localStorage.getItem(key), PRINT_RUN_KEY), "indigo");
+  for (const line of ["print run wrong", "print run riso extra", "print riso"]) {
+    await command(page, line);
+    await selected(page, "indigo");
+    assert.equal(await page.evaluate((key) => localStorage.getItem(key), PRINT_RUN_KEY), "indigo", line);
+  }
   await switchIn(page).getByText("Sumi black", { exact: true }).click();
   await command(page, "print run");
   assert.match((await output(page)) ?? "", /print run: Sumi black \(sumi\)/);
@@ -98,6 +100,15 @@ test("visible Pocket chips, commands and terminal settings agree, clear Lab and 
   await page.evaluate((lab) => (window as unknown as { otohimeAppearance: { applyLab: (s: unknown) => void } }).otohimeAppearance.applyLab(lab), normalizeLab({ printRun: "riso" }));
   await command(page, "print run");
   assert.match((await output(page)) ?? "", /Riso pink \+ mint \(riso\); Ink Lab override active/);
+  const applied = await page.evaluate((key) => sessionStorage.getItem(key), INK_LAB_KEY);
+  assert.ok(applied, "negative control starts with a persisted applied Lab");
+  for (const line of ["print run purple", "print run house extra"]) {
+    await command(page, line);
+    await selected(page, "riso");
+    assert.equal(await page.getAttribute("html", "data-ink-lab"), "", line);
+    assert.equal(await page.evaluate((key) => sessionStorage.getItem(key), INK_LAB_KEY), applied, line);
+    assert.equal(await page.evaluate((key) => localStorage.getItem(key), PRINT_RUN_KEY), "sumi", line);
+  }
   await command(page, "print run house");
   await selected(page, "house");
   assert.equal(await page.getAttribute("html", "data-ink-lab"), null);

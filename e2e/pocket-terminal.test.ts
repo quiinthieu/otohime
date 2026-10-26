@@ -87,7 +87,9 @@ test("nothing of the terminal loads with the page; / brings its chunk and opens 
   assert.equal(await page.inputValue("#pt-in"), "", "the / that opened it is not typed");
   assert.equal(await page.getAttribute("#pt-in", "role"), "combobox");
   assert.equal(await page.getAttribute("dialog.pocket-terminal", "aria-labelledby"), "pt-title");
-  assert.equal(await page.textContent("#pt-title"), "Pocket terminal");
+  // Riso headings include aria-hidden plate text; users still receive one plain accessible name.
+  assert.equal(await page.getByRole("heading", { name: "Pocket terminal", exact: true }).count(), 1);
+  assert.equal(await page.getByRole("dialog", { name: "Pocket terminal", exact: true }).count(), 1);
   assert.equal(await page.getAttribute("[role=log]", "aria-live"), "polite");
   assert.deepEqual(await heard(page), [], "the opening key stopped at the loader");
 
