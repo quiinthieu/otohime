@@ -38,10 +38,18 @@ Each project cartridge's title link stretches over the whole card. Resting the m
 - **Synthetic** (already in the suites): clock, lifecycle and preference fixtures, and the immobilised turtle.
 - **Not applicable:** no queued runtime, capacity deferral or callback ingestion applies to this browser-only change.
 
+## Push and rebases
+
+- **Delivery:** `591c28e1758bb95605b93e1cc8f7d1225cc2d2dc` on main, pushed normally (`c0a40c2..591c28e`, no force). See `artifacts/commits.txt`.
+- **First push rejected:** non-fast-forward. `git pull --rebase` brought in code changes, including fd99b92, which carries print runs through the root layouts. All four contract commands passed again on rebased `b51b063` (`artifacts/rebase1/`): foundation 21/21, `npm test` 2207/2207, lint/typecheck exit 0, browser 28/28 on production build `pR1QYv6JtUGePPA87LzyG`.
+- **Second push rejected:** only report-only `c0a40c2` (pm-260 board record, `projects/**`) arrived. `git diff b51b063 591c28e -- . ':!projects'` is empty, so the four contract runs above cover the exact code tree that was pushed. The foundation suite was rerun on the final HEAD (21/21) before the third, successful push.
+- **Footer probe run:** the 171/171 Footer probe ran on the pre-rebase tree (same feature code, older upstream). It was not repeated after the rebase.
+- **Follow-up commit:** the commit carrying this addendum and `commits.txt` touches only `projects/**`, so it starts no CI. It is not the delivery SHA.
+
 ## Status
 
 - **Execution demonstrated:** locally, on the production build above.
-- **Integration deployed:** pending. The pushed SHA must go through main CI checks (including the Footer probe) and production.
+- **Integration deployed:** pending. The pushed SHA `591c28e` must go through main CI checks (including the Footer probe) and production.
 - **Product delivered:** pending independent QA, which must repeat the live continuous pointer path, keyboard path and reduced-motion path at a deployed descendant of the pushed SHA.
 - **Failure conditions:** a red or skipped checks or production job; live `/api/health` or the route `build-sha` not descending from the pushed SHA; Fetch back intercepted by `.peek-blurb` or transparent on a normal mouse path; arrival or return over 5 active seconds; source geometry or hrefs changed.
 - **Owner:** plan-manager CI gate, then QA for t-1583.

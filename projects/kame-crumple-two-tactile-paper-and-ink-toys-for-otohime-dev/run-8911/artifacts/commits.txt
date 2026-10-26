@@ -1,0 +1,1 @@
+591c28e1758bb95605b93e1cc8f7d1225cc2d2dc pm-259/t-1583: Keep Fetch back reachable when an open Peek fan covers the card's actions (delivery, pushed c0a40c2..591c28e)
