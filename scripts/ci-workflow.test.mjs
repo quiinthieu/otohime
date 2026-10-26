@@ -117,3 +117,13 @@ test("verify-deploy treats exactly the push paths-ignore as report-only", () => 
   assert.deepEqual(list(["on", "push", "paths-ignore"]), ["projects/**", "**.md"]);
   assert.match(script, /^\s*"" \| projects\/\* \| \*\.md\) ;;$/m, "verify-deploy.sh must ignore projects/* and *.md only");
 });
+
+test("the author gate precedes production migrations and main checks", () => {
+  const prod = steps("production");
+  const author = prod.indexOf("node scripts/check-deploy-author.mjs");
+  assert.ok(author > prod.indexOf("actions/checkout@"), "inspect the checked-out commit");
+  assert.ok(author < prod.indexOf("npm ci"), "fail before setup, build and migrations");
+  assert.ok(author < prod.indexOf("npm run db:migrate"), "never migrate an undeployable author");
+  assert.match(prod, /DEPLOY_AUTHOR_EMAIL: quiinthieu@gmail\.com/);
+  assert.match(steps("checks"), /if: github.event_name != 'pull_request'[\s\S]*?node scripts\/check-deploy-author\.mjs/);
+});
