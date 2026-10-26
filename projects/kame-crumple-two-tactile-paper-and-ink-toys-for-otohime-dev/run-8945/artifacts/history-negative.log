@@ -1,0 +1,71 @@
+TAP version 13
+# Subtest: fixture and inherited git runners suppress auto-maintenance, with a real enabled control
+not ok 1 - fixture and inherited git runners suppress auto-maintenance, with a real enabled control
+  ---
+  duration_ms: 53.327989
+  type: 'test'
+  location: '/data/build-worker/leases/c6fdeb51-4a22-4030-a3b4-bf92427299ee-c36864087e6b108f3f792a23d52eee87/work/otohime/scripts/.history-isolation-negative.test.ts:182:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    fixture commands override repository maintenance settings
+    + actual - expected
+    
+    + [
+    +   {
+    +     argv: [
+    +       'git',
+    +       'maintenance',
+    +       'run',
+    +       '--auto',
+    +       '--quiet'
+    +     ],
+    +     child_class: '?',
+    +     child_id: 0,
+    +     event: 'child_start',
+    +     file: 'run-command.c',
+    +     line: 726,
+    +     sid: '20261026T130940.085934Z-Hc3461ed8-P0003f39c',
+    +     thread: 'main',
+    +     time: '2026-10-26T13:09:40.086834Z',
+    +     use_shell: false
+    +   }
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0:
+      event: 'child_start'
+      sid: '20261026T130940.085934Z-Hc3461ed8-P0003f39c'
+      thread: 'main'
+      time: '2026-10-26T13:09:40.086834Z'
+      file: 'run-command.c'
+      line: 726
+      child_id: 0
+      child_class: '?'
+      use_shell: false
+      argv:
+        0: 'git'
+        1: 'maintenance'
+        2: 'run'
+        3: '--auto'
+        4: '--quiet'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///data/build-worker/leases/c6fdeb51-4a22-4030-a3b4-bf92427299ee-c36864087e6b108f3f792a23d52eee87/work/otohime/scripts/.history-isolation-negative.test.ts:197:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 145.991072

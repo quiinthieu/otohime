@@ -1,0 +1,20 @@
+{
+  "planned_run": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  },
+  "completed_page1": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  },
+  "completed_page2": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  },
+  "running": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  },
+  "queued": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  },
+  "prior_failed_job_log": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  }
+}

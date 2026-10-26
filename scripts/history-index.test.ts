@@ -180,6 +180,35 @@ test("serialization is canonical: one entry per line, stable bytes, and it round
 
 // --- against git -----------------------------------------------------------------------------------------------
 
+test("fixture and inherited git runners suppress auto-maintenance, with a real enabled control", () => {
+  const repo = fixtureRepo(SAMPLE);
+  // Force the machine-independent control to launch maintenance, but prohibit repacking/pruning.
+  sh(repo, "config", "maintenance.auto", "true");
+  sh(repo, "config", "gc.auto", "0");
+  const children = (trace: string) => readFileSync(trace, "utf8").trim().split("\n")
+    .map(line => JSON.parse(line) as { event: string; argv?: string[] })
+    .filter(event => event.event === "child_start" && event.argv?.includes("maintenance"));
+  const args = ["-c", "user.name=Fixture", "-c", "user.email=fixture@example.test", "commit", "--quiet", "--allow-empty", "-m", "maintenance control"];
+  const enabled = join(TMP, "maintenance-enabled.jsonl");
+  execFileSync("git", args, { cwd: repo, env: { ...GIT_ENV, GIT_CONFIG_COUNT: "0", GIT_TRACE2_EVENT: enabled } });
+  assert.ok(children(enabled).length > 0, "negative control really launches Git maintenance");
+
+  const fixture = join(TMP, "maintenance-fixture.jsonl");
+  execFileSync("git", args, { cwd: repo, env: { ...GIT_ENV, GIT_TRACE2_EVENT: fixture } });
+  assert.deepEqual(children(fixture), [], "fixture commands override repository maintenance settings");
+
+  const inherited = join(TMP, "maintenance-inherited.jsonl");
+  const previous = process.env.GIT_TRACE2_EVENT;
+  try {
+    process.env.GIT_TRACE2_EVENT = inherited;
+    assert.notEqual(gitRunner(repo)(args), null);
+  } finally {
+    if (previous === undefined) delete process.env.GIT_TRACE2_EVENT;
+    else process.env.GIT_TRACE2_EVENT = previous;
+  }
+  assert.deepEqual(children(inherited), [], "code-under-test subprocesses inherit the same isolation");
+});
+
 test("a full clone is indexed newest first with dates, prefixes and file summaries, and the same bytes every run", () => {
   const repo = fixtureRepo(SAMPLE);
   const git = gitRunner(repo);

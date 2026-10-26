@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: a plan/task prefix is split off the subject, and anything else is left as written
+ok 1 - a plan/task prefix is split off the subject, and anything else is left as written
+  ---
+  duration_ms: 1.308618
+  type: 'test'
+  ...
+# Subtest: subjects lose control characters and runs of space, and are capped with an ellipsis
+ok 2 - subjects lose control characters and runs of space, and are capped with an ellipsis
+  ---
+  duration_ms: 0.256799
+  type: 'test'
+  ...
+# Subtest: changed paths summarize into at most AREAS_MAX areas, most files first, ties by name
+ok 3 - changed paths summarize into at most AREAS_MAX areas, most files first, ties by name
+  ---
+  duration_ms: 0.316054
+  type: 'test'
+  ...
+# Subtest: git log text parses into entries with dates in UTC, line counts and binary files counted as files
+ok 4 - git log text parses into entries with dates in UTC, line counts and binary files counted as files
+  ---
+  duration_ms: 0.915488
+  type: 'test'
+  ...
+# Subtest: validation rejects every malformed field, including optional-looking ones, and over-long lists
+ok 5 - validation rejects every malformed field, including optional-looking ones, and over-long lists
+  ---
+  duration_ms: 0.702927
+  type: 'test'
+  ...
+# Subtest: serialization is canonical: one entry per line, stable bytes, and it round-trips
+ok 6 - serialization is canonical: one entry per line, stable bytes, and it round-trips
+  ---
+  duration_ms: 26.465694
+  type: 'test'
+  ...
+# Subtest: fixture and inherited git runners suppress auto-maintenance, with a real enabled control
+ok 7 - fixture and inherited git runners suppress auto-maintenance, with a real enabled control
+  ---
+  duration_ms: 29.322344
+  type: 'test'
+  ...
+# Subtest: a full clone is indexed newest first with dates, prefixes and file summaries, and the same bytes every run
+ok 8 - a full clone is indexed newest first with dates, prefixes and file summaries, and the same bytes every run
+  ---
+  duration_ms: 55.123331
+  type: 'test'
+  ...
+# Subtest: the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out
+ok 9 - the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out
+  ---
+  duration_ms: 937.466711
+  type: 'test'
+  ...
+# Subtest: without git, outside a repository, or in an empty one, the committed fallback is used as it is
+ok 10 - without git, outside a repository, or in an empty one, the committed fallback is used as it is
+  ---
+  duration_ms: 43.450992
+  type: 'test'
+  ...
+# Subtest: a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+ok 11 - a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+  ---
+  duration_ms: 88.998865
+  type: 'test'
+  ...
+# Subtest: a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+ok 12 - a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+  ---
+  duration_ms: 100.991068
+  type: 'test'
+  ...
+# Subtest: a git log that cannot be parsed falls back instead of failing the build
+ok 13 - a git log that cannot be parsed falls back instead of failing the build
+  ---
+  duration_ms: 25.858958
+  type: 'test'
+  ...
+# Subtest: --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+ok 14 - --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+  ---
+  duration_ms: 146.812368
+  type: 'test'
+  ...
+# Subtest: the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+ok 15 - the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+  ---
+  duration_ms: 371.528082
+  type: 'test'
+  ...
+# Subtest: the committed content/history.json is a well-formed, bounded, canonical index
+ok 16 - the committed content/history.json is a well-formed, bounded, canonical index
+  ---
+  duration_ms: 1.680795
+  type: 'test'
+  ...
+# Subtest: package.json builds the index before next build and exposes history:index and history:check
+ok 17 - package.json builds the index before next build and exposes history:index and history:check
+  ---
+  duration_ms: 0.228253
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1978.969389
