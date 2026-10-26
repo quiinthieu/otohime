@@ -1,0 +1,6 @@
+{
+  "current": { "payload": { "count": 1, "playing_now": true, "listens": [{ "track_metadata": { "track_name": "Fixture Brainz Track", "artist_name": "Fixture Brainz Artist", "additional_info": { "spotify_id": "https://open.spotify.com/track/BrainzFixture1?si=drop", "origin_url": "https://unsafe.example/track" } } }] } },
+  "last": { "payload": { "count": 1, "listens": [{ "listened_at": 1793066523, "track_metadata": { "track_name": "Fixture Last Track", "artist_name": "Fixture Last Artist", "additional_info": { "origin_url": "https://musicbrainz.org/recording/12345678-1234-1234-1234-123456789abc#drop" } } }] } },
+  "emptyCurrent": { "payload": { "count": 0, "playing_now": true, "listens": [] } },
+  "emptyLast": { "payload": { "count": 0, "listens": [] } }
+}

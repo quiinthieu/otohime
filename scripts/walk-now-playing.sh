@@ -20,8 +20,8 @@
 # provider unharmed; a 10 s hang is cut at the 4 s budget; query strings, POST and a dead upstream change nothing;
 # no sentinel shows in any response, client chunk or the server's log. Then a server with Spotify on a dead port,
 # and one with no credentials (which must not ask the fakes anything). A build this walk runs itself has the fakes
-# and sentinels in its env and must make no request; with SKIP_BUILD=1 the build output is checked for prerendered
-# readings instead. Production code has no fixture switch: the fakes are reached only through the loopback-only
+# and sentinels in its env and must make no request; the full fixture walk runs this build even with SKIP_BUILD=1.
+# Build output is also checked for prerendered readings. Production code has no fixture switch: the fakes are reached only through the loopback-only
 # NOW_PLAYING_*_HOST overrides, and through them the state says *-fixture, never *-live.
 #
 # Env: PORT (4121), BASE_URL (read-only mode), EXPECT_SHA (build-sha to expect; defaults to GITHUB_SHA locally,
@@ -46,6 +46,7 @@ FAKE_PORT="${FAKE_PORT:-4131}"
 FAKE_TOKEN_PORT="$FAKE_PORT"
 FAKE_API_PORT="$((FAKE_PORT + 1))"
 FAKE_STEAM_PORT="$((FAKE_PORT + 2))"
+FAKE_LISTENBRAINZ_PORT="$((FAKE_PORT + 3))"
 OK=0
 FAILED=0
 
@@ -82,7 +83,7 @@ check() {
 }
 
 # The provider variables lib/now-playing.ts reads. Every server this walk starts gets exactly the ones it names.
-PROVIDER_VARS="SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET SPOTIFY_REFRESH_TOKEN STEAM_API_KEY STEAM_ID NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST NOW_PLAYING_SPOTIFY_API_HOST NOW_PLAYING_STEAM_HOST"
+PROVIDER_VARS="LISTENBRAINZ_USER NOW_PLAYING_LISTENBRAINZ_HOST SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET SPOTIFY_REFRESH_TOKEN STEAM_API_KEY STEAM_ID NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST NOW_PLAYING_SPOTIFY_API_HOST NOW_PLAYING_STEAM_HOST"
 
 # start_server [VAR=value...]: next start on $PORT in its own process group, with every provider variable unset
 # and then the given ones set.
@@ -129,7 +130,7 @@ SENTINELS="$SENT_ID,$SENT_SECRET,$SENT_REFRESH,$SENT_KEY,$SENT_STEAM_ID,FakeAcce
 CREDS=(SPOTIFY_CLIENT_ID="$SENT_ID" SPOTIFY_CLIENT_SECRET="$SENT_SECRET" SPOTIFY_REFRESH_TOKEN="$SENT_REFRESH" STEAM_API_KEY="$SENT_KEY" STEAM_ID="$SENT_STEAM_ID")
 HOSTS=(NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST="http://127.0.0.1:$FAKE_TOKEN_PORT" NOW_PLAYING_SPOTIFY_API_HOST="http://127.0.0.1:$FAKE_API_PORT" NOW_PLAYING_STEAM_HOST="http://127.0.0.1:$FAKE_STEAM_PORT")
 FIXTURE_ENV=()
-[ "$QUIET_ONLY" = "1" ] || FIXTURE_ENV=("${CREDS[@]}" "${HOSTS[@]}")
+[ "$QUIET_ONLY" = "1" ] || FIXTURE_ENV=("${CREDS[@]}" "${HOSTS[@]}" LISTENBRAINZ_USER="Fixture Owner" NOW_PLAYING_LISTENBRAINZ_HOST="http://127.0.0.1:$FAKE_LISTENBRAINZ_PORT")
 
 # The cache clock: performance.now plus the milliseconds in $WORK/clock-offset, re-read at most every 50 ms. Only
 # the servers this walk starts load it (NODE_OPTIONS=--require); nothing in the app knows it exists.
@@ -154,7 +155,7 @@ performance.now = () => {
 CLOCK
 CLOCK_MS=0
 printf '0' >"$WORK/clock-offset"
-CLOCK_ENV=(NODE_OPTIONS="--require $WORK/clock.cjs" WALK_CLOCK_FILE="$WORK/clock-offset")
+CLOCK_ENV=(NODE_OPTIONS="--require \"$WORK/clock.cjs\"" WALK_CLOCK_FILE="$WORK/clock-offset")
 
 # start_fakes: the three loopback providers, answering $FAKE_DIR/mode.json, logging to $FAKE_DIR/requests.log.
 start_fakes() {
@@ -162,14 +163,14 @@ start_fakes() {
   mkdir -p "$FAKE_DIR"
   : >"$FAKE_DIR/requests.log"
   printf '{}' >"$FAKE_DIR/mode.json"
-  for p in "$FAKE_TOKEN_PORT" "$FAKE_API_PORT" "$FAKE_STEAM_PORT"; do
+  for p in "$FAKE_TOKEN_PORT" "$FAKE_API_PORT" "$FAKE_STEAM_PORT" "$FAKE_LISTENBRAINZ_PORT"; do
     if curl -s -o /dev/null --max-time 2 "http://127.0.0.1:$p/"; then
       echo "not ok - fakes: port $p is taken; set FAKE_PORT to a free range of three"
       return 1
     fi
   done
   set -m
-  env "${CREDS[@]}" FAKE_DIR="$FAKE_DIR" FAKE_TOKEN_PORT="$FAKE_TOKEN_PORT" FAKE_API_PORT="$FAKE_API_PORT" FAKE_STEAM_PORT="$FAKE_STEAM_PORT" \
+  env "${CREDS[@]}" FAKE_DIR="$FAKE_DIR" FAKE_TOKEN_PORT="$FAKE_TOKEN_PORT" FAKE_API_PORT="$FAKE_API_PORT" FAKE_STEAM_PORT="$FAKE_STEAM_PORT" FAKE_LISTENBRAINZ_PORT="$FAKE_LISTENBRAINZ_PORT" \
     node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
     "$ROOT/scripts/probe-cassette.mjs" fake >"$WORK/fake.log" 2>&1 &
   FAKE_PID=$!
@@ -204,7 +205,7 @@ if [ -z "$BASE_URL" ]; then
   if [ "$QUIET_ONLY" != "1" ]; then
     start_fakes || exit 1
   fi
-  if [ "${SKIP_BUILD:-}" != "1" ]; then
+  if [ "${SKIP_BUILD:-}" != "1" ] || [ "$QUIET_ONLY" != "1" ]; then
     # With the fakes up and the sentinels set, so a build that read a provider would be caught.
     if ! env ${FIXTURE_ENV[@]+"${FIXTURE_ENV[@]}"} npm run build >"$WORK/build.log" 2>&1; then
       echo "not ok - build: npm run build failed; log:"
@@ -343,7 +344,11 @@ else
   check "music: shelf in the first HTML, outside any boundary" first_html music
 fi
 check "music: television still there" has music 'The playlist on Spotify'
-check "music: listings still there" has music '>Listings</h2>'
+check "music: listings still there" node -e '
+  const html = require("fs").readFileSync(process.argv[1], "utf8");
+  const headings = [...html.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/g)];
+  if (!headings.some(([, h]) => /class="riso-source(?:\s[^"]*)?"[^>]*>Listings<\/span>/.test(h))) process.exit(1);
+' "$WORK/music.body"
 check "music: Ink Radio still there" has music 'id="ink-radio"'
 check "music: no owner tools for a visitor" lacks music 'Add a channel'
 if [ "$LOCAL" -eq 1 ]; then
@@ -409,7 +414,9 @@ same_read() {
     const shelf = html.slice(at, html.indexOf("</section>", at));
     const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     const want = [`data-spotify="${r.spotify}" data-steam="${r.steam}"`];
-    if (r.readAt) want.push(`dateTime="${r.readAt}"`);
+    want.push(`data-music-source="${r.music.source ?? "none"}"`, `data-music-state="${r.music.state}"`);
+    if (r.track?.listenedAt) want.push(`dateTime="${r.track.listenedAt}"`);
+    if (r.readAt && (r.music.state !== "off" || r.play.state !== "off")) want.push(`dateTime="${r.readAt}"`);
     if (r.track) want.push(esc(r.track.title), "data-face=\"track\"");
     else want.push("class=\"tape\" data-face=\"quiet\"");
     if (r.game) want.push(esc(r.game.title), "data-face=\"game\"");
@@ -421,7 +428,7 @@ same_read() {
 
 # exact_keys <key>: the API's whole answer is the sanitized display shape, nothing more.
 exact_keys() {
-  json_is "$1" 'JSON.stringify(Object.keys(r)) === JSON.stringify(["spotify","track","steam","game","readAt"]) && (r.track === null || JSON.stringify(Object.keys(r.track)) === JSON.stringify(["title","artists","url","playing"])) && (r.game === null || JSON.stringify(Object.keys(r.game)) === JSON.stringify(["title","url"]))'
+  json_is "$1" 'JSON.stringify(Object.keys(r)) === JSON.stringify(["music","play","spotify","track","steam","game","readAt"]) && (r.track === null || JSON.stringify(Object.keys(r.track)) === JSON.stringify(r.music.source === "listenbrainz" ? ["title","artists","url","playing","listenedAt"] : ["title","artists","url","playing"])) && (r.game === null || JSON.stringify(Object.keys(r.game)) === JSON.stringify(["title","url"]))'
 }
 
 # no_sentinel <file...>: none of this run's credentials, nor the fake access token, in these files.
@@ -452,7 +459,7 @@ timed_between() {
 }
 
 # --- No requests at build ---
-if [ "${SKIP_BUILD:-}" != "1" ]; then
+if [ "${SKIP_BUILD:-}" != "1" ] || [ "$QUIET_ONLY" != "1" ]; then
   check "build: the fakes saw no request while the build ran" test "$(grep -c . "$FAKE_DIR/requests.log")" -eq 0
   check "build: no sentinel in the client output" no_sentinel $(find .next/static -type f -name '*.js')
 fi
@@ -580,7 +587,7 @@ check "scripts: fetched every chunk /music references" chunks finalmusic
 check "no sentinel in any HTTP response" no_sentinel "$WORK"/*.body
 check "no sentinel in the client chunks" no_sentinel "$WORK"/chunks/*.js
 check "no sentinel in the server log" no_sentinel "$WORK/server.log"
-check "no provider host in the HTML or chunks" sh -c "! grep -lE 'accounts\.spotify\.com|api\.spotify\.com|api\.steampowered\.com|127\.0\.0\.1:$FAKE_PORT' '$WORK/finalmusic.body' '$WORK'/chunks/*.js"
+check "no provider host in the HTML or chunks" sh -c "! grep -lE 'accounts\.spotify\.com|api\.spotify\.com|api\.steampowered\.com|api\.listenbrainz\.org|127\.0\.0\.1:$FAKE_PORT' '$WORK/finalmusic.body' '$WORK'/chunks/*.js"
 check "the fakes never saw a wrong credential" no_bad_auth
 stop_server
 
@@ -605,6 +612,67 @@ get nocredmusic /music
 check "no credentials: both off" json_is nocred 'r.spotify === "spotify-off" && r.steam === "steam-off"'
 check "no credentials: no request at all" delta 0 0 0
 quiet_face nocredmusic
+stop_server
+
+# --- Selected public ListenBrainz music; keyed Spotify must not be read ---
+start_server "${CREDS[@]}" "${HOSTS[@]}" "${CLOCK_ENV[@]}" LISTENBRAINZ_USER="Fixture Owner" NOW_PLAYING_LISTENBRAINZ_HOST="http://127.0.0.1:$FAKE_LISTENBRAINZ_PORT"
+wait_ready
+lb_case() {
+  set_mode "$2"
+  advance
+  local before after
+  before="$(grep -c '^listenbrainz ' "$FAKE_DIR/requests.log")"
+  mark
+  get lb /api/now-playing
+  check "$1: HTTP 200" status_is lb 200
+  check "$1: reading" json_is lb "$3"
+  check "$1: sanitized shape" exact_keys lb
+  after="$(grep -c '^listenbrainz ' "$FAKE_DIR/requests.log")"
+  check "$1: exactly two public requests, no retries" test "$((after - before))" -eq 2
+  check "$1: Spotify unused, Steam read" delta 0 0 1
+  get lbmusic /music
+  check "$1: shared cached page/API reading" same_read lb lbmusic
+  shelf lbmusic >/dev/null
+  check "$1: page uses cache, no new public requests" test "$(grep -c '^listenbrainz ' "$FAKE_DIR/requests.log")" -eq "$after"
+}
+lb_case "Brainz current" '{}' 'r.music.source === "listenbrainz" && r.music.state === "fixture" && r.spotify === "spotify-off" && r.track.title === "Fixture Brainz Track" && r.track.playing && r.track.listenedAt === null'
+check "Brainz current: spinning" has lbmusic 'data-spin=""'
+check "Brainz current: fixture credit" has lbmusic 'Track details from ListenBrainz (CC0)'
+check "Brainz current: public profile" has lbmusic 'href="https://listenbrainz.org/user/Fixture%20Owner/"'
+lb_case "Brainz last" '{"lbNow":"empty"}' 'r.track.title === "Fixture Last Track" && !r.track.playing && r.track.listenedAt === new Date(1793066523000).toISOString()'
+check "Brainz last: full UTC date and time" has lbmusic "$(node -e 'const d=new Date(1793066523000).toISOString();console.log(d.slice(0,10)+" · "+d.slice(11,19)+" UTC")')"
+check "Brainz last: stationary" not_in_shelf lbmusic 'data-spin'
+lb_case "Brainz old last" '{"lbNow":"empty","lbLast":"old"}' 'r.track.listenedAt === "2000-01-01T00:00:00.000Z" && !r.track.playing'
+check "Brainz old: dated honestly" has lbmusic '2000-01-01 · 00:00:00 UTC'
+lb_case "Brainz empty" '{"lbNow":"empty","lbLast":"empty"}' 'r.music.state === "fixture" && r.track === null'
+lb_case "Brainz 404" '{"lbNow":"404","lbLast":"404"}' 'r.music.state === "quiet" && r.track === null && r.spotify === "spotify-off"'
+lb_case "Brainz rate limit" '{"lbNow":"429","lbLast":"429"}' 'r.music.state === "quiet" && r.track === null'
+lb_case "Brainz challenge" '{"lbNow":"html","lbLast":"html"}' 'r.music.state === "quiet" && r.track === null'
+lb_case "Brainz malformed JSON" '{"lbNow":"bad-json","lbLast":"bad-json"}' 'r.music.state === "quiet" && r.track === null'
+lb_case "Brainz error envelope" '{"lbNow":"error","lbLast":"error"}' 'r.music.state === "quiet" && r.track === null'
+lb_case "Brainz redirects" '{"lbNow":"redirect","lbLast":"redirect"}' 'r.music.state === "quiet" && r.track === null'
+lb_case "Brainz one endpoint failure" '{"lbNow":"500"}' 'r.track.title === "Fixture Last Track" && !r.track.playing'
+lb_case "Brainz current wins broken last" '{"lbLast":"429"}' 'r.track.title === "Fixture Brainz Track" && r.track.playing'
+lb_case "Brainz unsafe URL" '{"lbNow":"unsafe"}' 'r.track.url === null && r.track.playing'
+check "Brainz unsafe URL: profile fallback" has lbmusic 'href="https://listenbrainz.org/user/Fixture%20Owner/"'
+check "Brainz unsafe URL: evil absent" not_in_shelf lbmusic 'evil.example'
+lb_case "Brainz timeout" '{"lbNow":"slow","lbLast":"slow"}' 'r.music.state === "quiet" && r.track === null'
+check "Brainz timeout: one four-second budget" timed_between lb 3.5 6.5
+check "Brainz: headers and username checked by fake" no_bad_auth
+check "Brainz: no secret in HTTP responses" no_sentinel "$WORK"/*.body
+check "Brainz: fetched every referenced client chunk" chunks lbmusic
+check "Brainz: no secret in client chunks or log" no_sentinel "$WORK"/chunks/*.js "$WORK/server.log"
+check "Brainz: mismatched selected source is caught" fails same_read api1 lbmusic
+stop_server
+# Invalid public identity does not request the endpoint; legacy selection remains available.
+start_server "${HOSTS[@]}" LISTENBRAINZ_USER='../invalid' NOW_PLAYING_LISTENBRAINZ_HOST="http://127.0.0.1:$FAKE_LISTENBRAINZ_PORT"
+wait_ready
+mark
+lb_before_invalid="$(grep -c '^listenbrainz ' "$FAKE_DIR/requests.log")"
+get invalid /api/now-playing
+check "invalid identity: off, no account selected" json_is invalid 'r.music.source === null && r.music.state === "off" && r.track === null'
+check "invalid identity: no provider requests" delta 0 0 0
+check "invalid identity: no public endpoint requests" test "$(grep -c '^listenbrainz ' "$FAKE_DIR/requests.log")" -eq "$lb_before_invalid"
 stop_server
 
 fi

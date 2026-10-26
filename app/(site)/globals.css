@@ -2376,6 +2376,12 @@
   font-size: 12px;
 }
 
+.np-listened-at {
+  color: #4b453b;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
 .np-title {
   font-size: 15px;
   font-weight: 600;

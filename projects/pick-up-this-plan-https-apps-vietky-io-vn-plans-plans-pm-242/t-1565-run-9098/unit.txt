@@ -1,0 +1,16 @@
+  ...
+# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs
+ok 2356 - probe bounds: measured after the one-shot ink lands, from the visible glyphs
+  ---
+  duration_ms: 2109.804584
+  type: 'test'
+  ...
+1..2356
+# tests 2370
+# suites 2
+# pass 2370
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19626.303417

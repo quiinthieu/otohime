@@ -81,7 +81,7 @@ if [ "${SKIP_BUILD:-}" != "1" ]; then
   fi
 fi
 
-PROVIDER_VARS="SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET SPOTIFY_REFRESH_TOKEN STEAM_API_KEY STEAM_ID NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST NOW_PLAYING_SPOTIFY_API_HOST NOW_PLAYING_STEAM_HOST"
+PROVIDER_VARS="LISTENBRAINZ_USER NOW_PLAYING_LISTENBRAINZ_HOST SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET SPOTIFY_REFRESH_TOKEN STEAM_API_KEY STEAM_ID NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST NOW_PLAYING_SPOTIFY_API_HOST NOW_PLAYING_STEAM_HOST"
 
 # start_server [VAR=value...]: next start with every provider variable unset, then the given ones set; waits for it.
 start_server() {
@@ -174,6 +174,28 @@ elif start_server "${CREDS[@]}" \
 else
   FAILED=$((FAILED + 1))
 fi
+
+# --- Public music, both current and old last-listen faces in the full browser matrix ---
+kill_group "$SERVER_PID"
+SERVER_PID=""
+for face in brainz last; do
+  if [ "$face" = brainz ]; then
+    printf '{"lbNow":"long","steam":"long"}' >"$FAKE_DIR/mode.json"
+  else
+    printf '{"lbNow":"empty","lbLast":"old","steam":"long"}' >"$FAKE_DIR/mode.json"
+  fi
+  if start_server "${CREDS[@]}" LISTENBRAINZ_USER="Fixture Owner" \
+    NOW_PLAYING_LISTENBRAINZ_HOST="http://127.0.0.1:$((FAKE_PORT + 3))" \
+    NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST="http://127.0.0.1:$FAKE_PORT" \
+    NOW_PLAYING_SPOTIFY_API_HOST="http://127.0.0.1:$((FAKE_PORT + 1))" \
+    NOW_PLAYING_STEAM_HOST="http://127.0.0.1:$((FAKE_PORT + 2))"; then
+    probe "$face" "$SENTINELS"
+  else
+    FAILED=$((FAILED + 1))
+  fi
+  kill_group "$SERVER_PID"
+  SERVER_PID=""
+done
 
 echo "probe-cassette: $FAILED failed pass(es)"
 [ "$FAILED" -eq 0 ]

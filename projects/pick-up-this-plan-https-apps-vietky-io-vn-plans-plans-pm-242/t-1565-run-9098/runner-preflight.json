@@ -1,0 +1,70 @@
+{
+  "phase": "runner baseline red gate",
+  "status": "fail",
+  "identity": "pre-implementation artifact; executable fingerprint not present, exact SHA unproven",
+  "items": [
+    {
+      "name": "Project tests",
+      "cmd": "npm test",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_ms": 17512
+    },
+    {
+      "name": "Lint",
+      "cmd": "npm run lint",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_ms": 8367
+    },
+    {
+      "name": "Typecheck",
+      "cmd": "npm run typecheck",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_ms": 5734
+    },
+    {
+      "name": "Build",
+      "cmd": "npm run build",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_ms": 12579
+    },
+    {
+      "name": "Search content index",
+      "cmd": "npm run ask:check",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_ms": 255
+    },
+    {
+      "name": "Provider HTTP contract",
+      "cmd": "SKIP_BUILD=1 bash scripts/walk-now-playing.sh",
+      "exit_code": 1,
+      "status": "fail",
+      "duration_ms": 69837
+    },
+    {
+      "name": "Cassette browser matrix",
+      "cmd": "SKIP_BUILD=1 bash scripts/probe-cassette.sh",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_ms": 24308
+    },
+    {
+      "name": "Reduced motion",
+      "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_ms": 138678
+    },
+    {
+      "name": "Application end to end",
+      "cmd": "SKIP_BUILD=1 npm run test:e2e",
+      "exit_code": 0,
+      "status": "pass",
+      "duration_ms": 370953
+    }
+  ]
+}

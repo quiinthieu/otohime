@@ -1,19 +1,16 @@
-// The one place the site talks to Spotify and Steam, and the only code that reads their credentials. Music's
-// cassette (app/(site)/(app)/music/page.tsx) and GET /api/now-playing both print readNowPlaying(), one "use cache"
-// function, so the page and the API always agree and a minute's views cost one read.
-//
-// Spotify: refresh the owner's access token (Authorization Code, scope user-read-currently-playing), then ask for
-// the currently playing track. Steam (optional): the owner's public player summary. Both run at once, each with
-// its own 4 s budget and no retry, so one provider failing never blanks the other. Missing or malformed
-// configuration means that provider is off and nothing is asked. No credential is logged, returned or put in an
-// error: only the parsed labels in lib/now-playing-data.ts leave this module.
-//
-// Host overrides (NOW_PLAYING_*_HOST) exist for the local walks' fake providers and are honoured only for a
-// loopback origin; with one in effect the state reads *-fixture, never *-live.
+// Shared on-demand server reader for selected ListenBrainz/Spotify music and independent Steam games.
+// Credentials and provider hosts stay here. Loopback overrides label fake readings as fixture.
+// Selected music failures remain quiet; nothing falls through to an unrelated account.
 import "server-only";
+import { nowPlaying } from "../content/now-playing.ts";
 import { cacheLife } from "next/cache";
 import {
   isPublicSteamProfile,
+  listenBrainzUser,
+  listenBrainzProfile,
+  parseListenBrainzPlayingNow,
+  parseListenBrainzListens,
+  type MusicReading,
   parseSpotifyToken,
   parseSpotifyTrack,
   parseSteamGame,
@@ -30,16 +27,18 @@ const HOSTS = {
   accounts: "https://accounts.spotify.com",
   api: "https://api.spotify.com",
   steam: "https://api.steampowered.com",
+  listenbrainz: "https://api.listenbrainz.org",
 } as const;
 
 export type Env = Record<string, string | undefined>;
 
 export type Config = {
+  listenbrainz: { user: string } | null;
   spotify: { clientId: string; clientSecret: string; refreshToken: string } | null;
   steam: { key: string; id: string } | null;
-  hosts: { accounts: string; api: string; steam: string };
+  hosts: { accounts: string; api: string; steam: string; listenbrainz: string };
   // A loopback host override is in effect for that provider.
-  fixture: { spotify: boolean; steam: boolean };
+  fixture: { spotify: boolean; steam: boolean; listenbrainz: boolean };
 };
 
 // A loopback http(s) origin (127.0.0.1, ::1 or localhost) for the walks' fakes, or null for anything else, so a
@@ -63,7 +62,9 @@ const STEAM_ID = /^7656\d{13}$/;
 
 const valid = (v: string | undefined, re: RegExp) => (v !== undefined && re.test(v) ? v : null);
 
-export function configFrom(env: Env): Config {
+export function configFrom(env: Env, publicDefault: string = nowPlaying.listenBrainzUser): Config {
+  const user = listenBrainzUser(env.LISTENBRAINZ_USER ?? publicDefault);
+  const listenbrainz = loopbackOrigin(env.NOW_PLAYING_LISTENBRAINZ_HOST);
   const clientId = valid(env.SPOTIFY_CLIENT_ID, CLIENT);
   const clientSecret = valid(env.SPOTIFY_CLIENT_SECRET, CLIENT);
   const refreshToken = valid(env.SPOTIFY_REFRESH_TOKEN, REFRESH);
@@ -73,14 +74,40 @@ export function configFrom(env: Env): Config {
   const api = loopbackOrigin(env.NOW_PLAYING_SPOTIFY_API_HOST);
   const steam = loopbackOrigin(env.NOW_PLAYING_STEAM_HOST);
   return {
+    listenbrainz: user ? { user } : null,
     spotify: clientId && clientSecret && refreshToken ? { clientId, clientSecret, refreshToken } : null,
     steam: key && id ? { key, id } : null,
-    hosts: { accounts: accounts ?? HOSTS.accounts, api: api ?? HOSTS.api, steam: steam ?? HOSTS.steam },
-    fixture: { spotify: Boolean(accounts || api), steam: Boolean(steam) },
+    hosts: { accounts: accounts ?? HOSTS.accounts, api: api ?? HOSTS.api, steam: steam ?? HOSTS.steam, listenbrainz: listenbrainz ?? HOSTS.listenbrainz },
+    fixture: { spotify: Boolean(accounts || api), steam: Boolean(steam), listenbrainz: Boolean(listenbrainz) },
   };
 }
 
 type Fetch = (url: string, init: RequestInit) => Promise<Response>;
+
+async function readListenBrainz(config: Config, fetcher: Fetch): Promise<{ music: MusicReading; track: Track | null }> {
+  const user = config.listenbrainz!.user;
+  const music: MusicReading = { source: "listenbrainz", state: "quiet", profileUrl: listenBrainzProfile(user) };
+  const signal = AbortSignal.timeout(TIMEOUT_MS);
+  const base = `${config.hosts.listenbrainz}/1/user/${encodeURIComponent(user)}`;
+  const get = async (path: string, parse: typeof parseListenBrainzListens) => {
+    try {
+      const res = await fetcher(`${base}/${path}`, {
+        headers: { "user-agent": "otohime.dev/1.0 (+https://otohime.dev)", accept: "application/json" },
+        signal,
+        redirect: "error",
+      });
+      if (res.status !== 200 || !/^application\/json(?:\s*;|$)/i.test(res.headers.get("content-type") ?? "")) return null;
+      return parse(await res.json());
+    } catch { return null; }
+  };
+  const [current, last] = await Promise.all([
+    get("playing-now", parseListenBrainzPlayingNow),
+    get("listens?count=1", parseListenBrainzListens),
+  ]);
+  const track = current?.track ?? last?.track ?? null;
+  if (current || last) music.state = config.fixture.listenbrainz ? "fixture" : "live";
+  return { music, track };
+}
 
 async function readSpotify(config: Config, fetcher: Fetch): Promise<{ spotify: SpotifyState; track: Track | null }> {
   const quiet = { spotify: "spotify-quiet", track: null } as const;
@@ -146,8 +173,16 @@ async function readSteam(config: Config, fetcher: Fetch): Promise<{ steam: Steam
 // Both providers at once, each failing on its own. Framework-free, so lib/now-playing.test.ts drives it with a
 // fake fetch.
 export async function readProviders(config: Config, fetcher: Fetch = fetch, now: () => Date = () => new Date()): Promise<NowPlaying> {
-  const [spotify, steam] = await Promise.all([readSpotify(config, fetcher), readSteam(config, fetcher)]);
-  return { ...spotify, ...steam, readAt: now().toISOString() };
+  const [selected, steam] = await Promise.all([
+    config.listenbrainz ? readListenBrainz(config, fetcher) : readSpotify(config, fetcher),
+    readSteam(config, fetcher),
+  ]);
+  const spotify = "spotify" in selected ? selected.spotify : "spotify-off";
+  const music: MusicReading = "music" in selected ? selected.music : {
+    source: spotify === "spotify-off" ? null : "spotify", state: spotify.slice(8) as MusicReading["state"], profileUrl: null,
+  };
+  return { music, play: { source: config.steam ? "steam" : null, state: steam.steam.slice(6) as MusicReading["state"], profileUrl: null },
+    spotify, track: selected.track, ...steam, readAt: now().toISOString() };
 }
 
 // The cached reading. A minute's views share one read (60 s revalidate, a browser may reuse it 30 s); after five

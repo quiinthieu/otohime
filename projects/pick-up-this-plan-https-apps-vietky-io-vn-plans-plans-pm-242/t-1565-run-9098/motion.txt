@@ -1,0 +1,24 @@
+ok - instruments: pressing A rolls exactly one window, on twos in 170 ms
+ok - instruments: the window that rolled is the right rotor's, now B
+# instruments reduced motion: /barometer?city=tokyo shows the reading face
+ok - instruments reduced motion: /barometer starts none of its instrument animations
+ok - instruments reduced motion: every animation on /barometer lasts <= 1 ms or has finished
+ok - instruments reduced motion: /planisphere starts no draw-on or fade
+ok - instruments reduced motion: ArrowRight turns the wheel
+ok - instruments reduced motion: the turn adds no animation or transition
+ok - instruments reduced motion: the turn replays no line draw and remounts no line
+ok - instruments reduced motion: /rotor rolls no window at load
+ok - instruments reduced motion: pressing A on /rotor steps the windows AAA -> AAB
+ok - instruments reduced motion: pressing A rolls no window
+ok - instruments reduced motion: after pressing A every animation lasts <= 1 ms or has finished
+ok - no-JS: /barometer is not hydrated
+ok - no-JS: /barometer's four parts end at their resting transform
+ok - no-JS: /planisphere is not hydrated
+ok - no-JS: /planisphere's lines end drawn (stroke-dashoffset 0)
+ok - no-JS: /planisphere's stars, names and markers end at their resting opacity
+ok - no-JS: /rotor is not hydrated
+ok - no-JS: /rotor's windows stand still, reading AAA
+ok - negative: the probe stripped @view-transition from /shore's HTML and CSS
+ok - negative: /projects -> /shore without the rule reveals with no transition
+ok - no console errors or page errors
+probe: 512 ok, 0 failed

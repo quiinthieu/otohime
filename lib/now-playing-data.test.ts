@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import {
   clip,
+  listenBrainzUser, listenBrainzProfile, listenBrainzTrackUrl,
+  parseListenBrainzPlayingNow, parseListenBrainzListens, listenedAtISO, listenTime,
   isPublicSteamProfile,
   LIMITS,
   parseSpotifyToken,
@@ -193,6 +196,8 @@ test("sanitize keeps the known fields only, and drops labels for providers that 
     extra: "dropped",
   };
   assert.deepEqual(sanitize(good), {
+    music: { source: "spotify", state: "fixture", profileUrl: null },
+    play: { source: "steam", state: "live", profileUrl: null },
     spotify: "spotify-fixture",
     track: { title: "A", artists: "B", url: "https://open.spotify.com/track/x1", playing: true },
     steam: "steam-live",
@@ -209,4 +214,56 @@ test("sanitize keeps the known fields only, and drops labels for providers that 
 
 test("the read stamp is the UTC hour and minute", () => {
   assert.equal(readTime("2026-10-26T01:02:03.000Z"), "01:02 UTC");
+});
+
+const LB = JSON.parse(readFileSync(new URL("./fixtures/listenbrainz.json", import.meta.url), "utf8"));
+test("ListenBrainz unknown input: current, last, old, valid empty and malformed stay distinct", () => {
+  const current = parseListenBrainzPlayingNow(LB.current);
+  assert.deepEqual(current?.track, { title: "Fixture Brainz Track", artists: "Fixture Brainz Artist", url: "https://open.spotify.com/track/BrainzFixture1", playing: true, listenedAt: null });
+  assert.deepEqual(parseListenBrainzPlayingNow(LB.emptyCurrent), { track: null });
+  assert.deepEqual(parseListenBrainzListens(LB.emptyLast), { track: null });
+  const last = parseListenBrainzListens(LB.last)?.track;
+  assert.equal(last?.listenedAt, new Date(1793066523000).toISOString());
+  assert.equal(last?.playing, false);
+  const old = structuredClone(LB.last); old.payload.listens[0].listened_at = 946684800;
+  assert.equal(parseListenBrainzListens(old)?.track?.listenedAt, "2000-01-01T00:00:00.000Z");
+  for (const body of [null, [], {}, "<html>challenge</html>", { error: "bad" }, { payload: {} }, { payload: { listens: [{}] } }, { ...LB.current, error: "bad" }]) {
+    assert.equal(parseListenBrainzPlayingNow(body), null);
+    assert.equal(parseListenBrainzListens(body), null);
+  }
+  for (const at of [null, "1793066523", NaN, Infinity, -1, 0, 1.5, 1e20]) {
+    const bad = structuredClone(LB.last); bad.payload.listens[0].listened_at = at;
+    assert.equal(parseListenBrainzListens(bad), null, String(at));
+    assert.equal(listenedAtISO(at), null);
+  }
+  assert.equal(listenTime("2000-01-01T00:00:00.000Z"), "2000-01-01 · 00:00:00 UTC");
+});
+test("ListenBrainz text, username, safe public links and sanitizer cannot smuggle fields", () => {
+  const body = structuredClone(LB.current);
+  body.payload.listens[0].track_metadata.track_name = " W\u0000" + "🎵".repeat(100);
+  body.payload.listens[0].track_metadata.artist_name = "A".repeat(100);
+  const track = parseListenBrainzPlayingNow(body)!.track!;
+  assert.equal([...track.title].length, LIMITS.title);
+  assert.equal([...track.artists].length, LIMITS.artists);
+  assert.doesNotMatch(track.title, /\u0000/);
+  assert.equal(listenBrainzProfile("Nhạc test"), "https://listenbrainz.org/user/Nh%E1%BA%A1c%20test/");
+  for (const name of ["", "../other", ".", "a/b", "a?b", "a#b", "a%2fb", "a\nb", "a".repeat(65), " a"]) assert.equal(listenBrainzUser(name), null, name);
+  for (const url of ["http://open.spotify.com/track/x", "https://open.spotify.com.evil/track/x", "javascript:alert(1)", "https://u:p@musicbrainz.org/recording/x", "https://musicbrainz.org:81/recording/x", "https://listenbrainz.org/user/a/../../evil", "https://evil.example/a"]) assert.equal(listenBrainzTrackUrl(url), null, url);
+  const reading = { ...QUIET, spotify: "spotify-live", music: { source: "listenbrainz", state: "fixture", profileUrl: "https://listenbrainz.org/user/Fixture/" }, track: { ...track, secret: "drop", url: "https://evil.example/x" } };
+  const clean = sanitize(reading);
+  assert.equal(clean.spotify, "spotify-off");
+  assert.equal(clean.music.state, "fixture");
+  assert.equal(clean.track?.url, null);
+  assert.doesNotMatch(JSON.stringify(clean), /secret|drop|evil/);
+  assert.equal(sanitize({ ...reading, track: { ...track, playing: false, listenedAt: "2026-02-30T00:00:00.000Z" } }).track, null);
+  assert.equal(sanitize({ ...reading, music: { ...reading.music, state: "quiet" } }).track, null);
+});
+
+test("source metadata cannot promote an unread Spotify adapter to live", () => {
+  const reading = { ...QUIET, music: { source: "spotify", state: "live", profileUrl: null }, track: { title: "Fake", artists: "Fake", url: null, playing: true } };
+  const clean = sanitize(reading);
+  assert.equal(clean.music.state, "off");
+  assert.equal(clean.music.source, null);
+  assert.equal(clean.spotify, "spotify-off");
+  assert.equal(clean.track, null);
 });
