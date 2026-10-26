@@ -27,3 +27,18 @@ JS of `/` and `/play` must not grow.
 
 ## Evidence rules
 All proof is on demand (unit tests, build, e2e with Playwright). No scheduled behaviour, no operator actions needed.
+
+## Cycle 2: get main onto otohime.dev (change request 1)
+Facts: tasks 1-4 above are done and on main (a847437+), but production serves build-sha
+`c38f72a6e927` (45 commits behind), so the terminal and the /play press are absent. Postcard works live.
+`/api/health` returns only `{ok:true}`; the sha is only in `<meta name="build-sha">`. The `production` job in
+`.github/workflows/ci.yml` runs only after the whole `checks` job is green, so a red step in `checks` on main
+(lint, typecheck, unit, ask:check, migrations, build, e2e, motion probe, footer walk/probe) silently keeps prod stale.
+No operator action is assumed: the repo already has Vercel secrets, and the first task proves it from a local run.
+
+1. Health reports the build: `/api/health` returns `{ok, sha}` from `BUILD_SHA`; unit test; README note.
+2. Make `checks` green on main: run each CI step locally in order, fix whatever is red (including the terminal and
+   press e2e, which must run in CI), push so the production job runs.
+3. Close the loop: production job asserts `/api/health` sha equals `GITHUB_SHA` (retry, bounded) and runs the
+   pocket-terminal and ink-press e2e against https://otohime.dev; `scripts/verify-deploy.sh` does the same on demand
+   (`BASE_URL`, `EXPECT_SHA`). Acceptance re-runs against the live sha; it fails if the dialog or press is missing.
