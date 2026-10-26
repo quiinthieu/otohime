@@ -1,0 +1,23 @@
+{
+  "tasks": [
+    {
+      "id": "b3abb4ba-f5fa-4447-bb5d-4eec52d9b94d",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "RUNNING",
+      "createdAt": "2026-10-26T22:02:23Z",
+      "updatedAt": "2026-10-26T22:02:27Z",
+      "startedAt": "2026-10-26T22:02:27Z"
+    },
+    {
+      "id": "d35e7175-b833-4fa1-948d-25ecfbffbaf5",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "RUNNING",
+      "createdAt": "2026-10-26T22:00:27Z",
+      "updatedAt": "2026-10-26T22:02:32Z",
+      "startedAt": "2026-10-26T22:00:30Z"
+    }
+  ],
+  "total": 2
+}

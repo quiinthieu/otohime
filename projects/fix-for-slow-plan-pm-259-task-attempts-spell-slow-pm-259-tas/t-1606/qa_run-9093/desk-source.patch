@@ -1,0 +1,404 @@
+commit 0b349dc012c0591ded5f82d28d0cf3395b71567c
+Author: Claude Code <noreply@anthropic.com>
+Date:   Mon Oct 26 19:42:18 2026 +0700
+
+    pm-270/t-1606: Make the desk swipe observe its preconditions and carry a gesture trace
+    
+    e2e/desk.test.ts swipe() now scrolls the tape into view, waits until its box
+    holds still across two animation frames, and asserts that the element at its
+    centre is the tape. It takes { holdMs, drags }. With drags it waits for
+    [data-dragging] on the item after the first touchMove past DRAG_THRESHOLD and
+    for that attribute to clear after touchEnd. Without drags it asserts that the
+    attribute never appears. Every swipe asserts that its pointerdown and its
+    pointerup or pointercancel reached the page. Only waiting conditions are used,
+    no fixed sleep.
+    
+    New scripts/e2e-gesture-trace.ts (pure, unit-tested in
+    scripts/e2e-gesture-trace.test.ts, now part of npm test) keeps at most 40
+    pointerdown/move/up/cancel records. When the list is full it drops moves
+    first. It also formats the records. A capture listener in the page's
+    instrument() feeds it, and the trace appears in the assertion message of the
+    wide-desk control (the 120 px drop is unchanged), the touch-tablet no-drag
+    check and the narrow-window mouse no-drag check.
+    
+    Nothing is quarantined: no run showed an environmental cause or a valid
+    gesture lost inside ink-desk.tsx, so the application is unchanged.
+    
+    e2e against a production build with a docker Postgres
+    (scripts/e2e-local.sh, local macOS, Chrome channel): 3 of 3 runs passed,
+    110/110 tests each. Negative control: with the tablet swipe set to
+    drags: true, the suite failed 109/110 with "music is dragging after the
+    first move past 6px" followed by the pointer trace.
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/e2e/desk.test.ts b/e2e/desk.test.ts
+index a8737bf..65a36b5 100644
+--- a/e2e/desk.test.ts
++++ b/e2e/desk.test.ts
+@@ -10,8 +10,9 @@ import { mkdtempSync, rmSync } from "node:fs";
+ import { tmpdir } from "node:os";
+ import { after, before, test } from "node:test";
+ import { chromium, type Browser, type BrowserContext, type Page } from "playwright-core";
+-import { STACKED, PINS, PIN_PAIRS, dropAt } from "../app/(site)/(app)/desk/_lib/drag.ts";
++import { DRAG_THRESHOLD, STACKED, PINS, PIN_PAIRS, dropAt, pastThreshold } from "../app/(site)/(app)/desk/_lib/drag.ts";
+ import { LONG_PRESS_MS } from "../app/(site)/(app)/desk/_lib/long-press.ts";
++import { formatTrace, hasGesture, traceOf, type GestureRecord } from "../scripts/e2e-gesture-trace.ts";
+ import {
+   DESK_ITEMS,
+   DESK_KEY,
+@@ -45,6 +46,8 @@ type Probe = {
+   // every transform an item or a leaf took, in order, by data-desk-item id or leaf index
+   items: Record<string, string[]>;
+   leaves: Record<string, string[]>;
++  // the pointer events since the last forget() (swipe() calls it), for a failed gesture's trace
++  gestures: GestureRecord[];
+ };
+ 
+ declare global {
+@@ -55,7 +58,7 @@ declare global {
+ 
+ // Runs in the page before any of its scripts.
+ function instrument() {
+-  const probe: Probe = { transitions: [], animations: [], items: {}, leaves: {} };
++  const probe: Probe = { transitions: [], animations: [], items: {}, leaves: {}, gestures: [] };
+   window.__desk = probe;
+   const name = (t: EventTarget | null) =>
+     t instanceof Element ? `${t.tagName.toLowerCase()}${typeof t.className === "string" && t.className ? `.${t.className.split(" ").join(".")}` : ""}` : "";
+@@ -74,6 +77,27 @@ function instrument() {
+       }
+     }
+   }).observe(document, { subtree: true, attributes: true, attributeFilter: ["style"] });
++  // Before the page's own handlers (React listens on its root): what arrived, where, and whether the item under it
++  // was already dragging. Capped here too; scripts/e2e-gesture-trace.ts keeps the last 40 for a message.
++  for (const type of ["pointerdown", "pointermove", "pointerup", "pointercancel"] as const) {
++    document.addEventListener(
++      type,
++      (e) => {
++        if (probe.gestures.length >= 400) probe.gestures.shift();
++        probe.gestures.push({
++          type,
++          t: e.timeStamp,
++          x: e.clientX,
++          y: e.clientY,
++          pointerId: e.pointerId,
++          pointerType: e.pointerType,
++          target: name(e.target),
++          dragging: e.target instanceof Element && e.target.closest("[data-desk-item]")?.hasAttribute("data-dragging") === true,
++        });
++      },
++      true,
++    );
++  }
+ }
+ 
+ let browser: Browser;
+@@ -214,17 +238,86 @@ async function grab(page: Page, selector: string, dx: number, dy: number) {
+   await page.mouse.move(c.x + dx, c.y + dy, { steps: 12 });
+ }
+ 
++// The pointer events the page saw since the last forget(), kept to the last 40 and formatted for a message.
++const forget = (page: Page) => page.evaluate(() => void (window.__desk.gestures = []));
++const traceOfPage = async (page: Page) => traceOf((await probe(page)).gestures);
++const gestureTrace = async (page: Page) => `pointer events the page saw:\n${formatTrace(await traceOfPage(page))}`;
++
++// The tape's box once it is on screen and has held still for two animation frames (a font or an image above the
++// desk can still move it after the load), and the element the browser would hit at its centre.
++async function settledTape(page: Page, selector: string) {
++  await page.locator(selector).scrollIntoViewIfNeeded({ timeout: 5_000 });
++  let last = "";
++  for (let i = 0; i < 60; i++) {
++    const seen = await page.evaluate(async (selector) => {
++      const frame = () => new Promise((done) => requestAnimationFrame(done));
++      const box = () => {
++        const r = document.querySelector(selector)!.getBoundingClientRect();
++        return { x: r.x, y: r.y, w: r.width, h: r.height };
++      };
++      const a = box();
++      await frame();
++      await frame();
++      const b = box();
++      const c = { x: b.x + b.w / 2, y: b.y + b.h / 2 };
++      const hit = document.elementFromPoint(c.x, c.y);
++      return {
++        still: JSON.stringify(a) === JSON.stringify(b),
++        inView: c.x >= 0 && c.y >= 0 && c.x < innerWidth && c.y < innerHeight && b.w > 0 && b.h > 0,
++        isTape: hit === document.querySelector(selector),
++        hit: hit ? `${hit.tagName.toLowerCase()}.${String(hit.className).split(" ").join(".")}` : "nothing",
++        box: b,
++        c,
++      };
++    }, selector);
++    last = JSON.stringify(seen);
++    if (seen.still && seen.inView) {
++      assert.ok(seen.isTape, `the finger lands on ${selector}, not on ${seen.hit} (${last})`);
++      return seen.c;
++    }
++  }
++  assert.fail(`${selector} never held still on screen for two frames (${last})`);
++}
++
+ // A finger on the item's tape (its drag handle on touch), sent as real touches through the DevTools protocol.
+-async function swipe(page: Page, id: string, dx: number, dy: number, holdMs = 0) {
+-  const c = await centre(page, `[data-desk-item="${id}"] .desk-tape`);
++// `drags` says what the page must show: a drag (data-dragging set on the item after the first move past
++// DRAG_THRESHOLD, cleared after the let-go) or none at all. Either way a miss fails with the gesture's trace.
++async function swipe(page: Page, id: string, dx: number, dy: number, { holdMs = 0, drags }: { holdMs?: number; drags: boolean }) {
++  const body = `[data-desk-item="${id}"]`;
++  const c = await settledTape(page, `${body} .desk-tape`);
++  const dragging = page.locator(`${body}[data-dragging]`);
++  const shows = async (state: "attached" | "detached", what: string) => {
++    try {
++      await dragging.waitFor({ state, timeout: 5_000 });
++    } catch {
++      assert.fail(`${what}\n${await gestureTrace(page)}`);
++    }
++  };
++  await forget(page);
+   const cdp = await page.context().newCDPSession(page);
+   const touch = (type: "touchStart" | "touchMove" | "touchEnd", x: number, y: number) =>
+     cdp.send("Input.dispatchTouchEvent", { type, touchPoints: type === "touchEnd" ? [] : [{ x, y, id: 1 }] });
+-  await touch("touchStart", c.x, c.y);
+-  if (holdMs) await page.waitForTimeout(holdMs);
+-  for (let i = 1; i <= 10; i++) await touch("touchMove", c.x + (dx * i) / 10, c.y + (dy * i) / 10);
+-  await touch("touchEnd", c.x + dx, c.y + dy);
+-  await cdp.detach();
++  try {
++    await touch("touchStart", c.x, c.y);
++    if (holdMs) await page.waitForTimeout(holdMs);
++    let past = false;
++    for (let i = 1; i <= 10; i++) {
++      await touch("touchMove", c.x + (dx * i) / 10, c.y + (dy * i) / 10);
++      if (drags && !past && pastThreshold((dx * i) / 10, (dy * i) / 10)) {
++        past = true;
++        await shows("attached", `${id} is dragging after the first move past ${DRAG_THRESHOLD}px`);
++      }
++    }
++    if (drags) assert.ok(past, `a swipe of (${dx}, ${dy}) is a drag`);
++    else assert.equal(await dragging.count(), 0, `${id} does not drag\n${await gestureTrace(page)}`);
++    await touch("touchEnd", c.x + dx, c.y + dy);
++    if (drags) await shows("detached", `${id} is let go after the touch ends`);
++  } finally {
++    await cdp.detach();
++  }
++  // The finger's press and let-go both reached the page (a no-drag swipe must not lose them either).
++  const trace = await traceOfPage(page);
++  assert.ok(hasGesture(trace, "pointerdown") && (hasGesture(trace, "pointerup") || hasGesture(trace, "pointercancel")), `the swipe reached the page\n${await gestureTrace(page)}`);
+ }
+ 
+ const tabTo = async (page: Page, id: string) => {
+@@ -557,8 +650,8 @@ test("on a phone the server's HTML is already the stacked desk, hydration keeps
+   assert.deepEqual(live.pins, served.pins);
+ 
+   // A swipe on the tape, a hold, and the desk's keys: nothing moves, nothing is stored, no menu opens.
+-  await swipe(page, "music", 120, 0);
+-  await swipe(page, "projects", 0, 0, LONG_PRESS_MS + 300);
++  await swipe(page, "music", 120, 0, { drags: false });
++  await swipe(page, "projects", 0, 0, { holdMs: LONG_PRESS_MS + 300, drags: false });
+   await link(page, "sketches").focus();
+   for (const key of ["ArrowRight", "r", "[", "Shift+F10"]) await page.keyboard.press(key);
+   assert.equal(await page.locator(".desk-menu").count(), 0, "no radial menu on the stacked desk");
+@@ -577,23 +670,24 @@ test("a narrow window and a wide touch tablet get the stacked desk too; the same
+   const narrow = await open({ viewport: NARROW });
+   assert.equal(await narrow.evaluate(() => matchMedia("(pointer: fine)").matches), true, "a mouse");
+   assertStacked(await layoutOf(narrow), "narrow window");
++  await forget(narrow);
+   await grab(narrow, `[data-desk-item="music"] .desk-link`, 100, 0);
+   await narrow.mouse.up();
+-  assert.equal(await raw(narrow), null, "a mouse drag on the stacked desk moves nothing");
++  assert.equal(await raw(narrow), null, `a mouse drag on the stacked desk moves nothing\n${await gestureTrace(narrow)}`);
+ 
+   const tablet = await open({ viewport: TABLET, touch: true });
+   assert.equal(await tablet.evaluate(() => matchMedia("(pointer: coarse)").matches), true, "a touch-first screen");
+   assertStacked(await layoutOf(tablet), "touch tablet");
+-  await swipe(tablet, "music", 120, 0);
+-  assert.equal(await raw(tablet), null);
++  await swipe(tablet, "music", 120, 0, { drags: false });
++  assert.equal(await raw(tablet), null, `a swipe on the touch tablet moves nothing\n${await gestureTrace(tablet)}`);
+ 
+   // The control: the very same swipe on the wide desk drags the item by its tape.
+   const wide = await open();
+   assert.equal(await wide.evaluate((q) => matchMedia(q).matches, STACKED), false);
+   assert.notEqual((await layoutOf(wide)).string, "none", "the wide desk has its string");
+-  await swipe(wide, "music", 120, 0);
++  await swipe(wide, "music", 120, 0, { drags: true });
+   const moved = await stored(wide);
+   const size = await deskSize(wide);
+-  near(at(moved, "music").x, dropAt(at(defaultLayout(), "music"), 120, 0, size).x, "the swipe dragged music");
++  near(at(moved, "music").x, dropAt(at(defaultLayout(), "music"), 120, 0, size).x, `the swipe dragged music\n${await gestureTrace(wide)}`);
+   assert.deepEqual(errors, []);
+ });
+diff --git a/package.json b/package.json
+index cdcf5d1..bfe2186 100644
+--- a/package.json
++++ b/package.json
+@@ -16,7 +16,7 @@
+     "db:generate": "drizzle-kit generate",
+     "db:migrate": "drizzle-kit migrate",
+     "db:studio": "prisma studio --port 4500",
+-    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'lib/**/*.test.ts' 'app/(shore)/_lib/*.test.ts' 'app/(ryugu)/_lib/*.test.ts' 'app/(capsule)/_lib/*.test.ts' 'app/(orrery)/_lib/*.test.ts' 'app/(elements)/_lib/*.test.ts' 'app/(vinyl)/_lib/*.test.ts' 'app/(rotor)/_lib/*.test.ts' 'app/(planisphere)/_lib/*.test.ts' 'app/(barometer)/_lib/*.test.ts' 'app/(articles)/_lib/*.test.ts' 'app/(structures)/_lib/*.test.ts' 'app/(design-system)/_lib/*.test.ts' 'app/(site)/(app)/music/_lib/*.test.ts' 'app/(site)/(app)/desk/_lib/*.test.ts' 'app/(site)/(app)/ledger/_lib/*.test.ts' 'scripts/history-index.test.ts' 'scripts/ci-workflow.test.mjs'",
++    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'lib/**/*.test.ts' 'app/(shore)/_lib/*.test.ts' 'app/(ryugu)/_lib/*.test.ts' 'app/(capsule)/_lib/*.test.ts' 'app/(orrery)/_lib/*.test.ts' 'app/(elements)/_lib/*.test.ts' 'app/(vinyl)/_lib/*.test.ts' 'app/(rotor)/_lib/*.test.ts' 'app/(planisphere)/_lib/*.test.ts' 'app/(barometer)/_lib/*.test.ts' 'app/(articles)/_lib/*.test.ts' 'app/(structures)/_lib/*.test.ts' 'app/(design-system)/_lib/*.test.ts' 'app/(site)/(app)/music/_lib/*.test.ts' 'app/(site)/(app)/desk/_lib/*.test.ts' 'app/(site)/(app)/ledger/_lib/*.test.ts' 'scripts/history-index.test.ts' 'scripts/e2e-gesture-trace.test.ts' 'scripts/ci-workflow.test.mjs'",
+     "test:e2e": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/**/*.test.ts'",
+     "elements:validate": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'app/(elements)/_lib/facts.test.ts' 'app/(elements)/_lib/elements.test.ts'",
+     "elements:vendor": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/vendor-elements.ts",
+diff --git a/scripts/e2e-gesture-trace.test.ts b/scripts/e2e-gesture-trace.test.ts
+new file mode 100644
+index 0000000..1f7e54d
+--- /dev/null
++++ b/scripts/e2e-gesture-trace.test.ts
+@@ -0,0 +1,85 @@
++// scripts/e2e-gesture-trace.ts on fixed records: the bound, what a full trace drops, and the text a failed
++// assertion carries.
++import assert from "node:assert/strict";
++import { test } from "node:test";
++import {
++  addGesture,
++  emptyTrace,
++  formatTrace,
++  hasGesture,
++  TRACE_MAX,
++  traceOf,
++  type GestureRecord,
++  type GestureType,
++} from "./e2e-gesture-trace.ts";
++
++const rec = (type: GestureType, t: number, x = 100, dragging = false): GestureRecord => ({
++  type,
++  t,
++  x,
++  y: 50,
++  pointerId: 1,
++  pointerType: "touch",
++  target: "span.desk-tape",
++  dragging,
++});
++
++// A press, n moves 12 px apart, and a let-go.
++const drag = (n: number): GestureRecord[] => [
++  rec("pointerdown", 1000),
++  ...Array.from({ length: n }, (_, i) => rec("pointermove", 1000 + 16 * (i + 1), 100 + 12 * (i + 1), true)),
++  rec("pointerup", 1000 + 16 * (n + 1), 100 + 12 * n, true),
++];
++
++test("the bound is 40 and a short gesture is kept whole, in order", () => {
++  assert.equal(TRACE_MAX, 40);
++  const t = traceOf(drag(10));
++  assert.equal(t.records.length, 12);
++  assert.equal(t.dropped, 0);
++  assert.deepEqual(t.records, drag(10));
++});
++
++test("a long drag keeps at most 40 records, and the press and the let-go survive", () => {
++  const t = traceOf(drag(100));
++  assert.equal(t.records.length, TRACE_MAX);
++  assert.equal(t.dropped, 102 - TRACE_MAX);
++  assert.equal(t.records[0].type, "pointerdown");
++  assert.equal(t.records.at(-1)!.type, "pointerup");
++  // the newest moves are the ones kept
++  assert.equal(t.records[1].x, 100 + 12 * (100 - TRACE_MAX + 3));
++  assert.ok(hasGesture(t, "pointerdown") && hasGesture(t, "pointerup") && !hasGesture(t, "pointercancel"));
++});
++
++test("with no move left to drop, the oldest record goes", () => {
++  const presses = Array.from({ length: 5 }, (_, i) => rec(i % 2 ? "pointerup" : "pointerdown", i));
++  const t = traceOf(presses, 3);
++  assert.deepEqual(
++    t.records.map((r) => r.t),
++    [2, 3, 4],
++  );
++  assert.equal(t.dropped, 2);
++});
++
++test("anything but pointer down/move/up/cancel is ignored, and the trace is not changed in place", () => {
++  const empty = emptyTrace();
++  const t = addGesture(empty, { ...rec("pointerdown", 0), type: "click" as GestureType });
++  assert.equal(t, empty);
++  const one = addGesture(empty, rec("pointercancel", 0));
++  assert.equal(empty.records.length, 0);
++  assert.equal(one.records.length, 1);
++  assert.equal(emptyTrace(0).max, 1, "a bound below one is one");
++});
++
++test("the format: times from the first record, the pointer, the point, the target and the drag state", () => {
++  assert.equal(formatTrace(emptyTrace()), "no pointer event reached the page");
++  const t = traceOf([rec("pointerdown", 500.4, 683.26), rec("pointermove", 516.9, 695.5, true), { ...rec("pointercancel", 530, 700), target: "" }]);
++  assert.equal(
++    formatTrace(t),
++    ["+0ms pointerdown touch#1 (683.3,50) span.desk-tape", "+17ms pointermove touch#1 (695.5,50) span.desk-tape dragging", "+30ms pointercancel touch#1 (700,50) ?"].join(
++      "\n",
++    ),
++  );
++  const long = formatTrace(traceOf(drag(60)));
++  assert.equal(long.split("\n").length, TRACE_MAX + 1);
++  assert.match(long, /\(22 records dropped to keep 40\)$/);
++});
+diff --git a/scripts/e2e-gesture-trace.ts b/scripts/e2e-gesture-trace.ts
+new file mode 100644
+index 0000000..1ba213b
+--- /dev/null
++++ b/scripts/e2e-gesture-trace.ts
+@@ -0,0 +1,64 @@
++// A bounded trace of the pointer events a browser test's gesture produced, for the test's failure message.
++// Pure, no DOM: the page records raw events (e2e/desk.test.ts's instrument()), and this keeps at most TRACE_MAX of
++// them and formats them, so a failed drag says whether the finger came down on the tape, moved, was let go or was
++// taken by the browser (pointercancel). scripts/e2e-gesture-trace.test.ts proves it.
++
++export const GESTURE_TYPES = ["pointerdown", "pointermove", "pointerup", "pointercancel"] as const;
++export type GestureType = (typeof GESTURE_TYPES)[number];
++
++export const TRACE_MAX = 40;
++
++// One event as the page saw it, before the page's own handlers ran (a capture listener on the document).
++export type GestureRecord = {
++  type: GestureType;
++  // ms since the page's time origin
++  t: number;
++  x: number;
++  y: number;
++  pointerId: number;
++  pointerType: string;
++  // the event's target, as tag.class
++  target: string;
++  // whether the item under the pointer carried data-dragging then
++  dragging: boolean;
++};
++
++export type GestureTrace = { records: GestureRecord[]; dropped: number; max: number };
++
++export const emptyTrace = (max: number = TRACE_MAX): GestureTrace => ({ records: [], dropped: 0, max: Math.max(1, Math.floor(max)) });
++
++const isGesture = (type: unknown): type is GestureType => (GESTURE_TYPES as readonly unknown[]).includes(type);
++
++// The trace with one more record. A full trace drops its oldest pointermove first, so the press, the let-go and a
++// cancel survive a long drag; with no move left to drop, the oldest record goes. Anything that is not a pointer
++// down/move/up/cancel is ignored.
++export function addGesture(trace: GestureTrace, record: GestureRecord): GestureTrace {
++  if (!isGesture(record.type)) return trace;
++  const records = [...trace.records, record];
++  let dropped = trace.dropped;
++  while (records.length > trace.max) {
++    const move = records.findIndex((r) => r.type === "pointermove");
++    records.splice(move === -1 ? 0 : move, 1);
++    dropped++;
++  }
++  return { ...trace, records, dropped };
++}
++
++export const traceOf = (records: readonly GestureRecord[], max: number = TRACE_MAX): GestureTrace =>
++  records.reduce(addGesture, emptyTrace(max));
++
++export const hasGesture = (trace: GestureTrace, type: GestureType) => trace.records.some((r) => r.type === type);
++
++const px = (v: number) => String(Math.round(v * 10) / 10);
++
++// One line per record, times from the first one: "+16ms pointermove touch#1 (695.5,612) span.desk-tape dragging".
++export function formatTrace(trace: GestureTrace): string {
++  if (trace.records.length === 0) return "no pointer event reached the page";
++  const t0 = trace.records[0].t;
++  const lines = trace.records.map(
++    (r) =>
++      `+${Math.round(r.t - t0)}ms ${r.type} ${r.pointerType}#${r.pointerId} (${px(r.x)},${px(r.y)}) ${r.target || "?"}${r.dragging ? " dragging" : ""}`,
++  );
++  if (trace.dropped > 0) lines.push(`(${trace.dropped} record${trace.dropped === 1 ? "" : "s"} dropped to keep ${trace.max})`);
++  return lines.join("\n");
++}

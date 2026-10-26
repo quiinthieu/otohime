@@ -1,0 +1,28 @@
+[
+  {
+    "prompt_truncated": false,
+    "run": {
+      "id": "run-9093",
+      "plan_id": "pm-270",
+      "task_id": "t-1606",
+      "role": "quality_engineer",
+      "kind": "role",
+      "template_id": "qa-agent",
+      "tm_task_id": "d35e7175-b833-4fa1-948d-25ecfbffbaf5",
+      "repo_id": "otohime",
+      "account_id": "codex-main",
+      "worker_id": "avietidol-z490",
+      "runner": "fleet",
+      "agent_profile": "codex-sol-6-1-high",
+      "attempt": 4,
+      "status": "running",
+      "deadline_at": "2026-10-27T02:00:21.660061Z",
+      "started_at": "2026-10-26T22:00:21.660061Z",
+      "finished_at": "0001-01-01T00:00:00Z",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "not_before": "0001-01-01T00:00:00Z",
+      "status_checked_at": "0001-01-01T00:00:00Z",
+      "callback_apply_failures": 0
+    }
+  }
+]

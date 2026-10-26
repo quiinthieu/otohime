@@ -1,0 +1,65 @@
+{
+  "tasks": [
+    {
+      "id": "e50e2d44-eebe-4e8f-8442-68be103ab47e",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T20:51:31Z",
+      "updatedAt": "2026-10-26T21:13:01Z",
+      "completedAt": "2026-10-26T21:12:59Z",
+      "startedAt": "2026-10-26T20:51:40Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "9ee2b573-614a-467a-ba1e-e5463468028e",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T20:47:45Z",
+      "updatedAt": "2026-10-26T20:50:34Z",
+      "completedAt": "2026-10-26T20:50:32Z",
+      "startedAt": "2026-10-26T20:47:45Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "c627be64-c469-4a9e-9455-ac18cabc025b",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T20:42:27Z",
+      "updatedAt": "2026-10-26T20:50:32Z",
+      "completedAt": "2026-10-26T20:50:30Z",
+      "startedAt": "2026-10-26T20:42:39Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "22c56747-09d9-4c0b-aba8-65d491c6ee36",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T20:38:52Z",
+      "updatedAt": "2026-10-26T20:40:08Z",
+      "completedAt": "2026-10-26T20:40:06Z",
+      "startedAt": "2026-10-26T20:38:58Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "240df74e-4b31-4e32-ba94-6f223739d42a",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T20:38:03Z",
+      "updatedAt": "2026-10-26T21:03:18Z",
+      "completedAt": "2026-10-26T21:03:16Z",
+      "startedAt": "2026-10-26T20:38:15Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    }
+  ],
+  "total": 1271
+}

@@ -1,0 +1,13 @@
+{
+  "observed_at": "2026-10-26T22:04:05.989359+00:00",
+  "chrome_executable_sha256": "4d2512ae84986bf987e6ea8ef14ca1af555ae574fbaff5b5a8c78a8dd73fa36f",
+  "postgres_image": [
+    "postgres@sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb"
+  ],
+  "instructions": {
+    "AGENTS.md": "063098f6cb31bb44c6f8fbea25b3876de7ee1e5f7d00a50dbab506f6415eb7f0",
+    "/data/build-worker/repo/mono-v2/projects/20260921222547_plan_manager_chief_of_staff_extraction.md": "1aebdc7b1007fd76b2da9acd0d593e5b20c8924833b6b3500b0673e001413999",
+    "/data/build-worker/repo/mono-v2/docs/claude/software-development.md": "3f6dc34c708a9e91282afcca0df28524346934d56b9e8a5593b5236110467cb0",
+    "node_modules/next/dist/docs/01-app/02-guides/testing/playwright.md": "900a9d4fd28a8908ea26ec1b229998edeb2c9f8ca7af94cf27868fb5471b3ddd"
+  }
+}

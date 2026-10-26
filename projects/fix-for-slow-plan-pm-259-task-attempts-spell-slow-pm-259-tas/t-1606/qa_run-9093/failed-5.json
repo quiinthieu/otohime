@@ -1,0 +1,70 @@
+{
+  "tasks": [
+    {
+      "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "FAILED",
+      "error": "agent_failed: exit 143 class=unknown marker=none",
+      "createdAt": "2026-10-26T11:57:08Z",
+      "updatedAt": "2026-10-26T12:16:26Z",
+      "completedAt": "2026-10-26T12:16:21Z",
+      "startedAt": "2026-10-26T11:59:09Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "FAILED",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main",
+      "createdAt": "2026-10-26T11:02:41Z",
+      "updatedAt": "2026-10-26T11:30:13Z",
+      "completedAt": "2026-10-26T11:30:10Z",
+      "startedAt": "2026-10-26T11:02:44Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "FAILED",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main",
+      "createdAt": "2026-10-26T10:53:31Z",
+      "updatedAt": "2026-10-26T11:22:03Z",
+      "completedAt": "2026-10-26T11:21:58Z",
+      "startedAt": "2026-10-26T10:53:37Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "FAILED",
+      "error": "agent_failed: exit 143 class=unknown marker=none",
+      "createdAt": "2026-10-26T10:01:50Z",
+      "updatedAt": "2026-10-26T10:09:00Z",
+      "completedAt": "2026-10-26T10:08:58Z",
+      "startedAt": "2026-10-26T10:01:54Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "FAILED",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 85b0eb1ae9c6 is not on origin/main",
+      "createdAt": "2026-10-26T09:46:57Z",
+      "updatedAt": "2026-10-26T10:41:58Z",
+      "completedAt": "2026-10-26T10:41:54Z",
+      "startedAt": "2026-10-26T09:47:07Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    }
+  ],
+  "total": 71
+}

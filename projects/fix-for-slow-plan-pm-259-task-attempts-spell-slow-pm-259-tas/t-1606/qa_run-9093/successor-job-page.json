@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "url": "https://github.com/quiinthieu/otohime/actions/runs/40409123749/job/121874634016",
+  "observed_at": "2026-10-26T22:25:32.074921+00:00",
+  "bytes": 216113,
+  "diagnostic_fragments": [
+    "line Link--secondary color-fg-default\" href=\"#annotation:22:212\"> Footer Chromium probe Process completed with exit code 1. Show more <button data-action=\"click:annotation-message#toggleExpansion\" data-target=\"annotation-message.showLessBut",
+    "ationContainer\" class=\"text-small text-mono annotation--contracted\"> Process completed with exit code 1. Show more Show less <td class=\"compact tmp-pr-3 col-7 col-lg-9",
+    "-ux > <check-step data-name=\"Post Run actions/setup-node@v7\" data-number=\"41\" data-conclusion=\"skipped\""
+  ]
+}

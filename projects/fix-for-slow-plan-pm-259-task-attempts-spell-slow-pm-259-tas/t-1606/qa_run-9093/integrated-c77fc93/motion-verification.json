@@ -1,0 +1,25 @@
+{
+  "source_head": "c77fc937e006510ab36003665ff1b4b2c3c1e36d",
+  "script_sha256": "6b36e65d5a7b6d2e36d1dccbba4e0a3f122c57d4364dd0b5d04ed6b6c69ee3c4",
+  "build_id": "K-m744A0cLXuzVkszoAQw",
+  "local_probe_id": "r17930546172871948",
+  "normal_temp_execution": {
+    "cmd": "TMPDIR=/tmp CI=true SKIP_BUILD=1 bash scripts/probe-motion-signed-in.sh",
+    "exit_code": 0,
+    "passed": 356,
+    "failed": 0,
+    "negative": "missing pagereveal guard logs Transition was skipped",
+    "log": "motion-integrated.log"
+  },
+  "inherited_long_temp_execution": {
+    "cmd": "CI=true SKIP_BUILD=1 bash scripts/probe-motion-signed-in.sh",
+    "exit_code": 1,
+    "assertions_executed": 0,
+    "tmpdir_length": 122,
+    "failure": "Chrome FATAL Socket path too long",
+    "log": "motion-long-tmpdir-failed.log",
+    "raw_chrome_error": "chrome-long-tmpdir.log"
+  },
+  "real": "locked Chrome/Playwright, production Next, migrated throwaway Docker Postgres, actual local auth/database path",
+  "fake": "existing probe deliberately strips pagereveal guard for negative control; viewport/media emulation"
+}

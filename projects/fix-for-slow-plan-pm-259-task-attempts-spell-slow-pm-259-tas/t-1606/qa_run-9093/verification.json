@@ -1,0 +1,72 @@
+{
+  "checkout": "cce0e62c33b5a204ed991ed36055a7bb87977043",
+  "verification": [
+    {
+      "name": "trace helper unit test",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "logs": [
+        "trace.log"
+      ]
+    },
+    {
+      "name": "lint and types",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "logs": [
+        "lint.log",
+        "typecheck.log"
+      ]
+    },
+    {
+      "name": "unit tests",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "logs": [
+        "unit.log"
+      ]
+    },
+    {
+      "name": "final moving-main integration E2E",
+      "cmd": "bash scripts/e2e-local.sh",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "repeats": [
+        {
+          "repeat": 1,
+          "exit": 0,
+          "duration_seconds": 392.051,
+          "log": "e2e-1.log",
+          "build": "build-1.json",
+          "counts": {
+            "tests": 179,
+            "pass": 178,
+            "fail": 0,
+            "skipped": 1
+          }
+        }
+      ],
+      "scope": "One supplemental complete production invocation; contracted x3 cohorts are pinned in the archived evidence."
+    }
+  ],
+  "qa_verdict": "fail",
+  "retained_failures": [
+    {
+      "log": "integrated-132ceba/unit.log",
+      "failure": "lib/gate-closure.test.ts:185",
+      "diagnosis": "child-output-control.json disproves fixture premise3/3 with real flushed subprocesses"
+    },
+    {
+      "log": "integrated-c77fc93/e2e-3.log",
+      "failure": "e2e/ledger.test.ts:397",
+      "diagnosis": "intermittent failure retained; original geometry unavailable; relevant source bytes unchanged"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "observed_at": "2026-10-26T22:04:56.686599+00:00",
+  "union_count": 41,
+  "groups": {
+    "d31a274be4ea845a406cb5886bf885a0556fa8fc1178fee753ede1ec540b0c6d": 1,
+    "d51370c0dc5e8a63950093c3e0cc1ddc80813b648e4d61863b3cd3433cee9454": 1,
+    "276ead2270aff7e18e803f54e98539356b82b8e9a130db96769ba9d7450570c2": 2,
+    "f6fdf19a0b4af0c6eabbf4614dc81fb7abd0094173847d357d9c3959a1d4a30e": 1,
+    "df38e93a42c4b9ddddca6632203ba40b33d5f8a5ba961d6863b68e563879e4fc": 1,
+    "16e55ec98295630ceb55665c20657a8b6e8c38ea4f23b0cefec3d26ba4094efc": 1,
+    "486416106b4835426a5d9010535b80ee804c13d61e7d2e09053a1739d4de9ec8": 1,
+    "d7bed87634fa80bd200d02597e0a940312c5a4a5eadc762570617bdfe5f78259": 1,
+    "34aa108bb2d302694e7e68328d872ec22395d97c323cf298bb67d71e7957ae38": 2,
+    "efb8a8a307796e7ccce75cf0f08781a2fe64f2a08e8f66e2ea20ac138c6008fb": 4,
+    "558eaf0d7e388ac168c994226465a51dccbc5bec2539a97919364a3127b5089e": 2,
+    "7a658f567f2ff4875d0aacaebebb96c53db3dab831ad17d2dc79dbf163dd55b7": 1,
+    "2c46fad059eab10022f2ed0aadb7e26ca96d60b5dff3c34b0db613d921bb166e": 1,
+    "49854d3d966418bae978d7f54685f3d53551ea073bca8550ba6e7294639e7ec8": 1,
+    "8d187b5e4b8e8c389e9de499a8ab2a718e85e7fd225bbe50b96a756fc47f11cd": 1,
+    "c49547efeb4599d0892dba37f60aae267ed4e05d70671bab4efdafd29a46be17": 2,
+    "3854fc5629b38701cfb50d4f1bb7e1d68a44c3bec4e17513e8939f15f4299d0f": 1,
+    "16689ca5d43961ba57ac6cf196d18ca437f5b5a7e474ff997498e5f1d2e63bad": 5,
+    "3382a806bf1101abb13b25469a9fb07e2f3051f3a0ef871547d5d25ec63638dd": 2,
+    "9937d65da65bcdf5d728c786e7f8c00da26bfdeed8782de9e8378ecdbb14ad3c": 3,
+    "0f3f5b19c4e45a132d670ed9c3ffb461e2292a94b434d496b2a88f0fba83d920": 2,
+    "050b9a8702fbf3166278e702f4fb155be85d88d2b786e6137e2afe51133ab476": 4,
+    "b71083cf2ed3c872d7ebae206c01cf6e4ba8fcc0d80bdf7fde1cb1bdea2282e7": 1
+  },
+  "scans": [
+    {
+      "file": "history-completed-1.json",
+      "read": 20,
+      "total": 459,
+      "counts": {
+        "failure": 12,
+        "success": 8
+      },
+      "newest": "2026-10-26T21:37:18Z",
+      "oldest": "2026-10-26T14:49:52Z"
+    },
+    {
+      "file": "history-completed-2.json",
+      "read": 20,
+      "total": 459,
+      "counts": {
+        "failure": 9,
+        "cancelled": 8,
+        "success": 3
+      },
+      "newest": "2026-10-26T14:33:10Z",
+      "oldest": "2026-10-26T12:28:24Z"
+    },
+    {
+      "file": "history-failure-1.json",
+      "read": 10,
+      "total": 112,
+      "counts": {
+        "failure": 10
+      },
+      "newest": "2026-10-26T21:37:18Z",
+      "oldest": "2026-10-26T15:08:10Z"
+    },
+    {
+      "file": "history-failure-2.json",
+      "read": 10,
+      "total": 112,
+      "counts": {
+        "failure": 10
+      },
+      "newest": "2026-10-26T15:00:53Z",
+      "oldest": "2026-10-26T13:25:44Z"
+    }
+  ]
+}

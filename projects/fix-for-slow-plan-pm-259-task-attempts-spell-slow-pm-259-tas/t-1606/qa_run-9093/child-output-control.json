@@ -1,0 +1,105 @@
+{
+  "node": "v22.23.3",
+  "real": "real locked child-runner module and actual Node subprocesses; no fake runner",
+  "rows": [
+    {
+      "mode": "original",
+      "trial": 1,
+      "source": "process.stdout.write('x'.repeat(200000));process.exit(3)",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 146176,
+      "endsWithX": true,
+      "existingAssertion": true,
+      "durationMs": 22
+    },
+    {
+      "mode": "original",
+      "trial": 2,
+      "source": "process.stdout.write('x'.repeat(200000));process.exit(3)",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 146176,
+      "endsWithX": true,
+      "existingAssertion": true,
+      "durationMs": 24
+    },
+    {
+      "mode": "original",
+      "trial": 3,
+      "source": "process.stdout.write('x'.repeat(200000));process.exit(3)",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 146176,
+      "endsWithX": true,
+      "existingAssertion": true,
+      "durationMs": 22
+    },
+    {
+      "mode": "flush-200000",
+      "trial": 1,
+      "source": "process.stdout.write('x'.repeat(200000),()=>process.exit(3))",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 200000,
+      "endsWithX": true,
+      "existingAssertion": false,
+      "durationMs": 20
+    },
+    {
+      "mode": "flush-200000",
+      "trial": 2,
+      "source": "process.stdout.write('x'.repeat(200000),()=>process.exit(3))",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 200000,
+      "endsWithX": true,
+      "existingAssertion": false,
+      "durationMs": 20
+    },
+    {
+      "mode": "flush-200000",
+      "trial": 3,
+      "source": "process.stdout.write('x'.repeat(200000),()=>process.exit(3))",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 200000,
+      "endsWithX": true,
+      "existingAssertion": false,
+      "durationMs": 24
+    },
+    {
+      "mode": "flush-1200000",
+      "trial": 1,
+      "source": "process.stdout.write('x'.repeat(1200000),()=>process.exit(3))",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 1000000,
+      "endsWithX": true,
+      "existingAssertion": false,
+      "durationMs": 22
+    },
+    {
+      "mode": "flush-1200000",
+      "trial": 2,
+      "source": "process.stdout.write('x'.repeat(1200000),()=>process.exit(3))",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 1000000,
+      "endsWithX": true,
+      "existingAssertion": false,
+      "durationMs": 27
+    },
+    {
+      "mode": "flush-1200000",
+      "trial": 3,
+      "source": "process.stdout.write('x'.repeat(1200000),()=>process.exit(3))",
+      "code": 3,
+      "timedOut": false,
+      "stdoutLength": 1000000,
+      "endsWithX": true,
+      "existingAssertion": false,
+      "durationMs": 23
+    }
+  ]
+}

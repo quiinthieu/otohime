@@ -1,0 +1,6 @@
+Starting full production E2E 1
+{"repeat": 1, "exit": 0, "duration_seconds": 382.08, "log": "e2e-1.log", "build": "build-1.json"}
+Starting full production E2E 2
+{"repeat": 2, "exit": 0, "duration_seconds": 379.942, "log": "e2e-2.log", "build": "build-2.json"}
+Starting full production E2E 3
+{"repeat": 3, "exit": 1, "duration_seconds": 374.498, "log": "e2e-3.log", "build": "build-3.json"}

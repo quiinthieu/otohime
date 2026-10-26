@@ -1,0 +1,44 @@
+{
+  "checkout": "9d3f7463d69b852c8a40b8b94b560a9ecdfe31ca",
+  "verification": [
+    {
+      "name": "trace helper unit test",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+      "expect": "exit0",
+      "status": "pass",
+      "exit_code": 0,
+      "counts": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "skipped": 0
+      },
+      "log": "trace.log"
+    },
+    {
+      "name": "lint and types",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "status": "pass",
+      "exit_code": 0,
+      "logs": [
+        "lint.log",
+        "typecheck.log"
+      ]
+    },
+    {
+      "name": "unit tests",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "status": "pass",
+      "exit_code": 0,
+      "counts": {
+        "tests": 2363,
+        "pass": 2363,
+        "fail": 0,
+        "skipped": 0
+      },
+      "log": "unit.log"
+    }
+  ]
+}

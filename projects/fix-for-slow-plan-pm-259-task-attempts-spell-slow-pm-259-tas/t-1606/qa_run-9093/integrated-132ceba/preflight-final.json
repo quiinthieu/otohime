@@ -1,0 +1,28 @@
+{
+  "node": "v22.23.3",
+  "platform": "linux",
+  "arch": "x64",
+  "next": "16.4.2",
+  "playwright": "1.64.0",
+  "chrome": "154.0.8037.57",
+  "lock_sha256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+  "schemaTables": [
+    "account",
+    "accountRelations",
+    "askUsage",
+    "bottleSuggestion",
+    "bottleUsage",
+    "guestbookEntry",
+    "guestbookUsage",
+    "session",
+    "sessionRelations",
+    "song",
+    "user",
+    "userRelations",
+    "verification"
+  ],
+  "drizzleAdapterConstructed": true,
+  "betterAuthContextInitialized": true,
+  "traceImports": "no pointer event reached the page",
+  "databaseQuery": "construction only; full production suites exercise migrated real Postgres"
+}

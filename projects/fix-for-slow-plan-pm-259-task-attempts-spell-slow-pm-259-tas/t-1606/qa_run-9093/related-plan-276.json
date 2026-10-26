@@ -1,0 +1,44 @@
+[
+  {
+    "plan": {
+      "id": "pm-276",
+      "idea_id": "idea-268",
+      "kind": "fix",
+      "title": "Delivery Signal Guardrails",
+      "repo_id": "otohime",
+      "slug": "fix-for-slow-plan-pm-273-task-attempts-spell-slow-pm-273-tas",
+      "status": "paused",
+      "current_revision": 1,
+      "approved_at": "2026-10-26T14:56:11.142665Z",
+      "auto_approved_at": "2026-10-26T14:56:11.142665Z",
+      "run_count": 2,
+      "max_runs": null,
+      "draft_failures": 0,
+      "acceptance_cycle": 0,
+      "trace_id": "ff01c468a001b20e8b87a10b09f8efe7",
+      "hidden_at": null,
+      "acceptance_not_before": null,
+      "acceptance_pending_until": null,
+      "queue_rank_at": null,
+      "yield_count": 0,
+      "execution_started_at": null,
+      "delivery_workflow": "legacy_v1",
+      "created_at": "2026-10-26T14:33:30.209286Z",
+      "updated_at": "2026-10-26T14:59:58.858061Z"
+    },
+    "tasks": [
+      {
+        "id": "t-1618",
+        "title": "Publish unit-test failure diagnostics",
+        "status": "ready",
+        "assigned_role": "software_engineer"
+      },
+      {
+        "id": "t-1619",
+        "title": "Enforce code-commit identity in CI",
+        "status": "backlog",
+        "assigned_role": "software_engineer"
+      }
+    ]
+  }
+]

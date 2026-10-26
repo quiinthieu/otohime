@@ -1,0 +1,63 @@
+{
+  "tasks": [
+    {
+      "id": "5e414ee7-d750-41a2-b19a-e2345b3f6847",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T21:39:10Z",
+      "updatedAt": "2026-10-26T21:39:47Z",
+      "completedAt": "2026-10-26T21:39:45Z",
+      "startedAt": "2026-10-26T21:39:22Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "60497898-ee53-43dc-bc69-8400b62e17cc",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T21:38:01Z",
+      "updatedAt": "2026-10-26T21:58:34Z",
+      "completedAt": "2026-10-26T21:58:32Z",
+      "startedAt": "2026-10-26T21:38:08Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "d759c97d-4704-434d-ad72-e9033756ef15",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T21:35:10Z",
+      "updatedAt": "2026-10-26T21:35:38Z",
+      "completedAt": "2026-10-26T21:35:37Z",
+      "startedAt": "2026-10-26T21:35:14Z"
+    },
+    {
+      "id": "22ae5846-3971-4bc3-a9f4-7891e55967e1",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T21:13:18Z",
+      "updatedAt": "2026-10-26T22:02:23Z",
+      "completedAt": "2026-10-26T22:02:20Z",
+      "startedAt": "2026-10-26T21:13:21Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    {
+      "id": "74e1787c-5ce0-4223-9def-49f09300d757",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T21:09:52Z",
+      "updatedAt": "2026-10-26T21:14:39Z",
+      "completedAt": "2026-10-26T21:14:37Z",
+      "startedAt": "2026-10-26T21:10:03Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    }
+  ],
+  "total": 1271
+}

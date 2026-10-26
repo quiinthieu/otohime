@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/quiinthieu/otohime/actions/runs/40409123749/job/121882559914",
+  "status": 200,
+  "observed_at": "2026-10-26T22:26:36.294435+00:00",
+  "bytes": 189515,
+  "title": [
+    "pm-269/t-1588: Await the Dashboard&#39;s own page fade after its skeleton \u00b7 quiinthieu/otohime@556a3ec \u00b7 GitHub"
+  ],
+  "steps": [],
+  "skipped_excerpts": [
+    "12Z\"> This job was skipped"
+  ]
+}

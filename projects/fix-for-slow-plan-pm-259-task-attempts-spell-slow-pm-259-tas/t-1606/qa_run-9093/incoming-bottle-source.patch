@@ -1,0 +1,69 @@
+diff --git a/components/bottle/button.css b/components/bottle/button.css
+index 1e905a7..5efd682 100644
+--- a/components/bottle/button.css
++++ b/components/bottle/button.css
+@@ -3,4 +3,4 @@
+ .bottle-icon { display: inline-block; width: 18px; height: 24px; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cdefs%3E%3Cfilter id='bottle-button-ink'%3E%3CfeTurbulence baseFrequency='.08' numOctaves='2' seed='4' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='.6'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23bottle-button-ink)' stroke='%23564d40' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath fill='%23c7a97b' d='M8 2h8v5H8z'/%3E%3Cpath fill='%23ece7d5' d='M8 7h8v6l4 5v11H4V18l4-5z'/%3E%3Cpath fill='%23faf6e9' d='M7 19h10v6H7z'/%3E%3Cpath fill='none' d='m9 22 2-1 4 2'/%3E%3C/g%3E%3C/svg%3E"); }
+ 
+ /* Use the footer’s reserved top padding, outside the scene’s pointer hit area and legacy Tab chain. */
+-.bottle-footer-entry { position: absolute; inset-block-start: -2.4rem; inset-inline-start: 0; z-index: 1; }
++.bottle-footer-entry { position: absolute; inset-block-end: 100%; margin-block-end: .25rem; inset-inline-start: 0; z-index: 1; }
+diff --git a/e2e/bottle-ui.test.ts b/e2e/bottle-ui.test.ts
+index e58196a..80d4bd7 100644
+--- a/e2e/bottle-ui.test.ts
++++ b/e2e/bottle-ui.test.ts
+@@ -121,6 +121,54 @@ test("both entries share the lazy card; keyboard, safe deliberate visit, focus a
+   console.log(JSON.stringify({ browser: browser.version(), lazyRequests: added }));
+ });
+ 
++for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 }]) test(`footer Bottle clears the scene with enlarged text at ${viewport.width}`, async () => {
++  const { c, p } = await open({ viewport, reducedMotion: "reduce", ...(viewport.width === 390 ? { isMobile: true, hasTouch: true } : {}) });
++  await poolFixture(c);
++  await home(p);
++  await p.evaluate(async () => { await document.fonts.ready; });
++  const button = p.locator('[data-bottle-entry="footer"]');
++  const geometry = () => button.evaluate((el) => {
++    const bottle = el.getBoundingClientRect();
++    const scene = document.querySelector(".end-canvas")!.getBoundingClientRect();
++    const footer = document.querySelector("footer.end")!.getBoundingClientRect();
++    return { height: bottle.height, gap: scene.top - bottle.bottom, left: bottle.left, right: bottle.right,
++      rootFont: parseFloat(getComputedStyle(document.documentElement).fontSize),
++      sceneTop: scene.top - footer.top, sceneWidth: scene.width, sceneHeight: scene.height, footerHeight: footer.height };
++  });
++  const assertClear = (g: Awaited<ReturnType<typeof geometry>>) => {
++    assert.ok(g.gap >= 0, `Bottle stays outside the existing scene pointer area: ${JSON.stringify(g)}`);
++    assert.ok(g.height >= 36 && g.left >= 0 && g.right <= viewport.width, "visible target retains its size and fits the viewport");
++  };
++  const baseline = await geometry();
++  assertClear(baseline);
++  // Reproduce QA's changed font metrics without changing the containing footer's layout.
++  await button.evaluate((el) => { el.style.fontSize = "24px"; });
++  const enlarged = await geometry();
++  assert.ok(enlarged.height > baseline.height, "the control actually makes the button taller");
++  assertClear(enlarged);
++  for (const key of ["sceneTop", "sceneWidth", "sceneHeight", "footerHeight"] as const) {
++    assert.equal(enlarged[key], baseline[key], `${key}: larger Bottle text preserves reserved footer geometry`);
++  }
++  if (viewport.width === 390) await button.tap(); else await button.click();
++  await panel(p).locator("[data-bottle-id]").waitFor();
++  await p.keyboard.press("Escape");
++  await p.waitForFunction(() => document.activeElement?.getAttribute("data-bottle-entry") === "footer");
++  await p.keyboard.press("Tab");
++  assert.equal(await p.locator("[data-end-mascot]").evaluate((el) => el === document.activeElement), true);
++
++  // The identical boundary assertion must reject the old fixed-offset layout.
++  await button.evaluate((el) => { el.style.insetBlockStart = "-2.4rem"; el.style.insetBlockEnd = "auto"; el.style.marginBlockEnd = "0"; });
++  const oldLayout = await geometry();
++  assert.throws(() => assertClear(oldLayout), /scene pointer area/, "old fixed offset is a failing browser negative control");
++  await button.evaluate((el) => { el.removeAttribute("style"); });
++  await p.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
++  await p.waitForFunction((size) => parseFloat(getComputedStyle(document.documentElement).fontSize) === size, baseline.rootFont * 2);
++  const scaled = await geometry();
++  assert.equal(scaled.rootFont, baseline.rootFont * 2, "root text scaling actually applied");
++  assertClear(scaled);
++  console.log(JSON.stringify({ viewport, baseline, enlarged, oldLayout, scaled, browser: browser.version() }));
++});
++
+ test("repeat exhaustion, stale stored ids, cross-entry history and bounded persistence", async () => {
+   const { c, p } = await open();
+   await poolFixture(c);
