@@ -5,6 +5,20 @@
  * Kept out of globals.css, whose named decisions are pinned; /play imports this sheet.
  */
 
+/*
+ * A print kept as the background (lib/pond-print.ts): the head script sets --pond-print on <html> before the first
+ * paint, and the page that holds the pond wears it under a veil of its own paper. --pond-wash is how much of the
+ * print shows; lib/pond-print.test.ts holds it to the number whose worst pigment keeps --ink and --muted at 4.5:1.
+ */
+body:has(.pond) {
+  --pond-wash: 4%;
+  --pond-veil: color-mix(in srgb, var(--paper) calc(100% - var(--pond-wash)), transparent);
+  background-image: linear-gradient(var(--pond-veil), var(--pond-veil)), var(--pond-print, none);
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 .pond {
   display: grid;
   grid-template-areas:
@@ -38,6 +52,36 @@
 
 .pond-canvas {
   cursor: crosshair;
+}
+
+/* Pull a print: a 4:3 sheet, the pond's full height and middle 8/9, lowered onto the water and lifted off. */
+.pond-paper {
+  position: absolute;
+  inset: 0 5.5556%;
+  background: #faf8f3;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+  pointer-events: none;
+  opacity: 0;
+  animation: pond-lower 900ms ease-in-out both;
+}
+
+@keyframes pond-lower {
+  0% {
+    opacity: 0;
+    translate: 0 -6%;
+    scale: 1.04;
+  }
+  35%,
+  65% {
+    opacity: 0.94;
+    translate: 0 0;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 -8%;
+    scale: 1.02;
+  }
 }
 
 .pond-canvas:focus-visible {
@@ -124,10 +168,19 @@
   font-weight: 700;
 }
 
+.pond-keep {
+  font-size: 0.875rem;
+}
+
+.pond-keep a {
+  text-decoration: underline;
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* The loader never mounts the pond; this hides one caught mid-switch behind the still print. */
   .pond-stage,
-  .pond-tools {
+  .pond-tools,
+  .pond-paper {
     display: none;
   }
 }

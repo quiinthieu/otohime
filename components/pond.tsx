@@ -12,9 +12,27 @@
 //
 // The canvas reports itself for scripts/probe-pond.sh: data-renderer is "webgl2" or "2d", data-drops and data-verts
 // are the model's counts, data-state is "loading", "ready" or "full" (the last op was refused at a cap).
+//
+// Prints (lib/pond-print.ts): Pull a print lowers a paper sheet over the water, redraws the engine's Marble in
+// Canvas2D at 2400x1800 with the seed's grain and downloads it as suminagashi-<seed>.png. Set as background keeps a
+// 1280x960 JPEG in localStorage and sets --pond-print at once; the root layout's head script sets it on later loads.
 import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { INK_HEX, POND_H, POND_W, WATER, pondRecipe } from "@/components/pond-static";
 import { applyOp, createMarble, replay, uForHalf, type Ink, type Marble, type Op, type Refusal } from "@/lib/marble";
+import {
+  BG_H,
+  BG_QUALITY,
+  BG_W,
+  PRINT_H,
+  PRINT_W,
+  STORAGE_KEY,
+  grain,
+  parseStoredPrint,
+  printFrame,
+  printName,
+  printSeed,
+  printUrl,
+} from "@/lib/pond-print";
 
 type Tool = "drip" | "comb" | "blow";
 
@@ -195,6 +213,39 @@ function canvas2d(ctx: CanvasRenderingContext2D): Painter {
   };
 }
 
+/** The print a sheet of w x h would lift off the pond: the water, the rings the sheet covers, then the paper's grain
+ * (water-coloured flecks and faint sumi fibres, so no colour the contrast test has not seen). Canvas2D, no filter. */
+function renderPrint(m: Marble, w: number, h: number, seed: string): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  const ctx = c.getContext("2d", { alpha: false });
+  if (!ctx) throw new Error("no 2d context");
+  ctx.fillStyle = WATER;
+  ctx.fillRect(0, 0, w, h);
+  const { s, ox, oy } = printFrame(POND_W, POND_H, w, h);
+  ctx.setTransform(s, 0, 0, s, -ox * s, -oy * s);
+  for (const d of m.drops) {
+    if (!bounds(d.pts)) continue;
+    ctx.beginPath();
+    ctx.moveTo(d.pts[0], d.pts[1]);
+    for (let i = 2; i < d.pts.length; i += 2) ctx.lineTo(d.pts[i], d.pts[i + 1]);
+    ctx.closePath();
+    ctx.fillStyle = INK_HEX[d.ink];
+    ctx.fill("evenodd");
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  for (const g of grain(seed, w, h)) {
+    ctx.globalAlpha = g.alpha;
+    ctx.fillStyle = g.light ? WATER : INK_HEX.sumi;
+    ctx.fillRect(g.x, g.y, g.size, g.size);
+  }
+  ctx.globalAlpha = 1;
+  return c;
+}
+
+const KEEP_FAILED = "Couldn't keep it here: this browser won't store the print. Pull a print to save it instead.";
+
 // mulberry32's mix on a counter: the n-th draw of a seeded sequence, in [0, 1). No Math.random.
 function hash(n: number): number {
   let t = (n * 0x6d2b79f5 + 0x5a1) >>> 0;
@@ -234,7 +285,7 @@ function segmentOp(tool: Tool, ax: number, ay: number, bx: number, by: number): 
 
 type Stroke = { ax: number; ay: number; trail: number[]; done: boolean };
 
-type Engine = { push(op: Op): void; clear(): void };
+type Engine = { push(op: Op): void; clear(): void; snapshot(): Marble };
 
 export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: () => void }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -253,6 +304,21 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
   const heading = useRef<[number, number]>([1, 0]);
   const draws = useRef(0);
   const id = useId();
+  const [sheet, setSheet] = useState(0);
+  const [pulling, setPulling] = useState(false);
+  const [pulled, setPulled] = useState<{ url: string; name: string } | null>(null);
+  const [keep, setKeep] = useState("");
+  const [kept, setKept] = useState(() => {
+    try {
+      return parseStoredPrint(localStorage.getItem(STORAGE_KEY)) !== null;
+    } catch {
+      return false;
+    }
+  });
+  const pulledUrl = useRef<string | null>(null);
+  useEffect(() => () => {
+    if (pulledUrl.current) URL.revokeObjectURL(pulledUrl.current);
+  }, []);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -414,6 +480,7 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
         draw();
         report();
       },
+      snapshot: () => marble,
     };
 
     resize();
@@ -465,6 +532,69 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
     engine.current?.push(combAcross(k % 2 === 0 ? 0 : Math.PI, 24));
   }, []);
 
+  // Pull a print: the sheet lowers (CSS only; none under reduced motion) while the print is drawn and encoded.
+  const pull = async () => {
+    const m = engine.current?.snapshot();
+    if (!m || pulling) return;
+    setPulling(true);
+    setSheet((n) => n + 1);
+    setKeep("Pulling a print…");
+    try {
+      // a frame for the sheet to start lowering before the main thread draws
+      await new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
+      const seed = printSeed(m);
+      const c = renderPrint(m, PRINT_W, PRINT_H, seed);
+      const blob = await new Promise<Blob | null>((r) => c.toBlob(r, "image/png"));
+      c.width = c.height = 0;
+      if (!blob) throw new Error("no png");
+      const url = URL.createObjectURL(blob);
+      const name = printName(seed);
+      if (pulledUrl.current) URL.revokeObjectURL(pulledUrl.current);
+      pulledUrl.current = url;
+      setPulled({ url, name });
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      a.hidden = true;
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setKeep(`Pulled ${name}.`);
+    } catch {
+      setKeep("The print didn't come off the water. Try again.");
+    } finally {
+      setPulling(false);
+    }
+  };
+
+  const keepAsBackground = () => {
+    const m = engine.current?.snapshot();
+    if (!m) return;
+    let url: string | null = null;
+    try {
+      const c = renderPrint(m, BG_W, BG_H, printSeed(m));
+      url = parseStoredPrint(c.toDataURL("image/jpeg", BG_QUALITY));
+      c.width = c.height = 0;
+      if (!url) throw new Error("no jpeg");
+      localStorage.setItem(STORAGE_KEY, url);
+    } catch {
+      setKeep(KEEP_FAILED);
+      return;
+    }
+    document.documentElement.style.setProperty("--pond-print", printUrl(url));
+    setKept(true);
+    setKeep("Kept as this page's background, faint under the paper.");
+  };
+
+  const clearBackground = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+    document.documentElement.style.removeProperty("--pond-print");
+    setKept(false);
+    setKeep("Background cleared.");
+  };
+
   const onKey = (e: KeyboardEvent<HTMLCanvasElement>) => {
     const step = e.shiftKey ? STEP * 4 : STEP;
     const move: Record<string, [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
@@ -506,6 +636,7 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
           aria-hidden="true"
           style={{ left: `${(reticle[0] / POND_W) * 100}%`, top: `${(reticle[1] / POND_H) * 100}%` }}
         />
+        {sheet > 0 && <span key={sheet} className="pond-paper" aria-hidden="true" onAnimationEnd={() => setSheet(0)} />}
       </div>
       <div className="pond-tools">
         <fieldset className="pond-set">
@@ -548,6 +679,30 @@ export default function Pond({ onLive, onLost }: { onLive: () => void; onLost: (
         </p>
         <p className="pond-status" aria-live="polite" data-full={full ? "" : undefined}>
           {status}
+        </p>
+        <div className="pond-chips">
+          <button type="button" className="chip" onClick={pull} aria-disabled={pulling || undefined}>
+            Pull a print
+          </button>
+          <button type="button" className="chip" onClick={keepAsBackground}>
+            Set as background
+          </button>
+          {kept && (
+            <button type="button" className="chip" onClick={clearBackground}>
+              Clear background
+            </button>
+          )}
+        </div>
+        <p className="pond-keep" aria-live="polite">
+          {keep}
+          {pulled && (
+            <>
+              {" "}
+              <a href={pulled.url} download={pulled.name}>
+                Download {pulled.name}
+              </a>
+            </>
+          )}
         </p>
       </div>
     </>

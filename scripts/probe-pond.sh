@@ -13,9 +13,11 @@
 # pointercancel. The Tool and Ink radio groups, Random drip, Comb across and Clear work, the arrow-key reticle with
 # Space drops ink, the canvas's role=img label and the aria-live line follow the count, and enough random drips show
 # "The pond is full". A page with no WebGL2 falls back to Canvas2D, a lost WebGL context brings the print back, and
-# reduced motion switched on unmounts the canvas. Under reduced motion from the start, and with JavaScript off, the
-# SVG shows with no canvas, and the pond's lazy chunk (found by its shader comment) is never requested; /play's HTML
-# names no pond chunk. axe (wcag2a/aa/21aa) finds nothing serious or critical on /play, still and live. Negative
+# reduced motion switched on unmounts the canvas. Pull a print downloads a 2400x1800 PNG (signature and IHDR read);
+# Set as background keeps a 1280x960 JPEG, sets --pond-print by the first frame after a reload, and Clear background
+# removes it; blocked storage says "Couldn't keep it here"; the page's own wash keeps 4.5:1 and 20% fails (a negative
+# control). Under reduced motion from the start, and with JavaScript off, the SVG shows with no canvas, and the
+# pond's lazy chunk (found by its shader comment) is never requested; /play's HTML names no pond chunk. axe (wcag2a/aa/21aa) finds nothing serious or critical on /play, still and live. Negative
 # controls: with the motion guard bypassed the reduced-motion check catches the canvas, and with animation frames
 # stopped the drip check catches the unchanged count. No console or page error anywhere.
 #
@@ -133,4 +135,5 @@ if ! "$PW/node_modules/.bin/playwright" install chromium --only-shell >"$WORK/br
 fi
 
 export BASE_URL PW_PREFIX="$PW"
-node "$ROOT/scripts/probe-pond.mjs"
+# --experimental-strip-types: the probe judges the wash with lib/pond-print.ts's own contrast sums.
+node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON "$ROOT/scripts/probe-pond.mjs"

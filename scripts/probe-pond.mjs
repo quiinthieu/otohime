@@ -6,9 +6,16 @@
 // one after Clear must differ from the print (the print was drawn). The pond's lazy chunk is found by its shader's
 // first comment among the scripts /play requests with motion; it must be absent under reduced motion and from the
 // HTML. A real touch drag goes through CDP, so the browser decides whether to take it for scrolling (pointercancel).
-import { mkdirSync, writeFileSync } from "node:fs";
+//
+// Prints (lib/pond-print.ts): Pull a print must download a real PNG (its signature and its IHDR's 2400x1800), Set as
+// background must leave --pond-print on <html> through a reload, set by the head script before the first frame, and
+// Clear background must take it away. A storage that refuses the write says "Couldn't keep it here", and a stored
+// value that is not our JPEG sets nothing. The wash is read back from the page's computed colours: at the page's
+// own --pond-wash the worst pigment keeps --ink and --muted at 4.5:1, and at 20% (the negative control) it fails.
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { PIGMENTS, worstContrast } from "../lib/pond-print.ts";
 
 const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
 const { chromium } = require("playwright");
@@ -451,6 +458,145 @@ async function negatives(browser) {
   }
 }
 
+const PNG_SIGNATURE = "89504e470d0a1a0a";
+const KEEP = `${POND} .pond-keep`;
+const pondPrint = (page) => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--pond-print").trim());
+const keepText = (page) => page.locator(KEEP).textContent();
+
+async function waitKeep(page, prefix, timeout = 15000) {
+  try {
+    await page.waitForFunction(({ sel, prefix }) => document.querySelector(sel)?.textContent.startsWith(prefix), { sel: KEEP, prefix }, { timeout, polling: 50 });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// The colours the wash works with, as the page computes them: its paper, ink, muted text and --pond-wash.
+const pageColours = (page) =>
+  page.evaluate((sel) => {
+    const rgb = (c) => (c.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
+    const body = getComputedStyle(document.body);
+    return {
+      paper: rgb(body.backgroundColor),
+      ink: rgb(body.color),
+      muted: rgb(getComputedStyle(document.querySelector(sel)).color),
+      wash: parseFloat(body.getPropertyValue("--pond-wash")) / 100,
+      image: body.backgroundImage.slice(0, 160),
+    };
+  }, "main p.text-muted");
+
+const worstOn = (c, wash) => Math.min(worstContrast(c.ink, c.paper, wash, PIGMENTS).ratio, worstContrast(c.muted, c.paper, wash, PIGMENTS).ratio);
+
+async function prints(browser) {
+  const name = "1366x768 prints";
+  const { page, context } = await open(browser, { viewport: DESKTOP });
+  try {
+    await page.goto(`${BASE_URL}/play`, { waitUntil: "load" });
+    await page.locator(POND).scrollIntoViewIfNeeded();
+    if (!(await waitReady(page))) {
+      check(`${name}: the pond came live`, false);
+      return;
+    }
+    check(`${name}: no print is kept yet: no --pond-print, no Clear background`, (await pondPrint(page)) === "" && (await button(page, "Clear background").count()) === 0);
+
+    // Pull a print: a sheet lowers, a PNG downloads.
+    const download = page.waitForEvent("download", { timeout: 15000 }).catch(() => null);
+    await button(page, "Pull a print").click();
+    const sheet = await page.locator(`${POND} .pond-paper`).count();
+    const got = await download;
+    check(`${name}: Pull a print lowers a paper sheet over the pond`, sheet === 1, `${sheet} sheets`);
+    check(`${name}: Pull a print downloads suminagashi-<seed>.png`, !!got && /^suminagashi-[0-9a-f]{8}\.png$/.test(got.suggestedFilename()), got ? got.suggestedFilename() : "no download");
+    if (got) {
+      const file = path.join(process.env.TMPDIR || "/tmp", got.suggestedFilename());
+      await got.saveAs(file);
+      const png = readFileSync(file);
+      const sig = png.subarray(0, 8).toString("hex");
+      const ihdr = png.subarray(12, 16).toString("latin1");
+      const [w, h] = [png.readUInt32BE(16), png.readUInt32BE(20)];
+      check(`${name}: the download is a PNG (signature 89 50 4E 47 0D 0A 1A 0A)`, sig === PNG_SIGNATURE, sig);
+      check(`${name}: and its IHDR says 2400x1800`, ihdr === "IHDR" && w === 2400 && h === 1800, `${ihdr} ${w}x${h}`);
+      check(`${name}: and it holds a pattern, not a blank sheet (over 100 kB)`, png.length > 100_000, `${png.length} bytes`);
+      if (SHOTS_DIR) writeFileSync(path.join(SHOTS_DIR, "print.png"), png);
+    }
+    const link = page.locator(`${KEEP} a[download]`);
+    check(`${name}: a Download link to the print stays`, (await link.count()) === 1 && /^suminagashi-[0-9a-f]{8}\.png$/.test((await link.getAttribute("download")) ?? ""));
+
+    // Set as background: kept in localStorage, on <html> at once.
+    await button(page, "Set as background").click();
+    const kept = await waitKeep(page, "Kept as this page's background");
+    const stored = await page.evaluate(() => localStorage.getItem("pond:print"));
+    const size = stored ? await page.evaluate((src) => new Promise((r) => { const i = new Image(); i.onload = () => r(`${i.naturalWidth}x${i.naturalHeight}`); i.onerror = () => r("broken"); i.src = src; }), stored) : "none";
+    check(`${name}: Set as background keeps a 1280x960 JPEG data URL in localStorage['pond:print']`, kept && stored?.startsWith("data:image/jpeg;base64,") && size === "1280x960", `${await keepText(page)} / ${stored?.slice(0, 30)} / ${size}`);
+    check(`${name}: and sets --pond-print on <html> at once`, (await pondPrint(page)).startsWith('url("data:image/jpeg;base64,'));
+    const colours = await pageColours(page);
+    check(`${name}: the page's body wears the print under its paper's veil`, colours.image.includes("linear-gradient") && colours.image.includes("data:image/jpeg"), colours.image);
+    console.log(`# ${name}: wash ${colours.wash}, paper ${colours.paper}, ink ${colours.ink}, muted ${colours.muted}, ${stored?.length} chars stored`);
+    const worst = worstOn(colours, colours.wash);
+    check(`${name}: at the page's wash (${colours.wash * 100}%, at most 6%) the worst pigment keeps ink and muted at 4.5:1`, colours.wash > 0 && colours.wash <= 0.06 && worst >= 4.5, `${worst.toFixed(2)}:1`);
+    await page.evaluate(() => document.body.style.setProperty("--pond-wash", "20%"));
+    const heavy = await pageColours(page);
+    const sunk = worstOn(heavy, heavy.wash);
+    check("negative control: with --pond-wash at 20% the same contrast check fails", heavy.wash === 0.2 && sunk < 4.5, `${heavy.wash}, ${sunk.toFixed(2)}:1`);
+    await page.evaluate(() => document.body.style.removeProperty("--pond-wash"));
+
+    // A reload: the head script sets it before the first frame.
+    await page.addInitScript(() => {
+      requestAnimationFrame(() => {
+        window.__firstFrame = getComputedStyle(document.documentElement).getPropertyValue("--pond-print").trim().slice(0, 40);
+      });
+    });
+    await page.reload({ waitUntil: "load" });
+    const first = await page.evaluate(() => window.__firstFrame ?? null);
+    check(`${name}: after a reload --pond-print is set by the first frame`, (first ?? "").startsWith('url("data:image/jpeg;base64,') && (await pondPrint(page)).startsWith('url("data:image/jpeg'), `first frame ${first}`);
+    const reloaded = await pageColours(page);
+    check(`${name}: and the body wears it again`, reloaded.image.includes("data:image/jpeg"), reloaded.image);
+
+    // Clear background.
+    await page.locator(POND).scrollIntoViewIfNeeded();
+    await waitReady(page);
+    await button(page, "Clear background").click();
+    await waitKeep(page, "Background cleared");
+    const after = { prop: await pondPrint(page), stored: await page.evaluate(() => localStorage.getItem("pond:print")), button: await button(page, "Clear background").count() };
+    check(`${name}: Clear background removes --pond-print, the stored print and itself`, after.prop === "" && after.stored === null && after.button === 0, JSON.stringify(after));
+    await page.reload({ waitUntil: "load" });
+    const cleared = { first: await page.evaluate(() => window.__firstFrame ?? null), image: (await pageColours(page)).image };
+    check(`${name}: and after a reload it stays gone`, cleared.first === "" && !cleared.image.includes("data:image"), JSON.stringify(cleared));
+
+    // Storage holding something that is not our JPEG sets nothing.
+    await page.evaluate(() => localStorage.setItem("pond:print", 'data:image/png;base64,iVBORw0KGgo=")}body{background:red'));
+    await page.reload({ waitUntil: "load" });
+    check(`${name}: a stored value that is not our JPEG sets no --pond-print`, (await pondPrint(page)) === "");
+    await page.evaluate(() => localStorage.removeItem("pond:print"));
+  } finally {
+    await context.close();
+  }
+
+  // A storage that refuses the write (quota, or blocked) says so and sets nothing.
+  const blocked = await open(browser, {
+    viewport: DESKTOP,
+    init: [
+      () => {
+        Storage.prototype.setItem = function () {
+          throw new DOMException("The quota has been exceeded.", "QuotaExceededError");
+        };
+      },
+    ],
+  });
+  try {
+    const page = blocked.page;
+    await page.goto(`${BASE_URL}/play`, { waitUntil: "load" });
+    await page.locator(POND).scrollIntoViewIfNeeded();
+    if (await waitReady(page)) {
+      await button(page, "Set as background").click();
+      const said = await waitKeep(page, "Couldn't keep it here", 5000);
+      check(`${name}: with storage full or blocked, Set as background says "Couldn't keep it here" and sets nothing`, said && (await pondPrint(page)) === "", await keepText(page));
+    } else check(`${name}: the pond came live with storage blocked`, false);
+  } finally {
+    await blocked.context.close();
+  }
+}
+
 // WebGL2 through SwiftShader where the machine has no GPU; the page falls back to Canvas2D when even that fails.
 const browser = await chromium.launch({ args: ["--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
 try {
@@ -472,6 +618,7 @@ try {
     check(`${name} JavaScript off: the SVG print shows and no canvas`, off.svg.shown && off.canvases === 0, `${off.svg.why}, ${off.canvases} canvases`);
     check(`${name} JavaScript off: the claw machine still renders`, off.claw.shown, off.claw.why);
   }
+  await prints(browser);
   await fallback(browser);
   await negatives(browser);
   check("no console errors or page errors", errors.length === 0, errors.slice(0, 3).join(" | "));

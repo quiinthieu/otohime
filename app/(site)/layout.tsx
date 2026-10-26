@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { SeasonLayer } from "@/components/season-layer";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
+import { pondPrintScript } from "@/lib/pond-print";
 import { seasonScript } from "@/lib/seasons";
 import "./globals.css";
 import "./seasons.css";
@@ -34,7 +35,8 @@ const pinTheme = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="d
 const holdForHop = `addEventListener("pagereveal",function(e){var v=e.viewTransition;if(!v)return;document.__reactViewTransition=v;var c=function(){if(document.__reactViewTransition===v)document.__reactViewTransition=null};v.finished.then(c,c)})`;
 
 // suppressHydrationWarning: the scripts add data-theme, data-season and data-booted (lib/boot.ts: the console already booted
-// this session, so Home shows its menu at once) before React hydrates.
+// this session, so Home shows its menu at once) before React hydrates, and pondPrintScript (lib/pond-print.ts) sets a
+// kept pond print as --pond-print, so the pond's page wears it from the first frame (app/(site)/pond.css).
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
@@ -47,6 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
         <script dangerouslySetInnerHTML={{ __html: seasonScript }} />
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        <script dangerouslySetInnerHTML={{ __html: pondPrintScript }} />
       </head>
       <body className="min-h-full">
         {/* The season's ambient bits, fixed behind every page and ahead of each group's masthead; mounted here once,
