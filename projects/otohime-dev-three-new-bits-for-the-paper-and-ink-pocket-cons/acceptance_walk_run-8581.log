@@ -1,0 +1,39 @@
+PASS | [1366x768] home status | status=200
+PASS | [1366x768] home build-sha | build-sha=d8a9be17b0cc16d26c8f774d83ce118de874cdf2
+PASS | [1366x768] clock+zone season (Sydney, 26 Oct) | data-season=spring
+PASS | [1366x768] ambient layer | {"aria":"true","pe":"none","z":"-1","bits":16,"total":19}
+PASS | [1366x768] season dial radios | radios=5
+PASS | [1366x768] dial pick winter | data-season=winter
+PASS | [1366x768] dial pick persists across reload | data-season=winter localStorage=winter
+PASS | [1366x768] ask: canned answer types out | contains WORK: true; excerpt="ASK THE CONSOLE Close Ask about my work, notes and projects > > what is your work WORK: I build the pipes between where "
+PASS | [1366x768] ask: citations link to source page | [["-> Work","/work"]]
+FAIL | [1366x768] ask: model endpoint /api/ask called by console | requests to /api/ask=0 
+FAIL | [1366x768] ask: POST /api/ask from origin | status=404
+PASS | [1366x768] unknown path status | status=404
+PASS | [1366x768] 404 five plain links | links=["/","/work","/projects","/notes","/play"]
+PASS | [1366x768] 404 smooth island (JS on) | button=true
+PASS | [1366x768] 404 smooth to flat | trail=["20% smooth.","40% smooth.","60% smooth.","80% smooth.","Flat again. Pick a way back."]
+PASS | [1366x768] 404 no-JS links reachable | {"/":200,"/work":200,"/projects":200,"/notes":200,"/play":200}
+PASS | [1366x768] reduced motion: no island, no layer bits | island=0 layerBits=0
+PASS | [1366x768] home no horizontal overflow | overflow=0
+FAIL | [1366x768] console/page errors (home, Ask, 404) | ["http 404 POST https://otohime.dev/api/ask","console: Failed to load resource: the server responded with a status of 404 ()"]
+PASS | [390x844] home status | status=200
+PASS | [390x844] home build-sha | build-sha=d8a9be17b0cc16d26c8f774d83ce118de874cdf2
+PASS | [390x844] clock+zone season (Sydney, 26 Oct) | data-season=spring
+PASS | [390x844] ambient layer | {"aria":"true","pe":"none","z":"-1","bits":16,"total":19}
+PASS | [390x844] season dial radios | radios=5
+PASS | [390x844] dial pick winter | data-season=winter
+PASS | [390x844] dial pick persists across reload | data-season=winter localStorage=winter
+PASS | [390x844] ask: canned answer types out | contains WORK: true; excerpt="ASK THE CONSOLE Close Ask about my work, notes and projects > > what is your work WORK: I build the pipes between where "
+PASS | [390x844] ask: citations link to source page | [["-> Work","/work"]]
+FAIL | [390x844] ask: model endpoint /api/ask called by console | requests to /api/ask=0 
+FAIL | [390x844] ask: POST /api/ask from origin | status=404
+PASS | [390x844] unknown path status | status=404
+PASS | [390x844] 404 five plain links | links=["/","/work","/projects","/notes","/play"]
+PASS | [390x844] 404 smooth island (JS on) | button=true
+PASS | [390x844] 404 smooth to flat | trail=["20% smooth.","40% smooth.","60% smooth.","80% smooth.","Flat again. Pick a way back."]
+PASS | [390x844] 404 no-JS links reachable | {"/":200,"/work":200,"/projects":200,"/notes":200,"/play":200}
+PASS | [390x844] reduced motion: no island, no layer bits | island=0 layerBits=0
+PASS | [390x844] home no horizontal overflow | overflow=0
+FAIL | [390x844] console/page errors (home, Ask, 404) | ["http 404 POST https://otohime.dev/api/ask","console: Failed to load resource: the server responded with a status of 404 ()"]
+SUMMARY 32/38 pass
