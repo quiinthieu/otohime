@@ -1,0 +1,237 @@
+[
+  {
+    "sequence": 1,
+    "title": "Surface CI probe annotations and streamed footer headings",
+    "role": "software_engineer",
+    "qa": "skip",
+    "depends_on": [],
+    "problem": "GitHub checks failures in Footer Chromium probe (workflows 40387187938 and 40409123749) write diagnostics only to GITHUB_STEP_SUMMARY, leaving public check annotations blank when raw logs return HTTP 403, and scripts/probe-end.mjs reads main h1 on /dashboard after a fixed 450ms pause while app/(site)/(app)/dashboard/loading.tsx can still stream a headingless skeleton under CI load.",
+    "action_items": [
+      "Implement scripts/ci-probe-annotate.mjs to execute or post-process non-TAP CI steps, preserve exact child exit codes under pipefail, write bounded escaped step summaries when GITHUB_STEP_SUMMARY is set, and emit GitHub workflow ::error title=...::... lines to stdout (escaping %, \\r, \\n, : and ,) with failed assertions, counts, and bounded next-start.log tails including missing-log handling.",
+      "Wire scripts/ci-probe-annotate.mjs into .github/workflows/ci.yml around Real CPU camera and privacy verifier, Motion probe, signed in, Footer walk, and Footer Chromium probe while retaining exact bash scripts/walk-end.sh and bash scripts/probe-end.sh invocations required by lib/end.test.ts and scripts/ci-workflow.test.mjs.",
+      "Update scripts/probe-end.mjs around the local 390x844 reduced-motion 403 exit check so after navigation to /projects or /dashboard it observes a rendered non-empty main h1 within a bounded 10s timeout instead of sampling loading.tsx's headingless skeleton after 450ms; preserve all existing probe assertions and scripts/probe-motion-signed-in.mjs.",
+      "Add scripts/ci-probe-annotate.test.mjs (exercising workflow shell execution against exit-7 and exit-0 fixtures, ::error escaping, and missing next-start.log) and scripts/probe-end-stream.test.mjs (exercising a 1.5s delayed streamed /dashboard heading positive control and a missing-heading timeout negative control). Extend scripts/ci-workflow.test.mjs, update architecture.md, run local gates including check-gate-closure.mjs, and stop at tested commit and push. If a person-only prerequisite appears, raise plan_manager_ask_user(kind=operator_action) immediately at task start."
+    ],
+    "interfaces": [
+      ".github/workflows/ci.yml",
+      "scripts/ci-probe-annotate.mjs",
+      "scripts/ci-probe-annotate.test.mjs",
+      "scripts/ci-workflow.test.mjs",
+      "scripts/probe-end.mjs",
+      "scripts/probe-end-stream.test.mjs",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/architecture.md"
+    ],
+    "non_goals": [
+      "weakening or deleting any Footer walk, Footer Chromium probe, or signed-in motion assertion",
+      "changing public route UI or Bottle and Peep-box styles",
+      "polling CI or deployed endpoints from inside the SWE run"
+    ],
+    "acceptance_criteria": "Any failure in CI camera, signed-in motion, Footer walk, or Footer Chromium probe preserves its nonzero exit status while emitting escaped ::error workflow annotations with the failing assertion and bounded server log tail, and probe-end.mjs resolves streamed /dashboard headings deterministically without skeleton races while failing when headings remain absent.",
+    "verification": [
+      {
+        "name": "CI probe annotation and streamed heading contracts",
+        "cwd": ".",
+        "cmd": "node --test scripts/ci-probe-annotate.test.mjs scripts/probe-end-stream.test.mjs scripts/ci-workflow.test.mjs",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "repository unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "lint and type contracts",
+        "cwd": ".",
+        "cmd": "npm run lint && npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "gate closure invariants",
+        "cwd": ".",
+        "cmd": "node scripts/check-gate-closure.mjs",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "CI-mode isolated footer walk and Chromium probe",
+        "cwd": ".",
+        "cmd": "node scripts/verify-bottle-footer.mjs",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Contain footer Bottle within reserved header band and certify Bottle UI",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "1"
+    ],
+    "problem": "Although commit 2540012 anchored .bottle-footer-entry above .end-canvas, run-9095's own geometry-scale.log shows .end-inner only reserves 38px above the scene gap while 24px button text makes the Bottle 43.1875px tall—protruding 5.1875px above footer.end's top border—and pixel font sizing keeps root 200% text scaling from enlarging the button label; meanwhile t-1588 was superseded before Bottle UI reached done.",
+    "action_items": [
+      "Read installed Next 16.4.2 lazy-loading guide before editing client boundaries. Update app/(site)/globals.css (.end-inner top padding >= 3.75rem) and components/bottle/button.css (rem-based font-size and 44px minimum touch target height while keeping position: absolute; inset-block-end: 100%; margin-block-end: .25rem) so the footer Bottle stays strictly inside footer.end's top border/hairline and strictly above .end-canvas across default text, 24px and 32px button font overrides, and settled 200% root font scaling at 1366x768, 768x1024, and 390x844, without disturbing stage-vs-copy alignment (<40px), /music TV clear gap (>=16px), or <=1px state-to-state layout stability.",
+      "Add lib/bottle-footer-layout.test.ts testing pure and stylesheet clearance invariants for footer top-border containment, scene-top separation, rem root scaling, and 44px target height, including negative controls for both the pre-2540012 -2.4rem top-offset overlap and the 2540012 2.5rem-padding top-border protrusion.",
+      "Extend e2e/bottle-ui.test.ts to assert both scene clearance (scene.top - bottle.bottom >= 0) and footer top-border containment (bottle.top >= footerContentTop) plus genuine button height growth under settled 200% root font scaling and 24px/32px button text at 1366x768 and 390x844, with browser negative controls proving both old -2.4rem scene overlap and 2.5rem-padding top-border overflow fail the identical helper.",
+      "Verify and preserve the complete Bottle footer and Pocket contract on main: gesture-only lazy chunk loading (bootstrap <=3KiB gzip, panel/CSS <=25KiB gzip, CLS <=0.001), bounded bottles:v1 no-repeat history and blocked-storage fallback, deliberate target=_blank rel='noopener noreferrer' Visit links, Escape focus return to originating entry, legacy Tab order before [data-end-mascot], inert pending suggestion submission with 429/offline resilience, reduced-motion cancellation, and no-JS baseline. Update architecture.md, run all local gates including check-gate-closure.mjs and verify-bottle-footer.mjs, and stop at tested commit and push."
+    ],
+    "interfaces": [
+      "components/bottle/",
+      "components/end-footer.tsx",
+      "components/handheld.tsx",
+      "app/(site)/globals.css",
+      "lib/bottles.ts",
+      "lib/bottles.test.ts",
+      "lib/bottle-footer-layout.test.ts",
+      "e2e/bottle-ui.test.ts",
+      "scripts/verify-bottle-footer.mjs",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/architecture.md"
+    ],
+    "non_goals": [
+      "changing Bottle database schema, moderation RBAC, or curated seed semantics",
+      "auto-opening external links or weakening probe-end.mjs geometry checks",
+      "modifying Kamishibai Theatre or Peep-box camera worker code"
+    ],
+    "acceptance_criteria": "Footer and Pocket Bottle buttons open the accessible paper discovery and pending-suggestion panel within lazy bundle and zero-CLS budgets, keep >=44px targets strictly inside footer.end and above .end-canvas at default, 24px/32px button text, and settled 200% root scaling on desktop and mobile, and pass CI-mode footer walk, Chromium probe, and gate-closure checks.",
+    "verification": [
+      {
+        "name": "Bottle layout and picker unit contracts",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/bottle-footer-layout.test.ts lib/bottles.test.ts",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "repository unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "lint and type contracts",
+        "cwd": ".",
+        "cmd": "npm run lint && npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "gate closure invariants",
+        "cwd": ".",
+        "cmd": "node scripts/check-gate-closure.mjs",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Bottle production-browser flow and enlarged-text containment",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/bottle-ui.test.ts",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "CI-mode isolated footer walk and Chromium probe",
+        "cwd": ".",
+        "cmd": "node scripts/verify-bottle-footer.mjs",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Reflow Peep-box camera tools under zoom and certify on-device head tracking",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "2"
+    ],
+    "problem": "Task t-1591 was superseded when revision 2 opened before opt-in head tracking reached done, and components/peep-box/peep-box.css sets a fixed .peep-tools height: 460px that clips or overflows camera status and directional controls under 390x844 mobile enlarged text and 200% root scaling.",
+    "action_items": [
+      "Read installed Next 16.4.2 lazy-loading and content-security-policy guides before changing Play client or header code. Update components/peep-box/peep-box.css so .peep-tools reserves min-height: 460px (preserving zero CLS at default text size) while expanding cleanly without internal clipping or sibling/footer overlap under 24px control text and settled 200% root font scaling at 390x844 and 1366x768.",
+      "Add lib/peep-box-layout.test.ts validating Peep-box aperture and tools sizing rules and enlarged-text reflow invariants alongside lib/head-tracker.test.ts and lib/peep-box-assets.test.ts.",
+      "Extend e2e/peep-box-camera.test.ts with 390x844 and 1366x768 enlarged-text and 200% root-font reflow assertions (including a browser negative control proving fixed height: 460px overflows scrollHeight > clientHeight when camera status/error copy and directional buttons are enlarged), while preserving zero-CLS default activation.",
+      "Re-verify and preserve the complete opt-in on-device camera contract on main: click-only video-without-audio consent before downloading MediaPipe 0.10.32 Wasm/model, checksum-verified same-origin vendoring into gitignored public/vendor/peep-box, real CPU FaceLandmarker inference on the pinned NASA public-domain fixture (478 landmarks, translated-pose delta, same-fixture zero-landmark crop and recovery), Off/Disable/hidden/offscreen/pagehide/route-exit/reduced-motion/pending-permission track and worker disposal without auto-resume, /play Permissions-Policy camera=(self), microphone=(), worker-scoped CSP, and zero frame-bearing network requests. Record updated verification fingerprints in architecture.md, run all seven local verification gates including full serial npm run test:e2e and verify-bottle-footer.mjs, and stop at tested commit and push."
+    ],
+    "interfaces": [
+      "components/peep-box/",
+      "lib/head-tracker.ts",
+      "lib/head-tracker.test.ts",
+      "lib/peep-box-assets.test.ts",
+      "lib/peep-box-layout.test.ts",
+      "content/peep-box-assets.json",
+      "content/peep-box-test-assets.json",
+      "scripts/vendor-peep-box.mjs",
+      "scripts/verify-peep-box-camera.mjs",
+      "e2e/peep-box-camera.test.ts",
+      "e2e/peep-box-face-fixture.ts",
+      "next.config.ts",
+      "package.json",
+      "package-lock.json",
+      ".gitignore",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/architecture.md"
+    ],
+    "non_goals": [
+      "remote face inference, biometric persistence, or committed Wasm/model/fixture binaries",
+      "camera autoplay, silent resume after visibility/navigation, or microphone permissions",
+      "requiring physical webcam or mobile sensor hardware as a delivery gate"
+    ],
+    "acceptance_criteria": "Use my camera strictly opts into same-origin checksum-verified MediaPipe 0.10.32 CPU/GPU worker tracking that drives off-axis Ryugu-jo layers with proven real 478-landmark fixture inference, zero frame egress, complete lifecycle disposal, and overflow-free 390x844/1366x768 enlarged-text and 200% zoom reflow while passing full serial E2E and CI-mode footer checks.",
+    "verification": [
+      {
+        "name": "Peep-box layout, head tracker lifecycle and asset contracts",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/peep-box-layout.test.ts lib/head-tracker.test.ts lib/peep-box-assets.test.ts",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "repository unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "lint and type contracts",
+        "cwd": ".",
+        "cmd": "npm run lint && npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "pinned assets intact",
+        "cwd": ".",
+        "cmd": "node scripts/vendor-peep-box.mjs && node scripts/vendor-peep-box.mjs --check",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "real CPU adapter and camera privacy in isolated production browser",
+        "cwd": ".",
+        "cmd": "node scripts/verify-peep-box-camera.mjs",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "complete serial browser regression suite",
+        "cwd": ".",
+        "cmd": "npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1800
+      },
+      {
+        "name": "footer CI-mode regression",
+        "cwd": ".",
+        "cmd": "node scripts/verify-bottle-footer.mjs",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  }
+]
