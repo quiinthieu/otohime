@@ -1,1 +1,2 @@
-<this commit> pm-271/t-1561: Open the Tamatebako over the changelog replay  (delivery, run-8935; its sha is the git_sha of the run-8935 summary report)
+e3852eb46f06192140c7ff292e78444c736e4467 pm-271/t-1561: Open the Tamatebako over the changelog replay  (delivery, run-8935)
+<this commit> pm-271/t-1561: Render the Tamatebako in a test, real and empty changelog  (delivery, run-8986; its sha is the git_sha of the run-8986 summary report)

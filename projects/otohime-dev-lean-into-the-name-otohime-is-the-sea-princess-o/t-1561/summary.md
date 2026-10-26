@@ -60,3 +60,23 @@ spaces.
   production `next start` server, and Google Chrome via playwright-core.
 - Not exercised: a browser render of the empty-history state (covered by unit tests and a source assertion), and the
   deployed site (QA owns it).
+
+## run-8986 (fix cycle after qa_report_run-8955, cause=environment)
+
+- Deploy blocker: cleared. At the start of the run, `https://otohime.dev/api/health` served `074059495faf`, which
+  contains e3852eb (`git merge-base --is-ancestor`). Live `/ryugu` contains the Tamatebako, "A changelog replay" and
+  the scrubber. I made no CI change; deployed QA belongs to the next QA run.
+- Vacuous gate: `app/(ryugu)/_lib/tamatebako-render.test.ts` (2 tests) compiles the real `_components/tamatebako.tsx`
+  with the repo's TypeScript and renders it with `react-dom/server`.
+  - Real `content/history.json`: a shut box (`aria-expanded="false"`, replay `hidden`), labelled a changelog replay.
+    A labelled `type="range"` scrubber has min 0, max n-1 and value n-1, with `aria-valuetext` set to the newest
+    commit. The leaf shows that commit's date, subject and sha on fresh paper (`data-age="0.000"`). No empty box.
+  - Empty, null or zero-entry index: the empty box, and no scrubber, leaf or `<time>`.
+  - Each case is the other's negative control. A mutation that forces the empty branch fails test 1.
+  - `wiring.test.ts` now requires the file. npm test's existing `app/(ryugu)/_lib/*.test.ts` glob runs it, so
+    package.json is unchanged.
+- Verification (darwin, Node 22.23.3, after `npm ci`):
+  - `npm test`: exit 0.
+  - `npm run lint`: exit 0, with 0 errors and 10 pre-existing warnings, none in touched files.
+  - `npm run build`: exit 0 from the space-free clone /tmp/oto-8986 after `rm -rf .next`. `/ryugu` is static (○),
+    with 200 of 493 commits indexed.
