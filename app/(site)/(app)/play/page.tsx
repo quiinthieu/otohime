@@ -3,11 +3,14 @@ import { swatches } from "@/components/figures";
 import { InkPressLoader } from "@/components/ink-press-loader";
 import { PondLoader } from "@/components/pond-loader";
 import { PondStatic } from "@/components/pond-static";
+import { PeepBoxLoader } from "@/components/peep-box/loader";
+import { PeepBoxScene } from "@/components/peep-box/scene";
 import { StampHeading } from "@/components/stamp-heading";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
 import "../../pond.css";
+import "@/components/peep-box/peep-box.css";
 
 export const metadata: Metadata = { title: "Play" };
 
@@ -37,6 +40,11 @@ export default function PlayPage() {
           </h2>
           <p className="mt-2 mb-4 text-muted">Type a word or a short phrase and pull a poster in wet ink: stamp, riso or brush. Shuffle for another print.</p>
           <InkPressLoader />
+        </section>
+        <section className="peep-box" aria-labelledby="peep-heading">
+          <h2 id="peep-heading" className="caption">Ryugu-jo peep-box</h2>
+          <p className="mt-2 mb-4 text-muted">Peek through a paper window into the sea princess’s palace. Move your pointer, use the direction buttons, or choose tilt.</p>
+          <PeepBoxLoader><PeepBoxScene /></PeepBoxLoader>
         </section>
         <h2 className="caption mt-12">In rotation</h2>
         <ul className="mt-3 grid gap-x-10 sm:grid-cols-2">

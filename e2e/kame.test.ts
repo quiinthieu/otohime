@@ -85,9 +85,9 @@ test("local calendar fixture increments once per day, friendly on day three and 
 
 test("keyboard hold threshold, focus loss, live reduced motion and Pocket pause", async (t) => {
   const { page } = await open(t, {}, undefined, true); await ready(page);
-  // Freeze elapsed time before boundary assertions; real scheduling overhead must
-  // not turn a 499ms fixture into a completed 500ms hold on a loaded CI worker.
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
+  // install() keeps time running during hydration. Freeze before key-down so
+  // protocol time cannot turn the 499ms negative control into a 500ms hold.
+  await page.clock.pauseAt(new Date("2026-10-26T13:00:00+09:00"));
   const pet = page.getByRole("button", { name: "Hold to pet Kame" });
   await pet.focus(); await page.keyboard.down("Space"); await page.clock.runFor(499);
   assert.notEqual(await state(page), "pet");

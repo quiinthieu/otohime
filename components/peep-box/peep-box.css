@@ -1,0 +1,63 @@
+.peep-box {
+  margin-top: 3rem;
+}
+.peep-aperture {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 5 / 3;
+  width: 100%;
+  border: 9px solid var(--paper-2);
+  outline: 1px solid var(--ink);
+  outline-offset: -1px;
+  border-radius: 42% 42% 4px 4px / 12% 12% 4px 4px;
+  box-shadow:
+    inset 0 0 0 1px var(--ink),
+    3px 4px 0 var(--line);
+  background: var(--paper);
+  touch-action: pan-y;
+}
+.peep-aperture svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.peep-label {
+  position: absolute;
+  bottom: 0.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.15rem 0.5rem;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  border: 1px solid var(--line);
+}
+.peep-tools {
+  height: 320px;
+  padding-top: 1rem;
+}
+.peep-tools button {
+  min-height: 44px;
+  padding: 0.4rem 0.8rem;
+}
+.peep-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+.peep-status {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.6rem;
+}
+.peep-tools button:disabled {
+  opacity: 0.5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .peep-aperture * {
+    transition: none;
+  }
+}
