@@ -88,7 +88,7 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
   "problem": "Paper surfaces have no reversible tear interaction, and adding separate drag listeners would conflict with navigation, scrolling and existing toys.",
   "action_items": [
     "Declare and test lib/tactile.ts first: stable surface ids, opt-in discovery, route exclusion, route-session state and one-pointer gesture arbitration (idle/peel/hold/fetch/crumple). Inject clock, storage and seed; invalid or throwing storage falls back to memory. Keep the pure interface independent of React.",
-"Implement components/tactile/loader.tsx and paper-layer.tsx, mounted once in the existing app/(site)/layout.tsx. Render null on the server; dynamically import only after window load and idle, and only on eligible public routes. Save-Data leaves an on-demand enable control; reduced motion keeps instant keyboard operations. Cleanup listeners, captures and transforms on route departure/pagehide; clear route-session storage on route departure only.",
+    "Implement components/tactile/loader.tsx and paper-layer.tsx, mounted once in the existing app/(site)/layout.tsx. Render null on the server; dynamically import only after window load and idle, and only on eligible public routes. Save-Data leaves an on-demand enable control; reduced motion keeps instant keyboard operations. Cleanup listeners, captures and transforms on route departure/pagehide; clear route-session storage on route departure only.",
     "Opt in every project Cartridge and public notes entry using stable data-paper-id/data-tossable metadata; exclude protected/account/admin/auth routes, /desk, stamp boards, inputs, editable content, controls and live canvases. Register a bounded text margin note or existing internal secret link per card. Preserve original DOM, hrefs, content, text selection and layout.",
     "Implement a 24px corner peel handle with a larger accessible hit area, seeded deckled clip polygon and real hidden-layer DOM revealed by drag or Peel corner. Add visible-on-focus controls outside clipping, per-card Reset, Escape cancellation, instant reduced-motion paths and session persistence. Touch scroll wins outside the explicit handle; greater than 8px motion cancels pending holds.",
     "Write unique pure and production-browser tests before implementation, including pointercancel, navigation cleanup, blocked storage, reduced motion, Save-Data, no-JS link access, keyboard reveal, stable card geometry and existing stamp/desk drag exclusions. Document the registry and gesture vocabulary under the plan folder; stop engineering work after tested commit/push."
@@ -105,7 +105,7 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
     "app/(site)/tactile.css",
     "e2e/tactile-tear.test.ts",
     "e2e/tactile-helpers.ts",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/"
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/tactile-contract.md"
   ],
   "non_goals": [
     "Kame visuals or fetch implementation",
@@ -175,7 +175,7 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
     "lib/sound-client.ts",
     "lib/sound.test.ts",
     "e2e/kame.test.ts",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/"
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/kame-contract.md"
   ],
   "non_goals": [
     "drag/fetch integration",
@@ -251,7 +251,7 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
     "app/(site)/kame.css",
     "e2e/kame-fetch.test.ts",
     "e2e/tactile-tear.test.ts",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/"
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/fetch-contract.md"
   ],
   "non_goals": [
     "moving/removing original content or changing hrefs",
@@ -325,7 +325,7 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
     "e2e/tactile-performance.test.ts",
     "e2e/tactile-helpers.ts",
     "scripts/tactile-budget.mjs",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/"
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/execution-evidence.md"
   ],
   "non_goals": [
     "WebGL, html2canvas, screenshotting cards or new physics dependencies",
