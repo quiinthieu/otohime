@@ -213,3 +213,10 @@ Local execution is demonstrated. CI, integration deployment and independent depl
 
 
 After the first push was rejected (concurrent main changes), git pull --rebase --autostash integrated origin/main 0a21579 cleanly. Upstream changed documentation only. All four contract gates passed again on rebased HEAD: 27 focused, 2344 repository, lint/typecheck, 6 fresh-production browser cases. Rebased build lbm2CuP7typK4fkkJlmZ4; executable fingerprint remains 82aba5ebf86f7611033894e89a96438b874b30001ace57777dbe66b756840162. Conservative gzip values: 22734, 22734, 22734. Full retry logs are artifacts/*-rebase1.log. No force push or CI/deployed-system inspection.
+
+
+## Theatre list focus repair · run-9061
+
+Both Read all cards controls set an explicit pending focus ref before leaving Theatre. A layout effect consumes it only after `active` becomes false, when React has revealed the server-rendered list heading. The previous animation-frame callback could run before that commit; it did not define a reliable focus boundary. Initial render and motion-preference changes do not steal focus. Stage/audio loading, transition names and sound lifecycle are unchanged.
+
+The production browser suite now includes a red/green regression that withholds application rAF callbacks and returns through each control. The original build failed that control; the repaired production build `AgKAOICVeqFrQ5Xf0izHl` passes all seven cases, alongside 27 focused and 2344 repository tests, lint and typecheck. Conservative measured Theatre budgets are 22773, 22773, 22773 gzip bytes across desktop, touch and 200%-equivalent reflow. Full identities, real/fake boundaries, history completeness and push-only delivery limits: [run-9061-summary.md](run-9061-summary.md).

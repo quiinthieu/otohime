@@ -120,6 +120,28 @@ test('theatre navigation is bounded, scoped and retains all projects and named p
   assert.deepEqual(errors.filter(e=>/duplicate|view.transition|kamishibai/i.test(e)),[]);
 });
 
+test('both Read all cards controls focus the committed list without an animation frame',async()=>{
+  const {page} = await open(); await page.goto(`${BASE}/projects`);
+  for (const control of ['stage','mode']) {
+    await activate(page);
+    // Hold application rAF callbacks: focus must follow the DOM commit, not a
+    // frame that can run before it (or be delayed in a throttled tab).
+    await page.evaluate(()=>{
+      const original=window.requestAnimationFrame;
+      window.requestAnimationFrame=()=>0;
+      Object.assign(window,{restoreKamiFrames:()=>{window.requestAnimationFrame=original;}});
+    });
+    try {
+      const buttons=page.getByRole('button',{name:'Read all cards',exact:true});
+      await (control==='stage'?buttons.last():buttons.first()).click();
+      await page.waitForFunction(()=>document.activeElement===document.querySelector('.kamishibai-list h2'),{},{polling:20});
+      assert.equal(await page.locator('.kamishibai-stories ol > li:visible').count(),33);
+    } finally {
+      await page.evaluate(()=>(window as unknown as {restoreKamiFrames:()=>void}).restoreKamiFrames());
+    }
+  }
+});
+
 test('unsupported transitions swap instantly and live reduced motion restores the whole list',async()=>{
   const {page} = await open({},true);await page.goto(`${BASE}/projects`);await activate(page);
   assert.equal(await page.evaluate(()=>typeof document.startViewTransition),'undefined');

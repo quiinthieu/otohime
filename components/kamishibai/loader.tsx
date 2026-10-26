@@ -1,5 +1,5 @@
 "use client";
-import { lazy, Suspense, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { lazy, Suspense, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { InkFilter } from "./art";
 import "./theatre.css";
 const Stage = lazy(() => import("./stage"));
@@ -13,15 +13,22 @@ export function TheatreLoader({ children }: { children: ReactNode }) {
   const reduced = useSyncExternalStore(subscribe, () => matchMedia(query).matches, () => true);
   const active = theatre && !reduced;
   const heading = useRef<HTMLHeadingElement>(null);
+  const focusList = useRef(false);
+  useLayoutEffect(() => {
+    if (!active && focusList.current) {
+      focusList.current = false;
+      heading.current?.focus();
+    }
+  }, [active]);
   const readAll = () => {
+    focusList.current = true;
     setTheatre(false);
-    requestAnimationFrame(() => heading.current?.focus());
   };
   return <section className="kamishibai" aria-labelledby="kamishibai-title" data-mode={active ? "theatre" : "list"}>
     <InkFilter />
     <h2 id="kamishibai-title">Paper theatre · project stories</h2>
     <p>Eleven small machines, told in ink. Read the cards, or pull up a seat at the wooden stage.</p>
-    <button className="btn kamishibai-enable" type="button" aria-pressed={active} disabled={reduced} onClick={() => setTheatre(!theatre)}>
+    <button className="btn kamishibai-enable" type="button" aria-pressed={active} disabled={reduced} onClick={() => active ? readAll() : setTheatre(true)}>
       {active ? "Read all cards" : "Theatre mode"}
     </button>
     <noscript><p>The complete story cards are printed below. Follow any project title to visit.</p></noscript>
