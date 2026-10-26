@@ -1,6 +1,16 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { bundleCarriesAskCall, chunkCarriesAskCall, chunkLinks, collectChunks, type Fetched } from "./ask-deploy.ts";
+import {
+  bundleCarriesAskCall,
+  checkTierGet,
+  checkTierPost,
+  chunkCarriesAskCall,
+  chunkLinks,
+  collectChunks,
+  inTierScope,
+  tierOrigin,
+  type Fetched,
+} from "./ask-deploy.ts";
 
 // Shaped like the minified chunk lib/ask-tier.ts lands in.
 const ASK_CHUNK = 'let a="/api/ask",s=(e,t)=>fetch(a,{method:"POST",body:JSON.stringify({question:e}),signal:t});';
@@ -94,4 +104,52 @@ test("collectChunks reports chunks that fail, stops at its limit and refuses a p
   assert.equal(capped.truncated, true);
 
   await assert.rejects(collectChunks("http://h", fakeSite({}).fetchText), /answered 404/);
+});
+
+const LLM = { mode: "llm", intent: "search", lines: ["I BUILD PIPELINES.", "SEE WORK."], sources: [{ title: "Work", href: "/work" }] };
+
+test("the tier GET passes only for a 200 whose body has enabled:true", () => {
+  assert.equal(checkTierGet(200, JSON.stringify({ enabled: true, limits: { hour: 10, day: 150 } })).ok, true);
+  assert.equal(checkTierGet(404, "Not Found").ok, false);
+  assert.equal(checkTierGet(200, JSON.stringify({ enabled: false })).ok, false);
+  assert.equal(checkTierGet(200, JSON.stringify({ enabled: "true" })).ok, false);
+  assert.equal(checkTierGet(200, "<html>enabled:true</html>").ok, false);
+  assert.equal(checkTierGet(503, JSON.stringify({ enabled: true })).ok, false);
+});
+
+test("the tier POST passes for model lines that cite /work, /projects or /notes", () => {
+  const r = checkTierPost(200, JSON.stringify(LLM));
+  assert.equal(r.ok, true, r.detail);
+  assert.equal(r.lines, 2);
+  assert.deepEqual(r.cited, ["/work"]);
+  const many = { ...LLM, sources: [{ title: "P", href: "/projects/shore" }, { title: "N", href: "/notes#ink" }] };
+  assert.equal(checkTierPost(200, JSON.stringify(many)).ok, true);
+});
+
+test("the tier POST misses on an offline reply, a refusal, no lines, no citation or an off-scope link", () => {
+  const offline = { ...LLM, mode: "offline", lines: ["(OFFLINE)", "SHORE."] };
+  assert.equal(checkTierPost(200, JSON.stringify(offline)).ok, false);
+  assert.equal(checkTierPost(429, JSON.stringify(offline)).ok, false);
+  assert.equal(checkTierPost(200, JSON.stringify({ ...LLM, lines: ["(OFFLINE)"] })).ok, false);
+  assert.equal(checkTierPost(429, JSON.stringify(LLM)).ok, false);
+  assert.equal(checkTierPost(403, JSON.stringify({ error: "origin" })).ok, false);
+  assert.equal(checkTierPost(404, "Not Found").ok, false);
+  assert.equal(checkTierPost(200, "not json").ok, false);
+  assert.equal(checkTierPost(200, JSON.stringify({ ...LLM, lines: [" ", ""] })).ok, false);
+  assert.equal(checkTierPost(200, JSON.stringify({ ...LLM, sources: [] })).ok, false);
+  for (const href of ["/shore", "/workshop", "https://otohime.dev/work", "//evil.example/work"]) {
+    const r = checkTierPost(200, JSON.stringify({ ...LLM, sources: [{ title: "X", href }] }));
+    assert.equal(r.ok, false, href);
+    assert.match(r.detail, /outside/);
+  }
+  assert.equal(checkTierPost(200, JSON.stringify({ ...LLM, sources: [{ title: "W", href: "/work" }, { title: "S", href: "/shore" }] })).ok, false);
+});
+
+test("the probe's Origin is the site's own origin, as the route compares it", () => {
+  assert.equal(tierOrigin("https://otohime.dev"), "https://otohime.dev");
+  assert.equal(tierOrigin("https://otohime.dev/"), "https://otohime.dev");
+  assert.equal(tierOrigin("http://localhost:4091/x"), "http://localhost:4091");
+  assert.equal(inTierScope("/work"), true);
+  assert.equal(inTierScope("/notes/ink"), true);
+  assert.equal(inTierScope("/"), false);
 });

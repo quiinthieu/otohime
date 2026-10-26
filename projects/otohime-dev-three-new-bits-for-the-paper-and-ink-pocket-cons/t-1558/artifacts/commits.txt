@@ -1,0 +1,2 @@
+<this commit> pm-255/t-1558: Add a read-only production probe for the Ask model tier
+Delivery SHA is the git_sha in the run-8909 summary report; a commit cannot contain its own hash.

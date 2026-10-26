@@ -11,6 +11,10 @@
 # app and DATABASE_URL at the throwaway database. Chromium then drives the console at 1366x768 and 390x844
 # (scripts/probe-ask-llm-fake.mjs on: the checks are listed there). A second next start with ASK_LLM unset
 # (the key still set) is the off control: the console sends no POST and the fake sees nothing.
+# Each phase then runs the production tier probe (scripts/probe-ask-tier.sh) against the local server: on, it
+# passes with the fake's lines and exactly one fake request, and fails on its POST check while the fake answers
+# non-JSON (the negative control); off, it fails on its GET check, sends nothing to the fake, and its forced
+# failures still print the canned answer.
 # Nothing reaches Anthropic, Vercel or a shared database. Everything started is torn down on exit.
 # With no Postgres to start (no initdb/pg_ctl and no docker), the probe stops and fails as "environment".
 # The off switch alone is scripts/probe-ask-llm.sh.
@@ -212,8 +216,42 @@ run_probe() { # phase
     "$ROOT/scripts/probe-ask-llm-fake.mjs" "$1"
 }
 
+fake_count() { curl -s "$FAKE_URL/__probe/requests" | node -e 'let s="";process.stdin.on("data",c=>s+=c).on("end",()=>console.log(JSON.parse(s).length))'; }
+fake_mode() { curl -s -o /dev/null -X POST "$FAKE_URL/__probe/mode?m=$1"; }
+
+# tier_probe <label>: scripts/probe-ask-tier.sh at the local server, its output kept as comments.
+# Sets TIER_EXIT, TIER_OUT and TIER_CALLS (requests the fake got during the run).
+tier_probe() {
+  local before
+  before="$(fake_count)"
+  TIER_OUT="$(BASE_URL="$BASE_URL" PW_PREFIX="$PW" TMPDIR="$WORK" bash "$ROOT/scripts/probe-ask-tier.sh" 2>&1)"
+  TIER_EXIT=$?
+  TIER_CALLS=$(($(fake_count) - before))
+  printf '%s\n' "$TIER_OUT" | sed "s/^/#   tier $1| /"
+}
+
+tier_ok() { # name, condition result
+  if [ "$2" -eq 0 ]; then echo "ok - $1"; else note_fail "$1"; fi
+}
+
+has() { printf '%s\n' "$TIER_OUT" | grep -q -- "$1"; }
+lacks_fallback_miss() { ! printf '%s\n' "$TIER_OUT" | grep -q '^not ok - .*forced'; }
+
 if start on ASK_LLM=1 ANTHROPIC_API_KEY="$FAKE_KEY" ANTHROPIC_BASE_URL="$FAKE_URL"; then
   run_probe on || note_fail "on: the model-tier checks failed (above)"
+  fake_mode json
+  tier_probe on
+  [ "$TIER_EXIT" -eq 0 ] && has '^ok - GET /api/ask is 200 with enabled:true' && has '^ok - POST /api/ask .* answers with cited model lines' && has '^ok - the cited page /work answers 200'
+  tier_ok "on: tier probe passes: GET enabled, one POST with the fake's lines citing /work (exit $TIER_EXIT)" $?
+  [ "$TIER_CALLS" -eq 1 ]
+  tier_ok "on: tier probe: its one POST reached the fake model exactly once ($TIER_CALLS)" $?
+  has '^ok - 390x844 touch, forced a 429 with no reply: the receipt prints the canned answer' && lacks_fallback_miss
+  tier_ok "on: tier probe: every forced failure prints the canned answer with no error" $?
+  fake_mode nonjson
+  tier_probe on-control
+  fake_mode json
+  [ "$TIER_EXIT" -eq 1 ] && has '^ok - GET /api/ask is 200 with enabled:true' && has '^not ok - POST /api/ask .*: mode "offline"' && [ "$TIER_CALLS" -eq 1 ]
+  tier_ok "on: control: with the fake answering non-JSON, the tier probe's POST check fails and it exits 1 (exit $TIER_EXIT)" $?
 else
   note_fail "on: server started"
 fi
@@ -222,6 +260,13 @@ stop_server
 # Negative control: the same build and key with the switch unset.
 if start off ANTHROPIC_API_KEY="$FAKE_KEY" ANTHROPIC_BASE_URL="$FAKE_URL"; then
   run_probe off || note_fail "off: the off-switch checks failed (above)"
+  tier_probe off
+  [ "$TIER_EXIT" -eq 1 ] && has '^not ok - GET /api/ask is 200 with enabled:true: 404' && has '^not ok - POST /api/ask answers with cited model lines: not sent'
+  tier_ok "off: tier probe fails on GET /api/ask 404 and sends no POST (exit $TIER_EXIT)" $?
+  [ "$TIER_CALLS" -eq 0 ]
+  tier_ok "off: tier probe: the fake model saw no request ($TIER_CALLS)" $?
+  has '^ok - 1366x768, forced the tier off (GET 404): the receipt prints the canned answer' && lacks_fallback_miss
+  tier_ok "off: tier probe: every forced failure prints the canned answer with no error" $?
 else
   note_fail "off: server started"
 fi

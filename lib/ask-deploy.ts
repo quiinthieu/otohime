@@ -74,3 +74,58 @@ export async function collectChunks(baseUrl: string, fetchText: FetchText, limit
     chunks,
   };
 }
+
+// The live tier, as scripts/probe-ask-tier.sh sees it once ASK_LLM and the key are set: GET /api/ask is 200 with
+// enabled:true, and one POST answers in mode llm with model lines and at least one citation, every one a
+// /work, /projects or /notes page. An (OFFLINE) reply, a 404 or a 429 is the tier not answering, so a miss.
+export const TIER_SCOPE = ["/work", "/projects", "/notes"] as const;
+export const TIER_QUESTION = "what data pipelines have you built?";
+
+export type TierCheck = { ok: boolean; detail: string };
+export type TierPostCheck = TierCheck & { lines: number; cited: string[] };
+
+const parseJson = (text: string): unknown => {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+};
+
+// A site path in the tier's scope: /work, /work/x or /work#y, never /workshop or an absolute URL.
+export function inTierScope(href: string): boolean {
+  return TIER_SCOPE.some((p) => href === p || href.startsWith(`${p}/`) || href.startsWith(`${p}#`) || href.startsWith(`${p}?`));
+}
+
+// The Origin header the route accepts: the site's own origin (lib/ask-llm.ts compares it to BETTER_AUTH_URL's).
+export function tierOrigin(baseUrl: string): string {
+  return new URL(baseUrl).origin;
+}
+
+export function checkTierGet(status: number, text: string): TierCheck {
+  const body = parseJson(text);
+  const enabled = typeof body === "object" && body !== null && (body as { enabled?: unknown }).enabled === true;
+  return { ok: status === 200 && enabled, detail: `${status} ${text.slice(0, 120)}` };
+}
+
+export function checkTierPost(status: number, text: string): TierPostCheck {
+  const body = parseJson(text) as { mode?: unknown; lines?: unknown; sources?: unknown } | null;
+  const lines = Array.isArray(body?.lines) ? body.lines.filter((l): l is string => typeof l === "string" && l.trim() !== "") : [];
+  const sources = Array.isArray(body?.sources) ? body.sources : [];
+  const cited = sources.map((s) => (typeof s === "object" && s !== null && typeof s.href === "string" ? s.href : ""));
+  const miss =
+    status !== 200
+      ? `status ${status}`
+      : body?.mode !== "llm"
+        ? `mode ${JSON.stringify(body?.mode ?? null)}`
+        : lines.length === 0
+          ? "no model lines"
+          : lines[0] === "(OFFLINE)"
+            ? "an (OFFLINE) reply"
+            : cited.length === 0
+              ? "no citation"
+              : cited.some((h) => !inTierScope(h))
+                ? `a citation outside ${TIER_SCOPE.join(", ")}: ${cited.filter((h) => !inTierScope(h)).join(", ")}`
+                : "";
+  return { ok: miss === "", lines: lines.length, cited, detail: miss || `${lines.length} line(s), cites ${cited.join(", ")}` };
+}
