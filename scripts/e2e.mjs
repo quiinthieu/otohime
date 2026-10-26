@@ -7,6 +7,9 @@
 // WebGL loops), and files run side by side starve each other's browsers of them (the leaves turned through 6 poses
 // and the sea drew 7 to 10 frames with eleven files at once), so a correct page fails its frame floor. A later
 // --test-concurrency on the command line still wins.
+// Under GitHub Actions (GITHUB_ACTIONS=true) scripts/e2e-annotate.mjs reports beside the TAP output: the job log needs a
+// token to read, so each failed test also becomes an ::error annotation and a section of the step summary.
+// A suite that fails with the server this script started prints the end of that server's log before it is removed.
 //
 // node scripts/e2e.mjs --serve-db <dir> starts only the throwaway database, under <dir>, with the migrations applied;
 // prints DATABASE_URL=... once it is ready, and on SIGTERM or SIGINT stops it and removes <dir>. scripts/walk-end.sh
@@ -19,7 +22,17 @@ import path from "node:path";
 
 const ROOT = path.join(import.meta.dirname, "..");
 // The suite is this process's own node flags and arguments (package.json's test:e2e), run in a child.
-const SUITE = [...process.execArgv, "--test-concurrency=1", ...process.argv.slice(2)];
+const ARGS = process.argv.slice(2);
+const ANNOTATE =
+  process.env.GITHUB_ACTIONS === "true" && !ARGS.some((a) => a.startsWith("--test-reporter"))
+    ? [
+        "--test-reporter=tap",
+        "--test-reporter-destination=stdout",
+        `--test-reporter=${path.join(import.meta.dirname, "e2e-annotate.mjs")}`,
+        "--test-reporter-destination=stdout",
+      ]
+    : [];
+const SUITE = [...process.execArgv, "--test-concurrency=1", ...ANNOTATE, ...ARGS];
 const SERVE_DB = process.argv[2] === "--serve-db" ? process.argv[3] : "";
 
 const run = (cmd, args, env = process.env) =>
@@ -156,7 +169,12 @@ async function main() {
     return 1;
   }
 
-  return run(process.execPath, SUITE, { ...env, BASE_URL: base });
+  const status = await run(process.execPath, SUITE, { ...env, BASE_URL: base });
+  if (status !== 0) {
+    console.error("The suite failed. The end of the server's log:");
+    console.error(readFileSync(log, "utf8").split("\n").slice(-80).join("\n"));
+  }
+  return status;
 }
 
 let status = 1;

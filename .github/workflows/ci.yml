@@ -73,11 +73,29 @@ jobs:
           test -z "$(git status --porcelain db/migrations)"
       - run: npm run build
       - run: npm run db:migrate
+      # The job log needs a token to read: a failed test is also an annotation and a step summary section
+      # (scripts/e2e-annotate.mjs), and a red step adds the server's last lines there, with what ran.
       - name: E2E against next start
         run: |
-          npm start &
+          npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
           curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
-          npm run test:e2e
+          status=0
+          npm run test:e2e || status=$?
+          if [ "$status" -ne 0 ]; then
+            {
+              echo "## E2E environment"
+              echo
+              echo "- commit $GITHUB_SHA, build $(cat .next/BUILD_ID), node $(node -v), $(google-chrome --version 2>/dev/null || echo 'no google-chrome'), $(nproc) CPUs"
+              echo
+              echo "### next start, last 80 lines"
+              echo
+              echo '```'
+              tail -n 80 "$RUNNER_TEMP/next-start.log" | sed 's/```/ˋˋˋ/g'
+              echo '```'
+            } >>"$GITHUB_STEP_SUMMARY"
+            tail -n 80 "$RUNNER_TEMP/next-start.log"
+          fi
+          exit "$status"
       # Signs in through the form against the same server and database, so a page error on the hop into a
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
       - name: Motion probe, signed in

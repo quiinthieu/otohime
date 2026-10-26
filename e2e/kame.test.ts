@@ -93,6 +93,13 @@ test("keyboard hold threshold, focus loss, live reduced motion and Pocket pause"
   assert.notEqual(await state(page), "pet");
   await page.clock.runFor(1); assert.equal(await state(page), "pet");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
+  // Negative control for that pause: an installed clock flows with real time until paused, so on a flowing one 50 real
+  // ms beside the same runFor(499) already pet Kame. Paused again after, as before.
+  await page.clock.resume();
+  await page.keyboard.down("Space"); await page.waitForTimeout(50); await page.clock.runFor(499);
+  assert.equal(await state(page), "pet", "a flowing clock adds real time to runFor");
+  await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
   await page.keyboard.down("Enter"); await page.clock.runFor(500); assert.equal(await state(page), "pet");
   await page.getByLabel("Kame name").focus(); await page.keyboard.up("Enter"); assert.equal(await state(page), "swim");
   await page.getByLabel("Kame name").fill("k"); await page.getByLabel("Kame name").press("k"); assert.equal(await state(page), "swim", "typing k is not Call");
