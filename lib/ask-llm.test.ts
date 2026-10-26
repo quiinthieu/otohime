@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { after, test as nodeTest } from "node:test";
-import { answer, type AskIndex } from "./ask.ts";
+import { answer, search, type AskIndex, type Passage } from "./ask.ts";
 import { askUsage } from "../db/schema.ts";
 import {
   ASK_LIMITS,
@@ -16,6 +16,8 @@ import {
   hrefMap,
   mapSources,
   MAX_PASSAGES,
+  MODEL_SCOPE,
+  modelScope,
   OFFLINE,
   parseAnswer,
   topPassages,
@@ -67,7 +69,7 @@ function post(body: unknown, { origin = ORIGIN, ip = "203.0.113.7" }: { origin?:
   return new Request(`${ORIGIN}/api/ask`, { method: "POST", headers, body: typeof body === "string" ? body : JSON.stringify(body) });
 }
 
-const BROAD = "shore games notes stack";
+const BROAD = "shore data engineering pipelines";
 
 // A run that skips or loses tests must not pass: every test registered here has to run to its end,
 // and the acceptance cases have to be among them.
@@ -76,6 +78,9 @@ const ACCEPTANCE = [
   "GET reports enabled when both are set",
   "POST answers 200 with links mapped from cited ids only",
   "the 11th request in an hour is 429 with the offline answer marked (OFFLINE)",
+  "an article question puts no article passage in the prompt",
+  "a Work question puts a Work passage in the prompt",
+  "every passage id in the prompt is in Work, Projects or Notes",
 ];
 const registered: string[] = [];
 const finished = new Set<string>();
@@ -311,4 +316,93 @@ test("migrations from 0003 on are expand-only, and 0003 creates ask_usage as the
   assert.deepEqual(columns.sort(), ["bucket", "count", "updated_at"]);
   for (const name of columns) assert.match(sql, new RegExp(`"${name}"`), name);
   assert.match(sql, /"bucket" text PRIMARY KEY NOT NULL/);
+});
+
+// The ids of the passages a request shows the model.
+const promptIds = (params: Params) => [...(params.messages[0].content as string).matchAll(/<passage id="([^"]*)"/g)].map((m) => m[1]);
+const byId = new Map(index.passages.map((p) => [p.id, p]));
+const IN_SCOPE_HREFS = new Set(["/work", "/projects", "/notes"]);
+const IN_SCOPE_KINDS = new Set(["work", "stack", "project", "note"]);
+// The rule written out again, so a change to MODEL_SCOPE cannot widen it unnoticed.
+const inScope = (p: Passage) => IN_SCOPE_KINDS.has(p.kind) || IN_SCOPE_HREFS.has(p.href);
+
+test("an article question puts no article passage in the prompt", async () => {
+  const article = index.passages.find((p) => p.id === "article-why-the-sky-is-blue")!;
+  assert.ok(article, "the Gazette article is in the index");
+  const question = article.title;
+  // Control: the whole index ranks the article first, so only the scope keeps it out.
+  assert.equal(search(index, question)[0].passage.kind, "article");
+  assert.ok(topPassages(index, question).length > 0, "the question still reaches the model");
+  const fake = fakeClient({ lines: ["NO MATCH."], cited: [article.id] });
+  const res = await handlePost(post({ question }), deps({ complete: fake.complete }));
+  assert.equal(fake.calls.length, 1);
+  const ids = promptIds(fake.calls[0]);
+  assert.ok(ids.length > 0);
+  for (const id of ids) {
+    assert.notEqual(byId.get(id)?.kind, "article", id);
+    assert.ok(!id.startsWith("article-"), id);
+  }
+  // An article id the model was not shown never becomes a link.
+  const body = await res.json();
+  assert.deepEqual(body.sources, []);
+});
+
+test("a Work question puts a Work passage in the prompt", async () => {
+  const fake = fakeClient({ lines: ["WAREHOUSE."], cited: ["work"] });
+  const res = await handlePost(post({ question: "what stack do you use at work" }), deps({ complete: fake.complete }));
+  assert.equal(fake.calls.length, 1);
+  const ids = promptIds(fake.calls[0]);
+  assert.ok(ids.includes("work"), ids.join(" "));
+  assert.ok(ids.every((id) => byId.get(id)?.href === "/work"), ids.join(" "));
+  assert.deepEqual((await res.json()).sources, [{ title: "Work", href: "/work" }]);
+});
+
+test("every passage id in the prompt is in Work, Projects or Notes", async () => {
+  // Questions aimed at every page outside the scope, at each page in it, and every article headline.
+  const questions = [
+    "games", "play", "bio", "who are you", "now playing", "contact email", "shore", "tide clock", BROAD,
+    "projects games notes music stack work", "work", "notes", "projects",
+    ...index.passages.filter((p) => p.kind !== "article").map((p) => p.title),
+    ...new Set(index.passages.filter((p) => p.kind === "article").map((p) => p.title)),
+  ];
+  let calls = 0;
+  const seen = new Set<string>();
+  for (const question of questions) {
+    for (const p of topPassages(index, question)) assert.ok(inScope(p), `${question}: ${p.id}`);
+    const fake = fakeClient({ lines: ["X."], cited: [] });
+    await handlePost(post({ question }), deps({ complete: fake.complete }));
+    calls += fake.calls.length;
+    for (const params of fake.calls) {
+      for (const id of promptIds(params)) {
+        const p = byId.get(id);
+        assert.ok(p, `${question}: ${id} is a real passage`);
+        assert.ok(inScope(p), `${question}: ${id} (${p.kind} ${p.href}) is out of scope`);
+        assert.ok(modelScope(p), id);
+        seen.add(modelScope(p)!);
+      }
+    }
+  }
+  assert.ok(calls > 10, "most questions reach the model");
+  assert.deepEqual([...seen].sort(), ["Notes", "Projects", "Work"], "each scope reaches the prompt");
+  // The scope as written: the kinds and pages the plan names, and nothing else.
+  assert.deepEqual(
+    MODEL_SCOPE.map((s) => [s.name, s.href, [...s.kinds].sort()]),
+    [["Work", "/work", ["stack", "work"]], ["Projects", "/projects", ["project"]], ["Notes", "/notes", ["note"]]],
+  );
+  // Out of scope in the committed index: the articles and the Play, Home and Bio passages.
+  const out = index.passages.filter((p) => !modelScope(p));
+  assert.ok(out.some((p) => p.kind === "article") && out.some((p) => p.href === "/play") && out.some((p) => p.kind === "bio"));
+  assert.ok(out.every((p) => !inScope(p)));
+});
+
+test("a question that matches only Play, Home or Bio gets the offline answer and no model call", async () => {
+  for (const question of ["games", "bio"]) {
+    assert.ok(search(index, question).length > 0, `${question} matches the whole index`);
+    const fake = fakeClient({ lines: ["X."], cited: [] });
+    const res = await handlePost(post({ question }), deps({ complete: fake.complete }));
+    assert.equal(fake.calls.length, 0, question);
+    const body = await res.json();
+    assert.equal(body.mode, "offline");
+    assert.deepEqual(body.lines, [OFFLINE, ...answer(index, question).lines], "the offline answer still uses the whole index");
+  }
 });

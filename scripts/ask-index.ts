@@ -3,14 +3,16 @@
 // at most 60 words, each with the page it came from. It lives in scripts/
 // because nothing in lib/ or components/ may import the Gazette.
 //   npm run ask:index   write the index
-//   npm run ask:check   exit 1 if the committed index differs from a fresh build or
-//                       does not cover Work, Projects and Notes; prints the coverage
+//   npm run ask:check   exit 1 if the committed index differs from a fresh build,
+//                       does not cover Work, Projects and Notes, or gives the model
+//                       no passage for one of them; prints both counts
 // --file=<path> reads or writes another file (the tests check a tampered copy).
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { ARTICLES } from "../app/(articles)/_lib/articles.ts";
 import { site } from "../content/site.ts";
 import { MAX_PASSAGE_WORDS, tokenize, type AskIndex, type Passage, type PassageKind } from "../lib/ask.ts";
+import { MODEL_SCOPE, modelScope } from "../lib/ask-llm.ts";
 
 const DEFAULT_FILE = join(import.meta.dirname, "../public/ask-index.json");
 
@@ -93,6 +95,13 @@ export function coverage(index: AskIndex): Coverage[] {
   });
 }
 
+export type ModelCoverage = { name: string; href: string; passages: number };
+
+// The passages the model tier may see (lib/ask-llm.ts), counted per scope.
+export function modelCoverage(index: AskIndex): ModelCoverage[] {
+  return MODEL_SCOPE.map(({ name, href }) => ({ name, href, passages: index.passages.filter((p) => modelScope(p) === name).length }));
+}
+
 // One passage per line, so a content change is a readable diff.
 export function serialize(index: AskIndex): string {
   return `{"version":${index.version},"passages":[\n${index.passages.map((p) => JSON.stringify(p)).join(",\n")}\n]}\n`;
@@ -119,11 +128,17 @@ function main(argv: string[]): number {
     }
     const covered = coverage(parsed);
     const missing = covered.filter((c) => !c.ok);
+    const scoped = modelCoverage(parsed);
+    const unscoped = scoped.filter((c) => c.passages === 0);
     if (missing.length > 0) {
       console.error(`ask:check: ${file} does not cover ${missing.map((c) => `${c.name} (${c.href})`).join(", ")}`);
-      return 1;
     }
+    if (unscoped.length > 0) {
+      console.error(`ask:check: ${file} has no model-scope passage for ${unscoped.map((c) => `${c.name} (${c.href})`).join(", ")}`);
+    }
+    if (missing.length > 0 || unscoped.length > 0) return 1;
     console.log(`ask:check: covers ${covered.map((c) => `${c.name} ${c.href} (${c.passages} passages)`).join(", ")}`);
+    console.log(`ask:check: model scope ${scoped.map((c) => `${c.name} ${c.href} (${c.passages} passages)`).join(", ")}`);
     if (committed !== fresh) {
       console.error(`ask:check: ${file} is stale; run npm run ask:index and commit it`);
       return 1;

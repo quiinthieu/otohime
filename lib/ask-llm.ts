@@ -1,13 +1,13 @@
 // Ask the console, with a model: the optional tier behind POST /api/ask. Off unless ASK_LLM=1 and
 // ANTHROPIC_API_KEY are both set; then GET reports enabled and POST answers a question from the top
-// passages lib/ask.ts finds. The model sees only those passages and may cite only their ids, so every
+// Work, Projects and Notes passages lib/ask.ts finds. The model sees only those passages and may cite only their ids, so every
 // link on the receipt is one of the site's own pages. Each IP gets ASK_LIMITS.hour model answers an
 // hour and the whole site ASK_LIMITS.day a day; past either, or on any SDK error, a refusal or a reply
 // that does not parse, the console prints the offline answer under an (OFFLINE) line.
 // Framework-free: app/api/ask/route.ts passes the SDK call, the Postgres store and the env in.
 import Anthropic from "@anthropic-ai/sdk";
 import { createHmac } from "node:crypto";
-import { answer, search, type AskIndex, type Passage, type Reply, type Source } from "./ask.ts";
+import { answer, search, type AskIndex, type Passage, type PassageKind, type Reply, type Source } from "./ask.ts";
 
 type CreateParams = Anthropic.Beta.Messages.MessageCreateParamsNonStreaming;
 type Message = Anthropic.Beta.Messages.BetaMessage;
@@ -69,8 +69,34 @@ const ANSWER_SCHEMA = {
 
 const escapeXml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+// The model answers from Work, Projects and Notes only: a passage is in scope when it lives on one of those
+// pages or is one of their items (a project's passage links to the project itself). Articles, Play, Shore,
+// Home and Bio stay with the offline answer, which still searches the whole index.
+export const MODEL_SCOPE: { name: string; href: string; kinds: PassageKind[] }[] = [
+  { name: "Work", href: "/work", kinds: ["work", "stack"] },
+  { name: "Projects", href: "/projects", kinds: ["project"] },
+  { name: "Notes", href: "/notes", kinds: ["note"] },
+];
+
+// The scope a passage belongs to, by name, or null when the model may not see it.
+export function modelScope(p: Passage): string | null {
+  return MODEL_SCOPE.find((s) => p.href === s.href || s.kinds.includes(p.kind))?.name ?? null;
+}
+
+// One scoped index per index, so search keeps its cached model.
+const scoped = new WeakMap<AskIndex, AskIndex>();
+
+export function modelIndex(index: AskIndex): AskIndex {
+  let s = scoped.get(index);
+  if (!s) {
+    s = { ...index, passages: index.passages.filter((p) => modelScope(p) !== null) };
+    scoped.set(index, s);
+  }
+  return s;
+}
+
 export function topPassages(index: AskIndex, question: string): Passage[] {
-  return search(index, question)
+  return search(modelIndex(index), question)
     .slice(0, MAX_PASSAGES)
     .map((h) => h.passage);
 }

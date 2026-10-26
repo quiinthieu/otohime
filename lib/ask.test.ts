@@ -61,6 +61,33 @@ test("the check fails when a required source is missing from the index", () => {
   }
 });
 
+test("the check prints the model's passage count for Work, Projects and Notes", () => {
+  const run = runIndexScript("--check");
+  assert.equal(run.status, 0, run.stderr);
+  assert.match(run.stdout, /model scope Work \/work \([1-9]\d* passages\), Projects \/projects \([1-9]\d* passages\), Notes \/notes \([1-9]\d* passages\)/);
+});
+
+test("the check fails when the model has no passage for Work, Projects or Notes", () => {
+  const dir = mkdtempSync(join(tmpdir(), "ask-index-"));
+  try {
+    for (const [name, href, kinds] of [
+      ["Work", "/work", ["work", "stack"]],
+      ["Projects", "/projects", ["project"]],
+      ["Notes", "/notes", ["note"]],
+    ] as const) {
+      const file = join(dir, `${name}.json`);
+      const thin: AskIndex = { ...index, passages: index.passages.filter((p) => p.href !== href && !(kinds as readonly string[]).includes(p.kind)) };
+      writeFileSync(file, JSON.stringify(thin));
+      const run = runIndexScript("--check", `--file=${file}`);
+      assert.equal(run.status, 1, name);
+      assert.match(run.stderr, new RegExp(`has no model-scope passage for ${name} \\(${href.replace("/", "\\/")}\\)`), name);
+      assert.doesNotMatch(run.stdout, /model scope/, name);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("the check fails on a stale or missing index", () => {
   const dir = mkdtempSync(join(tmpdir(), "ask-index-"));
   try {
