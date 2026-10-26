@@ -1,0 +1,39 @@
+# acceptance walk run-8588 (cycle 3) against https://otohime.dev, headless Chromium 1.64.0
+## browser walk 1366x768 and 390x844
+[1366,"home",200,"Otohime"]
+[1366,"ask button count",1]
+[1366,"ask answer text (first 160)","ASK THE CONSOLE Close Ask about my work, notes and projects > > What is your work? WORK: I build the pipes between where data lands and where people use it: bat"]
+[1366,"api/ask requests","[]"]
+[1366,"404 status",404,"links","[\"/\",\"/work\",\"/projects\",\"/notes\",\"/play\"]"]
+[1366,"console errors","[\"Failed to load resource: the server responded with a status of 404 ()\"]"]
+[390,"home",200,"Otohime"]
+[390,"ask button count",1]
+[390,"ask answer text (first 160)","ASK THE CONSOLE Close Ask about my work, notes and projects > > What is your work? WORK: I build the pipes between where data lands and where people use it: bat"]
+[390,"api/ask requests","[]"]
+[390,"404 status",404,"links","[\"/\",\"/work\",\"/projects\",\"/notes\",\"/play\"]"]
+[390,"console errors","[\"Failed to load resource: the server responded with a status of 404 ()\"]"]
+## probe-seasons remote, first run (layer 54/59, winter 1366px)
+clock 2026-01-15T12:00:00.000Z: 19/19 checks pass
+FAIL layer: winter 1366px: one layer, drawn for data-season: [1,"winter","still"]
+FAIL layer: winter 1366px: at most 40 elements, layer included: 1 elements, 0 bits
+FAIL layer: winter 1366px: only snow bits
+FAIL layer: winter 1366px: every bit runs one animation, no transitions: [0,0,[]]
+FAIL layer: winter 1366px: animated properties are transform and opacity only
+layer: 54/59 checks pass
+dial: 45/45 checks pass
+joint: 28/28 checks pass
+seasons exit 1
+## probe-seasons remote, rerun
+clock 2026-01-15T12:00:00.000Z: 19/19 checks pass
+layer: 59/59 checks pass
+dial: 45/45 checks pass
+joint: 28/28 checks pass
+seasons exit 0
+## probe-lost remote
+ok - no console errors or page errors
+probe: 34 ok, 0 failed
+lost exit 0
+## probe-ask remote
+ok - no console errors or page errors
+probe: 60 ok, 0 failed
+ask exit 0
