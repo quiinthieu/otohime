@@ -3,6 +3,13 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-9010 update: board unchanged since run-9000
+
+Read live in run-9010 (product owner), 2026-10-26 14:44 UTC: pm-267 still `paused` (t-1594, t-1596
+`qa_pending`; t-1595, t-1597 `backlog`; no open escalations) and owns outcomes 1-3; outcome 4 stays
+met. No otohime software_engineer task is proposed; the proposal is the empty DAG. Owners and failure
+conditions in the run-9000 update stand.
+
 ## Run-9000 update: board unchanged since run-8996
 
 Read live in run-9000 (product owner, claude-sonnet-5-5), 2026-10-26 ~14:40 UTC:
