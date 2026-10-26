@@ -1,0 +1,110 @@
+      duration_ms: 311.441583
+      type: 'test'
+      ...
+    # Subtest: a leaving member is announced with bye and the new count
+    ok 2 - a leaving member is announced with bye and the new count
+      ---
+      duration_ms: 5.910042
+      type: 'test'
+      ...
+    # Subtest: the two rooms cannot communicate
+    ok 3 - the two rooms cannot communicate
+      ---
+      duration_ms: 311.219917
+      type: 'test'
+      ...
+    # Subtest: bad upgrades are refused with the shared statuses
+    ok 4 - bad upgrades are refused with the shared statuses
+      ---
+      duration_ms: 21.498541
+      type: 'test'
+      ...
+    # Subtest: binary, oversize and malformed frames are dropped and the fifth closes 1008
+    ok 5 - binary, oversize and malformed frames are dropped and the fifth closes 1008
+      ---
+      duration_ms: 5.917041
+      type: 'test'
+      ...
+    # Subtest: a burst is cut at the 15-token bucket without fan-out of the excess
+    ok 6 - a burst is cut at the 15-token bucket without fan-out of the excess
+      ---
+      duration_ms: 306.064167
+      type: 'test'
+      ...
+    # Subtest: the room holds 24; the next socket hears full and is closed 1013
+    ok 7 - the room holds 24; the next socket hears full and is closed 1013
+      ---
+      duration_ms: 55.283375
+      type: 'test'
+      ...
+    # Subtest: GET /version is public build metadata only
+    ok 8 - GET /version is public build metadata only
+      ---
+      duration_ms: 11.769709
+      type: 'test'
+      ...
+    # Subtest: /version refuses writes and serves the code+lock+config fingerprint
+    ok 9 - /version refuses writes and serves the code+lock+config fingerprint
+      ---
+      duration_ms: 8.630833
+      type: 'test'
+      ...
+    # Subtest: an allowed upgrade with cookies and a UA still works; nothing but the upgrade reaches the room
+    ok 10 - an allowed upgrade with cookies and a UA still works; nothing but the upgrade reaches the room
+      ---
+      duration_ms: 2.736792
+      type: 'test'
+      ...
+    1..10
+ok 1 - actual Worker (wrangler.jsonc) in workerd
+  ---
+  duration_ms: 1200.615458
+  type: 'suite'
+  ...
+# Subtest: GhostRoom reconstruction on live state (test/wrangler.reentry.jsonc)
+    # Subtest: strikes, the bucket and fan-out survive a rebuilt GhostRoom
+    ok 1 - strikes, the bucket and fan-out survive a rebuilt GhostRoom
+      ---
+      duration_ms: 425.122417
+      type: 'test'
+      ...
+    # Subtest: the cap holds across a rebuild and nothing is ever stored
+    ok 2 - the cap holds across a rebuild and nothing is ever stored
+      ---
+      duration_ms: 155.2525
+      type: 'test'
+      ...
+    1..2
+ok 2 - GhostRoom reconstruction on live state (test/wrangler.reentry.jsonc)
+  ---
+  duration_ms: 706.310542
+  type: 'suite'
+  ...
+# Subtest: privacy boundary in source and configuration
+    # Subtest: Worker observability and logpush are off
+    ok 1 - Worker observability and logpush are off
+      ---
+      duration_ms: 0.0705
+      type: 'test'
+      ...
+    # Subtest: Worker code uses no storage, SQL, alarms, logs, cookies, IP or UA
+    ok 2 - Worker code uses no storage, SQL, alarms, logs, cookies, IP or UA
+      ---
+      duration_ms: 0.449083
+      type: 'test'
+      ...
+    1..2
+ok 3 - privacy boundary in source and configuration
+  ---
+  duration_ms: 0.549167
+  type: 'suite'
+  ...
+1..3
+# tests 14
+# suites 3
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2363.044458

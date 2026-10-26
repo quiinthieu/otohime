@@ -1,0 +1,24 @@
+  duration_ms: 82.029917
+  type: 'suite'
+  ...
+# Subtest: teardown is deterministic: close() resolves with open sockets and frees the port
+ok 3 - teardown is deterministic: close() resolves with open sockets and frees the port
+  ---
+  duration_ms: 1.547459
+  type: 'test'
+  ...
+# Subtest: the CLI prints its ready line and exits on SIGTERM
+ok 4 - the CLI prints its ready line and exits on SIGTERM
+  ---
+  duration_ms: 102.231
+  type: 'test'
+  ...
+1..4
+# tests 18
+# suites 2
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1246.045875

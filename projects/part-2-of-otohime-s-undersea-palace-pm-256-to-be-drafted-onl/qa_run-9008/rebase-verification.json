@@ -1,0 +1,57 @@
+{
+  "base": "5ad4906",
+  "tested_report_commit": "e6eaeb0b7cddc26962786c918bd70f7725510fef",
+  "worker_fingerprint": "54ea22a371c9031e7f6e7801a246aea25a9b11841ccaa2ff1390bc48d186574e",
+  "results": [
+    {
+      "name": "Protocol and room",
+      "exit_code": 0,
+      "output_tail": "  duration_ms: 0.055667\n  type: 'test'\n  ...\n1..23\n# tests 23\n# suites 0\n# pass 23\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 66.437334"
+    },
+    {
+      "name": "Fake WebSocket",
+      "exit_code": 0,
+      "output_tail": "  duration_ms: 53.232916\n  type: 'test'\n  ...\n1..4\n# tests 18\n# suites 2\n# pass 18\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1147.504917"
+    },
+    {
+      "name": "Worker npm ci",
+      "exit_code": 0,
+      "output_tail": "\nadded 41 packages, and audited 42 packages in 1s\n\n7 packages are looking for funding\n  run `npm fund` for details\n\n3 vulnerabilities (2 moderate, 1 high)\n\nTo address all issues, run:\n  npm audit fix --force\n\nRun `npm audit` for details."
+    },
+    {
+      "name": "Worker typecheck",
+      "exit_code": 0,
+      "output_tail": "\n> typecheck\n> tsc --noEmit -p tsconfig.json\n"
+    },
+    {
+      "name": "Actual local Worker",
+      "exit_code": 0,
+      "output_tail": "  duration_ms: 1.231208\n  type: 'suite'\n  ...\n1..3\n# tests 14\n# suites 3\n# pass 14\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 4559.528417"
+    },
+    {
+      "name": "Worker bundle",
+      "exit_code": 0,
+      "output_tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nTotal Upload: 12.05 KiB / gzip: 3.81 KiB\nYour Worker has access to the following bindings:\nBinding                                          Resource                  \nenv.GHOST_ROOMS (GhostRoom)                      Durable Object            \nenv.ALLOWED_ORIGINS (\"https://otohime.dev\")      Environment Variable      \n\n--dry-run: exiting now.\n\u001b[33m\u25b2 \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mProxy environment variables detected. We'll use your proxy for fetch requests.\u001b[0m\n\n\nbundle:check PASS index.js 12336 bytes, fingerprint 54ea22a371c9031e7f6e7801a246aea25a9b11841ccaa2ff1390bc48d186574e"
+    },
+    {
+      "name": "Project tests",
+      "exit_code": 0,
+      "output_tail": "  duration_ms: 2.136875\n  type: 'test'\n  ...\n1..2301\n# tests 2315\n# suites 2\n# pass 2315\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 16205.465"
+    },
+    {
+      "name": "Lint",
+      "exit_code": 0,
+      "output_tail": "<checkout>/app/(shore)/shore/page.tsx\n  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n<checkout>/app/(vinyl)/vinyl/page.tsx\n  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n<checkout>/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs\n  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars\n\n\u2716 10 problems (0 errors, 10 warnings)\n  0 errors and 9 warnings potentially fixable with the `--fix` option.\n"
+    },
+    {
+      "name": "Production build",
+      "exit_code": 0,
+      "output_tail": "\u251c \u25cb /vinyl\n\u251c \u25d0 /work                                       1d      1w\n\u251c \u25cb /work/opengraph-image-blv499\n\u2514 \u25d0 /zine\n\n\n\u0192 Proxy (Middleware)\n\n\u25cb  (Static)             prerendered as static content\n\u25d0  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content\n\u0192  (Dynamic)            server-rendered on demand\n"
+    },
+    {
+      "name": "Concurrent deployment-script tests",
+      "exit_code": 0,
+      "output_tail": "ok - CLI request errors are unknown deployment state, with diagnostic\nok - inspect exit 1 accepts an old-to-expected alias transition\nok - alias transition makes exactly two real HTTP requests\nok - healthy deploy exits 0\nok - healthy deploy uploads with --no-wait\nok - healthy deploy waits on the printed URL\nok - healthy deploy prints no ::error\nok - health with another sha exits non-zero\nok - health with another sha prints ::error\nok - inspect exit 1 plus unreachable health fails with both diagnostics\nok - missing GITHUB_SHA is refused before any upload\n# all checks passed"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+  duration_ms: 0.135625
+  type: 'test'
+  ...
+# Subtest: a clear error when PW_PREFIX is set but its playwright is not there
+ok 2300 - a clear error when PW_PREFIX is set but its playwright is not there
+  ---
+  duration_ms: 0.13525
+  type: 'test'
+  ...
+# Subtest: the default loader resolves the repo's locked playwright-core
+ok 2301 - the default loader resolves the repo's locked playwright-core
+  ---
+  duration_ms: 1.976625
+  type: 'test'
+  ...
+1..2301
+# tests 2315
+# suites 2
+# pass 2315
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14798.939083

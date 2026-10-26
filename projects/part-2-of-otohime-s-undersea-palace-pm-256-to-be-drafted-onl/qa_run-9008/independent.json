@@ -1,0 +1,88 @@
+{
+  "node": "v22.23.3",
+  "fingerprint": "54ea22a371c9031e7f6e7801a246aea25a9b11841ccaa2ff1390bc48d186574e",
+  "results": [
+    {
+      "name": "actual Worker version identifies locked executable",
+      "status": "pass",
+      "evidence": {
+        "fingerprint": "54ea22a371c9031e7f6e7801a246aea25a9b11841ccaa2ff1390bc48d186574e",
+        "files": {
+          "../policy.ts": "12be2480beb3db8ecf0f11daa6ede1472040a1814be1fa98240d68186c5a206b",
+          "../protocol.ts": "d51891a13a41c804e67903408e0db555e94ae3435a6cca6229cb33e928bc9278",
+          "../room.ts": "7551f7959ccf46d813ec5b5c3da6a24cf3b5c0a37bc6ec83575d7b34ba71d06d",
+          "package-lock.json": "b49cf8d37759e18044b6e137747cd9f2a059c0c19515006f9a2db4e12f9e7bd7",
+          "package.json": "3818cacdf884801c22a86b780d9b361c74b92bc93a424593269cf815b226ccde",
+          "src/index.ts": "191e2167418f54559e31fd20acfcd6bcf313598ac865bb293b3412c36ad9e23b",
+          "src/room-do.ts": "01e6dee412ca3c6c2a8e7ea11b8175459c750ed3c9126e38d8e89e2b5120495e",
+          "src/version.ts": "0c0313f4e86dfcb80f123705643257b766ffe99627d3aea44bd01de04cccdab8",
+          "wrangler.jsonc": "8aca7620a5647b9f87ec25710b364926126dee26189a37c1dfbbd4e965df0781"
+        }
+      }
+    },
+    {
+      "name": "actual Worker: independent move/click, UUID, no echo and room isolation",
+      "status": "pass",
+      "evidence": {
+        "clients": 3,
+        "credentials": false,
+        "moveAndClick": true
+      }
+    },
+    {
+      "name": "actual Worker: negative control bad Origin refuses upgrade",
+      "status": "pass",
+      "evidence": {
+        "status": 403
+      }
+    },
+    {
+      "name": "actual Worker: malformed JSON does not fan out and closes after five",
+      "status": "pass",
+      "evidence": {
+        "code": 1008
+      }
+    },
+    {
+      "name": "actual Worker: reserved RSV1 without extension cannot fan out",
+      "status": "pass",
+      "evidence": {
+        "invalidFanout": 0,
+        "readyState": 2
+      }
+    },
+    {
+      "name": "fake: independent move/click, UUID, no echo and room isolation",
+      "status": "pass",
+      "evidence": {
+        "clients": 3,
+        "credentials": false,
+        "moveAndClick": true
+      }
+    },
+    {
+      "name": "fake: negative control bad Origin refuses upgrade",
+      "status": "pass",
+      "evidence": {
+        "status": 403
+      }
+    },
+    {
+      "name": "fake: malformed JSON does not fan out and closes after five",
+      "status": "pass",
+      "evidence": {
+        "code": 1008
+      }
+    },
+    {
+      "name": "fake: reserved RSV1 without extension cannot fan out",
+      "status": "fail",
+      "error": "invalid wire frame fanned out 1 event(s)\n\n1 !== 0\n"
+    },
+    {
+      "name": "clock rollback then recovery cannot refill without passing the prior high-water mark",
+      "status": "fail",
+      "error": "recovery minted tokens: {\"id\":\"a\",\"tokens\":14,\"at\":1000000,\"invalid\":0}\n\n'accepted' !== 'rate'\n"
+    }
+  ]
+}

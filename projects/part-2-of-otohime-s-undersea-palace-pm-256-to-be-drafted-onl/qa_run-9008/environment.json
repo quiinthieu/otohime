@@ -1,0 +1,13 @@
+{
+  "sha": "aa14129c5f9011357f9735223560d1640d0f15d1",
+  "delivery": "4647c201ff4ad11102e725a1bd081faf807f0a6c",
+  "code": "ae6573a10e499b644491bb1f9ac36588cafbb387",
+  "node": "v22.23.3",
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "nextBuildId": "YmGkBC2GJE9_WF06y4PkG",
+  "hashes": {
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "scripts/ghosts-fake.mjs": "e7b612ee1e23bee85139a6944d4a247935934809a7c82c3b29d61d66b1140028"
+  },
+  "workerDependencies": "otohime-ghosts-worker@ <checkout>/ghosts/worker\n\u251c\u2500\u2500 @cloudflare/workers-types@5.20261026.1\n\u251c\u2500\u2500 @emnapi/runtime@1.11.3 extraneous\n\u251c\u2500\u2500 @img/sharp-wasm32@0.35.5 extraneous\n\u251c\u2500\u2500 tslib@2.8.1 extraneous\n\u251c\u2500\u2500 typescript@5.9.3\n\u2514\u2500\u2500 wrangler@4.152.0\n\n"
+}
