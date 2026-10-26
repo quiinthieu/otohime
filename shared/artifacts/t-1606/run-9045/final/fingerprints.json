@@ -1,0 +1,148 @@
+{
+  "sourceBase": "1e039a34a27b102173527ac04ce1765e359898d6",
+  "verificationHead": "29ad9185e3e8a566f54e6e70e9536d4af56b6a6f",
+  "profile": {
+    "agent": "Codex (GPT-6)",
+    "role": "software_engineer",
+    "run": "run-9045",
+    "effort": "not exposed"
+  },
+  "node": "v22.12.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "next": "16.4.2",
+  "playwrightCore": "1.64.0",
+  "chrome": "Google Chrome 155.0.8059.86",
+  "postgresImage": [
+    "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24"
+  ],
+  "chromeCliLauncher": {
+    "path": "/tmp/otohime-run-9045-bin/google-chrome",
+    "exec": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "reason": "expose the real macOS Chrome to the shell wrapper by its expected CLI name; the browser still launches via channel chrome"
+  },
+  "files": {
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "next.config.ts": "0321d5e23b1a93b09761f2049ef5b9edf2843067e1be089664296063b9fa096b",
+    "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+    "scripts/probe-end.mjs": "958029c7b17fbd50345b1e949ddd6beab7a37ec88455be0e83ee0e21850b70af",
+    "e2e/probe-end.test.ts": "6473052092c99bb15de816c64ee5097d0a15029dbe75a880d22cf4ec8e7045c4",
+    "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+    "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+    "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+    "app/(site)/(app)/desk/_components/ink-desk.tsx": "012876f0500aadc288ad2f4de791093403cc9d071cd7d6eea528602f6f6ac7f5",
+    "components/end-footer.tsx": "f022a58c921430992ab3b466eb9f720ac8e1eea34b0a9137e655d6f6527f75a7",
+    "content/site.ts": "64a62e89c7aaa7f839e6c342dda8f991890b0c8031c4c1f1fd7e29f3d13e21ac",
+    "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+    "scripts/e2e-local.sh": "263cbd935fb5620ea5da39a0ea72ee7ca9447de527354f00386429cd349468f4",
+    "scripts/probe-end-dom.mjs": "8af95772dc3723dd61b2b9cc69d66da3fa1ffeae2c28380ff388727adb5562c1",
+    "scripts/probe-end-dom.test.mjs": "018ba333057332f46c67d667f91cd5c1e31e1074dbbe4372c660e32a5ed67d4e",
+    "package.json": "8b8d3b3262167054d7cbf6a4192d2feb703cd9f253049635a6fe1a453cb78b30",
+    "components/riso-heading.css": "fd64c5d5386762695074995bf4a66c8a9ec50e784120276da223439f3edad1cd",
+    "app/(site)/globals.css": "06ddbe30668c4456062cf103a9c4cb0f64d7771f9a96296d3807f467d0dfc3f7",
+    "app/(site)/(app)/desk/desk.css": "a883b639a7fe37cb9a0b13414c720b2de3e0ee3d5094dcd25a3dd651471c8cc2",
+    "app/(site)/(app)/admin/bottles/page.tsx": "937a7c0b16afbd29359454b2578e8ede787c8f02b5fc9c8476e6e1d8fca073b5",
+    "app/(site)/(app)/admin/bottles/review-controls.tsx": "fa6d1e9c4eab1d275814ec7d9e1ec5e528a35d60e44484b7fa82a7a7713f7fe0",
+    "app/(site)/(app)/layout.tsx": "859fc9e993843bb6387786533ca53faca4603368e99d0c49de3576142a1ba3bc",
+    "app/api/admin/bottles/[id]/route.ts": "983d05c9cdd828bd654e38254fdd75e7c261f61ca5963b89e2033bef291d7309",
+    "app/api/admin/bottles/route.ts": "5683683b3ac83d88e0c4bc1ba8d5c3498c7fd26789f753bf7617367958f994c1",
+    "app/api/bottles/route.ts": "e1116787c829f0027371edf38618c1bcbe36e001e6cdb33e82e505a5de167f79",
+    "app/api/bottles/suggestions/route.ts": "84f30e64b6e9e28050a8a741faa82aad8d5b9d107a99127f3f5a31f754692227",
+    "content/bottles.json": "4ac9c4673ec4a60fb7f9e576c0531b4af097b6e6dfb36b9b61e4c19f844202b3",
+    "db/migrations/0005_magenta_william_stryker.sql": "916184939e015fae0a745fcd31572511eede78d7b35f0986fd10f7d3f262aeae",
+    "db/migrations/meta/0005_snapshot.json": "d626d18cf732c138d582b123797b144c517aa17156b36275071102260d054329",
+    "db/migrations/meta/_journal.json": "56308d9b89b7da207c698a0a7ed49775e921bb4bbad9cbce6b365ed8ea74e92f",
+    "db/schema.ts": "37941a56665999672e646ab20bb2baef3b9939d590cdaf7d104edc7860264905",
+    "e2e/bottles-api.test.ts": "7d8875b9de71d79b773c2e06e76d2203b6ac00d0eb8f59d90e1b2a7761220291",
+    "lib/bottles-http.test.ts": "b66fef76baa2022ce6ff195335183fdfc9169d34fba1c7d19c312b266d471a6e",
+    "lib/bottles-http.ts": "ad1cb93cd27427d19ab0e19d22976b26ec3fc6c3ae6c765df5648217df12f9df",
+    "lib/bottles-server.ts": "9dccc66500833fcfa8a915520b04867e53e55bc40581b6a754548c64a6abef19",
+    "lib/bottles-service.test.ts": "8f0bee3c6afe8770860067efeb2f7b51190e8f25acec94f568678138833210ae",
+    "lib/bottles-service.ts": "44cc9b65f9c787c26b57562589f9805e73ae0966f0de301750df8dfa147f1d0d",
+    "lib/bottles-store-contract.ts": "ed32355bd154f0bd90b0b0e75c262f1bc72a98902bb1b39884fa32b9e1a6983d",
+    "lib/bottles-store.ts": "5560c733e5510e94a1fb0098e7899adfecab85d97d239860e728a776cdeef5d1",
+    "lib/bottles.test.ts": "908a127e2fde877b72c7cce4bd72cbdc6fce6065f957f9ea17496750575b44c0",
+    "lib/bottles.ts": "d543504cedbd38ad3a4666a49a1f28ed29c5b2813f967be767530c6b01139e01",
+    "lib/permissions.test.ts": "e720ef13a0b9bc665704cef8b9f3271f52a50f6eef2cfe54ad399f5a81760ce6",
+    "lib/permissions.ts": "f9fc8962881c807550a8e16b63bff0ffca02a515fa04b43b88cdf61e20381d6c"
+  },
+  "executableFingerprint": "6907f9b6c9f65bb581ac4dba7603a95931960df7d57d391d759b595988868130",
+  "sourceAncestry": {
+    "0b349dc": "ancestor",
+    "3ae76a4": "ancestor",
+    "9ddd084": "ancestor",
+    "scope": "source tree only; deployed ancestry is unobserved"
+  },
+  "productionBuilds": [
+    {
+      "suite": 1,
+      "buildId": "WBUkwKz2im1_VTvM-r52A",
+      "manifestHashes": [
+        "79747af130848faa2e8ec669f2dbe5a45923b20a9bd5f8d56aa0831c0b6def8e  .next/prerender-manifest.json",
+        "f3124fef824b7a4b973be6561e8670bfb4fb0d995d8fecc74fb85b0d33bdf24c  .next/build-manifest.json"
+      ]
+    },
+    {
+      "suite": 2,
+      "buildId": "nsZiG6Ojkq9lHzMWU3qlJ",
+      "manifestHashes": [
+        "79747af130848faa2e8ec669f2dbe5a45923b20a9bd5f8d56aa0831c0b6def8e  .next/prerender-manifest.json",
+        "66711f604323a67c2270a7e2cdba772bba71671deb1681f4968ee728a14ba3ef  .next/build-manifest.json"
+      ]
+    },
+    {
+      "suite": 3,
+      "buildId": "5eExtR38clb6cuNAUM4GM",
+      "manifestHashes": [
+        "79747af130848faa2e8ec669f2dbe5a45923b20a9bd5f8d56aa0831c0b6def8e  .next/prerender-manifest.json",
+        "f3f80244c565d12dfa1920573507c2855e037becc5e6dd713bb3ccee021e643d  .next/build-manifest.json"
+      ]
+    }
+  ],
+  "note": "Final source includes controlled-clock full-motion notebook regression; all swipe controls use real clocks. Same 1e039a3 upstream base; no additional rebase.",
+  "previousExecutableFingerprint": "c5b007d61826c83f61b3676b444bdead46769898ba4af3ba5502cf88e9a83925",
+  "upstreamChangedFiles": [
+    "app/(site)/(app)/admin/bottles/page.tsx",
+    "app/(site)/(app)/admin/bottles/review-controls.tsx",
+    "app/(site)/(app)/layout.tsx",
+    "app/api/admin/bottles/[id]/route.ts",
+    "app/api/admin/bottles/route.ts",
+    "app/api/bottles/route.ts",
+    "app/api/bottles/suggestions/route.ts",
+    "content/bottles.json",
+    "db/migrations/0005_magenta_william_stryker.sql",
+    "db/migrations/meta/0005_snapshot.json",
+    "db/migrations/meta/_journal.json",
+    "db/schema.ts",
+    "e2e/bottles-api.test.ts",
+    "lib/bottles-http.test.ts",
+    "lib/bottles-http.ts",
+    "lib/bottles-server.ts",
+    "lib/bottles-service.test.ts",
+    "lib/bottles-service.ts",
+    "lib/bottles-store-contract.ts",
+    "lib/bottles-store.ts",
+    "lib/bottles.test.ts",
+    "lib/bottles.ts",
+    "lib/permissions.test.ts",
+    "lib/permissions.ts"
+  ],
+  "clockBoundary": {
+    "controlled": "Only the full-motion notebook-control page: Date/performance/timers/RAF; runFor drives notebook after settled bodies.",
+    "real": "Production Next/Chrome/React/DOM/CSS and every actual swipe control; no application edits.",
+    "negative": "Reduced-motion notebook phase emits 3 poses and fails unchanged >6 assertion."
+  },
+  "finalVerification": {
+    "trace": "5/5",
+    "lint": "exit 0",
+    "typecheck": "exit 0",
+    "unit": "2337/2337",
+    "productionE2E": "3/3; each 151 pass, 0 fail, 1 existing skip",
+    "footer": "171/171",
+    "suiteSeconds": [
+      340.07199791600004,
+      342.13741466700003,
+      337.430682541
+    ]
+  }
+}

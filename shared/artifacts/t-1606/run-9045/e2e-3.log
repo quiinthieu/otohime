@@ -1,0 +1,854 @@
+Starting Postgres otohime-e2e-85696 on 127.0.0.1:50473
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/980c6385-7c10-4d4b-a913-43e9c9333678-5f7135afde1553acd4a14064a1164be7/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Building
+
+> otohime@0.1.0 prebuild
+> node scripts/ledger-fetch.mjs || true; node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts
+
+ledger: kept content/ledger.json (no GITHUB_TOKEN)
+history:index: git (full history): 200 of 531 commits in /Users/avietidol/Library/Application Support/build-worker/leases/980c6385-7c10-4d4b-a913-43e9c9333678-5f7135afde1553acd4a14064a1164be7/work/otohime/content/history.json, unchanged
+
+> otohime@0.1.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 23ms
+- Cache Components enabled
+- Partial Prefetching enabled
+- Experiments (use with caution):
+  ✓ authInterrupts
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 839ms
+  Running TypeScript ...
+  Finished TypeScript in 2.6s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/201) ...
+  Generating static pages using 7 workers (50/201) 
+  Generating static pages using 7 workers (100/201) 
+  Generating static pages using 7 workers (150/201) 
+✓ Generating static pages using 7 workers (201/201) in 1888ms
+  Finalizing page optimization ...
+
+Route (app)                             Revalidate  Expire
+┌ ◐ /                                           1d      1w
+├ ○ /_not-found
+├ ◐ /account                                    1d      1w
+├ ◐ /admin                                      1d      1w
+├ ◐ /admin/roles                                1d      1w
+├ ◐ /admin/users                                1d      1w
+├   /admin/users/[id]                           1d      1w
+│ └ ◐ /admin/users/[id]                         1d      1w
+├ ƒ /api/ask
+├ ƒ /api/auth/[...all]
+├ ƒ /api/guestbook
+├ ƒ /api/health
+├ ƒ /api/now-playing
+├ ○ /articles
+├   /articles/[slug]
+│ ├ ◐ /articles/[slug]
+│ ├ ○ /articles/why-the-sky-is-blue
+│ ├ ○ /articles/why-we-need-a-leap-day
+│ └ ◐ [+4 more paths]
+├ ƒ /barometer
+├ ○ /capsule
+├ ◐ /dashboard                                  1d      1w
+├ ○ /design-system
+├ ◐ /desk                                       1d      1w
+├ ○ /desk/opengraph-image-blg90x
+├ ○ /elements
+├   /elements/[symbol]
+│ ├ ◐ /elements/[symbol]
+│ ├ ○ /elements/h
+│ ├ ○ /elements/he
+│ └ ◐ [+116 more paths]
+├ ○ /forgot-password
+├ ○ /icon.svg
+├ ◐ /ledger                                     1d      1w
+├ ○ /ledger/opengraph-image-1olq6y
+├ ƒ /music                                      1d      1w
+├ ○ /music/opengraph-image-rp137v
+├ ◐ /notes                                      1d      1w
+├ ○ /notes/opengraph-image-rplwnn
+├ ○ /og
+├ ○ /orrery
+├   /orrery/[body]
+│ ├ ◐ /orrery/[body]
+│ ├ ○ /orrery/sun
+│ ├ ○ /orrery/mercury
+│ └ ◐ [+12 more paths]
+├ ƒ /planisphere
+├ ◐ /play                                       1d      1w
+├ ○ /play/opengraph-image-blpn7k
+├ ◐ /postcard                                   1d      1w
+├ ƒ /postcard/image
+├ ○ /postcard/opengraph-image-1x4cxz
+├ ◐ /postcard/view                              1d      1w
+├ ◐ /projects                                   1d      1w
+├ ○ /projects/opengraph-image-1ndqzi
+├ ○ /reset-password
+├ ƒ /rotor
+├ ○ /ryugu
+├ ○ /shore
+├ ○ /sign-in
+├ ◐ /sketches                                   1d      1w
+├ ƒ /sketches/download/[filename]
+├ ○ /sketches/opengraph-image-t812bo
+├ ○ /structures
+├   /structures/[slug]
+│ ├ ◐ /structures/[slug]
+│ ├ ○ /structures/array
+│ ├ ○ /structures/linked-list
+│ └ ◐ [+6 more paths]
+├ ○ /vinyl
+├ ◐ /work                                       1d      1w
+├ ○ /work/opengraph-image-blv499
+└ ◐ /zine
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+Starting the server on http://localhost:4027
+
+> otohime@0.1.0 test:e2e
+> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/**/*.test.ts'
+
+TAP version 13
+# Subtest: a dragged item stays where it was dropped after a reload, and the red string follows a pin live
+ok 1 - a dragged item stays where it was dropped after a reload, and the red string follows a pin live
+  ---
+  duration_ms: 3740.139333
+  ...
+# Subtest: Tidy up springs everything home and square, keeps the stack, and the tidy desk survives a reload
+ok 2 - Tidy up springs everything home and square, keeps the stack, and the tidy desk survives a reload
+  ---
+  duration_ms: 2639.012209
+  ...
+# Subtest: from the keyboard: Tab to an item, arrows nudge it (Shift for more), R turns it, [ and ] restack it, each said aloud
+ok 3 - from the keyboard: Tab to an item, arrows nudge it (Shift for more), R turns it, [ and ] restack it, each said aloud
+  ---
+  duration_ms: 1400.279125
+  ...
+# Subtest: a long press opens the radial menu without following the link; it rotates, sends to back, and Esc closes it
+ok 4 - a long press opens the radial menu without following the link; it rotates, sends to back, and Esc closes it
+  ---
+  duration_ms: 2261.189667
+  ...
+# Subtest: under reduced motion the desk snaps: no spring, no lean, no transition or animation on it or in it, and the notebook opens at once
+ok 5 - under reduced motion the desk snaps: no spring, no lean, no transition or animation on it or in it, and the notebook opens at once
+  ---
+  duration_ms: 2593.679541
+  ...
+# Subtest: with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)
+ok 6 - with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)
+  ---
+  duration_ms: 3624.43425
+  ...
+# Subtest: on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds
+ok 7 - on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds
+  ---
+  duration_ms: 2347.47525
+  ...
+# Subtest: a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+ok 8 - a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+  ---
+  duration_ms: 2736.588292
+  ...
+# Subtest: real migration upgrades old schema without losing sentinel data
+ok 9 - real migration upgrades old schema without losing sentinel data
+  ---
+  duration_ms: 53.180834
+  ...
+# Subtest: real API persists pending vectors and hides private rows, with 24-entry tied-time pages
+ok 10 - real API persists pending vectors and hides private rows, with 24-entry tied-time pages
+  ---
+  duration_ms: 62.464958
+  ...
+# Subtest: malformed, foreign, profane, URL and oversized bodies never insert
+ok 11 - malformed, foreign, profane, URL and oversized bodies never insert
+  ---
+  duration_ms: 11.050541
+  ...
+# Subtest: concurrent hour, day and queue admission are atomic
+ok 12 - concurrent hour, day and queue admission are atomic
+  ---
+  duration_ms: 67.116417
+  ...
+# Subtest: the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+ok 13 - the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+  ---
+  duration_ms: 6170.508334
+  ...
+# Subtest: typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+ok 14 - typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+  ---
+  duration_ms: 25963.28625
+  ...
+# Subtest: a hidden tab stops the drying clock and showing it again finishes the drying
+ok 15 - a hidden tab stops the drying clock and showing it again finishes the drying
+  ---
+  duration_ms: 7684.174541
+  ...
+# Subtest: reduced motion prints one dried frame and the press never asks for an animation frame
+ok 16 - reduced motion prints one dried frame and the press never asks for an animation frame
+  ---
+  duration_ms: 2646.03125
+  ...
+# Subtest: without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+ok 17 - without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+  ---
+  duration_ms: 1992.279375
+  ...
+# Subtest: a lost WebGL context hands the poster to the SVG fallback
+ok 18 - a lost WebGL context hands the poster to the SVG fallback
+  ---
+  duration_ms: 4401.2995
+  ...
+# Subtest: /music serves the radio's slot under its heading, with the snapshot's credit
+ok 19 - /music serves the radio's slot under its heading, with the snapshot's credit
+  ---
+  duration_ms: 73.987875
+  ...
+# Subtest: the served page plays nothing: no audio element, no autoplay, no stream
+ok 20 - the served page plays nothing: no audio element, no autoplay, no stream
+  ---
+  duration_ms: 0.389791
+  ...
+# Subtest: the stations are lazy: not in the page's first scripts, but in a chunk those scripts load
+ok 21 - the stations are lazy: not in the page's first scripts, but in a chunk those scripts load
+  ---
+  duration_ms: 10.876417
+  ...
+# Subtest: negative control: the Television is unchanged and other pages carry no radio
+ok 22 - negative control: the Television is unchanged and other pages carry no radio
+  ---
+  duration_ms: 34.531167
+  ...
+# Subtest: fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+ok 23 - fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+  ---
+  duration_ms: 1473.530375
+  ...
+# Subtest: keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+ok 24 - keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+  ---
+  duration_ms: 4495.539875
+  ...
+# Subtest: mouse grip toss, exact click suppression, text selection and native link navigation
+ok 25 - mouse grip toss, exact click suppression, text selection and native link navigation
+  ---
+  duration_ms: 4438.57775
+  ...
+# Subtest: continuous mouse path across the title and its open Peek reaches a visible Fetch back
+ok 26 - continuous mouse path across the title and its open Peek reaches a visible Fetch back
+  ---
+  duration_ms: 3198.759166
+  ...
+# Subtest: real mobile CDP grip fetch and card-body scrolling negative control
+ok 27 - real mobile CDP grip fetch and card-body scrolling negative control
+  ---
+  duration_ms: 6002.66375
+  ...
+# Subtest: chips and sticker perform real fetch while links and source dimensions stay intact
+ok 28 - chips and sticker perform real fetch while links and source dimensions stay intact
+  ---
+  duration_ms: 3163.10625
+  ...
+# Subtest: Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+ok 29 - Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+  ---
+  duration_ms: 1347.728375
+  ...
+# cancel path: escape
+# cancel path: blur
+# cancel path: hidden
+# cancel path: resize
+# cancel path: modal
+# cancel path: motion
+# cancel path: dismiss
+# cancel path: remove
+# Subtest: pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+ok 30 - pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+  ---
+  duration_ms: 1594.518875
+  ...
+# Subtest: unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+ok 31 - unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+  ---
+  duration_ms: 14246.358958
+  ...
+# Subtest: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+ok 32 - Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+  ---
+  duration_ms: 2775.828333
+  ...
+# Subtest: native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+ok 33 - native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+  ---
+  duration_ms: 2074.47
+  ...
+# Subtest: peeled mobile cards keep all fetch actions clear of the real margin note
+ok 34 - peeled mobile cards keep all fetch actions clear of the real margin note
+  ---
+  duration_ms: 1454.144166
+  ...
+# Subtest: server baseline has only an inert shell; no JS retains public links
+ok 35 - server baseline has only an inert shell; no JS retains public links
+  ---
+  duration_ms: 593.506166
+  ...
+# Subtest: swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+ok 36 - swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+  ---
+  duration_ms: 2082.033709
+  ...
+# Subtest: local calendar fixture increments once per day, friendly on day three and future-safe
+ok 37 - local calendar fixture increments once per day, friendly on day three and future-safe
+  ---
+  duration_ms: 547.998
+  ...
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 38 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 1163.064833
+  ...
+# Subtest: blocked storage remains usable and Save-Data imports only on explicit enable
+ok 39 - blocked storage remains usable and Save-Data imports only on explicit enable
+  ---
+  duration_ms: 1640.396834
+  ...
+# Subtest: 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+ok 40 - 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+  ---
+  duration_ms: 1180.097417
+  ...
+# Subtest: real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+ok 41 - real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+  ---
+  duration_ms: 813.658458
+  ...
+# Subtest: optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+ok 42 - optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+  ---
+  duration_ms: 685.554125
+  ...
+# Subtest: a day's receipt opens from the keyboard: Tab to the last day, arrows to an inked one, Enter pins, Escape closes
+ok 43 - a day's receipt opens from the keyboard: Tab to the last day, arrows to an inked one, Enter pins, Escape closes
+  ---
+  duration_ms: 766.016459
+  ...
+# Subtest: Press replays the year in date order, a day per tick, with a stamp thud every seventh day
+ok 44 - Press replays the year in date order, a day per tick, with a stamp thud every seventh day
+  ---
+  duration_ms: 7657.262583
+  ...
+# 365 days in 142 ticks, 53 thuds, 375 transitions
+# Subtest: under reduced motion Press lands the final year at once: no replay, no transition or animation in the ledger
+ok 45 - under reduced motion Press lands the final year at once: no replay, no transition or animation in the ledger
+  ---
+  duration_ms: 1132.835042
+  ...
+# Subtest: on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt
+ok 46 - on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt
+  ---
+  duration_ms: 6940.054708
+  ...
+# Subtest: the add form is visible to the owner only
+ok 47 - the add form is visible to the owner only
+  ---
+  duration_ms: 389.573709
+  ...
+# Subtest: a song inserted by SQL shows up for anonymous visitors with its channel number
+ok 48 - a song inserted by SQL shows up for anonymous visitors with its channel number
+  ---
+  duration_ms: 18.125458
+  ...
+# Subtest: an owner adds a channel with a plain form post, and every visitor sees it
+ok 49 - an owner adds a channel with a plain form post, and every visitor sees it
+  ---
+  duration_ms: 61.149875
+  ...
+# Subtest: replayed adds from a plain user and an admin, and a replayed remove, change nothing
+ok 50 - replayed adds from a plain user and an admin, and a replayed remove, change nothing
+  ---
+  duration_ms: 89.119209
+  ...
+# Subtest: duplicate videos and non-YouTube links add no row
+ok 51 - duplicate videos and non-YouTube links add no row
+  ---
+  duration_ms: 68.81575
+  ...
+# Subtest: an owner removes the channel and it leaves every page
+ok 52 - an owner removes the channel and it leaves every page
+  ---
+  duration_ms: 52.5125
+  ...
+# Subtest: the served index has three distinct, known items behind every key
+ok 53 - the served index has three distinct, known items behind every key
+  ---
+  duration_ms: 8.53825
+  ...
+# Subtest: /projects marks each project title and each Gazette desk, and they stay ordinary links
+ok 54 - /projects marks each project title and each Gazette desk, and they stay ordinary links
+  ---
+  duration_ms: 13.126334
+  ...
+# Subtest: /music marks each listed credit as a button, never a link
+ok 55 - /music marks each listed credit as a button, never a link
+  ---
+  duration_ms: 16.646875
+  ...
+# Subtest: negative control: unmarked pages and the nav carry no marker, and no marker names an unknown key
+ok 56 - negative control: unmarked pages and the nav carry no marker, and no marker names an unknown key
+  ---
+  duration_ms: 86.325375
+  ...
+# Subtest: every card goes somewhere real: each destination answers 200 and has its \#section
+ok 57 - every card goes somewhere real: each destination answers 200 and has its \#section
+  ---
+  duration_ms: 1294.617167
+  ...
+# {"viewport":{"width":390,"height":844},"gzipBytes":8454,"attributableCLS":0,"browser":"155.0.8059.86","chunks":[{"path":"/_next/static/chunks/3at0skbznrey0.js","sha256":"ee0af5c50a8cb0256297f4f6407808a3ec6cded43ca8b14f88810d0d6e7d345a","gzipBytes":5279},{"path":"/_next/static/chunks/3y01lkwuqj4_p.js","sha256":"3570b1f30dfed72f4f83c6c15e8ba2dbb5c95bcc7b328f0ddacdba6ed4b12c23","gzipBytes":2637}]}
+# Subtest: real layer geometry, pointer, keyboard, fixed aperture and lazy budget at 390
+ok 58 - real layer geometry, pointer, keyboard, fixed aperture and lazy budget at 390
+  ---
+  duration_ms: 13129.002208
+  ...
+# {"viewport":{"width":1366,"height":768},"gzipBytes":8454,"attributableCLS":0,"browser":"155.0.8059.86","chunks":[{"path":"/_next/static/chunks/3at0skbznrey0.js","sha256":"ee0af5c50a8cb0256297f4f6407808a3ec6cded43ca8b14f88810d0d6e7d345a","gzipBytes":5279},{"path":"/_next/static/chunks/3y01lkwuqj4_p.js","sha256":"3570b1f30dfed72f4f83c6c15e8ba2dbb5c95bcc7b328f0ddacdba6ed4b12c23","gzipBytes":2637}]}
+# Subtest: real layer geometry, pointer, keyboard, fixed aperture and lazy budget at 1366
+ok 59 - real layer geometry, pointer, keyboard, fixed aperture and lazy budget at 1366
+  ---
+  duration_ms: 11944.576875
+  ...
+# Subtest: tilt permission grant calibrates, rotates, relinquishes to controls and tears down
+ok 60 - tilt permission grant calibrates, rotates, relinquishes to controls and tears down
+  ---
+  duration_ms: 6461.18275
+  ...
+# Subtest: denial and unavailable tilt preserve pointer controls
+ok 61 - denial and unavailable tilt preserve pointer controls
+  ---
+  duration_ms: 5444.094667
+  ...
+# Subtest: a pending tilt grant cannot reactivate after Disable or reduced motion
+ok 62 - a pending tilt grant cannot reactivate after Disable or reduced motion
+  ---
+  duration_ms: 3718.140625
+  ...
+# Subtest: rest, offscreen, hidden, disable, pagehide and live reduced motion cancel work
+ok 63 - rest, offscreen, hidden, disable, pagehide and live reduced motion cancel work
+  ---
+  duration_ms: 4630.105166
+  ...
+# Subtest: touch pans scroll normally, Save-Data stays opt-in and original toys remain
+ok 64 - touch pans scroll normally, Save-Data stays opt-in and original toys remain
+  ---
+  duration_ms: 3234.098417
+  ...
+# Subtest: no-JS and reduced motion keep the server paper scene with no pose loop
+ok 65 - no-JS and reduced motion keep the server paper scene with no pose loop
+  ---
+  duration_ms: 2470.965334
+  ...
+# Subtest: nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog
+ok 66 - nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog
+  ---
+  duration_ms: 1589.517625
+  ...
+# Subtest: help prints into the live log; Tab stays inside; Escape closes and gives focus back
+ok 67 - help prints into the live log; Tab stays inside; Escape closes and gives focus back
+  ---
+  duration_ms: 1212.337167
+  ...
+# Subtest: a bare page name, and a palette pick, navigate and close the terminal
+ok 68 - a bare page name, and a palette pick, navigate and close the terminal
+  ---
+  duration_ms: 1795.451542
+  ...
+# Subtest: theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens
+ok 69 - theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens
+  ---
+  duration_ms: 1143.92875
+  ...
+# Subtest: adventure: the walk is kept across a reload, the last secret puts the stamp in `stamps`
+ok 70 - adventure: the walk is kept across a reload, the last secret puts the stamp in `stamps`
+  ---
+  duration_ms: 29959.600333
+  ...
+# Subtest: adventure in private mode: storage throws, the walk still plays and says once that it will not keep
+ok 71 - adventure in private mode: storage throws, the walk still plays and says once that it will not keep
+  ---
+  duration_ms: 1033.569334
+  ...
+# Subtest: every kind of page names a stamped card, and each card is a 1200x630 PNG
+ok 72 - every kind of page names a stamped card, and each card is a 1200x630 PNG
+  ---
+  duration_ms: 316.297541
+  ...
+# Subtest: /postcard offers the twelve sheets and a note capped at 140; /sketches links to it
+ok 73 - /postcard offers the twelve sheets and a note capped at 140; /sketches links to it
+  ---
+  duration_ms: 45.770833
+  ...
+# Subtest: a postcard's link opens its view: noindex, titled, its own card as og:image, the note as text
+ok 74 - a postcard's link opens its view: noindex, titled, its own card as og:image, the note as text
+  ---
+  duration_ms: 14.210459
+  ...
+# Subtest: /postcard/image draws the postcard as a 1200x630 PNG, cached a day and kept out of the index
+ok 75 - /postcard/image draws the postcard as a 1200x630 PNG, cached a day and kept out of the index
+  ---
+  duration_ms: 955.910709
+  ...
+# Subtest: a bad link is a lost postcard: the view says so (noindex) and the image is a 404
+ok 76 - a bad link is a lost postcard: the view says so (noindex) and the image is a 404
+  ---
+  duration_ms: 40.910333
+  ...
+# Subtest: visible Pocket chips, commands and terminal settings agree, clear Lab and survive reload
+ok 77 - visible Pocket chips, commands and terminal settings agree, clear Lab and survive reload
+  ---
+  duration_ms: 1780.370917
+  ...
+# Subtest: native arrows and Space work through capture; Tab wraps, Escape returns focus, buttons keep Enter
+ok 78 - native arrows and Space work through capture; Tab wraps, Escape returns focus, buttons keep Enter
+  ---
+  duration_ms: 957.780667
+  ...
+# Subtest: denied localStorage works in memory and truthfully discloses reload risk
+ok 79 - denied localStorage works in memory and truthfully discloses reload risk
+  ---
+  duration_ms: 974.117042
+  ...
+# Subtest: denied sessionStorage works in memory and truthfully discloses reload risk
+ok 80 - denied sessionStorage works in memory and truthfully discloses reload risk
+  ---
+  duration_ms: 875.137833
+  ...
+# Subtest: denied both works in memory and truthfully discloses reload risk
+ok 81 - denied both works in memory and truthfully discloses reload risk
+  ---
+  duration_ms: 673.113541
+  ...
+# Subtest: lab and go lab route through the command effect and close the dialog
+ok 82 - lab and go lab route through the command effect and close the dialog
+  ---
+  duration_ms: 1152.5175
+  ...
+# Subtest: quota-denied writes keep the Pocket choice in memory and disclose failure
+ok 83 - quota-denied writes keep the Pocket choice in memory and disclose failure
+  ---
+  duration_ms: 780.125708
+  ...
+# Subtest: controls reflow and stay reachable on desktop, phone and a 200% equivalent viewport
+ok 84 - controls reflow and stay reachable on desktop, phone and a 200% equivalent viewport
+  ---
+  duration_ms: 2294.583584
+  ...
+# Subtest: unset appearance adds nothing to any root: no attribute, inline property or layer (the house look)
+ok 85 - unset appearance adds nothing to any root: no attribute, inline property or layer (the house look)
+  ---
+  duration_ms: 3537.921709
+  ...
+# Subtest: a stored run colors the first styled frame of every root layout, with hydration held back
+ok 86 - a stored run colors the first styled frame of every root layout, with hydration held back
+  ---
+  duration_ms: 1237.766666
+  ...
+# Subtest: evidence: every root hydrated under each colored run
+ok 87 - evidence: every root hydrated under each colored run # SKIP
+  ---
+  duration_ms: 0.11275
+  ...
+# Subtest: every run, theme and season on the main site before hydration: the run's colors, the season kept underneath
+ok 88 - every run, theme and season on the main site before hydration: the run's colors, the season kept underneath
+  ---
+  duration_ms: 8290.325583
+  ...
+# Subtest: an applied Lab survives reload and full hops across roots, changes the SVG filters and paper, and resets exactly
+ok 89 - an applied Lab survives reload and full hops across roots, changes the SVG filters and paper, and resets exactly
+  ---
+  duration_ms: 785.24175
+  ...
+# Subtest: same-tab changes apply at once; another tab's run reaches this one and clears its stale Lab
+ok 90 - same-tab changes apply at once; another tab's run reaches this one and clears its stale Lab
+  ---
+  duration_ms: 606.402208
+  ...
+# Subtest: denied storage boots House and works for the page only; corrupt and hostile values are ignored
+ok 91 - denied storage boots House and works for the page only; corrupt and hostile values are ignored
+  ---
+  duration_ms: 594.108583
+  ...
+# Subtest: the layer never takes input, forced colors drop it, and reduced motion stops the seed clock
+ok 92 - the layer never takes input, forced colors drop it, and reduced motion stops the seed clock
+  ---
+  duration_ms: 2469.325458
+  ...
+# Subtest: footer probe reads only the heading source (JavaScript on)
+ok 93 - footer probe reads only the heading source (JavaScript on)
+  ---
+  duration_ms: 587.509917
+  ...
+# Subtest: footer probe reads only the heading source (JavaScript off)
+ok 94 - footer probe reads only the heading source (JavaScript off)
+  ---
+  duration_ms: 246.826667
+  ...
+# Subtest: signed-out visitors are redirected before anything streams
+ok 95 - signed-out visitors are redirected before anything streams
+  ---
+  duration_ms: 10362.916667
+  ...
+# Subtest: the public pages are open to everyone
+ok 96 - the public pages are open to everyone
+  ---
+  duration_ms: 77.246167
+  ...
+# Subtest: the front page is an entrance, without the sidebar
+ok 97 - the front page is an entrance, without the sidebar
+  ---
+  duration_ms: 38.677708
+  ...
+# Subtest: the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor, Planisphere, Barometer, Gazette, Structures and Design system
+ok 98 - the projects page sits in the sidebar and lists Shore, Capsule, Orrery, Elements, Vinyl, Rotor, Planisphere, Barometer, Gazette, Structures and Design system
+  ---
+  duration_ms: 11.239084
+  ...
+# Subtest: Shore is its own page, without the site's sidebar
+ok 99 - Shore is its own page, without the site's sidebar
+  ---
+  duration_ms: 2.706875
+  ...
+# Subtest: Capsule is its own page, without the site's sidebar
+ok 100 - Capsule is its own page, without the site's sidebar
+  ---
+  duration_ms: 3.256292
+  ...
+# Subtest: Orrery is its own page, without the site's sidebar
+ok 101 - Orrery is its own page, without the site's sidebar
+  ---
+  duration_ms: 3.480166
+  ...
+# Subtest: /sun is a permanent redirect to the Sun's poster
+ok 102 - /sun is a permanent redirect to the Sun's poster
+  ---
+  duration_ms: 1.231166
+  ...
+# Subtest: Elements is its own page, without the site's sidebar
+ok 103 - Elements is its own page, without the site's sidebar
+  ---
+  duration_ms: 3.607042
+  ...
+# Subtest: Vinyl is its own page, without the site's sidebar
+ok 104 - Vinyl is its own page, without the site's sidebar
+  ---
+  duration_ms: 2.823333
+  ...
+# Subtest: Rotor is its own page, without the site's sidebar
+ok 105 - Rotor is its own page, without the site's sidebar
+  ---
+  duration_ms: 11.563375
+  ...
+# Subtest: Planisphere is its own page, without the site's sidebar
+ok 106 - Planisphere is its own page, without the site's sidebar
+  ---
+  duration_ms: 26.151
+  ...
+# Subtest: Barometer is its own page, without the site's sidebar
+ok 107 - Barometer is its own page, without the site's sidebar
+  ---
+  duration_ms: 9.664458
+  ...
+# Subtest: The Gazette is its own page, without the site's sidebar
+ok 108 - The Gazette is its own page, without the site's sidebar
+  ---
+  duration_ms: 2.927291
+  ...
+# Subtest: Structures is its own page, without the site's sidebar
+ok 109 - Structures is its own page, without the site's sidebar
+  ---
+  duration_ms: 7.333667
+  ...
+# Subtest: Design system is its own page, without the site's sidebar
+ok 110 - Design system is its own page, without the site's sidebar
+  ---
+  duration_ms: 6.085666
+  ...
+# Subtest: a plain user can't list users or raise their own role
+ok 111 - a plain user can't list users or raise their own role
+  ---
+  duration_ms: 34.685958
+  ...
+# Subtest: the owner lists users and makes an admin
+ok 112 - the owner lists users and makes an admin
+  ---
+  duration_ms: 34.924709
+  ...
+# Subtest: song create and delete are owner-only on /admin/roles
+ok 113 - song create and delete are owner-only on /admin/roles
+  ---
+  duration_ms: 33.490042
+  ...
+# Subtest: an admin can't escalate or touch the owner
+ok 114 - an admin can't escalate or touch the owner
+  ---
+  duration_ms: 35.3135
+  ...
+# Subtest: a ban signs the target out everywhere and blocks sign-in
+ok 115 - a ban signs the target out everywhere and blocks sign-in
+  ---
+  duration_ms: 70.552417
+  ...
+# Subtest: a password reset signs every device out
+ok 116 - a password reset signs every device out
+  ---
+  duration_ms: 84.84725
+  ...
+# Subtest: one heading name, one selectable copy, deterministic settled plates and token plate counts
+ok 117 - one heading name, one selectable copy, deterministic settled plates and token plate counts
+  ---
+  duration_ms: 2289.997666
+  ...
+# Subtest: entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+ok 118 - entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+  ---
+  duration_ms: 1609.566583
+  ...
+# Subtest: server/no-JavaScript headings are readable and mobile notes wrap without overflow
+ok 119 - server/no-JavaScript headings are readable and mobile notes wrap without overflow
+  ---
+  duration_ms: 215.372166
+  ...
+# Subtest: Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+ok 120 - Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+  ---
+  duration_ms: 3043.880833
+  ...
+# Subtest: shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+ok 121 - shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+  ---
+  duration_ms: 271.03625
+  ...
+# Subtest: typing urashima at the top of Home goes down to the palace; a lone A opens the console's page instead
+ok 122 - typing urashima at the top of Home goes down to the palace; a lone A opens the console's page instead
+  ---
+  duration_ms: 8046.597958
+  ...
+# Subtest: typing urashima into a field types it, and goes nowhere
+ok 123 - typing urashima into a field types it, and goes nowhere
+  ---
+  duration_ms: 1570.138
+  ...
+# Subtest: Pocket: the console's Dive chip goes down to the palace
+ok 124 - Pocket: the console's Dive chip goes down to the palace
+  ---
+  duration_ms: 2644.298042
+  ...
+# Subtest: the waterline: the last thing below the footer links down to the palace, by touch as well
+ok 125 - the waterline: the last thing below the footer links down to the palace, by touch as well
+  ---
+  duration_ms: 2307.959584
+  ...
+# Subtest: the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling
+ok 126 - the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling
+  ---
+  duration_ms: 896.4245
+  ...
+# Subtest: with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer
+ok 127 - with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer
+  ---
+  duration_ms: 1722.571959
+  ...
+# Subtest: while the page is hidden the loop stops, and it comes back when the page is seen again
+ok 128 - while the page is hidden the loop stops, and it comes back when the page is seen again
+  ---
+  duration_ms: 1923.726625
+  ...
+# Subtest: without WebGL the sea is static: the served caustic and fish, and no frame runs
+ok 129 - without WebGL the sea is static: the served caustic and fish, and no frame runs
+  ---
+  duration_ms: 1760.122666
+  ...
+# Subtest: under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate
+ok 130 - under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate
+  ---
+  duration_ms: 1525.997209
+  ...
+# Subtest: the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages
+ok 131 - the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages
+  ---
+  duration_ms: 2541.768125
+  ...
+# Subtest: the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog
+ok 132 - the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog
+  ---
+  duration_ms: 1111.904709
+  ...
+# Subtest: under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back
+ok 133 - under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back
+  ---
+  duration_ms: 1450.201
+  ...
+# Subtest: server and no-JS baseline: all cards remain readable links without toy controls
+ok 134 - server and no-JS baseline: all cards remain readable links without toy controls
+  ---
+  duration_ms: 1098.142917
+  ...
+# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+ok 135 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+  ---
+  duration_ms: 3556.702291
+  ...
+# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+ok 136 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+  ---
+  duration_ms: 2590.668542
+  ...
+# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable
+ok 137 - blocked storage and live reduced motion keep instant keyboard operations usable
+  ---
+  duration_ms: 1560.49125
+  ...
+# Subtest: Save-Data loads paper only after explicit enabling
+ok 138 - Save-Data loads paper only after explicit enabling
+  ---
+  duration_ms: 1423.393542
+  ...
+# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+ok 139 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+  ---
+  duration_ms: 6919.197042
+  ...
+# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload
+ok 140 - renderer import waits for window load and the idle callback; server markup has no toy preload
+  ---
+  duration_ms: 1078.307709
+  ...
+# Subtest: existing desktop desk and stamp gestures keep their own controls
+ok 141 - existing desktop desk and stamp gestures keep their own controls
+  ---
+  duration_ms: 3760.760417
+  ...
+1..141
+# tests 141
+# suites 0
+# pass 140
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 336133.516125
