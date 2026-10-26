@@ -1,5 +1,18 @@
-# QA t-1521 (run-8598, quality_engineer, claude-sonnet-5-5) — verdict: FAIL (cause=code)
-Delivery sha 93413db (main HEAD; no separate deploy, repo checked locally on the same sha).
-Real: npm ci, npm test 1741/1741, typecheck + lint (0 errors, 10 pre-existing warnings), build exit 0, next start on :4000 with e2e/postcard.test.ts 5/5 (13 pages, absolute og:image, 1200x630 PNG), /postcard/image?c=junk -> 404 (negative control). Fake/unproven: deployed site, real share sheet, CI (gh unavailable), no browser run by me.
-Defect: commit 93413db message ends with `Co-Authored-By: Claude <noreply@anthropic.com>`. plan.commit_identity forbids any Co-Authored-By trailer. Author is Otohime <quiinthieu@gmail.com> (correct). No author.txt in delivery evidence.
-Functionality otherwise meets the acceptance criteria.
+# QA report t-1521 (run-8604, claude-sonnet-5-5) - verdict FAIL, cause=authority
+
+Delivery sha 2f1680c (contains 93413db); main at fd9bc0a contains it (merge-base --is-ancestor ok). Deploy not observed (no deploy from this lease); CI not observed (no gh).
+
+## Independent evidence (fresh npm ci, this lease, Node/Next 16.4.2)
+- npm test: 1756/1756 pass. typecheck exit 0; lint 0 errors/10 old warnings; build exit 0 with /postcard, /postcard/image, /postcard/view, 7 segment opengraph-images.
+- e2e/postcard.test.ts: 5/5 (stamped 1200x630 PNG per page, picker with 140 cap, view noindex with og:image, image 404 on bad code).
+- Real: Next build and server, Satori. Fake: none. Not proven: production site, real share sheet, emoji without network.
+- Negative control: bad code -> lost-postcard view and 404 image (e2e test 4/5).
+
+## Identity (author.txt)
+- All commits author/committer Otohime <quiinthieu@gmail.com>.
+- 2f1680c: Co-Authored-By trailers (anchored ^Co-Authored-By:) = 0.
+- 93413db (the delivery commit): trailers = 1 ("Co-Authored-By: Claude"). plan.commit_identity forbids it, so this is a failure.
+- It sits under later commits on shared main; fixing needs a history rewrite/force-push, which is forbidden. No code change can remove it.
+
+## Verdict
+Every functional check passes. Only a board-side precondition is missing: a decider waiver of the 93413db commit message. cause=authority, blocker {t-1521, "commit identity: no Co-Authored-By trailer"}. Owner: decider/operator. Once waived/reconciled, re-verify needs no code change.
