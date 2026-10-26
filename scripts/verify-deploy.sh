@@ -5,9 +5,14 @@
 #   BASE_URL=https://otohime.dev EXPECT_SHA=<40-hex sha> bash scripts/verify-deploy.sh
 #   bash scripts/verify-deploy.sh --self-test     # negative and positive controls against a local fake server
 #
-# 1. Polls $BASE_URL/api/health until its `sha` equals EXPECT_SHA exactly, for at most VERIFY_TIMEOUT seconds
+# 1. Polls $BASE_URL/api/health until its `sha` serves EXPECT_SHA, for at most VERIFY_TIMEOUT seconds
 #    (default 300, capped at 590 so the bound stays under 10 minutes), every VERIFY_INTERVAL seconds (default 10).
-#    A sha that never matches, a non-200 answer or nothing listening exits 1 and names what it last saw.
+#    The served sha serves EXPECT_SHA when it is EXPECT_SHA, when it descends from it (main keeps one pending CI
+#    run, so a newer push can replace this commit's run and deploy it as part of a later commit), or when
+#    EXPECT_SHA is ahead of it only by report-only paths (projects/**, *.md: ci.yml's push paths-ignore, so that
+#    commit never deploys). Ancestry is read from this checkout (VERIFY_REPO overrides it), fetching an unknown
+#    served sha from origin once. A stale served sha with code still undeployed, a non-200 answer or nothing
+#    listening exits 1 and names what it last saw.
 # 2. Runs e2e/pocket-terminal.test.ts and e2e/ink-press.test.ts against BASE_URL (scripts/e2e.mjs runs the suite
 #    as it is when BASE_URL is set). Both are read-only: no form posts, no sign-in. They need Google Chrome or
 #    CHROME_PATH, like npm run test:e2e.
@@ -19,6 +24,35 @@ cd "$(dirname "$0")/.." || exit 2
 
 NODE_TS=(node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON)
 MAX_TIMEOUT=590
+
+git_repo() { git -C "${VERIFY_REPO:-.}" "$@"; }
+
+# Does a deployment of <got> serve <want>? Sets HOW (exact, contains, report-only ahead) and returns 0, or 1.
+# Runs in the polling shell, not a subshell, so FETCHED keeps an unknown sha to one fetch.
+serves() {
+  local want="$1" got="$2" files f
+  HOW=""
+  if [ "$got" = "$want" ]; then HOW="exact"; return 0; fi
+  printf '%s' "$got" | grep -qE '^[0-9a-f]{40}$' || return 1
+  git_repo cat-file -e "$want^{commit}" 2>/dev/null || return 1
+  if ! git_repo cat-file -e "$got^{commit}" 2>/dev/null && [ "$got" != "${FETCHED:-}" ]; then
+    FETCHED="$got"
+    git_repo remote get-url origin >/dev/null 2>&1 &&
+      GIT_TERMINAL_PROMPT=0 GIT_SSH_COMMAND="${GIT_SSH_COMMAND:-ssh -o BatchMode=yes -o ConnectTimeout=10}" \
+        git_repo fetch --quiet --no-tags origin "$got" >/dev/null 2>&1
+  fi
+  git_repo cat-file -e "$got^{commit}" 2>/dev/null || return 1
+  if git_repo merge-base --is-ancestor "$want" "$got"; then HOW="contains"; return 0; fi
+  git_repo merge-base --is-ancestor "$got" "$want" || return 1
+  files="$(git_repo diff --name-only "$got" "$want")" || return 1
+  while IFS= read -r f; do
+    case "$f" in
+      "" | projects/* | *.md) ;;
+      *) return 1 ;;
+    esac
+  done <<<"$files"
+  HOW="report-only ahead"
+}
 
 verify() {
   local base="${1:-${BASE_URL:-}}" want="${2:-${EXPECT_SHA:-}}"
@@ -47,8 +81,8 @@ verify() {
     code="${body##*$'\n'}"
     body="${body%$'\n'*}"
     got="$(printf '%s' "$body" | grep -oE '"sha"[[:space:]]*:[[:space:]]*"[^"]*"' | head -n 1 | sed -E 's/.*"([^"]*)"$/\1/')"
-    if [ "$code" = "200" ] && [ "$got" = "$want" ]; then
-      echo "ok - /api/health serves $want (try $tries)"
+    if [ "$code" = "200" ] && serves "$want" "$got"; then
+      echo "ok - /api/health sha $got serves $want ($HOW, try $tries)"
       break
     fi
     if [ "$code" = "200" ]; then
@@ -104,6 +138,21 @@ self_test() {
   local work="$WORK"
   local A=1111111111111111111111111111111111111111 B=2222222222222222222222222222222222222222
 
+  # Fixture history (no origin, so nothing is fetched): C1 code; C2 = C1 + a report and a README (report-only
+  # ahead); C3 = C2 + code; SIDE branches off C1 with only a report, so only ancestry refuses it.
+  # Every case reads ancestry from it via VERIFY_REPO.
+  local C1 C2 C3 SIDE
+  repo() { git -C "$work/repo" -c user.name=self-test -c user.email=self-test@localhost -c commit.gpgsign=false "$@"; }
+  commit() { mkdir -p "$work/repo/$(dirname "$1")" && echo "$2" >"$work/repo/$1" && repo add -A && repo commit -qm "$2" && repo rev-parse HEAD; }
+  git init -q "$work/repo"
+  C1="$(commit lib/app.ts one)"
+  repo checkout -qb side
+  SIDE="$(commit projects/side/notes.md side)"
+  repo checkout -q -
+  commit projects/p/summary.md report >/dev/null
+  C2="$(commit README.md readme)"
+  C3="$(commit lib/app.ts two)"
+
   serve() {
     [ -n "$SERVER" ] && kill "$SERVER" 2>/dev/null && wait "$SERVER" 2>/dev/null
     rm -f "$work/port"
@@ -121,7 +170,7 @@ self_test() {
     [ $# -gt 0 ] && shift
     args=("$@")
     rm -f "$work/e2e-ran"
-    env VERIFY_TIMEOUT=4 VERIFY_INTERVAL=1 MARK="$work/e2e-ran" ${envs[@]+"${envs[@]}"} \
+    env VERIFY_TIMEOUT=4 VERIFY_INTERVAL=1 VERIFY_REPO="$work/repo" MARK="$work/e2e-ran" ${envs[@]+"${envs[@]}"} \
       bash scripts/verify-deploy.sh ${args[@]+"${args[@]}"} >"$work/out" 2>&1 || code=$?
     local ok=1 why=""
     case "$want" in
@@ -167,6 +216,31 @@ self_test() {
   base="http://127.0.0.1:$port"
   expect "a stale sha that turns into EXPECT_SHA mid-poll passes (the poll retries)" 0 ran \
     BASE_URL="$base" EXPECT_SHA="$B" EXPECT_BASE="$base" VERIFY_E2E_CMD="$reached"
+
+  serve "$C3"
+  base="http://127.0.0.1:$port"
+  expect "a served sha that descends from EXPECT_SHA passes (a newer push deployed it)" 0 ran \
+    BASE_URL="$base" EXPECT_SHA="$C1" EXPECT_BASE="$base" VERIFY_E2E_CMD="$reached"
+
+  serve "$C1"
+  base="http://127.0.0.1:$port"
+  expect "EXPECT_SHA ahead of the served sha only by projects/** and *.md passes (report commits never deploy)" 0 ran \
+    BASE_URL="$base" EXPECT_SHA="$C2" EXPECT_BASE="$base" VERIFY_E2E_CMD="$reached"
+  expect "negative control: EXPECT_SHA ahead of the served sha by code exits nonzero and skips e2e (stale deploy)" \
+    nonzero skipped BASE_URL="$base" EXPECT_SHA="$C3" VERIFY_E2E_CMD='touch "$MARK"'
+  if grep -qF "last got sha '$C1'" "$work/out"; then
+    pass=$((pass + 1))
+    echo "ok - the stale deploy names the sha it saw"
+  else
+    fail=$((fail + 1))
+    echo "not ok - the stale-deploy output does not name sha $C1"
+    sed 's/^/#   /' "$work/out"
+  fi
+
+  serve "$SIDE"
+  base="http://127.0.0.1:$port"
+  expect "a served sha off another branch exits nonzero and skips e2e, even when the diff is report-only" nonzero skipped \
+    BASE_URL="$base" EXPECT_SHA="$C2" VERIFY_E2E_CMD='touch "$MARK"'
 
   serve 500
   base="http://127.0.0.1:$port"

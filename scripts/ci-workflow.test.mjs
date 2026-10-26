@@ -103,3 +103,10 @@ test("production proves the deployed sha, terminal and press after the deploy", 
   assert.doesNotMatch(prod, /curl\b[^\n]*otohime\.dev\/api\/health/, "production must not smoke-test with a bare health curl");
   assert.match(steps("checks"), /bash scripts\/verify-deploy\.sh --self-test/, "checks must run the verify-deploy self-test");
 });
+
+test("verify-deploy treats exactly the push paths-ignore as report-only", () => {
+  // A report-only lead passes verify-deploy because CI never deploys it; the two lists must not drift apart.
+  const script = readFileSync(new URL("./verify-deploy.sh", import.meta.url), "utf8");
+  assert.deepEqual(list(["on", "push", "paths-ignore"]), ["projects/**", "**.md"]);
+  assert.match(script, /^\s*"" \| projects\/\* \| \*\.md\) ;;$/m, "verify-deploy.sh must ignore projects/* and *.md only");
+});

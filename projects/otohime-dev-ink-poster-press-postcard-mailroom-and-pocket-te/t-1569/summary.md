@@ -51,3 +51,52 @@ terminal/press proof after it (decision recorded).
 - That the production job's new step passes on the GitHub runner (Chrome present, about 2 minutes). It fails
   if the job is red at "Verify the deployed sha, terminal and press".
 - The one unattributed e2e failure in the first live run, which may be a flake around deploy cutover.
+
+# run-8960 fix (claude-opus-5-5, effort high, linux lease, Node 22.23.3, /usr/bin/google-chrome)
+
+Delivery commit: the commit that adds this section (`git log -1 -- projects/otohime-dev-ink-poster-press-postcard-mailroom-and-pocket-te/t-1569/summary.md`).
+
+## Why the green gate failed (gate sha 9d0167a)
+- `EXPECT_SHA=$(git rev-parse HEAD)` was 9d0167a. That is a report-only commit, and the push `paths-ignore`
+  (`projects/**`, `**.md`) means it never runs CI, so it is never deployed.
+- ec59663's CI run 40330037984 was **cancelled**. Main's concurrency group keeps one pending run, and the next
+  push (0740594, run 40330477897) replaced it. At 13:31Z the newest deployed run was 542c620 (run 40325669520,
+  success), and 5577ec5 (run 40328273755) was still in progress. So the live sha could never equal either commit.
+  At best it would become a descendant of them.
+
+## Change
+`verify-deploy.sh` now polls until the served sha *serves* EXPECT_SHA. It accepts the served sha when:
+1. the served sha equals EXPECT_SHA (`exact`);
+2. the served sha descends from it (`contains`, the rule ci.yml already states for QA); or
+3. EXPECT_SHA descends from the served sha and `git diff --name-only` between them lists only
+   `projects/*` / `*.md` (`report-only ahead`).
+
+Anything else fails, including a stale deploy with code still pending, a sha off another branch, or an unknown sha.
+Ancestry comes from the checkout (`VERIFY_REPO` overrides it), and an unknown served sha is fetched from origin once.
+In CI's shallow production checkout, only `exact` can pass.
+The e2e step is unchanged.
+
+Other edits:
+- The self-test has 15 checks, up from 10, against a temporary git fixture with no origin. The new checks are a
+  newer served sha, a report-only lead, the stale deploy with a code lead (negative control, and it names the sha
+  it saw), and a side branch whose diff is report-only (ancestry alone refuses it).
+- `scripts/ci-workflow.test.mjs` pins the script's report-only patterns to ci.yml's `paths-ignore`.
+- The README is updated to match.
+
+## Evidence
+| check | result |
+|---|---|
+| `bash scripts/verify-deploy.sh --self-test` | 15 ok, 0 failed (~22 s) |
+| mutation: report-only filter accepts any path | red: stale-deploy negative control + its sha line (13 ok, 2 failed) |
+| mutation: ancestry check `got <= want` removed | red: side-branch case (14 ok, 1 failed) |
+| mutation: script also ignores `docs/*` | ci-workflow test 7 red |
+| `npm test` | 2234 pass, 0 fail |
+| `bash -n scripts/verify-deploy.sh && grep -q verify-deploy .github/workflows/ci.yml` | exit 0 |
+| real negative control: otohime.dev (live 542c620) with EXPECT_SHA=b8e1e2a (main tip; 0740594 and ec59663 code not deployed) | exit 1, "last got sha '542c620…'" |
+| real positive: otohime.dev (live 542c620) with EXPECT_SHA=9cb3833 (ancestor) | `contains, try 1`; e2e 12/12 (press 6, terminal 6); exit 0 |
+
+## Not yet proven (plan-manager QA, after CI)
+- The contract's live probe at this delivery sha. It passes once production serves this commit or a descendant
+  of it. It fails if another plan's code commit sits between the live sha and this one when the gate runs, and
+  that commit has not deployed within the 300 s poll.
+- The production job's "Verify the deployed sha, terminal and press" step on the GitHub runner.
