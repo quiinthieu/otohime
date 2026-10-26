@@ -1,0 +1,41 @@
+{
+  "observed_at": "2026-10-26T07:57:22.091934+00:00",
+  "delivery_sha": "5cd6ee0102242f09f0f328fa5b786635d967b39c",
+  "local_sha": "3351f78608acae7aa6d31c029e9fe665a9458e6f",
+  "node": "v22.12.0",
+  "platform": "Darwin arm64",
+  "build_id": "1ozFho32Nz7e3UPkieYTe",
+  "runtime_source_matches_delivery": true,
+  "runtime_fingerprint_sha256": "fc016a02069b7f3ab9bee524cdc5fabc5275f538dfdb30a2303f09dea44c8a5f",
+  "source_sha256": {
+    ".github/workflows/ci.yml": "9dcff7a80fcf598df21d07c4f54e0f88c40a8bbb7dac8acb60f093c987a18a9f",
+    "app/(ryugu)/_components/sea.tsx": "c6366da45fa9053d6430b47087555a199ac7b5789611adc0fb678a874a034f08",
+    "app/(ryugu)/_lib/scene.ts": "60d23ea908ac817a2e9cbe74068d3693060f85f6fa4e68286fe5b7903462785a",
+    "app/(ryugu)/_lib/school.ts": "92976ce1bb73a0c14e15625ebe15581fc4a3fc8547ecd3f6e8481c229c9cec8b",
+    "app/(ryugu)/layout.tsx": "de4c312c4b4758c5ec521d54e649384e4ef6e0db6ac8a3fe29aef4d4a761bcb8",
+    "app/(ryugu)/ryugu.css": "6d571785360c4c7234f68149eae1e0ce3528263fdcc2c2de57150a1497f005f3",
+    "app/(ryugu)/ryugu/page.tsx": "44d222aed2b5595999dcf93fec50f06a6462807b121f12b36212c19424c7c14b",
+    "app/(site)/globals.css": "06ddbe30668c4456062cf103a9c4cb0f64d7771f9a96296d3807f467d0dfc3f7",
+    "app/(site)/layout.tsx": "c2f11ccef6004e4ce6ea7d2fefd63d07688978fe5b1d29e4432de2a58edca096",
+    "components/end-footer.tsx": "316653d28452fb53779d67f6e2d934a5aaac7ffc366073dce446ecb909095af8",
+    "components/handheld.tsx": "2611a485cb6450e37589fd1ab74b5572d966ecf9ab909247b1af6a4da053c856",
+    "components/urashima-keys.tsx": "e19f857a64fa105992d8ba92574606105c63e46763b5a5e5282e432979143c12",
+    "content/site.ts": "60b489ebcfb7196b5bc4e073cfc191ce772221c3c346d7fc3e3dff36039fff1d",
+    "lib/urashima.ts": "b0c669ac6ddc59b7ef98b1ca7b5a2249f452060e6c51e5f55b771bec1e7663a1",
+    "next.config.ts": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "package.json": "9fdb11f9be330bc0d6bc37c77f8441d1774c3b8acc77b6ac15a1f3755cfde9bb"
+  },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "playwright-core": "1.64.0",
+    "pg": "8.23.1",
+    "embedded-postgres": "17.10.0-beta.17"
+  },
+  "palace_artifact_sha256": {
+    ".next/server/app/(ryugu)/ryugu/page.js": "57b91fdd03a02a0cca4cad391c6ec1e952f0e16525ef95670fa2513ecd4353b5",
+    ".next/server/app/(ryugu)/ryugu/page_client-reference-manifest.js": "44757f4927235283438b7c9035d785ef6922f6843967c3548f03fb6ea12dfd9f"
+  }
+}
