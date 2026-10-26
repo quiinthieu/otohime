@@ -1,191 +1,122 @@
 # Keyless Pocket Presence
 
-Plan: pm-258 · idea-254 · product-owner recovery run run-8715 (supersedes run-8712 delivery)
+Plan pm-258 · revision 2 · product owner run-9039 · 2026-10-26.
+Baseline: 21a8f6edb7a3bed1ec1e505917a522df1f653468.
+Sources: [original plan/provider contracts](plan_run-8715.md), [verbatim research](research.md), [last QA](qa_report_run-8849.md), [newer closure evidence](t-1564-closure.md).
+The exact proposal task and prerequisite manifest are in [revision2-contract.md](revision2-contract.md).
 
-Repository baseline: 2a58479b90339ca0d5519c89c6e0c16a58753c08 · 2026-10-26
-Source: [rep-5070 preserved verbatim](research.md) and [pm-242](https://apps.vietky.io.vn/plans/plans/pm-242).
+## Deliverable and scope reduction
 
-## Product outcome and scope
+The original product is keyless listening/game presence on /music: ListenBrainz music and optional Lanyard games. This revision replaces only superseded t-1564. Its nearest independently deliverable outcome is a reproducible local gate-repair closure tool. Production recovery and personalized owner presence remain separately unproven.
 
-Visitors can read the owner's public listening or gaming presence in the existing /music cassette and game cartridge without adding deployment keys or secrets. ListenBrainz is the music provider; Lanyard is the optional game provider. All eleven other delivered pm-242 outcomes stay outside this work. The original Spotify/Steam adapters remain available as explicitly configured alternatives.
+t-1564 exhausted three fix cycles across two agent profiles. Its original control repairs are landed and recorded as deployed, but its broad seven-command closure repeatedly failed when concurrent app changes broke shared footer contracts. Repeating that closure or accepting evidence-only reports cannot repair those defects. The replacement ships one on-demand command with failure propagation, fingerprints and mutation controls. It proves only the local regressions it executes. This reduction is recorded as a board decision; it does not waive a product defect, weaken a correct assertion or establish external delivery.
 
-The immediately deliverable outcome is a deployed, verified keyless integration with honest defaults and safe failure behavior. A personalized live owner track/game is a separate observable outcome: absent an owner-provided public identifier and feed, it is **undelivered**, even if integration checks pass. Never substitute an unrelated public account into production or claim a fixture is live. Account setup is advisory and does not block the build or core capability acceptance.
+## Preserve finished work and successor tasks
 
-## Evidence and policy inputs
+| Work | Current observed state | Treatment |
+| --- | --- | --- |
+| pm-242 twelve build tasks / eleven delivered visitor outcomes | Done; personalized live output missing | Preserve shipped behavior. |
+| t-1564 | Superseded in revision 2 | Preserve repairs, reports and raw evidence; replace the remaining closure obligation only. |
+| Serial runner, reporter and CI failure summary | 15fd171 / 841ca69; current regression suite passes | Reuse tests, do not re-implement. |
+| Kame clock pause/control | 9ddd084/841ca69 | Preserve. Local unit tooling does not prove Kame browser execution. |
+| Footer waterline | Actual source repair 3351f78, pm-249/t-1568 | Preserve attribution and behavior. |
+| pm-270/t-1603, t-1604, t-1605 | Done | Preserve workflow filtering, probe/runtime and deploy changes. |
+| pm-270/t-1606 desk swipe | Green gate | Preserve 0b349dc precondition/trace work; do not duplicate or assert final acceptance. |
+| pm-272/t-1565 ListenBrainz | Ready | Keep its existing full build contract in successor pm-272. |
+| pm-272/t-1566 Lanyard | Backlog after t-1565 | Keep its existing optional-provider contract. |
 
-- Research rep-5070 found pm-242 abandoned after 12/12 completed tasks; eleven visitor ideas worked and live Now Playing remained quiet behind Spotify/Steam secrets. Its provider probes belong to that research run and are not execution evidence from this planning run.
-- Recovery run independently read five recent main run summaries and job-step listings for two completed failures: [40277024423](https://github.com/quiinthieu/otohime/actions/runs/40277024423) at 76141f1 failed E2E against next start; [40275822192](https://github.com/quiinthieu/otohime/actions/runs/40275822192) at 7041d7f failed Footer Chromium probe. Both skipped production. Run 40277523350 at the current baseline 2a58479 was in progress at inspection. This is one bounded summary page, not complete history. Both raw checks-log requests returned HTTP 403, so the exact assertions are inconclusive. Task 1 owns diagnosis and repair of both known gate failures, and checks whether the new baseline already corrected either.
-- Installed locked dependencies with npm ci. Recovery preflight at 76141f1: npm test passed 1,968 tests with zero failed/skipped; lint passed with 10 warnings; typecheck passed. Delivery checks are repeated after integrating concurrent main changes and recorded in the summary report. No feature implementation or live-provider execution is claimed by this document.
-- AGENTS.md applies. The referenced projects/20260921222547_plan_manager_chief_of_staff_extraction.md and docs/claude/software-development.md are absent from this checkout and lease-home search; an attempted upstream lookup was unavailable. Their contents have not been read or inferred. The explicit user role/build-contract rules govern this plan; the missing-policy lesson is recorded on the board.
-- Read installed Next 16.4.2 guides for connection() and cacheLife. Preserve request-time provider reads and cacheLife inside the existing use-cache function. The connection guide now prefers io() for some Cache Components cases, but real-request-only reads remain intentional here; do not perform an unrelated API migration.
-- Provider primary references: [ListenBrainz core read endpoints](https://listenbrainz.readthedocs.io/en/latest/users/api/core.html) describe current and latest listens; [Lanyard documentation](https://github.com/Phineas/lanyard) describes its opt-in public presence API. A documented public endpoint does not prove an owner account is configured.
+pm-272 already has after_plan_id=pm-258 (created 12:54Z). Do not create duplicate provider tasks or a second part. The original provider contracts remain in the archived plan and on their task records. Closing this revision's tooling scope releases that successor without pretending the shared production lane is repaired.
 
-## Architecture and interfaces
+Settings read: max_plan_elapsed=6h; max_live_runs_per_plan=2; qa_mode=auto. Propose one SWE task without dependencies. Default estimate is one hour if no measured role p50 applies; server admission is authoritative. If size admission refuses, propose an independently useful first part within its ceiling and chain later ideas by after_plan_id, never parent_plan_id. No task depends on another plan's unfinished work.
 
-Extend lib/now-playing.ts and its pure parser/sanitizer module, not a parallel reader. Keep GET /api/now-playing always 200 for provider failure, with no-store response headers, and retain the shared server-rendered /music shelf. Preserve the single cached reader with stale=30, revalidate=60, expire=300; this is request-driven caching, not a schedule. On-demand GET is the production trigger; fixtures and a controlled cache clock prove refresh immediately.
+## How the replacement differs
 
-Add music and play objects with source (listenbrainz|spotify|null and lanyard|steam|null respectively) and state (off|quiet|live|fixture). Keep spotify, steam, track, game and readAt. Legacy provider fields describe only the adapter actually read; selected track/game are identified by music/play. Unselected adapters remain off and need not make requests. A configured ListenBrainz/Lanyard source takes priority over Spotify/Steam; failure stays quiet rather than silently changing attribution. A valid real empty response can be live with null data; live means the selected real endpoint answered validly, not that something is playing.
+| Failed approach | Revision 2 |
+| --- | --- |
+| All seven shared app/footer checks must be green while other plans change them | Local repair regressions plus project unit/lint/types/build are the task's proof. Shared footer/production defects retain explicit owners. |
+| Repeated manual evidence-only closures | Implement a machine-checkable CLI with bounded children, exact source/lock identity and nonzero propagation. |
+| Unavailable historical assertion/author.txt as a mandatory closure gate | Retain exact unread evidence as inconclusive; never infer bytes or historical cause. |
+| One newer SHA or successful attempt erases a flake | Correlate relevant code/lock/config hashes; preserve matched failures beside passing runs. |
+| Provider builds coupled to human account setup | Preserve pm-272 contracts; personalized activation remains an advisory outcome, not a core integration gate. |
 
-Extend Track with a sanitized listenedAt timestamp for a past ListenBrainz listen. Playing-now has no listened_at; only a valid actual track enables reels. Last-listen labels include full UTC date and time so an old record cannot look current. Keep caps (title/artists 64, game 48), text-only rendering, strict HTTPS public-link hosts and encoded username path segments.
+The original broad contract is replaced only for this internal tooling task. Product delivery still needs its actual code repairs, deploy checks, ancestry and user-path proof. Preserve all footer, keyboard, no-JS, motion, contrast, displacement and zero-page-error assertions, reporter diagnostics, and production needs:checks.
 
-Use server-owned content/now-playing.ts for optional public identifier defaults (initially empty), overridable by LISTENBRAINZ_USER and LANYARD_USER_ID. Never accept provider URLs or identities from an HTTP caller. Host overrides are test-only loopback origins, reject credentials/path tricks and redirects, and can never produce live state. Provider errors, HTML gateway challenges, malformed payloads and aborts produce quiet output without exception details. A partial ListenBrainz success may display a valid last listen, never infer current playback from history.
+## Task 1 — Make landed gate repairs reproducibly verifiable
 
-No cron, OAuth, scrape, new paid service, bot token, new infrastructure, or durable compute queue is needed. Two ListenBrainz requests may occur per cache read; rate/caching claims are per cache instance, not a global once-per-minute guarantee across a serverless fleet. Keyed credentials must stay server-only and never enter HTML, RSC, client chunks or logs.
+Role software_engineer; depends_on=[]; qa=skip.
 
-## Order, size and ownership
-
-Three software-engineer tasks, ordered 1 → 2 → 3, because provider/API/UI/walk interfaces overlap and a red deploy gate must be repaired first. Each has qa=required. The platform supplies task QA and final acceptance; duplicating those as build tasks would add no product change.
-
-Settings read this run: max_plan_elapsed=24h, max_live_runs_per_plan=3, qa_mode=auto. With the fallback one-hour role duration, overlapping/serial tasks total 3h and longest dependency path 3h. The server uses its current learned p50 on proposal admission. If refused for size, split at task boundaries, propose the first admissible part here, and file later parts with after_plan_id chaining rather than parent_plan_id.
-
-The product owner writes this document, preserves research, records decisions, runs repository tests, commits and pushes documentation on main, confirms the delivery commit is on origin/main, then proposes these exact contracts with the delivery SHA and product title. No task claim belongs to this role. The software engineers stop at tested pushes; deployment evidence comes from the gate and independent QA.
-
-## Build contracts
-
-The machine-readable equivalent is [tasks.json](tasks.json). Verification runs inside the delivery checkout and touches only isolated local fixtures/databases, never shared infrastructure. Build/probe commands may perform their own bounded readiness checks for processes they just started; no contract relies on elapsed time, a natural refresh, an operator response or another plan's work.
-
-### 1. Restore the deployment checks gate
-
-**Role:** software_engineer · **Depends on:** none · **QA:** required
-
-**Problem:** Main has observed E2E and Footer Chromium probe failures, so checks blocks production and keyless presence cannot deploy. The latest baseline may have changed either failure and must be reproduced before choosing a repair.
+**Problem:** Landed local repairs and evolving shared-lane defects are mixed in expensive manual closure reports. There is no repeatable command that rejects missing or false-positive local evidence.
 
 **Action items:**
 
-- Inspect current and bounded paginated completed/failed GitHub Actions history around c38f72a through the delivery base, including 40277024423 (E2E) and 40275822192 (footer). Read raw failure tails where accessible and reproduce each remaining failure against a production build with a throwaway local database. Diagnose the assertion and correlate relevant code/lock/configuration fingerprints; a later SHA alone is not evidence of a fix. Record exact run ids, inspected counts and any unavailable/truncated evidence.
-- Fix the smallest E2E behavior, footer behavior or objectively incorrect probe assumption responsible, preserving the public-page, keyboard, reduced-motion, contrast and negative-control coverage. Add a focused regression for each actual defect; do not skip a gate, relax correct thresholds or alter unrelated feature work. If a failure is already corrected at the delivery base, cite the actual assertion passing rather than duplicate the repair.
-- Make the existing footer walk and browser probe run with an isolated local database on supported leases, reusing the embedded-postgres lifecycle in scripts/e2e.mjs when Docker is unavailable if needed. Clean up only PIDs and database files created by this run.
-- Run the verification commands and push the focused repair. CI/deployment evidence is evaluated by the green gate and QA; do not add a staging mutation or a deployment wait to this build task.
+1. Read AGENTS.md and relevant installed Next guides. Preserve original repairs and existing owners. Add only scripts/check-gate-closure.mjs, lib/gate-closure.test.ts and gate-closure.md in this plan folder.
+2. Declare an on-demand CLI, node scripts/check-gate-closure.mjs, returning otohime.gate-closure.v1 JSON. Execute current-checkout lib/e2e-runner.test.ts, lib/end.test.ts and lib/urashima.test.ts using Node 22 strip-types, clearing NODE_TEST_CONTEXT for nested tests, with child timeout at most 180s and bounded tails. Reuse real serial-vs-parallel, Actions-vs-local reporter, CI exit-preservation, migrated embedded-Postgres lifecycle and waterline regressions.
+3. Report tested SHA, dirty status, Node/platform, SHA256 hashes of relevant source/test/workflow files and package-lock.json, command exits/signals/timeouts and local_controls=pass/fail. External evidence is explicitly inconclusive. Exit zero only if every required real child executes and passes; missing results, nonzero exit, spawn error, timeout, malformed output and fingerprint failures exit nonzero.
+4. Write failing tests first for serialization/error propagation through a fake child-runner port and a real CLI path. In an isolated checkout, removing the real serial enforcement must make the CLI fail. Restore and clean only owned files/children. Do not copy existing assertions into a competing suite.
+5. Use npm ci and preflight real playwright-core, pg, embedded-postgres imports and binary assets in the locked environment. Distinguish fake runner tests from actual nested Node/Postgres execution; neither supplies browser/user-path proof.
+6. Write gate-closure.md with exact identities, real/fake boundaries, negative-control results, actual profile/model/effort and the unresolved-owner table below. Verify and push as Otohime <quiinthieu@gmail.com>, subject pm-258/<assigned-task-id>: with no co-author trailer. On rejection pull --rebase, rerun verification at integrated HEAD and push normally. SWE stops at push.
 
-**Interfaces:** `components/end-footer.tsx`; `components/end-stage.tsx`; `lib/end.ts`; `lib/end.test.ts`; `app/(site)/globals.css`; `scripts/walk-end.sh`; `scripts/probe-end.sh`; `scripts/probe-end.mjs`; `scripts/e2e.mjs`; `e2e/`.
+**Interfaces:** scripts/check-gate-closure.mjs; lib/gate-closure.test.ts; projects/pick-up-this-plan-https-apps-vietky-io-vn-plans-plans-pm-242/gate-closure.md.
 
-**Non-goals:** Redesigning the footer; Deleting or disabling the CI gate; New providers or owner account setup; Repairing unrelated abandoned plans.
+**Non-goals:** Visitor UI, migrations, providers, changing existing runner/reporter/footer/Kame/desk/deploy implementations, fetching CI history from verification, deployment mutations, human accounts, schedules, global delivery certification.
 
-**Acceptance:** The observed E2E and footer gate failures are diagnosed and each remaining defect is reproduced and corrected; application E2E, the original footer walk and Chromium matrix pass against the delivery build with a regression/negative control that detects each repaired defect. The green gate must pass before the platform marks the task delivered; production deployment remains gated by checks.
+**Acceptance:** The on-demand CLI executes real local controls and emits fingerprinted JSON, passing healthy controls and failing the isolated serial-enforcement mutation and fake error/timeout/spawn cases. Project tests/lint/types/build pass at delivery SHA. Evidence remains truthful about external gaps. This delivers internal local closure tooling only.
 
-**Verification:** each command runs at repository root, expects exit 0.
-
-| Check | Command | Timeout |
+| Verification | Command at repository root | Timeout / expected |
 | --- | --- | --- |
-| Project tests | `npm test` | 300s |
-| Lint | `npm run lint` | 300s |
-| Typecheck | `npm run typecheck` | 300s |
-| Build | `npm run build` | 600s |
-| Footer HTTP walk | `SKIP_BUILD=1 bash scripts/walk-end.sh` | 900s |
-| Footer Chromium matrix | `SKIP_BUILD=1 bash scripts/probe-end.sh` | 900s |
-| Application end to end | `SKIP_BUILD=1 npm run test:e2e` | 900s |
+| Project suite and new negative controls | npm test | 300s / exit0 |
+| Lint | npm run lint | 300s / exit0 |
+| Types | npm run typecheck | 300s / exit0 |
+| Build | npm run build | 600s / exit0 |
+| Real local closure | node scripts/check-gate-closure.mjs | 240s / exit0 |
 
-### 2. Read the cassette from ListenBrainz
+qa=skip applies because only internal scripts/tests/docs change and verification fully proves the narrow behavior. Plan acceptance remains required. The machine payload in revision2-contract.md includes the complete build contract and identical commands.
 
-**Role:** software_engineer · **Depends on:** 1 · **QA:** required
+## Independent acceptance and retained defects
 
-**Problem:** The music cassette requires Spotify secrets and only shows its quiet face; a public ListenBrainz account can supply current or last-listened music without deployment secrets.
+Acceptance obtains independent evidence beyond the supplied proof summary. At delivery SHA in an isolated checkout, remove serial enforcement and exercise the real CLI; assert nonzero with the named failed control, then restore locally. Independently compare emitted hashes to actual files and verify that fake runner results cannot certify deployment.
 
-**Action items:**
+Read live /api/health and rendered build-sha independently, compare them and check ancestry of original 841ca69/15fd171 repairs. Record this separately; missing evidence is a delivery gap, not local proof. Acceptance may pass only this revision's tooling scope while retaining the product gap. pm-272 retains its provider acceptance: on-demand GET /api/now-playing and /music, honest off/quiet/fixture/live states, safe links/credits, failure isolation, no-fetch-at-build, sentinel scans, mobile/no-JS/keyboard/motion, and independent controls.
 
-- Implement pure unknown-input ListenBrainz parsers and fixtures, capped/clean display strings, a validated listenedAt ISO timestamp for last listens, and HTTPS link allowlisting. Distinguish a valid empty payload from malformed JSON, HTML challenges and error shapes.
-- Add validated LISTENBRAINZ_USER configuration with an optional server-owned public default in content/now-playing.ts (empty until the operator supplies an identity); environment configuration takes precedence. Encode the username as one path segment. Never select an unrelated person's account as the production default. No owner chore is needed to implement or verify this task.
-- Read playing-now and listens?count=1 concurrently under one 4-second abort budget, with User-Agent otohime.dev/1.0 (+https://otohime.dev), Accept application/json, and no retries. A valid playing-now listen wins; otherwise show a valid last listen with its full UTC date/time and stationary reels. Neither endpoint being usable yields quiet. Reject redirects and unapproved hosts; loopback-only NOW_PLAYING_LISTENBRAINZ_HOST yields fixture state.
-- Add source metadata music/play without removing spotify/steam/track/game/readAt; extend sanitize and every UI/API consumer consistently. Select ListenBrainz when configured, otherwise Spotify; failures of a configured selected provider stay quiet. Legacy adapter states identify only adapters actually read; never mark a fixture or a different source spotify-live. Introduce the empty play metadata now, preserving Steam as the game source until task 3.
-- Render per-source side labels, public profile/track links and provider credits; retain the playlist and static game quiet faces, no-JS HTML, keyboard affordances, long-label bounds, reduced-motion behavior and original keyed-provider support.
-- Keep readNowPlaying as the shared server-only use-cache reader with cacheLife stale 30/revalidate 60/expire 300; callers still await connection(). No provider reads at build and no background schedule. Extend loopback fakes and clock-controlled HTTP/browser walks for current, last, old last-listen, empty, 404, 429, HTML, bad JSON, unsafe URLs, timeouts, one-endpoint failure, missing/invalid configuration, source selection and sentinel scans. Prove no provider requests during a build in a fixture build check inside the HTTP walk, even with SKIP_BUILD=1 on the outer walk.
-- Document public configuration and owner feed setup as advisory, with the live-connector uncertainty from research; update .env.example and README, and regenerate public/ask-index.json with npm run ask:index when indexed copy changes. Preserve the real/fake distinction and report no live owner output unless observed.
-
-**Interfaces:** `lib/now-playing.ts`; `lib/now-playing-data.ts`; `lib/now-playing.test.ts`; `lib/now-playing-data.test.ts`; `components/cassette.tsx`; `content/site.ts`; `content/now-playing.ts`; `app/api/now-playing/route.ts`; `app/(site)/(app)/music/page.tsx`; `app/(site)/globals.css`; `scripts/walk-now-playing.sh`; `scripts/probe-cassette.sh`; `scripts/probe-cassette.mjs`; `.env.example`; `README.md`; `public/ask-index.json`.
-
-**Non-goals:** Creating a ListenBrainz account or uploading listens; OAuth or keys in the deployment; Lanyard music fallback; Cron jobs or polling services; Claiming the owner is playing a sampled public user's track.
-
-**Acceptance:** On-demand GET /api/now-playing and /music use the same cached selected reading: a valid current ListenBrainz fixture shows its credited track and spinning reels, a last listen shows its full UTC timestamp and still reels, and failures return HTTP 200 with honest quiet content. Fixtures are labelled fixture, the default with no account is off, legacy adapters work when selected, public links are safe, and an instrumented build makes zero provider requests. Owner account setup is advisory and does not gate integration delivery.
-
-**Verification:** each command runs at repository root, expects exit 0.
-
-| Check | Command | Timeout |
+| Outstanding item | Evidence anchor | Owner and failure condition |
 | --- | --- | --- |
-| Project tests | `npm test` | 300s |
-| Lint | `npm run lint` | 300s |
-| Typecheck | `npm run typecheck` | 300s |
-| Build | `npm run build` | 600s |
-| Search content index | `npm run ask:check` | 300s |
-| Provider HTTP contract | `SKIP_BUILD=1 bash scripts/walk-now-playing.sh` | 900s |
-| Cassette browser matrix | `SKIP_BUILD=1 bash scripts/probe-cassette.sh` | 900s |
-| Reduced motion | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
-| Application end to end | `SKIP_BUILD=1 npm run test:e2e` | 900s |
+| Desk swipe | 40310239199/checks 121530268639; desk.test.ts:597; music x0.3 vs0.425 | pm-270/t-1606; fails if the displacement assertion recurs on matched sources containing the repair. |
+| Riso footer integration | ver-3586/run-9009/task 1527adf0-8941-4d2e-955d-5743acd0b45d; rep-5295 local walk 7/matrix 12 failures | pm-268/t-1601 source, pm-270/t-1604 harness; pm-275/t-1617 recorded canonical delivery recovery owner. Reproduced code defects remain failures. |
+| Vercel production | 40328273755/121600218178; 40330477897/121613136055 | pm-275/t-1617, predecessor t-1605; fails if production fails or served SHA lacks intended code. pm-275 is paused, not proof of repair. |
+| Historical unit reds | Eight run/job pairs in t-1564-closure.md; local fixture fix 17bca22 | pm-275/t-1617; diagnose actual assertions/repeated matched failures. Generic exit evidence remains inconclusive. |
+| Original footer raw assertion | 40277523350/121423322274 at 2a58479 | Evidence owner this replacement; footer owner t-1604. Unread assertion remains inconclusive. |
+| author.txt bytes | Historical task 03c16ea7; 44 bytes; SHA256 7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada | Existing platform artifact owner; replacement preserves gap. Git identity does not prove artifact bytes. |
+| Navigation/hydration candidates | Page already revealed / React #418; no matching annotation in later closure interval | pm-256/t-1559 and pm-259/t-1573; matching uncaught errors remain failures. |
+| Personalized music/game | No demonstrated owner public identifier/feed | pm-272 activation/acceptance; absent or mismatched owner feed means personalized output undelivered. |
 
-### 3. Read optional games from Lanyard
+This document records existing ownership; it does not claim an external owner accepted a newly enlarged contract. Paused owners and pending replacements do not waive defects.
 
-**Role:** software_engineer · **Depends on:** 2 · **QA:** required
+At the start of a later run that needs a person to create/connect a feed, raise only that physical chore with plan_manager_ask_user(kind=operator_action), stable fingerprint listenbrainz-user:now-playing or lanyard-join:current-game, then end that activation run. Attach a real readiness URL once the public identifier is known; never placeholders or secrets. Integration work comes first. Nothing proves itself through polling, a soak, another plan's completion or the next natural run. This task needs no new runtime/capacity submission.
 
-**Problem:** The game cartridge still needs a Steam key, while optional Lanyard public Discord presence can identify the current game without a deployment secret.
+## Prerequisites
 
-**Action items:**
+See the nonempty platform.plan-prerequisites.v1 manifest in revision2-contract.md: exact setup/authority, managed secret name/key only, typed probes and contexts for repository publication, existing Node/npm fleet, public CI and served-SHA reads. No provider or deployment secrets are needed for this replacement. Agent-owned existing setup is inspected; no physical operator setup is needed for the local build.
 
-- Add a pure Lanyard parser taking unknown, requiring success:true and a valid data.activities array; use the first type===0 activity with a valid capped game name. Ignore Spotify-only, custom-status, streaming and malformed activities, strip control characters, and retain no Discord profile/avatar/friend identifiers in the public result.
-- Validate LANYARD_USER_ID as a 17-20 digit snowflake with the same environment-over-server-public-default configuration path from task 2; default empty. Add a 4-second server-only request, meaningful User-Agent, JSON validation and no retry. Reject redirects; NOW_PLAYING_LANYARD_HOST remains loopback-only and always fixture-labelled.
-- Select Lanyard when configured, otherwise Steam. Valid empty activities produce live-with-no-game (fixture for a fake); unknown/unmonitored user, error status, HTML, malformed response and timeout produce quiet. Keep music independent and keep configured-provider failures quiet instead of switching providers.
-- Extend play source metadata, sanitized API result and per-source cartridge/credit copy. Lanyard games have no invented Steam/store URL. Preserve the static Now-list fallback, existing Steam path, no-JS rendering, readable long names, mobile layout, keyboard and reduced motion.
-- Extend captured fixtures and the existing HTTP/browser walks for a type-0 game, no game, Spotify-only presence, user_not_monitored, invalid/overlong fields, HTML, 429, abort, missing/invalid identifiers and mixed-provider isolation. Retain the instrumented no-fetch-at-build check and credential sentinel scan; update README/.env.example and regenerate the search index if needed.
-- Run the build-contract verification and push. Leave owner Discord joining/identity personalization advisory to the post-build activation check; no person-only prerequisite is required for these tests.
+Manifest generation 3 was declared/probed at 15:39:06Z:
+- github:otohime:repository missing: repo has no ci_token.
+- runner:otohime:node22 unknown: task-manager accounts/rank HTTP400 requires repo/provider or account_id.
+- github:otohime:public-ci failed: github-actions not allowlisted.
+- otohime:served-sha failed: https not allowlisted.
 
-**Interfaces:** `lib/now-playing.ts`; `lib/now-playing-data.ts`; `lib/now-playing.test.ts`; `lib/now-playing-data.test.ts`; `content/now-playing.ts`; `content/site.ts`; `components/cassette.tsx`; `scripts/walk-now-playing.sh`; `scripts/probe-cassette.sh`; `scripts/probe-cassette.mjs`; `.env.example`; `README.md`; `public/ask-index.json`.
+These remain unproven adapter results. Earlier expect/target/context validation failures were corrected and recorded, not hidden. No manual state or decision makes a prerequisite ready. legacy_v1 shadow admission applies; an enforced batched_v1 revision cannot finalize until typed probes prove readiness. Do not add unrelated personal credentials to overcome adapter coverage.
 
-**Non-goals:** Discord bot hosting or tokens; Lanyard Spotify fallback; Steam XML scraping; A service-availability SLA; Account joining as a build prerequisite.
+Separate execution-runner observations on this baseline: npm ci succeeded; Node 22; project 2320/2320 tests; lint 0 errors/10 warnings; typecheck/build; focused 25/25 all passed. Live health returned 074059495faf4bee48e8f655584dfd4487089b41; both ancestry checks exited 0. CI sample 5/443: newest 40349872187/e03cf1c in_progress, previous four failed. These are incomplete summaries with no new raw job-tail diagnosis. Prior reports retain their exact history bounds and callback evidence; this PO does not extend them.
 
-**Acceptance:** With the on-demand loopback Lanyard fixture selected, GET /api/now-playing and /music agree on the credited game with no invented store link and a fixture state. Empty, unknown, malformed or timed-out presence degrades honestly without changing the music reading. With no public identifier the default stays off; the Steam fallback works when selected. Independent QA verifies the delivery SHA and a relevant negative control. Personalized live presence is reported separately from integration proof.
+## Save and submit
 
-**Verification:** each command runs at repository root, expects exit 0.
+Standing files remain AGENTS.md and docs/claude/software-development.md. Requested policy sources were located/read at /data/build-worker/repo/mono-v2/projects/20260921222547_plan_manager_chief_of_staff_extraction.md and /data/build-worker/repo/mono-v2/docs/claude/software-development.md; target root policy paths are absent. Installed Next 16.4.2 Playwright guidance was read. Do not move global standing rules into this plan.
 
-| Check | Command | Timeout |
-| --- | --- | --- |
-| Project tests | `npm test` | 300s |
-| Lint | `npm run lint` | 300s |
-| Typecheck | `npm run typecheck` | 300s |
-| Build | `npm run build` | 600s |
-| Search content index | `npm run ask:check` | 300s |
-| Provider HTTP contract | `SKIP_BUILD=1 bash scripts/walk-now-playing.sh` | 900s |
-| Cassette browser matrix | `SKIP_BUILD=1 bash scripts/probe-cassette.sh` | 900s |
-| Reduced motion | `SKIP_BUILD=1 bash scripts/probe-motion.sh` | 900s |
-| Application end to end | `SKIP_BUILD=1 npm run test:e2e` | 900s |
+PO edits Markdown only in this folder; research.md is already committed and remains byte-identical. Preserve original plan as plan_run-8715.md. Restore generated content/history.json after build. Commit every authored file with imperative pm-258/t-1564: subject and required identity, push git push origin HEAD, rebase/retest on rejection without force. Then propose this path/SHA/title and exact contract, and submit kind=summary.
 
-## Independent QA and acceptance
+Actual run: codex-sol-6-1-high / gpt-6.1-sol / high; account codex-main; fleet avietidol-z490; attempt 3. This planning commit certifies neither new application delivery nor green default-branch CI.
 
-QA obtains the deployed build-sha and the gate result independently; reports cite the delivery SHA and relevant code/lock/configuration/fixture fingerprints. Do not use a new documentation SHA to dismiss a deterministic executable failure.
+## Integrated delivery check
 
-| Starting state | On-demand action | Observable result / proof |
-| --- | --- | --- |
-| Gate repair build | Run application E2E and footer matrix with real browser and isolated DB | Each original failing assertion passes; reintroducing a repaired defect in an isolated local copy makes its regression fail. Production checks/deploy jobs are inspected by exact SHA. |
-| All provider config absent | GET /api/now-playing; open /music with JS on/off | Always 200, sources off, playlist/static game face, no provider requests, no misleading live text. |
-| Loopback current ListenBrainz | GET API then /music against a delivery build | Matching track/source/readAt, fixture state, bounded labels, correct credit, safe link, reels only when playing. |
-| Loopback last/old listen | Trigger same read with controlled cache clock | Full UTC timestamp, still reels, no current-playback claim. No real-time sleep. |
-| Lanyard type-0 activity | Trigger same selected reader | Fixture game/source agrees with page; music independent; no fabricated Steam URL. |
-| Error/empty/HTML/429/timeout/unsafe URL | Trigger fixtures and inspect API plus browser | Empty valid response and failed response remain distinguishable; failures are quiet, links safe, the other provider still works. |
-| Configured legacy provider only | Trigger existing keyed-provider fakes | Previous Spotify/Steam path works, sentinels absent from HTML/RSC/assets/logs, selected-source metadata truthful. |
-| Desktop/mobile, light/dark, no JS, reduced motion | Independent browser walkthrough at 1366 and 390 | No overflow/layout jump, readable contrast, keyboard link/focus works, credits remain, motion stops as specified. |
-| Fresh production build | GET /api/now-playing and /music, compare build-sha | Actual deployed integration and quiet/live state reported independently; never apply loopback host overrides to production. |
-| Owner public identity supplied | GET real public endpoint and production trigger | Only an observed matching owner reading counts as personalized live delivery; otherwise explicitly undelivered. |
+The first normal push was rejected after concurrent ab34874 landed. git pull --rebase succeeded. The integrated base adds a plain Riso footer-heading HTTP assertion and regression (pm-264/t-1590); it is preserved. On that integrated checkout, npm test passed 2,321/2,321, lint passed with 0 errors/10 warnings, typecheck and build exited 0, and the focused repair suite passed 26/26. Only this Markdown changed after those checks, and generated history output was restored. No claim about all footer browser gates follows from those results.
 
-A role rerunning the supplied walk alone is not independent proof. QA independently checks browser DOM/network and API responses, supplies one separate malformed/wrong-type response, and uses a relevant negative control (for example, unsafe-link acceptance must fail when an allowlist is bypassed in an isolated local copy). Restore the local mutation before reporting; never deploy it. Retain existing footer/cassette controls as additional evidence.
-
-Execution evidence reports separate integration deployed, execution demonstrated against fakes, any real provider read, and personalized product output delivered. No GPU/runtime or capacity deferral applies. Inspect bounded paginated failed/completed CI history plus current runs and raw failure tails where accessible; state counts, bound and completeness, follow deployment through the actual persisted workflow result, and mark unread/truncated evidence inconclusive. Record defects alongside replacements rather than waiving them.
-
-Report the actual run profile/model/effort from the run's evidence; this plan's dashboard role preferences are not proof of which model a future fallback run used. Each report names real/fake boundaries, build/executable identity, negative control, history completeness, defects and deferred-check ownership.
-
-## Advisory activation, without idle tasks
-
-Implementation, fixture execution, and core capability acceptance go first. Public identifiers default empty; never infer the owner's account from a sample username.
-
-The first later run that actually needs an owner's feed raises only the corresponding physical chore through plan_manager_ask_user kind=operator_action, records what remains unproven, and ends that activation run immediately. It never polls. Core build tasks do not depend on that activation run.
-
-- Music fingerprint: listenbrainz-user:now-playing. Ask the owner to create/use a public ListenBrainz account, connect an existing player or scrobbler, and provide the username. No credential is copied into this repository or deployment. Once the username is known, attach a real ready_probe URL https://api.listenbrainz.org/1/user/<encoded-name>/listens?count=1, expect_status 200 and body_contains track_name; never submit a literal placeholder URL. The Spotify connector's playing-now behavior is unverified, so last-listen support is mandatory and Web Scrobbler is the documented live path.
-- Optional game fingerprint: lanyard-join:current-game. Ask the owner to join the Lanyard server with their Discord account, enable presence and supply the public user id. Once known, ready_probe https://api.lanyard.rest/v1/users/<id>, expect_status 200 and body_contains discord_user. No bot token or deployment key.
-- A subsequent platform run can commit the public identifiers after an answer; an absent or waived answer leaves quiet output. State this as an advisory personalization gap in the operator-owned plan report, not a fake success or a build gate. The old waived Spotify/Steam secret chores esc-377/esc-378 are not prerequisites.
-- Capture actual escalation/report ids returned by the platform, the activation owner, readiness URL and failure condition (owner feed absent/mismatched or configured provider deterministically failing). No scheduled watch is invented for an unknown account date. If acceptance has a genuine dated condition, use the existing pending/not_before mechanism; otherwise report the present gap and close the run without a timed recheck.
-
-## Completion criteria for this planning run
-
-Research and these exact runnable contracts are committed and pushed; plan_manager_propose_tasks accepts the path, SHA and title Keyless Pocket Presence; plan_manager_submit_report(kind=summary) references the same artifact. Planning does not certify a deployed feature or a green default branch: the inherited E2E/footer gate failures are explicitly owned by task 1.
-
-## Delivery recovery for run-8715
-
-The task-manager result for run-8712 was `agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2cf0b57ba573 is not on origin/main`. Its feature-branch push succeeded but did not satisfy platform delivery. This run restores all three planning artifacts from that commit onto current main, preserves research.md byte for byte, updates the current gate evidence/contracts, and pushes with `git push origin HEAD`. On a non-fast-forward rejection, pull with rebase, rerun the project tests, and push again without force. Confirm the remote main contains the final delivery commit before submitting the replacement proposal and summary.
-
-No application implementation is part of this product-owner recovery. The standing policy files remain absent in both the checkout and fetched origin/main; their contents cannot be claimed as read. The explicit role instructions govern the work. Actual run metadata: profile `codex-sol-6-1-high`, model `gpt-6.1-sol`, effort `high`, fleet worker `avietidol-mac-mini`. This is planning evidence, with no live owner output, deployment proof, or runtime execution claim.
+Latest independent CI summary read after rebase: 3/444 sampled runs. 40352230491 at ab34874 is in progress; 40349872187 at e03cf1c and 40346324813 at 74522bc failed. No raw assertion was read in this sample. This documentation-only push is excluded by the existing projects/** workflow filter and does not itself prove a new successful CI run. No force push or deployment mutation was used.
