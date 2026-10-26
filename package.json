@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "bash scripts/dev.sh",
     "dev:next": "NODE_OPTIONS=--max-http-header-size=65536 next dev --port 4000",
+    "prebuild": "node scripts/ledger-fetch.mjs || true",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
