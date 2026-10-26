@@ -13,10 +13,11 @@ import {
   parseSound,
   SOUND_KEY,
   storeSound,
+  PURR,
   type Cue,
   type CueName,
 } from "./sound.ts";
-import { play, setSound } from "./sound-client.ts";
+import { play, setSound, startPurr, stopPurr } from "./sound-client.ts";
 
 const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle", "press"];
 const OLD = NAMES.filter((name) => name !== "press");
@@ -112,18 +113,20 @@ test("a press is a soft falling thunk, quieter than every other cue", () => {
 
 // A Web Audio stand-in: each oscillator it makes remembers its pitch, wave and
 // the gain values its envelope was set to.
-type Voice = { hz: number; wave: string; gains: number[]; started: boolean };
+type Voice = { hz: number; wave: string; gains: number[]; started: boolean; disconnected: boolean };
 class FakeAudioContext {
   static made = 0;
+  static current: FakeAudioContext;
   static voices: Voice[] = [];
   state: "running" | "suspended" | "closed" = "running";
   currentTime = 1;
   destination = {};
   constructor() {
     FakeAudioContext.made++;
+    FakeAudioContext.current = this;
   }
   createOscillator() {
-    const voice: Voice = { hz: 0, wave: "", gains: [], started: false };
+    const voice: Voice = { hz: 0, wave: "", gains: [], started: false, disconnected: false };
     FakeAudioContext.voices.push(voice);
     return {
       set type(w: string) {
@@ -138,7 +141,7 @@ class FakeAudioContext {
       connect: (gain: { values: number[] }) => ((voice.gains = gain.values), gain),
       start: () => (voice.started = true),
       stop: () => {},
-      disconnect: () => {},
+      disconnect: () => { voice.disconnected = true; },
     };
   }
   createGain() {
@@ -253,6 +256,54 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
 });
 
 const source = (file: string) => readFileSync(resolve(import.meta.dirname, "..", file), "utf8");
+
+test("pet purr is bounded, quiet, shared, gated and cancellable", async () => {
+  assert.ok(PURR.db <= -34);
+  assert.ok(cueLength(PURR) < 0.3);
+  assert.equal(PURR.wave, "triangle");
+  setSound(false); heard();
+  const made = FakeAudioContext.made;
+  assert.equal(startPurr(), false);
+  assert.equal(FakeAudioContext.made, made);
+  assert.deepEqual(heard(), []);
+  setSound(true); await new Promise((r) => setImmediate(r)); heard();
+  assert.equal(startPurr(), true);
+  const first = heard();
+  assert.equal(first.length, PURR.notes.length);
+  assert.equal(peakOf(first), cueGain(PURR));
+  stopPurr(); assert.ok(first.every((v) => v.disconnected));
+  startPurr(); const second = heard();
+  setSound(false); assert.ok(second.every((v) => v.disconnected));
+  stopPurr();
+  assert.equal(FakeAudioContext.made, made, "reuses the context already made by the toggle");
+});
+
+test("purr cancels on hide and a late resume cannot revive a released gesture", async () => {
+  const documentBefore = Object.getOwnPropertyDescriptor(globalThis, "document");
+  const doc = Object.assign(new EventTarget(), { hidden: false });
+  Object.defineProperty(globalThis, "document", { configurable: true, value: doc });
+  const context = FakeAudioContext.current;
+  const resume = context.resume;
+  try {
+    setSound(true); await new Promise((r) => setImmediate(r)); heard();
+    startPurr(); const purr = heard();
+    doc.hidden = true; doc.dispatchEvent(new Event("visibilitychange"));
+    assert.ok(purr.every((v) => v.disconnected));
+    assert.equal(startPurr(), false, "hidden pages cannot start pet audio");
+    doc.hidden = false;
+    setSound(false); heard();
+    const pending: (() => void)[] = [];
+    context.resume = () => new Promise<void>((resolve) => pending.push(() => { context.state = "running"; resolve(); }));
+    setSound(true); startPurr(); stopPurr();
+    pending.forEach((resolve) => resolve());
+    await new Promise((r) => setImmediate(r));
+    assert.ok(heard().every((voice) => voice.hz !== 147 && voice.hz !== 165), "no stale pet notes after resume");
+  } finally {
+    context.resume = resume; setSound(false); stopPurr(); heard();
+    if (documentBefore) Object.defineProperty(globalThis, "document", documentBefore);
+    else Reflect.deleteProperty(globalThis, "document");
+  }
+});
 
 test("only the client adapter opens an AudioContext, and only from unlock", () => {
   const client = source("lib/sound-client.ts");

@@ -1,0 +1,97 @@
+Starting embedded Postgres on 127.0.0.1:38647
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/23466f57-01ae-4856-a67d-3052c504dacc-77d6094b5c7ddd950374ac63efd30c52/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:37827
+TAP version 13
+# Subtest: server baseline has only an inert shell; no JS retains public links
+ok 1 - server baseline has only an inert shell; no JS retains public links
+  ---
+  duration_ms: 510.104112
+  type: 'test'
+  ...
+# Subtest: swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+not ok 2 - swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+  ---
+  duration_ms: 374.020561
+  type: 'test'
+  location: '/data/build-worker/leases/23466f57-01ae-4856-a67d-3052c504dacc-77d6094b5c7ddd950374ac63efd30c52/work/otohime/e2e/kame.test.ts:40:1'
+  failureType: 'testCodeFailure'
+  error: 'first paint places Kame along the page edge'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///data/build-worker/leases/23466f57-01ae-4856-a67d-3052c504dacc-77d6094b5c7ddd950374ac63efd30c52/work/otohime/e2e/kame.test.ts:45:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: local calendar fixture increments once per day, friendly on day three and future-safe
+ok 3 - local calendar fixture increments once per day, friendly on day three and future-safe
+  ---
+  duration_ms: 765.047615
+  type: 'test'
+  ...
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 4 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 644.54484
+  type: 'test'
+  ...
+# Subtest: blocked storage remains usable and Save-Data imports only on explicit enable
+ok 5 - blocked storage remains usable and Save-Data imports only on explicit enable
+  ---
+  duration_ms: 530.392831
+  type: 'test'
+  ...
+# Subtest: 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+ok 6 - 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+  ---
+  duration_ms: 685.339261
+  type: 'test'
+  ...
+# Subtest: real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+ok 7 - real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+  ---
+  duration_ms: 480.223151
+  type: 'test'
+  ...
+# Subtest: optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+not ok 8 - optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+  ---
+  duration_ms: 442.406111
+  type: 'test'
+  location: '/data/build-worker/leases/23466f57-01ae-4856-a67d-3052c504dacc-77d6094b5c7ddd950374ac63efd30c52/work/otohime/e2e/kame.test.ts:175:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1232
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1232
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///data/build-worker/leases/23466f57-01ae-4856-a67d-3052c504dacc-77d6094b5c7ddd950374ac63efd30c52/work/otohime/e2e/kame.test.ts:195:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 6
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4914.819239

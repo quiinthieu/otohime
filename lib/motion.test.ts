@@ -299,10 +299,12 @@ test("the site root layout mounts the season layer first in <body>, ahead of eve
   // The press cue's listener (components/press-sound.tsx) renders nothing, so it may follow the layer. The Pocket
   // Terminal's loader (components/pocket-terminal-loader.tsx) renders nothing until "/" or Cmd/Ctrl-K, and its dialog
   // opens in the top layer, so it stands between the layer and the pages without moving either. The urashima listener
-  // (components/urashima-keys.tsx) renders nothing either.
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?\{children\}\s*<\/body>/);
+  // (components/urashima-keys.tsx) renders nothing either. Kame's loader has a null server render; its ink is fixed
+  // and its controls portal into the reserved footer slot after load+idle. It leaves the season layer first.
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*\{children\}\s*<\/body>/);
   assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
   assert.equal(src.match(/<PressSound\b/g)?.length, 1);
+  assert.equal(src.match(/<KameLoader\b/g)?.length, 1);
   // Mounted once, in the root layout only: no group layout or page mounts a second one.
   const others = siteFiles(["layout.tsx", "page.tsx", "not-found.tsx"]).filter((p) => p !== join("app", "(site)", "layout.tsx"));
   assert.deepEqual(others.filter((p) => readFileSync(join(ROOT, p), "utf8").includes("SeasonLayer")), []);

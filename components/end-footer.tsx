@@ -82,6 +82,8 @@ export function EndFooter() {
           </div>
         </div>
 
+        <div id="kame-shell" />
+
         <div className="end-bar">
           <p className="end-credits">
             <span data-end-signature="">{site.end.signature}</span>

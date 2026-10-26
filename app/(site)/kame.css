@@ -1,0 +1,20 @@
+/* A small ink print above ordinary paper, below the site's peeks (60), masthead (20) and modal dialogs. */
+.kame-ink { position: fixed; top: 0; left: 0; width: 46px; height: 64px; z-index: 10; pointer-events: none; color: var(--ink); }
+.kame-ink[hidden] { display: none; }
+.kame-ink svg { display: block; width: 100%; height: 100%; }
+.kame-ink[data-motion="on"][data-state="swim"] svg { animation: kame-swim 24s ease-in-out infinite alternate; }
+@keyframes kame-swim { from { translate: 0 -35px; } to { translate: 0 35px; } }
+.kame-ink[data-motion="on"]:is([data-state="swim"], [data-state="follow"], [data-state="fetch"]) .kame-flippers { transform-origin: 32px 48px; animation: kame-paddle 3s ease-in-out infinite alternate; }
+@keyframes kame-paddle { from { transform: scaleX(.91) rotate(-3deg); } to { transform: scaleX(1.04) rotate(3deg); } }
+#kame-shell { min-height: 240px; padding-block: 24px; }
+.kame-tools { max-width: 640px; }
+.kame-tools fieldset { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; border: 0; padding: 0; min-width: 0; }
+.kame-button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--ink); border-radius: 8px 5px 7px 4px; color: var(--ink); background: var(--paper); font: inherit; font-size: 12px; cursor: pointer; }
+.kame-button:hover { background: var(--paper-2); }
+.kame-button svg { display: inline-block; vertical-align: middle; margin-right: 6px; }
+.kame-pet { touch-action: none; user-select: none; }
+.kame-name { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.kame-name input { width: 150px; min-height: 44px; border: 1px solid var(--muted); border-radius: 4px; padding: 8px; background: var(--paper); color: var(--ink); }
+.kame-tools [role="status"] { min-height: 2.5em; }
+@media (max-width: 600px) { #kame-shell { min-height: 320px; } }
+@media (prefers-reduced-motion: reduce) { .kame-ink svg, .kame-ink .kame-flippers { animation: none !important; } }

@@ -71,3 +71,8 @@ export function envelope(n: Note, t: number, peak: number): [time: number, gain:
 // The stored preference: only the exact word "on" turns it on.
 export const parseSound = (stored: string | null | undefined): boolean => stored === "on";
 export const storeSound = (on: boolean) => (on ? "on" : "off");
+
+// One bounded pet purr, on the site's shared context. No loop or media file.
+export const PURR: Cue = { db: -34, wave: "triangle", notes: [
+  note(147, 0, 0.008, 0.09), note(165, 0.09, 0.008, 0.09), note(147, 0.18, 0.008, 0.09),
+] };

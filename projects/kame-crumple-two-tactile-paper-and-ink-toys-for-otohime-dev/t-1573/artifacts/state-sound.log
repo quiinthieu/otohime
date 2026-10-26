@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: elapsed clock sleeps exactly at 45s and activity wakes it; pet and shell win over idle
+ok 1 - elapsed clock sleeps exactly at 45s and activity wakes it; pet and shell win over idle
+  ---
+  duration_ms: 1.100192
+  type: 'test'
+  ...
+# Subtest: fetch command accepts only available motion and cancels locally
+ok 2 - fetch command accepts only available motion and cancels locally
+  ---
+  duration_ms: 0.622362
+  type: 'test'
+  ...
+# Subtest: local calendar visits count once, cross month/year and reset after missed/future/invalid days
+ok 3 - local calendar visits count once, cross month/year and reset after missed/future/invalid days
+  ---
+  duration_ms: 0.784416
+  type: 'test'
+  ...
+# Subtest: malformed and blocked storage stays usable; names trim to 24 Unicode characters
+ok 4 - malformed and blocked storage stays usable; names trim to 24 Unicode characters
+  ---
+  duration_ms: 0.3116
+  type: 'test'
+  ...
+# Subtest: hour mood boundaries and friendly three-day greeting are explicit
+ok 5 - hour mood boundaries and friendly three-day greeting are explicit
+  ---
+  duration_ms: 0.238466
+  type: 'test'
+  ...
+# Subtest: the nine cues the console and the ink toys need are all there
+ok 6 - the nine cues the console and the ink toys need are all there
+  ---
+  duration_ms: 1.224607
+  type: 'test'
+  ...
+# Subtest: every cue is short, audible and quick to start and stop
+ok 7 - every cue is short, audible and quick to start and stop
+  ---
+  duration_ms: 0.301696
+  type: 'test'
+  ...
+# Subtest: a cue's notes run in order
+ok 8 - a cue's notes run in order
+  ---
+  duration_ms: 0.250793
+  type: 'test'
+  ...
+# Subtest: gain is capped at -18 dB
+ok 9 - gain is capped at -18 dB
+  ---
+  duration_ms: 0.182131
+  type: 'test'
+  ...
+# Subtest: an envelope starts and ends silent and peaks after the attack
+ok 10 - an envelope starts and ends silent and peaks after the attack
+  ---
+  duration_ms: 0.173091
+  type: 'test'
+  ...
+# Subtest: the table is not changed by reading it
+ok 11 - the table is not changed by reading it
+  ---
+  duration_ms: 0.173928
+  type: 'test'
+  ...
+# Subtest: the stored preference is off unless it says on
+ok 12 - the stored preference is off unless it says on
+  ---
+  duration_ms: 0.162635
+  type: 'test'
+  ...
+# Subtest: a stamp is a low falling thud and a rustle is quiet high ticks
+ok 13 - a stamp is a low falling thud and a rustle is quiet high ticks
+  ---
+  duration_ms: 0.197418
+  type: 'test'
+  ...
+# Subtest: a press is a soft falling thunk, quieter than every other cue
+ok 14 - a press is a soft falling thunk, quieter than every other cue
+  ---
+  duration_ms: 0.284931
+  type: 'test'
+  ...
+# Subtest: play() sounds stamp and rustle only while the toggle is on, never above MAX_DB
+ok 15 - play() sounds stamp and rustle only while the toggle is on, never above MAX_DB
+  ---
+  duration_ms: 7.145112
+  type: 'test'
+  ...
+# Subtest: pet purr is bounded, quiet, shared, gated and cancellable
+ok 16 - pet purr is bounded, quiet, shared, gated and cancellable
+  ---
+  duration_ms: 0.63872
+  type: 'test'
+  ...
+# Subtest: purr cancels on hide and a late resume cannot revive a released gesture
+ok 17 - purr cancels on hide and a late resume cannot revive a released gesture
+  ---
+  duration_ms: 0.697234
+  type: 'test'
+  ...
+# Subtest: only the client adapter opens an AudioContext, and only from unlock
+ok 18 - only the client adapter opens an AudioContext, and only from unlock
+  ---
+  duration_ms: 0.488976
+  type: 'test'
+  ...
+# Subtest: the toggle reads storage only through the external store
+ok 19 - the toggle reads storage only through the external store
+  ---
+  duration_ms: 0.111762
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 95.214174

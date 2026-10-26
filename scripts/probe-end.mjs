@@ -1205,6 +1205,7 @@ try {
         await page.locator("footer.end").filter({ visible: true }).first().scrollIntoViewIfNeeded();
         await page.waitForTimeout(100);
 
+        await page.locator("footer.end [data-end-stage]").evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
         const stageBox = await page.locator("footer.end [data-end-stage]").boundingBox();
         await page.mouse.move(stageBox.x + 15, stageBox.y + 15);
         await page.waitForTimeout(60);
@@ -1264,6 +1265,9 @@ try {
         await livePage.locator("footer.end").filter({ visible: true }).first().scrollIntoViewIfNeeded();
         await livePage.waitForTimeout(200);
 
+        // Optional companion controls make the full footer taller than this viewport.
+        // Center the stage below the sticky masthead; nearest scrolling can leave its top corners behind it.
+        await livePage.locator("footer.end [data-end-stage]").evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
         const stageBox = await livePage.locator("footer.end [data-end-stage]").boundingBox();
         await livePage.mouse.move(stageBox.x + 25, stageBox.y + 25);
         await livePage.waitForTimeout(60);
@@ -1345,7 +1349,10 @@ try {
 
       // Desktop eye bounds across all 4 corners and reset on leave
       const stage = footer.locator("[data-end-stage]");
+      await stage.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
       const box = await stage.boundingBox();
+      // The setup scroll also positions Kame at the edge. Measure pointer work only after it drains.
+      await page.waitForFunction(() => window.__endPendingRafs === 0);
       await page.evaluate(() => {
         window.__endMaxPendingRafs = 0;
       });
@@ -1746,6 +1753,8 @@ try {
           else if (el.hasAttribute("data-end-page")) kind = `page:${el.getAttribute("data-end-page")}`;
           else if (el.hasAttribute("data-end-zine")) kind = "zine";
           else if (el.hasAttribute("data-end-line")) kind = `line:${el.getAttribute("data-end-line")}`;
+          else if (el.hasAttribute("data-kame-action")) kind = `kame:${el.getAttribute("data-kame-action")}`;
+          else if (el.matches('input[aria-label="Kame name"]')) kind = "kame:name";
           else if (el.hasAttribute("data-end-top")) kind = "top";
           else if (el.hasAttribute("data-end-ryugu")) kind = "ryugu";
           return { inFooter, kind, focusRing };
@@ -1761,6 +1770,7 @@ try {
         ...CONSOLE_MENU.map((m) => `page:${m.href}`),
         "zine",
         ...site.lines.map((l) => `line:${l.label}`),
+        "kame:call", "kame:pet", "kame:hide", "kame:name",
         "top",
         "ryugu",
       ];
@@ -1779,7 +1789,7 @@ try {
       const allRingsVisible = tabStops.every((s) => s.inFooter && s.focusRing);
 
       check(
-        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines, Back to top and the waterline in order with visible focus rings and no trap`,
+        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines, Kame controls, Back to top and the waterline in order with visible focus rings and no trap`,
         JSON.stringify(gotKinds) === JSON.stringify(expectedKinds) &&
           allRingsVisible &&
           afterFooter?.inFooter === false,

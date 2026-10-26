@@ -3,6 +3,8 @@ import { PocketTerminalLoader } from "@/components/pocket-terminal-loader";
 import { PressSound } from "@/components/press-sound";
 import { SeasonLayer } from "@/components/season-layer";
 import { UrashimaKeys } from "@/components/urashima-keys";
+import { KameLoader } from "@/components/kame/loader";
+import { Suspense } from "react";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
 import { pondPrintScript } from "@/lib/pond-print";
@@ -66,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Typing "urashima" goes down to Ryugu-jo (components/urashima-keys.tsx). Also ahead of the pages: its capture
            listener takes the word's a's before the Pocket console can open a page with them. */}
         <UrashimaKeys />
+        <Suspense fallback={null}><KameLoader /></Suspense>
         {children}
       </body>
     </html>
