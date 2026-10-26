@@ -4,6 +4,8 @@ import { chromium } from "playwright-core";
 
 const base = process.env.BASE_URL;
 assert.ok(base, "run through scripts/e2e.mjs");
+const width = Number(process.env.QA_WIDTH ?? 390);
+const height = Number(process.env.QA_HEIGHT ?? 844);
 
 test("independent paper view and native touch scroll control", async () => {
   const browser = await chromium.launch({
@@ -12,9 +14,9 @@ test("independent paper view and native touch scroll control", async () => {
   });
   try {
     const context = await browser.newContext({
-      viewport: { width: 390, height: 844 },
+      viewport: { width, height },
       hasTouch: true,
-      isMobile: true,
+      isMobile: width < 600,
     });
     const page = await context.newPage();
     const requests = [];
@@ -77,7 +79,7 @@ test("independent paper view and native touch scroll control", async () => {
     assert.equal(await box.locator("[data-peep-controller]").count(), 0);
     assert.deepEqual(await matrices(), neutral);
     assert.equal(requests.some((url) => /mediapipe|face_landmarker|\.wasm/.test(url)), false);
-    console.log(JSON.stringify({ before, up, down, neutral, right, requests: requests.length }));
+    console.log(JSON.stringify({ width, height, before, up, down, neutral, right, requests: requests.length }));
     await context.close();
   } finally {
     await browser.close();
