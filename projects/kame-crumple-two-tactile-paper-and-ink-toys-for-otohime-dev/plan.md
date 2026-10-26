@@ -1,274 +1,135 @@
 # Kame and Crumple
 
-Plan: pm-259 · Revision: 1 · Product owner: run-8751 · 2026-10-26
-Research: [rep-5095, preserved verbatim](research.md)
-Planning base: `5cd6ee0` (resolve the delivery SHA from the commit containing this file).
-Actual drafting profile: `codex-sol-6-1-high`, model `gpt-6.1-sol`, effort `high` (run-8751 record).
+Plan: pm-259 · Revision: 2 · Product owner: run-8806 · 2026-10-26
+Planning base: `15fd171`; delivery SHA is the commit containing this revision.
+Actual run: `codex-sol-6-1-high` / `gpt-6.1-sol` / `high`, fleet worker `avietidol-z490` (run record).
+Research: [rep-5095 preserved verbatim](research.md).
 
-## Product outcome
+## Outcome and revision boundary
 
-Make Otohime's existing paper feel playful: an ink turtle swims along the page edge, and paper can be peeled, fetched, folded into a ball and tossed into a footer basket. Every action has a keyboard equivalent and an immediate recovery. The paper's text, links and geometry remain intact. Both toys are progressive enhancements on the existing public `(site)` pages; the normal site is the usable baseline without JavaScript.
+Kame is an optional ink turtle companion; Crumple makes existing paper peel, fold, fly into a basket and iron flat again. Content remains readable, links keep working and every gesture has a keyboard action. Both features remain lazy progressive enhancements with no new dependency.
 
-The first release covers project cartridges on `/projects`, every public note entry on `/notes`, footer social link chips and a small lazy-rendered decorative paper sticker. The registry can opt in other plain paper surfaces using the same contract. Kame accompanies public pages within the existing site root. Existing independent root-layout exhibits, signed-in rooms, auth/admin pages, editable forms, the Ink Desk and stamp-board gestures are outside gesture discovery. Do not apply a document-wide `.card` selector: most current `.card` elements are account/admin controls. This scope is explicit so safe eligibility can be tested rather than guessed.
+Revision 1 delivered Kame at `dd21add9d4badb1af46a1f3affea59058d6418c2` and tear/registry at `a46ad8e496467183a5ed938dc5100e563a0e330b`, both ancestors of the planning base. Their board tasks t-1572/t-1573 are superseded, not proof that their code is missing. t-1574/t-1575 were also superseded. This revision retains delivered code and its tests, replaces the unfinished fetch and oversized final task with four smaller contracts, and explicitly re-verifies the foundation in composition. Old reports describe local execution; CI/deployed acceptance is still required and is not inferred from them.
 
-Success is the completed browser walkthrough and passing delivery-SHA gates for all four contracts below. This document is a build plan, not a claim that the toys are already implemented.
+The operator authorized changing the implementation approach. Canvas 2D seeded paper triangles/ink creases plus small deterministic physics preserve the requested appearance with less dependency and WebGL-context risk. A broad card-body drag can conflict with links, selection and scrolling; deliberate 44px grips provide the guaranteed drag route on mouse/touch, with optional blank-paper input only where safe. Stationary blank-paper/grip holds and keyboard buttons retain the crumple experience.
 
-## Chosen experience
+## Scope and interaction
 
-- **Kame:** rough, currentColor SVG turtle; small flipper strokes and zZ ink bubbles; a pointer-transparent fixed layer except for real controls. Scroll updates its edge target via rAF-coalesced transforms. It naps after 45 seconds without activity, follows a called cursor, pets on a held gesture, fetches a tossed visual proxy and retracts into a footer shell. Call Kame, Pet, Name and Hide/Restore are labelled buttons/input. The artwork itself is aria-hidden. Optional K only works outside fields/dialogs and without modifiers.
-- **Mood and memory:** local hour 00–05 sleepy, 06–11 bright, 12–18 calm, 19–23 drowsy; an unbroken streak of at least three local dates adds a friendly greeting. Count a visit once per date; same-day reloads do not inflate it, a missed day resets it, and a future/invalid stored day cannot create a streak. Store `kame:v1` as `{name,lastVisit,streak,dismissed}`; trim names to 24 characters and render as text. Inject clock/calendar and storage for tests; failed storage becomes in-memory state.
-- **Sound:** reuse `lib/sound-client.ts` and its sound toggle/context. Quiet synthesized purr while petting, started only by an input gesture when sound is on, ending on release, cancel, blur, hide, toggle-off or unmount. Reuse cue data if sufficient; otherwise add a tested bounded cue. No media files or second audio context.
-- **Tear:** explicit upper corner handle, 24px geometric hot zone with at least 44px accessible control hit area. Pull reveals a seeded deckled edge and a short real DOM margin note or an existing internal secret link. Peel corner does the same via keyboard. Keep controls and recovered text outside the clipped visual layer.
-- **Fetch:** drag a card body on mouse or an explicit touch grip, then release with velocity. Kame retrieves an aria-hidden visual proxy and returns it to the source rectangle. The source stays in its original DOM order. Ordinary click/modified click/key activation still navigates; suppress exactly the synthetic click caused by a completed drag. Fetch back is also a button.
-- **Crumple:** a stationary 600ms card-body hold or Crumple button folds a seeded Canvas 2D triangle mesh into a ball in about 400ms. Draw paper and ink creases as vectors, avoiding content screenshots. Toss with mouse/touch or Toss to basket. Footer SVG basket receives balls using a tiny fixed-step 2D integrator with rim collisions, friction and rest detection.
-- **Recovery:** per-card Reset, Read card and global Iron flat stay reachable even when the card's painted layer is gone. Original text and links stay in the accessibility tree; focusing a source link immediately restores visible paper. Iron flat reverses tears/crumpling with a short sweep overlay. Escape and route change clear cosmetic state, proxies, captures and animation work. Kame name/streak survive reset.
-- **Motion and touch:** reduced motion means an asleep, stationary Kame and instantaneous paper states; no follow/fetch movement or physics animation. Buttons still work. A preference change stops active movement immediately. Touch scroll is the default outside deliberate grips/corner handles; scope touch-action before pointerdown on those controls, never on the document. Save-Data offers explicit on-demand enabling instead of automatically downloading the toys.
+Paper cards are project cartridges on /projects and public note entries on /notes. Fetch additionally includes footer Lines chips through noninteractive wrappers and a small lazy decorative sticker on those two routes. Fetch-only surfaces do not need a margin layer. Other plain paper can opt in later; “any card” means any explicitly registered paper card, never account/admin forms selected by a global CSS class.
 
-## Architecture and shared interfaces
+Kame keeps the current public-route allowlist: /, /work, /play, /notes, /music, /projects, /sketches. Signed-in/auth/admin pages, independent exhibit roots, /desk, stamp boards, live canvases and editable/nested controls retain existing inputs. The SVG artwork stays aria-hidden and pointer-transparent; real labelled footer controls operate it.
 
-Reuse the patterns in `components/pond-loader.tsx`, `ink-hero-loader.tsx`, `stamp-board.tsx`, `lost-sheet.tsx`, `lib/sound.ts`, `lib/sound-client.ts` and `components/end-footer.tsx`. Use existing layouts only. The installed Next 16.4.2 guide at `node_modules/next/dist/docs/01-app/02-guides/lazy-loading.md` requires `ssr:false` inside a Client Component; server-side dynamic import does not provide the desired boundary. Do not change route-group motion/sibling classifications.
+Keep existing Kame behavior: slow edge swimming beside scroll, zZ after injected 45s idle, Call or unmodified K outside fields/dialogs to follow, 500ms hold-to-pet with existing sound-toggle-gated bounded synthesized purr, inline name trimmed to 24 Unicode code points, shell dismissal/restoration. Local hours 00–05/06–11/12–18/19–23 give sleepy/bright/calm/drowsy; a streak of three dates adds a friendly greeting. Guard `kame:v1` name/lastVisit/streak/dismissed storage, count once per local date and tolerate invalid/future/blocked storage.
 
-| Interface | Responsibility and observable state |
+Peel remains a 24px visual corner with 44px accessible hit area, seeded deckle and real margin DOM. Peel corner and Reset use the same state transitions. Fetch animates one proxy to the turtle and back. Crumple draws a roughly 400ms paper fold into a ball; a pointer flick can land it in the footer basket. Crumple, Fetch back, Toss to basket, Read card, Reset and Iron flat are real labelled keyboard actions. Reduced motion keeps a stationary sleeping turtle and instant paper recovery/toss without follow/fetch/physics animation; petting responds statically and sound stays opt-in.
+
+## Architecture and interfaces
+
+Read [the landed gesture contract](tactile-contract.md) and [the Kame port](kame-contract.md) before implementation. Extend them; do not mount a second gesture manager. The planning rules and standing software rules were recovered read-only from `/home/avietidol/codes/mono-v2/projects/20260921222547_plan_manager_chief_of_staff_extraction.md` and `/home/avietidol/codes/mono-v2/docs/claude/software-development.md`, absent in this repo. Standing rules stay in their source documents and AGENTS.md.
+
+The installed Next guide `node_modules/next/dist/docs/01-app/02-guides/lazy-loading.md` was read: client dynamic boundaries provide lazy loading and `ssr:false` belongs in a Client Component. Preserve current null-fallback Suspense mounting in the existing site layout and feature CSS imports from loaders. Do not add root layouts/stylesheets or duplicate motion/sibling classifications.
+
+| Interface | Contract |
 | --- | --- |
-| `lib/tactile.ts` | Pure surface registry/eligibility, one-pointer gesture owner, injected clock/storage, route-session reset. Stable surface ids derive from project href/title and note date, never array position. |
-| `data-paper-id`, `data-tossable` | Opt-in metadata on original server DOM. Not an SSR enhancement marker; no interactive toy nodes, proxies or canvases exist there before activation. |
-| `lib/tear.ts` | Seeded deckle geometry and intact/peeled/reset transitions. Safe bounded session serialization. |
-| `lib/kame.ts` | Pure state/mood/calendar/storage policy and a small fetch/cancel command interface; no React or browser imports. |
-| `lib/kame-fetch.ts` | Bounded velocity samples, origin/return geometry and exact-once click suppression using the shared gesture owner. |
-| `lib/crumple.ts` | Seeded fold mesh and fixed-step physics; sleep and basket-in results are deterministic values. |
-| `components/tactile/`, `components/kame/` | Separate lazy loaders and renderers, guarded browser adapters and full teardown. Expose real user controls and data-state attributes that browser tests can observe. |
-| `components/end-footer.tsx` | Stable shell/basket slots and lazy controls; preserve navigation, credits and the Ryugu-jo entry. |
+| `lib/tactile.ts` + mounted PaperLayer | Stable typed registry, one gesture owner and route-session state; extend discovery for fetch-only wrappers without making anchors draggable. |
+| `components/kame/commands.ts` | Local typed command/acknowledgement port. Existing boolean means acceptance only; task 1 adds actual arrival/completion/cancel observation. No window test API. |
+| `lib/kame-fetch.ts` | Pure bounded velocity, original rectangle, toss/return and exact-once click-suppression policy. |
+| `lib/crumple.ts` | Seeded folding lifecycle first; task 3 adds fixed-step bounded physics and hit/rest outcomes. |
+| `components/tactile/` | Sole browser adapter, real controls, lazy Canvas module, proxy lifecycle, recovery and teardown. |
+| `components/end-footer.tsx` | Existing shell, fetch-only wrappers and stable basket slot; preserve waterline, navigation and Ryugu-jo entry. |
+| `scripts/tactile-budget.mjs` | Actual production chunk attribution/gzip accounting; fixture-tested refusal of empty/ambiguous evidence. |
 
-Gesture precedence is a single contract: corner peel owns its pointer; nested controls and existing toy roots retain theirs; otherwise a stationary hold can become crumple at 600ms. A body drag over 6px may become fetch and immediately cancels its hold; motion over 8px always cancels an unclaimed hold. On touch outside a grip, scrolling wins and cancels pending hold/drag. No event may produce both fetch and crumple. Pointercancel, lost capture, Escape, blur, pagehide, target removal, route departure or viewport resize restore sources and stop the active gesture. Kame pet hold is 500ms on Kame's own control, independent of card holds. Unit fixtures cover threshold boundaries.
+Gesture arbitration is explicit: peel handle owns peel; nested controls and excluded roots own their input. A stationary primary hold reaches crumple at 600ms. Mouse blank-paper/grip movement above 6px claims fetch and cancels hold; touch body movement above 8px cancels hold for native scrolling. At exact thresholds no transition occurs. Touch-action:none is applied before pointerdown only to explicit grips/handles, never card bodies or document. Wrong-pointer events cannot release ownership. No event activates two toys.
 
-New layers use the existing stacking vocabulary: above ordinary content, below PeekLayer, Pocket and dialogs; never cover a focused control. Fixed/absolute visuals cannot affect paper geometry. Limit active balls to eight, DPR to two, and integrate with clamped deltas; stop rAF when at rest/hidden. Session state is bounded, keyed by route plus stable id, and removed on route departure; revisiting a route starts flat. Reload within the same route may restore peeled state. Blocked/malformed storage never blocks reading.
+All sources remain in DOM and the accessibility tree at their original geometry/hrefs. Visual proxies are aria-hidden; optional paint-only opacity on source children must restore before source focus, Read, Reset or failure completes. Never hide original content via visibility/display/inert/aria-hidden. Controls sit outside clipping/opacity. The only persistent identity is existing Kame memory; paper session data is bounded and route-scoped. Route departure clears paper cosmetics. Iron flat clears all paper state but preserves Kame identity/dismissal.
 
-## Delivery order and size
+Use existing theme ink/paper variables and stacking below Peek/Pocket/dialogs. Pause or cancel behind modals. Cancel fetch/fold/flight and restore content on interruption; teardown releases captures, subscriptions, observers, frames, audio and canvas resources. Cap balls at eight, DPR at two, elapsed deltas and flight at five active seconds. rAF stops when resting/hidden. If a module/context is unavailable, source reading and reset still work. No backend, scheduled work, external runtime job, paid API or binary asset is needed.
 
-Settings read during run-8751: `max_plan_elapsed=6h0m0s`, `max_live_runs_per_plan=3`, `qa_mode=auto`. Four SWE tasks; all retain `qa=required` because all change visible behaviour. No separate QA task duplicates the platform's per-task QA/acceptance dispatch.
+## Delivery order and admission
 
 ```mermaid
 flowchart LR
-    T1["1 · Tear and gesture contract"] --> T3["3 · Fetch integration"]
-    T2["2 · Kame companion"] --> T3
-    T3 --> T4["4 · Crumple, reset and budgets"]
+  F["1 · Fetch with foundation regression"] --> C["2 · Canvas fold and per-card recovery"]
+  C --> B["3 · Basket physics and global ironing"]
+  B --> V["4 · Performance budgets and composition"]
 ```
 
-Tasks 1 and 2 have no functional dependency; both declare the shared layout/footer paths so the platform can schedule footprint conflicts. Task 3 composes their interfaces; task 4 consumes the completed gesture contract. With the documented 1h fallback per task the conservative weighted sum is 4h and longest dependency path is 3h. The admission service's measured role p50 is authoritative. If it refuses this proposal above 6h, submit tasks 1–2 here and file fetch then crumple as chained parts with `after_plan_id`, retaining this document as the scope reference. Do not pre-plan later parts against unlanded code.
+Current settings read on run-8806: max_plan_elapsed=6h0m0s, max_live_runs_per_plan=1, qa_mode=auto. All tasks require QA because each affects visible behavior. Four serial SWE tasks have a 4h fallback estimate (1h each); the admission server's measured role p50 is authoritative. Tasks name overlapping paths deliberately. If admission exceeds the ceiling, submit only tasks 1–2 and file tasks 3–4 as a later part using after_plan_id=pm-259, naming this document; later drafting occurs against landed code, without pre-planning unlanded implementations. No parent_plan_id for parts.
 
-## Verification and acceptance
+No contract depends on a human choice or timed observation. Any newly discovered physical/sign-in chore is raised by the first task that needs it, at its start, via advisory plan_manager_ask_user kind=operator_action with a stable fingerprint and readiness probe only when meaningful. Record judgement calls and surprises as decisions/lessons. Engineering proves locally, commits with pm-259/<assigned-task-id>: and pushes; green gate, CI/deployed QA and acceptance belong to the platform. This product-owner run uses pm-259/run-8806: because it has no claimed task id.
 
-The JSON contracts below are the exact proposal payload, not illustrative tasks. Each feature has a new named verifier which must fail or be missing before implementation and pass at delivery. Generic existing green tests alone cannot close a new feature. Feature tests use clock/calendar/seed injection and real production-browser pointer/key inputs; nobody proves idle/streak/physics by spending real time idle.
+## Verification protocol
 
-Local gate commands run from the repository root after `npm ci`. `scripts/e2e.mjs` with no BASE_URL creates its own isolated database, builds and serves the production app; these tests must use public pages and must not mutate a shared deployment. Browser tests close contexts promptly. Named new tests and the budget script are delivered by their owning contracts. A missing browser or a skipped/zero-test run is inconclusive, never success.
+Each JSON contract below is the exact proposal. New verifier files are implementation obligations: missing/no-match/skipped/zero-test results cannot pass. Start with a failing feature assertion, preserve existing tests and fix regressions. Run npm ci in the locked Node 22 checkout. Pure clock/calendar/seed/storage fixtures prove policy, not rendering. Real production Next imports and Chromium Canvas/Web Audio construction plus CDP touch prove the browser path. No test mutates a shared deployment.
 
-Task 4's performance acceptance is precise:
+Use scripts/e2e.mjs without BASE_URL for an isolated temporary PostgreSQL and production build/server; it runs test files serially. Do not override concurrency upward. Use short TMPDIR=/tmp for Chromium on lease paths. The footer walk/probe have their own isolated local database path. Task 4's commands clear BASE_URL and database overrides and build with CI=true and GITHUB_SHA equal to the delivery commit to reproduce CI identity. Independent QA reads the actual served build/chunk identity rather than trusting state attributes or supplied summary scripts.
 
-1. Loader bootstrap at most 2KiB gzip; incremental Kame under 15KiB gzip; combined tear/crumple under 20KiB gzip, including new shared helper code counted once and excluding already-shipped React/runtime. Identify real transitive output chunks, not just source file sizes; report gzip accounting. Existing heavy libraries must not become toy imports.
-2. Parsed initial server HTML contains no interactive Kame/paper controls, no toy canvas/proxies and no toy preload request. Inert surface metadata and stable footer slots are allowed. The loader renders null on the server and requests toy modules only after window load plus an idle callback (bounded setTimeout fallback); Crumple's renderer is further deferred until its first action.
-3. Compare five paired cold navigations each at 1280×860 and 390×844, same browser/production build/CPU-network settings. Use browser-side request interception to block toy chunks for the control, without adding a production feature flag. Log every sample and the original final LCP element. Enabled median LCP minus control median is at most max(100ms, 5% of control median); the toy never becomes an LCP candidate. This tolerance handles measurement noise and does not authorize critical-path requests.
-4. No toy-caused layout shift (measurement tolerance 0.001); card bounding boxes before/after action/reset differ by at most 1 CSS pixel. Assert observer entries and geometry, not a bare total CLS that another animation could mask.
-5. Exercise no-JS, blocked storage, Save-Data, live reduced-motion changes, dark/light and readable content while crumpled. Use real touch event dispatch for scrolling/long-press conflicts; mouse emulation alone is insufficient.
+Performance acceptance at task 4:
 
-QA and final acceptance independently inspect the delivery diff and the actual running browser build (meta build-sha plus build/chunk fingerprint); an unrelated new SHA is insufficient. Walk each user path on desktop and touch, verify keyboard focus recovery and readable original content, and exercise negative controls: a normal footer link must still navigate, scrolling a card must not toss it, typing k in a field must not call Kame, sound-off must not create purr audio, reduced motion must not run animation, and an excluded desk/stamp gesture must still work. Read the source accessibility tree and response/request evidence rather than only screenshots or the SWE's proof script. Reports include starting state → action → result → artifact, observed defects and exact identities.
+1. Enforce combined loader bootstrap <=2KiB gzip, incremental Kame <15KiB gzip, combined tear/fetch/crumple paper code <20KiB gzip. Assign shared new code once to paper and show the union total; exclude existing framework runtime, never omit a new helper. Traverse actual emitted dependencies and record contributing chunks; source-file gzip alone is insufficient.
+2. Parse initial server HTML: no interactive toy controls, proxies or Canvas; inert paper metadata and reserved shell/basket slots are allowed. No toy renderer/module preload is critical-path. Kame/paper modules request only after load plus idle; Canvas requests only after first action. Hold the idle callback to demonstrate absence before release and presence afterward. Save-Data keeps optional renderers unloaded until explicit enable.
+3. Run five paired cold navigations at each 1280×860 and 390×844 viewport on one production build with identical browser/CPU/network settings. Enabled and control differ only by browser-side blocking of identified toy chunks. Record every LCP sample, final LCP element and request timing. Enabled median minus control median <=max(100ms, 5% of control median), and no toy is a final LCP candidate.
+4. Observe toy-attributable layout shifts <=0.001 and source bounding boxes before/action/reset within 1 CSS pixel. Inspect shift source nodes and overlay geometry; aggregate CLS or state strings alone cannot prove this.
+5. Fault injection is explicit: malformed/blocked storage, failed import/Canvas, reduced motion toggled mid-action, Save-Data, source removal and lifecycle interruptions. Relevant negative controls must fail under an intentional budget breach/eager-request fixture and pass normally.
 
-This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Vercel deployments; generic GitLab/k3s instructions do not identify its deployment. Green gate and independent QA own deployed proof; SWE action items stop at tested commit/push. If a delivered build is unavailable, report the exact missing build/deployment id and owner rather than accepting a stale public site. There are no external scheduled jobs in this feature, so runtime queue/history/callback evidence is not applicable; browser execution remains required. Record fake clock/physics boundaries separately from actual production-renderer execution.
+Independent per-task QA and final acceptance inspect delivered diffs plus real served build-sha/build id/chunk hashes, then obtain separate observations through keyboard, mouse and CDP touch. Walk: flat paper → peel → fetch → crumple → basket hit/miss → Iron flat → intact readable source; repeat under reduced motion, Save-Data and blocked storage. Preserve accessible names/hrefs/text/focus and geometry. Challenge normal link navigation, text selection, card scrolling, k in a field, sound-off, modal layering and excluded desk/stamp input. Footer walk/probe remain required alongside full e2e.
+
+Reports distinguish local execution, deployed integration and product acceptance; name real/fake boundaries, exact build/executable identities, raw evidence, defects, independent negative controls and any deferred check's id/owner/failure condition. No asynchronous runtime history/callback scan applies to this browser-only change. The actual deployment topology is GitHub Actions plus Vercel in .github/workflows/ci.yml; generic mono-v2 GitLab/k3s instructions do not describe this repo. CI or deployment unreadability is reported as unobserved and never relabelled success. Future dated observations use acceptance/watch; no contract proves itself by elapsed idle time.
 
 ## Build contracts
 
-### 1. Peel paper corners with a shared gesture contract
+### 1. Complete safe Kame fetch on the landed paper registry
 
 ```json
 {
   "sequence": 1,
-  "title": "Peel paper corners with a shared gesture contract",
+  "title": "Complete safe Kame fetch on the landed paper registry",
   "role": "software_engineer",
   "depends_on": [],
   "qa": "required",
-  "problem": "Paper surfaces have no reversible tear interaction, and adding separate drag listeners would conflict with navigation, scrolling and existing toys.",
+  "problem": "Kame and peeling are on main, but commandKame acknowledges acceptance rather than arrival, and paper has no complete toss/return path. Rebuilding the foundation would discard validated fixes.",
   "action_items": [
-    "Declare and test lib/tactile.ts first: stable surface ids, opt-in discovery, route exclusion, route-session state and one-pointer gesture arbitration (idle/peel/hold/fetch/crumple). Inject clock, storage and seed; invalid or throwing storage falls back to memory. Keep the pure interface independent of React.",
-    "Implement components/tactile/loader.tsx and paper-layer.tsx, mounted once in the existing app/(site)/layout.tsx. Render null on the server; dynamically import only after window load and idle, and only on eligible public routes. Save-Data leaves an on-demand enable control; reduced motion keeps instant keyboard operations. Cleanup listeners, captures and transforms on route departure/pagehide; clear route-session storage on route departure only.",
-    "Opt in every project Cartridge and public notes entry using stable data-paper-id/data-tossable metadata; exclude protected/account/admin/auth routes, /desk, stamp boards, inputs, editable content, controls and live canvases. Register a bounded text margin note or existing internal secret link per card. Preserve original DOM, hrefs, content, text selection and layout.",
-    "Implement a 24px corner peel handle with a larger accessible hit area, seeded deckled clip polygon and real hidden-layer DOM revealed by drag or Peel corner. Add visible-on-focus controls outside clipping, per-card Reset, Escape cancellation, instant reduced-motion paths and session persistence. Touch scroll wins outside the explicit handle; greater than 8px motion cancels pending holds.",
-    "Write unique pure and production-browser tests before implementation, including pointercancel, navigation cleanup, blocked storage, reduced motion, Save-Data, no-JS link access, keyboard reveal, stable card geometry and existing stamp/desk drag exclusions. Document the registry and gesture vocabulary under the plan folder; stop engineering work after tested commit/push."
+    "Read the landed tactile-contract.md and kame-contract.md; retain a46ad8e and dd21add behavior and regression tests. Add failing fetch unit/browser tests first, and extend the existing PaperLayer's single createGesture owner instead of adding competing document-wide body listeners. Preserve current loaders, route eligibility and stylesheet placement.",
+    "Declare lib/kame-fetch.ts pure velocity/proxy/return lifecycle and a typed completion subscription in components/kame/commands.ts. Acceptance, arrival, return and cancellation are distinct. Emit arrival from the rendered turtle's actual bounded position; cap each operation at 5s of active elapsed time and cancel safely if arrival never occurs. No guessed sleep proves completion; unit tests drive time, browser tests inspect geometry.",
+    "Add 44px explicit drag grips and Fetch back buttons to registered project/note cards. Mouse blank-paper dragging is allowed only outside links, selectable text and controls; touch body scrolling wins. Register footer Lines chips via noninteractive wrappers, and one small lazy decorative sticker, with stable ids. Fetch-only chip/sticker entries need no margin note and no peel actions; extend discovery explicitly while keeping paper eligibility exclusions.",
+    "Use one aria-hidden fixed proxy with bounded velocity on release. Kame reaches it and returns it to its measured source; source DOM, hrefs and layout stay intact. Suppress exactly the completed drag's pointer click, never a later real click or keyboard/modified activation. A rejected fetch restores immediately with a scoped accessible response.",
+    "Cancel on Escape, pointercancel, capture loss, blur, hidden page, route departure, source removal, resize, modal opening, dismissal or motion change. Reduced motion never animates fetch; Fetch back restores instantly. Save-Data downloads only after explicit enable. Cleanup all subscriptions, frames and captures. Keep reset callable by later crumple work.",
+    "Run existing tear/Kame plus new fetch production browser checks, including initial sprite placement, actual arrival/return geometry, mobile CDP grip input, native link navigation and card-body scroll negative controls. Write fetch-contract.md with lifecycle/arbitration and evidence identity. Commit with the assigned pm-259/task-id prefix and push; engineering ends at push."
   ],
   "interfaces": [
     "lib/tactile.ts",
     "lib/tactile.test.ts",
-    "lib/tear.ts",
-    "lib/tear.test.ts",
-    "components/tactile/",
-    "components/cartridge.tsx",
-    "app/(site)/(app)/notes/page.tsx",
-    "app/(site)/layout.tsx",
-    "app/(site)/tactile.css",
-    "e2e/tactile-tear.test.ts",
-    "e2e/tactile-helpers.ts",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/tactile-contract.md"
-  ],
-  "non_goals": [
-    "Kame visuals or fetch implementation",
-    "crumple renderer and basket physics",
-    "new root layouts, backend endpoints or dependencies",
-    "editing card content or affecting auth/admin/desk tools"
-  ],
-  "acceptance_criteria": "On /projects and /notes, eligible paper cards peel into a deterministic deckled corner revealing accessible margin content; keyboard Peel corner and Reset perform the same actions. Links and scrolling retain normal behaviour, cancellation and route changes restore the card, and no interactive toy markup or heavyweight code is in the server render.",
-  "verification": [
-    {
-      "name": "tear and gesture edge cases",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/tactile.test.ts lib/tear.test.ts",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "existing repository suite",
-      "cwd": ".",
-      "cmd": "npm test",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "lint and type contracts",
-      "cwd": ".",
-      "cmd": "npm run lint && npm run typecheck",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "production tear, touch and progressive enhancement",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/tactile-tear.test.ts",
-      "expect": "exit0",
-      "timeout_s": 900
-    }
-  ]
-}
-```
-
-### 2. Give Kame a persistent accessible ink companion
-
-```json
-{
-  "sequence": 2,
-  "title": "Give Kame a persistent accessible ink companion",
-  "role": "software_engineer",
-  "depends_on": [],
-  "qa": "required",
-  "problem": "The site has no companion; Kame needs deterministic mood, persistence and accessible controls before gestures can request fetch.",
-  "action_items": [
-    "Declare and test lib/kame.ts with swim/nap/follow/fetch/pet/shell states, injected elapsed clock, local calendar day and storage. Idle at 45s sleeps; visit streak increments once per local date, resets after a missed date and tolerates malformed/future records. Define hour-based mood ranges and cap/trim the stored name to 24 characters.",
-    "Implement a separate components/kame/loader.tsx and ink SVG companion in the existing app/(site)/layout.tsx without importing tactile code. After load plus idle, show slow edge swimming and zZ ink bubbles, Call Kame, inline naming, Pet and shell dismissal/restoration; expose a small local fetch-command interface for task 3 without creating global test-only APIs.",
-    "Keep original layout and controls unobstructed at 390px and desktop; turtle artwork is aria-hidden while real labelled buttons handle Call, hold-to-pet and dismiss/restore. Pause follow and inputs behind Pocket/dialogs. Provide keyboard press/release petting and touch hold at 500ms, with pointer cancellation and focus-loss cleanup. Use optional K shortcut only outside editable fields/modifier combinations.",
-    "Persist only kame:v1 name/lastVisit/streak/dismissed with guarded access. On reduced motion Kame stays asleep in a corner with static responses and working controls; preference changes immediately stop motion. Save-Data defers optional code to an explicit enable control. Pause animation and release audio when document hides or page unmounts.",
-    "Reuse the existing sound context/toggle for a bounded quiet chiptune purr (existing cue sequence or a tested new cue), starting only from a pet gesture while sound is on; stop on release/cancel/blur/hide/toggle-off/unmount. Add state, storage, sound and production-browser tests including accelerated idle and calendar fixtures; stop after tested commit/push."
-  ],
-  "interfaces": [
-    "lib/kame.ts",
-    "lib/kame.test.ts",
-    "components/kame/",
-    "app/(site)/layout.tsx",
-    "app/(site)/kame.css",
-    "components/end-footer.tsx",
-    "lib/sound.ts",
-    "lib/sound-client.ts",
-    "lib/sound.test.ts",
-    "e2e/kame.test.ts",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/kame-contract.md"
-  ],
-  "non_goals": [
-    "drag/fetch integration",
-    "paper tear or crumple implementation",
-    "server tracking, analytics or sound files",
-    "new route groups or third-party dependencies"
-  ],
-  "acceptance_criteria": "Kame paddles along public page edges, naps after a fixture-driven 45s idle, follows when called, accepts hold-to-pet and a quiet sound-toggle-gated purr, remembers its inline name/streak/dismissal, and restores from a footer shell. Reduced motion gives a stationary sleeping companion with keyboard controls; blocked storage and sound-off remain fully usable.",
-  "verification": [
-    {
-      "name": "Kame states, local dates and sound policy",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/kame.test.ts lib/sound.test.ts",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "existing repository suite",
-      "cwd": ".",
-      "cmd": "npm test",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "lint and type contracts",
-      "cwd": ".",
-      "cmd": "npm run lint && npm run typecheck",
-      "expect": "exit0",
-      "timeout_s": 300
-    },
-    {
-      "name": "production companion and accessibility",
-      "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/kame.test.ts",
-      "expect": "exit0",
-      "timeout_s": 900
-    }
-  ]
-}
-```
-
-### 3. Fetch tossed cards, stickers and link chips safely
-
-```json
-{
-  "sequence": 3,
-  "title": "Fetch tossed cards, stickers and link chips safely",
-  "role": "software_engineer",
-  "depends_on": [
-    "1",
-    "2"
-  ],
-  "qa": "required",
-  "problem": "The companion and paper layer need a shared toss-to-fetch interaction that returns items without stealing link clicks, touch scrolling, or another toy's gesture.",
-  "action_items": [
-    "Extend the existing tactile gesture port and Kame command interface with capture, bounded velocity samples, toss origin/return rectangle, cancel and completion. Body motion above 6px starts fetch only when not owned by peel or the 600ms crumple hold. Freeze the full hold/drag arbitration table in tests so task 4 can consume it.",
-    "Integrate fetch for all opted-in project and note cards, footer social link chips and a small decorative paper sticker rendered after lazy activation. For touch use explicit draggable grips with touch-action scoped there from pointerdown; leave the rest of each card scrollable. Regular clicks, modified clicks, keyboard activation and text selection keep their native behaviour; suppress only the one click generated by a completed toss.",
-    "Animate an aria-hidden visual proxy on toss, let Kame swim to it and return it to the measured origin; original source DOM and href stay in place. Restore on completion, Escape, pointercancel, blur, route change, target detachment, resize or reduced-motion changes. Dismissed/sleep-only Kame declines fetch and restores the object immediately.",
-    "Add keyboard Fetch back buttons associated with the same registered surfaces; announce completion once. Ensure peel handles, nested controls, long-press candidates, stamp boards, /desk and open Pocket dialogs never start a fetch; bound simultaneous activity to one gesture.",
-    "Add tests of toss velocity and exact-once click suppression, real mouse and touch grip paths, link navigation negative controls, route cleanup and coexistence with tear. Keep purr and terminal sound behaviour unchanged; stop after tested commit/push."
-  ],
-  "interfaces": [
-    "lib/tactile.ts",
-    "lib/tactile.test.ts",
-    "lib/kame.ts",
-    "lib/kame.test.ts",
     "lib/kame-fetch.ts",
     "lib/kame-fetch.test.ts",
+    "lib/kame.ts",
+    "lib/kame.test.ts",
     "components/tactile/",
     "components/kame/",
     "components/end-footer.tsx",
     "app/(site)/tactile.css",
     "app/(site)/kame.css",
     "e2e/kame-fetch.test.ts",
+    "e2e/kame.test.ts",
     "e2e/tactile-tear.test.ts",
+    "e2e/tactile-helpers.ts",
     "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/fetch-contract.md"
   ],
   "non_goals": [
-    "moving/removing original content or changing hrefs",
-    "basket scoring or crumple renderer",
-    "taking gestures from protected forms, existing games or native scrolling"
+    "recreating landed Kame or peel features",
+    "crumple rendering or basket physics",
+    "new dependencies, route groups, global event APIs or backend writes"
   ],
-  "acceptance_criteria": "A mouse toss or touch-grip toss of an opted-in card, sticker or footer link chip makes Kame fetch its visual copy and return it. Untossed links still navigate, completed tosses suppress exactly one click, keyboard Fetch back is equivalent, and peel/hold/dialog/desk gestures stay independent. Every cancellation restores the source immediately.",
+  "acceptance_criteria": "On /projects and /notes, cards, footer Lines chips and a decorative sticker can be tossed with an explicit touch/mouse grip or Fetch back button. The visible turtle reaches the proxy and returns it within 5s active time; source text, links and geometry remain intact. Cancel/reduced-motion/dismissed paths restore immediately. Ordinary links, text selection, touch scrolling, peel, Pet and existing desk/stamp gestures still work.",
   "verification": [
     {
-      "name": "fetch and arbitration edge cases",
+      "name": "fetch policy and existing foundation",
       "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/kame-fetch.test.ts lib/tactile.test.ts lib/kame.test.ts",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/kame-fetch.test.ts lib/tactile.test.ts lib/kame.test.ts lib/tear.test.ts",
       "expect": "exit0",
       "timeout_s": 300
     },
     {
-      "name": "existing repository suite",
+      "name": "repository suite",
       "cwd": ".",
       "cmd": "npm test",
       "expect": "exit0",
@@ -282,9 +143,9 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
       "timeout_s": 300
     },
     {
-      "name": "production fetch and peel coexistence",
+      "name": "production fetch, companion and peel",
       "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/kame-fetch.test.ts e2e/tactile-tear.test.ts",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/kame-fetch.test.ts e2e/kame.test.ts e2e/tactile-tear.test.ts",
       "expect": "exit0",
       "timeout_s": 900
     }
@@ -292,25 +153,25 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
 }
 ```
 
-### 4. Crumple, toss and iron paper with measured budgets
+### 2. Fold paper into reversible Canvas balls
 
 ```json
 {
-  "sequence": 4,
-  "title": "Crumple, toss and iron paper with measured budgets",
+  "sequence": 2,
+  "title": "Fold paper into reversible Canvas balls",
   "role": "software_engineer",
   "depends_on": [
-    "3"
+    "1"
   ],
   "qa": "required",
-  "problem": "Visitors cannot yet crumple and toss paper or reset both toys, and final composition needs proof of content recovery, bounded work and loading performance.",
+  "problem": "The shared gesture layer can fetch but cannot turn a card into a tactile paper ball; rendering and restoration need a bounded, independently provable implementation before adding basket physics.",
   "action_items": [
-    "Declare and test lib/crumple.ts physics and fold model with seeded triangles/ink creases, fixed timestep, clamped delta, gravity, rim collisions, restitution, friction, basket-in detection and sleep-at-rest. Use injected clock/seed for instant fixture execution; cap active balls at 8 and device pixel ratio at 2.",
-    "Implement lazy Canvas 2D triangle-mesh crumpling (~400ms) into a ball sprite, bounded offscreen geometry, footer SVG basket, mouse/touch tossing and keyboard Toss to basket. A stationary card-body hold at 600ms crumples, >8px movement cancels the hold, and the shared gesture owner prevents fetch/tear double activation.",
-    "Keep the original accessible DOM and reserved layout box; use a visual proxy/paint-only suppression, not display:none, visibility:hidden, removal or aria-hidden on content. Provide always-reachable Read card and Reset controls outside the painted area; focus of any original link restores its visibility. On renderer failure restore the original synchronously.",
-    "Implement per-card Reset and global Iron flat, reversing tear and crumple with an iron-sweep overlay; reduced motion swaps instantly and keyboard toss places the ball directly in the basket. Reset both cosmetic states on route departure; clear pending gestures, captures and animations on Escape/cancel/hide/resize/unmount. Reset may stop fetch but keeps Kame's name and visit history.",
-    "Add full production-browser regressions (mouse, real touch events, keyboard, theme, reduced motion toggled mid-action, Save-Data, blocked storage, no-JS, Pocket/peeks/stamps/desk). Assert original accessible names, hrefs, text and card geometry survive crumple/reset and footer links remain usable.",
-    "Add scripts/tactile-budget.mjs and e2e/tactile-performance.test.ts: identify actual production chunks from build output, count shared toy code once, enforce loader <=2KiB gzip, Kame <15KiB gzip and tear+crumple <20KiB gzip incremental code. Prove toy requests occur after load+idle and absent in critical preload; assert no interactive toy elements/canvas in parsed server HTML, no toy-caused CLS and paired LCP tolerance from the plan. Record measurements and fixture/build identity under the plan folder; stop after tested commit/push."
+    "Declare lib/crumple.ts seeded fold mesh and intact/folding/ball/reset lifecycle using injected seed/elapsed clock. Add failing tests for finite bounded geometry, deterministic creases, completion, cancellation and invalid input before implementing.",
+    "Load a small Canvas 2D renderer only on the first Crumple action after the existing load/idle activation. Draw vector paper triangles and ink creases into an approximately 400ms fold-to-ball proxy. Do not screenshot DOM, use WebGL or add dependencies. Cap DPR at 2 and active balls at 8; extra actions leave the source unchanged and announce the limit.",
+    "Add per-card Crumple, Read card and Reset controls outside the animated source area. A primary stationary grip or noninteractive blank-paper hold at 600ms uses the same createGesture owner; touch movement above 8px cancels for scrolling, grip/mouse movement above 6px gives fetch precedence, and corner peel never becomes a hold. Do not intercept text selection, links, nested controls or browser context menus; keyboard Crumple is the equivalent.",
+    "Preserve source DOM, accessibility names, hrefs and its reserved layout box. Paint-only opacity may conceal original visual children while the proxy represents the card; never remove content or apply display:none, visibility:hidden, inert or aria-hidden to original content. Focus of any original link, Read card or Reset synchronously restores visible paper. Controls remain visible/focusable while crumpled.",
+    "On import/canvas/context failure, restore the source immediately and keep Read/Reset functional. Reduced motion uses an instant ball/static state with no running animation. Cancel active folds on Escape, pointer cancellation, blur/hide, source removal, resize, route departure, motion change and modal opening; release resources. Ordinary per-card Reset also clears the peel/fetch state through task 1's shared lifecycle.",
+    "Add real production-browser mouse/touch/keyboard tests for fold output, retained accessible content/geometry, renderer failure and recovery; assert actual nonempty canvas paint plus source focus restoration, not data-state alone. Preserve all foundation tests. Document the renderer port for basket work in crumple-contract.md, then test, commit and push."
   ],
   "interfaces": [
     "lib/crumple.ts",
@@ -318,31 +179,27 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
     "lib/tactile.ts",
     "lib/tactile.test.ts",
     "components/tactile/",
-    "components/kame/",
-    "components/end-footer.tsx",
     "app/(site)/tactile.css",
     "e2e/crumple.test.ts",
-    "e2e/tactile-performance.test.ts",
     "e2e/tactile-helpers.ts",
-    "scripts/tactile-budget.mjs",
-    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/execution-evidence.md"
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/crumple-contract.md"
   ],
   "non_goals": [
-    "WebGL, html2canvas, screenshotting cards or new physics dependencies",
-    "persisting discarded content or server writes",
-    "modifying CI, authentication or unrelated visual toys"
+    "ball flight, rim collision or basket scoring",
+    "global Iron flat animation",
+    "HTML capture, new physics/rendering dependencies, content persistence"
   ],
-  "acceptance_criteria": "Long-press or keyboard Crumple folds a card into an ink-creased canvas ball; mouse/touch tosses and keyboard Toss to basket reach the footer basket with deterministic collision/rest behaviour. Read card, Reset and Iron flat always recover all original content and tears without layout shift; reduced motion is instant. All four feature browser suites and measured lazy-load, gzip, LCP and CLS budgets pass at the delivery build.",
+  "acceptance_criteria": "Every opted-in project/note paper card crumples through the same keyboard, 600ms hold or button action into a seeded ink-creased Canvas ball. Read card, focus and Reset restore the original immediately without content loss or geometry change. Reduced motion is static; blocked imports/canvas, scroll cancellation, route departure and the ninth-ball limit leave readable content.",
   "verification": [
     {
-      "name": "crumple physics and shared gesture invariants",
+      "name": "fold geometry and gesture boundaries",
       "cwd": ".",
       "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/crumple.test.ts lib/tactile.test.ts lib/tear.test.ts lib/kame-fetch.test.ts",
       "expect": "exit0",
       "timeout_s": 300
     },
     {
-      "name": "existing repository suite",
+      "name": "repository suite",
       "cwd": ".",
       "cmd": "npm test",
       "expect": "exit0",
@@ -356,11 +213,155 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
       "timeout_s": 300
     },
     {
-      "name": "production toys and performance budgets",
+      "name": "production crumple and fetch coexistence",
       "cwd": ".",
-      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/tactile-tear.test.ts e2e/kame.test.ts e2e/kame-fetch.test.ts e2e/crumple.test.ts e2e/tactile-performance.test.ts",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts e2e/kame-fetch.test.ts e2e/tactile-tear.test.ts",
       "expect": "exit0",
       "timeout_s": 900
+    }
+  ]
+}
+```
+
+### 3. Toss balls into the basket and iron paper flat
+
+```json
+{
+  "sequence": 3,
+  "title": "Toss balls into the basket and iron paper flat",
+  "role": "software_engineer",
+  "depends_on": [
+    "2"
+  ],
+  "qa": "required",
+  "problem": "Crumpled paper has no toss destination, and visitors need a single reliable way to recover every cosmetic state without resetting Kame's memory.",
+  "action_items": [
+    "Extend the pure crumple port with fixed-step 2D circle/segment physics: gravity, friction, bounded restitution, basket rim collision, in-opening detection, finite/clamped delta and sleep-at-rest. Write tests first; drive seed/time directly to prove hit, rim miss, high velocity, resize and rest without wall-clock idle.",
+    "Add an ink SVG footer basket in a stable reserved slot. Ball grips support captured pointer flicks; Toss to basket offers the keyboard equivalent. Use one owner and no conflicting card/fetch listeners. Convert viewport/source/basket coordinates explicitly; pointer tossing targets the visible basket, and keyboard Toss places the ball directly in the basket when it is offscreen without automatic page scrolling. Read/Reset remain usable.",
+    "Bound physics to eight balls and DPR 2; stop rAF at rest and while hidden. Document and test the maximum 5s active simulation: a ball still moving is settled safely at a bounded location, not simulated forever. A basket hit is an observable state but never removes the source content or creates persisted score.",
+    "Implement global Iron flat plus the existing per-card Reset: cancel fetch/fold/flight, clear tear/crumple session state and proxies, restore original paint/focus and run one short iron-sweep decoration. Reduced motion restores instantly and Toss places directly in the basket. Kame's name, visit streak and dismissal survive recovery.",
+    "Route departure, Escape, modal opening, live reduced-motion change, source removal and renderer failure synchronously restore source paint and release active resources; pagehide cleans adapters and no duplicate mounts appear on pageshow. Per-card actions affect only that card; global reset covers every registered paper card.",
+    "Add deterministic physics tests and real production-browser basket hit/miss, touch flick, keyboard toss, interruption and full reset checks. Verify footer navigation, waterline, shell, notes/projects geometry and accessible source content. Document recovery ownership in recovery-contract.md; test, commit and push."
+  ],
+  "interfaces": [
+    "lib/crumple.ts",
+    "lib/crumple.test.ts",
+    "lib/tactile.ts",
+    "lib/tactile.test.ts",
+    "components/tactile/",
+    "components/end-footer.tsx",
+    "app/(site)/tactile.css",
+    "e2e/crumple.test.ts",
+    "e2e/tactile-recovery.test.ts",
+    "e2e/tactile-helpers.ts",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/recovery-contract.md"
+  ],
+  "non_goals": [
+    "server scores, achievements or discarded-content storage",
+    "resetting Kame identity or changing unrelated footer toys",
+    "new libraries, CI topology changes or unbounded simulation"
+  ],
+  "acceptance_criteria": "A real pointer flick produces bounded ball flight, rim misses and basket hits; Toss to basket works by keyboard and reduced motion places instantly. Iron flat and per-card Reset restore tears, folds, fetched proxies and original focus/geometry, including interruptions. Animation stops at rest or by 5s active simulation. Footer links, shell controls and Kame memory survive every reset.",
+  "verification": [
+    {
+      "name": "physics and shared lifecycle",
+      "cwd": ".",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/crumple.test.ts lib/tactile.test.ts lib/kame-fetch.test.ts",
+      "expect": "exit0",
+      "timeout_s": 300
+    },
+    {
+      "name": "repository suite",
+      "cwd": ".",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "timeout_s": 300
+    },
+    {
+      "name": "lint and type contracts",
+      "cwd": ".",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "timeout_s": 300
+    },
+    {
+      "name": "production basket, recovery and companion",
+      "cwd": ".",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts e2e/tactile-recovery.test.ts e2e/kame.test.ts e2e/tactile-tear.test.ts",
+      "expect": "exit0",
+      "timeout_s": 900
+    }
+  ]
+}
+```
+
+### 4. Enforce loading budgets and complete composition checks
+
+```json
+{
+  "sequence": 4,
+  "title": "Enforce loading budgets and complete composition checks",
+  "role": "software_engineer",
+  "depends_on": [
+    "3"
+  ],
+  "qa": "required",
+  "problem": "Individual toy checks cannot prove combined lazy-loading, LCP, layout and existing site interactions; previous site-wide additions passed focused tests but broke footer and frame-count gates.",
+  "action_items": [
+    "Add scripts/tactile-budget.mjs with tests using miniature built-chunk fixtures: traverse real production chunk dependencies, enforce the plan's incremental gzip budgets, reject missing/ambiguous attribution or an empty chunk set and count shared toy modules once. Report build id, lock hash, contributing chunks and per-feature totals. Fix actual loader/import boundaries if the budgets fail, retaining the existing route and motion contracts.",
+    "Add e2e/tactile-performance.test.ts against the exact production build: parse server DOM separately from Flight text, inspect actual response bytes/network requests for toy modules, and prove load-plus-idle gating, Save-Data explicit opt-in and first-action-only Canvas import. Scope markers/roles and rAF counters to the feature they observe so multiple legitimate status regions/animations coexist; preserve assertion strength.",
+    "Run the performance protocol below on demand with held-idle and network-blocked negative controls; enforce LCP/CLS/geometry thresholds. Include a fixture that intentionally breaches a budget and a browser control that would detect an eager module request. Never relax thresholds or accept a skipped/no-test run to close the task.",
+    "Complete composed browser checks for no-JS, blocked storage, light/dark, 390px touch, keyboard focus, reduced motion changed mid-action, open Pocket/Peek layering, excluded desk/stamp gestures, normal footer links and sound-off. Use real production imports/Canvas/Web Audio and real CDP touch; clock/seed/storage/media/network fixtures only control policy and failure paths.",
+    "Run the entire repository e2e suite serially plus the existing footer walk and Chromium probe using the local-only commands in verification. Fix any defects in changed components and keep existing assertions. Record raw sample rows, negative-control outputs, build/executable/chunk identities and real/fake boundaries in execution-evidence.md; commit and push. Deployment and independent QA are owned by the platform after delivery."
+  ],
+  "interfaces": [
+    "scripts/tactile-budget.mjs",
+    "lib/tactile-budget.test.ts",
+    "e2e/tactile-performance.test.ts",
+    "e2e/tactile-helpers.ts",
+    "e2e/kame-fetch.test.ts",
+    "e2e/crumple.test.ts",
+    "e2e/tactile-recovery.test.ts",
+    "components/kame/",
+    "components/tactile/",
+    "app/(site)/kame.css",
+    "app/(site)/tactile.css",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/execution-evidence.md"
+  ],
+  "non_goals": [
+    "broadening eligible routes or adding features",
+    "weakening footer/motion/sibling assertions",
+    "shared infrastructure writes or changing dependency locks"
+  ],
+  "acceptance_criteria": "Actual built chunks meet bootstrap <=2KiB, Kame <15KiB and combined paper <20KiB gzip budgets with explicit shared-code accounting. Toy requests start only after load+idle, Canvas only after action, and server HTML has no interactive toy markup. Paired desktop/mobile runs meet the specified LCP tolerance, toy CLS <=0.001 and source geometry <=1px. Full serial e2e, footer walk/probe and negative controls pass with no skips.",
+  "verification": [
+    {
+      "name": "budget verifier positive and negative fixtures",
+      "cwd": ".",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/tactile-budget.test.ts",
+      "expect": "exit0",
+      "timeout_s": 300
+    },
+    {
+      "name": "repository suite",
+      "cwd": ".",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "timeout_s": 300
+    },
+    {
+      "name": "lint and type contracts",
+      "cwd": ".",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "timeout_s": 300
+    },
+    {
+      "name": "all production browser tests",
+      "cwd": ".",
+      "cmd": "env -u BASE_URL -u SKIP_BUILD CI=true GITHUB_SHA=$(git rev-parse HEAD) npm run test:e2e",
+      "expect": "exit0",
+      "timeout_s": 1500
     },
     {
       "name": "built incremental gzip budgets",
@@ -368,15 +369,21 @@ This repository actually uses GitHub Actions `.github/workflows/ci.yml` with Ver
       "cmd": "node scripts/tactile-budget.mjs",
       "expect": "exit0",
       "timeout_s": 120
+    },
+    {
+      "name": "CI-equivalent footer walk on isolated local server",
+      "cwd": ".",
+      "cmd": "env -u BASE_URL -u DATABASE_URL -u EXPECT_SHA CI=true GITHUB_SHA=$(git rev-parse HEAD) bash scripts/walk-end.sh",
+      "expect": "exit0",
+      "timeout_s": 900
+    },
+    {
+      "name": "CI-equivalent footer browser probe on isolated local server",
+      "cwd": ".",
+      "cmd": "env -u BASE_URL -u DATABASE_URL -u EXPECT_SHA CI=true GITHUB_SHA=$(git rev-parse HEAD) bash scripts/probe-end.sh",
+      "expect": "exit0",
+      "timeout_s": 900
     }
   ]
 }
 ```
-
-## Non-goals and handoff
-
-No new framework, package, root layout, backend API, server tracking, external runtime, WebGL dependency, screenshot-to-texture library, production test hook or persistent content mutation. The referenced social posts are provenance from the idea, not implementation dependencies; their contents were not fetched. The saved research is preserved verbatim; the explicit accessibility/motion choices above supersede its suggestions to hide the original card or skip all reduced-motion code.
-
-No person-only prerequisite is known. If a future task first discovers a physical external chore, its engineer raises the stable `operator_action` at that task's start and reports the missing readiness immediately; independent work continues where possible. Policy/design choices are decided and recorded, not sent out as chores. The platform executes the DAG after proposal; this PO run commits only these Markdown artifacts and submits the summary.
-
-Standing rules remain in AGENTS.md and the shared docs/claude/software-development.md. In this lease the two requested planning/rule documents resolve from /data/build-worker/repo/mono-v2/; they are not copied into this repository. Decisions and the lesson about actual GitHub/Vercel CI are in the plan-manager decision ledger.
