@@ -1,0 +1,25 @@
+{"name":"desk: negative control 'urashimx' stays on /","ok":true,"detail":"https://otohime.dev/"}
+{"name":"desk: typing urashima on / reaches /ryugu","ok":true,"detail":"https://otohime.dev/ryugu"}
+{"name":"desk: Pocket chip '▽ Dive' reaches /ryugu","ok":true,"detail":"https://otohime.dev/ryugu"}
+{"name":"desk: footer waterline 'Below the waterline: Ryugu-jo ↓' reaches /ryugu","ok":true,"detail":"https://otohime.dev/ryugu"}
+{"name":"desk: /ryugu 200 live sea runs","ok":true,"detail":{"mode":"live","gl":1,"frames":126}}
+{"name":"desk: ink fish move/flee","ok":true,"detail":{"fish":9,"moved":9}}
+{"name":"desk: isolated (no Tailwind/cartridge rules, one class-styling sheet, no footer, no Pocket, noindex)","ok":true,"detail":{"sheets":["/_next/static/chunks/2cin_6hzxsgvy.css","/_next/static/chunks/31_6w8v5d7luy.css"],"leak":0,"classSheets":1,"robots":"noindex, nofollow","title":"Ryugu-jo"}}
+{"name":"desk: no horizontal overflow","ok":true,"detail":null}
+{"name":"desk: hidden page stops frames, resumes when visible","ok":true,"detail":{"hidden":0,"resumed":73}}
+{"name":"desk: no page errors / 4xx on live palace","ok":true,"detail":{"errs":[],"bad":[]}}
+{"name":"desk: no WebGL -> static scene, fish drawn, no frames loop","ok":true,"detail":{"mode":"static","fish":9,"frames":0,"errs":[]}}
+{"name":"desk: reduced motion -> still, no GL, no frames","ok":true,"detail":{"mode":"still","gl":0,"frames":0}}
+{"name":"desk: first Tab focuses a way back up, Enter returns to /","ok":true,"detail":{"focus":{"tag":"A","href":"/","txt":"↑ Back to the surface"},"url":"https://otohime.dev/"}}
+{"name":"phone: Pocket chip '▽ Dive' reaches /ryugu","ok":true,"detail":"https://otohime.dev/ryugu"}
+{"name":"phone: footer waterline 'Below the waterline: Ryugu-jo ↓' reaches /ryugu","ok":true,"detail":"https://otohime.dev/ryugu"}
+{"name":"phone: /ryugu 200 live sea runs","ok":true,"detail":{"mode":"live","gl":1,"frames":49}}
+{"name":"phone: ink fish move/flee","ok":true,"detail":{"fish":9,"moved":9}}
+{"name":"phone: isolated (no Tailwind/cartridge rules, one class-styling sheet, no footer, no Pocket, noindex)","ok":true,"detail":{"sheets":["/_next/static/chunks/2cin_6hzxsgvy.css","/_next/static/chunks/31_6w8v5d7luy.css"],"leak":0,"classSheets":1,"robots":"noindex, nofollow","title":"Ryugu-jo"}}
+{"name":"phone: no horizontal overflow","ok":true,"detail":null}
+{"name":"phone: hidden page stops frames, resumes when visible","ok":true,"detail":{"hidden":0,"resumed":32}}
+{"name":"phone: no page errors / 4xx on live palace","ok":true,"detail":{"errs":[],"bad":[]}}
+{"name":"phone: no WebGL -> static scene, fish drawn, no frames loop","ok":true,"detail":{"mode":"static","fish":9,"frames":0,"errs":[]}}
+{"name":"phone: reduced motion -> still, no GL, no frames","ok":true,"detail":{"mode":"still","gl":0,"frames":0}}
+{"name":"phone: first Tab focuses a way back up, Enter returns to /","ok":true,"detail":{"focus":{"tag":"A","href":"/","txt":"↑ Back to the surface"},"url":"https://otohime.dev/"}}
+walk: 24/24 hold
