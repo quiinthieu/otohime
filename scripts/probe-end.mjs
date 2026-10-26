@@ -7,6 +7,7 @@ import { site } from "../content/site.ts";
 import { away, KONAMI, TENTH_POKE } from "../lib/end.ts";
 import { CONSOLE_MENU, PUBLIC_PAGES } from "../lib/pages.ts";
 import { launchBrowser } from "./probe-browser.mjs";
+import { endTitleBounds, endTitleText, inPage, settleEndTitle, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
 
 const rootRequire = createRequire(import.meta.url);
 const pg = rootRequire("pg");
@@ -500,7 +501,6 @@ try {
             const footerNav = footer.querySelectorAll('nav[aria-label="Footer"]').length === 1;
             const footerMainNav = footer.querySelectorAll('[aria-label="Main"]').length === 0;
             const mainNavOk = mainNavs.length === (isHome ? 0 : 1);
-            const title = footer.querySelector("h2#end-title")?.textContent?.trim() ?? "";
             const sub = footer.querySelector(".end-sub")?.textContent?.trim() ?? "";
             const status = footer.querySelector(".end-copy > .caption")?.textContent?.trim() ?? "";
             const sig = footer.querySelector("[data-end-signature]")?.textContent?.trim() ?? "";
@@ -523,7 +523,6 @@ try {
                 footerNav &&
                 footerMainNav &&
                 mainNavOk &&
-                title === wantCopy.title &&
                 sub === wantCopy.sub &&
                 status === wantCopy.status &&
                 sig === wantCopy.signature &&
@@ -538,7 +537,6 @@ try {
                 footerNav,
                 footerMainNav,
                 mainNavOk,
-                title,
                 sub,
                 copy,
                 topHref,
@@ -551,8 +549,15 @@ try {
           { wantCopy: site.end, wantYear: utcYear, isHome: route === "/" },
         );
 
+        // The heading's accessible plain source (not RisoText's aria-hidden plates), from the same visible footer.
+        const title = await page.evaluate(inPage(endTitleText, VISIBLE_FOOTER));
+
         check(`route ${route}: build-sha matches (${meta.sha || "none"})`, matchesExpectedSha(meta.sha), meta.sha);
-        check(`route ${route}: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last`, meta.ok, meta.detail);
+        check(
+          `route ${route}: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last`,
+          meta.ok && title === site.end.title,
+          `${meta.detail} title=${JSON.stringify(title)}`,
+        );
 
         const links = await verifyCanonicalLinks(page);
         check(`route ${route}: 6 canonical CONSOLE_MENU links and 4 site.lines links match source`, links.ok, links.reason);
@@ -602,6 +607,9 @@ try {
         await hydrated(page);
         await page.locator("footer.end").filter({ visible: true }).first().scrollIntoViewIfNeeded();
         await page.waitForTimeout(300);
+        // Let the heading's one-shot ink entry land, then measure its plain text's final line boxes.
+        const settled = await page.evaluate(inPage(settleEndTitle, VISIBLE_FOOTER, 3000));
+        const titleBounds = await page.evaluate(inPage(endTitleBounds, VISIBLE_FOOTER, viewport.width));
 
         const layout = await page.evaluate(
           ({ vw, isDesktop, isMobile, isMusic }) => {
@@ -618,7 +626,6 @@ try {
             const stage = footer.querySelector("[data-end-stage]");
             const canvas = footer.querySelector(".end-canvas");
             const copy = footer.querySelector(".end-copy");
-            const title = footer.querySelector("h2#end-title");
             const readout = footer.querySelector("[data-end-readout]");
             const links = [...footer.querySelectorAll(".end-links > *")];
             const details = footer.querySelector("details.end-knobs-details");
@@ -641,9 +648,7 @@ try {
               copyRect.right <= vw &&
               linksRectA.right <= linksRectB.left + 2;
 
-            const textUnclipped =
-              title.scrollWidth <= title.clientWidth + 2 &&
-              readout.scrollHeight <= readout.clientHeight + 2;
+            const textUnclipped = readout.scrollHeight <= readout.clientHeight + 2;
 
             const summaryStyle = getComputedStyle(summary);
             const disclosureOk = isMobile
@@ -697,7 +702,11 @@ try {
         );
 
         check(`${label} ${route}: no horizontal overflow and footer sits below main`, layout.noOverflow && layout.belowMain, layout.detail);
-        check(`${label} ${route}: stage/copy grid, link columns, and text bounds are unclipped`, layout.gridPlacementOk && layout.inBounds && layout.textUnclipped, layout.detail);
+        check(
+          `${label} ${route}: stage/copy grid, link columns, and text bounds are unclipped`,
+          layout.gridPlacementOk && layout.inBounds && layout.textUnclipped && titleBounds.ok,
+          `${layout.detail} title=${JSON.stringify({ ...titleBounds, settled })}`,
+        );
         check(`${label} ${route}: customization disclosure state matches viewport`, layout.disclosureOk, layout.detail);
         if (route === "/music") {
           check(`${label} /music: television and its >=200x200 clear area stay unobscured above footer`, layout.musicTvOk, layout.detail);
@@ -1874,11 +1883,11 @@ try {
       try {
         await page.goto(`${BASE_URL}/`, { waitUntil: "load" });
         const noJsCheck = await verifyCanonicalLinks(page);
+        const noJsTitle = await page.evaluate(inPage(endTitleText, `document.querySelector("footer.end")`));
         const noJsDom = await page.evaluate(() => {
           const footer = document.querySelector("footer.end");
           const svgs = [...footer.querySelectorAll("svg")].filter((s) => !s.closest("[data-end-waterline]"));
           return {
-            title: footer.querySelector("h2#end-title")?.textContent?.trim(),
             svgCount: svgs.length,
             lcd: `${footer.querySelector('[data-lcd-line="0"]')?.textContent}/${footer.querySelector('[data-lcd-line="1"]')?.textContent}`,
             topHref: footer.querySelector("a[data-end-top]")?.getAttribute("href"),
@@ -1890,12 +1899,12 @@ try {
         check(
           "no-JS: renders complete still scene, heading, 6 page links, 4 contact links, credits, year and #main top anchor",
           noJsCheck.ok &&
-            noJsDom.title === site.end.title &&
+            noJsTitle === site.end.title &&
             noJsDom.svgCount === 3 &&
             noJsDom.lcd === "SAVE/POINT" &&
             noJsDom.topHref === "#main" &&
             noJsDom.runningFooterAnims === 0,
-          JSON.stringify({ noJsCheck, noJsDom }),
+          JSON.stringify({ noJsCheck, noJsDom, noJsTitle }),
         );
 
         // Follow footer Work link without JS
