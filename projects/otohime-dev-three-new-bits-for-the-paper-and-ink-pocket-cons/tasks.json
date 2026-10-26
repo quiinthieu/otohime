@@ -40,7 +40,7 @@
     "non_goals": ["shader or WebGL bubbles", "ink-blot wipe", "changes to other route groups' 404s", "any new runtime dependency"],
     "verification": [
       {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
-      {"name": "lint changed files", "cwd": ".", "cmd": "npx eslint app/(site)/not-found.tsx app/global-not-found.tsx components/lost-sheet.tsx", "expect": "exit0", "timeout_s": 600},
+      {"name": "lint changed files", "cwd": ".", "cmd": "npx eslint 'app/(site)/not-found.tsx' app/global-not-found.tsx components/lost-sheet.tsx", "expect": "exit0", "timeout_s": 600},
       {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800},
       {"name": "lost probe", "cwd": ".", "cmd": "bash scripts/probe-lost.sh", "expect": "exit0", "timeout_s": 900}
     ]
