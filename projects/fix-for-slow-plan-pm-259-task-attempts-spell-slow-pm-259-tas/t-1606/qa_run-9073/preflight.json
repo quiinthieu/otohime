@@ -1,0 +1,10 @@
+{
+  "node": "v22.23.3",
+  "next": "16.4.2",
+  "playwright": "1.64.0",
+  "pg": "8.23.1",
+  "drizzle": true,
+  "adapterType": "function",
+  "authHandler": "function",
+  "boundary": "real locked modules and constructors; connection and application wiring exercised separately by production E2E; no fake runtime"
+}

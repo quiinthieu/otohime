@@ -1,0 +1,513 @@
+Starting Postgres otohime-e2e-2171155 on 127.0.0.1:37313
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/afad9c86-6cbf-4cea-9303-c83f49cef7d9-65c35cbde8efccbb817d3d15c5be2b6b/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Building
+
+> otohime@0.1.0 prebuild
+> node scripts/ledger-fetch.mjs || true; node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts
+
+ledger: kept content/ledger.json (no GITHUB_TOKEN)
+history:index: git (full history): 200 of 550 commits in /data/build-worker/leases/afad9c86-6cbf-4cea-9303-c83f49cef7d9-65c35cbde8efccbb817d3d15c5be2b6b/work/otohime/content/history.json, unchanged
+
+> otohime@0.1.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 30ms
+- Cache Components enabled
+- Partial Prefetching enabled
+- Experiments (use with caution):
+  ✓ authInterrupts
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 641ms
+  Running TypeScript ...
+  Finished TypeScript in 3.3s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/205) ...
+  Generating static pages using 19 workers (51/205) 
+  Generating static pages using 19 workers (102/205) 
+  Generating static pages using 19 workers (153/205) 
+✓ Generating static pages using 19 workers (205/205) in 2.1s
+  Finalizing page optimization ...
+
+Route (app)                             Revalidate  Expire
+┌ ◐ /                                           1d      1w
+├ ○ /_not-found
+├ ◐ /account                                    1d      1w
+├ ◐ /admin                                      1d      1w
+├ ◐ /admin/bottles                              1d      1w
+├ ◐ /admin/roles                                1d      1w
+├ ◐ /admin/users                                1d      1w
+├   /admin/users/[id]                           1d      1w
+│ └ ◐ /admin/users/[id]                         1d      1w
+├ ƒ /api/admin/bottles
+├ ƒ /api/admin/bottles/[id]
+├ ƒ /api/ask
+├ ƒ /api/auth/[...all]
+├ ƒ /api/bottles
+├ ƒ /api/bottles/suggestions
+├ ƒ /api/guestbook
+├ ƒ /api/health
+├ ƒ /api/now-playing
+├ ○ /articles
+├   /articles/[slug]
+│ ├ ◐ /articles/[slug]
+│ ├ ○ /articles/why-the-sky-is-blue
+│ ├ ○ /articles/why-we-need-a-leap-day
+│ └ ◐ [+4 more paths]
+├ ƒ /barometer
+├ ○ /capsule
+├ ◐ /dashboard                                  1d      1w
+├ ○ /design-system
+├ ◐ /desk                                       1d      1w
+├ ○ /desk/opengraph-image-blg90x
+├ ○ /elements
+├   /elements/[symbol]
+│ ├ ◐ /elements/[symbol]
+│ ├ ○ /elements/h
+│ ├ ○ /elements/he
+│ └ ◐ [+116 more paths]
+├ ○ /forgot-password
+├ ○ /icon.svg
+├ ◐ /ledger                                     1d      1w
+├ ○ /ledger/opengraph-image-1olq6y
+├ ƒ /music                                      1d      1w
+├ ○ /music/opengraph-image-rp137v
+├ ◐ /notes                                      1d      1w
+├ ○ /notes/opengraph-image-rplwnn
+├ ○ /og
+├ ○ /orrery
+├   /orrery/[body]
+│ ├ ◐ /orrery/[body]
+│ ├ ○ /orrery/sun
+│ ├ ○ /orrery/mercury
+│ └ ◐ [+12 more paths]
+├ ƒ /planisphere
+├ ◐ /play                                       1d      1w
+├ ○ /play/opengraph-image-blpn7k
+├ ◐ /postcard                                   1d      1w
+├ ƒ /postcard/image
+├ ○ /postcard/opengraph-image-1x4cxz
+├ ◐ /postcard/view                              1d      1w
+├ ◐ /projects                                   1d      1w
+├ ○ /projects/opengraph-image-1ndqzi
+├ ○ /reset-password
+├ ƒ /rotor
+├ ○ /ryugu
+├ ○ /shore
+├ ○ /sign-in
+├ ◐ /sketches                                   1d      1w
+├ ƒ /sketches/download/[filename]
+├ ○ /sketches/opengraph-image-t812bo
+├ ○ /structures
+├   /structures/[slug]
+│ ├ ◐ /structures/[slug]
+│ ├ ○ /structures/array
+│ ├ ○ /structures/linked-list
+│ └ ◐ [+6 more paths]
+├ ○ /vinyl
+├ ◐ /work                                       1d      1w
+├ ○ /work/opengraph-image-blv499
+└ ◐ /zine
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+Starting the server on http://localhost:4027
+
+> otohime@0.1.0 test:e2e
+> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/**/*.test.ts'
+
+TAP version 13
+# {"browser":"154.0.8037.57","lazyRequests":["http://localhost:4027/_next/static/chunks/199hh8689mj_p.js"]}
+# Subtest: both entries share the lazy card; keyboard, safe deliberate visit, focus and modal coexistence
+ok 1 - both entries share the lazy card; keyboard, safe deliberate visit, focus and modal coexistence
+  ---
+  duration_ms: 2695.794879
+  type: 'test'
+  ...
+# Subtest: repeat exhaustion, stale stored ids, cross-entry history and bounded persistence
+ok 2 - repeat exhaustion, stale stored ids, cross-entry history and bounded persistence
+  ---
+  duration_ms: 1012.300583
+  type: 'test'
+  ...
+# Subtest: readable but unwritable storage keeps visit history across both entries
+ok 3 - readable but unwritable storage keeps visit history across both entries
+  ---
+  duration_ms: 1607.723866
+  type: 'test'
+  ...
+# Subtest: touch, blocked storage, offline pool and live reduced motion stay usable
+ok 4 - touch, blocked storage, offline pool and live reduced motion stay usable
+  ---
+  duration_ms: 1470.159724
+  type: 'test'
+  ...
+# Subtest: empty and single pools and malformed stored history remain usable
+ok 5 - empty and single pools and malformed stored history remain usable
+  ---
+  duration_ms: 1053.218551
+  type: 'test'
+  ...
+# Subtest: real suggestion is pending in Postgres and absent from the public pool; validation stays local
+ok 6 - real suggestion is pending in Postgres and absent from the public pool; validation stays local
+  ---
+  duration_ms: 1109.008245
+  type: 'test'
+  ...
+# Subtest: suggestion failures retain input, render inert reasons, prevent duplicates and honor 429
+ok 7 - suggestion failures retain input, render inert reasons, prevent duplicates and honor 429
+  ---
+  duration_ms: 1262.571297
+  type: 'test'
+  ...
+# Subtest: no-JS baseline retains footer/Pocket links and explains Bottle activation
+ok 8 - no-JS baseline retains footer/Pocket links and explains Bottle activation
+  ---
+  duration_ms: 145.884603
+  type: 'test'
+  ...
+# {"cls":0,"lazyBytes":4966,"bootstrapBytes":1612,"glueGzip":177,"chunks":[{"file":".next/static/chunks/199hh8689mj_p.js","gzip":4378,"sha256":"e4b166ce41b6aa0e4172bf530d9dd20593d3a6f0fffa02a896fe9b48567ea167"},{"file":".next/static/chunks/3zvc0i9-car40.css","gzip":588,"sha256":"f16c4d552e8f62e4858d07bc747b97b16b181f80512f6f220fc3ceb01a362be2"}],"bootstrapModules":[{"file":".next/static/chunks/1icj9jl_jb0ar.js","gzip":776,"sha256":"26c8dc23530c6fdf6007d71e1cecb8bb79b2680ce9e3afde5aced0ca3eea02bc"}],"browser":"154.0.8037.57"}
+# Subtest: lazy network boundaries, emitted gzip budgets and open/close CLS at 1366
+ok 9 - lazy network boundaries, emitted gzip budgets and open/close CLS at 1366
+  ---
+  duration_ms: 1497.348855
+  type: 'test'
+  ...
+# {"cls":0,"lazyBytes":4966,"bootstrapBytes":1612,"glueGzip":177,"chunks":[{"file":".next/static/chunks/199hh8689mj_p.js","gzip":4378,"sha256":"e4b166ce41b6aa0e4172bf530d9dd20593d3a6f0fffa02a896fe9b48567ea167"},{"file":".next/static/chunks/3zvc0i9-car40.css","gzip":588,"sha256":"f16c4d552e8f62e4858d07bc747b97b16b181f80512f6f220fc3ceb01a362be2"}],"bootstrapModules":[{"file":".next/static/chunks/1icj9jl_jb0ar.js","gzip":776,"sha256":"26c8dc23530c6fdf6007d71e1cecb8bb79b2680ce9e3afde5aced0ca3eea02bc"}],"browser":"154.0.8037.57"}
+# Subtest: lazy network boundaries, emitted gzip budgets and open/close CLS at 390
+ok 10 - lazy network boundaries, emitted gzip budgets and open/close CLS at 390
+  ---
+  duration_ms: 1289.112651
+  type: 'test'
+  ...
+# Subtest: browser Back closes the shared-footer modal without an orphaned overlay
+ok 11 - browser Back closes the shared-footer modal without an orphaned overlay
+  ---
+  duration_ms: 1061.715826
+  type: 'test'
+  ...
+# Subtest: Postgres: atomic admission, canonical duplicates, persistence, review and authorization
+ok 12 - Postgres: atomic admission, canonical duplicates, persistence, review and authorization
+  ---
+  duration_ms: 505.482707
+  type: 'test'
+  ...
+# Subtest: Postgres: concurrent URL duplicates roll back quota in other buckets
+ok 13 - Postgres: concurrent URL duplicates roll back quota in other buckets
+  ---
+  duration_ms: 145.931987
+  type: 'test'
+  ...
+# Subtest: migration upgrades populated users and songs; fresh database has Bottle tables
+ok 14 - migration upgrades populated users and songs; fresh database has Bottle tables
+  ---
+  duration_ms: 30.306802
+  type: 'test'
+  ...
+# Subtest: actual HTTP persistence, authorized review, approve/reject and privacy
+ok 15 - actual HTTP persistence, authorized review, approve/reject and privacy
+  ---
+  duration_ms: 77.59621
+  type: 'test'
+  ...
+# Subtest: hostile payloads, streamed oversize, unsupported bodies, and forged origins/headers
+ok 16 - hostile payloads, streamed oversize, unsupported bodies, and forged origins/headers
+  ---
+  duration_ms: 30.785363
+  type: 'test'
+  ...
+# Subtest: concurrent HTTP cap accepts exactly five; spoofed headers cannot reset local bucket
+ok 17 - concurrent HTTP cap accepts exactly five; spoofed headers cannot reset local bucket
+  ---
+  duration_ms: 51.812181
+  type: 'test'
+  ...
+# Subtest: bounded cursor pages, approval revalidation and rights recheck at write time
+ok 18 - bounded cursor pages, approval revalidation and rights recheck at write time
+  ---
+  duration_ms: 72.905371
+  type: 'test'
+  ...
+# Subtest: database outage returns all twelve seeds with an explicit degraded flag over HTTP
+ok 19 - database outage returns all twelve seeds with an explicit degraded flag over HTTP
+  ---
+  duration_ms: 8.067843
+  type: 'test'
+  ...
+# Subtest: admin browser controls are labelled, plain text, navigable and forbidden to ordinary users
+ok 20 - admin browser controls are labelled, plain text, navigable and forbidden to ordinary users
+  ---
+  duration_ms: 947.515228
+  type: 'test'
+  ...
+# Subtest: real handler and Postgres accept data with external fetch disabled (trap negative control)
+ok 21 - real handler and Postgres accept data with external fetch disabled (trap negative control)
+  ---
+  duration_ms: 6.496677
+  type: 'test'
+  ...
+# Subtest: curated precedence and canonical duplicates remain deterministic over HTTP
+ok 22 - curated precedence and canonical duplicates remain deterministic over HTTP
+  ---
+  duration_ms: 12.424733
+  type: 'test'
+  ...
+# Subtest: a dragged item stays where it was dropped after a reload, and the red string follows a pin live
+ok 23 - a dragged item stays where it was dropped after a reload, and the red string follows a pin live
+  ---
+  duration_ms: 2247.837635
+  type: 'test'
+  ...
+# Subtest: Tidy up springs everything home and square, keeps the stack, and the tidy desk survives a reload
+ok 24 - Tidy up springs everything home and square, keeps the stack, and the tidy desk survives a reload
+  ---
+  duration_ms: 1999.580132
+  type: 'test'
+  ...
+# Subtest: from the keyboard: Tab to an item, arrows nudge it (Shift for more), R turns it, [ and ] restack it, each said aloud
+ok 25 - from the keyboard: Tab to an item, arrows nudge it (Shift for more), R turns it, [ and ] restack it, each said aloud
+  ---
+  duration_ms: 1471.377019
+  type: 'test'
+  ...
+# Subtest: a long press opens the radial menu without following the link; it rotates, sends to back, and Esc closes it
+ok 26 - a long press opens the radial menu without following the link; it rotates, sends to back, and Esc closes it
+  ---
+  duration_ms: 2037.602438
+  type: 'test'
+  ...
+# Subtest: under reduced motion the desk snaps: no spring, no lean, no transition or animation on it or in it, and the notebook opens at once
+ok 27 - under reduced motion the desk snaps: no spring, no lean, no transition or animation on it or in it, and the notebook opens at once
+  ---
+  duration_ms: 2755.744668
+  type: 'test'
+  ...
+# \# notebook controlled clock: 16 observed poses
+# Subtest: with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)
+ok 28 - with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)
+  ---
+  duration_ms: 4781.837209
+  type: 'test'
+  ...
+# Subtest: on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds
+ok 29 - on a phone the server's HTML is already the stacked desk, hydration keeps it, and a finger neither drags nor holds
+  ---
+  duration_ms: 2913.182273
+  type: 'test'
+  ...
+# Subtest: a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+not ok 30 - a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+  ---
+  duration_ms: 12148.3165
+  type: 'test'
+  location: '/data/build-worker/leases/afad9c86-6cbf-4cea-9303-c83f49cef7d9-65c35cbde8efccbb817d3d15c5be2b6b/work/otohime/e2e/desk.test.ts:680:1'
+  failureType: 'testCodeFailure'
+  error: '[data-desk-item="music"] .desk-tape never held still on screen for two frames ({"still":true,"inView":false,"isTape":false,"hit":"nothing","box":{"x":-155.81895446777344,"y":450.42266845703125,"w":0,"h":0},"c":{"x":-155.81895446777344,"y":450.42266845703125}})'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'fail'
+  stack: |-
+    settledTape (file:///data/build-worker/leases/afad9c86-6cbf-4cea-9303-c83f49cef7d9-65c35cbde8efccbb817d3d15c5be2b6b/work/otohime/e2e/desk.test.ts:282:10)
+    async swipe (file:///data/build-worker/leases/afad9c86-6cbf-4cea-9303-c83f49cef7d9-65c35cbde8efccbb817d3d15c5be2b6b/work/otohime/e2e/desk.test.ts:290:13)
+    async TestContext.<anonymous> (file:///data/build-worker/leases/afad9c86-6cbf-4cea-9303-c83f49cef7d9-65c35cbde8efccbb817d3d15c5be2b6b/work/otohime/e2e/desk.test.ts:699:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: real migration upgrades old schema without losing sentinel data
+ok 31 - real migration upgrades old schema without losing sentinel data
+  ---
+  duration_ms: 38.699669
+  type: 'test'
+  ...
+# Subtest: real API persists pending vectors and hides private rows, with 24-entry tied-time pages
+ok 32 - real API persists pending vectors and hides private rows, with 24-entry tied-time pages
+  ---
+  duration_ms: 93.326238
+  type: 'test'
+  ...
+# Subtest: malformed, foreign, profane, URL and oversized bodies never insert
+ok 33 - malformed, foreign, profane, URL and oversized bodies never insert
+  ---
+  duration_ms: 14.947222
+  type: 'test'
+  ...
+# Subtest: concurrent hour, day and queue admission are atomic
+ok 34 - concurrent hour, day and queue admission are atomic
+  ---
+  duration_ms: 80.967852
+  type: 'test'
+  ...
+# Subtest: the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+ok 35 - the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+  ---
+  duration_ms: 4972.221175
+  type: 'test'
+  ...
+# Subtest: typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+ok 36 - typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+  ---
+  duration_ms: 21154.826022
+  type: 'test'
+  ...
+# Subtest: a hidden tab stops the drying clock and showing it again finishes the drying
+ok 37 - a hidden tab stops the drying clock and showing it again finishes the drying
+  ---
+  duration_ms: 7603.583596
+  type: 'test'
+  ...
+# Subtest: reduced motion prints one dried frame and the press never asks for an animation frame
+ok 38 - reduced motion prints one dried frame and the press never asks for an animation frame
+  ---
+  duration_ms: 2885.991833
+  type: 'test'
+  ...
+# Subtest: without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+ok 39 - without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+  ---
+  duration_ms: 2231.952276
+  type: 'test'
+  ...
+# Subtest: a lost WebGL context hands the poster to the SVG fallback
+ok 40 - a lost WebGL context hands the poster to the SVG fallback
+  ---
+  duration_ms: 4507.783106
+  type: 'test'
+  ...
+# Subtest: /music serves the radio's slot under its heading, with the snapshot's credit
+ok 41 - /music serves the radio's slot under its heading, with the snapshot's credit
+  ---
+  duration_ms: 79.180593
+  type: 'test'
+  ...
+# Subtest: the served page plays nothing: no audio element, no autoplay, no stream
+ok 42 - the served page plays nothing: no audio element, no autoplay, no stream
+  ---
+  duration_ms: 0.452058
+  type: 'test'
+  ...
+# Subtest: the stations are lazy: not in the page's first scripts, but in a chunk those scripts load
+ok 43 - the stations are lazy: not in the page's first scripts, but in a chunk those scripts load
+  ---
+  duration_ms: 14.982028
+  type: 'test'
+  ...
+# Subtest: negative control: the Television is unchanged and other pages carry no radio
+ok 44 - negative control: the Television is unchanged and other pages carry no radio
+  ---
+  duration_ms: 54.971392
+  type: 'test'
+  ...
+# Subtest: fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+ok 45 - fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+  ---
+  duration_ms: 1218.398265
+  type: 'test'
+  ...
+# Subtest: keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+ok 46 - keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+  ---
+  duration_ms: 3718.371855
+  type: 'test'
+  ...
+# Subtest: mouse grip toss, exact click suppression, text selection and native link navigation
+ok 47 - mouse grip toss, exact click suppression, text selection and native link navigation
+  ---
+  duration_ms: 2347.225007
+  type: 'test'
+  ...
+# Subtest: continuous mouse path across the title and its open Peek reaches a visible Fetch back
+ok 48 - continuous mouse path across the title and its open Peek reaches a visible Fetch back
+  ---
+  duration_ms: 2191.872331
+  type: 'test'
+  ...
+# Subtest: real mobile CDP grip fetch and card-body scrolling negative control
+ok 49 - real mobile CDP grip fetch and card-body scrolling negative control
+  ---
+  duration_ms: 2180.113727
+  type: 'test'
+  ...
+# Subtest: chips and sticker perform real fetch while links and source dimensions stay intact
+ok 50 - chips and sticker perform real fetch while links and source dimensions stay intact
+  ---
+  duration_ms: 2440.300745
+  type: 'test'
+  ...
+# Subtest: Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+ok 51 - Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+  ---
+  duration_ms: 1383.416202
+  type: 'test'
+  ...
+# cancel path: escape
+# cancel path: blur
+# cancel path: hidden
+# cancel path: resize
+# cancel path: modal
+# cancel path: motion
+# cancel path: dismiss
+# cancel path: remove
+# Subtest: pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+ok 52 - pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+  ---
+  duration_ms: 1372.737878
+  type: 'test'
+  ...
+# Subtest: unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+ok 53 - unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+  ---
+  duration_ms: 3812.241353
+  type: 'test'
+  ...
+# Subtest: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+ok 54 - Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+  ---
+  duration_ms: 1666.589256
+  type: 'test'
+  ...
+# Subtest: native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+ok 55 - native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+  ---
+  duration_ms: 1480.838301
+  type: 'test'
+  ...
+# Subtest: peeled mobile cards keep all fetch actions clear of the real margin note
+ok 56 - peeled mobile cards keep all fetch actions clear of the real margin note
+  ---
+  duration_ms: 1442.697986
+  type: 'test'
+  ...
+# Subtest: server baseline has only an inert shell; no JS retains public links
+ok 57 - server baseline has only an inert shell; no JS retains public links
+  ---
+  duration_ms: 321.270147
+  type: 'test'
+  ...
+# Subtest: swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+ok 58 - swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+  ---
+  duration_ms: 911.914617
+  type: 'test'
+  ...
+# Subtest: local calendar fixture increments once per day, friendly on day three and future-safe
+ok 59 - local calendar fixture increments once per day, friendly on day three and future-safe
+  ---
+  duration_ms: 821.569434
+  type: 'test'
+  ...
+Terminated

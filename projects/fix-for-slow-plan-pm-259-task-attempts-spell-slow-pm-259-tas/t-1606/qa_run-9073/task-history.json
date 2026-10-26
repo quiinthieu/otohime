@@ -1,0 +1,377 @@
+{
+  "FAILED": {
+    "limit": 10,
+    "offsets": [
+      0,
+      10
+    ],
+    "total": 71,
+    "complete": false,
+    "tasks": [
+      {
+        "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main",
+        "completedAt": "2026-10-26T19:19:11Z",
+        "workerId": "billie-mac"
+      },
+      {
+        "id": "980c6385-7c10-4d4b-a913-43e9c9333678",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4088d29ec0d9 is not on origin/main",
+        "completedAt": "2026-10-26T18:08:30Z",
+        "workerId": "billie-mac"
+      },
+      {
+        "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none",
+        "completedAt": "2026-10-26T14:54:18Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0e2bbe863f6e is not on origin/main",
+        "completedAt": "2026-10-26T14:06:46Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none",
+        "completedAt": "2026-10-26T13:10:33Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 143 class=unknown marker=none",
+        "completedAt": "2026-10-26T12:16:21Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main",
+        "completedAt": "2026-10-26T11:30:10Z",
+        "workerId": "billie-mac"
+      },
+      {
+        "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main",
+        "completedAt": "2026-10-26T11:21:58Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 143 class=unknown marker=none",
+        "completedAt": "2026-10-26T10:08:58Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 85b0eb1ae9c6 is not on origin/main",
+        "completedAt": "2026-10-26T10:41:54Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "0d081765-06f9-4a1e-9de4-28107aa0608b",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f697e2c2aaba is not on origin/main",
+        "completedAt": "2026-10-26T09:24:38Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none",
+        "completedAt": "2026-10-26T08:58:57Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "ab0601c1-0d1a-4e67-9dcd-6f56661aff53",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none",
+        "completedAt": "2026-10-26T08:48:11Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "66ea35bc-4dda-4c94-9e04-2373c8194bae",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=infra marker=3374166 02:10 codex exec --dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c model_reasoning_effort=\"medium\" -- # Save Work Before Finishing This jo",
+        "completedAt": "2026-10-26T08:39:56Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "d3133670-fcdd-4712-8637-3470dc32c653",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none",
+        "completedAt": "2026-10-26T08:13:27Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "6aa491b3-d339-4ffa-b628-216aaf055f8b",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none",
+        "completedAt": "2026-10-26T08:04:51Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "b3128d45-07a7-4e69-94c1-b964d173900e",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none",
+        "completedAt": "2026-10-26T07:59:18Z",
+        "workerId": "billie-mac"
+      },
+      {
+        "id": "c1039357-4ba4-4647-9175-8cb366561de7",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=push_failed marker=+ \"error\": \"agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main\",",
+        "completedAt": "2026-10-26T07:46:24Z",
+        "workerId": "billie-mac"
+      },
+      {
+        "id": "7c2f6e70-50ad-4564-91d6-ca9e7bed9283",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=quota marker=urllib.error.HTTPError: HTTP Error 403: rate limit exceeded",
+        "completedAt": "2026-10-26T07:08:09Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "cbfb6d6f-f022-4967-8eeb-b79415d8a53e",
+        "status": "FAILED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 1 class=unknown marker=none",
+        "completedAt": "2026-10-26T07:00:30Z",
+        "workerId": "billie-mac"
+      }
+    ]
+  },
+  "COMPLETED": {
+    "limit": 10,
+    "offsets": [
+      0,
+      10
+    ],
+    "total": 1266,
+    "complete": false,
+    "tasks": [
+      {
+        "id": "4c690b8c-22bd-4101-b959-309bb8cad768",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T19:09:08Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "314ccc2e-647f-4a47-b291-94085aeea492",
+        "status": "COMPLETED",
+        "completedAt": "2026-10-26T18:58:24Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "c321fa27-c38d-4db1-859e-ab4f3e18825f",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T19:00:10Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "37955b84-b065-4009-94f8-0568868361a7",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T18:45:56Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "f0a4f16a-9f0d-4b5f-98fd-25a0aa2eb143",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T18:52:43Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "84dd3dd5-3e0e-4d2e-8182-403e40d57775",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T18:28:16Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "763fefd8-0f73-46ca-b677-a7f57f3a545b",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T18:34:40Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "acde707b-0dcb-4582-84c1-3c192ac1f618",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T18:43:04Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "f1d40844-4e12-4786-b9d7-dda977f25980",
+        "status": "COMPLETED",
+        "completedAt": "2026-10-26T17:56:00Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "d5076d46-546f-444a-bdac-60c9b95a3ac6",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:55:15Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "a3e3fae7-ba27-40b4-b7e7-00aa6df2f1cb",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T18:09:18Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "02bb3208-5823-4705-aae0-624709485a5d",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:52:54Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "34ac9a8f-c9fe-44ad-87cc-8f118dc31c17",
+        "status": "COMPLETED",
+        "completedAt": "2026-10-26T17:45:21Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "5c9f53bc-c9cc-47d4-b057-048b135ea335",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:50:25Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "5938f2f4-3cf3-404e-bbb2-f9ae901bd846",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:58:19Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "6355b72a-22b5-4420-bbe3-8aaf92cd1c9e",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:45:07Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "d6813b94-f824-440f-ae27-d95753ccac64",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:42:30Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "926b8487-c909-48dc-bc96-eefc3e7d1c05",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:41:18Z",
+        "workerId": "avietidol-mac-mini"
+      },
+      {
+        "id": "0e8456d2-968a-4cb1-b979-0da227ffa09d",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:35:29Z",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "2f3e053d-24e7-4914-b277-c514996c228f",
+        "status": "COMPLETED",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "completedAt": "2026-10-26T17:34:37Z",
+        "workerId": "avietidol-mac-mini"
+      }
+    ]
+  },
+  "PENDING": {
+    "complete": false
+  },
+  "RUNNING": {
+    "total": 2,
+    "complete": true,
+    "tasks": [
+      {
+        "id": "afad9c86-6cbf-4cea-9303-c83f49cef7d9",
+        "status": "RUNNING",
+        "workerId": "avietidol-z490"
+      },
+      {
+        "id": "de104a54-00b2-426f-8f4d-64db79f24494",
+        "status": "RUNNING",
+        "workerId": "avietidol-mac-mini"
+      }
+    ]
+  }
+}

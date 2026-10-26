@@ -1,0 +1,15 @@
+{
+  "node": "v22.23.3",
+  "npm": "10.9.9",
+  "chrome": "Google Chrome 154.0.8037.57",
+  "kernel": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+  "cpus": 20,
+  "postgres": {
+    "Id": "sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb",
+    "RepoDigests": [
+      "postgres@sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb"
+    ],
+    "Architecture": "amd64",
+    "Os": "linux"
+  }
+}

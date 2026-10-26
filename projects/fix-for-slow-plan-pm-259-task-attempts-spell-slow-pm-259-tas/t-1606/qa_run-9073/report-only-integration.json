@@ -1,0 +1,19 @@
+{
+  "from": "45c8d92af04883ce42a59bc9dc53d48daa921644",
+  "to": "37c7b33a547aaa34d4552611dbb8af77efb8b0d3",
+  "changed_paths": [
+    "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/fix_plan_run-9077.md",
+    "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/fix_plan_run-9078.md",
+    "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/qa_report_run-9077.md",
+    "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/qa_report_run-9078.md",
+    "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/qa_run-9077-probe.test.ts"
+  ],
+  "application_changes": [],
+  "integrated_checks": {
+    "trace": 0,
+    "lint": 0,
+    "types": 0,
+    "unit": 0
+  },
+  "full_e2e_result": "preserved failed repeat2 from identical application/e2e/lock/configuration fingerprint"
+}

@@ -1,0 +1,29 @@
+{
+  "node": "v22.23.3",
+  "next": "16.4.2",
+  "playwright": "1.64.0",
+  "pg": "8.23.1",
+  "schemaTables": [
+    [
+      "user",
+      true
+    ],
+    [
+      "session",
+      true
+    ],
+    [
+      "account",
+      true
+    ],
+    [
+      "verification",
+      true
+    ]
+  ],
+  "drizzle": true,
+  "adapterType": "function",
+  "authHandler": "function",
+  "authContext": true,
+  "boundary": "real locked modules, repo schema, adapter and initialized auth context; E2E separately exercises real DB and built app; no fake"
+}

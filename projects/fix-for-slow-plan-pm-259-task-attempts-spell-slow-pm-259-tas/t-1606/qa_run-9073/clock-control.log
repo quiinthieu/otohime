@@ -1,0 +1,6 @@
+{"browser":"154.0.8037.57","playwright":"1.64.0"}
+{"wallMs":0,"virtualMs":499,"seen":{"fired":true,"elapsed":501},"afterOneMoreVirtualMs":true}
+{"wallMs":50,"virtualMs":499,"seen":{"fired":false,"elapsed":499},"afterOneMoreVirtualMs":true}
+{"wallMs":50,"virtualMs":499,"seen":{"fired":false,"elapsed":499},"afterOneMoreVirtualMs":true}
+{"wallMs":50,"virtualMs":499,"seen":{"fired":false,"elapsed":500},"afterOneMoreVirtualMs":true}
+{"wallMs":150,"virtualMs":499,"seen":{"fired":true,"elapsed":599},"afterOneMoreVirtualMs":true}
