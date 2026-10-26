@@ -1,0 +1,35 @@
+TAP version 13
+# Subtest: the real child runner keeps exits, bounds its tails, and kills a timed-out child's whole process group
+not ok 1 - the real child runner keeps exits, bounds its tails, and kills a timed-out child's whole process group
+  ---
+  duration_ms: 48.95343
+  type: 'test'
+  location: '/data/build-worker/leases/6002a5a7-1af8-4933-a036-7987c8e7f8f8-3861c886d29b6a9a71a76089633e3fb3/work/otohime/lib/gate-closure.test.ts:177:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    output over the bound is cut to the bound
+    + actual - expected
+    
+    + 1200000
+    - 1000000
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1000000
+  actual: 1200000
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///data/build-worker/leases/6002a5a7-1af8-4933-a036-7987c8e7f8f8-3861c886d29b6a9a71a76089633e3fb3/work/otohime/lib/gate-closure.test.ts:196:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 131.735274

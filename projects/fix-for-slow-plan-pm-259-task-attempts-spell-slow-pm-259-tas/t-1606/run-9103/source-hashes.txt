@@ -1,0 +1,8 @@
+99363dab11aa76ddd67484744007d877edcebdfd3cfbad11c589a2368e25adab  e2e/ledger.test.ts
+c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1  lib/gate-closure.test.ts
+38bf3c064f9e66ee51c927081997c5336e69ea469a3928ff57ec57884ca9aff2  scripts/check-gate-closure.mjs
+9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b  package-lock.json
+0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7  .github/workflows/ci.yml
+fe191b996a20b8fba648193b7dde36153384d817c603c69ee18d0281dfee0634  app/(site)/(app)/ledger/ledger.css
+e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4  e2e/desk.test.ts
+d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5  scripts/e2e-gesture-trace.ts

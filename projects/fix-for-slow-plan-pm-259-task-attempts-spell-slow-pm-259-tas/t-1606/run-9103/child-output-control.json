@@ -1,0 +1,62 @@
+{
+ "immediate_200k": [
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 146176,
+   "hasHead": false
+  },
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 146176,
+   "hasHead": false
+  },
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 146176,
+   "hasHead": false
+  }
+ ],
+ "flushed_200k": [
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 200000,
+   "hasHead": false
+  },
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 200000,
+   "hasHead": false
+  },
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 200000,
+   "hasHead": false
+  }
+ ],
+ "flushed_1_2m": [
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 1000000,
+   "hasHead": false
+  },
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 1000000,
+   "hasHead": false
+  },
+  {
+   "code": 3,
+   "timedOut": false,
+   "length": 1000000,
+   "hasHead": false
+  }
+ ]
+}

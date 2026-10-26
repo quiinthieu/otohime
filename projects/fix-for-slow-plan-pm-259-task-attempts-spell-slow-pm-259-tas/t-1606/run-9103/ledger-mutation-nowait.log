@@ -1,0 +1,36 @@
+TAP version 13
+# Subtest: on a phone the layout check waits for a sheet shown after hydration, and fails a sheet without its minimum width
+not ok 1 - on a phone the layout check waits for a sheet shown after hydration, and fails a sheet without its minimum width
+  ---
+  duration_ms: 459.25035
+  type: 'test'
+  location: '/data/build-worker/leases/6002a5a7-1af8-4933-a036-7987c8e7f8f8-3861c886d29b6a9a71a76089633e3fb3/work/otohime/e2e/ledger.test.ts:504:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the year scrolls inside its frame
+    layout settled after 1 frames: inner 390px, visual 390px, root font 16px, ready complete, fonts loaded
+    scroller scroll 0 / client 0, sheet 0px (min-width 736px), page scroll 390
+      +0ms hidden complete scroll 0/0 sheet 0 min 736px inner 390 visual 390 font 16px
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    assertPhoneLayout (file:///data/build-worker/leases/6002a5a7-1af8-4933-a036-7987c8e7f8f8-3861c886d29b6a9a71a76089633e3fb3/work/otohime/e2e/ledger.test.ts:477:10)
+    TestContext.<anonymous> (file:///data/build-worker/leases/6002a5a7-1af8-4933-a036-7987c8e7f8f8-3861c886d29b6a9a71a76089633e3fb3/work/otohime/e2e/ledger.test.ts:517:3)
+    runNextTicks (node:internal/process/task_queues:64:5)
+    process.processImmediate (node:internal/timers:452:9)
+    process.callbackTrampoline (node:internal/async_hooks:130:17)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 901.526191

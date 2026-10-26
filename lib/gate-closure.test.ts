@@ -179,10 +179,22 @@ test("the real child runner keeps exits, bounds its tails, and kills a timed-out
   delete env.NODE_TEST_CONTEXT;
   const spec = (args: string[], timeoutMs = 20_000, cmd = process.execPath) => ({ id: "t", command: cmd, args, cwd: ROOT, env, timeoutMs });
 
-  const three = await realRunChild(spec(["-e", "process.stdout.write('x'.repeat(200000)); process.exit(3)"]));
-  assert.equal(three.code, 3);
-  assert.equal(three.timedOut, false);
-  assert.ok(three.stdout.length < 200_000 && three.stdout.endsWith("x"));
+  // Each child exits from stdout.write's callback, once its output is flushed: an exit straight after the write
+  // drops whatever the pipe has not taken yet, and a short read would then pass for the runner's bound.
+  const KEPT = 1_000_000; // realRunChild keeps the last million characters of each stream
+  const flushedExit = (out: string) => ["-e", `process.stdout.write(${out}, () => process.exit(3))`];
+
+  const under = await realRunChild(spec(flushedExit("'x'.repeat(200000)")));
+  assert.equal(under.code, 3);
+  assert.equal(under.timedOut, false);
+  assert.equal(under.stdout.length, 200_000, "output under the bound is kept whole");
+
+  // Over the bound: 200,000 h then 1,000,000 t. The tail is kept and the head dropped.
+  const over = await realRunChild(spec(flushedExit("'h'.repeat(200000) + 't'.repeat(1000000)")));
+  assert.equal(over.code, 3);
+  assert.equal(over.timedOut, false);
+  assert.equal(over.stdout.length, KEPT, "output over the bound is cut to the bound");
+  assert.ok(over.stdout.endsWith("t") && !over.stdout.includes("h"), "the last characters are the ones kept");
 
   const missing = await realRunChild(spec([], 5_000, join(tmpdir(), "gate-closure-no-such-binary")));
   assert.match(String(missing.error), /ENOENT/);
