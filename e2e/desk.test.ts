@@ -10,8 +10,9 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { after, before, test } from "node:test";
 import { chromium, type Browser, type BrowserContext, type Page } from "playwright-core";
-import { STACKED, PINS, PIN_PAIRS, dropAt } from "../app/(site)/(app)/desk/_lib/drag.ts";
+import { DRAG_THRESHOLD, STACKED, PINS, PIN_PAIRS, dropAt, pastThreshold } from "../app/(site)/(app)/desk/_lib/drag.ts";
 import { LONG_PRESS_MS } from "../app/(site)/(app)/desk/_lib/long-press.ts";
+import { formatTrace, hasGesture, traceOf, type GestureRecord } from "../scripts/e2e-gesture-trace.ts";
 import {
   DESK_ITEMS,
   DESK_KEY,
@@ -45,6 +46,8 @@ type Probe = {
   // every transform an item or a leaf took, in order, by data-desk-item id or leaf index
   items: Record<string, string[]>;
   leaves: Record<string, string[]>;
+  // the pointer events since the last forget() (swipe() calls it), for a failed gesture's trace
+  gestures: GestureRecord[];
 };
 
 declare global {
@@ -55,7 +58,7 @@ declare global {
 
 // Runs in the page before any of its scripts.
 function instrument() {
-  const probe: Probe = { transitions: [], animations: [], items: {}, leaves: {} };
+  const probe: Probe = { transitions: [], animations: [], items: {}, leaves: {}, gestures: [] };
   window.__desk = probe;
   const name = (t: EventTarget | null) =>
     t instanceof Element ? `${t.tagName.toLowerCase()}${typeof t.className === "string" && t.className ? `.${t.className.split(" ").join(".")}` : ""}` : "";
@@ -74,6 +77,27 @@ function instrument() {
       }
     }
   }).observe(document, { subtree: true, attributes: true, attributeFilter: ["style"] });
+  // Before the page's own handlers (React listens on its root): what arrived, where, and whether the item under it
+  // was already dragging. Capped here too; scripts/e2e-gesture-trace.ts keeps the last 40 for a message.
+  for (const type of ["pointerdown", "pointermove", "pointerup", "pointercancel"] as const) {
+    document.addEventListener(
+      type,
+      (e) => {
+        if (probe.gestures.length >= 400) probe.gestures.shift();
+        probe.gestures.push({
+          type,
+          t: e.timeStamp,
+          x: e.clientX,
+          y: e.clientY,
+          pointerId: e.pointerId,
+          pointerType: e.pointerType,
+          target: name(e.target),
+          dragging: e.target instanceof Element && e.target.closest("[data-desk-item]")?.hasAttribute("data-dragging") === true,
+        });
+      },
+      true,
+    );
+  }
 }
 
 let browser: Browser;
@@ -214,17 +238,86 @@ async function grab(page: Page, selector: string, dx: number, dy: number) {
   await page.mouse.move(c.x + dx, c.y + dy, { steps: 12 });
 }
 
+// The pointer events the page saw since the last forget(), kept to the last 40 and formatted for a message.
+const forget = (page: Page) => page.evaluate(() => void (window.__desk.gestures = []));
+const traceOfPage = async (page: Page) => traceOf((await probe(page)).gestures);
+const gestureTrace = async (page: Page) => `pointer events the page saw:\n${formatTrace(await traceOfPage(page))}`;
+
+// The tape's box once it is on screen and has held still for two animation frames (a font or an image above the
+// desk can still move it after the load), and the element the browser would hit at its centre.
+async function settledTape(page: Page, selector: string) {
+  await page.locator(selector).scrollIntoViewIfNeeded({ timeout: 5_000 });
+  let last = "";
+  for (let i = 0; i < 60; i++) {
+    const seen = await page.evaluate(async (selector) => {
+      const frame = () => new Promise((done) => requestAnimationFrame(done));
+      const box = () => {
+        const r = document.querySelector(selector)!.getBoundingClientRect();
+        return { x: r.x, y: r.y, w: r.width, h: r.height };
+      };
+      const a = box();
+      await frame();
+      await frame();
+      const b = box();
+      const c = { x: b.x + b.w / 2, y: b.y + b.h / 2 };
+      const hit = document.elementFromPoint(c.x, c.y);
+      return {
+        still: JSON.stringify(a) === JSON.stringify(b),
+        inView: c.x >= 0 && c.y >= 0 && c.x < innerWidth && c.y < innerHeight && b.w > 0 && b.h > 0,
+        isTape: hit === document.querySelector(selector),
+        hit: hit ? `${hit.tagName.toLowerCase()}.${String(hit.className).split(" ").join(".")}` : "nothing",
+        box: b,
+        c,
+      };
+    }, selector);
+    last = JSON.stringify(seen);
+    if (seen.still && seen.inView) {
+      assert.ok(seen.isTape, `the finger lands on ${selector}, not on ${seen.hit} (${last})`);
+      return seen.c;
+    }
+  }
+  assert.fail(`${selector} never held still on screen for two frames (${last})`);
+}
+
 // A finger on the item's tape (its drag handle on touch), sent as real touches through the DevTools protocol.
-async function swipe(page: Page, id: string, dx: number, dy: number, holdMs = 0) {
-  const c = await centre(page, `[data-desk-item="${id}"] .desk-tape`);
+// `drags` says what the page must show: a drag (data-dragging set on the item after the first move past
+// DRAG_THRESHOLD, cleared after the let-go) or none at all. Either way a miss fails with the gesture's trace.
+async function swipe(page: Page, id: string, dx: number, dy: number, { holdMs = 0, drags }: { holdMs?: number; drags: boolean }) {
+  const body = `[data-desk-item="${id}"]`;
+  const c = await settledTape(page, `${body} .desk-tape`);
+  const dragging = page.locator(`${body}[data-dragging]`);
+  const shows = async (state: "attached" | "detached", what: string) => {
+    try {
+      await dragging.waitFor({ state, timeout: 5_000 });
+    } catch {
+      assert.fail(`${what}\n${await gestureTrace(page)}`);
+    }
+  };
+  await forget(page);
   const cdp = await page.context().newCDPSession(page);
   const touch = (type: "touchStart" | "touchMove" | "touchEnd", x: number, y: number) =>
     cdp.send("Input.dispatchTouchEvent", { type, touchPoints: type === "touchEnd" ? [] : [{ x, y, id: 1 }] });
-  await touch("touchStart", c.x, c.y);
-  if (holdMs) await page.waitForTimeout(holdMs);
-  for (let i = 1; i <= 10; i++) await touch("touchMove", c.x + (dx * i) / 10, c.y + (dy * i) / 10);
-  await touch("touchEnd", c.x + dx, c.y + dy);
-  await cdp.detach();
+  try {
+    await touch("touchStart", c.x, c.y);
+    if (holdMs) await page.waitForTimeout(holdMs);
+    let past = false;
+    for (let i = 1; i <= 10; i++) {
+      await touch("touchMove", c.x + (dx * i) / 10, c.y + (dy * i) / 10);
+      if (drags && !past && pastThreshold((dx * i) / 10, (dy * i) / 10)) {
+        past = true;
+        await shows("attached", `${id} is dragging after the first move past ${DRAG_THRESHOLD}px`);
+      }
+    }
+    if (drags) assert.ok(past, `a swipe of (${dx}, ${dy}) is a drag`);
+    else assert.equal(await dragging.count(), 0, `${id} does not drag\n${await gestureTrace(page)}`);
+    await touch("touchEnd", c.x + dx, c.y + dy);
+    if (drags) await shows("detached", `${id} is let go after the touch ends`);
+  } finally {
+    await cdp.detach();
+  }
+  // The finger's press and let-go both reached the page (a no-drag swipe must not lose them either).
+  const trace = await traceOfPage(page);
+  assert.ok(hasGesture(trace, "pointerdown") && (hasGesture(trace, "pointerup") || hasGesture(trace, "pointercancel")), `the swipe reached the page\n${await gestureTrace(page)}`);
 }
 
 const tabTo = async (page: Page, id: string) => {
@@ -557,8 +650,8 @@ test("on a phone the server's HTML is already the stacked desk, hydration keeps 
   assert.deepEqual(live.pins, served.pins);
 
   // A swipe on the tape, a hold, and the desk's keys: nothing moves, nothing is stored, no menu opens.
-  await swipe(page, "music", 120, 0);
-  await swipe(page, "projects", 0, 0, LONG_PRESS_MS + 300);
+  await swipe(page, "music", 120, 0, { drags: false });
+  await swipe(page, "projects", 0, 0, { holdMs: LONG_PRESS_MS + 300, drags: false });
   await link(page, "sketches").focus();
   for (const key of ["ArrowRight", "r", "[", "Shift+F10"]) await page.keyboard.press(key);
   assert.equal(await page.locator(".desk-menu").count(), 0, "no radial menu on the stacked desk");
@@ -577,23 +670,24 @@ test("a narrow window and a wide touch tablet get the stacked desk too; the same
   const narrow = await open({ viewport: NARROW });
   assert.equal(await narrow.evaluate(() => matchMedia("(pointer: fine)").matches), true, "a mouse");
   assertStacked(await layoutOf(narrow), "narrow window");
+  await forget(narrow);
   await grab(narrow, `[data-desk-item="music"] .desk-link`, 100, 0);
   await narrow.mouse.up();
-  assert.equal(await raw(narrow), null, "a mouse drag on the stacked desk moves nothing");
+  assert.equal(await raw(narrow), null, `a mouse drag on the stacked desk moves nothing\n${await gestureTrace(narrow)}`);
 
   const tablet = await open({ viewport: TABLET, touch: true });
   assert.equal(await tablet.evaluate(() => matchMedia("(pointer: coarse)").matches), true, "a touch-first screen");
   assertStacked(await layoutOf(tablet), "touch tablet");
-  await swipe(tablet, "music", 120, 0);
-  assert.equal(await raw(tablet), null);
+  await swipe(tablet, "music", 120, 0, { drags: false });
+  assert.equal(await raw(tablet), null, `a swipe on the touch tablet moves nothing\n${await gestureTrace(tablet)}`);
 
   // The control: the very same swipe on the wide desk drags the item by its tape.
   const wide = await open();
   assert.equal(await wide.evaluate((q) => matchMedia(q).matches, STACKED), false);
   assert.notEqual((await layoutOf(wide)).string, "none", "the wide desk has its string");
-  await swipe(wide, "music", 120, 0);
+  await swipe(wide, "music", 120, 0, { drags: true });
   const moved = await stored(wide);
   const size = await deskSize(wide);
-  near(at(moved, "music").x, dropAt(at(defaultLayout(), "music"), 120, 0, size).x, "the swipe dragged music");
+  near(at(moved, "music").x, dropAt(at(defaultLayout(), "music"), 120, 0, size).x, `the swipe dragged music\n${await gestureTrace(wide)}`);
   assert.deepEqual(errors, []);
 });
