@@ -2,19 +2,22 @@
 // and at most one effect come out. components/pocket-terminal.tsx applies the effect (a navigation, the theme, the
 // sound, the season) and prints the lines; components/pocket-terminal-loader.tsx opens it with opensTerminal.
 import { PUBLIC_PAGES } from "./pages.ts";
+import type { AppearanceSnapshot, AppearanceWriteResult } from "./ink-lab.ts";
+import { isPrintRunId, PRINT_RUN_IDS, PRINT_RUNS, type PrintRunId } from "./print-runs.ts";
 import { isSeason, SEASONS, type Season } from "./seasons.ts";
 
 export type Theme = "light" | "dark";
 export type SeasonChoice = Season | "auto";
 
 // What the commands read: the theme showing, the sound switch, the season dial's choice and the stamps won.
-export type TerminalState = { theme: Theme; sound: boolean; season: SeasonChoice; stamps: readonly string[] };
+export type TerminalState = { theme: Theme; sound: boolean; season: SeasonChoice; stamps: readonly string[]; appearance: AppearanceSnapshot };
 
 export type Effect =
   | { kind: "go"; href: string }
   | { kind: "theme"; theme: Theme }
   | { kind: "sound"; on: boolean }
   | { kind: "season"; season: SeasonChoice }
+  | { kind: "print-run"; printRun: PrintRunId }
   | { kind: "clear" }
   | { kind: "adventure" }
   | { kind: "close" };
@@ -28,7 +31,20 @@ export const PLACES: readonly Place[] = [
   ...PUBLIC_PAGES.map((p) => ({ name: p.label.toLowerCase(), href: p.href, label: p.label })),
   { name: "ask", href: "/", label: "Ask the console" },
   { name: "postcard", href: "/postcard", label: "Postcard" },
+  { name: "lab", href: "/lab", label: "Ink Lab" },
 ];
+
+export function describePrintRun(snapshot: AppearanceSnapshot): string {
+  const id = snapshot.lab?.printRun ?? snapshot.printRun;
+  return `print run: ${PRINT_RUNS[id].label} (${id})${snapshot.lab ? "; Ink Lab override active" : ""}`;
+}
+
+// Shared by both visible controls and command effects. Report the actual storage result, never an optimistic save.
+export function printRunStatus(result: AppearanceWriteResult): string {
+  return `${describePrintRun(result.snapshot)}. ${result.persisted
+    ? "Saved for reload; Ink Lab override cleared."
+    : "Storage is blocked; active on this page only. Reload may not retain this choice."}`;
+}
 
 // The stamps won, kept by lib/adventure.ts as a JSON array of names.
 export const STAMPS_KEY = "terminal-stamps";
@@ -73,6 +89,8 @@ export const HELP = [
   "theme [light|dark]      flip or pin the paper",
   "sound [on|off]          flip or set the beeps",
   `season [auto|${SEASONS.join("|")}]`,
+  "print run [house|sumi|riso|indigo]   report or choose the print run",
+  "lab                     open Ink Lab (/lab)",
   "stamps                  the stamps you have won",
   "adventure               a walk through the data world",
   "clear                   wipe the screen",
@@ -111,6 +129,12 @@ export function run(line: string, state: TerminalState): Reply {
       const season = parseSeasonChoice(arg);
       return { lines: [`season: ${season}`], effect: { kind: "season", season } };
     }
+    case "print": {
+      if (arg === "run") return { lines: [describePrintRun(state.appearance)] };
+      const [sub, id, ...extra] = rest.map((word) => word.toLowerCase());
+      if (sub !== "run" || !isPrintRunId(id) || extra.length) return { lines: ["print run: house, sumi, riso or indigo; use print run to see the current choice"] };
+      return { lines: [], effect: { kind: "print-run", printRun: id } };
+    }
     case "stamps":
       return state.stamps.length
         ? { lines: [`stamps (${state.stamps.length}):`, ...state.stamps.map((s) => `  [*] ${s}`)] }
@@ -144,6 +168,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
   ...PLACES.map((p) => ({ line: `go ${p.name}`, label: p.label, hint: p.href })),
   { line: "theme", label: "Flip theme", hint: "light / dark" },
   { line: "sound", label: "Flip sound", hint: "on / off" },
+  { line: "print run", label: "Current print run", hint: "appearance" },
+  ...PRINT_RUN_IDS.map((id) => ({ line: `print run ${id}`, label: PRINT_RUNS[id].label, hint: "print run" })),
   ...(["auto", ...SEASONS] as const).map((s) => ({ line: `season ${s}`, label: `Season: ${s}`, hint: "season" })),
   { line: "stamps", label: "Stamps", hint: "your collection" },
   { line: "adventure", label: "Adventure", hint: "the data world" },

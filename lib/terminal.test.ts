@@ -2,11 +2,14 @@ import assert from "node:assert/strict";
 import { readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { test } from "node:test";
-import { PUBLIC_PAGES } from "./pages.ts";
+import { CONSOLE_MENU, PUBLIC_PAGES } from "./pages.ts";
+import { createAppearanceStore, normalizeLab } from "./ink-lab.ts";
+import { PRINT_RUN_IDS, PRINT_RUNS } from "./print-runs.ts";
 import {
   findPlace,
   HELP,
   moveActive,
+  printRunStatus,
   opensTerminal,
   parseSeasonChoice,
   parseStamps,
@@ -20,7 +23,7 @@ import {
 const ROOT = resolve(import.meta.dirname, "..");
 const read = (file: string) => readFileSync(join(ROOT, file), "utf8");
 
-const STATE: TerminalState = { theme: "light", sound: false, season: "auto", stamps: [] };
+const STATE: TerminalState = { theme: "light", sound: false, season: "auto", stamps: [], appearance: { printRun: "house", lab: null } };
 const key = (k: string, mods: Partial<{ metaKey: boolean; ctrlKey: boolean; altKey: boolean }> = {}) => ({
   key: k,
   metaKey: false,
@@ -29,17 +32,64 @@ const key = (k: string, mods: Partial<{ metaKey: boolean; ctrlKey: boolean; altK
   ...mods,
 });
 
-test("the places are every public page, then ask and postcard, each once", () => {
+test("the places are every public page, then ask, postcard and lab, each once", () => {
   assert.deepEqual(
     PLACES.slice(0, PUBLIC_PAGES.length).map((p) => p.href),
     PUBLIC_PAGES.map((p) => p.href),
   );
-  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "ask", "postcard"]);
+  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "ask", "postcard", "lab"]);
   assert.equal(new Set(PLACES.map((p) => p.name)).size, PLACES.length);
   assert.equal(findPlace("ask"), PLACES.find((p) => p.name === "ask"));
   assert.equal((findPlace("ask") as { href: string }).href, "/");
   assert.equal((findPlace("postcard") as { href: string }).href, "/postcard");
   assert.equal((findPlace("play") as { href: string }).href, "/play");
+});
+
+test("print run reports the effective appearance, including an applied Lab", () => {
+  for (const id of PRINT_RUN_IDS) {
+    const appearance = { printRun: id, lab: null };
+    assert.deepEqual(run("print run", { ...STATE, appearance }), { lines: [`print run: ${PRINT_RUNS[id].label} (${id})`] });
+  }
+  const appearance = { printRun: "sumi" as const, lab: normalizeLab({ printRun: "indigo" }) };
+  assert.deepEqual(run("print run", { ...STATE, appearance }), { lines: ["print run: Indigo night (indigo); Ink Lab override active"] });
+});
+
+test("print run selects only exact validated ids; malformed commands have no effect", () => {
+  for (const id of PRINT_RUN_IDS) {
+    assert.deepEqual(run(`  PRINT   RUN  ${id.toUpperCase()}  `, STATE), { lines: [], effect: { kind: "print-run", printRun: id } });
+  }
+  const before = structuredClone(STATE);
+  for (const line of ["print", "print riso", "print run purple", "print run ris", "print run riso extra", "print run __proto__", "print run <script>"]) {
+    const reply = run(line, STATE);
+    assert.equal(reply.effect, undefined, line);
+    assert.match(reply.lines.join(" "), /print run.*house.*sumi.*riso.*indigo/, line);
+  }
+  assert.deepEqual(STATE, before);
+});
+
+test("preset results report effective choice and disclose either storage failure", () => {
+  const memory = () => ({ getItem: () => null, setItem: () => {}, removeItem: () => {} });
+  const denied = () => { throw new Error("denied"); };
+  for (const ports of [{ local: memory, session: denied }, { local: denied, session: memory }, { local: denied, session: denied }]) {
+    const store = createAppearanceStore(ports);
+    store.applyLab(normalizeLab({ printRun: "indigo" }));
+    const result = store.setPrintRun("riso");
+    assert.equal(result.snapshot.lab, null);
+    assert.equal(result.snapshot.printRun, "riso");
+    assert.equal(printRunStatus(result), "print run: Riso pink + mint (riso). Storage is blocked; active on this page only. Reload may not retain this choice.");
+  }
+  const store = createAppearanceStore({ local: memory, session: memory });
+  assert.equal(printRunStatus(store.setPrintRun("house")), "print run: House (house). Saved for reload; Ink Lab override cleared.");
+});
+
+test("lab navigation and print run choices appear in help and suggestions without changing the LCD", () => {
+  for (const line of ["lab", "go lab", "go /lab"]) assert.deepEqual(run(line, STATE).effect, { kind: "go", href: "/lab" });
+  assert.ok(HELP.some((line) => line.startsWith("print run")));
+  assert.ok(HELP.some((line) => line.startsWith("lab")));
+  assert.deepEqual(suggest("print run").map((s) => s.line), ["print run", ...PRINT_RUN_IDS.map((id) => `print run ${id}`)]);
+  assert.ok(suggest("lab").some((s) => s.line === "go lab"));
+  assert.equal(CONSOLE_MENU.length, 7);
+  assert.ok(CONSOLE_MENU.every((p) => String(p.href) !== "/lab"));
 });
 
 test("go opens a page by name, path or a prefix only one page has", () => {
