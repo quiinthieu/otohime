@@ -3,6 +3,18 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-8979 update: board unchanged since run-8974
+
+Read at **14:05 UTC** (run-8979, product owner):
+
+- pm-260 `drafting` (t-1578 superseded, t-1593 done). pm-267 (mono-v2) still `paused`,
+  last update 11:53Z: t-1594 and t-1596 `qa_pending`, t-1595 and t-1597 `backlog`.
+- Outcome 4 stays met (pm-255 released, t-1557 done). Outcomes 1-3 stay with pm-267; the
+  otohime checkout has no orchestrator or watchdog code, so no otohime SWE task is proposed.
+- Deferred, owner pm-267. Failure conditions: abandon text still says abandoning frees parts;
+  a part with execution_started_at=null still breaches task_duration; an abandoned parent
+  leaves a part held with only an advisory line. Resuming pm-267 is a platform-owner action.
+
 ## Run-8974 update: board unchanged since run-8971
 
 Read at **14:00 UTC** (run-8974, product owner):
