@@ -1,0 +1,105 @@
+{
+  "scan": {
+    "project": "plan-manager",
+    "limit": 20,
+    "offsets": [
+      0,
+      20
+    ],
+    "globalCompleteness": false
+  },
+  "statuses": {
+    "FAILED": {
+      "read": 40,
+      "relevant": [
+        {
+          "id": "7c2f6e70-50ad-4564-91d6-ca9e7bed9283",
+          "run_id": "run-8749",
+          "status": "FAILED",
+          "title": "Enter Ryugu-jo",
+          "error": "agent_failed: exit 1 class=quota marker=urllib.error.HTTPError: HTTP Error 403: rate limit exceeded",
+          "callback_state": "delivered",
+          "callback_attempts": 1,
+          "completed_at": "2026-10-26T07:08:09Z"
+        },
+        {
+          "id": "cbfb6d6f-f022-4967-8eeb-b79415d8a53e",
+          "run_id": "run-8747",
+          "status": "FAILED",
+          "title": "Enter Ryugu-jo",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callback_state": "delivered",
+          "callback_attempts": 1,
+          "completed_at": "2026-10-26T07:00:30Z"
+        },
+        {
+          "id": "ae6896a0-e218-416a-abfc-91c592749ab3",
+          "run_id": "run-8692",
+          "status": "FAILED",
+          "title": "product_owner pm-256",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "callback_state": "delivered",
+          "callback_attempts": 1,
+          "completed_at": "2026-10-26T05:11:38Z"
+        },
+        {
+          "id": "4a7f32b9-94fe-4e4f-b83c-62af4b81dc39",
+          "run_id": "run-8686",
+          "status": "FAILED",
+          "title": "product_owner pm-256",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "callback_state": "delivered",
+          "callback_attempts": 1,
+          "completed_at": "2026-10-26T05:05:57Z"
+        }
+      ]
+    },
+    "COMPLETED": {
+      "read": 40,
+      "relevant": [
+        {
+          "id": "8d1bee7e-af54-4c5a-adbe-e7cf6adbdd6d",
+          "run_id": "run-8745",
+          "status": "COMPLETED",
+          "title": "Enter Ryugu-jo",
+          "callback_state": "delivered",
+          "callback_attempts": 1,
+          "completed_at": "2026-10-26T06:56:56Z"
+        },
+        {
+          "id": "48559c50-0b8f-400d-b30b-8610b17ebead",
+          "run_id": "run-8731",
+          "status": "COMPLETED",
+          "title": "Enter Ryugu-jo",
+          "callback_state": "delivered",
+          "callback_attempts": 1,
+          "completed_at": "2026-10-26T06:55:55Z"
+        },
+        {
+          "id": "f30080a0-bd09-43e6-9f77-acb40b39c849",
+          "run_id": "run-8729",
+          "status": "COMPLETED",
+          "title": "Enter Ryugu-jo",
+          "callback_state": "delivered",
+          "callback_attempts": 1,
+          "completed_at": "2026-10-26T06:27:34Z"
+        }
+      ]
+    },
+    "PENDING": {
+      "read": 0,
+      "relevant": []
+    },
+    "RUNNING": {
+      "read": 5,
+      "relevant": [
+        {
+          "id": "c1039357-4ba4-4647-9175-8cb366561de7",
+          "run_id": "run-8752",
+          "status": "RUNNING",
+          "title": "Enter Ryugu-jo"
+        }
+      ]
+    }
+  }
+}
