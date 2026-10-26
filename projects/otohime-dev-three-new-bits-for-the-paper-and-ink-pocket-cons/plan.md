@@ -1,5 +1,178 @@
 # Paper Almanac Bits
 
+## Re-plan: run-8597 (change request 3 on Ask the Ink, run-8588)
+
+Plan **pm-248**, product-owner run **run-8597**. The previous attempt, run-8593,
+proposed four Ask tasks but never committed or pushed this plan. Its wrapper
+failed with `push_not_on_main`: HEAD was not on origin/main. This run commits
+and pushes before it proposes.
+
+### What failed
+
+Acceptance run-8588 failed the Ask bit (`change_request_3.md`):
+
+- The Ask console (`components/ask-console.tsx`) never calls `POST /api/ask`.
+  The browser walk saw 0 requests at both widths. Every answer is the offline
+  canned text from `lib/ask.ts`.
+- `POST https://otohime.dev/api/ask` returns 404, because `ASK_LLM=1` and
+  `ANTHROPIC_API_KEY` are not set in production.
+
+The server side already exists on main: `app/api/ask/route.ts` and
+`lib/ask-llm.ts` (Haiku, rate limits, citations, offline fallback, Postgres
+usage store). The console is the missing link, plus a model scope that matches
+the idea.
+
+### Decisions
+
+- **Model scope is Work, Projects and Notes only.** The model's passages come
+  from the `work`, `stack`, `project` and `note` kinds, and from pages
+  `/work`, `/projects` and `/notes`. Articles, Play, Shore, Home and Bio are not
+  shown to the model. The offline index is unchanged.
+- **Console calls GET first.** It POSTs only when `GET /api/ask` says
+  `enabled:true`, so a disabled site sends no failing POST and shows no error.
+- **Production flags are a person's job.** Setting `ASK_LLM=1` and a
+  server-only `ANTHROPIC_API_KEY` in Vercel Production needs an account owner.
+  This run raises it as one `operator_action` (`set-env:ask-llm-production`) and
+  does not make it a task gate. Acceptance checks production later.
+- **No live model call in any task.** A fake Anthropic server proves the path.
+  Live answer quality stays unproven until a key exists.
+- **Nothing waits.** The three tasks start now and are proven by unit tests and
+  a fake-model probe. None needs production.
+
+### Remaining work
+
+| # | Task | Role | QA | Depends on |
+| --- | --- | --- | --- | --- |
+| 1 | Ask grounding scope | software_engineer | skip | none |
+| 2 | Console calls the model tier | software_engineer | required | none |
+| 3 | Fake-model Ask probe | software_engineer | required | 1, 2 |
+
+Task 1 changes no visible behaviour while the model tier is off in production,
+and its unit tests and index check prove it, so it may skip QA. Tasks 2 and 3
+change what a visitor sees or prove the path a visitor uses, so they require QA.
+
+### Operator action
+
+`set-env:ask-llm-production`: a person with the Vercel account sets `ASK_LLM=1`
+and a server-only `ANTHROPIC_API_KEY` in Production, then redeploys. The
+readiness probe is `GET https://otohime.dev/api/ask` with status 200 and body
+containing `"enabled":true`. Acceptance walks production after that. No task
+waits for it.
+
+### Task contracts (proposal payload)
+
+```json
+[
+  {
+    "sequence": 1,
+    "title": "Ask grounding scope",
+    "role": "software_engineer",
+    "qa": "skip",
+    "acceptance_criteria": "The model tier's prompt holds only passages from Work, Projects and Notes. A question that matches an article, Play, Shore, Home or Bio gets no passage from those pages in the prompt. npm run ask:check fails when the committed index has no model-scope passage for Work, Projects or Notes.",
+    "depends_on": [],
+    "problem": "lib/ask-llm.ts topPassages searches the whole index. The index holds 42 articles and passages from Play, Shore, Home and Bio, so a model answer can cite pages the idea excludes. The idea grounds Ask only in Work, Projects and Notes.",
+    "action_items": [
+      "In lib/ask-llm.ts, filter topPassages to passages whose kind is work, stack, project or note, or whose href is /work, /projects or /notes, before search ranks them. Leave lib/ask.ts and the offline answer unchanged.",
+      "In scripts/ask-index.ts --check, print the model-scope passage count for Work, Projects and Notes, and fail if any of the three has zero.",
+      "Add node:test cases in lib/ask-llm.test.ts: an article question puts no article passage in the prompt; a Work question puts a Work passage in it; every id in the prompt is in scope.",
+      "Do not change the model, ASK_LIMITS, the system prompt or the route file."
+    ],
+    "interfaces": "scripts/ask-index.ts",
+    "non_goals": [
+      "articles or other pages in the model's scope",
+      "changing the offline answer in lib/ask.ts",
+      "changing MODEL, ASK_LIMITS or the system prompt",
+      "streaming",
+      "any Vercel or environment change"
+    ],
+    "verification": [
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 900},
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
+      {"name": "index coverage check", "cwd": ".", "cmd": "npm run ask:check", "expect": "exit0", "timeout_s": 300}
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Console calls the model tier",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "When GET /api/ask reports enabled, asking the Ask console sends one POST /api/ask, types out the model's lines and shows each cited page as a link to that page. When GET /api/ask is 404, a POST fails, the call times out after 10 s or the reply is not usable, the console types the offline canned answer with no visible error and sends no POST.",
+    "depends_on": [],
+    "problem": "components/ask-console.tsx answers only from lib/ask.ts in the browser and never references /api/ask. The run-8588 walk saw 0 requests to /api/ask, so the model tier is never reached.",
+    "action_items": [
+      "In components/ask-console.tsx, call GET /api/ask once when the console opens. The model tier is on only for a 200 reply whose body has enabled:true.",
+      "When on, POST /api/ask with JSON {question}. A reply with mode llm renders its lines through the existing typewriter and its sources as receipt links. Any other reply, a network error or a 10 s abort falls back to answer(index, query) from lib/ask.ts, as today.",
+      "Keep the (OFFLINE) line the server adds when mode is offline. Add no visible error state.",
+      "Keep the typewriter and citation rendering from t-1518. Do not change lib/ask.ts.",
+      "Update scripts/probe-ask.mjs so it asserts that GET /api/ask is made, and that with ASK_LLM unset no POST /api/ask is sent."
+    ],
+    "interfaces": "scripts/probe-ask.sh; scripts/probe-ask.mjs",
+    "non_goals": [
+      "streaming (SSE)",
+      "changing the API shape or ASK_LIMITS",
+      "a live Anthropic call",
+      "Vercel or environment changes",
+      "new dependencies",
+      "changing the offline canned answers"
+    ],
+    "verification": [
+      {"name": "typecheck", "cwd": ".", "cmd": "npm run typecheck", "expect": "exit0", "timeout_s": 900},
+      {"name": "lint changed files", "cwd": ".", "cmd": "npx eslint components/ask-console.tsx lib/ask-llm.ts", "expect": "exit0", "timeout_s": 600},
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 900},
+      {"name": "offline console probe", "cwd": ".", "cmd": "bash scripts/probe-ask.sh", "expect": "exit0", "timeout_s": 1200}
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Fake-model Ask probe",
+    "role": "software_engineer",
+    "qa": "required",
+    "acceptance_criteria": "bash scripts/probe-ask-llm-fake.sh runs the built app against a fake Anthropic server and a throwaway Postgres at 1366x768 and 390x844. It passes when the console POSTs /api/ask once and shows the fake model's lines with a link to a Work, Projects or Notes page. A non-JSON fake reply falls back to the offline answer, a cross-origin POST is 403, and the off-switch probe still passes.",
+    "depends_on": ["1", "2"],
+    "problem": "No check drives the console through the model tier. scripts/probe-ask-llm.sh proves only that the switch is off, so the path from console to route, model and citations is unproven.",
+    "action_items": [
+      "First check that initdb and pg_ctl (or docker) are on PATH. If none is, stop and report environment: no Postgres, and do not mark the probe passed.",
+      "Write scripts/probe-ask-llm-fake.mjs (pinned Playwright, same pattern as scripts/probe-ask.mjs) and scripts/probe-ask-llm-fake.sh.",
+      "The shell script starts a fake Anthropic server on a free port that answers /v1/messages with a fixed JSON reply citing the Work passage id. It starts a throwaway Postgres on a free port, applies db/migrations, and starts next start with ASK_LLM=1, a fake ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL set to the fake server, BETTER_AUTH_URL set to the app origin and DATABASE_URL set to the throwaway database.",
+      "Positive check at both widths: exactly one POST /api/ask, the rendered lines equal the fake reply, and the citation link returns 200 and is /work, /projects or /notes. Fail if the fake server recorded zero requests.",
+      "Negative controls: the fake server returns non-JSON, and the console shows the offline answer with no error; ASK_LLM unset, and the console sends no POST; a cross-origin POST returns 403.",
+      "Tear down the fake server, app and Postgres on exit.",
+      "Change no file under lib/ or components/. App changes belong to tasks 1 and 2."
+    ],
+    "interfaces": "scripts/probe-ask-llm-fake.sh; scripts/probe-ask-llm-fake.mjs; scripts/probe-ask-llm.sh",
+    "non_goals": [
+      "a live Anthropic call or a real key",
+      "production, Vercel or any shared database",
+      "answer quality",
+      "new npm dependencies",
+      "SSE streaming"
+    ],
+    "verification": [
+      {"name": "unit tests", "cwd": ".", "cmd": "npm test", "expect": "exit0", "timeout_s": 900},
+      {"name": "production build", "cwd": ".", "cmd": "npm run build", "expect": "exit0", "timeout_s": 1800},
+      {"name": "off-switch probe", "cwd": ".", "cmd": "SKIP_BUILD=1 bash scripts/probe-ask-llm.sh", "expect": "exit0", "timeout_s": 900},
+      {"name": "fake-model probe", "cwd": ".", "cmd": "SKIP_BUILD=1 bash scripts/probe-ask-llm-fake.sh", "expect": "exit0", "timeout_s": 1200}
+    ]
+  }
+]
+```
+
+### Verification boundaries
+
+- Every command runs inside the checkout. None changes Vercel, a shared
+  database or another system's state.
+- The fake-model probe uses a throwaway Postgres and a fake Anthropic server
+  that only the probe starts. The live model is never called.
+- Each command was parse-checked with `bash -n -c` before proposing.
+
+### Deferred and unproven
+
+- Production `ASK_LLM` and the server-only key: operator action
+  `set-env:ask-llm-production`. Acceptance walks production after it is set.
+  Failure condition: `/api/ask` still returns 404, or the console makes no
+  POST while enabled.
+- Live Haiku answer quality: unproven until a key exists.
+
 ## Re-plan: run-8566 (change request on t-1512)
 
 Plan **pm-248**, product-owner run **run-8566**. Baseline for this re-plan:
