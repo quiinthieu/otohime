@@ -1163,7 +1163,9 @@
   /*
    * The season dial (components/season-dial.tsx): one pill the height of an
    * .icon-btn, five inked stops, the pick filled in ink. The radios are
-   * visually hidden, so the stop that holds focus wears the ring.
+   * visually hidden, so the stop that holds focus wears the ring. Its motion
+   * (the stops' fill) lives in seasons.css, beside the ambient layer's, under
+   * one reduced-motion rule.
    */
   .season-dial {
     display: inline-flex;
@@ -1184,9 +1186,6 @@
     height: 1.375rem;
     border-radius: 50%;
     cursor: pointer;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
   }
 
   .season-dial label:hover {

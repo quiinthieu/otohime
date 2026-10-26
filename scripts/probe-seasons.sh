@@ -25,6 +25,13 @@
 # the masthead stays 64px with nothing clashing or spilling, nothing in it moves from the first frame, and hiding the
 # dial moves neither the brand mark nor the theme toggle (negative controls: a viewport-wide dial and a nudged dial
 # are caught).
+# Joint (layer and dial together, at 390px and 1366px): the sources and the served CSS hold one reduced-motion rule
+# for both, in seasons.css, and neither declares motion outside a media query; under reduce a dial pick tints at
+# once with no transition or animation in the dial or layer. With the layer made hit-testable for the read, the brand,
+# dial, theme toggle, heading and the open Ask console paint over it, and no season's layer adds sideways scroll
+# (negative controls: a layer at z-index 9999 covers the masthead and a non-modal Ask dialog, a pick with motion
+# welcome runs the dial's transitions, a wide absolute layer adds scroll, and a dial transition put back in
+# globals.css is caught).
 #
 # Env: PORT (4141, or a free port when that default is busy; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1, EXPECT_SHA (checked if set).
 # Playwright is installed into a temp prefix at run time; package.json stays unchanged.

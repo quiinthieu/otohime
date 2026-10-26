@@ -248,7 +248,7 @@ test("the site layout loads the season tints after its root sheet, and only the 
   assert.ok(page.includes('import "./(site)/seasons.css";'), "the 404 does not load the tints");
 });
 
-test("seasons.css tints only under data-season, and the ambient layer moves only where motion is welcome", () => {
+test("seasons.css tints only under data-season, and the ambient layer and dial move only where motion is welcome", () => {
   const css = readFileSync(join(ROOT, "app/(site)/seasons.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
   const top = blocks(css);
   const tints = top.filter((b) => b.prelude.startsWith(":root"));
@@ -268,15 +268,20 @@ test("seasons.css tints only under data-season, and the ambient layer moves only
   for (const { body } of [...tints, ...rest.slice(0, 2)]) assert.doesNotMatch(body, /\b(animation|transition)\b/);
   assert.match(rest[0].body, /position:\s*fixed;[\s\S]*z-index:\s*-1;[\s\S]*pointer-events:\s*none;/);
   assert.match(rest[1].body, /opacity:\s*0;/, "a bit at rest is invisible");
-  // Animation lives only under no-preference, on the layer's bits, with the season's keyframes.
+  // Motion lives only under no-preference: the layer's bits, with the season's keyframes, and the dial's stops.
   const moving = blocks(rest[2].body);
-  for (const b of moving) assert.ok(selectors(b).every((sel) => sel.startsWith(".season-layer")), b.prelude);
+  for (const b of moving) assert.ok(selectors(b).every((sel) => sel.startsWith(".season-layer") || sel === ".season-dial label"), b.prelude);
+  assert.match(rule(moving, ".season-dial label")[0]?.body ?? "", /transition:\s*background-color 0\.15s ease,\s*color 0\.15s ease;/);
   const named = moving.flatMap((b) => [...b.body.matchAll(/animation-name:\s*([\w-]+);/g)].map((m) => m[1]));
   assert.deepEqual(named.sort(), ["almanac-leaf", "almanac-petal", "almanac-rain", "almanac-snow"]);
   assert.match(rule(moving, ".season-layer[data-paused] > .almanac-bit")[0]?.body ?? "", /animation-play-state:\s*paused;/);
-  // Reduced motion takes animation away outright: none, not the site-wide 0.01ms run.
+  // Reduced motion takes animation and transition away outright from the layer and the dial, in one rule: none,
+  // not the site-wide 0.01ms run.
   const still = blocks(rest[3].body);
-  assert.deepEqual(still.map((b) => [b.prelude, b.body.trim()]), [[".season-layer > *", "animation: none;"]]);
+  assert.deepEqual(
+    still.map((b) => [b.prelude.replace(/\s+/g, " "), b.body.trim().replace(/\s+/g, " ")]),
+    [[".season-layer, .season-layer *, .season-dial, .season-dial *", "animation: none; transition: none;"]],
+  );
 });
 
 test("the site root layout mounts the season layer first in <body>, ahead of every group's masthead", () => {

@@ -84,15 +84,29 @@
   .season-layer[data-paused] > .almanac-bit {
     animation-play-state: paused;
   }
+
+  /* The dial's stops fill and clear with the pick (components/season-dial.tsx). */
+  .season-dial label {
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
 }
 
 /*
- * The layer renders no bits under reduced motion; should one be drawn, it has
- * no animation at all (not the site-wide 0.01ms run) and stays at opacity 0.
+ * The one reduced-motion rule for the layer and the dial. The layer renders no
+ * bits under reduced motion; should one be drawn, it has no animation at all
+ * (not the site-wide 0.01ms run) and stays at opacity 0. A dial pick fills its
+ * stop and retints the pill at once: the site-wide reset leaves every element
+ * transitioning "all" for 0.01ms, so both get transition none, every element.
  */
 @media (prefers-reduced-motion: reduce) {
-  .season-layer > * {
+  .season-layer,
+  .season-layer *,
+  .season-dial,
+  .season-dial * {
     animation: none;
+    transition: none;
   }
 }
 

@@ -10,6 +10,32 @@
 //   bash scripts/probe-seasons.sh                                                # node + layer checks
 import { hemisphereFromZone, resolveSeason, SEASON_ATTR, seasonScript } from "../lib/seasons.ts";
 
+// The one reduced-motion source, in the CSS sources: every prefers-reduced-motion block of the (site) sheets that
+// names the layer or the dial, by file. Comments are stripped first, then the blocks are found by brace matching.
+const { readFileSync } = await import("node:fs");
+const SITE_CSS = ["app/(site)/globals.css", "app/(site)/seasons.css", "app/(site)/peeks.css"];
+function reduceBlocks(css) {
+  const out = [];
+  const re = /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{/g;
+  for (let m; (m = re.exec(css)); ) {
+    let depth = 1;
+    let i = m.index + m[0].length;
+    for (; i < css.length && depth; i++) depth += css[i] === "{" ? 1 : css[i] === "}" ? -1 : 0;
+    out.push(css.slice(m.index, i));
+  }
+  return out;
+}
+const SEASONAL = /\.season-(layer|dial)|\.almanac-/;
+const seasonReduce = (sources) =>
+  Object.entries(sources)
+    .flatMap(([file, css]) => reduceBlocks(css).filter((b) => SEASONAL.test(b)).map((b) => `${file}: ${b.match(/\{([^{]*)\{/)?.[1].replace(/\s+/g, " ").trim()}`));
+const sources = Object.fromEntries(SITE_CSS.map((f) => [f, readFileSync(new URL(`../${f}`, import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\//g, "")]));
+// Motion the dial or layer declares outside any media query: a transition or animation that reduce cannot reach.
+const ungated = (css) => {
+  const bare = css.replace(/@media[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, "");
+  return [...bare.matchAll(/([^{}]*)\{([^{}]*)\}/g)].filter(([, sel, body]) => SEASONAL.test(sel) && /(^|[;\s])(transition|animation)(-name|-property)?\s*:/.test(body)).map(([, sel]) => sel.replace(/\s+/g, " ").trim());
+};
+
 // Mid-January, noon UTC: high summer in Sydney, deep winter in London.
 const CLOCK = new Date("2026-01-15T12:00:00Z");
 // Mid-July: deep winter in Sydney, high summer in London.
@@ -66,6 +92,20 @@ const CHECKS = [
   ["pre-paint stored nonsense", () => same(seasonScript, CLOCK, "Australia/Sydney", "monsoon"), "same summer"],
   ["pre-paint storage throws", () => same(seasonScript, CLOCK, "Australia/Sydney", new Error("SecurityError")), "same summer"],
   ["negative control: north-only script", () => same(northOnly, CLOCK, "Australia/Sydney", null), "script winter, resolveSeason summer"],
+  [
+    "one reduced-motion rule for layer and dial, in seasons.css",
+    () => seasonReduce(sources).join(" | "),
+    "app/(site)/seasons.css: .season-layer, .season-layer *, .season-dial, .season-dial *",
+  ],
+  ["no layer or dial motion outside a media query", () => SITE_CSS.flatMap((f) => ungated(sources[f])).join(" | ") || "none", "none"],
+  [
+    "negative control: a dial transition back in globals.css is caught twice",
+    () => {
+      const g = sources["app/(site)/globals.css"] + "\n.season-dial label { transition: color 0.15s; }\n@media (prefers-reduced-motion: reduce) { .season-dial label { transition: none; } }\n";
+      return [seasonReduce({ ...sources, "app/(site)/globals.css": g }).length, ungated(g).join()].join(" ");
+    },
+    "2 .season-dial label",
+  ],
 ];
 
 let failed = 0;
@@ -80,7 +120,8 @@ console.log(`clock ${CLOCK.toISOString()}: ${CHECKS.length - failed}/${CHECKS.le
 if (process.env.PW_PREFIX) {
   failed += await layerChecks();
   failed += await dialChecks();
-} else console.log("note: PW_PREFIX unset, layer and dial checks skipped (bash scripts/probe-seasons.sh runs them)");
+  failed += await jointChecks();
+} else console.log("note: PW_PREFIX unset, layer, dial and joint checks skipped (bash scripts/probe-seasons.sh runs them)");
 process.exit(failed ? 1 : 0);
 
 // The ambient layer in a real browser, against the built app at BASE_URL. The season is chosen the way the dial
@@ -550,5 +591,217 @@ async function dialChecks() {
     await browser.close();
   }
   console.log(`dial: ${good}/${good + bad} checks pass`);
+  return bad;
+}
+
+// The layer and the dial together, at a phone and a laptop width. Paint order: the layer is pointer-events none, so
+// hit-testing skips it; the one fixture makes it hit-testable for the read alone, so elementFromPoint at the brand,
+// dial, theme toggle, page heading and the open Ask console says what paints on top there. Motion: in the served
+// CSS (not the sources) every layer or dial rule under prefers-reduced-motion: reduce is one rule, and a dial pick
+// under reduce starts no transition or animation in the dial or the layer. The narrow width: no season's layer adds
+// scroll. Negative controls: a layer raised to z-index 9999 covers every point, the Ask dialog shown non-modal is
+// covered by it too, a pick with motion welcome runs the dial's transitions, and a wide absolute layer adds scroll.
+async function jointChecks() {
+  const { createRequire } = await import("node:module");
+  const path = await import("node:path");
+  const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
+  const { chromium } = require("playwright");
+  const BASE_URL = process.env.BASE_URL;
+  const WIDTHS = [
+    { width: 390, height: 844 },
+    { width: 1366, height: 768 },
+  ];
+  let bad = 0;
+  let good = 0;
+  const check = (name, pass, detail = "") => {
+    if (pass) good++;
+    else bad++;
+    console.log(`${pass ? "ok  " : "FAIL"} joint: ${name}${detail ? `: ${detail}` : ""}`);
+  };
+
+  async function open(browser, { viewport, reduced = false, season = "spring" }) {
+    const context = await browser.newContext({ viewport, timezoneId: "Australia/Sydney", reducedMotion: reduced ? "reduce" : "no-preference" });
+    await context.clock.setFixedTime(CLOCK);
+    if (season) await context.addInitScript({ content: `try{localStorage.setItem("season",${JSON.stringify(season)})}catch(e){}` });
+    const page = await context.newPage();
+    const errors = [];
+    page.on("console", (m) => m.type() === "error" && errors.push(`console ${page.url()}: ${m.text()}`));
+    page.on("pageerror", (e) => errors.push(`pageerror ${page.url()}: ${e.message}`));
+    await page.goto(BASE_URL + "/", { waitUntil: "load" });
+    await page.waitForFunction(() => document.querySelector("svg.season-layer")?.dataset.seasonLayer && document.querySelector("[data-season-dial] input:checked"), null, { timeout: 15000 }).catch(() => {});
+    return { context, page, errors };
+  }
+
+  // What paints on top at each named point: "layer" when it is the layer, else the element's tag and class. The
+  // layer is made hit-testable for this read only, and z, when given, raises it.
+  const hits = (page, points, z = null) =>
+    page.evaluate(
+      ({ points, z }) => {
+        const svg = document.querySelector("svg.season-layer");
+        const was = svg.getAttribute("style");
+        svg.style.pointerEvents = "auto";
+        if (z !== null) svg.style.zIndex = String(z);
+        const out = {};
+        for (const [name, sel] of Object.entries(points)) {
+          const el = document.querySelector(sel);
+          if (!el) {
+            out[name] = "missing";
+            continue;
+          }
+          const r = el.getBoundingClientRect();
+          const at = document.elementFromPoint(r.left + r.width / 2, r.top + Math.min(r.height / 2, 20));
+          out[name] = !at ? "nothing" : svg.contains(at) ? "layer" : `${at.localName}${at.classList[0] ? "." + at.classList[0] : ""}`;
+        }
+        if (was === null) svg.removeAttribute("style");
+        else svg.setAttribute("style", was);
+        return out;
+      },
+      { points, z },
+    );
+  const MAST = {
+    brand: "header.masthead > :first-child",
+    dial: "[data-season-dial]",
+    theme: "header.masthead .theme-toggle",
+    heading: "main h1, main h2",
+  };
+  const clear = (o) => Object.values(o).every((v) => v !== "layer" && v !== "missing" && v !== "nothing");
+  const covered = (o) => Object.values(o).every((v) => v === "layer");
+
+  // Every layer or dial rule the served CSS puts under prefers-reduced-motion: reduce, and whether one of them sets
+  // both animation and transition to none.
+  const servedReduce = (page) =>
+    page.evaluate(() => {
+      const found = [];
+      const walk = (rules, media) => {
+        for (const r of rules) {
+          if (r instanceof CSSMediaRule) walk(r.cssRules, [...media, r.conditionText]);
+          else if (r instanceof CSSStyleRule) {
+            if (/\.season-(layer|dial)|\.almanac-/.test(r.selectorText) && media.some((m) => /prefers-reduced-motion:\s*reduce/.test(m)))
+              found.push({ sel: r.selectorText, anim: r.style.animationName, trans: r.style.transitionProperty });
+            if (r.cssRules?.length) walk(r.cssRules, media);
+          } else if (r.cssRules) walk(r.cssRules, media);
+        }
+      };
+      for (const sheet of document.styleSheets) {
+        try {
+          walk(sheet.cssRules, []);
+        } catch {}
+      }
+      return found;
+    });
+
+  // A dial pick, with every transition and animation started in the dial or the layer counted from just before it.
+  async function pick(page, viewport) {
+    await page.evaluate(() => {
+      window.__motion = [];
+      const scope = (e) => e.target instanceof Element && e.target.closest("[data-season-dial], svg.season-layer");
+      for (const type of ["transitionrun", "animationstart"]) document.addEventListener(type, (e) => scope(e) && window.__motion.push(`${type} ${e.propertyName ?? e.animationName}`), true);
+    });
+    if (viewport.width < 640) await page.click("[data-season-dial]");
+    else await page.click('[data-season-dial] label[title="Winter"]');
+    await page.waitForTimeout(400);
+    return page.evaluate(() => ({
+      motion: [...new Set(window.__motion)],
+      season: document.documentElement.dataset.season,
+      layer: document.querySelector("svg.season-layer")?.dataset.seasonLayer,
+      label: getComputedStyle(document.querySelector("[data-season-dial] label")).transitionProperty,
+    }));
+  }
+
+  const browser = await chromium.launch();
+  try {
+    for (const viewport of WIDTHS) {
+      const tag = `${viewport.width}px`;
+
+      // Motion welcome: the layer drawn under the masthead, the page and the Ask console.
+      {
+        const { context, page, errors } = await open(browser, { viewport });
+        const drawn = await page.evaluate(() => ({ layer: document.querySelector("svg.season-layer")?.dataset.seasonLayer, bits: document.querySelectorAll("svg.season-layer .almanac-bit").length, z: getComputedStyle(document.querySelector("svg.season-layer")).zIndex, bar: getComputedStyle(document.querySelector("header.masthead")).backgroundColor }));
+        check(`${tag}: the layer is drawn for spring, z-index -1`, drawn.layer === "spring" && drawn.bits > 0 && drawn.z === "-1", JSON.stringify(drawn));
+        let h = await hits(page, MAST);
+        check(`${tag}: brand, dial, theme toggle and heading paint over the layer`, clear(h), JSON.stringify(h));
+        const raised = await hits(page, MAST, 9999);
+        check(`${tag}: negative control: a layer at z-index 9999 covers all four`, covered(raised), JSON.stringify(raised));
+
+        // The Ask console: a modal, so in the top layer, over the layer at any z-index.
+        const chip = page.getByRole("button", { name: "Ask the console" });
+        await chip.scrollIntoViewIfNeeded().catch(() => {});
+        await chip.click().catch(() => {});
+        await page.waitForSelector("dialog.ask-console[open]", { timeout: 10000 }).catch(() => {});
+        const ASK = { console: "dialog.ask-console[open]", prompt: "dialog.ask-console[open] input, dialog.ask-console[open] textarea" };
+        h = await hits(page, ASK);
+        check(`${tag}: the open Ask console paints over the layer`, clear(h), JSON.stringify(h));
+        h = await hits(page, ASK, 9999);
+        check(`${tag}: the open Ask console stays over a layer raised to 9999 (modal top layer)`, clear(h), JSON.stringify(h));
+        await page.keyboard.press("Escape");
+        await page.waitForFunction(() => !document.querySelector("dialog.ask-console")?.open, null, { timeout: 5000 }).catch(() => {});
+        // Negative control: the same dialog shown non-modal, out of the top layer, is covered by the raised layer.
+        // Shown once the console has settled closed, so its own close handling cannot shut it again.
+        await page.waitForTimeout(500);
+        await page.evaluate(() => {
+          const d = document.querySelector("dialog.ask-console");
+          d?.show();
+          d?.scrollIntoView({ block: "center" });
+        });
+        await page.waitForTimeout(100);
+        const flat = await hits(page, { console: "dialog.ask-console[open]" }, 9999);
+        check(`${tag}: negative control: the Ask dialog shown non-modal is covered by a layer at 9999`, covered(flat), JSON.stringify(flat));
+        await page.evaluate(() => document.querySelector("dialog.ask-console").close());
+
+        // No season's layer adds scroll at this width; a wide absolute layer does (negative control).
+        const scroll = [];
+        for (const season of ["spring", "summer", "autumn", "winter"]) {
+          await page.evaluate((s) => document.documentElement.setAttribute("data-season", s), season);
+          await page.waitForFunction((s) => document.querySelector("svg.season-layer")?.dataset.seasonLayer === s, season, { timeout: 5000 }).catch(() => {});
+          await page.waitForTimeout(250);
+          scroll.push(await page.evaluate(() => [document.querySelector("svg.season-layer").dataset.seasonLayer, document.documentElement.scrollWidth]));
+        }
+        check(`${tag}: no season's layer adds sideways scroll`, scroll.every(([, w]) => w <= viewport.width) && scroll.map(([s]) => s).join() === "spring,summer,autumn,winter", JSON.stringify(scroll));
+        const wide = await page.evaluate(() => {
+          const svg = document.querySelector("svg.season-layer");
+          const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          r.setAttribute("width", String(innerWidth * 1.5));
+          r.setAttribute("height", "4");
+          svg.append(r);
+          svg.style.position = "absolute";
+          svg.style.overflow = "visible";
+          svg.style.width = `${innerWidth * 1.5}px`;
+          const w = document.documentElement.scrollWidth;
+          r.remove();
+          svg.removeAttribute("style");
+          return w;
+        });
+        check(`${tag}: negative control: a wide absolute layer is seen to add scroll`, wide > viewport.width, `${wide}`);
+
+        // The pick with motion welcome runs the dial's transitions (negative control for the reduce run below).
+        const moved = await pick(page, viewport);
+        check(`${tag}: negative control: a pick with motion welcome runs the dial's transitions`, moved.motion.some((m) => m.startsWith("transitionrun")) && moved.label !== "none", JSON.stringify(moved));
+        check(`${tag}: motion welcome: no console or page errors`, errors.length === 0, errors.slice(0, 3).join(" | "));
+        await context.close();
+      }
+
+      // Reduced motion: the one rule in the served CSS, and a pick that moves nothing.
+      {
+        const { context, page, errors } = await open(browser, { viewport, reduced: true });
+        const rules = await servedReduce(page);
+        check(
+          `${tag}: reduced motion: the served CSS has one layer-and-dial rule, animation and transition none`,
+          rules.length === 1 && /\.season-layer/.test(rules[0].sel) && /\.season-dial/.test(rules[0].sel) && rules[0].anim === "none" && rules[0].trans === "none",
+          JSON.stringify(rules),
+        );
+        const still = await page.evaluate(() => ({ layer: document.querySelector("svg.season-layer")?.dataset.seasonLayer, bits: document.querySelectorAll("svg.season-layer .almanac-bit").length }));
+        const p = await pick(page, viewport);
+        const want = viewport.width < 640 ? "summer" : "winter";
+        check(`${tag}: reduced motion: a pick tints at once with no transition or animation in dial or layer`, still.layer === "still" && still.bits === 0 && p.motion.length === 0 && p.label === "none" && p.season === want && p.layer === "still", JSON.stringify({ ...still, ...p }));
+        const h = await hits(page, MAST);
+        check(`${tag}: reduced motion: masthead and heading still paint over the layer`, clear(h), JSON.stringify(h));
+        check(`${tag}: reduced motion: no console or page errors`, errors.length === 0, errors.slice(0, 3).join(" | "));
+        await context.close();
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+  console.log(`joint: ${good}/${good + bad} checks pass`);
   return bad;
 }
