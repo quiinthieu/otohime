@@ -172,8 +172,21 @@ test("touch, blocked storage, offline pool and live reduced motion stay usable",
   const first = await cardId(p);
   await panel(p).getByRole("button", { name: "Another bottle" }).tap();
   assert.notEqual(await cardId(p), first);
+  // Observe cancellation at the media-query event, not before Chromium dispatches it.
+  await p.evaluate(() => {
+    const w = window as unknown as { bottleMotionChange: Promise<number> };
+    w.bottleMotionChange = new Promise((resolve) => {
+      matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", () => {
+        resolve(document.querySelector(".bottle-card")?.getAnimations().length ?? -1);
+      }, { once: true });
+    });
+  });
   await p.emulateMedia({ reducedMotion: "reduce" });
-  assert.equal(await p.locator(".bottle-card").evaluate((el) => el.getAnimations().length), 0);
+  const animationsAfterChange = await p.evaluate(() => Promise.race([
+    (window as unknown as { bottleMotionChange: Promise<number> }).bottleMotionChange,
+    new Promise<number>((_, reject) => setTimeout(() => reject(new Error("reduced-motion change was not dispatched")), 500)),
+  ]));
+  assert.equal(animationsAfterChange, 0);
   await panel(p).getByRole("button", { name: "Another bottle" }).tap();
   assert.equal(await p.locator(".bottle-card").evaluate((el) => el.getAnimations().length), 0);
   await panel(p).getByRole("button", { name: "Close Bottle" }).tap();
