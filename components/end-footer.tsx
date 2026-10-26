@@ -61,7 +61,7 @@ export function EndFooter() {
                 <p className="caption mb-2.5">Lines</p>
                 <ul className="end-lines">
                   {site.lines.map((line) => (
-                    <li key={line.label}>
+                    <li key={line.label} data-paper-id={`line:${encodeURIComponent(line.label)}`} data-tossable="true" data-paper-fetch-only="true" data-paper-label={line.label}>
                       <a
                         href={line.href}
                         data-end-line={line.label}

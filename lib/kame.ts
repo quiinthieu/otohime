@@ -5,7 +5,7 @@ export const PET_MS = 500;
 export type KameState = "swim" | "nap" | "follow" | "fetch" | "pet" | "shell";
 export type KameMemory = { name: string; lastVisit: string; streak: number; dismissed: boolean };
 export type Point = { x: number; y: number };
-export type FetchCommand = { type: "fetch"; target: Point } | { type: "cancel" };
+export type FetchCommand = { type: "fetch"; target: Point; id?: string } | { type: "cancel" };
 export type KameStorage = { getItem(key: string): string | null; setItem(key: string, value: string): unknown };
 export const trimName = (value: unknown) => typeof value === "string" ? [...value.trim()].slice(0, 24).join("").trim() || "Kame" : "Kame";
 export const localDay = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;

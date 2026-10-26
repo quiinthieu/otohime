@@ -18,6 +18,13 @@ test("explicit registry: stable ids survive ordering, duplicates and unsafe surf
   }
   assert.equal(eligibleRoute("/notes"), true);
 });
+test('fetch-only chips and stickers explicitly opt in without notes or peel eligibility',()=>{
+  const chip={id:'line:mail',tossable:true,excluded:false,margin:'',fetchOnly:true};
+  assert.deepEqual(discoverSurfaces('/notes',[chip]),[chip]);
+  assert.deepEqual(discoverSurfaces('/notes',[{...chip,fetchOnly:false}]),[]);
+  assert.deepEqual(discoverSurfaces('/desk',[chip]),[]);
+  assert.deepEqual(discoverSurfaces('/projects',[{...chip,excluded:true}]),[]);
+});
 test("one pointer: peel owns movement and cannot become fetch or crumple", () => {
   let now = 0; const g = createGesture({clock:()=>now});
   assert.ok(g.start({pointer:1,x:0,y:0,intent:"peel"}));

@@ -6,7 +6,7 @@ export interface StoragePort {
   removeItem(key: string): void;
 }
 export interface TactileOptions { clock: () => number; storage?: StoragePort; seed: number }
-export interface Surface { id: string; tossable: boolean; excluded: boolean; margin: string }
+export interface Surface { id: string; tossable: boolean; excluded: boolean; margin: string; fetchOnly?: boolean }
 export interface PointerStart { pointer: number; x: number; y: number; intent: "peel" | "body" | "grip"; touch?: boolean; blocked?: boolean }
 export interface GesturePort {
   readonly state: Gesture;
@@ -33,7 +33,7 @@ export function discoverSurfaces(route: string, surfaces: Surface[]): Surface[] 
   if (!eligibleRoute(route)) return [];
   const seen = new Set<string>();
   return surfaces.filter(s => {
-    if (!s.id || s.id.length > 256 || !s.tossable || s.excluded || !s.margin.trim() || seen.has(s.id)) return false;
+    if (!s.id || s.id.length > 256 || !s.tossable || s.excluded || (!s.margin.trim() && s.fetchOnly !== true) || seen.has(s.id)) return false;
     seen.add(s.id); return true;
   }).slice(0, 128).map(s => ({...s, margin:s.margin.trim().slice(0,160)}));
 }

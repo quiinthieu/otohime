@@ -4,7 +4,8 @@ import { createPortal } from "react-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createKame, PET_MS, type Kame, type KameState } from "@/lib/kame";
 import { startPurr, stopPurr, subscribeSound } from "@/lib/sound-client";
-import { bindKame } from "./commands";
+import { bindKame, emitKameCompletion } from "./commands";
+import { ARRIVAL_PX, FETCH_SPEED, FETCH_LIMIT_MS } from "@/lib/kame-fetch";
 
 type View = { state: KameState; name: string; streak: number; mood: string; friendly: boolean; reduced: boolean; paused: boolean };
 const editing = (target: EventTarget | null) => target instanceof HTMLElement && !!target.closest("input,textarea,select,[contenteditable]:not([contenteditable=false])");
@@ -42,16 +43,43 @@ export default function Companion() {
     const point = position.current;
     point.x = innerWidth - 48; point.y = innerHeight * 0.4;
     const cursor = { ...point };
+    let fetchLeg: { id: string; arrived: boolean; elapsed: number } | null = null;
+    const actualCenter = () => {
+      const rect = sprite.current?.getBoundingClientRect();
+      return rect ? { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 } : { x: point.x + 23, y: point.y + 32 };
+    };
+    const cancelFetchLeg = () => {
+      const old = fetchLeg; fetchLeg = null;
+      if (old) emitKameCompletion({ type: 'cancelled', id: old.id, position: actualCenter() });
+    };
     const canMove = () => !paused && !reduced && ["follow", "fetch"].includes(kame.state());
     const paint = () => { if (sprite.current) sprite.current.style.transform = `translate3d(${point.x}px,${point.y}px,0)`; };
     const draw = (now: number) => {
       frame = 0;
       if (!canMove()) return;
-      const dt = Math.min(50, Math.max(0, now - previous)); previous = now;
-      const target = kame.state() === "fetch" ? kame.target()! : cursor;
-      point.x += (Math.max(0, Math.min(innerWidth - 48, target.x)) - point.x) * Math.min(1, dt / 700);
-      point.y += (Math.max(80, Math.min(innerHeight - 72, target.y)) - point.y) * Math.min(1, dt / 700);
-      paint(); frame = requestAnimationFrame(draw);
+      const elapsed = Math.max(0, now - previous);
+      const dt = Math.min(50, elapsed); previous = now;
+      const fetching = kame.state() === "fetch";
+      if (fetching && (!sprite.current || sprite.current.hidden)) { kame.fetch({ type: 'cancel' }); publish(); return; }
+      const target = fetching ? kame.target()! : cursor;
+      const x = Math.max(0, Math.min(innerWidth - 48, target.x - (fetching ? 23 : 0)));
+      const y = Math.max(fetching ? 0 : 80, Math.min(innerHeight - (fetching ? 64 : 72), target.y - (fetching ? 32 : 0)));
+      const distance = Math.hypot(x - point.x, y - point.y);
+      const scale = fetching ? Math.min(1, FETCH_SPEED * dt / 1000 / (distance || 1)) : Math.min(1, dt / 700);
+      point.x += (x - point.x) * scale; point.y += (y - point.y) * scale;
+      paint();
+      const leg = fetchLeg;
+      if (fetching && leg) {
+        leg.elapsed += elapsed;
+        if (leg.elapsed >= FETCH_LIMIT_MS) { kame.fetch({ type: 'cancel' }); publish(); return; }
+        const actual = actualCenter();
+        emitKameCompletion({ type: 'position', id: leg.id, position: actual });
+        if (!leg.arrived && Math.hypot(actual.x - target.x, actual.y - target.y) <= ARRIVAL_PX) {
+          leg.arrived = true;
+          emitKameCompletion({ type: 'arrived', id: leg.id, position: actual });
+        }
+      }
+      if (!frame && canMove() && !fetchLeg?.arrived) frame = requestAnimationFrame(draw);
     };
     const placeEdge = () => {
       point.x = innerWidth - 48;
@@ -59,9 +87,10 @@ export default function Companion() {
       paint();
     };
     const publish = () => {
+      if (fetchLeg && kame.state() !== "fetch") cancelFetchLeg();
       const next = { state: kame.state(), ...kame.memory(), mood: kame.mood(), friendly: kame.friendly(), reduced, paused };
       setView((old) => old && JSON.stringify(old) === JSON.stringify(next) ? old : next);
-      if (canMove() && !frame) { previous = performance.now(); frame = requestAnimationFrame(draw); }
+      if (canMove() && !frame && !fetchLeg?.arrived) { previous = performance.now(); frame = requestAnimationFrame(draw); }
       if (!canMove()) { cancelAnimationFrame(frame); frame = 0; }
       if (reduced || kame.state() === "swim") placeEdge();
       armIdle();
@@ -120,7 +149,7 @@ export default function Companion() {
       if (reduced || paused || kame.state() !== "swim" || edgeFrame) return;
       edgeFrame = requestAnimationFrame(() => { edgeFrame = 0; if (kame.state() === "swim" && !paused && !reduced) placeEdge(); });
     };
-    const resize = () => { release(); placeEdge(); };
+    const resize = () => { kame.fetch({ type: "cancel" }); release(); placeEdge(); };
     const pointer = (event: PointerEvent) => { if (paused) return; cursor.x = event.clientX + 18; cursor.y = event.clientY + 18; activity(); };
     const key = (event: KeyboardEvent) => {
       if (event.defaultPrevented || blocked()) return;
@@ -130,7 +159,19 @@ export default function Companion() {
     };
     const observer = new MutationObserver(syncPause);
     observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["open", "aria-modal"] });
-    const unbind = bindKame((command) => { if (blocked()) return false; const accepted = kame.fetch(command); publish(); return accepted; });
+    const unbind = bindKame((command) => {
+      if (command.type === 'cancel') { kame.fetch(command); cancelFetchLeg(); publish(); return true; }
+      if (blocked() || !sprite.current || sprite.current.hidden) return false;
+      const accepted = kame.fetch(command);
+      if (accepted) {
+        cancelFetchLeg();
+        if (command.id) {
+          fetchLeg = { id: command.id, arrived: false, elapsed: 0 };
+          emitKameCompletion({ type: 'accepted', id: command.id, position: actualCenter() });
+        }
+      }
+      publish(); return accepted;
+    });
     // A sound preference change ends this pet's audio, including an asynchronous resume.
     const unsubscribe = subscribeSound(stopPurr);
     kame.reduced(reduced); paused = blocked(); kame.pause(paused);
@@ -148,7 +189,7 @@ export default function Companion() {
     document.addEventListener("visibilitychange", syncPause);
     media.addEventListener("change", preference);
     return () => {
-      release(); cancelAnimationFrame(mounted); cancelAnimationFrame(frame); cancelAnimationFrame(edgeFrame);
+      cancelFetchLeg(); release(); cancelAnimationFrame(mounted); cancelAnimationFrame(frame); cancelAnimationFrame(edgeFrame);
       if (idleTimer !== null) clearTimeout(idleTimer);
       observer.disconnect(); unbind(); unsubscribe();
       actions.current = null; engine.current = null;

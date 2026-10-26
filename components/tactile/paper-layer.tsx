@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { createGesture, createRouteSession, discoverSurfaces, type StoragePort } from "@/lib/tactile";
 import { deckle, tearState } from "@/lib/tear";
+import { createPaperFetch } from "./fetch";
+import { bindPaperReset } from "./reset";
 
 // Explicit roots, never a document-wide card/body gesture listener. Future toys use
 // the same port but must opt in their own grips. Existing controls keep their input.
@@ -21,17 +23,23 @@ export default function PaperLayer({ route }: { route: string }) {
       teardown();
       const events = new AbortController();
       const { signal } = events;
+      const sticker = document.createElement('div');
+      sticker.className = 'paper-sticker'; sticker.dataset.paperId = 'sticker:sea-star';
+      sticker.dataset.tossable = 'true'; sticker.dataset.paperFetchOnly = 'true'; sticker.dataset.paperLabel = 'Sea star';
+      const ink = document.createElement('span'); ink.textContent = '✳'; ink.setAttribute('aria-hidden', 'true'); sticker.append(ink);
+      document.getElementById('kame-shell')?.append(sticker);
       const nodes = [...document.querySelectorAll<HTMLElement>('[data-paper-id][data-tossable]')];
       const descriptors = nodes.map(el => ({
         id: el.dataset.paperId ?? "", tossable: el.dataset.tossable === "true",
         excluded: !!el.closest(EXCLUDED) || !!el.querySelector('input,textarea,select,[contenteditable]:not([contenteditable="false"]),canvas,.stamp-board,.desk-wrap'),
-        margin: el.dataset.paperMargin ?? "",
+        margin: el.dataset.paperMargin ?? "", fetchOnly: el.dataset.paperFetchOnly === "true",
       }));
       const registry = discoverSurfaces(route, descriptors);
       const cleanups: (() => void)[] = [];
       const resets: (() => void)[] = [];
       let cancelActive = () => {};
       const motion = matchMedia('(prefers-reduced-motion: reduce)');
+      const fetch = createPaperFetch(gesture, signal, motion);
 
       for (const surface of registry) {
         const el = nodes.find(n => n.dataset.paperId === surface.id)!;
@@ -51,7 +59,11 @@ export default function PaperLayer({ route }: { route: string }) {
         const handle=button('Drag corner','paper-handle'); handle.setAttribute('aria-label','Drag corner'); handle.title='Drag to peel the paper corner';
         const peel=button('Peel corner','paper-peel'); peel.setAttribute('aria-controls',margin.id);
         const reset=button('Reset','paper-reset');
-        actions.append(peel,reset); root.append(corner,margin,handle,actions); el.append(root);
+        if (!surface.fetchOnly) { actions.append(peel,reset); root.append(corner,margin,handle); }
+        else actions.append(reset);
+        root.append(actions); el.append(root);
+        fetch.attach(el, root, actions);
+        if (!surface.fetchOnly) actions.append(margin);
         el.dataset.paperActive='true';
         let amount=session.peeled(surface.id) ? 1 : 0;
         let origin: {x:number;y:number;pointer:number} | null=null;
@@ -75,8 +87,8 @@ export default function PaperLayer({ route }: { route: string }) {
         };
         paint(amount,amount ? 'peeled':'intact');
         resets.push(()=>apply('cancel'));
-        peel.addEventListener('click',()=>apply('peel'),{signal});
-        reset.addEventListener('click',()=>apply('reset'),{signal});
+        peel.addEventListener('click',()=>{fetch.cancel();apply('peel');},{signal});
+        reset.addEventListener('click',()=>{fetch.cancel();apply('reset');},{signal});
         handle.addEventListener('click',e=>{
           if(suppressClick && e.detail>0) {e.preventDefault();suppressClick=false;return;}
           apply('peel');
@@ -84,6 +96,7 @@ export default function PaperLayer({ route }: { route: string }) {
         handle.addEventListener('pointerdown',e=>{
           if(e.button!==0 || !e.isPrimary || document.querySelector('[aria-modal="true"],dialog[open]')) return;
           if(!gesture.start({pointer:e.pointerId,x:e.clientX,y:e.clientY,intent:'peel'})) return;
+          fetch.cancel();
           suppressClick=false;
           origin={x:e.clientX,y:e.clientY,pointer:e.pointerId};
           cancelActive=()=>{suppressClick=true;apply('cancel');};
@@ -106,21 +119,26 @@ export default function PaperLayer({ route }: { route: string }) {
         for(const type of ['pointercancel','lostpointercapture'] as const) handle.addEventListener(type,e=>{if(origin?.pointer===e.pointerId) cancelActive();},{signal});
         // Focusing original content restores its paper without removing or moving it.
         el.addEventListener('focusin',e=>{if(e.target instanceof Node && !root.contains(e.target)) apply('reset');},{signal});
-        cleanups.push(()=>{release();root.remove();delete el.dataset.paperActive;delete el.dataset.paperState;});
+        cleanups.push(()=>{release();root.remove();delete el.dataset.paperActive;delete el.dataset.paperState;delete el.dataset.fetchState;});
       }
-      const cancel=()=>cancelActive();
+      const cancel=()=>{cancelActive();fetch.cancel();};
       const reset=()=>{cancel();for(const clear of resets) clear();};
       restoreAll=reset;
+      const unbindReset=bindPaperReset(reset);
       document.addEventListener('keydown',e=>{if(e.key==='Escape') reset();},{signal});
       window.addEventListener('blur',cancel,{signal});
       window.addEventListener('resize',cancel,{signal});
       document.addEventListener('visibilitychange',()=>{if(document.hidden) cancel();},{signal});
       motion.addEventListener('change',cancel,{signal});
       const observer=new MutationObserver(()=>{
-        if(nodes.some(n=>!n.isConnected)) cancel();
+        if(nodes.some(n=>!n.isConnected)) {
+          cancel();
+          for(let i=nodes.length-1;i>=0;i--) if(!nodes[i].isConnected) nodes.splice(i,1);
+        }
+        if(document.querySelector('[aria-modal="true"],dialog[open]')) cancel();
       });
-      observer.observe(document.body,{childList:true,subtree:true});
-      teardown=()=>{events.abort();observer.disconnect();for(const clean of cleanups) clean();gesture.cancel();teardown=()=>{};};
+      observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["open","aria-modal"]});
+      teardown=()=>{events.abort();observer.disconnect();fetch.dispose();unbindReset();sticker.remove();for(const clean of cleanups) clean();gesture.cancel();teardown=()=>{};};
     };
     // Navigation API catches client hops, full-root links, history and location changes;
     // reload preserves this route's session. The fallback covers ordinary link departures.
