@@ -64,13 +64,13 @@ node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-
 | --- | --- |
 | 0 | The `--require` mode holds and `--manifest` verified all four snapshots. |
 | 1 | The inputs are readable and consistent, but the evidence falls short, or no manifest was given. See `unmet` and `reasons`. |
-| 2 | Unsupported arguments, an unreadable or truncated file, a payload declaring itself partial, an unrecognized payload shape (including a schedule without `inputs.tasks`), mismatched plan/task/predecessor ids, foreign snapshots, or a failed manifest. See `input_errors`. |
+| 2 | Unsupported arguments, an unreadable or truncated file, a payload declaring itself partial, an unrecognized payload shape (including a schedule without `inputs.tasks`), mismatched plan/task/predecessor ids, a malformed field (section 4), foreign snapshots, or a failed manifest. See `input_errors`. |
 
 ## 4. What each check requires
 
 | Check | Passes only when |
 | --- | --- |
-| `hold_released` | Both `get_plan.progress` and `explain_schedule.progress` are present and agree. Their state is `live`, `startable` or `finishing_only`, their reason is not `after_plan`, and pm-248 is not among the holders. Absent progress is not a release. |
+| `hold_released` | Both `get_plan.progress` and `explain_schedule.progress` are present and agree. Their state is `live`, `startable` or `finishing_only`, their reason is not `after_plan`, and pm-248 is not among the holders. The two reads must also name the same holders. Absent progress is not a release. |
 | `queued_startable` | Plan status is `queued` and progress state is `startable`. |
 | `execution_started` | `execution_started_at` is a timestamp and plan status is `executing`, `finishing` or `done`. An old timestamp on a queued or paused plan does not count. |
 | `release_recorded` | A pm-255 timeline entry with `type=decision`, its own `id`, and `kind=after_plan_released`, which is the only supported release kind. Its `evidence` must carry `plan_id` = pm-255, `predecessor_id` = pm-248, `predecessor_status` = `abandoned`, and a non-empty `parent_note`. With `--abandon-decision`, `abandon_decision_id`/`note_decision_id` must exactly match those ids. Summary and reason prose are never read, so negated or prospective wording proves nothing. Every other kind (`after_plan_orphaned`, `slow_verdict`, `other`, …) is not a release. A shared trace_id does not identify the part either, because split parts inherit their parent's trace. This is the receipt the pm-260 operator playbook (plan.md, step 3) writes. A future mono-v2 receipt in another shape fails with `release_decision_missing` until the probe is taught that shape. |
@@ -79,6 +79,18 @@ node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-
 Mode `released` needs `hold_released`, `release_recorded`, and either `queued_startable` or `execution_started`. Mode `dispatched` also needs `execution_started` and `dispatch_proven`.
 
 Identity is checked first: `plan.id` and `schedule.plan_id` must equal `--plan-id`. The task must be in both task lists under pm-255. `after_plan_id` must be the predecessor or null: the administrative repair clears it, while the mono-v2 fix (pm-263) keeps it as provenance. At least one timeline entry must carry pm-255's `trace_id`. Every run must belong to pm-255.
+
+Present fields are validated before they are read. If a field is present with an unsupported value, that is an input error (exit 2). It is never read as "none", so it can never clear an edge or a hold:
+
+| Field | Supported | Error when present otherwise |
+| --- | --- | --- |
+| `plan.after_plan_id` | absent, `null`, or a non-empty string | `plan_after_plan_id_unsupported` (e.g. `248`, `{}`, `[]`, `""`) |
+| `plan.trace_id`, `plan.execution_started_at` | absent, `null`, or a non-empty string | `plan_trace_id_unsupported`, `plan_execution_started_at_unsupported` |
+| `progress.reason` | absent, `null`, or a non-empty string | `<source>_progress_reason_unsupported` |
+| `progress.holders` | absent, `null`, or an array | `<source>_progress_holders_unsupported` (e.g. `"pm-248"`) |
+| each holder | an object with a non-empty string `plan_id`, string-or-null `task_id`/`run_id`, and an array of strings or null for `paths` | `<source>_progress_holder_unsupported`. A single bad holder fails the whole input, and is never filtered out. |
+
+`<source>` is `plan` (get_plan) or `schedule` (explain_schedule), so a malformed read is named by its tool. An omitted reason or holders list is accepted because a live or startable plan may leave them out. Absence alone cannot pass `hold_released`: the state still has to be released, and a waiting/after_plan read still fails.
 
 The output keeps the source run ids, task-manager ids and statuses under `evidence.dispatch_runs`, and lists failed attempts under `evidence.failed_attempts`. `delivery_proven` is always `false`. A submitted or even failed SWE run proves dispatch only, never that t-1557's Ask deploy bundle probe was delivered. A failed attempt stays a defect to report next to any later retry.
 
@@ -98,4 +110,5 @@ Edit only the copies. Do not regenerate the manifest for an edited copy: the sha
 - Proven now, in this checkout: the evaluator and CLI behave as described, against synthetic API-shaped fixtures (`node --experimental-strip-types ... --test lib/plan-release.test.ts`).
 - Not proven by this task: the real pm-255 release, the release note on its timeline, and t-1557's dispatch. These depend on operator chore esc-395 (`release-after-plan:pm-255:pm-248`, platform operator) or the mono-v2 fix in pm-263, and then on scheduler capacity. QA or acceptance own the live walkthrough.
 - QA's independent live capture (run-8800, 08:57Z, `qa-evidence/` with its manifest) is decoded and exits 1 in both modes. The reasons are `plan_progress_missing`, `hold_after_plan`, `held_by_predecessor`, `progress_waiting`, `release_decision_missing` and `swe_run_missing`. This is a negative result: pm-255 was still held. The test suite runs this regression on the unmodified files.
+- QA's second live capture (run-8812, 09:18Z, `qa-evidence-run-8812/` with its manifest) shows pm-255 `queued`, with `waiting/after_plan` in both reads. It exits 1 in both modes with `hold_after_plan`, `held_by_predecessor`, `progress_waiting`, `release_decision_missing` and `swe_run_missing`. This is a negative result, and the test suite also runs it on the unmodified files. QA's `qa-adversarial.mjs` meets the contract in all 20 cases, including D6–D9, which now exit 2 (run-8814).
 - Last observation by this task's first run (run-8789, 2026-10-26T08:42:13Z, via explain_schedule): pm-255 was `paused`, progress `waiting/after_plan`, holder pm-248, `execution_started_at` null, no own runs. The `heldBoard` fixture copies the shape of that read, and on it the probe exits 1 (`hold_after_plan`). That run did not run the probe on saved live snapshots; run-8809 ran it on QA's capture above.

@@ -264,6 +264,113 @@ test("an unrecognized progress state is unsupported input", () => {
   assert.equal(verdict(e, "released").unmet[0], "input_supported");
 });
 
+// QA run-8812 D6: a present after_plan_id of any type but a non-empty string is not a cleared edge.
+test("an unsupported after_plan_id is input error, never a cleared edge (QA D6)", () => {
+  for (const value of [248, 0, false, true, {}, { plan_id: "pm-248" }, ["pm-248"], "", "  "]) {
+    const b = dispatchedBoard();
+    b.plan.plan.after_plan_id = value;
+    const e = evalBoard(b);
+    assert.deepEqual(e.input_errors, ["plan_after_plan_id_unsupported"], JSON.stringify(value));
+    assert.equal(e.hold_released, false);
+    assert.equal(e.evidence.after_plan_id, null);
+    assert.equal(verdict(e, "dispatched").ok, false);
+    assert.equal(verdict(e, "released").ok, false);
+  }
+  // The documented forms stay supported: absent, null (cleared) and the exact predecessor string.
+  for (const value of [undefined, null, "pm-248"]) {
+    const b = dispatchedBoard();
+    if (value === undefined) delete b.plan.plan.after_plan_id;
+    else b.plan.plan.after_plan_id = value;
+    const e = evalBoard(b);
+    assert.deepEqual(e.input_errors, [], String(value));
+    assert.equal(e.evidence.after_plan_id, value ?? null);
+    assert.equal(verdict(e, "dispatched").ok, true, String(value));
+  }
+});
+
+test("unsupported trace_id or execution_started_at values are input errors", () => {
+  for (const [field, value, code] of [
+    ["trace_id", 42, "plan_trace_id_unsupported"],
+    ["trace_id", "", "plan_trace_id_unsupported"],
+    ["execution_started_at", 1761469800, "plan_execution_started_at_unsupported"],
+    ["execution_started_at", { at: "2026-10-26T09:10:00Z" }, "plan_execution_started_at_unsupported"],
+  ] as const) {
+    const b = dispatchedBoard();
+    b.plan.plan[field] = value;
+    const e = evalBoard(b);
+    assert.deepEqual(e.input_errors, [code], `${field}=${JSON.stringify(value)}`);
+    assert.equal(verdict(e, "dispatched").ok, false);
+  }
+});
+
+// QA run-8812 D7-D9: malformed reason, holders or holder identities, in either source alone.
+const BAD_PROGRESS: [string, Json, string][] = [
+  ["object reason (D7)", { state: "live", reason: { after_plan: "pm-248" }, holders: [] }, "progress_reason_unsupported"],
+  ["array reason", { state: "live", reason: ["after_plan"], holders: [] }, "progress_reason_unsupported"],
+  ["numeric reason", { state: "live", reason: 0, holders: [] }, "progress_reason_unsupported"],
+  ["blank reason", { state: "live", reason: "", holders: [] }, "progress_reason_unsupported"],
+  ["string holders (D8)", { state: "live", holders: "pm-248" }, "progress_holders_unsupported"],
+  ["object holders", { state: "live", holders: { plan_id: "pm-248" } }, "progress_holders_unsupported"],
+  ["numeric holder identity (D9)", { state: "live", holders: [{ plan_id: 248 }] }, "progress_holder_unsupported"],
+  ["string holder item", { state: "live", holders: ["pm-248"] }, "progress_holder_unsupported"],
+  ["null holder item", { state: "live", holders: [null] }, "progress_holder_unsupported"],
+  ["holder without plan_id", { state: "live", holders: [{ task_id: "t-1" }] }, "progress_holder_unsupported"],
+  ["blank holder plan_id", { state: "live", holders: [{ plan_id: "" }] }, "progress_holder_unsupported"],
+  ["numeric holder task_id", { state: "live", holders: [{ plan_id: "pm-248", task_id: 7 }] }, "progress_holder_unsupported"],
+  ["string holder paths", { state: "live", holders: [{ plan_id: "pm-248", paths: "lib/" }] }, "progress_holder_unsupported"],
+  ["valid holder beside a bad one", { state: "live", holders: [{ plan_id: "pm-249" }, { plan_id: 248 }] }, "progress_holder_unsupported"],
+];
+
+test("malformed progress reason, holders or holder identity is input error in each source (QA D7-D9)", () => {
+  for (const [name, bad, code] of BAD_PROGRESS) {
+    for (const where of ["plan", "schedule"] as const) {
+      const b = dispatchedBoard();
+      b[where].progress = clone(bad);
+      const e = evalBoard(b);
+      assert.deepEqual(e.input_errors, [`${where}_${code}`], `${where}: ${name}`);
+      assert.equal(e.hold_released, false, `${where}: ${name}`);
+      assert.equal(verdict(e, "dispatched").ok, false, `${where}: ${name}`);
+      assert.equal(verdict(e, "released").ok, false, `${where}: ${name}`);
+    }
+    // Both sources malformed at once are each named.
+    const both = dispatchedBoard();
+    both.plan.progress = clone(bad);
+    both.schedule.progress = clone(bad);
+    assert.deepEqual(evalBoard(both).input_errors, [`plan_${code}`, `schedule_${code}`], name);
+  }
+});
+
+test("documented progress forms stay supported: omitted or null reason and holders, full holder objects", () => {
+  for (const progress of [
+    { state: "live" },
+    { state: "live", reason: null, holders: null },
+    { state: "live", holders: [] },
+    { state: "live", reason: "paths", holders: [{ plan_id: "pm-249", task_id: "t-1", run_id: "run-1", paths: ["lib/a.ts"] }] },
+    { state: "live", holders: [{ plan_id: "pm-249", task_id: null, run_id: null, paths: null }] },
+  ]) {
+    const b = dispatchedBoard();
+    b.plan.progress = clone(progress);
+    b.schedule.progress = clone(progress);
+    const e = evalBoard(b);
+    assert.deepEqual(e.input_errors, [], JSON.stringify(progress));
+    assert.equal(e.hold_released, true, JSON.stringify(progress));
+    assert.equal(verdict(e, "dispatched").ok, true, JSON.stringify(progress));
+  }
+  // A well-formed holder that is the predecessor still holds the part.
+  const b = dispatchedBoard();
+  b.plan.progress = b.schedule.progress = { state: "live", holders: [{ plan_id: "pm-248" }] };
+  assert.deepEqual(evalBoard(b).reasons.hold_released, ["held_by_predecessor"]);
+});
+
+test("progress whose holders differ between get_plan and explain_schedule fails closed", () => {
+  const b = dispatchedBoard();
+  b.schedule.progress = { state: "live", holders: [{ plan_id: "pm-249" }] };
+  const e = evalBoard(b);
+  assert.deepEqual(e.input_errors, []);
+  assert.deepEqual(e.reasons.hold_released, ["progress_disagrees"]);
+  assert.equal(verdict(e, "dispatched").ok, false);
+});
+
 test("an old execution timestamp under a current after_plan hold proves neither release nor execution", () => {
   const b = heldBoard();
   b.plan.plan.status = "queued";
@@ -748,6 +855,58 @@ test("CLI: the unmodified live held snapshot set is decoded and reports the hold
     assert.deepEqual(body.reasons.dispatch_proven, ["swe_run_missing"]);
     assert.equal(body.delivery_proven, false);
   }
+});
+
+// QA's second live capture (run-8812, 09:18Z): pm-255 queued, both reads carry waiting/after_plan.
+const LIVE_8812 = join(ROOT, "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8812");
+
+test("CLI: the unmodified run-8812 live capture, with progress in both reads, still exits 1 on the hold", () => {
+  const files = Object.fromEntries(["plan", "schedule", "timeline", "runs"].map((k) => [k, join(LIVE_8812, `${k}.json`)]));
+  const extra = [...IDS, "--abandon-decision", "dec-55805,dec-55807", "--manifest", join(LIVE_8812, "manifest.json")];
+  for (const mode of ["released", "dispatched"]) {
+    const { code, body } = runCli(files, [...extra, "--require", mode]);
+    assert.equal(code, 1, `${mode}: ${JSON.stringify(body.input_errors)}`);
+    assert.deepEqual(body.input_errors, []);
+    assert.equal(body.manifest.completeness, "verified");
+    assert.equal(body.evidence.plan_status, "queued");
+    assert.deepEqual(body.reasons.hold_released, ["hold_after_plan", "held_by_predecessor", "progress_waiting"]);
+    assert.equal(body.queued_startable, false);
+    assert.deepEqual(body.reasons.release_recorded, ["release_decision_missing"]);
+    assert.deepEqual(body.reasons.dispatch_proven, ["swe_run_missing"]);
+    assert.equal(body.delivery_proven, false);
+  }
+});
+
+test("CLI: malformed predecessor or progress evidence exits 2 under a verified manifest (QA D6-D9)", () => {
+  withDir((dir) => {
+    // Baselines first: the same boards, unmutated, pass.
+    const base = verified(dir, dispatchedBoard());
+    assert.equal(runCli(base.files, [...IDS, ...base.manifest]).code, 0);
+    const q = verified(dir, queuedBoard());
+    assert.equal(runCli(q.files, [...IDS, "--require", "released", ...q.manifest]).code, 0);
+
+    const cases: [string, (b: Json) => void, string[]][] = [
+      ["D6 numeric predecessor", (b) => (b.plan.plan.after_plan_id = 248), ["plan_after_plan_id_unsupported"]],
+    ];
+    for (const [name, bad, code] of BAD_PROGRESS) {
+      if (!/D[789]/.test(name)) continue;
+      cases.push([`${name} in get_plan`, (b) => (b.plan.progress = clone(bad)), [`plan_${code}`]]);
+      cases.push([`${name} in explain_schedule`, (b) => (b.schedule.progress = clone(bad)), [`schedule_${code}`]]);
+    }
+    for (const [name, mutate, errors] of cases) {
+      for (const [board, mode] of [[dispatchedBoard(), "dispatched"], [queuedBoard(), "released"]] as const) {
+        mutate(board);
+        const v = verified(dir, board);
+        const r = runCli(v.files, [...IDS, "--require", mode, ...v.manifest]);
+        assert.equal(r.code, 2, `${name} (${mode}): ${JSON.stringify(r.body)}`);
+        assert.equal(r.body.ok, false);
+        assert.equal(r.body.manifest.completeness, "verified");
+        assert.deepEqual(r.body.input_errors, errors, name);
+        assert.equal(r.body.hold_released, false, name);
+        assert.equal(r.body.delivery_proven, false);
+      }
+    }
+  });
 });
 
 test("CLI: truncated payloads and incomplete or mismatched manifests exit 2", () => {

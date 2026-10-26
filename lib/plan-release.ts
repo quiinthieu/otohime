@@ -90,21 +90,43 @@ type Obj = Record<string, unknown>;
 const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== null && !Array.isArray(v);
 const str = (v: unknown): string | null => (typeof v === "string" && v.trim() !== "" ? v : null);
 
+const absent = (v: unknown) => v === undefined || v === null;
+// An optional identity: absent/null is "none", a non-empty string is itself, anything else is
+// unsupported. Never coerce a present value (248, {}, "") into "none".
+function optionalId(v: unknown): { ok: true; value: string | null } | { ok: false } {
+  if (absent(v)) return { ok: true, value: null };
+  return str(v) === null ? { ok: false } : { ok: true, value: v as string };
+}
+
+// A holder is {plan_id, task_id?, run_id?, paths?[]}; plan_id is the identity the hold names.
+function holderOk(h: unknown): h is Obj & { plan_id: string } {
+  if (!isObj(h) || str(h.plan_id) === null) return false;
+  if (!absent(h.task_id) && typeof h.task_id !== "string") return false;
+  if (!absent(h.run_id) && typeof h.run_id !== "string") return false;
+  return absent(h.paths) || (Array.isArray(h.paths) && h.paths.every((p) => typeof p === "string"));
+}
+
+// Every present field is validated before it is normalized: an unsupported reason or holder is an
+// input error, never "no reason" or "no holder". Absent/null reason and holders are accepted (a
+// live or startable plan may omit them); state, reason and holders are each still checked.
 function readProgress(v: unknown, where: string, errs: string[]) {
-  if (v === undefined || v === null) return null;
+  if (absent(v)) return null;
   if (!isObj(v) || typeof v.state !== "string") {
     errs.push(`${where}_progress_unsupported`);
     return null;
   }
-  if (!(PROGRESS_STATES as readonly string[]).includes(v.state)) {
-    errs.push(`${where}_progress_state_unrecognized`);
-    return null;
-  }
-  const holders = Array.isArray(v.holders)
-    ? v.holders.map((h) => (isObj(h) ? str(h.plan_id) : null)).filter((h): h is string => h !== null)
-    : [];
-  return { state: v.state, reason: str(v.reason), holders };
+  const before = errs.length;
+  if (!(PROGRESS_STATES as readonly string[]).includes(v.state)) errs.push(`${where}_progress_state_unrecognized`);
+  if (!optionalId(v.reason).ok) errs.push(`${where}_progress_reason_unsupported`);
+  if (!absent(v.holders) && !Array.isArray(v.holders)) errs.push(`${where}_progress_holders_unsupported`);
+  else if (Array.isArray(v.holders) && !v.holders.every(holderOk)) errs.push(`${where}_progress_holder_unsupported`);
+  if (errs.length > before) return null;
+  const holders = Array.isArray(v.holders) ? (v.holders as { plan_id: string }[]).map((h) => h.plan_id) : [];
+  return { state: v.state, reason: absent(v.reason) ? null : (v.reason as string), holders };
 }
+
+const sameSet = (a: string[], b: string[]) =>
+  JSON.stringify([...new Set(a)].sort()) === JSON.stringify([...new Set(b)].sort());
 
 // What a release receipt still lacks; empty means it is one.
 function releaseGaps(ev: Obj | null, expected: Expected, refs: string[]): string[] {
@@ -176,8 +198,14 @@ export function evaluateRelease(snap: Snapshots, expected: Expected): Evaluation
   // Identity: all four snapshots describe the expected part and task.
   if (plan.id !== expected.plan_id) errs.push("plan_id_mismatch");
   if (sched.plan_id !== expected.plan_id) errs.push("schedule_plan_id_mismatch");
-  const after = plan.after_plan_id === undefined || plan.after_plan_id === null ? null : str(plan.after_plan_id);
-  if (after !== null && after !== expected.predecessor_id) errs.push("predecessor_mismatch");
+  // The edge is absent/null (cleared) or the predecessor's id (retained provenance). A present
+  // value of any other type is unsupported, never a cleared edge.
+  const afterId = optionalId(plan.after_plan_id);
+  const after = afterId.ok ? afterId.value : null;
+  if (!afterId.ok) errs.push("plan_after_plan_id_unsupported");
+  else if (after !== null && after !== expected.predecessor_id) errs.push("predecessor_mismatch");
+  if (!optionalId(plan.trace_id).ok) errs.push("plan_trace_id_unsupported");
+  if (!optionalId(plan.execution_started_at).ok) errs.push("plan_execution_started_at_unsupported");
   const tasks = planDoc.tasks as unknown[];
   if (!tasks.some((t) => isObj(t) && t.id === expected.task_id && t.plan_id === expected.plan_id)) {
     errs.push("task_missing_from_plan");
@@ -206,7 +234,11 @@ export function evaluateRelease(snap: Snapshots, expected: Expected): Evaluation
   if (errs.length) return finish(result);
   if (!pPlan) reasons.hold_released.push("plan_progress_missing");
   if (!pSched) reasons.hold_released.push("schedule_progress_missing");
-  if (pPlan && pSched && (pPlan.state !== pSched.state || pPlan.reason !== pSched.reason)) {
+  if (
+    pPlan &&
+    pSched &&
+    (pPlan.state !== pSched.state || pPlan.reason !== pSched.reason || !sameSet(pPlan.holders, pSched.holders))
+  ) {
     reasons.hold_released.push("progress_disagrees");
   }
   const progress = pSched ?? pPlan;
