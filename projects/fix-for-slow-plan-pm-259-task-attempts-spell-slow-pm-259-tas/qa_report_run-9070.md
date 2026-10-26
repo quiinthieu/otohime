@@ -18,7 +18,7 @@ Fresh local verification on checkout **5abaebc70f9f4efb627fe9a0e7db81717dc77533*
 | exact trace helper unit command | 5/5 pass |
 | npm run lint and npm run typecheck | exit 0; 10 existing lint warnings |
 | npm test | 2346/2346 pass |
-| exact production E2E loop | final counts recorded in verification.json |
+| exact production E2E loop | 3/3 exit 0; each 169 pass, 0 fail, 1 existing skip out of 170 |
 | separate complete footer probe | 168 pass, zero fail, EXPECT_SHA=dev for the local production build |
 | lint including saved QA probes | exit 0 |
 
@@ -52,7 +52,7 @@ History uses two pages of 20 for each filter: 40/452 completed main CI runs (9 s
 
 The persisted board gate **ver-3605**, run-9066, is green for **52ec090** with all four contracted verification items passing. Independent board reads show verification run-9066 succeeded and the gate was ingested; delivery run-9065 succeeded. GitHub's persisted check-runs separately show the delivery's checks failed and production skipped. The empty legacy commit-status collection says pending, so it is not used as a pipeline verdict. No callback transport changes are part of this task; callback transport logs were not read.
 
-`executable-fingerprint.json` covers 843 tracked source/configuration/lock/asset files, excluding generated history and report files, SHA-256 **2da70df9fbf0295758c5ebfab0c8a91bb72c175b3dfe5a92c91cf68c85ceecf0**. Relevant per-file identities, local build IDs/artifact digests and generated-history digests accompany the logs. CI artifact hashes and browser versions are unobserved because raw logs are restricted; source-equivalent historical runs are not claimed to be binary-equivalent. No external model artifacts are used by the swipe executable.
+`executable-fingerprint.json` covers 843 tracked source/configuration/lock/asset files, excluding generated history and report files, SHA-256 **2da70df9fbf0295758c5ebfab0c8a91bb72c175b3dfe5a92c91cf68c85ceecf0**. Relevant per-file identities, three local build IDs, artifact snapshots for builds 2 and 3, and generated-history digests accompany the logs. The first build was replaced before an artifact snapshot was captured; only its build ID and complete test log are retained. Build 2 was captured during execution and includes runtime cache files. The final build 3 snapshot was captured after server cleanup: 3108 files, build ID `hNeshaJFtchlA2UL2O5sE`, artifact SHA-256 `2fd7a5c8bfb0187f0b6cf6d815a9096c049ce7a31637942b8855a4c06510578f`. CI artifact hashes and browser versions are unobserved because raw logs are restricted; source-equivalent historical runs are not claimed to be binary-equivalent. No external model artifacts are used by the swipe executable.
 
 Local runtime: macOS arm64; Node 22.23.3 installed outside the checkout to satisfy Node 22 and the contracted flags (host default was 22.12.0); npm ci lock; Next 16.4.2; playwright-core 1.64.0; Chrome 155.0.8059.86; Docker 29.6.2; postgres:17-alpine digest `sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24`.
 
@@ -69,3 +69,5 @@ Integration on main: yes. Local execution demonstrated: yes. Integration deploye
 3. **Deployed acceptance**, owner pm-270 acceptance, source delivery 52ec090 and skipped production jobs 121774463039/121780019832. Failure condition: no green checks+production successor, live build-sha omits delivery, or deployed wide swipe/stacked negative control fails. A successor SHA must pass `git merge-base --is-ancestor 52ec090 <live-sha>` and be read independently through health and meta. No soak, future quota reset or passive polling is requested.
 
 See [fix_plan_run-9070.md](fix_plan_run-9070.md). Decisions and the clock lesson are recorded on pm-270.
+
+All three fresh complete production suites pass. Suite durations: 405.307s, 391.933s and 402.415s. The one existing skip is “evidence: every root hydrated under each colored run”. Both desk stacked/wide controls pass in all three suites. Full logs are retained, including terminal carriage returns; HTML-derived annotation text is whitespace-normalized. Only the generated content/history.json is restored after its measured hash is saved.

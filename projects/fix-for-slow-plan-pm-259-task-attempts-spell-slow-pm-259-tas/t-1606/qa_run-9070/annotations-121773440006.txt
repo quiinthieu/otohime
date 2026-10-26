@@ -1,33 +1,26 @@
- 
-                          
-                     
-                       
-                           Footer Chromium probe 
-                        
-                       
-                       
-                         
-                           Process completed with exit code 1. 
-                         
-                         Show more 
-                         Show less 
-                       
-                     
-                   
+Footer Chromium probe
 
- 
-                          
-                     
-                       
-                           Run npm run lint:  
+
+
+
+                           Process completed with exit code 1.
+
+                         Show more
+                         Show less
+
+
+
+
+
+
+
+
+                           Run npm run lint:
                         projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2
-                       
-                       
-                         
-                           'resolve' is defined but never used 
-                         
-                         Show more 
-                         Show less 
-                       
-                     
-                   
+
+
+
+                           'resolve' is defined but never used
+
+                         Show more
+                         Show less

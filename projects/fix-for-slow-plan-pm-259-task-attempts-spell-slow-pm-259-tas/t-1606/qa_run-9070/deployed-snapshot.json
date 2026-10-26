@@ -1,0 +1,16 @@
+{
+  "observed_at": "2026-10-26T19:13:59.365710+00:00",
+  "health_url": "https://otohime.dev/api/health",
+  "health": {
+    "ok": true,
+    "sha": "4b8278a46fe27151dd115e31e0bba2a9b18ac0cf"
+  },
+  "meta_url": "https://otohime.dev/desk",
+  "meta_sha": "4b8278a46fe27151dd115e31e0bba2a9b18ac0cf",
+  "ancestry_exit_codes": {
+    "52ec090": 1,
+    "0b349dc": 0,
+    "3ae76a4": 0,
+    "9ddd084": 0
+  }
+}

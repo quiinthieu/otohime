@@ -1,5 +1,5 @@
 {
-  "phase": "checkpoint; third E2E in progress",
+  "phase": "complete",
   "source_sha": "5abaebc70f9f4efb627fe9a0e7db81717dc77533",
   "delivery_sha": "52ec0904d93171262d262a21c0d61cf27d3ae8e2",
   "verification": [
@@ -40,36 +40,49 @@
       "cwd": ".",
       "cmd": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
       "expect": "exit0",
-      "status": "running",
+      "status": "pass",
       "attempts": [
         {
           "log": "e2e-1.log",
           "status": "pass",
+          "exit_code": 0,
           "counts": {
             "tests": "170",
             "pass": "169",
             "fail": "0",
             "skipped": "1",
             "duration_ms": "405306.595083"
-          }
+          },
+          "build_id": "qUQvfv9Gd10p8XKeChI09"
         },
         {
           "log": "e2e-2.log",
           "status": "pass",
+          "exit_code": 0,
           "counts": {
             "tests": "170",
             "pass": "169",
             "fail": "0",
             "skipped": "1",
             "duration_ms": "391932.780292"
-          }
+          },
+          "build_id": "1yrqcIp_1C0lkf_V4LVhG"
         },
         {
           "log": "e2e-3.log",
-          "status": "running",
-          "counts": {}
+          "status": "pass",
+          "exit_code": 0,
+          "counts": {
+            "tests": "170",
+            "pass": "169",
+            "fail": "0",
+            "skipped": "1",
+            "duration_ms": "402415.441125"
+          },
+          "build_id": "hNeshaJFtchlA2UL2O5sE"
         }
-      ]
+      ],
+      "exit_code": 0
     }
   ],
   "additional": {
@@ -94,5 +107,6 @@
       "original_premise_trials": 3,
       "log": "clock-control.log"
     }
-  }
+  },
+  "completed_at": "2026-10-26T19:17:56.426788+00:00"
 }

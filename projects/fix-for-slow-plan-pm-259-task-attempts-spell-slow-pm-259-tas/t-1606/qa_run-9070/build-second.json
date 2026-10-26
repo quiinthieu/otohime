@@ -3054,5 +3054,6 @@
     ".next/static/media/icon.1fz1o535moyr0.svg": "0882cf4aa3fc42b43dd6df28748ee07d35dad0fd94655cec40e546252ef52f0a"
   },
   "sha256": "1f9ff3f59d9602d89436bd2856e77640137bcf40d938e71d31687191f5ad0368",
-  "generated_history_sha256": "05dfc22641c110d2a80e6603d4494903dac25b714fe38b59eba01cc4f38927d5"
+  "generated_history_sha256": "05dfc22641c110d2a80e6603d4494903dac25b714fe38b59eba01cc4f38927d5",
+  "capture_boundary": "after production compilation, during the E2E suite; includes runtime server/cache artifacts"
 }
