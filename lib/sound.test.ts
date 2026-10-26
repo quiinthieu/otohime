@@ -16,10 +16,11 @@ import {
   type Cue,
   type CueName,
 } from "./sound.ts";
+import { play, setSound } from "./sound-client.ts";
 
-const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst"];
+const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle"];
 
-test("the six cues later tasks need are all there", () => {
+test("the eight cues the console and the ink toys need are all there", () => {
   assert.deepEqual(Object.keys(CUES).sort(), [...NAMES].sort());
 });
 
@@ -78,6 +79,136 @@ test("the stored preference is off unless it says on", () => {
   for (const v of [null, undefined, "", "off", "true", "ON", "1"]) assert.equal(parseSound(v), false, String(v));
   assert.equal(parseSound(storeSound(true)), true);
   assert.equal(parseSound(storeSound(false)), false);
+});
+
+test("a stamp is a low falling thud and a rustle is quiet high ticks", () => {
+  const { stamp, rustle } = CUES;
+  for (const cue of [stamp, rustle]) assert.ok(cue.db <= MAX_DB, `asks for ${cue.db} dB`);
+  const thud = stamp.notes.map((n) => n.hz);
+  assert.ok(thud.every((hz) => hz <= 220), `stamp ${thud}`);
+  assert.deepEqual(thud, [...thud].sort((a, b) => b - a), "stamp falls");
+  assert.ok(rustle.notes.length >= 4, "a rustle is several ticks");
+  assert.ok(rustle.notes.every((n) => n.hz >= 1000 && n.decay <= 0.03), "rustle ticks are high and short");
+  const gaps = rustle.notes.slice(1).map((n, i) => +(n.at - rustle.notes[i].at).toFixed(3));
+  assert.ok(new Set(gaps).size > 1, `rustle ticks are unevenly spaced: ${gaps}`);
+  assert.ok(cueGain(rustle) < cueGain(stamp), "a rustle sits under a stamp");
+});
+
+// A Web Audio stand-in: each oscillator it makes remembers its pitch, wave and
+// the gain values its envelope was set to.
+type Voice = { hz: number; wave: string; gains: number[]; started: boolean };
+class FakeAudioContext {
+  static made = 0;
+  static voices: Voice[] = [];
+  state: "running" | "suspended" | "closed" = "running";
+  currentTime = 1;
+  destination = {};
+  constructor() {
+    FakeAudioContext.made++;
+  }
+  createOscillator() {
+    const voice: Voice = { hz: 0, wave: "", gains: [], started: false };
+    FakeAudioContext.voices.push(voice);
+    return {
+      set type(w: string) {
+        voice.wave = w;
+      },
+      frequency: {
+        set value(hz: number) {
+          voice.hz = hz;
+        },
+      },
+      onended: null,
+      connect: (gain: { values: number[] }) => ((voice.gains = gain.values), gain),
+      start: () => (voice.started = true),
+      stop: () => {},
+      disconnect: () => {},
+    };
+  }
+  createGain() {
+    const values: number[] = [];
+    return {
+      values,
+      gain: {
+        setValueAtTime: (v: number) => values.push(v),
+        linearRampToValueAtTime: (v: number) => values.push(v),
+      },
+      connect: () => this.destination,
+      disconnect: () => {},
+    };
+  }
+  resume() {
+    this.state = "running";
+    return Promise.resolve();
+  }
+  suspend() {
+    this.state = "suspended";
+    return Promise.resolve();
+  }
+  close() {
+    this.state = "closed";
+    return Promise.resolve();
+  }
+}
+
+const heard = () => FakeAudioContext.voices.splice(0).filter((v) => v.started);
+const peakOf = (voices: Voice[]) => Math.max(...voices.flatMap((v) => v.gains));
+
+test("play() sounds stamp and rustle only while the toggle is on, never above MAX_DB", async () => {
+  const stored = new Map<string, string>();
+  Object.assign(globalThis, {
+    AudioContext: FakeAudioContext,
+    localStorage: { getItem: (k: string) => stored.get(k) ?? null, setItem: (k: string, v: string) => stored.set(k, v) },
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  });
+
+  // Off by default: nothing is made and nothing sounds.
+  play("stamp");
+  play("rustle");
+  assert.equal(FakeAudioContext.made, 0);
+  assert.deepEqual(heard(), []);
+
+  setSound(true);
+  assert.equal(stored.get(SOUND_KEY), "on");
+  heard(); // the "open" beep that confirms the switch
+
+  play("stamp");
+  const stamp = heard();
+  assert.deepEqual(stamp.map((v) => v.hz), CUES.stamp.notes.map((n) => n.hz));
+  assert.ok(stamp.every((v) => v.wave === "square" && v.gains[0] === 0 && v.gains.at(-1) === 0));
+  assert.equal(peakOf(stamp), dbToGain(CUES.stamp.db));
+
+  play("rustle");
+  const rustle = heard();
+  assert.deepEqual(rustle.map((v) => v.hz), CUES.rustle.notes.map((n) => n.hz));
+  assert.equal(peakOf(rustle), dbToGain(CUES.rustle.db));
+
+  // A cue asking for full volume still plays at MAX_DB.
+  const real = CUES.stamp;
+  CUES.stamp = { ...real, db: 0 };
+  try {
+    play("stamp");
+    assert.equal(peakOf(heard()), dbToGain(MAX_DB));
+  } finally {
+    CUES.stamp = real;
+  }
+
+  // Switched off: silence again.
+  setSound(false);
+  assert.equal(stored.get(SOUND_KEY), "off");
+  play("stamp");
+  play("rustle");
+  await new Promise((r) => setImmediate(r));
+  assert.deepEqual(heard(), []);
+
+  // Back on: the muted context resumes and the cues play through it.
+  setSound(true);
+  await new Promise((r) => setImmediate(r));
+  heard();
+  play("rustle");
+  assert.equal(heard().length, CUES.rustle.notes.length);
+  assert.equal(FakeAudioContext.made, 1, "one context, reused");
 });
 
 const source = (file: string) => readFileSync(resolve(import.meta.dirname, "..", file), "utf8");

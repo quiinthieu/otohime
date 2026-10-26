@@ -5,7 +5,7 @@
 // click or key press, so the browser's autoplay rule is met; it is reused
 // after that and closed on pagehide. Anything Web Audio refuses (no API, a
 // throwing constructor, a rejected resume) leaves the page silent and working.
-import { CUES, cueGain, envelope, noteEnd, parseSound, SOUND_KEY, storeSound, type Cue, type CueName } from "@/lib/sound";
+import { CUES, cueGain, envelope, noteEnd, parseSound, SOUND_KEY, storeSound, type Cue, type CueName } from "./sound.ts";
 
 let on = false;
 let loaded = false;
