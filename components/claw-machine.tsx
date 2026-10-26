@@ -95,6 +95,7 @@ export function ClawMachine({ games }: { games: Game[] }) {
     <Machine
       label="Claw machine"
       caption="Crane"
+      ownSound
       colour="pink"
       viewBox="0 0 440 380"
       busy={busy}

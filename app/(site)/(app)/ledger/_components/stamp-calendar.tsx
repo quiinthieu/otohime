@@ -144,7 +144,7 @@ export function StampCalendar({ ledger, end }: { ledger: Ledger; end: string }) 
         Arrow keys move a day up and down and a week left and right; Home and End go to the first and last day.
       </p>
       <div className="ledger-press">
-        <button type="button" className="chip" onClick={press === "pressing" ? stopPress : startPress}>
+        <button type="button" className="chip" data-own-sound="" onClick={press === "pressing" ? stopPress : startPress}>
           {press === "pressing" ? "Stop" : "Press"}
         </button>
         <p className="sr-only" aria-live="polite">

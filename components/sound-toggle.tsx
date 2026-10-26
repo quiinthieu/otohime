@@ -15,6 +15,8 @@ export function SoundToggle({ label }: { label: string }) {
       aria-pressed={on}
       aria-label={label}
       title={label}
+      // turning sound on plays its own "open" (lib/sound-client.ts), so components/press-sound.tsx leaves it alone
+      data-own-sound=""
       onClick={() => setSound(!on)}
     >
       <svg viewBox="0 0 20 20" className="size-4" aria-hidden="true">

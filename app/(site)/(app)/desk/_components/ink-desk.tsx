@@ -675,7 +675,8 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
           {labels.tidy}
         </button>
       </div>
-      <div ref={deskRef} className="desk" data-desk="">
+      {/* Its items and menu stamp and rustle on their own, so the press cue (components/press-sound.tsx) skips them. */}
+      <div ref={deskRef} className="desk" data-desk="" data-own-sound="">
         <div ref={corkRef} className="desk-cork" role="group" aria-label={labels.cork}>
           <svg className="desk-string" viewBox={`0 0 ${CORK.w} ${CORK.h}`} aria-hidden="true">
             {PIN_PAIRS.map(([a, b]) => (

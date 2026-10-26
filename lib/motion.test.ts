@@ -289,8 +289,10 @@ test("seasons.css tints only under data-season, and the ambient layer and dial m
 test("the site root layout mounts the season layer first in <body>, ahead of every group's masthead", () => {
   const src = readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8");
   assert.match(src, /^import \{ SeasonLayer \} from "@\/components\/season-layer";$/m);
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*\{children\}\s*<\/body>/);
+  // The press cue's listener (components/press-sound.tsx) renders nothing, so it may follow the layer.
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?\{children\}\s*<\/body>/);
   assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
+  assert.equal(src.match(/<PressSound\b/g)?.length, 1);
   // Mounted once, in the root layout only: no group layout or page mounts a second one.
   const others = siteFiles(["layout.tsx", "page.tsx", "not-found.tsx"]).filter((p) => p !== join("app", "(site)", "layout.tsx"));
   assert.deepEqual(others.filter((p) => readFileSync(join(ROOT, p), "utf8").includes("SeasonLayer")), []);

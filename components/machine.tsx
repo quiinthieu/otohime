@@ -151,6 +151,7 @@ export function Machine({
   below,
   readout,
   tilt = false,
+  ownSound = false,
   ...art
 }: {
   label: string;
@@ -162,6 +163,8 @@ export function Machine({
   below?: React.ReactNode;
   readout: string;
   tilt?: boolean;
+  // The toy plays its own cues (lib/sound-client.ts), so its keys skip the press cue (components/press-sound.tsx).
+  ownSound?: boolean;
 } & Figure) {
   const [fig, setFig] = useState(colour);
   const [wobble, setWobble] = useState(3.5);
@@ -191,6 +194,7 @@ export function Machine({
       data-hand={pen.hand}
       data-seed={pen.seed}
       data-boil={boil.running ? "on" : boil.owned ? "held" : undefined}
+      data-own-sound={ownSound ? "" : undefined}
     >
       <div className="machine-stage">
         <div className="machine-controls">

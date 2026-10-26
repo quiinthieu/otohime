@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { PressSound } from "@/components/press-sound";
 import { SeasonLayer } from "@/components/season-layer";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
@@ -55,6 +56,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* The season's ambient bits, fixed behind every page and ahead of each group's masthead; mounted here once,
            so a move between groups does not restart them. */}
         <SeasonLayer />
+        {/* The letterpress keys' press cue (components/press-sound.tsx): one document listener for every page. */}
+        <PressSound />
         {children}
       </body>
     </html>

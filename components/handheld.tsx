@@ -468,6 +468,7 @@ export function Handheld() {
     <Machine
       label="Pocket console"
       caption="Handheld"
+      ownSound
       colour="blue"
       figure={(wobble, pen) => (
         <div className="console-screen">
