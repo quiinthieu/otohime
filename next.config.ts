@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [{ source: "/sun", destination: "/orrery/sun", permanent: true }];
   },
+  // Chrome falls back to /favicon.ico when a soft navigation leaves no icon link (the hop out of a 403); the
+  // site's only icon is app/icon.svg, so serve that instead of a 404 console error.
+  async rewrites() {
+    return [{ source: "/favicon.ico", destination: "/icon.svg" }];
+  },
   // Commit the build came from; layout.tsx publishes it as <meta name="build-sha">.
   env: {
     BUILD_SHA: process.env.GITHUB_SHA ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "dev",

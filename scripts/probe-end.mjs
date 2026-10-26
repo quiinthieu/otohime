@@ -1,14 +1,13 @@
 // Drives headless Chromium across the Internet Save Point footer verification matrix.
-// Run by scripts/probe-end.sh, which installs Playwright into PW_PREFIX and passes BASE_URL.
+// Run by scripts/probe-end.sh, which passes BASE_URL. The browser comes from scripts/probe-browser.mjs: the
+// runner's Chrome in CI, else the Playwright the .sh installed into PW_PREFIX.
 import { existsSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
-import path from "node:path";
 import { site } from "../content/site.ts";
 import { away, KONAMI, TENTH_POKE } from "../lib/end.ts";
 import { CONSOLE_MENU, PUBLIC_PAGES } from "../lib/pages.ts";
+import { launchBrowser } from "./probe-browser.mjs";
 
-const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
-const { chromium } = require("playwright");
 const rootRequire = createRequire(import.meta.url);
 const pg = rootRequire("pg");
 
@@ -467,8 +466,7 @@ async function verifyCanonicalLinks(page) {
   );
 }
 
-const browser = await chromium.launch();
-console.log(`# browser: Chromium ${browser.version()}`);
+const browser = await launchBrowser();
 console.log(`# base_url: ${BASE_URL}`);
 
 try {

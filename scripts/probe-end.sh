@@ -15,7 +15,9 @@
 # focus, no-JavaScript rendering and anchor fallback, and a failing-then-restored canonical-href negative control.
 #
 # Env: PORT (4083; a port Next reserves is bumped by 10), BASE_URL (remote mode), EXPECT_SHA, SKIP_BUILD=1.
-# Playwright is installed into a temp prefix at run time; package.json stays unchanged.
+# The browser (scripts/probe-browser.mjs): in CI with google-chrome on PATH, the repo's locked playwright-core drives
+# the runner's Chrome and nothing is installed. Otherwise Playwright and its Chromium shell are installed into a temp
+# prefix (PW_PREFIX), each installer bounded at 180 s and stamped with `date -u`. package.json stays unchanged.
 set -u
 
 cd "$(dirname "$0")/.." || exit 2
@@ -53,6 +55,22 @@ pgq() {
       .then(() => c.end())
       .catch(() => process.exit(1));
   ' "$@"
+}
+
+# installer NAME LOG CMD...: one network installer, output to LOG, at most 180 s, stamped before and after on
+# stdout so a stall names itself. GNU timeout; a perl alarm where coreutils is absent (macOS), same bound.
+installer() {
+  local name="$1" log="$2" status=0 note=""
+  shift 2
+  echo "# $(date -u +%FT%TZ) $name: start (bound 180 s)"
+  if command -v timeout >/dev/null 2>&1; then
+    timeout 180 "$@" >"$log" 2>&1 || status=$?
+  else
+    perl -e 'alarm shift; exec { $ARGV[0] } @ARGV or die "exec $ARGV[0]: $!"' 180 "$@" >"$log" 2>&1 || status=$?
+  fi
+  case "$status" in 124|137|142) note=" (timed out at 180 s)" ;; esac
+  echo "# $(date -u +%FT%TZ) $name: exit $status$note"
+  return "$status"
 }
 
 # No database answers and Docker is not there: the throwaway embedded Postgres of scripts/e2e.mjs (--serve-db), its
@@ -189,22 +207,29 @@ if [ "$LOCAL" -eq 1 ] && ! kill -0 "$SERVER_PID" 2>/dev/null; then
   exit 1
 fi
 
-PW="$WORK/playwright"
-mkdir -p "$PW"
-if ! npm i --prefix "$PW" --no-audit --no-fund --silent playwright@1.64.0 >"$WORK/npm.log" 2>&1; then
-  echo "not ok - playwright: npm i playwright failed; log:"
-  tail -n 20 "$WORK/npm.log"
-  echo "probe: 0 ok, 1 failed"
-  exit 1
-fi
-DEPS=""
-[ -n "${CI:-}" ] && [ "$(uname)" = Linux ] && DEPS="--with-deps"
-if ! "$PW/node_modules/.bin/playwright" install chromium --only-shell $DEPS >"$WORK/browser.log" 2>&1; then
-  echo "not ok - playwright: install chromium --only-shell failed; log:"
-  tail -n 20 "$WORK/browser.log"
-  echo "probe: 0 ok, 1 failed"
-  exit 1
+# CI with the runner's Chrome: no installer runs (run 40307460821 stalled 14 min in these). Elsewhere, as before.
+if [ -n "${CI:-}" ] && command -v google-chrome >/dev/null 2>&1; then
+  unset PW_PREFIX
+  echo "# browser: runner $(google-chrome --version 2>/dev/null) with the repo's playwright-core; nothing installed"
+else
+  PW="$WORK/playwright"
+  mkdir -p "$PW"
+  if ! installer "npm i playwright@1.64.0" "$WORK/npm.log" npm i --prefix "$PW" --no-audit --no-fund --silent playwright@1.64.0; then
+    echo "not ok - playwright: npm i playwright failed; log:"
+    tail -n 20 "$WORK/npm.log"
+    echo "probe: 0 ok, 1 failed"
+    exit 1
+  fi
+  DEPS=""
+  [ -n "${CI:-}" ] && [ "$(uname)" = Linux ] && DEPS="--with-deps"
+  if ! installer "playwright install chromium" "$WORK/browser.log" "$PW/node_modules/.bin/playwright" install chromium --only-shell $DEPS; then
+    echo "not ok - playwright: install chromium --only-shell failed; log:"
+    tail -n 20 "$WORK/browser.log"
+    echo "probe: 0 ok, 1 failed"
+    exit 1
+  fi
+  export PW_PREFIX="$PW"
 fi
 
-export BASE_URL PW_PREFIX="$PW" EXPECT_SHA ANY_SHA_OR_DEV PROBE_LOCAL="$LOCAL" SERVER_LOG="$WORK/server.log"
+export BASE_URL EXPECT_SHA ANY_SHA_OR_DEV PROBE_LOCAL="$LOCAL" SERVER_LOG="$WORK/server.log"
 node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON "$ROOT/scripts/probe-end.mjs"

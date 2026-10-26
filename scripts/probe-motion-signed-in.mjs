@@ -1,6 +1,7 @@
 // Drives headless Chromium through the sign-in and the full-load hops into the signed-in rooms. Run by
-// scripts/probe-motion-signed-in.sh, which finds or starts the database and the server, installs Playwright into
-// PW_PREFIX and passes BASE_URL, DATABASE_URL and PROBE_RUN.
+// scripts/probe-motion-signed-in.sh, which finds or starts the database and the server and passes BASE_URL,
+// DATABASE_URL and PROBE_RUN. The browser comes from scripts/probe-browser.mjs: the runner's Chrome in CI, else the
+// Playwright the .sh installed into PW_PREFIX.
 //
 // A sign-in is a full page load (Better Auth's client follows callbackURL), and so is a location.assign from a
 // project. Each lands on a page whose Suspense boundaries stream in after the hop's transition has started; React's
@@ -11,12 +12,8 @@
 // The 403's exits, as the plain user (the 403 reached by router.push and by page.goto): its Go home and the brand
 // mark (to /, a swap of the (app) layout for (home)) and the nav's Projects and Dashboard each fade the 403 out and
 // the next page in, read once a frame from getAnimations(); under reduced motion each completes and nothing runs.
-import { createRequire } from "node:module";
-import path from "node:path";
 import pg from "pg";
-
-const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
-const { chromium } = require("playwright");
+import { launchBrowser } from "./probe-browser.mjs";
 
 const BASE_URL = process.env.BASE_URL;
 const RUN = process.env.PROBE_RUN;
@@ -276,7 +273,7 @@ async function hopInto(page, to, landing) {
 }
 
 const users = {};
-const browser = await chromium.launch();
+const browser = await launchBrowser();
 try {
   for (const who of ["owner", "plain"]) users[who] = await signUp(who);
   // The README's owner bootstrap: owners only ever come from SQL.

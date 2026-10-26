@@ -40,8 +40,13 @@ jobs:
     if: github.event.action != 'closed'
     # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
     runs-on: ubuntu-24.04
-    # Allow cold Playwright/Chromium setup plus every browser gate; the 20-minute budget cancelled run 40307460821.
-    timeout-minutes: 35
+    # A green job takes 10-11 min (research_run-8877: E2E 230-300 s, signed-in motion probe 171-180 s, footer
+    # probe 55 s, the rest npm ci, lint, typecheck, tests and build). Run 40307460821 hit the old 20 min only
+    # because the motion probe spent 14 min in its network installers (npm i playwright, playwright install
+    # --with-deps); the probes now drive the runner's Chrome with the locked playwright-core and install
+    # nothing in CI, so 20 min is about 9 min of headroom. Each browser probe step also has its own 8-minute
+    # bound, so a stall fails that step by name instead of cancelling the whole job.
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:17-alpine
@@ -115,6 +120,7 @@ jobs:
       # Signs in through the form against the same server and database, so a page error on the hop into a
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
       - name: Motion probe, signed in
+        timeout-minutes: 8
         run: |
           # The server the e2e step left running; start one again if it has gone.
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
@@ -123,6 +129,7 @@ jobs:
           }
           bash scripts/probe-motion-signed-in.sh
       - name: Footer walk
+        timeout-minutes: 8
         run: |
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
             npm start &
@@ -130,6 +137,7 @@ jobs:
           }
           EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh
       - name: Footer Chromium probe
+        timeout-minutes: 8
         run: |
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
             npm start &

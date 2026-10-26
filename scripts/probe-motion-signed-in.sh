@@ -20,7 +20,10 @@
 # With BASE_URL set it builds, migrates and starts nothing, and DATABASE_URL (that server's database) must answer.
 #
 # Env: PORT (4063; a port Next reserves is bumped by 10), BASE_URL (remote mode), DATABASE_URL, SKIP_BUILD=1.
-# Playwright and embedded-postgres are installed into a temp prefix at run time; package.json stays unchanged.
+# The browser (scripts/probe-browser.mjs): in CI with google-chrome on PATH, the repo's locked playwright-core drives
+# the runner's Chrome and nothing is installed. Otherwise Playwright and its Chromium shell are installed into a temp
+# prefix (PW_PREFIX), as is embedded-postgres when needed; each installer is bounded at 180 s and stamped with
+# `date -u`. package.json stays unchanged.
 # No `set -e`: every check runs, and the summary names the ones that failed.
 set -u
 
@@ -85,6 +88,22 @@ fail() {
   exit 1
 }
 
+# installer NAME LOG CMD...: one network installer, output to LOG, at most 180 s, stamped before and after on
+# stdout so a stall names itself. GNU timeout; a perl alarm where coreutils is absent (macOS), same bound.
+installer() {
+  local name="$1" log="$2" status=0 note=""
+  shift 2
+  echo "# $(date -u +%FT%TZ) $name: start (bound 180 s)"
+  if command -v timeout >/dev/null 2>&1; then
+    timeout 180 "$@" >"$log" 2>&1 || status=$?
+  else
+    perl -e 'alarm shift; exec { $ARGV[0] } @ARGV or die "exec $ARGV[0]: $!"' 180 "$@" >"$log" 2>&1 || status=$?
+  fi
+  case "$status" in 124|137|142) note=" (timed out at 180 s)" ;; esac
+  echo "# $(date -u +%FT%TZ) $name: exit $status$note"
+  return "$status"
+}
+
 free_port() {
   node -e 'const s=require("net").createServer().listen(0,"127.0.0.1",()=>{console.log(s.address().port);s.close()})'
 }
@@ -135,7 +154,7 @@ else
   if [ "$DB_OK" != 1 ]; then
     EPG="$WORK/embedded-postgres"
     mkdir -p "$EPG"
-    if npm i --prefix "$EPG" --no-audit --no-fund --silent embedded-postgres@17.10.0-beta.17 >"$WORK/epg-npm.log" 2>&1; then
+    if installer "npm i embedded-postgres" "$WORK/epg-npm.log" npm i --prefix "$EPG" --no-audit --no-fund --silent embedded-postgres@17.10.0-beta.17; then
       DB_PORT="$(free_port)"
       cat >"$EPG/run.mjs" <<'EOF'
 import { createRequire } from "node:module";
@@ -224,21 +243,28 @@ if [ "$READY" -ne 1 ]; then
   fail "ready: $BASE_URL/api/health did not answer after $READY_TRIES tries"
 fi
 
-PW="$WORK/playwright"
-mkdir -p "$PW"
-if ! npm i --prefix "$PW" --no-audit --no-fund --silent playwright@1.64.0 >"$WORK/npm.log" 2>&1; then
-  tail -n 20 "$WORK/npm.log"
-  fail "playwright: npm i playwright failed"
-fi
-# A CI runner (GitHub's ubuntu image, passwordless sudo) also gets the shell's system libraries.
-DEPS=""
-[ -n "${CI:-}" ] && [ "$(uname)" = Linux ] && DEPS="--with-deps"
-if ! "$PW/node_modules/.bin/playwright" install chromium --only-shell $DEPS >"$WORK/browser.log" 2>&1; then
-  tail -n 20 "$WORK/browser.log"
-  fail "playwright: install chromium --only-shell $DEPS failed"
+# CI with the runner's Chrome: no installer runs (run 40307460821 stalled 14 min in these). Elsewhere, as before.
+if [ -n "${CI:-}" ] && command -v google-chrome >/dev/null 2>&1; then
+  unset PW_PREFIX
+  echo "# browser: runner $(google-chrome --version 2>/dev/null) with the repo's playwright-core; nothing installed"
+else
+  PW="$WORK/playwright"
+  mkdir -p "$PW"
+  if ! installer "npm i playwright@1.64.0" "$WORK/npm.log" npm i --prefix "$PW" --no-audit --no-fund --silent playwright@1.64.0; then
+    tail -n 20 "$WORK/npm.log"
+    fail "playwright: npm i playwright failed"
+  fi
+  # A CI runner (GitHub's ubuntu image, passwordless sudo) also gets the shell's system libraries.
+  DEPS=""
+  [ -n "${CI:-}" ] && [ "$(uname)" = Linux ] && DEPS="--with-deps"
+  if ! installer "playwright install chromium" "$WORK/browser.log" "$PW/node_modules/.bin/playwright" install chromium --only-shell $DEPS; then
+    tail -n 20 "$WORK/browser.log"
+    fail "playwright: install chromium --only-shell $DEPS failed"
+  fi
+  export PW_PREFIX="$PW"
 fi
 
-export BASE_URL DATABASE_URL PW_PREFIX="$PW" PROBE_RUN="$RUN"
+export BASE_URL DATABASE_URL PROBE_RUN="$RUN"
 node "$ROOT/scripts/probe-motion-signed-in.mjs"
 STATUS=$?
 if [ "$STATUS" -ne 0 ] && [ "$LOCAL" -eq 1 ] && [ -s "$WORK/server.log" ]; then
