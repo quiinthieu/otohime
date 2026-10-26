@@ -10,6 +10,7 @@
 # and a cross-origin POST is 403. The probe passes only if all 6 checks pass.
 # That start points ANTHROPIC_BASE_URL at a closed local port and sends no POST that passes the origin check,
 # so nothing ever reaches Anthropic. No database is needed: the disabled route never touches one.
+# The tier switched on, from the console through the route to a fake model, is scripts/probe-ask-llm-fake.sh.
 #
 # Env: PORT (default: a free port; an explicit PORT that is busy is refused), SKIP_BUILD=1.
 # No `set -e`: every check runs, and the summary names the ones that failed.
