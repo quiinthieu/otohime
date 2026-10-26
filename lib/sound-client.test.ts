@@ -5,6 +5,8 @@ import { test } from "node:test";
 import { dbToGain, MAX_DB, SOUND_KEY } from "./sound.ts";
 import {
   brownNoise,
+  startStoryVoice,
+  stopStoryVoice,
   setSound,
   startWater,
   stopWater,
@@ -33,6 +35,8 @@ type Node = { kind: string; started: boolean; stopped: boolean; [k: string]: unk
 
 class FakeAudioContext {
   static made = 0;
+  static holdResume = false;
+  static releaseResume: (() => void) | null = null;
   static nodes: Node[] = [];
   state: "running" | "suspended" | "closed" = "suspended";
   currentTime = 1;
@@ -47,7 +51,7 @@ class FakeAudioContext {
       started: false,
       stopped: false,
       connect: (to: unknown) => to,
-      disconnect: () => {},
+      disconnect: () => { n.disconnected = true; },
       start: () => (n.started = true),
       stop: () => (n.stopped = true),
       ...extra,
@@ -72,6 +76,7 @@ class FakeAudioContext {
     return this.node("osc", { type: "sine", frequency: param(440), onended: null });
   }
   resume() {
+    if (FakeAudioContext.holdResume) return new Promise<void>(resolve => { FakeAudioContext.releaseResume = () => { this.state = "running"; resolve(); }; });
     this.state = "running";
     return Promise.resolve();
   }
@@ -256,4 +261,41 @@ test("the water is made, not loaded, and the pond stops it out of view", () => {
   // The pond's controls sound on their own terms, so the site-wide press cue skips them.
   assert.match(pond, /className="pond-stage" data-own-sound=""/);
   assert.match(pond, /className="pond-tools" data-own-sound=""/);
+});
+
+
+test("theatre voice is bounded and every cancellation disconnects scheduled notes immediately", async () => {
+  const notes = Array.from({length:100}, (_,i) => ({hz:220, at:.12+i*.065, attack:.008, decay:.045}));
+  setSound(false); take();
+  assert.equal(startStoryVoice(notes), false); assert.deepEqual(take(), []);
+  setSound(true); await tick(); take();
+  const made = FakeAudioContext.made;
+  for (const stop of [stopStoryVoice, () => setSound(false), () => {
+    doc.visibilityState = "hidden"; doc.fire("visibilitychange"); doc.visibilityState = "visible";
+  }, () => win.fire("pagehide")]) {
+    setSound(true); await tick(); take();
+    assert.equal(startStoryVoice(notes), true); await tick();
+    const nodes = take();
+    assert.ok(nodes.length <= 64); assert.equal(nodes.filter(n=>n.kind==='osc').length,30);
+    stop();
+    for (const node of nodes) assert.equal(node.disconnected, true, `${node.kind} disconnected`);
+    assert.equal(doc.count("visibilitychange"),0);
+  }
+  assert.equal(FakeAudioContext.made, made, "all speech shares the original context until pagehide");
+  setSound(true); await tick(); take();
+  startStoryVoice(notes); const old = take();
+  startStoryVoice(notes); const replacement = take();
+  assert.ok(old.every(n=>n.disconnected)); assert.ok(replacement.some(n=>!n.disconnected));
+  stopStoryVoice(); take(); setSound(false);
+});
+
+test("a pending resume never revives a cancelled or muted voice", async () => {
+  setSound(true); await tick(); take(); setSound(false);
+  FakeAudioContext.holdResume = true;
+  setSound(true); // holds the ordinary open cue too
+  startStoryVoice([{hz:220,at:.12,attack:.008,decay:.045}]);
+  const release = FakeAudioContext.releaseResume!;
+  stopStoryVoice(); setSound(false); release(); await tick();
+  assert.deepEqual(take(), []);
+  FakeAudioContext.holdResume = false;
 });

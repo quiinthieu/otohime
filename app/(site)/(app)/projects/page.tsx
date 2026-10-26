@@ -1,3 +1,5 @@
+import { TheatreLoader } from "@/components/kamishibai/loader";
+import { ProjectStories } from "@/components/kamishibai/stories";
 import { RisoText } from "@/components/riso-heading";
 import { Cartridge } from "@/components/cartridge";
 import { FigTitle, Notice } from "@/components/figures";
@@ -53,6 +55,7 @@ export default function ProjectsPage() {
             ))}
           </ul>
         )}
+        <TheatreLoader><ProjectStories /></TheatreLoader>
         <GazetteDesks />
       </div>
     </ViewTransition>

@@ -1,0 +1,44 @@
+pm-269/t-1589 · run-9051
+Profile: codex-sol-6-1-high; model gpt-6.1-sol; reasoning high; worker avietidol-z490.
+Node 22.23.3; Next 16.4.2; React/React DOM 19.3.0; Playwright Core 1.64.0; Chrome 154.0.8037.57.
+Production build: _JqrC7YzWbNjoMwoUriVU
+Executable fingerprint (sorted path + NUL + bytes + NUL): 82aba5ebf86f7611033894e89a96438b874b30001ace57777dbe66b756840162
+
+PASS (27 tests): node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/kamishibai.test.ts lib/ink-babble.test.ts lib/sound.test.ts lib/sound-client.test.ts
+PASS (2344 tests): npm test
+PASS (0 errors, 10 existing warnings): npm run lint
+PASS: npm run typecheck
+PASS (6 cases, fresh production build + disposable real Postgres 17): node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/kamishibai.test.ts
+
+Real boundaries: production React ViewTransitions, CSSAnimation observation, SVG output, browser native oscillator/gain/context construction, node disconnection/context state, touch tap, navigation, server markup with JavaScript disabled. Browser subclass only observes real WebAudio; no audio constructor/resume substitution.
+Fake boundaries: Node unit AudioContext stand-in; synthetic hidden/pagehide events; removed transition API. Zoom reflow uses 683x384 CSS pixels at DPR 2, equivalent to a 1366x768 window at 200%; no physical device or subjective loudspeaker listening claimed.
+Negative controls: normal enabled input creates live voice nodes; mute/hide/list/route/reduced/pagehide remove voice output. Different babble seeds differ; punctuation delays notes. Outside-scope and input/dialog arrows do not advance while scoped button arrows do. Initial network lacks case-study controller/data chunk; entry downloads it.
+Budget: conservative 22734 bytes gzip, includes full loader route chunk, source CSS, lazy controller and all post-entry fetched resources (including existing project prefetches). Excludes initial shared runtime. No duplicate transition-name console errors.
+
+History completeness: plan SWE listing has run-9049 (Bottle, succeeded) and run-9051 (this Theatre run, running), no prior Theatre failed/completed attempt, callback_apply_failures=0 for both. Platform bounded coding_task pages offset 0 and 20, limit 20 each, examined 40 FAILED of total 81 and 40 COMPLETED of total 1428; no Theatre title matched. Additional all-type latest-20 snapshots: 1125 FAILED and 6370 COMPLETED totals. These global scans are partial, not a complete platform audit. project_id=otohime filter returned no rows because platform projectId is task category; use repoId instead. Read raw tail for Peep-box sibling a7d6a38f-7400-4d5e-840f-935c6002a3c0: push_not_on_main and rescue, unrelated executable; long log tail is incomplete. Its historical product defects are not claimed cleared by Theatre tests. No historical callback/run establishes deployment of this new fingerprint.
+
+Execution demonstrated locally. Integration deployment and delivered live product unproven. No unavailable capacity or operator prerequisite. Post-push CI/green gate/deployed QA: owner plan-manager, pm-269/t-1589 run-9051; ids assigned by platform after delivery; failure condition any gate/browser/acceptance regression. No CI or deployed-system polling performed.
+Pre-existing dirty content/history.json excluded; requested chief-of-staff and docs/claude/software-development.md paths absent from checkout. AGENTS.md, present plan and installed Next guides read.
+
+Source hashes:
+6a30909da8a46a2c18d29d7d0aaa9d7353536bcab8f2a1ab7d72818064a12259  app/(site)/(app)/projects/page.tsx
+861ca1b9b80f0ebe4c5be434742256c1d653e4d13f729202d96db84b66c884f6  components/kamishibai/art.tsx
+34c25612a5020c6257aa1ffeadc8a086d4c6d95057a2e2a4ca700989e613a0b4  components/kamishibai/loader.tsx
+2e2b3369aa1c0d737bedebb7e83c6a22e5d2a38e6dc4d2c52c807ee4e86eb742  components/kamishibai/stage.tsx
+07d2b2ad352c5c114a1527feff834e73f750e40591e7edb446ab942cd08f0169  components/kamishibai/stories.tsx
+a9cca7e0967676daa32522a5a4b0fcb4acd37bbc5e1df52e6ed1938850545284  components/kamishibai/theatre.css
+7e8cfb4d6e5f5fbce723592d2557a9cf75b7353b33e10a40f40a68dbd2c75212  content/project-stories.ts
+3c44b1241327305da186f78bf8a0ee8e761ae3426057604b890985afa8eca11c  lib/ink-babble.ts
+320b63c0e6ee29a741fef4922527bf3771a8ed7492bb335349781c7cf13283ee  lib/kamishibai.ts
+1ec431b1efec697cde23e8b94768ec88ca13b0565729a3140dd9a894b8bd04c2  lib/sound-client.ts
+14c2338fd09f9d6bf471b82793386d79cbe57d7341e00ae40b5d3726e5665f7a  lib/sound.ts
+0321d5e23b1a93b09761f2049ef5b9edf2843067e1be089664296063b9fa096b  next.config.ts
+2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b  package-lock.json
+
+Production resource evidence:
+{"viewport":{"width":1366,"height":768},"browser":"154.0.8037.57","gzip":22734,"chunks":[{"path":"/_next/static/chunks/3fqrxa_o-mx43.css","gzip":862,"sha256":"bb0dceb888ac53bd07a8a62f5ac949bcbc55977e000547b9317bb1dde04101a1"},{"path":"/_next/static/chunks/1zguut5iuihyh.js","gzip":1282,"sha256":"39654c30a364eb4666e9b2e246c5bb70427c327c4a30268a3860c941de159db1"},{"path":"/_next/static/chunks/0mlolsdrkhbe_.js","gzip":7174,"sha256":"0f28c9f630d5965edc6419e7701b2a0bd5280fad0422c054306e2cae76612e8b"},{"path":"/_next/static/chunks/05afrdw8ncctl.css","gzip":3664,"sha256":"15253208e6752deffd8a1de2847205edfc77499fa4201738d719f42479c03b09"},{"path":"/_next/static/chunks/3c29t8qd_5c54.js","gzip":3305,"sha256":"b5f946dc53c819dba66d009295b94daa1b8cb39dcd5b47f35128a2d5637a98c0"},{"path":"/_next/static/chunks/2edpjohw17mbt.js","gzip":6447,"sha256":"73107a0cfca1da0f5479a0da71c108018f228edbc0308d3c4e4851b65fdd3a6b"}]}
+{"viewport":{"width":390,"height":844},"browser":"154.0.8037.57","gzip":22734,"chunks":[{"path":"/_next/static/chunks/3fqrxa_o-mx43.css","gzip":862,"sha256":"bb0dceb888ac53bd07a8a62f5ac949bcbc55977e000547b9317bb1dde04101a1"},{"path":"/_next/static/chunks/1zguut5iuihyh.js","gzip":1282,"sha256":"39654c30a364eb4666e9b2e246c5bb70427c327c4a30268a3860c941de159db1"},{"path":"/_next/static/chunks/0mlolsdrkhbe_.js","gzip":7174,"sha256":"0f28c9f630d5965edc6419e7701b2a0bd5280fad0422c054306e2cae76612e8b"},{"path":"/_next/static/chunks/05afrdw8ncctl.css","gzip":3664,"sha256":"15253208e6752deffd8a1de2847205edfc77499fa4201738d719f42479c03b09"},{"path":"/_next/static/chunks/3c29t8qd_5c54.js","gzip":3305,"sha256":"b5f946dc53c819dba66d009295b94daa1b8cb39dcd5b47f35128a2d5637a98c0"},{"path":"/_next/static/chunks/2edpjohw17mbt.js","gzip":6447,"sha256":"73107a0cfca1da0f5479a0da71c108018f228edbc0308d3c4e4851b65fdd3a6b"}]}
+{"viewport":{"width":683,"height":384},"browser":"154.0.8037.57","gzip":22734,"chunks":[{"path":"/_next/static/chunks/3fqrxa_o-mx43.css","gzip":862,"sha256":"bb0dceb888ac53bd07a8a62f5ac949bcbc55977e000547b9317bb1dde04101a1"},{"path":"/_next/static/chunks/1zguut5iuihyh.js","gzip":1282,"sha256":"39654c30a364eb4666e9b2e246c5bb70427c327c4a30268a3860c941de159db1"},{"path":"/_next/static/chunks/0mlolsdrkhbe_.js","gzip":7174,"sha256":"0f28c9f630d5965edc6419e7701b2a0bd5280fad0422c054306e2cae76612e8b"},{"path":"/_next/static/chunks/05afrdw8ncctl.css","gzip":3664,"sha256":"15253208e6752deffd8a1de2847205edfc77499fa4201738d719f42479c03b09"},{"path":"/_next/static/chunks/3c29t8qd_5c54.js","gzip":3305,"sha256":"b5f946dc53c819dba66d009295b94daa1b8cb39dcd5b47f35128a2d5637a98c0"},{"path":"/_next/static/chunks/2edpjohw17mbt.js","gzip":6447,"sha256":"73107a0cfca1da0f5479a0da71c108018f228edbc0308d3c4e4851b65fdd3a6b"}]}
+
+
+After the first push was rejected (concurrent main changes), git pull --rebase --autostash integrated origin/main 0a21579 cleanly. Upstream changed documentation only. All four contract gates passed again on rebased HEAD: 27 focused, 2344 repository, lint/typecheck, 6 fresh-production browser cases. Rebased build lbm2CuP7typK4fkkJlmZ4; executable fingerprint remains 82aba5ebf86f7611033894e89a96438b874b30001ace57777dbe66b756840162. Conservative gzip values: 22734, 22734, 22734. Full retry logs are artifacts/*-rebase1.log. No force push or CI/deployed-system inspection.
