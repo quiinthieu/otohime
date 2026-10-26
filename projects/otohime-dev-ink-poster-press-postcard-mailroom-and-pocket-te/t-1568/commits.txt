@@ -1,0 +1,1 @@
+<this commit> pm-249/t-1568: Make CI checks green: teach the footer walk and probe the waterline, and wait for the sea's frames  (delivery; its sha is the git_sha of the run-8758 summary report, since a commit cannot name itself)

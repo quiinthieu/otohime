@@ -485,8 +485,14 @@ try {
             const sig = footer.querySelector("[data-end-signature]")?.textContent?.trim() ?? "";
             const copy = footer.querySelector("[data-end-copyright]")?.textContent?.replace(/\s+/g, " ").trim() ?? "";
             const topHref = footer.querySelector("a[data-end-top]")?.getAttribute("href") ?? "";
+            // The scene's three layers, then the waterline's one wave under everything (the way down to Ryugu-jo).
             const svgs = [...footer.querySelectorAll("svg")];
-            const svgsHidden = svgs.length === 3 && svgs.every((s) => s.getAttribute("aria-hidden") === "true");
+            const sceneSvgs = svgs.filter((s) => !s.closest("[data-end-waterline]"));
+            const waterline = footer.lastElementChild?.matches("[data-end-waterline]") ? footer.lastElementChild : null;
+            const waveCount = waterline?.querySelectorAll("svg").length ?? 0;
+            const ryuguHref = waterline?.querySelector("a[data-end-ryugu]")?.getAttribute("href") ?? "";
+            const svgsHidden =
+              sceneSvgs.length === 3 && waveCount === 1 && svgs.every((s) => s.getAttribute("aria-hidden") === "true");
             return {
               sha,
               ok:
@@ -502,6 +508,7 @@ try {
                 sig === wantCopy.signature &&
                 copy === `© ${wantYear} Otohime` &&
                 topHref === "#main" &&
+                ryuguHref === "/ryugu" &&
                 svgsHidden,
               detail: JSON.stringify({
                 domAfter,
@@ -514,7 +521,9 @@ try {
                 sub,
                 copy,
                 topHref,
-                svgCount: svgs.length,
+                ryuguHref,
+                sceneSvgCount: sceneSvgs.length,
+                waveCount,
               }),
             };
           },
@@ -522,7 +531,7 @@ try {
         );
 
         check(`route ${route}: build-sha matches (${meta.sha || "none"})`, matchesExpectedSha(meta.sha), meta.sha);
-        check(`route ${route}: one semantic footer.end below main#main with landmarks, copy, year and 3 aria-hidden SVGs`, meta.ok, meta.detail);
+        check(`route ${route}: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last`, meta.ok, meta.detail);
 
         const links = await verifyCanonicalLinks(page);
         check(`route ${route}: 6 canonical CONSOLE_MENU links and 4 site.lines links match source`, links.ok, links.reason);
@@ -1738,12 +1747,13 @@ try {
           else if (el.hasAttribute("data-end-zine")) kind = "zine";
           else if (el.hasAttribute("data-end-line")) kind = `line:${el.getAttribute("data-end-line")}`;
           else if (el.hasAttribute("data-end-top")) kind = "top";
+          else if (el.hasAttribute("data-end-ryugu")) kind = "ryugu";
           return { inFooter, kind, focusRing };
         });
 
       // Every stop the footer should hold, in order: the pages, then the zine link under them (/zine, a sheet to print,
-      // not a CONSOLE_MENU room), then the contact lines. The walk takes one Tab per stop, so a new page or line
-      // lengthens it instead of leaving the last stops unvisited.
+      // not a CONSOLE_MENU room), then the contact lines, Back to top, and last the waterline's way down to Ryugu-jo.
+      // The walk takes one Tab per stop, so a new page or line lengthens it instead of leaving the last stops unvisited.
       const expectedKinds = [
         "mascot",
         "wobble",
@@ -1752,6 +1762,7 @@ try {
         "zine",
         ...site.lines.map((l) => `line:${l.label}`),
         "top",
+        "ryugu",
       ];
       const firstStop = await describeActive();
       if (firstStop) tabStops.push(firstStop);
@@ -1768,7 +1779,7 @@ try {
       const allRingsVisible = tabStops.every((s) => s.inFooter && s.focusRing);
 
       check(
-        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines and Back to top in order with visible focus rings and no trap`,
+        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines, Back to top and the waterline in order with visible focus rings and no trap`,
         JSON.stringify(gotKinds) === JSON.stringify(expectedKinds) &&
           allRingsVisible &&
           afterFooter?.inFooter === false,
@@ -1814,7 +1825,7 @@ try {
         const noJsCheck = await verifyCanonicalLinks(page);
         const noJsDom = await page.evaluate(() => {
           const footer = document.querySelector("footer.end");
-          const svgs = [...footer.querySelectorAll("svg")];
+          const svgs = [...footer.querySelectorAll("svg")].filter((s) => !s.closest("[data-end-waterline]"));
           return {
             title: footer.querySelector("h2#end-title")?.textContent?.trim(),
             svgCount: svgs.length,

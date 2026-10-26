@@ -98,6 +98,17 @@ async function open(path: string, options: BrowserContextOptions & { noWebgl?: b
 const probe = (page: Page) => page.evaluate(() => ({ ...(window as unknown as { __probe: Probe }).__probe }));
 const fish = (page: Page) => page.$$eval("[data-fish]", (gs) => gs.map((g) => g.getAttribute("transform")));
 const water = (page: Page) => page.getAttribute(".sea", "data-water");
+// Waits until more than n frames have been asked for. Software WebGL's frame rate swings with the host's load,
+// so a live loop is judged by frames arriving within a bound, not by how many fit a fixed window.
+const framesPast = (page: Page, n: number) =>
+  page.waitForFunction((n) => (window as unknown as { __probe: Probe }).__probe.raf > n, n, { timeout: 5000 });
+// Waits until a fish has left where it was: only the sea's own loop moves them.
+const swamFrom = (page: Page, still: (string | null)[]) =>
+  page.waitForFunction(
+    (still) => [...document.querySelectorAll("[data-fish]")].some((g, i) => g.getAttribute("transform") !== still[i]),
+    still,
+    { timeout: 5000 },
+  );
 const settle = (page: Page) => page.waitForFunction(() => document.querySelector(".sea")?.getAttribute("data-water") !== "served");
 const atPalace = (page: Page) => page.waitForURL(`${BASE}/ryugu`, { timeout: 10_000 });
 // Home's console is hydrated once its chips answer: B Play swaps the readout.
@@ -179,7 +190,7 @@ test("with WebGL and motion welcome, the sea is live: the water draws, the fish 
   assert.equal(await water(page), "live");
   const served = await fish(page);
   const before = (await probe(page)).raf;
-  await page.waitForTimeout(700);
+  await framesPast(page, before + 15).catch(() => {});
   const ran = (await probe(page)).raf - before;
   assert.ok(ran > 15, `the loop runs: ${ran} frames`);
   assert.notDeepEqual(await fish(page), served, "negative control: a live fish moves");
@@ -219,7 +230,10 @@ test("while the page is hidden the loop stops, and it comes back when the page i
     (window as unknown as { __probe: Probe }).__probe.hide = false;
     document.dispatchEvent(new Event("visibilitychange"));
   });
-  await page.waitForTimeout(400);
+  // the probe counts every caller's frames, so the sea's own loop is the fish swimming again
+  await swamFrom(page, still).catch(() => {});
+  await framesPast(page, paused.raf + 5).catch(() => {});
+  assert.notDeepEqual(await fish(page), still, "the fish did not swim again");
   assert.ok((await probe(page)).raf - paused.raf > 5, "the loop did not come back");
 });
 

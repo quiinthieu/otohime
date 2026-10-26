@@ -223,9 +223,21 @@ for (let i = 0; i < site.lines.length; i++) {
 
 // Still scene, mascot button, readout, reserved badge, wobble slider, 5 swatches, credits, cached UTC year, Back to top
 assert.match(footerHtml, /\bdata-end-stage=""/);
-const svgs = [...footerHtml.matchAll(/<svg\b[^>]*>/g)];
+// The waterline closes the footer: one wave and the way down to Ryugu-jo, after everything else.
+const waterAt = footerHtml.search(/<div\b[^>]*\bdata-end-waterline=""/);
+assert.ok(waterAt !== -1, "missing the waterline");
+const sceneHtml = footerHtml.slice(0, waterAt);
+const waterHtml = footerHtml.slice(waterAt);
+assert.match(waterHtml, /<a\b[^>]*\bhref="\/ryugu"[^>]*\bdata-end-ryugu=""/, "missing the waterline link to /ryugu");
+assert.ok(decode(waterHtml).includes(site.end.below), "missing the waterline copy");
+assert.equal([...waterHtml.matchAll(/<a\b/g)].length, 1, "the waterline holds one link");
+assert.match(sceneHtml, /\bdata-end-top=""/, "Back to top must come before the waterline");
+assert.doesNotMatch(waterHtml, /\bdata-end-(page|line|top|stage)=/, "nothing of the footer sits below the waterline");
+const svgs = [...sceneHtml.matchAll(/<svg\b[^>]*>/g)];
 assert.equal(svgs.length, 3, `expected 3 SVG layers (ground Inked, console Inked, sky), found ${svgs.length}`);
-assert.ok(svgs.every((m) => m[0].includes("aria-hidden=\"true\"")), "every decorative SVG must be aria-hidden");
+const waves = [...waterHtml.matchAll(/<svg\b[^>]*>/g)];
+assert.equal(waves.length, 1, `expected 1 waterline wave, found ${waves.length}`);
+assert.ok([...svgs, ...waves].every((m) => m[0].includes("aria-hidden=\"true\"")), "every decorative SVG must be aria-hidden");
 assert.match(footerHtml, /<button\b[^>]*\btype="button"[^>]*\bdata-end-mascot=""[^>]*\baria-label="Poke the save-point console"/);
 assert.match(footerHtml, /<p\b[^>]*\bdata-end-readout=""[^>]*\baria-live="polite"[^>]*>/);
 assert.ok(decode(footerHtml).includes(site.end.idle.readout), "missing idle readout copy");
