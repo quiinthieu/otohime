@@ -312,6 +312,18 @@ async function hydrated(page, selector = "[data-end-stage]") {
   await page.waitForTimeout(120);
 }
 
+// A route navigation retried once, and only when the runner's network changed under it (Playwright's
+// net::ERR_NETWORK_CHANGED, seen on hosted runners). Any other error, or a second failure, still throws.
+async function gotoRoute(page, url) {
+  try {
+    return await page.goto(url, { waitUntil: "load" });
+  } catch (e) {
+    if (!String(e?.message).includes("net::ERR_NETWORK_CHANGED")) throw e;
+    console.log(`# retry: ${url} after net::ERR_NETWORK_CHANGED`);
+    return page.goto(url, { waitUntil: "load" });
+  }
+}
+
 // The badge fades in over 0.15 s; wait (bounded) for the visible footer's badge to be unlocked, visible and opaque
 // instead of sampling it after a fixed delay. On timeout, return what it looked like so a stuck badge is diagnosable.
 const BADGE_SETTLE_MS = 2_000;
@@ -443,7 +455,7 @@ try {
     try {
       const utcYear = String(new Date().getUTCFullYear());
       for (const route of PUBLIC_PATHS) {
-        const res = await page.goto(`${BASE_URL}${route}`, { waitUntil: "load" });
+        const res = await gotoRoute(page, `${BASE_URL}${route}`);
         await hydrated(page);
         check(`route ${route}: HTTP 200`, res?.status() === 200, String(res?.status()));
 
@@ -522,7 +534,7 @@ try {
         ["/forgot-password", 200],
         ["/does-not-exist", 404],
       ]) {
-        const res = await page.goto(`${BASE_URL}${route}`, { waitUntil: "load" });
+        const res = await gotoRoute(page, `${BASE_URL}${route}`);
         check(`isolated ${route}: HTTP ${wantStatus}`, res?.status() === wantStatus, String(res?.status()));
         const count = await page.evaluate(
           () => document.querySelectorAll("footer, [data-end-stage], #end-title").length,
@@ -533,7 +545,7 @@ try {
       // Eleven independent project roots must remain footer-free
       for (const proj of PROJECTS) {
         const route = `/${proj}`;
-        const res = await page.goto(`${BASE_URL}${route}`, { waitUntil: "load" });
+        const res = await gotoRoute(page, `${BASE_URL}${route}`);
         check(`project ${route}: HTTP 200`, res?.status() === 200, String(res?.status()));
         const info = await page.evaluate(() => ({
           sha: document.querySelector('meta[name="build-sha"]')?.getAttribute("content") ?? "",
@@ -556,7 +568,7 @@ try {
     const { context, page } = await open(browser, { viewport, isMobile: mobile, hasTouch: mobile });
     try {
       for (const route of ["/", "/work", "/music", "/projects"]) {
-        await page.goto(`${BASE_URL}${route}`, { waitUntil: "load" });
+        await gotoRoute(page, `${BASE_URL}${route}`);
         await hydrated(page);
         await page.locator("footer.end").filter({ visible: true }).first().scrollIntoViewIfNeeded();
         await page.waitForTimeout(300);

@@ -294,7 +294,7 @@ check "/forgot-password has no site footer stage" no_site_footer_in_dom forgot
 
 get missing /does-not-exist
 check "/does-not-exist returns 404" status_is missing 404
-check "/does-not-exist shows the parcel 404" has missing 'Nothing in this parcel'
+check "/does-not-exist shows the lost sheet 404" has missing 'This page got lost'
 check "/does-not-exist has no <footer>" count_eq missing '<footer' 0
 check "/does-not-exist has no site footer stage" no_site_footer_in_dom missing
 

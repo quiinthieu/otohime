@@ -88,13 +88,19 @@ jobs:
             curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
           }
           bash scripts/probe-motion-signed-in.sh
-      - name: Footer walk and Chromium probe
+      - name: Footer walk
         run: |
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
             npm start &
             curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
           }
           EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh
+      - name: Footer Chromium probe
+        run: |
+          curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
+            npm start &
+            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
+          }
           EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh
 
   preview:
