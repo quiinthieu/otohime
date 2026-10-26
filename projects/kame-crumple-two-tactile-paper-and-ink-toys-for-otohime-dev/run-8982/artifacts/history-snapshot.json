@@ -1,0 +1,72 @@
+[
+  {
+    "name": "failure_1",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "failure_2",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "completed_1",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "completed_2",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "in_progress",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "queued",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "failed_job",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "raw_failed_tail",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "descendant_jobs",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)"
+  },
+  {
+    "name": "vercel_state",
+    "http_status": 403,
+    "count": null,
+    "total": null,
+    "message": null
+  }
+]

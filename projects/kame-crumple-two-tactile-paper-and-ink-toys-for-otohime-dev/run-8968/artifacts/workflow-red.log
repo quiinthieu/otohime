@@ -1,0 +1,74 @@
+TAP version 13
+# Subtest: push to main ignores report-only paths
+ok 1 - push to main ignores report-only paths
+  ---
+  duration_ms: 1.898031
+  type: 'test'
+  ...
+# Subtest: report-only pushes skip, code pushes still run
+ok 2 - report-only pushes skip, code pushes still run
+  ---
+  duration_ms: 0.373037
+  type: 'test'
+  ...
+# Subtest: pull_request has no path filter
+ok 3 - pull_request has no path filter
+  ---
+  duration_ms: 0.128049
+  type: 'test'
+  ...
+# Subtest: manual recovery runs the same checks and production gates as a main push
+not ok 4 - manual recovery runs the same checks and production gates as a main push
+  ---
+  duration_ms: 0.387291
+  type: 'test'
+  location: '/data/build-worker/leases/9ba74ec0-4222-4d33-b1b0-3f2349dd716e-f5ffbf52a1b4bc7e3f702541172dbd65/work/otohime/scripts/ci-workflow.test.mjs:78:1'
+  failureType: 'testCodeFailure'
+  error: 'queue replacement recovery needs workflow_dispatch'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: ~
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///data/build-worker/leases/9ba74ec0-4222-4d33-b1b0-3f2349dd716e-f5ffbf52a1b4bc7e3f702541172dbd65/work/otohime/scripts/ci-workflow.test.mjs:79:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: checks and production run on ubuntu-24.04
+ok 5 - checks and production run on ubuntu-24.04
+  ---
+  duration_ms: 0.351979
+  type: 'test'
+  ...
+# Subtest: main keeps cancel-in-progress off and no queue: max
+ok 6 - main keeps cancel-in-progress off and no queue: max
+  ---
+  duration_ms: 0.140115
+  type: 'test'
+  ...
+# Subtest: production proves the deployed sha, terminal and press after the deploy
+ok 7 - production proves the deployed sha, terminal and press after the deploy
+  ---
+  duration_ms: 0.501497
+  type: 'test'
+  ...
+# Subtest: verify-deploy treats exactly the push paths-ignore as report-only
+ok 8 - verify-deploy treats exactly the push paths-ignore as report-only
+  ---
+  duration_ms: 0.197899
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 7
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 50.160753

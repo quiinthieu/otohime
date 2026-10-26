@@ -1,0 +1,14 @@
+Full TAP saved in runner shared artifacts/run-8982/repository-full.log
+
+  duration_ms: 2.538781
+  type: 'test'
+  ...
+1..2267
+# tests 2267
+# suites 0
+# pass 2267
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8087.34332

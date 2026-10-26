@@ -1,0 +1,8 @@
+{
+  "http_status": 403,
+  "url": "https://api.github.com/repos/quiinthieu/otohime/actions/workflows/ci.yml/runs?status=queued&per_page=20",
+  "response": {
+    "message": "API rate limit exceeded for 42.115.242.31. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
+    "documentation_url": "https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"
+  }
+}

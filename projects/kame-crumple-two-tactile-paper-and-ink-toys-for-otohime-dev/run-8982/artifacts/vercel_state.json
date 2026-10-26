@@ -1,0 +1,11 @@
+{
+  "http_status": 403,
+  "url": "https://api.vercel.com/v13/deployments/otohime-rcix516b1-otohime.vercel.app",
+  "response": {
+    "error": {
+      "code": "forbidden",
+      "message": "The request is missing an authentication token",
+      "missingToken": true
+    }
+  }
+}

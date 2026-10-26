@@ -1,0 +1,14 @@
+Full TAP read: all tests passed. Successful per-test output is in uploaded repository.log.
+
+> otohime@0.1.0 test
+> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'lib/**/*.test.ts' 'app/(shore)/_lib/*.test.ts' 'app/(ryugu)/_lib/*.test.ts' 'app/(capsule)/_lib/*.test.ts' 'app/(orrery)/_lib/*.test.ts' 'app/(elements)/_lib/*.test.ts' 'app/(vinyl)/_lib/*.test.ts' 'app/(rotor)/_lib/*.test.ts' 'app/(planisphere)/_lib/*.test.ts' 'app/(barometer)/_lib/*.test.ts' 'app/(articles)/_lib/*.test.ts' 'app/(structures)/_lib/*.test.ts' 'app/(design-system)/_lib/*.test.ts' 'app/(site)/(app)/music/_lib/*.test.ts' 'app/(site)/(app)/desk/_lib/*.test.ts' 'app/(site)/(app)/ledger/_lib/*.test.ts' 'scripts/history-index.test.ts' 'scripts/e2e-gesture-trace.test.ts' 'scripts/ci-workflow.test.mjs' 'scripts/probe-browser.test.mjs'
+
+1..2241
+# tests 2241
+# suites 0
+# pass 2241
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8219.890026

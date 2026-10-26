@@ -1,0 +1,30 @@
+ok - hanging upload exits non-zero
+ok - hanging upload fails within the bound (2s <= 15s)
+ok - hanging upload makes exactly one deploy call (got 1)
+ok - hanging upload never inspects
+ok - hanging upload prints ::error
+ok - hanging upload leaves no child running
+ok - fast upload failure is retried once and then succeeds
+ok - two fast upload failures stop after the one retry
+ok - two fast upload failures print ::error
+ok - upload with a URL is not retried (got 1 deploys)
+ok - hanging inspect exits non-zero
+ok - hanging inspect fails within the bound (2s <= 20s)
+ok - hanging inspect prints ::error with state and URL
+ok - hanging inspect makes one deploy and two inspects
+ok - hanging inspect leaves no child running
+ok - errored deployment prints ::error with Error state
+ok - failed inspect retains its full diagnostic in one escaped annotation
+ok - state re-read diagnostic is retained in that annotation
+ok - deployment state comes only from the status field, without ANSI
+ok - failed inspect stops before health even for a matching sha
+ok - CLI request errors are unknown deployment state, with diagnostic
+ok - healthy deploy exits 0
+ok - healthy deploy uploads with --no-wait
+ok - healthy deploy waits on the printed URL
+ok - healthy deploy prints no ::error
+ok - health with another sha exits non-zero
+ok - health with another sha prints ::error
+ok - unreachable health endpoint exits non-zero
+ok - missing GITHUB_SHA is refused before any upload
+# all checks passed
