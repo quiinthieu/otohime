@@ -1,3 +1,4 @@
 b0befb6d438d04d0c7541acffc0c51618fcad148 pm-256/t-1560: Build the static git history index for Tamatebako  (delivery, run-8838)
 543ba68fb184a73232fe16e532afb31590a05e73 pm-256/t-1560: Turn off git auto-maintenance in the history index fixtures  (fix cycle, run-8850)
-<this commit> pm-256/t-1560: Re-verify the history index at main and refresh its fallback  (fix cycle, run-8864, cause=environment; its sha is the git_sha of the run-8864 summary report)
+9420077d06f4dec23585d543b548d5f7b49640b7 pm-256/t-1560: Re-verify the history index at main and refresh its fallback  (fix cycle, run-8864, cause=environment)
+<this commit> pm-256/t-1560: Re-verify the history index at 3a54f43 for fix plan run-8875  (fix cycle, run-8891, cause=environment, report-only; its sha is the git_sha of the run-8891 summary report)

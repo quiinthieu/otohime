@@ -79,3 +79,26 @@ Fix plan run-8858 found cause=environment: 543ba68 is correct and only waiting f
 **Fixture flake not reproduced on this git.** Apple Git 2.54 shows no flake with either test file, even under forced detached gc (`gc.auto=1`, `gc.autoDetach=true`, `gc.pruneExpire=now` via `GIT_CONFIG_*`). b0befb6's test failed 0/8 with the default config and 0/5 under forced gc; 543ba68's test failed 0/5 under forced gc. So this lease adds no new revert evidence. The reproduction recorded in run-8850 (linux, git 2.43, 3/5 against 0/5) and QA run-8858 (3/6 against 0/6) stands as the evidence.
 
 **Not shown here (deferred to QA, owner quality_engineer).** Fix plan items 1–2 are not shown: the deployed `/api/health` sha passing `git merge-base --is-ancestor 543ba68 <sha>`, and the id of the green CI run that deployed it. This role does not check the deployed system. This commit's push replaces the pending `main` run, and every later run on `main` still contains 543ba68.
+
+## Fix cycle (run-8891): environment, re-verified at 3a54f43
+
+Run profile: claude-opus-5-5 (Claude Code, macOS lease, Apple Git 2.54.0 (Apple Git-157), node 22.23.3, `npm ci` first).
+
+Fix plan run-8875 found cause=environment. The code is correct; the problem is that no deployed commit contains 9420077 yet. This run changes no t-1560 file. Since 9420077, `scripts/history-index.ts`, `scripts/history-index.test.ts` and `content/history.json` are unchanged. `package.json` differs only by pm-270's added `scripts/ci-workflow.test.mjs` glob. Main at 3a54f43 contains 9420077. The red gate's `Could not find 'scripts/history-index.test.ts'` ran at 1ca12d0, which predates b0befb6, so it is stale.
+
+This commit touches only `projects/**`. Since 2eaada2 (pm-270/t-1603), `ci.yml` `paths-ignore` skips such pushes, so this push does not replace the pending `main` run that carries 9420077. The build regenerated `content/history.json` (200 of 432). I restored it from git rather than committing it. The fix plan forbids changing it, and committing it would requeue CI.
+
+| check (at 3a54f43) | result |
+|---|---|
+| contract command, 5 runs in a row | 5/5 exit 0, 16/16 each |
+| `npm test` | exit 0, 2160/2160 |
+| `npm run build` | exit 0, `history:index: git (full history): 200 of 432 commits` |
+| `npm run history:check` on the committed fallback | exit 0, trails HEAD by 18 (MAX_LAG 20) |
+| real `file://` clone at depth 1 | fallback path (200 of 414), output byte-identical to the committed file |
+| real full clone, indexed twice | same sha256 both times (32812db0…), equal to the lease build's output |
+
+**Negative control.** In the first entry (line 6), I replaced the subject with `tampered`. `history:check` then exits 1 ("does not match git at its own head fe0dd82eb8"). After restoring the file it exits 0.
+
+**Lag note.** The fallback trails HEAD by 18 commits, and `--check` allows 20. Neither CI nor `prebuild` runs `--check`, so lag cannot fail a build or a deploy. A later manual `--check` that fails on lag is the designed staleness signal. The fix is then `npm run history:index` plus a commit that also triggers CI.
+
+**Not shown here (deferred to QA, owner quality_engineer).** Fix plan run-8875 items 1–2 are not shown: an `/api/health` sha S for which `git merge-base --is-ancestor 9420077 S` succeeds, and the id of the CI run that deployed it with its `vercel deploy --prebuilt` step green. This role does not check the deployed system or watch the pipeline. Failure condition: the footer Chromium probe or the vercel deploy fails again on a run that contains 9420077. That is a CI-lane defect for pm-270, not for t-1560.
