@@ -1,0 +1,302 @@
+[
+  {
+    "sequence": 1,
+    "title": "Restore the deployment checks gate",
+    "role": "software_engineer",
+    "depends_on": [],
+    "qa": "required",
+    "problem": "Main has observed E2E and Footer Chromium probe failures, so checks blocks production and keyless presence cannot deploy. The latest baseline may have changed either failure and must be reproduced before choosing a repair.",
+    "action_items": [
+      "Inspect current and bounded paginated completed/failed GitHub Actions history around c38f72a through the delivery base, including 40277024423 (E2E) and 40275822192 (footer). Read raw failure tails where accessible and reproduce each remaining failure against a production build with a throwaway local database. Diagnose the assertion and correlate relevant code/lock/configuration fingerprints; a later SHA alone is not evidence of a fix. Record exact run ids, inspected counts and any unavailable/truncated evidence.",
+      "Fix the smallest E2E behavior, footer behavior or objectively incorrect probe assumption responsible, preserving the public-page, keyboard, reduced-motion, contrast and negative-control coverage. Add a focused regression for each actual defect; do not skip a gate, relax correct thresholds or alter unrelated feature work. If a failure is already corrected at the delivery base, cite the actual assertion passing rather than duplicate the repair.",
+      "Make the existing footer walk and browser probe run with an isolated local database on supported leases, reusing the embedded-postgres lifecycle in scripts/e2e.mjs when Docker is unavailable if needed. Clean up only PIDs and database files created by this run.",
+      "Run the verification commands and push the focused repair. CI/deployment evidence is evaluated by the green gate and QA; do not add a staging mutation or a deployment wait to this build task."
+    ],
+    "interfaces": [
+      "components/end-footer.tsx",
+      "components/end-stage.tsx",
+      "lib/end.ts",
+      "lib/end.test.ts",
+      "app/(site)/globals.css",
+      "scripts/walk-end.sh",
+      "scripts/probe-end.sh",
+      "scripts/probe-end.mjs",
+      "scripts/e2e.mjs",
+      "e2e/"
+    ],
+    "non_goals": [
+      "Redesigning the footer",
+      "Deleting or disabling the CI gate",
+      "New providers or owner account setup",
+      "Repairing unrelated abandoned plans"
+    ],
+    "acceptance_criteria": "The observed E2E and footer gate failures are diagnosed and each remaining defect is reproduced and corrected; application E2E, the original footer walk and Chromium matrix pass against the delivery build with a regression/negative control that detects each repaired defect. The green gate must pass before the platform marks the task delivered; production deployment remains gated by checks.",
+    "verification": [
+      {
+        "name": "Project tests",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Typecheck",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 600
+      },
+      {
+        "name": "Footer HTTP walk",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/walk-end.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Footer Chromium matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-end.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Application end to end",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Read the cassette from ListenBrainz",
+    "role": "software_engineer",
+    "depends_on": [
+      "1"
+    ],
+    "qa": "required",
+    "problem": "The music cassette requires Spotify secrets and only shows its quiet face; a public ListenBrainz account can supply current or last-listened music without deployment secrets.",
+    "action_items": [
+      "Implement pure unknown-input ListenBrainz parsers and fixtures, capped/clean display strings, a validated listenedAt ISO timestamp for last listens, and HTTPS link allowlisting. Distinguish a valid empty payload from malformed JSON, HTML challenges and error shapes.",
+      "Add validated LISTENBRAINZ_USER configuration with an optional server-owned public default in content/now-playing.ts (empty until the operator supplies an identity); environment configuration takes precedence. Encode the username as one path segment. Never select an unrelated person's account as the production default. No owner chore is needed to implement or verify this task.",
+      "Read playing-now and listens?count=1 concurrently under one 4-second abort budget, with User-Agent otohime.dev/1.0 (+https://otohime.dev), Accept application/json, and no retries. A valid playing-now listen wins; otherwise show a valid last listen with its full UTC date/time and stationary reels. Neither endpoint being usable yields quiet. Reject redirects and unapproved hosts; loopback-only NOW_PLAYING_LISTENBRAINZ_HOST yields fixture state.",
+      "Add source metadata music/play without removing spotify/steam/track/game/readAt; extend sanitize and every UI/API consumer consistently. Select ListenBrainz when configured, otherwise Spotify; failures of a configured selected provider stay quiet. Legacy adapter states identify only adapters actually read; never mark a fixture or a different source spotify-live. Introduce the empty play metadata now, preserving Steam as the game source until task 3.",
+      "Render per-source side labels, public profile/track links and provider credits; retain the playlist and static game quiet faces, no-JS HTML, keyboard affordances, long-label bounds, reduced-motion behavior and original keyed-provider support.",
+      "Keep readNowPlaying as the shared server-only use-cache reader with cacheLife stale 30/revalidate 60/expire 300; callers still await connection(). No provider reads at build and no background schedule. Extend loopback fakes and clock-controlled HTTP/browser walks for current, last, old last-listen, empty, 404, 429, HTML, bad JSON, unsafe URLs, timeouts, one-endpoint failure, missing/invalid configuration, source selection and sentinel scans. Prove no provider requests during a build in a fixture build check inside the HTTP walk, even with SKIP_BUILD=1 on the outer walk.",
+      "Document public configuration and owner feed setup as advisory, with the live-connector uncertainty from research; update .env.example and README, and regenerate public/ask-index.json with npm run ask:index when indexed copy changes. Preserve the real/fake distinction and report no live owner output unless observed."
+    ],
+    "interfaces": [
+      "lib/now-playing.ts",
+      "lib/now-playing-data.ts",
+      "lib/now-playing.test.ts",
+      "lib/now-playing-data.test.ts",
+      "components/cassette.tsx",
+      "content/site.ts",
+      "content/now-playing.ts",
+      "app/api/now-playing/route.ts",
+      "app/(site)/(app)/music/page.tsx",
+      "app/(site)/globals.css",
+      "scripts/walk-now-playing.sh",
+      "scripts/probe-cassette.sh",
+      "scripts/probe-cassette.mjs",
+      ".env.example",
+      "README.md",
+      "public/ask-index.json"
+    ],
+    "non_goals": [
+      "Creating a ListenBrainz account or uploading listens",
+      "OAuth or keys in the deployment",
+      "Lanyard music fallback",
+      "Cron jobs or polling services",
+      "Claiming the owner is playing a sampled public user's track"
+    ],
+    "acceptance_criteria": "On-demand GET /api/now-playing and /music use the same cached selected reading: a valid current ListenBrainz fixture shows its credited track and spinning reels, a last listen shows its full UTC timestamp and still reels, and failures return HTTP 200 with honest quiet content. Fixtures are labelled fixture, the default with no account is off, legacy adapters work when selected, public links are safe, and an instrumented build makes zero provider requests. Owner account setup is advisory and does not gate integration delivery.",
+    "verification": [
+      {
+        "name": "Project tests",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Typecheck",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 600
+      },
+      {
+        "name": "Search content index",
+        "cwd": ".",
+        "cmd": "npm run ask:check",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Provider HTTP contract",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/walk-now-playing.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Cassette browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-cassette.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Reduced motion",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Application end to end",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Read optional games from Lanyard",
+    "role": "software_engineer",
+    "depends_on": [
+      "2"
+    ],
+    "qa": "required",
+    "problem": "The game cartridge still needs a Steam key, while optional Lanyard public Discord presence can identify the current game without a deployment secret.",
+    "action_items": [
+      "Add a pure Lanyard parser taking unknown, requiring success:true and a valid data.activities array; use the first type===0 activity with a valid capped game name. Ignore Spotify-only, custom-status, streaming and malformed activities, strip control characters, and retain no Discord profile/avatar/friend identifiers in the public result.",
+      "Validate LANYARD_USER_ID as a 17-20 digit snowflake with the same environment-over-server-public-default configuration path from task 2; default empty. Add a 4-second server-only request, meaningful User-Agent, JSON validation and no retry. Reject redirects; NOW_PLAYING_LANYARD_HOST remains loopback-only and always fixture-labelled.",
+      "Select Lanyard when configured, otherwise Steam. Valid empty activities produce live-with-no-game (fixture for a fake); unknown/unmonitored user, error status, HTML, malformed response and timeout produce quiet. Keep music independent and keep configured-provider failures quiet instead of switching providers.",
+      "Extend play source metadata, sanitized API result and per-source cartridge/credit copy. Lanyard games have no invented Steam/store URL. Preserve the static Now-list fallback, existing Steam path, no-JS rendering, readable long names, mobile layout, keyboard and reduced motion.",
+      "Extend captured fixtures and the existing HTTP/browser walks for a type-0 game, no game, Spotify-only presence, user_not_monitored, invalid/overlong fields, HTML, 429, abort, missing/invalid identifiers and mixed-provider isolation. Retain the instrumented no-fetch-at-build check and credential sentinel scan; update README/.env.example and regenerate the search index if needed.",
+      "Run the build-contract verification and push. Leave owner Discord joining/identity personalization advisory to the post-build activation check; no person-only prerequisite is required for these tests."
+    ],
+    "interfaces": [
+      "lib/now-playing.ts",
+      "lib/now-playing-data.ts",
+      "lib/now-playing.test.ts",
+      "lib/now-playing-data.test.ts",
+      "content/now-playing.ts",
+      "content/site.ts",
+      "components/cassette.tsx",
+      "scripts/walk-now-playing.sh",
+      "scripts/probe-cassette.sh",
+      "scripts/probe-cassette.mjs",
+      ".env.example",
+      "README.md",
+      "public/ask-index.json"
+    ],
+    "non_goals": [
+      "Discord bot hosting or tokens",
+      "Lanyard Spotify fallback",
+      "Steam XML scraping",
+      "A service-availability SLA",
+      "Account joining as a build prerequisite"
+    ],
+    "acceptance_criteria": "With the on-demand loopback Lanyard fixture selected, GET /api/now-playing and /music agree on the credited game with no invented store link and a fixture state. Empty, unknown, malformed or timed-out presence degrades honestly without changing the music reading. With no public identifier the default stays off; the Steam fallback works when selected. Independent QA verifies the delivery SHA and a relevant negative control. Personalized live presence is reported separately from integration proof.",
+    "verification": [
+      {
+        "name": "Project tests",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Lint",
+        "cwd": ".",
+        "cmd": "npm run lint",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Typecheck",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Build",
+        "cwd": ".",
+        "cmd": "npm run build",
+        "expect": "exit0",
+        "timeout_s": 600
+      },
+      {
+        "name": "Search content index",
+        "cwd": ".",
+        "cmd": "npm run ask:check",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Provider HTTP contract",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/walk-now-playing.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Cassette browser matrix",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-cassette.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Reduced motion",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "Application end to end",
+        "cwd": ".",
+        "cmd": "SKIP_BUILD=1 npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  }
+]
