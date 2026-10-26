@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { after, test } from "node:test";
 import {
   AREAS_MAX,
@@ -45,20 +45,34 @@ const sh = (cwd: string, ...args: string[]) => execFileSync("git", args, { cwd, 
 let repos = 0;
 type Commit = { subject: string; files: Record<string, string> };
 
-// A repository with the given commits, the n-th dated n hours after a fixed instant.
+// A repository with the given commits, the n-th dated n hours after a fixed instant. The whole history is one
+// `git fast-import` stream, not two subprocesses per commit. Built commit by commit, the 205-commit fixture ran
+// for seconds and a macOS gate still lost HEAD's tree partway through it ("bad tree object HEAD" at commit 180)
+// with auto-maintenance already off; the cause was never observed. One process writing one pack leaves far less
+// room for it. The work tree and index are then checked out, so later commits, checkouts and merges start
+// from a clean tree.
 function fixtureRepo(commits: readonly Commit[]): string {
   const dir = join(TMP, `repo-${repos++}`);
   mkdirSync(dir);
   sh(dir, "init", "--quiet", "--initial-branch=main");
+  const parts: Buffer[] = [];
+  const data = (body: string | Buffer) => {
+    const bytes = Buffer.from(body);
+    parts.push(Buffer.from(`data ${bytes.length}\n`), bytes, Buffer.from("\n"));
+  };
   commits.forEach((c, i) => {
+    const when = `${Date.UTC(2026, 8, 1) / 1000 + i * 3600} +0000`;
+    parts.push(Buffer.from(`commit refs/heads/main\nauthor Fixture <fixture@example.test> ${when}\ncommitter Fixture <fixture@example.test> ${when}\n`));
+    data(`${c.subject}\n`);
     for (const [path, body] of Object.entries(c.files)) {
-      mkdirSync(dirname(join(dir, path)), { recursive: true });
-      writeFileSync(join(dir, path), body);
+      parts.push(Buffer.from(`M 100644 inline ${path}\n`));
+      data(body);
     }
-    sh(dir, "add", "--all");
-    const date = new Date(Date.UTC(2026, 8, 1) + i * 3_600_000).toISOString();
-    execFileSync("git", ["commit", "--quiet", "--allow-empty", "-m", c.subject], { cwd: dir, env: { ...GIT_ENV, GIT_AUTHOR_DATE: date, GIT_COMMITTER_DATE: date } });
   });
+  if (commits.length > 0) {
+    execFileSync("git", ["fast-import", "--quiet", "--done"], { cwd: dir, env: GIT_ENV, input: Buffer.concat([...parts, Buffer.from("done\n")]), stdio: ["pipe", "pipe", "pipe"] });
+    sh(dir, "reset", "--quiet", "--hard", "main");
+  }
   return dir;
 }
 

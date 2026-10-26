@@ -103,7 +103,16 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm test
+      # The job log needs a token to read: on a red run each failed unit test also becomes an annotation and a step
+      # summary section (scripts/tap-annotate.mjs, from the TAP kept here). pipefail keeps npm test's own status.
+      - name: npm test
+        id: unit
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$RUNNER_TEMP/npm-test.tap"
+      - name: Annotate failed unit tests
+        if: failure() && steps.unit.outcome == 'failure'
+        run: node scripts/tap-annotate.mjs "$RUNNER_TEMP/npm-test.tap"
       # The production deploy script against a fake npx, here so GNU timeout (not the macOS fallback) is exercised.
       - run: bash scripts/vercel-deploy.test.sh
       # verify-deploy.sh against a local fake /api/health: a sha mismatch must exit nonzero without running the e2e.

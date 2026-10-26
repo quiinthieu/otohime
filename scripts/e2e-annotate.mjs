@@ -9,7 +9,7 @@ const ANNOTATION_CHARS = 3000;
 const SUMMARY_CHARS = 8000;
 
 // Workflow command escaping: the message keeps its lines as %0A, a property may not hold : or , either.
-const escapeData = (s) => s.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+export const escapeData = (s) => s.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
 const escapeProperty = (s) => escapeData(s).replace(/:/g, "%3A").replace(/,/g, "%2C");
 const clip = (s, n) => (s.length > n ? `${s.slice(0, n)}\n… (${s.length - n} more characters)` : s);
 
@@ -20,11 +20,11 @@ function describe(error) {
   return String(cause);
 }
 
-export function annotation({ name, file, line }, error) {
+export function annotation({ name, file, line }, error, label = "E2E") {
   const props = [];
   if (file) props.push(`file=${escapeProperty(path.relative(process.cwd(), file.replace(/^file:\/\//, "")))}`);
   if (file && line) props.push(`line=${line}`);
-  props.push(`title=${escapeProperty(`E2E failed: ${name}`)}`);
+  props.push(`title=${escapeProperty(`${label} failed: ${name}`)}`);
   return `::error ${props.join(",")}::${escapeData(clip(describe(error), ANNOTATION_CHARS))}\n`;
 }
 

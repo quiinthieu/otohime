@@ -1,0 +1,18 @@
+{
+  "github_api_runs_main_per_page_5": {
+    "http": 403,
+    "message": "API rate limit exceeded"
+  },
+  "run_page_40339124232": {
+    "http": 200,
+    "annotations": "only 'Process completed with exit code 1'"
+  },
+  "health": {
+    "url": "https://otohime.dev/api/health",
+    "body": {
+      "ok": true,
+      "sha": "074059495faf4bee48e8f655584dfd4487089b41"
+    }
+  },
+  "history_completeness": "incomplete: zero run records readable; no FAILED/COMPLETED pages obtained"
+}

@@ -1,0 +1,12 @@
+  type: 'test'
+  ...
+1..2304
+# tests 2318
+# suites 2
+# pass 2318
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8050.58078
+exit=0

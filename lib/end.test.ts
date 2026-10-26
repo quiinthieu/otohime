@@ -330,6 +330,10 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
           PATH: `${binDir}:${process.env.PATH ?? "/usr/bin:/bin"}`,
         };
         delete ciEnv.PORT;
+        // The installer branch is the one under test: with CI set and google-chrome on PATH (the ubuntu-24.04 runner)
+        // probe-end.sh skips npm and launches the real probe, which the 10s bound kills (exit 130). TMPDIR is
+        // resolved before that branch, so unsetting CI loses nothing; the runner branch has its own case below.
+        delete ciEnv.CI;
         const res = await runScript(probePath, ciEnv);
         assert.equal(res.code, 1, `probe-end.sh BASE_URL (${c.label}) should stop at stubbed npm`);
         assert.doesNotMatch(res.stderr, /unbound variable/, `probe-end.sh BASE_URL (${c.label}) stderr: ${res.stderr}`);
@@ -339,6 +343,24 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
           `probe-end.sh BASE_URL (${c.label}) stdout: ${res.stdout}`,
         );
       }
+
+      // The runner branch, on any host: CI set and a fake google-chrome first on PATH install nothing and hand off to
+      // probe-end.mjs, here a fake node that reports its arguments and exits 7.
+      writeFileSync(resolve(binDir, "google-chrome"), '#!/usr/bin/env bash\necho "Google Chrome 999.0.0.0"\n');
+      writeFileSync(resolve(binDir, "node"), '#!/usr/bin/env bash\necho "STUB_NODE $*"\nexit 7\n');
+      chmodSync(resolve(binDir, "google-chrome"), 0o755);
+      chmodSync(resolve(binDir, "node"), 0o755);
+      const runnerEnv: NodeJS.ProcessEnv = {
+        ...baseEnv,
+        CI: "true",
+        BASE_URL: `http://127.0.0.1:${busyPort}`,
+        PATH: `${binDir}:${process.env.PATH ?? "/usr/bin:/bin"}`,
+      };
+      const runner = await runScript(probePath, runnerEnv);
+      assert.equal(runner.code, 7, `probe-end.sh runner branch should exit with probe-end.mjs's code: ${runner.stdout}${runner.stderr}`);
+      assert.match(runner.stdout, /^# browser: runner Google Chrome 999\.0\.0\.0 with the repo's playwright-core; nothing installed$/m);
+      assert.doesNotMatch(runner.stdout, /RESOLVED_TMPDIR|npm i playwright/, `runner branch ran an installer: ${runner.stdout}`);
+      assert.match(runner.stdout, /^STUB_NODE .*scripts\/probe-end\.mjs$/m);
     } finally {
       rmSync(binDir, { recursive: true, force: true });
     }

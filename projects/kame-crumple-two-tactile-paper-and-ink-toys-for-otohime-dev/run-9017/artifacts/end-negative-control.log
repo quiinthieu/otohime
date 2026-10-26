@@ -1,0 +1,80 @@
+TAP version 13
+# Subtest: idle state starts at SAVE POINT with the console resting
+ok 1 - idle state starts at SAVE POINT with the console resting
+  ---
+  duration_ms: 1.432022
+  type: 'test'
+  ...
+# Subtest: each poke advances the cycle, wraps around, and changes LCD and readout
+ok 2 - each poke advances the cycle, wraps around, and changes LCD and readout
+  ---
+  duration_ms: 0.444456
+  type: 'test'
+  ...
+# Subtest: the tenth poke shows the breather line and the eleventh resumes cycling
+ok 3 - the tenth poke shows the breather line and the eleventh resumes cycling
+  ---
+  duration_ms: 0.1538
+  type: 'test'
+  ...
+# Subtest: a poke holds the button down for two ticks and settle releases it immediately
+ok 4 - a poke holds the button down for two ticks and settle releases it immediately
+  ---
+  duration_ms: 0.169587
+  type: 'test'
+  ...
+# Subtest: the Konami sequence unlocks Reached the end with lowercase or uppercase B and A
+ok 5 - the Konami sequence unlocks Reached the end with lowercase or uppercase B and A
+  ---
+  duration_ms: 0.281046
+  type: 'test'
+  ...
+# Subtest: Konami prefix overlap preserves matching prefixes and wrong keys reset to zero
+ok 6 - Konami prefix overlap preserves matching prefixes and wrong keys reset to zero
+  ---
+  duration_ms: 0.19682
+  type: 'test'
+  ...
+# Subtest: leaving the viewport clears partial Konami progress without losing pokes or unlock
+ok 7 - leaving the viewport clears partial Konami progress without losing pokes or unlock
+  ---
+  duration_ms: 0.118306
+  type: 'test'
+  ...
+# Subtest: restoration and repeated unlock preserve mascot pokes and re-display the achievement
+ok 8 - restoration and repeated unlock preserve mascot pokes and re-display the achievement
+  ---
+  duration_ms: 0.209091
+  type: 'test'
+  ...
+# Subtest: site.end copy matches the required sentences, LCD bounds, and PUBLIC_PAGES count
+ok 9 - site.end copy matches the required sentences, LCD bounds, and PUBLIC_PAGES count
+  ---
+  duration_ms: 0.579414
+  type: 'test'
+  ...
+# Subtest: lib/end.ts is pure and imports no browser or DOM APIs
+ok 10 - lib/end.ts is pure and imports no browser or DOM APIs
+  ---
+  duration_ms: 0.553956
+  type: 'test'
+  ...
+# Subtest: walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR
+not ok 11 - walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR
+  ---
+  duration_ms: 10910.889404
+  type: 'test'
+  location: '/data/build-worker/leases/9b7b382b-f672-423f-a9d7-68b5cd5239bf-b23822b8f209679ddbe5b75e394f1073/work/otohime/lib/end.test.ts:226:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    probe-end.sh BASE_URL (unset TMPDIR) should stop at stubbed npm
+    
+    130 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 130
+  operator: 'strictEqual'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
