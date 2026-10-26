@@ -3,6 +3,21 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-8893 update: outcome 4 is met live
+
+Read at **12:20 UTC** (run-8893, product owner, profile claude-sonnet-5-5):
+
+- **pm-255** is `executing` (execution_started_at 11:54:57Z, source promotion),
+  progress `startable`, no open escalations. **t-1557 is done** (SWE run-8894,
+  bca260a, QA pass rep-5200 run-8903); t-1558 is ready. Outcome 4 (release and
+  dispatch of the Ask deploy bundle probe) is observed on the board.
+- **pm-267** (mono-v2) is `paused`: t-1594 and t-1596 `qa_pending`, t-1595 and
+  t-1597 `backlog`. They still own outcomes 1-3 (decider text, slowness anchor,
+  on-demand drills). Not an otohime change.
+- Zero otohime SWE tasks; the local proposal is the saved empty DAG and is
+  expected to be refused (missing_acceptance_criteria). No task invented.
+- `npm test` 2168 passed, 0 failed (docs-only change).
+
 ## Run-8881 update: board refreshed, ownership unchanged
 
 Read at **11:45 UTC** (run-8881, product owner, profile claude-sonnet-5-5):
