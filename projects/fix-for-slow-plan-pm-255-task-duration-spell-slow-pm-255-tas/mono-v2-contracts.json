@@ -1,0 +1,241 @@
+[
+  {
+    "sequence": 1,
+    "title": "Release finished predecessor parts",
+    "role": "software_engineer",
+    "acceptance_criteria": "One tick releases queued/drafting parts of done, abandoned, rejected or failed_draft predecessors, retains the edge, and records the parent's terminal note on each part. Reopening a budget-abandoned parent restores an unstarted part's hold; unfinished predecessors remain held on resume as well as promotion.",
+    "problem": "afterPlanHold releases only on done; finishPlanBy emits an advisory-only orphan line for other terminal outcomes. Parts cannot progress and resume currently bypasses an unfinished predecessor's hold.",
+    "action_items": [
+      "Write failing table and engine tests first in pm245_split_test.go using forEachBackend/cwEngine: abandoned parent plus queued part promotes within one tick with a free slot, full slots leave it queued without after_plan, drafting part gets one research run, done behavior remains, rejected/failed_draft release, executing predecessor remains held, and supported reopen of a budget-abandoned parent restores the hold on its unstarted queued part.",
+      "Use the repository's canonical finished-status predicate in afterPlanHold while preserving AfterPlanID; do not equate unrelated superseded revisions with delivery without verifying the predicate's existing semantics. Keep intake refusal for new parts after abandoned/rejected predecessors. Enforce the same after_plan predicate in continuePausedPlan before direct execution; test unfinished-parent resume stays queued and terminal-parent resume remains eligible.",
+      "Replace advisory-only orphan handling with idempotent after_plan_released decisions on parent and each nonterminal direct part. Carry predecessor id/status, terminal decision id, summary and note, released part ids, and advisory:false. Key by terminal transition and child so repeated ticks/callbacks and concurrent engines do not duplicate evidence or the single notification. Use the actual newly applied terminal note, even if it is appended after the plan status write. Cover late notes, a second tick and two-engine races.",
+      "Release held drafts through the existing path; render actual predecessor status and note in executor/prompt.go: done builds on main; abandoned/rejected/failed_draft plans from current main and explicitly names undelivered assumptions. Include status in draft_released evidence. Do not auto-resume paused parts or cancel already running part work on reopen.",
+      "Update the chained-parts and Progress sections of ARCHITECTURE.md and a timestamped changelog. Include release provenance and supported reopen behavior. Build, run required gates, commit and push; staging is evaluated by QA/acceptance."
+    ],
+    "interfaces": [
+      "servers/plan-manager/internal/orchestrator/schedule.go",
+      "servers/plan-manager/internal/orchestrator/after_plan.go",
+      "servers/plan-manager/internal/orchestrator/engine.go",
+      "servers/plan-manager/internal/orchestrator/failure_apply.go",
+      "servers/plan-manager/internal/orchestrator/pm245_split_test.go",
+      "servers/plan-manager/internal/executor/prompt.go",
+      "servers/plan-manager/internal/executor/prompt_test.go",
+      "servers/plan-manager/ARCHITECTURE.md",
+      "changelogs/"
+    ],
+    "non_goals": [
+      "Clearing stored provenance edges as normal scheduler policy",
+      "Automatically resuming every paused plan",
+      "Broadening reopen authorization",
+      "Changing intake after_plan validation",
+      "Changing active-plan caps"
+    ],
+    "verification": [
+      {
+        "name": "build",
+        "cwd": "servers/plan-manager",
+        "cmd": "make build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "service tests",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "PostgreSQL contracts without skips",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test-postgres",
+        "expect": "exit0",
+        "timeout_s": 1800
+      },
+      {
+        "name": "conditional writes",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test-conditional-writes",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ],
+    "qa": "required"
+  },
+  {
+    "sequence": 2,
+    "title": "Explain abandonment effects to deciders",
+    "role": "software_engineer",
+    "depends_on": [
+      "1"
+    ],
+    "acceptance_criteria": "A decider packet names each open direct part, its status and open task count, and honestly describes abandonment as releasing scheduling eligibility. The applied abandon/reject response and terminal decision include released_parts; plans without parts render no section.",
+    "problem": "The decider sees no after_plan parts and has claimed abandonment frees a part while the scheduler held it. It must understand the deployed policy and report actual effects.",
+    "action_items": [
+      "Declare executor.DeciderPart and Parts on DeciderPacket with ID, title, status, open task count. Fill from AfterPlanID=p.ID with VisibilityAll; filter terminal parts and sort ids deterministically. Count open tasks using the existing task terminal-status helper.",
+      "Add an explicit part section to decider_prompt.go: abandonment/rejection releases these parts into their own promotion line within a tick subject to caps; it does not guarantee an immediate run or resume paused parts. Replan/nonterminal states retain the hold; acceptance releases it only when it actually finishes the predecessor. State reopen effect on unstarted parts.",
+      "Attach released_parts ids and real release policy to the abandon/reject result and terminal decision evidence through decision.go and the existing terminal transition helper. List paused parts as eligibility released but still paused; copy the final decider note to per-part release decisions atomically/idempotently through T1's helper.",
+      "Write packet, prompt/snapshot and applied-decision tests for one part, no parts, hidden part, terminal part excluded, paused part, open task counts, stable ordering, and the actual note/evidence round trip. Update architecture/changelog; build, test, commit and push."
+    ],
+    "interfaces": [
+      "servers/plan-manager/internal/executor/decider_prompt.go",
+      "servers/plan-manager/internal/executor/decider_prompt_test.go",
+      "servers/plan-manager/internal/executor/testdata/",
+      "servers/plan-manager/internal/orchestrator/decider.go",
+      "servers/plan-manager/internal/orchestrator/decision.go",
+      "servers/plan-manager/internal/orchestrator/after_plan.go",
+      "servers/plan-manager/internal/orchestrator/decider_test.go",
+      "servers/plan-manager/ARCHITECTURE.md",
+      "changelogs/"
+    ],
+    "non_goals": [
+      "New decider choices or a human policy gate",
+      "Changing which plans can be abandoned or reopened",
+      "Guaranteeing runtime capacity"
+    ],
+    "verification": [
+      {
+        "name": "build",
+        "cwd": "servers/plan-manager",
+        "cmd": "make build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "service tests",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "PostgreSQL contracts",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test-postgres",
+        "expect": "exit0",
+        "timeout_s": 1800
+      }
+    ],
+    "qa": "required"
+  },
+  {
+    "sequence": 3,
+    "title": "Anchor task slowness to execution",
+    "role": "software_engineer",
+    "acceptance_criteria": "A queued part with execution_started_at=null and a ready timestamp older than slow_task_duration produces neither task_duration nor task_attempts pause. Once executing, duration, investigator ReadyFor and spell identity use max(task first-ready, plan execution start), with exact threshold tests and real-attempt controls.",
+    "problem": "The watchdog counts tasks.started_at inherited at split before the part ever executed, flags zero-attempt tasks and uses the same misleading duration in investigator packets.",
+    "action_items": [
+      "Write clock-controlled regression tests first in pm245_speed_test.go for an abandoned-parent part and an unfinished-parent part with no execution start and old ready timestamps: no task_duration measure, no task_attempts measure, no pause or investigator. Include a no-after_plan never-executed plan.",
+      "Reuse/export board's sampleStart anchor rather than duplicating divergent arithmetic. When execution_started_at is null skip local task-duration and task-attempt rules. Otherwise since=max(task.started_at, execution_started_at); missing task start cannot invent a duration. Use since consistently for measurements, spell keys and slownessPacket ReadyFor.",
+      "Use the existing Progress after_plan evaluation to suppress local task rules for a held part, including a previously executing part held after predecessor reopen. Preserve independent CI wait/platform incident rules; if they report on a held part, include the predecessor cause and holder id explicitly.",
+      "Test inherited ready earlier than execution, ready later than execution, exact/below/above thresholds, active tasks with real attempts, no-start packet output, suppression during hold, normal idle and CI behavior, and deduplication after release with a fresh execution-anchored spell. Adapt existing drill fixture execution starts so its legitimate positive task-duration case still breaches.",
+      "Update slow_task_duration help text in settings and shipped documentation/config descriptions to state execution-qualified first-ready semantics without changing threshold defaults. Update ARCHITECTURE.md and changelog; build, run service/Postgres gates, commit and push."
+    ],
+    "interfaces": [
+      "servers/plan-manager/internal/board/types.go",
+      "servers/plan-manager/internal/board/types_test.go",
+      "servers/plan-manager/internal/orchestrator/slowness.go",
+      "servers/plan-manager/internal/orchestrator/pm245_speed_test.go",
+      "servers/plan-manager/internal/orchestrator/drill_slowness.go",
+      "servers/plan-manager/internal/orchestrator/settings.go",
+      "servers/plan-manager/ARCHITECTURE.md",
+      "changelogs/"
+    ],
+    "non_goals": [
+      "Rewriting tasks.started_at or historical samples",
+      "Changing watchdog thresholds, modes, metrics cardinality or retry budgets",
+      "Automatically resuming slow plans",
+      "Suppressing independent CI failure evidence"
+    ],
+    "verification": [
+      {
+        "name": "build",
+        "cwd": "servers/plan-manager",
+        "cmd": "make build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "service tests",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "PostgreSQL contracts",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test-postgres",
+        "expect": "exit0",
+        "timeout_s": 1800
+      }
+    ],
+    "qa": "required"
+  },
+  {
+    "sequence": 4,
+    "title": "Prove split recovery on demand",
+    "role": "software_engineer",
+    "depends_on": [
+      "2",
+      "3"
+    ],
+    "acceptance_criteria": "Existing HTTP and MCP split/slowness drills run the deployed scheduler/watchdog path against isolated fixtures with controlled clocks and return named cases for terminal-parent release, supported reopen, unfinished-parent hold, and never-executed task suppression. Both drills leave live plans/settings untouched.",
+    "problem": "Unit success alone cannot establish that the deployed on-demand surfaces exercise the fixed path. Existing drills encode the old orphan/clock behavior.",
+    "action_items": [
+      "Extend drill_plan_split with one-tick abandoned release (parent note on part timeline), done release, full-cap release eligibility, supported reopen restoring an unstarted hold, and a still-executing predecessor negative control. Use the real engine, isolated transaction/fake launcher and private metrics; assert no leaked fixture rows or changes to live plans/settings.",
+      "Extend drill_slowness with old first-ready plus null execution start yielding zero local breaches, promotion setting execution start, below/at/above threshold clock advancement and correct Since/ReadyFor, plus an executing-task positive breach and unfinished-parent hold negative control. Call the same tick code; no natural clock delay.",
+      "Keep existing HTTP /api/v1/drills/plan-split and /api/v1/drills/slowness, their local shared mux, and MCP tools as on-demand triggers for the same implementations. Update descriptions and conformance/handler tests with case names, build identity, real/fake boundary, counts, cleanup and completeness.",
+      "Add a required no-skip test manifest and Makefile target test-after-plan-recovery covering the new named tests on memory and PostgreSQL and proof-client offline tests if a client is needed. Assert each named case was actually executed, not merely that go test matched nothing. Update architecture/changelog. Build, test, commit and push; deployed drills belong to QA/acceptance."
+    ],
+    "interfaces": [
+      "servers/plan-manager/internal/orchestrator/drill_plan_split.go",
+      "servers/plan-manager/internal/orchestrator/drill_slowness.go",
+      "servers/plan-manager/internal/orchestrator/pm245_split_test.go",
+      "servers/plan-manager/internal/orchestrator/pm245_speed_test.go",
+      "servers/plan-manager/internal/api/",
+      "servers/plan-manager/internal/mcp/",
+      "servers/plan-manager/tests/required/after-plan-recovery.txt",
+      "servers/plan-manager/Makefile",
+      "servers/plan-manager/ARCHITECTURE.md",
+      "changelogs/"
+    ],
+    "non_goals": [
+      "Using real pm-255 as a destructive drill fixture",
+      "Changing platform settings or provisioning runtimes",
+      "A new scheduler, cron or soak test",
+      "Claiming fake launcher output is real executable delivery"
+    ],
+    "verification": [
+      {
+        "name": "build",
+        "cwd": "servers/plan-manager",
+        "cmd": "make build",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "service tests",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "required recovery cases, no skips",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test-after-plan-recovery",
+        "expect": "exit0",
+        "timeout_s": 1800
+      },
+      {
+        "name": "conditional writes",
+        "cwd": "servers/plan-manager",
+        "cmd": "make test-conditional-writes",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ],
+    "qa": "required"
+  }
+]
