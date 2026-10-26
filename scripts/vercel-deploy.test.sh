@@ -102,7 +102,9 @@ check "hanging upload fails within the bound (${elapsed}s <= 15s)" '[ "$elapsed"
 check "hanging upload makes exactly one deploy call (got $deploys)" '[ "$deploys" -eq 1 ]'
 check "hanging upload never inspects" '! grep -q "^inspect" "$CALLS"'
 check "hanging upload prints ::error" 'grep -q "^::error title=vercel deploy::upload timed out" <<<"$out"'
-check "hanging upload leaves no child running" '! pgrep -f "sleep 6011" >/dev/null'
+# Anchored to the fake's own argv: an unanchored "sleep 6011" also matches any wrapper (an agent, a
+# shell) whose command line quotes this file, and reported a leftover child that did not exist.
+check "hanging upload leaves no child running" '! pgrep -f "^sleep 6011$" >/dev/null'
 
 # Fast upload failure with no URL: retried exactly once.
 run fail-once fail-once ok "$healthy"
@@ -121,7 +123,7 @@ check "hanging inspect exits non-zero" '[ "$code" -ne 0 ]'
 check "hanging inspect fails within the bound (${elapsed}s <= 20s)" '[ "$elapsed" -le 20 ]'
 check "hanging inspect prints ::error with state and URL" '[[ "$out" == *"Building after 2s $URL"* ]] && [[ "$out" == *"last body: $old"* ]]'
 check "hanging inspect makes one deploy and two inspects" '[ "$deploys" -eq 1 ] && [ "$(grep -c "^inspect" "$CALLS")" -eq 2 ]'
-check "hanging inspect leaves no child running" '! pgrep -f "sleep 6011" >/dev/null'
+check "hanging inspect leaves no child running" '! pgrep -f "^sleep 6011$" >/dev/null'
 
 # Nonzero inspect cannot veto an observed exact-SHA deployment (the original production regression).
 run error-inspect ok error "$healthy"
