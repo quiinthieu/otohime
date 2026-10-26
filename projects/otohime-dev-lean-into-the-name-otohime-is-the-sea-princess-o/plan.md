@@ -24,7 +24,7 @@ Part 2 is Ink ghosts, submitted as a successor idea with `after_plan_id=pm-256`,
 - **Role:** software engineer
 - **Problem:** the site has no hidden undersea destination, and the existing cartridge styling must not leak into the new scene.
 - **Action items:** create an isolated palace route and layout; add keyboard, Pocket, and below-waterline entry points; implement water caustics with a static fallback; animate ink fish that flee pointer/tap input; pause when hidden and honor reduced motion; add focused unit/e2e coverage for all entry and fallback behaviors.
-- **Interfaces:** `app/(ryugu)/`; `components/ryugu/`; `components/handheld.tsx`; footer component path identified from the current source tree.
+- **Interfaces:** `app/(ryugu)/`; `components/ryugu/`; `components/handheld.tsx`; `components/end-footer.tsx`.
 - **Non-goals:** history replay, sound, realtime visitors, historical snapshots, new runtime services.
 - **Verification:** `npm test`; `npm run lint`; `npm run build`.
 - **Acceptance:** the palace is reachable through all three entry points, remains isolated from cartridge CSS, and its motion degrades safely without WebGL or under reduced motion.
