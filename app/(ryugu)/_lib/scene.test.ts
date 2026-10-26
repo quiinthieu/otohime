@@ -112,9 +112,11 @@ test("ryugu.css shows the WebGL water only for a live sea, and the static causti
   assert.match(CSS, /\.sea-water \{[^}]*opacity: 0;/);
   assert.match(CSS, /\.sea\[data-water="live"\] \.sea-water \{[^}]*opacity: 0\.9;/);
   assert.match(CSS, /\.sea-still \.caustic \{[^}]*opacity: 0\.7;/);
-  // The only motion in the sheet is the way down, under no-preference; reduced motion takes every animation away.
+  // The only motion in the sheet is the way down and the Tamatebako's smoke, under no-preference; reduced motion
+  // takes every animation away.
   const animated = [...CSS.matchAll(/([^{}]+)\{[^{}]*\banimation:/g)].map((m) => m[1].trim());
-  assert.deepEqual(animated.filter((s) => s.startsWith(".")), [".surface", ".palace-copy"]);
+  assert.deepEqual(animated.filter((s) => s.startsWith(".")), [".surface", ".palace-copy", ".smoke i"]);
+  assert.match(CSS, /@media \(prefers-reduced-motion: no-preference\) \{[^@]*\.smoke i \{\s*animation: smoke/);
   assert.match(CSS, /@media \(prefers-reduced-motion: no-preference\) \{\s*\.surface \{/);
   assert.match(CSS, /@media \(prefers-reduced-motion: reduce\) \{\s*\*,\s*\*::before,\s*\*::after \{\s*animation: none !important;\s*transition: none !important;/);
 });

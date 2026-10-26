@@ -178,13 +178,237 @@ h1 {
   color: var(--muted);
 }
 
-/* The way down: the surface floats up into place and the copy surfaces after it, only where motion is welcome. */
+/* The Tamatebako: a lacquered box below the copy. Opened, smoke rises out of it and the changelog replay shows on a
+   leaf of paper whose age (--leaf-paper, --leaf-ink, --leaf-foxing, --leaf-edge, set per position by
+   app/(ryugu)/_lib/tamatebako.ts) yellows the sheet, fades the ink and brings up foxing. */
+.tamatebako {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+  margin: 2.5rem auto 0;
+  padding: 0 1.25rem 18rem;
+  text-align: center;
+}
+
+.box-title {
+  margin: 0 0 0.5rem;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem 1rem 0.6rem;
+  border: 1px solid rgba(214, 232, 237, 0.25);
+  border-radius: 6px;
+  background: rgba(7, 11, 15, 0.55);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.box:hover {
+  border-color: rgba(214, 232, 237, 0.55);
+}
+
+.box:focus-visible,
+.scrubber:focus-visible {
+  outline: 2px solid var(--light);
+  outline-offset: 3px;
+}
+
+.box-art {
+  width: 96px;
+  height: 77px;
+  overflow: visible;
+}
+
+.box-art path {
+  fill: #2a0d0b;
+  stroke: #7a2a1f;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.box-art .box-gold {
+  fill: none;
+  stroke: #c9a24f;
+  stroke-width: 2;
+}
+
+.box-lid {
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tamatebako[data-open] .box-lid {
+  transform: translate(-4px, -14px) rotate(-14deg);
+}
+
+.smoke {
+  position: absolute;
+  left: 50%;
+  top: 4.5rem;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.smoke i {
+  position: absolute;
+  left: -40px;
+  top: -40px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(230, 225, 211, 0.55), rgba(230, 225, 211, 0));
+  opacity: 0;
+}
+
+.smoke i:nth-child(2) {
+  animation-delay: 0.12s;
+  translate: -46px 0;
+}
+
+.smoke i:nth-child(3) {
+  animation-delay: 0.24s;
+  translate: 52px 0;
+}
+
+.smoke i:nth-child(4) {
+  animation-delay: 0.36s;
+  translate: -10px 0;
+}
+
+@keyframes smoke {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(18px, -120px) scale(2.2);
+  }
+}
+
+.replay {
+  margin-top: 1.25rem;
+  text-align: left;
+}
+
+.replay[hidden] {
+  display: none;
+}
+
+.replay-note {
+  margin: 0 0 1rem;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.replay-note strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.scrub-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 15px;
+}
+
+.scrubber {
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  accent-color: #c9a24f;
+  cursor: pointer;
+}
+
+.scrub-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.leaf {
+  margin: 1rem 0 0;
+  padding: 1rem 1.15rem 1.1rem;
+  border-radius: 2px;
+  color: var(--leaf-ink, #231e16);
+  text-shadow: none;
+  background-color: var(--leaf-paper, var(--paper));
+  background-image:
+    radial-gradient(circle at 18% 28%, rgba(139, 90, 33, var(--leaf-foxing, 0)) 0 3px, transparent 7px),
+    radial-gradient(circle at 74% 64%, rgba(139, 90, 33, var(--leaf-foxing, 0)) 0 2px, transparent 6px),
+    radial-gradient(circle at 58% 16%, rgba(139, 90, 33, var(--leaf-foxing, 0)) 0 1.5px, transparent 5px);
+  box-shadow:
+    inset 0 0 var(--leaf-edge, 4px) rgba(120, 84, 30, 0.45),
+    0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.leaf p {
+  margin: 0;
+}
+
+.leaf-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.leaf .leaf-date {
+  margin-top: 0.6rem;
+  font-size: 14px;
+}
+
+.leaf .leaf-subject {
+  margin-top: 0.15rem;
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.leaf .leaf-meta {
+  margin-top: 0.5rem;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.leaf-meta code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* The way down: the surface floats up into place and the copy surfaces after it, and the Tamatebako's smoke rises,
+   only where motion is welcome. */
 @media (prefers-reduced-motion: no-preference) {
   .surface {
     animation: sink 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
   .palace-copy {
     animation: fade-in 1.2s ease-out 0.6s both;
+  }
+  .smoke i {
+    animation: smoke 1.3s ease-out forwards;
   }
 }
 
@@ -207,6 +431,9 @@ h1 {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+  .smoke {
+    display: none;
   }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
     animation-duration: 0s !important;

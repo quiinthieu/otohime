@@ -19,7 +19,7 @@ const PALACE_TESTS = readdirSync(join(ROOT, "app/(ryugu)/_lib"))
   .map((f) => `app/(ryugu)/_lib/${f}`);
 
 test("the palace's unit tests are all found, and npm test runs every one of them", () => {
-  for (const f of ["isolation", "scene", "school", "wiring"]) assert.ok(PALACE_TESTS.includes(`app/(ryugu)/_lib/${f}.test.ts`), f);
+  for (const f of ["isolation", "scene", "school", "tamatebako", "wiring"]) assert.ok(PALACE_TESTS.includes(`app/(ryugu)/_lib/${f}.test.ts`), f);
   for (const file of PALACE_TESTS) assert.ok(runs(UNIT, file), `npm test never runs ${file}`);
 });
 

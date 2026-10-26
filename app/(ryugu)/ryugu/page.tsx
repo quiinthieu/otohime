@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import history from "@/content/history.json";
 import { Sea } from "../_components/sea";
+import { Tamatebako } from "../_components/tamatebako";
+import { replay } from "../_lib/tamatebako";
 
 // absolute: the layout's template would otherwise make this "Ryugu-jo · Ryugu-jo".
 export const metadata: Metadata = { title: { absolute: "Ryugu-jo" } };
 
-// /ryugu: the paper site's surface at the top, and below the waterline the ink sea with Otohime's palace on its floor.
+// /ryugu: the paper site's surface at the top, and below the waterline the ink sea with Otohime's palace on its floor
+// and her Tamatebako, which replays the changelog built at build time (content/history.json, scripts/history-index.ts).
 export default function RyuguPage() {
   return (
     <main className="ryugu">
@@ -30,6 +34,7 @@ export default function RyuguPage() {
         </p>
         <p className="hint">Move your pointer, or touch the water, and the ink fish scatter.</p>
       </section>
+      <Tamatebako replay={replay(history)} />
     </main>
   );
 }

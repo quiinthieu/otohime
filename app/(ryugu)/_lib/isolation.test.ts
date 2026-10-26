@@ -82,10 +82,26 @@ test("the root layout mounts the shared appearance boundary and nothing else of 
   assert.notEqual(reachesSite(ROOT_LAYOUT, "@/components/appearance-boot"), null, "the checker still flags the boundary");
 });
 
+// The other exception is data, not code or style: the palace page reads the Tamatebako's changelog, the static
+// content/history.json the build writes (scripts/history-index.ts). That specifier exactly, in page.tsx alone.
+const HISTORY = "@/content/history.json";
+const PAGE = join(ROOT, "app/(ryugu)/ryugu/page.tsx");
+const history = (file: string, spec: string) => file === PAGE && spec === HISTORY;
+
+test("the palace page reads the static changelog and nothing else of content/", () => {
+  const shared = specifiers(PAGE).filter((spec) => reachesSite(PAGE, spec) !== null);
+  assert.deepEqual(shared, [HISTORY]);
+  assert.notEqual(reachesSite(PAGE, HISTORY), null, "the checker still flags the data");
+  assert.ok(!history(join(ROOT, "app/(ryugu)/_components/tamatebako.tsx"), HISTORY), "only the page");
+  for (const spec of ["@/content/site", "@/content/ledger.json", "@/content/history", "../../../content/history.json"]) {
+    assert.ok(!history(PAGE, spec), spec);
+  }
+});
+
 test("nothing under app/(ryugu)/ imports the site's CSS, Tailwind, code or another project", () => {
   for (const file of palaceFiles) {
     for (const spec of specifiers(file)) {
-      const bad = rootAppearance(file, spec) ? null : reachesSite(file, spec);
+      const bad = rootAppearance(file, spec) || history(file, spec) ? null : reachesSite(file, spec);
       assert.equal(bad, null, `${relative(ROOT, file)} imports ${spec} (${bad})`);
     }
   }

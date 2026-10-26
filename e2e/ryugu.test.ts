@@ -1,8 +1,10 @@
 // Ryugu-jo in a real browser, against a running production server: the three ways down (typing "urashima" at the
 // top of Home, the Pocket console's Dive chip, the waterline under the footer), the palace's own stylesheet and
 // nothing of the site's, a live sea with WebGL whose fish flee the pointer, and the still sea it falls back to with
-// no WebGL, under reduced motion and while the page is hidden. Negative controls: a lone A on Home does open a
-// page (so the word's taken a's are what keep it), and the live sea does swim (so a frozen fish means a fallback).
+// no WebGL, under reduced motion and while the page is hidden; and the Tamatebako, by keyboard, by touch and under
+// reduced motion, its scrubber walking back through the real changelog as the paper ages. Negative controls: a lone
+// A on Home does open a page (so the word's taken a's are what keep it), the live sea does swim (so a frozen fish
+// means a fallback), and the box does smoke when motion is welcome.
 // Drives Chrome through playwright-core: CHROME_PATH if set, else the installed Google Chrome, else Playwright's
 // own Chromium.
 //   BASE_URL  the server (default http://localhost:4000)
@@ -276,5 +278,117 @@ test("under reduced motion the sea is still, asks for no WebGL at all, and the w
   // motion welcome again: the sea comes alive without a reload
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.waitForFunction(() => document.querySelector(".sea")?.getAttribute("data-water") === "live");
+  assert.deepEqual(errors, []);
+});
+
+// The Tamatebako: the box, its smoke and the changelog replay's scrubber.
+type LeafView = { sha: string; date: string | null; subject: string; age: number; blue: number; text: string | null };
+const leaf = (page: Page) =>
+  page.evaluate((): LeafView => {
+    const l = document.querySelector(".leaf")!;
+    return {
+      sha: l.querySelector("code")?.textContent ?? "",
+      date: l.querySelector("time")?.getAttribute("datetime") ?? null,
+      subject: l.querySelector(".leaf-subject")?.textContent ?? "",
+      age: Number(l.getAttribute("data-age")),
+      blue: Number(getComputedStyle(l).backgroundColor.match(/\d+/g)![2]),
+      text: document.querySelector(".scrubber")?.getAttribute("aria-valuetext") ?? null,
+    };
+  });
+const smoked = (page: Page) => page.evaluate(() => (window as unknown as { __smoked: boolean }).__smoked);
+// Records whether the box's smoke was ever in the page, however briefly.
+const watchSmoke = (page: Page) =>
+  page.evaluate(() => {
+    const w = window as unknown as { __smoked: boolean };
+    w.__smoked = false;
+    new MutationObserver(() => {
+      if (document.querySelector("[data-smoke]")) w.__smoked = true;
+    }).observe(document.body, { subtree: true, childList: true });
+  });
+
+test("the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages", async () => {
+  const { page, errors } = await open("/ryugu", { noWebgl: true });
+  await settle(page);
+  const box = page.getByRole("button", { name: "Open the Tamatebako" });
+  assert.equal(await box.getAttribute("aria-expanded"), "false");
+  assert.equal(await page.locator(".replay").isVisible(), false, "the replay is shut in the box");
+  await watchSmoke(page);
+  await box.focus();
+  await page.keyboard.press("Enter");
+  const shut = page.getByRole("button", { name: "Close the Tamatebako" });
+  assert.equal(await shut.getAttribute("aria-expanded"), "true");
+  assert.match(await page.locator(".replay-note").innerText(), /A changelog replay\.[\s\S]*real commit[\s\S]*not rebuilt/);
+  await page.waitForSelector("[data-smoke]", { state: "detached", timeout: 3000 });
+  assert.equal(await smoked(page), true, "the box let out smoke");
+
+  await page.keyboard.press("Tab");
+  const slider = page.getByRole("slider", { name: "Scrub back through the changelog" });
+  assert.equal(await slider.evaluate((s) => s === document.activeElement), true, "Tab reaches the scrubber");
+  const max = Number(await slider.getAttribute("max"));
+  assert.ok(max > 0, "the changelog has commits");
+  const newest = await leaf(page);
+  assert.equal(await slider.inputValue(), String(max));
+  assert.equal(newest.age, 0);
+  assert.match(newest.date ?? "", /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/);
+  assert.match(newest.sha, /^[0-9a-f]{10}$/);
+  assert.ok(newest.subject.length > 0);
+  assert.ok(newest.text?.includes(newest.subject), newest.text ?? "");
+
+  await page.keyboard.press("ArrowLeft");
+  const back = await leaf(page);
+  assert.equal(await slider.inputValue(), String(max - 1));
+  assert.notEqual(back.sha, newest.sha, "a step back is another commit");
+  assert.ok(back.age > 0 && back.blue < newest.blue, `the paper aged: ${JSON.stringify([newest, back])}`);
+
+  await page.keyboard.press("Home");
+  const oldest = await leaf(page);
+  assert.equal(await slider.inputValue(), "0");
+  assert.equal(oldest.age, 1);
+  assert.ok(oldest.blue < back.blue, "the oldest commit's paper is the yellowest");
+  assert.match(oldest.text ?? "", /Commit 1 of \d+, old and foxed\.$/);
+  await page.keyboard.press("End");
+  assert.equal((await leaf(page)).sha, newest.sha);
+
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Enter");
+  assert.equal(await box.getAttribute("aria-expanded"), "false");
+  assert.equal(await page.locator(".replay").isVisible(), false);
+  assert.deepEqual(errors, []);
+});
+
+test("the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog", async () => {
+  const { page, errors } = await open("/ryugu", { noWebgl: true, hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
+  await settle(page);
+  await page.locator(".tamatebako .box").tap();
+  const slider = page.locator(".scrubber");
+  await slider.scrollIntoViewIfNeeded();
+  const b = (await slider.boundingBox())!;
+  assert.ok(b.height >= 44, `the scrubber is a finger's height: ${b.height}`);
+  await page.touchscreen.tap(b.x + 6, b.y + b.height / 2);
+  await page.waitForFunction(() => Number(document.querySelector(".leaf")?.getAttribute("data-age")) > 0.9);
+  const old = await leaf(page);
+  await page.touchscreen.tap(b.x + b.width - 6, b.y + b.height / 2);
+  await page.waitForFunction(() => Number(document.querySelector(".leaf")?.getAttribute("data-age")) < 0.1);
+  const fresh = await leaf(page);
+  assert.notEqual(old.sha, fresh.sha);
+  assert.ok(old.blue < fresh.blue, "the far end's paper is the older one");
+  assert.deepEqual(errors, []);
+});
+
+test("under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back", async () => {
+  const { page, errors } = await open("/ryugu", { noWebgl: true, reducedMotion: "reduce" });
+  await settle(page);
+  await watchSmoke(page);
+  await page.locator(".tamatebako .box").click();
+  assert.equal(await page.locator(".replay").isVisible(), true, "the replay shows at once");
+  assert.equal(await page.locator(".box-lid").evaluate((l) => getComputedStyle(l).transitionDuration), "0s");
+  await page.waitForTimeout(400);
+  assert.equal(await smoked(page), false, "smoke under reduced motion");
+  // negative control: with motion welcome the same box does smoke
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.locator(".tamatebako .box").click();
+  await page.locator(".tamatebako .box").click();
+  await page.waitForSelector("[data-smoke]", { state: "attached", timeout: 2000 });
+  assert.equal(await smoked(page), true);
   assert.deepEqual(errors, []);
 });
