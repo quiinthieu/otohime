@@ -1,113 +1,89 @@
 # Split Part Recovery
 
-Plan: pm-260 · product owner run-8783 · 2026-10-26
-Repository: otohime · platform implementation repository: mono-v2
-Status: execution contracts prepared; code and real board release are not yet delivered.
+Plan **pm-260**, revision 3 · product-owner **run-8836** · 2026-10-26
+Repository **otohime** · remaining deliverable: **offline recovery evidence certification**.
 
-## Outcome and ownership
+This revision replaces the exhausted **t-1578 Verify split part release** contract. It preserves its working implementation and every finished artifact. It does **not** claim that pm-255 has been released, t-1557 dispatched, the platform fixed, or production deployed.
 
-A split part must not stay held forever after its predecessor is abandoned. Existing parts of a terminal predecessor become eligible in their own promotion line within one tick. The edge remains as provenance; a supported reopen restores the hold for an unstarted part. Abandonment releases eligibility, does not promise a slot, and does not resume a paused part.
+## What changes after the failed attempts
 
-This checkout contains the product site, not the scheduler. Research [rep-5107](research.md) located the implementation in mono-v2 `servers/plan-manager` at f7d5b90. The research report body is preserved verbatim, including its historical observations; the decisions in this plan supersede its open points and manual workaround.
+[QA run-8833](qa_report_run-8833.md) passed 2099 project tests, 41 focused tests, typecheck and 20 independent adversarial controls. Green gate **ver-3526** passed at **b73d93ca825ae4c56a7931c22e2280a960b535e8**, containing the repaired evaluator **c2ca9c20c6ae527d329ed4263672572ffd7219c9**. No new evaluator defect was identified. QA nevertheless failed after three fix cycles on two profiles because site E2E failed and the live site lacked the delivery. Repeated documentation-only pushes did not repair either condition.
 
-Delivery is divided by repository, without a cross-repository after_plan edge:
-
-| Owner | Deliverable |
+| Previous coupling | Revised execution |
 | --- | --- |
-| pm-260, otohime | One SWE contract in [proposal.json](proposal.json): an offline read-only release/dispatch evidence probe and collection walkthrough. QA independently reads the real board. |
-| New mono-v2 plan, filed by this PO run | Four implementation contracts in [mono-v2-contracts.json](mono-v2-contracts.json), to be copied into that plan and proposed by its own PO after inspecting current main. No otohime SWE task names a mono-v2 code path. |
-| Privileged platform operator | Exact one-plan administrative repair and resume for pm-255; fingerprint `release-after-plan:pm-255:pm-248`. The request is filed after the planning artifacts and proposal are saved; there is no polling. |
-| Acceptance on both plans | Preserve separate verdicts for artifact delivery, scheduler integration, release eligibility and actual t-1557 dispatch. The mono-v2 plan owns platform semantics; pm-260 owns the real pm-255 observation. |
+| Local file-reading CLI judged by the site's Vercel deployment | Execute the real CLI from the locked Node 22 checkout. It is not a deployed endpoint. Site E2E/deployment remains an explicit separate defect. |
+| Another SWE cycle despite already-green offline commands | One certification contract, with the existing red-gate already-green path. Repair only a newly reproduced offline defect; never manufacture a source change. |
+| QA repeatedly discovers the same held board | All 20 independent adversarial controls are now declared in verification[], alongside the complete unit suite, focused subprocess tests and typecheck. |
+| Tool correctness, board release, dispatch and product output blurred | Independent booleans and evidence boundaries stay intact; delivery_proven is always false. Full original recovery is still unmet. |
+| Stale capacity workaround in the first plan | Preserve current overrides and reuse esc-395. No cap/reset, SQL, reopen or resume bypass by a delivery role. |
 
-The new mono-v2 idea is an independent repair, not part 2 of pm-260: cross-repository after_plan edges are forbidden, and it must start without waiting for the evidence probe. Its intake id is recorded in the PO summary.
+The nearest deliverable that this repository and role can prove now is an independently executable offline evidence tool. The original scheduler/decider/watchdog implementation belongs to mono-v2; the administrative release requires privileges this delivery role does not have. This limitation is recorded as a scope decision, not a claim that eventual recovery is impossible or a waiver of a known defect.
 
-## Evidence and resolved decisions
+## Preserved work and current facts
 
-- At 08:30:38Z, `explain_schedule(pm-255)` reported paused, waiting/after_plan, holder pm-248, no own runs, t-1557 ready, and execution_started_at null.
-- Live settings now show max_active_plans **2**, an operator override, with **4** used and **0** free. Research's max=4 and temporary max=5/reset sequence are stale. Reset would restore Helm's 4 and discard the operator's 2. Preserve the current cap.
-- pm-248 was abandoned by decider-agent, not auto:decider-budget. The reopen API refuses that predecessor. Reopen/re-abandon is not an executable recovery procedure.
-- Proposals admit only SWE tasks and at least one task. A local acceptance probe is a useful repo-owned build contract; a pretend scheduler task or empty DAG would fail.
-- Release existing parts of done, abandoned, rejected and failed_draft predecessors. Preserve intake validation and other terminal/revision semantics unless the canonical status predicate already includes them safely. No new library, controller, storage schema or screen is needed.
-- Keep the edge in normal policy and copy the actual final terminal decision summary/note to every open direct part. Handle the terminal note's write order so a pre-note status transition does not lose it.
-- Make paused resume consult the same hold predicate. On supported reopen, restore the hold on queued/unstarted work; do not cancel work that already started.
-- Skip local task_duration and task_attempts for plans without execution_started_at. Otherwise anchor duration and investigator ReadyFor at max(first-ready timestamp, execution_started_at). A still-held part gets no local work-slowness pause; independent CI rules retain the explicit after_plan cause.
-- No task proves a claim by passage of time. Controlled clocks and real on-demand drill entry points prove periodic scheduler/watchdog behavior now.
-- This is a bug fix to the existing deterministic scheduler. Alternatives considered: advisory-only notices (the defect), per-part release/reject questions (a needless policy gate), permanent edge clearing (loses reopen semantics), and a new workflow engine (unnecessary scope). Release with retained provenance is chosen.
-- Product-owner run has no task id; its documentation commit uses `pm-260/run-8783:`. Assigned SWE runs use their actual `plan_id/task_id:` prefix.
-- Every judgement is also recorded through plan_manager_record_decision; the missing research artifact and changed cap are recorded as a lesson.
+The earlier [plan](plan_run-8783.md), [proposal](proposal_run-8783.json), verbatim [research rep-5107](research.md), all QA reports, snapshots, manifests and repair history remain committed. The earlier plan/playbook is historical; its settings, ownership placeholders and temporary-cap workaround are superseded by this revision and the recorded esc-395 outcome. Standing rules remain in AGENTS.md and docs/claude/software-development.md; this plan does not replace them.
 
-## Current plan build contract
+Live reads during run-8836 establish:
 
-[proposal.json](proposal.json) is the exact task array submitted to plan_manager_propose_tasks. It contains one independent SWE task, **Verify split part release**, with problem, ordered action_items, interfaces, non_goals and three checkout-only verification commands.
+- pm-260 is drafting revision 2 before this proposal. Its only returned task t-1578 is **superseded**, not done. No completed board task needs replacement. Preserve any task already done if the board changes before proposal application.
+- pm-255 is **queued**, progress **waiting/after_plan**, holder **pm-248**, execution_started_at **null**, t-1557 ready; explain_schedule returns no own runs. The current slot snapshot is **4 used / 5 maximum / 1 free**. This is a predecessor hold, not solely missing capacity.
+- max_live_runs_per_plan is **1**, max_plan_elapsed **6h**, qa_mode **auto**. Do not inherit the original cap of 2 or a prior report's full-board observation.
+- pm-258/t-1564 **Restore the deployment checks gate** is already running. It owns the concrete E2E/footer diagnosis and repair; a second CI repair contract here would conflict with it.
+- mono-v2 **pm-263** is paused: t-1579 and t-1581 ready, t-1580/t-1582 backlog. None is delivered by this re-plan. t-1582 explicitly excludes the real pm-255 administrative repair and t-1557 dispatch, so those must not be silently transferred to that plan.
+- **esc-395**, fingerprint **release-after-plan:pm-255:pm-248**, is waived/unperformed. Its decider outcome permits offline work, forbids the bypasses above, and retains the operator chore. Do not open a duplicate action or treat its resolved flag as chore completion.
 
-The probe consumes unmodified decoded JSON from get_plan, explain_schedule, get_timeline and list_runs. It makes no network call or board mutation. It reports release eligibility and actual durable SWE submission separately, requires matching ids and the parent's terminal note on the part timeline, and fails closed on incomplete inputs.
+The QA report's CI evidence remains open: **40303396148/checks 121506990908** and **40303724712/checks 121509554244** failed E2E; the precise assertion was unread, so no environment cause or application repair line is established. QA observed production **ee1f6ce6cd7f47c8e7fe1c450b33ff07e922332f**, lacking b73d93c. This run does not promote those historical observations to fresh production evidence.
 
-Two modes are explicit:
+A bounded independent GitHub read in this PO run returned five main workflows: **40307460821** pending at **9ddd0840**, **40306767130** cancelled at **922b210**, **40306337481** in progress at **ae4607d**, then the two failed runs above. Five summaries are not complete history or raw assertion evidence. Cancellation is not a repaired gate, and pending is not deployment.
 
-| Mode | Required evidence |
-| --- | --- |
-| released | Current progress has left after_plan, the release note is present, and pm-255 is either queued/startable or has actually started execution. |
-| dispatched, default | released plus execution_started_at and a software_engineer run for t-1557 with a durable task-manager id; a scheduled run without submission is insufficient. |
+## Remaining build contract
 
-A failed submitted SWE attempt can prove dispatch, never product delivery. Tests cover API-shaped synthetic positive fixtures and held, paused, wrong-id, missing-progress, missing-note, scheduled-only and truncated negative fixtures. They are fake board evidence, not proof of the live release. Verification runs `npm test`, the focused evaluator/CLI test, and `npm run typecheck`. QA remains required.
+[proposal.json](proposal.json) is the exact new task array. One task, **Certify offline release evidence**, has no dependencies and can start immediately. It changes only the existing internal CLI/evaluator, their tests and evidence documentation if an actual offline regression requires repair. It does not require a board write, external runtime, other plan completion or natural tick.
 
-Offline implementation is independent of board capacity. The operator action already filed by this PO is reused, not recreated by each run. If a run encounters a genuinely absent person-only prerequisite, its first action raises the stable chore and reports immediately; subsequent work resumes under the outcome. Runtime capacity is handled by the existing durable plan queue, not a machine-start chore.
+The task's acceptance is narrowly executable: the actual evaluator imports and CLI subprocesses pass all four declared commands in the locked checkout. Synthetic API-shaped positive fixtures prove the tool's rules. Held, malformed, foreign, incomplete, tampered and scheduled-only evidence must fail with the existing stable distinctions. A failed submitted SWE run may prove dispatch but never product output. No weakened assertion, skipped test or fabricated receipt is acceptable.
 
-## Platform build contracts for mono-v2
+The exact verification commands are:
 
-[mono-v2-contracts.json](mono-v2-contracts.json) contains all fields and commands for these four contracts. It is a blueprint for the correctly homed plan, not a claim they were proposed on pm-260.
+```sh
+npm test
+node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/plan-release.test.ts
+node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-adversarial.mjs
+npm run typecheck
+```
 
-| Sequence | Contract | Dependencies | Result |
-| --- | --- | --- | --- |
-| 1 | Release finished predecessor parts | none | One-tick queued/drafting release; per-part terminal note; repeat/race idempotence; retained edge; resume observes unfinished hold; reopen restores unstarted hold. |
-| 2 | Explain abandonment effects to deciders | "1" | Deterministic part list/counts in the packet and prompt; abandon/reject responses and terminal evidence name real effects and released_parts, including still-paused parts honestly. |
-| 3 | Anchor task slowness to execution | none | Never-executed parts cannot trigger task-local slow work rules; measurements, investigator prompt and spell identity share the execution-qualified first-ready anchor. |
-| 4 | Prove split recovery on demand | "2", "3" | Existing split/slowness HTTP and MCP drills cover release, reopen, real hold and clock scenarios through production code with isolated fixtures and explicit cleanup. |
+Install first with **npm ci**, use Node 22, and keep the committed lockfile. Commands only affect the checkout or temporary fixtures. There are no deployment/cluster/board mutations in verification[]. All 20 adversarial cases must retain a passing positive baseline and contract_met=true, including malformed optional fields, missing progress, negative prose, unrelated receipt identities and failed-attempt preservation.
 
-Each behavior ships with its own failing regression tests in its implementation contract; sequence 4 is deployed-path proof, not delayed unit coverage. The no-skip recovery target checks named tests actually ran on memory and PostgreSQL. The real executable preflight is `make build` using the service's locked go.mod/go.sum and existing dependency environment; fake launchers prove orchestration only.
+Set **qa=skip** because this task certifies an internal offline tool and changes no person-facing screen, endpoint or migration; verification[] fully proves that scope. Acceptance remains independent. This does not disable CI or change the classification of the prior QA failures. If all red-gate commands are already green, the documented **red_gate_already_green** mechanism should close the task without another SWE delivery. If a command fails, implement its failing regression and smallest repair, run the full verification, commit with the newly assigned task prefix and push. SWE work stops at push; no site-deployment receipt is part of this contract.
 
-Current admission settings are max_plan_elapsed=6h and max_live_runs_per_plan=3. At fallback 1h/task, all four overlap through service architecture/changelog and their total is 4h; the longest dependency chain is 3h. The correctly homed PO must use the server's learned role p50 estimate before storage. If refused plan_too_large, keep a first part within the limit and file the remainder as same-repo after_plan parts using the returned preceding plan ids; never parent_plan_id. No planned task requires an external human or runtime to pass its checkout verification.
+The one-task DAG has no idle edge. Size admission uses current role p50 and max_live_runs_per_plan=1: weighted sum and longest path both equal one SWE task duration (fallback 1h if fewer than 20 samples), below the 6h ceiling on the available historical estimate. The proposal response is authoritative; if it refuses size, split only real implementation scope rather than duplicate this already-delivered tool. No later project part or duplicate idea is needed: the other work already has owners.
 
-All target SWE work ends at commit/push. QA/acceptance run the deployed drills through `plan_manager_drill_plan_split` and `plan_manager_drill_slowness` (default isolated mode), the same implementations used by the HTTP surfaces. No live_submit fixture is needed for this change. The natural periodic tick is outside task proof.
+## Original outcomes: owners, evidence and failure conditions
 
-## Immediate pm-255 recovery playbook
+These remain visible even if the replacement task passes. A scoped offline pass must not be described as full Split Part Recovery success.
 
-This is an administrative database repair and existing resume operation performed by the privileged platform operator. Delivery roles must not invoke the privileged tools or bypass them through HTTP/SQL.
+| Outcome / exact ids | Owner | Required evidence; failure condition |
+| --- | --- | --- |
+| Terminal-parent release, retained edge, supported reopen and final parent note | pm-263/t-1579, t-1580; mono-v2 QA/acceptance | Unit/backends plus deployed on-demand split drill. Abandoned/done release within one controlled tick; unfinished/reopened predecessor holds. Missing note, lingering hold or unsafe resume fails. |
+| Null execution start and honest task_duration | pm-263/t-1581, t-1582; mono-v2 QA/acceptance | Controlled-clock tests and deployed slowness drill; never-executed part past threshold has no local work-duration breach; real execution resets the anchor. An inherited ready-time breach remains a defect. |
+| E2E and containing site deployment | Existing pm-258/t-1564, coordinated with pm-256/t-1559; site QA | Obtain actual failing assertion using [fix_plan_run-8833.md](fix_plan_run-8833.md), reproduce locally, repair only evidenced source and retain gates. If necessary, diagnostic entry .github/workflows/ci.yml:80 publishes bounded failing TAP while preserving pipefail/original exit. Checks+production must pass at a containing SHA; unread assertions, repeated red or stale deployment remain unresolved. |
+| Real pm-255 release receipt | Privileged operator esc-395; **pm-260 acceptance retains observation ownership** | Reuse the existing chore. Before action, operator refreshes parent status and current settings; administrative repair is conditional on the exact edge and abandoned pm-248. Record genuine after_plan_released provenance including actual dec-55805/dec-55807 note, and authenticated progress leaving after_plan. Alternatively use deployed pm-263 semantics and an authorized resume if needed. Persistent hold or merely waived chore fails. |
+| Real t-1557 SWE dispatch, separately from output | Scheduler/durable queue; **pm-260 acceptance** | Fresh matching four-tool snapshots/manifest, execution_started_at, a real t-1557 software_engineer run id and durable tm_task_id. Scheduled-only, wrong task, missing execution or missing durable id fails. Capacity uses the durable scheduler, never another person-starts-runtime step. A failed attempt stays a defect beside a replacement. |
+| t-1557 Ask probe product output | pm-255/t-1557 owning delivery/gate/QA | Successful actual executable/output evidence under its unchanged contract. A dispatch id, fake runner or this CLI's result proves none of that product delivery. |
 
-1. Read pm-255, pm-248, the actual abandoned decision/note (dec-55805 and dec-55807), and current settings. If pm-255 has already progressed, preserve its evidence and do not repeat writes.
-2. If pm-248 remains abandoned and pm-255 still has after_plan_id=pm-248, conditionally clear only that edge in a transaction using the operator's authorized database procedure. Predicate on both ids and pm-248's abandoned status; require one changed row. Preserve the old edge in the audit decision. This one-off repair differs from normal retained-edge policy because the old deployment has no release route and no authenticated resume can remove its schedule hold.
-3. Record a pm-255 timeline decision naming pm-248, its abandoned decision id, summary and final note, pm-260 and the administrative edge repair; include before/after edge and actor. Verify note readback. If already cleared, avoid a duplicate repair decision.
-4. Resume pm-255 through the existing privileged resume operation if it remains paused. Do not alter max_active_plans, watchdog settings, task timestamps, t-1557/t-1558 identities or contracts.
-5. Read the immediate result once through get_plan/explain_schedule/list_runs. Resume admits executing when capacity is available or durably queues pm-255 in its own right; normal caps may keep it queued/startable. Record observed state and any real task-manager id. Do not call queueing a dispatch.
-6. If not yet dispatched, leave acceptance pending under the platform's pending/watch mechanism with exact plan/task/chore ids, ownership and failure condition. This is a capacity deferral, not a new human prerequisite, and does not make a false dispatch claim.
+The manual chore is already raised at its first point of need; there is no new human gate for the offline task. If a future role encounters a distinct person-only prerequisite, it raises kind=operator_action immediately with a stable chore fingerprint and a meaningful ready_probe when supported, then ends with the exact id and outcome requirement. An operator action is a chore, not a request to choose policy. Do not poll, soak, spend fix cycles on a missing external prerequisite, or add tasks that idle on pm-263 or CI.
 
-Do not use reopen/re-abandon or the cap-bump bypass. Clearing this single stale edge makes the old scheduler's progress truthful immediately and prevents renewed after_plan holding. The general code fix keeps edges for all normal transitions.
+## Acceptance and evidence boundaries
 
-A generic unauthenticated HTTP ready_probe cannot establish this admin-only state: GET /api/v1/plans/pm-255/schedule requires IAM, /internal requires its token, and the probe schema has no auth headers or JSON predicate. Omit a misleading HTTP 200 login-page probe; readiness is the operator's recorded outcome plus independent MCP readback. No credential is put in a URL. After the platform fix, acceptance uses the existing authenticated tools to prove the state directly.
+For the revised task, acceptance independently executes the checkout CLI and inspects the implementation diff and prior independent controls. Do not pass by rerunning only the implementer's supplied summary. Use the saved unmodified run-8833 four-tool capture as an observed historical hold negative, and a separate temporary copy changed without rehashing as a manifest-tamper control. The former must exit 1 and the latter 2. Fresh reads are required for any *current* release claim. Existing [release-walkthrough.md](release-walkthrough.md) defines collection, completeness and source identities.
 
-## Acceptance walkthrough and negative controls
+The scoped artifact may be reported delivered when its independent evidence passes. For the **original** recovery request, pm-260 acceptance retains the live release/dispatch gap and must explicitly report it unmet until genuine evidence exists; it cannot submit a full original-outcome pass based on the narrower contract. No pending replacement, future dated event or scoped certification waives observed CI defects. Report a missing prerequisite with its owner and exact ids rather than starting another documentation-only fix cycle. Dated observations belong to an existing pending/watch mechanism only where its contract applies, never a task step.
 
-| Scope | Starting state | Action now | Required observable evidence |
-| --- | --- | --- | --- |
-| Existing-part release | abandoned predecessor, one queued part, one free slot | Fixture HandleTick once through deployed split drill | Part executes; parent note attached; after_plan edge retained; one release notification. |
-| Capacity boundary | terminal predecessor, full normal slots | Fixture tick | Part queued, progress startable/capacity-bound, not after_plan; release does not promise dispatch. |
-| Existing done behavior | done predecessor, queued part | Fixture tick | Part promoted with previous done semantics. |
-| Supported reopen | budget-abandoned predecessor, unstarted queued part | Existing reopen then fixture tick | Progress after_plan names predecessor; done then tick releases it. |
-| Negative control | executing predecessor | Fixture promotion/resume | No part dispatch, progress remains after_plan. |
-| Draft safety | abandoned/rejected predecessor and held draft | Fixture draft release | One research run, prompt names true status and undelivered assumptions. |
-| Decider honesty | parent has open/paused parts | Render packet, apply abandonment in fixture | Part ids/counts listed, release eligibility distinguished from paused state, released_parts evidence and final note copied once. |
-| Watchdog clock | ready 3h ago, execution_started_at=null, threshold 2h | On-demand slowness drill | No task_duration/task_attempts pause or investigator. After promotion clock advances synthetically to threshold boundaries; Since and ReadyFor use new anchor. |
-| Real board | pm-255 paused behind abandoned pm-248 | Operator administrative repair/resume; independent MCP reads | Part timeline has the parent note and repair; queued/startable or executing with progress.reason != after_plan. Final dispatch criterion requires a real SWE run for t-1557 and its task-manager id. |
-| Evidence-probe negative control | Copy of real snapshots | Change part/holder/task id or restore after_plan hold | Probe fails; the untouched live board is not mutated. |
+Any execution/delivery claim identifies the executable fingerprint (relevant code, lock, configuration and artifact hashes), actual build SHA and observed run profile/model/effort. Inspect bounded paginated FAILED and COMPLETED histories plus current jobs, raw runner tails and callback persisted ingestion before claiming real execution. Record inspected counts and completeness; unread/truncated ranges are inconclusive. This PO performed planning reads only and does not claim a new runtime-history or callback audit. Historical QA audit bounds remain in qa_report_run-8833.md.
 
-QA/acceptance obtain raw evidence independently of the implementer's summary, compare deployed build identity to delivery SHA, and inspect bounded paginated failed and completed run/task histories as well as current jobs. Record counts and whether pagination/tails are complete; any unread/truncated range is inconclusive. Follow a real submitted run's callback through persisted ingestion if asserting execution/delivery, and correlate executable fingerprints (relevant code, lock/config hashes) rather than unrelated main commits.
+Boundary table for this re-plan: offline CLI execution **demonstrated**; synthetic success **tool behavior only**; integration deployed at delivery **unproven**; real pm-255 release **not demonstrated**; real t-1557 dispatch **not demonstrated**; t-1557 product output **unproven**.
 
-Reports distinguish integration deployed, queue/capacity pending, execution demonstrated, and product delivered. Actual profile/model/effort must come from the observed run. This PO ran profile codex-sol-6-1-high, gpt-6.1-sol, high (run-8783); research ran on its historical cited profile, not today's defaults. No task or report may equate a fake launcher, green unit tests, or a durable queue id with t-1557's delivered output.
+## Planning delivery
 
-Deferred live items name ids pm-255/t-1557, the operator chore id returned at filing, and the new mono-v2 plan id returned at intake; owners are platform operator (edge repair/resume), scheduler (capacity/admission) and acceptance (dispatch proof). Failure means the hold persists after reported repair, a fresh local slowness pause occurs before execution, or a submitted SWE job fails; the latter remains a defect alongside any replacement.
+Read the Chief of Staff plan and software-development.md from the host mono-v2 checkout because these standing documents are absent in otohime. Actual run identity: **run-8836**, profile **codex-sol-6-1-high**, model **gpt-6.1-sol**, effort **high**, fleet worker **avietidol-z490**, task-manager **e2ca0f05-6ffb-44e4-8230-26653c5c3c80**. Current role defaults are not substituted for observed identity.
 
-## Scope and delivery validation
-
-No application, scheduler code, deployment config, credentials or binaries are changed in this PO run. Only planning/research artifacts under this folder are committed. Run the project's own `npm test` before the documentation commit, validate both JSON DAGs and all required contract fields, and run `git diff --check`. Push with `git push origin HEAD`; on non-fast-forward rebase, rerun the tests and push without force.
-
-The summary report records pushed SHA, branch, proposal task id(s), mono-v2 idea/plan id, operator action id, local tests and visible GitHub Actions status. Planning completion is not platform-fix completion. The report explicitly leaves real release/dispatch unproven until independent observation.
+This PO changes planning artifacts only. The already-committed research.md is retained verbatim. Validate proposal fields/DAG/paths and run the project's own tests, focused CLI tests, 20 controls, typecheck and git diff --check. Use **pm-260/t-1578:** for this re-plan commit to identify the exhausted source task; do not claim an engineering task as product owner. Push normally; if rejected, pull --rebase, repeat verification and push without force. Submit plan_manager_propose_tasks with this path, pushed git_sha and title **Split Part Recovery**, then plan_manager_submit_report kind=summary with branch, SHA, returned task id and visible CI status. This delivers a concrete revised plan, not the unresolved original recovery.

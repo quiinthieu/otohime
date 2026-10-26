@@ -1,54 +1,60 @@
 [
   {
     "sequence": 1,
-    "title": "Verify split part release",
+    "title": "Certify offline release evidence",
     "role": "software_engineer",
-    "acceptance_criteria": "An offline read-only probe distinguishes after_plan hold, queued/startable release, and durable SWE dispatch for pm-255/t-1557; missing, mismatched or incomplete evidence fails. Unit fixtures prove the release and negative controls without board writes.",
-    "problem": "pm-255's abandoned predecessor still holds it, and a release claim can be mistaken for queueing or submission. Otohime needs a reproducible acceptance probe over independently fetched board evidence; the scheduler fix is assigned separately to mono-v2.",
+    "acceptance_criteria": "In the locked Node 22 checkout, the existing read-only CLI and pure evaluator pass the project suite, API-shaped evaluator/CLI fixtures, all 20 independent adversarial controls and typecheck. Held evidence exits 1; malformed or tampered evidence exits 2; scheduled-only runs cannot prove dispatch; even failed submitted runs never prove product delivery. This is offline certification only; real release, dispatch, deployed scheduler semantics and site deployment remain explicitly unproven.",
+    "problem": "The superseded t-1578 spent three fix cycles coupling an already-correct local CLI to unrelated failed site E2E, stale production and a privileged board chore. Its completed implementation and independent controls must be preserved and certified at one checkout SHA without inventing a source repair or requiring another owner to finish.",
     "action_items": [
-      "At the start inspect pm-260's operator_action fingerprint release-after-plan:pm-255:pm-248; reuse the existing action. If absent and the plan is still held/paused, raise plan_manager_ask_user kind=operator_action for a privileged operator to clear only pm-255's after_plan edge conditionally on pm-248 still being abandoned, resume pm-255, and record the parent note on its timeline. This is a board administration chore, not runtime provisioning. End that run with the chore id; do not spend a fix cycle. On relaunch the offline implementation does not require real dispatch.",
-      "Declare lib/plan-release.ts with a pure evaluator taking decoded get_plan, explain_schedule, get_timeline and list_runs JSON snapshots plus expected plan_id, predecessor_id and task_id. Return separate booleans hold_released, queued_startable, execution_started, release_recorded and dispatch_proven, and stable missing-evidence reasons. Require explicit recognized fields; absent progress is not release.",
-      "Implement scripts/probe-plan-release.mjs using the evaluator, with --plan, --schedule, --timeline, --runs JSON file arguments, --plan-id pm-255, --predecessor-id pm-248, --task-id t-1557 and --require released|dispatched (default dispatched). It only reads local snapshots and prints JSON; exit 0 for released only with hold_released, release_recorded and either queued_startable or execution_started; dispatched also requires execution_started and dispatch_proven. Unsupported/incomplete inputs exit nonzero.",
-      "Require matching plan/task ids; hold_released requires progress.reason != after_plan and progress.state in the known live/startable/finishing_only states. queued_startable requires plan queued and progress startable. execution_started requires a non-null execution_started_at and a recognized executing/finishing/done plan state. release_recorded requires a timeline decision naming pm-248 and its abandoned note. dispatch_proven requires a software_engineer run for t-1557 with a nonempty tm_task_id and a submitted/running/finished outcome, excluding scheduled-only or unrelated runs. Preserve source run ids and outcome; failure is not product delivery.",
-      "Write lib/plan-release.test.ts and CLI integration tests with temporary files for real API-shaped synthetic fixtures: held/paused, released queued/startable, released with execution and durable SWE task id, missing progress, old execution timestamp with current after_plan hold, wrong plan/task, missing timeline note, merely scheduled run, truncated evidence, and a failed SWE attempt. A failed attempt may prove dispatch only, never delivery.",
-      "Document snapshot collection through the four existing MCP read tools in projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/release-walkthrough.md, including captured_at, completeness and SHA metadata outside the raw payloads. Keep credentials out. Prove CLI behavior against fixtures now; leave real board walkthrough to QA/acceptance. Commit and push using the assigned pm-260/task prefix."
+      "Start by reading plan.md revision 3, qa_report_run-8833.md and fix_plan_run-8833.md. Preserve c2ca9c2/b73d93c evaluator behavior, structured receipts, all existing tests and prior QA evidence. Read esc-395 outcome for context; it is not a prerequisite of this offline contract. Do not duplicate the operator chore or mutate another plan.",
+      "Install package-lock.json dependencies with npm ci on Node 22 and run every verification item. Exercise the actual evaluator imports and CLI subprocesses, not a fake CLI. If the red gate already passes all items, use the platform already-green path: no artificial source or receipt-only delivery is required.",
+      "Only if an offline command exposes a reproducible defect, add its failing regression first and make the smallest repair in the listed interfaces. Retain the valid baseline and all 20 adversarial controls, including malformed optional fields, missing progress, negated prose, foreign ids, incomplete manifests, scheduled-only submission and failed dispatch without delivery. Do not weaken assertions to obtain green.",
+      "For any repair, run the full verification at its delivery SHA, record executable/lock/config fingerprints, real versus synthetic boundaries and exact check results in release-walkthrough.md. Preserve historical failed CI observations as history and leave live outcomes unproven. Commit with the assigned pm-260/task-id prefix, push normally and stop at push; independent acceptance owns scoped certification and original live-gap reporting."
     ],
     "interfaces": [
       "lib/plan-release.ts",
       "lib/plan-release.test.ts",
       "scripts/probe-plan-release.mjs",
+      "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-adversarial.mjs",
       "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/release-walkthrough.md"
     ],
     "non_goals": [
-      "Scheduler or watchdog changes in otohime",
-      "Board writes or privileged operator tools in a delivery role",
-      "Changing Ask features or t-1557/t-1558 contracts",
-      "Adding an external service, dependency or polling job",
-      "Claiming dispatch demonstrates t-1557 product delivery"
+      "Repairing or disabling site E2E, CI, production gates or deployment detection",
+      "Implementing mono-v2 scheduler, decider or watchdog changes",
+      "Changing board settings, after_plan edges, pm-255 task contracts or timestamps",
+      "Reopening pm-248, SQL writes, cap bypasses or duplicate operator actions",
+      "Treating offline fixtures, green gates, queued jobs or failed SWE attempts as real recovery or delivered Ask output"
     ],
     "verification": [
       {
-        "name": "project unit suite",
+        "name": "Project unit suite",
         "cwd": ".",
         "cmd": "npm test",
         "expect": "exit0",
         "timeout_s": 900
       },
       {
-        "name": "release evaluator and CLI fixtures",
+        "name": "Real evaluator and CLI fixtures",
         "cwd": ".",
         "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/plan-release.test.ts",
         "expect": "exit0",
         "timeout_s": 300
       },
       {
-        "name": "typecheck",
+        "name": "Independent adversarial controls",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-adversarial.mjs",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "Typecheck",
         "cwd": ".",
         "cmd": "npm run typecheck",
         "expect": "exit0",
         "timeout_s": 900
       }
     ],
-    "qa": "required"
+    "qa": "skip"
   }
 ]
