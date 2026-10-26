@@ -1,1 +1,2 @@
-<this commit> pm-256/t-1559: Open Ryugu-jo below the waterline: urashima, Pocket and footer entries, WebGL caustics with a still fallback, fleeing ink fish  (delivery; its sha is the git_sha of the run-8731 summary report, since a commit cannot name itself)
+5cd6ee0102242f09f0f328fa5b786635d967b39c pm-256/t-1559: Open Ryugu-jo below the waterline: urashima, Pocket and footer entries, WebGL caustics with a still fallback, fleeing ink fish  (delivery, run-8731)
+<this commit> pm-256/t-1559: Guard that npm test runs every Ryugu-jo test file  (run-8820; its sha is the git_sha of the run-8820 summary report)
