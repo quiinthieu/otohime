@@ -20,6 +20,7 @@ import {
   type Dir,
   type PocketKey,
 } from "@/lib/snake";
+import { getPalaceSound, getServerPalaceSound, setPalaceSound, subscribePalaceSound } from "@/lib/palace-sound";
 import { play } from "@/lib/sound-client";
 import { PALACE_HREF } from "@/lib/urashima";
 import Link from "next/link";
@@ -75,6 +76,8 @@ export function Handheld() {
   const [unlocked, unlock] = useReducer(() => true, false);
   const code = useRef(0);
   const reduced = useSyncExternalStore(onReducedChange, () => matchMedia(REDUCED).matches, () => false);
+  // The palace's sea sound, switched here and heard only down in Ryugu-jo (lib/palace-sound.ts).
+  const seaSound = useSyncExternalStore(subscribePalaceSound, getPalaceSound, getServerPalaceSound);
   const lcdRef = useRef<SVGRectElement>(null);
   const [onscreen, setOnscreen] = useState(true);
   // The page A is opening: its label shows over the LCD until the navigation takes it (or LABEL_MS passes).
@@ -514,6 +517,10 @@ export function Handheld() {
               <a href={PALACE_HREF} className="chip" data-pocket-ryugu="">
                 {P.dive}
               </a>
+              {/* Ryugu-jo's sea sound: off until pressed, and pressed again to silence an open palace. */}
+              <Chip aria-pressed={seaSound} aria-label={P.seaSoundLabel} data-pocket-sea-sound="" onClick={() => setPalaceSound(!seaSound)}>
+                {P.seaSound}
+              </Chip>
             </>
           )}
           <Chip onClick={() => input("b")} aria-pressed={s.game === true}>

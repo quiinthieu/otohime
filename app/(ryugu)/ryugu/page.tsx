@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import history from "@/content/history.json";
+import { AmbienceToggle } from "../_components/ambience";
 import { Sea } from "../_components/sea";
 import { Tamatebako } from "../_components/tamatebako";
 import { replay } from "../_lib/tamatebako";
@@ -9,6 +10,7 @@ export const metadata: Metadata = { title: { absolute: "Ryugu-jo" } };
 
 // /ryugu: the paper site's surface at the top, and below the waterline the ink sea with Otohime's palace on its floor
 // and her Tamatebako, which replays the changelog built at build time (content/history.json, scripts/history-index.ts).
+// The sea can be heard too, but only once the visitor asks for it.
 export default function RyuguPage() {
   return (
     <main className="ryugu">
@@ -20,6 +22,8 @@ export default function RyuguPage() {
             <span aria-hidden="true">↑</span> Back to the surface
           </a>
         </nav>
+        {/* Off until the visitor turns it on, here or in Pocket on the site (../_lib/ambience.ts). */}
+        <AmbienceToggle />
         <svg className="waterline" viewBox="0 0 1000 24" preserveAspectRatio="none" aria-hidden="true">
           <path d="M0 0H1000V10Q975 20 950 12T900 12T850 12T800 12T750 12T700 12T650 12T600 12T550 12T500 12T450 12T400 12T350 12T300 12T250 12T200 12T150 12T100 12T50 12T0 12Z" />
         </svg>

@@ -1,0 +1,10 @@
+1 off by default: status off, aria-pressed=false, contexts after a click and a key: 0
+2 button on: ["/ryugu created","/ryugu state:running"] stored on
+3 Pocket chip off: palace status off, source stopped; Home audio events: 0
+3b Pocket chip on: palace status waiting, no new sound until a gesture
+4a palace tab hidden while Home was in front: false
+4 back to the surface: AudioContext.close() called on the way out (count:state before close) = 1:running
+5 return visit: waiting on load with 0 audio events, a key press -> ["/ryugu created","/ryugu state:running"]
+5b palace button off: status off, stored off
+6 no Web Audio: status unsupported, aria-disabled, nothing stored, page errors: 0 - This browser has no Web Audio, so the palace stays silent.
+PROBE PASS

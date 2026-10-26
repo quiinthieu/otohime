@@ -65,6 +65,46 @@ a:focus-visible {
   font-size: 15px;
 }
 
+/* The sea's sound, on the paper strip under the way back up: off until pressed (../_lib/ambience.ts). */
+.ambience {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  background-color: var(--paper);
+  padding: 0 1.25rem 0.2rem;
+  font-size: 14px;
+}
+
+.sound {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+}
+
+.sound[aria-pressed="true"] {
+  background-color: #231e16;
+  color: var(--paper);
+}
+
+.sound[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.sound:focus-visible {
+  outline: 2px solid #231e16;
+  outline-offset: 2px;
+}
+
+.sound-note {
+  font-style: italic;
+}
+
 .waterline {
   display: block;
   width: 100%;

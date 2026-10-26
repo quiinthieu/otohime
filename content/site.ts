@@ -105,6 +105,9 @@ export const site = {
     badge: "★",
     // The way down to Ryugu-jo (app/(ryugu)/), beside the menu's chips.
     dive: "▽ Dive",
+    // Ryugu-jo's sea sound, beside Dive: it sounds only in the palace, never up here.
+    seaSound: "♪ Sea sound",
+    seaSoundLabel: "Sea sound in Ryugu-jo",
   },
   // TODO(otohime)
   notes: [
