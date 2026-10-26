@@ -174,10 +174,10 @@ flowchart LR
   B --> D["4 Riso headings"]
   C --> E["5 Public Ink Lab"]
   D --> E
-  E --> F["6 Independent QA"]
+  E -.-> F["Platform QA and acceptance; outside proposal DAG"]
 ```
 
-Settings observed: max_live_runs_per_plan=1, max_plan_elapsed=6h, qa_mode=auto. With fallback durations, the weighted sum is 6h and the longest path 5h: max(6h,5h)=6h, equal to the ceiling. Actual latest-200 role medians, if enough samples exist, are authoritative in propose_tasks. Task 1 is pure plumbing with qa=skip; visible tasks require QA. If actual admission refuses plan_too_large, propose only the Print Shop foundation/controls/headings/QA part here, and file the Lab part using submit_idea(repo=otohime, after_plan_id=pm-268), citing this file. Do not pre-plan a later part against unlanded code. No part is dropped.
+Settings observed: max_live_runs_per_plan=1, max_plan_elapsed=6h, qa_mode=auto. With fallback durations, the weighted sum is 5h and the longest path 4h: max(5h,4h)=5h, below the ceiling. Actual latest-200 role medians, if enough samples exist, are authoritative in propose_tasks. Task 1 is pure plumbing with qa=skip; visible tasks require QA. If actual admission refuses plan_too_large, propose only the Print Shop foundation/controls/headings part here with platform QA, and file the Lab part using submit_idea(repo=otohime, after_plan_id=pm-268), citing this file. Do not pre-plan a later part against unlanded code. No part is dropped.
 
 ## Execution and verification rules for these contracts
 
@@ -204,6 +204,22 @@ This browser feature has no model executable, remote job, queue, scheduled event
 | Responsiveness/performance | coalesced preview update assertions | Screenshots, keyboard, zoom, measured latency and cleanup |
 
 Acceptance produces a walkthrough table (starting state · action · observable result · evidence) for the delivery SHA after all task gates are green. Code defects fail; unavailable evidence is inconclusive. No dated or watch-only check is required by this feature.
+
+## Integrated QA handoff (platform-assigned)
+
+The proposal API accepts only software_engineer rows; the platform launches quality engineers after green gates according to qa=required and performs final acceptance. The following independent integrated audit is a required handoff to the final visible task's QA and plan acceptance, not a sixth proposed task.
+
+**Problem:** Shared theme, SVG, accessibility, persistence and transition changes need independent browser evidence beyond an implementer's green test report.
+
+**Pass condition:** Independent QA documents the complete visitor journey and failure controls on the delivered SHA, with observed contrast, first paint, reduced motion, accessible headings, all root-layout carry-through, URL reproducibility and truthful storage recovery. Code defects fail QA; unobserved deployment or browser evidence is explicitly inconclusive.
+
+1. Claim the QA task, inspect the delivered diff and exact green-gate/CI build identity, and independently derive tests from this plan. Read health build SHA rather than treating a decision row as deployment evidence. Use the repository GitHub Actions/Vercel deployment, not mono-v2 GitLab jobs.
+2. Walk a fresh visitor choosing each print run, reloading, navigating across all public root layouts, opening /lab publicly, changing every control, sharing to a clean browser context, applying, leaving/reloading and resetting. Verify desktop 1366x768/1920x1080, mobile 390x844, 200% zoom, keyboard-only, reduced motion, forced colors and no-JavaScript headings.
+3. Read actual computed paper/ink/muted/focus values and actual SVG attributes; measure contrast with the maximum combined overlay and inspect screenshots. Inspect the accessibility tree for one heading name, and exercise TitleMorph and Stamp it. Record root route inventory coverage and any missing evidence explicitly.
+4. Run independent negative controls: open a hostile/oversized query, deny both storages and clipboard, edit preview without Apply while inspecting a separate real-site card, and open a fresh browser context after Apply. These must not inject style/script, report false persistence, leak scope or inherit the session.
+5. Submit qa_report and a summary with a walkthrough table, exact SHA/build/browser/Node/lockfile identities, measured preview timing, evidence paths and defects. Separate real browser persistence from fake-store tests and any unobserved deployment. Do not change application code, wait for natural events or add a human approval gate.
+
+Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/qa.md. QA may write evidence and reports, never application fixes. An assigned quality engineer claims its platform task; the product owner does not claim it.
 
 ## Task contracts
 
@@ -559,31 +575,6 @@ Acceptance produces a walkthrough table (starting state · action · observable 
         "expect": "exit0",
         "timeout_s": 900
       }
-    ]
-  },
-  {
-    "sequence": 6,
-    "title": "Audit the complete print and Lab visitor journey",
-    "role": "quality_engineer",
-    "depends_on": [
-      "5"
-    ],
-    "problem": "Shared theme, SVG, accessibility, persistence and transition changes need independent browser evidence beyond an implementer's green test report.",
-    "acceptance_criteria": "Independent QA documents the complete visitor journey and failure controls on the delivered SHA, with observed contrast, first paint, reduced motion, accessible headings, all root-layout carry-through, URL reproducibility and truthful storage recovery. Code defects fail QA; unobserved deployment or browser evidence is explicitly inconclusive.",
-    "action_items": [
-      "Claim the QA task, inspect the delivered diff and exact green-gate/CI build identity, and independently derive tests from this plan. Read health build SHA rather than treating a decision row as deployment evidence. Use the repository GitHub Actions/Vercel deployment, not mono-v2 GitLab jobs.",
-      "Walk a fresh visitor choosing each print run, reloading, navigating across all public root layouts, opening /lab publicly, changing every control, sharing to a clean browser context, applying, leaving/reloading and resetting. Verify desktop 1366x768/1920x1080, mobile 390x844, 200% zoom, keyboard-only, reduced motion, forced colors and no-JavaScript headings.",
-      "Read actual computed paper/ink/muted/focus values and actual SVG attributes; measure contrast with the maximum combined overlay and inspect screenshots. Inspect the accessibility tree for one heading name, and exercise TitleMorph and Stamp it. Record root route inventory coverage and any missing evidence explicitly.",
-      "Run independent negative controls: open a hostile/oversized query, deny both storages and clipboard, edit preview without Apply while inspecting a separate real-site card, and open a fresh browser context after Apply. These must not inject style/script, report false persistence, leak scope or inherit the session.",
-      "Submit qa_report and a summary with a walkthrough table, exact SHA/build/browser/Node/lockfile identities, measured preview timing, evidence paths and defects. Separate real browser persistence from fake-store tests and any unobserved deployment. Do not change application code, wait for natural events or add a human approval gate."
-    ],
-    "interfaces": [
-      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/qa.md"
-    ],
-    "non_goals": [
-      "application fixes by QA",
-      "a usability study or fabricated performance evidence",
-      "proving delivery through health alone"
     ]
   }
 ]
