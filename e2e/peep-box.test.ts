@@ -149,11 +149,47 @@ async function open(
 }
 const box = (p: Page) => p.locator("[data-peep]");
 const aperture = (p: Page) => box(p).locator("[data-peep-aperture]");
-async function activate(p: Page) {
+// The controller renders its buttons before its effect wires them, and only runs once
+// its IntersectionObserver reports the aperture. Input before that is ignored by
+// design, so wait for the running pointer source before driving it.
+async function activate(p: Page, { running = true } = {}) {
   await box(p)
     .getByRole("button", { name: "Look inside", exact: true })
     .click();
   await box(p).locator("[data-peep-controller]").waitFor();
+  if (running)
+    await p.waitForFunction(() => {
+      const e = document.querySelector("[data-peep]");
+      return (
+        e?.getAttribute("data-running") === "true" &&
+        e.getAttribute("data-source") === "pointer"
+      );
+    });
+}
+// Everything the geometry assertions depend on, for their failure messages.
+async function geometry(p: Page) {
+  return box(p).evaluate((e) => {
+    const a = e.querySelector("[data-peep-aperture]")!;
+    const r = (n: Element) => {
+      const b = n.getBoundingClientRect();
+      return [b.x, b.y, b.width, b.height].map((v) => +v.toFixed(2));
+    };
+    return {
+      running: e.getAttribute("data-running"),
+      source: e.getAttribute("data-source"),
+      moving: e.getAttribute("data-moving"),
+      scrollY,
+      innerHeight,
+      aperture: r(a),
+      svg: r(a.querySelector("svg")!),
+      ctm: [...e.querySelectorAll<SVGGraphicsElement>("[data-peep-layer]")].map(
+        (l) => {
+          const m = l.getScreenCTM()!;
+          return [m.a, m.d, m.e, m.f].map((v) => +v.toFixed(3));
+        },
+      ),
+    };
+  });
 }
 async function settle(p: Page) {
   await p.waitForFunction(
@@ -211,6 +247,7 @@ for (const viewport of [
     const svgRect = await aperture(p).locator("svg").boundingBox();
     assert.ok(svgRect);
     const neutral = [await point(p, 0), await point(p, 3)];
+    const neutralGeometry = await geometry(p);
     await activate(p);
     await box(p)
       .getByRole("button", { name: "Look right", exact: true })
@@ -218,18 +255,21 @@ for (const viewport of [
     await p.keyboard.press("Enter");
     await settle(p);
     const right = [await point(p, 0), await point(p, 3)];
+    const rightGeometry = await geometry(p);
     for (const [i, depth] of [
       [0, 500],
       [1, 60],
-    ])
+    ]) {
+      const expected =
+        ((120 * depth) / (600 + depth)) *
+        Math.min(svgRect.width / 600, svgRect.height / 360);
+      const actual = right[i].x - neutral[i].x;
       assert.ok(
-        Math.abs(
-          right[i].x -
-            neutral[i].x -
-            ((120 * depth) / (600 + depth)) *
-              Math.min(svgRect.width / 600, svgRect.height / 360),
-        ) < 0.1,
+        Math.abs(actual - expected) < 0.1,
+        `depth ${depth}: displacement ${actual} expected ${expected} ` +
+          JSON.stringify({ neutral, right, svgRect, neutralGeometry, rightGeometry }),
       );
+    }
     assert.ok(right[0].x - neutral[0].x > (right[1].x - neutral[1].x) * 3);
     await p.keyboard.press("ArrowLeft");
     await settle(p);
@@ -602,6 +642,10 @@ test("touch pans scroll normally, Save-Data stays opt-in and original toys remai
     "missing",
     true,
   );
+  // Ink Press grows from its placeholder once scrolled near; let it finish so the
+  // document height and the aperture stay put while the pan is measured.
+  await p.locator("#press-heading").scrollIntoViewIfNeeded();
+  await p.waitForSelector("[data-press=poster]", { timeout: 20_000 });
   await box(p).scrollIntoViewIfNeeded();
   await p.waitForLoadState("networkidle");
   assert.equal(
@@ -611,31 +655,58 @@ test("touch pans scroll normally, Save-Data stays opt-in and original toys remai
   );
   await activate(p);
   await settle(p);
-  const r = await aperture(p).boundingBox();
-  assert.ok(r);
+  await aperture(p).scrollIntoViewIfNeeded();
   assert.equal(
     await aperture(p).evaluate((e) => getComputedStyle(e).touchAction),
     "pan-y",
   );
+  const start = await aperture(p).evaluate((e) => {
+    const r = e.getBoundingClientRect();
+    return {
+      aperture: [r.x, r.y, r.width, r.height],
+      scrollY,
+      max: document.documentElement.scrollHeight - innerHeight,
+    };
+  });
+  // Pan toward whichever side has room: a finger moving up scrolls down.
+  const down = start.max - start.scrollY >= 60;
+  assert.ok(
+    down || start.scrollY >= 60,
+    `no room to scroll either way ${JSON.stringify(start)}`,
+  );
+  const [ax, ay, aw, ah] = start.aperture;
+  const x = ax + aw / 2,
+    y0 = ay + ah * (down ? 0.8 : 0.2),
+    step = down ? -20 : 20;
   const session = await c.newCDPSession(p);
-  const before = await p.evaluate(() => scrollY);
   await session.send("Input.dispatchTouchEvent", {
     type: "touchStart",
-    touchPoints: [{ x: r.x + r.width / 2, y: r.y + r.height * 0.8 }],
+    touchPoints: [{ x, y: y0 }],
   });
   for (let i = 1; i <= 6; i++)
     await session.send("Input.dispatchTouchEvent", {
       type: "touchMove",
-      touchPoints: [{ x: r.x + r.width / 2, y: r.y + r.height * 0.8 - i * 20 }],
+      touchPoints: [{ x, y: y0 + i * step }],
     });
   await session.send("Input.dispatchTouchEvent", {
     type: "touchEnd",
     touchPoints: [],
   });
-  await p.waitForTimeout(150);
+  const moved = await p
+    .waitForFunction(
+      ({ from, down }) => (down ? scrollY - from : from - scrollY) > 30,
+      { from: start.scrollY, down },
+      { timeout: 2_000 },
+    )
+    .then(() => true)
+    .catch(() => false);
+  const end = await p.evaluate(() => ({
+    scrollY,
+    max: document.documentElement.scrollHeight - innerHeight,
+  }));
   assert.ok(
-    (await p.evaluate(() => scrollY)) > before + 30,
-    "touch negative control really scrolls the document",
+    moved,
+    `touch negative control really scrolls the document ${JSON.stringify({ down, start, end })}`,
   );
   assert.equal(
     await p.getByRole("heading", { name: "Suminagashi pond" }).count(),
@@ -656,7 +727,7 @@ test("no-JS and reduced motion keep the server paper scene with no pose loop", a
   assert.equal(await box(nojs.p).locator("svg[role=img]").count(), 1);
   assert.equal(await box(nojs.p).locator("[data-peep-layer]").count(), 4);
   const { p, scripts } = await open({ reducedMotion: "reduce" }, "granted");
-  await activate(p);
+  await activate(p, { running: false });
   await box(p)
     .getByText("Motion is reduced. Enjoy the still paper scene.")
     .waitFor();
