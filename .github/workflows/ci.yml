@@ -13,17 +13,8 @@ on:
       - "projects/**"
       - "**.md"
 
-# PRs: a new push cancels the stale run. main: runs queue in order and are
-# never cancelled mid-flight, so an older commit can't deploy after a newer one.
-# GitHub keeps at most one pending run per group: a newer push replaces the
-# pending one (cancelled before it starts, no jobs), so main deploys the newest
-# commit that reaches the front, not every commit. `queue: max` is rejected: at
-# ~12 pushes/hour against ~11-minute checks it grows an unbounded backlog of
-# stale shas. The live sha lags main by report commits that never run, so QA
-# judges delivery by `git merge-base --is-ancestor <delivery> <live sha>`.
-concurrency:
-  group: ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+# Concurrency belongs to jobs: a shared main workflow group can replace a
+# pending run before checks even start, including with cancel-in-progress:false.
 
 permissions:
   contents: read
@@ -40,6 +31,11 @@ env:
 jobs:
   checks:
     if: github.event.action != 'closed'
+    # PR updates replace stale checks; main pushes and manual recovery each keep
+    # their own checks, independently of the serialized production queue.
+    concurrency:
+      group: ci-checks-${{ github.event.pull_request.number || github.run_id }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
     runs-on: ubuntu-24.04
     # A green job takes 10-11 min (research_run-8877: E2E 230-300 s, signed-in motion probe 171-180 s, footer
@@ -185,6 +181,9 @@ jobs:
 
   preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    concurrency:
+      group: ci-preview-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -252,6 +251,12 @@ jobs:
   production:
     needs: checks
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    # Only deploys share a slot. A newer pending deploy can replace an older
+    # pending one; running deploys finish. QA proves delivery by live ancestry,
+    # never by the existence of a queued job or an assumption of commit order.
+    concurrency:
+      group: otohime-production-main
+      cancel-in-progress: false
     runs-on: ubuntu-24.04
     # Setup + pull + build + migrate take about 2 minutes (run 40311256064: pull 13 s, build 31 s, migrate 3 s);
     # the deploy script bounds the upload at 5 and readiness at 7, and the terminal/press e2e after it takes

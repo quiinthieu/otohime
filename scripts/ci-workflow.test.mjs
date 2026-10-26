@@ -88,9 +88,25 @@ test("checks and production run on ubuntu-24.04", () => {
   }
 });
 
-test("main keeps cancel-in-progress off and no queue: max", () => {
-  assert.equal(scalar(["concurrency", "cancel-in-progress"]), "${{ github.event_name == 'pull_request' }}");
-  assert.equal(block(["concurrency", "queue"]), null);
+test("each main push and manual recovery keeps its checks outside a shared workflow queue", () => {
+  // Negative control: cancel-in-progress:false still replaces a pending workflow.
+  // A shared workflow group must fail this guard even when running jobs are protected.
+  assert.equal(block(["concurrency"]), null, "workflow concurrency can cancel main before checks start");
+  assert.equal(scalar(["jobs", "checks", "concurrency", "group"]), "ci-checks-${{ github.event.pull_request.number || github.run_id }}");
+  assert.equal(scalar(["jobs", "checks", "concurrency", "cancel-in-progress"]), "${{ github.event_name == 'pull_request' }}");
+});
+
+test("PR checks and previews cancel stale jobs in separate PR-specific groups", () => {
+  assert.equal(scalar(["jobs", "preview", "concurrency", "group"]), "ci-preview-${{ github.event.pull_request.number }}");
+  assert.equal(scalar(["jobs", "preview", "concurrency", "cancel-in-progress"]), "true");
+  assert.notEqual(scalar(["jobs", "checks", "concurrency", "group"]), scalar(["jobs", "preview", "concurrency", "group"]));
+});
+
+test("only production deploys serialize after successful checks, without cancelling the running deploy", () => {
+  assert.equal(scalar(["jobs", "production", "needs"]), "checks");
+  assert.equal(scalar(["jobs", "production", "concurrency", "group"]), "otohime-production-main");
+  assert.equal(scalar(["jobs", "production", "concurrency", "cancel-in-progress"]), "false");
+  assert.equal(block(["jobs", "production", "concurrency", "queue"]), null);
 });
 
 // Lines of a job's `steps:` list, joined, comments dropped.

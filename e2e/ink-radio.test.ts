@@ -37,7 +37,10 @@ before(async () => {
 });
 
 test("/music serves the radio's slot under its heading, with the snapshot's credit", () => {
-  assert.match(html, /<section aria-labelledby="ink-radio"[^>]*>\s*<h2 id="ink-radio"[^>]*>Ink Radio/);
+  // Riso headings wrap their plain source and add aria-hidden visual plates.
+  // Bound the match to this heading so a label elsewhere cannot satisfy it.
+  const heading = /<section aria-labelledby="ink-radio"[^>]*>\s*<h2 id="ink-radio"[^>]*>([\s\S]*?)<\/h2>/.exec(html)?.[1] ?? "";
+  assert.match(heading, /(?:^|>)Ink Radio(?:<|$)/);
   assert.match(html, /data-radio="slot"[^>]*>\s*<p class="readout" data-radio="waiting">Warming up the valves…<\/p>/);
   const credit = /<p[^>]*data-radio="credit"[^>]*>([\s\S]*?)<\/p>/.exec(html)?.[1] ?? "";
   assert.ok(credit, "the credit is in the served page");
@@ -47,7 +50,8 @@ test("/music serves the radio's slot under its heading, with the snapshot's cred
     credit,
     new RegExp(`<time dateTime="${snapshot.retrieved}">${snapshot.retrieved.slice(0, 10)}</time>`, "i"),
   );
-  const listings = html.indexOf(">Listings</h2>");
+  const listings = [...html.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/g)]
+    .find((h) => /(?:^|>)Listings(?:<|$)/.test(h[1]))?.index ?? -1;
   assert.ok(
     listings > html.indexOf('aria-label="Television"') && html.indexOf('id="ink-radio"') > listings,
     "the radio comes after the Television and its listings",
