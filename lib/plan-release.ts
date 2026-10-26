@@ -8,8 +8,8 @@ export type Expected = {
   plan_id: string;
   predecessor_id: string;
   task_id: string;
-  // Decision ids of the predecessor's abandonment (e.g. dec-55805, dec-55807). When given, the
-  // part's release decision must name one of them.
+  // Decision ids of the predecessor's abandonment (e.g. dec-55805, dec-55807). When given, every
+  // decision id the release receipt cites must be one of them, compared field by field.
   abandon_decision_ids?: string[];
 };
 
@@ -51,7 +51,7 @@ export type Evaluation = {
     release_decision_id: string | null;
     dispatch_runs: DispatchRun[];
     failed_attempts: string[];
-    ignored_runs: { run_id: string; why: string }[];
+    ignored_runs: { run_id: string | null; why: string; status?: string }[];
   };
 };
 
@@ -59,24 +59,32 @@ export const PROGRESS_STATES = ["live", "startable", "finishing_only", "waiting"
 export const RELEASED_STATES = ["live", "startable", "finishing_only"];
 export const EXECUTING_STATUSES = ["executing", "finishing", "done"];
 // Run statuses after task-manager accepted the job. "scheduled" is the board's own pre-submission
-// state; cancelled and superseded runs are not counted as dispatch.
-const RUN_OUTCOME: Record<string, DispatchRun["outcome"]> = {
-  pending: "submitted",
-  running: "running",
-  succeeded: "finished",
-  failed: "finished",
-};
-// Decision kinds that mention the predecessor but are not a release: the hold itself, the split,
-// the watchdog and its investigator, and the old advisory orphan line.
-export const NOT_RELEASE_KINDS = [
-  "plan_split_from",
-  "promotion_skipped",
-  "after_plan_orphaned",
-  "slow_breach",
-  "slow_verdict",
-  "slow_investigator_dispatched",
-  "escalation",
-];
+// state; every other status, known or not, is not a dispatch. A Map, so inherited Object keys
+// such as "constructor" or "__proto__" never resolve to an outcome.
+const RUN_OUTCOME = new Map<string, DispatchRun["outcome"]>([
+  ["pending", "submitted"],
+  ["running", "running"],
+  ["succeeded", "finished"],
+  ["failed", "finished"],
+]);
+const NON_DISPATCH_STATUSES = ["scheduled", "cancelled", "superseded"];
+
+// The only release receipt shape this probe accepts: the administrative repair's decision as the
+// pm-260 playbook specifies it (plan.md, "Immediate pm-255 recovery playbook", step 3). Every field
+// is checked by identity; summary and reason prose is never read. Any other kind is not a release.
+export const RELEASE_KINDS = ["after_plan_released"];
+const DECISION_ID_FIELDS = ["abandon_decision_id", "note_decision_id"] as const;
+
+// Envelope markers that declare a payload partial. Their presence fails the input; they are never
+// silently ignored. (get_timeline's own `cursor` names its oldest entry and is not a marker.)
+function envelopeErrors(name: string, doc: Obj): string[] {
+  const errs: string[] = [];
+  if ("complete" in doc && doc.complete !== true) errs.push(`${name}_incomplete`);
+  if ("has_more" in doc && doc.has_more !== false) errs.push(`${name}_has_more`);
+  if ("truncated" in doc && doc.truncated !== false) errs.push(`${name}_truncated`);
+  if ("next_cursor" in doc && doc.next_cursor !== null && doc.next_cursor !== "") errs.push(`${name}_has_more`);
+  return [...new Set(errs)];
+}
 
 type Obj = Record<string, unknown>;
 const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -98,12 +106,24 @@ function readProgress(v: unknown, where: string, errs: string[]) {
   return { state: v.state, reason: str(v.reason), holders };
 }
 
-function hasNote(evidence: unknown): boolean {
-  if (!isObj(evidence)) return false;
-  return Object.entries(evidence).some(([k, v]) => {
-    if (/note$/i.test(k) && str(v) !== null) return true;
-    return isObj(v) && hasNote(v);
-  });
+// What a release receipt still lacks; empty means it is one.
+function releaseGaps(ev: Obj | null, expected: Expected, refs: string[]): string[] {
+  if (!ev) return ["release_evidence_missing"];
+  const gaps: string[] = [];
+  if (str(ev.plan_id) === null) gaps.push("release_plan_id_missing");
+  else if (ev.plan_id !== expected.plan_id) gaps.push("release_plan_id_mismatch");
+  if (str(ev.predecessor_id) === null) gaps.push("release_predecessor_missing");
+  else if (ev.predecessor_id !== expected.predecessor_id) gaps.push("release_predecessor_mismatch");
+  if (ev.predecessor_status !== "abandoned") gaps.push("release_predecessor_not_abandoned");
+  if (str(ev.parent_note) === null) gaps.push("release_note_missing");
+  if (refs.length) {
+    const cited = DECISION_ID_FIELDS.filter((f) => ev[f] !== undefined && ev[f] !== null);
+    if (cited.length === 0) gaps.push("abandon_decision_ref_missing");
+    else if (cited.some((f) => typeof ev[f] !== "string" || !refs.includes(ev[f] as string))) {
+      gaps.push("abandon_decision_ref_mismatch");
+    }
+  }
+  return gaps;
 }
 
 export function evaluateRelease(snap: Snapshots, expected: Expected): Evaluation {
@@ -134,18 +154,24 @@ export function evaluateRelease(snap: Snapshots, expected: Expected): Evaluation
     if (str(expected[k]) === null) errs.push(`expected_${k}_missing`);
   }
 
-  // Shapes: every payload must be the tool's own top-level object.
+  // Shapes: every payload must be the tool's own top-level object. explain_schedule lists the
+  // plan's tasks under inputs.tasks; there is no top-level task list.
   const planDoc = snap.plan;
   const plan = isObj(planDoc) && isObj(planDoc.plan) ? planDoc.plan : null;
   if (!plan || !isObj(planDoc) || !Array.isArray(planDoc.tasks)) errs.push("plan_shape_unsupported");
   const sched = isObj(snap.schedule) && typeof snap.schedule.plan_id === "string" ? snap.schedule : null;
-  if (!sched || !Array.isArray(sched.tasks)) errs.push("schedule_shape_unsupported");
+  const schedTasks = sched && isObj(sched.inputs) && Array.isArray(sched.inputs.tasks) ? sched.inputs.tasks : null;
+  if (!schedTasks) errs.push("schedule_shape_unsupported");
   const entries = isObj(snap.timeline) && Array.isArray(snap.timeline.entries) ? snap.timeline.entries : null;
   if (!entries) errs.push("timeline_shape_unsupported");
   else if (entries.length === 0) errs.push("timeline_empty");
   const runs = isObj(snap.runs) && Array.isArray(snap.runs.runs) ? snap.runs.runs : null;
   if (!runs) errs.push("runs_shape_unsupported");
-  if (errs.length || !plan || !isObj(planDoc) || !sched || !entries || !runs) return finish(result);
+  for (const k of ["plan", "schedule", "timeline", "runs"] as const) {
+    const doc = snap[k];
+    if (isObj(doc)) errs.push(...envelopeErrors(k, doc));
+  }
+  if (errs.length || !plan || !isObj(planDoc) || !sched || !schedTasks || !entries || !runs) return finish(result);
 
   // Identity: all four snapshots describe the expected part and task.
   if (plan.id !== expected.plan_id) errs.push("plan_id_mismatch");
@@ -156,11 +182,11 @@ export function evaluateRelease(snap: Snapshots, expected: Expected): Evaluation
   if (!tasks.some((t) => isObj(t) && t.id === expected.task_id && t.plan_id === expected.plan_id)) {
     errs.push("task_missing_from_plan");
   }
-  if (!(sched.tasks as unknown[]).some((t) => isObj(t) && t.task_id === expected.task_id)) {
+  if (!schedTasks.some((t) => isObj(t) && t.task_id === expected.task_id)) {
     errs.push("task_missing_from_schedule");
   }
-  // Timeline entries carry no plan_id; the plan's trace_id on its own decisions ties them to it.
-  // A decision written from another plan's context may carry that plan's trace, so one match suffices.
+  // Timeline entries carry no plan_id; the plan's trace_id on its own decisions ties the snapshot
+  // to it. This only identifies the snapshot: a release receipt must name the part itself.
   const trace = str(plan.trace_id);
   if (trace !== null && !entries.some((e) => isObj(e) && e.trace_id === trace)) errs.push("timeline_plan_mismatch");
   if (runs.some((r) => !isObj(r) || r.plan_id !== expected.plan_id)) errs.push("runs_plan_mismatch");
@@ -203,47 +229,48 @@ export function evaluateRelease(snap: Snapshots, expected: Expected): Evaluation
   if (!EXECUTING_STATUSES.includes(status ?? "")) reasons.execution_started.push("plan_status_not_executing");
   result.execution_started = reasons.execution_started.length === 0;
 
-  // The part's timeline must carry a release decision naming the predecessor and its abandonment note.
+  // The part's timeline must carry a structured release receipt naming the part, the abandoned
+  // predecessor and its note. The closest incomplete receipt explains the miss.
   const refs = (expected.abandon_decision_ids ?? []).filter((id) => str(id) !== null);
   let best: string[] | null = null;
   for (const e of entries) {
-    if (!isObj(e) || e.type !== "decision" || NOT_RELEASE_KINDS.includes(String(e.kind))) continue;
-    const ev = isObj(e.evidence) ? e.evidence : null;
-    if (ev && ev.plan_id !== undefined && ev.plan_id !== expected.plan_id) continue;
-    const text = [e.summary, e.reason, ev ? JSON.stringify(ev) : ""].map((x) => (typeof x === "string" ? x : "")).join(" ");
-    if (!text.includes(expected.predecessor_id)) continue;
-    const miss: string[] = [];
-    if (!/abandon/i.test(text)) miss.push("release_decision_not_abandonment");
-    if (!/releas|clear/i.test(text)) miss.push("release_decision_not_release");
-    if (!hasNote(ev)) miss.push("release_note_missing");
-    if (refs.length && !refs.some((id) => text.includes(id))) miss.push("abandon_decision_ref_missing");
-    if (miss.length === 0) {
+    if (!isObj(e) || e.type !== "decision" || typeof e.kind !== "string" || !RELEASE_KINDS.includes(e.kind)) continue;
+    const gaps = str(e.id) === null ? ["release_decision_id_missing"] : [];
+    gaps.push(...releaseGaps(isObj(e.evidence) ? e.evidence : null, expected, refs));
+    if (gaps.length === 0) {
       result.release_recorded = true;
-      result.evidence.release_decision_id = str(e.id);
-      best = null;
+      result.evidence.release_decision_id = e.id as string;
       break;
     }
-    if (!best || miss.length < best.length) best = miss;
+    if (!best || gaps.length < best.length) best = gaps;
   }
   if (!result.release_recorded) reasons.release_recorded.push(...(best ?? ["release_decision_missing"]));
 
-  // Dispatch: a software_engineer run for the task that task-manager accepted (durable tm_task_id).
+  // Dispatch: a software_engineer run for the task, with its own source id, that task-manager
+  // accepted (durable tm_task_id).
   for (const r of runs as Obj[]) {
-    const id = str(r.id) ?? "?";
     if (r.task_id !== expected.task_id) continue;
+    const id = str(r.id);
+    const ignore = (why: string, extra: { status?: string } = {}) =>
+      result.evidence.ignored_runs.push({ run_id: id, why, ...extra });
     if (r.role !== "software_engineer") {
-      result.evidence.ignored_runs.push({ run_id: id, why: `role_${String(r.role)}` });
+      ignore(`role_${String(r.role)}`);
       continue;
     }
-    const st = String(r.status);
-    const outcome = RUN_OUTCOME[st];
+    if (id === null) {
+      ignore("run_id_missing");
+      continue;
+    }
+    const st = typeof r.status === "string" ? r.status : "";
+    const outcome = RUN_OUTCOME.get(st);
     if (!outcome) {
-      result.evidence.ignored_runs.push({ run_id: id, why: `status_${st}` });
+      if (NON_DISPATCH_STATUSES.includes(st)) ignore(`status_${st}`);
+      else ignore("status_unsupported", { status: String(r.status) });
       continue;
     }
     const tm = str(r.tm_task_id);
     if (tm === null) {
-      result.evidence.ignored_runs.push({ run_id: id, why: "tm_task_id_missing" });
+      ignore("tm_task_id_missing");
       continue;
     }
     result.evidence.dispatch_runs.push({ run_id: id, tm_task_id: tm, status: st, outcome, failed: st === "failed" });
@@ -253,7 +280,15 @@ export function evaluateRelease(snap: Snapshots, expected: Expected): Evaluation
   if (!result.dispatch_proven) {
     const why = result.evidence.ignored_runs.map((r) => r.why);
     reasons.dispatch_proven.push(
-      why.includes("status_scheduled") ? "swe_run_scheduled_only" : why.length ? "swe_run_not_submitted" : "swe_run_missing",
+      why.includes("status_scheduled")
+        ? "swe_run_scheduled_only"
+        : why.includes("run_id_missing")
+          ? "swe_run_id_missing"
+          : why.includes("status_unsupported")
+            ? "swe_run_status_unsupported"
+            : why.length
+              ? "swe_run_not_submitted"
+              : "swe_run_missing",
     );
   }
   return result;

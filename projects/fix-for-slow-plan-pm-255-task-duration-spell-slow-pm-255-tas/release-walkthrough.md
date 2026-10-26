@@ -15,6 +15,8 @@ Use your own authenticated plan-manager MCP session. Save each tool's decoded JS
 | `timeline.json` | `plan_manager_get_timeline` | `{"plan_id":"pm-255","limit":200}` |
 | `runs.json` | `plan_manager_list_runs` | `{"plan_id":"pm-255"}` (no role/status filter) |
 
+Save `explain_schedule` as returned: its task list is under `inputs.tasks`, and the probe reads nothing else for tasks. `get_plan` of a paused part may omit `progress`. Leave it out; the probe reports `plan_progress_missing` and never treats absent progress as a release.
+
 Take all four reads in one sitting, back to back. The probe fails closed when `get_plan` and `explain_schedule` disagree on status or progress, so if a tick lands between them, take all four again.
 
 Completeness: `list_runs` returns every run of the plan in one `runs` array, with no pagination. `get_timeline` returns at most `limit` entries, newest first, plus a `cursor`. If it returns exactly `limit` entries and the oldest one is not the `idea:` entry, page backwards with `before=<cursor>` until you reach it. Then mark the timeline incomplete, or save a timeline that covers the release. A truncated or partly read history is inconclusive, never a pass.
@@ -40,7 +42,9 @@ Write `manifest.json` next to the snapshots. Do not add these fields to the payl
 }
 ```
 
-Compute the hashes with `shasum -a 256 plan.json schedule.json timeline.json runs.json` (or `sha256sum`). Set `complete` to `true` only when the result was read in full (see section 1). The probe exits 2 if any entry is missing, any `complete` is not `true`, a `tool` or `args.plan_id` does not match, a `captured_at` is not a timestamp, or a sha256 does not match the file's bytes. The `mcp__plan-manager__` tool-name prefix is accepted. Without `--manifest` the probe still evaluates the payloads but reports `"completeness": "unverified"`. QA and acceptance should always pass a manifest.
+Compute the hashes with `shasum -a 256 plan.json schedule.json timeline.json runs.json` (or `sha256sum`). Set `complete` to `true` only when the result was read in full (see section 1). The probe exits 2 if any entry is missing, any `complete` is not `true`, a `tool` or `args.plan_id` does not match, a `captured_at` is not a timestamp, or a sha256 does not match the file's bytes. The `mcp__plan-manager__` tool-name prefix is accepted.
+
+Exit 0 requires a verified manifest. Without `--manifest` the probe still evaluates the payloads for diagnosis, but it reports `"completeness": "unverified"`, adds `completeness_verified` to `unmet` and exits 1, however good the evidence looks. A payload that declares itself partial (`complete` other than `true`, `has_more` other than `false`, `truncated` other than `false`, or a non-empty `next_cursor`) exits 2 whether or not a manifest is given. `get_timeline`'s own `cursor` is not such a marker. `list_runs` has no pagination; this check only stops a declared-partial payload from passing.
 
 ## 3. Run the probe
 
@@ -54,13 +58,13 @@ node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-
   --require released      # or dispatched (the default)
 ```
 
-`--abandon-decision` names pm-248's abandonment decisions (dec-55805 `abandoned`, dec-55807 note). With it, the release decision must cite one of them. The plan, predecessor and task ids are required arguments, not defaults.
+`--abandon-decision` names pm-248's abandonment decisions (dec-55805 `abandoned`, dec-55807 note). With it, every decision id field in the release receipt (`abandon_decision_id`, `note_decision_id`) must equal one of them exactly, and at least one must be present. Always pass it for pm-255: it ties the receipt's note to the real abandonment. The plan, predecessor and task ids are required arguments, not defaults.
 
 | Exit | Meaning |
 | --- | --- |
-| 0 | The `--require` mode holds. |
-| 1 | The inputs are readable and consistent, but the evidence falls short. See `unmet` and `reasons`. |
-| 2 | Unsupported arguments, an unreadable or truncated file, an unrecognized payload shape, mismatched plan/task/predecessor ids, foreign snapshots, or a failed manifest. See `input_errors`. |
+| 0 | The `--require` mode holds and `--manifest` verified all four snapshots. |
+| 1 | The inputs are readable and consistent, but the evidence falls short, or no manifest was given. See `unmet` and `reasons`. |
+| 2 | Unsupported arguments, an unreadable or truncated file, a payload declaring itself partial, an unrecognized payload shape (including a schedule without `inputs.tasks`), mismatched plan/task/predecessor ids, foreign snapshots, or a failed manifest. See `input_errors`. |
 
 ## 4. What each check requires
 
@@ -69,8 +73,8 @@ node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-
 | `hold_released` | Both `get_plan.progress` and `explain_schedule.progress` are present and agree. Their state is `live`, `startable` or `finishing_only`, their reason is not `after_plan`, and pm-248 is not among the holders. Absent progress is not a release. |
 | `queued_startable` | Plan status is `queued` and progress state is `startable`. |
 | `execution_started` | `execution_started_at` is a timestamp and plan status is `executing`, `finishing` or `done`. An old timestamp on a queued or paused plan does not count. |
-| `release_recorded` | A pm-255 timeline `decision` that names pm-248, says it was abandoned, says the part was released or the edge cleared, and carries the note in an evidence field ending in `note` (for example `parent_note`). It must cite the `--abandon-decision` ids when given. Kinds that mention pm-248 without releasing it never count: `plan_split_from`, `promotion_skipped`, `after_plan_orphaned`, `slow_breach`, `slow_verdict`, `slow_investigator_dispatched` and `escalation`. |
-| `dispatch_proven` | A `list_runs` run with `role=software_engineer`, `task_id=t-1557`, a non-empty `tm_task_id`, and status `pending` (submitted), `running`, `succeeded` or `failed` (finished). A `scheduled` run, a cancelled run, another role or another task does not count. Each run is listed in `evidence.ignored_runs` with the reason. |
+| `release_recorded` | A pm-255 timeline entry with `type=decision`, its own `id`, and `kind=after_plan_released`, which is the only supported release kind. Its `evidence` must carry `plan_id` = pm-255, `predecessor_id` = pm-248, `predecessor_status` = `abandoned`, and a non-empty `parent_note`. With `--abandon-decision`, `abandon_decision_id`/`note_decision_id` must exactly match those ids. Summary and reason prose are never read, so negated or prospective wording proves nothing. Every other kind (`after_plan_orphaned`, `slow_verdict`, `other`, …) is not a release. A shared trace_id does not identify the part either, because split parts inherit their parent's trace. This is the receipt the pm-260 operator playbook (plan.md, step 3) writes. A future mono-v2 receipt in another shape fails with `release_decision_missing` until the probe is taught that shape. |
+| `dispatch_proven` | A `list_runs` run with `role=software_engineer`, `task_id=t-1557`, its own non-empty `id`, a non-empty `tm_task_id`, and status exactly `pending` (submitted), `running`, `succeeded` or `failed` (finished). A `scheduled`, `cancelled` or `superseded` run does not count, and neither does another role or another task. Any other status, including inherited object keys such as `constructor`, is `status_unsupported`. A run without a source id is `run_id_missing`. Each such run is listed in `evidence.ignored_runs` with the reason. |
 
 Mode `released` needs `hold_released`, `release_recorded`, and either `queued_startable` or `execution_started`. Mode `dispatched` also needs `execution_started` and `dispatch_proven`.
 
@@ -93,4 +97,5 @@ Edit only the copies. Do not regenerate the manifest for an edited copy: the sha
 
 - Proven now, in this checkout: the evaluator and CLI behave as described, against synthetic API-shaped fixtures (`node --experimental-strip-types ... --test lib/plan-release.test.ts`).
 - Not proven by this task: the real pm-255 release, the release note on its timeline, and t-1557's dispatch. These depend on operator chore esc-395 (`release-after-plan:pm-255:pm-248`, platform operator) or the mono-v2 fix in pm-263, and then on scheduler capacity. QA or acceptance own the live walkthrough.
-- Last observation by this task's run (run-8789, 2026-10-26T08:42:13Z, via explain_schedule): pm-255 was `paused`, progress `waiting/after_plan`, holder pm-248, `execution_started_at` null, no own runs. The `heldBoard` fixture copies the shape of that read, and on it the probe exits 1 (`hold_after_plan`). This task did not run the probe on saved live snapshots.
+- QA's independent live capture (run-8800, 08:57Z, `qa-evidence/` with its manifest) is decoded and exits 1 in both modes. The reasons are `plan_progress_missing`, `hold_after_plan`, `held_by_predecessor`, `progress_waiting`, `release_decision_missing` and `swe_run_missing`. This is a negative result: pm-255 was still held. The test suite runs this regression on the unmodified files.
+- Last observation by this task's first run (run-8789, 2026-10-26T08:42:13Z, via explain_schedule): pm-255 was `paused`, progress `waiting/after_plan`, holder pm-248, `execution_started_at` null, no own runs. The `heldBoard` fixture copies the shape of that read, and on it the probe exits 1 (`hold_after_plan`). That run did not run the probe on saved live snapshots; run-8809 ran it on QA's capture above.

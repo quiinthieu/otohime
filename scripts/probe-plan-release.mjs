@@ -8,8 +8,10 @@
 //     --plan-id pm-255 --predecessor-id pm-248 --task-id t-1557 \
 //     [--abandon-decision dec-55805,dec-55807] [--manifest manifest.json] [--require released|dispatched]
 //
-// Exit 0: the --require mode holds. Exit 1: inputs are readable but the evidence falls short.
-// Exit 2: bad arguments or unsupported, unreadable, mismatched or incomplete inputs.
+// Exit 0: the --require mode holds and a --manifest verified every snapshot's completeness and
+// bytes. Exit 1: inputs are readable but the evidence falls short, or no manifest was given (the
+// output is then diagnostic only). Exit 2: bad arguments or unsupported, unreadable, mismatched or
+// incomplete inputs.
 // See projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/release-walkthrough.md.
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -101,7 +103,9 @@ if (inputErrors.length) {
 
 const evaluation = evaluateRelease(snaps, expected);
 const v = verdict(evaluation, args.require);
+// Without a verified manifest the evaluation is diagnostic only: it never exits 0.
+const unmet = manifest.completeness === "verified" ? v.unmet : [...v.unmet, "completeness_verified"];
 out(
-  { ok: v.ok, mode: v.mode, unmet: v.unmet, ...evaluation, manifest, sha256: digests },
-  evaluation.input_errors.length ? 2 : v.ok ? 0 : 1,
+  { ok: unmet.length === 0, mode: v.mode, unmet, ...evaluation, manifest, sha256: digests },
+  evaluation.input_errors.length ? 2 : unmet.length === 0 ? 0 : 1,
 );

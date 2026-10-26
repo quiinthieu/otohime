@@ -6,10 +6,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { checkManifest, evaluateRelease, verdict, type Expected, type Snapshots } from "./plan-release.ts";
+import { checkManifest, evaluateRelease, verdict, type DispatchRun, type Expected, type Snapshots } from "./plan-release.ts";
 
-// Synthetic payloads shaped like the live plan-manager tools' output for pm-255 (read 2026-10-26).
-// They are fake board evidence: they prove the probe's rules, not the live release.
+// Synthetic payloads shaped like the live plan-manager tools' output for pm-255 (QA capture
+// qa-evidence/*.json, 2026-10-26T08:57Z): explain_schedule lists tasks under inputs.tasks, and
+// get_plan of the paused part carries no progress. They are fake board evidence: they prove the
+// probe's rules, not the live release.
 const TRACE = "d2b6a7810c26edc93b8d9f448c842a38";
 const EXPECTED: Expected = { plan_id: "pm-255", predecessor_id: "pm-248", task_id: "t-1557" };
 const NOTE = "acceptance_exhausted: two acceptance cycles failed on the Ask model tier; abandoning pm-248.";
@@ -35,7 +37,6 @@ function heldBoard(): { plan: Json; schedule: Json; timeline: Json; runs: Json }
         after_plan_id: "pm-248",
         created_at: "2026-10-26T04:28:31.028078Z",
       },
-      progress: clone(progress),
       reports: [],
       tasks: [
         { id: "t-1557", plan_id: "pm-255", title: "Ask deploy bundle probe", role: "software_engineer", status: "ready", started_at: "2026-10-26T04:27:53.975898Z" },
@@ -55,13 +56,9 @@ function heldBoard(): { plan: Json; schedule: Json; timeline: Json; runs: Json }
           { task_id: "t-1557", status: "ready", paths_from: "interfaces", paths: ["scripts/probe-ask-deploy.mjs"] },
           { task_id: "t-1558", status: "backlog", paths_from: "interfaces", paths: ["scripts/probe-ask-tier.mjs"] },
         ],
+        own_runs: [],
+        open_escalations: ["esc-389"],
       },
-      tasks: [
-        { task_id: "t-1557", status: "ready", paths_from: "interfaces", paths: ["scripts/probe-ask-deploy.mjs"] },
-        { task_id: "t-1558", status: "backlog", paths_from: "interfaces", paths: ["scripts/probe-ask-tier.mjs"] },
-      ],
-      own_runs: [],
-      open_escalations: ["esc-389"],
       terms: [],
     },
     timeline: {
@@ -169,7 +166,7 @@ function dispatchedBoard() {
   b.plan.progress = clone(progress);
   b.schedule.status = "executing";
   b.schedule.progress = clone(progress);
-  b.schedule.own_runs = [{ run_id: "run-9001", task_id: "t-1557", role: "software_engineer", status: "running" }];
+  b.schedule.inputs.own_runs = [{ run_id: "run-9001", task_id: "t-1557", role: "software_engineer", status: "running" }];
   b.runs.runs.push(clone(SWE_RUN));
   return b;
 }
@@ -180,7 +177,7 @@ test("held/paused behind abandoned pm-248: nothing is released, recorded or disp
   const e = evalBoard(heldBoard());
   assert.deepEqual(e.input_errors, []);
   assert.equal(e.hold_released, false);
-  assert.deepEqual(e.reasons.hold_released, ["hold_after_plan", "held_by_predecessor", "progress_waiting"]);
+  assert.deepEqual(e.reasons.hold_released, ["plan_progress_missing", "hold_after_plan", "held_by_predecessor", "progress_waiting"]);
   assert.equal(e.queued_startable, false);
   assert.equal(e.execution_started, false);
   // dec-56482 (slow_verdict) names pm-248, "abandoned" and "released" but is not a release decision.
@@ -296,7 +293,7 @@ test("wrong plan, task, predecessor or foreign snapshots are unsupported", () =>
     ["schedule of another plan", (b) => (b.schedule.plan_id = "pm-258"), EXPECTED, "schedule_plan_id_mismatch"],
     ["task id", () => {}, { ...EXPECTED, task_id: "t-1564" }, "task_missing_from_plan"],
     ["task moved away", (b) => (b.plan.tasks[0].plan_id = "pm-248"), EXPECTED, "task_missing_from_plan"],
-    ["task absent from schedule", (b) => b.schedule.tasks.shift(), EXPECTED, "task_missing_from_schedule"],
+    ["task absent from schedule", (b) => b.schedule.inputs.tasks.shift(), EXPECTED, "task_missing_from_schedule"],
     ["predecessor", (b) => (b.plan.plan.after_plan_id = "pm-248"), { ...EXPECTED, predecessor_id: "pm-247" }, "predecessor_mismatch"],
     ["timeline of another plan", (b) => b.timeline.entries.forEach((x: Json) => x.trace_id && (x.trace_id = "4156e7859e7efe5c")), EXPECTED, "timeline_plan_mismatch"],
     ["runs of another plan", (b) => (b.runs.runs[0].plan_id = "pm-260"), EXPECTED, "runs_plan_mismatch"],
@@ -319,6 +316,8 @@ test("unsupported payload shapes are rejected, not read as absent evidence", () 
   const cases: [Partial<Snapshots>, string][] = [
     [{ plan: { id: "pm-255", status: "executing" } }, "plan_shape_unsupported"],
     [{ schedule: { progress: good.schedule.progress } }, "schedule_shape_unsupported"],
+    // An undocumented top-level task list is not a substitute for inputs.tasks.
+    [{ schedule: { ...good.schedule, inputs: undefined, tasks: good.schedule.inputs.tasks } }, "schedule_shape_unsupported"],
     [{ timeline: [] }, "timeline_shape_unsupported"],
     [{ timeline: { entries: [] } }, "timeline_empty"],
     [{ runs: [] }, "runs_shape_unsupported"],
@@ -334,7 +333,7 @@ test("unsupported payload shapes are rejected, not read as absent evidence", () 
   ]);
 });
 
-test("a release decision without the abandonment note, or without the named abandon decision, is not recorded", () => {
+test("a release receipt without the parent note, or citing other abandon decisions, is not recorded", () => {
   const b = queuedBoard();
   delete b.timeline.entries[0].evidence.parent_note;
   let e = evalBoard(b);
@@ -342,21 +341,76 @@ test("a release decision without the abandonment note, or without the named aban
   assert.deepEqual(e.reasons.release_recorded, ["release_note_missing"]);
   assert.equal(verdict(e, "released").ok, false);
 
+  const blank = queuedBoard();
+  blank.timeline.entries[0].evidence.parent_note = "   ";
+  assert.deepEqual(evalBoard(blank).reasons.release_recorded, ["release_note_missing"]);
+
+  // Without --abandon-decision ids the decision id fields are not required; with them they are.
   const c = queuedBoard();
-  c.timeline.entries[0].summary = "released from after_plan pm-248: pm-248 abandoned";
   delete c.timeline.entries[0].evidence.abandon_decision_id;
   delete c.timeline.entries[0].evidence.note_decision_id;
   assert.equal(evalBoard(c).release_recorded, true);
+  // The summary still names dec-55805; prose never stands in for the field.
   e = evalBoard(c, { ...EXPECTED, abandon_decision_ids: ["dec-55805"] });
   assert.deepEqual(e.reasons.release_recorded, ["abandon_decision_ref_missing"]);
 
+  // Exact identity, not substring: dec-558050 contains dec-55805.
   const d = queuedBoard();
-  d.timeline.entries[0].evidence.plan_id = "pm-248";
-  assert.deepEqual(evalBoard(d).reasons.release_recorded, ["release_decision_missing"]);
+  d.timeline.entries[0].evidence.note_decision_id = "dec-558050";
+  e = evalBoard(d, { ...EXPECTED, abandon_decision_ids: ["dec-55805", "dec-55807"] });
+  assert.deepEqual(e.reasons.release_recorded, ["abandon_decision_ref_mismatch"]);
+  assert.equal(evalBoard(queuedBoard(), { ...EXPECTED, abandon_decision_ids: ["dec-55805", "dec-55807"] }).release_recorded, true);
+});
 
+test("a release receipt must name the part, the predecessor and its abandoned status by field", () => {
+  const cases: [string, (ev: Json) => void, string[]][] = [
+    ["part of another plan", (ev) => (ev.plan_id = "pm-248"), ["release_plan_id_mismatch"]],
+    ["no part id", (ev) => delete ev.plan_id, ["release_plan_id_missing"]],
+    ["other predecessor", (ev) => (ev.predecessor_id = "pm-247"), ["release_predecessor_mismatch"]],
+    ["no predecessor", (ev) => delete ev.predecessor_id, ["release_predecessor_missing"]],
+    ["predecessor done, not abandoned", (ev) => (ev.predecessor_status = "done"), ["release_predecessor_not_abandoned"]],
+    ["no predecessor status", (ev) => delete ev.predecessor_status, ["release_predecessor_not_abandoned"]],
+  ];
+  for (const [name, mutate, want] of cases) {
+    const b = queuedBoard();
+    mutate(b.timeline.entries[0].evidence);
+    const e = evalBoard(b);
+    assert.equal(e.release_recorded, false, name);
+    assert.deepEqual(e.reasons.release_recorded, want, name);
+  }
+  const noId = queuedBoard();
+  delete noId.timeline.entries[0].id;
+  assert.deepEqual(evalBoard(noId).reasons.release_recorded, ["release_decision_id_missing"]);
+  const noEvidence = queuedBoard();
+  delete noEvidence.timeline.entries[0].evidence;
+  assert.deepEqual(evalBoard(noEvidence).reasons.release_recorded, ["release_evidence_missing"]);
+});
+
+test("only the structured release kind counts: orphan lines, slow verdicts and negated prose do not", () => {
   const f = queuedBoard();
   f.timeline.entries[0].kind = "after_plan_orphaned";
-  assert.equal(evalBoard(f).release_recorded, false);
+  assert.deepEqual(evalBoard(f).reasons.release_recorded, ["release_decision_missing"]);
+
+  // QA D3a: a negated, prospective decision of another kind with an unrelated note.
+  const n = queuedBoard();
+  Object.assign(n.timeline.entries[0], {
+    kind: "other",
+    summary: "Do not release pm-255: pm-248 was abandoned; release has NOT occurred.",
+    evidence: { plan_id: "pm-255", note: "Review this proposal tomorrow." },
+  });
+  let e = evalBoard(n);
+  assert.equal(e.release_recorded, false);
+  assert.deepEqual(e.reasons.release_recorded, ["release_decision_missing"]);
+  assert.equal(verdict(e, "released").ok, false);
+
+  // QA D3b: a foreign release receipt without the part's id, next to one local-trace entry.
+  const g = queuedBoard();
+  g.timeline.entries[0].trace_id = "foreign-trace";
+  delete g.timeline.entries[0].evidence.plan_id;
+  e = evalBoard(g);
+  assert.deepEqual(e.input_errors, []);
+  assert.equal(e.release_recorded, false);
+  assert.deepEqual(e.reasons.release_recorded, ["release_plan_id_missing"]);
 });
 
 test("a merely scheduled run, an unsubmitted run and unrelated runs do not prove dispatch", () => {
@@ -381,6 +435,71 @@ test("a merely scheduled run, an unsubmitted run and unrelated runs do not prove
   c.runs.runs[0].tm_task_id = "";
   e = evalBoard(c);
   assert.deepEqual(e.reasons.dispatch_proven, ["swe_run_not_submitted"]);
+});
+
+test("inherited Object keys and unknown statuses are not run outcomes", () => {
+  for (const status of ["constructor", "toString", "__proto__", "hasOwnProperty", "queued", ""]) {
+    const b = dispatchedBoard();
+    b.runs.runs[0].status = status;
+    const e = evalBoard(b);
+    assert.equal(e.dispatch_proven, false, status);
+    assert.deepEqual(e.evidence.dispatch_runs, [], status);
+    assert.deepEqual(e.evidence.ignored_runs, [{ run_id: "run-9001", why: "status_unsupported", status }], status);
+    assert.deepEqual(e.reasons.dispatch_proven, ["swe_run_status_unsupported"], status);
+    assert.equal(verdict(e, "dispatched").ok, false, status);
+  }
+  const odd = dispatchedBoard();
+  odd.runs.runs[0].status = { running: true };
+  assert.equal(evalBoard(odd).dispatch_proven, false);
+});
+
+test("accepted runs carry exactly submitted, running or finished", () => {
+  for (const [status, outcome] of [["pending", "submitted"], ["running", "running"], ["succeeded", "finished"], ["failed", "finished"]]) {
+    const b = dispatchedBoard();
+    b.runs.runs[0].status = status;
+    assert.equal(evalBoard(b).evidence.dispatch_runs[0].outcome, outcome);
+  }
+});
+
+test("a matching SWE run without its own source id is not dispatch evidence", () => {
+  for (const id of [undefined, "", "  ", 9001]) {
+    const b = dispatchedBoard();
+    if (id === undefined) delete b.runs.runs[0].id;
+    else b.runs.runs[0].id = id;
+    const e = evalBoard(b);
+    assert.equal(e.dispatch_proven, false, String(id));
+    assert.deepEqual(e.evidence.ignored_runs, [{ run_id: null, why: "run_id_missing" }]);
+    assert.deepEqual(e.reasons.dispatch_proven, ["swe_run_id_missing"]);
+    assert.ok(!JSON.stringify(e).includes('"?"'));
+  }
+  // A second, identified run still proves dispatch, under its own id.
+  const b = dispatchedBoard();
+  delete b.runs.runs[0].id;
+  b.runs.runs.push({ ...SWE_RUN, id: "run-9005", status: "failed" });
+  const e = evalBoard(b);
+  assert.equal(e.dispatch_proven, true);
+  assert.deepEqual(e.evidence.dispatch_runs.map((r: DispatchRun) => r.run_id), ["run-9005"]);
+  assert.deepEqual(e.evidence.failed_attempts, ["run-9005"]);
+});
+
+test("payloads that declare themselves partial are unsupported input", () => {
+  const b = dispatchedBoard();
+  Object.assign(b.runs, { complete: false, has_more: true, next_cursor: "unread" });
+  let e = evalBoard(b);
+  assert.deepEqual(e.input_errors, ["runs_incomplete", "runs_has_more"]);
+  assert.equal(e.dispatch_proven, false);
+  assert.equal(verdict(e, "dispatched").ok, false);
+
+  const t = dispatchedBoard();
+  t.timeline.truncated = true;
+  assert.deepEqual(evalBoard(t).input_errors, ["timeline_truncated"]);
+
+  // Explicit completeness markers that say "complete" are accepted; get_timeline's cursor is not a marker.
+  const ok = dispatchedBoard();
+  Object.assign(ok.runs, { complete: true, has_more: false, next_cursor: null });
+  e = evalBoard(ok);
+  assert.deepEqual(e.input_errors, []);
+  assert.equal(verdict(e, "dispatched").ok, true);
 });
 
 test("a failed SWE attempt proves dispatch only and is reported as a failed attempt, never delivery", () => {
@@ -484,38 +603,151 @@ test("CLI: dispatched board with a verified manifest exits 0 and keeps run ids a
   });
 });
 
+// Snapshot files plus a manifest that verifies them: the only input on which the CLI may exit 0.
+function verified(dir: string, board: Record<string, unknown>) {
+  const { files, digests } = write(dir, board);
+  const m = join(dir, "manifest.json");
+  writeFileSync(m, JSON.stringify(manifestFor(digests)));
+  return { files, manifest: ["--manifest", m] };
+}
+
 test("CLI: queued/startable board passes --require released and fails the default dispatched mode", () => {
   withDir((dir) => {
-    const { files } = write(dir, queuedBoard());
-    const released = runCli(files, [...IDS, "--require", "released"]);
+    const { files, manifest } = verified(dir, queuedBoard());
+    const released = runCli(files, [...IDS, "--require", "released", ...manifest]);
     assert.equal(released.code, 0, JSON.stringify(released.body));
-    assert.equal(released.body.manifest.completeness, "unverified");
-    const dispatched = runCli(files, IDS);
+    assert.equal(released.body.manifest.completeness, "verified");
+    const dispatched = runCli(files, [...IDS, ...manifest]);
     assert.equal(dispatched.code, 1);
     assert.equal(dispatched.body.mode, "dispatched");
     assert.deepEqual(dispatched.body.unmet, ["execution_started", "dispatch_proven"]);
   });
 });
 
+test("CLI: without a manifest the evaluation is diagnostic only and never exits 0", () => {
+  withDir((dir) => {
+    const { files } = write(dir, queuedBoard());
+    const released = runCli(files, [...IDS, "--require", "released"]);
+    assert.equal(released.code, 1);
+    assert.equal(released.body.ok, false);
+    assert.equal(released.body.manifest.completeness, "unverified");
+    assert.deepEqual(released.body.unmet, ["completeness_verified"]);
+    // The checks themselves are still reported for diagnosis.
+    assert.equal(released.body.hold_released, true);
+
+    const d = runCli(write(dir, dispatchedBoard()).files, IDS);
+    assert.equal(d.code, 1);
+    assert.deepEqual(d.body.unmet, ["completeness_verified"]);
+  });
+});
+
+test("CLI: a runs payload declaring itself partial exits 2 with or without a manifest (QA D5)", () => {
+  withDir((dir) => {
+    const b = dispatchedBoard();
+    Object.assign(b.runs, { complete: false, has_more: true, next_cursor: "unread" });
+    const bare = runCli(write(dir, b).files, IDS);
+    assert.equal(bare.code, 2);
+    assert.deepEqual(bare.body.input_errors, ["runs_incomplete", "runs_has_more"]);
+    const { files, manifest } = verified(dir, b);
+    const withManifest = runCli(files, [...IDS, ...manifest]);
+    assert.equal(withManifest.code, 2);
+    assert.equal(withManifest.body.ok, false);
+  });
+});
+
 test("CLI: held board, scheduled-only run and failed attempt exit 1 or 0 as the evidence says", () => {
   withDir((dir) => {
-    const held = runCli(write(dir, heldBoard()).files, [...IDS, "--require", "released"]);
+    const h = verified(dir, heldBoard());
+    const held = runCli(h.files, [...IDS, "--require", "released", ...h.manifest]);
     assert.equal(held.code, 1);
     assert.ok(held.body.reasons.hold_released.includes("hold_after_plan"));
 
     const sched = dispatchedBoard();
     sched.runs.runs[0] = { ...SWE_RUN, status: "scheduled", tm_task_id: "" };
-    const s = runCli(write(dir, sched).files, IDS);
+    const sv = verified(dir, sched);
+    const s = runCli(sv.files, [...IDS, ...sv.manifest]);
     assert.equal(s.code, 1);
     assert.deepEqual(s.body.reasons.dispatch_proven, ["swe_run_scheduled_only"]);
 
     const failed = dispatchedBoard();
     failed.runs.runs[0].status = "failed";
-    const f = runCli(write(dir, failed).files, IDS);
+    const fv = verified(dir, failed);
+    const f = runCli(fv.files, [...IDS, ...fv.manifest]);
     assert.equal(f.code, 0);
+    assert.deepEqual(f.body.evidence.dispatch_runs, [
+      { run_id: "run-9001", tm_task_id: SWE_RUN.tm_task_id, status: "failed", outcome: "finished", failed: true },
+    ]);
     assert.deepEqual(f.body.evidence.failed_attempts, ["run-9001"]);
     assert.equal(f.body.delivery_proven, false);
   });
+});
+
+test("CLI: inherited-key statuses and a missing run id exit 1 with no dispatch outcome (QA D2, D4)", () => {
+  withDir((dir) => {
+    for (const status of ["constructor", "toString", "__proto__"]) {
+      const b = dispatchedBoard();
+      b.runs.runs[0].status = status;
+      const v = verified(dir, b);
+      const r = runCli(v.files, [...IDS, ...v.manifest]);
+      assert.equal(r.code, 1, status);
+      assert.equal(r.body.dispatch_proven, false, status);
+      assert.deepEqual(r.body.evidence.dispatch_runs, [], status);
+      assert.deepEqual(r.body.reasons.dispatch_proven, ["swe_run_status_unsupported"], status);
+    }
+    const b = dispatchedBoard();
+    delete b.runs.runs[0].id;
+    const v = verified(dir, b);
+    const r = runCli(v.files, [...IDS, ...v.manifest]);
+    assert.equal(r.code, 1);
+    assert.deepEqual(r.body.reasons.dispatch_proven, ["swe_run_id_missing"]);
+    assert.deepEqual(r.body.evidence.dispatch_runs, []);
+  });
+});
+
+test("CLI: negated prose and a foreign release receipt exit 1 with release unrecorded (QA D3)", () => {
+  withDir((dir) => {
+    const n = dispatchedBoard();
+    Object.assign(n.timeline.entries[0], {
+      kind: "other",
+      summary: "Do not release pm-255: pm-248 was abandoned; release has NOT occurred.",
+      evidence: { plan_id: "pm-255", note: "Review this proposal tomorrow." },
+    });
+    const nv = verified(dir, n);
+    const a = runCli(nv.files, [...IDS, ...nv.manifest]);
+    assert.equal(a.code, 1);
+    assert.deepEqual(a.body.reasons.release_recorded, ["release_decision_missing"]);
+
+    const g = dispatchedBoard();
+    g.timeline.entries[0].trace_id = "foreign-trace";
+    delete g.timeline.entries[0].evidence.plan_id;
+    const gv = verified(dir, g);
+    const b = runCli(gv.files, [...IDS, ...gv.manifest]);
+    assert.equal(b.code, 1);
+    assert.deepEqual(b.body.reasons.release_recorded, ["release_plan_id_missing"]);
+  });
+});
+
+// QA's independently captured live snapshots (run-8800, 08:57Z) with their manifest, unmodified.
+// pm-255 was still held, so this is a negative result: exit 1 in both modes, never exit 2.
+const LIVE = join(ROOT, "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence");
+
+test("CLI: the unmodified live held snapshot set is decoded and reports the hold (QA D1)", () => {
+  const files = Object.fromEntries(["plan", "schedule", "timeline", "runs"].map((k) => [k, join(LIVE, `${k}.json`)]));
+  const extra = [...IDS, "--abandon-decision", "dec-55805,dec-55807", "--manifest", join(LIVE, "manifest.json")];
+  for (const mode of ["released", "dispatched"]) {
+    const { code, body } = runCli(files, [...extra, "--require", mode]);
+    assert.equal(code, 1, `${mode}: ${JSON.stringify(body.input_errors)}`);
+    assert.deepEqual(body.input_errors, []);
+    assert.equal(body.manifest.completeness, "verified");
+    assert.deepEqual(body.reasons.hold_released, ["plan_progress_missing", "hold_after_plan", "held_by_predecessor", "progress_waiting"]);
+    assert.equal(body.hold_released, false);
+    assert.equal(body.queued_startable, false);
+    assert.equal(body.execution_started, false);
+    assert.deepEqual(body.reasons.release_recorded, ["release_decision_missing"]);
+    // run-8771 is the investigator, not a t-1557 dispatch.
+    assert.deepEqual(body.reasons.dispatch_proven, ["swe_run_missing"]);
+    assert.equal(body.delivery_proven, false);
+  }
 });
 
 test("CLI: truncated payloads and incomplete or mismatched manifests exit 2", () => {
