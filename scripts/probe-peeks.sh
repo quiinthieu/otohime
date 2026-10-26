@@ -13,7 +13,8 @@
 # toggles; a card click navigates (in the site, inside a view transition; to a project, with the card's title
 # carrying the project's hop name); the fan stays inside the viewport at the four edges and flips above near the
 # bottom. Under reduced motion the cards lie flat with no animation. Negative controls: an unmarked nav link and
-# a pass-through hover shorter than the intent open nothing, a long-press that moves opens nothing, and a stale
+# a pass-through hover shorter than the intent open nothing, a long-press that moves opens nothing, a tap on an
+# empty spot (read from the live layout) closes the fan and navigates nowhere, and a stale
 # marker (an unknown key) leaves the plain link alone. No horizontal scroll, no console or page error.
 #
 # Env: PORT (4103, or a free port when that default is busy; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1, SHOTS_DIR.

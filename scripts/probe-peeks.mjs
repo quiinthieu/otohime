@@ -153,6 +153,30 @@ const active = (page) =>
 // An empty spot: the page's left gutter under the nav, far from any marked element.
 const PARK = [8, DESKTOP.height - 8];
 
+// An empty spot read from the live layout: the viewport point farthest from anything a tap could land on (a
+// link, a control, a marked element, the fan). A fixed point drifts onto the masthead's controls as they grow,
+// and Chromium's touch adjustment snaps a tap near one onto it. Hit-testing, not element boxes, so a stretched
+// link (a cartridge title's ::after covers its whole cartridge) counts where it is actually tappable.
+const emptySpot = (page) =>
+  page.evaluate(() => {
+    const live = 'a[href], button, input, select, textarea, summary, label, [role="button"], [data-peek], #peek-panel, [tabindex]:not([tabindex="-1"])';
+    const { clientWidth: w, clientHeight: h } = document.documentElement;
+    const free = [];
+    const taken = [];
+    for (let y = 6; y <= h - 6; y += 12) {
+      for (let x = 6; x <= w - 6; x += 12) {
+        (document.elementFromPoint(x, y)?.closest(live) ? taken : free).push([x, y]);
+      }
+    }
+    let best = { d: -1, x: 0, y: 0 };
+    for (const [x, y] of free) {
+      let d = Infinity;
+      for (const [tx, ty] of taken) d = Math.min(d, Math.hypot(tx - x, ty - y));
+      if (d > best.d) best = { d, x, y };
+    }
+    return [best.x, best.y];
+  });
+
 async function shot(page, name) {
   if (!SHOTS_DIR) return;
   mkdirSync(SHOTS_DIR, { recursive: true });
@@ -423,8 +447,10 @@ async function phone(browser, index) {
   await shot(page, "phone-long-press");
 
   // A tap outside closes it; a plain tap on the link still follows it.
-  await touch(page, [PHONE.width / 2, 12]);
+  await touch(page, await emptySpot(page));
   check("touch: a tap outside closes the fan", await waitGone(page));
+  await sleep(300);
+  check("touch: and navigates nowhere", new URL(page.url()).pathname === "/projects", page.url());
   await shore.scrollIntoViewIfNeeded();
   await shore.tap();
   await page.waitForURL(/\/shore$/, { timeout: 15000 }).catch(() => {});
