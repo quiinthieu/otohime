@@ -305,3 +305,10 @@ Commit and push origin HEAD; if main
 moves, pull --rebase, rerun npm test and push again without force.
 The summary names actual branch, SHA, proposal result, chore reuse and observed
 CI. No task idles on another owner or a natural schedule.
+
+## Run-8888 refresh (2026-10-26)
+
+- Live read: pm-255 queued, progress startable, queue position 1, no holders; t-1557 ready. Outcome 4 holds on the board.
+- pm-267 (mono-v2, After Plan Recovery) carries outcomes 1-3 and is now `paused` (updated 11:53Z). Resuming it is a platform-owner action, not an otohime task.
+- No otohime software_engineer task remains, so the proposal stays the empty DAG; no work was invented.
+- Deferred, owner pm-267 / scheduler / acceptance. Failure conditions: abandon text still claims it frees parts; null execution start still breaches task_duration; t-1557 gets no SWE run once a slot is free.
