@@ -1,0 +1,209 @@
+{
+  "recorded_at": "2026-10-26T09:12:39.684Z",
+  "qa": {
+    "id": "run-8808",
+    "plan_id": "pm-258",
+    "task_id": "t-1564",
+    "role": "quality_engineer",
+    "kind": "role",
+    "template_id": "qa-agent",
+    "tm_task_id": "0d081765-06f9-4a1e-9de4-28107aa0608b",
+    "repo_id": "otohime",
+    "account_id": "codex-main",
+    "worker_id": "avietidol-z490",
+    "runner": "fleet",
+    "agent_profile": "codex-sol-6-1-high",
+    "attempt": 1,
+    "status": "running",
+    "deadline_at": "2026-10-26T13:04:20.486021Z",
+    "started_at": "2026-10-26T09:04:20.486021Z",
+    "finished_at": "0001-01-01T00:00:00Z",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "not_before": "0001-01-01T00:00:00Z",
+    "status_checked_at": "0001-01-01T00:00:00Z",
+    "callback_apply_failures": 0
+  },
+  "software_engineer": {
+    "id": "run-8744",
+    "plan_id": "pm-258",
+    "task_id": "t-1564",
+    "role": "software_engineer",
+    "kind": "role",
+    "template_id": "coding-agent",
+    "tm_task_id": "8d0933c1-50c4-40e6-8c5f-e4b07a2934fd",
+    "repo_id": "otohime",
+    "account_id": "claude-kqviet",
+    "worker_id": "avietidol-mac-mini",
+    "runner": "fleet",
+    "git_sha": "15fd171",
+    "agent_profile": "claude-opus-high",
+    "attempt": 2,
+    "status": "succeeded",
+    "deadline_at": "2026-10-26T14:55:18.582906Z",
+    "started_at": "2026-10-26T06:55:18.582906Z",
+    "finished_at": "2026-10-26T08:57:42.545131Z",
+    "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+    "not_before": "0001-01-01T00:00:00Z",
+    "status_checked_at": "2026-10-26T08:57:13.303904Z",
+    "callback_apply_failures": 0
+  },
+  "green_gate": {
+    "id": "ver-3521",
+    "plan_id": "pm-258",
+    "task_id": "t-1564",
+    "run_id": "run-8802",
+    "gate": "green",
+    "git_sha": "15fd171",
+    "status": "pass",
+    "created_at": "2026-10-26T09:03:27.318043Z",
+    "items": [
+      {
+        "name": "Project tests",
+        "cmd": "npm test",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 6572
+      },
+      {
+        "name": "Lint",
+        "cmd": "npm run lint",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 7423
+      },
+      {
+        "name": "Typecheck",
+        "cmd": "npm run typecheck",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 4820
+      },
+      {
+        "name": "Build",
+        "cmd": "npm run build",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 10364
+      },
+      {
+        "name": "Footer HTTP walk",
+        "cmd": "SKIP_BUILD=1 bash scripts/walk-end.sh",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 6047
+      },
+      {
+        "name": "Footer Chromium matrix",
+        "cmd": "SKIP_BUILD=1 bash scripts/probe-end.sh",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 68616
+      },
+      {
+        "name": "Application end to end",
+        "cmd": "SKIP_BUILD=1 npm run test:e2e",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 183542
+      }
+    ]
+  },
+  "delivery_task": {
+    "id": "8d0933c1-50c4-40e6-8c5f-e4b07a2934fd",
+    "status": "COMPLETED",
+    "callbackState": "delivered",
+    "callbackAttempts": 1,
+    "result": {
+      "agent": "claude",
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "author.txt",
+          "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+          "size": 44
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "changed-files.txt",
+          "sha256": "d18c552ae504ebef601385500b64a65353d29e04b3cd90d9342e103edecb92b3",
+          "size": 228
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "changes.patch",
+          "sha256": "3b9c7157615fac38646f3d33c5316a5517873c33e5aedbcc627e254e6dbf19ac",
+          "size": 30324
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "commits.txt",
+          "sha256": "6bc93fe23d9ece0c6691ac51351a8a28b6f387a7f958b3597634ab7a57eb7401",
+          "size": 729
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "diffstat.txt",
+          "sha256": "cf0371044e3657047b8dab393e1a4c5a099eb5dbd67642033dffd3b78a1fee06",
+          "size": 736
+        },
+        {
+          "content_type": "application/json",
+          "name": "footprint.json",
+          "sha256": "ca5f9d5d088eb7d98c63d8c28b675508831dda168419c3f7095078e9096a3de4",
+          "size": 456
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "uncommitted.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        {
+          "content_type": "application/json",
+          "name": "usage.json",
+          "sha256": "902edb8f1f2d2ae566dcfa621178d41b8645e17712f186260ecbcc1bc2384aa2",
+          "size": 406
+        }
+      ],
+      "duration_s": 7323,
+      "exit_code": 0,
+      "recordings": [],
+      "repo_id": "otohime",
+      "usage": {
+        "cpu_cores": 0.01,
+        "cpu_seconds": 3032.03,
+        "io_sampler": "rusage",
+        "peak_cpu_cores": 8.85,
+        "peak_rss_mb": 14665.06,
+        "read_bytes": 4148658176,
+        "rss_mb": 370.94,
+        "sampler": "ps",
+        "samples": 1464,
+        "write_bytes": 2036424704
+      },
+      "worker_id": "avietidol-mac-mini"
+    }
+  },
+  "verification_task": {
+    "id": "b960bf5e-5e8e-42a7-acbf-32fa823169da",
+    "projectId": "plan-manager",
+    "taskType": "coding_task",
+    "status": "COMPLETED",
+    "resultUrl": "{\"agent\":\"shell\",\"artifacts\":[{\"content_type\":\"application/octet-stream\",\"name\":\"commits.txt\",\"sha256\":\"2de5e2dff80d7615d1c3373c8713276ec7cdfe824d66e7848d45823fb53439d6\",\"size\":32},{\"content_type\":\"application/octet-stream\",\"name\":\"uncommitted.txt\",\"sha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"size\":0},{\"content_type\":\"application/json\",\"name\":\"usage.json\",\"sha256\":\"c4b59be25f7e827c2ec9c5b0ea39e19ac8a9d4b7fc7dd4226d46ab20d97cef21\",\"size\":200},{\"content_type\":\"application/json\",\"name\":\"verification.json\",\"sha256\":\"ca845051aecaea996fda2e5c37d7f9be7d189f6b81f2613e67d1a72a69551482\",\"size\":29180}],\"duration_s\":321,\"exit_code\":0,\"recordings\":[],\"repo_id\":\"otohime\",\"usage\":{\"cpu_cores\":0.39,\"cpu_seconds\":207.39,\"io_sampler\":\"rusage\",\"peak_cpu_cores\":4,\"peak_rss_mb\":4934.13,\"read_bytes\":250052608,\"rss_mb\":1854.13,\"sampler\":\"ps\",\"samples\":64,\"write_bytes\":1279303680},\"worker_id\":\"avietidol-mac-mini\"}",
+    "createdBy": "plan-manager",
+    "createdAt": "2026-10-26T08:57:45Z",
+    "updatedAt": "2026-10-26T09:03:28Z",
+    "completedAt": "2026-10-26T09:03:26Z",
+    "title": "Restore the deployment checks gate",
+    "priority": 7,
+    "branch": "main",
+    "startedAt": "2026-10-26T08:57:56Z",
+    "callbackUrl": "http://plan-manager.staging.svc.cluster.local.:8148/internal/v1/task-callback",
+    "callbackState": "delivered",
+    "callbackAttempts": 1,
+    "callbackNextAt": "2026-10-26T09:03:42Z",
+    "repoId": "otohime",
+    "runner": "fleet",
+    "workerId": "avietidol-mac-mini"
+  }
+}

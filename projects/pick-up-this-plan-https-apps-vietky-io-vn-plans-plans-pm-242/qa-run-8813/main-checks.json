@@ -1,0 +1,10 @@
+[
+  {
+    "cmd": "npm test",
+    "exit": 0
+  },
+  {
+    "cmd": "npm run lint",
+    "exit": 0
+  }
+]

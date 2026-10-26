@@ -1,0 +1,53 @@
+{
+  "tested_head": "a80a35b1bcd8b028a4a6ecc752898fdb916523cb",
+  "upstream_base": "836df717e1ee175ab97d9febc805e0c3183fe51f",
+  "changes_since_last_full_suite": [
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/fix_plan_run-8816.md",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/adversarial.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/capture-times.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-comparison.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-failed-raw-logs.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-jobs-40263545741.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-jobs-40296784613.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-jobs-40297827219.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-jobs-40298672101.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-jobs-40300404091.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-last-green.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-latest-failed-raw-logs.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-recent.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-run-40263545741.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-run-40296784613.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/ci-run-40300404091.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/execution-audit.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/failed-runner-tail.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/fingerprint.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/focused-summary.log",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/gate-runner-tail.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/live-dispatched.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/live-released.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/manifest.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/negative-manifest-tamper.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/plan.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/production-build.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/production-health.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/runs.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/schedule.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/swe-runner-tail.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/task-history-summary.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/timeline.json",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/types-summary.log",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8816/unit-summary.log",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa_report_run-8816.md"
+  ],
+  "source_diff_since_last_full_suite": "",
+  "results": [
+    {
+      "command": "npm test",
+      "exit_code": 0
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0
+    }
+  ]
+}

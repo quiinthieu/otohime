@@ -1,0 +1,29 @@
+{
+  "base": "https://otohime.dev",
+  "live": true,
+  "fake": false,
+  "checks": [
+    "real health and no-store presence API",
+    "canonical-link corruption is detected and restoration passes (DOM-only negative control)"
+  ],
+  "hops": [],
+  "presence": {
+    "spotify": "spotify-off",
+    "track": null,
+    "steam": "steam-off",
+    "game": null,
+    "readAt": "2026-10-26T09:37:38.786Z"
+  },
+  "browser": "156.0.8078.48",
+  "sha": "ee1f6ce6cd7f47c8e7fe1c450b33ff07e922332f",
+  "footerPages": [
+    "/work",
+    "/play",
+    "/notes",
+    "/music",
+    "/projects",
+    "/sketches",
+    "/desk"
+  ],
+  "pageErrorsBeforeHops": []
+}

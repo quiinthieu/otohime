@@ -1,0 +1,5 @@
+{
+  "delivery_exit": 0,
+  "live_exit": 0,
+  "script": "../qa-run-8808/independent.mjs"
+}

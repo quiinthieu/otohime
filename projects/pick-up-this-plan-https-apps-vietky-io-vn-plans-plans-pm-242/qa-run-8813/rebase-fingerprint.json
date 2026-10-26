@@ -1,0 +1,13 @@
+{
+  "tested_head": "37fb0ed2c42944ca4e407b19547ea50e1db51fba",
+  "upstream_base": "c2ca9c20c6ae527d329ed4263672572ffd7219c9",
+  "original_delivery": "15fd171ac7d54027fd1c13a715efe1de13110a6b",
+  "compared_file_count": 516,
+  "delivery_application_runner_lock_config_diff": "",
+  "concurrent_change_paths": [
+    "lib/plan-release.test.ts",
+    "lib/plan-release.ts",
+    "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/release-walkthrough.md"
+  ],
+  "evidence_commit_recovery": "875264fe88ea12e7b30e3627a2bc182b20e5ed76 rejected non-fast-forward; git pull --rebase produced tested head; final amended commit adds only QA records."
+}

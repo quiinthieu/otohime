@@ -1,0 +1,38 @@
+{
+  "software_engineer_task": "8d0933c1-50c4-40e6-8c5f-e4b07a2934fd",
+  "source": "task_manager_get_task_logs (bounded tail, older log not read)",
+  "returned_lines": 42,
+  "final_result_messages": [
+    {
+      "type": "result",
+      "result": "The checks gate repair is pushed to `main` as `15fd171` (on top of `320a07f`). All seven verification commands pass on that tree. I didn't wait for or watch CI on it, so the green gate and QA still have to confirm it.\n\n**What was failing on main.** The last green run was c38f72a. I read the first page of GitHub Actions history (50 of 364 runs, so older history is unread). I couldn't read the CI logs themselves (they return 403 without a token), so I reproduced each failure locally instead.\n\n- **Footer probe, 999fea4..7041d7f:** the probe pressed Tab a fixed 13 times, which stopped short once the Desk added a seventh page. 2a58479 had already fixed this, and that Tab check passes now.\n- **Footer probe, 2a58479:** one run failed and I couldn't reproduce it, on the Mac or in a 4-CPU Ubuntu container. Still unexplained.\n- **Footer walk and probe at 5cd6ee0:** the new Ryugu waterline broke two assumptions (exactly 3 SVGs, and Back to top as the footer's last stop). 3351f78 (pm-249/t-1568) fixed this while I was working, so I dropped my duplicate fix when rebasing.\n- **E2E, 76141f1..8b49935:** fixed here. The E2E runner ran its test files side by side, so the tests that count animation frames (desk leaves, Ryugu sea) starved each other. `scripts/e2e.mjs` now runs them one at a time; you can still pass a different `--test-concurrency` to override it. A new test, `lib/e2e-runner.test.ts`, fails if that one-at-a-time setting is removed.\n\n**Two new failures from the Kame companion (dd21add), also fixed here.** Both failed every time I ran them.\n- The footer probe's \"at most 1 pending animation frame\" check was catching Kame's own frame, triggered by a late scroll event. The probe now waits for scrolling to stop before measuring, and a new negative control overlaps the two frames on purpose to show the check still catches it.\n- The ink-press E2E looked up \"the\" status message, which became ambiguous once Kame added its own. That lookup now only searches inside the press.\n\n**Isolated database.** The footer walk and probe now start a throwaway Postgres when no database answers and Docker isn't available (`node scripts/e2e.mjs --serve-db`), and they clean up only their own process and files. The probe passed with Docker hidden. Along the way I found that the embedded-postgres package exits on Ctrl-C/SIGTERM before our cleanup runs, which left temp files and the server behind. `e2e.mjs` now handles those signals itself.\n\n**Results on the pushed tree:**\n\n| Check | Result |\n| --- | --- |\n| `npm test` | 2078/2078 |\n| lint | 0 errors |\n| typecheck | pass |\n| build | pass |\n| footer walk | 67 ok, 0 failed |\n| footer Chromium probe | 171 ok, 0 failed |\n| E2E | 91/91 |\n\n**Still open, not mine to fix (reported, not filtered):** `e2e/ryugu.test.ts:110` sometimes records an uncaught browser error after typing \"urashima\": \"Transition was aborted because of invalid state. Page already revealed\". It hit about 9 in 40 tries starting from /work, and 1 in 3 full E2E runs in the container. No page script I tried could catch it. It comes from pm-256/t-1559 and may still turn a CI run red.\n\nThe decisions and one lesson are recorded on the board, and the summary report is submitted. `commits.txt` is in `shared/artifacts`, and the full write-up is `projects/pick-up-this-plan-https-apps-vietky-io-vn-plans-plans-pm-242/t-1564-summary.md`.",
+      "model_usage_since_last_result": {
+        "claude-opus-5-5": {
+          "inputTokens": 340,
+          "outputTokens": 131135,
+          "cacheReadInputTokens": 31859288,
+          "cacheCreationInputTokens": 295261,
+          "webSearchRequests": 0,
+          "costUSD": 11.3580056,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 48513,
+          "canonicalModel": "claude-opus-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      }
+    }
+  ],
+  "exit_tail": [
+    "---",
+    "Command exited with code: 0"
+  ],
+  "failed_comparison_task": "b3128d45-07a7-4e69-94c1-b964d173900e",
+  "failed_comparison_tail": [
+    "ERROR: Selected model is at capacity. Please try a different model.",
+    "Command exited with code: 1",
+    "rescue: pushed working state to branch task-rescue/b3128d45-07a7-4e69-94c1-b964d173900e"
+  ],
+  "comparison_limit": "This is a different QA run, not proof of an application defect or a fix in 15fd171."
+}

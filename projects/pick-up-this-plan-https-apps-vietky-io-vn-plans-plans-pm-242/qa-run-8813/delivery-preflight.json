@@ -1,0 +1,16 @@
+{
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "arch": "arm64",
+  "embeddedPostgres": "EmbeddedPostgres",
+  "pgClient": "Client",
+  "chromiumLauncher": "chromium",
+  "versions": {
+    "next": "16.4.2",
+    "pg": "8.23.1",
+    "embedded-postgres": "17.10.0-beta.17",
+    "playwright-core": "1.64.0"
+  },
+  "fake": false,
+  "note": "Constructor check only; real initialization, queries, migrations and cleanup are exercised by lib/e2e-runner.test.ts and the seven delivery checks. Initial metadata read via require(package/package.json) hit embedded-postgres exports restriction; direct fs read resolves it."
+}

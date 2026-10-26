@@ -1,0 +1,373 @@
+{
+  "complete": false,
+  "note": "Project id otohime returned empty; tasks belong to project plan-manager, so bounded global scans were filtered by repoId. Older pages are unread. No claims about unrelated task executables.",
+  "pages": [
+    {
+      "status": "FAILED",
+      "limit": 50,
+      "offset": 0,
+      "total": 1115,
+      "read": 50,
+      "relevant": [
+        {
+          "id": "8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+          "title": "Peel paper corners with a shared gesture contract",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T08:44:14Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "run_id": "run-8793",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "ab0601c1-0d1a-4e67-9dcd-6f56661aff53",
+          "title": "Give Kame a persistent accessible ink companion",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T08:44:13Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "run_id": "run-8788",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "66ea35bc-4dda-4c94-9e04-2373c8194bae",
+          "title": "Give Kame a persistent accessible ink companion",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T08:34:15Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=infra marker=3374166 02:10 codex exec --dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c model_reasoning_effort=\"medium\" -- # Save Work Before Finishing This jo",
+          "run_id": "run-8785",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "d3133670-fcdd-4712-8637-3470dc32c653",
+          "title": "Give Kame a persistent accessible ink companion",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T07:56:51Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "run_id": "run-8764",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "6aa491b3-d339-4ffa-b628-216aaf055f8b",
+          "title": "Peel paper corners with a shared gesture contract",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T07:56:51Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "run_id": "run-8763",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "b3128d45-07a7-4e69-94c1-b964d173900e",
+          "title": "Enter Ryugu-jo",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T07:48:24Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "run_id": "run-8761",
+          "plan_id": "pm-256"
+        },
+        {
+          "id": "c1039357-4ba4-4647-9175-8cb366561de7",
+          "title": "Enter Ryugu-jo",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T07:38:18Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=push_failed marker=+ \"error\": \"agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main\",",
+          "run_id": "run-8752",
+          "plan_id": "pm-256"
+        },
+        {
+          "id": "7c2f6e70-50ad-4564-91d6-ca9e7bed9283",
+          "title": "Enter Ryugu-jo",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T07:02:44Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=quota marker=urllib.error.HTTPError: HTTP Error 403: rate limit exceeded",
+          "run_id": "run-8749",
+          "plan_id": "pm-256"
+        },
+        {
+          "id": "cbfb6d6f-f022-4967-8eeb-b79415d8a53e",
+          "title": "Enter Ryugu-jo",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T06:58:27Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "run_id": "run-8747",
+          "plan_id": "pm-256"
+        },
+        {
+          "id": "0d1bf426-d806-455f-a22d-35227899f204",
+          "title": "product_owner pm-258",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T05:48:09Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2cf0b57ba573 is not on origin/main",
+          "run_id": "run-8712",
+          "plan_id": "pm-258"
+        },
+        {
+          "id": "ae6896a0-e218-416a-abfc-91c592749ab3",
+          "title": "product_owner pm-256",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T05:08:06Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "run_id": "run-8692",
+          "plan_id": "pm-256"
+        },
+        {
+          "id": "4a7f32b9-94fe-4e4f-b83c-62af4b81dc39",
+          "title": "product_owner pm-256",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T05:00:29Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main",
+          "run_id": "run-8686",
+          "plan_id": "pm-256"
+        },
+        {
+          "id": "bcf09602-7917-448d-971a-46623a45fe8f",
+          "title": "product_owner pm-248",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T02:41:14Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on origin/main",
+          "run_id": "run-8593",
+          "plan_id": "pm-248"
+        },
+        {
+          "id": "00341da4-46a5-4b12-be59-0f8d4de156f6",
+          "title": "acceptance_engineer pm-248",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T02:20:07Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD dbca71f4ee3b is not on origin/main",
+          "run_id": "run-8581",
+          "plan_id": "pm-248"
+        },
+        {
+          "id": "bc169b77-3237-49be-a88e-01245057e78c",
+          "title": "acceptance_engineer pm-248",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T02:07:55Z",
+          "callbackState": "delivered",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 88fcbd38213d is not on origin/main",
+          "run_id": "run-8575",
+          "plan_id": "pm-248"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "limit": 50,
+      "offset": 50,
+      "total": 1115,
+      "read": 50,
+      "relevant": [
+        {
+          "id": "86b79907-defc-4d0a-98e6-43fd17f1b307",
+          "title": "Ship Fan-out Peeks",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T01:05:53Z",
+          "callbackState": "delivered",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=all_busy all_busy=2 held=1 offline=5 idle=0 workers=8",
+          "git_sha": "4942e75",
+          "run_id": "run-8547",
+          "plan_id": "pm-247"
+        },
+        {
+          "id": "97a9bbd5-4f02-4178-b6fa-dfbff80648ad",
+          "title": "Ship Ink Radio",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T00:57:10Z",
+          "callbackState": "delivered",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=1 offline=5 idle=2 workers=9",
+          "git_sha": "b01893b",
+          "run_id": "run-8541",
+          "plan_id": "pm-247"
+        },
+        {
+          "id": "830924f3-ff1c-4d61-aaac-b25e6324cc40",
+          "title": "Prove footer interactions and polish the scene",
+          "status": "FAILED",
+          "createdAt": "2026-10-25T21:44:01Z",
+          "callbackState": "delivered",
+          "error": "unsupported: /bin/bash: fork/exec /bin/bash: argument list too long",
+          "run_id": "run-8447",
+          "plan_id": "pm-241"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "limit": 50,
+      "offset": 0,
+      "total": 6009,
+      "read": 50,
+      "relevant": [
+        {
+          "id": "7fb67a05-2a4f-4348-bbbf-2e905fdfe9d2",
+          "title": "research pm-264",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T09:01:41Z",
+          "callbackState": "delivered",
+          "run_id": "run-8805",
+          "plan_id": "pm-264"
+        },
+        {
+          "id": "b960bf5e-5e8e-42a7-acbf-32fa823169da",
+          "title": "Restore the deployment checks gate",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:57:45Z",
+          "callbackState": "delivered",
+          "git_sha": "15fd171",
+          "run_id": "run-8802",
+          "plan_id": "pm-258"
+        },
+        {
+          "id": "ff8dc637-96fa-4f99-a701-e2aaaf79521f",
+          "title": "Verify split part release",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:54:26Z",
+          "callbackState": "delivered",
+          "run_id": "run-8800",
+          "plan_id": "pm-260"
+        },
+        {
+          "id": "5170e115-ee41-421e-a443-49a8510adf66",
+          "title": "Verify split part release",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:50:23Z",
+          "callbackState": "delivered",
+          "git_sha": "320a07f",
+          "run_id": "run-8796",
+          "plan_id": "pm-260"
+        },
+        {
+          "id": "3910cd99-1eb2-4c0b-a2aa-271c13392491",
+          "title": "slowness investigator pm-249",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:44:14Z",
+          "callbackState": "delivered",
+          "run_id": "run-8794",
+          "plan_id": "pm-249"
+        },
+        {
+          "id": "41d067dd-e2a5-41f1-aa5f-f4d86ff414cd",
+          "title": "Peel paper corners with a shared gesture contract",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:42:10Z",
+          "callbackState": "delivered",
+          "git_sha": "a46ad8e",
+          "run_id": "run-8790",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "f2877d39-a399-477b-916e-616c3a38b997",
+          "title": "Verify split part release",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:41:03Z",
+          "callbackState": "delivered",
+          "run_id": "run-8789",
+          "plan_id": "pm-260"
+        },
+        {
+          "id": "023a176a-b527-495b-ab70-bb82f40e22a8",
+          "title": "Give Kame a persistent accessible ink companion",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:32:23Z",
+          "callbackState": "delivered",
+          "git_sha": "dd21add",
+          "run_id": "run-8784",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "8a684e3a-2941-4d93-9364-5dcfd7603dcf",
+          "title": "product_owner pm-260",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:29:05Z",
+          "callbackState": "delivered",
+          "run_id": "run-8783",
+          "plan_id": "pm-260"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "limit": 50,
+      "offset": 50,
+      "total": 6009,
+      "read": 50,
+      "relevant": [
+        {
+          "id": "23466f57-01ae-4856-a67d-3052c504dacc",
+          "title": "Give Kame a persistent accessible ink companion",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:18:34Z",
+          "callbackState": "delivered",
+          "run_id": "run-8768",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "2ba59fd6-4676-4d27-8279-8cb23ee039fb",
+          "title": "research pm-260",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:18:09Z",
+          "callbackState": "delivered",
+          "run_id": "run-8776",
+          "plan_id": "pm-260"
+        },
+        {
+          "id": "fd47853a-bb44-4ed2-8c80-96ff33dda68a",
+          "title": "slowness investigator pm-258",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:14:54Z",
+          "callbackState": "delivered",
+          "run_id": "run-8773",
+          "plan_id": "pm-258"
+        },
+        {
+          "id": "57451dc2-6e21-4ad0-ac0f-57c4cd2b7378",
+          "title": "slowness investigator pm-256",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:14:54Z",
+          "callbackState": "delivered",
+          "run_id": "run-8772",
+          "plan_id": "pm-256"
+        },
+        {
+          "id": "565313df-a594-448d-94a3-70fa9c882f9f",
+          "title": "slowness investigator pm-255",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:14:54Z",
+          "callbackState": "delivered",
+          "run_id": "run-8771",
+          "plan_id": "pm-255"
+        },
+        {
+          "id": "5867dddd-1f01-46ab-b8c6-c5251d079434",
+          "title": "Peel paper corners with a shared gesture contract",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T08:09:23Z",
+          "callbackState": "delivered",
+          "run_id": "run-8766",
+          "plan_id": "pm-259"
+        },
+        {
+          "id": "a57738b7-974c-427c-9397-29a784bc5354",
+          "title": "Make CI checks green on main",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T07:47:10Z",
+          "callbackState": "delivered",
+          "git_sha": "3351f78",
+          "run_id": "run-8762",
+          "plan_id": "pm-249"
+        }
+      ]
+    }
+  ]
+}

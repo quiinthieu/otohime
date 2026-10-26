@@ -1,0 +1,6 @@
+{
+  "mutant_exit": 1,
+  "restored_exit": 0,
+  "restored_identical": true,
+  "fake_boundary": "Only the scheduling regression uses two dummy test files; HTTP, browser, Postgres and application checks are real."
+}

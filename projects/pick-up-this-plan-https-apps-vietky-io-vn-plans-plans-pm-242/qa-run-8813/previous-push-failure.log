@@ -1,0 +1,30 @@
+
+tokens used
+176,234
+QA **failed (`cause=code`)**. Delivery `15fd171` still fails GitHub E2E run `40295803050`; production remains at `c38f72a`.
+
+All seven local checks pass, including 2,078 unit tests, 91 E2E tests, and both footer probes. These results do not resolve the CI failure.
+
+Submitted QA report `rep-5131` and fix plan `rep-5132`.
+
+Committed and pushed all QA evidence:
+
+- Branch: `qa/pm-258-t-1564-run-8808`
+- Commit: `f697e2c2aababbc2fb9ada016fb92430f8012fca`
+
+[QA report](projects/pick-up-this-plan-https-apps-vietky-io-vn-plans-plans-pm-242/qa_report_run-8808.md)
+---
+Command exited with code: 0
+push_not_on_main: HEAD f697e2c2aababbc2fb9ada016fb92430f8012fca is not on origin/main (1 commit(s) since 4059b63f5a43d7184a5f6029ebee654c5e7840bf); cutting task-rescue/0d081765-06f9-4a1e-9de4-28107aa0608b
+progress phase=rescue
+=== rescue: preserving workspace of failed task (exit code 1, phase agent, budget 60s) ===
+On branch qa/pm-258-t-1564-run-8808
+nothing to commit, working tree clean
+remote:
+remote: Create a pull request for 'task-rescue/0d081765-06f9-4a1e-9de4-28107aa0608b' on GitHub by visiting:
+remote:      https://github.com/quiinthieu/otohime/pull/new/task-rescue/0d081765-06f9-4a1e-9de4-28107aa0608b
+remote:
+To github.com:quiinthieu/otohime.git
+ * [new branch]      HEAD -> task-rescue/0d081765-06f9-4a1e-9de4-28107aa0608b
+rescue: pushed working state to branch task-rescue/0d081765-06f9-4a1e-9de4-28107aa0608b
+=== rescue: done ===

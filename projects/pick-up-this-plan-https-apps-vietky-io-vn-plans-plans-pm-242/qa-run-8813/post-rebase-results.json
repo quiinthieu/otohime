@@ -1,0 +1,48 @@
+{
+  "tested_commit": "37fb0ed2c42944ca4e407b19547ea50e1db51fba",
+  "upstream_base": "c2ca9c20c6ae527d329ed4263672572ffd7219c9",
+  "results": [
+    {
+      "name": "unit",
+      "command": "npm test",
+      "exit_code": 0,
+      "duration_s": 5.83
+    },
+    {
+      "name": "lint",
+      "command": "npm run lint",
+      "exit_code": 0,
+      "duration_s": 7.5
+    },
+    {
+      "name": "typecheck",
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "duration_s": 5.0
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "exit_code": 0,
+      "duration_s": 9.47
+    },
+    {
+      "name": "walk",
+      "command": "SKIP_BUILD=1 bash scripts/walk-end.sh",
+      "exit_code": 0,
+      "duration_s": 5.59
+    },
+    {
+      "name": "probe",
+      "command": "SKIP_BUILD=1 bash scripts/probe-end.sh",
+      "exit_code": 0,
+      "duration_s": 62.87
+    },
+    {
+      "name": "e2e",
+      "command": "SKIP_BUILD=1 npm run test:e2e",
+      "exit_code": 0,
+      "duration_s": 177.8
+    }
+  ]
+}

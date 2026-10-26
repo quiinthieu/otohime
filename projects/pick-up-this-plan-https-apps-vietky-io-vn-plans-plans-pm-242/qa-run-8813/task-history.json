@@ -1,0 +1,921 @@
+[
+  {
+    "status": "FAILED",
+    "offset": 0,
+    "limit": 25,
+    "total": 1116,
+    "count": 25,
+    "tasks": [
+      {
+        "id": "0d081765-06f9-4a1e-9de4-28107aa0608b",
+        "title": "Restore the deployment checks gate",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T09:04:24Z",
+        "callbackState": "delivered",
+        "run_id": "run-8808",
+        "plan_id": "pm-258",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f697e2c2aaba is not on origin/main"
+      },
+      {
+        "id": "8e93fb33-9d07-45c6-9dac-4bb6e6f92b8f",
+        "title": "Peel paper corners with a shared gesture contract",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T08:44:14Z",
+        "callbackState": "delivered",
+        "run_id": "run-8793",
+        "plan_id": "pm-259",
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "ab0601c1-0d1a-4e67-9dcd-6f56661aff53",
+        "title": "Give Kame a persistent accessible ink companion",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T08:44:13Z",
+        "callbackState": "delivered",
+        "run_id": "run-8788",
+        "plan_id": "pm-259",
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "3b989de4-9c35-45f7-94cd-0fd264cf3a81",
+        "title": "Colab T4 session",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T08:40:59Z",
+        "error": "task exited with code 1"
+      },
+      {
+        "id": "66ea35bc-4dda-4c94-9e04-2373c8194bae",
+        "title": "Give Kame a persistent accessible ink companion",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T08:34:15Z",
+        "callbackState": "delivered",
+        "run_id": "run-8785",
+        "plan_id": "pm-259",
+        "error": "agent_failed: exit 1 class=infra marker=3374166 02:10 codex exec --dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c model_reasoning_effort=\"medium\" -- # Save Work Before Finishing This jo"
+      },
+      {
+        "id": "d3133670-fcdd-4712-8637-3470dc32c653",
+        "title": "Give Kame a persistent accessible ink companion",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T07:56:51Z",
+        "callbackState": "delivered",
+        "run_id": "run-8764",
+        "plan_id": "pm-259",
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "6aa491b3-d339-4ffa-b628-216aaf055f8b",
+        "title": "Peel paper corners with a shared gesture contract",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T07:56:51Z",
+        "callbackState": "delivered",
+        "run_id": "run-8763",
+        "plan_id": "pm-259",
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "b3128d45-07a7-4e69-94c1-b964d173900e",
+        "title": "Enter Ryugu-jo",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T07:48:24Z",
+        "callbackState": "delivered",
+        "run_id": "run-8761",
+        "plan_id": "pm-256",
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "c1039357-4ba4-4647-9175-8cb366561de7",
+        "title": "Enter Ryugu-jo",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T07:38:18Z",
+        "callbackState": "delivered",
+        "run_id": "run-8752",
+        "plan_id": "pm-256",
+        "error": "agent_failed: exit 1 class=push_failed marker=+ \"error\": \"agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main\","
+      },
+      {
+        "id": "7c2f6e70-50ad-4564-91d6-ca9e7bed9283",
+        "title": "Enter Ryugu-jo",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T07:02:44Z",
+        "callbackState": "delivered",
+        "run_id": "run-8749",
+        "plan_id": "pm-256",
+        "error": "agent_failed: exit 1 class=quota marker=urllib.error.HTTPError: HTTP Error 403: rate limit exceeded"
+      },
+      {
+        "id": "cbfb6d6f-f022-4967-8eeb-b79415d8a53e",
+        "title": "Enter Ryugu-jo",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T06:58:27Z",
+        "callbackState": "delivered",
+        "run_id": "run-8747",
+        "plan_id": "pm-256",
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "97e1589b-213b-44fb-8bd7-6d203e154e34",
+        "title": "product_owner pm-246",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T06:26:41Z",
+        "callbackState": "delivered",
+        "run_id": "run-8730",
+        "plan_id": "pm-246",
+        "error": "agent_failed: exit 1 class=unknown marker=none"
+      },
+      {
+        "id": "0d1bf426-d806-455f-a22d-35227899f204",
+        "title": "product_owner pm-258",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T05:48:09Z",
+        "callbackState": "delivered",
+        "run_id": "run-8712",
+        "plan_id": "pm-258",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2cf0b57ba573 is not on origin/main"
+      },
+      {
+        "id": "ae6896a0-e218-416a-abfc-91c592749ab3",
+        "title": "product_owner pm-256",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T05:08:06Z",
+        "callbackState": "delivered",
+        "run_id": "run-8692",
+        "plan_id": "pm-256",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main"
+      },
+      {
+        "id": "4a7f32b9-94fe-4e4f-b83c-62af4b81dc39",
+        "title": "product_owner pm-256",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T05:00:29Z",
+        "callbackState": "delivered",
+        "run_id": "run-8686",
+        "plan_id": "pm-256",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 1ca12d01618f is not on origin/main"
+      },
+      {
+        "id": "d5d4800d-61da-489d-9b58-769dfe6a1230",
+        "title": "forge animate animate run a81e9bfc attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T04:59:03Z",
+        "callbackState": "delivered",
+        "run_id": "a81e9bfc-bb41-52bb-ba1e-0fb71e8c872b",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "99186d6f-b1bd-4051-9d2e-1526ac90c9e6",
+        "title": "forge animate animate run a307ebbb attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T04:39:20Z",
+        "callbackState": "delivered",
+        "run_id": "a307ebbb-066c-5baa-93ec-d6e4a27809b1",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "2add0a5a-4649-45ce-941b-e759cfbd5ed5",
+        "title": "asset review 02ede7cd-4246-4b64-a1fc-bbf8153a738e/title-logo (767dc4ee-881f-4d4e-93d6-0aaa707687b5)",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T04:30:02Z",
+        "callbackState": "delivered",
+        "run_id": "pack-review-767dc4ee-881f-4d4e-93d6-0aaa707687b5",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "f4498de7-4cde-4e82-862e-10e0d402e9cd",
+        "title": "asset review 02ede7cd-4246-4b64-a1fc-bbf8153a738e/prop-1 (ab02cf9c-2f6f-421b-b2a6-ba45352e65b6)",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T04:30:00Z",
+        "callbackState": "delivered",
+        "run_id": "pack-review-ab02cf9c-2f6f-421b-b2a6-ba45352e65b6",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "e61e0b7e-b8a1-4534-b920-00584c87ff13",
+        "title": "asset review c65c1126-b4a8-4a63-8b66-96c574f7b280/tile-3 (3746eaf2-fcae-461a-b6ed-272e00b94fdd)",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T04:21:01Z",
+        "callbackState": "delivered",
+        "run_id": "pack-review-3746eaf2-fcae-461a-b6ed-272e00b94fdd",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "c8e2155d-1dfa-415b-a86b-8d8ac75012c6",
+        "title": "Colab L4 session",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T03:51:07Z",
+        "error": "task exited with code 1"
+      },
+      {
+        "id": "b291c57d-2985-469c-97d0-d6926aebf1d2",
+        "title": "forge animate animate run 0f03545a attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T03:47:00Z",
+        "callbackState": "delivered",
+        "run_id": "0f03545a-3336-5289-81a7-00852c161c33",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "8a347804-44ca-4ddb-bb39-d6419f1ab393",
+        "title": "forge rig unirig run 4bc369bc attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T03:44:58Z",
+        "callbackState": "delivered",
+        "run_id": "4bc369bc-0325-5aa1-b1b1-70580d67e8a2",
+        "error": "E_RIG_FAILED"
+      },
+      {
+        "id": "b70942e1-4048-485c-b65e-c790f256a803",
+        "title": "forge animate animate run 7402a074 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T03:39:41Z",
+        "callbackState": "delivered",
+        "run_id": "7402a074-98d7-545a-9f25-c8d4fddfd769",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "c60b31d6-fda6-44eb-8c18-098a5a0357a2",
+        "title": "forge animate animate run f2125ae9 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T03:29:11Z",
+        "callbackState": "delivered",
+        "run_id": "f2125ae9-1681-5955-8004-7f7e33f6d8a3",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      }
+    ]
+  },
+  {
+    "status": "FAILED",
+    "offset": 25,
+    "limit": 25,
+    "total": 1116,
+    "count": 25,
+    "tasks": [
+      {
+        "id": "d1148f11-a972-4979-8278-d654c7ae6683",
+        "title": "forge animate animate run 5fa3bfc3 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T03:17:39Z",
+        "callbackState": "delivered",
+        "run_id": "5fa3bfc3-d7bf-5f17-b955-a8c3369e5242",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "9e402e32-09d5-458a-9737-2511a6f51385",
+        "title": "forge animate animate run dac8a2ca attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T03:09:27Z",
+        "callbackState": "delivered",
+        "run_id": "dac8a2ca-2122-555d-a7ac-adf8b0a33616",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "da70e804-2fd5-4c91-8b26-3d10fb2b8ef4",
+        "title": "Colab L4 session",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:54:01Z",
+        "error": "task exited with code 1"
+      },
+      {
+        "id": "1a0831cf-433c-4586-bee1-db124eaf593a",
+        "title": "forge rig unirig run ad443dd5 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:52:53Z",
+        "callbackState": "delivered",
+        "run_id": "ad443dd5-8de5-592a-b39a-e908dbad6278",
+        "error": "E_RIG_FAILED"
+      },
+      {
+        "id": "0de6cba0-053a-417f-8651-9bb7a5838bd9",
+        "title": "forge animate animate run 471826c0 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:48:48Z",
+        "callbackState": "delivered",
+        "run_id": "471826c0-5ff3-52c7-9c43-4db53663a7f1",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "2a650075-89cc-4294-89ae-4f612fa984db",
+        "title": "forge animate animate run 524c769f attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:46:49Z",
+        "callbackState": "delivered",
+        "run_id": "524c769f-90d7-5992-a97c-8dbaa63f24fb",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "c6c441d6-8119-4ec5-9530-467adf3605e2",
+        "title": "forge animate animate run 61804682 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:44:47Z",
+        "callbackState": "delivered",
+        "run_id": "61804682-6bf9-5027-bc85-85b2a754f5ab",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "bcf09602-7917-448d-971a-46623a45fe8f",
+        "title": "product_owner pm-248",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:41:14Z",
+        "callbackState": "delivered",
+        "run_id": "run-8593",
+        "plan_id": "pm-248",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on origin/main"
+      },
+      {
+        "id": "63e2e40d-e560-467c-86e8-d95029b2b041",
+        "title": "asset review 02ede7cd-4246-4b64-a1fc-bbf8153a738e/title-logo (767dc4ee-881f-4d4e-93d6-0aaa707687b5)",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:29:06Z",
+        "callbackState": "delivered",
+        "run_id": "pack-review-767dc4ee-881f-4d4e-93d6-0aaa707687b5",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "5d7573fd-f237-420a-a0dd-d535750c4c6f",
+        "title": "asset review 02ede7cd-4246-4b64-a1fc-bbf8153a738e/prop-1 (ab02cf9c-2f6f-421b-b2a6-ba45352e65b6)",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:29:05Z",
+        "callbackState": "delivered",
+        "run_id": "pack-review-ab02cf9c-2f6f-421b-b2a6-ba45352e65b6",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "00341da4-46a5-4b12-be59-0f8d4de156f6",
+        "title": "acceptance_engineer pm-248",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:20:07Z",
+        "callbackState": "delivered",
+        "run_id": "run-8581",
+        "plan_id": "pm-248",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD dbca71f4ee3b is not on origin/main"
+      },
+      {
+        "id": "cb564ed1-8a8e-45a2-b810-d3c928192397",
+        "title": "asset review c65c1126-b4a8-4a63-8b66-96c574f7b280/tile-3 (3746eaf2-fcae-461a-b6ed-272e00b94fdd)",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:19:42Z",
+        "callbackState": "delivered",
+        "run_id": "pack-review-3746eaf2-fcae-461a-b6ed-272e00b94fdd",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "3297f222-f0b2-4c5b-a9f0-03478497cd76",
+        "title": "forge animate animate run 4120bf4b attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:18:40Z",
+        "callbackState": "delivered",
+        "run_id": "4120bf4b-85be-5cfc-b93b-ea8012b2a5cb",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "1f57abf9-4690-4e9e-8229-a95ea1cfb460",
+        "title": "forge rig unirig run f0b205a8 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:12:58Z",
+        "callbackState": "delivered",
+        "run_id": "f0b205a8-7cb7-518f-b8d4-e33e4f41fbe9",
+        "error": "E_RIG_FAILED"
+      },
+      {
+        "id": "bc169b77-3237-49be-a88e-01245057e78c",
+        "title": "acceptance_engineer pm-248",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:07:55Z",
+        "callbackState": "delivered",
+        "run_id": "run-8575",
+        "plan_id": "pm-248",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 88fcbd38213d is not on origin/main"
+      },
+      {
+        "id": "95909abf-0b41-4086-ad04-3c0a649a2fff",
+        "title": "Colab L4 session",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T02:06:02Z",
+        "error": "task exited with code 1"
+      },
+      {
+        "id": "88588dda-94fe-41e1-9975-61392099bfda",
+        "title": "forge animate animate run ecdc4fed attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:56:42Z",
+        "callbackState": "delivered",
+        "run_id": "ecdc4fed-c793-515e-b760-655e3f918cb5",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "1c6bc28c-475f-4bee-a99d-92cf01c4e817",
+        "title": "forge animate animate run c86ab4b8 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:54:20Z",
+        "callbackState": "delivered",
+        "run_id": "c86ab4b8-880a-5d94-a636-df9c9ebb57bc",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "1a6e97c0-edd6-4800-aec1-c3c5398947d7",
+        "title": "forge rig unirig run 35214ab8 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:51:08Z",
+        "callbackState": "delivered",
+        "run_id": "35214ab8-863f-585f-86bc-2177f6ea83e0",
+        "error": "E_RIG_FAILED"
+      },
+      {
+        "id": "da4fbf25-7d02-49f1-a1ba-5872a1fdf045",
+        "title": "forge animate animate run 84ffdb8b attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:32:57Z",
+        "callbackState": "delivered",
+        "run_id": "84ffdb8b-cf8d-5381-85b2-9a68f4a44638",
+        "error": "E_ANIMATE_MAP"
+      },
+      {
+        "id": "07bd7efc-8b00-4636-9c40-66f58e91890f",
+        "title": "forge animate animate run 9d39f67e attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:30:59Z",
+        "callbackState": "delivered",
+        "run_id": "9d39f67e-431a-5ae7-8fd3-bc3f01724e10",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "6a2a8024-bfce-4fa0-91ad-915e61c4d237",
+        "title": "forge animate animate run ecd05a9f attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:28:53Z",
+        "callbackState": "delivered",
+        "run_id": "ecd05a9f-14c3-5e23-971c-3ecdb01755be",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "c6096178-3604-4933-ab50-a7610398f9e3",
+        "title": "asset review 02ede7cd-4246-4b64-a1fc-bbf8153a738e/title-logo (767dc4ee-881f-4d4e-93d6-0aaa707687b5)",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:28:43Z",
+        "callbackState": "delivered",
+        "run_id": "pack-review-767dc4ee-881f-4d4e-93d6-0aaa707687b5",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "a3f28dbe-47b1-4b7d-90e0-52e369804394",
+        "title": "asset review 02ede7cd-4246-4b64-a1fc-bbf8153a738e/prop-1 (ab02cf9c-2f6f-421b-b2a6-ba45352e65b6)",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:28:41Z",
+        "callbackState": "delivered",
+        "run_id": "pack-review-ab02cf9c-2f6f-421b-b2a6-ba45352e65b6",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      },
+      {
+        "id": "379b0444-cd0d-4fe5-9611-7c01f1877ea0",
+        "title": "forge animate animate run eca8eaf5 attempt 1",
+        "status": "FAILED",
+        "createdAt": "2026-10-26T01:25:17Z",
+        "callbackState": "delivered",
+        "run_id": "eca8eaf5-db89-5315-9edf-d9cde3ea6441",
+        "error": "gpu_unavailable: colab_launch_circuit_open tier T4/f2efd4a7f8fb: 2 zero-output sessions (limit 2, 0.28 CU); recover with a new immutable launcher release; no eligible home GPU or live session"
+      }
+    ]
+  },
+  {
+    "status": "COMPLETED",
+    "offset": 0,
+    "limit": 25,
+    "total": 6033,
+    "count": 25,
+    "tasks": [
+      {
+        "id": "d141781f-351e-4466-98c3-5e9a23215e5d",
+        "title": "linego forge run 7b24aa5d-dcc1-40d5-b833-64376083ab8b",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:30:03Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "f1020d32-3120-42b3-a223-79ef376851b5",
+        "title": "linego forge run ae383ad8-5447-4282-929f-65066f889173",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:30:03Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "653bc4e3-a652-419c-82da-d38b73bfc36a",
+        "title": "fleet canary avietidol-z490",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:28:11Z"
+      },
+      {
+        "id": "ab645a4b-12d9-4ec0-9e54-7842f1f8919b",
+        "title": "linego forge run dcf13733-9907-4325-90d5-0e88bfcbc367",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:25:02Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "37062744-57c7-4986-af4f-0f8fe98ae93c",
+        "title": "linego forge run 0a8bf484-c185-459e-a258-a1ea781b4b47",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:25:02Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "a3e71f85-d106-4318-afcc-7f3b964a01b4",
+        "title": "reclaim viet-mac",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:23:24Z"
+      },
+      {
+        "id": "fc125646-caff-4b68-8a55-7f68c435d6a0",
+        "title": "linego forge run 9a08185a-0ef1-450e-a8b1-a262172ec7ac",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:20:03Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "df218ada-5a7c-4f12-bbd4-250d87a57a89",
+        "title": "linego forge run 9c28b03a-db1a-481a-b45f-9012c42bafc2",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:20:03Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "f1706e38-852a-44b7-83ee-144362065f99",
+        "title": "Verify split part release",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:17:30Z",
+        "callbackState": "delivered",
+        "run_id": "run-8812",
+        "plan_id": "pm-260"
+      },
+      {
+        "id": "811cf276-1fcb-4f47-9d7d-400ae70a1e22",
+        "title": "slowness investigator pm-260",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:15:41Z",
+        "callbackState": "delivered",
+        "run_id": "run-8811",
+        "plan_id": "pm-260"
+      },
+      {
+        "id": "dce3e389-c72b-4a33-b8a5-d2ea56c6f9fe",
+        "title": "linego forge run 8d02e49c-28e2-4a22-b631-54c3ed1c20fd",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:15:03Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "637d91fe-9fa0-4ffb-a21c-85bbf76f17ba",
+        "title": "linego forge run 36cbe8aa-6690-4d22-82f8-85abd66897ef",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:15:03Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "1ce9d413-e929-4ad3-afd9-6bd0ff084d91",
+        "title": "Verify split part release",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:15:02Z",
+        "callbackState": "delivered",
+        "run_id": "run-8810",
+        "plan_id": "pm-260",
+        "git_sha": "4e5377c"
+      },
+      {
+        "id": "57773c94-d888-4d68-af57-fcd44fecda15",
+        "title": "reclaim viet-mac",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:13:16Z"
+      },
+      {
+        "id": "2433ecb6-3c48-47e0-8b5b-56b71922ca43",
+        "title": "Colab T4 session",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:12:14Z"
+      },
+      {
+        "id": "534bb3e6-c6b7-4f3f-ac39-c9fd5f75a411",
+        "title": "environment canary deploy can-427",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:10:38Z",
+        "callbackState": "delivered",
+        "run_id": "can-427",
+        "plan_id": "pm-platform"
+      },
+      {
+        "id": "ba914888-5ae7-4271-8c8d-2f2121022b8c",
+        "title": "doctor viet-mac",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:10:13Z"
+      },
+      {
+        "id": "c826aa11-8e27-4592-badd-fb7872a4c5ff",
+        "title": "linego forge run e76934fa-52dc-4f52-b8c7-f34ed8804bc0",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:10:04Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "485b9fc2-3cd4-4b50-9022-ff06c45bf4fa",
+        "title": "linego forge run 6d4484b3-0f73-4258-b017-73b03147f4aa",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:10:04Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "b052244b-fc14-4c54-8287-cb4d6c64d607",
+        "title": "issue harvest doc sync quota:9d6ba8d7364a2a4b",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:08:23Z",
+        "run_id": "harvest-9d6ba8d7364a2a4b",
+        "plan_id": "pm-platform"
+      },
+      {
+        "id": "d97bbcf2-59e5-445d-97b4-1ca6bf07c8fd",
+        "title": "environment canary deploy can-426",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:07:52Z",
+        "callbackState": "delivered",
+        "run_id": "can-426",
+        "plan_id": "pm-platform"
+      },
+      {
+        "id": "bec3c74b-a910-45f1-8689-2685b6bfb0c8",
+        "title": "Verify split part release",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:07:33Z",
+        "callbackState": "delivered",
+        "run_id": "run-8809",
+        "plan_id": "pm-260"
+      },
+      {
+        "id": "d9984dc2-cc99-4858-97e0-76c1bafd4bf1",
+        "title": "linego forge run 748590f5-585c-441a-b3ea-274302134da9",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:05:05Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "adbde128-b17a-4bc1-bb35-1d1cbfa65489",
+        "title": "linego forge run ed676148-a078-4ee4-86a2-ab76ad6a00e6",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:05:05Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "c3f31644-d01e-4841-bb60-9bc3b4b5b469",
+        "title": "Peel paper corners with a shared gesture contract",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:04:24Z",
+        "callbackState": "delivered",
+        "run_id": "run-8803",
+        "plan_id": "pm-259"
+      }
+    ]
+  },
+  {
+    "status": "COMPLETED",
+    "offset": 25,
+    "limit": 25,
+    "total": 6033,
+    "count": 25,
+    "tasks": [
+      {
+        "id": "a0cd9b90-0511-419d-bf76-6b6a23b3fba4",
+        "title": "product_owner pm-264",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:03:36Z",
+        "callbackState": "delivered",
+        "run_id": "run-8807",
+        "plan_id": "pm-264"
+      },
+      {
+        "id": "fe1bbced-9021-429e-9d37-c0560d968643",
+        "title": "reclaim viet-mac",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:02:39Z"
+      },
+      {
+        "id": "17314d72-edaa-4bcb-9595-2aba483cedcc",
+        "title": "product_owner pm-259",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:02:08Z",
+        "callbackState": "delivered",
+        "run_id": "run-8806",
+        "plan_id": "pm-259"
+      },
+      {
+        "id": "7fb67a05-2a4f-4348-bbbf-2e905fdfe9d2",
+        "title": "research pm-264",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:01:41Z",
+        "callbackState": "delivered",
+        "run_id": "run-8805",
+        "plan_id": "pm-264"
+      },
+      {
+        "id": "1fc4e854-d7f2-4fac-9d13-1201902f3efe",
+        "title": "decider pm-259",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:01:35Z",
+        "callbackState": "delivered",
+        "run_id": "run-8804",
+        "plan_id": "pm-platform"
+      },
+      {
+        "id": "77c16753-d221-4423-a31b-a628e83b3d0b",
+        "title": "linego forge run 860888b5-413a-4396-9434-4d22ebc661a4",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:00:10Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "6fe2cf8f-e8a4-4ad7-8561-6a1ab0ebd097",
+        "title": "linego forge run 9e9b8b02-4093-47b1-af63-16fdd374d4dc",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:00:10Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "3714bfcd-dc23-473d-8d59-8c3c0c6f2d83",
+        "title": "finance-vn-usd-vnd-hourly - 2026-10-26 09:00:08",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T09:00:08Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "cbc13411-a533-4854-b7db-e88fcfab6d7d",
+        "title": "issue harvest doc sync agent_auth:0e38a9b11aae4112",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:57:57Z",
+        "run_id": "harvest-0e38a9b11aae4112",
+        "plan_id": "pm-platform"
+      },
+      {
+        "id": "b960bf5e-5e8e-42a7-acbf-32fa823169da",
+        "title": "Restore the deployment checks gate",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:57:45Z",
+        "callbackState": "delivered",
+        "run_id": "run-8802",
+        "plan_id": "pm-258",
+        "git_sha": "15fd171"
+      },
+      {
+        "id": "a233d6d7-3e16-4d7b-b2ac-2eb9b48e4e4b",
+        "title": "linego forge run 65221643-5327-4552-8af1-235664a2b6ad",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:55:06Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "d4b40f6a-1d68-4f6e-9ee0-b683391a6027",
+        "title": "linego forge run 7d41108f-373a-4a21-afd7-a27f54d8c361",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:55:06Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "ff8dc637-96fa-4f99-a701-e2aaaf79521f",
+        "title": "Verify split part release",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:54:26Z",
+        "callbackState": "delivered",
+        "run_id": "run-8800",
+        "plan_id": "pm-260"
+      },
+      {
+        "id": "007deb9b-8033-498d-96f2-5c95e3b203e5",
+        "title": "Ship separately guarded enforcement activation",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:53:07Z",
+        "callbackState": "delivered",
+        "run_id": "run-8799",
+        "plan_id": "pm-253",
+        "git_sha": "eb525f6ea"
+      },
+      {
+        "id": "2a31cdc8-1842-4ee5-a1cc-69f83dfff84d",
+        "title": "reclaim viet-mac",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:52:28Z"
+      },
+      {
+        "id": "0060c7b8-627d-4f26-922f-e3a4a6b8fb1d",
+        "title": "doctor billie-mac",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:51:26Z"
+      },
+      {
+        "id": "e0b34785-a259-4e46-8592-fff014ae3df1",
+        "title": "decider pm-260",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:51:06Z",
+        "callbackState": "delivered",
+        "run_id": "run-8798",
+        "plan_id": "pm-platform"
+      },
+      {
+        "id": "621011bc-9183-4ea0-947b-7111c29f0e9e",
+        "title": "slowness investigator pm-246",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:51:04Z",
+        "callbackState": "delivered",
+        "run_id": "run-8797",
+        "plan_id": "pm-246"
+      },
+      {
+        "id": "5170e115-ee41-421e-a443-49a8510adf66",
+        "title": "Verify split part release",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:50:23Z",
+        "callbackState": "delivered",
+        "run_id": "run-8796",
+        "plan_id": "pm-260",
+        "git_sha": "320a07f"
+      },
+      {
+        "id": "e6348c48-2e52-48f4-b162-47dcaf8cd6f0",
+        "title": "linego forge run 8de4ac4f-7fc1-4695-8e0d-8bb94f28b23e",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:50:05Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "72f553fe-eb4a-42e0-afb4-1f0adf6cc79c",
+        "title": "linego forge run 82440cbd-aa64-4f69-90f9-55cbbfd655c8",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:50:05Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "b3b5f2da-fae3-43f0-b468-3fc9ce13bad2",
+        "title": "watch pm-245",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:47:38Z",
+        "callbackState": "delivered",
+        "run_id": "run-8756",
+        "plan_id": "pm-platform"
+      },
+      {
+        "id": "ca0f5fce-62f8-4a0f-b2d2-cecaa56fc7ca",
+        "title": "product_owner pm-263",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:46:25Z",
+        "callbackState": "delivered",
+        "run_id": "run-8795",
+        "plan_id": "pm-263"
+      },
+      {
+        "id": "8bb90983-9266-4a3b-987f-b6299a37124e",
+        "title": "linego forge run e1b50e33-d1c9-4f26-952a-3996317d685b",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:45:06Z",
+        "callbackState": "delivered"
+      },
+      {
+        "id": "3b7d30c6-42b4-4361-a5be-1e72e9138e61",
+        "title": "linego forge run 7547b480-0a38-468e-b310-b30af99312f3",
+        "status": "COMPLETED",
+        "createdAt": "2026-10-26T08:45:05Z",
+        "callbackState": "delivered"
+      }
+    ]
+  },
+  {
+    "status": "RUNNING",
+    "offset": 0,
+    "limit": 25,
+    "total": 3,
+    "count": 3,
+    "tasks": [
+      {
+        "id": "c39431b8-0c3b-48d3-a777-2a9fe4ab346e",
+        "title": "Verify split part release",
+        "status": "RUNNING",
+        "createdAt": "2026-10-26T09:29:16Z",
+        "run_id": "run-8814",
+        "plan_id": "pm-260"
+      },
+      {
+        "id": "deb9f2ff-5fc9-4632-b7b6-2029f235ed91",
+        "title": "Restore the deployment checks gate",
+        "status": "RUNNING",
+        "createdAt": "2026-10-26T09:29:16Z",
+        "run_id": "run-8813",
+        "plan_id": "pm-258"
+      },
+      {
+        "id": "94c8aba6-08fe-48bf-a39b-f630623c10ad",
+        "title": "Step-level timing: where every plan and task spends its time (Grafana + plan page)",
+        "status": "RUNNING",
+        "createdAt": "2026-10-26T08:24:38Z"
+      }
+    ]
+  },
+  {
+    "status": "PENDING",
+    "offset": 0,
+    "limit": 25,
+    "count": 0,
+    "tasks": []
+  }
+]

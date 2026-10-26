@@ -1,0 +1,35 @@
+  type: 'test'
+  ...
+# Subtest: site.zine names four real projects and a real sketch
+ok 2086 - site.zine names four real projects and a real sketch
+  ---
+  duration_ms: 0.103417
+  type: 'test'
+  ...
+# Subtest: zinePages lays the site out in reading order with the right picks
+ok 2087 - zinePages lays the site out in reading order with the right picks
+  ---
+  duration_ms: 0.211417
+  type: 'test'
+  ...
+# Subtest: every page stays inside its budget, even with oversized content
+ok 2088 - every page stays inside its budget, even with oversized content
+  ---
+  duration_ms: 0.377583
+  type: 'test'
+  ...
+# Subtest: zinePages refuses a site.zine that names something the site does not have
+ok 2089 - zinePages refuses a site.zine that names something the site does not have
+  ---
+  duration_ms: 0.211458
+  type: 'test'
+  ...
+1..2089
+# tests 2089
+# suites 0
+# pass 2089
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5771.482417

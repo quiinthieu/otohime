@@ -1,0 +1,33 @@
+TAP version 13
+# (node:62941) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/pm258-run8813-delivery/lib/e2e-runner.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/pm258-run8813-delivery/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: scripts/e2e.mjs runs the e2e files one at a time; an explicit --test-concurrency=2 overlaps them (negative control)
+not ok 1 - scripts/e2e.mjs runs the e2e files one at a time; an explicit --test-concurrency=2 overlaps them (negative control)
+  ---
+  duration_ms: 592.242625
+  type: 'test'
+  location: '/private/tmp/pm258-run8813-delivery/lib/e2e-runner.test.ts:58:1'
+  failureType: 'testCodeFailure'
+  error: 'the second file started before the first ended: [{"name":"b","start":1793007465311,"end":1793007465813},{"name":"a","start":1793007465311,"end":1793007465813}]'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/pm258-run8813-delivery/lib/e2e-runner.test.ts:61:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 637.323083

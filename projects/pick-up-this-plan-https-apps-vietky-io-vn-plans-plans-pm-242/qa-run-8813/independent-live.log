@@ -1,0 +1,17 @@
+TAP version 13
+# {"base":"https://otohime.dev","live":true,"fake":false,"checks":["real health and no-store presence API","canonical-link corruption is detected and restoration passes (DOM-only negative control)"],"hops":[],"presence":{"spotify":"spotify-off","track":null,"steam":"steam-off","game":null,"readAt":"2026-10-26T09:37:38.786Z"},"browser":"156.0.8078.48","sha":"ee1f6ce6cd7f47c8e7fe1c450b33ff07e922332f","footerPages":["/work","/play","/notes","/music","/projects","/sketches","/desk"],"pageErrorsBeforeHops":[]}
+# Subtest: independent HTTP, keyboard, locator negative control and root-layout navigation audit
+ok 1 - independent HTTP, keyboard, locator negative control and root-layout navigation audit
+  ---
+  duration_ms: 8627.553792
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8747.992084

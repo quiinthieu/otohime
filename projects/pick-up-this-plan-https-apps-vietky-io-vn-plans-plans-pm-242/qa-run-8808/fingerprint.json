@@ -1,0 +1,89 @@
+{
+  "delivery": "15fd171ac7d54027fd1c13a715efe1de13110a6b",
+  "tree": "6a891790f547a95c322238580145b0a804973680",
+  "node": "v22.23.3",
+  "platform": "linux-x64",
+  "files": {
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "package.json": "9fdb11f9be330bc0d6bc37c77f8441d1774c3b8acc77b6ac15a1f3755cfde9bb",
+    "next.config.ts": "10f96b09409416a6b8b4bdeacf739ddf2788ae900bf0bf3233ef3cead6b00046",
+    ".github/workflows/ci.yml": "9dcff7a80fcf598df21d07c4f54e0f88c40a8bbb7dac8acb60f093c987a18a9f",
+    "scripts/e2e.mjs": "9a1ea42b41bc897136704c8d220e69bce70a5de4a080fd74c5bcf7fcbe2be758",
+    "scripts/probe-end.mjs": "dd5530694f222fae4abfe642fe6f62a488d9299d1318182a233e5c2ca7324b0f",
+    "scripts/probe-end.sh": "aa5f51d7264fefa726e84ff004b1be8e6627d6f81cdb2c7d2a43b5e497270a3a",
+    "scripts/walk-end.sh": "0d8bd9b95186c6efe0e7edd8f47f1969d56ae50aec4487bb8a423a62ceb28ec7",
+    "lib/e2e-runner.test.ts": "f54f834ef905b4a8eef8a2688cd43c3ce06b3f0a5b784bedb97150d2e6df3faa",
+    "e2e/ink-press.test.ts": "bd4ba62d534154cb515f8d968f056cfe92dd5ae86d7bf45e637fb670b8ff798b",
+    "e2e/ryugu.test.ts": "45313291a514ffd1bc566af404c7b35fc8be9e8386f62d82384055fc9cb723fd",
+    "components/urashima-keys.tsx": "e19f857a64fa105992d8ba92574606105c63e46763b5a5e5282e432979143c12",
+    "app/(ryugu)/layout.tsx": "de4c312c4b4758c5ec521d54e649384e4ef6e0db6ac8a3fe29aef4d4a761bcb8",
+    "app/(ryugu)/ryugu.css": "6d571785360c4c7234f68149eae1e0ce3528263fdcc2c2de57150a1497f005f3",
+    "app/(site)/layout.tsx": "8b0c71d020b0c85fd516cb94865938c93fa92b70746c6c3587ba395e512cb5c5",
+    "components/end-footer.tsx": "3b0de75988d2db84207ae64cd565b37b5d0ca8e72d2812bfa8d606d23189ef53",
+    "components/end-stage.tsx": "c423208e47eebea1fdf0821ad9b7bf32df0cc9edc0f3024c9e78b72e82537255",
+    "node_modules/@embedded-postgres/linux-x64/native/bin/postgres": "87eec8574a58d12f4731d5c18f232758c0137dfcc50271f892d23f36db556a99",
+    "node_modules/@embedded-postgres/linux-x64/native/bin/initdb": "8d9bd95ecf33c850ed3ed0949c04c1606e18d96067bef992ae99924a2aaebd7b",
+    "node_modules/playwright-core/package.json": "1d6b6f80ffb0c52865af0f9fe01abf2140df019e49ae6ac134605e462d583f3a",
+    "node_modules/embedded-postgres/package.json": "2509e3eecad3be130277929ad3da788a26d0ec9a244f8e050ed389fc39482005"
+  },
+  "build_id": "SlqCQXca7utFhyZ_8u0se",
+  "models": "No model artifacts apply; this is a Next.js/browser/Postgres executable.",
+  "built_asset_manifest_sha256": "46195416cb95253c669e0857d170ee21a9c66c1efb2efecf0d5409e3d2fa6d7b",
+  "built_asset_files": 114,
+  "public_assets_git_manifest_sha256": "06344c37f56176021bc606b405fc517c9743a8c87a0d66b597c700f43dee3067",
+  "browser_manifest": [
+    {
+      "name": "chromium",
+      "revision": "1248",
+      "installByDefault": true,
+      "browserVersion": "156.0.8078.4",
+      "title": "Chrome for Testing"
+    },
+    {
+      "name": "chromium-headless-shell",
+      "revision": "1248",
+      "installByDefault": true,
+      "browserVersion": "156.0.8078.4",
+      "title": "Chrome Headless Shell"
+    },
+    {
+      "name": "firefox",
+      "revision": "1555",
+      "installByDefault": true,
+      "browserVersion": "157.0",
+      "title": "Firefox"
+    },
+    {
+      "name": "webkit",
+      "revision": "2370",
+      "installByDefault": true,
+      "revisionOverrides": {
+        "mac14": "2251",
+        "mac14-arm64": "2251"
+      },
+      "browserVersion": "27.2",
+      "title": "WebKit"
+    },
+    {
+      "name": "ffmpeg",
+      "revision": "1013",
+      "installByDefault": true
+    },
+    {
+      "name": "winldd",
+      "revision": "1007",
+      "installByDefault": false
+    },
+    {
+      "name": "android",
+      "revision": "1001",
+      "installByDefault": false
+    }
+  ],
+  "runtime_binaries": {
+    "/opt/google/chrome/chrome": {
+      "sha256": "4d2512ae84986bf987e6ea8ef14ca1af555ae574fbaff5b5a8c78a8dd73fa36f",
+      "version": "Google Chrome 154.0.8037.57"
+    }
+  }
+}
