@@ -297,6 +297,12 @@ button:disabled {
   text-transform: uppercase;
 }
 
+/* An inline box is as tall as its font's ascent and descent, which some serifs (Noto's) stretch past the line, so
+   page 8's date would poke out of the safe area. As an inline-block it is exactly one line tall, whatever the font. */
+.kicker time {
+  display: inline-block;
+}
+
 .page-title {
   margin-top: 1.5mm;
   font-size: 13pt;

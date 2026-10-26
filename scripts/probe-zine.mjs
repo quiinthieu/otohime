@@ -288,7 +288,10 @@ async function printButton(browser) {
   if (count === 1) await button.click();
   const printed = await page.waitForFunction(() => window.__printed === 1, null, { timeout: 5000 }).then(() => true, () => false);
   check("Print: a click waits for fonts and the sketch, then calls window.print() once", printed);
-  const after = await page.locator("[data-print]").isEnabled();
+  // React commits setBusy(false) a moment after print() returns, so wait for it rather than read it at once.
+  const after = await page
+    .waitForFunction(() => document.querySelector("[data-print]")?.disabled === false, null, { timeout: 5000 })
+    .then(() => true, () => false);
   check("Print: the button is ready again afterwards", after);
   await context.close();
 }
