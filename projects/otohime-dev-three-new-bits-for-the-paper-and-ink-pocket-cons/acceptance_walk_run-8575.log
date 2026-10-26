@@ -1,0 +1,44 @@
+PASS | [1366x768] home build-sha | meta build-sha=3604c822f6616f8eb7f091ff46c2af68a8ef488b
+PASS | [1366x768] clock+zone season (Sydney, Oct) | data-season=spring
+PASS | [1366x768] ambient layer | {"aria":"true","bits":16,"pe":"none","z":"-1"}
+PASS | [1366x768] season dial visible | radiogroup visible=true
+PASS | [1366x768] dial pick winter sets data-season | data-season=winter localStorage=winter
+PASS | [1366x768] pick persists across reload | after reload data-season=winter
+ASK DIALOG TEXT: "ASK THE CONSOLE\nClose\nAsk about my work, notes and projects\n>\n\n> what is your work\n\nWORK:\n\nI build the pipes between where\ndata lands and where people use\nit: batch jobs, streams, and the\nodd 3 a.m. backfill.\n\nWarehouse: Snowflake, BigQuery,\nwhere the questions get\nanswered.\n\nTransformation: dbt, SQL with\nversion control and manners.\n\nOrchestration: Airflow, Dagster,\nthe schedule, and what happens\nwhen it slips.\n\nStreaming: Kafka, for whatever\ncan't wait for the nightly run.\n\nStorage: Iceberg on S3, cheap,\nopen, time travel included.\n\nQuality: tests, contracts,\nalerts, so the dashboard is\nrigh"
+ASK ANCHORS: [["-> Work","/work"]]
+PASS | [1366x768] ask: answer and citations | citations=["/work"]
+PASS | [1366x768] ask: model endpoint used by console | requests to /api/ask=0
+PASS | [1366x768] home no horizontal overflow | scrollWidth-clientWidth=0
+PASS | [1366x768] home console errors | none
+PASS | [1366x768] unknown path status | status=404
+PASS | [1366x768] 404 five plain links | links=["/","/work","/projects","/notes","/play"]
+PASS | [1366x768] 404 smooth island (JS on) | button visible=true
+PASS | [1366x768] 404 smooth to flat | presses=5 final status="Flat again. Pick a way back." trail=["20% smooth.","40% smooth.","60% smooth.","80% smooth.","Flat again. Pick a way back."]
+PASS | [1366x768] 404 console errors | none
+PASS | [1366x768] 404 no-JS links reachable | /=200 /work=200 /projects=200 /notes=200 /play=200
+PASS | [1366x768] reduced motion: no island, no running bits | island=0 runningBits=0
+PASS | [1366x768] reduced motion on home: layer static | runningBits=0
+PASS | [1366x768] reduced motion console errors | none
+PASS | [390x844] home build-sha | meta build-sha=3604c822f6616f8eb7f091ff46c2af68a8ef488b
+PASS | [390x844] clock+zone season (Sydney, Oct) | data-season=spring
+PASS | [390x844] ambient layer | {"aria":"true","bits":16,"pe":"none","z":"-1"}
+PASS | [390x844] season dial visible | radiogroup visible=true
+PASS | [390x844] dial pick winter sets data-season | data-season=winter localStorage=winter
+PASS | [390x844] pick persists across reload | after reload data-season=winter
+ASK DIALOG TEXT: "ASK THE CONSOLE\nClose\nAsk about my work, notes and projects\n>\n\n> what is your work\n\nWORK:\n\nI build the pipes between where\ndata lands and where people use\nit: batch jobs, streams, and the\nodd 3 a.m. backfill.\n\nWarehouse: Snowflake, BigQuery,\nwhere the questions get\nanswered.\n\nTransformation: dbt, SQL with\nversion control and manners.\n\nOrchestration: Airflow, Dagster,\nthe schedule, and what happens\nwhen it slips.\n\nStreaming: Kafka, for whatever\ncan't wait for the nightly run.\n\nStorage: Iceberg on S3, cheap,\nopen, time travel included.\n\nQuality: tests, contracts,\nalerts, so the dashboard is\nrigh"
+ASK ANCHORS: [["-> Work","/work"]]
+PASS | [390x844] ask: answer and citations | citations=["/work"]
+PASS | [390x844] ask: model endpoint used by console | requests to /api/ask=0
+PASS | [390x844] home no horizontal overflow | scrollWidth-clientWidth=0
+PASS | [390x844] home console errors | none
+PASS | [390x844] unknown path status | status=404
+PASS | [390x844] 404 five plain links | links=["/","/work","/projects","/notes","/play"]
+PASS | [390x844] 404 smooth island (JS on) | button visible=true
+PASS | [390x844] 404 smooth to flat | presses=5 final status="Flat again. Pick a way back." trail=["20% smooth.","40% smooth.","60% smooth.","80% smooth.","Flat again. Pick a way back."]
+PASS | [390x844] 404 console errors | none
+PASS | [390x844] 404 no-JS links reachable | /=200 /work=200 /projects=200 /notes=200 /play=200
+PASS | [390x844] reduced motion: no island, no running bits | island=0 runningBits=0
+PASS | [390x844] reduced motion on home: layer static | runningBits=0
+PASS | [390x844] reduced motion console errors | none
+
+SUMMARY 38/38 pass
