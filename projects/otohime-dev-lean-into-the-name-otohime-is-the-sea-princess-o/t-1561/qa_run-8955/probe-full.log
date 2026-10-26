@@ -1,0 +1,16 @@
+ok - the box starts shut (aria-expanded=false)
+ok - Space opens the box
+ok - the replay is labelled a changelog replay, not a rebuilt site: "A changelog replay. Each position is a real commit to otohime.dev, the newest 200 of its 4…"
+ok - one slider with its accessible name
+ok - the scrubber has 200 positions
+ok - PageDown steps back (199 -> 179)
+ok - PageUp steps forward
+ok - every one of 200 positions matches git show (sha, committer date in UTC, subject): 0 mismatches
+  9 subjects shown capped with an ellipsis
+ok - 200 distinct commits on 200 positions
+ok - negative control: no position matches its neighbour's commit (0)
+ok - the paper's computed style and data-age change at every step back (0 steps did not)
+ok - the paper's blue channel never rises going back (0 rises)
+ok - the oldest position is fully aged: 25 Oct 2026, 22:33 UTC: Add the season model, tints and contrast tests. Commit 1 of 200, old and foxed.
+ok - no page errors ()
+PASS

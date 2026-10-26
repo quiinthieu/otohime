@@ -1,0 +1,15 @@
+ok 1 - typing urashima at the top of Home goes down to the palace; a lone A opens the console's page instead
+ok 2 - typing urashima into a field types it, and goes nowhere
+ok 3 - Pocket: the console's Dive chip goes down to the palace
+ok 4 - the waterline: the last thing below the footer links down to the palace, by touch as well
+ok 5 - the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling
+ok 6 - with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer
+ok 7 - while the page is hidden the loop stops, and it comes back when the page is seen again
+ok 8 - without WebGL the sea is static: the served caustic and fish, and no frame runs
+ok 9 - under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate
+ok 10 - the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages
+ok 11 - the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog
+ok 12 - under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back
+# tests 12
+# pass 12
+# fail 0

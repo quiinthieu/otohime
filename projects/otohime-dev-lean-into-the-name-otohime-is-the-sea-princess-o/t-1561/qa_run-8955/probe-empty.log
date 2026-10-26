@@ -1,0 +1,7 @@
+ok - the box starts shut (aria-expanded=false)
+ok - Space opens the box
+ok - the replay is labelled a changelog replay, not a rebuilt site: "A changelog replay. Each position is a real commit to otohime.dev, all 0 of its commits, w…"
+ok - an empty index shows no scrubber
+ok - an empty index shows the empty box: "The box is empty: this build carries no changelog to replay."
+ok - no page errors ()
+PASS
