@@ -1,0 +1,126 @@
+{
+  "project_id": "plan-manager",
+  "task_type": "coding_task",
+  "queries": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 20,
+      "total": 61,
+      "returned": 20,
+      "matching_pm260": []
+    },
+    {
+      "status": "FAILED",
+      "offset": 20,
+      "limit": 20,
+      "total": 61,
+      "returned": 20,
+      "matching_pm260": []
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 20,
+      "total": 1133,
+      "returned": 20,
+      "matching_pm260": [
+        {
+          "id": "3a311226-9ba0-408f-bf69-06709cdb7021",
+          "run_id": "run-8816",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        },
+        {
+          "id": "93ce2092-5bfe-4c95-981f-da2bd3ace8cf",
+          "run_id": "run-8815",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        },
+        {
+          "id": "c39431b8-0c3b-48d3-a777-2a9fe4ab346e",
+          "run_id": "run-8814",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        },
+        {
+          "id": "f1706e38-852a-44b7-83ee-144362065f99",
+          "run_id": "run-8812",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        },
+        {
+          "id": "1ce9d413-e929-4ad3-afd9-6bd0ff084d91",
+          "run_id": "run-8810",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        },
+        {
+          "id": "bec3c74b-a910-45f1-8689-2685b6bfb0c8",
+          "run_id": "run-8809",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 20,
+      "limit": 20,
+      "total": 1133,
+      "returned": 20,
+      "matching_pm260": [
+        {
+          "id": "ff8dc637-96fa-4f99-a701-e2aaaf79521f",
+          "run_id": "run-8800",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        },
+        {
+          "id": "5170e115-ee41-421e-a443-49a8510adf66",
+          "run_id": "run-8796",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        },
+        {
+          "id": "f2877d39-a399-477b-916e-616c3a38b997",
+          "run_id": "run-8789",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        },
+        {
+          "id": "8a684e3a-2941-4d93-9364-5dcfd7603dcf",
+          "run_id": "run-8783",
+          "status": "COMPLETED",
+          "callback_state": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 20,
+      "total": 5,
+      "returned": 5,
+      "matching_pm260": [
+        {
+          "id": "e6da1063-d2f0-4028-b99d-877c0827f271",
+          "run_id": "run-8823",
+          "status": "RUNNING",
+          "callback_state": null
+        }
+      ]
+    },
+    {
+      "status": "PENDING",
+      "offset": 0,
+      "limit": 20,
+      "total": null,
+      "returned": null,
+      "matching_pm260": []
+    }
+  ],
+  "completeness": "FAILED 40/61 and COMPLETED 40/1133 read; older ranges unread/inconclusive. RUNNING 5/5; PENDING returned {} without an explicit count, so exhaustive zero is unproven.",
+  "recorded_at": "2026-10-26T09:55:33.121778+00:00",
+  "capture_window": "During run-8823, before the verification receipt; no atomic history snapshot claimed."
+}
