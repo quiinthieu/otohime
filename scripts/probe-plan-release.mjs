@@ -20,8 +20,9 @@ import { checkManifest, evaluateRelease, MODES, verdict } from "../lib/plan-rele
 
 const SNAPSHOTS = ["plan", "schedule", "timeline", "runs"];
 
+// Every output, including an early exit 2, says delivery is unproven: this probe never proves it.
 function out(body, code) {
-  process.stdout.write(JSON.stringify(body, null, 2) + "\n");
+  process.stdout.write(JSON.stringify({ delivery_proven: false, ...body }, null, 2) + "\n");
   process.exit(code);
 }
 

@@ -107,6 +107,39 @@ Edit only the copies. Do not regenerate the manifest for an edited copy: the sha
 
 ## 6. Evidence boundaries
 
+- **t-1593 offline certification (run-8841, 2026-10-26, plan.md revision 3).** Parent `750947b`, rebased onto `b0befb6` before push, Node v22.23.3, npm 10.9.9, `npm ci` from the committed lockfile, TypeScript 5.9.3. At `750947b` all four checks already exited 0, and the red gate called them vacuous. This run therefore adds named assertions behind each check:
+  - `lib/plan-release.test.ts` runs the real CLI on QA's unmodified run-8833 capture (`qa-evidence-run-8833/`). It must exit **1** in both modes with a verified manifest, queued, `hold_after_plan`/`held_by_predecessor`/`progress_waiting`, `release_decision_missing` and `swe_run_missing`.
+  - A temporary copy of that capture marked executing, without rehashing, must exit **2** with `manifest_plan_sha256_mismatch`.
+  - The focused suite runs `qa-adversarial.mjs` as a subprocess and checks every one of the 20 named controls' exit codes. Scheduled-only submission never proves dispatch (`swe_run_scheduled_only`). The failed attempt proves dispatch only, with `delivery_proven=false`. A queued/startable release is not a dispatch.
+  - `qa-adversarial.mjs` itself now fails unless exactly 20 uniquely named controls ran.
+  - A guard checks that the `npm test` glob and the strict `tsconfig.json` include both cover the evaluator and its tests, with no skip, `.only` or `@ts-ignore`.
+
+  **One offline defect was reproduced and repaired.** Early exit-2 outputs of `scripts/probe-plan-release.mjs` (bad arguments, unreadable inputs, failed manifest, as in `qa-evidence-run-8833/negative-tamper.json`) omitted `delivery_proven`. Section 4 promises that field is always `false`. The regression failed first. `out()` now defaults it to `false`. Exit codes, `input_errors` and `lib/plan-release.ts` are unchanged.
+
+  Results at the delivery tree (after rebase onto b0befb6): `npm test` **2125/2125** (2109 before the rebase), focused suite **45/45** (0 skipped), adversarial **20/20** `contract_met` with `complete=true`, `npm run typecheck` exit **0**, eslint on the touched files exit 0. Negative controls:
+  - A scratch copy that drops one control exits 1 (`count` 19, `complete=false`).
+  - A temporary `lib/` file with a type error fails `tsc --noEmit` with exit 2.
+  - With the script fix reverted, the tamper and early-exit regressions fail.
+
+  SHA-256 fingerprints:
+  - `lib/plan-release.ts` `969c4a7c…d289` (unchanged since c2ca9c2)
+  - `lib/plan-release.test.ts` `075a44ce…077f`
+  - `scripts/probe-plan-release.mjs` `f60adbb9…c9ac2`
+  - `qa-adversarial.mjs` `133de542…f6234`
+  - `package.json` `7693c520…4bcf` (b0befb6's history script, not this task)
+  - `package-lock.json` `2d0ec0be…a8b`
+  - `tsconfig.json` `e1f2b4ec…e49d`
+  - `next.config.ts` `10f96b09…0046`
+  - `.github/workflows/ci.yml` `9dcff7a8…8a9f`
+
+  Real vs synthetic: the evaluator imports, the CLI subprocess, the lockfile and the saved run-8833 bytes are real. Every positive board, including the 20 adversarial boards, is synthetic and proves tool behaviour only. The following remain **unproven**, with their owners in plan.md:
+  - CI and site deployment of this commit
+  - E2E (pm-258/t-1564)
+  - the real pm-255 release (esc-395/pm-263)
+  - t-1557 dispatch (pm-260 acceptance)
+  - t-1557 product output
+
+  Historical CI failures 40303396148/121506990908 and 40303724712/121509554244 stay as recorded history.
 - QA run-8833 independently refreshed the receipt: all three required checks pass (2099 unit, 41 focused, typecheck), but delivery b73d93c CI **40303396148 / checks 121506990908** and containing successor **40303724712 / checks 121509554244** fail E2E. Production remains **ee1f6ce**, which lacks b73d93c (ancestry exit 1). Fresh four-tool evidence correctly exits 1 in both modes: pm-255 is queued but still waiting/after_plan; t-1557 has no SWE run. A tampered temporary copy exits 2. [QA report](qa_report_run-8833.md) and [fix plan](fix_plan_run-8833.md) preserve independent evidence, bounds and owners. This is a failed deployed QA receipt, not a new evaluator defect or a release/dispatch claim.
 - Run-8823 (2026-10-26) preserves repaired delivery `c2ca9c20c6ae527d329ed4263672572ffd7219c9`. The evaluator, CLI, tests, package files, Next configuration and workflow match that delivery byte for byte. [Verification receipt](verification-run-8823.json) records their SHA-256 fingerprints, the actual run profile, checks and deferred owners. The normal `main` push includes the repair and enters the existing push-triggered checks/production workflow; a push alone does not prove deployment.
 - Local checks after `npm ci` on Node v22.23.3: `npm test` **2096/2096**, the contracted focused suite **41/41**, and `npm run typecheck` exit **0**, with no skipped tests. The unchanged QA adversarial diagnostic meets all **20/20** synthetic controls. Running the real CLI against QA's unmodified run-8816 capture (09:36:35–09:36:37Z) exits **1** in both modes with a verified manifest: the part was queued but still waiting/after_plan, with no release receipt or SWE dispatch. Changing only a temporary copy's plan id without rehashing exits **2**, `manifest_plan_sha256_mismatch`. These are offline replays, not fresh board observations.

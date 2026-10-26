@@ -877,6 +877,122 @@ test("CLI: the unmodified run-8812 live capture, with progress in both reads, st
   }
 });
 
+// QA's third live capture (run-8833, 10:13Z), the historical hold negative named by plan.md
+// revision 3: unmodified it exits 1; a copy edited without rehashing is tampered evidence, exit 2.
+const LIVE_8833 = join(ROOT, "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-evidence-run-8833");
+const LIVE_8833_FILES = Object.fromEntries(["plan", "schedule", "timeline", "runs"].map((k) => [k, join(LIVE_8833, `${k}.json`)]));
+const LIVE_8833_ARGS = [...IDS, "--abandon-decision", "dec-55805,dec-55807", "--manifest", join(LIVE_8833, "manifest.json")];
+
+test("CLI: the unmodified run-8833 live capture is held evidence and exits 1 in both modes", () => {
+  for (const mode of ["released", "dispatched"]) {
+    const { code, body } = runCli(LIVE_8833_FILES, [...LIVE_8833_ARGS, "--require", mode]);
+    assert.equal(code, 1, `${mode}: ${JSON.stringify(body.input_errors)}`);
+    assert.equal(body.ok, false);
+    assert.deepEqual(body.input_errors, []);
+    assert.equal(body.manifest.completeness, "verified");
+    assert.equal(body.evidence.plan_status, "queued");
+    assert.deepEqual(body.reasons.hold_released, ["hold_after_plan", "held_by_predecessor", "progress_waiting"]);
+    assert.deepEqual(body.reasons.queued_startable, ["progress_not_startable"]);
+    assert.deepEqual(body.reasons.execution_started, ["execution_started_at_missing", "plan_status_not_executing"]);
+    assert.deepEqual(body.reasons.release_recorded, ["release_decision_missing"]);
+    assert.deepEqual(body.reasons.dispatch_proven, ["swe_run_missing"]);
+    assert.equal(body.dispatch_proven, false);
+    assert.equal(body.delivery_proven, false);
+  }
+});
+
+test("CLI: a run-8833 copy changed without rehashing is tampered evidence and exits 2", () => {
+  withDir((dir) => {
+    const plan = JSON.parse(readFileSync(LIVE_8833_FILES.plan, "utf8"));
+    plan.plan.status = "executing";
+    plan.plan.execution_started_at = "2026-10-26T10:30:00Z";
+    const files = { ...LIVE_8833_FILES, plan: join(dir, "plan.json") };
+    writeFileSync(files.plan, JSON.stringify(plan));
+    for (const mode of ["released", "dispatched"]) {
+      const { code, body } = runCli(files, [...LIVE_8833_ARGS, "--require", mode]);
+      assert.equal(code, 2, `${mode}: ${JSON.stringify(body.input_errors)}`);
+      assert.equal(body.ok, false);
+      assert.ok(body.input_errors.includes("manifest_plan_sha256_mismatch"), JSON.stringify(body.input_errors));
+      assert.equal(body.manifest.completeness, "failed");
+      assert.equal(body.delivery_proven, false);
+    }
+  });
+});
+
+// The 20 independent QA controls, run as the real subprocess the verification command runs.
+const ADVERSARIAL = join(ROOT, "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/qa-adversarial.mjs");
+const CONTROLS: Record<string, number> = {
+  "valid-baseline": 0,
+  "held-negative-control": 1,
+  "scheduled-negative-control": 1,
+  "unknown-status-constructor": 1,
+  "unrelated-negative-release-note": 1,
+  "foreign-release-with-one-local-trace": 1,
+  "missing-source-run-id": 1,
+  "explicit-incomplete-without-manifest": 2,
+  "missing-progress": 1,
+  "wrong-task": 1,
+  "wrong-plan": 2,
+  "missing-parent-note": 1,
+  "valid-without-manifest": 1,
+  "failed-attempt-is-dispatch-only": 0,
+  "queued-startable-release": 0,
+  "queued-is-not-dispatch": 1,
+  "unsupported-predecessor-type": 2,
+  "unsupported-progress-reason": 2,
+  "unsupported-progress-holders": 2,
+  "unsupported-holder-identity": 2,
+};
+
+test("the 20 adversarial controls all run and meet their contract through the real CLI", () => {
+  const r = spawnSync(
+    process.execPath,
+    ["--experimental-strip-types", "--disable-warning=ExperimentalWarning", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", ADVERSARIAL],
+    { cwd: ROOT, encoding: "utf8", env: { ...process.env, NODE_OPTIONS: "" } },
+  );
+  assert.equal(r.status, 0, r.stderr);
+  const out = JSON.parse(r.stdout);
+  assert.equal(out.synthetic, true);
+  assert.equal(out.count, 20);
+  assert.equal(out.complete, true);
+  const byName = Object.fromEntries(out.results.map((c: Json) => [c.name, c]));
+  assert.deepEqual(Object.keys(byName).sort(), Object.keys(CONTROLS).sort());
+  for (const [name, exit] of Object.entries(CONTROLS)) {
+    const c = byName[name];
+    assert.equal(c.actual_exit, exit, `${name}: ${JSON.stringify(c.input_errors)}`);
+    assert.equal(c.contract_met, true, name);
+    assert.equal(c.delivery_proven, false, name);
+    assert.equal(c.ok, exit === 0, name);
+    if (exit === 2) assert.ok(c.input_errors.length > 0, name);
+  }
+  // Held evidence fails on the hold itself, not on some unrelated input.
+  assert.deepEqual(byName["held-negative-control"].reasons.hold_released, ["hold_after_plan", "held_by_predecessor", "progress_waiting"]);
+  // Scheduled-only submission never proves dispatch.
+  assert.equal(byName["scheduled-negative-control"].dispatch_proven, false);
+  assert.ok(byName["scheduled-negative-control"].reasons.dispatch_proven.includes("swe_run_scheduled_only"));
+  // A failed submitted run proves dispatch only; delivery stays unproven.
+  const failed = byName["failed-attempt-is-dispatch-only"];
+  assert.equal(failed.dispatch_proven, true);
+  assert.deepEqual(failed.dispatch_runs.map((d: Json) => [d.run_id, d.outcome]), [["qa-swe", "finished"]]);
+  // A queued/startable release is a release, never a dispatch.
+  assert.equal(byName["queued-startable-release"].mode, "released");
+  assert.equal(byName["queued-is-not-dispatch"].dispatch_proven, false);
+});
+
+test("npm test and typecheck cover the evaluator, CLI tests and adversarial controls", () => {
+  const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
+  assert.match(pkg.scripts.test, /--test '?lib\/\*\*\/\*\.test\.ts'?/);
+  assert.equal(pkg.scripts.typecheck, "next typegen && tsc --noEmit");
+  const tsconfig = JSON.parse(readFileSync(join(ROOT, "tsconfig.json"), "utf8"));
+  assert.equal(tsconfig.compilerOptions.strict, true);
+  assert.ok(tsconfig.include.includes("**/*.ts"));
+  assert.deepEqual(tsconfig.exclude, ["node_modules"]);
+  for (const f of ["lib/plan-release.ts", "lib/plan-release.test.ts"]) {
+    assert.doesNotMatch(readFileSync(join(ROOT, f), "utf8"), /@ts-(nocheck|ignore|expect-error)/, f);
+  }
+  assert.doesNotMatch(readFileSync(fileURLToPath(import.meta.url), "utf8"), new RegExp(["test", "skip"].join("\\.") + "|\\{ ?skip|\\.only\\("));
+});
+
 test("CLI: malformed predecessor or progress evidence exits 2 under a verified manifest (QA D6-D9)", () => {
   withDir((dir) => {
     // Baselines first: the same boards, unmutated, pass.
@@ -948,6 +1064,11 @@ test("CLI: wrong ids exit 2; missing or unsupported arguments exit 2", () => {
     assert.deepEqual(runCli(files, [...IDS, "--require", "delivered"]).body.input_errors, ["argument_require_unsupported"]);
     assert.deepEqual(runCli(files, [...IDS, "--live"]).body.input_errors, ["arguments_unsupported"]);
     assert.deepEqual(runCli({ ...files, plan: join(dir, "absent.json") }, IDS).body.input_errors, ["plan_unreadable"]);
+    // Early exits still state that delivery is unproven.
+    for (const early of [noRuns, runCli(files, [...IDS, "--live"]), runCli({ ...files, plan: join(dir, "absent.json") }, IDS)]) {
+      assert.equal(early.code, 2);
+      assert.equal(early.body.delivery_proven, false);
+    }
   });
 });
 

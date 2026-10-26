@@ -114,7 +114,11 @@ try {
       dispatch_proven: body.dispatch_proven, dispatch_runs: body.evidence?.dispatch_runs,
       completeness: body.manifest?.completeness, delivery_proven: body.delivery_proven });
   }
-  console.log(JSON.stringify({ synthetic: true, results }, null, 2));
-  if (results.some(result => !result.contract_met)) process.exitCode = 1;
+  // The certified control set is exactly these 20 uniquely named cases; a dropped,
+  // duplicated or renamed control fails the run instead of passing on fewer cases.
+  const names = results.map(result => result.name);
+  const complete = names.length === 20 && new Set(names).size === 20;
+  console.log(JSON.stringify({ synthetic: true, count: names.length, complete, results }, null, 2));
+  if (!complete || results.some(result => !result.contract_met)) process.exitCode = 1;
 } finally { rmSync(dir, { recursive: true, force: true }); }
 // Both contract_met and the process exit status assert the independently observed behavior.
