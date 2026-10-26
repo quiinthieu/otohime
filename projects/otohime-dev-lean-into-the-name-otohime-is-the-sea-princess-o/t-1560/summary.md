@@ -102,3 +102,23 @@ This commit touches only `projects/**`. Since 2eaada2 (pm-270/t-1603), `ci.yml` 
 **Lag note.** The fallback trails HEAD by 18 commits, and `--check` allows 20. Neither CI nor `prebuild` runs `--check`, so lag cannot fail a build or a deploy. A later manual `--check` that fails on lag is the designed staleness signal. The fix is then `npm run history:index` plus a commit that also triggers CI.
 
 **Not shown here (deferred to QA, owner quality_engineer).** Fix plan run-8875 items 1–2 are not shown: an `/api/health` sha S for which `git merge-base --is-ancestor 9420077 S` succeeds, and the id of the CI run that deployed it with its `vercel deploy --prebuilt` step green. This role does not check the deployed system or watch the pipeline. Failure condition: the footer Chromium probe or the vercel deploy fails again on a run that contains 9420077. That is a CI-lane defect for pm-270, not for t-1560.
+
+## Fix cycle (run-8916): commit identity, 8955310 superseded
+
+Run profile: claude-opus-5-5 (Claude Code, macOS lease, Apple Git 2.54.0 (Apple Git-157), node 22.12.0, `npm ci` first).
+
+Fix plan run-8901 found cause=code in the commit identity, not in the indexer. 8955310 (run-8891) ends with a `Co-Authored-By: Claude Opus 5.5` trailer, which plan.commit_identity forbids. Force-pushing main is forbidden, so 8955310 stays in history and this commit supersedes it. commits.txt line 4 now names 8955310's full sha and marks it as an identity defect superseded by run-8916. This commit is line 5.
+
+This commit is committed as Otohime <quiinthieu@gmail.com> with `git commit -F`, with no `Co-Authored-By` line and no attribution helper. It touches only `t-1560/summary.md` and `t-1560/commits.txt`. `scripts/history-index.ts`, its test, `package.json` and `content/history.json` are unchanged. The build regenerated `content/history.json` (200 of 444); I restored it from git so that `ci.yml` `paths-ignore` keeps this push out of the main CI queue.
+
+| check (at 9cb3833 plus this commit) | result |
+|---|---|
+| contract command, 3 runs in a row | 3/3 exit 0, 16/16 each |
+| `npm test` | exit 0, 2206/2206 |
+| `npm run build` | exit 0, `history:index: git (full history): 200 of 444 commits` |
+| `git log -1 --format='%an <%ae>\|%(trailers:key=Co-Authored-By,valueonly)'` | `Otohime <quiinthieu@gmail.com>\|`, nothing after the bar |
+| `git log origin/main..HEAD --format=%B \| grep -c Co-Authored-By` | 0 |
+
+**Negative control.** The same trailer check run on 8955310 prints `Otohime <quiinthieu@gmail.com>|Claude Opus 5.5 <noreply@anthropic.com>`, so the check does detect the defect.
+
+**Not shown here (deferred to QA, owner quality_engineer).** The deployed `/api/health` sha passing `git merge-base --is-ancestor 9420077 <sha>`, and one depth-1 real-clone control. This report-only commit does not redeploy, which is expected. The intermittent `vercel deploy --prebuilt` stall at ci.yml:228 is a pm-270 CI-lane item, not a t-1560 change.
