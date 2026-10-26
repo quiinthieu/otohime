@@ -3,6 +3,24 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-8881 update: board refreshed, ownership unchanged
+
+Read at **11:45 UTC** (run-8881, product owner, profile claude-sonnet-5-5):
+
+- **pm-255** is still `queued`, `progress.state=startable`, queue position 1, holders
+  `[]`, open escalations `[]`; t-1557 `ready`, no own runs. Slots **5 of 5 used**
+  (pm-249 t-1568, pm-256 t-1560 QA, pm-264 t-1590 QA, pm-267 t-1596), so the first
+  t-1557 SWE run waits only for a scheduler slot. Nothing in this plan can speed that.
+- **pm-267** (mono-v2, executing): t-1594 `qa_pending` (cef2b4f62), t-1596 now has a
+  real SWE run (**run-8882**), t-1595 and t-1597 `backlog` behind their dependencies.
+- Tests: locked `npm ci` on Node v22.23.3, `npm test` **2155 passed**, 0 failed.
+
+No otohime SWE task remains, so the local proposal is again the saved empty DAG and
+the platform is expected to refuse it (`missing_acceptance_criteria`). Run-8881
+decided again not to manufacture a task: every remaining outcome is owned by pm-267
+(code, drills), the scheduler (t-1557 dispatch) or acceptance (live evidence). The
+failure conditions and owners in the run-8878 table below stand unchanged.
+
 ## Run-8878 update: the live hold is released
 
 Read at **11:37 UTC** (run-8878, product owner, profile claude-sonnet-5-5):
