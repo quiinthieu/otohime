@@ -154,10 +154,15 @@ export default function InkRadio() {
     return () => clearTimeout(timer);
   }, [radio.status, radio.attempt, radio.station]);
 
-  // The Television starting stops the radio; leaving the page (or <Activity> hiding it) stops it too.
+  // The Television starting stops the radio; leaving the page (or <Activity> hiding it) stops it too. The
+  // takeover silences the stream there and then, not after the next render: both never sound together. A late
+  // `playing` from the interrupted attempt changes nothing, as the radio is idle by then.
   useEffect(() => {
     const el = audio.current;
-    const off = air.subscribe("radio", () => dispatch({ type: "stop" }));
+    const off = air.subscribe("radio", () => {
+      if (el) silence(el);
+      dispatch({ type: "stop" });
+    });
     return () => {
       off();
       if (el) silence(el);

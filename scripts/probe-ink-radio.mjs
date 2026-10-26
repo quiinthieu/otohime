@@ -83,7 +83,15 @@ window.YT = {
     cuePlaylist() {}
     getPlaylistIndex() { return 0; }
     playVideoAt() { this.playVideo(); }
-    playVideo() { window.__tv.plays++; setTimeout(() => this.events.onStateChange({ target: this, data: 1 }), 30); }
+    playVideo() {
+      window.__tv.plays++;
+      setTimeout(() => {
+        this.events.onStateChange({ target: this, data: 1 });
+        // The radio's audio the moment the set's PLAYING handler returns, before React renders again.
+        const a = document.querySelector('audio[data-radio="audio"]');
+        window.__tv.radioAtClaim = a ? { src: a.getAttribute("src"), paused: a.paused } : null;
+      }, 30);
+    }
     pauseVideo() { window.__tv.pauses++; setTimeout(() => this.events.onStateChange({ target: this, data: 2 }), 30); }
     destroy() {}
   },
@@ -300,11 +308,16 @@ async function desktop(browser) {
   await page.waitForFunction(() => !!window.__tv, null, { timeout: 5000 }).catch(() => {});
   const tvPlay = page.locator('section[aria-label="Television"]').getByRole("button", { name: "Play", exact: true });
   await tvPlay.click();
-  r = await until(page, (x) => x.status === "idle");
+  r = await until(page, (x) => x.status === "idle" && x.src === null && x.paused === true);
   check(
     "the Television starting stops the radio",
     r.tv?.plays === 1 && r.status === "idle" && !r.lamp && r.src === null && r.paused === true,
     JSON.stringify(r),
+  );
+  check(
+    "the takeover silences the radio at once, inside the Television's PLAYING handler",
+    r.tv?.radioAtClaim?.src === null && r.tv?.radioAtClaim?.paused === true,
+    JSON.stringify(r.tv?.radioAtClaim),
   );
   // And the radio starting pauses the Television.
   const before = net.requests.length;
