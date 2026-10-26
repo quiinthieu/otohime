@@ -1,0 +1,9 @@
+{
+  "shared_root": "/data/build-worker/repo/mono-v2",
+  "files": {
+    "projects/20260921222547_plan_manager_chief_of_staff_extraction.md": "1aebdc7b1007fd76b2da9acd0d593e5b20c8924833b6b3500b0673e001413999",
+    "docs/claude/software-development.md": "3f6dc34c708a9e91282afcca0df28524346934d56b9e8a5593b5236110467cb0",
+    "docs/claude/frontend.md": "4e5dad1e5f92deb5584a4fe3d83b0374726982d220de8dcc08d26349ed0466b7"
+  },
+  "scope": "Explicit t-1606 role contract controls stop-at-push, projects-only evidence and the existing Next application scope."
+}

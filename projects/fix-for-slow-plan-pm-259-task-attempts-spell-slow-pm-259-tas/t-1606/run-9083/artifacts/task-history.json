@@ -1,0 +1,314 @@
+{
+  "observed_at": "2026-10-26T20:33:05.668Z",
+  "coverage": "Project-wide coding_task cohort, bounded two pages each FAILED/COMPLETED. Not a complete t-1606 history. PENDING returned {} without numeric total.",
+  "pages": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 5,
+      "total": 71,
+      "tasks": [
+        {
+          "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T18:54:36Z",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-9070",
+          "plan_id": "pm-270",
+          "agent": "codex",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "980c6385-7c10-4d4b-a913-43e9c9333678",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T16:09:49Z",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4088d29ec0d9 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-9045",
+          "plan_id": "pm-270",
+          "agent": "codex",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T14:50:35Z",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-9019",
+          "plan_id": "pm-277",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T13:42:54Z",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0e2bbe863f6e is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-8968",
+          "plan_id": "pm-259",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T12:54:42Z",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-8934",
+          "plan_id": "pm-268",
+          "agent": "codex",
+          "worker": "avietidol-mac-mini"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 5,
+      "limit": 5,
+      "total": 71,
+      "tasks": [
+        {
+          "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T11:57:08Z",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-8895",
+          "plan_id": "pm-270",
+          "agent": "claude",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T11:02:41Z",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-8856",
+          "plan_id": "pm-264",
+          "agent": "codex",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T10:53:31Z",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-8848",
+          "plan_id": "pm-259",
+          "agent": "codex",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T10:01:50Z",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-8828",
+          "plan_id": "pm-256",
+          "agent": "claude",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+          "status": "FAILED",
+          "createdAt": "2026-10-26T09:46:57Z",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 85b0eb1ae9c6 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-8819",
+          "plan_id": "pm-264",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 5,
+      "total": 1258,
+      "tasks": [
+        {
+          "id": "1920b839-dfa4-4a3f-ac99-74a48377f28c",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T20:16:35Z",
+          "run_id": "harvest-07604ef4e4c2f8a1",
+          "plan_id": "pm-platform",
+          "agent": "shell",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "17c5723c-27da-4322-9e18-ac9ad77cd630",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T20:16:19Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "can-451",
+          "plan_id": "pm-platform",
+          "agent": "shell",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "6bdc97f5-cd29-4168-aec1-0bfc36cafc8b",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T19:59:04Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-9079",
+          "plan_id": "pm-269",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "7b583fc1-af29-46b7-a45f-cf28d0d56725",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T19:45:36Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-9078",
+          "plan_id": "pm-269",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "21dfa299-e406-419c-97aa-392fd3446cb2",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T19:42:18Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "can-450",
+          "plan_id": "pm-platform",
+          "agent": "shell",
+          "worker": "avietidol-z490"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 5,
+      "limit": 5,
+      "total": 1258,
+      "tasks": [
+        {
+          "id": "8e2b94c3-2d5d-400b-b21a-b610466f0091",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T19:42:14Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-9077",
+          "plan_id": "pm-269",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "875286af-1fca-43b1-a917-fda4a8ec5753",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T19:40:25Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-9076",
+          "plan_id": "pm-269",
+          "agent": "shell",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "f6030259-d023-4521-b875-69c81573602d",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T19:37:06Z",
+          "run_id": "harvest-c2b122d537f6a979",
+          "plan_id": "pm-platform",
+          "agent": "shell",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "68dc9049-ab92-4d0a-90ea-2401c9177991",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T19:36:31Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "can-449",
+          "plan_id": "pm-platform",
+          "agent": "shell",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "7a03fe9d-86f3-4307-8e3a-641db05d4382",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-26T19:31:14Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "run_id": "run-9075",
+          "plan_id": "pm-269",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 5,
+      "total": 4,
+      "tasks": [
+        {
+          "id": "3cdd55f5-5dea-4e9c-b1a9-6e44cbb70f7f",
+          "status": "RUNNING",
+          "createdAt": "2026-10-26T20:28:55Z",
+          "run_id": "run-9083",
+          "plan_id": "pm-270",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "85e42098-1bc2-4d5b-b75b-78d8e65fbd17",
+          "status": "RUNNING",
+          "createdAt": "2026-10-26T20:28:55Z",
+          "run_id": "run-9082",
+          "plan_id": "pm-269",
+          "agent": "codex",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "0ebaaa16-f6aa-4db1-8c3e-186ebdb840ab",
+          "status": "RUNNING",
+          "createdAt": "2026-10-26T20:26:10Z",
+          "run_id": "run-9081",
+          "plan_id": "pm-269",
+          "agent": "shell",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "7537a7d9-7ce8-462b-b351-1e2e751da9e4",
+          "status": "RUNNING",
+          "createdAt": "2026-10-26T20:25:03Z",
+          "run_id": "run-9080",
+          "plan_id": "pm-258",
+          "agent": "claude",
+          "worker": "avietidol-z490"
+        }
+      ]
+    },
+    {
+      "status": "PENDING",
+      "offset": 0,
+      "limit": 5,
+      "tasks": []
+    }
+  ]
+}

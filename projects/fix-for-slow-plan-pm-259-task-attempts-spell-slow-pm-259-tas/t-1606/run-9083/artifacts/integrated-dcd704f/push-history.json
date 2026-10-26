@@ -1,0 +1,12 @@
+{
+  "attempts": [
+    {
+      "commit": "3544ec2837a6ecd57bc3d17cf1f7728faf73264d",
+      "exit": 1,
+      "result": "HEAD -> main rejected: fetch first"
+    }
+  ],
+  "rebase_cycles": 1,
+  "integrated_parent": "dcd704f9d58b0bf516efa40e742c17af2d7fe075",
+  "conflict_resolution": "Keep 98ff28c full 600ms measured hold, add isolated clock regression and bounded pet-state wait."
+}

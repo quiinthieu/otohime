@@ -1,0 +1,23 @@
+{
+  "id": "run-9083",
+  "plan_id": "pm-270",
+  "task_id": "t-1606",
+  "role": "software_engineer",
+  "kind": "role",
+  "template_id": "coding-agent",
+  "tm_task_id": "3cdd55f5-5dea-4e9c-b1a9-6e44cbb70f7f",
+  "repo_id": "otohime",
+  "account_id": "codex-main",
+  "worker_id": "avietidol-z490",
+  "runner": "fleet",
+  "agent_profile": "codex-sol-6-1-high",
+  "attempt": 3,
+  "status": "running",
+  "deadline_at": "2026-10-27T04:28:35.999315Z",
+  "started_at": "2026-10-26T20:28:35.999315Z",
+  "finished_at": "0001-01-01T00:00:00Z",
+  "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+  "not_before": "0001-01-01T00:00:00Z",
+  "status_checked_at": "0001-01-01T00:00:00Z",
+  "callback_apply_failures": 0
+}
