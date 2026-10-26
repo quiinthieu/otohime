@@ -1,6 +1,7 @@
 import type { Swatch } from "@/components/figures";
 import { PUBLIC_PAGES } from "../lib/pages.ts";
 import { resolveSketchesCollection, type Sketch } from "../lib/sketches.ts";
+import type { ZineConfig } from "../lib/zine.ts";
 
 export type { Sketch };
 
@@ -231,6 +232,13 @@ export const site = {
   sketchesHint: sketchesCollection.hint,
   sketchesIntro: sketchesCollection.intro,
   sketches: sketchesCollection.sketches satisfies Sketch[],
+  // The fold zine on /zine (lib/zine.ts): four projects by title, one sketch by title, and the issue line on the
+  // cover. The rest is picked for you: the bio, and the newest note on the back.
+  zine: {
+    projects: ["Shore", "Orrery", "Rotor", "Planisphere"],
+    sketch: "Lake",
+    issue: "No. 1 · Autumn 2026",
+  } satisfies ZineConfig,
   end: {
     title: "You've reached the end of the internet.",
     sub: "Thanks for stopping by. See you on the next level.",

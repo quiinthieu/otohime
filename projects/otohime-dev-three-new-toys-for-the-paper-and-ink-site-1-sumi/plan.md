@@ -30,6 +30,7 @@ Three independent additions to the paper-and-ink otohime.dev site:
 ## Decisions
 - Vector closed-form marbling over stable fluids: exact rings, deterministic, testable, resolution-free.
 - Marble model (t-1547, `lib/marble.ts`): the pond is an immutable stack of ink rings. `applyOp` returns `{ok:false, reason}` with the untouched pond on a cap (`max_drops`, `max_verts`) or a malformed op. Long image edges are split at the pre-image midpoint, so new vertices sit on the true curve. The renderer, Worker and print should consume `Marble` / `toSvgPaths` as they are.
+- Zine model (t-1542, `lib/zine.ts`): `CELLS` is the imposition (CSS degrees, CW=90 for the left column, CCW=-90 for the right), `guides(paper)` gives the folds and cut in mm, `parsePaper` takes `searchParams.paper` as is. `zinePages(site)` returns the 8 pages in reading order: 1 cover, 2 bio, 3-6 `site.zine.projects`, 7 `site.zine.sketch`, 8 back with the newest note, each field cut to `BUDGETS`. It throws on a title the site does not have. The cut parts 4|7 and 3|8. The /zine page should draw these as they are.
 - Grain as background-image, not filter: keeps probe-cartridges' no-filter check and its negative control valid.
 - Portrait 2x4 imposition: avoids the iOS landscape `@page` regression.
 - Background wash capped at 6% by a contrast unit test with a 20% negative control.
