@@ -1,0 +1,68 @@
+[
+  {
+    "name": "focused",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/head-tracker.test.ts lib/peep-box-assets.test.ts",
+    "cwd": ".",
+    "expect": "exit0",
+    "exit_code": 0,
+    "status": "pass",
+    "duration_ms": 159
+  },
+  {
+    "name": "unit",
+    "cmd": "npm test",
+    "cwd": ".",
+    "expect": "exit0",
+    "exit_code": 0,
+    "status": "pass",
+    "duration_ms": 38812
+  },
+  {
+    "name": "lint-types",
+    "cmd": "npm run lint && npm run typecheck",
+    "cwd": ".",
+    "expect": "exit0",
+    "exit_code": 0,
+    "status": "pass",
+    "duration_ms": 18980
+  },
+  {
+    "name": "assets",
+    "cmd": "node scripts/vendor-peep-box.mjs && node scripts/vendor-peep-box.mjs --check",
+    "cwd": ".",
+    "expect": "exit0",
+    "exit_code": 0,
+    "status": "pass",
+    "duration_ms": 210
+  },
+  {
+    "name": "camera",
+    "cmd": "node scripts/verify-peep-box-camera.mjs",
+    "cwd": ".",
+    "expect": "exit0",
+    "exit_code": 0,
+    "status": "pass",
+    "duration_ms": 42371,
+    "build": "eX1tbfLcLzZkVohliDgRD"
+  },
+  {
+    "name": "serial-e2e",
+    "cmd": "npm run test:e2e",
+    "cwd": ".",
+    "expect": "exit0",
+    "exit_code": 0,
+    "status": "pass",
+    "duration_ms": 443170,
+    "build": "5LI0oGXL3ZKMr2tjLVS4A"
+  },
+  {
+    "name": "footer",
+    "cmd": "node scripts/verify-bottle-footer.mjs",
+    "cwd": ".",
+    "expect": "exit0",
+    "exit_code": 0,
+    "status": "pass",
+    "duration_ms": 87611,
+    "build": "WWlkk30JKtcMryt8P49Rr"
+  }
+]

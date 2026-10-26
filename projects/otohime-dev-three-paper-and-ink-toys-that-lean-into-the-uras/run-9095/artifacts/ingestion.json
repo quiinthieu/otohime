@@ -1,0 +1,66 @@
+{
+  "prior": {
+    "task": "6bdc97f5-cd29-4168-aec1-0bfc36cafc8b",
+    "status": "COMPLETED",
+    "callbackState": "delivered",
+    "callbackAttempts": 1,
+    "run": "run-9079",
+    "runStatus": "succeeded",
+    "git_sha": "e21f832",
+    "callback_apply_failures": 0
+  },
+  "current": {
+    "task": "92991a43-e9f7-40c4-952d-c4703a43c68f",
+    "run": "run-9095",
+    "callback": "applied after exit; not yet observed"
+  },
+  "failedSample": {
+    "task": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+    "status": "FAILED",
+    "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main",
+    "callbackState": "delivered",
+    "callbackAttempts": 1
+  },
+  "tails": [
+    {
+      "task": "6bdc97f5-cd29-4168-aec1-0bfc36cafc8b",
+      "characters": 69026,
+      "lines": 1254,
+      "completeness": "[truncated 2748 earlier log lines; use StreamTaskLogs for the full log]",
+      "terminal": [
+        "+  } finally { rmSync(work, { recursive: true, force: true }); }",
+        "+});",
+        "",
+        "tokens used",
+        "195,440",
+        "Pushed to `main`: `e21f83206f8ce94a86e7cd2e8eb2144ef629f9a3`.",
+        "",
+        "Fixed Kame clock checks and Footer CI diagnostics. All seven required checks passed after rebasing, including 2,355 units and 175 browser tests.",
+        "",
+        "Summary submitted. New CI and deployed QA remain unverified and are handed to plan-manager.",
+        "---",
+        "Command exited with code: 0"
+      ]
+    },
+    {
+      "task": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+      "characters": 67243,
+      "lines": 446,
+      "completeness": "[truncated 3556 earlier log lines; use StreamTaskLogs for the full log]",
+      "terminal": [
+        "progress phase=rescue",
+        "=== rescue: preserving workspace of failed task (exit code 1, phase agent, budget 60s) ===",
+        "On branch qa/pm-270-t-1606-run-9070",
+        "nothing to commit, working tree clean",
+        "remote:",
+        "remote: Create a pull request for 'task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3' on GitHub by visiting:",
+        "remote:      https://github.com/quiinthieu/otohime/pull/new/task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3",
+        "remote:",
+        "To github.com:quiinthieu/otohime.git",
+        " * [new branch]      HEAD -> task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3",
+        "rescue: pushed working state to branch task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3",
+        "=== rescue: done ==="
+      ]
+    }
+  ]
+}

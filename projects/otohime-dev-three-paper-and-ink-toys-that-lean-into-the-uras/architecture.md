@@ -1,5 +1,9 @@
 # Ryugu Paper Toys architecture
 
+## Footer geometry repair · pm-269/t-1591 · run-9095
+
+The Bottle button remains an absolutely positioned child of the existing footer stage wrapper. Its bottom now sits at the wrapper's top with a `.25rem` gap; its own content determines its height. The former `-2.4rem` top offset allowed larger text to intrude into the scene. No stage dimensions, DOM order, camera runtime or global motion rules change. The production Bottle browser suite measures the real scene boundary at desktop/mobile sizes, enlarges the button text to 24px without changing reserved footer geometry, verifies tap/click and keyboard order, and checks a computed 200% root font size. Reinstating the old CSS in that browser makes the same boundary assertion fail. Full verification and execution identities are recorded in `run-9095-summary.md` and `run-9095/artifacts/`.
+
 ## Pointer and tilt Peep-box · pm-264/t-1590
 
 The Play route server-renders `PeepBoxScene` inside `PeepBoxLoader`. The scene is source SVG: palace, seabed/kelp, fish and turtle at depths 500, 300, 160 and 60 SVG units. The 600×360 window reserves its aspect ratio, clips its contents, and uses existing paper/ink/colour tokens and the isolated `peep-ryugu-ink` filter. The controls reserve 320 CSS pixels before activation. Claw, Pond and Ink Press keep their existing implementations and entry points.
