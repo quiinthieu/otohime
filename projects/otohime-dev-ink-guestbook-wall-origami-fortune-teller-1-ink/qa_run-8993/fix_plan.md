@@ -1,0 +1,7 @@
+# Fix plan · run-8993 · t-1612
+
+Cause: **code**. GitHub checks run 455 at `3c3772b` and descendant run 456 fail `npm test`, so the guestbook delivery is not deployed. Last green run 440 passed the same job before the footer probe acquired a CI Chrome branch. The guestbook provenance step passes; the failure is in an inherited repository test fixture.
+
+At `lib/end.test.ts:327–334`, the BASE_URL/TMPDIR fixture prepends a stub `npm` but inherits `CI=true`. In `scripts/probe-end.sh:211–217`, CI with installed Chrome bypasses the installer and therefore never calls that stub. Set `ciEnv.CI = ""` (or delete `ciEnv.CI`) when building that fixture so it deliberately exercises the installer branch. Add a separate explicit CI-with-Chrome assertion for the real Chrome branch if it is not already covered. Do not remove the production CI Chrome path to satisfy a stub test.
+
+Proof before changing code: at `3c3772b`, `CI=true GITHUB_ACTIONS=true node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/end.test.ts` failed 10/11 with `130 !== 1` at line 334; `CI=''` passed 11/11. After the change, run the full `npm test`, lint, typecheck, Drizzle, and isolated guestbook API contracts on the replacement commit, then push and obtain green GitHub checks and a deployed descendant SHA. Re-run independent deployed read and isolated write-path QA. Owner: software engineer for t-1612; no operator action is needed.
