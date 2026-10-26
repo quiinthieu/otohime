@@ -35,3 +35,13 @@ junk, empty and `../../etc/passwd` codes give a lost-postcard view and a 404 ima
 - The deployed site was not checked (task stops at the push). Owner: QA. It fails if `https://otohime.dev/og`
   or `/postcard/image?c=<code>` is not a 1200x630 PNG in production.
 - Emoji in a note are drawn by Satori from its emoji CDN at request time (seen working here); how the PNG looks with no outbound network is unverified.
+
+## Fix cycle (run-8599, claude-opus-5-5): commit trailer
+QA rep-4993 failed 93413db for one reason: its message ends with `Co-Authored-By: Claude <noreply@anthropic.com>`,
+which plan.commit_identity forbids. That trailer was a mistake. 93413db is already on shared main under later commits
+(cda79f5, fb11fbd), so it is not rewritten and nothing is force-pushed. The decider is asked to waive the old message.
+This follow-up commit is authored by Otohime <quiinthieu@gmail.com> and carries no trailer.
+`author.txt` records the identity and trailer check for both commits. The application code is unchanged.
+Re-run on HEAD fb11fbd + this commit (Node 22.23.3, Next 16.4.2): `npm ci && npm test` 1756/1756 passed;
+`npm run typecheck && npm run lint` exit 0 (0 errors, the same 10 earlier warnings); `npm run build` exit 0
+(`/og`, `/postcard`, `/postcard/image`, `/postcard/view` present).
