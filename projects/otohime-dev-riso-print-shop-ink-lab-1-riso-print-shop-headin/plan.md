@@ -237,14 +237,14 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
       "Declare the repository-owned PrintRun, InkLabSettings, AppearanceSnapshot and AppearanceStore interfaces before implementation. Put immutable presets in lib/print-runs.ts and the codec/ranges in lib/ink-lab.ts; use the exact schema, keys, defaults and precedence below.",
       "Write failing node:test cases in lib/print-runs.test.ts and lib/ink-lab.test.ts first: all preset ids, theme/season coexistence, default equivalence with MATERIALS.ink, canonical URL round-trip, every clamp boundary, blocked storage through a fake store, duplicate and unknown parameters, invalid hex/hand/version, NaN/Infinity, overlong input and script-like strings.",
       "Define getSnapshot/subscribe/setPrintRun/applyLab/resetHouse through the AppearanceStore port, with fake-store contract tests. Preset selection clears Lab; resetting clears both appearance keys while preserving season/theme and other local data. Do not import browser globals in these pure files.",
-      "Calculate preset contrast including muted text, form fields, both papers and worst-case total grain; keep body ink separate from editable decorative plates. Keep existing inkFilter default output identical. Add a plan-local developer contract note under the plan folder."
+      "Calculate preset contrast including muted text, form fields, both papers and worst-case total grain; keep body ink separate from editable decorative plates. Keep existing inkFilter default output identical. Document the typed appearance/schema contract in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/appearance-contract.md."
     ],
     "interfaces": [
       "lib/print-runs.ts",
       "lib/print-runs.test.ts",
       "lib/ink-lab.ts",
       "lib/ink-lab.test.ts",
-      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/"
+      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/appearance-contract.md"
     ],
     "non_goals": [
       "browser adapter or UI",
@@ -298,7 +298,7 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
       "Implement numeric SVG adapters for components/figures.tsx, season-layer.tsx, ink-press.tsx, ink-radio.tsx, the ledger stamp-calendar, app/(site)/not-found.tsx and app/(ryugu)/_components/sea.tsx. Preserve filter ids, filter region bounds, source seeds and interaction-specific amplitudes; use numeric props or tagged filter updates after hydration, never CSS var() as an SVG numeric attribute. Isolated project engines stay pure.",
       "Adjust isolation tests only with an exact allowlist for the shared appearance boot/runtime/CSS boundary in root layouts, with positive and negative controls. Continue rejecting imports of site globals, unrelated components and shared state from project _lib engines. Do not delete existing tests.",
       "Add optional static grain/halftone overlays with pointer-events:none, combined alpha <=0.06, no duplicate fixed overlays, and forced-colors off. Honor reduced motion for heading movement/seed clocks, cancel rAF/listeners/observers on teardown and keep at most one appearance clock, only while visible and needed.",
-      "Write lib/appearance-client.test.ts and e2e/print-runs.test.ts. Exercise storage denial/corruption, first-paint computed colors with hydration delayed, all preset/theme/season combinations, same-tab/cross-tab updates, session reload, reset, and full document hops to every root. Assert actual SVG values change and restore, no errors, no input interception, and unchanged default project isolation. Keep technical evidence in .agent-artifacts/; update the plan's runtime architecture note."
+      "Write lib/appearance-client.test.ts and e2e/print-runs.test.ts. Exercise storage denial/corruption, first-paint computed colors with hydration delayed, all preset/theme/season combinations, same-tab/cross-tab updates, session reload, reset, and full document hops to every root. Assert actual SVG values change and restore, no errors, no input interception, and unchanged default project isolation. Keep technical evidence in .agent-artifacts/; document the root-layout inventory, token aliases and SVG adapters in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/runtime-architecture.md."
     ],
     "interfaces": [
       "lib/appearance-client.ts",
@@ -313,7 +313,7 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
       "components/ink-radio.tsx",
       "app/",
       "e2e/print-runs.test.ts",
-      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/"
+      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/runtime-architecture.md"
     ],
     "non_goals": [
       "site-global CSS imports into isolated projects",
@@ -519,7 +519,7 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
       "Decode the versioned query through task 1's codec. Update a canonical shareable URL via replaceState without flooding history; restore the preview on Back/Forward and reload. Share copies the current canonical absolute URL; if Clipboard API fails, expose a selected readonly URL field and a useful status without losing edits.",
       "Apply an immutable sanitized snapshot through the common store and report success only when it takes effect; storage denial must say it lasts only on this page. Reset clears both appearance keys/attributes/variables and restores the original season/theme house style, preview defaults and a clean /lab URL. A clean fresh browser context never inherits an applied session; do not use an opener-cloned tab as the independence test.",
       "Coalesce preview changes to one rAF update per frame, never rasterize the entire page on a slider input, pause clocks offscreen/hidden, use effective speed zero under reduced motion, and tear down work on navigation. Record measured input-to-preview latency and filter update count; target <=100ms on the documented test machine without claiming a universal SLA.",
-      "Write e2e/ink-lab.test.ts for every control, preview isolation, share/open in clean context, canonical/hostile URLs, apply -> /work -> /shore -> reload -> /lab -> reset, Back/Forward, denied storage/clipboard, keyboard interaction at 390x844 and 200% zoom, and a scoped preview negative control. Keep .github/workflows/ci.yml's e2e glob coverage; update developer documentation under the plan folder."
+      "Write e2e/ink-lab.test.ts for every control, preview isolation, share/open in clean context, canonical/hostile URLs, apply -> /work -> /shore -> reload -> /lab -> reset, Back/Forward, denied storage/clipboard, keyboard interaction at 390x844 and 200% zoom, and a scoped preview negative control. Keep .github/workflows/ci.yml's e2e glob coverage; document public Lab controls, URL/apply/reset behavior and failure recovery in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/ink-lab-contract.md."
     ],
     "interfaces": [
       "app/(site)/(app)/lab/",
@@ -531,7 +531,7 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
       "lib/terminal.ts",
       "lib/terminal.test.ts",
       "e2e/ink-lab.test.ts",
-      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/"
+      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/ink-lab-contract.md"
     ],
     "non_goals": [
       "accounts, databases, server preset API or short links",
