@@ -3,6 +3,7 @@ import { site, type Sketch } from "@/content/site";
 import { getSketchDimensions } from "@/lib/sketches";
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { ViewTransition } from "react";
 
 export const metadata: Metadata = { title: "Sketches" };
@@ -79,6 +80,11 @@ export default function SketchesPage() {
           Sketches
         </FigTitle>
         <p className="mt-2 max-w-prose text-muted">{site.sketchesIntro}</p>
+        <p className="mt-2">
+          <Link href="/postcard" className="link">
+            Send one as a postcard
+          </Link>
+        </p>
         {/* Chromium runs scroll timelines with JavaScript off too; without it the sheets stand still and whole. */}
         <noscript>
           <style>{".sheet-wash,.sheet-frame path{animation:none!important}"}</style>

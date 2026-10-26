@@ -26,6 +26,8 @@ const nextConfig: NextConfig = {
   // Commit the build came from; layout.tsx publishes it as <meta name="build-sha">.
   env: {
     BUILD_SHA: process.env.GITHUB_SHA ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "dev",
+    // The day the build ran, YYYY-MM-DD in UTC: the postmark on every page's Open Graph card (lib/og.tsx).
+    BUILD_DATE: process.env.BUILD_DATE ?? new Date().toISOString().slice(0, 10),
   },
   turbopack: {
     rules: {

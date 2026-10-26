@@ -14,6 +14,8 @@ import "./(site)/seasons.css";
 export const metadata: Metadata = {
   title: "Otohime",
   description: `Otohime. ${site.tagline}`,
+  metadataBase: new URL(process.env.SITE_URL ?? "https://otohime.dev"),
+  openGraph: { images: [{ url: "/og", alt: "Otohime, stamped on paper by otohime.dev", width: 1200, height: 630 }] },
 };
 
 // The same as app/(site)/layout.tsx: a pinned theme and the season before first paint.

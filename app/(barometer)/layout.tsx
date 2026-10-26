@@ -23,6 +23,9 @@ const hand = Patrick_Hand({
 });
 
 export const metadata: Metadata = {
+  // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
+  metadataBase: new URL(process.env.SITE_URL ?? "https://otohime.dev"),
+  openGraph: { images: [{ url: "/og", alt: "Otohime, stamped on paper by otohime.dev", width: 1200, height: 630 }] },
   title: { default: "Barometer", template: "%s · Barometer" },
   description: "A brass weather station for a chosen city, drawn in ink: an aneroid dial, a thermometer, a wind vane and a rain cup, read from Open-Meteo.",
   other: { "build-sha": process.env.BUILD_SHA ?? "dev" },

@@ -7,6 +7,9 @@ import "./elements.css";
 // project. A system font stack, so the build needs no font download.
 
 export const metadata: Metadata = {
+  // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
+  metadataBase: new URL(process.env.SITE_URL ?? "https://otohime.dev"),
+  openGraph: { images: [{ url: "/og", alt: "Otohime, stamped on paper by otohime.dev", width: 1200, height: 630 }] },
   title: { default: "Elements", template: "%s · Elements" },
   description: "All 118 elements: a periodic table with a Bohr atom and one surprising fact per element.",
   other: { "build-sha": process.env.BUILD_SHA ?? "dev" },

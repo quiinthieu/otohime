@@ -1,0 +1,2 @@
+pm-249/t-1521: Stamp every page's Open Graph card and open the Postcard Mailroom
+(one commit; its sha is the git_sha of the run-8589 summary report, since a commit cannot name itself)

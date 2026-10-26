@@ -15,6 +15,9 @@ const display = Fraunces({
 });
 
 export const metadata: Metadata = {
+  // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
+  metadataBase: new URL(process.env.SITE_URL ?? "https://otohime.dev"),
+  openGraph: { images: [{ url: "/og", alt: "Otohime, stamped on paper by otohime.dev", width: 1200, height: 630 }] },
   title: { default: "Capsule", template: "%s · Capsule" },
   description: "A coin, a crank, and a printed card to keep.",
   other: { "build-sha": process.env.BUILD_SHA ?? "dev" },
