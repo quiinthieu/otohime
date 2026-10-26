@@ -122,6 +122,9 @@ jobs:
           # generate wrote files = schema changed without a committed migration
           test -z "$(git status --porcelain db/migrations)"
       - run: npm run build
+      - name: Real CPU camera and privacy verifier
+        timeout-minutes: 5
+        run: node scripts/verify-peep-box-camera.mjs
       - run: npm run db:migrate
       # The job log needs a token to read: a failed test is also an annotation and a step summary section
       # (scripts/e2e-annotate.mjs), and a red step adds the server's last lines there, with what ran.

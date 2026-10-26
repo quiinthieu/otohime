@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore, type RefObject } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type RefObject,
+} from "react";
 import {
   boundEye,
   NEUTRAL,
@@ -12,6 +18,9 @@ import {
   type PoseSource,
 } from "@/lib/peep-box";
 
+import { cameraTracker } from "./camera";
+import type { HeadStatus } from "@/lib/head-tracker";
+
 const MOTION = "(prefers-reduced-motion: reduce)";
 const subscribe = (notify: () => void) => {
   const q = matchMedia(MOTION);
@@ -22,6 +31,8 @@ type Controls = {
   look: (x: number, y: number) => void;
   tilt: () => void;
   calibrate: () => void;
+  camera: () => void;
+  cameraOff: () => void;
 };
 type OrientationPermission = typeof DeviceOrientationEvent & {
   requestPermission?: () => Promise<string>;
@@ -39,6 +50,10 @@ export default function Active({
   );
   const control = useRef<Controls | null>(null);
   const status = useRef<HTMLParagraphElement>(null);
+  const [cameraState, setCameraState] = useState<HeadStatus>({
+    state: "idle",
+    generation: 0,
+  });
 
   useEffect(() => {
     const el = root.current;
@@ -172,6 +187,38 @@ export default function Active({
         return () => window.removeEventListener("deviceorientation", read);
       },
     };
+    const tracker = cameraTracker((state, pose) => {
+      el.setAttribute("data-camera", state.state);
+      setCameraState(state);
+      if (state.state === "fallback") {
+        if (running) choose(pointer);
+        const explanation =
+          state.error === "NotAllowedError"
+            ? "Camera permission was not allowed."
+            : state.error === "NotFoundError"
+              ? "No camera was found."
+              : /worker|model/.test(state.error)
+                ? "Camera unavailable: its local model or worker could not start."
+                : "Camera unavailable or disconnected.";
+        say(`${explanation} Use your pointer or tilt.`);
+      } else if (state.state === "active" && running) {
+        if (pose) emit(pose);
+        say(
+          state.face
+            ? "Camera on. Gently move your head."
+            : "Camera on. No face found; view centred. Pointer controls are available.",
+        );
+      }
+    });
+    const camera: PoseSource = {
+      kind: "camera",
+      start() {
+        void tracker.start();
+        return () => {
+          if (tracker.status.state !== "fallback") tracker.stop();
+        };
+      },
+    };
     const choose = (source: PoseSource) => {
       session.select(source, emit);
       el.setAttribute("data-source", source.kind);
@@ -180,6 +227,7 @@ export default function Active({
       generation++;
       running = false;
       session.stop();
+      tracker.stop();
       reset();
       el.setAttribute("data-running", "false");
       el.setAttribute("data-source", "pointer");
@@ -204,6 +252,19 @@ export default function Active({
       return () => suspend();
     }
     control.current = {
+      camera() {
+        if (running) {
+          generation++;
+          choose(camera);
+        }
+      },
+      cameraOff() {
+        generation++;
+        tracker.stop();
+        if (running) choose(pointer);
+        emit(NEUTRAL);
+        say("Camera off. Use your pointer or tilt.");
+      },
       look(px, py) {
         generation++;
         if (!running) return;
@@ -222,6 +283,8 @@ export default function Active({
         say("Tilt centred. Hold your device comfortably.");
       },
       async tilt() {
+        tracker.stop();
+        if (running) choose(pointer);
         const token = ++generation;
         const sensor = window.DeviceOrientationEvent as
           | OrientationPermission
@@ -326,6 +389,40 @@ export default function Active({
               </button>
             ))}
           </div>
+          <div className="peep-row">
+            <button
+              disabled={
+                cameraState.state === "active" ||
+                cameraState.state === "loading"
+              }
+              type="button"
+              className="btn"
+              onClick={() => control.current?.camera()}
+            >
+              Use my camera
+            </button>
+            <button
+              type="button"
+              className="btn"
+              disabled={
+                cameraState.state !== "active" &&
+                cameraState.state !== "loading"
+              }
+              onClick={() => control.current?.cameraOff()}
+            >
+              Turn camera off
+            </button>
+            <span className="peep-status">
+              {cameraState.state === "active"
+                ? "Camera on"
+                : cameraState.state === "loading"
+                  ? "Opening camera…"
+                  : "Camera off"}
+            </span>
+          </div>
+          <p className="peep-status">
+            Frames stay on your device. Nothing is uploaded. Camera is optional.
+          </p>
           <div className="peep-row">
             <button
               type="button"

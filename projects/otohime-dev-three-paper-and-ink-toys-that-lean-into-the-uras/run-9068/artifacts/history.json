@@ -1,0 +1,344 @@
+{
+  "currentRun": {
+    "id": "run-9068",
+    "tm_task_id": "de104a54-00b2-426f-8f4d-64db79f24494",
+    "profile": "codex-sol-6-1-high",
+    "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "worker": "avietidol-mac-mini"
+  },
+  "pages": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 5,
+      "total": 1126,
+      "tasks": [
+        {
+          "id": "980c6385-7c10-4d4b-a913-43e9c9333678",
+          "title": "Desk swipe observes its preconditions",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4088d29ec0d9 is not on origin/main",
+          "run_id": "run-9045",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "30fd1015-8571-485d-a7b3-c88008526b4b",
+          "title": "Batched delivery P4: dependency readiness and implemented tasks",
+          "status": "FAILED",
+          "error": "agent_timeout"
+        },
+        {
+          "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+          "title": "product_owner pm-277",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "run_id": "run-9019",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+          "title": "Complete safe Kame fetch on the landed paper registry",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0e2bbe863f6e is not on origin/main",
+          "run_id": "run-8968",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+          "title": "Add the Pocket print-run switch and commands",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "run_id": "run-8934",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 5,
+      "limit": 5,
+      "total": 1126,
+      "tasks": [
+        {
+          "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+          "title": "Desk swipe observes its preconditions",
+          "status": "FAILED",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "run_id": "run-8895",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+          "title": "Build the pointer and gyro Peep-box",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main",
+          "run_id": "run-8856",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+          "title": "Complete safe Kame fetch on the landed paper registry",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main",
+          "run_id": "run-8848",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+          "title": "Enter Ryugu-jo",
+          "status": "FAILED",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "run_id": "run-8828",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+          "title": "Build the pointer and gyro Peep-box",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 85b0eb1ae9c6 is not on origin/main",
+          "run_id": "run-8819",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 5,
+      "total": 6425,
+      "tasks": [
+        {
+          "id": "89f0c9fd-fbee-45a1-ab58-52d6ad0aea3b",
+          "title": "linego forge run f7ebb00c-6a41-4dac-9b95-f7a1e80d0e69",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "6c1cb605-c902-4bfa-a3e0-b10d4a7b2c75",
+          "title": "linego forge run b8a728a6-afb4-4d36-9c28-2f5c8f6017c9",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9c71ed17-e66c-4069-b7e3-bf59bddc2c62",
+          "title": "linego forge run 4e1ecde3-5da7-4263-82ac-a985cbae2331",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c7d31a6e-4051-41a5-868b-73f43b3e6bfc",
+          "title": "linego forge run f7357322-ed09-407b-8604-fd30b3482e5b",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4c690b8c-22bd-4101-b959-309bb8cad768",
+          "title": "product_owner pm-285",
+          "status": "COMPLETED",
+          "run_id": "run-9072",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 5,
+      "limit": 5,
+      "total": 6425,
+      "tasks": [
+        {
+          "id": "85355f73-4603-4517-8bf4-0c525368e1c3",
+          "title": "reclaim viet-mac",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "384d9c22-bcf5-4ccd-b061-33125023f529",
+          "title": "research pm-285",
+          "status": "COMPLETED",
+          "run_id": "run-9071",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "110aab98-f70e-4eee-ab37-037e3d1e637f",
+          "title": "linego forge run cd42c16c-2997-428a-a07d-198f5e143551",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "22cb4a23-e2ee-4f1b-9789-29db0a8ce649",
+          "title": "linego forge run 05eee36d-7759-46b8-9c50-df263df7e246",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b0d9cc81-ae56-4670-80bb-82381d2c0955",
+          "title": "finance-vn-usd-vnd-hourly - 2026-10-26 19:00:07",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 5,
+      "total": 3,
+      "tasks": [
+        {
+          "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+          "title": "Desk swipe observes its preconditions",
+          "status": "RUNNING",
+          "run_id": "run-9070"
+        },
+        {
+          "id": "de104a54-00b2-426f-8f4d-64db79f24494",
+          "title": "Track opt-in heads entirely on device",
+          "status": "RUNNING",
+          "run_id": "run-9068"
+        },
+        {
+          "id": "72b31733-a794-4cf6-87c4-1f84a55d2a64",
+          "title": "Batched delivery P5: integrator, publication and delivery locks (after fixing the P4 follow-up pipeline)",
+          "status": "RUNNING"
+        }
+      ]
+    }
+  ],
+  "priorPlanRuns": [
+    {
+      "id": "run-9049",
+      "task": "t-1587",
+      "status": "succeeded",
+      "sha": "70fe593"
+    },
+    {
+      "id": "run-9051",
+      "task": "t-1589",
+      "status": "succeeded",
+      "sha": "6453315"
+    },
+    {
+      "id": "run-9057",
+      "task": "t-1587",
+      "status": "succeeded"
+    },
+    {
+      "id": "run-9058",
+      "task": "t-1587",
+      "status": "succeeded",
+      "sha": "9bdb3b2"
+    },
+    {
+      "id": "run-9061",
+      "task": "t-1589",
+      "status": "succeeded",
+      "sha": "4b8278a"
+    },
+    {
+      "id": "run-9064",
+      "task": "t-1588",
+      "status": "succeeded",
+      "sha": "5abaebc"
+    },
+    {
+      "id": "run-9068",
+      "task": "t-1591",
+      "status": "running"
+    }
+  ],
+  "completedIngestion": {
+    "task": {
+      "id": "acde707b-0dcb-4582-84c1-3c192ac1f618",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1
+    },
+    "run": {
+      "id": "run-9064",
+      "status": "succeeded",
+      "git_sha": "5abaebc",
+      "callback_apply_failures": 0
+    }
+  },
+  "tails": {
+    "a7d6a38f-7400-4d5e-840f-935c6002a3c0": {
+      "keys": [
+        "lines"
+      ],
+      "tail": [
+        "tokens used",
+        "299,859",
+        "**QA verdict: fail (`cause=code`).** The delivered Peep-box browser test intermittently failed its touch-scroll control and layer-geometry assertion at both required widths, even though repeat runs passed. The [QA report](/Users/avietidol/Library/Application%20Support/build-worker/leases/a7d6a38f-7400-4d5e-840f-935c6002a3c0-15a2e0554a2ab6a3cf7568888cfac116/work/otohime/projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/qa_run-8856.md) and [fix plan](/Users/avietidol/Library/Application%20Support/build-worker/leases/a7d6a38f-7400-4d5e-840f-935c6002a3c0-15a2e0554a2ab6a3cf7568888cfac116/work/otohime/projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/fix_plan_run-8856.md) were submitted as `rep-5176` and `rep-5177`.",
+        "",
+        "**Saved work:** branch `pm-264-t-1590-qa-run-8856-final`, pushed commit `a021df91b875a594a16adc1bf2244ac56c78cd8e`. Six non-fast-forward rejections prevented integration of the QA documents on `main`; no force push occurred.",
+        "",
+        "The delivery SHA `28d4542` has a passing board green gate (`ver-3536`). Local checks passed on repeat: 2,133 unit tests, lint/type checks, focused browser 8/8, and full browser 110/110. Those passes do not clear the observed intermittent failures. GitHub CI run `#415` for the delivery was cancelled before checks or deployment; the live site still reported pre-delivery SHA `ae4607d`. **Local execution is demonstrated; deployed product delivery is not.**",
+        "---",
+        "Command exited with code: 0",
+        "push_not_on_main: HEAD a021df91b875a594a16adc1bf2244ac56c78cd8e is not on origin/main (10 commit(s) since 543ba68fb184a73232fe16e532afb31590a05e73); cutting task-rescue/a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+        "progress phase=rescue",
+        "=== rescue: preserving workspace of failed task (exit code 1, phase agent, budget 60s) ===",
+        "On branch pm-264-t-1590-qa-run-8856-final",
+        "nothing to commit, working tree clean",
+        "remote:",
+        "remote: Create a pull request for 'task-rescue/a7d6a38f-7400-4d5e-840f-935c6002a3c0' on GitHub by visiting:",
+        "remote:      https://github.com/quiinthieu/otohime/pull/new/task-rescue/a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+        "remote:",
+        "To github.com:quiinthieu/otohime.git",
+        " * [new branch]      HEAD -> task-rescue/a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+        "rescue: pushed working state to branch task-rescue/a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+        "=== rescue: done ==="
+      ],
+      "completeness": "endpoint returns tail only; historical transcript incomplete; embedded prior reports are not independent execution evidence"
+    },
+    "acde707b-0dcb-4582-84c1-3c192ac1f618": {
+      "keys": [
+        "lines"
+      ],
+      "tail": [
+        "+        \" * [new branch]      HEAD -> task-rescue/a7d6a38f-7400-4d5e-840f-935c6002a3c0\",",
+        "+        \"rescue: pushed working state to branch task-rescue/a7d6a38f-7400-4d5e-840f-935c6002a3c0\",",
+        "+        \"=== rescue: done ===\"",
+        "+      ],",
+        "+      \"keys\": [",
+        "+        \"lines\"",
+        "+      ],",
+        "+      \"completeness\": \"tail only; historical transcript incomplete\"",
+        "+    }",
+        "+  },",
+        "+  \"completeness\": \"bounded global history only; 20 FAILED of81,20 COMPLETED of1418,5 RUNNING of5; no previous SWE run for t-1588 in plan-run list\"",
+        "+}",
+        "",
+        "tokens used",
+        "246,981",
+        "Implemented and pushed to `main`.",
+        "",
+        "Commit: `5abaebc70f9f4efb627fe9a0e7db81717dc77533`",
+        "",
+        "All required checks passed after rebase. Full browser regression: 167 passed, one optional skip. Plan-manager summary submitted; CI/deployed QA handed off without watching the pipeline.",
+        "---",
+        "Command exited with code: 0"
+      ],
+      "completeness": "endpoint returns tail only; historical transcript incomplete; embedded prior reports are not independent execution evidence"
+    }
+  },
+  "completeness": "FAILED 10/1126 and COMPLETED 10/6425, offsets0/5 limit5; global history incomplete. RUNNING 3/3. Only current run targets t-1591. This run callback is post-exit and unproven."
+}

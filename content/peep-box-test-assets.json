@@ -1,0 +1,9 @@
+{
+  "file": "astronaut.png",
+  "url": "https://raw.githubusercontent.com/scikit-image/scikit-image/c1af2bf80d2c8845bbbf06222f87e8b58a8e5c1e/skimage/data/astronaut.png",
+  "sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+  "size": 791555,
+  "license": "Public domain (NASA)",
+  "terms": "NASA photograph of Eileen Collins. No known copyright restrictions; released into the public domain. No endorsement implied. Verification only; never deployed.",
+  "licenseEvidence": "https://scikit-image.org/docs/0.19.x/api/skimage.data.html#skimage.data.astronaut"
+}

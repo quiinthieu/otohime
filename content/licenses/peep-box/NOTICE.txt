@@ -1,0 +1,27 @@
+Peep-box asset attribution and redistribution record (verified 2026-10-27)
+
+MediaPipe Tasks Vision 0.10.32, JavaScript SDK, SIMD and non-SIMD Wasm
+and their JavaScript loaders: Copyright The MediaPipe Authors, Apache-2.0.
+Exact release source: https://github.com/google-ai-edge/mediapipe/tree/8317ba78778738ba90a521e7e4580a2ba0129c81
+Release LICENSE: https://raw.githubusercontent.com/google-ai-edge/mediapipe/8317ba78778738ba90a521e7e4580a2ba0129c81/LICENSE
+The published npm package explicitly declares Apache-2.0 for its distribution
+(including wasm/); there is no separate NOTICE in the pinned release tree or
+npm distribution. Files are copied unmodified, with LICENSE and this attribution.
+This statement concerns those distributed files, not every repository dependency.
+
+Face Landmarker bundle float16/1 contains face detector, face mesh and
+blendshape models. Model licensing is verified separately from the SDK:
+- BlazeFace (short range): Copyright Google, Apache License Version 2.0,
+  https://storage.googleapis.com/mediapipe-assets/MediaPipe%20BlazeFace%20Model%20Card%20%28Short%20Range%29.pdf
+- Face Mesh V2: Geng Yan and Ivan Grishchenko, Google, Apache License Version 2.0,
+  https://storage.googleapis.com/mediapipe-assets/Model%20Card%20MediaPipe%20Face%20Mesh%20V2.pdf
+- Blendshape V2: Ivan Grishchenko, Geng Yan, Andrei Zanfir, Eduard Gabriel
+  Bazavan, Google, Apache License Version 2.0,
+  https://storage.googleapis.com/mediapipe-assets/Model%20Card%20Blendshape%20V2.pdf
+Each card's LICENSED UNDER field specifies Apache 2.0. Full license is in
+Apache-2.0.txt. Model bytes are unmodified. No endorsement is implied.
+
+The SDK is evaluated in a classic worker with an exports namespace shim;
+SDK and Wasm bytes are unmodified and SHA256 checked before execution.
+The local worker and pose mapping are original otohime source.
+The NASA verification portrait has its own manifest and is never deployed.

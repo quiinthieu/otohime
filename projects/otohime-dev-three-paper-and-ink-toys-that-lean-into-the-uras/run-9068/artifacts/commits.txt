@@ -1,0 +1,3 @@
+run-9068 main pm-269/t-1591: Track opt-in heads entirely on device
+One delivery commit; its exact SHA is in the submitted summary git_sha and the runner artifacts/commits.txt (a commit cannot contain its own hash).
+Integration base: 234342159d8fad056e7db0432bec3d3c2959f3d5

@@ -18,6 +18,26 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/play",
+        headers: [
+          { key: "Permissions-Policy", value: "camera=(self), microphone=()" },
+        ],
+      },
+      {
+        source: "/vendor/peep-box/:version/head-worker.js",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'none'; script-src 'self' blob: 'wasm-unsafe-eval'; connect-src 'self' blob:; worker-src 'none'",
+          },
+        ],
+      },
+    ];
+  },
   // Sun became Orrery (pm-199): the old page is the Sun's poster now. The exact
   // path only, so /sun/nope stays the site's 404. 308s are cached for good.
   async redirects() {
@@ -30,7 +50,8 @@ const nextConfig: NextConfig = {
   },
   // Commit the build came from; layout.tsx publishes it as <meta name="build-sha">.
   env: {
-    BUILD_SHA: process.env.GITHUB_SHA ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "dev",
+    BUILD_SHA:
+      process.env.GITHUB_SHA ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "dev",
     // The day the build ran, YYYY-MM-DD in UTC: the postmark on every page's Open Graph card (lib/og.tsx).
     BUILD_DATE: process.env.BUILD_DATE ?? new Date().toISOString().slice(0, 10),
   },

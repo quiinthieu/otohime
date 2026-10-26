@@ -1,0 +1,12 @@
+npm test (complete suite exited 0)
+  type: 'test'
+  ...
+1..2340
+# tests 2354
+# suites 2
+# pass 2354
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7088.188792

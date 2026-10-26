@@ -1,0 +1,25 @@
+# Subtest: touch, blocked storage, offline pool and live reduced motion stay usable
+not ok 4 - touch, blocked storage, offline pool and live reduced motion stay usable
+  ---
+  duration_ms: 1399.307541
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/de104a54-00b2-426f-8f4d-64db79f24494-40d269b55f706c931c858e6e6cdeb7a1/work/otohime/e2e/bottle-ui.test.ts:164:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    1 !== 0
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/de104a54-00b2-426f-8f4d-64db79f24494-40d269b55f706c931c858e6e6cdeb7a1/work/otohime/e2e/bottle-ui.test.ts:176:10)
+    runNextTicks (node:internal/process/task_queues:64:5)
+    process.processImmediate (node:internal/timers:452:9)
+    process.callbackTrampoline (node:internal/async_hooks:130:17)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
