@@ -12,6 +12,8 @@ import { hemisphereFromZone, resolveSeason, SEASON_ATTR, seasonScript } from "..
 
 // Mid-January, noon UTC: high summer in Sydney, deep winter in London.
 const CLOCK = new Date("2026-01-15T12:00:00Z");
+// Mid-July: deep winter in Sydney, high summer in London.
+const JULY = new Date("2026-07-15T12:00:00Z");
 // Late on 28 February in UTC is already 1 March in Auckland: autumn there, by its own wall clock.
 const TURN = new Date("2026-02-28T23:30:00Z");
 
@@ -51,6 +53,8 @@ const CHECKS = [
   ["hemisphere Australia/Sydney", () => hemisphereFromZone("Australia/Sydney"), "south"],
   ["season Australia/Sydney", () => resolveSeason(null, CLOCK, "Australia/Sydney"), "summer"],
   ["season Europe/London", () => resolveSeason(null, CLOCK, "Europe/London"), "winter"],
+  ["season Australia/Sydney in July", () => resolveSeason(null, JULY, "Australia/Sydney"), "winter"],
+  ["season Europe/London in July", () => resolveSeason(null, JULY, "Europe/London"), "summer"],
   ["season no zone", () => resolveSeason(null, CLOCK, ""), "winter"],
   ["manual autumn in Sydney", () => resolveSeason("autumn", CLOCK, "Australia/Sydney"), "autumn"],
   ["pre-paint Australia/Sydney", () => same(seasonScript, CLOCK, "Australia/Sydney", null), "same summer"],
@@ -73,8 +77,10 @@ for (const [name, run, want] of CHECKS) {
 }
 console.log(`clock ${CLOCK.toISOString()}: ${CHECKS.length - failed}/${CHECKS.length} checks pass`);
 
-if (process.env.PW_PREFIX) failed += await layerChecks();
-else console.log("note: PW_PREFIX unset, layer checks skipped (bash scripts/probe-seasons.sh runs them)");
+if (process.env.PW_PREFIX) {
+  failed += await layerChecks();
+  failed += await dialChecks();
+} else console.log("note: PW_PREFIX unset, layer and dial checks skipped (bash scripts/probe-seasons.sh runs them)");
 process.exit(failed ? 1 : 0);
 
 // The ambient layer in a real browser, against the built app at BASE_URL. The season is chosen the way the dial
@@ -266,5 +272,283 @@ async function layerChecks() {
     await browser.close();
   }
   console.log(`layer: ${good}/${good + bad} checks pass`);
+  return bad;
+}
+
+// The season dial (components/season-dial.tsx) in a real browser. The visitor's zone and clock are the context's
+// (timezoneId, clock.setFixedTime), so the pre-paint script and the dial's Auto both read them as a visitor's
+// browser would. The one fixture is blocked storage: an init script makes every localStorage access throw, as a
+// browser with site data blocked does. The masthead controls' boxes are sampled every frame from the first.
+async function dialChecks() {
+  const { createRequire } = await import("node:module");
+  const path = await import("node:path");
+  const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
+  const { chromium } = require("playwright");
+  const BASE_URL = process.env.BASE_URL;
+  const DESKTOP = { width: 1366, height: 768 };
+  const PHONE = { width: 390, height: 844 };
+  const STOPS = ["auto", "spring", "summer", "autumn", "winter"];
+  let bad = 0;
+  let good = 0;
+  const check = (name, pass, detail = "") => {
+    if (pass) good++;
+    else bad++;
+    console.log(`${pass ? "ok  " : "FAIL"} dial: ${name}${detail ? `: ${detail}` : ""}`);
+  };
+
+  const BLOCK = `(()=>{const deny=()=>{throw new DOMException("The operation is insecure.","SecurityError")};for(const o of [window,Window.prototype])try{Object.defineProperty(o,"localStorage",{configurable:true,get:deny})}catch(e){}})()`;
+  // Each masthead control's box, sampled every frame from the first one: a new entry only when the box moves.
+  const TRACK = `window.__track={};(function loop(){var h=document.querySelector("header.masthead");if(h){var items={brand:h.firstElementChild,sound:h.querySelector(".sound-toggle"),dial:h.querySelector("[data-season-dial]"),theme:h.querySelector(".theme-toggle")};for(var k in items){var el=items[k];if(!el)continue;var r=el.getBoundingClientRect(),v=k==="brand"?Math.round(r.left)+","+Math.round(r.top):[r.left,r.top,r.width,r.height].map(Math.round).join(),t=window.__track[k]||(window.__track[k]=[]);if(t[t.length-1]!==v)t.push(v)}}requestAnimationFrame(loop)})()`;
+
+  async function open(browser, { zone = "Australia/Sydney", now = CLOCK, viewport = DESKTOP, blocked = false } = {}) {
+    const context = await browser.newContext({ viewport, timezoneId: zone });
+    await context.clock.setFixedTime(now);
+    if (blocked) await context.addInitScript({ content: BLOCK });
+    await context.addInitScript({ content: TRACK });
+    const page = await context.newPage();
+    const errors = [];
+    page.on("console", (m) => m.type() === "error" && errors.push(`console ${page.url()}: ${m.text()}`));
+    page.on("pageerror", (e) => errors.push(`pageerror ${page.url()}: ${e.message}`));
+    await goto(page);
+    return { context, page, errors };
+  }
+  // hydrated: the dial has a checked stop
+  async function goto(page, reload = false) {
+    if (reload) await page.reload({ waitUntil: "load" });
+    else await page.goto(BASE_URL + "/", { waitUntil: "load" });
+    await page.waitForFunction(() => document.querySelector("[data-season-dial] input:checked"), null, { timeout: 15000 }).catch(() => {});
+  }
+
+  const state = (page) =>
+    page.evaluate(() => {
+      const dial = document.querySelector("[data-season-dial]");
+      const radios = dial ? [...dial.querySelectorAll('input[type="radio"]')] : [];
+      let stored;
+      try {
+        stored = localStorage.getItem("season");
+      } catch {
+        stored = "blocked";
+      }
+      const active = document.activeElement;
+      return {
+        role: dial?.getAttribute("role") ?? null,
+        label: dial?.getAttribute("aria-label") ?? null,
+        stops: radios.map((r) => r.value).join(),
+        names: radios.map((r) => r.labels?.[0]?.textContent ?? "").join("|"),
+        checked: radios.filter((r) => r.checked).map((r) => r.value).join(),
+        season: document.documentElement.dataset.season,
+        stored,
+        layer: document.querySelector("svg.season-layer")?.dataset.seasonLayer,
+        focused: active instanceof HTMLInputElement && dial?.contains(active) ? active.value : null,
+      };
+    });
+  const brief = (s) => JSON.stringify({ checked: s.checked, season: s.season, stored: s.stored, layer: s.layer, focused: s.focused });
+  const layerIs = (page, season) =>
+    page.waitForFunction((s) => document.querySelector("svg.season-layer")?.dataset.seasonLayer === s, season, { timeout: 5000 }).catch(() => {});
+
+  // The focus ring: the outline on each stop's label.
+  const rings = (page) =>
+    page.evaluate(() =>
+      Object.fromEntries(
+        [...document.querySelectorAll("[data-season-dial] label")].map((l) => {
+          const s = getComputedStyle(l);
+          return [l.querySelector("input").value, s.outlineStyle === "none" ? "none" : `${s.outlineStyle} ${s.outlineWidth}`];
+        }),
+      ),
+    );
+
+  // The masthead's boxes: its height, the brand mark, each control on the right, and anything that spills.
+  const layout = (page) =>
+    page.evaluate(() => {
+      const head = document.querySelector("header.masthead");
+      const box = (el) => {
+        const r = el.getBoundingClientRect();
+        return { l: Math.round(r.left * 10) / 10, r: Math.round(r.right * 10) / 10, t: Math.round(r.top * 10) / 10, b: Math.round(r.bottom * 10) / 10, h: Math.round(r.height * 10) / 10 };
+      };
+      const brand = head.firstElementChild;
+      const controls = [...head.lastElementChild.children].filter((el) => getComputedStyle(el).display !== "none");
+      const hb = box(head);
+      const items = controls.map((el) => ({ cls: el.getAttribute("class") ?? el.nodeName, ...box(el) }));
+      const b = box(brand);
+      return {
+        head: hb.h,
+        brand: b,
+        theme: box(head.querySelector(".theme-toggle")),
+        dial: head.querySelector("[data-season-dial]") ? box(head.querySelector("[data-season-dial]")) : null,
+        // a control left of the brand mark's right edge, past the viewport, or outside the bar's height
+        clash: items.filter((i) => i.l < b.r || i.r > innerWidth || i.t < hb.t || i.b > hb.b).map((i) => i.cls),
+        overflow: document.documentElement.scrollWidth > innerWidth,
+      };
+    });
+
+  const browser = await chromium.launch();
+  try {
+    // The served HTML: one radiogroup in the masthead, between the speaker and the theme toggle, no stop checked yet.
+    {
+      const html = await (await fetch(BASE_URL + "/")).text();
+      const head = html.indexOf('<header class="masthead');
+      const at = html.indexOf('class="season-dial"');
+      const sound = html.indexOf("sound-toggle", head);
+      const theme = html.indexOf("theme-toggle", head);
+      const dial = at === -1 ? "" : html.slice(at, theme);
+      const radios = dial.match(/<input[^>]*>/g) ?? [];
+      check(
+        "served HTML: one radiogroup in the masthead between the speaker and the theme toggle",
+        head !== -1 && at > sound && sound > head && at < theme && html.indexOf('class="season-dial"', at + 1) === -1 && /role="radiogroup"/.test(html.slice(at - 60, at)),
+        JSON.stringify([head, sound, at, theme]),
+      );
+      check("served HTML: five native radios, none checked before hydration", radios.length === 5 && radios.every((r) => /type="radio"/.test(r) && /name="season-dial"/.test(r) && !/checked/.test(r)), `${radios.length} radios`);
+    }
+
+    // Zone and clock pick the season: Sydney is in the south.
+    for (const [zone, now, want] of [
+      ["Australia/Sydney", CLOCK, "summer"],
+      ["Australia/Sydney", JULY, "winter"],
+      ["Europe/London", CLOCK, "winter"],
+    ]) {
+      const { context, page, errors } = await open(browser, { zone, now });
+      const s = await state(page);
+      const tag = `${zone} at ${now.toISOString().slice(0, 10)}`;
+      check(`${tag}: Auto checked, data-season ${want}, layer ${want}${zone === "Europe/London" ? " (negative control: north at the same clock)" : ""}`, s.checked === "auto" && s.season === want && s.stored === null, brief(s));
+      if (zone === "Australia/Sydney" && now === CLOCK) {
+        check("radiogroup named Season with Auto and the four seasons, each stop named", s.role === "radiogroup" && s.label === "Season" && s.stops === STOPS.join() && s.names === "Auto, by your clock|Spring|Summer|Autumn|Winter", JSON.stringify([s.role, s.label, s.stops, s.names]));
+      }
+      check(`${tag}: no console or page errors`, errors.length === 0, errors.slice(0, 3).join(" | "));
+      await context.close();
+    }
+
+    // Keyboard: Tab reaches the checked stop with a visible ring, arrows move the pick at once, it survives a reload,
+    // and Auto clears it.
+    {
+      const { context, page, errors } = await open(browser);
+      for (let i = 0; i < 30 && (await state(page)).focused === null; i++) await page.keyboard.press("Tab");
+      let s = await state(page);
+      check("Tab lands on the checked stop (Auto)", s.focused === "auto", brief(s));
+      let r = await rings(page);
+      check("the focused stop wears a 2px ring; the others none (negative control)", r.auto === "solid 2px" && STOPS.slice(1).every((v) => r[v] === "none"), JSON.stringify(r));
+
+      await page.keyboard.press("ArrowRight");
+      s = await state(page);
+      check("ArrowRight: spring checked, focused, stored and on <html> at once", s.checked === "spring" && s.focused === "spring" && s.stored === "spring" && s.season === "spring", brief(s));
+      r = await rings(page);
+      check("the ring follows the focus to spring", r.spring === "solid 2px" && r.auto === "none", JSON.stringify(r));
+      await layerIs(page, "spring");
+      check("the ambient layer follows the dial to spring", (await state(page)).layer === "spring");
+
+      for (let i = 0; i < 3; i++) await page.keyboard.press("ArrowRight");
+      s = await state(page);
+      check("ArrowRight x3: winter", s.checked === "winter" && s.stored === "winter" && s.season === "winter", brief(s));
+
+      await goto(page, true);
+      await layerIs(page, "winter");
+      s = await state(page);
+      check("reload: winter persists (checked, stored, data-season, layer)", s.checked === "winter" && s.stored === "winter" && s.season === "winter" && s.layer === "winter", brief(s));
+
+      for (let i = 0; i < 30 && (await state(page)).focused === null; i++) await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
+      s = await state(page);
+      check("ArrowRight from winter wraps to Auto: storage cleared, the clock's summer restored", s.checked === "auto" && s.focused === "auto" && s.stored === null && s.season === "summer", brief(s));
+      await page.keyboard.press("ArrowLeft");
+      await page.keyboard.press("ArrowLeft");
+      s = await state(page);
+      check("ArrowLeft x2 from Auto: autumn", s.checked === "autumn" && s.stored === "autumn" && s.season === "autumn", brief(s));
+      await page.click('[data-season-dial] label[title^="Auto"]');
+      s = await state(page);
+      check("click Auto: storage cleared, summer restored", s.checked === "auto" && s.stored === null && s.season === "summer", brief(s));
+      await goto(page, true);
+      await layerIs(page, "summer");
+      s = await state(page);
+      check("reload after Auto: still Auto and summer", s.checked === "auto" && s.stored === null && s.season === "summer" && s.layer === "summer", brief(s));
+      check("keyboard run: no console or page errors", errors.length === 0, errors.slice(0, 3).join(" | "));
+      await context.close();
+    }
+
+    // Storage blocked: Auto, a pick holds in memory, and a reload is Auto again, all without an error.
+    {
+      const { context, page, errors } = await open(browser, { blocked: true });
+      let s = await state(page);
+      check("blocked storage: the fixture holds (localStorage throws)", s.stored === "blocked", brief(s));
+      check("blocked storage: falls back to Auto and the clock's summer", s.checked === "auto" && s.season === "summer", brief(s));
+      await page.click('[data-season-dial] label[title="Winter"]');
+      await layerIs(page, "winter");
+      s = await state(page);
+      check("blocked storage: a pick of winter holds in memory and on <html>", s.checked === "winter" && s.season === "winter" && s.layer === "winter", brief(s));
+      await goto(page, true);
+      s = await state(page);
+      check("blocked storage: reload is Auto and summer again", s.checked === "auto" && s.season === "summer", brief(s));
+      check("blocked storage: no console or page errors", errors.length === 0, errors.slice(0, 3).join(" | "));
+      await context.close();
+    }
+
+    // A phone folds the dial to one button showing the pick; a tap turns it, and the arrow keys still work.
+    {
+      const { context, page, errors } = await open(browser, { viewport: PHONE });
+      const shown = () =>
+        page.evaluate(() =>
+          [...document.querySelectorAll("[data-season-dial] label")]
+            .filter((l) => getComputedStyle(l).opacity !== "0" && getComputedStyle(l).pointerEvents !== "none")
+            .map((l) => l.querySelector("input").value)
+            .join(),
+        );
+      let s = await state(page);
+      check("390px: folded, only the pick (Auto) shows", (await shown()) === "auto" && s.checked === "auto", `${await shown()} ${brief(s)}`);
+      await page.click("[data-season-dial]");
+      s = await state(page);
+      check("390px: a tap turns Auto to spring, stored and on <html>", s.checked === "spring" && s.stored === "spring" && s.season === "spring" && (await shown()) === "spring", `${await shown()} ${brief(s)}`);
+      await page.click("[data-season-dial]");
+      s = await state(page);
+      check("390px: a second tap turns it to summer, one stop per tap", s.checked === "summer" && s.stored === "summer", brief(s));
+      for (let i = 0; i < 30 && (await state(page)).focused === null; i++) await page.keyboard.press("Tab");
+      await page.keyboard.press("ArrowRight");
+      s = await state(page);
+      check("390px: ArrowRight on the folded dial: autumn", s.checked === "autumn" && s.stored === "autumn" && s.season === "autumn" && (await shown()) === "autumn", `${await shown()} ${brief(s)}`);
+      await goto(page, true);
+      s = await state(page);
+      check("390px: reload keeps autumn", s.checked === "autumn" && s.season === "autumn" && (await shown()) === "autumn", brief(s));
+      check("390px fold: no console or page errors", errors.length === 0, errors.slice(0, 3).join(" | "));
+      await context.close();
+    }
+    // Negative control for the fold: at a laptop width a click on the pick does not turn it.
+    {
+      const { context, page } = await open(browser);
+      await page.click('[data-season-dial] label[title^="Auto"]');
+      const s = await state(page);
+      check("1366px: negative control: clicking the picked Auto keeps Auto", s.checked === "auto" && s.stored === null, brief(s));
+      await context.close();
+    }
+
+    // The masthead with the dial, at a phone and a laptop width: the bar keeps its 4rem, nothing clashes or spills,
+    // nothing in it moved from the first frame on, and taking the dial out moves neither the brand mark nor the
+    // theme toggle nor the bar's height. Negative controls: a dial nudged after load is seen to move, and a
+    // viewport-wide dial is caught as a clash.
+    for (const viewport of [PHONE, DESKTOP]) {
+      const tag = `${viewport.width}px`;
+      const { context, page, errors } = await open(browser, { viewport });
+      await page.waitForTimeout(500);
+      const a = await layout(page);
+      check(`${tag}: masthead 64px tall, dial 32px, nothing clashes or spills`, a.head === 64 && a.dial?.h === 32 && a.clash.length === 0 && !a.overflow, JSON.stringify({ head: a.head, dial: a.dial, clash: a.clash, overflow: a.overflow }));
+      // The brand mark's corner and the speaker's, dial's and theme toggle's boxes, from the first frame on. The
+      // account control streams in after the shell, left of all three, and must not move them.
+      const moves = () => page.evaluate(() => Object.fromEntries(["brand", "sound", "dial", "theme"].map((k) => [k, window.__track[k] ?? []])));
+      const track = await moves();
+      check(`${tag}: nothing in the masthead moved from the first frame on`, Object.values(track).every((t) => t.length === 1), JSON.stringify(track));
+      const nudge = await page.addStyleTag({ content: "[data-season-dial]{margin-right:12px!important}" });
+      await page.waitForTimeout(300);
+      const late = await moves();
+      check(`${tag}: negative control: a dial nudged after load is seen to move`, late.dial.length > track.dial.length, JSON.stringify(late.dial));
+      await nudge.evaluate((el) => el.remove());
+      await page.addStyleTag({ content: "[data-season-dial]{display:none!important}" });
+      const b = await layout(page);
+      check(`${tag}: without the dial the bar height, brand mark and theme toggle are where they were`, b.head === a.head && JSON.stringify(b.brand) === JSON.stringify(a.brand) && JSON.stringify(b.theme) === JSON.stringify(a.theme), JSON.stringify({ with: [a.head, a.brand.r, a.theme.l], without: [b.head, b.brand.r, b.theme.l] }));
+      await page.addStyleTag({ content: "[data-season-dial]{display:inline-flex!important;min-width:100vw!important}" });
+      const c = await layout(page);
+      check(`${tag}: negative control: a viewport-wide dial is caught`, c.clash.length > 0 || c.overflow || c.head !== 64, JSON.stringify({ clash: c.clash, overflow: c.overflow }));
+      check(`${tag}: no console or page errors`, errors.length === 0, errors.slice(0, 3).join(" | "));
+      await context.close();
+    }
+  } finally {
+    await browser.close();
+  }
+  console.log(`dial: ${good}/${good + bad} checks pass`);
   return bad;
 }

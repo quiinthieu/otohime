@@ -15,6 +15,16 @@
 # control: a visible visibilitychange does not pause). A data-season change redraws the layer. Under reduced
 # motion, from the start or by a live switch, the layer has no bits and nothing runs; a forced bit gets
 # animation none and opacity 0 (negative control: the same bit animates with motion welcome). No console errors.
+# Dial (components/season-dial.tsx), with the zone and a fixed clock set on the browser context: Australia/Sydney
+# is Auto summer in January and winter in July (negative control: Europe/London is winter in January); one
+# radiogroup of five native radios sits between the speaker and the theme toggle; Tab reaches the pick with a
+# visible ring, the arrow keys move and wrap the pick, setting data-season, localStorage "season" and the layer at
+# once, the pick survives a reload, and Auto clears storage and restores the clock's season. With localStorage
+# throwing, the dial is Auto, a pick holds in memory and a reload is Auto again, with no error. At 390px the dial
+# folds to one button a tap turns (negative control: at 1366px a click on the pick keeps it). At 390px and 1366px
+# the masthead stays 64px with nothing clashing or spilling, nothing in it moves from the first frame, and hiding the
+# dial moves neither the brand mark nor the theme toggle (negative controls: a viewport-wide dial and a nudged dial
+# are caught).
 #
 # Env: PORT (4141, or a free port when that default is busy; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1, EXPECT_SHA (checked if set).
 # Playwright is installed into a temp prefix at run time; package.json stays unchanged.

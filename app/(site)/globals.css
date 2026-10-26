@@ -1161,6 +1161,92 @@
   }
 
   /*
+   * The season dial (components/season-dial.tsx): one pill the height of an
+   * .icon-btn, five inked stops, the pick filled in ink. The radios are
+   * visually hidden, so the stop that holds focus wears the ring.
+   */
+  .season-dial {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    height: 2rem;
+    padding: 0 2px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    color: var(--ink);
+  }
+
+  .season-dial label {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .season-dial label:hover {
+    background: color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+
+  .season-dial label:has(:checked) {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .season-dial label:has(:focus-visible) {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  /*
+   * A phone's bar has no room for five stops: the dial folds into one .icon-btn
+   * showing the pick (Auto until hydration), and a tap turns it to the next
+   * (DIAL_FOLDED in components/season-dial.tsx). The other radios stay
+   * rendered, so the arrow keys still move the pick.
+   */
+  @media (max-width: 39.99rem) {
+    .season-dial {
+      position: relative;
+      width: 2rem;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    .season-dial label {
+      width: 100%;
+      height: 100%;
+    }
+
+    .season-dial label:has(:checked) {
+      background: none;
+      color: var(--ink);
+    }
+
+    .season-dial label:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .season-dial label:not(:has(:checked)) {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .season-dial:not(:has(:checked)) label:first-child {
+      position: relative;
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /*
    * Console save-point footer ("The End of the Internet"):
    * static line work in Inked, ambient loops and LCD eyes in .end-sky outside
    * the SVG filter, and plain HTML navigation beside the miniature world.

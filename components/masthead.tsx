@@ -1,5 +1,6 @@
 import { BrandMark } from "@/components/brand-mark";
 import { SignOutButton, StopImpersonatingButton } from "@/components/nav-links";
+import { SeasonDial } from "@/components/season-dial";
 import { SoundToggle } from "@/components/sound-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { site } from "@/content/site";
@@ -26,6 +27,7 @@ export function Masthead() {
             <Account />
           </Suspense>
           <SoundToggle label={site.sound.label} />
+          <SeasonDial />
           <ThemeToggle />
         </div>
       </header>
