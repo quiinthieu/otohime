@@ -1,0 +1,19 @@
+{
+  "plan_id": "pm-260",
+  "run_id": "run-8866",
+  "title": "Split Part Recovery",
+  "path": "projects/fix-for-slow-plan-pm-255-task-duration-spell-slow-pm-255-tas/plan.md",
+  "git_sha": "e08f6f58b82ee20d40dd184ed808d6ddeb895422",
+  "tasks": [],
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "missing_acceptance_criteria: proposal has no tasks"
+      }
+    ],
+    "isError": true
+  },
+  "accepted_platform_proposal": "dec-57246",
+  "accepted_platform_plan": "pm-267"
+}
