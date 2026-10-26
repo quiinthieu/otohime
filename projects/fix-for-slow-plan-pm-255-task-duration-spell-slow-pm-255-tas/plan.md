@@ -3,6 +3,38 @@
 Plan **pm-260**, current-revision planning handoff · product owner **run-8866** · 2026-10-26.
 Repository **otohime**. The original recovery outcomes remain required.
 
+## Run-8878 update: the live hold is released
+
+Read at **11:37 UTC** (run-8878, product owner, profile claude-sonnet-5-5):
+
+- **pm-255 is released.** Orchestrator decision **dec-57364** (`after_plan_released`,
+  advisory=false, 11:35:26Z) names pm-248 abandoned, `released_parts=[pm-255]`,
+  `terminal_decision_id=dec-55805`. explain_schedule now shows pm-255
+  `progress.state=startable`, queue position 1, holders `[]`; t-1557 is ready.
+  Slots were 5 of 5 used, so t-1557 has no SWE run yet: dispatch follows when a
+  slot frees, owned by the scheduler. This is the deployed pm-263/pm-267 release
+  code (f9e9cc574 lineage) acting on the existing edge, not a manual board write.
+- **The note is still empty.** dec-57364 has `terminal_note=""`: the legacy
+  abandon note lives in the later dec-55807 `decision_applied`. pm-267 **t-1594**
+  fixed that binding in **cef2b4f62** (green gate ver-3541 pass: build, test,
+  test-postgres, test-conditional-writes, test-after-plan-release 60 of 60);
+  it is `qa_pending`, not yet deployed. Parent-note provenance on pm-255 is
+  therefore **not** yet met.
+- t-1595, t-1596 (slowness anchor) and t-1597 (drills) are still pending in pm-267.
+
+Remaining originals and owners (no otohime task can discharge them):
+
+| Outcome | State | Owner / failure condition |
+| --- | --- | --- |
+| (1) release or operator_action, decider text | release observed live; decider text is t-1595 | pm-267; fails if abandon text still says it frees parts |
+| (2) unit tests | t-1594 tests green at cef2b4f62 | pm-267 QA |
+| (3) slowness anchored to execution | t-1596 | pm-267; fails if null execution start still breaches task_duration |
+| (4) pm-255 reaches startable, t-1557 dispatched | startable met; dispatch pending a slot | scheduler; fails if t-1557 has no SWE run after a slot is free |
+
+**Zero remaining otohime SWE tasks.** The local proposal is again the saved empty
+DAG; the platform will refuse it (`missing_acceptance_criteria`), as in run-8866.
+The accepted execution-complete proposal is dec-57246 on pm-267. No task waits.
+
 ## Current execution handoff
 
 [Fresh bounded observations](planning-observations-run-8866.json), captured at
