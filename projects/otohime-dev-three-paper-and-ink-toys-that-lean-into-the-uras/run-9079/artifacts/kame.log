@@ -1,0 +1,69 @@
+Starting embedded Postgres on 127.0.0.1:41283
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/6bdc97f5-cd29-4168-aec1-0bfc36cafc8b-d0165dd19a875230f8a4f23ccd89aa4f/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:40403
+TAP version 13
+# Subtest: server baseline has only an inert shell; no JS retains public links
+ok 1 - server baseline has only an inert shell; no JS retains public links
+  ---
+  duration_ms: 519.722988
+  type: 'test'
+  ...
+# Subtest: swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+ok 2 - swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist
+  ---
+  duration_ms: 947.061217
+  type: 'test'
+  ...
+# Subtest: local calendar fixture increments once per day, friendly on day three and future-safe
+ok 3 - local calendar fixture increments once per day, friendly on day three and future-safe
+  ---
+  duration_ms: 668.963888
+  type: 'test'
+  ...
+# Subtest: keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+ok 4 - keyboard hold threshold, focus loss, live reduced motion and Pocket pause
+  ---
+  duration_ms: 981.068977
+  type: 'test'
+  ...
+# Subtest: blocked storage remains usable and Save-Data imports only on explicit enable
+ok 5 - blocked storage remains usable and Save-Data imports only on explicit enable
+  ---
+  duration_ms: 578.480669
+  type: 'test'
+  ...
+# Subtest: 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+ok 6 - 390px real touch hold/cancel leaves navigation unobstructed and hidden tabs pause
+  ---
+  duration_ms: 750.530324
+  type: 'test'
+  ...
+# Subtest: real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+ok 7 - real shared Web Audio purr is sound-gated and disconnected on release and toggle-off
+  ---
+  duration_ms: 599.438272
+  type: 'test'
+  ...
+# Subtest: optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+ok 8 - optional renderer is requested only after load and an idle callback; reduced motion starts asleep
+  ---
+  duration_ms: 444.482118
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5912.802178

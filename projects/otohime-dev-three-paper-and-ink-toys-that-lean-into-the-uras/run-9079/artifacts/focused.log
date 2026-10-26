@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: camera remains idle until start and requests permission before capture/worker; denial falls back
+ok 1 - camera remains idle until start and requests permission before capture/worker; denial falls back
+  ---
+  duration_ms: 1.229419
+  type: 'test'
+  ...
+# Subtest: Off during pending permission stops late tracks without downloading or starting worker
+ok 2 - Off during pending permission stops late tracks without downloading or starting worker
+  ---
+  duration_ms: 0.333623
+  type: 'test'
+  ...
+# Subtest: late capture and late bitmaps are closed; cannot reactivate stopped generation
+ok 3 - late capture and late bitmaps are closed; cannot reactivate stopped generation
+  ---
+  duration_ms: 0.721423
+  type: 'test'
+  ...
+# Subtest: one frame in flight, 15Hz pacing, no-face neutral and recovery, worker failure releases all
+ok 4 - one frame in flight, 15Hz pacing, no-face neutral and recovery, worker failure releases all
+  ---
+  duration_ms: 0.793658
+  type: 'test'
+  ...
+# Subtest: loading and stalled inference time out and release the stream
+ok 5 - loading and stalled inference time out and release the stream
+  ---
+  duration_ms: 0.382534
+  type: 'test'
+  ...
+# Subtest: asset contract pins installed SDK, immutable model, SHA256, size and per-asset redistribution terms
+ok 6 - asset contract pins installed SDK, immutable model, SHA256, size and per-asset redistribution terms
+  ---
+  duration_ms: 48.213723
+  type: 'test'
+  ...
+# Subtest: corrupted bytes and truncated content fail closed
+ok 7 - corrupted bytes and truncated content fail closed
+  ---
+  duration_ms: 0.384324
+  type: 'test'
+  ...
+# Subtest: verification portrait is pinned, licensed and excluded from deployment
+ok 8 - verification portrait is pinned, licensed and excluded from deployment
+  ---
+  duration_ms: 0.220314
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 124.134662

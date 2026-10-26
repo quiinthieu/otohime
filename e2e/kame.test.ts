@@ -93,10 +93,17 @@ test("keyboard hold threshold, focus loss, live reduced motion and Pocket pause"
   assert.notEqual(await state(page), "pet");
   await page.clock.runFor(1); assert.equal(await state(page), "pet");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
-  // Negative control for that pause: an installed clock flows with real time until paused, so on a flowing one 50 real
-  // ms beside the same runFor(499) already pet Kame. Paused again after, as before.
+  // Prove the resumed page clock actually advanced before adding virtual time.
+  // 400ms alone is below the threshold; measured real time supplies the rest.
   await page.clock.resume();
-  await page.keyboard.down("Space"); await page.waitForTimeout(50); await page.clock.runFor(499);
+  await pet.focus();
+  assert.equal(await pet.evaluate((button) => document.activeElement === button), true);
+  await page.keyboard.down("Space");
+  const started = await page.evaluate(() => Date.now());
+  await page.waitForFunction((started) => Date.now() - started >= 150, started, { timeout: 2_000 });
+  const elapsed = await page.evaluate(() => Date.now()) - started;
+  assert.ok(elapsed >= 150 && elapsed < 5_000, `resumed page clock advanced ${elapsed}ms`);
+  await page.clock.runFor(400);
   assert.equal(await state(page), "pet", "a flowing clock adds real time to runFor");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));

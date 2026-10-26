@@ -1,0 +1,185 @@
+Starting embedded Postgres on 127.0.0.1:34011
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/data/build-worker/leases/6bdc97f5-cd29-4168-aec1-0bfc36cafc8b-d0165dd19a875230f8a4f23ccd89aa4f/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Building
+
+> otohime@0.1.0 prebuild
+> node scripts/vendor-peep-box.mjs && (node scripts/ledger-fetch.mjs || true; node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts)
+
+Peep-box vision-0.10.32-face-1: vendored
+ledger: kept content/ledger.json (no GITHUB_TOKEN)
+history:index: git (full history): 200 of 557 commits in /data/build-worker/leases/6bdc97f5-cd29-4168-aec1-0bfc36cafc8b-d0165dd19a875230f8a4f23ccd89aa4f/work/otohime/content/history.json
+
+> otohime@0.1.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 26ms
+- Cache Components enabled
+- Partial Prefetching enabled
+- Experiments (use with caution):
+  ✓ authInterrupts
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 560ms
+  Running TypeScript ...
+  Finished TypeScript in 3.0s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/205) ...
+  Generating static pages using 19 workers (51/205)
+  Generating static pages using 19 workers (102/205)
+  Generating static pages using 19 workers (153/205)
+✓ Generating static pages using 19 workers (205/205) in 1885ms
+  Finalizing page optimization ...
+
+Route (app)                             Revalidate  Expire
+┌ ◐ /                                           1d      1w
+├ ○ /_not-found
+├ ◐ /account                                    1d      1w
+├ ◐ /admin                                      1d      1w
+├ ◐ /admin/bottles                              1d      1w
+├ ◐ /admin/roles                                1d      1w
+├ ◐ /admin/users                                1d      1w
+├   /admin/users/[id]                           1d      1w
+│ └ ◐ /admin/users/[id]                         1d      1w
+├ ƒ /api/admin/bottles
+├ ƒ /api/admin/bottles/[id]
+├ ƒ /api/ask
+├ ƒ /api/auth/[...all]
+├ ƒ /api/bottles
+├ ƒ /api/bottles/suggestions
+├ ƒ /api/guestbook
+├ ƒ /api/health
+├ ƒ /api/now-playing
+├ ○ /articles
+├   /articles/[slug]
+│ ├ ◐ /articles/[slug]
+│ ├ ○ /articles/why-the-sky-is-blue
+│ ├ ○ /articles/why-we-need-a-leap-day
+│ └ ◐ [+4 more paths]
+├ ƒ /barometer
+├ ○ /capsule
+├ ◐ /dashboard                                  1d      1w
+├ ○ /design-system
+├ ◐ /desk                                       1d      1w
+├ ○ /desk/opengraph-image-blg90x
+├ ○ /elements
+├   /elements/[symbol]
+│ ├ ◐ /elements/[symbol]
+│ ├ ○ /elements/h
+│ ├ ○ /elements/he
+│ └ ◐ [+116 more paths]
+├ ○ /forgot-password
+├ ○ /icon.svg
+├ ◐ /ledger                                     1d      1w
+├ ○ /ledger/opengraph-image-1olq6y
+├ ƒ /music                                      1d      1w
+├ ○ /music/opengraph-image-rp137v
+├ ◐ /notes                                      1d      1w
+├ ○ /notes/opengraph-image-rplwnn
+├ ○ /og
+├ ○ /orrery
+├   /orrery/[body]
+│ ├ ◐ /orrery/[body]
+│ ├ ○ /orrery/sun
+│ ├ ○ /orrery/mercury
+│ └ ◐ [+12 more paths]
+├ ƒ /planisphere
+├ ◐ /play                                       1d      1w
+├ ○ /play/opengraph-image-blpn7k
+├ ◐ /postcard                                   1d      1w
+├ ƒ /postcard/image
+├ ○ /postcard/opengraph-image-1x4cxz
+├ ◐ /postcard/view                              1d      1w
+├ ◐ /projects                                   1d      1w
+├ ○ /projects/opengraph-image-1ndqzi
+├ ○ /reset-password
+├ ƒ /rotor
+├ ○ /ryugu
+├ ○ /shore
+├ ○ /sign-in
+├ ◐ /sketches                                   1d      1w
+├ ƒ /sketches/download/[filename]
+├ ○ /sketches/opengraph-image-t812bo
+├ ○ /structures
+├   /structures/[slug]
+│ ├ ◐ /structures/[slug]
+│ ├ ○ /structures/array
+│ ├ ○ /structures/linked-list
+│ └ ◐ [+6 more paths]
+├ ○ /vinyl
+├ ◐ /work                                       1d      1w
+├ ○ /work/opengraph-image-blv499
+└ ◐ /zine
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+Starting the server on http://localhost:38223
+TAP version 13
+# lifecycle control: off
+# Subtest: camera opt-in absence, denial and late permission cancellation (fake media/worker)
+ok 1 - camera opt-in absence, denial and late permission cancellation (fake media/worker)
+  ---
+  duration_ms: 2696.559843
+  type: 'test'
+  ...
+# lifecycle control: disable
+# lifecycle control: hidden
+# lifecycle control: offscreen
+# lifecycle control: pagehide
+# lifecycle control: route
+# lifecycle control: reduce
+# lifecycle control: revoke
+# Subtest: every lifecycle exit stops tracks and worker and never automatically resumes (fake inference)
+ok 2 - every lifecycle exit stops tracks and worker and never automatically resumes (fake inference)
+  ---
+  duration_ms: 15856.170348
+  type: 'test'
+  ...
+# {"delegates":["CPU","GPU"],"real":"locked CPU SDK/model/Wasm/production worker","fake":"media lifecycle only","browser":"154.0.8037.57","build":"6U9OLvp-kGpiT7TfybxOi","fixture":{"file":"astronaut.png","url":"https://raw.githubusercontent.com/scikit-image/scikit-image/c1af2bf80d2c8845bbbf06222f87e8b58a8e5c1e/skimage/data/astronaut.png","sha256":"88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5","size":791555,"license":"Public domain (NASA)","terms":"NASA photograph of Eileen Collins. No known copyright restrictions; released into the public domain. No endorsement implied. Verification only; never deployed.","licenseEvidence":"https://scikit-image.org/docs/0.19.x/api/skimage.data.html\#skimage.data.astronaut"},"workerSHA256":"abded2a89252b128933ca06c8a4c9501e128029aaf9df049f231bc7428b5337a","lockSHA256":"9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b","assets":{"version":"vision-0.10.32-face-1","package":"@mediapipe/tasks-vision","packageVersion":"0.10.32","modelVersion":"float16/1","assets":[{"file":"vision_bundle.cjs","packagePath":"vision_bundle.cjs","url":"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/vision_bundle.cjs","sha256":"43c65a77825c5d5af7456d4781a64cd15cb3e53f479ff1f923c12b5adecf2b44","size":137315,"license":"Apache-2.0","terms":"content/licenses/peep-box/NOTICE.txt"},{"file":"wasm/vision_wasm_internal.js","packagePath":"wasm/vision_wasm_internal.js","url":"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_internal.js","sha256":"6f6b86509cf9e163ea1cfec7edc8cf53732699c04781e4c21c557c1ba402310e","size":204816,"license":"Apache-2.0","terms":"content/licenses/peep-box/NOTICE.txt"},{"file":"wasm/vision_wasm_internal.wasm","packagePath":"wasm/vision_wasm_internal.wasm","url":"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_internal.wasm","sha256":"cb3ec20026a9aecc2a81a93c25630ceb5389297ddb7a5f0bd61dd09cde606b9b","size":11453626,"license":"Apache-2.0","terms":"content/licenses/peep-box/NOTICE.txt"},{"file":"wasm/vision_wasm_nosimd_internal.js","packagePath":"wasm/vision_wasm_nosimd_internal.js","url":"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_nosimd_internal.js","sha256":"9f8fc960e363f0fb2f42f7937b97ae9cf9a5630490f71031fa90caa9bb121938","size":204669,"license":"Apache-2.0","terms":"content/licenses/peep-box/NOTICE.txt"},{"file":"wasm/vision_wasm_nosimd_internal.wasm","packagePath":"wasm/vision_wasm_nosimd_internal.wasm","url":"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_nosimd_internal.wasm","sha256":"924274fcd5ac8985f6570a8573e7971b7bd2d580ba1b8f3beb0ba8f95db6347c","size":10647962,"license":"Apache-2.0","terms":"content/licenses/peep-box/NOTICE.txt"},{"file":"face_landmarker.task","url":"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task","sha256":"64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff","size":3758596,"license":"Apache-2.0","terms":"content/licenses/peep-box/NOTICE.txt"}]},"results":{"ready":{"generation":7,"type":"ready","delegate":"CPU","sdk":"0.10.32","model":"float16/1"},"output":[{"generation":7,"type":"pose","pose":{"x":92.87982881069183,"y":-44.59767937660217,"z":542.1338409821002},"count":478},{"generation":7,"type":"pose","pose":{"x":61.5559458732605,"y":-44.58466172218323,"z":543.1942704016003},"count":478},{"generation":7,"type":"pose","pose":null,"count":0},{"generation":7,"type":"pose","pose":{"x":92.87982881069183,"y":-44.59767937660217,"z":542.1338409821002},"count":478}]}}
+# Subtest: real production CPU worker: licensed pixels yield landmarks, translated pose, no-face recovery, no upload
+ok 3 - real production CPU worker: licensed pixels yield landmarks, translated pose, no-face recovery, no upload
+  ---
+  duration_ms: 5246.729725
+  type: 'test'
+  ...
+# Subtest: real worker/model failures preserve usable pointer mode (network corruption and worker error controls)
+ok 4 - real worker/model failures preserve usable pointer mode (network corruption and worker error controls)
+  ---
+  duration_ms: 5854.925154
+  type: 'test'
+  ...
+# Subtest: Off while the real model download is pending cancels the worker and late response
+ok 5 - Off while the real model download is pending cancels the worker and late response
+  ---
+  duration_ms: 2176.639668
+  type: 'test'
+  ...
+# Subtest: missing camera and initial reduced motion retain a static/pointer view without assets
+ok 6 - missing camera and initial reduced motion retain a static/pointer view without assets
+  ---
+  duration_ms: 2012.674171
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 34524.861984

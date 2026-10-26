@@ -175,7 +175,30 @@ jobs:
             npm start &
             curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
           }
-          EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh
+          status=0
+          EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee "$RUNNER_TEMP/footer-probe.log" || status=$?
+          if [ "$status" -ne 0 ]; then
+            {
+              echo "## Footer Chromium probe failure"
+              echo
+              echo "Commit $GITHUB_SHA; probe exit $status"
+              echo
+              echo '```'
+              grep -E '^(not ok -|probe:)' "$RUNNER_TEMP/footer-probe.log" | sed 's/```/ˋˋˋ/g' || true
+              echo '```'
+              echo
+              echo "### next start, last 80 lines"
+              echo
+              echo '```'
+              if [ -f "$RUNNER_TEMP/next-start.log" ]; then
+                tail -n 80 "$RUNNER_TEMP/next-start.log" | sed 's/```/ˋˋˋ/g'
+              else
+                echo "next-start.log unavailable"
+              fi
+              echo '```'
+            } >>"$GITHUB_STEP_SUMMARY"
+          fi
+          exit "$status"
 
   preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository

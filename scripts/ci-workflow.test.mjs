@@ -2,7 +2,10 @@
 // pull requests keep running on every change, and the jobs that ship run on a pinned runner.
 // Dependency-free (no npm ci needed): reads the YAML by indentation, which is all this file uses.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 
 const workflow = readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
@@ -132,4 +135,42 @@ test("verify-deploy treats exactly the push paths-ignore as report-only", () => 
   const script = readFileSync(new URL("./verify-deploy.sh", import.meta.url), "utf8");
   assert.deepEqual(list(["on", "push", "paths-ignore"]), ["projects/**", "**.md"]);
   assert.match(script, /^\s*"" \| projects\/\* \| \*\.md\) ;;$/m, "verify-deploy.sh must ignore projects/* and *.md only");
+});
+
+test("Footer CI step preserves probe failure and surfaces assertions with a bounded server tail", () => {
+  const start = lines.indexOf("      - name: Footer Chromium probe");
+  assert.ok(start >= 0);
+  const run = lines.indexOf("        run: |", start);
+  const body = [];
+  for (const line of lines.slice(run + 1)) {
+    if (line.trim() && !line.startsWith("          ")) break;
+    body.push(line.slice(10));
+  }
+  const work = mkdtempSync(join(tmpdir(), "footer-ci-"));
+  try {
+    mkdirSync(join(work, "scripts"));
+    writeFileSync(join(work, "scripts/probe-end.sh"), 'echo "ok - first"\necho "not ok - fixture assertion" >&2\necho "probe: 1 ok, 1 failed"\nexit "$PROBE_STATUS"\n');
+    writeFileSync(join(work, "next-start.log"), Array.from({ length: 100 }, (_, i) => `server ${i} \`\`\``).join("\n") + "\n");
+    const summary = join(work, "summary.md");
+    for (const [status, serverLog] of [[7, true], [7, false], [0, false]]) {
+      if (!serverLog) rmSync(join(work, "next-start.log"), { force: true });
+      writeFileSync(summary, "");
+      const result = spawnSync("/bin/bash", ["-eo", "pipefail", "-c", `curl() { return 0; }\n${body.join("\n")}`], {
+        cwd: work, encoding: "utf8", env: { ...process.env, RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "fixture-sha", BASE_URL: "http://fixture.invalid", PROBE_STATUS: String(status) },
+      });
+      assert.equal(result.status, status, result.stderr);
+      assert.match(readFileSync(join(work, "footer-probe.log"), "utf8"), /not ok - fixture assertion\nprobe: 1 ok, 1 failed/);
+      const report = readFileSync(summary, "utf8");
+      if (status === 0) assert.equal(report, "");
+      else {
+        assert.match(report, /fixture-sha/);
+        assert.match(report, /not ok - fixture assertion\nprobe: 1 ok, 1 failed/);
+        if (serverLog) {
+          assert.doesNotMatch(report, /server 19 /);
+          assert.match(report, /server 20 ˋˋˋ/);
+          assert.match(report, /server 99 ˋˋˋ/);
+        } else assert.match(report, /next-start.log unavailable/);
+      }
+    }
+  } finally { rmSync(work, { recursive: true, force: true }); }
 });

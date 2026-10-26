@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: push to main ignores report-only paths
+ok 1 - push to main ignores report-only paths
+  ---
+  duration_ms: 1.705416
+  type: 'test'
+  ...
+# Subtest: report-only pushes skip, code pushes still run
+ok 2 - report-only pushes skip, code pushes still run
+  ---
+  duration_ms: 0.371539
+  type: 'test'
+  ...
+# Subtest: pull_request has no path filter
+ok 3 - pull_request has no path filter
+  ---
+  duration_ms: 0.134911
+  type: 'test'
+  ...
+# Subtest: manual recovery runs the same checks and production gates as a main push
+ok 4 - manual recovery runs the same checks and production gates as a main push
+  ---
+  duration_ms: 0.493963
+  type: 'test'
+  ...
+# Subtest: checks and production run on ubuntu-24.04
+ok 5 - checks and production run on ubuntu-24.04
+  ---
+  duration_ms: 0.976037
+  type: 'test'
+  ...
+# Subtest: each main push and manual recovery keeps its checks outside a shared workflow queue
+ok 6 - each main push and manual recovery keeps its checks outside a shared workflow queue
+  ---
+  duration_ms: 0.363891
+  type: 'test'
+  ...
+# Subtest: PR checks and previews cancel stale jobs in separate PR-specific groups
+ok 7 - PR checks and previews cancel stale jobs in separate PR-specific groups
+  ---
+  duration_ms: 0.468289
+  type: 'test'
+  ...
+# Subtest: only production deploys serialize after successful checks, without cancelling the running deploy
+ok 8 - only production deploys serialize after successful checks, without cancelling the running deploy
+  ---
+  duration_ms: 0.348518
+  type: 'test'
+  ...
+# Subtest: production proves the deployed sha, terminal and press after the deploy
+ok 9 - production proves the deployed sha, terminal and press after the deploy
+  ---
+  duration_ms: 0.550049
+  type: 'test'
+  ...
+# Subtest: verify-deploy treats exactly the push paths-ignore as report-only
+ok 10 - verify-deploy treats exactly the push paths-ignore as report-only
+  ---
+  duration_ms: 0.612697
+  type: 'test'
+  ...
+# Subtest: Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+ok 11 - Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+  ---
+  duration_ms: 12.554495
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 70.105387
