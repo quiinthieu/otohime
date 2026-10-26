@@ -304,7 +304,7 @@ test("migrations from 0003 on are expand-only, and 0003 creates ask_usage as the
   assert.ok(later.length > 0);
   for (const { tag } of later) {
     const sql = readFileSync(join(dir, `${tag}.sql`), "utf8");
-    for (const word of [/\bDROP\b/i, /\bRENAME\b/i, /\bTRUNCATE\b/i, /\bDELETE\b/i, /\bALTER\s+COLUMN\b/i, /\bSET\s+NOT\s+NULL\b/i]) {
+    for (const word of [/\bDROP\b/i, /\bRENAME\b/i, /\bTRUNCATE\b/i, /\bDELETE\s+FROM\b/i, /\bALTER\s+COLUMN\b/i, /\bSET\s+NOT\s+NULL\b/i]) {
       assert.doesNotMatch(sql, word, `${tag} is expand-only`);
     }
   }

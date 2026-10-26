@@ -460,3 +460,7 @@ Rules that keep this safe:
 - Commits to `main` must be authored by the site owner's GitHub email, or Vercel Hobby will not deploy them.
 - Don't run `vercel --prod` from a laptop; it skips the migration.
 - Keep the Vercel Git integration disconnected, or Vercel deploys before CI migrates.
+
+### Ink guestbook storage
+
+The moderated vector API is at `GET/POST /api/guestbook`. Apply `npm run db:migrate` before serving it. It uses the existing `DATABASE_URL` and `BETTER_AUTH_SECRET`; missing database configuration disables reads and writes with 503, while a missing secret disables writes with 503. No additional provider is required. New drawings remain pending until a separate owner moderation flow approves them. Payload limits, error codes, pagination, and the trusted ingress IP assumption are in [the guestbook contract](projects/otohime-dev-ink-guestbook-wall-origami-fortune-teller-1-ink/guestbook-contract.md).

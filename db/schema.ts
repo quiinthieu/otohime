@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index, integer } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import { pgTable, text, timestamp, boolean, index, integer, jsonb, check } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -118,3 +118,33 @@ export const accountRelations = relations(account, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+// Anonymous ink stays pending until the owner reviews it. The public API selects explicit fields.
+export const guestbookEntry = pgTable("guestbook_entry", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull().default(""),
+  note: text("note").notNull().default(""),
+  v: integer("v").notNull(),
+  strokes: jsonb("strokes").notNull(),
+  durationMs: integer("duration_ms").notNull(),
+  pointCount: integer("point_count").notNull(),
+  byteCount: integer("byte_count").notNull(),
+  status: text("status").notNull().default("pending"),
+  tilt: integer("tilt").notNull(),
+  tape: integer("tape").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 }).defaultNow().notNull(),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true, precision: 6 }),
+  reviewedBy: text("reviewed_by").references(() => user.id, { onDelete: "set null" }),
+}, (table) => [
+  index("guestbook_public_idx").on(table.status, table.createdAt.desc(), table.id.desc()),
+  check("guestbook_status_check", sql`${table.status} in ('pending', 'approved', 'rejected')`),
+  check("guestbook_tilt_check", sql`${table.tilt} between -4 and 4`),
+  check("guestbook_tape_check", sql`${table.tape} between 0 and 3`),
+  check("guestbook_v_check", sql`${table.v} = 1`),
+]);
+
+export const guestbookUsage = pgTable("guestbook_usage", {
+  bucket: text("bucket").primaryKey(),
+  count: integer("count").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 }).defaultNow().notNull(),
+}, (table) => [check("guestbook_usage_count_check", sql`${table.count} >= 0`)]);

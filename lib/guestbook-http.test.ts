@@ -1,0 +1,36 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { guestbookGet, guestbookPost, type GuestbookDeps } from "./guestbook-http.ts";
+const payload = { v: 1, durationMs: 50, strokes: [{ c: 1, p: [1, 2, 3, 4], w: [2, 2], t0: 0, d: 50 }] };
+let calls = 0;
+const deps: GuestbookDeps = { env: { DATABASE_URL: "postgres://fixture", BETTER_AUTH_SECRET: "secret", BETTER_AUTH_URL: "https://example.dev" }, store: { async admit() { calls++; return { kind: "accepted", id: "id" }; }, async list() { return { entries: [], nextCursor: null }; } }, now: () => new Date("2026-10-26T12:00:00Z"), id: () => "id", decoration: () => ({ tilt: 0, tape: 1 }) };
+const post = (body: string, headers: Record<string,string> = {}) => guestbookPost(new Request("https://example.dev/api/guestbook", { method: "POST", body, headers: { "content-type": "application/json", ...headers } }), deps);
+test("HTTP rejects invalid boundaries before store", async () => {
+  calls = 0;
+  assert.equal((await post(JSON.stringify(payload), { origin: "https://foreign.dev" })).status, 403);
+  assert.equal((await post(JSON.stringify(payload), { "content-type": "text/plain" })).status, 415);
+  assert.equal((await post("{broken")).status, 400);
+  assert.equal((await post(JSON.stringify({ ...payload, note: "www.example.com" }))).status, 400);
+  assert.equal((await post(JSON.stringify(payload) + " ".repeat(8200))).status, 413);
+  assert.equal(calls, 0);
+  const response = await post(JSON.stringify(payload), { origin: "https://example.dev" });
+  assert.equal(response.status, 201);
+  assert.deepEqual(await response.json(), { id: "id", status: "pending" });
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.equal(calls, 1);
+});
+test("configuration, quota, read and invalid cursor have stable statuses", async () => {
+  const saved = deps.env;
+  deps.env = { DATABASE_URL: "db" };
+  assert.equal((await post(JSON.stringify(payload))).status, 503);
+  deps.env = saved;
+  const savedStore = deps.store;
+  deps.store = { ...savedStore, async admit() { return { kind: "hour_limit" }; } };
+  const limited = await post(JSON.stringify(payload));
+  assert.equal(limited.status, 429);
+  assert.equal(limited.headers.get("retry-after"), "3600");
+  deps.store = savedStore;
+  assert.equal((await guestbookGet(new Request("https://example.dev/api/guestbook?cursor=oops"), deps)).status, 400);
+  const read = await guestbookGet(new Request("https://example.dev/api/guestbook?status=pending"), deps);
+  assert.deepEqual(await read.json(), { entries: [], nextCursor: null });
+});
