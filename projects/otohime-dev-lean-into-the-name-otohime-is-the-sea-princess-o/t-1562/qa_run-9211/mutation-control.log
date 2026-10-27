@@ -1,0 +1,4 @@
+# mutation: ambienceSession.show() returns at once (never reopens)
+not ok 11 - back to a palace the browser kept (bfcache): the button works again, and still waits for a gesture
+# pass 15
+# fail 1

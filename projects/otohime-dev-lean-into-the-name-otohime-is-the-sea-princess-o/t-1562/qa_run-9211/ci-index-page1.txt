@@ -1,0 +1,25 @@
+currently running: Run 508 of CI. fix(ci): standardize deployment authors
+currently running: Run 507 of CI. pm-271/t-1562: Record run-9207 commits and author
+completed successfully: Run 506 of CI. pm-269/t-1648: Model hosted CLI identity refusal in deploy fixture
+completed successfully: Run 505 of CI. pm-270/t-1671: Authenticate deployment readiness and assert gate evid…
+failed: Run 504 of CI. pm-269/t-1648: Verify deployment readiness through scoped API
+failed: Run 503 of CI. pm-269/t-1648: Rebuild Bottle gates without stale Next output
+failed: Run 502 of CI. pm-269/t-1648: Require complete Bottle repository and deployment evid…
+failed: Run 501 of CI. pm-269/t-1648: Require explicit Ready state before production health
+failed: Run 500 of CI. pm-270/t-1671: Certify desk fixtures and register main-lane tests
+failed: Run 499 of CI. pm-269/t-1648: Require complete named Bottle gate evidence
+failed: Run 498 of CI. pm-257/t-1609: Persist Pocket ghost controls
+failed: Run 497 of CI. pm-269/t-1648: Scope production inspection and certify Bottle gates
+failed: Run 496 of CI. pm-269/t-1648: Contain Bottle within the footer header band
+failed: Run 495 of CI. pm-269/t-1647: Preserve CI probe failures and verify rendered headings
+failed: Run 494 of CI. pm-255/t-1632: Accept only the tier-off GET /api/ask 404 in the seaso…
+failed: Run 493 of CI. pm-259/t-1624: Expose browser gate crash diagnostics
+failed: Run 492 of CI. pm-259/t-1626: Fail closed on deployment diagnostics and identity
+completed successfully: Run 491 of CI. pm-249/t-1569: Install missing e2e dependencies before the deploy probe
+completed successfully: Run 490 of CI. pm-272/t-1566: Fix cassette provider probes on Bash 3.2
+failed: Run 489 of CI. pm-257/t-1608: Reconcile disabled ghost configuration with console ch…
+completed successfully: Run 488 of CI. pm-272/t-1566: Read optional Lanyard game presence
+failed: Run 487 of CI. pm-257/t-1608: Render idle-loaded visitor ink and bounded lifecycle
+completed successfully: Run 486 of CI. pm-270/t-1660: Annotate CI probe failures and await streamed headings
+completed successfully: Run 485 of CI. pm-257/t-1607: Reject invalid fake frames and preserve rate time
+failed: Run 484 of CI. pm-270/t-1606: Flush gate-closure child output and settle ledger phon…

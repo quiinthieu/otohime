@@ -1,0 +1,28 @@
+ok - silent: served off, aria-pressed=false
+ok - silent: a click and a key elsewhere make no AudioContext while off
+ok - enable: one running context (["running"])
+ok - enable: quiet but audible output (RMS 2.64e-3)
+ok - enable: the preference is stored on
+ok - silent: a stored on reloads as waiting (waiting)
+ok - silent: a stored on makes no context on load
+ok - enable: a click in the palace starts it (RMS 2.84e-3)
+ok - pocket: the chip shows the stored on
+ok - pocket: off from Pocket silences the palace (RMS 0.00e+0, off)
+ok - pocket: the preference is stored off
+ok - pocket: Home makes no AudioContext (no sound on other routes)
+ok - pocket: after Pocket's off a palace click brings nothing back
+ok - leave: playing again before leaving
+ok - leave: the surface makes no context of its own
+ok - bfcache: Back restored the palace from the back/forward cache (pageshow persisted=true)
+ok - leave: the context made before leaving is closed (closed)
+ok - bfcache: the restored button rereads the stored on (waiting)
+ok - bfcache: no new context before a gesture (no autoplay on return)
+ok - bfcache: a key press plays again (playing, RMS 2.84e-3)
+ok - bfcache: the restored button switches it off
+ok - no page or console errors ()
+ok - no-audio: the button says unsupported
+ok - no-audio: aria-disabled
+ok - no-audio: nothing is stored
+ok - no-audio: no page or console errors ()
+PASS
+exit=0
