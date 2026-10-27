@@ -1,0 +1,118 @@
+{
+  "httpStatus": 200,
+  "total_count": 247,
+  "page": 1,
+  "limit": 10,
+  "runs": [
+    {
+      "id": 40438060093,
+      "name": "CI",
+      "head_sha": "ea79432eb9bf23f40a18586eb91408ba1a585288",
+      "run_number": 488,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40438060093",
+      "created_at": "2026-10-27T02:22:38Z",
+      "updated_at": "2026-10-27T02:43:57Z"
+    },
+    {
+      "id": 40432734832,
+      "name": "CI",
+      "head_sha": "4c9f325055c6da83fbe12afe6ffeb5858efd2a89",
+      "run_number": 486,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40432734832",
+      "created_at": "2026-10-27T01:28:07Z",
+      "updated_at": "2026-10-27T01:48:43Z"
+    },
+    {
+      "id": 40430068517,
+      "name": "CI",
+      "head_sha": "5139d4fd9d7e4b83d53e17fb715ad576b4e38cc4",
+      "run_number": 485,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40430068517",
+      "created_at": "2026-10-27T01:01:32Z",
+      "updated_at": "2026-10-27T01:19:38Z"
+    },
+    {
+      "id": 40420670837,
+      "name": "CI",
+      "head_sha": "baec1f88e602e9ad50ebecb9827a476f939495af",
+      "run_number": 483,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40420670837",
+      "created_at": "2026-10-26T23:34:23Z",
+      "updated_at": "2026-10-26T23:55:28Z"
+    },
+    {
+      "id": 40416521718,
+      "name": "CI",
+      "head_sha": "bf4ceb0cfb25aebd2869df4262c4a9984cbebfa1",
+      "run_number": 482,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40416521718",
+      "created_at": "2026-10-26T22:59:09Z",
+      "updated_at": "2026-10-26T23:20:15Z"
+    },
+    {
+      "id": 40413292527,
+      "name": "CI",
+      "head_sha": "25400127ac6ccc51c607f37a32eb804fc5b35b06",
+      "run_number": 481,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40413292527",
+      "created_at": "2026-10-26T22:33:03Z",
+      "updated_at": "2026-10-26T22:52:17Z"
+    },
+    {
+      "id": 40398613267,
+      "name": "CI",
+      "head_sha": "98ff28cd58389fa912dbe0e4e2dde95eddb9e3c4",
+      "run_number": 478,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40398613267",
+      "created_at": "2026-10-26T20:46:25Z",
+      "updated_at": "2026-10-26T21:07:44Z"
+    },
+    {
+      "id": 40397362917,
+      "name": "CI",
+      "head_sha": "cfd9714ec9e6813e21085284443ceb46a96b5889",
+      "run_number": 477,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40397362917",
+      "created_at": "2026-10-26T20:37:55Z",
+      "updated_at": "2026-10-26T20:57:18Z"
+    },
+    {
+      "id": 40382662377,
+      "name": "CI",
+      "head_sha": "01dfe6b0e79fb286927057cccadfe29da83214cb",
+      "run_number": 473,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40382662377",
+      "created_at": "2026-10-26T18:59:28Z",
+      "updated_at": "2026-10-26T19:19:01Z"
+    },
+    {
+      "id": 40372282006,
+      "name": "CI",
+      "head_sha": "4b8278a46fe27151dd115e31e0bba2a9b18ac0cf",
+      "run_number": 470,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40372282006",
+      "created_at": "2026-10-26T17:49:53Z",
+      "updated_at": "2026-10-26T18:05:46Z"
+    }
+  ]
+}

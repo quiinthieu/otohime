@@ -1,0 +1,38 @@
+
+> otohime@0.1.0 lint
+> eslint
+
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(articles)/_components/masthead.tsx
+  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(barometer)/barometer/page.tsx
+  44:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(capsule)/capsule/page.tsx
+  26:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(elements)/elements/page.tsx
+  22:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(orrery)/_components/chrome.tsx
+  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(planisphere)/planisphere/page.tsx
+  59:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(rotor)/rotor/page.tsx
+  37:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(shore)/shore/page.tsx
+  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/app/(vinyl)/vinyl/page.tsx
+  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/f88e41f9-a566-419d-bed6-997ee03f6751-d0fb15bd9658018829b584705e67c090/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs
+  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (0 errors, 10 warnings)
+  0 errors and 9 warnings potentially fixable with the `--fix` option.
+

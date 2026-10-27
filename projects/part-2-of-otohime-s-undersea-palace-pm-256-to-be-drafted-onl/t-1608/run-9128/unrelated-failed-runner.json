@@ -1,0 +1,13 @@
+{
+  "taskId": "0d9749c4-86af-41ea-b8ff-52596bb8ba62",
+  "linesRead": 625,
+  "firstLine": "[truncated 1565 earlier log lines; use StreamTaskLogs for the full log]",
+  "tail": [
+    "",
+    "ERROR: Selected model is at capacity. Please try a different model.",
+    "ERROR: Selected model is at capacity. Please try a different model.",
+    "---",
+    "Command exited with code: 1",
+    "rescue: workspace has no local work beyond origin/main — nothing to preserve"
+  ]
+}

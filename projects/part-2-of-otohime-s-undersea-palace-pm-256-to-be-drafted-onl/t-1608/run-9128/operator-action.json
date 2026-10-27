@@ -1,0 +1,15 @@
+{
+  "escalation": "esc-427",
+  "fingerprint": "vercel-ci-access:otohime-production",
+  "owner": "Vercel/GitHub operator",
+  "taskId": "t-1608",
+  "runId": "run-9128",
+  "state": "parked until outcome",
+  "readyProbe": {
+    "type": "http",
+    "url": "https://otohime.dev/api/health",
+    "expect_status": 200,
+    "body_contains": "a958913b6a17f2cefda59882dfbdfcb0cd01e453"
+  },
+  "failureCondition": "Access recovery or rerun does not deploy the required SHA, or resumed QA fails"
+}
