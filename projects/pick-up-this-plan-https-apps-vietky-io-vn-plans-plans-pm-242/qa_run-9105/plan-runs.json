@@ -1,0 +1,46 @@
+{
+  "complete_for_current_plan_api": true,
+  "all_plan_history_complete": false,
+  "runs": [
+    {
+      "id": "run-9098",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "sha": "bf4ceb0",
+      "tm_task_id": "28222520-a6e6-46a2-bc2a-9ff51581856e",
+      "profile": "codex-sol-6-1-high",
+      "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+    },
+    {
+      "id": "run-9100",
+      "role": "verify",
+      "status": "succeeded",
+      "sha": "bf4ceb0",
+      "tm_task_id": "9c4ad5ab-2229-485f-bbbf-4920106ac0ca"
+    },
+    {
+      "id": "run-9102",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "sha": "baec1f8",
+      "tm_task_id": "ac91ee64-8dae-40c7-b9a9-eec10d7eb9ba",
+      "profile": "codex-sol-6-1-high",
+      "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+    },
+    {
+      "id": "run-9104",
+      "role": "verify",
+      "status": "succeeded",
+      "sha": "baec1f8",
+      "tm_task_id": "3a391704-efff-4b43-9b16-e8c53f895fc2"
+    },
+    {
+      "id": "run-9105",
+      "role": "quality_engineer",
+      "status": "running",
+      "tm_task_id": "1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f",
+      "profile": "codex-sol-6-1-high",
+      "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+    }
+  ]
+}

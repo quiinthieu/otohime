@@ -1,0 +1,34 @@
+{
+  "node": "v22.12.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "lockSHA256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+  "versions": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "pg": "8.23.1",
+    "playwright-core": "1.64.0",
+    "embedded-postgres": "17.10.0-beta.17"
+  },
+  "pgClient": true,
+  "drizzle": true,
+  "embedded": true,
+  "assets": {
+    "initdb": {
+      "path": "/Users/avietidol/Library/Application Support/build-worker/leases/1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f-cf3438b349b387cadb2f9d9bd79ac660/work/otohime/node_modules/@embedded-postgres/darwin-arm64/native/bin/initdb",
+      "exists": true
+    },
+    "pg_ctl": {
+      "path": "/Users/avietidol/Library/Application Support/build-worker/leases/1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f-cf3438b349b387cadb2f9d9bd79ac660/work/otohime/node_modules/@embedded-postgres/darwin-arm64/native/bin/pg_ctl",
+      "exists": true
+    },
+    "postgres": {
+      "path": "/Users/avietidol/Library/Application Support/build-worker/leases/1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f-cf3438b349b387cadb2f9d9bd79ac660/work/otohime/node_modules/@embedded-postgres/darwin-arm64/native/bin/postgres",
+      "exists": true
+    }
+  },
+  "chrome": "156.0.8078.48",
+  "rendered": "QA real browser",
+  "fetch": "function",
+  "abort": "function"
+}

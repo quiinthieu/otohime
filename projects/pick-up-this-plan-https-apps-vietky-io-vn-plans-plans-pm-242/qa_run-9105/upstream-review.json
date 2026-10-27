@@ -1,0 +1,28 @@
+{
+  "base": "baec1f88e602e9ad50ebecb9827a476f939495af",
+  "upstream": "c6d09f0067cb3f3ea77a75b723edc72918013c24",
+  "changed_paths": [
+    "e2e/ledger.test.ts",
+    "lib/gate-closure.test.ts",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/child-control.mjs",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/child-mutation.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/child-output-control.json",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/e2e-1.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/e2e-2.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/e2e-3.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/ledger-1.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/ledger-2.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/ledger-3.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/ledger-mutation-nowait.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/lint.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/source-hashes.txt",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/trace.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/run-9103/unit-tail.log",
+    "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/summary_run-9103.md"
+  ],
+  "non_project_paths": [
+    "e2e/ledger.test.ts",
+    "lib/gate-closure.test.ts"
+  ],
+  "review": "Both non-project paths are tests. Ledger adds visible/stable layout precondition and an adversarial minimum-width removal; gate-closure producer now flushes real pipe output before checking bounds. Application, lock, config and scripts remain byte-identical."
+}

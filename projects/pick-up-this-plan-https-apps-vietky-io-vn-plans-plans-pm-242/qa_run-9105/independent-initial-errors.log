@@ -1,0 +1,14 @@
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+locator.getAttribute: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-now-playing]')[22m
+
+    at /Users/avietidol/Library/Application Support/build-worker/leases/1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f-cf3438b349b387cadb2f9d9bd79ac660/work/otohime/projects/pick-up-this-plan-https-apps-vietky-io-vn-plans-plans-pm-242/qa_run-9105/independent.mjs:52:32 {
+  log: [ "  - waiting for locator('[data-now-playing]')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.12.0

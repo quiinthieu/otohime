@@ -1,0 +1,26 @@
+  duration_ms: 0.437708
+  ...
+# Subtest: the default loader resolves the repo's locked playwright-core
+ok 2358 - the default loader resolves the repo's locked playwright-core
+  ---
+  duration_ms: 6.589958
+  ...
+# Subtest: probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+ok 2359 - probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+  ---
+  duration_ms: 6084.841875
+  ...
+# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs
+ok 2360 - probe bounds: measured after the one-shot ink lands, from the visible glyphs
+  ---
+  duration_ms: 3806.323791
+  ...
+1..2360
+# tests 2374
+# suites 2
+# pass 2374
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 44365.166583

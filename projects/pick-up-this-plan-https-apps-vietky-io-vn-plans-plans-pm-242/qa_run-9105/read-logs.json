@@ -1,0 +1,127 @@
+[
+  {
+    "name": "unit",
+    "bytes": 437602,
+    "sha256": "8833b2155e5987158560f82aca38c70884698bcef3ae3a48b9b4ec0e40283d43",
+    "not_ok_lines": [],
+    "tail": [
+      "# tests 2374",
+      "# suites 2",
+      "# pass 2374",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0",
+      "# todo 0",
+      "# duration_ms 40380.695375"
+    ]
+  },
+  {
+    "name": "lint",
+    "bytes": 3181,
+    "sha256": "b429a9329a020370bc27b86bdbd25c1cee316a46a191da460faf9e3fdbc234de",
+    "not_ok_lines": [],
+    "tail": [
+      "  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')",
+      "",
+      "/Users/avietidol/Library/Application Support/build-worker/leases/1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f-cf3438b349b387cadb2f9d9bd79ac660/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars",
+      "",
+      "\u2716 10 problems (0 errors, 10 warnings)",
+      "  0 errors and 9 warnings potentially fixable with the `--fix` option.",
+      ""
+    ]
+  },
+  {
+    "name": "types",
+    "bytes": 118,
+    "sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326",
+    "not_ok_lines": [],
+    "tail": [
+      "",
+      "> otohime@0.1.0 typecheck",
+      "> next typegen && tsc --noEmit",
+      "",
+      "Generating route types...",
+      "\u2713 Types generated successfully"
+    ]
+  },
+  {
+    "name": "build",
+    "bytes": 10237,
+    "sha256": "4c9ee48761cc59b563b72dcc24e60898f9422deac5a39ba8c4df3c04d8a9b0af",
+    "not_ok_lines": [],
+    "tail": [
+      "",
+      "",
+      "\u0192 Proxy (Middleware)",
+      "",
+      "\u25cb  (Static)             prerendered as static content",
+      "\u25d0  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content",
+      "\u0192  (Dynamic)            server-rendered on demand",
+      ""
+    ]
+  },
+  {
+    "name": "ask",
+    "bytes": 582,
+    "sha256": "a204068a4e4bb1f2e3b2efe92200d9ff21cc9c86b4b728d5d7db33f5a57b4f98",
+    "not_ok_lines": [],
+    "tail": [
+      "",
+      "> otohime@0.1.0 ask:check",
+      "> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/ask-index.ts --check",
+      "",
+      "ask:check: covers Work /work (7 passages), Projects /projects (12 passages), Notes /notes (3 passages)",
+      "ask:check: model scope Work /work (7 passages), Projects /projects (12 passages), Notes /notes (3 passages)",
+      "ask:check: /Users/avietidol/Library/Application Support/build-worker/leases/1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f-cf3438b349b387cadb2f9d9bd79ac660/work/otohime/public/ask-index.json is up to date"
+    ]
+  },
+  {
+    "name": "http",
+    "bytes": 12923,
+    "sha256": "010862f711e344390ed347ebbbed095dc2f64a7bd7cebc7a1edc1a38c85e8821",
+    "not_ok_lines": [],
+    "tail": [
+      "ok - Brainz: no secret in HTTP responses",
+      "ok - Brainz: fetched every referenced client chunk",
+      "ok - Brainz: no secret in client chunks or log",
+      "ok - Brainz: mismatched selected source is caught",
+      "ok - invalid identity: off, no account selected",
+      "ok - invalid identity: no provider requests",
+      "ok - invalid identity: no public endpoint requests",
+      "walk: 278 ok, 0 failed"
+    ]
+  },
+  {
+    "name": "browser",
+    "bytes": 9681,
+    "sha256": "2c6d92e72d2e290f0b1c611fcb8e574d843543eb683523e6d7ede9f890d331b9",
+    "not_ok_lines": [],
+    "tail": [
+      "ok - no-JS: the fixture reading, not a fallback",
+      "ok - no-JS: last UTC date and stationary reels",
+      "ok - no-JS: a read stamp only when read",
+      "ok - no secret in any of the 343 responses the browser received",
+      "ok - scripts were scanned",
+      "ok - no console or page errors",
+      "probe: 53 ok, 0 failed",
+      "probe-cassette: 0 failed pass(es)"
+    ]
+  },
+  {
+    "name": "motion",
+    "bytes": 43605,
+    "sha256": "90b4927380ffb331371f96a35f2954690a676ebc7a74592d40509e2256e9ffbd",
+    "not_ok_lines": [],
+    "tail": [
+      "ok - no-JS: /planisphere's lines end drawn (stroke-dashoffset 0)",
+      "ok - no-JS: /planisphere's stars, names and markers end at their resting opacity",
+      "ok - no-JS: /rotor is not hydrated",
+      "ok - no-JS: /rotor's windows stand still, reading AAA",
+      "ok - negative: the probe stripped @view-transition from /shore's HTML and CSS",
+      "ok - negative: /projects -> /shore without the rule reveals with no transition",
+      "ok - no console errors or page errors",
+      "probe: 512 ok, 0 failed"
+    ]
+  }
+]

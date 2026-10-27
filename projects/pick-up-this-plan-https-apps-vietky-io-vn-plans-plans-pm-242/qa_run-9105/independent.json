@@ -1,0 +1,124 @@
+{
+  "browser": "156.0.8078.48",
+  "real": "locked Chrome, Next production build, fetch, React and CSS",
+  "fake": "only loopback ListenBrainz HTTP responses",
+  "scenarios": [
+    {
+      "scenario": "current",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/QA%20Identity/"
+        },
+        "play": {
+          "source": null,
+          "state": "off",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "QA cassette <independent>",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-26T23:57:36.423Z"
+      },
+      "requests": [
+        {
+          "scenario": "current",
+          "path": "/1/user/QA%20Identity/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "current",
+          "path": "/1/user/QA%20Identity/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "negativeControl": "mutated fixture state rejected; unsafe provider URL discarded"
+    },
+    {
+      "scenario": "last",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/QA%20Identity/"
+        },
+        "play": {
+          "source": null,
+          "state": "off",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "QA old last",
+          "artists": "QA artist",
+          "url": null,
+          "playing": false,
+          "listenedAt": "2000-01-01T00:00:00.000Z"
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-26T23:57:39.844Z"
+      },
+      "requests": [
+        {
+          "scenario": "last",
+          "path": "/1/user/QA%20Identity/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "last",
+          "path": "/1/user/QA%20Identity/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "negativeControl": "mutated fixture state rejected; unsafe provider URL discarded"
+    },
+    {
+      "scenario": "broken",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "quiet",
+          "profileUrl": "https://listenbrainz.org/user/QA%20Identity/"
+        },
+        "play": {
+          "source": null,
+          "state": "off",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": null,
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-26T23:57:43.390Z"
+      },
+      "requests": [
+        {
+          "scenario": "broken",
+          "path": "/1/user/QA%20Identity/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "broken",
+          "path": "/1/user/QA%20Identity/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "negativeControl": "malformed responses yield HTTP 200 quiet"
+    }
+  ]
+}

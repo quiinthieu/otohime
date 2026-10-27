@@ -1,0 +1,8 @@
+{
+  "id": "run-9105",
+  "profile": "codex-sol-6-1-high",
+  "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+  "worker": "billie-mac",
+  "account": "codex-main",
+  "tm_task_id": "1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f"
+}

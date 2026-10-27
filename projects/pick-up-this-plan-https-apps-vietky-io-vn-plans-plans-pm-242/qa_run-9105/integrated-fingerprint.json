@@ -1,0 +1,121 @@
+{
+  "head": "c6d09f0067cb3f3ea77a75b723edc72918013c24",
+  "files": [
+    {
+      "path": "package.json",
+      "sha256": "cc0c85cfdc4261781ddeea43ceaad9c743f6269e1f8a0fbbf5ecc849a96a501d",
+      "matches_delivery": true
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "matches_delivery": true
+    },
+    {
+      "path": "next.config.ts",
+      "sha256": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+      "matches_delivery": true
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "31902b54fba14db30d5a63026588796ddd27599ac76e6660e2c0b3d3ec69ba2d",
+      "matches_delivery": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+      "matches_delivery": true
+    },
+    {
+      "path": ".env.example",
+      "sha256": "908ab6e2d9a8446cf5aa869b11cb80ab59d66d3b693eea7bdc238b3c50c6e6be",
+      "matches_delivery": true
+    },
+    {
+      "path": "content/now-playing.ts",
+      "sha256": "a0593164ef11e808ad3b8a7885038628ae1fa6233f7bd35034421a78e732f4b2",
+      "matches_delivery": true
+    },
+    {
+      "path": "content/site.ts",
+      "sha256": "536ae680c226384efbdeb3cecbdfbf2a4ce74ab128e101312a8dd2e16b695b12",
+      "matches_delivery": true
+    },
+    {
+      "path": "lib/now-playing.ts",
+      "sha256": "c4e6fe8a973d40e56466dcbe8f5ae63fb369661cefeb4b19039b74b5b7f23b4f",
+      "matches_delivery": true
+    },
+    {
+      "path": "lib/now-playing-data.ts",
+      "sha256": "6d5fff0492f4f71b850b8f8ee020f691d8a29514174ff63d5117479db421d372",
+      "matches_delivery": true
+    },
+    {
+      "path": "components/cassette.tsx",
+      "sha256": "0cc3b418681feb5d4dce5db112d667ad1f2c5faffa5be5d8a8b8925c7216d5d4",
+      "matches_delivery": true
+    },
+    {
+      "path": "app/api/now-playing/route.ts",
+      "sha256": "e2e58d2903692a885bf8950da4f72aef6046cbe7339172537d2c238ae88303ce",
+      "matches_delivery": true
+    },
+    {
+      "path": "app/(site)/(app)/music/page.tsx",
+      "sha256": "a56b0e6a39b382a0424dca306a6e0a93aa47f84b817a9f2294c75bfae93cf5c9",
+      "matches_delivery": true
+    },
+    {
+      "path": "app/(site)/globals.css",
+      "sha256": "b08a5d803ab8b0c235eb9f1e68139cc54afc672573e0467059a2efd10927c6c5",
+      "matches_delivery": true
+    },
+    {
+      "path": "lib/fixtures/listenbrainz.json",
+      "sha256": "f2785a4800e33a8bb51603adc17ffa8784d72f56971a6c9df7aeb5f4a2d2034b",
+      "matches_delivery": true
+    },
+    {
+      "path": "scripts/walk-now-playing.sh",
+      "sha256": "bd416fbb60809f2130effd4422a5948fa7a449223df0862a15186f49675d4431",
+      "matches_delivery": true
+    },
+    {
+      "path": "scripts/probe-cassette.sh",
+      "sha256": "958736b6fd3bfb37a5dfa56a63343ce6013e60838b4dcc6d17917f48b556ce6e",
+      "matches_delivery": true
+    },
+    {
+      "path": "scripts/probe-cassette.mjs",
+      "sha256": "522c2a4baeeffdbae292a3b8e7573c7ea9398492b062d9917d1910fd079a1530",
+      "matches_delivery": true
+    },
+    {
+      "path": "scripts/probe-motion.sh",
+      "sha256": "cda5ca4e95d260f99bc16ad55ef0a8931812b788b53d24906708e760754a4082",
+      "matches_delivery": true
+    },
+    {
+      "path": "scripts/probe-motion.mjs",
+      "sha256": "1a7dc03f6cc65688417fa88229670a1e3f5bd11cabb984fcbf82508758aa0f19",
+      "matches_delivery": true
+    },
+    {
+      "path": "scripts/probe-checks.mjs",
+      "sha256": "69b30726c9b85939bffde8abfad7ab3cf723301c5e24ade4fee4e9df5a951b71",
+      "matches_delivery": true
+    },
+    {
+      "path": "scripts/e2e.mjs",
+      "sha256": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+      "matches_delivery": true
+    }
+  ],
+  "changed_tests": {
+    "lib/gate-closure.test.ts": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+    "e2e/ledger.test.ts": "99363dab11aa76ddd67484744007d877edcebdfd3cfbad11c589a2368e25adab"
+  },
+  "build_id": "6hno9Fq12KoykAMWjA99w",
+  "api_bundle_sha256": "26ffe1c3a588c8d80f019e86ca3aa202088d41a921beac4cbba096d3a0793130"
+}
