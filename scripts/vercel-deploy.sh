@@ -7,7 +7,7 @@
 #
 #   bash scripts/vercel-deploy.sh            # in CI, after `vercel pull` and `vercel build --prod`
 #
-# Env: GITHUB_SHA (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
+# Env: GITHUB_SHA and VERCEL_ORG_ID (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
 # diagnostic re-read), HEALTH_URL (https://otohime.dev/api/health), HEALTH_RETRIES (10) and
 # HEALTH_RETRY_DELAY (6 s; curl reads 0 as exponential backoff, so tests use 1),
 # HEALTH_ATTEMPTS (12 reads of the body, HEALTH_POLL_DELAY 10 s apart, for an alias that lags ready).
@@ -18,6 +18,7 @@
 set -euo pipefail
 
 : "${GITHUB_SHA:?GITHUB_SHA is required}"
+: "${VERCEL_ORG_ID:?VERCEL_ORG_ID is required}"
 UPLOAD_TIMEOUT=${UPLOAD_TIMEOUT:-300}
 READY_TIMEOUT=${READY_TIMEOUT:-420}
 INSPECT_TIMEOUT=${INSPECT_TIMEOUT:-60}
@@ -98,16 +99,17 @@ fi
 [ "$status" -eq 0 ] || log "upload exited $status but printed $url; waiting on it, not retrying"
 echo "deployment: $url"
 
-log "ready: vercel inspect --wait (bound ${READY_TIMEOUT}s)"
+# Standalone inspect cannot infer the linked project's team context like deploy can.
+log "ready: vercel inspect --wait with configured team scope (bound ${READY_TIMEOUT}s)"
 status=0
-bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
+bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --scope "$VERCEL_ORG_ID" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
 cat "$wait_log" >&2
 state=$(deployment_state "$wait_log")
 case "$state" in Error|Canceled|Cancelled) terminal=1 ;; *) terminal=0 ;; esac
 if [ "$status" -ne 0 ] || [ "$terminal" -eq 1 ]; then
   log "inspect --wait exited $status; reading the deployment state once more"
   state_status=0
-  bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" >"$state_log" 2>&1 || state_status=$?
+  bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" --scope "$VERCEL_ORG_ID" >"$state_log" 2>&1 || state_status=$?
   cat "$state_log" >&2
   # A failed re-read cannot erase the terminal state reported by the waiting command.
   state=${state:-$(deployment_state "$state_log")}

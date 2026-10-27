@@ -1,5 +1,11 @@
 # Ryugu Paper Toys architecture
 
+## Scoped production verification · pm-269/t-1648 · run-9171
+
+The production verifier requires `VERCEL_ORG_ID` before uploading and passes that same team scope to both the waiting `vercel inspect` and its diagnostic re-read. The existing token binding, bounded upload/readiness, fail-closed inspection and exact `ok: true`/top-level SHA JSON health check remain in force. The scope-sensitive CLI fixture rejects unscoped inspection with `User not found`, accepts scoped `Ready`, checks both command argument lists, refuses missing context before upload and proves that scoped identity errors or failed waits cannot be rescued by matching health or a successful re-read. Real CLI help construction confirms `--scope` support; real authorization remains a production CI check.
+
+Run `node scripts/verify-bottle-contracts.mjs <artifact-directory>` to execute all six Bottle contract commands plus the deployment fixture. This promotes the previous archived verifier into a reusable command. Receipts require named unskipped passing TAP cases, nonzero counts, certified real closure and 65 walk/170 Chromium assertions. Negative evidence controls reject silent success, renamed/skipped controls, missing TypeScript output, uncertified closure and omitted/failed deployment assertions. Static analysis certifies static contracts only. The landed Bottle geometry, lazy boundaries and interaction controls are preserved; current execution identities, counts and limits are recorded in [run-9171-summary.md](run-9171-summary.md).
+
 ## Bottle header containment and certification · pm-269/t-1648 · run-9159
 
 The footer reserves `3.75rem` above its grid for Bottle. The button retains its absolute bottom anchor (`inset-block-end: 100%`, `.25rem` margin), uses `.8125rem` label text and a 44px minimum height in both footer and Pocket. The reserved band contains the entire button below the footer border and dashed hairline, including 32px label text; stage/copy alignment and scene geometry remain independent of button state. The installed Next 16.4.2 lazy-loading guide was read before editing. The gesture-only client import and lazy panel/CSS remain intact.

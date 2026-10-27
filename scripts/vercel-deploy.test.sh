@@ -16,6 +16,7 @@ failures=0
 assertions=0
 SHA=0123456789abcdef0123456789abcdef01234567
 URL=https://otohime-abc123-quiinthieu.vercel.app
+export FAKE_TEAM=team_fixture
 
 # The alias changes by request count, not elapsed time: exercise retry without a soak or vendor calls.
 node --input-type=module - "$work" "$SHA" <<'SERVER' &
@@ -67,6 +68,17 @@ case "$1" in
     esac ;;
   inspect)
     case " $* " in *" --wait "*) wait=1 ;; *) wait=0 ;; esac
+    if [[ "$FAKE_INSPECT" == scope-* ]]; then
+      case " $* " in
+        *" --scope $FAKE_TEAM "*) ;;
+        *) echo 'Error: User not found' >&2; exit 1 ;;
+      esac
+      if [ "$FAKE_INSPECT:$wait" = scope-reread:1 ]; then
+        echo 'Error: request interrupted' >&2; exit 7
+      fi
+      printf '  status\t● Ready\n  url\t%s\n' "$2" >&2
+      exit 0
+    fi
     case "$FAKE_INSPECT:$wait" in
       ok:*) printf '  status\t● Ready\n  url\t%s\n' "$2" >&2 ;;
       hang:1) echo "waiting for deployment" >&2; sleep 6011 ;;
@@ -100,6 +112,7 @@ run() {
   printf '%s' "$4" >"$work/$name.health.json"
   local start=$SECONDS
   out=$(env "${attempts_env[@]}" PATH="$work/bin:$PATH" GITHUB_SHA=$SHA UPLOAD_TIMEOUT=2 READY_TIMEOUT=2 INSPECT_TIMEOUT=5 \
+    VERCEL_ORG_ID="${FIXTURE_TEAM-$FAKE_TEAM}" \
     HEALTH_URL="$health_base/$name.health.json" HEALTH_RETRIES=0 HEALTH_RETRY_DELAY=1 HEALTH_POLL_DELAY=0 \
     bash "$here/vercel-deploy.sh" 2>&1)
   code=$?
@@ -110,6 +123,22 @@ run() {
 
 healthy="{\"ok\":true,\"sha\":\"$SHA\"}"
 old='{"ok":true,"sha":"ae4607d000000000000000000000000000000000"}'
+
+# Model standalone inspect's missing team context independently of the deploy script.
+export CALLS="$work/unscoped.calls" FAKE_INSPECT=scope-required
+out=$(PATH="$work/bin:$PATH" npx vercel@64 inspect "$URL" 2>&1)
+code=$?
+check "standalone inspect without scope reproduces User not found" '[ "$code" -ne 0 ] && [[ "$out" == *"Error: User not found"* ]]'
+run scoped-inspect ok scope-required "$healthy"
+check "explicit team scope permits Ready inspect and exact-sha health" '[ "$code" -eq 0 ] && [[ "$out" == *"Ready"* ]] && [[ "$out" == *"health: serving $SHA"* ]]'
+check "waiting inspect receives the configured team scope" 'grep -qx "inspect $URL --scope $FAKE_TEAM --wait --timeout 6m --logs" "$CALLS"'
+run scoped-reread ok scope-reread "$healthy"
+check "diagnostic re-read receives the same team scope" 'grep -qx "inspect $URL --scope $FAKE_TEAM" "$CALLS" && [[ "$out" == *"Ready"* ]] && [[ "$out" != *"User not found"* ]]'
+check "scoped Ready re-read cannot rescue failed waiting inspect" '[ "$code" -ne 0 ] && [[ "$out" == *"inspect --wait output (exit 7,"* ]] && ! grep -q "^/scoped-reread.health.json$" "$work/health.calls"'
+FIXTURE_TEAM= run missing-team ok scope-required "$healthy"
+check "missing team is refused before upload" '[ "$code" -ne 0 ] && [ ! -s "$CALLS" ] && [[ "$out" == *"VERCEL_ORG_ID is required"* ]]'
+run scoped-identity-error ok user-not-found "$healthy"
+check "User not found with explicit scope still fails closed before health" '[ "$code" -ne 0 ] && [[ "$out" == *"User not found"* ]] && ! grep -q "^/scoped-identity-error.health.json$" "$work/health.calls"'
 
 # (a) Hanging upload: fails inside UPLOAD_TIMEOUT plus the kill grace, never a second deployment.
 run hang-upload hang ok "$healthy"
@@ -184,7 +213,7 @@ check "production default allows the fifth-read transition without another uploa
 run healthy ok ok "$healthy"
 check "healthy deploy exits 0" '[ "$code" -eq 0 ]'
 check "healthy deploy uploads with --no-wait" 'grep -qx "deploy --prebuilt --prod --archive=tgz --no-wait" "$CALLS"'
-check "healthy deploy waits on the printed URL" 'grep -qx "inspect $URL --wait --timeout 6m --logs" "$CALLS"'
+check "healthy deploy waits on the printed URL in its team scope" 'grep -qx "inspect $URL --scope $FAKE_TEAM --wait --timeout 6m --logs" "$CALLS"'
 check "healthy deploy prints no ::error" '! grep -q "::error" <<<"$out"'
 
 # (d) Health body reports another sha: fails after its attempts.
@@ -205,7 +234,7 @@ kill "$health_pid"
 wait "$health_pid" 2>/dev/null
 health_pid=""
 export FAKE_INSPECT=ok
-out=$(PATH="$work/bin:$PATH" GITHUB_SHA=$SHA HEALTH_URL="$health_base/missing.json" HEALTH_RETRIES=0 \
+out=$(PATH="$work/bin:$PATH" GITHUB_SHA=$SHA VERCEL_ORG_ID=$FAKE_TEAM HEALTH_URL="$health_base/missing.json" HEALTH_RETRIES=0 \
   HEALTH_RETRY_DELAY=1 HEALTH_ATTEMPTS=1 bash "$here/vercel-deploy.sh" 2>&1)
 code=$?
 check "ready inspect plus unreachable health fails with a public diagnostic" '[ "$code" -ne 0 ] && [[ "$out" == *"::error title=vercel deploy::health check"* ]] && [[ "$out" == *"last body, first 1000 bytes: none"* ]]'
