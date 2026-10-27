@@ -1,0 +1,477 @@
+{
+  "complete": false,
+  "pageSize": 10,
+  "offsets": [
+    0,
+    10
+  ],
+  "states": {
+    "FAILED": {
+      "total": 1136,
+      "read": 20,
+      "rows": [
+        {
+          "id": "395a6b11-7cce-4e40-ba52-807fc549944b",
+          "title": "Colab T4 session",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "71e8e810-0954-45d4-a2e6-117a56874af7",
+          "title": "Colab T4 session",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "4c91b23d-c87e-404a-beb5-d252794fb587",
+          "title": "Colab T4 session",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "048d59f7-e4ee-409f-8fb7-048fca2cc6ea",
+          "title": "forge animate animate run 0772a433 attempt 1",
+          "status": "FAILED",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4c20e3f0-899c-4849-b528-d3534f067600",
+          "title": "forge animate animate run b955dace attempt 1",
+          "status": "FAILED",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "099b4019-bbdf-4b54-9033-ded8ea2deed2",
+          "title": "forge animate animate run a7cbb7ba attempt 1",
+          "status": "FAILED",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dbd11b30-c057-42ab-ae29-35ec993e970f",
+          "title": "forge animate animate run 237912e7 attempt 1",
+          "status": "FAILED",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "49f5d126-f235-4fe7-92fb-9ea6ccb0e698",
+          "title": "Colab L4 session",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+          "title": "Desk swipe observes its preconditions",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dfd4968b-2d12-4210-8f59-31ed282e5d2a",
+          "title": "self_update avietidol-mac-mini",
+          "status": "FAILED",
+          "error": "version_mismatch: published 8d968e279dd9, asked for 59ad87b456df"
+        },
+        {
+          "id": "980c6385-7c10-4d4b-a913-43e9c9333678",
+          "title": "Desk swipe observes its preconditions",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4088d29ec0d9 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "30fd1015-8571-485d-a7b3-c88008526b4b",
+          "title": "Batched delivery P4: dependency readiness and implemented tasks",
+          "status": "FAILED",
+          "repo": "mono-v2",
+          "error": "agent_timeout"
+        },
+        {
+          "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+          "title": "product_owner pm-277",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+          "title": "Complete safe Kame fetch on the landed paper registry",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0e2bbe863f6e is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+          "title": "Add the Pocket print-run switch and commands",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+          "title": "Desk swipe observes its preconditions",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+          "title": "Build the pointer and gyro Peep-box",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+          "title": "Complete safe Kame fetch on the landed paper registry",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+          "title": "Enter Ryugu-jo",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+          "title": "Build the pointer and gyro Peep-box",
+          "status": "FAILED",
+          "repo": "otohime",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 85b0eb1ae9c6 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    "COMPLETED": {
+      "total": 6772,
+      "read": 20,
+      "rows": [
+        {
+          "id": "49d6293a-4522-484b-bd14-23bdf4148e54",
+          "title": "linego forge run 1247db7b-2b96-4d4b-ae87-c960406e4377",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8ce42448-60e4-4bdb-9386-eb21707867d9",
+          "title": "linego forge run fd677428-621a-4afb-9b12-b6b793090458",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e762c2bf-5d29-4304-9633-d4a76f5f2bb5",
+          "title": "review run-a5344600d0ab-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "47c38361-145b-4334-9aa6-fe38adc1e09d",
+          "title": "review run-9adf36641679-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b3cb17b3-772f-475f-98e9-20a4163747d1",
+          "title": "review run-93f9fd79d70e-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7bdbb381-7c9c-44bf-b686-5c4eda35b4cd",
+          "title": "review run-8164c0e5553d-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "469c2422-8cbe-4b14-b715-97140b1d5a39",
+          "title": "review run-7dff77073617-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7190ceac-a966-402d-a777-81e4b8b43ed9",
+          "title": "review run-a5344600d0ab-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "42ed3380-90f7-4272-ba4e-d208543da975",
+          "title": "review run-9adf36641679-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2d95d928-1fd7-4a55-b7e5-6ab220009454",
+          "title": "review run-93f9fd79d70e-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ce2c16c1-2e66-47c2-ace8-4f721ef681bf",
+          "title": "review run-8164c0e5553d-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "25b4ae2a-5e9d-42ea-b5f1-21719cac97df",
+          "title": "review run-7dff77073617-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "6b8466a0-df56-4310-93d5-55e6bacecaaf",
+          "title": "fleet canary viet-mac",
+          "status": "COMPLETED",
+          "repo": "otohime"
+        },
+        {
+          "id": "e6b898ec-afc3-4d0c-91a1-15c39470ec7e",
+          "title": "review run-a5344600d0ab-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2448326b-a615-48f1-ba98-4461a94230f9",
+          "title": "review run-9adf36641679-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "12b6fa1a-64de-4001-9e1c-a0bfb411f67b",
+          "title": "review run-93f9fd79d70e-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d7ded957-6be4-492f-9a9c-6d8d8effb9c3",
+          "title": "review run-8164c0e5553d-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "6e60dcb6-840b-4ed8-b28e-66eceba10916",
+          "title": "review run-7dff77073617-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f26c2e23-bf4d-4410-84f0-6a512c7dac5e",
+          "title": "linego forge run 437d8df8-a669-43d0-91b0-e79441ba4bd8",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "813a4859-8ca8-405e-8c7b-04fa731b25bc",
+          "title": "linego forge run 1f3dff51-5a94-457d-b150-149575c90992",
+          "status": "COMPLETED",
+          "repo": "mono-v2",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    "RUNNING": {
+      "total": 12,
+      "read": 12,
+      "rows": [
+        {
+          "id": "30af0ba3-609a-4bc3-85e4-84f725c1ff90",
+          "title": "review run-a5344600d0ab-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "RUNNING",
+          "repo": "mono-v2"
+        },
+        {
+          "id": "b817634b-f2c4-4af2-bc92-f389d66b8dba",
+          "title": "review run-9adf36641679-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "RUNNING",
+          "repo": "mono-v2"
+        },
+        {
+          "id": "5c04af5e-6707-492f-b5cd-ff7f5f3b5ece",
+          "title": "review run-93f9fd79d70e-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "RUNNING",
+          "repo": "mono-v2"
+        },
+        {
+          "id": "34b1972c-2044-4edd-803d-ff1b6ba17fe1",
+          "title": "review run-8164c0e5553d-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "RUNNING",
+          "repo": "mono-v2"
+        },
+        {
+          "id": "197985a4-9f25-4769-9114-75422e2eda39",
+          "title": "review run-7dff77073617-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "RUNNING",
+          "repo": "mono-v2"
+        },
+        {
+          "id": "73c928b5-e2c3-4f51-9eeb-157aa766f5d5",
+          "title": "Build bounded ghost rooms and Worker adapter",
+          "status": "RUNNING",
+          "repo": "otohime"
+        },
+        {
+          "id": "fcf04e5c-7587-414c-a27f-adab4dd0d590",
+          "title": "forge animate animate run 281631c3 attempt 1",
+          "status": "RUNNING"
+        },
+        {
+          "id": "f952e719-909a-4108-b784-38c78fee9c49",
+          "title": "product_owner pm-270",
+          "status": "RUNNING",
+          "repo": "otohime"
+        },
+        {
+          "id": "c0911a51-3c85-49c1-8ee5-01b6626a1fe2",
+          "title": "forge rig unirig run e7d7f83c attempt 1",
+          "status": "RUNNING"
+        },
+        {
+          "id": "0ff7970d-bb27-47c1-8337-d4d45cb3044a",
+          "title": "Colab L4 session",
+          "status": "RUNNING"
+        },
+        {
+          "id": "7e3c8ba6-7fb6-4af7-95f0-998bb05d4e9f",
+          "title": "Read optional games from Lanyard",
+          "status": "RUNNING",
+          "repo": "otohime"
+        },
+        {
+          "id": "bf936211-7d6f-49e7-b1c1-a081b827f5e1",
+          "title": "Batched delivery P7: plan-wide final QA owns completion and repair",
+          "status": "RUNNING",
+          "repo": "mono-v2"
+        }
+      ]
+    },
+    "PENDING": {
+      "total": 1,
+      "read": 1,
+      "rows": [
+        {
+          "id": "bc894a90-0610-4bf0-ba66-b08ddb65049c",
+          "title": "forge animate animate run 2a8126f5 attempt 1",
+          "status": "PENDING"
+        }
+      ]
+    }
+  },
+  "priorRuns": [
+    {
+      "run": "run-8976",
+      "task": "97f80709-45b8-4fb3-9eec-172d2f7f0dda",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "reports": [
+        {
+          "id": "rep-5268",
+          "kind": "summary",
+          "git_sha": "ae6573a7302f7dcd778d405a112e3cf7dad9205a"
+        }
+      ],
+      "ingestion": "plan-manager persisted succeeded run and reports",
+      "logsRead": 49
+    },
+    {
+      "run": "run-9008",
+      "task": "5571b04a-2bbe-418f-a23f-abc4d67b1f54",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "reports": [
+        {
+          "id": "rep-5282",
+          "kind": "fix_plan",
+          "git_sha": "276ce78f9bd21b4e7a46cf2159b7addca33d6b9d"
+        },
+        {
+          "id": "rep-5281",
+          "kind": "qa_report",
+          "git_sha": "276ce78f9bd21b4e7a46cf2159b7addca33d6b9d"
+        }
+      ],
+      "ingestion": "plan-manager persisted succeeded run and reports",
+      "logsRead": 0
+    }
+  ],
+  "failureTail": {
+    "task": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+    "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main",
+    "linesRead": 446,
+    "complete": false,
+    "scope": "Unrelated Desk transport; not evidence of ghost executable failure",
+    "tail": [
+      "To github.com:quiinthieu/otohime.git",
+      " * [new branch]      HEAD -> task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3",
+      "rescue: pushed working state to branch task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3",
+      "=== rescue: done ==="
+    ]
+  }
+}

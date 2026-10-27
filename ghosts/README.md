@@ -45,6 +45,10 @@ These are defined once in `protocol.ts` and enforced by `room.ts`.
 | Rate | 15-token bucket, refills 15/s, per connection | Every incoming frame spends a token, invalid ones included. With no token left, the frame is dropped unread and nothing fans out. |
 | Invalid frames | 5 | Binary, oversize and malformed frames count. The fifth closes 1008. Valid frames don't reset the count. |
 
+The fake rejects any RSV1/2/3 wire bit with 1002 before reading the payload; no WebSocket extensions are
+negotiated. The same masked-wire cases run against workerd. Bucket timestamps retain their high-water mark
+across clock rollback and attachment restoration: time recovery alone never grants tokens.
+
 ## Admission
 
 The Worker decides admission before it allocates a Durable Object, in this order:

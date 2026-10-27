@@ -150,8 +150,9 @@ export class Room {
   }
 
   private refill(member: MemberState): void {
-    const now = this.now();
-    const elapsed = Math.max(0, now - member.at);
+    // Keep the high-water mark through clock rollback and attachment restoration.
+    const now = Math.max(member.at, this.now());
+    const elapsed = now - member.at;
     member.tokens = Math.min(RATE_CAPACITY, member.tokens + (elapsed * RATE_REFILL_PER_SECOND) / 1000);
     member.at = now;
   }

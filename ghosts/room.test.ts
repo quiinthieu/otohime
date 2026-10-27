@@ -211,3 +211,29 @@ test("a clock that goes backwards never mints tokens", () => {
   time.advance(-5_000);
   assert.equal(room.receive("a", move(0.1, 0.1)).outcome, "rate");
 });
+
+for (const reconstruct of [false, true]) {
+  test(`rollback and recovery preserve the bucket time high-water mark${reconstruct ? " across attachment restoration" : ""}`, () => {
+    const time = clock();
+    let room = new Room(time);
+    room.join("a");
+    for (let i = 0; i < RATE_CAPACITY; i++) room.receive("a", move(0.1, 0.1));
+    const drained = room.snapshot("a")!;
+    time.advance(-5_000);
+    assert.equal(room.receive("a", move(0.1, 0.1)).outcome, "rate");
+    const attachment = readMemberState(JSON.parse(JSON.stringify(room.snapshot("a"))))!;
+    assert.equal(attachment.at, drained.at, "a rolled-back attempt must retain the prior timestamp");
+    assert.deepEqual(Object.keys(attachment).sort(), ["at", "id", "invalid", "tokens"]);
+    if (reconstruct) {
+      room = new Room(time);
+      assert.equal(room.restore(attachment), true);
+    }
+    time.advance(5_000);
+    assert.equal(room.receive("a", move(0.1, 0.1)).outcome, "rate", "recovery to T refills nothing");
+    time.advance(66);
+    assert.equal(room.receive("a", move(0.1, 0.1)).outcome, "rate", "T+66 ms is still short");
+    time.advance(1);
+    assert.equal(room.receive("a", move(0.1, 0.1)).outcome, "accepted", "T+67 ms refills one token");
+    assert.equal(room.receive("a", move(0.1, 0.1)).outcome, "rate", "only one token was refilled");
+  });
+}

@@ -61,7 +61,8 @@ function closePayload(code, reason = "") {
 
 /**
  * Incremental frame reader. Returns complete frames and keeps the remainder;
- * a frame whose declared payload exceeds maxPayload yields {tooBig:true}.
+ * Reserved bits yield {reserved:true} immediately; an excessive declared
+ * payload yields {tooBig:true}. Neither fault buffers the payload.
  */
 function makeReader(maxPayload) {
   let buffer = Buffer.alloc(0);
@@ -70,6 +71,12 @@ function makeReader(maxPayload) {
     const frames = [];
     for (;;) {
       if (buffer.length < 2) break;
+      // No extensions are negotiated. Reject before reading lengths, masks or payloads.
+      if ((buffer[0] & 0x70) !== 0) {
+        frames.push({ reserved: true });
+        buffer = Buffer.alloc(0);
+        break;
+      }
       const fin = (buffer[0] & 0x80) !== 0;
       const opcode = buffer[0] & 0x0f;
       const masked = (buffer[1] & 0x80) !== 0;
@@ -244,6 +251,11 @@ export async function startGhostsFake(options = {}) {
     socket.on("data", (chunk) => {
       for (const frame of read(chunk)) {
         if (conn.left) return;
+        if (frame.reserved) {
+          leave(conn, "reserved bits");
+          sendClose(conn, 1002, "reserved bits");
+          return;
+        }
         if (frame.tooBig) {
           log({ kind: "frame", room: conn.room, conn: conn.n, outcome: "too-big" });
           leave(conn, "too-big");
@@ -453,6 +465,10 @@ export function rawConnect(base, { path = "/ghosts?room=%2F", origin, headers = 
       sendBinary(bytes) {
         socket.write(encodeFrame(0x2, Buffer.from(bytes), true));
       },
+      /** Wire-level negative cases, without the client's frame encoder. */
+      sendRaw(bytes) {
+        socket.write(bytes);
+      },
       /** Several text frames in one TCP write: a true burst. */
       burst(texts) {
         socket.write(Buffer.concat(texts.map((text) => encodeFrame(0x1, Buffer.from(text), true))));
@@ -658,6 +674,28 @@ export const CONTRACT_CASES = [
       await b.close();
     },
   },
+  ...[0x40, 0x20, 0x10].map((reserved, index) => ({
+    name: `RSV${index + 1} without a negotiated extension closes 1002 without fan-out`,
+    async run(target) {
+      const a = await open(target);
+      const b = await open(target);
+      try {
+        a.sendText(move(0.2, 0.4));
+        await b.next((m) => m.t === "m" && m.id === a.id, { label: "ordinary move before invalid wire frame" });
+        const mark = b.messages.length;
+        // Handcraft a masked frame independently of encodeFrame. No extension was negotiated.
+        const payload = Buffer.from(move(0.3, 0.6));
+        const mask = Buffer.from([1, 2, 3, 4]);
+        const masked = Buffer.from(payload.map((byte, i) => byte ^ mask[i % 4]));
+        a.sendRaw(Buffer.concat([Buffer.from([0x81 | reserved, 0x80 | payload.length]), mask, masked]));
+        await b.next((m) => m.t === "bye" && m.id === a.id, { from: mark, label: "protocol rejection releases member" });
+        assert.equal((await a.waitClosed()).code, 1002);
+        assert.equal(b.messages.slice(mark).some((m) => m.t === "m" && m.id === a.id), false, "invalid frame never fans out");
+      } finally {
+        await closeAll([a, b]);
+      }
+    },
+  })),
   {
     name: `a burst is cut at the ${RATE_CAPACITY}-token bucket without fan-out of the excess`,
     async run(target) {

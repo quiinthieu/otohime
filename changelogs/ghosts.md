@@ -1,5 +1,11 @@
 # Ink ghosts changelog
 
+## 2026-10-27: reject reserved wire bits and preserve rate time (pm-257/t-1607)
+
+- Reject RSV1/2/3 in the fake at the frame header with 1002, before buffering payloads or entering the room.
+- Preserve the token bucket timestamp high-water mark during clock rollback, including restored attachments.
+- Add shared fake/workerd wire regressions, a partial-header case, and rollback/recovery tests with restoration.
+
 ## 2026-10-26: bounded ghost rooms and Worker adapter (pm-257/t-1607)
 
 - Added `ghosts/protocol.ts`, `ghosts/policy.ts` and `ghosts/room.ts`: the wire protocol, upgrade admission and the
