@@ -2,7 +2,7 @@
 // pull requests keep running on every change, and the jobs that ship run on a pinned runner.
 // Dependency-free (no npm ci needed): reads the YAML by indentation, which is all this file uses.
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -137,6 +137,45 @@ test("verify-deploy treats exactly the push paths-ignore as report-only", () => 
   assert.match(script, /^\s*"" \| projects\/\* \| \*\.md\) ;;$/m, "verify-deploy.sh must ignore projects/* and *.md only");
 });
 
+test("checks uses measured 25m job and 12m E2E budgets", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "25");
+  assert.match(workflow, /40420670837: 1039s total \(E2E 501s, camera 79s,\n\s*# signed-in motion 171s, footer probe 71s\)/);
+  assert.match(steps("checks"), /- name: E2E against next start\n\s*timeout-minutes: 12/);
+});
+
+test("all four non-TAP probe steps annotate the captured pipefail status", () => {
+  const checks = steps("checks");
+  for (const [step, command] of [
+    ["Real CPU camera and privacy verifier", "node scripts/verify-peep-box-camera.mjs"],
+    ["Motion probe, signed in", "bash scripts/probe-motion-signed-in.sh"],
+    ["Footer walk", 'EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh'],
+    ["Footer Chromium probe", 'EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh'],
+  ]) {
+    const start = checks.indexOf(`- name: ${step}\n`);
+    assert.ok(start >= 0, step);
+    const end = checks.indexOf("      - ", start + 1);
+    const body = checks.slice(start, end < 0 ? undefined : end);
+    assert.ok(body.includes(`${command} 2>&1 | tee `), body);
+    assert.match(body, /\| tee [^\n]+ \|\| status=\$\?/);
+    assert.ok(body.includes(`node scripts/ci-probe-annotate.mjs "${step}" "$status"`), body);
+  }
+});
+
+test("signed-in motion normalizes unset, empty and long TMPDIR before mktemp", () => {
+  const script = readFileSync(new URL("./probe-motion-signed-in.sh", import.meta.url), "utf8");
+  const normalization = script.match(/export TMPDIR="\$\{TMPDIR:-\/tmp\}"\nif \[ "\$\{#TMPDIR\}" -gt 48 \]; then\n  export TMPDIR="\/tmp"\nfi/)?.[0];
+  assert.ok(normalization, "same normalization as probe-end.sh");
+  assert.ok(script.indexOf(normalization) < script.indexOf('WORK="$(mktemp'));
+  for (const [value, expected] of [[undefined, "/tmp"], ["", "/tmp"], ["/" + "x".repeat(48), "/tmp"], ["/" + "x".repeat(47), "/" + "x".repeat(47)]]) {
+    const env = { ...process.env };
+    if (value === undefined) delete env.TMPDIR;
+    else env.TMPDIR = value;
+    const result = spawnSync("bash", ["-uc", `${normalization}\nprintf '%s' "$TMPDIR"`], { env, encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout, expected);
+  }
+});
+
 test("Footer CI step preserves probe failure and surfaces assertions with a bounded server tail", () => {
   const start = lines.indexOf("      - name: Footer Chromium probe");
   assert.ok(start >= 0);
@@ -149,6 +188,9 @@ test("Footer CI step preserves probe failure and surfaces assertions with a boun
   const work = mkdtempSync(join(tmpdir(), "footer-ci-"));
   try {
     mkdirSync(join(work, "scripts"));
+    for (const file of ["ci-probe-annotate.mjs", "e2e-annotate.mjs"]) {
+      copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
+    }
     writeFileSync(join(work, "scripts/probe-end.sh"), 'echo "ok - first"\necho "not ok - fixture assertion" >&2\necho "probe: 1 ok, 1 failed"\nexit "$PROBE_STATUS"\n');
     writeFileSync(join(work, "next-start.log"), Array.from({ length: 100 }, (_, i) => `server ${i} \`\`\``).join("\n") + "\n");
     const summary = join(work, "summary.md");
@@ -163,14 +205,19 @@ test("Footer CI step preserves probe failure and surfaces assertions with a boun
       const report = readFileSync(summary, "utf8");
       if (status === 0) assert.equal(report, "");
       else {
+        assert.match(result.stdout, /::error title=Footer Chromium probe::.*not ok - fixture assertion%0Aprobe: 1 ok, 1 failed/);
         assert.match(report, /fixture-sha/);
         assert.match(report, /not ok - fixture assertion\nprobe: 1 ok, 1 failed/);
         if (serverLog) {
           assert.doesNotMatch(report, /server 19 /);
           assert.match(report, /server 20 ˋˋˋ/);
           assert.match(report, /server 99 ˋˋˋ/);
-        } else assert.match(report, /next-start.log unavailable/);
+        } else {
+          assert.match(report, /next-start.log unavailable/);
+          assert.match(result.stdout, /next-start.log unavailable/);
+        }
       }
+      if (status === 0) assert.doesNotMatch(result.stdout, /::error/);
     }
   } finally { rmSync(work, { recursive: true, force: true }); }
 });

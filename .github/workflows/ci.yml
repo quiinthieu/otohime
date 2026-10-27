@@ -38,13 +38,11 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
     runs-on: ubuntu-24.04
-    # A green job takes 10-11 min (research_run-8877: E2E 230-300 s, signed-in motion probe 171-180 s, footer
-    # probe 55 s, the rest npm ci, lint, typecheck, tests and build). Run 40307460821 hit the old 20 min only
-    # because the motion probe spent 14 min in its network installers (npm i playwright, playwright install
-    # --with-deps); the probes now drive the runner's Chrome with the locked playwright-core and install
-    # nothing in CI, so 20 min is about 9 min of headroom. Each browser probe step also has its own 8-minute
-    # bound, so a stall fails that step by name instead of cancelling the whole job.
-    timeout-minutes: 20
+    # Measured green run 40420670837: 1039s total (E2E 501s, camera 79s,
+    # signed-in motion 171s, footer probe 71s). 25m leaves 461s for cold-cache
+    # variation; E2E is bounded at 12m and browser probes keep their own caps.
+    # Motion's paced auth requests explain its 171s; no runtime browser installers in CI.
+    timeout-minutes: 25
     services:
       postgres:
         image: postgres:17-alpine
@@ -124,11 +122,15 @@ jobs:
       - run: npm run build
       - name: Real CPU camera and privacy verifier
         timeout-minutes: 5
-        run: node scripts/verify-peep-box-camera.mjs
+        run: |
+          status=0
+          node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
+          node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log"
       - run: npm run db:migrate
       # The job log needs a token to read: a failed test is also an annotation and a step summary section
       # (scripts/e2e-annotate.mjs), and a red step adds the server's last lines there, with what ran.
       - name: E2E against next start
+        timeout-minutes: 12
         run: |
           npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
           curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
@@ -156,49 +158,32 @@ jobs:
         run: |
           # The server the e2e step left running; start one again if it has gone.
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
-            npm start &
+            npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
             curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
           }
-          bash scripts/probe-motion-signed-in.sh
+          status=0
+          bash scripts/probe-motion-signed-in.sh 2>&1 | tee "$RUNNER_TEMP/motion-probe.log" || status=$?
+          node scripts/ci-probe-annotate.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log"
       - name: Footer walk
         timeout-minutes: 8
         run: |
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
-            npm start &
+            npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
             curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
           }
-          EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh
+          status=0
+          EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh 2>&1 | tee "$RUNNER_TEMP/footer-walk.log" || status=$?
+          node scripts/ci-probe-annotate.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log"
       - name: Footer Chromium probe
         timeout-minutes: 8
         run: |
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
-            npm start &
+            npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
             curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
           }
           status=0
           EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee "$RUNNER_TEMP/footer-probe.log" || status=$?
-          if [ "$status" -ne 0 ]; then
-            {
-              echo "## Footer Chromium probe failure"
-              echo
-              echo "Commit $GITHUB_SHA; probe exit $status"
-              echo
-              echo '```'
-              grep -E '^(not ok -|probe:)' "$RUNNER_TEMP/footer-probe.log" | sed 's/```/ˋˋˋ/g' || true
-              echo '```'
-              echo
-              echo "### next start, last 80 lines"
-              echo
-              echo '```'
-              if [ -f "$RUNNER_TEMP/next-start.log" ]; then
-                tail -n 80 "$RUNNER_TEMP/next-start.log" | sed 's/```/ˋˋˋ/g'
-              else
-                echo "next-start.log unavailable"
-              fi
-              echo '```'
-            } >>"$GITHUB_STEP_SUMMARY"
-          fi
-          exit "$status"
+          node scripts/ci-probe-annotate.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log"
 
   preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository

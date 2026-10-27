@@ -1,0 +1,81 @@
+{
+  "schema": "otohime.pm-270.t-1660.local-verification.v1",
+  "run_id": "run-9115",
+  "base_sha": "7666778e99e21c3bb475d3d66c6798061b7115d5",
+  "executable_fingerprint_sha256": "7c9a395686de436c857e16d6f2055a232d9d4b517a28f109f58820079b8e4acc",
+  "file_sha256": {
+    ".github/workflows/ci.yml": "b08a5728f75ab97b52106052ed52d5edce37b1028ea799c0fecefd84d0800b6a",
+    "scripts/ci-probe-annotate.mjs": "290b01a759e293e646a9db383e6e7daa482d6e4f0fc4590ffb5d21bdca8e3bfe",
+    "scripts/ci-probe-annotate.test.mjs": "f6ebf49db8e52d2312b1889a2f0781fbffabf2cef9b929bd58f5e7434222e2cc",
+    "scripts/ci-workflow.test.mjs": "3f704d120d61ca598781f1634a339b1129055aaf6018906bbfbf6989fb40ff0d",
+    "scripts/probe-end.mjs": "96b7204d0d01d2bd92b1ba4e37c53c4113a521820017ea7d3b39ac0b3088d012",
+    "scripts/probe-end-stream.test.mjs": "0afaac288b43fd9fc607328ec9ea3f9dc37dde85d6b8bd53dadcb8713a85720d",
+    "scripts/probe-motion-signed-in.sh": "76972ccd8cafd12a42b55232fc7f3f9fb15704937a07cc275d4731e7541ca884",
+    "scripts/e2e-annotate.mjs": "9f51f1cc753de5b8690a143ac3f404a90d574d660a5d09f20fd7eebd859933f4",
+    "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+  },
+  "runtime": {
+    "node": "22.12.0",
+    "next": "16.4.2",
+    "playwright-core": "1.64.0",
+    "chrome": "156.0.8078.48",
+    "os": "darwin arm64",
+    "profile": "codex-sol-6-1-high",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "worker": "billie-mac"
+  },
+  "verification": {
+    "targeted": {
+      "tests": 23,
+      "pass": 23,
+      "fail": 0
+    },
+    "unit": {
+      "tests": 2383,
+      "pass": 2383,
+      "fail": 0
+    },
+    "lint": {
+      "errors": 0,
+      "existing_warnings": 10
+    },
+    "typecheck": {
+      "exit": 0
+    },
+    "gate_closure": {
+      "certified": true,
+      "tests": 26,
+      "required_named_assertions": 7,
+      "failures": 0
+    },
+    "footer": {
+      "walk_pass": 65,
+      "probe_pass": 170,
+      "failed": 0,
+      "build_id": "rKd5VuMMhkjlhOfangau3"
+    }
+  },
+  "scope": "Local executable verification; raw CI history and deployment unobserved. Deployment/green gate/independent QA are plan-manager follow-up.",
+  "history": {
+    "failed_read": 0,
+    "completed_read": 0,
+    "current_jobs_read": 0,
+    "complete": false,
+    "reason": "SWE stops at push under task contract; no external success claimed."
+  },
+  "rebase_validation": {
+    "upstream_sha": "6abdc3b76ca307b5b3c39d374dec60ac67a882ad",
+    "tested_head": "d973eb854370385fe822db9e397251f9d207d6f5",
+    "upstream_changes": "Two report-only commits; all executable fingerprint files unchanged.",
+    "all_five_commands_passed": true,
+    "targeted_tests": 23,
+    "unit_tests": 2383,
+    "gate_tests": 26,
+    "footer_walk_pass": 65,
+    "footer_probe_pass": 170,
+    "build_id": "M8yldkfWOn2qomjcxlww2",
+    "raw_logs": "shared/artifacts/{targeted-rebase1.log,unit-rebase1.log,lint-type-rebase1.log,gate-rebase1.json,footer-rebase1.log}"
+  }
+}

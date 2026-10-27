@@ -12,6 +12,15 @@ import { endTitleBounds, endTitleText, inPage, settleEndTitle, VISIBLE_FOOTER } 
 const rootRequire = createRequire(import.meta.url);
 const pg = rootRequire("pg");
 
+// Shared-layout hydration does not resolve loading.tsx's route Suspense boundary.
+// Wait for rendered content, then leave the existing text/layout/error assertions to judge it.
+async function observeMainHeading(page) {
+  const heading = await page.waitForFunction(() => [...document.querySelectorAll("main h1")].some((el) =>
+    el.textContent?.trim() && (typeof el.checkVisibility === "function" ? el.checkVisibility() : el.offsetParent !== null)),
+  null, { timeout: 10_000 });
+  await heading.dispose();
+}
+
 const BASE_URL = process.env.BASE_URL;
 const EXPECT_SHA = process.env.EXPECT_SHA ?? "";
 const ANY_SHA_OR_DEV = process.env.ANY_SHA_OR_DEV === "1";
@@ -2017,8 +2026,8 @@ try {
                   });
                   await page.locator(`nav[aria-label="Main"] a[href="/${target}"]`).click();
                   await page.waitForURL(`${BASE_URL}/${target}`, { timeout: 15_000 });
-                  await page.waitForTimeout(450);
                   await hydrated(page);
+                  await observeMainHeading(page);
                   const landed = await page.evaluate(() => {
                     const isVis = (el) =>
                       typeof el.checkVisibility === "function" ? el.checkVisibility() : el.offsetParent !== null;
