@@ -1,0 +1,789 @@
+{
+  "started": "2026-10-27T10:42:37.418Z",
+  "checkout": "/tmp/acc",
+  "scenarios": [
+    {
+      "name": "default-off",
+      "env": {},
+      "reading": {
+        "status": 200,
+        "cacheControl": "no-store",
+        "firstMs": 25,
+        "api": {
+          "music": {
+            "source": null,
+            "state": "off",
+            "profileUrl": null
+          },
+          "play": {
+            "source": null,
+            "state": "off",
+            "profileUrl": null
+          },
+          "spotify": "spotify-off",
+          "track": null,
+          "steam": "steam-off",
+          "game": null,
+          "readAt": "2026-10-27T10:42:39.083Z"
+        },
+        "apiRepeatReadAtEqual": true,
+        "page": {
+          "musicSource": "none",
+          "musicState": "off",
+          "playSource": "none",
+          "playState": "off",
+          "hasTitle": null,
+          "hasGame": null,
+          "fixtureLabel": false,
+          "lanyardCredit": false,
+          "steamStoreLink": true
+        }
+      },
+      "pageAgreesWithApi": true,
+      "serverLogErrorLines": []
+    },
+    {
+      "name": "live",
+      "env": {
+        "LISTENBRAINZ_USER": "aerozol",
+        "LANYARD_USER_ID": "94490510688792576"
+      },
+      "upstreamBefore": {
+        "at": "2026-10-27T10:42:41.301Z",
+        "playing": null,
+        "last": {
+          "title": "Fisherman's Tune (single version)",
+          "artist": "Launchable Socks",
+          "listenedAt": "2026-10-27T05:54:28.000Z"
+        },
+        "lanyard": {
+          "status": 200,
+          "success": true,
+          "activityTypes": [],
+          "game": null
+        }
+      },
+      "reading": {
+        "status": 200,
+        "cacheControl": "no-store",
+        "firstMs": 581,
+        "api": {
+          "music": {
+            "source": "listenbrainz",
+            "state": "live",
+            "profileUrl": "https://listenbrainz.org/user/aerozol/"
+          },
+          "play": {
+            "source": "lanyard",
+            "state": "live",
+            "profileUrl": null
+          },
+          "spotify": "spotify-off",
+          "track": {
+            "title": "Fisherman's Tune (single version)",
+            "artists": "Launchable Socks",
+            "url": null,
+            "playing": false,
+            "listenedAt": "2026-10-27T05:54:28.000Z"
+          },
+          "steam": "steam-off",
+          "game": null,
+          "readAt": "2026-10-27T10:42:41.879Z"
+        },
+        "apiRepeatReadAtEqual": true,
+        "page": {
+          "musicSource": "listenbrainz",
+          "musicState": "live",
+          "playSource": "lanyard",
+          "playState": "live",
+          "hasTitle": true,
+          "hasGame": null,
+          "fixtureLabel": false,
+          "lanyardCredit": true,
+          "steamStoreLink": false
+        }
+      },
+      "upstreamAfter": {
+        "at": "2026-10-27T10:42:42.428Z",
+        "playing": null,
+        "last": {
+          "title": "Fisherman's Tune (single version)",
+          "artist": "Launchable Socks",
+          "listenedAt": "2026-10-27T05:54:28.000Z"
+        },
+        "lanyard": {
+          "status": 200,
+          "success": true,
+          "activityTypes": [],
+          "game": null
+        }
+      },
+      "pageAgreesWithApi": true,
+      "comparatorNegativeControl": "rejected",
+      "serverLogErrorLines": []
+    },
+    {
+      "name": "live-unknown",
+      "env": {
+        "LISTENBRAINZ_USER": "otohime-acc-9218-no-such-user",
+        "LANYARD_USER_ID": "100000000000000000"
+      },
+      "upstreamBefore": {
+        "at": "2026-10-27T10:42:49.809Z",
+        "playing": null,
+        "last": {
+          "title": "Fisherman's Tune (single version)",
+          "artist": "Launchable Socks",
+          "listenedAt": "2026-10-27T05:54:28.000Z"
+        },
+        "lanyard": {
+          "status": 200,
+          "success": true,
+          "activityTypes": [],
+          "game": null
+        }
+      },
+      "reading": {
+        "status": 200,
+        "cacheControl": "no-store",
+        "firstMs": 570,
+        "api": {
+          "music": {
+            "source": "listenbrainz",
+            "state": "quiet",
+            "profileUrl": "https://listenbrainz.org/user/otohime-acc-9218-no-such-user/"
+          },
+          "play": {
+            "source": "lanyard",
+            "state": "quiet",
+            "profileUrl": null
+          },
+          "spotify": "spotify-off",
+          "track": null,
+          "steam": "steam-off",
+          "game": null,
+          "readAt": "2026-10-27T10:42:50.375Z"
+        },
+        "apiRepeatReadAtEqual": true,
+        "page": {
+          "musicSource": "listenbrainz",
+          "musicState": "quiet",
+          "playSource": "lanyard",
+          "playState": "quiet",
+          "hasTitle": null,
+          "hasGame": null,
+          "fixtureLabel": false,
+          "lanyardCredit": true,
+          "steamStoreLink": false
+        }
+      },
+      "upstreamAfter": {
+        "at": "2026-10-27T10:42:50.921Z",
+        "playing": null,
+        "last": {
+          "title": "Fisherman's Tune (single version)",
+          "artist": "Launchable Socks",
+          "listenedAt": "2026-10-27T05:54:28.000Z"
+        },
+        "lanyard": {
+          "status": 200,
+          "success": true,
+          "activityTypes": [],
+          "game": null
+        }
+      },
+      "pageAgreesWithApi": true,
+      "serverLogErrorLines": []
+    },
+    {
+      "name": "live-hostile",
+      "env": {
+        "LISTENBRAINZ_USER": "aerozol",
+        "NOW_PLAYING_LISTENBRAINZ_HOST": "https://evil.example",
+        "LANYARD_USER_ID": "12345"
+      },
+      "upstreamBefore": {
+        "at": "2026-10-27T10:42:52.587Z",
+        "playing": null,
+        "last": {
+          "title": "Fisherman's Tune (single version)",
+          "artist": "Launchable Socks",
+          "listenedAt": "2026-10-27T05:54:28.000Z"
+        },
+        "lanyard": {
+          "status": 200,
+          "success": true,
+          "activityTypes": [],
+          "game": null
+        }
+      },
+      "reading": {
+        "status": 200,
+        "cacheControl": "no-store",
+        "firstMs": 4045,
+        "api": {
+          "music": {
+            "source": "listenbrainz",
+            "state": "live",
+            "profileUrl": "https://listenbrainz.org/user/aerozol/"
+          },
+          "play": {
+            "source": null,
+            "state": "off",
+            "profileUrl": null
+          },
+          "spotify": "spotify-off",
+          "track": null,
+          "steam": "steam-off",
+          "game": null,
+          "readAt": "2026-10-27T10:42:56.619Z"
+        },
+        "apiRepeatReadAtEqual": true,
+        "page": {
+          "musicSource": "listenbrainz",
+          "musicState": "live",
+          "playSource": "none",
+          "playState": "off",
+          "hasTitle": null,
+          "hasGame": null,
+          "fixtureLabel": false,
+          "lanyardCredit": false,
+          "steamStoreLink": true
+        }
+      },
+      "upstreamAfter": {
+        "at": "2026-10-27T10:42:57.224Z",
+        "playing": null,
+        "last": {
+          "title": "Fisherman's Tune (single version)",
+          "artist": "Launchable Socks",
+          "listenedAt": "2026-10-27T05:54:28.000Z"
+        },
+        "lanyard": {
+          "status": 200,
+          "success": true,
+          "activityTypes": [],
+          "game": null
+        }
+      },
+      "pageAgreesWithApi": true,
+      "serverLogErrorLines": []
+    },
+    {
+      "name": "invalid-user",
+      "env": {
+        "LISTENBRAINZ_USER": "../admin"
+      },
+      "reading": {
+        "status": 200,
+        "cacheControl": "no-store",
+        "firstMs": 26,
+        "api": {
+          "music": {
+            "source": null,
+            "state": "off",
+            "profileUrl": null
+          },
+          "play": {
+            "source": null,
+            "state": "off",
+            "profileUrl": null
+          },
+          "spotify": "spotify-off",
+          "track": null,
+          "steam": "steam-off",
+          "game": null,
+          "readAt": "2026-10-27T10:42:58.724Z"
+        },
+        "apiRepeatReadAtEqual": true,
+        "page": {
+          "musicSource": "none",
+          "musicState": "off",
+          "playSource": "none",
+          "playState": "off",
+          "hasTitle": null,
+          "hasGame": null,
+          "fixtureLabel": false,
+          "lanyardCredit": false,
+          "steamStoreLink": true
+        }
+      },
+      "pageAgreesWithApi": true,
+      "serverLogErrorLines": []
+    },
+    {
+      "name": "recorder-503",
+      "env": {
+        "LISTENBRAINZ_USER": "aerozol",
+        "LANYARD_USER_ID": "94490510688792576",
+        "NOW_PLAYING_LISTENBRAINZ_HOST": "http://127.0.0.1:45992",
+        "NOW_PLAYING_LANYARD_HOST": "http://127.0.0.1:45992"
+      },
+      "reading": {
+        "status": 200,
+        "cacheControl": "no-store",
+        "firstMs": 39,
+        "api": {
+          "music": {
+            "source": "listenbrainz",
+            "state": "quiet",
+            "profileUrl": "https://listenbrainz.org/user/aerozol/"
+          },
+          "play": {
+            "source": "lanyard",
+            "state": "quiet",
+            "profileUrl": null
+          },
+          "spotify": "spotify-off",
+          "track": null,
+          "steam": "steam-off",
+          "game": null,
+          "readAt": "2026-10-27T10:43:00.397Z"
+        },
+        "apiRepeatReadAtEqual": true,
+        "page": {
+          "musicSource": "listenbrainz",
+          "musicState": "quiet",
+          "playSource": "lanyard",
+          "playState": "quiet",
+          "hasTitle": null,
+          "hasGame": null,
+          "fixtureLabel": false,
+          "lanyardCredit": true,
+          "steamStoreLink": false
+        }
+      },
+      "pageAgreesWithApi": true,
+      "recorded": [
+        {
+          "url": "/1/user/aerozol/playing-now",
+          "ua": "otohime.dev/1.0 (+https://otohime.dev)"
+        },
+        {
+          "url": "/1/user/aerozol/listens?count=1",
+          "ua": "otohime.dev/1.0 (+https://otohime.dev)"
+        },
+        {
+          "url": "/v1/users/94490510688792576",
+          "ua": "otohime.dev/1.0 (+https://otohime.dev)"
+        }
+      ],
+      "serverLogErrorLines": []
+    },
+    {
+      "name": "hang-game",
+      "env": {
+        "LISTENBRAINZ_USER": "aerozol",
+        "LANYARD_USER_ID": "94490510688792576",
+        "NOW_PLAYING_LANYARD_HOST": "http://127.0.0.1:45993"
+      },
+      "reading": {
+        "status": 200,
+        "cacheControl": "no-store",
+        "firstMs": 4039,
+        "api": {
+          "music": {
+            "source": "listenbrainz",
+            "state": "live",
+            "profileUrl": "https://listenbrainz.org/user/aerozol/"
+          },
+          "play": {
+            "source": "lanyard",
+            "state": "quiet",
+            "profileUrl": null
+          },
+          "spotify": "spotify-off",
+          "track": {
+            "title": "Fisherman's Tune (single version)",
+            "artists": "Launchable Socks",
+            "url": null,
+            "playing": false,
+            "listenedAt": "2026-10-27T05:54:28.000Z"
+          },
+          "steam": "steam-off",
+          "game": null,
+          "readAt": "2026-10-27T10:43:06.073Z"
+        },
+        "apiRepeatReadAtEqual": true,
+        "page": {
+          "musicSource": "listenbrainz",
+          "musicState": "live",
+          "playSource": "lanyard",
+          "playState": "quiet",
+          "hasTitle": true,
+          "hasGame": null,
+          "fixtureLabel": false,
+          "lanyardCredit": true,
+          "steamStoreLink": false
+        }
+      },
+      "pageAgreesWithApi": true,
+      "serverLogErrorLines": []
+    }
+  ],
+  "browser": [
+    {
+      "target": "local-live",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "js": true,
+      "status": 200,
+      "sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+      "music": [
+        "listenbrainz",
+        "live"
+      ],
+      "play": [
+        "lanyard",
+        "live"
+      ],
+      "tapeFace": "track",
+      "spinning": false,
+      "tapeSide": "Side A · ListenBrainz",
+      "tapeTitle": "Fisherman's Tune (single version)",
+      "tapeSub": "Launchable Socks",
+      "listenedAt": "2026-10-27T05:54:28.000Z",
+      "listenedText": "2026-10-27 · 05:54:28 UTC",
+      "cartFace": "quiet",
+      "cartSide": "Cartridge · Lanyard",
+      "cartGame": "Hades II, one more run",
+      "tapeLink": "https://listenbrainz.org/user/aerozol/",
+      "cartLinks": [],
+      "credit": "Read 10:42 UTC. Track details from ListenBrainz (CC0), game presence from Lanyard / Discord. The ListenBrainz profile.",
+      "creditLinks": [
+        "https://listenbrainz.org/",
+        "https://github.com/Phineas/lanyard",
+        "https://listenbrainz.org/user/aerozol/"
+      ],
+      "overflowX": false,
+      "shelfInViewportWidth": true,
+      "tabReached": true,
+      "errors": [],
+      "benignRequestFailures": [
+        "http://127.0.0.1:46002/?_rsc=mUXDygsRGSHHVQjM net::ERR_ABORTED",
+        "http://127.0.0.1:46002/work?_rsc=KEZBD9cMjkp9WjRQ net::ERR_ABORTED",
+        "http://127.0.0.1:46002/notes?_rsc=qZerrArlgIa2-64z net::ERR_ABORTED",
+        "http://127.0.0.1:46002/sketches?_rsc=w359QxXqRBniF3iU net::ERR_ABORTED",
+        "http://127.0.0.1:46002/play?_rsc=wA1tHmGqF9tBtGgc net::ERR_ABORTED",
+        "http://127.0.0.1:46002/projects?_rsc=_PSdmwW8dQfKscSI net::ERR_ABORTED"
+      ],
+      "screenshot": "local-live-1366x768-js.png"
+    },
+    {
+      "target": "local-live",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "js": false,
+      "status": 200,
+      "sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+      "music": [
+        "listenbrainz",
+        "live"
+      ],
+      "play": [
+        "lanyard",
+        "live"
+      ],
+      "tapeFace": "track",
+      "spinning": false,
+      "tapeSide": "Side A · ListenBrainz",
+      "tapeTitle": "Fisherman's Tune (single version)",
+      "tapeSub": "Launchable Socks",
+      "listenedAt": "2026-10-27T05:54:28.000Z",
+      "listenedText": "2026-10-27 · 05:54:28 UTC",
+      "cartFace": "quiet",
+      "cartSide": "Cartridge · Lanyard",
+      "cartGame": "Hades II, one more run",
+      "tapeLink": "https://listenbrainz.org/user/aerozol/",
+      "cartLinks": [],
+      "credit": "Read 10:42 UTC. Track details from ListenBrainz (CC0), game presence from Lanyard / Discord. The ListenBrainz profile.",
+      "creditLinks": [
+        "https://listenbrainz.org/",
+        "https://github.com/Phineas/lanyard",
+        "https://listenbrainz.org/user/aerozol/"
+      ],
+      "overflowX": false,
+      "shelfInViewportWidth": true,
+      "tabReached": null,
+      "errors": [],
+      "benignRequestFailures": [
+        "http://127.0.0.1:46002/_next/static/chunks/0om590q-tq0l9.js csp"
+      ],
+      "screenshot": "local-live-1366x768-nojs.png"
+    },
+    {
+      "target": "local-live",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "js": true,
+      "status": 200,
+      "sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+      "music": [
+        "listenbrainz",
+        "live"
+      ],
+      "play": [
+        "lanyard",
+        "live"
+      ],
+      "tapeFace": "track",
+      "spinning": false,
+      "tapeSide": "Side A · ListenBrainz",
+      "tapeTitle": "Fisherman's Tune (single version)",
+      "tapeSub": "Launchable Socks",
+      "listenedAt": "2026-10-27T05:54:28.000Z",
+      "listenedText": "2026-10-27 · 05:54:28 UTC",
+      "cartFace": "quiet",
+      "cartSide": "Cartridge · Lanyard",
+      "cartGame": "Hades II, one more run",
+      "tapeLink": "https://listenbrainz.org/user/aerozol/",
+      "cartLinks": [],
+      "credit": "Read 10:42 UTC. Track details from ListenBrainz (CC0), game presence from Lanyard / Discord. The ListenBrainz profile.",
+      "creditLinks": [
+        "https://listenbrainz.org/",
+        "https://github.com/Phineas/lanyard",
+        "https://listenbrainz.org/user/aerozol/"
+      ],
+      "overflowX": false,
+      "shelfInViewportWidth": true,
+      "tabReached": true,
+      "errors": [],
+      "benignRequestFailures": [
+        "http://127.0.0.1:46002/work?_rsc=KEZBD9cMjkp9WjRQ net::ERR_ABORTED",
+        "http://127.0.0.1:46002/notes?_rsc=qZerrArlgIa2-64z net::ERR_ABORTED",
+        "http://127.0.0.1:46002/play?_rsc=wA1tHmGqF9tBtGgc net::ERR_ABORTED",
+        "http://127.0.0.1:46002/projects?_rsc=_PSdmwW8dQfKscSI net::ERR_ABORTED"
+      ],
+      "screenshot": "local-live-390x844-js.png"
+    },
+    {
+      "target": "local-live",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "js": false,
+      "status": 200,
+      "sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+      "music": [
+        "listenbrainz",
+        "live"
+      ],
+      "play": [
+        "lanyard",
+        "live"
+      ],
+      "tapeFace": "track",
+      "spinning": false,
+      "tapeSide": "Side A · ListenBrainz",
+      "tapeTitle": "Fisherman's Tune (single version)",
+      "tapeSub": "Launchable Socks",
+      "listenedAt": "2026-10-27T05:54:28.000Z",
+      "listenedText": "2026-10-27 · 05:54:28 UTC",
+      "cartFace": "quiet",
+      "cartSide": "Cartridge · Lanyard",
+      "cartGame": "Hades II, one more run",
+      "tapeLink": "https://listenbrainz.org/user/aerozol/",
+      "cartLinks": [],
+      "credit": "Read 10:42 UTC. Track details from ListenBrainz (CC0), game presence from Lanyard / Discord. The ListenBrainz profile.",
+      "creditLinks": [
+        "https://listenbrainz.org/",
+        "https://github.com/Phineas/lanyard",
+        "https://listenbrainz.org/user/aerozol/"
+      ],
+      "overflowX": false,
+      "shelfInViewportWidth": true,
+      "tabReached": null,
+      "errors": [],
+      "benignRequestFailures": [
+        "http://127.0.0.1:46002/_next/static/chunks/0om590q-tq0l9.js csp"
+      ],
+      "screenshot": "local-live-390x844-nojs.png"
+    },
+    {
+      "target": "deployed",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "js": true,
+      "status": 200,
+      "sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+      "music": [
+        "none",
+        "off"
+      ],
+      "play": [
+        "none",
+        "off"
+      ],
+      "tapeFace": "quiet",
+      "spinning": false,
+      "tapeSide": "Side A · Spotify",
+      "tapeTitle": "Nothing on the deck right now.",
+      "tapeSub": "The playlist is always on.",
+      "listenedAt": null,
+      "listenedText": "",
+      "cartFace": "quiet",
+      "cartSide": "Cartridge · Steam",
+      "cartGame": "Hades II, one more run",
+      "tapeLink": "https://open.spotify.com/playlist/609w1YzsoSy1zuHmyBhYwu",
+      "cartLinks": [],
+      "credit": "Not read live: the labels are the static ones. Track details from Spotify, game details from Steam.",
+      "creditLinks": [
+        "https://www.spotify.com/",
+        "https://store.steampowered.com/"
+      ],
+      "overflowX": false,
+      "shelfInViewportWidth": true,
+      "tabReached": true,
+      "errors": [],
+      "benignRequestFailures": [
+        "https://otohime.dev/work?_rsc=KEZBD9cMjkp9WjRQ net::ERR_ABORTED",
+        "https://otohime.dev/?_rsc=mUXDygsRGSHHVQjM net::ERR_ABORTED",
+        "https://otohime.dev/notes?_rsc=qZerrArlgIa2-64z net::ERR_ABORTED",
+        "https://otohime.dev/projects?_rsc=_PSdmwW8dQfKscSI net::ERR_ABORTED",
+        "https://otohime.dev/play?_rsc=wA1tHmGqF9tBtGgc net::ERR_ABORTED",
+        "https://otohime.dev/sketches?_rsc=w359QxXqRBniF3iU net::ERR_ABORTED"
+      ],
+      "screenshot": "deployed-1366x768-js.png"
+    },
+    {
+      "target": "deployed",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "js": false,
+      "status": 200,
+      "sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+      "music": [
+        "none",
+        "off"
+      ],
+      "play": [
+        "none",
+        "off"
+      ],
+      "tapeFace": "quiet",
+      "spinning": false,
+      "tapeSide": "Side A · Spotify",
+      "tapeTitle": "Nothing on the deck right now.",
+      "tapeSub": "The playlist is always on.",
+      "listenedAt": null,
+      "listenedText": "",
+      "cartFace": "quiet",
+      "cartSide": "Cartridge · Steam",
+      "cartGame": "Hades II, one more run",
+      "tapeLink": "https://open.spotify.com/playlist/609w1YzsoSy1zuHmyBhYwu",
+      "cartLinks": [],
+      "credit": "Not read live: the labels are the static ones. Track details from Spotify, game details from Steam.",
+      "creditLinks": [
+        "https://www.spotify.com/",
+        "https://store.steampowered.com/"
+      ],
+      "overflowX": false,
+      "shelfInViewportWidth": true,
+      "tabReached": null,
+      "errors": [],
+      "benignRequestFailures": [
+        "https://otohime.dev/_next/static/chunks/0om590q-tq0l9.js csp"
+      ],
+      "screenshot": "deployed-1366x768-nojs.png"
+    },
+    {
+      "target": "deployed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "js": true,
+      "status": 200,
+      "sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+      "music": [
+        "none",
+        "off"
+      ],
+      "play": [
+        "none",
+        "off"
+      ],
+      "tapeFace": "quiet",
+      "spinning": false,
+      "tapeSide": "Side A · Spotify",
+      "tapeTitle": "Nothing on the deck right now.",
+      "tapeSub": "The playlist is always on.",
+      "listenedAt": null,
+      "listenedText": "",
+      "cartFace": "quiet",
+      "cartSide": "Cartridge · Steam",
+      "cartGame": "Hades II, one more run",
+      "tapeLink": "https://open.spotify.com/playlist/609w1YzsoSy1zuHmyBhYwu",
+      "cartLinks": [],
+      "credit": "Not read live: the labels are the static ones. Track details from Spotify, game details from Steam.",
+      "creditLinks": [
+        "https://www.spotify.com/",
+        "https://store.steampowered.com/"
+      ],
+      "overflowX": false,
+      "shelfInViewportWidth": true,
+      "tabReached": true,
+      "errors": [],
+      "benignRequestFailures": [
+        "https://otohime.dev/?_rsc=mUXDygsRGSHHVQjM net::ERR_ABORTED"
+      ],
+      "screenshot": "deployed-390x844-js.png"
+    },
+    {
+      "target": "deployed",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "js": false,
+      "status": 200,
+      "sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+      "music": [
+        "none",
+        "off"
+      ],
+      "play": [
+        "none",
+        "off"
+      ],
+      "tapeFace": "quiet",
+      "spinning": false,
+      "tapeSide": "Side A · Spotify",
+      "tapeTitle": "Nothing on the deck right now.",
+      "tapeSub": "The playlist is always on.",
+      "listenedAt": null,
+      "listenedText": "",
+      "cartFace": "quiet",
+      "cartSide": "Cartridge · Steam",
+      "cartGame": "Hades II, one more run",
+      "tapeLink": "https://open.spotify.com/playlist/609w1YzsoSy1zuHmyBhYwu",
+      "cartLinks": [],
+      "credit": "Not read live: the labels are the static ones. Track details from Spotify, game details from Steam.",
+      "creditLinks": [
+        "https://www.spotify.com/",
+        "https://store.steampowered.com/"
+      ],
+      "overflowX": false,
+      "shelfInViewportWidth": true,
+      "tabReached": null,
+      "errors": [],
+      "benignRequestFailures": [
+        "https://otohime.dev/_next/static/chunks/0om590q-tq0l9.js csp"
+      ],
+      "screenshot": "deployed-390x844-nojs.png"
+    }
+  ],
+  "failures": [],
+  "finished": "2026-10-27T10:43:18.426Z"
+}

@@ -1,0 +1,116 @@
+◇ injected env (0) from .env
+ok   default-off API status 200
+ok   default-off no-JS /music data attributes agree with API source/state
+ok   default-off repeat API read is served from the shared cache (same readAt)
+ok   default-off music off, play off, no track/game
+ok   live API status 200
+ok   live no-JS /music data attributes agree with API source/state
+ok   live repeat API read is served from the shared cache (same readAt)
+ok   live music listenbrainz/live (got listenbrainz/live)
+ok   live profile url https://listenbrainz.org/user/aerozol/
+ok   live track equals independent upstream read ({"title":"Fisherman's Tune (single version)","artists":"Launchable Socks","url":null,"playing":false,"listenedAt":"2026-10-27T05:54:28.000Z"} vs {"title":"Fisherman's Tune (single version)","artist":"Launchable Socks","listenedAt":"2026-10-27T05:54:28.000Z"})
+ok   live no-JS /music HTML contains the track title
+ok   live play lanyard/live (got lanyard/live)
+ok   live game equals upstream first type-0 activity (null vs null)
+ok   live Lanyard game has no invented store link
+ok   live live reading is not labelled fixture
+ok   live Lanyard credit link present
+ok   live Discord id not published in API
+ok   live comparator rejects a different upstream reading
+ok   local-live 1366x768 JS HTTP 200
+ok   local-live 1366x768 JS browser errors: none
+ok   local-live 1366x768 JS no horizontal overflow
+ok   local-live 1366x768 JS tape link reachable by keyboard
+ok   local-live 1366x768 JS live sources shown (listenbrainz,live/lanyard,live)
+ok   local-live 1366x768 JS tape shows "Fisherman's Tune (single version)"
+ok   local-live 1366x768 JS last listen shows full UTC time "2026-10-27 · 05:54:28 UTC" and still reels
+ok   local-live 1366x768 JS ListenBrainz and Lanyard credits
+ok   local-live 1366x768 JS public profile link
+ok   local-live 1366x768 JS no invented store link
+ok   local-live 1366x768 JS not labelled fixture
+ok   local-live 1366x768 no-JS HTTP 200
+ok   local-live 1366x768 no-JS browser errors: none
+ok   local-live 1366x768 no-JS no horizontal overflow
+ok   local-live 1366x768 no-JS live sources shown (listenbrainz,live/lanyard,live)
+ok   local-live 1366x768 no-JS tape shows "Fisherman's Tune (single version)"
+ok   local-live 1366x768 no-JS last listen shows full UTC time "2026-10-27 · 05:54:28 UTC" and still reels
+ok   local-live 1366x768 no-JS ListenBrainz and Lanyard credits
+ok   local-live 1366x768 no-JS public profile link
+ok   local-live 1366x768 no-JS no invented store link
+ok   local-live 1366x768 no-JS not labelled fixture
+ok   local-live 390x844 JS HTTP 200
+ok   local-live 390x844 JS browser errors: none
+ok   local-live 390x844 JS no horizontal overflow
+ok   local-live 390x844 JS tape link reachable by keyboard
+ok   local-live 390x844 JS live sources shown (listenbrainz,live/lanyard,live)
+ok   local-live 390x844 JS tape shows "Fisherman's Tune (single version)"
+ok   local-live 390x844 JS last listen shows full UTC time "2026-10-27 · 05:54:28 UTC" and still reels
+ok   local-live 390x844 JS ListenBrainz and Lanyard credits
+ok   local-live 390x844 JS public profile link
+ok   local-live 390x844 JS no invented store link
+ok   local-live 390x844 JS not labelled fixture
+ok   local-live 390x844 no-JS HTTP 200
+ok   local-live 390x844 no-JS browser errors: none
+ok   local-live 390x844 no-JS no horizontal overflow
+ok   local-live 390x844 no-JS live sources shown (listenbrainz,live/lanyard,live)
+ok   local-live 390x844 no-JS tape shows "Fisherman's Tune (single version)"
+ok   local-live 390x844 no-JS last listen shows full UTC time "2026-10-27 · 05:54:28 UTC" and still reels
+ok   local-live 390x844 no-JS ListenBrainz and Lanyard credits
+ok   local-live 390x844 no-JS public profile link
+ok   local-live 390x844 no-JS no invented store link
+ok   local-live 390x844 no-JS not labelled fixture
+ok   live-unknown API status 200
+ok   live-unknown no-JS /music data attributes agree with API source/state
+ok   live-unknown repeat API read is served from the shared cache (same readAt)
+ok   live-unknown unknown ListenBrainz user is quiet (quiet)
+ok   live-unknown unmonitored Lanyard id is quiet (quiet)
+ok   live-hostile API status 200
+ok   live-hostile no-JS /music data attributes agree with API source/state
+ok   live-hostile repeat API read is served from the shared cache (same readAt)
+ok   live-hostile non-loopback host override ignored, real API read (live)
+ok   live-hostile invalid 5-digit Lanyard id is off (off)
+ok   invalid-user API status 200
+ok   invalid-user no-JS /music data attributes agree with API source/state
+ok   invalid-user repeat API read is served from the shared cache (same readAt)
+ok   invalid-user path-traversal username is off (off)
+ok   recorder-503 API status 200
+ok   recorder-503 no-JS /music data attributes agree with API source/state
+ok   recorder-503 repeat API read is served from the shared cache (same readAt)
+ok   recorder-503 recorder saw 3 runtime requests (build saw 0)
+ok   recorder-503 required User-Agent
+ok   recorder-503 503 upstream gives quiet music and game
+ok   recorder-503 a failed loopback read is honest quiet: no fixture/live claim
+ok   hang-game API status 200
+ok   hang-game no-JS /music data attributes agree with API source/state
+ok   hang-game repeat API read is served from the shared cache (same readAt)
+ok   hang-game answered in 4039 ms
+ok   hang-game hung Lanyard is quiet
+ok   hang-game music still live from real ListenBrainz
+ok   deployed 1366x768 JS HTTP 200
+ok   deployed 1366x768 JS browser errors: none
+ok   deployed 1366x768 JS no horizontal overflow
+ok   deployed 1366x768 JS tape link reachable by keyboard
+ok   deployed 1366x768 JS build-sha b4e142ad37c76abdc496c14afb4ac18b2b5c03ba
+ok   deployed 1366x768 JS honest off/quiet shelf (none,off/none,off)
+ok   deployed 1366x768 JS no invented store link
+ok   deployed 1366x768 no-JS HTTP 200
+ok   deployed 1366x768 no-JS browser errors: none
+ok   deployed 1366x768 no-JS no horizontal overflow
+ok   deployed 1366x768 no-JS build-sha b4e142ad37c76abdc496c14afb4ac18b2b5c03ba
+ok   deployed 1366x768 no-JS honest off/quiet shelf (none,off/none,off)
+ok   deployed 1366x768 no-JS no invented store link
+ok   deployed 390x844 JS HTTP 200
+ok   deployed 390x844 JS browser errors: none
+ok   deployed 390x844 JS no horizontal overflow
+ok   deployed 390x844 JS tape link reachable by keyboard
+ok   deployed 390x844 JS build-sha b4e142ad37c76abdc496c14afb4ac18b2b5c03ba
+ok   deployed 390x844 JS honest off/quiet shelf (none,off/none,off)
+ok   deployed 390x844 JS no invented store link
+ok   deployed 390x844 no-JS HTTP 200
+ok   deployed 390x844 no-JS browser errors: none
+ok   deployed 390x844 no-JS no horizontal overflow
+ok   deployed 390x844 no-JS build-sha b4e142ad37c76abdc496c14afb4ac18b2b5c03ba
+ok   deployed 390x844 no-JS honest off/quiet shelf (none,off/none,off)
+ok   deployed 390x844 no-JS no invented store link
+
+0 failures
