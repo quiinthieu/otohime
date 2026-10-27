@@ -68,7 +68,7 @@ export function ThemeToggle() {
     root.style.setProperty("--ty", `${y}px`);
     root.style.setProperty("--tr", `${Math.ceil(reach)}px`);
     root.classList.add("theming");
-    document.startViewTransition(apply).finished.finally(() => root.classList.remove("theming"));
+    document.startViewTransition(apply).finished.catch(() => {}).finally(() => root.classList.remove("theming"));
   }
 
   return (

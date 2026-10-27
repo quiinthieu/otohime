@@ -3,13 +3,16 @@
 // build time (the prebuild step in package.json); the palace imports the JSON and never runs git. No author names
 // or emails are read.
 //
-// Never fatal at build time. Without git, outside a work tree, or in a shallow clone (CI and Vercel check out one
-// commit), the committed content/history.json is the fallback and is left as it is. A shallow clone that still
-// holds the fallback's head commit gets the newer commits spliced on top, so the result matches a full clone.
-//   npm run history:index   write the index
-//   npm run history:check   exit 1 if the committed index is malformed, differs from git at its own head, or lags
-//                           HEAD by more than MAX_LAG commits (a shallow or git-less checkout checks the shape only)
-// --file=<path> reads or writes another file, --repo=<dir> indexes another checkout (the tests' fixture repos).
+// In default (permissive) mode, without git, outside a work tree, or in a shallow clone, the committed
+// content/history.json is the fallback and is left as it is. A shallow clone that still holds the fallback's head
+// commit gets the newer commits spliced on top, so the result matches a full clone.
+// In strict delivery mode (--strict), full git history at the build revision is required; shallow clones, missing git,
+// mismatched build SHAs, stale leaves (> MAX_LAG) or total mismatches exit 1.
+//   npm run history:index                 write the index (permissive fallback outside full git)
+//   npm run history:index -- --strict     write the index from full git history and verify it strictly
+//   npm run history:check                 exit 1 if the index is malformed, differs from git, or lags HEAD > MAX_LAG
+//   npm run history:check -- --strict     exit 1 unless full git history is present and the file matches HEAD and total
+// --file=<path> reads or writes another file, --repo=<dir> indexes another checkout, --rev=<sha> pins the build SHA.
 import { execFileSync } from "node:child_process";
 import { readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -39,8 +42,8 @@ export type HistoryEntry = {
 
 export type HistoryIndex = {
   version: 1;
-  head: string | null; // full SHA of the newest indexed commit, null when empty
-  total: number; // non-merge commits reachable from head, of which entries holds the newest MAX_ENTRIES
+  head: string | null; // full SHA of the newest indexed non-merge commit, null when empty
+  total: number; // all commits reachable from the indexed revision (git rev-list --count), of which entries holds the newest MAX_ENTRIES non-merge leaves
   entries: HistoryEntry[];
 };
 
@@ -171,7 +174,7 @@ export function validateIndex(v: unknown): HistoryIndex | null {
   if (v.head === null) return v.entries.length === 0 && v.total === 0 ? (v as HistoryIndex) : null;
   if (typeof v.head !== "string" || !/^[0-9a-f]{40}$/.test(v.head)) return null;
   if (v.entries.length === 0 || !v.head.startsWith(v.entries[0].sha)) return null;
-  if (v.entries.length < MAX_ENTRIES && v.total !== v.entries.length) return null;
+  if (v.entries.length === 1 && v.total !== 1) return null;
   return v as HistoryIndex;
 }
 
@@ -216,7 +219,12 @@ function log(git: Git, range: string, limit: number): ParsedCommit[] | null {
   return text === null ? null : parseLog(text);
 }
 
-function count(git: Git, range: string): number | null {
+export function count(git: Git, range: string): number | null {
+  const n = Number(git(["rev-list", "--count", range, "--"])?.trim());
+  return Number.isSafeInteger(n) && n >= 0 ? n : null;
+}
+
+export function countNonMerges(git: Git, range: string): number | null {
   const n = Number(git(["rev-list", "--count", "--no-merges", range, "--"])?.trim());
   return Number.isSafeInteger(n) && n >= 0 ? n : null;
 }
@@ -228,7 +236,7 @@ const fullSha = (git: Git, rev: string) => {
 
 const isAncestor = (git: Git, older: string, newer: string) => git(["merge-base", "--is-ancestor", older, newer]) !== null;
 
-// The index of the non-merge history reachable from `rev`, read straight from git; null if git fails.
+// The index at `rev`, read straight from git: newest MAX_ENTRIES non-merge leaves and total reachable commits; null if git fails.
 export function indexAt(git: Git, rev = "HEAD"): HistoryIndex | null {
   const commits = log(git, rev, MAX_ENTRIES);
   const total = count(git, rev);
@@ -244,12 +252,13 @@ export function splice(git: Git, fallback: HistoryIndex, rev = "HEAD"): HistoryI
   if (!fallback.head || !isAncestor(git, fallback.head, rev)) return null;
   const range = `${fallback.head}..${rev}`;
   const newer = log(git, range, MAX_ENTRIES);
-  const added = count(git, range);
-  if (!newer || added === null || newer.length !== Math.min(added, MAX_ENTRIES)) return null;
+  const nonMergeAdded = countNonMerges(git, range);
+  const totalAdded = count(git, range);
+  if (!newer || nonMergeAdded === null || totalAdded === null || newer.length !== Math.min(nonMergeAdded, MAX_ENTRIES)) return null;
   if (newer.some((c) => c.parents === 0)) return null;
-  if (newer.length === 0) return fallback;
+  if (totalAdded === 0) return fallback;
   const entries = [...newer.map((c) => c.entry), ...fallback.entries].slice(0, MAX_ENTRIES);
-  return { version: 1, head: newer[0].sha, total: fallback.total + added, entries };
+  return { version: 1, head: newer[0]?.sha ?? fallback.head, total: fallback.total + totalAdded, entries };
 }
 
 export type Resolution = { index: HistoryIndex; source: "git" | "spliced" | "fallback" | "empty"; reason: string };
@@ -276,31 +285,100 @@ export function resolveHistory(git: Git, repo: string, fallback: HistoryIndex | 
 }
 
 export type CheckResult = { ok: boolean; message: string };
+export type CheckOptions = {
+  maxLag?: number;
+  strict?: boolean;
+  rev?: string | null;
+};
 
-export function checkHistory(git: Git, repo: string, text: string | null, maxLag = MAX_LAG): CheckResult {
+export function checkHistory(
+  git: Git,
+  repo: string,
+  text: string | null,
+  maxLagOrOptions: number | CheckOptions = MAX_LAG,
+): CheckResult {
+  const opts: CheckOptions =
+    typeof maxLagOrOptions === "number" ? { maxLag: maxLagOrOptions } : maxLagOrOptions;
+  const maxLag = opts.maxLag ?? MAX_LAG;
+  const strict = opts.strict === true;
+  const expectedRev = opts.rev?.trim() || null;
+
   if (text === null) return { ok: false, message: "is missing; run npm run history:index" };
   const committed = parseHistory(text);
   if (!committed) return { ok: false, message: "is malformed or over its bounds; run npm run history:index" };
   if (serializeHistory(committed) !== text) return { ok: false, message: "is not in canonical form; run npm run history:index" };
+
   const state = gitState(git, repo);
-  if (state !== "full") return { ok: true, message: `is well-formed (${state === "shallow" ? "shallow clone" : "no git history"}: not compared with git)` };
+  if (state !== "full") {
+    if (strict) {
+      return {
+        ok: false,
+        message: `strict check requires full git history (${state === "shallow" ? "shallow clone; use fetch-depth: 0" : "no git history"})`,
+      };
+    }
+    return { ok: true, message: `is well-formed (${state === "shallow" ? "shallow clone" : "no git history"}: not compared with git)` };
+  }
+
   const head = fullSha(git, "HEAD");
   if (!head) return { ok: false, message: "cannot be checked: HEAD did not resolve" };
+  if (expectedRev) {
+    const want = fullSha(git, expectedRev);
+    if (!want || want !== head) {
+      return { ok: false, message: `build revision ${expectedRev} does not match checked-out HEAD ${head}` };
+    }
+  }
+
   if (committed.head === null) {
     const n = count(git, "HEAD");
-    return n === 0 ? { ok: true, message: "is empty, as is the history" } : { ok: false, message: `is empty but HEAD has ${n ?? "unknown"} commits; run npm run history:index` };
+    return !strict && n === 0
+      ? { ok: true, message: "is empty, as is the history" }
+      : { ok: false, message: `is empty but HEAD has ${n ?? "unknown"} commits; run npm run history:index` };
   }
+
   if (!fullSha(git, committed.head) || !isAncestor(git, committed.head, head)) {
     return { ok: false, message: `names head ${committed.head}, which is not in HEAD's history; run npm run history:index` };
   }
-  const rebuilt = indexAt(git, committed.head);
-  if (!rebuilt || serializeHistory(rebuilt) !== text) {
+
+  const rebuiltAtLeaf = indexAt(git, committed.head);
+  if (!rebuiltAtLeaf || serializeHistory({ ...rebuiltAtLeaf, total: committed.total }) !== text) {
     return { ok: false, message: `does not match git at its own head ${committed.head.slice(0, SHA_LENGTH)}; run npm run history:index` };
   }
+
   const lag = count(git, `${committed.head}..${head}`);
   if (lag === null || lag > maxLag) {
     return { ok: false, message: `is stale: ${lag ?? "unknown"} commits behind HEAD (at most ${maxLag}); run npm run history:index and commit it` };
   }
+
+  const headTotal = count(git, head);
+  const nonMergeLag = countNonMerges(git, `${committed.head}..${head}`);
+  if (headTotal === null || nonMergeLag === null) {
+    return { ok: false, message: "cannot count commits reachable from HEAD" };
+  }
+
+  if (strict) {
+    if (committed.total !== headTotal) {
+      return {
+        ok: false,
+        message: `does not match git: total ${committed.total} != ${headTotal} (git rev-list --count HEAD); run npm run history:index -- --strict`,
+      };
+    }
+    if (nonMergeLag > 0) {
+      return {
+        ok: false,
+        message: `is stale for strict build: newest leaf ${committed.head.slice(0, SHA_LENGTH)} misses ${nonMergeLag} non-merge commit${nonMergeLag === 1 ? "" : "s"} at HEAD; run npm run history:index -- --strict`,
+      };
+    }
+  } else {
+    const validLeafTotal = committed.total === rebuiltAtLeaf.total;
+    const validMergeHeadTotal = nonMergeLag === 0 && committed.total === headTotal;
+    if (!validLeafTotal && !validMergeHeadTotal) {
+      return {
+        ok: false,
+        message: `does not match git at its own head ${committed.head.slice(0, SHA_LENGTH)}: total ${committed.total} != ${rebuiltAtLeaf.total}; run npm run history:index`,
+      };
+    }
+  }
+
   return { ok: true, message: `matches git and trails HEAD by ${lag} commit${lag === 1 ? "" : "s"}` };
 }
 
@@ -318,12 +396,57 @@ export function main(argv: string[], git?: Git): number {
   const arg = (name: string) => argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
   const file = resolve(arg("file") ?? DEFAULT_FILE);
   const repo = resolve(arg("repo") ?? ROOT);
+  const strict = argv.includes("--strict");
+  const rev = arg("rev") ?? (strict ? process.env.GITHUB_SHA : undefined);
   const run = git ?? gitRunner(repo);
   const text = readText(file);
   if (argv.includes("--check")) {
-    const { ok, message } = checkHistory(run, repo, text);
+    const { ok, message } = checkHistory(run, repo, text, { strict, rev });
     (ok ? console.log : console.error)(`history:check: ${file} ${message}`);
     return ok ? 0 : 1;
+  }
+  if (strict) {
+    const state = gitState(run, repo);
+    if (state !== "full") {
+      console.error(
+        `history:index: strict generation requires full git history (${state === "shallow" ? "shallow clone; use fetch-depth: 0" : "git history unavailable"})`,
+      );
+      return 1;
+    }
+    const head = fullSha(run, "HEAD");
+    if (!head) {
+      console.error("history:index: strict generation failed: HEAD did not resolve");
+      return 1;
+    }
+    if (rev?.trim()) {
+      const want = fullSha(run, rev.trim());
+      if (!want || want !== head) {
+        console.error(`history:index: strict generation failed: build revision ${rev.trim()} does not match checked-out HEAD ${head}`);
+        return 1;
+      }
+    }
+    let index: HistoryIndex | null = null;
+    try {
+      index = indexAt(run, head);
+    } catch (err) {
+      console.error(`history:index: strict generation failed: ${err instanceof Error ? err.message : String(err)}`);
+      return 1;
+    }
+    if (!index || index.head === null) {
+      console.error("history:index: strict generation failed: repository has no indexable commits");
+      return 1;
+    }
+    const fresh = serializeHistory(index);
+    if (fresh !== text) writeFileSync(file, fresh);
+    const verified = checkHistory(run, repo, readText(file), { strict: true, rev });
+    if (!verified.ok) {
+      console.error(`history:index: strict post-write check failed for ${file}: ${verified.message}`);
+      return 1;
+    }
+    console.log(
+      `history:index: git (strict full history at ${head.slice(0, SHA_LENGTH)}): ${index.entries.length} of ${index.total} commits in ${file}${fresh === text ? ", unchanged" : ""}`,
+    );
+    return 0;
   }
   const { index, source, reason } = resolveHistory(run, repo, text === null ? null : parseHistory(text));
   const fresh = serializeHistory(index);

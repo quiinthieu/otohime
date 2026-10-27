@@ -169,6 +169,8 @@ test("server/no-JavaScript headings are readable and mobile notes wrap without o
 test("Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies", async () => {
   const { context, page, errors } = await open();
   try {
+    await settled(page);
+    await page.waitForLoadState("networkidle");
     const pocket = page.getByRole("region", { name: "Pocket console", exact: true });
     await pocket.getByRole("button", { name: "A Open", exact: true }).click();
     await page.waitForURL(`${BASE}/work`);

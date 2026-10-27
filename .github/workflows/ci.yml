@@ -116,6 +116,8 @@ jobs:
       - run: bash scripts/vercel-deploy.test.sh
       # verify-deploy.sh against a local fake /api/health: a sha mismatch must exit nonzero without running the e2e.
       - run: bash scripts/verify-deploy.sh --self-test
+      # probe-history.sh against local fixture health/pages/git: stale leaves, wrong totals and moving deploys must fail.
+      - run: bash scripts/probe-history.sh --self-test
       # public/ask-index.json is built from content/site.ts and the Gazette; a content edit must regenerate it.
       - run: npm run ask:check
       - name: Migrations match db/schema.ts
@@ -124,7 +126,10 @@ jobs:
           npm run db:generate
           # generate wrote files = schema changed without a committed migration
           test -z "$(git status --porcelain db/migrations)"
+      - run: npm run history:index -- --strict --rev="$GITHUB_SHA"
+      - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run build
+      - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - name: Real CPU camera and privacy verifier
         timeout-minutes: 5
         run: |
@@ -216,6 +221,8 @@ jobs:
           missing=$(for v in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID NEON_API_KEY NEON_PROJECT_ID; do [ -n "${!v}" ] || printf '%s ' "$v"; done)
           if [ -n "$missing" ]; then echo "::error::Set these repo secrets/variables for previews: $missing(see README → Deploying)"; exit 1; fi
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version-file: package.json
@@ -239,7 +246,10 @@ jobs:
           echo "::add-mask::$(node -p 'new URL(process.argv[1]).password' "$direct")"
           { echo "DATABASE_URL=$direct"; echo "DATABASE_URL_POOLED=$pooled"; } >> "$GITHUB_ENV"
       - run: npx vercel@64 pull --yes --environment=preview
+      - run: npm run history:index -- --strict --rev="$GITHUB_SHA"
+      - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npx vercel@64 build
+      - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run db:migrate # DATABASE_URL = direct URL of the PR branch
       - name: Deploy
         id: deploy
@@ -284,6 +294,8 @@ jobs:
       BETTER_AUTH_URL: https://otohime.dev
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Check Vercel deployment author
         env:
           DEPLOY_AUTHOR_EMAIL: quiinthieu@gmail.com
@@ -295,7 +307,12 @@ jobs:
       - run: npm ci
       - run: npx vercel@64 pull --yes --environment=production
       # Build before migrating: a failed build never leaves prod migrated ahead of its code.
-      - run: npx vercel@64 build --prod
+      - name: Build production bundle with strict changelog history
+        run: |
+          npm run history:index -- --strict --rev="$GITHUB_SHA"
+          npm run history:check -- --strict --rev="$GITHUB_SHA"
+          npx vercel@64 build --prod
+          npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run db:migrate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL_UNPOOLED }}
@@ -309,6 +326,8 @@ jobs:
       # Ink Poster Press: their e2e files run read-only against https://otohime.dev (runner's Google Chrome).
       - name: Verify the deployed sha, terminal and press
         run: EXPECT_SHA="$GITHUB_SHA" bash scripts/verify-deploy.sh https://otohime.dev
+      - name: Verify deployed palace changelog history
+        run: EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-history.sh https://otohime.dev
 
   cleanup:
     if: github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository

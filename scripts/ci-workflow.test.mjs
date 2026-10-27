@@ -410,3 +410,141 @@ test("the author gate precedes production migrations and main checks", () => {
   assert.match(prod, /DEPLOY_AUTHOR_EMAIL: quiinthieu@gmail\.com/);
   assert.match(steps("checks"), /if: github.event_name == 'push' \|\| \(github.event_name == 'workflow_dispatch' && github.ref == 'refs\/heads\/main'\)[\s\S]*?node scripts\/check-deploy-author\.mjs/);
 });
+
+test("checks, preview and production check out full git ancestry (fetch-depth: 0) and gate builds with strict history checks", () => {
+  for (const job of ["checks", "preview", "production"]) {
+    const s = steps(job);
+    assert.match(
+      s,
+      /- uses: actions\/checkout@v7\n\s+with:\n\s+fetch-depth: 0/,
+      `${job} must check out complete ancestry with fetch-depth: 0`,
+    );
+    const gen = s.indexOf('npm run history:index -- --strict --rev="$GITHUB_SHA"');
+    const preCheck = s.indexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
+    const build = s.indexOf(job === "checks" ? "npm run build" : job === "preview" ? "npx vercel@64 build" : "npx vercel@64 build --prod");
+    const postCheck = s.lastIndexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
+    assert.ok(gen !== -1, `${job} must run strict history:index`);
+    assert.ok(preCheck > gen && preCheck < build, `${job} must run strict history:check before build`);
+    assert.ok(postCheck > build, `${job} must run strict history:check after build`);
+  }
+
+  const prod = steps("production");
+  const postBuildCheck = prod.lastIndexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
+  const migrate = prod.indexOf("npm run db:migrate");
+  const deploy = prod.indexOf("bash scripts/vercel-deploy.sh");
+  const verifyDeploy = prod.indexOf('EXPECT_SHA="$GITHUB_SHA" bash scripts/verify-deploy.sh https://otohime.dev');
+  const probeHistory = prod.indexOf('EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-history.sh https://otohime.dev');
+  assert.ok(postBuildCheck < migrate && postBuildCheck < deploy, "production strict history:check must precede db:migrate and vercel-deploy.sh");
+  assert.ok(probeHistory > verifyDeploy, "production must run probe-history.sh after verify-deploy.sh");
+  assert.match(steps("checks"), /bash scripts\/probe-history\.sh --self-test/, "checks must run probe-history.sh --self-test");
+});
+
+test("production strict history build step blocks build/upload on shallow or mismatched history and catches post-build tampering", () => {
+  const stepShell = gateBody("Build production bundle with strict changelog history");
+  const work = mkdtempSync(join(tmpdir(), "prod-history-ci-"));
+  const gitEnv = {
+    ...process.env,
+    GIT_CONFIG_GLOBAL: "/dev/null",
+    GIT_CONFIG_NOSYSTEM: "1",
+    GIT_AUTHOR_NAME: "Fixture",
+    GIT_AUTHOR_EMAIL: "fixture@example.test",
+    GIT_COMMITTER_NAME: "Fixture",
+    GIT_COMMITTER_EMAIL: "fixture@example.test",
+  };
+  try {
+    const origin = join(work, "origin");
+    mkdirSync(origin);
+    spawnSync("git", ["init", "-q", "--initial-branch=main"], { cwd: origin, env: gitEnv });
+    for (let i = 1; i <= 25; i++) {
+      writeFileSync(join(origin, `f-${i}.txt`), `${i}\n`);
+      spawnSync("git", ["add", `f-${i}.txt`], { cwd: origin, env: gitEnv });
+      spawnSync("git", ["commit", "-qm", `pm-271/t-${i}: Step ${i}`], { cwd: origin, env: gitEnv });
+    }
+    const headSha = spawnSync("git", ["rev-parse", "HEAD"], { cwd: origin, env: gitEnv, encoding: "utf8" }).stdout.trim();
+    const oldSha = spawnSync("git", ["rev-parse", "HEAD~22"], { cwd: origin, env: gitEnv, encoding: "utf8" }).stdout.trim();
+
+    function setupCheckout(dir) {
+      mkdirSync(join(dir, "scripts"), { recursive: true });
+      mkdirSync(join(dir, "content"), { recursive: true });
+      copyFileSync(new URL("./history-index.ts", import.meta.url), join(dir, "scripts/history-index.ts"));
+      writeFileSync(
+        join(dir, "package.json"),
+        JSON.stringify({
+          name: "fixture",
+          private: true,
+          scripts: {
+            "history:index": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts",
+            "history:check": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts --check",
+          },
+        }),
+      );
+    }
+
+    function runProdBuildStep(cwd, sha, buildMode = "ok") {
+      const marker = join(cwd, "build-invoked");
+      const uploadMarker = join(cwd, "upload-invoked");
+      rmSync(marker, { force: true });
+      rmSync(uploadMarker, { force: true });
+      const stub = `
+        npx() {
+          echo "called" > "${marker}"
+          if [ "$BUILD_MODE" = "tamper-total" ]; then
+            node -e '
+              const fs = require("node:fs");
+              const t = fs.readFileSync("content/history.json", "utf8").replace(/"total": \\d+,/, "\\"total\\": 999,");
+              fs.writeFileSync("content/history.json", t);
+            '
+          elif [ "$BUILD_MODE" = "tamper-stale" ]; then
+            node --experimental-strip-types scripts/history-index.ts --file=content/history.json
+            node -e '
+              const fs = require("node:fs");
+              fs.writeFileSync("content/history.json", fs.readFileSync("content/history.json.stale", "utf8"));
+            '
+          else
+            npm run history:index
+          fi
+        }
+      `;
+      const res = spawnSync("bash", ["-eo", "pipefail", "-c", `${stub}\n${stepShell}\necho "uploaded" > "${uploadMarker}"`], {
+        cwd,
+        env: { ...gitEnv, GITHUB_SHA: sha, BUILD_MODE: buildMode },
+        encoding: "utf8",
+      });
+      let built = false;
+      let uploaded = false;
+      try { built = readFileSync(marker, "utf8").includes("called"); } catch {}
+      try { uploaded = readFileSync(uploadMarker, "utf8").includes("uploaded"); } catch {}
+      return { ...res, built, uploaded };
+    }
+
+    // 1. Shallow clone negative control: fails before npx vercel@64 build --prod or upload runs.
+    const shallow = join(work, "shallow");
+    spawnSync("git", ["clone", "-q", "--depth=1", `file://${origin}`, shallow], { env: gitEnv });
+    setupCheckout(shallow);
+    const shallowRes = runProdBuildStep(shallow, headSha);
+    assert.notEqual(shallowRes.status, 0);
+    assert.equal(shallowRes.built, false, "shallow clone must not reach vercel build");
+    assert.equal(shallowRes.uploaded, false, "shallow clone must not reach upload");
+
+    // 2. Full clone with wrong GITHUB_SHA negative control: fails before npx vercel@64 build --prod or upload runs.
+    setupCheckout(origin);
+    const wrongShaRes = runProdBuildStep(origin, oldSha);
+    assert.notEqual(wrongShaRes.status, 0);
+    assert.equal(wrongShaRes.built, false, "mismatched GITHUB_SHA must not reach vercel build");
+    assert.equal(wrongShaRes.uploaded, false, "mismatched GITHUB_SHA must not reach upload");
+
+    // 3. Post-build tampering negative control (wrong total): build runs, post-build history:check blocks upload.
+    const tamperTotalRes = runProdBuildStep(origin, headSha, "tamper-total");
+    assert.notEqual(tamperTotalRes.status, 0);
+    assert.equal(tamperTotalRes.built, true);
+    assert.equal(tamperTotalRes.uploaded, false, "post-build total tampering must block upload");
+
+    // 4. Positive path: full clone at headSha generates current index, builds, passes post-build check and reaches upload.
+    const okRes = runProdBuildStep(origin, headSha, "ok");
+    assert.equal(okRes.status, 0, okRes.stderr);
+    assert.equal(okRes.built, true);
+    assert.equal(okRes.uploaded, true);
+  } finally {
+    rmSync(work, { recursive: true, force: true });
+  }
+});

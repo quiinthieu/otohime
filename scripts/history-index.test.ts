@@ -38,8 +38,9 @@ after(() => rmSync(TMP, { recursive: true, force: true }));
 // would repack and prune their objects under a running test ("bad tree object HEAD"). It is turned off through the
 // environment, and on process.env too, because the code under test runs git with the inherited environment.
 Object.assign(process.env, { GIT_CONFIG_COUNT: "2", GIT_CONFIG_KEY_0: "gc.auto", GIT_CONFIG_VALUE_0: "0", GIT_CONFIG_KEY_1: "maintenance.auto", GIT_CONFIG_VALUE_1: "false" });
+delete process.env.GITHUB_SHA;
 // No user or system config, so a signing hook or a log.* setting on the machine cannot change the fixtures.
-const GIT_ENV = { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1", GIT_AUTHOR_NAME: "Fixture", GIT_AUTHOR_EMAIL: "fixture@example.test", GIT_COMMITTER_NAME: "Fixture", GIT_COMMITTER_EMAIL: "fixture@example.test" };
+const GIT_ENV = { ...process.env, GITHUB_SHA: "", GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1", GIT_AUTHOR_NAME: "Fixture", GIT_AUTHOR_EMAIL: "fixture@example.test", GIT_COMMITTER_NAME: "Fixture", GIT_COMMITTER_EMAIL: "fixture@example.test" };
 const sh = (cwd: string, ...args: string[]) => execFileSync("git", args, { cwd, env: GIT_ENV, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
 
 let repos = 0;
@@ -246,17 +247,29 @@ test("a full clone is indexed newest first with dates, prefixes and file summari
   assert.equal(serializeHistory(indexAt(gitRunner(fixtureRepo(SAMPLE)))!), serializeHistory(index));
 });
 
-test("the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out", () => {
+test("the index is capped at MAX_ENTRIES while total counts all reachable commits (including merges); merges are left out of entries", () => {
   const repo = fixtureRepo(commitsN(MAX_ENTRIES + 5));
   sh(repo, "checkout", "--quiet", "-b", "side");
   sh(repo, "commit", "--quiet", "--allow-empty", "-m", "side work");
   sh(repo, "checkout", "--quiet", "main");
   sh(repo, "merge", "--quiet", "--no-ff", "-m", "Merge side", "side");
-  const index = indexAt(gitRunner(repo))!;
+  const git = gitRunner(repo);
+  const index = indexAt(git)!;
+  const unfilteredTotal = Number(sh(repo, "rev-list", "--count", "HEAD").trim());
   assert.equal(index.entries.length, MAX_ENTRIES);
-  assert.equal(index.total, MAX_ENTRIES + 6);
+  assert.equal(index.total, MAX_ENTRIES + 7);
+  assert.equal(index.total, unfilteredTotal);
   assert.ok(index.entries.every((e) => !e.subject.startsWith("Merge")));
   assert.ok(validateIndex(index));
+  assert.equal(checkHistory(git, repo, serializeHistory(index), { strict: true }).ok, true);
+
+  // Interleaved merge: add a non-merge commit after the merge and prove total still equals unfiltered rev-list.
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "post-merge leaf");
+  const afterMerge = indexAt(git)!;
+  assert.equal(afterMerge.total, Number(sh(repo, "rev-list", "--count", "HEAD").trim()));
+  assert.equal(afterMerge.total, MAX_ENTRIES + 8);
+  assert.equal(afterMerge.entries[0].subject, "post-merge leaf");
+  assert.equal(checkHistory(git, repo, serializeHistory(afterMerge), { strict: true }).ok, true);
 });
 
 test("without git, outside a repository, or in an empty one, the committed fallback is used as it is", () => {
@@ -369,6 +382,81 @@ test("the command line writes the index, leaves a fallback alone, and --check ex
   r = runScript(`--repo=${repo}`, `--file=${file}`, "--check");
   assert.equal(r.status, 1);
   assert.match(r.stderr, /history:check: .* does not match git/);
+});
+
+test("strict mode rejects shallow clones, missing git, build SHA mismatch, wrong-total-only, and >MAX_LAG stale fallbacks before refreshing", () => {
+  const repo = fixtureRepo(commitsN(6));
+  const git = gitRunner(repo);
+  const file = join(TMP, `strict-${repos++}.json`);
+  const initialIndex = indexAt(git)!;
+  const initialText = serializeHistory(initialIndex);
+  writeFileSync(file, initialText);
+
+  // 1. Add >20 commits without modifying the fallback file: observe negative controls BEFORE refreshing.
+  for (let i = 6; i < 30; i++) {
+    writeFileSync(join(repo, `lib/step-${i}.ts`), `export const n = ${i};\n`);
+    sh(repo, "add", `lib/step-${i}.ts`);
+    sh(repo, "commit", "--quiet", "-m", `pm-9/t-${i}: Step ${i}`);
+  }
+  const staleCheck = runScript(`--repo=${repo}`, `--file=${file}`, "--check");
+  assert.equal(staleCheck.status, 1);
+  assert.match(staleCheck.stderr, /stale: 24 commits behind HEAD/);
+  const strictStaleCheck = runScript(`--repo=${repo}`, `--file=${file}`, "--check", "--strict");
+  assert.equal(strictStaleCheck.status, 1);
+  assert.match(strictStaleCheck.stderr, /stale: 24 commits behind HEAD/);
+
+  // 2. Depth-1 shallow clone holding the historical fallback cannot pass strict check or strict generation.
+  const depth1 = shallowClone(repo, 1);
+  const depth1File = join(TMP, `depth1-${repos++}.json`);
+  writeFileSync(depth1File, initialText);
+  // Permissive check still accepts a well-formed fallback in a shallow clone.
+  assert.equal(runScript(`--repo=${depth1}`, `--file=${depth1File}`, "--check").status, 0);
+  // Strict check and strict generation must fail nonzero in a depth-1 clone.
+  const strictShallowCheck = runScript(`--repo=${depth1}`, `--file=${depth1File}`, "--check", "--strict");
+  assert.equal(strictShallowCheck.status, 1);
+  assert.match(strictShallowCheck.stderr, /strict check requires full git history \(shallow clone/);
+  const strictShallowGen = runScript(`--repo=${depth1}`, `--file=${depth1File}`, "--strict");
+  assert.equal(strictShallowGen.status, 1);
+  assert.match(strictShallowGen.stderr, /strict generation requires full git history \(shallow clone/);
+  assert.equal(readFileSync(depth1File, "utf8"), initialText, "failed strict generation leaves fallback untouched");
+
+  // 3. Git-unavailable directory fails strict generation and strict check, while permissive fallback still works.
+  const plain = join(TMP, `strict-plain-${repos++}`);
+  mkdirSync(plain);
+  assert.equal(runScript(`--repo=${plain}`, `--file=${depth1File}`, "--check", "--strict").status, 1);
+  assert.equal(runScript(`--repo=${plain}`, `--file=${depth1File}`, "--strict").status, 1);
+  assert.equal(runScript(`--repo=${plain}`, `--file=${depth1File}`, "--check").status, 0);
+
+  // 4. Complete clone automatically refreshes >20-commit stale fallback and passes strict check, deterministically on rerun.
+  const headSha = sh(repo, "rev-parse", "HEAD").trim();
+  const gen1 = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${headSha}`);
+  assert.equal(gen1.status, 0, gen1.stderr);
+  assert.match(gen1.stdout, /strict full history.*30 of 30 commits/);
+  const refreshed = readFileSync(file, "utf8");
+  const gen2 = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${headSha}`);
+  assert.equal(gen2.status, 0, gen2.stderr);
+  assert.match(gen2.stdout, /unchanged/);
+  assert.equal(readFileSync(file, "utf8"), refreshed);
+  assert.equal(runScript(`--repo=${repo}`, `--file=${file}`, "--check", "--strict", `--rev=${headSha}`).status, 0);
+
+  // 5. Build identity mismatch (--rev != HEAD) fails both strict generation and strict check.
+  const olderSha = sh(repo, "rev-parse", "HEAD~1").trim();
+  const wrongRevCheck = runScript(`--repo=${repo}`, `--file=${file}`, "--check", "--strict", `--rev=${olderSha}`);
+  assert.equal(wrongRevCheck.status, 1);
+  assert.match(wrongRevCheck.stderr, /build revision .* does not match checked-out HEAD/);
+  const wrongRevGen = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${olderSha}`);
+  assert.equal(wrongRevGen.status, 1);
+  assert.match(wrongRevGen.stderr, /build revision .* does not match checked-out HEAD/);
+
+  // 6. Mutating ONLY total while keeping a current head fails both permissive and strict checks.
+  const wrongTotalFile = join(TMP, `wrong-total-${repos++}.json`);
+  writeFileSync(wrongTotalFile, refreshed.replace('"total": 30,', '"total": 31,'));
+  const permissiveWrongTotal = runScript(`--repo=${repo}`, `--file=${wrongTotalFile}`, "--check");
+  assert.equal(permissiveWrongTotal.status, 1);
+  assert.match(permissiveWrongTotal.stderr, /total 31 != 30/);
+  const strictWrongTotal = runScript(`--repo=${repo}`, `--file=${wrongTotalFile}`, "--check", "--strict");
+  assert.equal(strictWrongTotal.status, 1);
+  assert.match(strictWrongTotal.stderr, /total 31 != 30/);
 });
 
 test("the committed content/history.json is a well-formed, bounded, canonical index", () => {

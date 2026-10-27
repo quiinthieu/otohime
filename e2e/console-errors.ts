@@ -18,7 +18,8 @@ export function collectBrowserErrors(origin: string): BrowserErrors {
     },
     console(value) {
       errors.push({ text: value.text, candidate: value.url === endpoint && value.args === 0 && value.line === 0 && value.column === 0 &&
-        value.text === "Failed to load resource: the server responded with a status of 404 (Not Found)" });
+        (value.text === "Failed to load resource: the server responded with a status of 404 (Not Found)" ||
+          value.text === "Failed to load resource: the server responded with a status of 404 ()") });
     },
     pageError(message) { errors.push({ text: message, candidate: false }); },
     get unexpected() {
