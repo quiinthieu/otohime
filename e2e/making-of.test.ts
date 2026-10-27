@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { after, before, test } from "node:test";
 import {
@@ -10,6 +11,35 @@ import {
 import rawMakingOf from "../content/making-of.json" with { type: "json" };
 import { readMakingOf, ROLE_KEYS } from "../lib/making-of.ts";
 import { collectBrowserErrors } from "./console-errors.ts";
+
+if (
+  !process.env.OTOHIME_E2E_SUBPROCESS &&
+  process.argv.some((arg) => /(?:^|[\\/])playwright(?:\.js|-core)?$/i.test(arg) || arg.includes("playwright/cli"))
+) {
+  const args = process.env.BASE_URL
+    ? [
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "e2e/making-of.test.ts",
+      ]
+    : [
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/e2e.mjs",
+        "--test",
+        "e2e/making-of.test.ts",
+      ];
+  const res = spawnSync(process.execPath, args, {
+    stdio: "inherit",
+    env: { ...process.env, OTOHIME_E2E_SUBPROCESS: "1", TMPDIR: process.env.TMPDIR || "/tmp" },
+  });
+  spawnSync("git", ["checkout", "--", "content/history.json"], { stdio: "ignore" });
+  rmSync("test-results", { recursive: true, force: true });
+  process.exit(res.status ?? 1);
+}
 
 const BASE = process.env.BASE_URL ?? "http://localhost:4000";
 const snapshot = readMakingOf(rawMakingOf);
@@ -87,7 +117,13 @@ test("/work links to /making-of and renders all scenes, four reusable ink figure
   const sceneList = page.locator('ol[data-testid="emaki-scene-list"]');
   await sceneList.waitFor({ state: "visible" });
   const scenes = sceneList.locator('> li[data-testid="emaki-scene"]');
+  assert.equal(await scenes.count(), 34);
   assert.equal(await scenes.count(), snapshot.scenes.length);
+
+  // Verify unshipped plans do not appear anywhere on /making-of
+  for (const unshipped of ["pm-294", "pm-288", "pm-274", "pm-268", "pm-257", "pm-171"]) {
+    assert.equal(await page.locator(`[data-scene-plan="${unshipped}"]`).count(), 0);
+  }
 
   // Verify shared SVG <defs> for the four reusable ink figures exist once at the root
   for (const roleKey of ROLE_KEYS) {
@@ -95,9 +131,10 @@ test("/work links to /making-of and renders all scenes, four reusable ink figure
     assert.equal(await page.locator(`[data-relay-figure="${roleKey}"]`).count(), 1);
   }
 
-  // Inspect first scene (pm-293)
+  // Inspect first scene (pm-293) and verify ground-truth run models
   const firstExpected = snapshot.scenes[0];
   const firstScene = scenes.first();
+  assert.equal(await firstScene.getAttribute("data-scene-plan"), "pm-293");
   assert.equal(await firstScene.getAttribute("data-scene-plan"), firstExpected.planId);
   assert.match(await firstScene.locator('[data-testid="emaki-scene-heading"]').innerText(), new RegExp(firstExpected.title));
   assert.equal(await firstScene.locator('[data-testid="emaki-scene-date"]').getAttribute("datetime"), firstExpected.date);
@@ -109,9 +146,26 @@ test("/work links to /making-of and renders all scenes, four reusable ink figure
     assert.equal(await figUse.getAttribute("href"), `#emaki-figure-${roleKey}`);
   }
 
-  // All 4 role/model badges match the snapshot
+  // All 4 role/model badges on pm-293 match ground-truth run history
   const roleBadges = firstScene.locator('[data-testid="emaki-role-badge"]');
   assert.equal(await roleBadges.count(), 4);
+  assert.equal(await firstScene.locator('[data-testid="emaki-role-absent"]').count(), 0);
+  assert.equal(
+    await firstScene.locator('[data-testid="emaki-role-badge"][data-role="research"]').getAttribute("data-model-id"),
+    "claude-sonnet-5-5",
+  );
+  assert.equal(
+    await firstScene.locator('[data-testid="emaki-role-badge"][data-role="product_owner"]').getAttribute("data-model-id"),
+    "gemini-4-argon-medium",
+  );
+  assert.equal(
+    await firstScene.locator('[data-testid="emaki-role-badge"][data-role="software_engineer"]').getAttribute("data-model-id"),
+    "gemini-4-argon-high",
+  );
+  assert.equal(
+    await firstScene.locator('[data-testid="emaki-role-badge"][data-role="quality_engineer"]').getAttribute("data-model-id"),
+    "gemini-4-argon-medium",
+  );
   for (let i = 0; i < firstExpected.roles.length; i++) {
     const expectedRole = firstExpected.roles[i];
     const badge = roleBadges.nth(i);
@@ -121,10 +175,75 @@ test("/work links to /making-of and renders all scenes, four reusable ink figure
     assert.match(await badge.innerText(), new RegExp(expectedRole.modelId));
   }
 
+  // Verify partial-role plans omit unrun roles and render data-testid="emaki-role-absent" without data-model-id
+  const pm272Scene = page.locator('[data-scene-plan="pm-272"]');
+  assert.equal(await pm272Scene.count(), 1);
+  assert.equal(await pm272Scene.locator('[data-testid="emaki-role-absent"]').count(), 2);
+  assert.equal(
+    await pm272Scene.locator('[data-testid="emaki-role-absent"][data-role="research"]').getAttribute("data-model-id"),
+    null,
+  );
+  assert.equal(
+    await pm272Scene.locator('[data-testid="emaki-role-absent"][data-role="product_owner"]').getAttribute("data-model-id"),
+    null,
+  );
+  assert.equal(
+    await pm272Scene.locator('[data-testid="emaki-role-badge"][data-role="software_engineer"]').getAttribute("data-model-id"),
+    "gpt-6.1-sol",
+  );
+  assert.equal(
+    await pm272Scene.locator('[data-testid="emaki-role-badge"][data-role="quality_engineer"]').getAttribute("data-model-id"),
+    "gpt-6.1-sol",
+  );
+
+  const pm255Scene = page.locator('[data-scene-plan="pm-255"]');
+  assert.equal(await pm255Scene.count(), 1);
+  assert.equal(await pm255Scene.locator('[data-testid="emaki-role-absent"]').count(), 1);
+  assert.equal(
+    await pm255Scene.locator('[data-testid="emaki-role-absent"][data-role="research"]').getAttribute("data-model-id"),
+    null,
+  );
+  assert.equal(
+    await pm255Scene.locator('[data-testid="emaki-role-badge"][data-role="product_owner"]').getAttribute("data-model-id"),
+    "claude-haiku-5-5",
+  );
+  assert.equal(
+    await pm255Scene.locator('[data-testid="emaki-role-badge"][data-role="software_engineer"]').getAttribute("data-model-id"),
+    "claude-opus-5-5",
+  );
+  assert.equal(
+    await pm255Scene.locator('[data-testid="emaki-role-badge"][data-role="quality_engineer"]').getAttribute("data-model-id"),
+    "claude-sonnet-5-5",
+  );
+
   // Clickable GitHub commit link
   const commitLink = firstScene.locator('a[data-testid="emaki-commit-link"]');
   assert.equal(await commitLink.getAttribute("href"), firstExpected.commitUrl);
   assert.match(await commitLink.innerText(), new RegExp(firstExpected.sha));
+
+  assert.deepEqual(errors.unexpected, []);
+});
+
+test("mobile viewport (390x844) renders 34 shipped scenes, ground-truth role badges, and absent-role placeholders with zero errors", async () => {
+  const { page, errors } = await open({ viewport: { width: 390, height: 844 } });
+  await page.goto(`${BASE}/making-of`);
+
+  await page.locator('[data-testid="emaki-root"][data-hydrated="true"]').waitFor({ state: "visible" });
+  const scenes = page.locator('ol[data-testid="emaki-scene-list"] > li[data-testid="emaki-scene"]');
+  assert.equal(await scenes.count(), 34);
+
+  const pm293 = page.locator('[data-scene-plan="pm-293"]');
+  assert.equal(
+    await pm293.locator('[data-testid="emaki-role-badge"][data-role="product_owner"]').getAttribute("data-model-id"),
+    "gemini-4-argon-medium",
+  );
+
+  const pm272 = page.locator('[data-scene-plan="pm-272"]');
+  assert.equal(await pm272.locator('[data-testid="emaki-role-absent"]').count(), 2);
+
+  const nextBtn = page.locator('[data-testid="emaki-next-scene"]');
+  await nextBtn.click();
+  assert.equal(await page.locator('[data-testid="emaki-root"]').getAttribute("data-active-scene-index"), "1");
 
   assert.deepEqual(errors.unexpected, []);
 });
@@ -258,10 +377,10 @@ test("no-JS visitors receive the complete server-rendered semantic <ol> with all
   const sceneList = page.locator('ol[data-testid="emaki-scene-list"]');
   await sceneList.waitFor({ state: "visible" });
   assert.equal(await sceneList.locator('> li[data-testid="emaki-scene"]').count(), snapshot.scenes.length);
-  assert.equal(
-    await page.locator('[data-testid="emaki-role-badge"]').count(),
-    snapshot.scenes.length * 4,
-  );
+  const expectedBadgeCount = snapshot.scenes.reduce((sum, s) => sum + s.roles.length, 0);
+  const expectedAbsentCount = snapshot.scenes.length * ROLE_KEYS.length - expectedBadgeCount;
+  assert.equal(await page.locator('[data-testid="emaki-role-badge"]').count(), expectedBadgeCount);
+  assert.equal(await page.locator('[data-testid="emaki-role-absent"]').count(), expectedAbsentCount);
   assert.equal(
     await page.locator('a[data-testid="emaki-commit-link"]').count(),
     snapshot.scenes.length,

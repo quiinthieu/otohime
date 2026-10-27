@@ -12,11 +12,14 @@ export const ROLE_LABELS: Record<AgentRoleKey, string> = {
   quality_engineer: "Quality Engineer",
 };
 
-export const DEFAULT_ROLE_MODELS: Record<AgentRoleKey, string> = {
-  research: "claude-sonnet-5-5",
-  product_owner: "claude-opus-5-5",
-  software_engineer: "claude-opus-5-5",
-  quality_engineer: "claude-sonnet-5-5",
+export type PlanStatus = "done" | "executing" | "paused" | "abandoned" | "rejected";
+export type PlanRoleModels = Record<AgentRoleKey, string | null>;
+export type PlanRunRecord = {
+  title: string;
+  summary: string;
+  status: PlanStatus;
+  shipped: boolean;
+  roles: PlanRoleModels;
 };
 
 export const SHA_LENGTH = 10;
@@ -66,7 +69,9 @@ export type PlanMetadataInput = {
   planId?: string;
   title?: string;
   summary?: string;
-  roles?: Partial<Record<AgentRoleKey, string>> | readonly Partial<MakingOfRole>[];
+  status?: PlanStatus;
+  shipped?: boolean;
+  roles?: Partial<Record<AgentRoleKey, string | null>> | readonly Partial<MakingOfRole>[];
 };
 
 export type BuildMakingOfInput = {
@@ -180,8 +185,12 @@ export function sanitizePublicText(raw: unknown, max = SUBJECT_MAX): string {
   return cleanSubject(cleaned, max);
 }
 
-// Normalizes a model identifier to a safe public slug; falls back to `fallbackModel` when empty or unsafe.
-export function sanitizeModelId(raw: unknown, fallbackModel = "claude-sonnet-5-5"): string {
+// Normalizes a model identifier to a safe public slug; returns `fallbackModel` (null by default) when empty or unsafe.
+// Never defaults to an invented model identifier unless the caller explicitly provides a string fallback.
+export function sanitizeModelId(raw: unknown): string | null;
+export function sanitizeModelId(raw: unknown, fallbackModel: string): string;
+export function sanitizeModelId(raw: unknown, fallbackModel: string | null): string | null;
+export function sanitizeModelId(raw: unknown, fallbackModel: string | null = null): string | null {
   if (typeof raw !== "string") return fallbackModel;
   const trimmed = raw.trim().toLowerCase();
   if (!trimmed || containsPrivateData(trimmed)) return fallbackModel;
@@ -193,16 +202,19 @@ export function sanitizeModelId(raw: unknown, fallbackModel = "claude-sonnet-5-5
   return normalized;
 }
 
+// Normalizes recorded per-role models into canonical ROLE_KEYS order.
+// Roles with null, undefined, or invalid model IDs are omitted rather than filled from static defaults.
 export function normalizeRoles(
-  input?: Partial<Record<AgentRoleKey, string>> | readonly Partial<MakingOfRole>[] | null,
+  input?: Partial<Record<AgentRoleKey, string | null | undefined>> | readonly Partial<MakingOfRole>[] | null,
 ): MakingOfRole[] {
   const byRole = new Map<AgentRoleKey, { label?: string; modelId?: string }>();
   if (Array.isArray(input)) {
     for (const item of input) {
       if (!isRecord(item) || !isAgentRoleKey(item.role)) continue;
+      if (typeof item.modelId !== "string") continue;
       byRole.set(item.role, {
         label: typeof item.label === "string" ? item.label : undefined,
-        modelId: typeof item.modelId === "string" ? item.modelId : undefined,
+        modelId: item.modelId,
       });
     }
   } else if (isRecord(input)) {
@@ -214,16 +226,21 @@ export function normalizeRoles(
     }
   }
 
-  return ROLE_KEYS.map((role) => {
+  const out: MakingOfRole[] = [];
+  for (const role of ROLE_KEYS) {
     const custom = byRole.get(role);
+    if (!custom) continue;
+    const modelId = sanitizeModelId(custom.modelId);
+    if (!modelId) continue;
     const defaultLabel = ROLE_LABELS[role];
-    const cleanLabel = custom?.label ? sanitizePublicText(custom.label, 32) : "";
-    return {
+    const cleanLabel = custom.label ? sanitizePublicText(custom.label, 32) : "";
+    out.push({
       role,
       label: cleanLabel || defaultLabel,
-      modelId: sanitizeModelId(custom?.modelId, DEFAULT_ROLE_MODELS[role]),
-    };
-  });
+      modelId,
+    });
+  }
+  return out;
 }
 
 export function commitUrlFor(sha: string): string {
@@ -320,11 +337,12 @@ export function parsePlanMarkdown(markdown: string): (PlanMetadataInput & { plan
 
   const roles: Partial<Record<AgentRoleKey, string>> = {};
   const poModelMatch =
-    /\b(claude-(?:opus|sonnet)-\d-\d|gpt-\d(?:\.\d)?-sol|gemini-\d-[a-z0-9-]+)\b/i.exec(
+    /\b(claude-(?:opus|sonnet|haiku|fable)-\d-\d|gpt-\d(?:\.\d)?-(?:sol|luna)|gemini-\d(?:\.\d)?-[a-z0-9-]+)\b/i.exec(
       markdown.slice(0, 600),
     );
   if (poModelMatch) {
-    roles.product_owner = sanitizeModelId(poModelMatch[1], DEFAULT_ROLE_MODELS.product_owner);
+    const poModel = sanitizeModelId(poModelMatch[1]);
+    if (poModel) roles.product_owner = poModel;
   }
 
   return {
@@ -335,306 +353,792 @@ export function parsePlanMarkdown(markdown: string): (PlanMetadataInput & { plan
   };
 }
 
-// Reviewed public metadata for otohime.dev plans so every scene has an accurate title, summary, and model lineage.
-export const DEFAULT_PLAN_CATALOG: Readonly<Record<string, PlanMetadataInput>> = {
+// Authoritative plan-manager run history for otohime.dev (`plans` + `runs.profile_flags --model`).
+// A plan is shipped when its status is `done`, or when it is the active plan `pm-293` shipping `/making-of`.
+// Roles that did not execute on a plan have `null` and are omitted from `scene.roles` rather than defaulted.
+export const PLAN_RUN_HISTORY: Readonly<Record<string, PlanRunRecord>> = {
+  // --- 34 shipped plans (`pm-293` + 33 `done` plans) ---
   "pm-293": {
     title: "Washi Daruma, Emaki, and Hanafuda",
     summary:
       "Three paper-and-ink experiments backed by a shared 12-month shipped digest: Daruma Kuyo shelf, Making-of Emaki handscroll, and Hanafuda Koi-Koi.",
+    status: "executing",
+    shipped: true,
     roles: {
       research: "claude-sonnet-5-5",
-      product_owner: "claude-opus-5-5",
-      software_engineer: "gemini-4-argon",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-288": {
-    title: "Golden Seams and Ink Traces",
-    summary: "Kintsugi fracture-and-mend stoneware canvas and ink trace experiments on washi paper.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gpt-6.1-sol",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-287": {
-    title: "Ink Bonsai Shadow Theatre",
-    summary: "Prunable procedural ink bonsai with paper-lantern shadow projection and seasonal foliage.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gpt-6.1-sol",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-286": {
-    title: "Ink Gashapon and Shodo Desk",
-    summary: "Tactile capsule sticker dispenser and brush-pressure calligraphy desk studies.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gpt-6.1-sol",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-285": {
-    title: "Ink Loom and Hanko Press",
-    summary: "Paper-strip weaving loom and carved vermilion hanko seal press experiments.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gpt-6.1-sol",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-282": {
-    title: "Paper Experiments: Pen Plotter Mode",
-    summary: "Single-line vector plotter pass and pop-up timeline studies across the paper site.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "claude-opus-5-5",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-279": {
-    title: "Paper Star Chart",
-    summary: "Ink assembly-line conveyor on Work and astrolabe star chart planning.",
-  },
-  "pm-277": {
-    title: "Riso Delivery Recovery",
-    summary: "Consolidated Riso print-run ownership and clean browser verification builds.",
-  },
-  "pm-276": {
-    title: "Delivery Signal Guardrails",
-    summary: "Deterministic gate diagnostics and deployment verification guardrails.",
-  },
-  "pm-275": {
-    title: "Reliable Plan Delivery",
-    summary: "Restored GitHub Actions checks and production verification path on Ubuntu Chrome.",
-  },
-  "pm-273": {
-    title: "Ink and Folds",
-    summary: "Moderated vector doodle guestbook wall at /guestbook and folded-paper fortune teller at /fortune.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gpt-6.1-sol",
-      software_engineer: "gpt-6-sol",
-      quality_engineer: "claude-sonnet-5-5",
+      product_owner: "gemini-4-argon-medium",
+      software_engineer: "gemini-4-argon-high",
+      quality_engineer: "gemini-4-argon-medium",
     },
   },
   "pm-272": {
     title: "ListenBrainz & Lanyard Pocket Presence",
     summary: "Live ListenBrainz cassette rotation and optional Lanyard presence in the Pocket console.",
+    status: "done",
+    shipped: true,
     roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gpt-6.1-sol",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-271": {
-    title: "Tamatebako Changelog & Palace Sound",
-    summary: "Current git history indexing for the Ryugu-jo Tamatebako box and bfcache-safe ambient palace sound.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "claude-opus-5-5",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
+      research: null,
+      product_owner: null,
+      software_engineer: "gpt-6.1-sol",
+      quality_engineer: "gpt-6.1-sol",
     },
   },
   "pm-270": {
     title: "Main Lane Throughput",
     summary: "Authenticated deployment readiness probes, callback-flushed gate output, and TMPDIR socket normalization.",
+    status: "done",
+    shipped: true,
     roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gpt-6.1-sol",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-269": {
-    title: "Ryugu Paper Toys II",
-    summary: "Message in a Bottle shore drift, Kamishibai project theatre, and Peep-box parallax diorama.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gemini-4-argon",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
-    },
-  },
-  "pm-268": {
-    title: "Riso Ink Studio",
-    summary: "Misregistered two-drum Risograph headings and interactive material tuning studio at /lab.",
-    roles: {
-      research: "claude-sonnet-5-5",
-      product_owner: "gpt-6.1-sol",
-      software_engineer: "claude-opus-5-5",
+      research: "claude-fable-5-1",
+      product_owner: "gemini-4-argon-high",
+      software_engineer: "gpt-6.1-sol",
       quality_engineer: "claude-sonnet-5-5",
     },
   },
   "pm-264": {
     title: "Peep-box Karinszoki Diorama",
     summary: "Layered paper peep-box stage driven by pointer tilt, device orientation, and opt-in head tracking.",
-  },
-  "pm-260": {
-    title: "Split Part Recovery",
-    summary: "Reconciled multi-part plan handoffs and verified Ask console probe behavior.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "gpt-6-sol",
+    },
   },
   "pm-259": {
     title: "Kame Fetch Recovery",
     summary: "Paper turtle companion walking the margin and crumpled-paper 404 toss game.",
+    status: "done",
+    shipped: true,
     roles: {
       research: "claude-sonnet-5-5",
-      product_owner: "claude-opus-5-5",
-      software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "gpt-6.1-sol",
+      quality_engineer: "gpt-6-sol",
     },
   },
   "pm-258": {
     title: "Keyless Pocket Presence",
     summary: "Zero-key public presence fallbacks and gate closure verification CLI.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "gpt-6.1-sol",
+    },
+  },
+  "pm-256": {
+    title: "Otohime's Undersea Palace",
+    summary: "Hidden Ryugu-jo undersea palace with ink-wash water caustics, fleeing fish, and the Tamatebako time box.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-luna",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-255": {
+    title: "Ask Console Tier Probe",
+    summary: "Read-only verification probes and rate-tier checks for the Pocket Ask route.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: null,
+      product_owner: "claude-haiku-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
+  },
+  "pm-251": {
+    title: "Paper Toys Trio (Suminagashi Pond, Letterpress Keys, Fold-a-Zine)",
+    summary: "Marbled suminagashi ink pond on /play, tactile letterpress keycaps, and printable 8-page fold-a-zine.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-opus-5-5",
+      product_owner: "claude-sonnet-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
+  },
+  "pm-250": {
+    title: "Ink Desk + Stamp Ledger",
+    summary: "Interactive isometric Ink Desk cartridge at /desk and a 365-day rubber-stamp activity ledger at /ledger.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "claude-sonnet-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
+  },
+  "pm-249": {
+    title: "Ink Poster Press, Postcard Mailroom, Pocket Terminal",
+    summary: "Two-colour Riso poster press, stamped postcard mailroom, and keyboard-driven Pocket terminal shell.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "claude-sonnet-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
+  },
+  "pm-247": {
+    title: "Ink Radio & Fan-Out Peeks",
+    summary: "Lo-fi procedural WebAudio ink radio and three-card fan-out peek previews across site links.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "gpt-6-luna",
+    },
+  },
+  "pm-243": {
+    title: "Ask the Ink Offline Index & LLM Route",
+    summary: "Build-time passage index from site content and Gazette articles with cited answers in Pocket.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-opus-5-5",
+      product_owner: "claude-haiku-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
+  },
+  "pm-241": {
+    title: "Internet Save Point",
+    summary: "Animated paper-and-ink footer with campfire save point, waterline sentinel, and room hops.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-216": {
+    title: "Design system: a drawn page with knobs at /design-system",
+    summary: "Interactive notebook-paper explainer with 8 token pots, 9 UI parts, and live propagation controls.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "gemini-3.8-flash-high",
+      quality_engineer: "gemini-3.8-flash-high",
+    },
+  },
+  "pm-214": {
+    title: "Structures: a drawn, poke-able series on data structures at /structures",
+    summary: "Six interactive hand-drawn data-structure explainers on squared notebook paper.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-213": {
+    title: "Gazette: a small newspaper of short, illustrated explainers at /articles",
+    summary: "Broadsheet science newspaper with blackletter masthead, ruled columns, and six illustrated articles.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-206": {
+    title: "Hop and Settle: motion across the whole app",
+    summary: "Cross-document View Transitions morphing project titles and settling instrument animations.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-204": {
+    title: "Barometer: a brass weather station for your city, drawn by hand",
+    summary: "Hand-drawn brass weather dial, mercury thermometer, anemometer, and barograph driven by Open-Meteo.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-203": {
+    title: "Planisphere: tonight's sky on a star wheel drawn in ink",
+    summary: "Rotatable ink star wheel projecting 88 constellations and visible planets for any latitude and hour.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-202": {
+    title: "Rotor: a hand-drawn Enigma, and room for the next projects",
+    summary: "Playable 3-rotor Wehrmacht Enigma I cipher machine drawn in ink with lampboard and plugboard.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-199": {
+    title: "Orrery: the Sun, the planets and five stars, drawn by hand",
+    summary: "Interactive hand-drawn solar system orrery and stellar scale comparator at /orrery.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-198": {
+    title: "Page-styled dropdowns: the open picker wears the page",
+    summary: "Custom accessible listbox pickers styled to match each room's paper and ink palette.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-197": {
+    title: "Still table: the Elements grid stops jiggling when the dialog closes",
+    summary: "Stabilized periodic table layout and focus restoration when closing element detail modals.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-196": {
+    title: "Capsule, printed: a sophisticated card set and a draw you cannot read early",
+    summary: "Halftone-printed collectible Ghibli character cards with sealed capsule draw mechanics.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-195": {
+    title: "All projects link: a way back to /projects",
+    summary: "Consistent back-to-bench navigation header across every isolated project route group.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-sonnet-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-191": {
+    title: "Vinyl: a crate, a turntable and a visible YouTube monitor",
+    summary: "Record crate browser, spinning tonearm turntable, and CRT monitor at /vinyl.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-190": {
+    title: "Elements: a periodic table with a 3D atom per element",
+    summary: "118-element periodic table with interactive Bohr shells and 3D orbital views at /elements.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-sonnet-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-189": {
+    title: "Sun, redrawn: a one-page hand-drawn poster",
+    summary: "Hand-lettered cutaway poster of solar layers, fusion core, and coronal loops.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-sonnet-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-188": {
+    title: "Sun: an animated cutaway of our star",
+    summary: "Interactive tour of the Sun's interior zones, granulation, and solar prominences.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-186": {
+    title: "Owner Channels: owners add songs to the /music television",
+    summary: "Authenticated song channel curation and database persistence for the /music television.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-184": {
+    title: "Capsule: a coin-and-crank card machine",
+    summary: "Hand-drawn Studio Ghibli capsule-toy machine with daily coins and persistent collection album.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-181": {
+    title: "Shore: a sea-glass focus timer",
+    summary: "Tactile sea-glass Pomodoro timer with lapping tide waves and chime cues at /shore.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
+  },
+  "pm-180": {
+    title: "Ship The Bench — verify pm-171, complete it, deploy it",
+    summary: "Build-SHA metadata verification and production deployment of the Projects bench.",
+    status: "done",
+    shipped: true,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-sonnet-5-5",
+      software_engineer: "claude-sonnet-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
+  },
+
+  // --- Unshipped plans (`paused`, `abandoned`, `executing`, `rejected`) excluded from `/making-of` scenes ---
+  "pm-294": {
+    title: "Paper & Ink Experiments Batch",
+    summary: "Queued paper-and-ink experiment exploration.",
+    status: "executing",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: null,
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-292": {
+    title: "Rejected Experiment Study",
+    summary: "Rejected study.",
+    status: "rejected",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gemini-4-argon-medium",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-291": {
+    title: "Paused Experiment Study",
+    summary: "Paused study.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-288": {
+    title: "Golden Seams and Ink Traces",
+    summary: "Kintsugi fracture-and-mend stoneware canvas and ink trace experiments on washi paper.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-287": {
+    title: "Ink Bonsai Shadow Theatre",
+    summary: "Prunable procedural ink bonsai with paper-lantern shadow projection and seasonal foliage.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-286": {
+    title: "Ink Gashapon and Shodo Desk",
+    summary: "Tactile capsule sticker dispenser and brush-pressure calligraphy desk studies.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-285": {
+    title: "Ink Loom and Hanko Press",
+    summary: "Paper-strip weaving loom and carved vermilion hanko seal press experiments.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-284": {
+    title: "Paused Ink Study 284",
+    summary: "Paused study.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-283": {
+    title: "Paused Ink Study 283",
+    summary: "Paused study.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-282": {
+    title: "Paper Experiments: Pen Plotter Mode",
+    summary: "Single-line vector plotter pass and pop-up timeline studies across the paper site.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-281": {
+    title: "Paused Ink Study 281",
+    summary: "Paused study.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-280": {
+    title: "Paused Ink Study 280",
+    summary: "Paused study.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-279": {
+    title: "Paper Star Chart",
+    summary: "Ink assembly-line conveyor on Work and astrolabe star chart planning.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-277": {
+    title: "Riso Delivery Recovery",
+    summary: "Consolidated Riso print-run ownership and clean browser verification builds.",
+    status: "abandoned",
+    shipped: false,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-276": {
+    title: "Delivery Signal Guardrails",
+    summary: "Deterministic gate diagnostics and deployment verification guardrails.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-275": {
+    title: "Reliable Plan Delivery",
+    summary: "Restored GitHub Actions checks and production verification path on Ubuntu Chrome.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-274": {
+    title: "Paper & Ink Exploration 274",
+    summary: "Paused exploration with research only.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: null,
+      software_engineer: null,
+      quality_engineer: null,
+    },
+  },
+  "pm-273": {
+    title: "Ink and Folds",
+    summary: "Moderated vector doodle guestbook wall at /guestbook and folded-paper fortune teller at /fortune.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "gpt-6-sol",
+      quality_engineer: "gpt-6-sol",
+    },
+  },
+  "pm-271": {
+    title: "Tamatebako Changelog & Palace Sound",
+    summary: "Current git history indexing for the Ryugu-jo Tamatebako box and bfcache-safe ambient palace sound.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: null,
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
+  },
+  "pm-269": {
+    title: "Ryugu Paper Toys II",
+    summary: "Message in a Bottle shore drift, Kamishibai project theatre, and Peep-box parallax diorama.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: null,
+      product_owner: "gemini-4-argon-high",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "gpt-6-sol",
+    },
+  },
+  "pm-268": {
+    title: "Riso Ink Studio",
+    summary: "Misregistered two-drum Risograph headings and interactive material tuning studio at /lab.",
+    status: "executing",
+    shipped: false,
     roles: {
       research: "claude-sonnet-5-5",
       product_owner: "gpt-6.1-sol",
       software_engineer: "claude-opus-5-5",
-      quality_engineer: "claude-sonnet-5-5",
+      quality_engineer: "gpt-6-sol",
+    },
+  },
+  "pm-260": {
+    title: "Split Part Recovery",
+    summary: "Reconciled multi-part plan handoffs and verified Ask console probe behavior.",
+    status: "abandoned",
+    shipped: false,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-sonnet-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "gpt-6.1-sol",
     },
   },
   "pm-257": {
     title: "Ink Ghosts",
     summary: "Anonymous live ink cursors and click ripples across Home and Ryugu-jo with a Pocket privacy switch.",
-  },
-  "pm-256": {
-    title: "Otohime's Undersea Palace",
-    summary: "Hidden Ryugu-jo undersea palace with ink-wash water caustics, fleeing fish, and the Tamatebako time box.",
-  },
-  "pm-255": {
-    title: "Ask Console Tier Probe",
-    summary: "Read-only verification probes and rate-tier checks for the Pocket Ask route.",
-  },
-  "pm-251": {
-    title: "Paper Toys Trio (Suminagashi Pond, Letterpress Keys, Fold-a-Zine)",
-    summary: "Marbled suminagashi ink pond on /play, tactile letterpress keycaps, and printable 8-page fold-a-zine.",
-  },
-  "pm-250": {
-    title: "Ink Desk + Stamp Ledger",
-    summary: "Interactive isometric Ink Desk cartridge at /desk and a 365-day rubber-stamp activity ledger at /ledger.",
-  },
-  "pm-249": {
-    title: "Ink Poster Press, Postcard Mailroom, Pocket Terminal",
-    summary: "Two-colour Riso poster press, stamped postcard mailroom, and keyboard-driven Pocket terminal shell.",
+    status: "paused",
+    shipped: false,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "gpt-6.1-sol",
+      quality_engineer: "gpt-6.1-sol",
+    },
   },
   "pm-248": {
     title: "Paper Almanac Bits",
     summary: "Seasonal paper-and-ink almanac tints, solar term dial, and grounded Ask the Ink search.",
-  },
-  "pm-247": {
-    title: "Ink Radio & Fan-Out Peeks",
-    summary: "Lo-fi procedural WebAudio ink radio and three-card fan-out peek previews across site links.",
-  },
-  "pm-243": {
-    title: "Ask the Ink Offline Index & LLM Route",
-    summary: "Build-time passage index from site content and Gazette articles with cited answers in Pocket.",
+    status: "abandoned",
+    shipped: false,
+    roles: {
+      research: "claude-sonnet-5-5",
+      product_owner: "claude-haiku-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
   },
   "pm-242": {
     title: "Pocket Console Encore",
     summary: "Handheld console cartridge menu, sound effects toggle, and live now-playing tape deck.",
-  },
-  "pm-241": {
-    title: "Internet Save Point",
-    summary: "Animated paper-and-ink footer with campfire save point, waterline sentinel, and room hops.",
+    status: "abandoned",
+    shipped: false,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-sonnet-5-5",
+    },
   },
   "pm-240": {
     title: "Ink & Watercolour Portraits",
     summary: "Hand-inked portrait gallery and handoff pipeline on /sketches.",
-  },
-  "pm-216": {
-    title: "Design system: a drawn page with knobs at /design-system",
-    summary: "Interactive notebook-paper explainer with 8 token pots, 9 UI parts, and live propagation controls.",
-  },
-  "pm-214": {
-    title: "Structures: a drawn, poke-able series on data structures at /structures",
-    summary: "Six interactive hand-drawn data-structure explainers on squared notebook paper.",
-  },
-  "pm-213": {
-    title: "Gazette: a small newspaper of short, illustrated explainers at /articles",
-    summary: "Broadsheet science newspaper with blackletter masthead, ruled columns, and six illustrated articles.",
-  },
-  "pm-206": {
-    title: "Hop and Settle: motion across the whole app",
-    summary: "Cross-document View Transitions morphing project titles and settling instrument animations.",
-  },
-  "pm-204": {
-    title: "Barometer: a brass weather station for your city, drawn by hand",
-    summary: "Hand-drawn brass weather dial, mercury thermometer, anemometer, and barograph driven by Open-Meteo.",
-  },
-  "pm-203": {
-    title: "Planisphere: tonight's sky on a star wheel drawn in ink",
-    summary: "Rotatable ink star wheel projecting 88 constellations and visible planets for any latitude and hour.",
-  },
-  "pm-202": {
-    title: "Rotor: a hand-drawn Enigma, and room for the next projects",
-    summary: "Playable 3-rotor Wehrmacht Enigma I cipher machine drawn in ink with lampboard and plugboard.",
-  },
-  "pm-199": {
-    title: "Orrery: the Sun, the planets and five stars, drawn by hand",
-    summary: "Interactive hand-drawn solar system orrery and stellar scale comparator at /orrery.",
-  },
-  "pm-198": {
-    title: "Page-styled dropdowns: the open picker wears the page",
-    summary: "Custom accessible listbox pickers styled to match each room's paper and ink palette.",
-  },
-  "pm-197": {
-    title: "Still table: the Elements grid stops jiggling when the dialog closes",
-    summary: "Stabilized periodic table layout and focus restoration when closing element detail modals.",
-  },
-  "pm-196": {
-    title: "Capsule, printed: a sophisticated card set and a draw you cannot read early",
-    summary: "Halftone-printed collectible Ghibli character cards with sealed capsule draw mechanics.",
-  },
-  "pm-195": {
-    title: "All projects link: a way back to /projects",
-    summary: "Consistent back-to-bench navigation header across every isolated project route group.",
-  },
-  "pm-191": {
-    title: "Vinyl: a crate, a turntable and a visible YouTube monitor",
-    summary: "Record crate browser, spinning tonearm turntable, and CRT monitor at /vinyl.",
-  },
-  "pm-190": {
-    title: "Elements: a periodic table with a 3D atom per element",
-    summary: "118-element periodic table with interactive Bohr shells and 3D orbital views at /elements.",
-  },
-  "pm-189": {
-    title: "Sun, redrawn: a one-page hand-drawn poster",
-    summary: "Hand-lettered cutaway poster of solar layers, fusion core, and coronal loops.",
-  },
-  "pm-188": {
-    title: "Sun: an animated cutaway of our star",
-    summary: "Interactive tour of the Sun's interior zones, granulation, and solar prominences.",
-  },
-  "pm-186": {
-    title: "Owner Channels: owners add songs to the /music television",
-    summary: "Authenticated song channel curation and database persistence for the /music television.",
-  },
-  "pm-184": {
-    title: "Capsule: a coin-and-crank card machine",
-    summary: "Hand-drawn Studio Ghibli capsule-toy machine with daily coins and persistent collection album.",
-  },
-  "pm-181": {
-    title: "Shore: a sea-glass focus timer",
-    summary: "Tactile sea-glass Pomodoro timer with lapping tide waves and chime cues at /shore.",
-  },
-  "pm-180": {
-    title: "Ship The Bench — verify pm-171, complete it, deploy it",
-    summary: "Build-SHA metadata verification and production deployment of the Projects bench.",
+    status: "abandoned",
+    shipped: false,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "gpt-6.1-sol",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
   },
   "pm-171": {
     title: "Projects Bench — a public Projects page",
     summary: "Initial Cartridge bench at /projects showcasing independent interactive experiments.",
+    status: "abandoned",
+    shipped: false,
+    roles: {
+      research: "claude-fable-5-1",
+      product_owner: "claude-opus-5-5",
+      software_engineer: "claude-opus-5-5",
+      quality_engineer: "claude-opus-5-5",
+    },
   },
 };
+
+export const SHIPPED_PLAN_REGISTRY: Readonly<Record<string, PlanRunRecord>> = Object.fromEntries(
+  Object.entries(PLAN_RUN_HISTORY).filter(([, record]) => record.shipped),
+);
+
+export const SHIPPED_PLAN_IDS: readonly string[] = Object.keys(SHIPPED_PLAN_REGISTRY);
+
+export const UNSHIPPED_PLAN_IDS: readonly string[] = Object.keys(PLAN_RUN_HISTORY).filter(
+  (planId) => !PLAN_RUN_HISTORY[planId].shipped,
+);
+
+// Public metadata catalog for shipped plans only.
+export const DEFAULT_PLAN_CATALOG: Readonly<Record<string, PlanMetadataInput>> = Object.fromEntries(
+  Object.entries(SHIPPED_PLAN_REGISTRY).map(([planId, record]) => [
+    planId,
+    {
+      planId,
+      title: record.title,
+      summary: record.summary,
+      status: record.status,
+      shipped: record.shipped,
+      roles: { ...record.roles },
+    },
+  ]),
+);
+
+export function isShippedPlan(
+  planId: string,
+  meta?: PlanMetadataInput | Readonly<Record<string, PlanMetadataInput>> | null,
+): boolean {
+  if (typeof planId !== "string") return false;
+  const key = planId.trim().toLowerCase();
+  if (!PLAN_ID_RE.test(key)) return false;
+  let item: PlanMetadataInput | undefined;
+  if (meta && isRecord(meta)) {
+    const looksLikeMeta =
+      "planId" in meta || "title" in meta || "summary" in meta || "roles" in meta || "shipped" in meta || "status" in meta;
+    item = looksLikeMeta
+      ? (meta as PlanMetadataInput)
+      : (meta as Readonly<Record<string, PlanMetadataInput>>)[key];
+  }
+  if (item && typeof item.shipped === "boolean") return item.shipped;
+  if (item?.status) return item.status === "done" || key === "pm-293";
+  return key in SHIPPED_PLAN_REGISTRY;
+}
 
 function toPlanMetadataMap(
   plans?: Readonly<Record<string, PlanMetadataInput>> | readonly PlanMetadataInput[],
@@ -657,7 +1161,8 @@ function toPlanMetadataMap(
   return map;
 }
 
-// Groups commits by `pm-NNN` prefix, merges reviewed plan/role/model metadata, sanitizes all strings to public fields,
+// Groups commits by `pm-NNN` prefix, filters to shipped plans (`done` + `pm-293`), merges ground-truth
+// plan-manager run models, omits roles that did not run, sanitizes all strings to public fields,
 // and preserves fallback scenes when git history is partial or absent.
 export function buildMakingOf(input: BuildMakingOfInput = {}): MakingOfSnapshot {
   const planMap = toPlanMetadataMap(input.plans);
@@ -736,18 +1241,22 @@ export function buildMakingOf(input: BuildMakingOfInput = {}): MakingOfSnapshot 
 
   for (const [planId, group] of grouped) {
     if (scenes.length >= MAX_SCENES) break;
+    const meta = planMap.get(planId);
+    if (!isShippedPlan(planId, meta)) continue;
     seenPlans.add(planId);
     const newest = group[0];
-    const meta = planMap.get(planId);
     const fb = fallbackByPlan.get(planId);
+    const recorded = SHIPPED_PLAN_REGISTRY[planId] ?? PLAN_RUN_HISTORY[planId];
 
-    const rawTitle = meta?.title ?? fb?.title ?? newest.subject;
+    const rawTitle = meta?.title ?? fb?.title ?? recorded?.title ?? newest.subject;
     const title = sanitizePublicText(rawTitle, TITLE_MAX) || planId;
 
-    const rawSummary = meta?.summary ?? fb?.summary ?? newest.subject;
+    const rawSummary = meta?.summary ?? fb?.summary ?? recorded?.summary ?? newest.subject;
     const summary = sanitizePublicText(rawSummary, SUMMARY_MAX) || title;
 
-    const roles = normalizeRoles(meta?.roles ?? fb?.roles);
+    const roles = normalizeRoles(meta?.roles ?? recorded?.roles ?? fb?.roles);
+    if (roles.length === 0) continue;
+
     const areas = mergeAreas([...group.map((c) => c.areas), ...(fb ? [fb.areas] : [])]);
     const sha = newest.shortSha;
     const commitCount = Math.min(MAX_COMMITS_PER_SCENE, group.length);
@@ -769,10 +1278,14 @@ export function buildMakingOf(input: BuildMakingOfInput = {}): MakingOfSnapshot 
     for (const fb of validFallback.scenes) {
       if (scenes.length >= MAX_SCENES) break;
       if (seenPlans.has(fb.planId)) continue;
-      seenPlans.add(fb.planId);
       const meta = planMap.get(fb.planId);
-      const title = sanitizePublicText(meta?.title ?? fb.title, TITLE_MAX) || fb.planId;
-      const summary = sanitizePublicText(meta?.summary ?? fb.summary, SUMMARY_MAX) || title;
+      if (!isShippedPlan(fb.planId, meta)) continue;
+      seenPlans.add(fb.planId);
+      const recorded = SHIPPED_PLAN_REGISTRY[fb.planId] ?? PLAN_RUN_HISTORY[fb.planId];
+      const title = sanitizePublicText(meta?.title ?? fb.title ?? recorded?.title, TITLE_MAX) || fb.planId;
+      const summary = sanitizePublicText(meta?.summary ?? fb.summary ?? recorded?.summary, SUMMARY_MAX) || title;
+      const roles = normalizeRoles(meta?.roles ?? recorded?.roles ?? fb.roles);
+      if (roles.length === 0) continue;
       scenes.push({
         planId: fb.planId,
         title,
@@ -781,7 +1294,7 @@ export function buildMakingOf(input: BuildMakingOfInput = {}): MakingOfSnapshot 
         commitUrl: commitUrlFor(fb.sha),
         commitCount: fb.commitCount,
         areas: mergeAreas([fb.areas]),
-        roles: normalizeRoles(meta?.roles ?? fb.roles),
+        roles,
         summary,
       });
     }
@@ -805,6 +1318,8 @@ export function buildMakingOf(input: BuildMakingOfInput = {}): MakingOfSnapshot 
   };
 }
 
+export const buildMakingOfLog = buildMakingOf;
+
 // --- validation and canonical serialization --------------------------------------------------------------------
 
 const SNAPSHOT_KEYS = ["version", "head", "scenes"] as const;
@@ -821,9 +1336,9 @@ const SCENE_KEYS = [
 ] as const;
 const ROLE_ITEM_KEYS = ["role", "label", "modelId"] as const;
 
-function validRoleItem(v: unknown, expectedRole: AgentRoleKey): v is MakingOfRole {
+function validRoleItem(v: unknown): v is MakingOfRole {
   if (!isRecord(v) || !hasKeys(v, ROLE_ITEM_KEYS)) return false;
-  if (v.role !== expectedRole) return false;
+  if (!isAgentRoleKey(v.role)) return false;
   if (
     typeof v.label !== "string" ||
     !v.label ||
@@ -846,6 +1361,8 @@ function validRoleItem(v: unknown, expectedRole: AgentRoleKey): v is MakingOfRol
 function validScene(v: unknown): v is MakingOfScene {
   if (!isRecord(v) || !hasKeys(v, SCENE_KEYS)) return false;
   if (typeof v.planId !== "string" || !PLAN_ID_RE.test(v.planId)) return false;
+  const shippedRecord = SHIPPED_PLAN_REGISTRY[v.planId];
+  if (!shippedRecord || !shippedRecord.shipped) return false;
   if (
     typeof v.title !== "string" ||
     !v.title ||
@@ -869,12 +1386,22 @@ function validScene(v: unknown): v is MakingOfScene {
   }
   if (new Set(v.areas).size !== v.areas.length) return false;
   const roles = v.roles;
-  if (
-    !Array.isArray(roles) ||
-    roles.length !== ROLE_KEYS.length ||
-    !ROLE_KEYS.every((roleKey, idx) => validRoleItem(roles[idx], roleKey))
-  ) {
+  if (!Array.isArray(roles) || roles.length === 0 || roles.length > ROLE_KEYS.length) {
     return false;
+  }
+  let prevRoleIndex = -1;
+  for (const item of roles) {
+    if (!validRoleItem(item)) return false;
+    const roleIndex = ROLE_KEYS.indexOf(item.role);
+    if (roleIndex <= prevRoleIndex) return false;
+    prevRoleIndex = roleIndex;
+  }
+  const expectedRoles = normalizeRoles(shippedRecord.roles);
+  if (roles.length !== expectedRoles.length) return false;
+  for (let i = 0; i < expectedRoles.length; i++) {
+    if (roles[i].role !== expectedRoles[i].role || roles[i].modelId !== expectedRoles[i].modelId) {
+      return false;
+    }
   }
   if (
     typeof v.summary !== "string" ||
@@ -904,6 +1431,8 @@ export function validateMakingOf(v: unknown): MakingOfSnapshot | null {
   if (v.scenes.length === 0) return null;
   return v as MakingOfSnapshot;
 }
+
+export const validateMakingOfLog = validateMakingOf;
 
 export function parseMakingOf(text: string): MakingOfSnapshot | null {
   try {

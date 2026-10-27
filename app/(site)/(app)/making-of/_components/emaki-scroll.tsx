@@ -429,17 +429,19 @@ export function EmakiScroll({ scenes, head }: EmakiScrollProps) {
                             d="M 28 50 Q 95 30, 170 48 T 312 44"
                             fill="none"
                           />
-                          {scene.roles.map((r, rIdx) => {
+                          {ROLE_KEYS.map((roleKey, rIdx) => {
                             const x = 44 + rIdx * 84;
+                            const present = scene.roles.some((r) => r.role === roleKey);
                             return (
                               <g
-                                key={r.role}
+                                key={roleKey}
                                 className="emaki-scene-figure"
-                                data-figure-role={r.role}
+                                data-figure-role={roleKey}
+                                data-role-present={present ? "true" : "false"}
                                 transform={`translate(${x}, 44)`}
                               >
                                 <use
-                                  href={`#emaki-figure-${r.role}`}
+                                  href={`#emaki-figure-${roleKey}`}
                                   x="-26"
                                   y="-30"
                                   width="52"
@@ -460,23 +462,39 @@ export function EmakiScroll({ scenes, head }: EmakiScrollProps) {
 
                       <p className="emaki-scene-summary">{scene.summary}</p>
 
-                      {/* Role & public model ID badges */}
+                      {/* Role & public model ID badges (omitted roles render as emaki-role-absent without data-model-id) */}
                       <ul
                         className="emaki-role-list"
                         aria-label={`Models per role for ${scene.planId}`}
                       >
-                        {scene.roles.map((r) => (
-                          <li
-                            key={r.role}
-                            className="emaki-role-item"
-                            data-testid="emaki-role-badge"
-                            data-role={r.role}
-                            data-model-id={r.modelId}
-                          >
-                            <span className="emaki-role-name">{r.label}</span>
-                            <code className="emaki-role-model">{r.modelId}</code>
-                          </li>
-                        ))}
+                        {ROLE_KEYS.map((roleKey) => {
+                          const recorded = scene.roles.find((r) => r.role === roleKey);
+                          if (!recorded) {
+                            return (
+                              <li
+                                key={roleKey}
+                                className="emaki-role-item emaki-role-item-absent"
+                                data-testid="emaki-role-absent"
+                                data-role={roleKey}
+                              >
+                                <span className="emaki-role-name">{ROLE_LABELS[roleKey]}</span>
+                                <span className="emaki-role-skipped">— skipped</span>
+                              </li>
+                            );
+                          }
+                          return (
+                            <li
+                              key={roleKey}
+                              className="emaki-role-item"
+                              data-testid="emaki-role-badge"
+                              data-role={roleKey}
+                              data-model-id={recorded.modelId}
+                            >
+                              <span className="emaki-role-name">{recorded.label}</span>
+                              <code className="emaki-role-model">{recorded.modelId}</code>
+                            </li>
+                          );
+                        })}
                       </ul>
 
                       <footer className="emaki-scene-footer">

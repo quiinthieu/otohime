@@ -12,12 +12,15 @@ import {
   gitState,
   indexAt,
   MAX_LAG,
+  normalizeRoles,
   parseLog,
   parseMakingOf,
   readRepoPlans,
   resolveMakingOf,
-  ROLE_KEYS,
+  SHIPPED_PLAN_IDS,
+  SHIPPED_PLAN_REGISTRY,
   serializeMakingOf,
+  UNSHIPPED_PLAN_IDS,
   validateMakingOf,
 } from "./making-of-index.ts";
 
@@ -97,9 +100,11 @@ function shallowClone(src: string, depth: number): string {
   return dir;
 }
 
+const SAMPLE_SHIPPED_IDS = ["pm-180", "pm-181", "pm-184", "pm-186", "pm-188", "pm-189", "pm-190", "pm-191"] as const;
+
 const commitsN = (n: number): Commit[] =>
   Array.from({ length: n }, (_, i) => ({
-    subject: `pm-${100 + Math.floor(i / 2)}/t-${i}: Step ${i}`,
+    subject: `${SAMPLE_SHIPPED_IDS[Math.floor(i / 2)]}/t-${i}: Step ${i}`,
     whenUtc: Date.UTC(2026, 9, 1) / 1000 + i * 3600,
     files: { [`lib/step-${i}.ts`]: `export const n = ${i};\n` },
   }));
@@ -289,9 +294,13 @@ test("--check passes fresh and shallow fallbacks, tolerates later projects/ edit
   assert.equal(checkMakingOf(git, repo, fresh).ok, true);
   assert.equal(checkMakingOf(git, repo, null).ok, false);
 
-  // Tampering negative controls
+  // Tampering negative controls: title change, wrong model, fabricated role, non-canonical JSON, bad version, foreign head
   const tamperedTitle = fresh.replace("Washi Daruma, Emaki, and Hanafuda", "Tampered Emaki Title");
   assert.match(checkMakingOf(git, repo, tamperedTitle).message, /does not match git/);
+  const tamperedModel = fresh.replace('"modelId":"gemini-4-argon-medium"', '"modelId":"claude-opus-5-5"');
+  assert.equal(checkMakingOf(git, repo, tamperedModel).ok, false);
+  const tamperedUnshipped = fresh.replace('"planId": "pm-181"', '"planId": "pm-268"');
+  assert.equal(checkMakingOf(git, repo, tamperedUnshipped).ok, false);
   assert.match(checkMakingOf(git, repo, fresh.replace(/\n {4}/g, "\n  ")).message, /canonical/);
   assert.match(checkMakingOf(git, repo, fresh.replace('"version": 1', '"version": 2')).message, /malformed/);
   const foreignHead = fresh.replace(
@@ -353,22 +362,57 @@ test("CLI writes making-of.json, preserves gitless fallback, and enforces --stri
   assert.ok(MAX_LAG >= 20);
 });
 
-test("committed content/making-of.json is valid, canonical, public-only, and package.json wires making-of scripts", () => {
+test("committed content/making-of.json has 34 shipped scenes with ground-truth run models and omits unrun roles", () => {
   const text = readFileSync(join(ROOT, "content/making-of.json"), "utf8");
   const parsed = parseMakingOf(text);
   assert.ok(parsed, "content/making-of.json failed validation");
   assert.equal(serializeMakingOf(parsed), text);
   assert.equal(containsPrivateData(text), false);
-  assert.ok(parsed.scenes.length >= 40);
+  assert.equal(parsed.scenes.length, 34);
+  assert.equal(SHIPPED_PLAN_IDS.length, 34);
+
+  const sceneIds = new Set(parsed.scenes.map((s) => s.planId));
+  for (const unshipped of UNSHIPPED_PLAN_IDS) {
+    assert.equal(sceneIds.has(unshipped), false, `unshipped plan ${unshipped} must not appear in making-of.json`);
+  }
 
   for (const scene of parsed.scenes) {
     assert.match(scene.planId, /^pm-\d+$/);
     assert.match(scene.commitUrl, /^https:\/\/github\.com\/quiinthieu\/otohime\/commit\/[0-9a-f]{10}$/);
-    assert.deepEqual(
-      scene.roles.map((r) => r.role),
-      [...ROLE_KEYS],
-    );
+    const expectedRoles = normalizeRoles(SHIPPED_PLAN_REGISTRY[scene.planId].roles);
+    assert.deepEqual(scene.roles, expectedRoles);
   }
+
+  // Spot-check pm-293, pm-272 (research + PO skipped), and pm-255 (research skipped)
+  const pm293 = parsed.scenes.find((s) => s.planId === "pm-293")!;
+  assert.deepEqual(
+    pm293.roles.map((r) => [r.role, r.modelId]),
+    [
+      ["research", "claude-sonnet-5-5"],
+      ["product_owner", "gemini-4-argon-medium"],
+      ["software_engineer", "gemini-4-argon-high"],
+      ["quality_engineer", "gemini-4-argon-medium"],
+    ],
+  );
+
+  const pm272 = parsed.scenes.find((s) => s.planId === "pm-272")!;
+  assert.deepEqual(
+    pm272.roles.map((r) => [r.role, r.modelId]),
+    [
+      ["software_engineer", "gpt-6.1-sol"],
+      ["quality_engineer", "gpt-6.1-sol"],
+    ],
+  );
+
+  const pm255 = parsed.scenes.find((s) => s.planId === "pm-255")!;
+  assert.deepEqual(
+    pm255.roles.map((r) => [r.role, r.modelId]),
+    [
+      ["product_owner", "claude-haiku-5-5"],
+      ["software_engineer", "claude-opus-5-5"],
+      ["quality_engineer", "claude-sonnet-5-5"],
+    ],
+  );
 
   const { scripts } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as {
     scripts: Record<string, string>;

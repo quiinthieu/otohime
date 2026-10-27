@@ -17,71 +17,29 @@ import {
   AREAS_MAX,
   areaOf,
   buildMakingOf,
-  cleanSubject,
-  commitUrlFor,
-   computeEmakiParallax,
-  computeScrollProgress,
-  containsPrivateData,
-  DEFAULT_PLAN_CATALOG,
-  DEFAULT_ROLE_MODELS,
-  EMPTY_MAKING_OF,
-  GITHUB_REPO_URL,
-  isoSecond,
-  MAX_COMMITS_PER_SCENE,
-  MAX_SCENES,
-  mergeAreas,
-  normalizeRoles,
-  parseMakingOf,
-  parsePlanMarkdown,
-  ROLE_KEYS,
-  ROLE_LABELS,
-  readMakingOf,
-  sanitizeModelId,
-  sanitizePublicText,
-  sceneProgressForIndex,
-  serializeMakingOf,
-  SHA_LENGTH,
-  SUBJECT_MAX,
-  SUMMARY_MAX,
-  splitPrefix,
-  stepSceneIndex,
-  summarizeAreas,
-  TITLE_MAX,
-  utcDayOf,
-  validateMakingOf,
-  type AgentRoleKey,
-  type BuildMakingOfInput,
-  type EmakiParallaxState,
-  type MakingOfCommitInput,
-  type MakingOfRole,
-  type MakingOfScene,
-  type MakingOfSnapshot,
-  type PlanMetadataInput,
-} from "../lib/making-of.ts";
-
-export {
-  AREAS_MAX,
-  areaOf,
-  buildMakingOf,
+  buildMakingOfLog,
   cleanSubject,
   commitUrlFor,
   computeEmakiParallax,
   computeScrollProgress,
   containsPrivateData,
   DEFAULT_PLAN_CATALOG,
-  DEFAULT_ROLE_MODELS,
   EMPTY_MAKING_OF,
   GITHUB_REPO_URL,
+  isShippedPlan,
   isoSecond,
   MAX_COMMITS_PER_SCENE,
   MAX_SCENES,
   mergeAreas,
   normalizeRoles,
+  PLAN_RUN_HISTORY,
   parseMakingOf,
   parsePlanMarkdown,
   ROLE_KEYS,
   ROLE_LABELS,
   readMakingOf,
+  SHIPPED_PLAN_IDS,
+  SHIPPED_PLAN_REGISTRY,
   sanitizeModelId,
   sanitizePublicText,
   sceneProgressForIndex,
@@ -93,8 +51,10 @@ export {
   stepSceneIndex,
   summarizeAreas,
   TITLE_MAX,
+  UNSHIPPED_PLAN_IDS,
   utcDayOf,
   validateMakingOf,
+  validateMakingOfLog,
   type AgentRoleKey,
   type BuildMakingOfInput,
   type EmakiParallaxState,
@@ -103,6 +63,64 @@ export {
   type MakingOfScene,
   type MakingOfSnapshot,
   type PlanMetadataInput,
+  type PlanRoleModels,
+  type PlanRunRecord,
+  type PlanStatus,
+} from "../lib/making-of.ts";
+
+export {
+  AREAS_MAX,
+  areaOf,
+  buildMakingOf,
+  buildMakingOfLog,
+  cleanSubject,
+  commitUrlFor,
+  computeEmakiParallax,
+  computeScrollProgress,
+  containsPrivateData,
+  DEFAULT_PLAN_CATALOG,
+  EMPTY_MAKING_OF,
+  GITHUB_REPO_URL,
+  isShippedPlan,
+  isoSecond,
+  MAX_COMMITS_PER_SCENE,
+  MAX_SCENES,
+  mergeAreas,
+  normalizeRoles,
+  PLAN_RUN_HISTORY,
+  parseMakingOf,
+  parsePlanMarkdown,
+  ROLE_KEYS,
+  ROLE_LABELS,
+  readMakingOf,
+  SHIPPED_PLAN_IDS,
+  SHIPPED_PLAN_REGISTRY,
+  sanitizeModelId,
+  sanitizePublicText,
+  sceneProgressForIndex,
+  serializeMakingOf,
+  SHA_LENGTH,
+  SUBJECT_MAX,
+  SUMMARY_MAX,
+  splitPrefix,
+  stepSceneIndex,
+  summarizeAreas,
+  TITLE_MAX,
+  UNSHIPPED_PLAN_IDS,
+  utcDayOf,
+  validateMakingOf,
+  validateMakingOfLog,
+  type AgentRoleKey,
+  type BuildMakingOfInput,
+  type EmakiParallaxState,
+  type MakingOfCommitInput,
+  type MakingOfRole,
+  type MakingOfScene,
+  type MakingOfSnapshot,
+  type PlanMetadataInput,
+  type PlanRoleModels,
+  type PlanRunRecord,
+  type PlanStatus,
 };
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -200,12 +218,16 @@ export function readRepoPlans(repo: string): Record<string, PlanMetadataInput> {
         const text = readFileSync(planPath, "utf8");
         const parsed = parsePlanMarkdown(text);
         if (!parsed) continue;
+        const recorded = PLAN_RUN_HISTORY[parsed.planId];
+        if (recorded && !recorded.shipped) continue;
         const existing = out[parsed.planId];
         out[parsed.planId] = {
           planId: parsed.planId,
-          title: parsed.title || existing?.title,
-          summary: existing?.summary ?? parsed.summary,
-          roles: existing?.roles ?? parsed.roles,
+          title: parsed.title || existing?.title || recorded?.title,
+          summary: existing?.summary ?? recorded?.summary ?? parsed.summary,
+          status: recorded?.status ?? existing?.status,
+          shipped: recorded ? recorded.shipped : (existing?.shipped ?? true),
+          roles: recorded?.roles ?? existing?.roles ?? parsed.roles,
         };
       } catch {
         // Ignore unreadable plan files and keep existing/default metadata.
@@ -321,15 +343,18 @@ export function splice(
 
   for (const [planId, group] of newerByPlan) {
     if (scenes.length >= MAX_SCENES) break;
+    const meta = plans[planId];
+    if (!isShippedPlan(planId, meta)) continue;
     seenPlans.add(planId);
     const newest = group[0];
     const prev = fallbackByPlan.get(planId);
-    const meta = plans[planId];
+    const recorded = SHIPPED_PLAN_REGISTRY[planId] ?? PLAN_RUN_HISTORY[planId];
     const sha = newest.sha.slice(0, SHA_LENGTH);
     const date = newest.entry.date.slice(0, 10);
-    const title = sanitizePublicText(meta?.title ?? newest.entry.subject, TITLE_MAX) || planId;
-    const summary = sanitizePublicText(meta?.summary ?? newest.entry.subject, SUMMARY_MAX) || title;
-    const roles = normalizeRoles(meta?.roles ?? prev?.roles);
+    const title = sanitizePublicText(meta?.title ?? recorded?.title ?? newest.entry.subject, TITLE_MAX) || planId;
+    const summary = sanitizePublicText(meta?.summary ?? recorded?.summary ?? newest.entry.subject, SUMMARY_MAX) || title;
+    const roles = normalizeRoles(meta?.roles ?? recorded?.roles ?? prev?.roles);
+    if (roles.length === 0) continue;
     const areas = mergeAreas([
       ...group.map((c) => c.entry.areas ?? []),
       ...(prev ? [prev.areas] : []),
@@ -352,6 +377,7 @@ export function splice(
   for (const prev of fallback.scenes) {
     if (scenes.length >= MAX_SCENES) break;
     if (seenPlans.has(prev.planId)) continue;
+    if (!isShippedPlan(prev.planId, plans[prev.planId])) continue;
     seenPlans.add(prev.planId);
     scenes.push({
       ...prev,

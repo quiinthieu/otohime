@@ -4,23 +4,28 @@ import {
   AREAS_MAX,
   areaOf,
   buildMakingOf,
+  buildMakingOfLog,
   clamp01,
   cleanSubject,
   commitUrlFor,
   computeEmakiParallax,
   computeScrollProgress,
   containsPrivateData,
-  DEFAULT_ROLE_MODELS,
+  DEFAULT_PLAN_CATALOG,
   EMPTY_MAKING_OF,
+  isShippedPlan,
   MAX_COMMITS_PER_SCENE,
   MAX_SCENES,
   mergeAreas,
   normalizeRoles,
+  PLAN_RUN_HISTORY,
   parseMakingOf,
   parsePlanMarkdown,
   ROLE_KEYS,
   ROLE_LABELS,
   readMakingOf,
+  SHIPPED_PLAN_IDS,
+  SHIPPED_PLAN_REGISTRY,
   sanitizeModelId,
   sanitizePublicText,
   sceneProgressForIndex,
@@ -31,38 +36,68 @@ import {
   stepSceneIndex,
   summarizeAreas,
   TITLE_MAX,
+  UNSHIPPED_PLAN_IDS,
   utcDayOf,
   validateMakingOf,
+  validateMakingOfLog,
   type MakingOfSnapshot,
 } from "./making-of.ts";
 
 const sha = (n: number) => n.toString(16).padStart(40, "0");
 
-test("groups commits by pm-NNN prefix into scenes with newest sha, date, commitUrl, commitCount, and merged areas", () => {
+test("groups shipped commits by pm-NNN prefix, excludes unshipped plans, and omits roles that did not run", () => {
+  assert.equal(SHIPPED_PLAN_IDS.length, 34);
+  assert.equal(Object.keys(DEFAULT_PLAN_CATALOG).length, 34);
+  for (const unshipped of ["pm-294", "pm-288", "pm-274", "pm-268", "pm-257", "pm-171"]) {
+    assert.equal(isShippedPlan(unshipped), false, `${unshipped} must not be marked shipped`);
+    assert.equal(UNSHIPPED_PLAN_IDS.includes(unshipped), true);
+  }
+  // Ground-truth run history for pm-268 records gpt-6-sol for QA while marking the plan unshipped
+  assert.equal(PLAN_RUN_HISTORY["pm-268"].roles.quality_engineer, "gpt-6-sol");
+  assert.equal(PLAN_RUN_HISTORY["pm-268"].shipped, false);
+
   const commits = [
     {
-      sha: sha(5),
+      sha: sha(8),
       date: "2026-10-27T18:30:00Z",
       subject: "feat: standalone housekeeping commit without pm prefix",
       paths: ["README.md"],
     },
     {
-      sha: sha(4),
+      sha: sha(7),
       date: "2026-10-27T16:15:00Z",
       subject: "pm-293/t-1675: Build Making-of Emaki handscroll",
       paths: ["app/(site)/(app)/making-of/page.tsx", "lib/making-of.ts", "e2e/making-of.test.ts"],
     },
     {
-      sha: sha(3),
+      sha: sha(6),
       date: "2026-10-27T12:00:00Z",
       subject: "pm-293/t-1673: Build shared yearly shipped digest",
       paths: ["lib/yearly-log.ts", "scripts/yearly-log.ts", "content/yearly-log.json"],
     },
     {
-      sha: sha(2),
+      sha: sha(5),
+      date: "2026-10-27T09:00:00Z",
+      subject: "pm-288/t-1650: Paused kintsugi experiment (must be excluded)",
+      paths: ["lib/kintsugi.ts"],
+    },
+    {
+      sha: sha(4),
+      date: "2026-10-26T18:00:00Z",
+      subject: "pm-272/t-1610: Add ListenBrainz & Lanyard Pocket presence",
+      paths: ["lib/listenbrainz.ts", "app/(site)/_components/pocket.tsx"],
+    },
+    {
+      sha: sha(3),
       date: "2026-10-26T09:45:00Z",
-      subject: "pm-268/t-1600: Add Riso Ink Studio",
+      subject: "pm-268/t-1600: Add Riso Ink Studio (executing unshipped plan, must be excluded)",
       paths: ["app/(site)/(app)/lab/page.tsx", "lib/ink-lab.ts"],
+    },
+    {
+      sha: sha(2),
+      date: "2026-10-24T11:00:00Z",
+      subject: "pm-255/t-1520: Add Ask console tier probe",
+      paths: ["app/api/ask/route.ts"],
     },
     {
       sha: sha(1),
@@ -72,51 +107,44 @@ test("groups commits by pm-NNN prefix into scenes with newest sha, date, commitU
     },
   ];
 
-  const plans = {
-    "pm-293": {
-      title: "Washi Daruma, Emaki, and Hanafuda",
-      summary: "Three paper-and-ink experiments backed by a shared yearly digest.",
-      roles: {
-        research: "claude-sonnet-5-5",
-        product_owner: "claude-opus-5-5",
-        software_engineer: "gemini-4-argon",
-        quality_engineer: "claude-sonnet-5-5",
-      },
-    },
-  };
-
-  const snapshot = buildMakingOf({ commits, plans });
-  assert.equal(validateMakingOf(snapshot), snapshot);
+  const snapshot = buildMakingOfLog({ commits });
+  assert.equal(validateMakingOfLog(snapshot), snapshot);
   // Head reflects newest indexed commit even when that commit has no pm-NNN prefix
-  assert.equal(snapshot.head, sha(5));
-  assert.equal(snapshot.scenes.length, 3);
+  assert.equal(snapshot.head, sha(8));
+  // Unshipped plans pm-288 and pm-268 are filtered out; only shipped plans remain
   assert.deepEqual(
     snapshot.scenes.map((s) => s.planId),
-    ["pm-293", "pm-268", "pm-181"],
+    ["pm-293", "pm-272", "pm-255", "pm-181"],
   );
 
   const pm293 = snapshot.scenes[0];
   assert.equal(pm293.title, "Washi Daruma, Emaki, and Hanafuda");
-  assert.equal(pm293.summary, "Three paper-and-ink experiments backed by a shared yearly digest.");
   assert.equal(pm293.date, "2026-10-27");
-  assert.equal(pm293.sha, sha(4).slice(0, 10));
-  assert.equal(pm293.commitUrl, commitUrlFor(sha(4)));
+  assert.equal(pm293.sha, sha(7).slice(0, 10));
+  assert.equal(pm293.commitUrl, commitUrlFor(sha(7)));
   assert.equal(pm293.commitCount, 2);
   assert.deepEqual(pm293.areas, ["app/(site)", "e2e", "lib"]);
   assert.deepEqual(pm293.roles, [
     { role: "research", label: "Researcher", modelId: "claude-sonnet-5-5" },
-    { role: "product_owner", label: "Product Owner", modelId: "claude-opus-5-5" },
-    { role: "software_engineer", label: "Software Engineer", modelId: "gemini-4-argon" },
-    { role: "quality_engineer", label: "Quality Engineer", modelId: "claude-sonnet-5-5" },
+    { role: "product_owner", label: "Product Owner", modelId: "gemini-4-argon-medium" },
+    { role: "software_engineer", label: "Software Engineer", modelId: "gemini-4-argon-high" },
+    { role: "quality_engineer", label: "Quality Engineer", modelId: "gemini-4-argon-medium" },
   ]);
 
-  // pm-268 has no entry in `plans`, so it derives title/summary from its newest commit subject and uses default role models
-  const pm268 = snapshot.scenes[1];
-  assert.equal(pm268.title, "Add Riso Ink Studio");
-  assert.equal(pm268.summary, "Add Riso Ink Studio");
-  assert.equal(pm268.commitCount, 1);
-  assert.equal(pm268.date, "2026-10-26");
-  assert.equal(pm268.roles[2].modelId, DEFAULT_ROLE_MODELS.software_engineer);
+  // pm-272 had no research or product_owner run; those roles must be omitted rather than defaulted
+  const pm272 = snapshot.scenes[1];
+  assert.deepEqual(pm272.roles, [
+    { role: "software_engineer", label: "Software Engineer", modelId: "gpt-6.1-sol" },
+    { role: "quality_engineer", label: "Quality Engineer", modelId: "gpt-6.1-sol" },
+  ]);
+
+  // pm-255 had no research run; research must be omitted
+  const pm255 = snapshot.scenes[2];
+  assert.deepEqual(pm255.roles, [
+    { role: "product_owner", label: "Product Owner", modelId: "claude-haiku-5-5" },
+    { role: "software_engineer", label: "Software Engineer", modelId: "claude-opus-5-5" },
+    { role: "quality_engineer", label: "Quality Engineer", modelId: "claude-sonnet-5-5" },
+  ]);
 });
 
 test("public-field sanitization strips emails, tokens, Co-Authored-By trailers, and private paths", () => {
@@ -127,10 +155,11 @@ test("public-field sanitization strips emails, tokens, Co-Authored-By trailers, 
   assert.equal(containsPrivateData(sanitized), false);
   assert.equal(sanitized, "Implement board");
 
-  assert.equal(sanitizeModelId("Claude Opus 5.5", "claude-sonnet-5-5"), "claude-opus-5.5");
+  assert.equal(sanitizeModelId("Claude Opus 5.5"), "claude-opus-5.5");
+  assert.equal(sanitizeModelId("owner@example.com"), null);
+  assert.equal(sanitizeModelId("ghp_1234567890abcdef"), null);
+  assert.equal(sanitizeModelId(""), null);
   assert.equal(sanitizeModelId("owner@example.com", "claude-sonnet-5-5"), "claude-sonnet-5-5");
-  assert.equal(sanitizeModelId("ghp_1234567890abcdef", "claude-sonnet-5-5"), "claude-sonnet-5-5");
-  assert.equal(sanitizeModelId("", "claude-opus-5-5"), "claude-opus-5-5");
 
   // Extra private keys on untrusted commit/plan objects are never copied into the output scene
   const rawCommit = {
@@ -141,7 +170,10 @@ test("public-field sanitization strips emails, tokens, Co-Authored-By trailers, 
     authorEmail: "private@example.com",
     privateLog: "/var/log/agent.log",
   };
-  const built = buildMakingOf({ commits: [rawCommit] });
+  const built = buildMakingOf({
+    commits: [rawCommit],
+    plans: { "pm-250": { title: "Add Ink Desk <secret@example.com>" } },
+  });
   assert.equal(built.scenes.length, 1);
   const scene = built.scenes[0];
   assert.equal(scene.title, "Add Ink Desk");
@@ -151,7 +183,7 @@ test("public-field sanitization strips emails, tokens, Co-Authored-By trailers, 
   assert.equal(containsPrivateData(serializeMakingOf(built)), false);
 });
 
-test("fallback preservation keeps reviewed metadata and older fallback scenes when git history is partial or empty", () => {
+test("fallback preservation keeps reviewed metadata and older shipped fallback scenes when git history is partial or empty", () => {
   const fallback = buildMakingOf({
     commits: [
       {
@@ -171,7 +203,6 @@ test("fallback preservation keeps reviewed metadata and older fallback scenes wh
       "pm-199": {
         title: "Orrery: Solar System Cutaway",
         summary: "Hand-drawn planets and five stars.",
-        roles: { software_engineer: "claude-opus-5-5", product_owner: "gpt-6.1-sol" },
       },
       "pm-181": {
         title: "Shore: Sea-Glass Focus Timer",
@@ -199,10 +230,11 @@ test("fallback preservation keeps reviewed metadata and older fallback scenes wh
   assert.equal(merged.scenes[0].planId, "pm-199");
   assert.equal(merged.scenes[0].sha, sha(3).slice(0, 10));
   assert.equal(merged.scenes[0].date, "2026-10-21");
-  // Preserves reviewed title, summary, and role model IDs from fallback
+  // Preserves reviewed title, summary, and ground-truth role model IDs from fallback/registry
   assert.equal(merged.scenes[0].title, "Orrery: Solar System Cutaway");
   assert.equal(merged.scenes[0].summary, "Hand-drawn planets and five stars.");
-  assert.equal(merged.scenes[0].roles[1].modelId, "gpt-6.1-sol");
+  assert.equal(merged.scenes[0].roles[0].modelId, "claude-fable-5-1");
+  assert.equal(merged.scenes[0].roles[1].modelId, "claude-opus-5-5");
   assert.deepEqual(merged.scenes[0].areas, ["app/(orrery)", "e2e"]);
   // Older pm-181 scene is preserved from fallback
   assert.deepEqual(merged.scenes[1], fallback.scenes[1]);
@@ -321,7 +353,7 @@ test("parallax progress math computes monotonic horizontal translation, layer of
   assert.equal(stepSceneIndex(2, "Enter", 5), null);
 });
 
-test("validateMakingOf rejects malformed fields, private leaks, and non-canonical shapes, and serializeMakingOf round-trips", () => {
+test("validateMakingOf rejects unshipped plans, wrong/defaulted models, fabricated roles, private leaks, and non-canonical shapes", () => {
   assert.deepEqual(validateMakingOf(EMPTY_MAKING_OF), EMPTY_MAKING_OF);
   const emptyText = serializeMakingOf(EMPTY_MAKING_OF);
   assert.deepEqual(parseMakingOf(emptyText), EMPTY_MAKING_OF);
@@ -333,6 +365,12 @@ test("validateMakingOf rejects malformed fields, private leaks, and non-canonica
         date: "2026-10-27T12:00:00Z",
         subject: "pm-293/t-1675: Build Making-of Emaki",
         paths: ["lib/making-of.ts", "app/(site)/(app)/making-of/page.tsx"],
+      },
+      {
+        sha: sha(6),
+        date: "2026-10-26T12:00:00Z",
+        subject: "pm-272/t-1610: Add ListenBrainz Pocket presence",
+        paths: ["lib/listenbrainz.ts"],
       },
     ],
   });
@@ -357,6 +395,37 @@ test("validateMakingOf rejects malformed fields, private leaks, and non-canonica
     (() => {
       const c = clone();
       c.scenes[0].planId = "bad-id";
+      return c;
+    })(),
+    // Negative control: unshipped plans must be rejected by validateMakingOf
+    (() => {
+      const c = clone();
+      c.scenes[0].planId = "pm-288";
+      return c;
+    })(),
+    (() => {
+      const c = clone();
+      c.scenes[0].planId = "pm-268";
+      return c;
+    })(),
+    (() => {
+      const c = clone();
+      c.scenes[0].planId = "pm-171";
+      return c;
+    })(),
+    // Negative control: wrong/defaulted model for pm-293 PO (claude-opus-5-5 instead of gemini-4-argon-medium)
+    (() => {
+      const c = clone();
+      c.scenes[0].roles[1].modelId = "claude-opus-5-5";
+      return c;
+    })(),
+    // Negative control: fabricated role on pm-272 (where research and product_owner did not run)
+    (() => {
+      const c = clone();
+      c.scenes[1].roles = [
+        { role: "research", label: "Researcher", modelId: "claude-sonnet-5-5" },
+        ...c.scenes[1].roles,
+      ];
       return c;
     })(),
     (() => {
@@ -418,7 +487,11 @@ test("validateMakingOf rejects malformed fields, private leaks, and non-canonica
   assert.equal(SUMMARY_MAX, 160);
   assert.equal(MAX_SCENES, 200);
   assert.equal(MAX_COMMITS_PER_SCENE, 100_000);
-  assert.deepEqual(normalizeRoles({ research: "claude-sonnet-5-5" }).length, 4);
+  // normalizeRoles omits any role not provided or set to null
+  assert.deepEqual(normalizeRoles({ research: "claude-sonnet-5-5", product_owner: null }), [
+    { role: "research", label: "Researcher", modelId: "claude-sonnet-5-5" },
+  ]);
+  assert.equal(Object.keys(SHIPPED_PLAN_REGISTRY).length, 34);
   assert.deepEqual(splitPrefix("pm-293/t-1675: Emaki"), {
     plan: "pm-293",
     task: "t-1675",

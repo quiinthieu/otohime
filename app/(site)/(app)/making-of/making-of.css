@@ -361,6 +361,10 @@
   stroke-dasharray: 5 3;
 }
 
+.emaki-scene-figure[data-role-present="false"] {
+  opacity: 0.28;
+}
+
 .emaki-scene-hanko rect {
   fill: #fbf6ea;
   stroke: #b52b1d;
@@ -410,6 +414,19 @@
   font-size: 0.68rem;
   color: var(--ink);
   word-break: break-all;
+}
+
+.emaki-role-item-absent {
+  border-style: dashed;
+  background: transparent;
+  opacity: 0.68;
+}
+
+.emaki-role-skipped {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-style: italic;
+  color: var(--muted);
 }
 
 .emaki-scene-footer {
