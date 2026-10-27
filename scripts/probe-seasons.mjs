@@ -601,12 +601,15 @@ async function dialChecks() {
 // under reduce starts no transition or animation in the dial or the layer. The narrow width: no season's layer adds
 // scroll. Negative controls: a layer raised to z-index 9999 covers every point, the Ask dialog shown non-modal is
 // covered by it too, a pick with motion welcome runs the dial's transitions, and a wide absolute layer adds scroll.
+// Errors: none, except the one console error Chromium logs for the tier-off GET /api/ask 404 (negative control:
+// another URL's 404, a GET /api/ask 500 and a console.error injected into the same page are each still counted).
 async function jointChecks() {
   const { createRequire } = await import("node:module");
   const path = await import("node:path");
   const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
   const { chromium } = require("playwright");
   const BASE_URL = process.env.BASE_URL;
+  const ASK_URL = BASE_URL + "/api/ask";
   const WIDTHS = [
     { width: 390, height: 844 },
     { width: 1366, height: 768 },
@@ -624,12 +627,45 @@ async function jointChecks() {
     await context.clock.setFixedTime(CLOCK);
     if (season) await context.addInitScript({ content: `try{localStorage.setItem("season",${JSON.stringify(season)})}catch(e){}` });
     const page = await context.newPage();
-    const errors = [];
-    page.on("console", (m) => m.type() === "error" && errors.push(`console ${page.url()}: ${m.text()}`));
-    page.on("pageerror", (e) => errors.push(`pageerror ${page.url()}: ${e.message}`));
+    const seen = [];
+    const tierOff = [];
+    page.on("console", (m) => m.type() === "error" && seen.push({ url: m.location().url, text: m.text(), line: `console ${page.url()}: ${m.text()}${m.location().url ? ` at ${m.location().url}` : ""}` }));
+    page.on("pageerror", (e) => seen.push({ url: null, text: e.message, line: `pageerror ${page.url()}: ${e.message}` }));
+    // The Ask console's GET /api/ask on open answers 404 while the model tier is off (lib/ask-tier.ts, enabled:false
+    // with ASK_LLM unset), and Chromium logs that load as a console error the visitor never sees. Each such GET 404
+    // allows one "status of 404" console error from that same URL, and nothing else: not a POST, not another status,
+    // not another URL, not a page error. With the tier on the GET is 200 and nothing is recorded or allowed.
+    page.on("response", (r) => r.request().method() === "GET" && r.status() === 404 && r.url() === ASK_URL && tierOff.push(r.url()));
+    const errors = () => {
+      const allowed = [...tierOff];
+      return seen
+        .filter((e) => {
+          const i = e.url === ASK_URL && /status of 404\b/.test(e.text) ? allowed.indexOf(e.url) : -1;
+          if (i < 0) return true;
+          allowed.splice(i, 1);
+          return false;
+        })
+        .map((e) => e.line);
+    };
     await page.goto(BASE_URL + "/", { waitUntil: "load" });
     await page.waitForFunction(() => document.querySelector("svg.season-layer")?.dataset.seasonLayer && document.querySelector("[data-season-dial] input:checked"), null, { timeout: 15000 }).catch(() => {});
-    return { context, page, errors };
+    return { context, page, errors, tierOff };
+  }
+
+  // Negative control for the tier-off allowance: three errors it must not swallow, each reported by errors(): a 404
+  // from another URL, a GET /api/ask answered 500 (routed in the browser, so the server never sees it) and a plain
+  // console.error. Gives back what errors() reports that it did not before.
+  async function injectErrors(page, errors) {
+    const before = errors().length;
+    await page.route(ASK_URL, (route) => route.fulfill({ status: 500, contentType: "application/json", body: "{}" }));
+    await page.evaluate(async () => {
+      await fetch("/probe-seasons-missing", { cache: "no-store" }).catch(() => {});
+      await fetch("/api/ask", { cache: "no-store" }).catch(() => {});
+      console.error("probe-seasons: injected console error");
+    });
+    await page.unroute(ASK_URL);
+    await page.waitForTimeout(300);
+    return errors().slice(before);
   }
 
   // What paints on top at each named point: "layer" when it is the layer, else the element's tag and class. The
@@ -715,7 +751,7 @@ async function jointChecks() {
 
       // Motion welcome: the layer drawn under the masthead, the page and the Ask console.
       {
-        const { context, page, errors } = await open(browser, { viewport });
+        const { context, page, errors, tierOff } = await open(browser, { viewport });
         const drawn = await page.evaluate(() => ({ layer: document.querySelector("svg.season-layer")?.dataset.seasonLayer, bits: document.querySelectorAll("svg.season-layer .almanac-bit").length, z: getComputedStyle(document.querySelector("svg.season-layer")).zIndex, bar: getComputedStyle(document.querySelector("header.masthead")).backgroundColor }));
         check(`${tag}: the layer is drawn for spring, z-index -1`, drawn.layer === "spring" && drawn.bits > 0 && drawn.z === "-1", JSON.stringify(drawn));
         let h = await hits(page, MAST);
@@ -776,7 +812,15 @@ async function jointChecks() {
         // The pick with motion welcome runs the dial's transitions (negative control for the reduce run below).
         const moved = await pick(page, viewport);
         check(`${tag}: negative control: a pick with motion welcome runs the dial's transitions`, moved.motion.some((m) => m.startsWith("transitionrun")) && moved.label !== "none", JSON.stringify(moved));
-        check(`${tag}: motion welcome: no console or page errors`, errors.length === 0, errors.slice(0, 3).join(" | "));
+        // Nothing but the tier-off GET /api/ask 404 so far; then the three injected errors are each still counted.
+        const counted = errors();
+        const injected = await injectErrors(page, errors);
+        const caught = ["/probe-seasons-missing", "status of 500", "probe-seasons: injected"].every((want) => injected.some((e) => e.includes(want)));
+        check(
+          `${tag}: motion welcome: no console or page errors but the tier-off GET /api/ask 404 (negative control: another URL's 404, a GET /api/ask 500 and a console.error are counted)`,
+          counted.length === 0 && caught && injected.length === 3,
+          counted.length ? counted.slice(0, 3).join(" | ") : `tier-off 404s ${tierOff.length}; injected: ${injected.join(" | ")}`,
+        );
         await context.close();
       }
 
@@ -795,7 +839,8 @@ async function jointChecks() {
         check(`${tag}: reduced motion: a pick tints at once with no transition or animation in dial or layer`, still.layer === "still" && still.bits === 0 && p.motion.length === 0 && p.label === "none" && p.season === want && p.layer === "still", JSON.stringify({ ...still, ...p }));
         const h = await hits(page, MAST);
         check(`${tag}: reduced motion: masthead and heading still paint over the layer`, clear(h), JSON.stringify(h));
-        check(`${tag}: reduced motion: no console or page errors`, errors.length === 0, errors.slice(0, 3).join(" | "));
+        const counted = errors();
+        check(`${tag}: reduced motion: no console or page errors`, counted.length === 0, counted.slice(0, 3).join(" | "));
         await context.close();
       }
     }
