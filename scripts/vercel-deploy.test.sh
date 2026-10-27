@@ -55,7 +55,8 @@ cat >"$work/bin/npx" <<'FAKE'
 #!/usr/bin/env bash
 shift
 echo "$*" >>"$CALLS"
-[ "$1" = deploy ] || { echo 'CLI inspect must never execute' >&2; exit 91; }
+# Hosted CLI 64.7.0 transcript (jobs 122084239061, 122096077381): every non-deploy command fails its user bootstrap.
+[ "$1" = deploy ] || { echo 'Error: Not able to load user because of unexpected error: User not found. (404)' >&2; exit 1; }
 mode=$FAKE_DEPLOY
 [ "$mode" = fail-once ] && { [ "$(wc -l < "$CALLS")" -eq 1 ] && mode=fail || mode=ok; }
 case "$mode" in
@@ -79,7 +80,7 @@ run() {
   out=$(env PATH="$work/bin:$PATH" GITHUB_SHA=$SHA UPLOAD_TIMEOUT=2 READY_TIMEOUT=1 INSPECT_TIMEOUT=1 STATUS_POLL_DELAY=0.01 \
     VERCEL_TOKEN="${FIXTURE_TOKEN-synthetic-token}" VERCEL_ORG_ID="${FIXTURE_TEAM-team_fixture}" VERCEL_PROJECT_ID="${FIXTURE_PROJECT-prj_fixture}" \
     VERCEL_API_URL="$base" HEALTH_URL="${FIXTURE_HEALTH_URL-$base/health}" HEALTH_RETRIES=0 HEALTH_RETRY_DELAY=1 HEALTH_ATTEMPTS=6 HEALTH_POLL_DELAY=0 \
-    bash "$here/vercel-deploy.sh" 2>&1)
+    bash "${FIXTURE_SCRIPT-$here/vercel-deploy.sh}" 2>&1)
   code=$?; elapsed=$((SECONDS - start))
   deploys=$(wc -l <"$CALLS")
 }
@@ -153,6 +154,15 @@ run pretty ok ready "{ \"ok\": true, \"sha\": \"$SHA\" }"
 check "formatted exact healthy SHA is accepted" '[ "$code" -eq 0 ]'
 FIXTURE_HEALTH_URL=http://127.0.0.1:1/health run unreachable ok ready "$healthy"
 check "READY plus unreachable health fails closed" '[ "$code" -ne 0 ] && [[ "$out" == *"health check"* ]] && [[ "$out" == *"last body, first 1000 bytes: none"* ]]'
+# Negative control: a readiness step that depends on the CLI's user bootstrap fails with the real transcript.
+mkdir -p "$work/inspect"
+cp "$here/deployment-status.mjs" "$work/inspect/"
+perl -pe 's/^(echo "deployment: \$url")$/$1\nnpx vercel\@64 inspect "\$url" --scope "\$VERCEL_ORG_ID" --wait >"\$wait_log" 2>&1 || fail "inspect: \$(diagnostic_tail "\$wait_log")"/' \
+  "$here/vercel-deploy.sh" >"$work/inspect/vercel-deploy.sh"
+FIXTURE_SCRIPT="$work/inspect/vercel-deploy.sh" run scoped-inspect ok ready "$healthy"
+check "scoped CLI inspect reproduces hosted User not found (404) and never reaches health" '[ "$code" -ne 0 ] && grep -q "^inspect " "$CALLS" && [[ "$out" == *"User not found. (404)"* ]] && ! grep -qx /health "$work/http.calls"'
+run ready ok ready "$healthy"
+check "API readiness succeeds beside the hosted CLI identity refusal without any CLI inspect" '[ "$code" -eq 0 ] && ! grep -q "^inspect " "$CALLS" && [[ "$out" != *"User not found"* ]]'
 check "deployment shell and adapter parse without executing" 'bash -n "$here/vercel-deploy.sh" "$here/vercel-deploy.test.sh" && node --check "$here/deployment-status.mjs"'
 printf 'if then\n' >"$work/invalid.sh"
 check "syntax negative control rejects malformed Bash" '! bash -n "$work/invalid.sh" 2>/dev/null'

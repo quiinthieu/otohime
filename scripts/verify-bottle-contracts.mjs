@@ -101,7 +101,9 @@ export const DEPLOYMENT_NAMES = [
   "HTTP 429 diagnostics redact vendor body and token",
   ...["preview", "public-only", "redirect"].map((mode) => `API ${mode} cannot bypass association or matching health`),
   "API redirect never forwards its credential",
-  "refused API token remains red and is never printed"
+  "refused API token remains red and is never printed",
+  "scoped CLI inspect reproduces hosted User not found (404) and never reaches health",
+  "API readiness succeeds beside the hosted CLI identity refusal without any CLI inspect",
 ];
 // Retain the exported contract used by the concurrently landed Bottle verifier.
 export const API_DEPLOYMENT_CONTROLS = DEPLOYMENT_NAMES;

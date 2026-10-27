@@ -1,5 +1,9 @@
 # Ryugu Paper Toys architecture
 
+## Hosted CLI identity transcript · pm-269/t-1648 · run-9198
+
+Production readiness stays on `741f59c`'s direct team-scoped `GET /v13/deployments/{hostname}` (`scripts/deployment-status.mjs`). The ee51ea9 CLI text matcher is not reintroduced. The deploy fixture's fake CLI now answers every non-deploy command with the exact hosted Vercel CLI 64.7.0 line `Error: Not able to load user because of unexpected error: User not found. (404)` (jobs `122084239061`, `122096077381`), and exits 1. A mutated copy of `vercel-deploy.sh` with a scoped `vercel inspect --wait` step reproduces that failure and never reaches health; the real script reaches API READY and exact-SHA health without calling inspect. The Bottle deployment receipt requires both controls. This fixture proves orchestration only; hosted API authorization is proven only by a green production job.
+
 ## Scoped API readiness fallback · pm-269/t-1648 · run-9194
 
 Both Vercel inspect calls retain the configured team scope. Only when both exit 1 with `Error: User not found` and no recognized deployment state may `scripts/vercel-deployment-state.mjs` independently read the uploaded hostname through `GET /v13/deployments/{hostname}?teamId=...`. The helper uses the existing `VERCEL_TOKEN`, requires `VERCEL_PROJECT_ID`, and accepts only an owner response matching the exact hostname/project, production target, deployment id and explicit `READY`. It makes one bounded read, rejects redirects, caps response bytes, and prints neither bearer credentials nor vendor response bodies. A nonready, refused or malformed API response still fails deployment. Other CLI failures and timeouts cannot use this fallback. The exact top-level JSON served-SHA health requirement remains after either successful readiness path. No token binding changes or new secret are introduced.

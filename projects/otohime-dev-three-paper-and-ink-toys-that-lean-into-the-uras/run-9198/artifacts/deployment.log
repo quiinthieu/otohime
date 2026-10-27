@@ -1,0 +1,64 @@
+ok - team-scoped bearer READY and exact-sha health succeed without user bootstrap
+ok - status resource receives exact hostname and configured team
+ok - deployment receipt binds project owner id and READY
+ok - healthy upload keeps no-wait and does not invoke CLI inspect
+ok - adapter never requests user bootstrap
+ok - user bootstrap 404 fixture exists beside successful deployment resource
+ok - healthy adapter never prints token or public error
+ok - wrong ownerId fails association before matching health
+ok - missing ownerId fails association before matching health
+ok - wrong projectId fails association before matching health
+ok - missing projectId fails association before matching health
+ok - wrong url fails association before matching health
+ok - missing url fails association before matching health
+ok - wrong id fails association before matching health
+ok - missing id fails association before matching health
+ok - wrong target fails association before matching health
+ok - missing target fails association before matching health
+ok - HTTP 401 fails closed before matching health
+ok - HTTP 401 diagnostics redact vendor body and token
+ok - HTTP 403 fails closed before matching health
+ok - HTTP 403 diagnostics redact vendor body and token
+ok - HTTP 404 fails closed before matching health
+ok - HTTP 404 diagnostics redact vendor body and token
+ok - HTTP 429 fails closed before matching health
+ok - HTTP 429 diagnostics redact vendor body and token
+ok - HTTP 500 fails closed before matching health
+ok - HTTP 500 diagnostics redact vendor body and token
+ok - API preview cannot bypass association or matching health
+ok - API public-only cannot bypass association or matching health
+ok - API redirect cannot bypass association or matching health
+ok - API redirect never forwards its credential
+ok - refused API token remains red and is never printed
+ok - malformed status JSON cannot be rescued by matching health
+ok - ERROR status fails closed before matching health
+ok - CANCELED status fails closed before matching health
+ok - UNKNOWN status fails closed before matching health
+ok - BUILDING status times out within bound and never reads health
+ok - QUEUED status times out within bound and never reads health
+ok - INITIALIZING status times out within bound and never reads health
+ok - hanging status HTTP is bounded and matching health cannot rescue it
+ok - missing TEAM is refused before upload
+ok - missing PROJECT is refused before upload
+ok - missing TOKEN is refused before upload
+ok - BUILDING to READY transition proceeds to exact-sha health
+ok - hanging upload is bounded without duplicate deployment
+ok - hanging upload never requests deployment status
+ok - hanging upload leaves no child
+ok - fast upload failure retries exactly once
+ok - two upload failures stop at one retry
+ok - failed upload with URL reuses deployment without retry
+ok - READY plus wrong public SHA remains red
+ok - invalid health body 51 cannot impersonate exact healthy SHA
+ok - invalid health body 52 cannot impersonate exact healthy SHA
+ok - invalid health body 53 cannot impersonate exact healthy SHA
+ok - alias transition keeps twelve-read production budget and accepts fifth exact SHA
+ok - production defaults preserve upload ready and health budgets
+ok - formatted exact healthy SHA is accepted
+ok - READY plus unreachable health fails closed
+ok - scoped CLI inspect reproduces hosted User not found (404) and never reaches health
+ok - API readiness succeeds beside the hosted CLI identity refusal without any CLI inspect
+ok - deployment shell and adapter parse without executing
+ok - syntax negative control rejects malformed Bash
+ok - missing GITHUB_SHA is refused before upload
+# all 63 assertions passed
