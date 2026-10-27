@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { canvasSize, GhostModel, GhostSession, paintGhosts, parseServerFrame, pointerPoint, shouldMove, type GhostRuntime, type GhostSocket, type Snapshot } from "./client.ts";
 import type { GhostConfig } from "./config.ts";
+import { ghostsPreferenceStore } from "./pref.ts";
 
 const config: GhostConfig = { endpoint: "wss://worker.example/ghosts", rooms: ["/", "/ryugu"] };
 const flush = async () => { await Promise.resolve(); await Promise.resolve(); };
@@ -196,6 +197,57 @@ test("hung config consumes attempts and disposed/aborted config can never connec
   pending[0](config); await flush(); assert.equal(h.sockets.length, 0);
   await h.advance(1000); h.session.dispose();
   pending[1](config); await flush(); assert.equal(h.sockets.length, 0); assert.equal(h.timers.size, 0);
+});
+
+test("opt-out synchronously clears visuals and rejects already queued socket/frame/timer callbacks", async () => {
+  const h = harness();
+  const preference = ghostsPreferenceStore(() => null, () => new EventTarget());
+  const unsubscribe = preference.subscribe(() => h.session.setEligible(!preference.get()));
+  await h.join(2);
+  const socket = h.sockets[0];
+  socket.receive({ t: "c", id: "peer", x: 0.2, y: 0.3 });
+  h.session.pointer("c", { x: 0.5, y: 0.5 });
+  const queuedFrame = [...h.frames.values()][0];
+  const queuedMessage = socket.onmessage!;
+  const queuedError = socket.onerror!;
+  const queuedDeadline = [...h.timers.values()][0]?.fn;
+  h.frame();
+  preference.set(true);
+  assert.equal(socket.closed, 1); assert.equal(h.frames.size, 0); assert.equal(h.timers.size, 0);
+  assert.equal(h.state.others, 0); assert.equal(h.state.ripples, 0);
+  const draws = h.drawCalls, sends = socket.sent.length;
+  queuedFrame();
+  queuedMessage.call(socket as unknown as WebSocket, { data: '{"t":"c","id":"late","x":1,"y":1}' } as MessageEvent);
+  queuedError.call(socket as unknown as WebSocket, {} as Event);
+  queuedDeadline?.();
+  h.session.pointer("c", { x: 0, y: 0 });
+  await h.advance(10000);
+  assert.equal(h.drawCalls, draws); assert.equal(socket.sent.length, sends);
+  assert.equal(h.session.model.peers.size, 0); assert.equal(h.session.model.ripples.length, 0);
+  assert.equal(h.frames.size, 0); assert.equal(h.timers.size, 0);
+  preference.set(false); await flush(); assert.equal(h.sockets.length, 2);
+  // Old callbacks must also remain inert after a new generation has joined.
+  h.sockets[1].receive({ t: "hi", id: "fresh", n: 1 });
+  queuedError.call(socket as unknown as WebSocket, {} as Event);
+  queuedFrame();
+  assert.equal(h.state.state, "on"); assert.equal(h.sockets[1].closed, 0);
+  unsubscribe(); h.session.dispose();
+});
+
+test("suppression cancels retry and handshake deadline even when a scheduler delivers cancelled callbacks", async () => {
+  const h = harness(); h.session.setEligible(true); await flush();
+  const deadline = [...h.timers.values()][0].fn;
+  h.sockets[0].drop();
+  const retry = [...h.timers.values()][0].fn;
+  h.session.setEligible(false);
+  deadline(); retry(); await flush();
+  assert.equal(h.sockets.length, 1); assert.equal(h.timers.size, 0);
+  h.session.setEligible(true); await flush();
+  h.sockets[1].receive({ t: "hi", id: "fresh", n: 1 });
+  deadline(); retry(); await flush();
+  assert.equal(h.state.state, "on"); assert.equal(h.sockets.length, 2);
+  assert.equal(h.sockets[1].closed, 0); assert.equal(h.timers.size, 0);
+  h.session.dispose();
 });
 
 test("canvas painter draws brush tips, trails and only live ripple arcs", () => {

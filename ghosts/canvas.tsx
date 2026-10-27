@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import { canvasSize, GhostSession, paintGhosts, pointerPoint, type Snapshot } from "./client.ts";
 import type { GhostRoom } from "./config.ts";
+import { getGhostsHidden, subscribeGhostsHidden } from "./pref-client.ts";
 
 export default function GhostCanvas({ room }: { room: GhostRoom }) {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -53,7 +54,7 @@ export default function GhostCanvas({ room }: { room: GhostRoom }) {
       listening = false;
     };
     const reconcile = () => {
-      const eligible = !motion.matches && !document.hidden && navigator.onLine;
+      const eligible = !getGhostsHidden() && !motion.matches && !document.hidden && navigator.onLine;
       if (eligible && !listening) {
         resize();
         window.addEventListener("resize", resize, { passive: true });
@@ -67,9 +68,11 @@ export default function GhostCanvas({ room }: { room: GhostRoom }) {
     document.addEventListener("visibilitychange", reconcile);
     window.addEventListener("online", reconcile);
     window.addEventListener("offline", reconcile);
+    const unsubscribe = subscribeGhostsHidden(reconcile);
     reconcile();
     return () => {
       detach(); session.dispose();
+      unsubscribe();
       motion.removeEventListener("change", reconcile);
       document.removeEventListener("visibilitychange", reconcile);
       window.removeEventListener("online", reconcile);

@@ -150,6 +150,7 @@ export class GhostSession {
       socket.close();
     }
     this.model.reset(); this.lastMove = undefined; this.lastClick = -Infinity;
+    this.drawnRipples = 0;
     this.runtime.clear();
   }
   private finish(state: "gone" | "off") {
@@ -160,16 +161,21 @@ export class GhostSession {
     if (!this.eligible || this.disposed) return;
     if (this.attempts >= 3) { this.finish("gone"); return; }
     this.publish("connecting");
-    this.retry = this.runtime.later(() => { this.retry = undefined; void this.start(); }, this.attempts === 1 ? 1000 : 3000);
+    const generation = this.generation;
+    this.retry = this.runtime.later(() => {
+      if (generation !== this.generation) return;
+      this.retry = undefined; void this.start();
+    }, this.attempts === 1 ? 1000 : 3000);
   };
   private async start() {
     if (!this.eligible || this.disposed || this.terminal) return;
     this.attempts++;
     const generation = ++this.generation;
+    const active = () => generation === this.generation && this.eligible && !this.disposed;
     const abort = this.abort = new AbortController();
     this.publish("connecting");
     // A hung config fetch or socket handshake consumes an attempt too.
-    this.deadline = this.runtime.later(this.fail, 8000);
+    this.deadline = this.runtime.later(() => { if (active()) this.fail(); }, 8000);
     try {
       const config = await this.runtime.config(abort.signal);
       if (generation !== this.generation) return;
@@ -177,9 +183,10 @@ export class GhostSession {
       if (!endpoint || !(Array.isArray(config?.rooms) && config.rooms.includes(this.room))) { this.finish("off"); return; }
       const url = new URL(endpoint); url.searchParams.set("room", this.room);
       const socket = this.socket = this.runtime.connect(url.href);
-      socket.onerror = this.fail;
-      socket.onclose = event => { if (event.code === 1013) this.finish("gone"); else this.fail(); };
+      socket.onerror = () => { if (active()) this.fail(); };
+      socket.onclose = event => { if (!active()) return; if (event.code === 1013) this.finish("gone"); else this.fail(); };
       socket.onmessage = event => {
+        if (!active()) return;
         const msg = parseServerFrame(event.data);
         if (!msg) return;
         if (msg.t === "full") { this.finish("gone"); return; }
@@ -211,7 +218,9 @@ export class GhostSession {
   }
   redraw = () => {
     if (this.state !== "on" || !this.eligible || this.disposed || this.raf !== undefined) return;
+    const generation = this.generation;
     this.raf = this.runtime.frame(() => {
+      if (generation !== this.generation || !this.eligible || this.disposed) return;
       this.raf = undefined;
       const now = this.runtime.now();
       this.model.prune(now);
@@ -222,7 +231,10 @@ export class GhostSession {
       if (this.model.animating()) this.redraw();
       else {
         const ms = this.model.nextExpiry(now);
-        if (Number.isFinite(ms)) this.expiry = this.runtime.later(() => { this.expiry = undefined; this.redraw(); }, ms);
+        if (Number.isFinite(ms)) this.expiry = this.runtime.later(() => {
+          if (generation !== this.generation) return;
+          this.expiry = undefined; this.redraw();
+        }, ms);
       }
     });
   };

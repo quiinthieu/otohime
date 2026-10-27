@@ -24,6 +24,7 @@ import {
 import { getPalaceSound, getServerPalaceSound, setPalaceSound, subscribePalaceSound } from "@/lib/palace-sound";
 import { play } from "@/lib/sound-client";
 import { PALACE_HREF } from "@/lib/urashima";
+import { setGhostsHidden, useGhostsHidden } from "@/ghosts/pref-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent, useReducer, useRef, useState, useSyncExternalStore } from "react";
@@ -79,6 +80,7 @@ export function Handheld() {
   const reduced = useSyncExternalStore(onReducedChange, () => matchMedia(REDUCED).matches, () => false);
   // The palace's sea sound, switched here and heard only down in Ryugu-jo (lib/palace-sound.ts).
   const seaSound = useSyncExternalStore(subscribePalaceSound, getPalaceSound, getServerPalaceSound);
+  const ghostsHidden = useGhostsHidden();
   const lcdRef = useRef<SVGRectElement>(null);
   const [onscreen, setOnscreen] = useState(true);
   // The page A is opening: its label shows over the LCD until the navigation takes it (or LABEL_MS passes).
@@ -522,6 +524,9 @@ export function Handheld() {
               {/* Ryugu-jo's sea sound: off until pressed, and pressed again to silence an open palace. */}
               <Chip aria-pressed={seaSound} aria-label={P.seaSoundLabel} data-pocket-sea-sound="" onClick={() => setPalaceSound(!seaSound)}>
                 {P.seaSound}
+              </Chip>
+              <Chip aria-pressed={!ghostsHidden} data-pocket-ghosts="" onClick={() => setGhostsHidden(!ghostsHidden)}>
+                Ghosts {ghostsHidden ? "off" : "on"}
               </Chip>
             </>
           )}
