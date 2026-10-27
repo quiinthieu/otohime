@@ -2,6 +2,7 @@ import { TheatreLoader } from "@/components/kamishibai/loader";
 import { ProjectStories } from "@/components/kamishibai/stories";
 import { RisoText } from "@/components/riso-heading";
 import { Cartridge } from "@/components/cartridge";
+import { DarumaBoard } from "@/components/daruma-board";
 import { FigTitle, Notice } from "@/components/figures";
 import { site } from "@/content/site";
 import { peekMark, peekTags } from "@/lib/peek-marks";
@@ -9,6 +10,7 @@ import { peekSlug } from "@/lib/peeks";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { type CSSProperties, ViewTransition } from "react";
+import "./daruma.css";
 
 export const metadata: Metadata = { title: "Projects" };
 
@@ -27,33 +29,35 @@ export default function ProjectsPage() {
             </Notice>
           </div>
         ) : (
-          <ul className="cartridges mt-8 grid grid-cols-2 gap-x-3 gap-y-5 sm:gap-x-6 sm:gap-y-7 lg:grid-cols-3">
-            {site.projectList.map((project, i) => (
-              <li key={project.title} className="rise cartridge-slot" style={{ "--i": i } as CSSProperties}>
-                <Cartridge project={project}>
-                  <span className="block">
-                    <span className="font-semibold">
-                      {project.href ? (
-                        // The title travels to the project's h1 on the hop: globals.css names it from --vt.
-                        <a
-                          href={project.href}
-                          className="project-title"
-                          style={{ "--vt": `project-${project.href.slice(1)}` } as CSSProperties}
-                          {...peekMark(`project:${peekSlug(project.title)}`)}
-                        >
-                          {project.title}
-                        </a>
-                      ) : (
-                        project.title
-                      )}
-                    </span>{" "}
-                    <span className="badge">{project.status}</span>
-                  </span>
-                  <span className="cartridge-note">{project.note}</span>
-                </Cartridge>
-              </li>
-            ))}
-          </ul>
+          <DarumaBoard projects={site.projectList}>
+            <ul className="cartridges mt-8 grid grid-cols-2 gap-x-3 gap-y-5 sm:gap-x-6 sm:gap-y-7 lg:grid-cols-3">
+              {site.projectList.map((project, i) => (
+                <li key={project.title} className="rise cartridge-slot" style={{ "--i": i } as CSSProperties}>
+                  <Cartridge project={project}>
+                    <span className="block">
+                      <span className="font-semibold">
+                        {project.href ? (
+                          // The title travels to the project's h1 on the hop: globals.css names it from --vt.
+                          <a
+                            href={project.href}
+                            className="project-title"
+                            style={{ "--vt": `project-${project.href.slice(1)}` } as CSSProperties}
+                            {...peekMark(`project:${peekSlug(project.title)}`)}
+                          >
+                            {project.title}
+                          </a>
+                        ) : (
+                          project.title
+                        )}
+                      </span>{" "}
+                      <span className="badge">{project.status}</span>
+                    </span>
+                    <span className="cartridge-note">{project.note}</span>
+                  </Cartridge>
+                </li>
+              ))}
+            </ul>
+          </DarumaBoard>
         )}
         <TheatreLoader><ProjectStories /></TheatreLoader>
         <GazetteDesks />
