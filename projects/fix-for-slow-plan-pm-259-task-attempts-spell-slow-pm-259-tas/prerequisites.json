@@ -1,7 +1,7 @@
 {
   "schema": "platform.plan-prerequisites.v1",
   "plan_id": "pm-270",
-  "revision": 2,
+  "revision": 3,
   "external_dependencies_reviewed": true,
   "reason": "Main Lane Throughput repairs repository-owned GitHub Actions workflow steps, Node/shell CI probe annotation helpers, streamed /dashboard heading observation in scripts/probe-end.mjs, TMPDIR path normalization in scripts/probe-motion-signed-in.sh, and deterministic desk/shared browser gate fixtures using locked npm dependencies and disposable embedded Postgres. Delivery relies on existing registered GitHub SSH access, fleet execution runners, GitHub Actions CI, and Vercel production deployment under existing account and cost authority; no new runtime service, paid API, account, or secret is needed.",
   "prerequisites": [
