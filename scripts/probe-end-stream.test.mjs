@@ -11,6 +11,7 @@ let observeMainHeading;
 let browser;
 let server;
 let base;
+let releaseDashboardStream;
 before(async () => {
   assert.ok(helper, "probe-end.mjs must define the bounded heading observer");
   observeMainHeading = new Function(`return (${helper});`)();
@@ -21,8 +22,7 @@ before(async () => {
     // A shared hydrated layout remains visible while route content streams, as with loading.tsx.
     res.write('<!doctype html><main id="main"><div id="skeleton">Loading</div></main><footer class="end" data-hydrated="true">Footer</footer>' + " ".repeat(2048));
     if (req.url === "/dashboard") {
-      const timer = setTimeout(() => res.end('<script>document.querySelector("main").innerHTML = "<h1>Hello, stream</h1>"</script>'), 1500);
-      res.on("close", () => clearTimeout(timer));
+      releaseDashboardStream = () => res.end('<script>document.querySelector("main").innerHTML = "<h1>Hello, stream</h1>"</script>');
     } else {
       const headings = '<h1>   </h1><h1 hidden>Hidden</h1><h1><span hidden>Hidden text only</span></h1><h1 style="opacity:0">Transparent heading</h1><h1 style="visibility:hidden">Invisible heading</h1>';
       res.end(`<script>document.querySelector("main").insertAdjacentHTML("beforeend", ${JSON.stringify(headings)})</script>`);
@@ -46,9 +46,13 @@ test("streamed /dashboard heading arriving after 1.5s resolves the real observer
     await page.goto(`${base}/dashboard`, { waitUntil: "commit" });
     await page.locator("footer.end[data-hydrated=true]").waitFor();
     assert.equal(await page.locator("main h1").count(), 0, "shared hydration is not route readiness");
-    const start = performance.now();
-    await observeMainHeading(page);
-    assert.ok(performance.now() - start >= 1000, "must observe the delayed stream, not a fixed short pause");
+    let settled = false;
+    const observation = observeMainHeading(page);
+    observation.then(() => { settled = true; }, () => { settled = true; });
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    assert.equal(settled, false, "observer must wait for the streamed heading");
+    releaseDashboardStream();
+    await observation;
     assert.equal(await page.locator("main h1").innerText(), "Hello, stream");
   } finally { await page.close(); }
 });
