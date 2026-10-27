@@ -7,6 +7,7 @@ import { join, resolve } from "node:path";
 import { test } from "node:test";
 import {
   AMBIENCE_CUTOFF_HZ,
+  ambienceSession,
   AMBIENCE_DB,
   AMBIENCE_SEED,
   brownNoise,
@@ -365,6 +366,43 @@ test("no Web Audio: the button says so, nothing is stored, nothing throws", asyn
   assert.equal(of(refused.ctx, "source")[0].stopped.length, 1);
 });
 
+test("back to a palace the browser kept (bfcache): the button works again, and still waits for a gesture", () => {
+  const storage = memory();
+  const contexts: Fake[] = [];
+  const open = () => createAmbience({ make: () => (contexts.push(fakeContext()), contexts.at(-1)!), storage });
+  let heard = 0;
+  const session = ambienceSession(open, () => heard++);
+  const first = session.current();
+  first.toggle();
+  assert.equal(first.status(), "playing");
+  session.hide(); // "Back to the surface": pagehide
+  assert.equal(first.status(), "off");
+  assert.ok(contexts[0].calls.includes("close"));
+  // negative control: without a restore, the closed ambience ignores the button for good
+  first.toggle();
+  assert.equal(first.status(), "off");
+  session.show(false); // an ordinary load is not a restore
+  assert.equal(session.current(), first);
+
+  heard = 0;
+  session.show(true); // Back: pageshow, persisted
+  const again = session.current();
+  assert.notEqual(again, first);
+  assert.equal(again.status(), "waiting", "the stored on is read again");
+  assert.equal(heard, 1, "the button hears the fresh status");
+  assert.equal(contexts.length, 1, "no context until a gesture: no autoplay on return");
+  again.gesture();
+  assert.equal(again.status(), "playing");
+  assert.equal(contexts.length, 2);
+  again.toggle();
+  assert.equal(storage.data.get(PALACE_SOUND_KEY), "off");
+  assert.equal(heard, 3);
+
+  session.dispose(); // unmount: closed, and nothing more is heard
+  assert.ok(contexts[1].calls.includes("close"));
+  assert.equal(heard, 3);
+});
+
 test("negative control: a running context is not resumed again, so the resume above is the gesture's doing", () => {
   const { a, ctx } = rig({ ctx: fakeContext({ state: "running" }) });
   a.toggle();
@@ -399,11 +437,13 @@ test("the palace mounts the button, opens audio only through make, and lets it g
   const ui = read("app/(ryugu)/_components/ambience.tsx");
   assert.equal(ui.match(/new ctor\(\)/g)?.length, 1, "one place makes a context");
   assert.doesNotMatch(ui, /new AudioContext|resume\(|localStorage\.setItem/, "the engine does the rest");
-  for (const [target, event] of [["", "click"], ["", "keydown"], ["", "storage"], ["", "pagehide"], ["document.", "visibilitychange"]]) {
+  for (const [target, event] of [["", "click"], ["", "keydown"], ["", "storage"], ["", "pagehide"], ["", "pageshow"], ["document.", "visibilitychange"]]) {
     assert.match(ui, new RegExp(`${target.replace(".", "\\.")}addEventListener\\("${event}"`), event);
     assert.match(ui, new RegExp(`${target.replace(".", "\\.")}removeEventListener\\("${event}"`), `${event} let go`);
   }
-  assert.match(ui, /a\.close\(\);\s*ambience\.current = null;/, "unmount closes it");
+  assert.match(ui, /addEventListener\("pagehide", session\.hide\);/, "leaving closes it");
+  assert.match(ui, /session\.show\(event\.persisted\);\s*ambience\.current = a\(\);/, "the button follows a restored page's ambience");
+  assert.match(ui, /session\.dispose\(\);\s*ambience\.current = null;/, "unmount closes it");
   assert.match(ui, /aria-pressed=\{view\.pressed\}/);
   assert.match(ui, /closest\("\[data-ambience\]"\)/, "the button's own click is not also a gesture");
   // ...but only its click and the keys that make one: an arrow pressed while it has focus is still a gesture
