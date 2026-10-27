@@ -53,3 +53,5 @@ Real-browser boundaries: production Next build/start, real React, real SVG filte
 Original implementation evidence is recorded in [t-1679-run-9265.md](t-1679-run-9265.md). Fresh rescue verification, performance repair and delivery evidence are in [t-1679-run-9267.md](t-1679-run-9267.md). Local checks demonstrate implementation execution; platform CI, deployment and independent QA remain downstream of the delivery push.
 
 The subsequent frame-deadline repair and fresh verification are recorded in [t-1679-run-9270.md](t-1679-run-9270.md).
+
+Rescue retention, fresh verification and the legacy main-delivery correction are recorded in [t-1679-run-9271.md](t-1679-run-9271.md).
