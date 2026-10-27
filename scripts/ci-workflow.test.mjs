@@ -8,6 +8,10 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 
+// Keep identity regressions in the existing CI suite without editing its shared package command.
+import "./check-deploy-author.test.mjs";
+import "./setup-owner-git.test.mjs";
+
 const workflow = readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
 const lines = workflow.split("\n");
 const indent = (line) => line.length - line.trimStart().length;

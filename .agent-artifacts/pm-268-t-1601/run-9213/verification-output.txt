@@ -1,0 +1,173 @@
+feature-rebase-1.log
+TAP version 13
+# (node:1383316) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///data/build-worker/leases/3869f68f-4297-4431-9fe9-95eeadb97f34-3a8f98c1a21a31a0b2088a1136b26744/work/otohime/lib/riso-heading.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /data/build-worker/leases/3869f68f-4297-4431-9fe9-95eeadb97f34-3a8f98c1a21a31a0b2088a1136b26744/work/otohime/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Unicode graphemes stay whole, including combining accents, flags and ZWJ emoji
+ok 1 - Unicode graphemes stay whole, including combining accents, flags and ZWJ emoji
+  ---
+  duration_ms: 1.156272
+  type: 'test'
+  ...
+# Subtest: empty and whitespace titles preserve their exact source
+ok 2 - empty and whitespace titles preserve their exact source
+  ---
+  duration_ms: 0.270476
+  type: 'test'
+  ...
+# Subtest: long and wrapped titles have bounded stagger and stable indices
+ok 3 - long and wrapped titles have bounded stagger and stable indices
+  ---
+  duration_ms: 3.640832
+  type: 'test'
+  ...
+# Subtest: SSR and client calls settle to the same signed 1–2px ghost offsets
+ok 4 - SSR and client calls settle to the same signed 1–2px ghost offsets
+  ---
+  duration_ms: 0.671597
+  type: 'test'
+  ...
+# Subtest: plate count can only resolve to two or three
+ok 5 - plate count can only resolve to two or three
+  ---
+  duration_ms: 0.127993
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 88.233488
+
+runner.log
+TAP version 13
+# Subtest: fresh e2e builds discard stale Next font output before compiling
+ok 1 - fresh e2e builds discard stale Next font output before compiling
+  ---
+  duration_ms: 5203.998032
+  type: 'test'
+  ...
+# Subtest: stale-font negative control fails before server or suite when cleanup is removed
+ok 2 - stale-font negative control fails before server or suite when cleanup is removed
+  ---
+  duration_ms: 77.484334
+  type: 'test'
+  ...
+# Subtest: SKIP_BUILD preserves the existing Next build and still executes the suite
+ok 3 - SKIP_BUILD preserves the existing Next build and still executes the suite
+  ---
+  duration_ms: 5199.614339
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10570.885598
+
+unit-rebase-1.log
+  duration_ms: 10190.393337
+  type: 'test'
+  ...
+1..2492
+# tests 2510
+# suites 2
+# pass 2510
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 21485.428809
+
+typecheck-rebase-1.log
+
+> otohime@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+lint-rebase-1.log
+
+/data/build-worker/leases/3869f68f-4297-4431-9fe9-95eeadb97f34-3a8f98c1a21a31a0b2088a1136b26744/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs
+  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (0 errors, 10 warnings)
+  0 errors and 9 warnings potentially fixable with the `--fix` option.
+
+
+browser-rebase-1.log
+│ ├ ○ /structures/linked-list
+│ └ ◐ [+6 more paths]
+├ ○ /vinyl
+├ ◐ /work                                       1d      1w
+├ ○ /work/opengraph-image-blv499
+└ ◐ /zine
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+Starting the server on http://localhost:34553
+TAP version 13
+# (node:1399543) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///data/build-worker/leases/3869f68f-4297-4431-9fe9-95eeadb97f34-3a8f98c1a21a31a0b2088a1136b26744/work/otohime/e2e/riso-headings.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /data/build-worker/leases/3869f68f-4297-4431-9fe9-95eeadb97f34-3a8f98c1a21a31a0b2088a1136b26744/work/otohime/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: disabled ghost config reconciles only its real resource error; unrelated errors still fail
+ok 1 - disabled ghost config reconciles only its real resource error; unrelated errors still fail
+  ---
+  duration_ms: 630.636977
+  type: 'test'
+  ...
+# Subtest: one heading name, one selectable copy, deterministic settled plates and token plate counts
+ok 2 - one heading name, one selectable copy, deterministic settled plates and token plate counts
+  ---
+  duration_ms: 1512.538164
+  type: 'test'
+  ...
+# Subtest: entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+ok 3 - entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+  ---
+  duration_ms: 1526.505285
+  type: 'test'
+  ...
+# Subtest: server/no-JavaScript headings are readable and mobile notes wrap without overflow
+ok 4 - server/no-JavaScript headings are readable and mobile notes wrap without overflow
+  ---
+  duration_ms: 279.815679
+  type: 'test'
+  ...
+# Subtest: Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+ok 5 - Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+  ---
+  duration_ms: 2574.625068
+  type: 'test'
+  ...
+# Subtest: shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+ok 6 - shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+  ---
+  duration_ms: 325.81469
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7549.209246
