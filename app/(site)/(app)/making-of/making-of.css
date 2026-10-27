@@ -1,0 +1,487 @@
+/* Making-of Emaki Handscroll (app/(site)/(app)/making-of/making-of.css) */
+
+.emaki-figure-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.emaki-root {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.emaki-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.95rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper-2);
+  box-shadow: 3px 3px 0 var(--shade);
+  outline: none;
+}
+
+.emaki-controls-bar:focus-visible,
+.emaki-scroll-stage:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.emaki-controls-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.emaki-seal-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.45rem;
+  border: 1.5px solid #b52b1d;
+  border-radius: 3px;
+  background: #fbf6ea;
+  color: #b52b1d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.emaki-live-status {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.emaki-nav-buttons {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.emaki-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.emaki-scroll-stage {
+  position: relative;
+  outline: none;
+}
+
+/* Sticky vertical-to-horizontal scroll runway when hydrated and motion is permitted */
+.emaki-root[data-hydrated="true"][data-reduced-motion="false"] .emaki-scroll-stage {
+  height: 360vh;
+  min-height: 2600px;
+}
+
+.emaki-root[data-hydrated="true"][data-reduced-motion="false"] .emaki-sticky-viewport {
+  position: sticky;
+  top: 1rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.emaki-relay-banner {
+  padding: 0.65rem 0.9rem 0.5rem;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  background: var(--paper-2);
+}
+
+.emaki-relay-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.emaki-relay-svg {
+  display: block;
+  width: 100%;
+  max-height: 88px;
+  overflow: visible;
+}
+
+.emaki-relay-scroll-path {
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  stroke-dasharray: 6 4;
+  opacity: 0.55;
+}
+
+.emaki-relay-node[data-active="true"] .emaki-relay-label {
+  font-weight: 700;
+  fill: #b52b1d;
+}
+
+.emaki-relay-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--ink);
+}
+
+.emaki-baton-paper {
+  fill: #fbf6ea;
+  stroke: #1e1914;
+  stroke-width: 1.8;
+}
+
+.emaki-baton-roller {
+  stroke: #8c2d19;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+.emaki-baton-seal {
+  fill: #d63c2d;
+}
+
+.emaki-viewport-frame {
+  position: relative;
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  border-left: 10px solid #8c2d19;
+  border-right: 10px solid #8c2d19;
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(30, 25, 20, 0.04) 0%, transparent 14%, transparent 86%, rgba(30, 25, 20, 0.05) 100%),
+    var(--paper);
+  box-shadow: 0 6px 0 var(--shade);
+  padding: 1.15rem 1rem;
+  overflow: hidden;
+}
+
+.emaki-roller {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(90deg, #1e1914, #d63c2d);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.emaki-roller-left {
+  left: 0;
+}
+
+.emaki-roller-right {
+  right: 0;
+}
+
+.emaki-roller-cap {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .emaki-roller-cap {
+      animation: emaki-roller-sheen linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@keyframes emaki-roller-sheen {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.emaki-parallax-layer {
+  position: absolute;
+  left: 0;
+  right: -1200px;
+  pointer-events: none;
+  will-change: transform;
+  color: var(--ink);
+}
+
+.emaki-parallax-clouds {
+  top: 0.35rem;
+  height: 92px;
+  opacity: 0.16;
+}
+
+.emaki-parallax-pines {
+  bottom: 0.25rem;
+  height: 68px;
+  opacity: 0.2;
+}
+
+.emaki-bg-svg {
+  width: 2400px;
+  height: 100%;
+  display: block;
+}
+
+/* Foreground ordered list of scenes */
+.emaki-scene-list {
+  position: relative;
+  z-index: 2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.1rem;
+  width: max-content;
+  will-change: transform;
+}
+
+/* No-JS / pre-hydration fallback: clean readable multi-column ordered list */
+.emaki-root[data-hydrated="false"] .emaki-scroll-stage {
+  height: auto;
+  min-height: 0;
+}
+
+.emaki-root[data-hydrated="false"] .emaki-sticky-viewport {
+  position: static;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.emaki-root[data-hydrated="false"] .emaki-viewport-frame {
+  overflow-x: auto;
+}
+
+.emaki-root[data-hydrated="false"] .emaki-scene-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+  width: 100%;
+  transform: none !important;
+}
+
+.emaki-scene {
+  width: 340px;
+  flex: 0 0 340px;
+  min-width: 0;
+  display: flex;
+}
+
+.emaki-root[data-hydrated="false"] .emaki-scene,
+.emaki-root[data-reduced-motion="true"] .emaki-scene {
+  width: auto;
+  flex: 1 1 auto;
+}
+
+.emaki-scene-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.9rem 0.95rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+  box-shadow: 3px 3px 0 var(--shade);
+}
+
+.emaki-scene[data-active="true"] .emaki-scene-card {
+  border-color: #b52b1d;
+  box-shadow: 4px 4px 0 rgba(181, 43, 29, 0.28);
+}
+
+.emaki-scene-header {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.emaki-scene-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.emaki-scene-number {
+  color: var(--muted);
+}
+
+.emaki-plan-badge {
+  padding: 0.08rem 0.4rem;
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  background: var(--paper-2);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.emaki-scene-date {
+  color: var(--muted);
+}
+
+.emaki-scene-title {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.emaki-scene-vignette {
+  padding: 0.35rem 0.4rem;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--paper-2) 70%, var(--paper));
+}
+
+.emaki-scene-svg {
+  display: block;
+  width: 100%;
+  height: 68px;
+  overflow: visible;
+}
+
+.emaki-scene-scroll-ribbon {
+  stroke: #1e1914;
+  stroke-width: 2;
+  stroke-dasharray: 5 3;
+}
+
+.emaki-scene-hanko rect {
+  fill: #fbf6ea;
+  stroke: #b52b1d;
+  stroke-width: 1.8;
+}
+
+.emaki-scene-hanko text {
+  font-size: 10px;
+  font-weight: 700;
+  fill: #b52b1d;
+}
+
+.emaki-scene-summary {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.42;
+  color: var(--ink);
+}
+
+.emaki-role-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.emaki-role-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper-2);
+  font-size: 0.7rem;
+}
+
+.emaki-role-name {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.emaki-role-model {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink);
+  word-break: break-all;
+}
+
+.emaki-scene-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed var(--line);
+}
+
+.emaki-scene-areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.emaki-commit-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.emaki-commit-link:hover,
+.emaki-commit-link:focus-visible {
+  color: #b52b1d;
+}
+
+/* Reduced motion: static grid layout, zero parallax or animations */
+.emaki-root[data-reduced-motion="true"] .emaki-scroll-stage {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.emaki-root[data-reduced-motion="true"] .emaki-sticky-viewport {
+  position: static !important;
+}
+
+.emaki-root[data-reduced-motion="true"] .emaki-scene-list {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)) !important;
+  width: 100% !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emaki-root,
+  .emaki-root *,
+  .emaki-scene-list,
+  .emaki-parallax-layer,
+  .emaki-roller-cap {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .emaki-scroll-stage {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .emaki-sticky-viewport {
+    position: static !important;
+  }
+
+  .emaki-scene-list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)) !important;
+    width: 100% !important;
+  }
+}

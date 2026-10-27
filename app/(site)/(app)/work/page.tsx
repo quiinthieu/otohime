@@ -18,9 +18,15 @@ export default function WorkPage() {
           Work
         </FigTitle>
         <p className="mt-2 max-w-prose text-muted">{site.work}</p>
-        <p className="mt-2">
+        <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
           <Link href="/ledger" className="link">
             The year in ink stamps
+          </Link>
+          <span aria-hidden="true" className="text-muted">
+            ·
+          </span>
+          <Link href="/making-of" className="link">
+            Making-of Emaki handscroll
           </Link>
         </p>
         <div className="mt-8">

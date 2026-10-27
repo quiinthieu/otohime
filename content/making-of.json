@@ -1,0 +1,854 @@
+{
+  "version": 1,
+  "head": "db788b1cd8a73670c906eb828401582709910017",
+  "scenes": [
+    {
+      "planId": "pm-293",
+      "title": "Washi Daruma, Emaki, and Hanafuda",
+      "date": "2026-10-27",
+      "sha": "db788b1cd8",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/db788b1cd8",
+      "commitCount": 6,
+      "areas": ["app/(site)","lib","e2e"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"gemini-4-argon"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Three paper-and-ink experiments backed by a shared 12-month shipped digest: Daruma Kuyo shelf, Making-of Emaki handscroll, and Hanafuda Koi-Koi."
+    },
+    {
+      "planId": "pm-268",
+      "title": "Riso Ink Studio",
+      "date": "2026-10-27",
+      "sha": "9815ddd75d",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/9815ddd75d",
+      "commitCount": 17,
+      "areas": ["projects","scripts","package.json"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Misregistered two-drum Risograph headings and interactive material tuning studio at /lab."
+    },
+    {
+      "planId": "pm-259",
+      "title": "Kame Fetch Recovery",
+      "date": "2026-10-27",
+      "sha": "a17c709bf3",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/a17c709bf3",
+      "commitCount": 29,
+      "areas": ["projects","scripts","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Paper turtle companion walking the margin and crumpled-paper 404 toss game."
+    },
+    {
+      "planId": "pm-272",
+      "title": "ListenBrainz & Lanyard Pocket Presence",
+      "date": "2026-10-27",
+      "sha": "18d495bd66",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/18d495bd66",
+      "commitCount": 7,
+      "areas": ["projects","lib","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Live ListenBrainz cassette rotation and optional Lanyard presence in the Pocket console."
+    },
+    {
+      "planId": "pm-271",
+      "title": "Tamatebako Changelog & Palace Sound",
+      "date": "2026-10-27",
+      "sha": "0cd1e091ba",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/0cd1e091ba",
+      "commitCount": 14,
+      "areas": ["projects","app/(ryugu)","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Current git history indexing for the Ryugu-jo Tamatebako box and bfcache-safe ambient palace sound."
+    },
+    {
+      "planId": "pm-270",
+      "title": "Main Lane Throughput",
+      "date": "2026-10-27",
+      "sha": "15bb2acac6",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/15bb2acac6",
+      "commitCount": 26,
+      "areas": ["projects","scripts","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Authenticated deployment readiness probes, callback-flushed gate output, and TMPDIR socket normalization."
+    },
+    {
+      "planId": "pm-269",
+      "title": "Ryugu Paper Toys II",
+      "date": "2026-10-27",
+      "sha": "3dc10f8df5",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/3dc10f8df5",
+      "commitCount": 38,
+      "areas": ["projects","scripts","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gemini-4-argon"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Message in a Bottle shore drift, Kamishibai project theatre, and Peep-box parallax diorama."
+    },
+    {
+      "planId": "pm-257",
+      "title": "Ink Ghosts",
+      "date": "2026-10-27",
+      "sha": "b3b1af9e33",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/b3b1af9e33",
+      "commitCount": 15,
+      "areas": ["projects","ghosts","changelogs"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Anonymous live ink cursors and click ripples across Home and Ryugu-jo with a Pocket privacy switch."
+    },
+    {
+      "planId": "pm-255",
+      "title": "Ask Console Tier Probe",
+      "date": "2026-10-27",
+      "sha": "d497269137",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/d497269137",
+      "commitCount": 10,
+      "areas": ["projects","scripts","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Read-only verification probes and rate-tier checks for the Pocket Ask route."
+    },
+    {
+      "planId": "pm-249",
+      "title": "Ink Poster Press, Postcard Mailroom, Pocket Terminal",
+      "date": "2026-10-27",
+      "sha": "20035357a9",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/20035357a9",
+      "commitCount": 27,
+      "areas": ["projects","README.md","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Two-colour Riso poster press, stamped postcard mailroom, and keyboard-driven Pocket terminal shell."
+    },
+    {
+      "planId": "pm-288",
+      "title": "Golden Seams and Ink Traces",
+      "date": "2026-10-27",
+      "sha": "10b020f7f0",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/10b020f7f0",
+      "commitCount": 1,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Kintsugi fracture-and-mend stoneware canvas and ink trace experiments on washi paper."
+    },
+    {
+      "planId": "pm-287",
+      "title": "Ink Bonsai Shadow Theatre",
+      "date": "2026-10-26",
+      "sha": "cce0e62c33",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/cce0e62c33",
+      "commitCount": 2,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Prunable procedural ink bonsai with paper-lantern shadow projection and seasonal foliage."
+    },
+    {
+      "planId": "pm-286",
+      "title": "Ink Gashapon and Shodo Desk",
+      "date": "2026-10-26",
+      "sha": "9349b88c75",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/9349b88c75",
+      "commitCount": 1,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Tactile capsule sticker dispenser and brush-pressure calligraphy desk studies."
+    },
+    {
+      "planId": "pm-258",
+      "title": "Keyless Pocket Presence",
+      "date": "2026-10-26",
+      "sha": "dcd704f9d5",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/dcd704f9d5",
+      "commitCount": 10,
+      "areas": ["projects","lib","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Zero-key public presence fallbacks and gate closure verification CLI."
+    },
+    {
+      "planId": "pm-285",
+      "title": "Ink Loom and Hanko Press",
+      "date": "2026-10-26",
+      "sha": "234342159d",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/234342159d",
+      "commitCount": 2,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Paper-strip weaving loom and carved vermilion hanko seal press experiments."
+    },
+    {
+      "planId": "pm-282",
+      "title": "Paper Experiments: Pen Plotter Mode",
+      "date": "2026-10-26",
+      "sha": "c0a6f3fc09",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/c0a6f3fc09",
+      "commitCount": 1,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Single-line vector plotter pass and pop-up timeline studies across the paper site."
+    },
+    {
+      "planId": "pm-264",
+      "title": "Peep-box Karinszoki Diorama",
+      "date": "2026-10-26",
+      "sha": "afb1186f6e",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/afb1186f6e",
+      "commitCount": 13,
+      "areas": ["projects","scripts","package.json"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Layered paper peep-box stage driven by pointer tilt, device orientation, and opt-in head tracking."
+    },
+    {
+      "planId": "pm-260",
+      "title": "Split Part Recovery",
+      "date": "2026-10-26",
+      "sha": "cd54d4b2f5",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/cd54d4b2f5",
+      "commitCount": 45,
+      "areas": ["projects","lib","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-sonnet-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Reconciled multi-part plan handoffs and verified Ask console probe behavior."
+    },
+    {
+      "planId": "pm-279",
+      "title": "Paper Star Chart",
+      "date": "2026-10-26",
+      "sha": "19f42646e2",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/19f42646e2",
+      "commitCount": 1,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Ink assembly-line conveyor on Work and astrolabe star chart planning."
+    },
+    {
+      "planId": "pm-277",
+      "title": "Riso Delivery Recovery",
+      "date": "2026-10-26",
+      "sha": "141f7056fe",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/141f7056fe",
+      "commitCount": 1,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Consolidated Riso print-run ownership and clean browser verification builds."
+    },
+    {
+      "planId": "pm-276",
+      "title": "Delivery Signal Guardrails",
+      "date": "2026-10-26",
+      "sha": "eb7ecdee80",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/eb7ecdee80",
+      "commitCount": 1,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Deterministic gate diagnostics and deployment verification guardrails."
+    },
+    {
+      "planId": "pm-275",
+      "title": "Reliable Plan Delivery",
+      "date": "2026-10-26",
+      "sha": "620eb6037c",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/620eb6037c",
+      "commitCount": 1,
+      "areas": ["projects"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Restored GitHub Actions checks and production verification path on Ubuntu Chrome."
+    },
+    {
+      "planId": "pm-273",
+      "title": "Ink and Folds",
+      "date": "2026-10-26",
+      "sha": "152e2c3edd",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/152e2c3edd",
+      "commitCount": 6,
+      "areas": ["projects","lib",".github"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"gpt-6.1-sol"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"gpt-6-sol"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Moderated vector doodle guestbook wall at /guestbook and folded-paper fortune teller at /fortune."
+    },
+    {
+      "planId": "pm-256",
+      "title": "Otohime's Undersea Palace",
+      "date": "2026-10-26",
+      "sha": "d47d84775d",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/d47d84775d",
+      "commitCount": 18,
+      "areas": ["projects","content","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Hidden Ryugu-jo undersea palace with ink-wash water caustics, fleeing fish, and the Tamatebako time box."
+    },
+    {
+      "planId": "pm-251",
+      "title": "Paper Toys Trio (Suminagashi Pond, Letterpress Keys, Fold-a-Zine)",
+      "date": "2026-10-26",
+      "sha": "ea80ff04cb",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/ea80ff04cb",
+      "commitCount": 18,
+      "areas": ["projects","scripts","app/(zine)"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Marbled suminagashi ink pond on /play, tactile letterpress keycaps, and printable 8-page fold-a-zine."
+    },
+    {
+      "planId": "pm-250",
+      "title": "Ink Desk + Stamp Ledger",
+      "date": "2026-10-26",
+      "sha": "af90a6a220",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/af90a6a220",
+      "commitCount": 17,
+      "areas": ["projects","app/(site)","e2e"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Interactive isometric Ink Desk cartridge at /desk and a 365-day rubber-stamp activity ledger at /ledger."
+    },
+    {
+      "planId": "pm-248",
+      "title": "Paper Almanac Bits",
+      "date": "2026-10-26",
+      "sha": "bf50f2637e",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/bf50f2637e",
+      "commitCount": 32,
+      "areas": ["projects","scripts","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Seasonal paper-and-ink almanac tints, solar term dial, and grounded Ask the Ink search."
+    },
+    {
+      "planId": "pm-247",
+      "title": "Ink Radio & Fan-Out Peeks",
+      "date": "2026-10-26",
+      "sha": "e1454ed261",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/e1454ed261",
+      "commitCount": 14,
+      "areas": ["projects","scripts",".github"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Lo-fi procedural WebAudio ink radio and three-card fan-out peek previews across site links."
+    },
+    {
+      "planId": "pm-240",
+      "title": "Ink & Watercolour Portraits",
+      "date": "2026-10-26",
+      "sha": "3e12700131",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/3e12700131",
+      "commitCount": 22,
+      "areas": ["projects","lib","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Hand-inked portrait gallery and handoff pipeline on /sketches."
+    },
+    {
+      "planId": "pm-242",
+      "title": "Pocket Console Encore",
+      "date": "2026-10-26",
+      "sha": "c23b4f94f0",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/c23b4f94f0",
+      "commitCount": 34,
+      "areas": ["projects","scripts","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Handheld console cartridge menu, sound effects toggle, and live now-playing tape deck."
+    },
+    {
+      "planId": "pm-241",
+      "title": "Internet Save Point",
+      "date": "2026-10-25",
+      "sha": "0444d51912",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/0444d51912",
+      "commitCount": 9,
+      "areas": ["projects","README.md","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Animated paper-and-ink footer with campfire save point, waterline sentinel, and room hops."
+    },
+    {
+      "planId": "pm-243",
+      "title": "Ask the Ink Offline Index & LLM Route",
+      "date": "2026-10-25",
+      "sha": "a3973b8df0",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/a3973b8df0",
+      "commitCount": 11,
+      "areas": ["projects","lib","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Build-time passage index from site content and Gazette articles with cited answers in Pocket."
+    },
+    {
+      "planId": "pm-216",
+      "title": "Design system: a drawn page with knobs at /design-system",
+      "date": "2026-10-21",
+      "sha": "ad778f13e9",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/ad778f13e9",
+      "commitCount": 8,
+      "areas": ["projects","app/(design-system)","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Interactive notebook-paper explainer with 8 token pots, 9 UI parts, and live propagation controls."
+    },
+    {
+      "planId": "pm-214",
+      "title": "Structures: a drawn, poke-able series on data structures at /structures",
+      "date": "2026-10-21",
+      "sha": "988e07cc7c",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/988e07cc7c",
+      "commitCount": 8,
+      "areas": ["projects","app/(structures)","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Six interactive hand-drawn data-structure explainers on squared notebook paper."
+    },
+    {
+      "planId": "pm-213",
+      "title": "Gazette: a small newspaper of short, illustrated explainers at /articles",
+      "date": "2026-10-21",
+      "sha": "34c0e43056",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/34c0e43056",
+      "commitCount": 5,
+      "areas": ["projects","app/(articles)","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Broadsheet science newspaper with blackletter masthead, ruled columns, and six illustrated articles."
+    },
+    {
+      "planId": "pm-206",
+      "title": "Hop and Settle: motion across the whole app",
+      "date": "2026-10-20",
+      "sha": "06f25bf5cd",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/06f25bf5cd",
+      "commitCount": 18,
+      "areas": ["projects","app/(site)","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Cross-document View Transitions morphing project titles and settling instrument animations."
+    },
+    {
+      "planId": "pm-203",
+      "title": "Planisphere: tonight's sky on a star wheel drawn in ink",
+      "date": "2026-10-20",
+      "sha": "ed38914970",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/ed38914970",
+      "commitCount": 17,
+      "areas": ["projects","app/(planisphere)","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Rotatable ink star wheel projecting 88 constellations and visible planets for any latitude and hour."
+    },
+    {
+      "planId": "pm-204",
+      "title": "Barometer: a brass weather station for your city, drawn by hand",
+      "date": "2026-10-20",
+      "sha": "38be1f0f23",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/38be1f0f23",
+      "commitCount": 6,
+      "areas": ["projects","README.md","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Hand-drawn brass weather dial, mercury thermometer, anemometer, and barograph driven by Open-Meteo."
+    },
+    {
+      "planId": "pm-202",
+      "title": "Rotor: a hand-drawn Enigma, and room for the next projects",
+      "date": "2026-10-20",
+      "sha": "c963f939e1",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/c963f939e1",
+      "commitCount": 6,
+      "areas": ["projects","app/(rotor)","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Playable 3-rotor Wehrmacht Enigma I cipher machine drawn in ink with lampboard and plugboard."
+    },
+    {
+      "planId": "pm-199",
+      "title": "Orrery: the Sun, the planets and five stars, drawn by hand",
+      "date": "2026-10-20",
+      "sha": "4cbeff1908",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/4cbeff1908",
+      "commitCount": 9,
+      "areas": ["projects","app/(orrery)","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Interactive hand-drawn solar system orrery and stellar scale comparator at /orrery."
+    },
+    {
+      "planId": "pm-198",
+      "title": "Page-styled dropdowns: the open picker wears the page",
+      "date": "2026-10-20",
+      "sha": "0c48d25648",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/0c48d25648",
+      "commitCount": 8,
+      "areas": ["projects","scripts","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Custom accessible listbox pickers styled to match each room's paper and ink palette."
+    },
+    {
+      "planId": "pm-196",
+      "title": "Capsule, printed: a sophisticated card set and a draw you cannot read early",
+      "date": "2026-10-20",
+      "sha": "15afb3aae3",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/15afb3aae3",
+      "commitCount": 11,
+      "areas": ["projects","app/(capsule)","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Halftone-printed collectible Ghibli character cards with sealed capsule draw mechanics."
+    },
+    {
+      "planId": "pm-197",
+      "title": "Still table: the Elements grid stops jiggling when the dialog closes",
+      "date": "2026-10-20",
+      "sha": "1bafcf6e8b",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/1bafcf6e8b",
+      "commitCount": 4,
+      "areas": ["projects","app/(elements)","scripts"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Stabilized periodic table layout and focus restoration when closing element detail modals."
+    },
+    {
+      "planId": "pm-195",
+      "title": "All projects link: a way back to /projects",
+      "date": "2026-10-20",
+      "sha": "c333dc2255",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/c333dc2255",
+      "commitCount": 7,
+      "areas": ["projects","app/(capsule)","app/(elements)"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Consistent back-to-bench navigation header across every isolated project route group."
+    },
+    {
+      "planId": "pm-191",
+      "title": "Vinyl: a crate, a turntable and a visible YouTube monitor",
+      "date": "2026-10-19",
+      "sha": "fda37fae7a",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/fda37fae7a",
+      "commitCount": 10,
+      "areas": ["projects","app/(vinyl)","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Record crate browser, spinning tonearm turntable, and CRT monitor at /vinyl."
+    },
+    {
+      "planId": "pm-190",
+      "title": "Elements: a periodic table with a 3D atom per element",
+      "date": "2026-10-19",
+      "sha": "49ce92538e",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/49ce92538e",
+      "commitCount": 8,
+      "areas": ["projects","app/(elements)","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "118-element periodic table with interactive Bohr shells and 3D orbital views at /elements."
+    },
+    {
+      "planId": "pm-189",
+      "title": "Sun, redrawn: a one-page hand-drawn poster",
+      "date": "2026-10-19",
+      "sha": "d6eee0fe4e",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/d6eee0fe4e",
+      "commitCount": 8,
+      "areas": ["projects","app/(sun)","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Hand-lettered cutaway poster of solar layers, fusion core, and coronal loops."
+    },
+    {
+      "planId": "pm-188",
+      "title": "Sun: an animated cutaway of our star",
+      "date": "2026-10-19",
+      "sha": "49b3e458fd",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/49b3e458fd",
+      "commitCount": 9,
+      "areas": ["projects","app/(sun)","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Interactive tour of the Sun's interior zones, granulation, and solar prominences."
+    },
+    {
+      "planId": "pm-186",
+      "title": "Owner Channels: owners add songs to the /music television",
+      "date": "2026-10-19",
+      "sha": "34876b2632",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/34876b2632",
+      "commitCount": 7,
+      "areas": ["projects","e2e","components"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Authenticated song channel curation and database persistence for the /music television."
+    },
+    {
+      "planId": "pm-184",
+      "title": "Capsule: a coin-and-crank card machine",
+      "date": "2026-10-19",
+      "sha": "b6359d381d",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/b6359d381d",
+      "commitCount": 11,
+      "areas": ["projects","app/(capsule)","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Hand-drawn Studio Ghibli capsule-toy machine with daily coins and persistent collection album."
+    },
+    {
+      "planId": "pm-181",
+      "title": "Shore: a sea-glass focus timer",
+      "date": "2026-10-19",
+      "sha": "9bee5507b0",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/9bee5507b0",
+      "commitCount": 12,
+      "areas": ["projects","app/(shore)","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Tactile sea-glass Pomodoro timer with lapping tide waves and chime cues at /shore."
+    },
+    {
+      "planId": "pm-180",
+      "title": "Ship The Bench — verify pm-171, complete it, deploy it",
+      "date": "2026-10-19",
+      "sha": "0e4be2260f",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/0e4be2260f",
+      "commitCount": 7,
+      "areas": ["projects","lib","README.md"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Build-SHA metadata verification and production deployment of the Projects bench."
+    },
+    {
+      "planId": "pm-171",
+      "title": "Projects Bench — a public Projects page",
+      "date": "2026-10-19",
+      "sha": "e7c679fd22",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/e7c679fd22",
+      "commitCount": 6,
+      "areas": ["projects","app/(app)","lib"],
+      "roles": [
+        {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
+        {"role":"product_owner","label":"Product Owner","modelId":"claude-opus-5-5"},
+        {"role":"software_engineer","label":"Software Engineer","modelId":"claude-opus-5-5"},
+        {"role":"quality_engineer","label":"Quality Engineer","modelId":"claude-sonnet-5-5"}
+      ],
+      "summary": "Initial Cartridge bench at /projects showcasing independent interactive experiments."
+    }
+  ]
+}
