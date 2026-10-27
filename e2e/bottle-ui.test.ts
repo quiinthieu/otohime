@@ -121,7 +121,7 @@ test("both entries share the lazy card; keyboard, safe deliberate visit, focus a
   console.log(JSON.stringify({ browser: browser.version(), lazyRequests: added }));
 });
 
-for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 }]) test(`footer Bottle clears the scene with enlarged text at ${viewport.width}`, async () => {
+for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024 }, { width: 390, height: 844 }]) test(`footer Bottle contains enlarged text and growing 200% root text at ${viewport.width}`, async () => {
   const { c, p } = await open({ viewport, reducedMotion: "reduce", ...(viewport.width === 390 ? { isMobile: true, hasTouch: true } : {}) });
   await poolFixture(c);
   await home(p);
@@ -130,43 +130,92 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 
   const geometry = () => button.evaluate((el) => {
     const bottle = el.getBoundingClientRect();
     const scene = document.querySelector(".end-canvas")!.getBoundingClientRect();
-    const footer = document.querySelector("footer.end")!.getBoundingClientRect();
-    return { height: bottle.height, gap: scene.top - bottle.bottom, left: bottle.left, right: bottle.right,
+    const footerEl = document.querySelector("footer.end")!;
+    const footer = footerEl.getBoundingClientRect();
+    // Both the solid top border and ::before dashed hairline precede the band.
+    const footerContentTop = footer.top + parseFloat(getComputedStyle(footerEl).borderTopWidth)
+      + parseFloat(getComputedStyle(footerEl, "::before").borderTopWidth);
+    const grid = document.querySelector(".end-grid")!;
+    const stage = document.querySelector(".end-stage")!.getBoundingClientRect();
+    const copy = document.querySelector(".end-copy")!.getBoundingClientRect();
+    return { height: bottle.height, gap: scene.top - bottle.bottom, topClearance: bottle.top - footerContentTop,
+      left: bottle.left, right: bottle.right, font: parseFloat(getComputedStyle(el).fontSize),
       rootFont: parseFloat(getComputedStyle(document.documentElement).fontSize),
+      sideBySide: getComputedStyle(grid).gridTemplateColumns.split(" ").length > 1, alignment: Math.abs(stage.top - copy.top),
       sceneTop: scene.top - footer.top, sceneWidth: scene.width, sceneHeight: scene.height, footerHeight: footer.height };
   });
   const assertClear = (g: Awaited<ReturnType<typeof geometry>>) => {
-    assert.ok(g.gap >= 0, `Bottle stays outside the existing scene pointer area: ${JSON.stringify(g)}`);
-    assert.ok(g.height >= 36 && g.left >= 0 && g.right <= viewport.width, "visible target retains its size and fits the viewport");
+    assert.ok(g.gap >= 0, `scene pointer area: ${JSON.stringify(g)}`);
+    assert.ok(g.topClearance >= 0, `footer top-border containment: ${JSON.stringify(g)}`);
+    assert.ok(g.height >= 44 && g.left >= 0 && g.right <= viewport.width, "44px target fits the viewport");
+    if (g.sideBySide) assert.ok(g.alignment < 40, "stage and copy remain aligned");
+  };
+  const settle = async (root: number, font: number) => {
+    await p.waitForFunction(({ root, font }) =>
+      parseFloat(getComputedStyle(document.documentElement).fontSize) === root
+      && parseFloat(getComputedStyle(document.querySelector('[data-bottle-entry="footer"]')!).fontSize) === font,
+    { root, font });
+    await p.evaluate(() => new Promise<void>((done) => requestAnimationFrame(() => requestAnimationFrame(() => done()))));
+  };
+  const stable = (a: Awaited<ReturnType<typeof geometry>>, b: typeof a) => {
+    for (const key of ["sceneTop", "sceneWidth", "sceneHeight", "footerHeight"] as const) {
+      assert.ok(Math.abs(a[key] - b[key]) <= 1, `${key}: Bottle state preserves reserved footer geometry`);
+    }
   };
   const baseline = await geometry();
   assertClear(baseline);
-  // Reproduce QA's changed font metrics without changing the containing footer's layout.
-  await button.evaluate((el) => { el.style.fontSize = "24px"; });
-  const enlarged = await geometry();
-  assert.ok(enlarged.height > baseline.height, "the control actually makes the button taller");
-  assertClear(enlarged);
-  for (const key of ["sceneTop", "sceneWidth", "sceneHeight", "footerHeight"] as const) {
-    assert.equal(enlarged[key], baseline[key], `${key}: larger Bottle text preserves reserved footer geometry`);
+  for (const entry of ["footer", "pocket"]) {
+    assert.ok((await p.locator(`[data-bottle-entry="${entry}"]`).boundingBox())!.height >= 44, `${entry} is a 44px target`);
   }
+  const sizes = [];
+  for (const font of [24, 32]) {
+    await button.evaluate((el, font) => { el.style.fontSize = `${font}px`; }, font);
+    await settle(baseline.rootFont, font);
+    const enlarged = await geometry();
+    assertClear(enlarged);
+    stable(enlarged, baseline);
+    sizes.push(enlarged);
+  }
+  assert.ok(sizes[1].height > baseline.height, "32px text actually grows the button");
   if (viewport.width === 390) await button.tap(); else await button.click();
   await panel(p).locator("[data-bottle-id]").waitFor();
+  stable(await geometry(), baseline);
   await p.keyboard.press("Escape");
   await p.waitForFunction(() => document.activeElement?.getAttribute("data-bottle-entry") === "footer");
+  stable(await geometry(), baseline);
   await p.keyboard.press("Tab");
   assert.equal(await p.locator("[data-end-mascot]").evaluate((el) => el === document.activeElement), true);
 
-  // The identical boundary assertion must reject the old fixed-offset layout.
-  await button.evaluate((el) => { el.style.insetBlockStart = "-2.4rem"; el.style.insetBlockEnd = "auto"; el.style.marginBlockEnd = "0"; });
-  const oldLayout = await geometry();
-  assert.throws(() => assertClear(oldLayout), /scene pointer area/, "old fixed offset is a failing browser negative control");
+  // Reject BOTH historical defects through exactly the same boundary helper.
+  await button.evaluate((el) => { el.style.fontSize = "24px"; el.style.insetBlockStart = "-2.4rem"; el.style.insetBlockEnd = "auto"; el.style.marginBlockEnd = "0"; });
+  await settle(baseline.rootFont, 24);
+  const oldOffset = await geometry();
+  assert.throws(() => assertClear(oldOffset), /scene pointer area/, "-2.4rem negative control");
+  await button.evaluate((el) => { el.removeAttribute("style"); el.style.fontSize = "24px"; });
+  await p.locator(".end-inner").evaluate((el) => { (el as HTMLElement).style.paddingBlockStart = "2.5rem"; });
+  await settle(baseline.rootFont, 24);
+  const oldPadding = await geometry();
+  assert.ok(oldPadding.gap >= 0, "old padding clears scene while failing top containment");
+  assert.throws(() => assertClear(oldPadding), /footer top-border containment/, "2.5rem negative control");
+  await p.locator(".end-inner").evaluate((el) => { el.removeAttribute("style"); });
   await button.evaluate((el) => { el.removeAttribute("style"); });
   await p.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
-  await p.waitForFunction((size) => parseFloat(getComputedStyle(document.documentElement).fontSize) === size, baseline.rootFont * 2);
+  await settle(baseline.rootFont * 2, baseline.font * 2);
   const scaled = await geometry();
-  assert.equal(scaled.rootFont, baseline.rootFont * 2, "root text scaling actually applied");
+  assert.equal(scaled.rootFont, baseline.rootFont * 2, "settled root text scaling actually applied");
+  assert.equal(scaled.font, baseline.font * 2, "the label itself doubles with the root");
+  assert.ok(scaled.height > baseline.height, "200% root scaling grows actual button height");
   assertClear(scaled);
-  console.log(JSON.stringify({ viewport, baseline, enlarged, oldLayout, scaled, browser: browser.version() }));
+  const scaledSizes = [];
+  for (const font of [24, 32]) {
+    await button.evaluate((el, font) => { el.style.fontSize = `${font}px`; }, font);
+    await settle(baseline.rootFont * 2, font);
+    const enlarged = await geometry();
+    assertClear(enlarged);
+    stable(enlarged, scaled);
+    scaledSizes.push(enlarged);
+  }
+  console.log(JSON.stringify({ viewport, baseline, sizes, oldOffset, oldPadding, scaled, scaledSizes, browser: browser.version() }));
 });
 
 test("repeat exhaustion, stale stored ids, cross-entry history and bounded persistence", async () => {
@@ -302,6 +351,7 @@ test("suggestion failures retain input, render inert reasons, prevent duplicates
   await c.route("**/api/bottles/suggestions", async (route) => {
     posts++;
     if (posts === 1) { await new Promise<void>((resolve) => { release = resolve; }); await route.fulfill({ status: 503, json: { reason: "unavailable", message: "<img src=x onerror=alert(1)>" } }); }
+    else if (posts === 2) await route.abort("internetdisconnected");
     else await route.fulfill({ status: 429, headers: { "retry-after": "3600" }, json: { reason: "rate_limited", message: "Try again next UTC hour." } });
   });
   const send = panel(p).getByRole("button", { name: "Send for review" });
@@ -315,9 +365,13 @@ test("suggestion failures retain input, render inert reasons, prevent duplicates
   assert.equal(await panel(p).locator("img").count(), 0);
   assert.equal(await panel(p).getByLabel("URL", { exact: true }).inputValue(), url);
   await send.click();
+  await panel(p).getByRole("alert").filter({ hasText: "Suggestions are temporarily unavailable" }).waitFor();
+  assert.equal(await panel(p).getByLabel("URL", { exact: true }).inputValue(), url, "offline submission retains input");
+  assert.equal(await send.isEnabled(), true, "offline submission can be retried");
+  await send.click();
   await p.waitForFunction(() => document.querySelector(".bottle-panel [role=alert]")?.textContent?.includes("rate_limited"));
   await send.click();
-  assert.equal(posts, 2);
+  assert.equal(posts, 3);
   const id = await cardId(p);
   await panel(p).getByRole("button", { name: "Another bottle" }).click();
   assert.notEqual(await cardId(p), id);
@@ -342,6 +396,10 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 
   await home(p);
   await p.locator("footer.end").scrollIntoViewIfNeeded();
   await p.evaluate(async () => { await document.fonts.ready; });
+  await p.locator('[data-bottle-entry="footer"]').hover();
+  await p.locator('[data-bottle-entry="footer"]').focus();
+  await p.locator('[data-bottle-entry="pocket"]').hover();
+  await p.locator('[data-bottle-entry="pocket"]').focus();
   await p.waitForTimeout(350); // settle existing footer entry, then measure every shift including recent input
   const initial = new Set(js);
   await p.evaluate(() => {

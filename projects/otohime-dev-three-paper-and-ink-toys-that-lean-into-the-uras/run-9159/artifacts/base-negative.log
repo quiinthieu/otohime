@@ -1,0 +1,69 @@
+TAP version 13
+# Subtest: Bottle stylesheet reserves a rem header band with a bottom anchor and 44px targets
+not ok 1 - Bottle stylesheet reserves a rem header band with a bottom anchor and 44px targets
+  ---
+  duration_ms: 1.7315
+  type: 'test'
+  location: '/private/tmp/bottle-base-qTAmgE/lib/bottle-footer-layout.test.ts:34:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(topRem >= 3.75)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/bottle-base-qTAmgE/lib/bottle-footer-layout.test.ts:35:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: Bottle clearance contains default, 24px and 32px text at normal and 200% roots
+not ok 2 - Bottle clearance contains default, 24px and 32px text at normal and 200% roots
+  ---
+  duration_ms: 0.069916
+  type: 'test'
+  location: '/private/tmp/bottle-base-qTAmgE/lib/bottle-footer-layout.test.ts:44:1'
+  failureType: 'testCodeFailure'
+  error: 'footer top-border containment'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    assertContained (file:///private/tmp/bottle-base-qTAmgE/lib/bottle-footer-layout.test.ts:30:10)
+    TestContext.<anonymous> (file:///private/tmp/bottle-base-qTAmgE/lib/bottle-footer-layout.test.ts:46:50)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: Bottle clearance rejects the old -2.4rem scene overlap using the same invariant
+ok 3 - Bottle clearance rejects the old -2.4rem scene overlap using the same invariant
+  ---
+  duration_ms: 0.150083
+  type: 'test'
+  ...
+# Subtest: Bottle clearance rejects the old 2.5rem top-border protrusion using the same invariant
+ok 4 - Bottle clearance rejects the old 2.5rem top-border protrusion using the same invariant
+  ---
+  duration_ms: 0.068875
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 2
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 42.174875

@@ -1,0 +1,13 @@
+{
+  "rejected_push": {
+    "sha": "8176cb528cdc10e45c72a4a66572aa5c37d711ac",
+    "command": "git push origin HEAD",
+    "reason": "non-fast-forward (fetch first)"
+  },
+  "recovery_command": "git pull --rebase",
+  "integration_base": "a6723c1b52f25ad9259c23eb33ebd9cafb01b788",
+  "tested_pre_evidence_amend_head": "5fa2506e0f3f670ef0d83c8edcab149974a8fdc8",
+  "incoming_scope": "a6723c1 adds only pm-257/t-1608 report and evidence files; no product or runtime configuration changes",
+  "rerun": "All six exact contract commands rerun after rebase; final receipts replace earlier logs.",
+  "force_push": false
+}
