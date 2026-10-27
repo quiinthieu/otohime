@@ -4,6 +4,15 @@ Personal site for [otohime.dev](https://otohime.dev). One Next.js app serves the
 
 ## Local setup
 
+For the site owner's work on a new machine, set the author for this clone once and check it before committing:
+
+```bash
+bash scripts/setup-owner-git.sh --configure
+bash scripts/setup-owner-git.sh --check
+```
+
+This changes only repository-local Git config (shared by linked worktrees); it does not change your global identity. The check verifies the effective author email, including `GIT_AUTHOR_EMAIL`; an explicit `git commit --author` can still override it. Setup also chooses the `Otohime` display name required by the existing guestbook delivery check. Git does not copy clone configuration to other machines. `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` carry the repository instructions in each clone, and CI checks the committed author before deploying.
+
 ```bash
 bash scripts/dev.sh
 ```

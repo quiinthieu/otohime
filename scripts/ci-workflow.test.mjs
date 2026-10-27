@@ -404,5 +404,5 @@ test("the author gate precedes production migrations and main checks", () => {
   assert.ok(author < prod.indexOf("npm ci"), "fail before setup, build and migrations");
   assert.ok(author < prod.indexOf("npm run db:migrate"), "never migrate an undeployable author");
   assert.match(prod, /DEPLOY_AUTHOR_EMAIL: quiinthieu@gmail\.com/);
-  assert.match(steps("checks"), /if: github.event_name != 'pull_request'[\s\S]*?node scripts\/check-deploy-author\.mjs/);
+  assert.match(steps("checks"), /if: github.event_name == 'push' \|\| \(github.event_name == 'workflow_dispatch' && github.ref == 'refs\/heads\/main'\)[\s\S]*?node scripts\/check-deploy-author\.mjs/);
 });
