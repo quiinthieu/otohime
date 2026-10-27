@@ -21,7 +21,8 @@
 }
 
 .daruma-view-btn[aria-pressed="true"],
-.daruma-kuyo-toggle[aria-pressed="true"] {
+.daruma-kuyo-toggle[aria-pressed="true"],
+.daruma-fixture-toggle[aria-pressed="true"] {
   background: var(--ink);
   color: var(--paper);
   border-color: var(--ink);
@@ -87,6 +88,30 @@
 .daruma-shelf-section[data-shelf="unfinished"] .daruma-shelf-grid {
   border-bottom-style: double;
   border-bottom-width: 8px;
+}
+
+.daruma-shelf-empty {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.9rem 1rem 1.05rem;
+  border: 1.5px dashed var(--line);
+  border-bottom: 6px double var(--ink);
+  border-radius: 6px;
+  background: var(--paper-2);
+  box-shadow: 0 4px 0 var(--shade);
+}
+
+.daruma-empty-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.daruma-fixture-badge {
+  border-style: dashed;
+  background: var(--paper-2);
 }
 
 .daruma-slot {

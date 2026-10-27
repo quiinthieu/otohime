@@ -34,7 +34,48 @@ export type DarumaProjectInput = {
   shipped?: string;
   lastActivityAt?: string;
   abandoned?: boolean;
+  demoFixture?: boolean;
 };
+
+export type DarumaFixtureInput =
+  | boolean
+  | string
+  | URLSearchParams
+  | readonly DarumaProjectInput[]
+  | null
+  | undefined;
+
+export const KUYO_DEMO_FIXTURES: readonly DarumaProjectInput[] = [
+  {
+    title: "Demo: Night Backfill",
+    note: "Demo fixture: one-eyed Daruma with work underway on the bench.",
+    status: "building",
+    colour: "yellow",
+    started: "2026-10-18",
+    lastActivityAt: "2026-10-25",
+    demoFixture: true,
+  },
+  {
+    title: "Demo: Winter Sketchbook",
+    note: "Demo fixture: one-eyed Daruma set aside and ready for the Daruma Kuyo ink-fire.",
+    status: "shelved",
+    colour: "mint",
+    started: "2026-05-12",
+    lastActivityAt: "2026-06-20",
+    abandoned: true,
+    demoFixture: true,
+  },
+  {
+    title: "Demo: Unturned Ledger",
+    note: "Demo fixture: blank-eyed Daruma idle over 90 days on the unfinished shelf.",
+    status: "shelved",
+    colour: "coral",
+    lastActivityAt: "2026-06-01",
+    demoFixture: true,
+  },
+];
+
+export const DARUMA_KUYO_FIXTURES = KUYO_DEMO_FIXTURES;
 
 export type ClassifiedDaruma<P extends DarumaProjectInput = DarumaProjectInput> = {
   project: P;
@@ -48,6 +89,7 @@ export type ClassifiedDaruma<P extends DarumaProjectInput = DarumaProjectInput> 
   abandoned: boolean;
   daysInactive: number | null;
   retiringInKuyo: boolean;
+  demoFixture: boolean;
   startedDate: string | null;
   shippedDate: string | null;
   lastActivityDate: string | null;
@@ -58,9 +100,11 @@ export type DarumaShelves<P extends DarumaProjectInput = DarumaProjectInput> = {
   shipped: ClassifiedDaruma<P>[];
   active: ClassifiedDaruma<P>[];
   unfinished: ClassifiedDaruma<P>[];
+  incomplete: ClassifiedDaruma<P>[];
   abandoned: ClassifiedDaruma<P>[];
   kuyoActive: boolean;
   kuyoRetiring: ClassifiedDaruma<P>[];
+  fixtureActive: boolean;
   nowMs: number;
 };
 
@@ -69,6 +113,8 @@ export type GroupDarumaOptions = {
   clock?: ClockInput;
   kuyo?: boolean | string | null;
   kuyoOverride?: boolean | string | null;
+  fixture?: DarumaFixtureInput;
+  fixtures?: DarumaFixtureInput;
 };
 
 const DAY_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -152,10 +198,67 @@ export function parseKuyoParam(raw: unknown): boolean {
   return lower === "1" || lower === "true" || lower === "yes" || lower === "on" || lower === "kuyo";
 }
 
+export function parseFixtureParam(raw: unknown): boolean {
+  if (typeof raw === "boolean") return raw;
+  if (Array.isArray(raw)) {
+    if (raw.length === 0) return false;
+    if (typeof raw[0] === "object" && raw[0] !== null) return true;
+    return parseFixtureParam(raw[0]);
+  }
+  if (raw instanceof URLSearchParams) {
+    return parseFixtureParam(raw.get("fixture") ?? raw.get("fixtures"));
+  }
+  if (typeof raw !== "string") return false;
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+  if (trimmed.includes("=") || trimmed.startsWith("?")) {
+    const params = new URLSearchParams(trimmed.startsWith("?") ? trimmed.slice(1) : trimmed);
+    return parseFixtureParam(params);
+  }
+  const lower = trimmed.toLowerCase();
+  return (
+    lower === "kuyo" ||
+    lower === "1" ||
+    lower === "true" ||
+    lower === "yes" ||
+    lower === "on" ||
+    lower === "demo" ||
+    lower === "unfinished"
+  );
+}
+
+export function resolveDarumaFixtureProjects(raw: unknown): DarumaProjectInput[] {
+  if (Array.isArray(raw)) {
+    const custom = raw.filter(
+      (item): item is DarumaProjectInput =>
+        typeof item === "object" &&
+        item !== null &&
+        typeof (item as DarumaProjectInput).title === "string" &&
+        typeof (item as DarumaProjectInput).status === "string",
+    );
+    if (custom.length > 0) {
+      return custom.map((item) => ({
+        ...item,
+        demoFixture: item.demoFixture ?? true,
+      }));
+    }
+    return raw.length > 0 && parseFixtureParam(raw[0])
+      ? KUYO_DEMO_FIXTURES.map((item) => ({ ...item, demoFixture: true }))
+      : [];
+  }
+  if (parseFixtureParam(raw)) {
+    return KUYO_DEMO_FIXTURES.map((item) => ({ ...item, demoFixture: true }));
+  }
+  return [];
+}
+
 export function parseDarumaViewParam(raw: unknown): DarumaViewMode {
   if (raw instanceof URLSearchParams) {
-    if (parseKuyoParam(raw.get("kuyo"))) return "daruma";
-    return parseDarumaViewParam(raw.get("view"));
+    const explicitView = raw.get("view")?.trim().toLowerCase();
+    if (explicitView === "cartridges") return "cartridges";
+    if (explicitView === "daruma" || explicitView === "shelf") return "daruma";
+    if (parseKuyoParam(raw.get("kuyo")) || parseFixtureParam(raw)) return "daruma";
+    return "cartridges";
   }
   if (Array.isArray(raw)) return raw.length > 0 ? parseDarumaViewParam(raw[0]) : "cartridges";
   if (typeof raw !== "string") return "cartridges";
@@ -218,6 +321,7 @@ export function classifyDaruma<P extends DarumaProjectInput>(
 
   const unfinished = shelf !== "shipped";
   const retiringInKuyo = kuyoActive && abandoned;
+  const demoFixture = project.demoFixture === true;
 
   return {
     project,
@@ -231,6 +335,7 @@ export function classifyDaruma<P extends DarumaProjectInput>(
     abandoned,
     daysInactive,
     retiringInKuyo,
+    demoFixture,
     startedDate,
     shippedDate,
     lastActivityDate,
@@ -253,10 +358,20 @@ export function groupDarumaShelves<P extends DarumaProjectInput>(
   const kuyoInput = isOptionsObj
     ? (optionsOrNow.kuyo ?? optionsOrNow.kuyoOverride ?? kuyoOverride)
     : kuyoOverride;
+  const implicitFixtureFromQuery =
+    typeof kuyoInput === "string" && /\bfixtures?=/i.test(kuyoInput) ? kuyoInput : undefined;
+  const fixtureInput = isOptionsObj
+    ? (optionsOrNow.fixture ?? optionsOrNow.fixtures ?? implicitFixtureFromQuery)
+    : implicitFixtureFromQuery;
 
   const nowMs = resolveNowMs(nowInput);
   const kuyoActive = isKuyoSeason(nowMs, kuyoInput);
-  const all = projects.map((p) => classifyDaruma(p, nowMs, kuyoActive));
+  const fixtureProjects = resolveDarumaFixtureProjects(fixtureInput);
+  const existingTitles = new Set(projects.map((p) => p.title));
+  const extraFixtures = fixtureProjects.filter((f) => !existingTitles.has(f.title)) as P[];
+  const combined = extraFixtures.length > 0 ? [...projects, ...extraFixtures] : projects;
+  const all = combined.map((p) => classifyDaruma(p, nowMs, kuyoActive));
+  const fixtureActive = fixtureProjects.length > 0 || all.some((d) => d.demoFixture);
 
   const shipped = all.filter((d) => d.shelf === "shipped");
   const active = all.filter((d) => d.shelf === "active");
@@ -269,11 +384,20 @@ export function groupDarumaShelves<P extends DarumaProjectInput>(
     shipped,
     active,
     unfinished,
+    incomplete: unfinished,
     abandoned,
     kuyoActive,
     kuyoRetiring,
+    fixtureActive,
     nowMs,
   };
+}
+
+export function formatUnfinishedEmptyState(shippedCount: number): string {
+  if (shippedCount <= 0) {
+    return "No projects are on the unfinished shelf.";
+  }
+  return `All ${shippedCount} current ${shippedCount === 1 ? "project has" : "projects have"} shipped — every Daruma doll has both eyes painted.`;
 }
 
 export function formatKuyoAnnouncement(

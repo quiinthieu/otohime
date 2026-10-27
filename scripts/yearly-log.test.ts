@@ -367,7 +367,7 @@ test("CLI writes the yearly log, preserves gitless fallback, and enforces --stri
   assert.ok(MAX_LAG >= 20);
 });
 
-test("committed content/yearly-log.json is valid, canonical, and package.json wires yearly-log scripts", () => {
+test("committed content/yearly-log.json is valid, canonical, in sync with content/site.ts, and package.json wires yearly-log scripts", () => {
   const text = readFileSync(join(ROOT, "content/yearly-log.json"), "utf8");
   const parsed = parseYearlyLog(text);
   assert.ok(parsed, "content/yearly-log.json failed validation");
@@ -376,9 +376,36 @@ test("committed content/yearly-log.json is valid, canonical, and package.json wi
     assert.equal(parsed.months[key].flower, MONTHLY_FLOWERS[key]);
   }
   assert.ok(parsed.months["10"].commits > 0);
-  assert.ok(parsed.months["10"].shippedProjects.length > 0);
+  assert.equal(parsed.months["10"].shippedProjects.length, 11);
   assert.ok(parsed.months["10"].notes.length > 0);
   assert.ok(parsed.months["10"].highlights.length > 0);
+
+  // Months 05 and 06 have 0 entries (no fabricated pre-repo May/June dates)
+  for (const key of ["05", "06"] as const) {
+    assert.equal(parsed.months[key].commits, 0);
+    assert.deepEqual(parsed.months[key].shippedProjects, []);
+    assert.deepEqual(parsed.months[key].notes, []);
+    assert.deepEqual(parsed.months[key].highlights, []);
+  }
+
+  // content/site.ts and content/yearly-log.json are in sync across all 11 live projects
+  const repoContent = readRepoContent(ROOT);
+  assert.equal(repoContent.projects.length, 11);
+  for (const p of repoContent.projects) {
+    assert.equal(p.status, "live", `Expected ${p.title} to be live in content/site.ts`);
+    assert.notEqual(p.abandoned, true, `Expected ${p.title} not to be abandoned in content/site.ts`);
+    assert.match(p.started ?? "", /^2026-10-/);
+    assert.match(p.shipped ?? "", /^2026-10-/);
+    assert.match(p.lastActivityAt ?? "", /^2026-10-/);
+  }
+  assert.deepEqual(
+    parsed.months["10"].shippedProjects,
+    repoContent.projects.map((p) => ({
+      title: p.title,
+      href: p.href,
+      shipped: p.shipped,
+    })),
+  );
 
   const { scripts } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as {
     scripts: Record<string, string>;

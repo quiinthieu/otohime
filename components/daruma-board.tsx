@@ -3,13 +3,17 @@
 import type { Project } from "@/content/site";
 import {
   formatKuyoAnnouncement,
+  formatUnfinishedEmptyState,
   groupDarumaShelves,
   parseClockParam,
   parseDarumaViewParam,
+  parseFixtureParam,
   parseKuyoParam,
+  resolveDarumaFixtureProjects,
   resolveNowMs,
   type ClassifiedDaruma,
   type ClockInput,
+  type DarumaFixtureInput,
   type DarumaViewMode,
 } from "@/lib/daruma";
 import {
@@ -44,6 +48,7 @@ const useIsomorphicLayoutEffect =
 declare global {
   interface Window {
     __DARUMA_NOW__?: number | string | Date;
+    __DARUMA_FIXTURES__?: DarumaFixtureInput;
   }
 }
 
@@ -52,6 +57,7 @@ export type DarumaBoardProps = {
   now?: ClockInput;
   initialView?: DarumaViewMode;
   initialKuyo?: boolean;
+  initialFixture?: DarumaFixtureInput;
   children: ReactNode;
 };
 
@@ -60,11 +66,14 @@ export function DarumaBoard({
   now,
   initialView = "cartridges",
   initialKuyo = false,
+  initialFixture = false,
   children,
 }: DarumaBoardProps) {
   const [view, setView] = useState<DarumaViewMode>(initialView);
   const [kuyoOverride, setKuyoOverride] = useState<boolean>(initialKuyo);
+  const [fixtureSource, setFixtureSource] = useState<DarumaFixtureInput>(initialFixture);
   const [urlClockMs, setUrlClockMs] = useState<number | null>(null);
+  const [hydrated, setHydrated] = useState<boolean>(false);
   const reducedMotion = useSyncExternalStore(
     subscribeReducedMotion,
     getReducedMotionSnapshot,
@@ -76,6 +85,11 @@ export function DarumaBoard({
       const search = window.location.search;
       const params = new URLSearchParams(search);
       const hasKuyo = parseKuyoParam(params);
+      const hasFixtureParam = parseFixtureParam(params);
+      const winFixtures = window.__DARUMA_FIXTURES__;
+      const hasWinFixtures =
+        resolveDarumaFixtureProjects(winFixtures).length > 0 ||
+        parseFixtureParam(winFixtures);
       const parsedView = parseDarumaViewParam(params);
       const parsedClock =
         parseClockParam(params) ??
@@ -86,18 +100,31 @@ export function DarumaBoard({
       if (parsedClock !== null) {
         setUrlClockMs(parsedClock);
       }
+      if (hasWinFixtures) {
+        setFixtureSource(winFixtures ?? true);
+      } else if (hasFixtureParam) {
+        setFixtureSource(true);
+      } else if (params.has("fixture") || params.has("fixtures")) {
+        setFixtureSource(false);
+      }
       if (hasKuyo) {
         setKuyoOverride(true);
-        setView("daruma");
       } else if (params.has("kuyo")) {
         setKuyoOverride(false);
       }
-      if (
+      const explicitView = params.get("view")?.trim().toLowerCase();
+      if (explicitView === "cartridges") {
+        setView("cartridges");
+      } else if (
         parsedView === "daruma" ||
+        hasKuyo ||
+        hasFixtureParam ||
+        hasWinFixtures ||
         (parsedClock !== null && new Date(parsedClock).getUTCMonth() === 11)
       ) {
         setView("daruma");
       }
+      setHydrated(true);
     };
 
     syncFromLocation();
@@ -109,6 +136,7 @@ export function DarumaBoard({
   const shelves = groupDarumaShelves(projects, {
     now: effectiveClock,
     kuyo: kuyoOverride,
+    fixture: fixtureSource,
   });
   const announcement = formatKuyoAnnouncement(shelves);
   const nowDay = new Date(shelves.nowMs).toISOString().slice(0, 10);
@@ -119,6 +147,8 @@ export function DarumaBoard({
       const url = new URL(window.location.href);
       if (nextView === "daruma") {
         url.searchParams.set("view", "daruma");
+      } else if (shelves.fixtureActive || shelves.kuyoActive) {
+        url.searchParams.set("view", "cartridges");
       } else {
         url.searchParams.delete("view");
       }
@@ -141,10 +171,32 @@ export function DarumaBoard({
     }
   }
 
+  function toggleFixture() {
+    const next = !shelves.fixtureActive;
+    setFixtureSource(next);
+    setView("daruma");
+    if (typeof window !== "undefined") {
+      if (!next && window.__DARUMA_FIXTURES__ !== undefined) {
+        delete window.__DARUMA_FIXTURES__;
+      }
+      const url = new URL(window.location.href);
+      if (next) {
+        url.searchParams.set("fixture", "kuyo");
+        url.searchParams.set("view", "daruma");
+      } else {
+        url.searchParams.delete("fixture");
+        url.searchParams.delete("fixtures");
+      }
+      window.history.replaceState(window.history.state, "", url);
+    }
+  }
+
   return (
     <div
       className="daruma-root"
       data-active-view={view}
+      data-fixture-active={shelves.fixtureActive ? "true" : "false"}
+      data-hydrated={hydrated ? "true" : "false"}
       data-reduced-motion={reducedMotion ? "true" : "false"}
     >
       <div className="daruma-view-bar" role="group" aria-label="Projects view">
@@ -168,8 +220,9 @@ export function DarumaBoard({
             Daruma shelf
           </button>
         </div>
-        <span className="text-muted text-xs">
+        <span className="text-muted text-xs" data-testid="daruma-shelf-summary">
           {shelves.shipped.length} shipped · {shelves.unfinished.length} on the unfinished shelf
+          {shelves.fixtureActive ? " (demo fixture)" : ""}
         </span>
       </div>
 
@@ -180,6 +233,7 @@ export function DarumaBoard({
           className="daruma-board"
           data-testid="daruma-board"
           data-kuyo-active={shelves.kuyoActive ? "true" : "false"}
+          data-fixture-active={shelves.fixtureActive ? "true" : "false"}
           data-now={nowDay}
         >
           <div
@@ -236,23 +290,51 @@ export function DarumaBoard({
           <section
             className="daruma-shelf-section"
             data-shelf="unfinished"
+            data-fixture-active={shelves.fixtureActive ? "true" : "false"}
             aria-labelledby="daruma-unfinished-heading"
           >
             <div className="daruma-shelf-header">
-              <h2 id="daruma-unfinished-heading" className="caption">
-                Unfinished shelf · waiting for the second eye ({shelves.unfinished.length})
-              </h2>
-              <span className="text-muted text-xs">
-                {shelves.active.length} active · {shelves.abandoned.length} abandoned (90+ days or shelved)
-              </span>
+              <div className="grid gap-1">
+                <h2 id="daruma-unfinished-heading" className="caption">
+                  Unfinished shelf · waiting for the second eye ({shelves.unfinished.length})
+                </h2>
+                <span className="text-muted text-xs">
+                  {shelves.active.length} active · {shelves.abandoned.length} abandoned (90+ days or shelved)
+                  {shelves.fixtureActive ? " · Kuyo demo fixture active" : ""}
+                </span>
+              </div>
+              <button
+                type="button"
+                className="btn btn-sm daruma-fixture-toggle"
+                aria-pressed={shelves.fixtureActive}
+                data-testid="daruma-fixture-toggle"
+                data-fixture-toggle="true"
+                onClick={toggleFixture}
+              >
+                {shelves.fixtureActive ? "Hide Kuyo demo fixture" : "Load Kuyo demo fixture"}
+              </button>
             </div>
-            <ul className="daruma-shelf-grid">
-              {shelves.unfinished.map((item) => (
-                <li key={item.project.title} className="daruma-slot">
-                  <DarumaCard item={item} />
-                </li>
-              ))}
-            </ul>
+            {shelves.unfinished.length === 0 ? (
+              <div
+                className="daruma-shelf-empty"
+                data-testid="daruma-unfinished-empty"
+              >
+                <p className="daruma-empty-title">
+                  {formatUnfinishedEmptyState(shelves.shipped.length)}
+                </p>
+                <p className="text-muted text-xs">
+                  Every live route on this site has shipped with both eyes painted, so no real project sits unfinished or abandoned. Load the opt-in Kuyo demo fixture (<code>?fixture=kuyo</code>) to preview one-eyed unfinished dolls and the year-end Daruma Kuyo ink-fire ceremony.
+                </p>
+              </div>
+            ) : (
+              <ul className="daruma-shelf-grid">
+                {shelves.unfinished.map((item) => (
+                  <li key={item.project.title} className="daruma-slot">
+                    <DarumaCard item={item} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         </div>
       )}
@@ -278,6 +360,7 @@ function DarumaCard({ item }: { item: ClassifiedDaruma<Project> }) {
       data-shelf-kind={item.shelf}
       data-abandoned={item.abandoned ? "true" : "false"}
       data-kuyo-retiring={item.retiringInKuyo ? "true" : "false"}
+      data-demo-fixture={item.demoFixture ? "true" : "false"}
     >
       <div className="daruma-doll-stage">
         <div className="daruma-doll-figure" data-testid="daruma-doll-figure">
@@ -295,6 +378,11 @@ function DarumaCard({ item }: { item: ClassifiedDaruma<Project> }) {
           <span className="daruma-title">{project.title}</span>
         )}
         <span className="badge">{project.status}</span>
+        {item.demoFixture ? (
+          <span className="badge daruma-fixture-badge" data-testid="daruma-fixture-badge">
+            demo fixture
+          </span>
+        ) : null}
         <span className="badge" data-daruma-eye-badge={item.eyeState}>
           {eyeLabel}
         </span>

@@ -15,6 +15,7 @@ export type Project = {
   shipped?: string;
   lastActivityAt?: string;
   abandoned?: boolean;
+  demoFixture?: boolean;
 };
 export type Game = { title: string; note: string; colour: Swatch };
 // A way to reach me, as a line on the home page's switchboard. code is the
@@ -177,17 +178,17 @@ export const site = {
   projects: "Independent projects, built in my own time and not for any employer.",
   // Add a project here and it shows up on /projects.
   projectList: [
-    { title: "Shore", note: "A focus timer that leaves sea glass behind.", href: "/shore", status: "live", colour: "mint", started: "2026-10-01", shipped: "2026-10-19", lastActivityAt: "2026-10-25" },
-    { title: "Capsule", note: "A coin, a crank, and a printed card to keep.", href: "/capsule", status: "live", colour: "coral", started: "2026-10-03", shipped: "2026-10-19", lastActivityAt: "2026-10-24" },
-    { title: "Orrery", note: "The Sun, the planets and five stars, cut open and drawn by hand.", href: "/orrery", status: "live", colour: "yellow", started: "2026-10-05", shipped: "2026-10-20", lastActivityAt: "2026-10-24" },
-    { title: "Elements", note: "All 118, each with a spinning atom and one surprising fact.", href: "/elements", status: "live", colour: "blue", started: "2026-10-04", shipped: "2026-10-19", lastActivityAt: "2026-10-25" },
-    { title: "Vinyl", note: "Dig the crate, drop the needle, watch it play.", href: "/vinyl", status: "live", colour: "pink", started: "2026-10-06", shipped: "2026-10-19", lastActivityAt: "2026-10-23" },
-    { title: "Rotor", note: "An Enigma, drawn by hand. Type and watch the lamps.", href: "/rotor", status: "live", colour: "coral", started: "2026-10-08", shipped: "2026-10-20", lastActivityAt: "2026-10-24" },
-    { title: "Planisphere", note: "Tonight's sky for your city, on a star wheel drawn in ink.", href: "/planisphere", status: "live", colour: "blue", started: "2026-10-09", shipped: "2026-10-20", lastActivityAt: "2026-10-25" },
-    { title: "Barometer", note: "A brass weather station for your city, read every quarter hour.", href: "/barometer", status: "building", colour: "yellow", started: "2026-10-18", lastActivityAt: "2026-10-25" },
-    { title: "Gazette", note: "A small newspaper: six short pieces on everyday science, each with a drawn infographic.", href: "/articles", status: "live", colour: "pink", started: "2026-10-11", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
-    { title: "Structures", note: "Eight ways to keep things, drawn by hand so you can poke them.", href: "/structures", status: "shelved", colour: "mint", started: "2026-05-12", lastActivityAt: "2026-06-20", abandoned: true },
-    { title: "Design system", note: "A box of decisions made once, drawn so you can turn the knobs.", href: "/design-system", status: "shelved", colour: "coral", lastActivityAt: "2026-06-01" },
+    { title: "Shore", note: "A focus timer that leaves sea glass behind.", href: "/shore", status: "live", colour: "mint", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
+    { title: "Capsule", note: "A coin, a crank, and a printed card to keep.", href: "/capsule", status: "live", colour: "coral", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
+    { title: "Orrery", note: "The Sun, the planets and five stars, cut open and drawn by hand.", href: "/orrery", status: "live", colour: "yellow", started: "2026-10-19", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Elements", note: "All 118, each with a spinning atom and one surprising fact.", href: "/elements", status: "live", colour: "blue", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
+    { title: "Vinyl", note: "Dig the crate, drop the needle, watch it play.", href: "/vinyl", status: "live", colour: "pink", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
+    { title: "Rotor", note: "An Enigma, drawn by hand. Type and watch the lamps.", href: "/rotor", status: "live", colour: "coral", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Planisphere", note: "Tonight's sky for your city, on a star wheel drawn in ink.", href: "/planisphere", status: "live", colour: "blue", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Barometer", note: "A brass weather station for your city, read every quarter hour.", href: "/barometer", status: "live", colour: "yellow", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Gazette", note: "A small newspaper: six short pieces on everyday science, each with a drawn infographic.", href: "/articles", status: "live", colour: "pink", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
+    { title: "Structures", note: "Eight ways to keep things, drawn by hand so you can poke them.", href: "/structures", status: "live", colour: "mint", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
+    { title: "Design system", note: "A box of decisions made once, drawn so you can turn the knobs.", href: "/design-system", status: "live", colour: "coral", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
   ] as Project[],
   // TODO(otohime)
   music: "Songs on repeat, one channel each. Tune in.",

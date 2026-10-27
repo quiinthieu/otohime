@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { site } from "../content/site.ts";
+import rawYearlyLog from "../content/yearly-log.json" with { type: "json" };
 import {
   ABANDONED_DAYS_THRESHOLD,
   classifyDaruma,
@@ -10,14 +11,18 @@ import {
   DEFAULT_NOW_MS,
   EYE_STROKE_LENGTH,
   formatKuyoAnnouncement,
+  formatUnfinishedEmptyState,
   groupDarumaShelves,
   isKuyoSeason,
   isProjectAbandoned,
+  KUYO_DEMO_FIXTURES,
   normalizeUtcDay,
   parseClockParam,
   parseDarumaViewParam,
+  parseFixtureParam,
   parseKuyoParam,
   parseUtcMs,
+  resolveDarumaFixtureProjects,
   resolveNowMs,
   type DarumaProjectInput,
 } from "./daruma.ts";
@@ -212,15 +217,131 @@ test("injectable clock and ?kuyo=1 / toggle override control the Daruma Kuyo cer
   assert.equal(futureShelves.abandoned.length, 2);
 });
 
-test("site.projectList populates shipped, active unfinished, and abandoned Daruma dolls out of the box", () => {
-  const shelves = groupDarumaShelves(site.projectList, "2026-10-27", true);
-  assert.equal(shelves.all.length, site.projectList.length);
-  assert.ok(shelves.shipped.length >= 8, "at least 8 shipped projects");
-  assert.ok(shelves.active.length >= 1, "at least 1 active started/unfinished project");
-  assert.ok(shelves.unfinished.length >= 3, "unfinished shelf holds active and abandoned dolls");
-  assert.ok(shelves.abandoned.length >= 2, "both explicit and 90-day-default abandoned projects present");
-  assert.equal(shelves.kuyoRetiring.length, shelves.abandoned.length);
+test("site.projectList reflects all 11 live October 2026 shipped projects in sync with content/yearly-log.json and shows an honest empty unfinished shelf by default", () => {
+  assert.equal(site.projectList.length, 11);
+  for (const project of site.projectList) {
+    assert.equal(project.status, "live", `${project.title} should have status: 'live'`);
+    assert.notEqual(project.abandoned, true, `${project.title} must not be marked abandoned`);
+    assert.notEqual(project.demoFixture, true, `${project.title} must not be a demo fixture`);
+    assert.match(project.started ?? "", /^2026-10-(1[789]|2\d)$/, `${project.title} started date must be real Oct 2026`);
+    assert.match(project.shipped ?? "", /^2026-10-(1[789]|2\d)$/, `${project.title} shipped date must be real Oct 2026`);
+    assert.match(
+      project.lastActivityAt ?? "",
+      /^2026-10-(1[789]|2\d)$/,
+      `${project.title} lastActivityAt date must be real Oct 2026`,
+    );
+  }
 
-  const eyeStates = new Set(shelves.all.map((d) => d.eyeState));
+  assert.deepEqual(
+    rawYearlyLog.months["10"].shippedProjects,
+    site.projectList.map((p) => ({
+      title: p.title,
+      href: p.href,
+      shipped: p.shipped,
+    })),
+  );
+  assert.deepEqual(rawYearlyLog.months["05"].shippedProjects, []);
+  assert.deepEqual(rawYearlyLog.months["06"].shippedProjects, []);
+
+  const defaultShelves = groupDarumaShelves(site.projectList, "2026-10-27", false);
+  assert.equal(defaultShelves.all.length, 11);
+  assert.equal(defaultShelves.shipped.length, 11);
+  assert.equal(defaultShelves.active.length, 0);
+  assert.equal(defaultShelves.unfinished.length, 0);
+  assert.equal(defaultShelves.incomplete.length, 0);
+  assert.equal(defaultShelves.abandoned.length, 0);
+  assert.equal(defaultShelves.kuyoRetiring.length, 0);
+  assert.equal(defaultShelves.fixtureActive, false);
+  assert.equal(
+    formatUnfinishedEmptyState(defaultShelves.shipped.length),
+    "All 11 current projects have shipped — every Daruma doll has both eyes painted.",
+  );
+  assert.equal(
+    formatKuyoAnnouncement(defaultShelves),
+    "Daruma Kuyo fire is at rest. No abandoned dolls on the shelf.",
+  );
+
+  for (const item of defaultShelves.all) {
+    assert.equal(item.eyeState, "both");
+    assert.equal(item.leftEyeDashoffset, 0);
+    assert.equal(item.rightEyeDashoffset, 0);
+    assert.equal(item.abandoned, false);
+    assert.equal(item.retiringInKuyo, false);
+  }
+
+  const defaultLitShelves = groupDarumaShelves(site.projectList, "2026-10-27", true);
+  assert.equal(defaultLitShelves.kuyoActive, true);
+  assert.equal(defaultLitShelves.kuyoRetiring.length, 0);
+  assert.equal(
+    formatKuyoAnnouncement(defaultLitShelves),
+    "Daruma Kuyo ink-fire ceremony lit: no abandoned Daruma dolls to retire.",
+  );
+});
+
+test("opt-in ?fixture=kuyo and custom fixture overrides load clearly labeled demo unfinished and abandoned dolls without misreporting live projects", () => {
+  assert.equal(parseFixtureParam("kuyo"), true);
+  assert.equal(parseFixtureParam("?fixture=kuyo"), true);
+  assert.equal(parseFixtureParam(new URLSearchParams("view=daruma&fixture=kuyo")), true);
+  assert.equal(parseFixtureParam(true), true);
+  assert.equal(parseFixtureParam("0"), false);
+  assert.equal(parseFixtureParam(null), false);
+
+  assert.equal(parseDarumaViewParam("?fixture=kuyo"), "daruma");
+  assert.equal(parseDarumaViewParam("?fixture=kuyo&view=cartridges"), "cartridges");
+  assert.equal(resolveDarumaFixtureProjects("kuyo").length, KUYO_DEMO_FIXTURES.length);
+
+  const fixtureShelves = groupDarumaShelves(site.projectList, {
+    now: "2026-10-27",
+    fixture: "kuyo",
+    kuyo: true,
+  });
+  assert.equal(fixtureShelves.fixtureActive, true);
+  assert.equal(fixtureShelves.shipped.length, 11);
+  assert.equal(fixtureShelves.active.length, 1);
+  assert.equal(fixtureShelves.unfinished.length, 3);
+  assert.equal(fixtureShelves.incomplete.length, 3);
+  assert.equal(fixtureShelves.abandoned.length, 2);
+  assert.equal(fixtureShelves.kuyoRetiring.length, 2);
+
+  // Live projects remain untouched on the shipped shelf
+  for (const item of fixtureShelves.shipped) {
+    assert.equal(item.demoFixture, false);
+    assert.equal(item.project.status, "live");
+    assert.equal(item.eyeState, "both");
+  }
+
+  // Unfinished shelf contains only demo fixture items with no live route hrefs
+  for (const item of fixtureShelves.unfinished) {
+    assert.equal(item.demoFixture, true);
+    assert.equal(item.project.href, undefined);
+  }
+
+  const eyeStates = new Set(fixtureShelves.all.map((d) => d.eyeState));
   assert.deepEqual(eyeStates, new Set(["both", "left", "none"]));
+  assert.match(
+    formatKuyoAnnouncement(fixtureShelves),
+    /Daruma Kuyo ink-fire ceremony lit: retiring 2 abandoned Daruma dolls \(Demo: Winter Sketchbook, Demo: Unturned Ledger\) in sumi ink flames\./,
+  );
+
+  // Custom window.__DARUMA_FIXTURES__ array override
+  const customFixtures: DarumaProjectInput[] = [
+    {
+      title: "Custom Demo Doll",
+      note: "Injected via window.__DARUMA_FIXTURES__.",
+      status: "shelved",
+      started: "2026-04-01",
+      lastActivityAt: "2026-05-01",
+      abandoned: true,
+    },
+  ];
+  const customShelves = groupDarumaShelves(site.projectList, {
+    now: "2026-10-27",
+    fixtures: customFixtures,
+    kuyo: true,
+  });
+  assert.equal(customShelves.fixtureActive, true);
+  assert.equal(customShelves.unfinished.length, 1);
+  assert.equal(customShelves.unfinished[0].demoFixture, true);
+  assert.equal(customShelves.kuyoRetiring.length, 1);
+  assert.equal(customShelves.kuyoRetiring[0].project.title, "Custom Demo Doll");
 });
