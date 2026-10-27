@@ -1,8 +1,8 @@
 # Riso Ink Studio
 
-Plan: **pm-268** · product-owner run: **run-8861** · repository: **otohime**  
-Prepared: 2026-10-26 · status: execution contracts, pending proposal admission  
-Run profile observed from plan_manager_get_run: **codex-sol-6-1-high**, model **gpt-6.1-sol**, effort **high**, fleet worker **avietidol-z490**. This is a planning delivery; the product is not implemented by this commit.
+Plan: **pm-268** · revision: **2** · product-owner run: **run-9245** (replanning revision 1 from **run-8861**) · repository: **otohime**  
+Prepared: 2026-10-27 · status: execution contracts for remaining scope, pending proposal admission  
+Run profile observed from `plan_manager_get_run`: **agy-argon-high**, model **gemini-4-argon**, effort **high**, fleet worker **avietidol-mac-mini**, account **billie-agy**, delivery workflow **legacy_v1**. This is a planning delivery; application code is not modified by this commit.
 
 ## Outcome and visitor contract
 
@@ -18,21 +18,48 @@ A visitor can choose a print run from the Pocket console, watch the main site's 
 | Applied preview or preset | Reset to house style | Both appearance keys cleared; root tokens/filters restored; season/theme choices retained |
 | Browser denies storage or clipboard | Apply/share | Current page still works; status accurately describes scope and offers copyable URL fallback |
 
+## Revision 2 replan: completed foundation and what changes after `t-1601` QA failures
+
+### Completed and preserved tasks on `main`
+
+The first three revision-1 tasks are complete, merged on `main`, and preserved as the foundation for the remaining work:
+
+1. **`t-1598` — Define bounded print and Lab appearance contracts (`done`)**: Shipped `lib/print-runs.ts`, `lib/print-runs.test.ts`, `lib/ink-lab.ts`, `lib/ink-lab.test.ts`, and `projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/appearance-contract.md`.
+2. **`t-1599` — Carry appearance through every public root layout (`done`, QA passed in `run-8985`)**: Shipped `lib/appearance-client.ts`, `lib/appearance-client.test.ts`, `components/appearance-boot.tsx`, `components/appearance-runtime.tsx`, `components/appearance.css`, all 14 root layouts plus `app/global-not-found.tsx`, numeric SVG filter adapters, `e2e/print-runs.test.ts`, and `projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/runtime-architecture.md`.
+3. **`t-1600` — Add the Pocket print-run switch and commands (`done`, QA passed in `run-9201`)**: Shipped `components/print-run-switch.tsx`, `components/handheld.tsx`, `components/pocket-terminal.tsx`, `components/pocket-terminal.css`, `lib/terminal.ts`, `lib/terminal.test.ts`, `e2e/print-run-console.test.ts`, `projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/console-contract.md`, `scripts/vercel-deploy.sh`, and `scripts/vercel-deploy.test.sh`.
+
+Per the operator replan instruction, those completed tasks are kept as-is and **only the remaining work is proposed below**, numbered from `1` (`sequence: 1` and `sequence: 2`) and depending only on each other.
+
+### Why `t-1601` failed across three fix cycles and what Sequence 1 does differently
+
+In revision 1, task `t-1601` ("Print accessible Riso heading plates") failed QA after three fix cycles (`run-8983` -> `run-9213` -> `run-9217` -> `run-9238`) across two agent profiles (`codex-sol-6-1-high` and `agy-argon-high`):
+
+- **What already works on `main`**: The Riso heading implementation (`lib/riso-heading.ts`, `lib/riso-heading.test.ts`, `components/riso-heading.tsx`, `components/riso-heading.css`, `e2e/riso-headings.test.ts`, `heading-contract.md`, and integration across `FigTitle`, `StampHeading`, `EndFooter`, and main-site public `h1`/`h2` headings) is already landed on `main`. In `qa_run-9241.md`, delivery `9815ddd` passed the task green gate (`ver-3669`, including `e2e/riso-headings.test.ts`) and local/public heading checks.
+- **Why QA still failed (`qa_run-9241.md` and `fix_plan_run-9241.md`)**: In GitHub Actions workflow run `40531718309` (`checks` job `122286013559` on `9815ddd`), the full E2E suite failed at `e2e/kame.test.ts:75` (`swimming, accelerated 45s idle, Call, keyboard name, dismissal and shell persist`) when opening `/projects` with an uncaught browser page error: `Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]=`. Because `checks` failed, the downstream `production` deployment job was skipped, leaving public `/api/health` on `8b0c491`.
+- **Why the three fix cycles repeated the failure**: Each fix attempt (`run-9213`, `run-9217`, `run-9238`) only executed `t-1601`'s task `verification[]` (`e2e/riso-headings.test.ts`) and pushed evidence-only or build-lock helper commits (`scripts/e2e-build.test.mjs`, `scripts/main-lane-closure.test.mjs`) without running `e2e/kame.test.ts` or fixing the `/projects` hydration race.
+- **Root cause of the `/projects` React `#418` (`args[]=HTML`) failure**:
+  1. In `app/(site)/layout.tsx`, `<Suspense fallback={null}><KameLoader /></Suspense>` and `<Suspense fallback={null}><TactileLoader /></Suspense>` are mounted in separate `<Suspense>` boundaries **before** `{children}` (`AppLayout` -> `<ViewTransition>` -> `/projects` `<DarumaBoard>` -> `<Cartridge>` and `<EndFooter>` containing `<div id="kame-shell" />` and `.end-lines`).
+  2. With main-site headings (`FigTitle`, `GazetteDesks`, `EndFooter`) rendered as `<RisoText>` client islands alongside `<DarumaBoard>` (`8b0c491`) and `AppLayout`'s streaming `<Suspense>` boundaries (`<Account />`, `<ImpersonationBanner />`, `<Nav />`), React 19 can hydrate the earlier `<KameLoader />` and `<TactileLoader />` boundaries before `{children}` finishes hydrating.
+  3. In `e2e/kame.test.ts`, `open(..., clock = true)` installs a Playwright fake clock (`page.clock.install(...)`) before `page.goto("${BASE}/projects", { waitUntil: "load" })` and immediately calls `page.clock.fastForward(46_000)` once `[data-kame]` attaches. When `TactileLoader`'s `PaperLayer` (`requestIdleCallback(..., { timeout: 2000 })`) or `KameLoader`'s `Companion` mutates `#kame-shell` (appending `.paper-sticker` or portaling `section.kame-tools`) or `.cartridge` / `.end-lines li` (`data-paper-active`, `data-paper-state`, `.paper-tools`) before `<DarumaBoard>` and `<EndFooter>` finish hydrating, React 19 encounters unexpected DOM nodes/attributes during hydration and throws `Minified React error #418?args[]=HTML&args[]=`.
+- **What Sequence 1 does differently from the failed `t-1601` attempts**:
+  1. **Fixes the `/projects` hydration ordering instead of pushing evidence-only commits**: Moves `<KameLoader />` and `<TactileLoader />` after `{children}` in `app/(site)/layout.tsx` and gates `KameLoader` / `TactileLoader` (`PaperLayer`) DOM mutations (`#kame-shell`, `[data-paper-id][data-tossable]`, `.end-lines li`) so they only attach/mutate after the `{children}` host elements have completed React hydration, and updates `e2e/kame.test.ts`'s `open`/`ready` handshake so fake-clock fast-forwarding runs after `/projects` hydration settles—without weakening or filtering `pageerror`.
+  2. **Preserves and verifies the landed Riso heading implementation**: Keeps `lib/riso-heading.ts`, `components/riso-heading.tsx`, `components/riso-heading.css`, `e2e/riso-headings.test.ts`, and `heading-contract.md` intact and verified.
+  3. **Gates task `verification[]` on both `e2e/riso-headings.test.ts` and `e2e/kame.test.ts`**: The plan-manager green gate now executes both `e2e/riso-headings.test.ts` and `e2e/kame.test.ts` (including repeated `/projects` clock/reload runs), making it impossible for Sequence 1 to pass its task gate while failing the `/projects` Kame check in GitHub Actions.
+
 ## Evidence and reuse
 
-The original research report **rep-5163** is preserved verbatim in [research.md](research.md). It did not fetch the two inspiration links. This run checked the [Heller repository](https://github.com/manu-brighter/manus-portfolio), whose README describes per-character plates, a single accessible text copy, persisted presets and a live playground. This is technique inspiration, not a license to copy implementation; its reuse license was not verified. The [uixNinja post](https://www.linkedin.com/posts/uixninja_fluid-ink-engine-a-custom-webgl2-experiment-activity-7516205344298160128-xJ7s) could not be fetched; no implementation claim depends on it.
+The original research report **rep-5163** is preserved verbatim in [research.md](research.md). It did not fetch the two inspiration links. Revision 1 checked the [Heller repository](https://github.com/manu-brighter/manus-portfolio), whose README describes per-character plates, a single accessible text copy, persisted presets and a live playground. This is technique inspiration, not a license to copy implementation; its reuse license was not verified. The [uixNinja post](https://www.linkedin.com/posts/uixninja_fluid-ink-engine-a-custom-webgl2-experiment-activity-7516205344298160128-xJ7s) could not be fetched; no implementation claim depends on it.
 
 Repository inspection confirms:
-- lib/seasons.ts and app/(site)/layout.tsx implement validated pre-paint visitor preferences.
-- lib/terminal.ts owns pure command interpretation; components/pocket-terminal.tsx owns effects and capture-key binding.
-- lib/ink-modes.ts owns MATERIALS/HANDS and inkFilter; existing consumers include figures, season particles, Ink Press and ledger stamps. Radio hiss, 404 crumple and Ryugu caustics use inline SVG filters.
-- lib/letterpress.test.ts pins contrast, worst-case grain alpha <=0.06 and house materials.
-- Root layouts are independent documents. app/(design-system)/_lib/isolation.test.ts explicitly rejects shared imports; root-only appearance exceptions require positive and negative controls.
-- lib/pages.ts separately owns PUBLIC_PAGES and CONSOLE_MENU; adding /lab to both would overflow the physical seven-item LCD.
-- npm test discovers lib/**/*.test.ts; .github/workflows/ci.yml discovers e2e/**/*.test.ts through the repo's node:test/Playwright runner.
-- The installed Next.js 16.4.2 guides at node_modules/next/dist/docs/01-app/01-getting-started/{03-layouts-and-pages,05-server-and-client-components}.md were consulted. Implementers must also read the installed guides relevant to their actual changes.
+- `lib/seasons.ts` and `app/(site)/layout.tsx` implement validated pre-paint visitor preferences; `lib/print-runs.ts`, `lib/ink-lab.ts`, `lib/appearance-client.ts`, `components/appearance-boot.tsx`, `components/appearance-runtime.tsx`, and `components/appearance.css` now implement the shared print-run and Ink Lab runtime across all 14 root layouts.
+- `lib/terminal.ts`, `components/print-run-switch.tsx`, `components/handheld.tsx`, and `components/pocket-terminal.tsx` implement the Pocket print-run switch and terminal `print run` / `lab` commands.
+- `lib/riso-heading.ts`, `components/riso-heading.tsx`, `components/riso-heading.css`, and `e2e/riso-headings.test.ts` implement per-character Riso heading plates on main-site headings, `FigTitle`, and `StampHeading`.
+- `app/(site)/layout.tsx`, `components/kame/loader.tsx`, `components/kame/companion.tsx`, `components/tactile/loader.tsx`, `components/tactile/paper-layer.tsx`, and `e2e/kame.test.ts` govern post-load interactive overlays (`#kame-shell`, `[data-paper-id][data-tossable]`) on `/projects`.
+- `lib/pages.ts` separately owns `PUBLIC_PAGES` and `CONSOLE_MENU`; adding `/lab` to both would overflow the physical seven-item LCD.
+- `npm test` discovers `lib/**/*.test.ts` and `scripts/*.test.ts`; `.github/workflows/ci.yml` discovers `e2e/**/*.test.ts` through `scripts/e2e.mjs`.
+- The installed Next.js 16.4.2 guides at `node_modules/next/dist/docs/01-app/01-getting-started/{03-layouts-and-pages,05-server-and-client-components}.md` were consulted. Implementers must also read the installed guides relevant to their actual changes.
 
-The two process documents requested by the job are absent from this checkout. Their host copies at /data/build-worker/repo/mono-v2/{AGENTS.md,docs/claude/software-development.md,projects/20260921222547_plan_manager_chief_of_staff_extraction.md} were consulted. Standing rules remain in their canonical documents; this plan adds no replacement policy. This is the existing Otohime Next.js repository with GitHub Actions/Vercel delivery, not a mono-v2 frontend migration.
+Standing rules remain in `AGENTS.md`. This is the existing Otohime Next.js repository with GitHub Actions/Vercel delivery.
 
 ## Decisions and alternatives
 
@@ -54,7 +81,7 @@ Checked 2026-10-26 using upstream repositories. Maintenance release dates, issue
 | Disadvantage here | We own narrow validation and coordination | More than bounded transform/opacity needs; custom terms | Existing ViewTransition integration still needs work | Public-page keyboard/mobile styling still needs custom integration |
 | Decision | **Chosen** | Rejected | Rejected | Rejected |
 
-Upstream descriptions are capability claims, not measured results. Each rejected candidate adds installation/upgrade/supply-chain surface without filling a required gap. No upstream source code is copied. The boundary is PrintRun/InkLabSettings/AppearanceStore, with pure logic and a single browser adapter.
+Upstream descriptions are capability claims, not measured results. Each rejected candidate adds installation/upgrade/supply-chain surface without filling a required gap. No upstream source code is copied. The boundary is `PrintRun`/`InkLabSettings`/`AppearanceStore`, with pure logic and a single browser adapter.
 
 ### Layout choice
 
@@ -63,26 +90,14 @@ Visitor task: tune a material while seeing it on actual site components, then sh
 Option A, **proof sheet**, is chosen: preview adjacent to grouped controls on desktop, preview first on mobile; actions always reachable in normal flow.
 
 ```mermaid
-block-beta
-  columns 3
-  title["A desktop: Ink Lab title and current scope"]:3
-  controls["Existing labeled controls: material, paper, plates, motion"]:1
-  preview["Real site heading, card, letterpress button"]:2
-  actions["Share · Apply to whole site · Reset to house style"]:3
-  phone["A phone: title → preview → grouped controls → actions"]:3
+flowchart LR
+  subgraph Desktop["Option A Desktop: Proof Sheet"]
+    Controls["Labeled controls: material, paper, plates, motion"] --- Preview["Real site heading, card, letterpress button"]
+  end
+  Desktop --> Actions["Share · Apply to whole site · Reset to house style"]
 ```
 
 Option B, **preview with a controls drawer**, maximizes the canvas but adds an opening step and hides current settings.
-
-```mermaid
-block-beta
-  columns 3
-  title["B desktop: title and open controls"]:3
-  preview["Large proof sheet"]:2
-  drawer["Controls drawer"]:1
-  actions["Share · Apply · Reset"]:3
-  phone["B phone: preview → open controls → drawer → actions"]:3
-```
 
 | Layout | Change a value and apply | Primary action | Phone and keyboard | Cost |
 | --- | --- | --- | --- | --- |
@@ -103,12 +118,12 @@ Verification hypothesis: A lets a visitor adjust, share, apply, navigate away an
 - Reset clears only these two appearance keys, corresponding attributes and inline properties, and restores original SVG values. It does not clear theme, season, stamps, audio, focus-timer state or saved drawings.
 - Session means the current browsing context's sessionStorage lifetime. Reload and full document hops retain it; independent fresh contexts do not. Browser opener-clone behavior is not promised away.
 - All storage access, including obtaining the object, is guarded. Failed writes retain the current-page in-memory result but must not claim reload/session persistence. Failed reset must report any inability to remove a persisted value.
-- Expose getSnapshot, subscribe, setPrintRun, applyLab and resetHouse through AppearanceStore. The pure contract and fake storage are tested separately from the real browser implementation. Derive pre-paint validation from trusted schema data so it cannot drift.
-- DOM markers: data-print-run and data-ink-lab on html. Only validated ids/numeric/hex fields may reach token or SVG adapters. No credentials or user content enter web storage.
+- Expose `getSnapshot`, `subscribe`, `setPrintRun`, `applyLab` and `resetHouse` through `AppearanceStore`. The pure contract and fake storage are tested separately from the real browser implementation. Derive pre-paint validation from trusted schema data so it cannot drift.
+- DOM markers: `data-print-run` and `data-ink-lab` on `html`. Only validated ids/numeric/hex fields may reach token or SVG adapters. No credentials or user content enter web storage.
 
 ### Presets and contrast
 
-Colors below are design inputs; contrast tests are binding. Body, muted text, controls and focus remain readable even when decorative plate colors are edited. Add coherent --field, --line, --hairline and semantic aliases for every affected root; derive them from these surfaces while proving required contrast.
+Colors below are design inputs; contrast tests are binding. Body, muted text, controls and focus remain readable even when decorative plate colors are edited. Add coherent `--field`, `--line`, `--hairline` and semantic aliases for every affected root; derive them from these surfaces while proving required contrast.
 
 | Preset | Paper / second paper | Ink / muted | Plates | Filter and overlay |
 | --- | --- | --- | --- | --- |
@@ -123,7 +138,7 @@ Indigo sets effective dark color-scheme while selected without overwriting the s
 
 ### Lab schema and URL
 
-Use v=1 and these allowed keys. Maximum accepted query length is **2048 characters**. Unsupported version or overlong query gives house preview with a polite explanation. Missing keys use the selected run's resolved defaults; invalid individual fields fall back to that field's default. First duplicate occurrence wins. Ignore unknown keys. Reject non-finite numeric values, clamp finite values, quantize to the specified step, and canonicalize. No eval, dynamic code, arbitrary CSS, raw SVG or user-chosen filter URL.
+Use `v=1` and these allowed keys. Maximum accepted query length is **2048 characters**. Unsupported version or overlong query gives house preview with a polite explanation. Missing keys use the selected run's resolved defaults; invalid individual fields fall back to that field's default. First duplicate occurrence wins. Ignore unknown keys. Reject non-finite numeric values, clamp finite values, quantize to the specified step, and canonicalize. No eval, dynamic code, arbitrary CSS, raw SVG or user-chosen filter URL.
 
 | Query | Field | Inclusive range / validation | House default |
 | --- | --- | --- | --- |
@@ -138,54 +153,49 @@ Use v=1 and these allowed keys. Maximum accepted query length is **2048 characte
 | h | hand/stroke style | ink, pencil, crayon, watercolour | ink |
 | o | optional halftone | 0 or 1 | 0 |
 
-Hand is the existing HANDS/MATERIALS style, including its stroke weight/tooth/wash. Numeric Lab values override the resolved material where explicitly controlled. Presets adjust existing filter frequencies/amplitudes as multipliers; preserve each scene's geometry, seeds and interactive effects. An applied snapshot sets resolved numeric values, not raw query strings. The readable anchor's foreground is body ink; freely editable plate colors affect decorative ghosts/swatch previews and never the body color.
+Hand is the existing `HANDS`/`MATERIALS` style, including its stroke weight/tooth/wash. Numeric Lab values override the resolved material where explicitly controlled. Presets adjust existing filter frequencies/amplitudes as multipliers; preserve each scene's geometry, seeds and interactive effects. An applied snapshot sets resolved numeric values, not raw query strings. The readable anchor's foreground is body ink; freely editable plate colors affect decorative ghosts/swatch previews and never the body color.
 
-Example: /lab?v=1&r=riso&t=0.040&d=4&w=0&g=0.03&p=292522,ff48b0,00a95c&n=3&m=420&h=ink&o=1. The encoder may omit default fields but must produce one stable representation; decode(encode(snapshot)) must equal the normalized snapshot. Share is preview-only. Updates replace URL state without one history entry per slider tick; popstate/reload restores the preview.
+Example: `/lab?v=1&r=riso&t=0.040&d=4&w=0&g=0.03&p=292522,ff48b0,00a95c&n=3&m=420&h=ink&o=1`. The encoder may omit default fields but must produce one stable representation; `decode(encode(snapshot))` must equal the normalized snapshot. Share is preview-only. Updates replace URL state without one history entry per slider tick; `popstate`/reload restores the preview.
 
 ### Render boundaries
 
 ```mermaid
 flowchart LR
-  P["Typed presets and codec"] --> B["Trusted pre-paint script"]
-  P --> S["AppearanceStore"]
-  S --> C["Browser local/session adapter"]
-  S --> R["Shared runtime in root layouts"]
-  R --> T["Scoped CSS token aliases and texture"]
-  R --> F["Numeric SVG filter adapters"]
-  L["Lab query and controls"] --> V["Scoped real-component preview"]
-  L --> A["Explicit Apply"]
+  P["Typed presets and codec (t-1598 done)"] --> B["Trusted pre-paint script (t-1599 done)"]
+  P --> S["AppearanceStore (t-1598/t-1599 done)"]
+  S --> C["Pocket console & terminal switch (t-1600 done)"]
+  S --> R["Shared runtime in root layouts (t-1599 done)"]
+  R --> H["Riso headings + /projects hydration guard (Seq 1)"]
+  L["Lab query and controls (Seq 2)"] --> V["Scoped real-component preview (Seq 2)"]
+  H --> V
+  L --> A["Explicit Apply (Seq 2)"]
   A --> S
 ```
 
-Whole-site appearance includes every public root layout: enumerate from app/ during task 2 and test one reachable public route per root, including /shore, /ryugu and /design-system. The house style of each isolated project remains its own. Allow only the specific appearance boundary in root layout isolation guards; engines and unrelated imports remain isolated. Adapt visual paper/ink/texture and decorative SVG appearance, not audio DSP, game mechanics, saved artwork or media pixels.
+Whole-site appearance includes every public root layout (implemented and verified in `t-1599`). Riso heading rollout is main-site public `h1`/`h2` content, the common `FigTitle`/`StampHeading` surfaces and the Lab preview. Standalone project typography remains intact while its appearance tokens follow the selected run. Each character has 2–3 plates; ghost offsets settle at deterministic ±1–2px, the base remains readable, one semantic copy is exposed, and existing `TitleMorph` names stay on the original heading wrapper. No-JavaScript and reduced-motion output is settled. No background heading animation loop.
 
-Riso heading rollout is main-site public h1/h2 content, the common FigTitle/StampHeading surfaces and the Lab preview. Standalone project typography remains intact while its appearance tokens follow the selected run. Each character has 2–3 plates; ghost offsets settle at deterministic ±1–2px, the base remains readable, one semantic copy is exposed, and existing TitleMorph names stay on the original heading wrapper. No-JavaScript and reduced-motion output is settled. No background heading animation loop.
+Live preview updates are coalesced through `requestAnimationFrame`; one appearance seed clock at most, no clock at speed zero or under reduced motion, paused for hidden/offscreen work and disposed on unmount. Measure update count and input-to-paint latency on the test machine; target <=100ms, disclose hardware and browser. No fabricated universal performance guarantee.
 
-Live preview updates are coalesced through rAF; one appearance seed clock at most, no clock at speed zero or under reduced motion, paused for hidden/offscreen work and disposed on unmount. Measure update count and input-to-paint latency on the test machine; target <=100ms, disclose hardware and browser. No fabricated universal performance guarantee.
+## Task DAG and admission (Revision 2 remaining tasks)
 
-## Task DAG and admission
-
-The payload below is the proposal source of truth. Sequences are proposal-local references, not board task ids.
+The payload below is the proposal source of truth for Revision 2. Sequences are proposal-local references (`1` and `2`), not board task ids; completed tasks `t-1598`, `t-1599`, and `t-1600` remain on the plan board as `done`.
 
 ```mermaid
 flowchart LR
-  A["1 Model and codec"] --> B["2 Root runtime and filters"]
-  B --> C["3 Pocket controls"]
-  B --> D["4 Riso headings"]
-  C --> E["5 Public Ink Lab"]
-  D --> E
-  E -.-> F["Platform QA and acceptance; outside proposal DAG"]
+  D1["t-1598..t-1600 (done on main)"] -.-> T1["1 Stabilize Riso heading plates and /projects Kame hydration"]
+  T1 --> T2["2 Open the public Ink Lab proof sheet"]
+  T2 -.-> QA["Platform QA and acceptance; outside proposal DAG"]
 ```
 
-Settings observed: max_live_runs_per_plan=1, max_plan_elapsed=6h, qa_mode=auto. With fallback durations, the weighted sum is 5h and the longest path 4h: max(5h,4h)=5h, below the ceiling. Actual latest-200 role medians, if enough samples exist, are authoritative in propose_tasks. Task 1 is pure plumbing with qa=skip; visible tasks require QA. If actual admission refuses plan_too_large, propose only the Print Shop foundation/controls/headings part here with platform QA, and file the Lab part using submit_idea(repo=otohime, after_plan_id=pm-268), citing this file. Do not pre-plan a later part against unlanded code. No part is dropped.
+Settings observed via `plan_manager_get_settings`: `max_live_runs_per_plan=2`, `max_plan_elapsed=0s` (disabled), `qa_mode=auto`. Sequence 2 depends on Sequence 1 (`depends_on: ["1"]`) so `/lab` consumes the verified `RisoHeading` contract and avoids concurrent `main`-lane pushes/deployments under `max_live_runs_per_plan=2`. Both remaining tasks change user-visible frontend surfaces and therefore set `"qa": "required"`.
 
 ## Execution and verification rules for these contracts
 
-Before implementation: npm ci with Node 22 and the committed lock; provision matching Chromium at job time if absent. Read installed Next.js guides. Feature-specific test files in each verification item must exist and assert the described behavior; a missing file, skipped suite, errored browser or all-green unrelated suite does not prove delivery. Write failing behavior tests before implementation; retain existing regression suites.
+Before implementation: `npm ci` with Node 22 and the committed lock; provision matching Chromium at job time if absent. Read installed Next.js guides. Feature-specific test files in each verification item must exist and assert the described behavior; a missing file, skipped suite, errored browser or all-green unrelated suite does not prove delivery. Write failing behavior tests before implementation; retain existing regression suites.
 
-The local e2e runner provisions its own throwaway Postgres and production build when BASE_URL is unset, then cleans them up. Verification commands must stay inside the checkout and must not mutate shared infrastructure. Feature E2E files are automatically covered by the existing CI glob. Software engineers finish at the tested commit/push; deployment proof belongs to the green gate, QA and acceptance. Commit subjects use pm-268/<assigned-task-id>: followed by an imperative subject. Retry non-fast-forward pushes by rebasing and rerunning tests; never force-push.
+The local e2e runner provisions its own throwaway Postgres and production build when `BASE_URL` is unset, then cleans them up. Verification commands must stay inside the checkout and must not mutate shared infrastructure. Feature E2E files are automatically covered by the existing CI glob. Software engineers finish at the tested commit/push; deployment proof belongs to the green gate, QA and acceptance. Commit subjects use `pm-268/<assigned-task-id>:` followed by an imperative subject. Retry non-fast-forward pushes by rebasing and rerunning tests; never force-push.
 
-QA/acceptance derive independent evidence from the delivered diff and public UI. Verify the deployed build identity via /api/health and the exact GitHub Actions checks/production jobs; a local test or a board decision is not rollout evidence. For browser evidence preserve and inspect screenshots/traces under .agent-artifacts/<task>/, including the failed-storage and long-content states. A health 200 alone never proves interaction.
+QA/acceptance derive independent evidence from the delivered diff and public UI. Verify the deployed build identity via `/api/health` and the exact GitHub Actions `checks`/`production` jobs; a local test or a board decision is not rollout evidence. For browser evidence preserve and inspect screenshots/traces under `.agent-artifacts/<task>/`, including the failed-storage and long-content states. A health 200 alone never proves interaction.
 
 This browser feature has no model executable, remote job, queue, scheduled event, recipient, quota watch or operator-only prerequisite. Execution evidence therefore means the real Node/Next build, installed dependency lock and browser behavior; fake storage tests are reported separately. Record defect causes and actual model/profile/effort for each run, not a mutable default. Inspect available failed/completed CI attempts bounded by relevant code/lock/config fingerprints and say whether history is complete. No wait-based task steps or natural-run acceptance.
 
@@ -197,7 +207,7 @@ This browser feature has no model executable, remote job, queue, scheduled event
 | Persistent print run | browser read-back and reload | Fresh real page, denied storage, effective computed colors |
 | No initial appearance flash | delayed-hydration browser test | First styled frame across root layouts, exact build identity |
 | True SVG carry-through | inspect actual SVG attributes | Changed and reset filter outputs on real components |
-| Accessible plate headings | Unicode/offset tests and E2E | Accessibility tree, reduced-motion/no-JS, dark-paper readability |
+| Accessible plate headings & clean `/projects` hydration | Unicode/offset tests + `e2e/riso-headings.test.ts` + `e2e/kame.test.ts` | Accessibility tree, reduced-motion/no-JS, dark-paper readability, zero React `#418` hydration errors on `/projects` |
 | No transition/stamp regressions | console and heading E2E | Console-to-Work morph plus Play Stamp it |
 | Preview isolation and session apply | real browser journey | Unapplied separate card, fresh context, cross-root reload |
 | Recovery | blocked-storage/clipboard tests | Truthful status, selectable URL, clear both appearance keys |
@@ -207,272 +217,61 @@ Acceptance produces a walkthrough table (starting state · action · observable 
 
 ## Integrated QA handoff (platform-assigned)
 
-The proposal API accepts only software_engineer rows; the platform launches quality engineers after green gates according to qa=required and performs final acceptance. The following independent integrated audit is a required handoff to the final visible task's QA and plan acceptance, not a sixth proposed task.
+The proposal API accepts only `software_engineer` rows; the platform launches quality engineers after green gates according to `qa=required` and performs final acceptance. The following independent integrated audit is a required handoff to each visible task's QA and plan acceptance, not an extra proposed SWE task.
 
-**Problem:** Shared theme, SVG, accessibility, persistence and transition changes need independent browser evidence beyond an implementer's green test report.
+**Problem:** Shared theme, SVG, accessibility, persistence, hydration ordering and transition changes need independent browser evidence beyond an implementer's green test report.
 
-**Pass condition:** Independent QA documents the complete visitor journey and failure controls on the delivered SHA, with observed contrast, first paint, reduced motion, accessible headings, all root-layout carry-through, URL reproducibility and truthful storage recovery. Code defects fail QA; unobserved deployment or browser evidence is explicitly inconclusive.
+**Pass condition:** Independent QA documents the complete visitor journey and failure controls on the delivered SHA, with observed contrast, first paint, reduced motion, accessible headings, zero `/projects` Kame hydration errors, all root-layout carry-through, URL reproducibility and truthful storage recovery. Code defects fail QA; unobserved deployment or browser evidence is explicitly inconclusive.
 
-1. Claim the QA task, inspect the delivered diff and exact green-gate/CI build identity, and independently derive tests from this plan. Read health build SHA rather than treating a decision row as deployment evidence. Use the repository GitHub Actions/Vercel deployment, not mono-v2 GitLab jobs.
-2. Walk a fresh visitor choosing each print run, reloading, navigating across all public root layouts, opening /lab publicly, changing every control, sharing to a clean browser context, applying, leaving/reloading and resetting. Verify desktop 1366x768/1920x1080, mobile 390x844, 200% zoom, keyboard-only, reduced motion, forced colors and no-JavaScript headings.
-3. Read actual computed paper/ink/muted/focus values and actual SVG attributes; measure contrast with the maximum combined overlay and inspect screenshots. Inspect the accessibility tree for one heading name, and exercise TitleMorph and Stamp it. Record root route inventory coverage and any missing evidence explicitly.
+1. Claim the QA task, inspect the delivered diff and exact green-gate/CI build identity, and independently derive tests from this plan. Read `/api/health` build SHA rather than treating a decision row as deployment evidence. Use the repository GitHub Actions/Vercel deployment, not mono-v2 GitLab jobs.
+2. Walk a fresh visitor choosing each print run, reloading, navigating across all public root layouts, opening `/projects` (verifying Riso headings and Kame idle/recall/reload without React `#418`), opening `/lab` publicly, changing every control, sharing to a clean browser context, applying, leaving/reloading and resetting. Verify desktop 1366x768/1920x1080, mobile 390x844, 200% zoom, keyboard-only, reduced motion, forced colors and no-JavaScript headings.
+3. Read actual computed paper/ink/muted/focus values and actual SVG attributes; measure contrast with the maximum combined overlay and inspect screenshots. Inspect the accessibility tree for one heading name, and exercise `TitleMorph` and `Stamp it`. Record root route inventory coverage and any missing evidence explicitly.
 4. Run independent negative controls: open a hostile/oversized query, deny both storages and clipboard, edit preview without Apply while inspecting a separate real-site card, and open a fresh browser context after Apply. These must not inject style/script, report false persistence, leak scope or inherit the session.
-5. Submit qa_report and a summary with a walkthrough table, exact SHA/build/browser/Node/lockfile identities, measured preview timing, evidence paths and defects. Separate real browser persistence from fake-store tests and any unobserved deployment. Do not change application code, wait for natural events or add a human approval gate.
+5. Submit `qa_report` and a `summary` with a walkthrough table, exact SHA/build/browser/Node/lockfile identities, measured preview timing, evidence paths and defects. Separate real browser persistence from fake-store tests and any unobserved deployment. Do not change application code, wait for natural events or add a human approval gate.
 
-Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/qa.md. QA may write evidence and reports, never application fixes. An assigned quality engineer claims its platform task; the product owner does not claim it.
+Evidence destination: `projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/qa.md`. QA may write evidence and reports, never application fixes. An assigned quality engineer claims its platform task; the product owner does not claim it.
 
-## Task contracts
+## Task contracts (Revision 2: remaining tasks only)
 
 ```json
 [
   {
     "sequence": 1,
-    "title": "Define bounded print and Lab appearance contracts",
+    "title": "Stabilize Riso heading plates and /projects Kame hydration",
     "role": "software_engineer",
-    "qa": "skip",
+    "qa": "required",
     "depends_on": [],
-    "problem": "Seasonal appearance and ink materials exist, but no validated print-run model or shareable Lab snapshot defines consistent values, precedence, storage, or reset semantics.",
-    "acceptance_criteria": "Pure typed interfaces resolve House, Sumi black, Riso pink + mint, and Indigo night plus a bounded Lab snapshot. Versioned URLs round-trip canonically; corrupt, oversized and hostile input safely falls back. Preset body/muted ink meets 4.5:1 on all supported paper surfaces at maximum grain.",
+    "problem": "Riso heading plates (lib/riso-heading.ts, components/riso-heading.tsx, components/riso-heading.css, e2e/riso-headings.test.ts) landed on main, but t-1601 failed QA three times because GitHub Actions checks failed e2e/kame.test.ts:75 on /projects with Minified React error #418 (args[]=HTML). In app/(site)/layout.tsx, KameLoader and TactileLoader sit in Suspense boundaries above {children} and can hydrate and mutate #kame-shell and .cartridge/.end-lines before /projects client subtrees (DarumaBoard, EndFooter, RisoText) finish hydrating under Playwright fake-clock installation and fast-forwarding.",
+    "acceptance_criteria": "Main-site public h1/h2 text, FigTitle and StampHeading print in with two or three spot-color plates per Unicode character and one plain accessible heading name, settled immediately under reduced motion and no-JavaScript, while /projects hydrates and runs the full Kame companion and tactile paper-layer lifecycle under both real time and Playwright fake clocks with zero React #418 hydration errors or browser pageerrors.",
     "action_items": [
-      "Declare the repository-owned PrintRun, InkLabSettings, AppearanceSnapshot and AppearanceStore interfaces before implementation. Put immutable presets in lib/print-runs.ts and the codec/ranges in lib/ink-lab.ts; use the exact schema, keys, defaults and precedence below.",
-      "Write failing node:test cases in lib/print-runs.test.ts and lib/ink-lab.test.ts first: all preset ids, theme/season coexistence, default equivalence with MATERIALS.ink, canonical URL round-trip, every clamp boundary, blocked storage through a fake store, duplicate and unknown parameters, invalid hex/hand/version, NaN/Infinity, overlong input and script-like strings.",
-      "Define getSnapshot/subscribe/setPrintRun/applyLab/resetHouse through the AppearanceStore port, with fake-store contract tests. Preset selection clears Lab; resetting clears both appearance keys while preserving season/theme and other local data. Do not import browser globals in these pure files.",
-      "Calculate preset contrast including muted text, form fields, both papers and worst-case total grain; keep body ink separate from editable decorative plates. Keep existing inkFilter default output identical. Document the typed appearance/schema contract in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/appearance-contract.md."
+      "Reproduce and diagnose the /projects hydration mismatch between KameLoader, TactileLoader (PaperLayer), /projects client subtrees (DarumaBoard, EndFooter, RisoText), and e2e/kame.test.ts fake-clock installation/fast-forwarding. Do not suppress, filter, or weaken pageerror assertions in e2e/kame.test.ts or e2e/riso-headings.test.ts.",
+      "Update app/(site)/layout.tsx, components/kame/loader.tsx, components/kame/companion.tsx, components/tactile/loader.tsx, and components/tactile/paper-layer.tsx as needed so post-load overlays mount after {children} and never mutate #kame-shell, [data-paper-id][data-tossable], or .end-lines DOM attributes/children before the host route subtree has finished React hydration.",
+      "Check e2e/kame.test.ts open()/ready() and reload flows at lines 23-41 and 75-100: ensure the test waits for /projects client hydration and companion readiness cleanly before advancing the Playwright fake clock, while preserving all 9 Kame tests (including the clock fixture negative control, 45s idle emergence, Call button, naming, dismissal, reload persistence, and 3-day streak).",
+      "Preserve and verify the landed RisoHeading and RisoText contract in lib/riso-heading.ts, components/riso-heading.tsx, components/riso-heading.css, components/figures.tsx, components/stamp-heading.tsx, and app/(site)/: one plain accessible heading name, aria-hidden per-character ghost plates with user-select:none, deterministic 1-2px settled offsets, no view-transition-name on plate spans, and working TitleMorph and /play Stamp it interactions.",
+      "Add regression unit coverage in lib/riso-heading.test.ts (or a dedicated hydration-order test) and update projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/heading-contract.md to document the /projects Kame/Tactile hydration boundary alongside the RisoHeading contract."
     ],
     "interfaces": [
-      "lib/print-runs.ts",
-      "lib/print-runs.test.ts",
-      "lib/ink-lab.ts",
-      "lib/ink-lab.test.ts",
-      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/appearance-contract.md"
-    ],
-    "non_goals": [
-      "browser adapter or UI",
-      "new dependencies or backend storage",
-      "changing house materials or persisted user content"
-    ],
-    "verification": [
-      {
-        "name": "feature contract tests",
-        "cwd": ".",
-        "cmd": "node --experimental-strip-types --test lib/print-runs.test.ts lib/ink-lab.test.ts",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "project unit suite",
-        "cwd": ".",
-        "cmd": "npm test",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "typecheck",
-        "cwd": ".",
-        "cmd": "npm run typecheck",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "lint",
-        "cwd": ".",
-        "cmd": "npm run lint",
-        "expect": "exit0",
-        "timeout_s": 300
-      }
-    ]
-  },
-  {
-    "sequence": 2,
-    "title": "Carry appearance through every public root layout",
-    "role": "software_engineer",
-    "qa": "required",
-    "depends_on": [
-      "1"
-    ],
-    "problem": "The site has many independent root layouts and real SVG filters. A CSS-only theme in app/(site) would disappear across full navigations and would never change numeric SVG filter attributes.",
-    "acceptance_criteria": "A validated stored print run colors the first styled frame on the main site and every public root layout. Applied Lab settings survive same-tab reload and cross-root navigation, alter actual decorative SVG filter attributes and paper, and reset completely. Unset appearance preserves each project's house look; reduced motion and forced colors remain usable without hydration errors.",
-    "action_items": [
-      "Read installed Next.js layout, CSS and server/client guides. Implement the AppearanceStore browser adapter in lib/appearance-client.ts, a shared pre-paint script generated from trusted schema/presets, components/appearance-runtime.tsx and components/appearance.css. Do not serialize untrusted strings directly into CSS or scripts.",
-      "Inventory app/*/layout.tsx root layouts and wire the same small appearance boundary into each. Map active preset tokens to each project's paper/ink aliases without importing app/(site)/globals.css or Tailwind into isolated projects. House/unset must add no project token overrides. Apply color/texture tokens before paint; hydrate from a consistent server snapshot and reconcile storage/events safely.",
-      "Implement numeric SVG adapters for components/figures.tsx, season-layer.tsx, ink-press.tsx, ink-radio.tsx, the ledger stamp-calendar, app/(site)/not-found.tsx and app/(ryugu)/_components/sea.tsx. Preserve filter ids, filter region bounds, source seeds and interaction-specific amplitudes; use numeric props or tagged filter updates after hydration, never CSS var() as an SVG numeric attribute. Isolated project engines stay pure.",
-      "Adjust isolation tests only with an exact allowlist for the shared appearance boot/runtime/CSS boundary in root layouts, with positive and negative controls. Continue rejecting imports of site globals, unrelated components and shared state from project _lib engines. Do not delete existing tests.",
-      "Add optional static grain/halftone overlays with pointer-events:none, combined alpha <=0.06, no duplicate fixed overlays, and forced-colors off. Honor reduced motion for heading movement/seed clocks, cancel rAF/listeners/observers on teardown and keep at most one appearance clock, only while visible and needed.",
-      "Write lib/appearance-client.test.ts and e2e/print-runs.test.ts. Exercise storage denial/corruption, first-paint computed colors with hydration delayed, all preset/theme/season combinations, same-tab/cross-tab updates, session reload, reset, and full document hops to every root. Assert actual SVG values change and restore, no errors, no input interception, and unchanged default project isolation. Keep technical evidence in .agent-artifacts/; document the root-layout inventory, token aliases and SVG adapters in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/runtime-architecture.md."
-    ],
-    "interfaces": [
-      "lib/appearance-client.ts",
-      "lib/appearance-client.test.ts",
-      "lib/print-runs.ts",
-      "lib/ink-lab.ts",
-      "components/appearance-runtime.tsx",
-      "components/appearance.css",
-      "components/figures.tsx",
-      "components/season-layer.tsx",
-      "components/ink-press.tsx",
-      "components/ink-radio.tsx",
-      "app/",
-      "e2e/print-runs.test.ts",
-      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/runtime-architecture.md"
-    ],
-    "non_goals": [
-      "site-global CSS imports into isolated projects",
-      "rewriting educational engines, audio processing, user drawings or exported artifacts",
-      "deployment or shared-infrastructure changes in task action items"
-    ],
-    "verification": [
-      {
-        "name": "feature contract tests",
-        "cwd": ".",
-        "cmd": "node --experimental-strip-types --test lib/appearance-client.test.ts",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "project unit suite",
-        "cwd": ".",
-        "cmd": "npm test",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "typecheck",
-        "cwd": ".",
-        "cmd": "npm run typecheck",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "lint",
-        "cwd": ".",
-        "cmd": "npm run lint",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "real-browser feature contract",
-        "cwd": ".",
-        "cmd": "node --experimental-strip-types scripts/e2e.mjs --test e2e/print-runs.test.ts",
-        "expect": "exit0",
-        "timeout_s": 900
-      }
-    ]
-  },
-  {
-    "sequence": 3,
-    "title": "Add the Pocket print-run switch and commands",
-    "role": "software_engineer",
-    "qa": "required",
-    "depends_on": [
-      "2"
-    ],
-    "problem": "Visitors have no discoverable or keyboard-accessible way to choose print runs, and the Pocket Terminal capture-phase key routing requires explicit control handling.",
-    "acceptance_criteria": "The Pocket console offers a small labeled Print run control for House, Sumi black, Riso pink + mint and Indigo night. The terminal supports print run, print run <id>, and lab; controls and commands agree immediately and persist on reload. Invalid commands have no effect, and native keyboard behavior, focus containment and focus return still work.",
-    "action_items": [
-      "Add components/print-run-switch.tsx using the AppearanceStore adapter. Mount a compact labeled switch beside the Pocket console controls in components/handheld.tsx and within the existing terminal settings. Reuse existing chips/keys; do not rely on a shortcut as the only visible entry.",
-      "Extend lib/terminal.ts state, parser, effect, HELP and suggestions: print run reports the current choice; print run house|sumi|riso|indigo selects; lab and go lab navigate to /lab through PLACES without increasing the seven-item physical LCD menu.",
-      "Route switch keyboard handling through the terminal bind() path where required; native radio/button behavior must work even under the loader's capture listener. Selecting a preset clears session Lab overrides and reports the effective choice; denied storage works in memory and indicates that reload will not retain it.",
-      "Write failing lib/terminal.test.ts cases and e2e/print-run-console.test.ts for pointer and keyboard changes, command/control synchronization, invalid ids, reload, blocked local/session storage, Tab/Shift+Tab, Escape and focus return. Preserve existing terminal, adventure, handheld and TitleMorph tests.",
-      "Document the print-run commands, labels, storage failure messages and capture-key behavior in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/console-contract.md."
-    ],
-    "interfaces": [
-      "components/print-run-switch.tsx",
-      "components/handheld.tsx",
-      "components/pocket-terminal.tsx",
-      "components/pocket-terminal.css",
-      "lib/terminal.ts",
-      "lib/terminal.test.ts",
-      "e2e/print-run-console.test.ts",
-      "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/console-contract.md"
-    ],
-    "non_goals": [
-      "expanding or resizing the physical console LCD menu",
-      "new console commands unrelated to appearance",
-      "authentication"
-    ],
-    "verification": [
-      {
-        "name": "feature contract tests",
-        "cwd": ".",
-        "cmd": "node --experimental-strip-types --test --test-reporter=tap lib/terminal.test.ts",
-        "expect": "match:ok [0-9]+ - print run selects only exact validated ids; malformed commands have no effect",
-        "timeout_s": 300
-      },
-      {
-        "name": "project unit suite",
-        "cwd": ".",
-        "cmd": "npm test",
-        "expect": "match:# pass [1-9][0-9]*",
-        "timeout_s": 300
-      },
-      {
-        "name": "typecheck",
-        "cwd": ".",
-        "cmd": "npm run typecheck",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "lint",
-        "cwd": ".",
-        "cmd": "npm run lint",
-        "expect": "exit0",
-        "timeout_s": 300
-      },
-      {
-        "name": "real-browser feature contract",
-        "cwd": ".",
-        "cmd": "node --experimental-strip-types scripts/e2e.mjs --test --test-reporter=tap e2e/print-run-console.test.ts",
-        "expect": "match:ok [0-9]+ - visible Pocket chips, commands and terminal settings agree, clear Lab and survive reload",
-        "timeout_s": 900
-      },
-      {
-        "name": "deploy inspect fallback regression",
-        "cwd": ".",
-        "cmd": "bash scripts/vercel-deploy.test.sh",
-        "expect": "match:ok - inspect exit 1 passes when public health serves the exact sha",
-        "timeout_s": 300
-      }
-    ]
-  },
-  {
-    "sequence": 4,
-    "title": "Print accessible Riso heading plates",
-    "role": "software_engineer",
-    "qa": "required",
-    "depends_on": [
-      "2"
-    ],
-    "problem": "Main-site headings lack per-character overprint motion. Existing TitleMorph and StampHeading interactions make naive duplicated text or transition names inaccessible and fragile.",
-    "acceptance_criteria": "Main-site public h1/h2 text and the shared heading preview print in with two or three spot-color plates per Unicode character, settling at deterministic 1–2px ghost offsets. Assistive technology receives one plain heading name; reduced motion/no-JavaScript show the settled text immediately. TitleMorph navigation and /play Stamp it retain their behavior.",
-    "action_items": [
-      "Declare RisoHeading and RisoText string-based interfaces, plus pure deterministic character/offset helpers in lib/riso-heading.ts. Write failing lib/riso-heading.test.ts cases for Unicode, whitespace, long/wrapped titles, deterministic SSR/client offsets and bounded plate counts. Preserve semantic h1/h2 ownership and avoid nested headings.",
-      "Build components/riso-heading.tsx and components/riso-heading.css: one plain accessible text copy, aria-hidden per-character visual plates, only the anchor layer selectable, ghost layers user-select:none, accessible anchor ink preserved. Use preset plate tokens and two/three-plate setting; no view-transition-name on plate spans.",
-      "Use transform/opacity only for entry, cap total stagger, and animate each mounted heading once as it enters view using one observer. Server/no-JavaScript output is settled and visible. Under reduced motion, forced colors and print media, show readable settled text without sliding, seed animation or blending artifacts.",
-      "Integrate into FigTitle, StampHeading, the Home heading and main-site public h2 text. Keep decorative Fig. prefixes hidden, rich-text titles intact, and .stamp-text source text and stamp generation free from duplicated ghosts. Standalone exhibit typography is preserved; its paper/ink still follows task 2.",
-      "Write e2e/riso-headings.test.ts for accessible names, selectable text, plate transforms, reduced motion, no JavaScript, mobile wrapping and heading navigation. Drive the console-to-/work TitleMorph and /play Stamp it negative controls; require no duplicate transition names or page errors. Include representative empty and long headings.",
-      "Document the RisoHeading/RisoText usage, semantic-copy rules, reduced-motion behavior and TitleMorph/Stamp it integration in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/heading-contract.md."
-    ],
-    "interfaces": [
+      "app/(site)/layout.tsx",
+      "components/kame/loader.tsx",
+      "components/kame/companion.tsx",
+      "components/tactile/loader.tsx",
+      "components/tactile/paper-layer.tsx",
       "lib/riso-heading.ts",
       "lib/riso-heading.test.ts",
       "components/riso-heading.tsx",
       "components/riso-heading.css",
-      "components/figures.tsx",
-      "components/stamp-heading.tsx",
-      "components/stamp-island.tsx",
-      "app/(site)/",
+      "e2e/kame.test.ts",
       "e2e/riso-headings.test.ts",
       "projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/heading-contract.md"
     ],
     "non_goals": [
-      "rewriting exhibit headings and type systems",
-      "GSAP/WebGL or continuous title animation",
-      "changing console page-transition names"
+      "suppressing or filtering React #418 or pageerror in E2E suites",
+      "rewriting standalone exhibit headings or type systems",
+      "building the /lab route (covered in sequence 2)"
     ],
     "verification": [
       {
-        "name": "feature contract tests",
+        "name": "riso heading unit contract",
         "cwd": ".",
         "cmd": "node --experimental-strip-types --test lib/riso-heading.test.ts",
         "expect": "exit0",
@@ -500,33 +299,32 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
         "timeout_s": 300
       },
       {
-        "name": "real-browser feature contract",
+        "name": "real-browser riso headings and kame hydration suite",
         "cwd": ".",
-        "cmd": "node --experimental-strip-types scripts/e2e.mjs --test e2e/riso-headings.test.ts",
+        "cmd": "node --experimental-strip-types scripts/e2e.mjs --test e2e/riso-headings.test.ts e2e/kame.test.ts",
         "expect": "exit0",
         "timeout_s": 900
       }
     ]
   },
   {
-    "sequence": 5,
+    "sequence": 2,
     "title": "Open the public Ink Lab proof sheet",
     "role": "software_engineer",
     "qa": "required",
     "depends_on": [
-      "3",
-      "4"
+      "1"
     ],
-    "problem": "Visitors cannot explore the site's actual materials, share a reproducible style, or apply and undo a session-scoped experiment.",
+    "problem": "Visitors cannot explore the site's actual materials, share a reproducible style, or apply and undo a session-scoped experiment at /lab.",
     "acceptance_criteria": "Unauthenticated /lab is reachable from public navigation and the Pocket terminal. Labeled live controls update real heading/card/button previews, a sanitized share URL recreates the same preview, Apply to whole site persists only for the tab session across routes/reload, and Reset to house style clears appearance overrides. Storage/clipboard failure is truthful and recoverable; editing a shared URL never silently applies it.",
     "action_items": [
       "Read installed Next.js guides, including searchParams/useSearchParams and Suspense requirements. Add a server shell at app/(site)/(app)/lab/page.tsx with title/description and a client Ink Lab island, dedicated CSS and a loading/fallback state that keeps the page heading present.",
-      "Build the chosen proof-sheet layout using existing Otohime card markup, letterpress button primitives and RisoHeading shared with the site; extract a small shared site-preview component only if necessary. Desktop has controls beside the preview, mobile puts the preview above grouped controls, and Apply/Share/Reset remain reachable. Add /lab to PUBLIC_PAGES and terminal navigation, but exclude it from CONSOLE_MENU and preserve existing LCD geometry assertions.",
-      "Expose every schema control below with persistent labels, current values and keyboard input, including plate colors/count, grain/halftone, hand, timing and wobble. Preview is isolated with unique filter ids and scoped variables; editing it must not change root style, storage or unrelated cards.",
-      "Decode the versioned query through task 1's codec. Update a canonical shareable URL via replaceState without flooding history; restore the preview on Back/Forward and reload. Share copies the current canonical absolute URL; if Clipboard API fails, expose a selected readonly URL field and a useful status without losing edits.",
-      "Apply an immutable sanitized snapshot through the common store and report success only when it takes effect; storage denial must say it lasts only on this page. Reset clears both appearance keys/attributes/variables and restores the original season/theme house style, preview defaults and a clean /lab URL. A clean fresh browser context never inherits an applied session; do not use an opener-cloned tab as the independence test.",
-      "Coalesce preview changes to one rAF update per frame, never rasterize the entire page on a slider input, pause clocks offscreen/hidden, use effective speed zero under reduced motion, and tear down work on navigation. Record measured input-to-preview latency and filter update count; target <=100ms on the documented test machine without claiming a universal SLA.",
-      "Write e2e/ink-lab.test.ts for every control, preview isolation, share/open in clean context, canonical/hostile URLs, apply -> /work -> /shore -> reload -> /lab -> reset, Back/Forward, denied storage/clipboard, keyboard interaction at 390x844 and 200% zoom, and a scoped preview negative control. Keep .github/workflows/ci.yml's e2e glob coverage; document public Lab controls, URL/apply/reset behavior and failure recovery in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/ink-lab-contract.md."
+      "Build the chosen proof-sheet layout using existing Otohime card markup, letterpress button primitives and RisoHeading shared with the site; extract a small shared site-preview component in components/ink-lab-preview.tsx. Desktop has controls beside the preview, mobile puts the preview above grouped controls, and Apply/Share/Reset remain reachable. Confirm /lab is in PUBLIC_PAGES and terminal navigation while excluded from CONSOLE_MENU so the seven-item physical LCD menu geometry stays intact.",
+      "Expose every schema control (print run r, turbulence t, displacement d, wobble speed w, paper grain g, 3 decorative plate colors p, plate count n, transition duration m, hand style h, halftone o) with persistent labels, current values and keyboard input. Isolate the preview with unique SVG filter ids and scoped CSS variables; editing preview controls must not mutate root document style, web storage or surrounding site chrome before Apply.",
+      "Decode the versioned query through lib/ink-lab.ts. Update a canonical shareable URL via replaceState without flooding history; restore the preview on Back/Forward and reload. Share copies the current canonical absolute URL; if Clipboard API fails, expose a selected readonly URL field and a truthful status message without losing edits.",
+      "Apply an immutable sanitized snapshot through AppearanceStore (lib/appearance-client.ts) and report success only when it takes effect; storage denial must state that the applied style lasts only on the current page. Reset to house style clears both appearance keys/attributes/variables and restores the original season/theme house style, preview defaults and a clean /lab URL. A clean fresh browser context never inherits an applied session.",
+      "Coalesce preview changes to one rAF update per frame, never rasterize the entire page on a slider input, pause seed clocks when offscreen/hidden, use effective speed zero under reduced motion, and tear down work on navigation. Record measured input-to-preview latency and filter update count; target <=100ms on the documented test machine.",
+      "Write e2e/ink-lab.test.ts covering every control, preview isolation negative control, share/open in clean context, canonical/hostile/overlong URLs, apply -> /work -> /shore -> reload -> /lab -> reset, Back/Forward, denied storage/clipboard, and keyboard interaction at 1366x768, 390x844 and 200% zoom. Document public Lab controls, URL/apply/reset behavior and failure recovery in projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-shop-headin/ink-lab-contract.md."
     ],
     "interfaces": [
       "app/(site)/(app)/lab/",
@@ -542,9 +340,9 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
     ],
     "non_goals": [
       "accounts, databases, server preset API or short links",
-      "persisting Lab settings across sessions",
-      "site-wide changes before Apply",
-      "changing the physical LCD menu"
+      "persisting Lab settings across independent browser contexts",
+      "site-wide changes before explicit Apply",
+      "changing the seven-item physical LCD menu"
     ],
     "verification": [
       {
@@ -571,7 +369,7 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
       {
         "name": "feature contract tests",
         "cwd": ".",
-        "cmd": "node --experimental-strip-types --test lib/print-runs.test.ts lib/ink-lab.test.ts",
+        "cmd": "node --experimental-strip-types --test lib/print-runs.test.ts lib/ink-lab.test.ts lib/pages.test.ts lib/terminal.test.ts",
         "expect": "exit0",
         "timeout_s": 300
       },
@@ -589,6 +387,6 @@ Evidence destination: projects/otohime-dev-riso-print-shop-ink-lab-1-riso-print-
 
 ## Planning validation
 
-On this planning checkout: Node v22.23.3, npm ci from package-lock.json; **npm test: 2133 passed, 0 failed, 0 skipped**. **npm run lint: exit 0, 10 existing warnings**. Application code is unchanged; feature/browser/build/deployment acceptance above remains future engineering work. Proposal and report reference the pushed plan commit; this file cannot contain its own eventual commit hash.
+On this Revision 2 planning checkout (`avietidol-mac-mini`, Node `v22.23.3`, `npm ci` from `package-lock.json`): **`npm test`: 2552 passed, 0 failed, 0 skipped**; **`npm run typecheck`: exit 0**; **`npm run lint`: exit 0, 10 existing warnings**. Application code is unchanged by this planning commit; feature/browser/build/deployment verification above governs the two remaining software engineering tasks and subsequent QA/acceptance runs. Proposal and report reference the pushed plan commit on `main`.
 
-The prior research body is preserved unchanged, including its original source-access limitation. This plan's source checks and explicit contracts supersede research suggestions where they differ.
+The prior research body in [research.md](research.md) is preserved unchanged.
