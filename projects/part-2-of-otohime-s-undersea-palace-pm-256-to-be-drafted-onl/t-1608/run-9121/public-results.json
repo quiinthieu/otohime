@@ -1,0 +1,41 @@
+{
+  "observedAt": "2026-10-27T01:53:38.790Z",
+  "browser": "156.0.8078.48",
+  "pages": [
+    {
+      "room": "/",
+      "status": 200,
+      "sha": "4c9f325055c6da83fbe12afe6ffeb5858efd2a89",
+      "deliveryAncestorExit": 1,
+      "layer": {
+        "present": 0
+      },
+      "sockets": []
+    },
+    {
+      "room": "/ryugu",
+      "status": 200,
+      "sha": "4c9f325055c6da83fbe12afe6ffeb5858efd2a89",
+      "deliveryAncestorExit": 1,
+      "layer": {
+        "present": 0
+      },
+      "sockets": []
+    }
+  ],
+  "errors": [],
+  "boundary": "Real read-only public application; configured hosted Worker execution is successor scope.",
+  "health": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "sha": "4c9f325055c6da83fbe12afe6ffeb5858efd2a89"
+    }
+  },
+  "config": {
+    "status": 404,
+    "cacheControl": "public, max-age=0, must-revalidate",
+    "bodyEmpty": false,
+    "bytes": 33369
+  }
+}

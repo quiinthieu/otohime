@@ -1,0 +1,22 @@
+# browser: 156.0.8078.48 via playwright-core, channel chrome
+identity {"browser":"156.0.8078.48","node":"v22.23.3","build":"yOIaHIx7bJjmqEMhtbxiW","endpoint":"ws://127.0.0.1:58456/ghosts"}
+real-runtime-route {"configured":200,"unset":404,"noStore":true,"sameBuildDifferentRuntime":true}
+room / {"trailPixels":1899,"localRipplePixels":114,"remoteRipplePixels":4677,"tipPixelsAfterFade":90,"idlePaintStable":true,"crossRoomPixels":0,"reducedMotionCloses":true,"usableControls":true,"moves":1}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: departure removes tip
+
+90 !== 0
+
+    at file:///Users/avietidol/Library/Application%20Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/t-1608/run-9121/browser.mjs:127:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 90,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3

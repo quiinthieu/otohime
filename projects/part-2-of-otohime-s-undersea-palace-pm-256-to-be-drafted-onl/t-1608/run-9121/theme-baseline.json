@@ -1,0 +1,9 @@
+{
+  "url": "https://otohime.dev/",
+  "errors": [
+    "AbortError: Transition was skipped. New ViewTransition started"
+  ],
+  "action": "synthetic double activation of the actual theme button in one event turn; native ViewTransitions",
+  "sha": "4c9f325055c6da83fbe12afe6ffeb5858efd2a89",
+  "ghostLayers": 0
+}

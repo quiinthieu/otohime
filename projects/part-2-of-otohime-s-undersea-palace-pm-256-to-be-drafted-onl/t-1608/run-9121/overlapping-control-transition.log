@@ -1,0 +1,34 @@
+# browser: 156.0.8078.48 via playwright-core, channel chrome
+identity {"browser":"156.0.8078.48","node":"v22.23.3","build":"yOIaHIx7bJjmqEMhtbxiW","endpoint":"ws://127.0.0.1:61700/ghosts"}
+real-runtime-route {"configured":200,"unset":404,"noStore":true,"sameBuildDifferentRuntime":true}
+room / {"trailPixels":1939,"localRipplePixels":116,"remoteRipplePixels":5209,"tipPixelsAfterFade":90,"idlePaintStable":true,"crossRoomPixels":0,"reducedMotionCloses":true,"usableControls":true,"moves":5}
+room /ryugu {"trailPixels":1944,"localRipplePixels":102,"remoteRipplePixels":5240,"tipPixelsAfterFade":90,"idlePaintStable":true,"crossRoomPixels":0,"reducedMotionCloses":true,"usableControls":true,"moves":4}
+negative-control-no-paint {"actualPaintOpsSuppressed":true,"arcs":2,"pixels":0,"visibleInkAssertionRejected":true}
+quiet / {"initialReduced":"off/zero sockets/zero pixels","unset":"off/zero sockets/zero pixels"}
+quiet /ryugu {"initialReduced":"off/zero sockets/zero pixels","unset":"off/zero sockets/zero pixels"}
+full {"attempts":1,"state":"gone","pixels":0}
+retryable-refusal {"attempts":3,"state":"gone","pixels":0}
+connection-lost-after-paint {"attempts":3,"state":"gone","pixels":0}
+cleanup {"realOffline":true,"realOnlineResume":true,"syntheticHidden":true}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'AbortError: Transition was skipped. New ViewTransition started'
++ ]
+- []
+
+    at file:///Users/avietidol/Library/Application%20Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/t-1608/run-9121/browser.mjs:197:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [ 'AbortError: Transition was skipped. New ViewTransition started' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3

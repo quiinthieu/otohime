@@ -1,0 +1,30 @@
+{
+  "failed": {
+    "id": 40423130342,
+    "run_number": 484,
+    "name": "CI",
+    "head_sha": "c6d09f0067cb3f3ea77a75b723edc72918013c24",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-10-26T23:56:33Z",
+    "updated_at": "2026-10-27T00:13:49Z",
+    "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40423130342",
+    "fingerprint": null,
+    "matchesDelivery": false
+  },
+  "precedingGreen": {
+    "id": 40420670837,
+    "run_number": 483,
+    "name": "CI",
+    "head_sha": "baec1f88e602e9ad50ebecb9827a476f939495af",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-26T23:34:23Z",
+    "updated_at": "2026-10-26T23:55:28Z",
+    "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40420670837",
+    "fingerprint": null,
+    "matchesDelivery": false
+  },
+  "configurationLogBetween": "",
+  "limits": "Public historical job logs return HTTP403; no environment attribution from missing raw assertion."
+}

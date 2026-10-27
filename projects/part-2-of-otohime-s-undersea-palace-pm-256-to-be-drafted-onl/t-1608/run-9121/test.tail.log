@@ -1,0 +1,110 @@
+ok 2365 - the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out
+  ---
+  duration_ms: 329.22225
+  type: 'test'
+  ...
+# Subtest: without git, outside a repository, or in an empty one, the committed fallback is used as it is
+ok 2366 - without git, outside a repository, or in an empty one, the committed fallback is used as it is
+  ---
+  duration_ms: 436.181875
+  type: 'test'
+  ...
+# Subtest: a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+ok 2367 - a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+  ---
+  duration_ms: 634.056667
+  type: 'test'
+  ...
+# Subtest: a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+ok 2368 - a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+  ---
+  duration_ms: 697.316459
+  type: 'test'
+  ...
+# Subtest: a git log that cannot be parsed falls back instead of failing the build
+ok 2369 - a git log that cannot be parsed falls back instead of failing the build
+  ---
+  duration_ms: 251.041291
+  type: 'test'
+  ...
+# Subtest: --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+ok 2370 - --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+  ---
+  duration_ms: 1198.546834
+  type: 'test'
+  ...
+# Subtest: the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+ok 2371 - the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+  ---
+  duration_ms: 965.059833
+  type: 'test'
+  ...
+# Subtest: the committed content/history.json is a well-formed, bounded, canonical index
+ok 2372 - the committed content/history.json is a well-formed, bounded, canonical index
+  ---
+  duration_ms: 1.332417
+  type: 'test'
+  ...
+# Subtest: package.json builds the index before next build and exposes history:index and history:check
+ok 2373 - package.json builds the index before next build and exposes history:index and history:check
+  ---
+  duration_ms: 0.157334
+  type: 'test'
+  ...
+# Subtest: Chrome through the repo's playwright-core when PW_PREFIX is unset
+ok 2374 - Chrome through the repo's playwright-core when PW_PREFIX is unset
+  ---
+  duration_ms: 3.126791
+  type: 'test'
+  ...
+# Subtest: PW_PREFIX's playwright when it is set, and Chrome is not tried
+ok 2375 - PW_PREFIX's playwright when it is set, and Chrome is not tried
+  ---
+  duration_ms: 0.234625
+  type: 'test'
+  ...
+# Subtest: a clear error when Chrome is absent and PW_PREFIX is unset
+ok 2376 - a clear error when Chrome is absent and PW_PREFIX is unset
+  ---
+  duration_ms: 0.692292
+  type: 'test'
+  ...
+# Subtest: a clear error when playwright-core itself is missing
+ok 2377 - a clear error when playwright-core itself is missing
+  ---
+  duration_ms: 0.168834
+  type: 'test'
+  ...
+# Subtest: a clear error when PW_PREFIX is set but its playwright is not there
+ok 2378 - a clear error when PW_PREFIX is set but its playwright is not there
+  ---
+  duration_ms: 0.148209
+  type: 'test'
+  ...
+# Subtest: the default loader resolves the repo's locked playwright-core
+ok 2379 - the default loader resolves the repo's locked playwright-core
+  ---
+  duration_ms: 2.15625
+  type: 'test'
+  ...
+# Subtest: probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+ok 2380 - probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+  ---
+  duration_ms: 2709.675333
+  type: 'test'
+  ...
+# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs
+ok 2381 - probe bounds: measured after the one-shot ink lands, from the visible glyphs
+  ---
+  duration_ms: 1948.757708
+  type: 'test'
+  ...
+1..2381
+# tests 2399
+# suites 2
+# pass 2399
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18935.688625

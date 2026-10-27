@@ -1,0 +1,93 @@
+Starting embedded Postgres on 127.0.0.1:60163
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:60166
+TAP version 13
+# Subtest: typing urashima at the top of Home goes down to the palace; a lone A opens the console's page instead
+ok 1 - typing urashima at the top of Home goes down to the palace; a lone A opens the console's page instead
+  ---
+  duration_ms: 5468.005083
+  type: 'test'
+  ...
+# Subtest: typing urashima into a field types it, and goes nowhere
+ok 2 - typing urashima into a field types it, and goes nowhere
+  ---
+  duration_ms: 1604.129292
+  type: 'test'
+  ...
+# Subtest: Pocket: the console's Dive chip goes down to the palace
+ok 3 - Pocket: the console's Dive chip goes down to the palace
+  ---
+  duration_ms: 1806.6425
+  type: 'test'
+  ...
+# Subtest: the waterline: the last thing below the footer links down to the palace, by touch as well
+ok 4 - the waterline: the last thing below the footer links down to the palace, by touch as well
+  ---
+  duration_ms: 1709.220458
+  type: 'test'
+  ...
+# Subtest: the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling
+ok 5 - the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling
+  ---
+  duration_ms: 1095.467083
+  type: 'test'
+  ...
+# Subtest: with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer
+ok 6 - with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer
+  ---
+  duration_ms: 2680.185791
+  type: 'test'
+  ...
+# Subtest: while the page is hidden the loop stops, and it comes back when the page is seen again
+ok 7 - while the page is hidden the loop stops, and it comes back when the page is seen again
+  ---
+  duration_ms: 2113.742416
+  type: 'test'
+  ...
+# Subtest: without WebGL the sea is static: the served caustic and fish, and no frame runs
+ok 8 - without WebGL the sea is static: the served caustic and fish, and no frame runs
+  ---
+  duration_ms: 2019.633958
+  type: 'test'
+  ...
+# Subtest: under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate
+ok 9 - under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate
+  ---
+  duration_ms: 1466.665792
+  type: 'test'
+  ...
+# Subtest: the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages
+ok 10 - the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages
+  ---
+  duration_ms: 2901.741708
+  type: 'test'
+  ...
+# Subtest: the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog
+ok 11 - the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog
+  ---
+  duration_ms: 1555.337792
+  type: 'test'
+  ...
+# Subtest: under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back
+ok 12 - under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back
+  ---
+  duration_ms: 1426.129875
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 26109.864042
