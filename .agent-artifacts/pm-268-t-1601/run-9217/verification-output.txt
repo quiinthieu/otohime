@@ -1,0 +1,190 @@
+unit-rebase-2.log (observed failure, retained)
+# Subtest: deployment status uses real bearer HTTP without user bootstrap; validates ownership, terminal state and bounds
+not ok 1653 - deployment status uses real bearer HTTP without user bootstrap; validates ownership, terminal state and bounds
+  ---
+  duration_ms: 157.036666
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/lib/deployment-status.test.ts:15:1'
+  failureType: 'testCodeFailure'
+  error: 'deployment_status: timeout; last state unknown'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    waitForDeployment (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/scripts/deployment-status.mjs:44:44)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/lib/deployment-status.test.ts:43:19)
+    async Test.run (node:internal/test_runner/test:935:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: arrows nudge 16 px, 64 with Shift; R rotates a step (Shift+R back); [ and ] restack; Esc closes
+ok 1654 - arrows nudge 16 px, 64 with Shift; R rotates a step (Shift+R back); [ and ] restack; Esc closes
+  ---
+  duration_ms: 2.201958
+  ...
+# Subtest: a nudge moves the centre by px over the desk's size and stops at the edge
+
+red.log (tail)
+(node:2903) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:2904) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:2904) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/avietidol/Library/Application%20Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/ghosts/config.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/avietidol/Library/Application Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/package.json.
+# file:///Users/avietidol/Library/Application%20Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/scripts/main-lane-closure.test.mjs:12
+# import { stripTypeScriptTypes } from "node:module";
+#          ^^^^^^^^^^^^^^^^^^^^
+# SyntaxError: The requested module 'node:module' does not provide an export named 'stripTypeScriptTypes'
+#     at ModuleJob._instantiate (node:internal/modules/esm/module_job:180:21)
+#     at async ModuleJob.run (node:internal/modules/esm/module_job:263:5)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+# Node.js v22.12.0
+# Subtest: scripts/main-lane-closure.test.mjs
+not ok 1 - scripts/main-lane-closure.test.mjs
+  ---
+  duration_ms: 101.629666
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/scripts/main-lane-closure.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 105.931458
+
+main-lane.log (tail)
+ok 20 - ledger's actual sampler waits for visible two-frame geometry and still rejects a sheet that fits
+  ---
+  duration_ms: 1936.921792
+  ...
+# Subtest: disabled ghost probe is console-clean; direct configuration HTTP 404 remains detectable
+ok 21 - disabled ghost probe is console-clean; direct configuration HTTP 404 remains detectable
+  ---
+  duration_ms: 558.869334
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3338.702667
+
+feature-rebase-2.log (tail)
+# Subtest: plate count can only resolve to two or three
+ok 5 - plate count can only resolve to two or three
+  ---
+  duration_ms: 0.066166
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 109.429959
+
+unit-rebase-2-retry.log (tail)
+# Subtest: missing, empty and hidden main headings fail at the 10s bound (negative control)
+ok 2492 - missing, empty and hidden main headings fail at the 10s bound (negative control)
+  ---
+  duration_ms: 10246.848709
+  ...
+1..2492
+# tests 2510
+# suites 2
+# pass 2510
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 54473.968958
+
+typecheck-rebase-2.log (tail)
+
+> otohime@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+lint-rebase-2.log (tail)
+
+/Users/avietidol/Library/Application Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/app/(vinyl)/vinyl/page.tsx
+  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs
+  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (0 errors, 10 warnings)
+  0 errors and 9 warnings potentially fixable with the `--fix` option.
+
+
+browser-rebase-2.log (tail)
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:52848
+(node:42479) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:42480) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:42480) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/avietidol/Library/Application%20Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/e2e/riso-headings.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /Users/avietidol/Library/Application Support/build-worker/leases/b7333287-e873-4a8d-8e9c-5364afd0a850-b7a226ad561d41b43223cbc6f0cbfcdf/work/otohime/package.json.
+# Subtest: disabled ghost config reconciles only its real resource error; unrelated errors still fail
+ok 1 - disabled ghost config reconciles only its real resource error; unrelated errors still fail
+  ---
+  duration_ms: 787.367292
+  ...
+# Subtest: one heading name, one selectable copy, deterministic settled plates and token plate counts
+ok 2 - one heading name, one selectable copy, deterministic settled plates and token plate counts
+  ---
+  duration_ms: 1945.679459
+  ...
+# Subtest: entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+ok 3 - entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+  ---
+  duration_ms: 1921.699041
+  ...
+# Subtest: server/no-JavaScript headings are readable and mobile notes wrap without overflow
+ok 4 - server/no-JavaScript headings are readable and mobile notes wrap without overflow
+  ---
+  duration_ms: 253.934709
+  ...
+# Subtest: Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+ok 5 - Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+  ---
+  duration_ms: 3787.200125
+  ...
+# Subtest: shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+ok 6 - shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+  ---
+  duration_ms: 340.8765
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10739.799375

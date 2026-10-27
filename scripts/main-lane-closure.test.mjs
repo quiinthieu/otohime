@@ -9,12 +9,17 @@ import { createServer } from "node:http";
 import { launchBrowser } from "./probe-browser.mjs";
 import { configResponse } from "../ghosts/config.ts";
 import { runInNewContext } from "node:vm";
-import { stripTypeScriptTypes } from "node:module";
+import ts from "typescript";
 import { realRunChild } from "./check-gate-closure.mjs";
 import { traceOf, formatTrace, TRACE_MAX } from "./e2e-gesture-trace.ts";
 
 const root = resolve(import.meta.dirname, "..");
 const read = (path) => readFileSync(join(root, path), "utf8");
+// Node 22.12 supports the suite's --experimental-strip-types CLI but has no
+// node:module stripping API. Compile extracted fixtures with our locked TS dependency.
+const compileFixture = (source) => ts.transpileModule(source, {
+  compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+}).outputText;
 const shell = read("scripts/probe-motion-signed-in.sh");
 const normalization = 'export TMPDIR="${TMPDIR:-/tmp}"\nif [ "${#TMPDIR}" -gt 48 ]; then\n  export TMPDIR="/tmp"\nfi';
 
@@ -121,7 +126,7 @@ test("the actual Kame clock predicate rejects frozen browser time and observes t
   const source = read("e2e/kame.test.ts");
   const helper = source.slice(source.indexOf("const browserElapsed ="), source.indexOf('\ntest("clock fixture'));
   let elapsed = 0;
-  const browserElapsed = runInNewContext(stripTypeScriptTypes(`${helper}\nbrowserElapsed;`), { performance: { now: () => elapsed } });
+  const browserElapsed = runInNewContext(compileFixture(`${helper}\nbrowserElapsed;`), { performance: { now: () => elapsed } });
   const page = { waitForFunction(predicate, started, options) {
     assert.equal(options.timeout, 2000);
     return predicate(started);
@@ -169,7 +174,7 @@ test("gate child drains callback-flushed stdout and stderr, retaining complete u
 test("ledger's actual sampler waits for visible two-frame geometry and still rejects a sheet that fits", async () => {
   const source = read("e2e/ledger.test.ts");
   const helpers = source.slice(source.indexOf("const settledLayout ="), source.indexOf('\ntest("on a phone the sheet scrolls'));
-  const { settledLayout, assertPhoneLayout } = new Function("assert", "LAYOUT_FRAMES", stripTypeScriptTypes(helpers) + "; return { settledLayout, assertPhoneLayout };")(assert, 40);
+  const { settledLayout, assertPhoneLayout } = new Function("assert", "LAYOUT_FRAMES", compileFixture(helpers) + "; return { settledLayout, assertPhoneLayout };")(assert, 40);
   const browser = await launchBrowser({ log: () => {}, options: { env: { ...process.env, TMPDIR: "/tmp" } } });
   try {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -189,7 +194,7 @@ test("ledger's actual sampler waits for visible two-frame geometry and still rej
 test("disabled ghost probe is console-clean; direct configuration HTTP 404 remains detectable", async () => {
   // Execute the actual GET body, substituting only Next request-context construction and runtime env.
   const route = read("app/api/ghosts/route.ts");
-  const body = stripTypeScriptTypes(route.slice(route.indexOf("export async function GET")).replace("export ", ""));
+  const body = compileFixture(route.slice(route.indexOf("export async function GET")).replace("export ", ""));
   const GET = new Function("connection", "configResponse", "process", `${body}; return GET;`)(async () => {}, configResponse, { env: {} });
   assert.match(read("ghosts/canvas.tsx"), /fetch\("\/api\/ghosts\?probe=1"/);
   const server = createServer(async (req, res) => {
