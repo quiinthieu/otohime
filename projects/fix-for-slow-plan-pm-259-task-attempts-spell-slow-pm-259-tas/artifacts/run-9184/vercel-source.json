@@ -1,0 +1,9 @@
+{
+  "version": "64.7.0",
+  "index_sha256": "2538efad3c4dd3dc1e8ac189a82f1e095d0bff0ee7bd741158ddff682bcc5282",
+  "observed_source": {
+    "env_token_supported": true,
+    "scope_bootstrap": true
+  },
+  "note": "scope bootstrap calls getUser before team lookup; do not infer from fake team-scope fixture that real non-user scoped credentials support /v2/user"
+}

@@ -1,0 +1,56 @@
+{
+  "observed_at": "2026-10-27T07:28:41.780078+00:00",
+  "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/122055594240/annotations?per_page=100&page=1",
+  "http_status": 200,
+  "link": null,
+  "data": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/f3512e8635b22e38fee3e2f3db20b37c3b57b227/.github",
+      "start_line": 449,
+      "start_column": null,
+      "end_line": 449,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "Process completed with exit code 1.",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/f3512e8635b22e38fee3e2f3db20b37c3b57b227/.github",
+      "start_line": 401,
+      "start_column": null,
+      "end_line": 401,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "Motion probe, signed in",
+      "message": "Gate: Motion probe, signed in; exit 1\nCommit: f3512e8635b22e38fee3e2f3db20b37c3b57b227\nBuild: hnZNkaGPTGDM5DdhzObjZ\nNode: v22.23.3\nChrome: Google Chrome 155.0.8059.39\nCommand, last 80 lines (bounded):\nlain 403 (router.push from /dashboard) -> / by the brand mark: every animation after it lasts <= 1 ms or has finished\nok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> / by the brand mark: no page error and no console error\nok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: completes, with every transition animation 0 ms\nok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: every animation after it lasts <= 1 ms or has finished\nok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: no page error and no console error\nok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: completes, with every transition animation 0 ms\nok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: every animation after it lasts <= 1 ms or has finished\nok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: no page error and no console error\nok - 390x844 reduced motion plain 403 (page.goto) -> / by its Go home: completes, with every transition animation 0 ms\nok - 390x844 reduced motion plain 403 (page.goto) -> / by its Go home: every animation after it lasts <= 1 ms or has finished\nok - 390x844 reduced motion plain 403 (page.goto) -> / by its Go home: no page error and no console error\nok - 390x844 reduced motion plain 403 (page.goto) -> / by the brand mark: completes, with every transition animation 0 ms\nok - 390x844 reduced motion plain 403 (page.goto) -> / by the brand mark: every animation after it lasts <= 1 ms or has finished\nok - 390x844 reduced motion plain 403 (page.goto) -> / by the brand mark: no page error and no console error\nok - 390x844 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: completes, with every transition animation 0 ms\nok - 390x844 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: every animation after it lasts <= 1 ms or has finished\nok - 390x844 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: no page error and no console error\nok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: completes, with every transition animation 0 ms\nok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: every animation after it lasts <= 1 ms or has finished\nok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: no page error and no console error\nok - no-JS: plain /admin/roles: the brand mark navigates to /\nok - negative: the probe stripped the pagereveal guard from /dashboard's HTML\nnot ok - negative: without the guard a sign-in logs \"Transition was skipped\": 1 errors; 1 errors; 1 errors\nok - the probe's accounts (*-r179308509930226@probe.test) are deleted\nprobe: 355 ok, 1 failed\n[Unrelated auth email/server tail omitted]",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/f3512e8635b22e38fee3e2f3db20b37c3b57b227/.github",
+      "start_line": 381,
+      "start_column": null,
+      "end_line": 381,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "Motion probe, signed in",
+      "message": "Commit f3512e8635b22e38fee3e2f3db20b37c3b57b227; probe exit 1\nnot ok - negative: without the guard a sign-in logs \"Transition was skipped\": 1 errors; 1 errors; 1 errors\nprobe: 355 ok, 1 failed\n[Unrelated auth email/server tail omitted]",
+      "raw_details": ""
+    },
+    {
+      "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/f3512e8635b22e38fee3e2f3db20b37c3b57b227/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "start_line": 2,
+      "start_column": 46,
+      "end_line": 2,
+      "end_column": 46,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "'resolve' is defined but never used",
+      "raw_details": ""
+    }
+  ]
+}

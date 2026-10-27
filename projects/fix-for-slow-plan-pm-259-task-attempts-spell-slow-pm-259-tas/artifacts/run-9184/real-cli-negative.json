@@ -1,0 +1,18 @@
+{
+  "boundary": "real installed Vercel CLI 64.7.0; synthetic credential and local fake API only; no external Vercel mutation/request",
+  "cli_exit": 1,
+  "cli_output": "Vercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)\n",
+  "cli_requests": [
+    "/v2/user"
+  ],
+  "direct_status_fixture": {
+    "id": "dpl_qa_fixture",
+    "readyState": "READY",
+    "projectId": "prj_fixture",
+    "meta": {
+      "githubCommitSha": "fixture"
+    }
+  },
+  "proven": "--scope bootstrap requests /v2/user and aborts on user 404 before deployment readiness lookup; API readiness is independently available in fixture",
+  "not_proven": "production credential kind, token ownership, or direct REST access under real CI credentials"
+}

@@ -1,0 +1,15 @@
+[eval]:1
+const {execFileSync}=require("node:child_process"),fs=require("node:fs");if(!fs.existsSync("scripts/main-lane-closure.test.mjs"))throw new Error("missing working-tree scripts/main-lane-closure.test.mjs");const ref=process.env.MAIN_DELIVERY_REF||"origin/main";const pkg=JSON.parse(execFileSync("git",["show",`${ref}:package.json`],{encoding:"utf8"}));for(const s of ["scripts/ci-probe-annotate.test.mjs","scripts/probe-end-stream.test.mjs","scripts/main-lane-closure.test.mjs"])if(!String(pkg.scripts?.test||"").includes(s))throw new Error(`${ref}:package.json missing ${s}`);execFileSync("git",["cat-file","-e",`${ref}:scripts/main-lane-closure.test.mjs`]);execFileSync("git",["merge-base","--is-ancestor","HEAD",ref]);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^
+
+Error: 4c64080^:package.json missing scripts/ci-probe-annotate.test.mjs
+    at [eval]:1:530
+    at runScriptInThisContext (node:internal/vm:209:10)
+    at node:internal/process/execution:446:12
+    at [eval]-wrapper:6:24
+    at runScriptInContext (node:internal/process/execution:444:60)
+    at evalFunction (node:internal/process/execution:279:30)
+    at evalTypeScript (node:internal/process/execution:291:3)
+    at node:internal/main/eval_string:74:3
+
+Node.js v22.23.3
