@@ -1,0 +1,45 @@
+# live sha b4e142ad37c76abdc496c14afb4ac18b2b5c03ba
+ok 1 - desk: typing 'urashima' on / lands on /ryugu
+ok 2 - desk: the box starts shut, replay hidden
+ok 3 - desk: Enter opens the box
+ok 4 - desk: the note presents a changelog replay, not rebuilt site versions
+ok 5 - desk: one labelled slider
+ok 6 - desk: newest leaf fe0dd82eb8 is a real commit: "Refresh split recovery ownership and proposal evidence"
+# newest leaf fe0dd82eb8 2026-10-26T11:17:18Z; live b4e142ad37; leaf is 213 commits behind live; note claims 414 commits, git has 627 at live
+not ok 7 - desk: the replay's newest leaf is within the indexer's own MAX_LAG (20) of the live sha (it is 213 behind)
+not ok 8 - desk: the note's commit count matches the live sha's history (claims 414, git has 627)
+ok 9 - desk: Home goes to the oldest leaf 6b0b2012fe (2026-10-25T17:32:34Z), a real commit
+ok 10 - desk: paper ages from rgb(242, 239, 231) (age 0) to rgb(214, 186, 122) (age 1)
+ok 11 - desk: a middle position shows a real commit cda79f5eb0 at age 0.497 (rgb(228, 213, 177))
+ok 12 - desk: the slider speaks the commit: "26 Oct 2026, 02:49 UTC: Record QA failure on Co-Authored-By trailer. Commit 101 …"
+ok 13 - desk: after taps and keys in the palace there is no AudioContext and sound is off
+ok 14 - desk: the Sea sound button plays a quiet ambience (rms 3.60e-3)
+ok 15 - desk: Pocket's Sea sound chip shows it on
+ok 16 - desk: switching it off in Pocket silences the palace (rms 0)
+ok 17 - desk: Home made no AudioContext
+ok 18 - desk: enabled again in the palace, it plays
+ok 19 - desk: leaving the palace closes its playing audio (close() calls 1:running); the surface makes 0 contexts
+ok 20 - desk: no page errors, console errors or same-origin 4xx/5xx
+ok 21 - phone: typing 'urashima' on / lands on /ryugu
+ok 22 - phone: the box starts shut, replay hidden
+ok 23 - phone: a tap opens the box
+ok 24 - phone: the note presents a changelog replay, not rebuilt site versions
+ok 25 - phone: one labelled slider
+ok 26 - phone: newest leaf fe0dd82eb8 is a real commit: "Refresh split recovery ownership and proposal evidence"
+# newest leaf fe0dd82eb8 2026-10-26T11:17:18Z; live b4e142ad37; leaf is 213 commits behind live; note claims 414 commits, git has 627 at live
+not ok 27 - phone: the replay's newest leaf is within the indexer's own MAX_LAG (20) of the live sha (it is 213 behind)
+not ok 28 - phone: the note's commit count matches the live sha's history (claims 414, git has 627)
+ok 29 - phone: a tap at the left end goes to the oldest leaf 6b0b2012fe (2026-10-25T17:32:34Z), a real commit
+ok 30 - phone: paper ages from rgb(242, 239, 231) (age 0) to rgb(214, 186, 122) (age 1)
+ok 31 - phone: a middle position shows a real commit cda79f5eb0 at age 0.497 (rgb(228, 213, 177))
+ok 32 - phone: the slider speaks the commit: "26 Oct 2026, 02:49 UTC: Record QA failure on Co-Authored-By trailer. Commit 101 …"
+ok 33 - phone: after taps and keys in the palace there is no AudioContext and sound is off
+ok 34 - phone: the Sea sound button plays a quiet ambience (rms 2.40e-3)
+ok 35 - phone: Pocket's Sea sound chip shows it on
+ok 36 - phone: switching it off in Pocket silences the palace (rms 0)
+ok 37 - phone: Home made no AudioContext
+ok 38 - phone: enabled again in the palace, it plays
+ok 39 - phone: leaving the palace closes its playing audio (close() calls 1:running); the surface makes 0 contexts
+ok 40 - phone: no page errors, console errors or same-origin 4xx/5xx
+ok 41 - no Web Audio: the button is unsupported/aria-disabled and a tap throws nothing (0 errors)
+FAIL 4 of 41

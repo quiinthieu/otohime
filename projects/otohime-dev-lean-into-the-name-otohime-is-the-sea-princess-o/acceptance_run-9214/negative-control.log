@@ -1,0 +1,4 @@
+history:index: git (full history): 200 of 628 commits in /data/build-worker/leases/1bfddc34-106c-46ae-94d3-42f5a0b558d5-5ebce3d26c3c960561e375d77b8fa9cd/work/otohime/content/history.json
+full clone index: newest 6809e82cd0 2026-10-27T10:26:13Z total 628 entries 200
+history:index: fallback (shallow clone): 200 of 414 commits in /tmp/sh/content/history.json, unchanged
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
