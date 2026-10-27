@@ -65,14 +65,19 @@ test("public shell/nav/terminal and every control tune only the proof sheet, wit
       const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!;
       const start = performance.now();
       for (const value of ["1", "2", "3", "4", "5"]) { setter.call(slider, value); slider.dispatchEvent(new Event("input", { bubbles: true })); }
-      await new Promise<void>(resolve => {
-        const observer = new MutationObserver(() => { if (preview.dataset.query?.includes("d=5&")) { observer.disconnect(); resolve(); } });
+      // Registered after the Lab's own rAF: the actual SVG must be ready for this paint,
+      // rather than leaving React's default-priority commit queued behind other work.
+      const firstFrame = new Promise<boolean>(resolve => requestAnimationFrame(() => {
+        resolve(preview.querySelector('feDisplacementMap[in2="warp"]')?.getAttribute("scale") === "5");
+      }));
+      const latencyMs = await new Promise<number>(resolve => {
+        const observer = new MutationObserver(() => { if (preview.dataset.query?.includes("d=5&")) { observer.disconnect(); resolve(performance.now() - start); } });
         observer.observe(preview, { attributes: true });
       });
-      return { latencyMs: performance.now() - start, updates: Number(preview.dataset.filterUpdates) - updates, effectiveSpeed: preview.dataset.effectiveSpeed };
+      return { latencyMs, renderedBeforePaint: await firstFrame, updates: Number(preview.dataset.filterUpdates) - updates, effectiveSpeed: preview.dataset.effectiveSpeed };
     });
     console.log("Ink Lab input measurement", JSON.stringify(metrics));
-    assert.ok(metrics.latencyMs <= 100, JSON.stringify(metrics)); assert.equal(metrics.updates, 1); assert.equal(metrics.effectiveSpeed, "0");
+    assert.ok(metrics.latencyMs <= 100, JSON.stringify(metrics)); assert.equal(metrics.renderedBeforePaint, true, "latest SVG commits inside the coalescing frame"); assert.equal(metrics.updates, 1); assert.equal(metrics.effectiveSpeed, "0");
     await page.reload(); await page.locator("[data-lab-ready]").waitFor();
     assert.equal(await page.getByLabel("Displacement", { exact: true }).inputValue(), "5");
     await page.keyboard.press("Control+k");
@@ -263,7 +268,9 @@ for (const [name, viewport, zoom] of [["desktop", { width: 1366, height: 768 }, 
         await button.focus(); await button.scrollIntoViewIfNeeded();
         const box = await button.boundingBox(); assert.ok(box && box.y >= 0 && box.y + box.height <= (await page.evaluate(() => innerHeight)) + 1, JSON.stringify(box));
       }
-      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      const overflow = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, viewport: innerWidth,
+        elements: [...document.querySelectorAll("body *")].filter(el => el.getBoundingClientRect().right > innerWidth + 1).map(el => ({ tag: el.tagName, className: el.getAttribute("class"), right: el.getBoundingClientRect().right })).slice(0, 15) }));
+      assert.ok(overflow.width <= overflow.viewport, JSON.stringify(overflow));
       if (process.env.LAB_SCREENSHOT_DIR) {
         mkdirSync(process.env.LAB_SCREENSHOT_DIR, { recursive: true });
         await page.evaluate(() => scrollTo(0, 0));

@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { appearancePlan, appearanceStore, applyPlan } from "@/lib/appearance-client";
 import { decodeLab, encodeLab, LAB_RANGES, labDefaults, normalizeLab, type InkLabSettings, type LabSnapshot } from "@/lib/ink-lab";
 import { HANDS } from "@/lib/ink-modes";
@@ -58,8 +59,12 @@ export function InkLab() {
     setManualUrl("");
     if (!frame.current) frame.current = requestAnimationFrame(() => {
       frame.current = 0;
-      setSnapshot(current.current);
-      setStatus("Preview updated. Apply to take this ink around the site.");
+      // rAF state updates otherwise use React's deferred priority and can miss
+      // this paint. Commit the bounded proof before publishing its URL.
+      flushSync(() => {
+        setSnapshot(current.current);
+        setStatus("Preview updated. Apply to take this ink around the site.");
+      });
       replace(current.current);
     });
   };
