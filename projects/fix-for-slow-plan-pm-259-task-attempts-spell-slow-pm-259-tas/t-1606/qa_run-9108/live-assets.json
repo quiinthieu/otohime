@@ -1,0 +1,165 @@
+{
+  "at": "2026-10-27T00:26:53.378079+00:00",
+  "limit": 40,
+  "discovered": 26,
+  "read": 26,
+  "complete_discovered_set": true,
+  "assets": [
+    {
+      "url": "https://otohime.dev/_next/static/chunks/02xr5wvz5vmnc.css",
+      "status": 200,
+      "size": 854,
+      "sha256": "d03aeebb79f08fc49a9519a0ed91d858b20d23a4645afb3e43403b330c29ce8f"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0571t6nqzk93o.js",
+      "status": 200,
+      "size": 15300,
+      "sha256": "5eab23c77649a1380c36ee071d6129bf6178e54a023737c1b98b841937f232dd"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0720thclvk_mw.js",
+      "status": 200,
+      "size": 8664,
+      "sha256": "508ce67b29f0f169fb354c8162fd0e9ac0006e24fccabf77bca75c5aa4854bc8"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/099o5yybbldz4.css",
+      "status": 200,
+      "size": 59068,
+      "sha256": "e8d96e3897e40f2f47e954a311801979ec82e8b12f040fd4b7155d528c6ce63b"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0_4x0bxtt3m90.js",
+      "status": 200,
+      "size": 21669,
+      "sha256": "53f2648ee2450bb47746b0b9e32ea2f70fd4c6916e413f55c9e6f0cb6f65078b"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0cz1d0mv5g_q7.js",
+      "status": 200,
+      "size": 112594,
+      "sha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0om590q-tq0l9.js",
+      "status": 200,
+      "size": 13492,
+      "sha256": "469b414134e038936d5dea6660fb6b6c2e2ef033d685c1ad30b07803323c7ba3"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/108fa2vkx_qrg.css",
+      "status": 200,
+      "size": 5049,
+      "sha256": "955be972fea5ba28bbda7438b13a92df0d95a0d4c1189acd7e44a7ec0ce18d6f"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/1icj9jl_jb0ar.js",
+      "status": 200,
+      "size": 36933,
+      "sha256": "e364901992cb944eea9532eac43b7588eef61301f286006ed9876a087d7a83ec"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/1jjnj_8hqrg8d.js",
+      "status": 200,
+      "size": 37712,
+      "sha256": "8aff3b989749f1e6dd129640839bf786b2b36a78783e9b4a6c41e423b74a46f9"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/1s37vwjm584j-.js",
+      "status": 200,
+      "size": 229627,
+      "sha256": "8fad0bc9f7b40a5b079b47f4e04c98c392e486bebed240b2517b1ca243b240fe"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/21ptmndrm4c6t.js",
+      "status": 200,
+      "size": 502742,
+      "sha256": "4c9e1f88b908df6166d132f27055a344ebc38ce92d4eeae01071f689abd4a5d3"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2hoi73vy1wqpo.js",
+      "status": 200,
+      "size": 27819,
+      "sha256": "a070e193cc6aa2af93f87b93c668ae7fa6039f396007a82104ba7b228d7850ac"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2k5el_cftfe_f.js",
+      "status": 200,
+      "size": 13918,
+      "sha256": "fc51dbcf932d0ececaff88454b7128d3a52467dc5011491beede70c5ab2051d4"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2kymltn7pgfpi.css",
+      "status": 200,
+      "size": 4962,
+      "sha256": "77257eff4ce03111f16490f2502d328bc7132539b434324e739b716c71d4da92"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2vg9178xebqwz.css",
+      "status": 200,
+      "size": 2490,
+      "sha256": "93f2dc1e88a166cf22a5671f7db3f308a84eeceade6e630b9504436dd114e107"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2y_wjjnipg5nm.js",
+      "status": 200,
+      "size": 31177,
+      "sha256": "9ecd5659c3ba5b7b0ac3a02250a2a43b2ae3cf9b70bdfc3b7904dad5aa006ea5"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/30pqe4rv77bcv.css",
+      "status": 200,
+      "size": 3214,
+      "sha256": "c6a77cca8569ff581792b95c4e63ad512f3ff06428434e6254ef56c190cdb6cd"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/31_6w8v5d7luy.css",
+      "status": 200,
+      "size": 1407,
+      "sha256": "c602b374a4ab0170b9f20d3ad48b13fc51a7631515f2b2dbc2da9c3ac2f07b02"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/32aml1ffqsm-8.js",
+      "status": 200,
+      "size": 249,
+      "sha256": "7abb3e29f498b8542fd208c87a6dc97b47a2432515eb49c12a45b5870e97da33"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3_ovxg0a_m274.js",
+      "status": 200,
+      "size": 14089,
+      "sha256": "93b42979da6c9bd05e5787916ac272f34a59879b2971543891328937f63362e1"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3dz7s82h34ptz.js",
+      "status": 200,
+      "size": 131399,
+      "sha256": "e49b20ed5f11e1601164f2dbc2a3f55c096eb41cdb233ffa42406751b08d3daa"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3n3_22x291uq1.js",
+      "status": 200,
+      "size": 31155,
+      "sha256": "aec824a693edf491c210fbbb840388dfab00f155cad556a9f275b2626d76d818"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3y2jzd1z59cqx.css",
+      "status": 200,
+      "size": 1874,
+      "sha256": "143ef0514c726cf6c858cbc234c6d127eff42c3d26be7d47e10e0a7c77c64c8b"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3ynqz-fhc410u.js",
+      "status": 200,
+      "size": 32881,
+      "sha256": "6182e42d8be51dfc48d481d075f05f48f606475096812418959b17a562f1a523"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+      "status": 200,
+      "size": 11255,
+      "sha256": "b5f9b5199b99ab6c141f4540f0b7d0fe803c4ecf6956849ecb6e59d3d439272e"
+    }
+  ]
+}
