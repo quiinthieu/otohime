@@ -68,3 +68,26 @@ test("cached hidden route hosts do not block the active route, and reactivation 
   registry.mark(notes);
   assert.equal(mounts, 2, "revealed Notes acknowledges its own reactivation");
 });
+
+test("duplicate host acknowledgements preserve readiness for late subscribers without reactivating overlays", () => {
+  const registry = createHydrationRegistry();
+  const first = {}, second = {};
+  const hosts = () => [first, second];
+  let early = 0, late = 0;
+  const cancelEarly = registry.wait(hosts, () => { early++; });
+  registry.mark(first);
+  registry.mark(first);
+  assert.equal(early, 0, "duplicate marks cannot stand in for the missing host");
+  registry.mark(second);
+  registry.mark(second);
+  assert.ok(hosts().every(host => registry.has(host)), "duplicate marks retain settled readiness");
+  assert.equal(early, 1, "the pending overlay activates only once");
+
+  const cancelLate = registry.wait(hosts, () => { late++; });
+  assert.equal(late, 1, "a later subscriber sees already-committed hosts immediately");
+  registry.mark(second);
+  registry.changed();
+  assert.deepEqual([early, late], [1, 1], "neither settled subscriber activates again");
+  cancelEarly();
+  cancelLate();
+});
