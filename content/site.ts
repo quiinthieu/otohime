@@ -200,6 +200,7 @@ export const site = {
     publicTrack: "The public track",
     profile: "The ListenBrainz profile",
     cart: "Cartridge · Steam",
+    cartLanyard: "Cartridge · Lanyard",
     playing: "On the deck",
     paused: "Paused on the deck",
     quiet: "Quiet",
@@ -212,7 +213,7 @@ export const site = {
     quietGame: "From my Now list, not read live.",
     read: "Read",
     unread: "Not read live: the labels are the static ones.",
-    credit: { listenbrainz: "Track details from ListenBrainz (CC0)", spotify: "Track details from Spotify", steam: "game details from Steam" },
+    credit: { lanyard: "game presence from Lanyard / Discord", listenbrainz: "Track details from ListenBrainz (CC0)", spotify: "Track details from Spotify", steam: "game details from Steam" },
   },
   // The songs in play order, each with why it's there.
   // TODO(otohime): the reasons are a first draft; make them yours

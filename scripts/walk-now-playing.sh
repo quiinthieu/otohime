@@ -47,6 +47,7 @@ FAKE_TOKEN_PORT="$FAKE_PORT"
 FAKE_API_PORT="$((FAKE_PORT + 1))"
 FAKE_STEAM_PORT="$((FAKE_PORT + 2))"
 FAKE_LISTENBRAINZ_PORT="$((FAKE_PORT + 3))"
+FAKE_LANYARD_PORT="$((FAKE_PORT + 4))"
 OK=0
 FAILED=0
 
@@ -83,7 +84,7 @@ check() {
 }
 
 # The provider variables lib/now-playing.ts reads. Every server this walk starts gets exactly the ones it names.
-PROVIDER_VARS="LISTENBRAINZ_USER NOW_PLAYING_LISTENBRAINZ_HOST SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET SPOTIFY_REFRESH_TOKEN STEAM_API_KEY STEAM_ID NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST NOW_PLAYING_SPOTIFY_API_HOST NOW_PLAYING_STEAM_HOST"
+PROVIDER_VARS="LANYARD_USER_ID NOW_PLAYING_LANYARD_HOST LISTENBRAINZ_USER NOW_PLAYING_LISTENBRAINZ_HOST SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET SPOTIFY_REFRESH_TOKEN STEAM_API_KEY STEAM_ID NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST NOW_PLAYING_SPOTIFY_API_HOST NOW_PLAYING_STEAM_HOST"
 
 # start_server [VAR=value...]: next start on $PORT in its own process group, with every provider variable unset
 # and then the given ones set.
@@ -126,11 +127,11 @@ SENT_SECRET="SentinelSecret$RUN_ID"
 SENT_REFRESH="Sentinel-Refresh_$RUN_ID"
 SENT_KEY="SentinelSteamKey$RUN_ID"
 SENT_STEAM_ID="76561197960435530"
-SENTINELS="$SENT_ID,$SENT_SECRET,$SENT_REFRESH,$SENT_KEY,$SENT_STEAM_ID,FakeAccessToken0123456789abcdef"
+SENTINELS="$SENT_ID,$SENT_SECRET,$SENT_REFRESH,$SENT_KEY,$SENT_STEAM_ID,FakeAccessToken0123456789abcdef,123456789012345678,PrivateFixtureName,PrivateFixtureAvatar,PrivateFixtureFriends"
 CREDS=(SPOTIFY_CLIENT_ID="$SENT_ID" SPOTIFY_CLIENT_SECRET="$SENT_SECRET" SPOTIFY_REFRESH_TOKEN="$SENT_REFRESH" STEAM_API_KEY="$SENT_KEY" STEAM_ID="$SENT_STEAM_ID")
 HOSTS=(NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST="http://127.0.0.1:$FAKE_TOKEN_PORT" NOW_PLAYING_SPOTIFY_API_HOST="http://127.0.0.1:$FAKE_API_PORT" NOW_PLAYING_STEAM_HOST="http://127.0.0.1:$FAKE_STEAM_PORT")
 FIXTURE_ENV=()
-[ "$QUIET_ONLY" = "1" ] || FIXTURE_ENV=("${CREDS[@]}" "${HOSTS[@]}" LISTENBRAINZ_USER="Fixture Owner" NOW_PLAYING_LISTENBRAINZ_HOST="http://127.0.0.1:$FAKE_LISTENBRAINZ_PORT")
+[ "$QUIET_ONLY" = "1" ] || FIXTURE_ENV=("${CREDS[@]}" "${HOSTS[@]}" LISTENBRAINZ_USER="Fixture Owner" NOW_PLAYING_LISTENBRAINZ_HOST="http://127.0.0.1:$FAKE_LISTENBRAINZ_PORT" LANYARD_USER_ID="123456789012345678" NOW_PLAYING_LANYARD_HOST="http://127.0.0.1:$FAKE_LANYARD_PORT")
 
 # The cache clock: performance.now plus the milliseconds in $WORK/clock-offset, re-read at most every 50 ms. Only
 # the servers this walk starts load it (NODE_OPTIONS=--require); nothing in the app knows it exists.
@@ -163,14 +164,14 @@ start_fakes() {
   mkdir -p "$FAKE_DIR"
   : >"$FAKE_DIR/requests.log"
   printf '{}' >"$FAKE_DIR/mode.json"
-  for p in "$FAKE_TOKEN_PORT" "$FAKE_API_PORT" "$FAKE_STEAM_PORT" "$FAKE_LISTENBRAINZ_PORT"; do
+  for p in "$FAKE_TOKEN_PORT" "$FAKE_API_PORT" "$FAKE_STEAM_PORT" "$FAKE_LISTENBRAINZ_PORT" "$FAKE_LANYARD_PORT"; do
     if curl -s -o /dev/null --max-time 2 "http://127.0.0.1:$p/"; then
       echo "not ok - fakes: port $p is taken; set FAKE_PORT to a free range of three"
       return 1
     fi
   done
   set -m
-  env "${CREDS[@]}" FAKE_DIR="$FAKE_DIR" FAKE_TOKEN_PORT="$FAKE_TOKEN_PORT" FAKE_API_PORT="$FAKE_API_PORT" FAKE_STEAM_PORT="$FAKE_STEAM_PORT" FAKE_LISTENBRAINZ_PORT="$FAKE_LISTENBRAINZ_PORT" \
+  env "${CREDS[@]}" FAKE_DIR="$FAKE_DIR" FAKE_TOKEN_PORT="$FAKE_TOKEN_PORT" FAKE_API_PORT="$FAKE_API_PORT" FAKE_STEAM_PORT="$FAKE_STEAM_PORT" FAKE_LISTENBRAINZ_PORT="$FAKE_LISTENBRAINZ_PORT" FAKE_LANYARD_PORT="$FAKE_LANYARD_PORT" \
     node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
     "$ROOT/scripts/probe-cassette.mjs" fake >"$WORK/fake.log" 2>&1 &
   FAKE_PID=$!
@@ -415,6 +416,7 @@ same_read() {
     const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     const want = [`data-spotify="${r.spotify}" data-steam="${r.steam}"`];
     want.push(`data-music-source="${r.music.source ?? "none"}"`, `data-music-state="${r.music.state}"`);
+    want.push(`data-play-source="${r.play.source ?? "none"}"`, `data-play-state="${r.play.state}"`);
     if (r.track?.listenedAt) want.push(`dateTime="${r.track.listenedAt}"`);
     if (r.readAt && (r.music.state !== "off" || r.play.state !== "off")) want.push(`dateTime="${r.readAt}"`);
     if (r.track) want.push(esc(r.track.title), "data-face=\"track\"");
@@ -428,7 +430,7 @@ same_read() {
 
 # exact_keys <key>: the API's whole answer is the sanitized display shape, nothing more.
 exact_keys() {
-  json_is "$1" 'JSON.stringify(Object.keys(r)) === JSON.stringify(["music","play","spotify","track","steam","game","readAt"]) && (r.track === null || JSON.stringify(Object.keys(r.track)) === JSON.stringify(r.music.source === "listenbrainz" ? ["title","artists","url","playing","listenedAt"] : ["title","artists","url","playing"])) && (r.game === null || JSON.stringify(Object.keys(r.game)) === JSON.stringify(["title","url"]))'
+  json_is "$1" 'JSON.stringify(Object.keys(r.music)) === JSON.stringify(["source","state","profileUrl"]) && JSON.stringify(Object.keys(r.play)) === JSON.stringify(["source","state","profileUrl"]) && JSON.stringify(Object.keys(r)) === JSON.stringify(["music","play","spotify","track","steam","game","readAt"]) && (r.track === null || JSON.stringify(Object.keys(r.track)) === JSON.stringify(r.music.source === "listenbrainz" ? ["title","artists","url","playing","listenedAt"] : ["title","artists","url","playing"])) && (r.game === null || JSON.stringify(Object.keys(r.game)) === JSON.stringify(["title","url"]))'
 }
 
 # no_sentinel <file...>: none of this run's credentials, nor the fake access token, in these files.
@@ -587,7 +589,7 @@ check "scripts: fetched every chunk /music references" chunks finalmusic
 check "no sentinel in any HTTP response" no_sentinel "$WORK"/*.body
 check "no sentinel in the client chunks" no_sentinel "$WORK"/chunks/*.js
 check "no sentinel in the server log" no_sentinel "$WORK/server.log"
-check "no provider host in the HTML or chunks" sh -c "! grep -lE 'accounts\.spotify\.com|api\.spotify\.com|api\.steampowered\.com|api\.listenbrainz\.org|127\.0\.0\.1:$FAKE_PORT' '$WORK/finalmusic.body' '$WORK'/chunks/*.js"
+check "no provider host in the HTML or chunks" sh -c "! grep -lE 'accounts\.spotify\.com|api\.spotify\.com|api\.steampowered\.com|api\.listenbrainz\.org|api\.lanyard\.rest|127\.0\.0\.1:$FAKE_PORT' '$WORK/finalmusic.body' '$WORK'/chunks/*.js"
 check "the fakes never saw a wrong credential" no_bad_auth
 stop_server
 
@@ -674,6 +676,58 @@ check "invalid identity: off, no account selected" json_is invalid 'r.music.sour
 check "invalid identity: no provider requests" delta 0 0 0
 check "invalid identity: no public endpoint requests" test "$(grep -c '^listenbrainz ' "$FAKE_DIR/requests.log")" -eq "$lb_before_invalid"
 stop_server
+
+# --- Selected public Lanyard games; Steam credentials are present but never read ---
+start_server "${CREDS[@]}" "${HOSTS[@]}" "${CLOCK_ENV[@]}" LISTENBRAINZ_USER="Fixture Owner" NOW_PLAYING_LISTENBRAINZ_HOST="http://127.0.0.1:$FAKE_LISTENBRAINZ_PORT" LANYARD_USER_ID="123456789012345678" NOW_PLAYING_LANYARD_HOST="http://127.0.0.1:$FAKE_LANYARD_PORT"
+wait_ready
+ly_case() {
+  set_mode "$2"
+  advance
+  local before after
+  before="$(calls lanyard)"
+  mark
+  get ly /api/now-playing
+  check "$1: HTTP 200" status_is ly 200
+  check "$1: Lanyard reading" json_is ly "r.play.source === \"lanyard\" && r.steam === \"steam-off\" && ($3)"
+  check "$1: sanitized shape" exact_keys ly
+  check "$1: Spotify and Steam unasked" delta 0 0 0
+  after="$(calls lanyard)"
+  check "$1: one public request, no retry" test "$((after - before))" -eq 1
+  get lymusic /music
+  check "$1: shared cached API/page game and source" same_read ly lymusic
+  check "$1: page uses cache" test "$(calls lanyard)" -eq "$after"
+  shelf lymusic >/dev/null
+  check "$1: official Lanyard credit link" in_shelf lymusic 'href="https://github.com/Phineas/lanyard"'
+  check "$1: credited Lanyard" in_shelf lymusic 'game presence from Lanyard / Discord'
+  check "$1: no invented store or Discord profile link" not_in_shelf lymusic 'href="https://store.steampowered.com'
+}
+ly_case "Lanyard game" '{}' 'r.play.state === "fixture" && r.game.title === "Fixture Lanyard Game" && r.game.url === null && r.track.title === "Fixture Brainz Track"'
+for mode in empty spotify invalidActivities; do
+  ly_case "Lanyard $mode" "{\"lanyard\":\"$mode\"}" 'r.play.state === "fixture" && r.game === null && r.track.title === "Fixture Brainz Track"'
+  check "Lanyard $mode: static Now-list fallback" in_shelf lymusic "$STATIC_GAME"
+done
+ly_case "Lanyard long" '{"lanyard":"long"}' 'r.play.state === "fixture" && [...r.game.title].length === 48 && r.game.title.endsWith("…") && !/\p{Cc}/u.test(r.game.title)'
+for mode in unknown malformed bad-json html 429 500 redirect slow; do
+  ly_case "Lanyard $mode" "{\"lanyard\":\"$mode\"}" 'r.play.state === "quiet" && r.game === null && r.track.title === "Fixture Brainz Track"'
+  if [ "$mode" = slow ]; then check "Lanyard timeout: four-second abort" timed_between ly 3.5 6.5; fi
+done
+ly_case "Lanyard survives music failure" '{"lbNow":"429","lbLast":"html"}' 'r.music.state === "quiet" && r.track === null && r.play.state === "fixture" && r.game.title === "Fixture Lanyard Game"'
+node -e 'const fs=require("fs"); const r=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));r.play.source="steam";fs.writeFileSync(process.argv[2],JSON.stringify(r));' "$WORK/ly.body" "$WORK/wrong-play.body"
+check "Lanyard: wrong game provider alone is caught" fails same_read wrong-play lymusic
+check "Lanyard: headers and identity checked by fake" no_bad_auth
+check "Lanyard: no secrets or Discord identifiers in HTTP responses" no_sentinel "$WORK"/*.body
+check "Lanyard: all referenced chunks fetched" chunks lymusic
+check "Lanyard: no sentinel in chunks or logs" no_sentinel "$WORK"/chunks/*.js "$WORK/server.log"
+stop_server
+for identity in '' 'invalid' '1234567890123456' '123456789012345678901'; do
+  start_server LANYARD_USER_ID="$identity" NOW_PLAYING_LANYARD_HOST="http://127.0.0.1:$FAKE_LANYARD_PORT"
+  wait_ready
+  before_invalid="$(calls lanyard)"
+  get lyinvalid /api/now-playing
+  check "Lanyard missing/invalid identity: off" json_is lyinvalid 'r.play.source === null && r.play.state === "off" && r.game === null'
+  check "Lanyard missing/invalid identity: no request" test "$(calls lanyard)" -eq "$before_invalid"
+  stop_server
+done
 
 fi
 

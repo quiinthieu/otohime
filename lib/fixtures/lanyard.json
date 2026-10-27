@@ -1,0 +1,7 @@
+{
+  "game": {"success":true,"data":{"discord_user":{"id":"123456789012345678","username":"PrivateFixtureName","avatar":"PrivateFixtureAvatar"},"kv":{"friends":"PrivateFixtureFriends"},"activities":[{"type":4,"name":"Custom status"},{"type":1,"name":"Stream"},{"type":2,"name":"Spotify"},{"type":0,"name":"Fixture Lanyard Game","application_id":"PrivateApplicationId","url":"https://store.steampowered.com/app/10/"},{"type":0,"name":"Second game"}]}},
+  "empty": {"success":true,"data":{"activities":[]}},
+  "spotify": {"success":true,"data":{"listening_to_spotify":true,"spotify":{"song":"Do not use for music"},"activities":[{"type":2,"name":"Spotify"},{"type":4,"name":"Custom status"},{"type":1,"name":"Stream"}]}},
+  "invalidActivities": {"success":true,"data":{"activities":[null,[],{},"game",{"type":"0","name":"Wrong type"},{"type":0,"name":17},{"type":0,"name":"  "}]}},
+  "unknown": {"success":false,"error":{"code":"user_not_monitored","message":"User is not being monitored by Lanyard"}}
+}

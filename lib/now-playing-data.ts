@@ -2,7 +2,7 @@
 // into it. Everything here takes `unknown` and returns null for anything unexpected: a malformed body, an error
 // shape, a private session or profile, nothing playing. Only the fields the labels print survive, display text is
 // capped, and the only links kept are the providers' own public pages. No fetch, no env, no clock: lib/now-playing.ts
-// is the one module that talks to the selected music provider and Steam.
+// is the one module that talks to the selected music provider and the selected game provider.
 
 // Display caps, in characters. A longer title is cut and ends in an ellipsis, so a label always fits its space.
 export const LIMITS = { title: 64, artists: 64, game: 48 } as const;
@@ -33,7 +33,7 @@ export type SteamState = "steam-off" | "steam-quiet" | "steam-live" | "steam-fix
 export type SourceState = "off" | "quiet" | "live" | "fixture";
 export type SourceReading<S extends string> = { source: S | null; state: SourceState; profileUrl: string | null };
 export type MusicReading = SourceReading<"spotify" | "listenbrainz">;
-export type PlayReading = SourceReading<"steam">;
+export type PlayReading = SourceReading<"steam" | "lanyard">;
 
 export type NowPlaying = {
   music: MusicReading;
@@ -188,6 +188,18 @@ export function parseSteamGame(body: unknown): Game | null {
   return title ? { title, url: steamStoreUrl(player.gameid) } : null;
 }
 
+// A valid envelope with no game differs from an unreadable/error envelope.
+// Discord identities, assets, Spotify data and activity URLs never leave this parser.
+export function parseLanyardGame(body: unknown): { game: Game | null } | null {
+  if (!isRecord(body) || body.success !== true || "error" in body || !isRecord(body.data) || !Array.isArray(body.data.activities)) return null;
+  for (const activity of body.data.activities) {
+    if (!isRecord(activity) || activity.type !== 0) continue;
+    const title = clip(activity.name, LIMITS.game);
+    if (title) return { game: { title, url: null } };
+  }
+  return { game: null };
+}
+
 function validISO(v: unknown): string | null {
   if (typeof v !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(v)) return null;
   const date = new Date(v);
@@ -213,15 +225,15 @@ export function sanitize(v: unknown): NowPlaying {
     if (spotify === "spotify-off") music.source = null;
   }
   if (!music.source) music.state = "off";
-  // Steam remains the sole game source until the optional game adapter is introduced.
-  const play: PlayReading = { source: steam === "steam-off" ? null : "steam", state: steam.slice(6) as SourceState, profileUrl: null };
+  const play: PlayReading = isRecord(v.play) && v.play.source === "lanyard"
+    ? { source: "lanyard", state: typeof v.play.state === "string" && ["off", "quiet", "live", "fixture"].includes(v.play.state) ? v.play.state as SourceState : "quiet", profileUrl: null }
+    : { source: steam === "steam-off" ? null : "steam", state: steam.slice(6) as SourceState, profileUrl: null };
   const t = v.track;
   const g = v.game;
   const title = isRecord(t) ? clip(t.title, LIMITS.title) : null;
   const artists = isRecord(t) ? clip(t.artists, LIMITS.artists) : null;
   const game = isRecord(g) ? clip(g.title, LIMITS.game) : null;
   const readAt = typeof v.readAt === "string" && !Number.isNaN(Date.parse(v.readAt)) ? new Date(v.readAt).toISOString() : null;
-  const connected = (s: string) => s.endsWith("-live") || s.endsWith("-fixture");
   return {
     music,
     play,
@@ -236,10 +248,10 @@ export function sanitize(v: unknown): NowPlaying {
             ...(music.source === "listenbrainz" ? { listenedAt: t.playing === true ? null : validISO(t.listenedAt) } : {}),
           }
         : null,
-    steam,
+    steam: play.source === "lanyard" ? "steam-off" : steam,
     game:
-      isRecord(g) && game && connected(steam)
-        ? { title: game, url: typeof g.url === "string" ? steamStoreUrl(/^https:\/\/store\.steampowered\.com\/app\/(\d+)\/$/.exec(g.url)?.[1]) : null }
+      isRecord(g) && game && (play.state === "live" || play.state === "fixture")
+        ? { title: game, url: play.source !== "lanyard" && typeof g.url === "string" ? steamStoreUrl(/^https:\/\/store\.steampowered\.com\/app\/(\d+)\/$/.exec(g.url)?.[1]) : null }
         : null,
     readAt,
   };

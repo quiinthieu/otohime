@@ -81,7 +81,7 @@ if [ "${SKIP_BUILD:-}" != "1" ]; then
   fi
 fi
 
-PROVIDER_VARS="LISTENBRAINZ_USER NOW_PLAYING_LISTENBRAINZ_HOST SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET SPOTIFY_REFRESH_TOKEN STEAM_API_KEY STEAM_ID NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST NOW_PLAYING_SPOTIFY_API_HOST NOW_PLAYING_STEAM_HOST"
+PROVIDER_VARS="LANYARD_USER_ID NOW_PLAYING_LANYARD_HOST LISTENBRAINZ_USER NOW_PLAYING_LISTENBRAINZ_HOST SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET SPOTIFY_REFRESH_TOKEN STEAM_API_KEY STEAM_ID NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST NOW_PLAYING_SPOTIFY_API_HOST NOW_PLAYING_STEAM_HOST"
 
 # start_server [VAR=value...]: next start with every provider variable unset, then the given ones set; waits for it.
 start_server() {
@@ -178,18 +178,24 @@ fi
 # --- Public music, both current and old last-listen faces in the full browser matrix ---
 kill_group "$SERVER_PID"
 SERVER_PID=""
-for face in brainz last; do
+for face in brainz last lanyard; do
+  GAME_ENV=()
+  if [ "$face" = lanyard ]; then
+    GAME_ENV=(LANYARD_USER_ID="123456789012345678" NOW_PLAYING_LANYARD_HOST="http://127.0.0.1:$((FAKE_PORT + 4))")
+  fi
   if [ "$face" = brainz ]; then
     printf '{"lbNow":"long","steam":"long"}' >"$FAKE_DIR/mode.json"
+  elif [ "$face" = lanyard ]; then
+    printf '{"lbNow":"long","lanyard":"long"}' >"$FAKE_DIR/mode.json"
   else
     printf '{"lbNow":"empty","lbLast":"old","steam":"long"}' >"$FAKE_DIR/mode.json"
   fi
-  if start_server "${CREDS[@]}" LISTENBRAINZ_USER="Fixture Owner" \
+  if start_server "${CREDS[@]}" "${GAME_ENV[@]}" LISTENBRAINZ_USER="Fixture Owner" \
     NOW_PLAYING_LISTENBRAINZ_HOST="http://127.0.0.1:$((FAKE_PORT + 3))" \
     NOW_PLAYING_SPOTIFY_ACCOUNTS_HOST="http://127.0.0.1:$FAKE_PORT" \
     NOW_PLAYING_SPOTIFY_API_HOST="http://127.0.0.1:$((FAKE_PORT + 1))" \
     NOW_PLAYING_STEAM_HOST="http://127.0.0.1:$((FAKE_PORT + 2))"; then
-    probe "$face" "$SENTINELS"
+    probe "$face" "$SENTINELS,123456789012345678,PrivateFixtureName,PrivateFixtureAvatar,PrivateFixtureFriends"
   else
     FAILED=$((FAILED + 1))
   fi
