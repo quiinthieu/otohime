@@ -1,0 +1,270 @@
+{
+  "history": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "total": 1160,
+      "tasks": [
+        {
+          "id": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+          "status": "FAILED",
+          "title": "integrate bat-1",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "04446d49-b79f-4d19-a8d9-6286fe34c1c1",
+          "status": "FAILED",
+          "title": "Colab T4 session",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "72818fa6-a037-4d9d-a79e-608a0ae654c5",
+          "status": "FAILED",
+          "title": "forge animate animate run 93dced9a attempt 1",
+          "error": "E_ANIMATE_MAP"
+        },
+        {
+          "id": "47d73a78-60ad-49f0-8dfb-75959a3daa75",
+          "status": "FAILED",
+          "title": "forge animate animate run 25ebd1db attempt 1",
+          "error": "E_ANIMATE_MAP"
+        },
+        {
+          "id": "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+          "status": "FAILED",
+          "title": "environment canary auth:claude can-466",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "repoId": "mono-v2"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 5,
+      "total": 1160,
+      "tasks": [
+        {
+          "id": "899ebc8e-06d2-4172-8d43-caab66fc163a",
+          "status": "FAILED",
+          "title": "environment canary env can-465",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "1930c4dc-bb2e-482c-8a12-9e74dbb760e7",
+          "status": "FAILED",
+          "title": "forge animate animate run c1651875 attempt 1",
+          "error": "E_ANIMATE_MAP"
+        },
+        {
+          "id": "e80be90f-766f-4877-97a4-0920424f7002",
+          "status": "FAILED",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 8959e8d817c4 is not on origin/main",
+          "repoId": "otohime"
+        },
+        {
+          "id": "5bcb5794-3867-4925-834d-301dabfdcca3",
+          "status": "FAILED",
+          "title": "forge animate animate run 3b856be7 attempt 1",
+          "error": "E_ANIMATE_MAP"
+        },
+        {
+          "id": "5d5c9945-2195-4e91-83fc-5ee66bd1cb29",
+          "status": "FAILED",
+          "title": "forge animate animate run a0326596 attempt 1",
+          "error": "E_ANIMATE_MAP"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "total": 7128,
+      "tasks": [
+        {
+          "id": "bef57263-3cb6-44af-ad83-543256cdca63",
+          "status": "COMPLETED",
+          "title": "linego forge run 3d6c6a0d-c0e5-4629-8f97-9297fd42c01b",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "66484ddf-f808-4c1e-bb52-16357e837819",
+          "status": "COMPLETED",
+          "title": "linego forge run 12a80358-70a3-40fb-8385-a20a0a69f8ed",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "48b61d87-4620-4500-86e8-ea45adf1af27",
+          "status": "COMPLETED",
+          "title": "reclaim viet-mac"
+        },
+        {
+          "id": "f9bff22b-7160-41ad-8cc8-198a6c5f0d09",
+          "status": "COMPLETED",
+          "title": "Exercise signed-total QA repair",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "b456ac08-4840-49fe-8fae-6bb3b84ac7aa",
+          "status": "COMPLETED",
+          "title": "reclaim viet-mac"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 5,
+      "total": 7128,
+      "tasks": [
+        {
+          "id": "72affdf5-9704-4a6b-92b8-c8849b4891cf",
+          "status": "COMPLETED",
+          "title": "linego forge run f1f163cc-ddb3-4e6d-9fca-1a3a6f9264a3",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "3d620059-f050-4910-bbfd-634d400ba11c",
+          "status": "COMPLETED",
+          "title": "linego forge run 4bb37756-7a3b-457c-8c2c-ce8ca4ef0f35",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "c12fa4b2-3bee-44cd-bff5-0b38e0bee4ac",
+          "status": "COMPLETED",
+          "title": "Append canary heading suffix",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "70e33b0a-5f9c-4f13-912a-25b8fb4040a6",
+          "status": "COMPLETED",
+          "title": "Surface CI probe annotations and streamed footer headings",
+          "repoId": "otohime"
+        },
+        {
+          "id": "440dbef0-3b9c-4a16-b40f-e7e94442aa5e",
+          "status": "COMPLETED",
+          "title": "linego forge run 4dc3c47f-763d-4888-a337-bcee8f3bc28e",
+          "repoId": "mono-v2"
+        }
+      ]
+    }
+  ],
+  "current": [
+    {
+      "total": 3,
+      "tasks": [
+        {
+          "id": "f064cbe7-9854-40d2-a678-422912b1ec60",
+          "status": "RUNNING"
+        },
+        {
+          "id": "4e3ad001-b441-4260-978b-a5e20a6317dd",
+          "status": "RUNNING"
+        },
+        {
+          "id": "d2ee32db-f340-4c71-8db0-100120ecd783",
+          "status": "RUNNING"
+        }
+      ]
+    },
+    {
+      "total": 0,
+      "tasks": []
+    }
+  ],
+  "delivery": {
+    "id": "e63ac27e-ea91-4016-b607-01eb3d41ba9d",
+    "status": "COMPLETED",
+    "callbackState": "delivered",
+    "callbackAttempts": 1,
+    "run": "run-9116"
+  },
+  "logs": [
+    {
+      "task": "e63ac27e-ea91-4016-b607-01eb3d41ba9d",
+      "lines": 1047,
+      "completeness": "tail only; full log unproven",
+      "tail": [
+        " Date: Tue Oct 27 08:37:12 2026 +0700",
+        " 12 files changed, 798 insertions(+), 4 deletions(-)",
+        " create mode 100644 app/api/ghosts/route.ts",
+        " create mode 100644 ghosts/canvas.tsx",
+        " create mode 100644 ghosts/client.test.ts",
+        " create mode 100644 ghosts/client.ts",
+        " create mode 100644 ghosts/config.test.ts",
+        " create mode 100644 ghosts/config.ts",
+        " create mode 100644 ghosts/loader.tsx",
+        " create mode 100644 projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/t-1608-run-9116.md",
+        "To github.com:quiinthieu/otohime.git",
+        "   4c9f325..ebbb06d  HEAD -> main",
+        "",
+        "exec",
+        "/bin/zsh -lc 'cat ../../shared/artifacts/commits.txt' in /Users/avietidol/Library/Application Support/build-worker/leases/e63ac27e-ea91-4016-b607-01eb3d41ba9d-562dbe814243f5e93aa4cca3bf25a6c9/work/otohime",
+        " succeeded in 0ms:",
+        "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+        "",
+        "mcp: plan-manager/plan_manager_submit_report started",
+        "mcp: plan-manager/plan_manager_submit_report (completed)",
+        "codex",
+        "Implemented and pushed to `main` at `ebbb06d09e6030f6a56b323247e879efdb76fcb6`.",
+        "",
+        "Validation passed: 2,399 project tests, 16 focused tests, lint, production build, and two-browser rendering proof using the fake WebSocket server.",
+        "",
+        "Report submitted. CI was not observed, per the stop-at-push contract.",
+        "tokens used",
+        "110,841",
+        "Implemented and pushed to `main` at `ebbb06d09e6030f6a56b323247e879efdb76fcb6`.",
+        "",
+        "Validation passed: 2,399 project tests, 16 focused tests, lint, production build, and two-browser rendering proof using the fake WebSocket server.",
+        "",
+        "Report submitted. CI was not observed, per the stop-at-push contract.",
+        "---",
+        "Command exited with code: 0"
+      ]
+    },
+    {
+      "task": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+      "lines": 43,
+      "completeness": "tail only; full log unproven",
+      "tail": [
+        "  Repo     : REPO_ID=mono-v2 GIT_MAIN_BRANCH=main PLANS_DIR=projects",
+        "  Account  : ACCOUNT_ID=<none>",
+        "  HOME     : /Users/avietidol/Library/Application Support/build-worker/leases/2d01ad98-1d8b-496f-850e-9e1e0f999588-e6da95156a67af78eae2ae43bddf0f56/home",
+        "  User     : uid=501(avietidol) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),33(_appstore),98(_lpadmin),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1)",
+        "  Branch   : main",
+        "  Sidecar  : enabled (shared=/Users/avietidol/Library/Application Support/build-worker/leases/2d01ad98-1d8b-496f-850e-9e1e0f999588-e6da95156a67af78eae2ae43bddf0f56/shared)",
+        "=========================================",
+        "  github.com host key refreshed",
+        "  gitlab.com host key refreshed",
+        "  bitbucket.org host key refreshed",
+        "Cloning git@gitlab.com:kq.viet/mono-v2.git (branch: main) into /Users/avietidol/Library/Application Support/build-worker/leases/2d01ad98-1d8b-496f-850e-9e1e0f999588-e6da95156a67af78eae2ae43bddf0f56/work/mono-v2...",
+        "  reference clone from /Users/avietidol/Library/Application Support/build-worker/repo/mono-v2 (fleet mirror)",
+        "Cloning into '/Users/avietidol/Library/Application Support/build-worker/leases/2d01ad98-1d8b-496f-850e-9e1e0f999588-e6da95156a67af78eae2ae43bddf0f56/work/mono-v2'...",
+        "Updating files:  70% (17417/24623)\rUpdating files:  71% (17483/24623)\rUpdating files:  72% (17729/24623)\rUpdating files:  73% (17975/24623)\rUpdating files:  74% (18222/24623)\rUpdating files:  75% (18468/24623)\rUpdating files:  76% (18714/24623)\rUpdating files:  77% (18960/24623)\rUpdating files:  78% (19206/24623)\rUpdating files:  79% (19453/24623)\rUpdating files:  80% (19699/24623)\rUpdating files:  81% (19945/24623)\rUpdating files:  82% (20191/24623)\rUpdating files:  83% (20438/24623)\rUpdating files:  84% (20684/24623)\rUpdating files:  85% (20930/24623)\rUpdating files:  86% (21176/24623)\rUpdating files:  87% (21423/24623)\rUpdating files:  88% (21669/24623)\rUpdating files:  89% (21915/24623)\rUpdating files:  90% (22161/24623)\rUpdating files:  91% (22407/24623)\rUpdating files:  92% (22654/24623)\rUpdating files:  93% (22900/24623)\rUpdating files:  94% (23146/24623)\rUpdating files:  95% (23392/24623)\rUpdating files:  96% (23639/24623)\rUpdating files:  97% (23885/24623)\rUpdating files:  98% (24131/24623)\rUpdating files:  99% (24377/24623)\rUpdating files: 100% (24623/24623)\rUpdating files: 100% (24623/24623), done.",
+        "  Cloned branch: main",
+        "  Cloned commit: b3663f556ed74273550a7036262338715c3eab4e",
+        "delivery: on delivery/pm-289/r1/c1/integration at b3663f556ed7 (input main@b3663f556ed7)",
+        "delivery: record-test is on PATH (/Users/avietidol/Library/Application Support/build-worker/leases/2d01ad98-1d8b-496f-850e-9e1e0f999588-e6da95156a67af78eae2ae43bddf0f56/shared/bin/record-test)",
+        "delivery: git_sha/resume_branch ignored in the batched context",
+        "push guard: batched developer job; every push but delivery/pm-289/r1/c1/integration refused",
+        "",
+        "progress phase=verify",
+        "=== verify-runner (agent=shell) ===",
+        "verify: warm-up budget exhausted; proceeding to items",
+        "verify: start item=integration_local timeout_s=7200",
+        "verify: item=integration_local status=fail exit=1 duration_ms=23274",
+        "integration: publication receipt missing, stale or not on main",
+        "batch_publish_failed: integration publication receipt invalid",
+        "progress phase=rescue",
+        "=== rescue: preserving workspace of failed task (exit code 1, phase verify, budget 60s) ===",
+        "On branch delivery/pm-289/r1/c1/integration",
+        "nothing to commit, working tree clean",
+        "Everything up-to-date",
+        "rescue: pushed working state to branch delivery/pm-289/r1/c1/integration",
+        "=== rescue: done ==="
+      ]
+    }
+  ]
+}
