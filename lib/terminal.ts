@@ -28,10 +28,9 @@ export type Place = { name: string; href: string; label: string };
 
 // Where `go` and a bare word lead: the public pages, in nav order, then the Ask chip (on Home) and the postcards.
 export const PLACES: readonly Place[] = [
-  ...PUBLIC_PAGES.map((p) => ({ name: p.label.toLowerCase(), href: p.href, label: p.label })),
+  ...PUBLIC_PAGES.map((p) => ({ name: p.href === "/lab" ? "lab" : p.label.toLowerCase(), href: p.href, label: p.label })),
   { name: "ask", href: "/", label: "Ask the console" },
   { name: "postcard", href: "/postcard", label: "Postcard" },
-  { name: "lab", href: "/lab", label: "Ink Lab" },
 ];
 
 export function describePrintRun(snapshot: AppearanceSnapshot): string {

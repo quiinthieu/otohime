@@ -1,0 +1,47 @@
+.lab-title { font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 700; line-height: 1.2; margin-block: .5rem; }
+.lab-intro { color: var(--muted); max-width: 60ch; margin-block: 1rem 2rem; }
+.lab-loading { min-height: 20rem; padding-block: 2rem; }
+.ink-lab { container-type: inline-size; }
+.lab-layout { display: grid; gap: 1.5rem; align-items: start; }
+.lab-preview { position: relative; isolation: isolate; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; min-width: 0; }
+.lab-defs { position: absolute; pointer-events: none; }
+.lab-paper-grain { position: absolute; inset: 0; opacity: var(--lab-grain); pointer-events: none; background-image: var(--lab-speck); background-size: 160px 160px; }
+.lab-preview[data-halftone="true"] .lab-paper-grain { background-image: var(--lab-speck), radial-gradient(circle, var(--lab-tone) 0 1px, transparent 1.5px); background-size: 160px 160px, 6px 6px; }
+.lab-proof-content { position: relative; padding: clamp(1rem, 3vw, 2rem); }
+.lab-proof-heading { font-size: clamp(1.6rem, 3vw, 2.5rem); line-height: 1.3; font-weight: 700; margin-block: 1rem 1.5rem; filter: var(--lab-filter); }
+.lab-proof-card { padding: 1.25rem; transition: border-color var(--ap-transition); }
+.lab-proof-card h3 { font-weight: 700; margin-block: 1rem .5rem; }
+.lab-proof-card p, .lab-proof-note { color: var(--muted); font-size: .875rem; }
+.lab-proof-card .btn { margin-top: 1rem; filter: var(--lab-filter); }
+.lab-linework { width: 100%; height: 90px; filter: var(--lab-filter); }
+.lab-swatches { display: flex; gap: .5rem; margin-top: 1rem; }
+.lab-swatches span { width: 2rem; height: .6rem; border: 1px solid var(--line); }
+.lab-proof-note { margin-top: 1rem; }
+.lab-controls { display: grid; gap: 1.25rem; min-width: 0; }
+.lab-controls fieldset { padding: 1rem; border: 1px solid var(--line); border-radius: 12px; min-width: 0; display: grid; gap: .6rem; }
+.lab-controls legend { padding-inline: .4rem; font-size: .8rem; font-weight: 700; }
+.lab-controls label, .lab-share label { font-size: .85rem; font-weight: 600; }
+.lab-controls select { border: 1px solid var(--line); border-radius: 6px; padding: .5rem; background: var(--field); color: var(--ink); width: 100%; min-height: 44px; }
+.lab-control { display: grid; grid-template-columns: 1fr auto; column-gap: .5rem; align-items: center; }
+.lab-control output { font-variant-numeric: tabular-nums; font-size: .8rem; }
+.lab-control input { grid-column: 1 / -1; width: 100%; min-height: 32px; accent-color: var(--ink); }
+.lab-help { color: var(--muted); font-size: .75rem; line-height: 1.6; }
+.lab-colors { display: grid; gap: .75rem; }
+.lab-colors > div { display: grid; grid-template-columns: 1fr 3rem 5rem; gap: .5rem; align-items: center; }
+.lab-colors input { width: 100%; min-height: 36px; cursor: pointer; }
+.lab-colors output { font-size: .8rem; }
+.lab-check { display: flex; align-items: center; gap: .5rem; min-height: 44px; }
+.lab-check input { width: 1.1rem; height: 1.1rem; accent-color: var(--ink); }
+.lab-actions { position: sticky; bottom: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: .75rem; padding-block: 1rem; background: var(--paper); border-top: 1px solid var(--line); margin-top: 1.5rem; }
+.lab-actions .btn { min-height: 44px; }
+.lab-status { min-height: 3rem; font-size: .875rem; padding-block: .5rem; }
+.lab-share { display: grid; gap: .5rem; }
+.lab-share input { width: 100%; border: 1px solid var(--line); background: var(--field); color: var(--ink); border-radius: 6px; padding: .75rem; }
+.ink-lab :is(input, select, button):focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+@container (min-width: 760px) {
+  .lab-layout { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
+  .lab-controls { grid-column: 1; grid-row: 1; }
+  .lab-preview { grid-column: 2; grid-row: 1; position: sticky; top: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) { .lab-preview * { transition: none !important; } }
+@media (forced-colors: active) { .lab-paper-grain, .lab-preview::before { display: none; } .lab-proof-heading, .lab-linework, .lab-proof-card .btn { filter: none; } }

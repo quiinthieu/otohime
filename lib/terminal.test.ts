@@ -32,12 +32,12 @@ const key = (k: string, mods: Partial<{ metaKey: boolean; ctrlKey: boolean; altK
   ...mods,
 });
 
-test("the places are every public page, then ask, postcard and lab, each once", () => {
+test("the places are every public page including Lab, then ask and postcard, each once", () => {
   assert.deepEqual(
     PLACES.slice(0, PUBLIC_PAGES.length).map((p) => p.href),
     PUBLIC_PAGES.map((p) => p.href),
   );
-  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "ask", "postcard", "lab"]);
+  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "lab", "ask", "postcard"]);
   assert.equal(new Set(PLACES.map((p) => p.name)).size, PLACES.length);
   assert.equal(findPlace("ask"), PLACES.find((p) => p.name === "ask"));
   assert.equal((findPlace("ask") as { href: string }).href, "/");
@@ -272,4 +272,8 @@ test("the terminal is an accessible modal: a dialog with a combobox prompt, a li
   assert.match(terminal, /role="option"/);
   assert.match(terminal, /role="log"[\s\S]*?aria-live="polite"/);
   assert.match(terminal, /import "\.\/pocket-terminal\.css";/);
+});
+
+test("Lab has one terminal destination after joining public navigation", () => {
+  assert.equal(PLACES.filter(place => place.href === "/lab").length, 1);
 });
