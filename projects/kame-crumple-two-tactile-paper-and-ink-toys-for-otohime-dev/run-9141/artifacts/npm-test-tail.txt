@@ -1,0 +1,40 @@
+  ...
+# Subtest: a clear error when Chrome is absent and PW_PREFIX is unset
+ok 2409 - a clear error when Chrome is absent and PW_PREFIX is unset
+  ---
+  duration_ms: 1.164667
+  ...
+# Subtest: a clear error when playwright-core itself is missing
+ok 2410 - a clear error when playwright-core itself is missing
+  ---
+  duration_ms: 0.30175
+  ...
+# Subtest: a clear error when PW_PREFIX is set but its playwright is not there
+ok 2411 - a clear error when PW_PREFIX is set but its playwright is not there
+  ---
+  duration_ms: 0.43
+  ...
+# Subtest: the default loader resolves the repo's locked playwright-core
+ok 2412 - the default loader resolves the repo's locked playwright-core
+  ---
+  duration_ms: 3.189958
+  ...
+# Subtest: probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+ok 2413 - probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+  ---
+  duration_ms: 6257.620958
+  ...
+# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs
+ok 2414 - probe bounds: measured after the one-shot ink lands, from the visible glyphs
+  ---
+  duration_ms: 4339.230667
+  ...
+1..2414
+# tests 2432
+# suites 2
+# pass 2432
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 42693.670292

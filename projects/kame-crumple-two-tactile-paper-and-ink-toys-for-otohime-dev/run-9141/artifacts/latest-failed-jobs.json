@@ -1,0 +1,201 @@
+{
+  "label": "latest-failed",
+  "run": {
+    "id": 40439524623,
+    "head_sha": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+    "status": "completed",
+    "conclusion": "failure",
+    "url": "https://github.com/quiinthieu/otohime/actions/runs/40439524623"
+  },
+  "http": "200",
+  "total_count": 4,
+  "read": 4,
+  "jobs": [
+    {
+      "id": 121976229834,
+      "name": "checks",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Initialize containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v7",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check guestbook delivery author",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/cache@v6",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v7",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm ci",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run lint",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "conclusion": "success"
+        },
+        {
+          "name": "npm test",
+          "conclusion": "success"
+        },
+        {
+          "name": "Annotate failed unit tests",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run bash scripts/vercel-deploy.test.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/verify-deploy.sh --self-test",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run ask:check",
+          "conclusion": "success"
+        },
+        {
+          "name": "Migrations match db/schema.ts",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run build",
+          "conclusion": "success"
+        },
+        {
+          "name": "Real CPU camera and privacy verifier",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run db:migrate",
+          "conclusion": "success"
+        },
+        {
+          "name": "E2E against next start",
+          "conclusion": "success"
+        },
+        {
+          "name": "Motion probe, signed in",
+          "conclusion": "success"
+        },
+        {
+          "name": "Footer walk",
+          "conclusion": "success"
+        },
+        {
+          "name": "Footer Chromium probe",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v7",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/cache@v6",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v7",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 121976231114,
+      "name": "preview",
+      "status": "completed",
+      "conclusion": "skipped",
+      "steps": []
+    },
+    {
+      "id": 121976278309,
+      "name": "cleanup",
+      "status": "completed",
+      "conclusion": "skipped",
+      "steps": []
+    },
+    {
+      "id": 121981152892,
+      "name": "production",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v7",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v7",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm ci",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npx vercel@64 pull --yes --environment=production",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npx vercel@64 build --prod",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run db:migrate",
+          "conclusion": "success"
+        },
+        {
+          "name": "Deploy and verify the served sha",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Verify the deployed sha, terminal and press",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Run actions/setup-node@v7",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Run actions/checkout@v7",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}

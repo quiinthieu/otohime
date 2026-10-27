@@ -1,0 +1,45 @@
+{
+  "diagnostic_controls": {
+    "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/browser-gate-diagnostics.test.ts lib/e2e-annotate.test.ts scripts/ci-workflow.test.mjs",
+    "exit": 0,
+    "counts": {
+      "tests": 38,
+      "pass": 38,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "required_named_tests_observed": [
+      "pre-test crash exposes real combined stdout/stderr",
+      "fallback preserves real per-assertion reporter diagnostics",
+      "startup negative control annotates readiness",
+      "wiring negative control: removing the EXIT fallback"
+    ]
+  },
+  "repository_suite": {
+    "command": "npm test",
+    "exit": 0,
+    "counts": {
+      "tests": 2432,
+      "pass": 2432,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "required_named_tests_observed": [
+      "pre-test crash exposes real combined stdout/stderr",
+      "fallback preserves real per-assertion reporter diagnostics",
+      "startup negative control annotates readiness",
+      "wiring negative control: removing the EXIT fallback"
+    ]
+  },
+  "lint_and_typecheck": {
+    "command": "npm run lint && npm run typecheck",
+    "exit": 0,
+    "lint_errors": 0,
+    "existing_lint_warnings": 10,
+    "route_types_generated": true,
+    "compiler_diagnostics": 0,
+    "negative_controls": "analyzer-controls.json"
+  }
+}

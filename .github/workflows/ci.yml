@@ -127,62 +127,57 @@ jobs:
           node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
           node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log"
       - run: npm run db:migrate
-      # The job log needs a token to read: a failed test is also an annotation and a step summary section
-      # (scripts/e2e-annotate.mjs), and a red step adds the server's last lines there, with what ran.
+      # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
       - name: E2E against next start
         timeout-minutes: 12
         run: |
+          set -o pipefail
+          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "E2E against next start" "$status" "$RUNNER_TEMP/e2e.log" || true; exit "$status"' EXIT
+          : >"$RUNNER_TEMP/e2e.log"
           npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
-          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
-          status=0
-          npm run test:e2e || status=$?
-          if [ "$status" -ne 0 ]; then
-            {
-              echo "## E2E environment"
-              echo
-              echo "- commit $GITHUB_SHA, build $(cat .next/BUILD_ID), node $(node -v), $(google-chrome --version 2>/dev/null || echo 'no google-chrome'), $(nproc) CPUs"
-              echo
-              echo "### next start, last 80 lines"
-              echo
-              echo '```'
-              tail -n 80 "$RUNNER_TEMP/next-start.log" | sed 's/```/ˋˋˋ/g'
-              echo '```'
-            } >>"$GITHUB_STEP_SUMMARY"
-            tail -n 80 "$RUNNER_TEMP/next-start.log"
-          fi
-          exit "$status"
+          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
+          npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
       # Signs in through the form against the same server and database, so a page error on the hop into a
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
       - name: Motion probe, signed in
         timeout-minutes: 8
         run: |
+          set -o pipefail
+          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log" || true; exit "$status"' EXIT
+          : >"$RUNNER_TEMP/motion-probe.log"
           # The server the e2e step left running; start one again if it has gone.
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
             npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
+            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/motion-probe.log"
           }
           status=0
-          bash scripts/probe-motion-signed-in.sh 2>&1 | tee "$RUNNER_TEMP/motion-probe.log" || status=$?
+          bash scripts/probe-motion-signed-in.sh 2>&1 | tee -a "$RUNNER_TEMP/motion-probe.log" || status=$?
           node scripts/ci-probe-annotate.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log"
       - name: Footer walk
         timeout-minutes: 8
         run: |
+          set -o pipefail
+          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log" || true; exit "$status"' EXIT
+          : >"$RUNNER_TEMP/footer-walk.log"
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
             npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
+            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/footer-walk.log"
           }
           status=0
-          EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh 2>&1 | tee "$RUNNER_TEMP/footer-walk.log" || status=$?
+          EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-walk.log" || status=$?
           node scripts/ci-probe-annotate.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log"
       - name: Footer Chromium probe
         timeout-minutes: 8
         run: |
+          set -o pipefail
+          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true; exit "$status"' EXIT
+          : >"$RUNNER_TEMP/footer-probe.log"
           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
             npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
+            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/footer-probe.log"
           }
           status=0
-          EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee "$RUNNER_TEMP/footer-probe.log" || status=$?
+          EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-probe.log" || status=$?
           node scripts/ci-probe-annotate.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log"
 
   preview:

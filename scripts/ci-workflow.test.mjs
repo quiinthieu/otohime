@@ -155,7 +155,7 @@ test("all four non-TAP probe steps annotate the captured pipefail status", () =>
     assert.ok(start >= 0, step);
     const end = checks.indexOf("      - ", start + 1);
     const body = checks.slice(start, end < 0 ? undefined : end);
-    assert.ok(body.includes(`${command} 2>&1 | tee `), body);
+    assert.match(body, new RegExp(command.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + " 2>&1 \\| tee (?:-a )?"));
     assert.match(body, /\| tee [^\n]+ \|\| status=\$\?/);
     assert.ok(body.includes(`node scripts/ci-probe-annotate.mjs "${step}" "$status"`), body);
   }
@@ -188,7 +188,7 @@ test("Footer CI step preserves probe failure and surfaces assertions with a boun
   const work = mkdtempSync(join(tmpdir(), "footer-ci-"));
   try {
     mkdirSync(join(work, "scripts"));
-    for (const file of ["ci-probe-annotate.mjs", "e2e-annotate.mjs"]) {
+    for (const file of ["ci-probe-annotate.mjs", "e2e-annotate.mjs", "browser-gate-diagnostics.mjs"]) {
       copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
     }
     writeFileSync(join(work, "scripts/probe-end.sh"), 'echo "ok - first"\necho "not ok - fixture assertion" >&2\necho "probe: 1 ok, 1 failed"\nexit "$PROBE_STATUS"\n');
@@ -220,4 +220,142 @@ test("Footer CI step preserves probe failure and surfaces assertions with a boun
       if (status === 0) assert.doesNotMatch(result.stdout, /::error/);
     }
   } finally { rmSync(work, { recursive: true, force: true }); }
+});
+
+const browserGates = [
+  ["E2E against next start", "e2e.log"],
+  ["Motion probe, signed in", "motion-probe.log"],
+  ["Footer walk", "footer-walk.log"],
+  ["Footer Chromium probe", "footer-probe.log"],
+];
+
+function gateBody(name) {
+  const start = lines.indexOf(`      - name: ${name}`);
+  assert.ok(start >= 0, name);
+  const run = lines.indexOf("        run: |", start);
+  const body = [];
+  for (const line of lines.slice(run + 1)) {
+    if (line.trim() && !line.startsWith("          ")) break;
+    body.push(line.slice(10));
+  }
+  return body.join("\n");
+}
+
+// Execute the actual YAML shell, not a copy of its implementation. Only external
+// server/readiness/probe behavior is replaced; Node, streams, tee and reporters are real.
+function runGate(name, log, scenario, mutate = (s) => s) {
+  const work = mkdtempSync(join(tmpdir(), "browser-gate-ci-"));
+  try {
+    mkdirSync(join(work, "scripts"));
+    mkdirSync(join(work, ".next"));
+    writeFileSync(join(work, ".next/BUILD_ID"), "workflow-fixture-build\n");
+    for (const file of ["browser-gate-diagnostics.mjs", "ci-probe-annotate.mjs", "e2e-annotate.mjs"]) {
+      copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
+    }
+    writeFileSync(join(work, "fixture.mjs"), `
+      import { appendFileSync } from 'node:fs';
+      appendFileSync('probe-called', 'called\\n');
+      process.stdout.write('workflow child stdout\\n', () => {
+        process.stderr.write('workflow child stderr: crashed before reporter\\n', () => {
+          process.exitCode = Number(process.env.FIXTURE_STATUS);
+        });
+      });
+    `);
+    for (const file of ["probe-motion-signed-in.sh", "walk-end.sh", "probe-end.sh"]) {
+      writeFileSync(join(work, "scripts", file), "node fixture.mjs\n");
+    }
+    writeFileSync(join(work, "next-start.log"), "existing server diagnostic\n");
+    // A stale previous log must not become this attempt's diagnostic.
+    writeFileSync(join(work, log), "stale-command-diagnostic\n");
+    const summary = join(work, "summary.md");
+    writeFileSync(summary, "");
+    const stubs = `
+      npm() {
+        if [ "$1" = start ]; then echo 'fixture server startup failure' >&2; return 31; fi
+        if [ "$1" = run ] && [ "$2" = test:e2e ]; then node fixture.mjs; return $?; fi
+        echo 'unexpected npm command' >&2; return 99
+      }
+      curl() {
+        if [ "$FIXTURE_STARTUP" = fail ]; then
+          wait || true
+          echo 'fixture readiness connection refused' >&2
+          return 22
+        fi
+        echo '{"ok":true}'
+      }
+    `;
+    const result = spawnSync("bash", ["-eo", "pipefail", "-c", `${stubs}\n${mutate(gateBody(name))}`], {
+      cwd: work, encoding: "utf8", timeout: 10000,
+      env: { ...process.env, RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "workflow-fixture-sha", BASE_URL: "http://fixture.invalid",
+        FIXTURE_STATUS: scenario === "success" ? "0" : "43", FIXTURE_STARTUP: scenario === "startup" ? "fail" : "ok" },
+    });
+    let calls = "";
+    try { calls = readFileSync(join(work, "probe-called"), "utf8"); } catch {}
+    return { ...result, report: readFileSync(summary, "utf8"), captured: readFileSync(join(work, log), "utf8"), calls };
+  } finally { rmSync(work, { recursive: true, force: true }); }
+}
+
+for (const [name, log] of browserGates) {
+  test(`${name}: real workflow captures combined command failure and identity, preserving exit 43`, () => {
+    const result = runGate(name, log, "crash");
+    assert.equal(result.status, 43, result.stderr);
+    assert.equal(result.calls, "called\n");
+    assert.match(result.captured, /workflow child stdout\nworkflow child stderr: crashed before reporter\n$/);
+    assert.match(result.stdout, /::error .*workflow child stderr: crashed before reporter/);
+    assert.match(result.report, /workflow-fixture-sha/);
+    assert.match(result.report, /workflow-fixture-build/);
+    assert.match(result.report, /Node: v22\./);
+    assert.match(result.report, /Chrome: /);
+    assert.match(result.report, /server.*(?:diagnostic|startup failure)/);
+    assert.doesNotMatch(result.report, /stale-command-diagnostic/);
+  });
+
+  test(`${name}: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22`, () => {
+    const result = runGate(name, log, "startup");
+    assert.equal(result.status, 22, result.stderr);
+    assert.equal(result.calls, "");
+    assert.match(result.stdout, /::error .*fixture readiness connection refused/);
+    assert.match(result.report, /fixture readiness connection refused/);
+    assert.match(result.report, /fixture server startup failure/);
+    assert.match(result.report, /workflow-fixture-build/);
+    assert.doesNotMatch(result.report, /stale-command-diagnostic/);
+  });
+
+  test(`${name}: successful workflow emits no failure annotation or summary`, () => {
+    const result = runGate(name, log, "success");
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.calls, "called\n");
+    assert.match(result.captured, /workflow child stdout/);
+    assert.match(result.captured, /workflow child stderr/);
+    assert.doesNotMatch(result.stdout, /::error /);
+    assert.equal(result.report, "");
+  });
+}
+
+test("wiring negative control: removing the EXIT fallback makes a startup crash opaque", () => {
+  const result = runGate(...browserGates[0], "startup", (body) => body.replace(/^.*trap .* EXIT$/m, ":"));
+  assert.equal(result.status, 22, result.stderr);
+  assert.match(result.captured, /readiness connection refused/);
+  assert.doesNotMatch(result.stdout, /::error /);
+  assert.equal(result.report, "");
+});
+
+test("reporter failure cannot replace the original workflow command exit", () => {
+  const result = runGate(...browserGates[0], "crash", (body) => body.replace("node scripts/browser-gate-diagnostics.mjs", "node scripts/missing-diagnostics.mjs"));
+  assert.equal(result.status, 43);
+  assert.match(result.stderr, /MODULE_NOT_FOUND/);
+  assert.equal(result.calls, "called\n");
+});
+
+test("browser fallbacks keep the existing gate order, probe budgets and assertion reporter", () => {
+  const checks = steps("checks");
+  const positions = browserGates.map(([name]) => checks.indexOf(`- name: ${name}\n`));
+  assert.deepEqual(positions, [...positions].sort((a, b) => a - b));
+  for (const [name] of browserGates.slice(1)) {
+    assert.ok(checks.includes(`- name: ${name}\n        timeout-minutes: 8\n`));
+  }
+  const e2e = readFileSync(new URL("./e2e.mjs", import.meta.url), "utf8");
+  assert.match(e2e, /GITHUB_ACTIONS === "true"/);
+  assert.match(e2e, /--test-reporter=tap/);
+  assert.match(e2e, /e2e-annotate.mjs/);
 });

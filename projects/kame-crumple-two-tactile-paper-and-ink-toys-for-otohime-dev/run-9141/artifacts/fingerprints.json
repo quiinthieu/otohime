@@ -1,0 +1,78 @@
+{
+  "base_sha": "20035357a972dbc94c7fbc08b45753cc3f8e1b78",
+  "versions": {
+    "node": "v22.12.0",
+    "npm": "10.9.0",
+    "chrome": "Google Chrome 156.0.8078.48",
+    "next": "16.4.2",
+    "playwright-core": "1.64.0",
+    "typescript": "5.9.3",
+    "eslint": "9.39.5"
+  },
+  "profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "platform": "darwin-arm64",
+  "build_id": "not built for this diagnostics-only task; fixture-build/workflow-fixture-build are fake",
+  "sha256": {
+    "package.json": "b43340c2d2ad12c024f0d3cb0b71688e895a6715e494706be759b6323ff20112",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    ".github/workflows/ci.yml": "c4feef3f399f29b5822d7c008f3413e7e79f6fa26d8fd2e828139cc1d9f9e592",
+    "scripts/browser-gate-diagnostics.mjs": "650d8d18ad0f8b1690a17120257e03c8787036221eb05d6ee14b8ce480a57792",
+    "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+    "scripts/e2e-annotate.mjs": "9f51f1cc753de5b8690a143ac3f404a90d574d660a5d09f20fd7eebd859933f4",
+    "scripts/ci-probe-annotate.mjs": "290b01a759e293e646a9db383e6e7daa482d6e4f0fc4590ffb5d21bdca8e3bfe",
+    "scripts/probe-motion-signed-in.sh": "76972ccd8cafd12a42b55232fc7f3f9fb15704937a07cc275d4731e7541ca884",
+    "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+    "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+    "lib/browser-gate-diagnostics.test.ts": "5f591a07eab1ff4a5a0a7bb41f6ec56ddf21a817e05afb5a6f90d5fcada35a09",
+    "lib/e2e-annotate.test.ts": "1c4ace851076190cb7cfa4479830b7ebf3753b6c28446c54e1fa8f587e6b9690",
+    "lib/e2e-runner.test.ts": "ab7823ea2df59b7412eec57c1ca97d6e15502b524f494468fecae7e0b4404c80",
+    "scripts/ci-workflow.test.mjs": "06f3b405cdf145bb81a60326d67a0321bfe2b93e166dfce0fb099bac3e5fa87b"
+  },
+  "historical_snapshots": [
+    {
+      "label": "latest-failed",
+      "sha": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+      "hashes": {
+        "package.json": "b43340c2d2ad12c024f0d3cb0b71688e895a6715e494706be759b6323ff20112",
+        "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+        "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+        ".github/workflows/ci.yml": "b08a5728f75ab97b52106052ed52d5edce37b1028ea799c0fecefd84d0800b6a",
+        "scripts/browser-gate-diagnostics.mjs": null,
+        "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+        "scripts/e2e-annotate.mjs": "9f51f1cc753de5b8690a143ac3f404a90d574d660a5d09f20fd7eebd859933f4",
+        "scripts/ci-probe-annotate.mjs": "290b01a759e293e646a9db383e6e7daa482d6e4f0fc4590ffb5d21bdca8e3bfe",
+        "scripts/probe-motion-signed-in.sh": "76972ccd8cafd12a42b55232fc7f3f9fb15704937a07cc275d4731e7541ca884",
+        "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+        "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+        "lib/browser-gate-diagnostics.test.ts": null,
+        "lib/e2e-annotate.test.ts": null,
+        "lib/e2e-runner.test.ts": "d4b11956ad3200e85b92fb9b83245a076b10b6c80847be56aef6f6d480874c95",
+        "scripts/ci-workflow.test.mjs": "3f704d120d61ca598781f1634a339b1129055aaf6018906bbfbf6989fb40ff0d"
+      }
+    },
+    {
+      "label": "latest-success",
+      "sha": "a7da8e81161e46245581b4be602ae07400248c84",
+      "hashes": {
+        "package.json": "b43340c2d2ad12c024f0d3cb0b71688e895a6715e494706be759b6323ff20112",
+        "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+        "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+        ".github/workflows/ci.yml": "b08a5728f75ab97b52106052ed52d5edce37b1028ea799c0fecefd84d0800b6a",
+        "scripts/browser-gate-diagnostics.mjs": null,
+        "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+        "scripts/e2e-annotate.mjs": "9f51f1cc753de5b8690a143ac3f404a90d574d660a5d09f20fd7eebd859933f4",
+        "scripts/ci-probe-annotate.mjs": "290b01a759e293e646a9db383e6e7daa482d6e4f0fc4590ffb5d21bdca8e3bfe",
+        "scripts/probe-motion-signed-in.sh": "76972ccd8cafd12a42b55232fc7f3f9fb15704937a07cc275d4731e7541ca884",
+        "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+        "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+        "lib/browser-gate-diagnostics.test.ts": null,
+        "lib/e2e-annotate.test.ts": null,
+        "lib/e2e-runner.test.ts": "d4b11956ad3200e85b92fb9b83245a076b10b6c80847be56aef6f6d480874c95",
+        "scripts/ci-workflow.test.mjs": "3f704d120d61ca598781f1634a339b1129055aaf6018906bbfbf6989fb40ff0d"
+      }
+    }
+  ]
+}

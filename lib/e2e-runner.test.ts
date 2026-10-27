@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { execFile, spawn } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { execFile, spawn, spawnSync } from "node:child_process";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { createRequire } from "node:module";
@@ -119,10 +119,48 @@ test("hops: down, then up", () => {
 test("CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails", () => {
   const ci = readFileSync(join(ROOT, ".github/workflows/ci.yml"), "utf8");
   const step = ci.slice(ci.indexOf("- name: E2E against next start"), ci.indexOf("- name: Motion probe, signed in"));
-  assert.match(step, /npm start >"\$RUNNER_TEMP\/next-start\.log" 2>&1 &/);
-  assert.match(step, /status=0\n\s+npm run test:e2e \|\| status=\$\?\n/);
-  assert.match(step, /tail -n 80 "\$RUNNER_TEMP\/next-start\.log"[^\n]*\n[\s\S]*>>"\$GITHUB_STEP_SUMMARY"/);
-  assert.match(step, /\n\s+exit "\$status"\n/);
+  const body = step.slice(step.indexOf("        run: |") + "        run: |".length)
+    .split("\n").filter((line) => line.startsWith("          ")).map((line) => line.slice(10)).join("\n");
+  const dir = mkdtempSync(join(tmpdir(), "e2e-ci-status-"));
+  try {
+    mkdirSync(join(dir, "scripts"));
+    for (const file of ["browser-gate-diagnostics.mjs", "e2e-annotate.mjs"]) {
+      copyFileSync(join(ROOT, "scripts", file), join(dir, "scripts", file));
+    }
+    writeFileSync(join(dir, "fixture.mjs"), `
+      process.stdout.write('suite stdout\\n', () => {
+        process.stderr.write('suite stderr\\n', () => { process.exitCode = Number(process.env.CI_FIXTURE_STATUS); });
+      });
+    `);
+    const summaryPath = join(dir, "summary.md");
+    for (const status of [17, 0]) {
+      writeFileSync(summaryPath, "");
+      const result = spawnSync("bash", ["-eo", "pipefail", "-c", `
+        npm() {
+          if [ "$1" = start ]; then
+            for ((i=0; i<100; i++)); do echo "server $i"; done
+          else node fixture.mjs; fi
+        }
+        curl() { wait || true; }
+        ${body}
+      `], { cwd: dir, env: { ...process.env, RUNNER_TEMP: dir, GITHUB_STEP_SUMMARY: summaryPath,
+        GITHUB_SHA: "ci-status-fixture", CI_FIXTURE_STATUS: String(status) }, encoding: "utf8", timeout: 10000 });
+      assert.equal(result.status, status, result.stderr);
+      assert.equal(readFileSync(join(dir, "e2e.log"), "utf8"), "suite stdout\nsuite stderr\n");
+      const summary = readFileSync(summaryPath, "utf8");
+      if (status === 0) {
+        assert.equal(summary, "");
+        assert.doesNotMatch(result.stdout, /::error /);
+      } else {
+        assert.match(result.stdout, /::error .*suite stderr/);
+        assert.match(summary, /ci-status-fixture/);
+        assert.match(summary, /suite stdout\nsuite stderr/);
+        assert.doesNotMatch(summary, /server 19\b/);
+        assert.match(summary, /server 20\n/);
+        assert.match(summary, /server 99\n/);
+      }
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
 // scripts/walk-end.sh and scripts/probe-end.sh fall back to this when no database answers and Docker is not there.

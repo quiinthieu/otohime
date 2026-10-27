@@ -1,0 +1,17 @@
+[
+  {
+    "control": "lint accepts valid source",
+    "exit": 0,
+    "diagnostic": ""
+  },
+  {
+    "control": "lint rejects undefined symbol",
+    "exit": 1,
+    "diagnostic": "/Users/avietidol/Library/Application Support/build-worker/leases/e9439ec5-0870-4409-93ad-4d317ce44974-913c6b46226ea7e237e81b0d2da05e3c/work/otohime/scripts/browser-gate-diagnostics.mjs\n  1:1  error  '__browser_gate_lint_negative_control__' is not defined  no-undef\n\n\u2716 1 problem (1 error, 0 warnings)"
+  },
+  {
+    "control": "project typecheck rejects number assigned to string",
+    "exit": 2,
+    "diagnostic": "> otohime@0.1.0 typecheck\n> next typegen && tsc --noEmit\n\nGenerating route types...\n\u2713 Types generated successfully\nlib/__browser_gate_type_negative_control__.ts(1,14): error TS2322: Type 'number' is not assignable to type 'string'."
+  }
+]

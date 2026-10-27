@@ -1,0 +1,12 @@
+{
+  "exit": 41,
+  "expected": 41,
+  "real_boundaries": [
+    "Node helper and builtin imports",
+    "real Chrome --version via shell exec of installed application binary"
+  ],
+  "fake_boundaries": [],
+  "build_id": "unavailable; no application build claimed",
+  "stdout": "::error title=CLI preflight (intentional failure)::Gate: CLI preflight (intentional failure); exit 41%0ACommit: 20035357a972dbc94c7fbc08b45753cc3f8e1b78%0ABuild: BUILD_ID unavailable (no output captured)%0ANode: v22.12.0%0AChrome: Google Chrome 156.0.8078.48%0ACommand, last 80 lines (bounded):%0Acommand log unavailable (no output captured)%0Anext start, last 80 lines (bounded):%0Anext-start.log unavailable (no output captured)\n",
+  "stderr": ""
+}
