@@ -1,0 +1,20 @@
+[
+  {
+    "name": "worker-typecheck",
+    "cmd": "npm run typecheck",
+    "exit": 0,
+    "seconds": 0.69
+  },
+  {
+    "name": "worker-local",
+    "cmd": "npm run test:local",
+    "exit": 0,
+    "seconds": 5.93
+  },
+  {
+    "name": "worker-bundle",
+    "cmd": "npm run bundle:check",
+    "exit": 0,
+    "seconds": 1.61
+  }
+]

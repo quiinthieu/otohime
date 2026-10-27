@@ -1,0 +1,355 @@
+{
+  "observed_at": "2026-10-27T01:19:38.077764+00:00",
+  "jobs": [
+    {
+      "id": 121945296200,
+      "name": "checks",
+      "status": "completed",
+      "conclusion": "success",
+      "runner_name": "GitHub Actions 1000000877",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-27T01:01:35Z",
+          "completed_at": "2026-10-27T01:01:36Z"
+        },
+        {
+          "name": "Initialize containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-27T01:01:37Z",
+          "completed_at": "2026-10-27T01:01:43Z"
+        },
+        {
+          "name": "Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-27T01:01:43Z",
+          "completed_at": "2026-10-27T01:01:45Z"
+        },
+        {
+          "name": "Check guestbook delivery author",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-27T01:01:45Z",
+          "completed_at": "2026-10-27T01:01:45Z"
+        },
+        {
+          "name": "Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-27T01:01:45Z",
+          "completed_at": "2026-10-27T01:01:48Z"
+        },
+        {
+          "name": "Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-27T01:01:48Z",
+          "completed_at": "2026-10-27T01:01:51Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-27T01:01:51Z",
+          "completed_at": "2026-10-27T01:02:02Z"
+        },
+        {
+          "name": "Run npm run lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-27T01:02:02Z",
+          "completed_at": "2026-10-27T01:02:20Z"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-27T01:02:20Z",
+          "completed_at": "2026-10-27T01:02:32Z"
+        },
+        {
+          "name": "npm test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-27T01:02:32Z",
+          "completed_at": "2026-10-27T01:03:05Z"
+        },
+        {
+          "name": "Annotate failed unit tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-27T01:03:05Z",
+          "completed_at": "2026-10-27T01:03:05Z"
+        },
+        {
+          "name": "Run bash scripts/vercel-deploy.test.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-27T01:03:05Z",
+          "completed_at": "2026-10-27T01:03:12Z"
+        },
+        {
+          "name": "Run bash scripts/verify-deploy.sh --self-test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-27T01:03:12Z",
+          "completed_at": "2026-10-27T01:03:35Z"
+        },
+        {
+          "name": "Run npm run ask:check",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-27T01:03:35Z",
+          "completed_at": "2026-10-27T01:03:35Z"
+        },
+        {
+          "name": "Migrations match db/schema.ts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-27T01:03:35Z",
+          "completed_at": "2026-10-27T01:03:36Z"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-27T01:03:36Z",
+          "completed_at": "2026-10-27T01:03:54Z"
+        },
+        {
+          "name": "Real CPU camera and privacy verifier",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-27T01:03:54Z",
+          "completed_at": "2026-10-27T01:04:53Z"
+        },
+        {
+          "name": "Run npm run db:migrate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-27T01:04:53Z",
+          "completed_at": "2026-10-27T01:04:54Z"
+        },
+        {
+          "name": "E2E against next start",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-27T01:04:54Z",
+          "completed_at": "2026-10-27T01:11:57Z"
+        },
+        {
+          "name": "Motion probe, signed in",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-27T01:11:57Z",
+          "completed_at": "2026-10-27T01:14:45Z"
+        },
+        {
+          "name": "Footer walk",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-27T01:14:45Z",
+          "completed_at": "2026-10-27T01:14:46Z"
+        },
+        {
+          "name": "Footer Chromium probe",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-27T01:14:46Z",
+          "completed_at": "2026-10-27T01:15:50Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 41,
+          "started_at": "2026-10-27T01:15:50Z",
+          "completed_at": "2026-10-27T01:15:50Z"
+        },
+        {
+          "name": "Post Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42,
+          "started_at": "2026-10-27T01:15:50Z",
+          "completed_at": "2026-10-27T01:16:01Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43,
+          "started_at": "2026-10-27T01:16:01Z",
+          "completed_at": "2026-10-27T01:16:01Z"
+        },
+        {
+          "name": "Stop containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 44,
+          "started_at": "2026-10-27T01:16:01Z",
+          "completed_at": "2026-10-27T01:16:01Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 45,
+          "started_at": "2026-10-27T01:16:01Z",
+          "completed_at": "2026-10-27T01:16:01Z"
+        }
+      ]
+    },
+    {
+      "id": 121945297796,
+      "name": "preview",
+      "status": "completed",
+      "conclusion": "skipped",
+      "runner_name": null,
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "steps": []
+    },
+    {
+      "id": 121945297970,
+      "name": "cleanup",
+      "status": "completed",
+      "conclusion": "skipped",
+      "runner_name": null,
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "steps": []
+    },
+    {
+      "id": 121950183033,
+      "name": "production",
+      "status": "in_progress",
+      "conclusion": null,
+      "runner_name": "GitHub Actions 1000000878",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-27T01:16:06Z",
+          "completed_at": "2026-10-27T01:16:07Z"
+        },
+        {
+          "name": "Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-27T01:16:07Z",
+          "completed_at": "2026-10-27T01:16:09Z"
+        },
+        {
+          "name": "Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-27T01:16:09Z",
+          "completed_at": "2026-10-27T01:16:13Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-27T01:16:13Z",
+          "completed_at": "2026-10-27T01:16:28Z"
+        },
+        {
+          "name": "Run npx vercel@64 pull --yes --environment=production",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-27T01:16:28Z",
+          "completed_at": "2026-10-27T01:16:46Z"
+        },
+        {
+          "name": "Run npx vercel@64 build --prod",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-27T01:16:46Z",
+          "completed_at": "2026-10-27T01:17:29Z"
+        },
+        {
+          "name": "Run npm run db:migrate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-27T01:17:29Z",
+          "completed_at": "2026-10-27T01:17:32Z"
+        },
+        {
+          "name": "Deploy and verify the served sha",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-27T01:17:32Z",
+          "completed_at": "2026-10-27T01:18:13Z"
+        },
+        {
+          "name": "Verify the deployed sha, terminal and press",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 9,
+          "started_at": "2026-10-27T01:18:13Z",
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/setup-node@v7",
+          "status": "pending",
+          "conclusion": null,
+          "number": 17,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/checkout@v7",
+          "status": "pending",
+          "conclusion": null,
+          "number": 18,
+          "started_at": null,
+          "completed_at": null
+        }
+      ]
+    }
+  ]
+}

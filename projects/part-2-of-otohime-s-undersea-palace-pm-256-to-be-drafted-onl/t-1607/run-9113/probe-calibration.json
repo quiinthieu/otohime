@@ -1,0 +1,9 @@
+{
+  "initialFailures": [
+    {
+      "name": "actual Worker: independent handcrafted RSV2 negative after valid click",
+      "error": "Error: RSV deadline"
+    }
+  ],
+  "correction": "Await actual ws receiver conclude event for the protocol close rather than TCP close or another socket event; final received close is 1002 for both actual Worker and fake. No app source changed."
+}

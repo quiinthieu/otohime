@@ -1,0 +1,30 @@
+      duration_ms: 1.135667
+      type: 'test'
+      ...
+    1..9
+ok 2 - fake-only behaviour
+  ---
+  duration_ms: 69.480125
+  type: 'suite'
+  ...
+# Subtest: teardown is deterministic: close() resolves with open sockets and frees the port
+ok 3 - teardown is deterministic: close() resolves with open sockets and frees the port
+  ---
+  duration_ms: 0.816792
+  type: 'test'
+  ...
+# Subtest: the CLI prints its ready line and exits on SIGTERM
+ok 4 - the CLI prints its ready line and exits on SIGTERM
+  ---
+  duration_ms: 66.362084
+  type: 'test'
+  ...
+1..4
+# tests 22
+# suites 2
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1191.824792

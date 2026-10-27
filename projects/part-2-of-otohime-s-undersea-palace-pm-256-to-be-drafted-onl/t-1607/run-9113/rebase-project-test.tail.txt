@@ -1,0 +1,25 @@
+  ---
+  duration_ms: 3.32425
+  type: 'test'
+  ...
+# Subtest: probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+ok 2361 - probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+  ---
+  duration_ms: 2393.858417
+  type: 'test'
+  ...
+# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs
+ok 2362 - probe bounds: measured after the one-shot ink lands, from the visible glyphs
+  ---
+  duration_ms: 1991.39025
+  type: 'test'
+  ...
+1..2362
+# tests 2380
+# suites 2
+# pass 2380
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20174.312666
