@@ -1,0 +1,314 @@
+[
+  {
+    "sequence": 1,
+    "title": "Deterministic fracture model",
+    "role": "software_engineer",
+    "qa": "skip",
+    "depends_on": [],
+    "problem": "Cards have no reproducible crack and mend geometry, so shared seeds cannot reconstruct a visitor's gold seams.",
+    "action_items": [
+      "Define stable eligible card IDs and deterministic seeded branching fracture paths from normalized click coordinates, with bounded path count and SVG dimensions.",
+      "Create pure gesture classification for clustered pointerdowns and shake thresholds; define reduced-motion behavior and test branch geometry, seed replay, limits, gesture timing, and malformed inputs.",
+      "Record task evidence with executable/build identity, real versus fixture boundary, test outcomes, and any deferred external check."
+    ],
+    "interfaces": [
+      "lib/kintsugi.ts",
+      "lib/kintsugi.test.ts",
+      "projects/otohime-dev-two-new-paper-and-ink-experiments-1-kintsugi-bre/task-1-evidence.md"
+    ],
+    "non_goals": [
+      "database writes",
+      "browser animation",
+      "card layout changes"
+    ],
+    "acceptance_criteria": "The same card, seed and origin reproduce the same bounded fracture and gold seam paths; clustered clicks and supported shake thresholds classify deterministically, including a reduced-motion bypass.",
+    "verification": [
+      {
+        "name": "project unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Shared seam store and API",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "1"
+    ],
+    "problem": "Repaired seams disappear on reload and unrestricted writes could inflate rankings or grow storage.",
+    "action_items": [
+      "Read the installed Next route handler guide, add Drizzle schema and migration for aggregate card counts, capped recent seam seeds, and bounded usage buckets.",
+      "Implement transactional admit/list/top operations using an allowlist, hashed visitor bucket, per-card and hourly limits, daily global cap, and bounded cleanup; do not persist raw identifiers.",
+      "Expose POST and GET /api/kintsugi with validated payloads, safe error codes, no-cache write responses and graceful read fallback; add store/API tests with a real throwaway Postgres fixture or equivalent transaction integration fixture and rejection controls.",
+      "At task start, if a new DB capability or permission absent from the declared prerequisites is discovered and only an operator can establish it, raise an exact prerequisite-linked operator_action; proceed with independent implementation.",
+      "Record task evidence with executable/build identity, real versus fixture boundary, test outcomes, and any deferred external check."
+    ],
+    "interfaces": [
+      "db/schema.ts",
+      "db/migrations/",
+      "lib/kintsugi-store.ts",
+      "lib/kintsugi-http.ts",
+      "lib/kintsugi-store.test.ts",
+      "lib/kintsugi-http.test.ts",
+      "app/api/kintsugi/route.ts",
+      "projects/otohime-dev-two-new-paper-and-ink-experiments-1-kintsugi-bre/task-2-evidence.md",
+      "e2e/kintsugi-api.test.ts"
+    ],
+    "non_goals": [
+      "client animation",
+      "public leaderboard page",
+      "new KV provider"
+    ],
+    "acceptance_criteria": "A valid card mend is stored and returned with bounded shared seeds and counts; invalid IDs, duplicate or over-limit visitors, and exhausted global budget cannot write. Database outage produces a bounded service response without exposing identifiers.",
+    "verification": [
+      {
+        "name": "project unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "migration and API integration",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/kintsugi-api.test.ts'",
+        "expect": "exit0",
+        "timeout_s": 1500
+      }
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Kintsugi card interaction",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "1",
+      "2"
+    ],
+    "problem": "Visitors cannot discover or experience the crack-and-gold repair on existing page cards.",
+    "action_items": [
+      "Read installed Next client/layout guidance; mount one lightweight Kintsugi layer and opt stable existing cards in with data-kintsugi IDs.",
+      "Recognize clustered pointer clicks and permission-gated DeviceMotion after a gesture; keep interactive card DOM and focus order intact, with decorative SVG aria-hidden and pointer-events none.",
+      "Animate origin-based ink fracture, restrained displacement, paper-crunch via the existing off-by-default Web Audio gate, then gold dash reveal and sheen; reduced motion skips drift/shake and fades seams in.",
+      "Send a bounded mend request, replay stored seeds, and leave local repair usable when offline or rate-limited. Add browser tests for click, supported motion, mute, card link, API failure and reduced motion.",
+      "Record task evidence with executable/build identity, real versus fixture boundary, test outcomes, and any deferred external check."
+    ],
+    "interfaces": [
+      "components/kintsugi-layer.tsx",
+      "components/kintsugi-layer.css",
+      "app/(site)/(app)/layout.tsx",
+      "app/(site)/(app)/work/page.tsx",
+      "lib/sound-client.ts",
+      "e2e/kintsugi.test.ts",
+      "projects/otohime-dev-two-new-paper-and-ink-experiments-1-kintsugi-bre/task-3-evidence.md"
+    ],
+    "non_goals": [
+      "DOM shard cloning",
+      "background accelerometer capture",
+      "new audio files"
+    ],
+    "acceptance_criteria": "Four near clicks crack an opted-in card from the clicked point and mend it in gold; the card remains usable, sound honors the site switch, stored seams replay, and reduced motion is calm. Shake works only after supported permission.",
+    "verification": [
+      {
+        "name": "project unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "browser suite",
+        "cwd": ".",
+        "cmd": "npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1500
+      }
+    ]
+  },
+  {
+    "sequence": 4,
+    "title": "Golden web gallery",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "2",
+      "3"
+    ],
+    "problem": "Shared repairs have no discoverable ranking or page where their accumulated seams can be seen.",
+    "action_items": [
+      "Read installed Next page/caching guide; build /kintsugi with server-read ranked cards, bounded revalidation and an intentional empty/offline state.",
+      "Render deterministic gold seam webs from stored seeds, count labels, accessible links to source cards and navigation entry without changing pinned nav labels.",
+      "Add browser tests for ranking with fixture mends, empty database, no JavaScript, small viewport and reduced motion; verify links and exact accessible heading.",
+      "Record task evidence with executable/build identity, real versus fixture boundary, test outcomes, and any deferred external check."
+    ],
+    "interfaces": [
+      "app/(site)/(app)/kintsugi/page.tsx",
+      "app/(site)/(app)/kintsugi/kintsugi.css",
+      "components/kintsugi-web.tsx",
+      "e2e/kintsugi-gallery.test.ts",
+      "projects/otohime-dev-two-new-paper-and-ink-experiments-1-kintsugi-bre/task-4-evidence.md"
+    ],
+    "non_goals": [
+      "visitor identity display",
+      "unbounded seam history",
+      "new collection mechanic"
+    ],
+    "acceptance_criteria": "The /kintsugi page ranks allowed cards by persisted mend count, shows their shared gold webs and source links, and has a readable empty state when storage is unavailable.",
+    "verification": [
+      {
+        "name": "project unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "browser suite",
+        "cwd": ".",
+        "cmd": "npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1500
+      }
+    ]
+  },
+  {
+    "sequence": 5,
+    "title": "Activity event model and export",
+    "role": "software_engineer",
+    "qa": "skip",
+    "depends_on": [],
+    "problem": "The daily ledger lacks event timestamps and job size data required for an honest strip-chart trace.",
+    "action_items": [
+      "Define and validate a versioned event schema for individual public commits, PRs and pipeline runs with safe short labels, status, runtime and row counts; add a checked-in pipeline export fixture and nonempty seismo.json.",
+      "Build a fail-soft GitHub refresh script modeled on ledger-fetch that retains the last valid trace on API failure or rate limit and never emits token, private body, logs or raw sensitive metadata.",
+      "Implement pure log-scaled magnitude, failure blot classification, stable time ordering, viewport/downsampling and SVG geometry/export helpers; test malformed feeds, outliers, duplicate events, rate-limit fallback and nonempty static output.",
+      "Record task evidence with executable/build identity, real versus fixture boundary, test outcomes, and any deferred external check."
+    ],
+    "interfaces": [
+      "content/seismo.json",
+      "content/seismo-runs.json",
+      "scripts/seismo-fetch.mjs",
+      "scripts/seismo-fetch.test.mjs",
+      "lib/seismo.ts",
+      "lib/seismo.test.ts",
+      "projects/otohime-dev-two-new-paper-and-ink-experiments-1-kintsugi-bre/task-5-evidence.md"
+    ],
+    "non_goals": [
+      "live GitHub request from the browser",
+      "private repository events",
+      "Work page UI"
+    ],
+    "acceptance_criteria": "A checked-in, timestamped, validated activity feed yields deterministic bounded tremors and failed-run blots; refresh preserves the last valid trace when GitHub fails, and the feed contains no credentials or private bodies.",
+    "verification": [
+      {
+        "name": "project unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "feed refresh fixture",
+        "cwd": ".",
+        "cmd": "node --test scripts/seismo-fetch.test.mjs",
+        "expect": "exit0",
+        "timeout_s": 300
+      }
+    ]
+  },
+  {
+    "sequence": 6,
+    "title": "Work page ink seismograph",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "5"
+    ],
+    "problem": "The Work page has no paper recorder, event inspection or shareable strip, and cannot rely on JavaScript for its initial data.",
+    "action_items": [
+      "Read installed Next server/client guidance; add a server-rendered SVG trace and named event list driven by the checked-in feed on the Work page, preserving meaningful no-JS content.",
+      "Enhance with a bounded-DPR canvas ink trace, subtle wobble and bleed, red failure blots, viewport/visibility-paused animation and reduced-motion stationary mode.",
+      "Implement pointer-drag and keyboard/range scrubbing, tappable spike details, and a tear-off standalone SVG download with torn edge and print stylesheet; keep a visible timeline and accessible labels.",
+      "Test real fixture spike selection, drag/keyboard window changes, failure blot, nonempty SVG download/print, no-JS SSR, hidden tab and reduced-motion behavior in browser.",
+      "Record task evidence with executable/build identity, real versus fixture boundary, test outcomes, and any deferred external check."
+    ],
+    "interfaces": [
+      "app/(site)/(app)/work/page.tsx",
+      "components/ink-seismograph.tsx",
+      "components/ink-seismograph.css",
+      "lib/seismo-export.ts",
+      "e2e/ink-seismograph.test.ts",
+      "projects/otohime-dev-two-new-paper-and-ink-experiments-1-kintsugi-bre/task-6-evidence.md"
+    ],
+    "non_goals": [
+      "real-time streaming",
+      "browser GitHub token",
+      "changing existing Work content outside the recorder"
+    ],
+    "acceptance_criteria": "Work shows a real static chart and event list without JavaScript; with JavaScript, visitors can inspect and scrub spikes, see failed runs in red, and download a nonempty printable SVG of the selected window. Reduced motion is stationary.",
+    "verification": [
+      {
+        "name": "project unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "browser suite",
+        "cwd": ".",
+        "cmd": "npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1500
+      }
+    ]
+  }
+]

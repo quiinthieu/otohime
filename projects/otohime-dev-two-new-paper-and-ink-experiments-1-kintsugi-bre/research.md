@@ -1,0 +1,9 @@
+# Research: Kintsugi Break and Ink Seismograph
+
+Prior research report `rep-5376` found Next 16.4, React 19, pg and Drizzle. There is no KV store, so the existing Postgres service can hold capped seam seeds and aggregate mend counts. `lib/bottles-store.ts` provides a transactional rate-limit precedent. `lib/sound-client.ts` synthesizes cues and defaults to off. `content/ledger.json` contains daily totals, which are too coarse for a strip chart. The Work page is `app/(site)/(app)/work/page.tsx`; browser tests should query `RisoText` headings by role and exact accessible name.
+
+The proposed Kintsugi gesture is four nearby pointerdowns within 900 ms, with optional permitted DeviceMotion above a threshold. Seeded SVG branches animate from the point of impact and resolve into gold paths. Persist seeds rather than geometry, cap retained seams per card, and bound writes by visitor bucket, card, and day. Keep the card DOM intact for links and accessibility. Reduced motion uses a fade and no shake.
+
+The proposed seismograph feed combines individual public GitHub commit/PR events with a checked-in pipeline runtime/row-count export. A pure model log-scales magnitude, clamps outliers, sorts and downsamples deterministically, and marks failed runs in red. Server SVG and text list cover no-JS; client canvas adds interaction and an SVG keepsake. Fetch failure retains a useful static trace. Risks include GitHub rate limits, motion permission differences, DPR resize, long traces, and data privacy.
+
+Suggested split: fracture model; DB/API; card interaction; gallery; activity model/export; Work chart. The two feature chains have no cross-dependency. Inspiration URLs were supplied in the idea, but this research did not fetch their content; design details above derive from the idea and repository inspection.
