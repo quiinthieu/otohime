@@ -1,0 +1,50 @@
+# polling https://otohime.dev/api/health for sha 79f7813e939d92610a86540c71783c02973d737e, at most 300s
+ok - /api/health sha 79f7813e939d92610a86540c71783c02973d737e serves 79f7813e939d92610a86540c71783c02973d737e (exact, try 1)
+# e2e dependencies do not import (playwright-core sharp); installing: npm ci --no-audit --no-fund
+npm warn deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.hirok.io
+npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.hirok.io
+
+added 517 packages in 10s
+npm notice
+npm notice New major version of npm available! 10.9.9 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+ok - e2e dependencies import after install
+# running the Pocket Terminal and Ink Poster Press e2e against https://otohime.dev
+TAP version 13
+# Subtest: the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+ok 1 - the press loads lazily in a small chunk, prints a WebGL2 poster that wets, dries and holds real ink
+# Subtest: typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+ok 2 - typing, the layouts and Shuffle set the poster, ?s= carries it, and Export PNG pulls the dried 1080x1350 frame
+# Subtest: a hidden tab stops the drying clock and showing it again finishes the drying
+ok 3 - a hidden tab stops the drying clock and showing it again finishes the drying
+# Subtest: reduced motion prints one dried frame and the press never asks for an animation frame
+ok 4 - reduced motion prints one dried frame and the press never asks for an animation frame
+# Subtest: without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+ok 5 - without WebGL the SVG ink filter shows the poster and Canvas2D exports it
+# Subtest: a lost WebGL context hands the poster to the SVG fallback
+ok 6 - a lost WebGL context hands the poster to the SVG fallback
+# Subtest: nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog
+ok 7 - nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog
+# Subtest: help prints into the live log; Tab stays inside; Escape closes and gives focus back
+ok 8 - help prints into the live log; Tab stays inside; Escape closes and gives focus back
+# Subtest: a bare page name, and a palette pick, navigate and close the terminal
+ok 9 - a bare page name, and a palette pick, navigate and close the terminal
+# Subtest: theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens
+ok 10 - theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens
+# Subtest: adventure: the walk is kept across a reload, the last secret puts the stamp in `stamps`
+ok 11 - adventure: the walk is kept across a reload, the last secret puts the stamp in `stamps`
+# Subtest: adventure in private mode: storage throws, the walk still plays and says once that it will not keep
+ok 12 - adventure in private mode: storage throws, the walk still plays and says once that it will not keep
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 78117.990042
+ok - https://otohime.dev serves 79f7813e939d92610a86540c71783c02973d737e with the Pocket Terminal and the Ink Poster Press
