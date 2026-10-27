@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "head": "086e99155e00e3b76b30ba0687fabe1eb1b0c874",
+  "generatedYear": 2026,
+  "months": {
+    "01": {
+      "month": 1,
+      "flower": "Pine",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "02": {
+      "month": 2,
+      "flower": "Plum",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "03": {
+      "month": 3,
+      "flower": "Cherry",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "04": {
+      "month": 4,
+      "flower": "Wisteria",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "05": {
+      "month": 5,
+      "flower": "Iris",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "06": {
+      "month": 6,
+      "flower": "Peony",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "07": {
+      "month": 7,
+      "flower": "Bush Clover",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "08": {
+      "month": 8,
+      "flower": "Susuki Grass",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "09": {
+      "month": 9,
+      "flower": "Chrysanthemum",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [
+        {"title":"On twos","date":"2026-09-28"},
+        {"title":"The contract caught it","date":"2026-09-03"}
+      ],
+      "highlights": []
+    },
+    "10": {
+      "month": 10,
+      "flower": "Maple",
+      "commits": 645,
+      "shippedProjects": [
+        {"title":"Shore","href":"/shore","shipped":"2026-10-19"},
+        {"title":"Capsule","href":"/capsule","shipped":"2026-10-19"},
+        {"title":"Orrery","href":"/orrery","shipped":"2026-10-20"},
+        {"title":"Elements","href":"/elements","shipped":"2026-10-19"},
+        {"title":"Vinyl","href":"/vinyl","shipped":"2026-10-19"},
+        {"title":"Rotor","href":"/rotor","shipped":"2026-10-20"},
+        {"title":"Planisphere","href":"/planisphere","shipped":"2026-10-20"},
+        {"title":"Barometer","href":"/barometer","shipped":"2026-10-20"},
+        {"title":"Gazette","href":"/articles","shipped":"2026-10-21"},
+        {"title":"Structures","href":"/structures","shipped":"2026-10-21"},
+        {"title":"Design system","href":"/design-system","shipped":"2026-10-21"}
+      ],
+      "notes": [
+        {"title":"Backfills are a feature","date":"2026-10-12"}
+      ],
+      "highlights": [
+        {"sha":"086e99155e","date":"2026-10-27T14:08:40Z","plan":"pm-293","subject":"Draft Washi Daruma, Emaki, and Hanafuda plan and research"},
+        {"sha":"a17c709bf3","date":"2026-10-27T12:56:51Z","plan":"pm-259","subject":"Record production acceptance"},
+        {"sha":"9b4a2cc2fe","date":"2026-10-27T12:52:20Z","plan":null,"subject":"feat(ryugu): ship current build history with strict production gate"},
+        {"sha":"110c7dba52","date":"2026-10-27T12:43:27Z","plan":"pm-259","subject":"Name QA run profile"},
+        {"sha":"a56ef10a16","date":"2026-10-27T12:42:28Z","plan":"pm-259","subject":"Record verified production browser QA"}
+      ]
+    },
+    "11": {
+      "month": 11,
+      "flower": "Willow",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    },
+    "12": {
+      "month": 12,
+      "flower": "Paulownia",
+      "commits": 0,
+      "shippedProjects": [],
+      "notes": [],
+      "highlights": []
+    }
+  }
+}
