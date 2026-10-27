@@ -1,0 +1,173 @@
+Bounded last 14000 characters of returned tool log; earlier output unproven.
+e state matches viewport
+# ok - 390x844 touch mobile /: no horizontal overflow and footer sits below main
+# ok - 390x844 touch mobile /: stage/copy grid, link columns, and text bounds are unclipped
+# ok - 390x844 touch mobile /: customization disclosure state matches viewport
+# ok - 390x844 touch mobile /work: no horizontal overflow and footer sits below main
+# ok - 390x844 touch mobile /work: stage/copy grid, link columns, and text bounds are unclipped
+# ok - 390x844 touch mobile /work: customization disclosure state matches viewport
+# ok - 390x844 touch mobile /music: no horizontal overflow and footer sits below main
+# ok - 390x844 touch mobile /music: stage/copy grid, link columns, and text bounds are unclipped
+# ok - 390x844 touch mobile /music: customization disclosure state matches viewport
+# ok - 390x844 touch mobile /music: television and its >=200x200 clear area stay unobscured above footer
+
+ succeeded in 171804ms:
+exec
+/bin/bash -lc 'tail -10 /tmp/otohime-verification-final.log; tail -8 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/footer.log; git diff --check' in /data/build-worker/leases/11dab240-f8ae-4a20-be15-5e43fd9e76a8-9432c89420b734d63dffd875b90e7dae/work/otohime
+ succeeded in 0ms:
+Running static: npm run lint && npm run typecheck
+Verified static: positive assertions and evidence negative controls passed
+Running closure: node scripts/check-gate-closure.mjs
+Verified closure: positive assertions and evidence negative controls passed
+Running browser: node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/bottle-ui.test.ts
+Verified browser: positive assertions and evidence negative controls passed
+Running footer: node scripts/verify-bottle-footer.mjs
+Verified footer: positive assertions and evidence negative controls passed
+Running deployment: bash scripts/vercel-deploy.test.sh
+Verified deployment: positive assertions and evidence negative controls passed
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 62081.415035
+
+exec
+/bin/bash -lc 'node scripts/verify-bottle-contracts.mjs --gate static /tmp/otohime-final-static > /tmp/otohime-final-static.log 2>&1' in /data/build-worker/leases/11dab240-f8ae-4a20-be15-5e43fd9e76a8-9432c89420b734d63dffd875b90e7dae/work/otohime
+ succeeded in 24179ms:
+codex
+All post-rebase gates pass: 2,463 repository tests, 14 Bottle browser cases, 65 footer-walk assertions, 170 Chromium assertions and 54 deployment fixture assertions. I’m saving the final evidence and amending the single commit before push. Hosted CI and deployed QA remain with plan-manager.
+
+exec
+/bin/bash -lc "tail -5 /tmp/otohime-final-static.log; tail -8 /tmp/otohime-final-static/static.log; node --input-type=module <<'JS'
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+const r=JSON.parse(readFileSync('projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/verification.json'));
+assert.deepEqual(r.map(x=>x.id),['layout','unit','static','closure','browser','footer','deployment']);
+assert.ok(r.every(x=>x.exit_code===0&&x.evidence_negative_controls==='pass'));
+console.log(JSON.stringify(r.map(x=>({id:x.id,tests:x.evidence.tests,assertions:x.evidence.assertions,build:x.build_id}))));
+JS" in /data/build-worker/leases/11dab240-f8ae-4a20-be15-5e43fd9e76a8-9432c89420b734d63dffd875b90e7dae/work/otohime
+ succeeded in 0ms:
+Running static: npm run lint && npm run typecheck
+Verified static: positive assertions and evidence negative controls passed
+  0 errors and 9 warnings potentially fixable with the `--fix` option.
+
+
+> otohime@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+[{"id":"layout","tests":12},{"id":"unit","tests":2463},{"id":"static"},{"id":"closure"},{"id":"browser","tests":14,"build":"fGJ2OC1x3D2gJYAtNmE66"},{"id":"footer","tests":1,"assertions":{"walk":65,"probe":170},"build":"ZsjaVWh9-2PSE0uwAW3it"},{"id":"deployment","assertions":54}]
+
+exec
+/bin/bash -lc "node --input-type=module <<'JS'
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,copyFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const folder='projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/';
+const dir=folder+'run-9178/artifacts/';
+const receipts=JSON.parse(readFileSync(dir+'verification.json','utf8'));
+const finalStatic=JSON.parse(readFileSync('/tmp/otohime-final-static/verification.json','utf8'))[0];
+assert.equal(finalStatic.id,'static');
+receipts[receipts.findIndex(x=>x.id==='static')]=finalStatic;
+copyFileSync('/tmp/otohime-final-static/static.log',dir+'static.log');
+writeFileSync(dir+'verification.json',JSON.stringify(receipts,null,2)+'\\n');
+for(const r of receipts){
+  assert.equal(r.exit_code,0);
+  assert.equal(r.evidence_negative_controls,'pass');
+  assert.equal(createHash('sha256').update(readFileSync(dir+r.id+'.log')).digest('hex'),r.log_sha256);
+}
+const previous=JSON.parse(readFileSync(folder+'run-9171/artifacts/executable.json','utf8'));
+const paths=[...new Set([...Object.keys(previous.files),'lib/bottles.test.ts','lib/bottle-verification.test.ts','scripts/check-gate-closure.mjs'])].sort();
+const files=Object.fromEntries(paths.map(p=>[p,createHash('sha256').update(readFileSync(p)).digest('hex')]));
+const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
+const versions={};
+for(const pkg of ['next','react','react-dom','playwright-core','pg','embedded-postgres']){
+ const installed=JSON.parse(readFileSync('node_modules/'+pkg+'/package.json','utf8')).version;
+ const locked=lock.packages['node_modules/'+pkg].version;
+ assert.equal(installed,locked);versions[pkg]={locked,installed};
+}
+const closure=JSON.parse(readFileSync(dir+'closure.log','utf8'));
+const metrics=readFileSync(dir+'browser.log','utf8').split('\\n').filter(l=>l.startsWith('# {\"cls\":')).map(l=>JSON.parse(l.slice(2)));
+assert.equal(metrics.length,2);
+for(const m of metrics){assert.ok(m.cls<=0.001);assert.ok(m.bootstrapBytes<=3072);assert.ok(m.lazyBytes<=25600);}
+assert.equal(files['scripts/vercel-deploy.sh'],createHash('sha256').update(execFileSync('git',['show','f08f670:scripts/vercel-deploy.sh'])).digest('hex'));
+for(const sha of ['e120461','f08f670'])execFileSync('git',['merge-base','--is-ancestor',sha,'HEAD']);
+const {BOTTLE_GATES}=await import('./scripts/verify-bottle-contracts.mjs');
+assert.equal(BOTTLE_GATES.length,7);
+const meta={schema:'otohime.bottle-executable.v1',validated_checkout:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),rebased_onto:'b3b1af9',source_state:'validated working tree; final delivery commit supplied by summary/commits.txt',node:process.version,platform:process.platform,arch:process.arch,versions,verifier_imported:true,files,combined_sha256:createHash('sha256').update(JSON.stringify(files)).digest('hex'),preflight:closure.preflight,builds:Object.fromEntries(receipts.filter(r=>r.build_id).map(r=>[r.id,r.build_id])),metrics,deployment_executable_unchanged_from:'f08f670',deployment_recovery:'unproven; hosted CI and deployed QA remain with plan-manager',delivery_contains:['e120461','f08f670']};
+writeFileSync(dir+'executable.json',JSON.stringify(meta,null,2)+'\\n');
+writeFileSync(dir+'verification-run.log',readFileSync('/tmp/otohime-verification-final.log','utf8')+'\\nFinal static repeat after the last browser assertion edit:\\n'+readFileSync('/tmp/otohime-final-static.log','utf8'));
+const summaryPath=folder+'run-9178-summary.md';
+let s=readFileSync(summaryPath,'utf8');
+s=s.replace('Fetch found unrelated QA documentation commit b3b1af9. Integrate it by rebase, rerun every original command plus deployment fixtures on the integrated tree, and amend this single task-prefixed commit with the final receipts before push. Generated content/history.json is restored.', 'Rebased onto unrelated QA documentation commit b3b1af9 without conflicts. All six original commands plus deployment fixtures pass on the integrated tree after fixing the measured browser-test race. Lint/typecheck also pass again after the last browser assertion edit. Final receipts are included in this single task-prefixed commit; generated content/history.json is restored.');
+s=s.replace('Relevant source, lock/config hashes, module versions and build/chunk identities are in executable.json.',"'`Relevant source, lock/config hashes, module versions and build/chunk identities are in executable.json. Combined source fingerprint ${meta.combined_sha256}; browser build ${meta.builds.browser}; footer build ${meta.builds.footer}.`);
+writeFileSync(summaryPath,s);
+console.log(JSON.stringify({fingerprint:meta.combined_sha256,builds:meta.builds,results:receipts.map(r=>({id:r.id,tests:r.evidence.tests,assertions:r.evidence.assertions}))}));
+JS
+git restore content/history.json
+git diff --check
+git add e2e/bottle-ui.test.ts projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/architecture.md projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178-summary.md projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178
+git commit --amend --no-edit
+mkdir -p ../../shared/artifacts
+git rev-parse HEAD > ../../shared/artifacts/commits.txt
+git status --short
+git log -1 --format='"'%H%n%s'" in /data/build-worker/leases/11dab240-f8ae-4a20-be15-5e43fd9e76a8-9432c89420b734d63dffd875b90e7dae/work/otohime
+ succeeded in 0ms:
+{"fingerprint":"c99fe8cab9eee6f1c6e35112d668f546de081547476836a14b825eb2ae1e688d","builds":{"browser":"fGJ2OC1x3D2gJYAtNmE66","footer":"ZsjaVWh9-2PSE0uwAW3it"},"results":[{"id":"layout","tests":12},{"id":"unit","tests":2463},{"id":"static"},{"id":"closure"},{"id":"browser","tests":14},{"id":"footer","tests":1,"assertions":{"walk":65,"probe":170}},{"id":"deployment","assertions":54}]}
+[main f3512e8] pm-269/t-1648: Require complete named Bottle gate evidence
+ Date: Tue Oct 27 13:50:29 2026 +0700
+ 27 files changed, 17304 insertions(+), 47 deletions(-)
+ create mode 100644 lib/bottle-verification.test.ts
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178-summary.md
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/browser-build.txt
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/browser-race.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/browser.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/callbacks.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/closure.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/deployment.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/evidence-negative-controls.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/executable.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/failed-runner-tail.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/footer-build.txt
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/footer.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/history.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/layout.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/prior-runner-tail.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/run-profile.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/static.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/unit.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/verification-run.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/verification.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/verifier-red.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9178/artifacts/verifier-unit.log
+f3512e8635b22e38fee3e2f3db20b37c3b57b227
+pm-269/t-1648: Require complete named Bottle gate evidence
+
+exec
+/bin/bash -lc 'git push origin HEAD' in /data/build-worker/leases/11dab240-f8ae-4a20-be15-5e43fd9e76a8-9432c89420b734d63dffd875b90e7dae/work/otohime
+ succeeded in 4123ms:
+To github.com:quiinthieu/otohime.git
+   b3b1af9..f3512e8  HEAD -> main
+
+mcp: plan-manager/plan_manager_submit_report started
+mcp: plan-manager/plan_manager_submit_report (completed)
+codex
+Pushed `main` at `f3512e8635b22e38fee3e2f3db20b37c3b57b227`.
+
+Added named gate regressions and fixed the browser measurement race. All six local gates and 54 deployment fixture assertions pass.
+
+Summary submitted. Hosted CI and deployed QA remain unverified with plan-manager.
+tokens used
+195,286
+Pushed `main` at `f3512e8635b22e38fee3e2f3db20b37c3b57b227`.
+
+Added named gate regressions and fixed the browser measurement race. All six local gates and 54 deployment fixture assertions pass.
+
+Summary submitted. Hosted CI and deployed QA remain unverified with plan-manager.
+---
+Command exited with code: 0

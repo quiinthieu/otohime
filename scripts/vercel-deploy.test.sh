@@ -81,6 +81,11 @@ case "$1" in
     fi
     case "$FAKE_INSPECT:$wait" in
       ok:*) printf '  status\t● Ready\n  url\t%s\n' "$2" >&2 ;;
+      building:*) printf '  status\t● Building\n' >&2 ;;
+      queued:*) printf '  status\t● Queued\n' >&2 ;;
+      initializing:*) printf '  status\t● Initializing\n' >&2 ;;
+      silent:*) ;;
+      unknown:*) printf '  status\t● Unknown\n' >&2 ;;
       hang:1) echo "waiting for deployment" >&2; sleep 6011 ;;
       hang:0) printf '  status\t● Building\n  url\t%s\n' "$2" >&2 ;;
       error:*) printf '  status\t● Error\n  url\t%s\n' "$2" >&2; exit 1 ;;
@@ -139,6 +144,13 @@ FIXTURE_TEAM= run missing-team ok scope-required "$healthy"
 check "missing team is refused before upload" '[ "$code" -ne 0 ] && [ ! -s "$CALLS" ] && [[ "$out" == *"VERCEL_ORG_ID is required"* ]]'
 run scoped-identity-error ok user-not-found "$healthy"
 check "User not found with explicit scope still fails closed before health" '[ "$code" -ne 0 ] && [[ "$out" == *"User not found"* ]] && ! grep -q "^/scoped-identity-error.health.json$" "$work/health.calls"'
+
+# A zero CLI exit is not readiness evidence. Even matching alias health cannot
+# turn an absent, unknown or nonterminal deployment state into Ready.
+for mode in building queued initializing silent unknown; do
+  run "nonready-$mode" ok "$mode" "$healthy"
+  check "zero-exit $mode inspect fails closed before matching health" '[ "$code" -ne 0 ] && [[ "$out" == *"::error title=vercel deploy::"* ]] && [ "$(grep -c "^inspect" "$CALLS")" -eq 2 ] && ! grep -q "^/nonready-$mode.health.json$" "$work/health.calls"'
+done
 
 # (a) Hanging upload: fails inside UPLOAD_TIMEOUT plus the kill grace, never a second deployment.
 run hang-upload hang ok "$healthy"

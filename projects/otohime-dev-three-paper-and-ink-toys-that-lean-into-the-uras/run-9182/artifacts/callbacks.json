@@ -1,0 +1,20 @@
+{
+  "boundary": "Persisted status and callbacks only; earlier bodies and transport internals unproven.",
+  "run": {
+    "id": "run-9178",
+    "status": "succeeded",
+    "callback_apply_failures": 0
+  },
+  "reports": [
+    {
+      "id": "rep-5410",
+      "kind": "summary",
+      "git_sha": "f3512e8635b22e38fee3e2f3db20b37c3b57b227"
+    }
+  ],
+  "failed_run": {
+    "id": "run-9183",
+    "status": "failed",
+    "callback_apply_failures": 0
+  }
+}

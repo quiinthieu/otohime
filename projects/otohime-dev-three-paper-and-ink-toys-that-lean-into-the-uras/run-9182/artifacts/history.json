@@ -1,0 +1,233 @@
+{
+  "boundary": "Global coding-task sample only; hosted CI deliberately unread by stop-at-push role. Pages beyond these bounds and transport internals remain inconclusive.",
+  "pages": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 5,
+      "total": 93,
+      "tasks": [
+        {
+          "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+          "plan": "pm-270",
+          "run": "run-9183",
+          "repo": "otohime",
+          "status": "FAILED",
+          "error": "agent_failed: exit 3 class=infra marker=mcp_probe_failed: plan-manager timeout",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+          "plan": "pm-270",
+          "run": "run-9161",
+          "repo": "otohime",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2a35aac9e2e3 is not on origin/main",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "aaf41670-24d4-4664-998d-744e4d6d29bd",
+          "plan": "pm-289",
+          "run": "run-9156",
+          "repo": "mono-v2",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+          "plan": "pm-289",
+          "run": "run-9153",
+          "repo": "mono-v2",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+          "plan": "pm-platform",
+          "run": "can-466",
+          "repo": "mono-v2",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 5,
+      "limit": 5,
+      "total": 93,
+      "tasks": [
+        {
+          "id": "899ebc8e-06d2-4172-8d43-caab66fc163a",
+          "plan": "pm-platform",
+          "run": "can-465",
+          "repo": "mono-v2",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "e80be90f-766f-4877-97a4-0920424f7002",
+          "plan": "pm-270",
+          "run": "run-9134",
+          "repo": "otohime",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 8959e8d817c4 is not on origin/main",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "0d9749c4-86af-41ea-b8ff-52596bb8ba62",
+          "plan": "pm-272",
+          "run": "run-9127",
+          "repo": "otohime",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=Bounded prepublication task-manager sample: RUNNING 2/2; FAILED offsets 0/2 limit2, 4/72; COMPLETED offsets 0/2 limit2, 4/1272. Incomplete project-wide history;",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "4ea09eb3-0d41-41ba-9617-bd8efae6d553",
+          "plan": "pm-270",
+          "run": "run-9120",
+          "repo": "otohime",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 01c659246c00 is not on origin/main",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "7e3c8ba6-7fb6-4af7-95f0-998bb05d4e9f",
+          "plan": "pm-272",
+          "run": "run-9109",
+          "repo": "otohime",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 90b623bced6e is not on origin/main",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 5,
+      "total": 1426,
+      "tasks": [
+        {
+          "id": "b97a55fc-4e3c-4da8-8e1a-18cc8882eef3",
+          "plan": "pm-platform",
+          "run": "can-474",
+          "repo": "mono-v2",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "0bb689a3-795c-4c5b-b4b0-5f1afa769149",
+          "plan": "pm-270",
+          "run": "run-9181",
+          "repo": "otohime",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "04e5260a-9667-4445-9a1f-a73ffbfd3c48",
+          "repo": "otohime",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "7456d7fb-3771-4fab-ba84-a87873900f85",
+          "plan": "pm-269",
+          "run": "run-9180",
+          "repo": "otohime",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "9597468c-25d3-4162-83a8-2d4b1dae6184",
+          "plan": "pm-269",
+          "run": "run-9179",
+          "repo": "otohime",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 5,
+      "limit": 5,
+      "total": 1426,
+      "tasks": [
+        {
+          "id": "a10f2248-8206-436f-a627-93274762d3eb",
+          "plan": "pm-platform",
+          "run": "can-473",
+          "repo": "mono-v2",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "11dab240-f8ae-4a20-be15-5e43fd9e76a8",
+          "plan": "pm-269",
+          "run": "run-9178",
+          "repo": "otohime",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "601b360a-3657-4898-92c6-9efaacf3e09f",
+          "plan": "pm-269",
+          "run": "run-9177",
+          "repo": "otohime",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "a38c1408-d136-4b29-bb22-c48ebb431cb4",
+          "plan": "pm-270",
+          "run": "run-9176",
+          "repo": "otohime",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        },
+        {
+          "id": "c9f6cb4d-762c-4deb-8a8e-d0a658af2765",
+          "plan": "pm-257",
+          "run": "run-9175",
+          "repo": "otohime",
+          "status": "COMPLETED",
+          "callback_state": "delivered",
+          "callback_attempts": 1
+        }
+      ]
+    }
+  ],
+  "current": {
+    "total": 1,
+    "tasks": [
+      {
+        "id": "723ea420-6d52-4aab-aebd-1aacbac96574",
+        "run": "run-9182",
+        "status": "RUNNING"
+      }
+    ]
+  }
+}

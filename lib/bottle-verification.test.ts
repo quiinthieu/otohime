@@ -77,14 +77,21 @@ test("Bottle closure receipt rejects renamed or empty controls and a fake uncert
 });
 
 test("Bottle deployment receipt requires scoped Ready and fail-closed controls beyond an assertion count", () => {
-  const output = log("deployment");
+  // Extend the archived parser fixture with synthetic Ready-state assertions.
+  // This tests receipt rejection only; the real shell fixture must still execute.
+  const readyControls = ["building", "queued", "initializing", "silent", "unknown"]
+    .map((mode) => `zero-exit ${mode} inspect fails closed before matching health`);
+  const output = log("deployment").replace("# all 54 assertions passed", [
+    ...readyControls.map((name) => `ok - ${name}`), "# all 59 assertions passed",
+  ].join("\n"));
   const evidence = assertBottleEvidence("deployment", output);
   assert.ok("assertions" in evidence);
-  assert.equal(evidence.assertions, 54);
+  assert.equal(evidence.assertions, 59);
   for (const marker of [
     "standalone inspect without scope reproduces User not found",
     "explicit team scope permits Ready inspect and exact-sha health",
     "User not found with explicit scope still fails closed before health",
+    ...readyControls,
   ]) {
     assert.throws(() => assertBottleEvidence("deployment", output.replace(marker, "omitted deployment control")));
     assert.throws(() => assertBottleEvidence("deployment", output.replace(`ok - ${marker}`, `not ok - ${marker}`)));

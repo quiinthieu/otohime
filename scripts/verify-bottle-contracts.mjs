@@ -62,11 +62,12 @@ const deploymentNames = [
   "missing team is refused before upload",
   "User not found with explicit scope still fails closed before health",
   "matching nested sha cannot impersonate the served executable",
+  ...["building", "queued", "initializing", "silent", "unknown"].map((mode) => `zero-exit ${mode} inspect fails closed before matching health`),
 ];
 function deploymentEvidence(output) {
   assert.doesNotMatch(output, /^not ok - /m);
   const count = Number(output.match(/^# all (\d+) assertions passed$/m)?.[1]);
-  assert.ok(count >= 53, "deployment fixture executes all assertions");
+  assert.ok(count >= 59, "deployment fixture executes all assertions");
   for (const name of deploymentNames) {
     assert.ok(output.split("\n").includes(`ok - ${name}`), `deployment assertion absent: ${name}`);
   }

@@ -105,9 +105,10 @@ status=0
 bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --scope "$VERCEL_ORG_ID" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
 cat "$wait_log" >&2
 state=$(deployment_state "$wait_log")
-case "$state" in Error|Canceled|Cancelled) terminal=1 ;; *) terminal=0 ;; esac
-if [ "$status" -ne 0 ] || [ "$terminal" -eq 1 ]; then
-  log "inspect --wait exited $status; reading the deployment state once more"
+# Exit zero alone cannot certify a deployment. Fail closed if the CLI emits no
+# recognized state or still reports a nonterminal state, even if alias health matches.
+if [ "$status" -ne 0 ] || [ "$state" != Ready ]; then
+  log "inspect --wait exited $status with state ${state:-unknown}; reading the deployment state once more"
   state_status=0
   bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" --scope "$VERCEL_ORG_ID" >"$state_log" 2>&1 || state_status=$?
   cat "$state_log" >&2
