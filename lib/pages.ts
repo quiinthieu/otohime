@@ -1,5 +1,5 @@
 export type PublicPage = {
-  href: "/" | "/work" | "/play" | "/notes" | "/music" | "/projects" | "/sketches";
+  href: "/" | "/work" | "/play" | "/notes" | "/music" | "/projects" | "/sketches" | "/lab";
   label: string;
 };
 
@@ -11,16 +11,18 @@ export const PUBLIC_PAGES = [
   { href: "/music", label: "Music" },
   { href: "/projects", label: "Projects" },
   { href: "/sketches", label: "Sketches" },
+  { href: "/lab", label: "Ink Lab" },
 ] as const satisfies readonly PublicPage[];
 
 // The Ink Desk is a cartridge for the console only: it stays out of the nav,
 // and the default home is unchanged.
 export const DESK_PAGE = { href: "/desk", label: "Desk" } as const;
 
-export type ConsoleItem = { href: Exclude<PublicPage["href"], "/"> | typeof DESK_PAGE.href; label: string };
+export type ConsoleItem = { href: Exclude<PublicPage["href"], "/" | "/lab"> | typeof DESK_PAGE.href; label: string };
 
+// Lab is public and terminal-addressable, but the physical LCD has seven cartridges.
 export const CONSOLE_MENU = [
-  ...PUBLIC_PAGES.filter((page) => page.href !== "/"),
+  ...PUBLIC_PAGES.filter((page) => page.href !== "/" && page.href !== "/lab"),
   DESK_PAGE,
 ] as const satisfies readonly ConsoleItem[];
 

@@ -7,8 +7,8 @@ test("/projects is the sixth public page", () => {
   assert.equal(PUBLIC_PAGES[5].href, "/projects");
 });
 
-test("the console menu is the public pages minus Home, in order, then the desk cartridge", () => {
-  assert.deepEqual(CONSOLE_MENU, [...PUBLIC_PAGES.filter((page) => page.href !== "/"), { href: "/desk", label: "Desk" }]);
+test("the console menu excludes Home and Lab, then adds the desk cartridge", () => {
+  assert.deepEqual(CONSOLE_MENU, [...PUBLIC_PAGES.filter((page) => page.href !== "/" && page.href !== "/lab"), { href: "/desk", label: "Desk" }]);
   assert.equal(CONSOLE_MENU.length, 7);
   assert.equal(new Set(CONSOLE_MENU.map((page) => page.href)).size, CONSOLE_MENU.length);
 });
@@ -42,4 +42,9 @@ test("the projects list and intro are in site", () => {
   assert.ok(Array.isArray(site.projectList));
   assert.equal(typeof site.projects, "string");
   assert.ok(site.projects.length > 0);
+});
+
+test("Ink Lab is public without adding an eighth physical LCD cartridge", () => {
+  assert.ok(PUBLIC_PAGES.some(page => page.href === "/lab" && page.label === "Ink Lab"));
+  assert.ok(!CONSOLE_MENU.some(page => (page.href as string) === "/lab"));
 });
