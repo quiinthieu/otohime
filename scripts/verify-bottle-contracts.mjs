@@ -44,9 +44,15 @@ export const BOTTLE_GATES = [
   { id: "layout", cmd: `node ${flags} --test lib/bottle-footer-layout.test.ts lib/bottles.test.ts`, required: layoutNames },
   { ...sharedGate("unit"), required: [
     ...sharedGate("unit").required,
+    ...layoutNames,
+    ...["layout", "unit", "browser", "footer"].map((id) => `Bottle ${id} receipt requires every named passing test and nonzero unskipped TAP`),
+    "Bottle repository receipt requires layout, picker and every verifier regression",
     "Bottle verifier import preserves shared gates and single-gate CLI rejects silent exit0",
     "Bottle closure receipt rejects renamed or empty controls and a fake uncertified runner",
     "Bottle footer receipt rejects summary counts without the individual walk and probe assertions",
+    "Bottle static receipt requires actual lint and typecheck output and makes only a static claim",
+    "Bottle deployment receipt requires scoped Ready and fail-closed controls beyond an assertion count",
+    "Bottle deployment receipt reconciles unique assertion lines with its summary",
   ] },
   ...["static", "closure"].map(sharedGate),
   { id: "browser", cmd: `node ${flags} scripts/e2e.mjs --test e2e/bottle-ui.test.ts`, required: browserNames },
@@ -68,6 +74,9 @@ function deploymentEvidence(output) {
   assert.doesNotMatch(output, /^not ok - /m);
   const count = Number(output.match(/^# all (\d+) assertions passed$/m)?.[1]);
   assert.ok(count >= 59, "deployment fixture executes all assertions");
+  const assertions = output.split("\n").filter((line) => line.startsWith("ok - "));
+  assert.equal(new Set(assertions).size, assertions.length, "duplicate deployment assertions cannot replace missing controls");
+  assert.equal(assertions.length, count, "individual deployment assertions must match the summary");
   for (const name of deploymentNames) {
     assert.ok(output.split("\n").includes(`ok - ${name}`), `deployment assertion absent: ${name}`);
   }

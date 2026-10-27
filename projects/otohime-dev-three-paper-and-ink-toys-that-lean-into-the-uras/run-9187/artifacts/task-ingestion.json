@@ -1,0 +1,26 @@
+{
+  "boundary": "Persisted fields only; callback transport internals and earlier log bodies are unproven.",
+  "tasks": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "id": "723ea420-6d52-4aab-aebd-1aacbac96574",
+        "status": "COMPLETED",
+        "repoId": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+        "status": "FAILED",
+        "repoId": "otohime",
+        "callbackState": "delivered",
+        "callbackAttempts": 1,
+        "error": "agent_failed: exit 3 class=infra marker=mcp_probe_failed: plan-manager timeout"
+      }
+    }
+  ]
+}

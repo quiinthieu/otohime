@@ -21,6 +21,20 @@ const tapFixture = (names: string[]) => [
   "# fail 0", "# cancelled 0", "# skipped 0", "# todo 0", "",
 ].join("\n");
 
+test("Bottle repository receipt requires layout, picker and every verifier regression", () => {
+  const layout = BOTTLE_GATES.find((gate: { id: string }) => gate.id === "layout")!.required!;
+  const verifier = [...readFileSync(new URL(import.meta.url), "utf8").matchAll(/test\("([^"]+)"/g)].map((match) => match[1]);
+  verifier.push(...["layout", "unit", "browser", "footer"].map((id) => `Bottle ${id} receipt requires every named passing test and nonzero unskipped TAP`));
+  const unit = BOTTLE_GATES.find((gate: { id: string }) => gate.id === "unit")!.required!;
+  const required = [...new Set([...unit, ...layout, ...verifier])];
+  assertBottleEvidence("unit", tapFixture(required));
+  for (const name of [...layout, ...verifier]) {
+    // Keep a coherent, nonzero passing TAP suite after removal. A total alone
+    // cannot prove that the Bottle contracts actually ran in npm test.
+    assert.throws(() => assertBottleEvidence("unit", tapFixture(required.filter((test) => test !== name))), name);
+  }
+});
+
 for (const id of ["layout", "unit", "browser", "footer"]) {
   test(`Bottle ${id} receipt requires every named passing test and nonzero unskipped TAP`, () => {
     const gate = BOTTLE_GATES.find((gate: { id: string }) => gate.id === id)!;
@@ -99,6 +113,18 @@ test("Bottle deployment receipt requires scoped Ready and fail-closed controls b
   assert.throws(() => assertBottleEvidence("deployment", "# all 54 assertions passed\n"));
   assert.throws(() => assertBottleEvidence("deployment", ""));
   assert.throws(() => assertBottleEvidence("not-a-gate", output), /unknown Bottle gate/);
+});
+
+test("Bottle deployment receipt reconciles unique assertion lines with its summary", () => {
+  const ready = ["building", "queued", "initializing", "silent", "unknown"]
+    .map((mode) => `ok - zero-exit ${mode} inspect fails closed before matching health`);
+  const output = log("deployment").replace("# all 54 assertions passed", [...ready, "# all 59 assertions passed"].join("\n"));
+  assertBottleEvidence("deployment", output);
+  const assertion = "ok - healthy deploy exits 0";
+  assert.ok(output.includes(assertion));
+  assert.throws(() => assertBottleEvidence("deployment", output.replace(assertion + "\n", "")), /assertion/);
+  assert.throws(() => assertBottleEvidence("deployment", output.replace(assertion, ready[0])), /duplicate/);
+  assert.throws(() => assertBottleEvidence("deployment", output.replace("# all 59", "# all 600")), /assertion/);
 });
 
 test("Bottle verifier import preserves shared gates and single-gate CLI rejects silent exit0", () => {
