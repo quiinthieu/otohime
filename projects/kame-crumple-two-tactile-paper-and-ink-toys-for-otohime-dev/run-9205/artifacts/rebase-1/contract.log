@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: foundation policy
+ok 1 - foundation policy
+  ---
+  duration_ms: 122.632347
+  type: 'test'
+  ...
+# Subtest: repository suite under CI
+ok 2 - repository suite under CI
+  ---
+  duration_ms: 19332.817686
+  type: 'test'
+  ...
+# Subtest: lint and type contracts
+ok 3 - lint and type contracts
+  ---
+  duration_ms: 20886.452956
+  type: 'test'
+  ...
+# Subtest: entire isolated production browser suite
+ok 4 - entire isolated production browser suite
+  ---
+  duration_ms: 433541.564486
+  type: 'test'
+  ...
+# Subtest: isolated footer walk
+ok 5 - isolated footer walk
+  ---
+  duration_ms: 14190.742676
+  type: 'test'
+  ...
+# Subtest: isolated footer Chrome probe
+ok 6 - isolated footer Chrome probe
+  ---
+  duration_ms: 72373.448855
+  type: 'test'
+  ...
+# Subtest: isolated signed-in motion
+ok 7 - isolated signed-in motion
+  ---
+  duration_ms: 177811.002401
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 738262.789969

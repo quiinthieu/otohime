@@ -1,0 +1,136 @@
+TAP version 13
+# Subtest: fetch bounds release velocity and proxy; invalid input fails closed
+ok 1 - fetch bounds release velocity and proxy; invalid input fails closed
+  ---
+  duration_ms: 1.50132
+  type: 'test'
+  ...
+# Subtest: acceptance cannot prove arrival: actual geometry gates both legs and carrying
+ok 2 - acceptance cannot prove arrival: actual geometry gates both legs and carrying
+  ---
+  duration_ms: 0.240338
+  type: 'test'
+  ...
+# Subtest: five seconds active time cancels either leg; cancellation is terminal and reversible
+ok 3 - five seconds active time cancels either leg; cancellation is terminal and reversible
+  ---
+  duration_ms: 0.160976
+  type: 'test'
+  ...
+# Subtest: completed drag click token is exact-once, pointer-scoped and never swallows a later activation
+ok 4 - completed drag click token is exact-once, pointer-scoped and never swallows a later activation
+  ---
+  duration_ms: 0.26301
+  type: 'test'
+  ...
+# Subtest: typed local port keeps acceptance separate from completion and tears down subscribers and receivers
+ok 5 - typed local port keeps acceptance separate from completion and tears down subscribers and receivers
+  ---
+  duration_ms: 1.504196
+  type: 'test'
+  ...
+# Subtest: elapsed clock sleeps exactly at 45s and activity wakes it; pet and shell win over idle
+ok 6 - elapsed clock sleeps exactly at 45s and activity wakes it; pet and shell win over idle
+  ---
+  duration_ms: 1.114917
+  type: 'test'
+  ...
+# Subtest: fetch command accepts only available motion and cancels locally
+ok 7 - fetch command accepts only available motion and cancels locally
+  ---
+  duration_ms: 0.613972
+  type: 'test'
+  ...
+# Subtest: local calendar visits count once, cross month/year and reset after missed/future/invalid days
+ok 8 - local calendar visits count once, cross month/year and reset after missed/future/invalid days
+  ---
+  duration_ms: 0.759798
+  type: 'test'
+  ...
+# Subtest: malformed and blocked storage stays usable; names trim to 24 Unicode characters
+ok 9 - malformed and blocked storage stays usable; names trim to 24 Unicode characters
+  ---
+  duration_ms: 0.316441
+  type: 'test'
+  ...
+# Subtest: hour mood boundaries and friendly three-day greeting are explicit
+ok 10 - hour mood boundaries and friendly three-day greeting are explicit
+  ---
+  duration_ms: 0.216709
+  type: 'test'
+  ...
+# Subtest: explicit registry: stable ids survive ordering, duplicates and unsafe surfaces are rejected
+ok 11 - explicit registry: stable ids survive ordering, duplicates and unsafe surfaces are rejected
+  ---
+  duration_ms: 1.369851
+  type: 'test'
+  ...
+# Subtest: fetch-only chips and stickers explicitly opt in without notes or peel eligibility
+ok 12 - fetch-only chips and stickers explicitly opt in without notes or peel eligibility
+  ---
+  duration_ms: 0.145107
+  type: 'test'
+  ...
+# Subtest: one pointer: peel owns movement and cannot become fetch or crumple
+ok 13 - one pointer: peel owns movement and cannot become fetch or crumple
+  ---
+  duration_ms: 0.272623
+  type: 'test'
+  ...
+# Subtest: hold boundaries, scroll precedence and cancellation prohibit double completion
+ok 14 - hold boundaries, scroll precedence and cancellation prohibit double completion
+  ---
+  duration_ms: 0.189854
+  type: 'test'
+  ...
+# Subtest: route session survives reload, clears only on departure, and bounds persisted ids
+ok 15 - route session survives reload, clears only on departure, and bounds persisted ids
+  ---
+  duration_ms: 1.516444
+  type: 'test'
+  ...
+# Subtest: throwing or malformed storage falls back to working memory
+ok 16 - throwing or malformed storage falls back to working memory
+  ---
+  duration_ms: 0.253776
+  type: 'test'
+  ...
+# Subtest: storage failures after a successful read retain local state, including deletion
+ok 17 - storage failures after a successful read retain local state, including deletion
+  ---
+  duration_ms: 0.1755
+  type: 'test'
+  ...
+# Subtest: registry and serialized session reject unbounded or invalid input
+ok 18 - registry and serialized session reject unbounded or invalid input
+  ---
+  duration_ms: 0.298795
+  type: 'test'
+  ...
+# Subtest: hovered actions move above only while an open Peek fan covers them, then stay put
+ok 19 - hovered actions move above only while an open Peek fan covers them, then stay put
+  ---
+  duration_ms: 0.314617
+  type: 'test'
+  ...
+# Subtest: seeded deckle is deterministic, finite, bounded and changes with the surface seed
+ok 20 - seeded deckle is deterministic, finite, bounded and changes with the surface seed
+  ---
+  duration_ms: 1.481552
+  type: 'test'
+  ...
+# Subtest: peel, Reset and cancellation use the same instant reversible state
+ok 21 - peel, Reset and cancellation use the same instant reversible state
+  ---
+  duration_ms: 0.125801
+  type: 'test'
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 88.047875
