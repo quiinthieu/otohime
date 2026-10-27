@@ -1,0 +1,141 @@
+[
+  {
+    "sequence": 1,
+    "title": "Surface CI probe annotations and streamed footer headings",
+    "role": "software_engineer",
+    "qa": "skip",
+    "depends_on": [],
+    "problem": "CI checks failures in Footer Chromium probe (runs 40387187938, 40409123749, 40423130342) write diagnostics only to GITHUB_STEP_SUMMARY, leaving public check-run annotations blank when raw logs return HTTP 403. Meanwhile scripts/probe-end.mjs samples main h1 on /dashboard after a fixed 450ms pause while loading.tsx can still stream a headingless skeleton, scripts/probe-motion-signed-in.sh lacks >48-char TMPDIR shortening, and checks (1039s warm in 40420670837) has <3m headroom under 20m.",
+    "action_items": [
+      "At task start, read AGENTS.md, installed Next.js 16.4.2 docs (including node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/loading.md), and projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/plan.md. If a person-only external prerequisite is missing, raise plan_manager_ask_user(kind=operator_action) immediately at task start with prerequisite_id, exact setup action, and readiness signal.",
+      "Implement scripts/ci-probe-annotate.mjs (reusing escapeData from ./e2e-annotate.mjs without modifying scripts/e2e-annotate.mjs) to post-process or run non-TAP CI steps, preserve exact nonzero exit codes under pipefail, write bounded escaped GITHUB_STEP_SUMMARY sections when set, and emit GitHub workflow ::error title=<step>::... annotations to stdout (escaping %, \\r, \\n, : and , in properties) with failed not ok - / probe: lines or crash tail plus bounded next-start.log tail (including missing-log handling).",
+      "Wire scripts/ci-probe-annotate.mjs into .github/workflows/ci.yml for Real CPU camera and privacy verifier, Motion probe, signed in, Footer walk, and Footer Chromium probe while retaining exact bash scripts/walk-end.sh and bash scripts/probe-end.sh invocations required by lib/end.test.ts and scripts/ci-workflow.test.mjs. Update checks.timeout-minutes to 25 and add timeout-minutes: 12 on E2E against next start with an updated comment citing measured run 40420670837 timings (1039s total: E2E 501s, camera 79s, signed-in motion 171s, footer probe 71s).",
+      "In scripts/probe-end.mjs around the local 390x844 reduced-motion 403 exit check, replace the fixed 450ms pause before reading main h1 with a bounded 10s observation for a rendered non-empty main h1 on /projects or /dashboard so app/(site)/(app)/dashboard/loading.tsx's headingless Suspense skeleton cannot race layout hydration; keep all existing probe assertions and console/network error checks intact. In scripts/probe-motion-signed-in.sh, normalize unset/empty/>48-char TMPDIR to /tmp matching scripts/probe-end.sh.",
+      "Add scripts/ci-probe-annotate.test.mjs (real subprocess exit-7 and exit-0 fixtures, ::error property/data escaping, crash without not ok -, and missing next-start.log) and scripts/probe-end-stream.test.mjs (1.5s delayed streamed /dashboard heading positive control and missing-heading timeout negative control). Update scripts/ci-workflow.test.mjs so its temporary workdir fixture exercises the updated Footer Chromium probe step and asserts ::error output alongside GITHUB_STEP_SUMMARY. Run all verification commands, commit with explicit GIT_AUTHOR_NAME='Otohime' GIT_AUTHOR_EMAIL='quiinthieu@gmail.com' GIT_COMMITTER_NAME='Otohime' GIT_COMMITTER_EMAIL='quiinthieu@gmail.com' (pm-270/<task_id>: imperative subject, no Co-Authored-By), push origin HEAD, and stop at the push."
+    ],
+    "interfaces": [
+      ".github/workflows/ci.yml",
+      "scripts/ci-probe-annotate.mjs",
+      "scripts/ci-probe-annotate.test.mjs",
+      "scripts/ci-workflow.test.mjs",
+      "scripts/probe-end.mjs",
+      "scripts/probe-end-stream.test.mjs",
+      "scripts/probe-motion-signed-in.sh"
+    ],
+    "non_goals": [
+      "weakening or deleting any Footer walk, Footer Chromium probe, or signed-in motion assertion or console/network error check",
+      "modifying scripts/e2e-annotate.mjs, scripts/vercel-deploy.sh, or lib/end.test.ts owned by sibling plans",
+      "querying CI or live production endpoints in a loop inside the SWE run"
+    ],
+    "acceptance_criteria": "Failures in CI camera, signed-in motion, Footer walk, or Footer Chromium probe preserve their exact nonzero exit status while emitting workflow-escaped ::error annotations with the failing assertion and bounded server log tail, probe-motion-signed-in.sh normalizes >48-char TMPDIR paths to /tmp, checks has a measured 25m job / 12m E2E step budget, and probe-end.mjs observes streamed /dashboard main h1 headings deterministically within 10s while failing when headings stay absent.",
+    "verification": [
+      {
+        "name": "CI probe annotation and streamed heading contracts",
+        "cwd": ".",
+        "cmd": "node --test scripts/ci-probe-annotate.test.mjs scripts/probe-end-stream.test.mjs scripts/ci-workflow.test.mjs",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "repository unit suite",
+        "cwd": ".",
+        "cmd": "CI=true npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "lint and type contracts",
+        "cwd": ".",
+        "cmd": "npm run lint && npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "gate closure invariants",
+        "cwd": ".",
+        "cmd": "node scripts/check-gate-closure.mjs",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "CI-mode isolated footer walk and Chromium probe",
+        "cwd": ".",
+        "cmd": "node scripts/verify-bottle-footer.mjs",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Certify desk swipe preconditions and shared gate fixtures",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "1"
+    ],
+    "problem": "Superseded t-1606 landed desk swipe precondition checks (0b349dc), observed browser-clock Kame timing (9d3f746), and callback-flushed gate-closure plus settled phone ledger fixtures (c6d09f0), passing all local gates, but c6d09f0 never deployed because CI run 40423130342 hit an unannotated Footer Chromium probe failure; new Task 1 probe tests also need registration in package.json npm test so every main push runs them.",
+    "action_items": [
+      "At task start, read AGENTS.md, installed Next.js 16.4.2 docs under node_modules/next/dist/docs/, and projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/plan.md. If a person-only external prerequisite is missing, raise plan_manager_ask_user(kind=operator_action) immediately at task start with prerequisite_id, exact setup action, and readiness signal.",
+      "Perform a single bounded read of public GitHub check-run annotations (https://api.github.com/repos/quiinthieu/otohime/commits/<head_or_task1_sha>/check-runs and /check-runs/<id>/annotations) from Task 1's main run. If Task 1's ::error annotations surfaced any remaining deterministic failure in Footer Chromium probe, Footer walk, or Motion probe, signed in, fix the smallest root cause in scripts/probe-end.mjs or the implicated file in interfaces and add a positive + intentional-failure regression test without weakening assertions or suppressing console/network errors.",
+      "Preserve all landed t-1606 contracts (e2e/desk.test.ts hydration/scrollCenter/pan-y preconditions and [data-dragging] lifecycle, scripts/e2e-gesture-trace.ts bounded failure trace, e2e/kame.test.ts observed performance.now() clock progression, e2e/ledger.test.ts two-frame phone layout settle, and lib/gate-closure.test.ts callback-flushed child output cap) unless a concrete defect is reproduced, in which case repair it with a paired negative control.",
+      "Create scripts/main-lane-closure.test.mjs with executable positive and negative controls verifying: (a) scripts/probe-motion-signed-in.sh normalizes unset, empty, and >48-char TMPDIR paths to /tmp before launching Chrome while preserving short custom TMPDIRs; (b) package.json scripts.test registers scripts/ci-probe-annotate.test.mjs, scripts/probe-end-stream.test.mjs, and scripts/main-lane-closure.test.mjs; and (c) the preserved desk gesture trace, Kame clock observation, ledger two-frame settle, and gate-closure stream-drain invariants hold. Register all three new .test.mjs files in package.json scripts.test.",
+      "Run all verification commands including 3x serial production E2E (bash scripts/e2e-local.sh) and isolated footer probes (node scripts/verify-bottle-footer.mjs). Commit with explicit GIT_AUTHOR_NAME='Otohime' GIT_AUTHOR_EMAIL='quiinthieu@gmail.com' GIT_COMMITTER_NAME='Otohime' GIT_COMMITTER_EMAIL='quiinthieu@gmail.com' (pm-270/<task_id>: imperative subject, no Co-Authored-By), push origin HEAD to trigger main CI + production deploy, and stop at the push."
+    ],
+    "interfaces": [
+      "package.json",
+      "scripts/main-lane-closure.test.mjs",
+      "scripts/probe-motion-signed-in.sh",
+      "scripts/probe-end.mjs",
+      "scripts/e2e-gesture-trace.ts",
+      "scripts/e2e-gesture-trace.test.ts",
+      "e2e/desk.test.ts",
+      "e2e/kame.test.ts",
+      "e2e/ledger.test.ts",
+      "lib/gate-closure.test.ts"
+    ],
+    "non_goals": [
+      "quarantining or skipping browser assertions without reproduced environmental proof",
+      "modifying scripts/e2e-annotate.mjs, scripts/vercel-deploy.sh, or unrelated feature routes",
+      "querying CI or live production endpoints in a loop after pushing"
+    ],
+    "acceptance_criteria": "package.json npm test executes CI probe annotation, streamed heading, and main-lane closure tests; probe-motion-signed-in.sh TMPDIR handling has executable positive and negative controls; desk swipe, Kame clock, ledger phone settle, gate-closure stream drain, and isolated footer probes pass deterministically across 3 serial full E2E runs; and an Otohime-authored commit containing 9ddd084 and c6d09f0 is pushed to main for CI and live QA certification.",
+    "verification": [
+      {
+        "name": "main lane closure and gesture trace unit contracts",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/main-lane-closure.test.mjs scripts/e2e-gesture-trace.test.ts",
+        "expect": "exit0",
+        "timeout_s": 180
+      },
+      {
+        "name": "full CI unit suite",
+        "cwd": ".",
+        "cmd": "CI=true npm test",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "lint, typecheck, and gate closure",
+        "cwd": ".",
+        "cmd": "npm run lint && npm run typecheck && node scripts/check-gate-closure.mjs",
+        "expect": "exit0",
+        "timeout_s": 600
+      },
+      {
+        "name": "CI-mode isolated footer walk and Chromium probe",
+        "cwd": ".",
+        "cmd": "node scripts/verify-bottle-footer.mjs",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "serial production E2E x3",
+        "cwd": ".",
+        "cmd": "bash scripts/e2e-local.sh",
+        "expect": "exit0",
+        "timeout_s": 2400
+      }
+    ]
+  }
+]
