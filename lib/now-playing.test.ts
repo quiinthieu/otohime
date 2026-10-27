@@ -3,7 +3,9 @@
 // server-only becomes an empty module and cacheLife throws (readNowPlaying itself only runs inside Next; its
 // shape is read as text below).
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
 import { register } from "node:module";
 import { join, relative, resolve } from "node:path";
 import { test } from "node:test";
@@ -402,6 +404,38 @@ test("ListenBrainz hung endpoints share the four-second deadline, with no retry"
 
 const LANYARD_ID = "123456789012345678";
 const LY = JSON.parse(readFileSync(join(ROOT, "lib/fixtures/lanyard.json"), "utf8"));
+test("cassette public-provider loop explicitly selects Steam or Lanyard and reaches every browser face", () => {
+  const script = readFileSync(join(ROOT, "scripts/probe-cassette.sh"), "utf8");
+  const start = script.indexOf("for face in brainz last lanyard; do");
+  const end = script.indexOf("\ndone", start);
+  assert.ok(start >= 0 && end > start, "the real public-provider loop is present");
+  const dir = mkdtempSync(join(tmpdir(), "cassette-loop-"));
+  try {
+    // Execute the real orchestration loop with fake server/browser ports. The full browser walk
+    // supplies the actual Next/Chromium coverage; this control tests every invocation's selection.
+    const child = spawnSync(process.env.NOW_PLAYING_TEST_BASH ?? "bash", ["-u", "-c", `
+FAKE_DIR="$1"
+FAKE_PORT=4135
+CREDS=(STEAM_ID=76561197960435530)
+SENTINELS=fixture
+SERVER_PID=""
+FAILED=0
+kill_group() { :; }
+start_server() { printf 'START:%s\\n' "$face"; printf 'ARG:%s\\n' "$@"; }
+probe() { printf 'PROBE:%s\\n' "$1"; }
+${script.slice(start, end + "\ndone".length)}
+exit "$FAILED"
+`, "cassette-loop", dir], { encoding: "utf8" });
+    assert.equal(child.status, 0, child.stderr);
+    assert.deepEqual(child.stdout.match(/^PROBE:.*$/gm), ["PROBE:brainz", "PROBE:last", "PROBE:lanyard"]);
+    for (const face of ["brainz", "last", "lanyard"]) {
+      const invocation = child.stdout.split(`START:${face}\n`)[1]?.split(`PROBE:${face}\n`)[0];
+      assert.ok(invocation, `${face}: reaches the probe`);
+      assert.match(invocation, face === "lanyard" ? /^ARG:LANYARD_USER_ID=123456789012345678$/m : /^ARG:LANYARD_USER_ID=$/m, `${face}: explicit game selection`);
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 test("Lanyard configuration uses env over the empty server default; identifiers and hosts are validated", () => {
   assert.equal(configFrom({}).lanyard, null);
   assert.deepEqual(configFrom({}, "", LANYARD_ID).lanyard, { id: LANYARD_ID });

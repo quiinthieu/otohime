@@ -179,7 +179,9 @@ fi
 kill_group "$SERVER_PID"
 SERVER_PID=""
 for face in brainz last lanyard; do
-  GAME_ENV=()
+  # Explicitly keep the music-only faces on Steam. Bash 3.2 treats an empty
+  # array expansion as unset under set -u, aborting before these probes run.
+  GAME_ENV=(LANYARD_USER_ID="")
   if [ "$face" = lanyard ]; then
     GAME_ENV=(LANYARD_USER_ID="123456789012345678" NOW_PLAYING_LANYARD_HOST="http://127.0.0.1:$((FAKE_PORT + 4))")
   fi
