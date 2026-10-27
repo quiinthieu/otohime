@@ -1,0 +1,19 @@
+{
+  "status": "infra",
+  "cause": "environment",
+  "reason": "git_push_non_fast_forward_retries_exhausted",
+  "main_attempts": 4,
+  "rebase_retries": 3,
+  "rejected_commits": [
+    "4f75d1256d7c5f078a7b2ebcd87d88d8fb0c36e3",
+    "44dd5261233b16277f116e3f93770e3fdebf9a46",
+    "cf28af07364812558866f445e7b9acf6a5551a01",
+    "4e6a32c522c6739042e5103da35f65137e866bd1"
+  ],
+  "rescue_branch": "task-rescue/pm-270-t-1661-run-9120",
+  "main_delivered": false,
+  "local_verification": "pass",
+  "ci_and_live_delivery": "not demonstrated",
+  "owner": "plan-manager delivery retry",
+  "failure_condition": "The tested commit remains absent from main; no deployed build certification can pass until main delivery succeeds."
+}

@@ -1,0 +1,126 @@
+{
+  "schema": "otohime.pm-270.local-certification.v1",
+  "plan_id": "pm-270",
+  "task_id": "t-1661",
+  "run_id": "run-9120",
+  "fingerprint": "68bdf4f3915dd7dbf80a0e1babac249f1ca856ea1de057b7e450e155c5959cd8",
+  "items": [
+    {
+      "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/main-lane-closure.test.mjs scripts/e2e-gesture-trace.test.ts",
+      "log": "rebase-2/closure-green.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "CI=true npm test",
+      "log": "rebase-2/unit.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 2437,
+        "pass": 2437,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "npm run lint && npm run typecheck && node scripts/check-gate-closure.mjs",
+      "logs": [
+        "rebase-2/lint.log",
+        "rebase-2/typecheck.log",
+        "rebase-2/gate-closure.json"
+      ],
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass"
+    },
+    {
+      "command": "node scripts/verify-bottle-footer.mjs",
+      "log": "rebase-2/footer-green.log",
+      "environment": "PATH prepends an exec launcher for installed macOS Google Chrome; verifier sets CI=true and TMPDIR=/tmp",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "bash scripts/e2e-local.sh",
+      "serial_attempt": 1,
+      "log": "rebase-2/e2e-1.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 182,
+        "pass": 181,
+        "fail": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "command": "bash scripts/e2e-local.sh",
+      "serial_attempt": 2,
+      "log": "rebase-2/e2e-2.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 182,
+        "pass": 181,
+        "fail": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "command": "bash scripts/e2e-local.sh",
+      "serial_attempt": 3,
+      "log": "rebase-2/e2e-3.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 182,
+        "pass": 181,
+        "fail": 0,
+        "skipped": 1
+      }
+    }
+  ],
+  "final_local_build_id": "Q38aE_UnZv27b064YE8KV",
+  "execution": "demonstrated locally",
+  "integration_deployed": "not observed for delivery commit",
+  "waiting_for_capacity": false,
+  "product_delivered": "pending plan-manager CI and independent QA",
+  "tested_tree_commit": "4b68b282d76d6ad235fbf49e34c166c32f0daeb0",
+  "rebased_onto": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+  "generated_history_sha256": "085a809342fcd1a96f15ac31aec7e3e6081130384dee92c98938e31c71b51a3f",
+  "fingerprint_path": "rebase-2/fingerprint.json",
+  "push_rejections": [
+    "4f75d1256d7c5f078a7b2ebcd87d88d8fb0c36e3",
+    "44dd5261233b16277f116e3f93770e3fdebf9a46"
+  ],
+  "task_code_paths": [
+    "package.json",
+    "scripts/main-lane-closure.test.mjs"
+  ]
+}

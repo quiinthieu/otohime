@@ -1,0 +1,69 @@
+{
+  "read_at": "2026-10-27T03:35:38.812518+00:00",
+  "bounded": true,
+  "requests": [
+    {
+      "name": "task1-check-runs",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/commits/4c9f325055c6da83fbe12afe6ffeb5858efd2a89/check-runs?per_page=100",
+      "status": 200,
+      "link": null,
+      "remaining": "59"
+    },
+    {
+      "name": "task1-annotations-121959563141",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121959563141/annotations?per_page=100",
+      "status": 200,
+      "link": null,
+      "remaining": "58"
+    },
+    {
+      "name": "task1-annotations-121954077700",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121954077700/annotations?per_page=100",
+      "status": 200,
+      "link": null,
+      "remaining": "57"
+    },
+    {
+      "name": "task1-annotations-121954077615",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121954077615/annotations?per_page=100",
+      "status": 200,
+      "link": null,
+      "remaining": "56"
+    },
+    {
+      "name": "task1-annotations-121954076567",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121954076567/annotations?per_page=100",
+      "status": 200,
+      "link": null,
+      "remaining": "55"
+    },
+    {
+      "name": "history-failure",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/workflows/ci.yml/runs?branch=main&per_page=10&status=failure",
+      "status": 200,
+      "link": "<https://api.github.com/repositories/1423113105/actions/workflows/ci.yml/runs?branch=main&per_page=10&status=failure&page=2>; rel=\"next\", <https://api.github.com/repositories/1423113105/actions/workflows/ci.yml/runs?branch=main&per_page=10&status=failure&page=12>; rel=\"last\"",
+      "remaining": "54"
+    },
+    {
+      "name": "history-completed",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/workflows/ci.yml/runs?branch=main&per_page=10&status=completed",
+      "status": 200,
+      "link": "<https://api.github.com/repositories/1423113105/actions/workflows/ci.yml/runs?branch=main&per_page=10&status=completed&page=2>; rel=\"next\", <https://api.github.com/repositories/1423113105/actions/workflows/ci.yml/runs?branch=main&per_page=10&status=completed&page=47>; rel=\"last\"",
+      "remaining": "53"
+    },
+    {
+      "name": "history-in_progress",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/workflows/ci.yml/runs?branch=main&per_page=10&status=in_progress",
+      "status": 200,
+      "link": null,
+      "remaining": "52"
+    },
+    {
+      "name": "history-queued",
+      "url": "https://api.github.com/repos/quiinthieu/otohime/actions/workflows/ci.yml/runs?branch=main&per_page=10&status=queued",
+      "status": 200,
+      "link": null,
+      "remaining": "51"
+    }
+  ]
+}

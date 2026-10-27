@@ -1,0 +1,11 @@
+{
+  "retry": 3,
+  "rejected_sha": "b36839a8ae6ac93cd63aabe0536b4d4e536f84ff",
+  "upstream_base": "cabb78bb430631a84855b3622d1906293bee977d",
+  "rebased_sha": "c4cfd5a018ad51674a5ed872466a60884f5c1059",
+  "incoming_paths": [
+    "scripts/probe-seasons.mjs",
+    "scripts/probe-seasons.sh"
+  ],
+  "requirement": "All nine task verification commands rerun; previous results historical only."
+}

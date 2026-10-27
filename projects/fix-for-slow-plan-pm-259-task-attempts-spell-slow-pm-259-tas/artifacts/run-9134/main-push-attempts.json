@@ -1,0 +1,26 @@
+[
+  {
+    "branch": "main",
+    "sha": "2e7db12aed9e44177d000baa25f402f051a5d5bb",
+    "exit_code": 1,
+    "output": "To github.com:quiinthieu/otohime.git\n ! [rejected]        HEAD -> main (fetch first)\nerror: failed to push some refs to 'github.com:quiinthieu/otohime.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details.\n"
+  },
+  {
+    "branch": "main",
+    "sha": "91e7e3baff40f0b38cade7c1dbc25572dfdc826f",
+    "exit_code": 1,
+    "output": "To github.com:quiinthieu/otohime.git\n ! [rejected]        HEAD -> main (fetch first)\nerror: failed to push some refs to 'github.com:quiinthieu/otohime.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details.\n"
+  },
+  {
+    "branch": "main",
+    "sha": "b36839a8ae6ac93cd63aabe0536b4d4e536f84ff",
+    "exit_code": 1,
+    "output": "To github.com:quiinthieu/otohime.git\n ! [rejected]        HEAD -> main (fetch first)\nerror: failed to push some refs to 'github.com:quiinthieu/otohime.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details.\n"
+  },
+  {
+    "branch": "main",
+    "sha": "93f470e8491034f36b821eab143b28d299fdcfe3",
+    "exit_code": 1,
+    "output": "To github.com:quiinthieu/otohime.git\n ! [rejected]        HEAD -> main (fetch first)\nerror: failed to push some refs to 'github.com:quiinthieu/otohime.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details.\n"
+  }
+]

@@ -1,0 +1,115 @@
+{
+  "head": "3e205ed55a28eb4d7fc5e21998fc814ccbfe4b96",
+  "fingerprint": "681ffb78c06e62d457c3a17b9fdce92ba14635b8176dbee53a31c2a0e3aeb8be",
+  "environment": {
+    "node": "v22.23.3",
+    "CI": "true",
+    "TMPDIR": "/tmp",
+    "chrome": "installed Google Chrome via exec launcher",
+    "browser_lock": "playwright-core@1.64.0"
+  },
+  "commands": [
+    {
+      "name": "closure-green",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "scripts/main-lane-closure.test.mjs",
+        "scripts/e2e-gesture-trace.test.ts"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 1.529,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/closure-green.log"
+    },
+    {
+      "name": "unit",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 17.367,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/unit.log"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 8.677,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/lint.log"
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 6.384,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/typecheck.log"
+    },
+    {
+      "name": "gate-closure",
+      "command": [
+        "node",
+        "scripts/check-gate-closure.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 3.358,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/gate-closure.log"
+    },
+    {
+      "name": "e2e-1",
+      "command": [
+        "bash",
+        "scripts/e2e-local.sh"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 393.629,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/e2e-1.log",
+      "build_id": "lqYZLyuR3JnUejTES8-fd"
+    },
+    {
+      "name": "e2e-2",
+      "command": [
+        "bash",
+        "scripts/e2e-local.sh"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 380.022,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/e2e-2.log",
+      "build_id": "O5C-ivoWs4ji8YI_6LzZM"
+    },
+    {
+      "name": "e2e-3",
+      "command": [
+        "bash",
+        "scripts/e2e-local.sh"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 380.935,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/e2e-3.log",
+      "build_id": "NdH7-GimSwEKOJA9AMe4U"
+    },
+    {
+      "name": "footer",
+      "command": [
+        "node",
+        "scripts/verify-bottle-footer.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 75.685,
+      "log": "projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/artifacts/run-9134/footer.log",
+      "build_id": "nYPVRHdUl7NTGzvD3K2RF"
+    }
+  ],
+  "fingerprint_unchanged": true
+}

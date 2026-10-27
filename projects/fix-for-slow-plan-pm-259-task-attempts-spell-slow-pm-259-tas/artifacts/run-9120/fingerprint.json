@@ -1,0 +1,41 @@
+{
+  "base_sha": "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+  "algorithm": "sha256",
+  "files": {
+    "package.json": "b16273003f9279a5f00e2050621d89ca67bd2be2fc8aaa13b8d65ec293fb0f70",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    ".github/workflows/ci.yml": "b08a5728f75ab97b52106052ed52d5edce37b1028ea799c0fecefd84d0800b6a",
+    "scripts/main-lane-closure.test.mjs": "e6c0025458e57799ab27e63333b57b1801a4a7ee40201e5c65a833eb7b52dec6",
+    "scripts/ci-probe-annotate.mjs": "290b01a759e293e646a9db383e6e7daa482d6e4f0fc4590ffb5d21bdca8e3bfe",
+    "scripts/ci-probe-annotate.test.mjs": "f6ebf49db8e52d2312b1889a2f0781fbffabf2cef9b929bd58f5e7434222e2cc",
+    "scripts/probe-end.mjs": "96b7204d0d01d2bd92b1ba4e37c53c4113a521820017ea7d3b39ac0b3088d012",
+    "scripts/probe-end-stream.test.mjs": "0afaac288b43fd9fc607328ec9ea3f9dc37dde85d6b8bd53dadcb8713a85720d",
+    "scripts/probe-motion-signed-in.sh": "76972ccd8cafd12a42b55232fc7f3f9fb15704937a07cc275d4731e7541ca884",
+    "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+    "scripts/e2e-gesture-trace.test.ts": "c7e0f4d10b63482538f8ece310917e0eae2be91f592d95ff8ea25fc71bb8b42b",
+    "scripts/check-gate-closure.mjs": "38bf3c064f9e66ee51c927081997c5336e69ea469a3928ff57ec57884ca9aff2",
+    "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+    "e2e/kame.test.ts": "1770d7cdb691b722ffe3e09554d4c7e2e3b316dce8490c434f105860ddc2ce5f",
+    "e2e/ledger.test.ts": "99363dab11aa76ddd67484744007d877edcebdfd3cfbad11c589a2368e25adab",
+    "lib/gate-closure.test.ts": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+    "ghosts/config.ts": "a46c0b8802e5a56262b596f76c6d5280f53ed0371b6118554b1bcc1ee485dc0e",
+    "ghosts/config.test.ts": "988143e8fa5ae194a69c3ab7b5fc0e5dcdfce98dd2ce9a651312c5a65eceeb59",
+    "ghosts/canvas.tsx": "48e1abd0b4e60b146fa07ffb3ff781335e40a6641ad13bea59031e0ad9c00781",
+    "ghosts/client.ts": "18b19bb094c91fd776a41ed7999e42343f85f08750495a250a524862238cd804",
+    "app/api/ghosts/route.ts": "f9309594cd32caaa094e25bba1adb1e7e5869127429924116d4c2cd18504026d"
+  },
+  "combined": "3b49096068b94eacaa17e4915b9e6290693a3857bd12401b5b243809c6bb9e95",
+  "profile": {
+    "id": "codex-sol-6-1-high",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "runner": "fleet",
+    "worker_id": "avietidol-mac-mini"
+  },
+  "environment": {
+    "node": "v22.23.3",
+    "npm": "10.9.9",
+    "chrome": "Google Chrome 156.0.8078.48",
+    "docker": "29.9.2"
+  }
+}

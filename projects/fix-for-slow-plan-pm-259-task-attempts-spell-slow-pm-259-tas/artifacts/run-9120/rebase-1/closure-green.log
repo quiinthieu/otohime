@@ -1,0 +1,166 @@
+TAP version 13
+# Subtest: the bound is 40 and a short gesture is kept whole, in order
+ok 1 - the bound is 40 and a short gesture is kept whole, in order
+  ---
+  duration_ms: 0.682917
+  type: 'test'
+  ...
+# Subtest: a long drag keeps at most 40 records, and the press and the let-go survive
+ok 2 - a long drag keeps at most 40 records, and the press and the let-go survive
+  ---
+  duration_ms: 0.171041
+  type: 'test'
+  ...
+# Subtest: with no move left to drop, the oldest record goes
+ok 3 - with no move left to drop, the oldest record goes
+  ---
+  duration_ms: 0.065417
+  type: 'test'
+  ...
+# Subtest: anything but pointer down/move/up/cancel is ignored, and the trace is not changed in place
+ok 4 - anything but pointer down/move/up/cancel is ignored, and the trace is not changed in place
+  ---
+  duration_ms: 0.041625
+  type: 'test'
+  ...
+# Subtest: the format: times from the first record, the pointer, the point, the target and the drag state
+ok 5 - the format: times from the first record, the pointer, the point, the target and the drag state
+  ---
+  duration_ms: 0.192584
+  type: 'test'
+  ...
+# Subtest: motion shell normalizes unset, empty and long TMPDIR before browser launch; preserves custom paths through length 48
+ok 6 - motion shell normalizes unset, empty and long TMPDIR before browser launch; preserves custom paths through length 48
+  ---
+  duration_ms: 130.274959
+  type: 'test'
+  ...
+# Subtest: motion TMPDIR controls reject missing normalization, an off-by-one bound and clobbered custom paths
+ok 7 - motion TMPDIR controls reject missing normalization, an off-by-one bound and clobbered custom paths
+  ---
+  duration_ms: 128.000375
+  type: 'test'
+  ...
+# Subtest: npm test executes all three main-lane suites; removing any registration fails
+ok 8 - npm test executes all three main-lane suites; removing any registration fails
+  ---
+  duration_ms: 0.448542
+  type: 'test'
+  ...
+# Subtest: preserve desk hydration, rejecting its removal
+ok 9 - preserve desk hydration, rejecting its removal
+  ---
+  duration_ms: 0.279791
+  type: 'test'
+  ...
+# Subtest: preserve desk viewport centering, rejecting its removal
+ok 10 - preserve desk viewport centering, rejecting its removal
+  ---
+  duration_ms: 0.121333
+  type: 'test'
+  ...
+# Subtest: preserve desk hit target, rejecting its removal
+ok 11 - preserve desk hit target, rejecting its removal
+  ---
+  duration_ms: 0.086334
+  type: 'test'
+  ...
+# Subtest: preserve desk drag start, rejecting its removal
+ok 12 - preserve desk drag start, rejecting its removal
+  ---
+  duration_ms: 0.11225
+  type: 'test'
+  ...
+# Subtest: preserve desk drag end, rejecting its removal
+ok 13 - preserve desk drag end, rejecting its removal
+  ---
+  duration_ms: 0.081208
+  type: 'test'
+  ...
+# Subtest: preserve desk failure trace, rejecting its removal
+ok 14 - preserve desk failure trace, rejecting its removal
+  ---
+  duration_ms: 0.205791
+  type: 'test'
+  ...
+# Subtest: preserve Kame observed clock, rejecting its removal
+ok 15 - preserve Kame observed clock, rejecting its removal
+  ---
+  duration_ms: 0.215042
+  type: 'test'
+  ...
+# Subtest: preserve Kame frozen-clock negative control, rejecting its removal
+ok 16 - preserve Kame frozen-clock negative control, rejecting its removal
+  ---
+  duration_ms: 0.094459
+  type: 'test'
+  ...
+# Subtest: preserve ledger visible two-frame settle, rejecting its removal
+ok 17 - preserve ledger visible two-frame settle, rejecting its removal
+  ---
+  duration_ms: 0.067041
+  type: 'test'
+  ...
+# Subtest: preserve ledger overflow assertion, rejecting its removal
+ok 18 - preserve ledger overflow assertion, rejecting its removal
+  ---
+  duration_ms: 0.057791
+  type: 'test'
+  ...
+# Subtest: preserve gate output flush, rejecting its removal
+ok 19 - preserve gate output flush, rejecting its removal
+  ---
+  duration_ms: 0.057625
+  type: 'test'
+  ...
+# Subtest: preserve gate under-cap assertion, rejecting its removal
+ok 20 - preserve gate under-cap assertion, rejecting its removal
+  ---
+  duration_ms: 0.048083
+  type: 'test'
+  ...
+# Subtest: preserve gate over-cap assertion, rejecting its removal
+ok 21 - preserve gate over-cap assertion, rejecting its removal
+  ---
+  duration_ms: 0.116125
+  type: 'test'
+  ...
+# Subtest: the actual Kame clock predicate rejects frozen browser time and observes the 50ms boundary
+ok 22 - the actual Kame clock predicate rejects frozen browser time and observes the 50ms boundary
+  ---
+  duration_ms: 0.489167
+  type: 'test'
+  ...
+# Subtest: gesture trace stays bounded while retaining press/release and meaningful failure output
+ok 23 - gesture trace stays bounded while retaining press/release and meaningful failure output
+  ---
+  duration_ms: 0.606708
+  type: 'test'
+  ...
+# Subtest: gate child drains callback-flushed stdout and stderr, retaining complete under-cap output and exact over-cap tails
+ok 24 - gate child drains callback-flushed stdout and stderr, retaining complete under-cap output and exact over-cap tails
+  ---
+  duration_ms: 36.801125
+  type: 'test'
+  ...
+# Subtest: ledger's actual sampler waits for visible two-frame geometry and still rejects a sheet that fits
+ok 25 - ledger's actual sampler waits for visible two-frame geometry and still rejects a sheet that fits
+  ---
+  duration_ms: 885.9785
+  type: 'test'
+  ...
+# Subtest: disabled ghost configuration is console-clean; intentional HTTP 404 remains detectable
+ok 26 - disabled ghost configuration is console-clean; intentional HTTP 404 remains detectable
+  ---
+  duration_ms: 283.95025
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1523.119584
