@@ -1,5 +1,12 @@
 # Ink ghosts changelog
 
+## 2026-10-27: reconcile disabled configuration with the browser gate (pm-257/t-1608)
+
+- Correlate only the exact same-origin config GET 404 with its native resource-console error in the Riso suite.
+  Keep unrelated resources, same-path 500 responses, application console errors and page errors failing.
+- Add pure ordering/cardinality controls, real browser negative controls and compiled route tests with runtime
+  configured/malformed endpoints. Preserve the empty no-store 404 and every existing heading assertion.
+
 ## 2026-10-27: draw ephemeral visitor ink (pm-257/t-1608)
 
 - Add request-time, no-store `/api/ghosts` configuration. Disabled or invalid endpoints return 404; secure
