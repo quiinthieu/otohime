@@ -9,7 +9,17 @@ export type Note = {
   decay: number; // seconds from the peak back to silence
 };
 export type Cue = { db: number; notes: readonly Note[]; wave?: OscillatorType };
-export type CueName = "move" | "open" | "back" | "chime" | "eat" | "burst" | "stamp" | "rustle" | "press";
+export type CueName =
+  | "move"
+  | "open"
+  | "back"
+  | "chime"
+  | "eat"
+  | "burst"
+  | "stamp"
+  | "rustle"
+  | "press"
+  | "shuffle";
 
 // Nothing plays louder than this, whatever a cue asks for.
 export const MAX_DB = -18;
@@ -48,6 +58,18 @@ export const CUES: Record<CueName, Cue> = {
   },
   // a letterpress key pushed down: a soft paper thunk, the quietest cue
   press: { db: -28, wave: "triangle", notes: [note(140, 0, 0.003, 0.07), note(90, 0.015, 0.003, 0.07)] },
+  // cards riffled and dealt on washi: a soft cascade of paper ticks
+  shuffle: {
+    db: -25,
+    notes: [
+      note(1180, 0, 0.002, 0.018),
+      note(1420, 0.022, 0.002, 0.018),
+      note(1310, 0.046, 0.002, 0.02),
+      note(1580, 0.072, 0.002, 0.02),
+      note(1260, 0.1, 0.002, 0.022),
+      note(980, 0.13, 0.003, 0.035),
+    ],
+  },
 };
 
 export const dbToGain = (db: number) => 10 ** (db / 20);

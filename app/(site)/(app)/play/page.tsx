@@ -9,6 +9,7 @@ import { PeepBoxScene } from "@/components/peep-box/scene";
 import { StampHeading } from "@/components/stamp-heading";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ViewTransition } from "react";
 import "../../pond.css";
 import "@/components/peep-box/peep-box.css";
@@ -26,6 +27,20 @@ export default function PlayPage() {
         <div className="mt-8">
           <ClawMachine games={site.games} />
         </div>
+        <section className="mt-12" aria-labelledby="hanafuda-heading">
+          <h2 id="hanafuda-heading" className="caption">
+            <RisoText>Hanafuda Koi-Koi</RisoText>
+          </h2>
+          <p className="mt-2 mb-4 text-muted">
+            Forty-eight ink-and-washi flower cards across the twelve months. Match suits against the CPU, call Koi-koi
+            under a red hanko stamp, and flip any month’s card back to read what shipped that month.
+          </p>
+          <p>
+            <Link href="/play/hanafuda" className="btn" data-testid="play-hanafuda-link">
+              Play Hanafuda Koi-Koi →
+            </Link>
+          </p>
+        </section>
         <section className="mt-12" aria-labelledby="pond-heading">
           <h2 id="pond-heading" className="caption"><RisoText>Suminagashi pond</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Float ink on still water, then comb and blow it into rings.</p>

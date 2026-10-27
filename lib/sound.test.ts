@@ -19,10 +19,10 @@ import {
 } from "./sound.ts";
 import { play, setSound, startPurr, stopPurr } from "./sound-client.ts";
 
-const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle", "press"];
+const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle", "press", "shuffle"];
 const OLD = NAMES.filter((name) => name !== "press");
 
-test("the nine cues the console and the ink toys need are all there", () => {
+test("the ten cues the console and the ink toys need are all there", () => {
   assert.deepEqual(Object.keys(CUES).sort(), [...NAMES].sort());
 });
 
@@ -94,6 +94,12 @@ test("a stamp is a low falling thud and a rustle is quiet high ticks", () => {
   const gaps = rustle.notes.slice(1).map((n, i) => +(n.at - rustle.notes[i].at).toFixed(3));
   assert.ok(new Set(gaps).size > 1, `rustle ticks are unevenly spaced: ${gaps}`);
   assert.ok(cueGain(rustle) < cueGain(stamp), "a rustle sits under a stamp");
+
+  const { shuffle } = CUES;
+  assert.ok(shuffle.db <= MAX_DB, `shuffle asks for ${shuffle.db} dB`);
+  assert.ok(shuffle.notes.length >= 5, "a shuffle is a quick cascade of paper ticks");
+  assert.ok(cueLength(shuffle) <= 0.25, "shuffle finishes crisply");
+  assert.ok(cueGain(shuffle) < cueGain(stamp), "a shuffle sits under a stamp");
 });
 
 test("a press is a soft falling thunk, quieter than every other cue", () => {
@@ -186,6 +192,7 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
   play("stamp");
   play("rustle");
   play("press");
+  play("shuffle");
   assert.equal(FakeAudioContext.made, 0);
   assert.deepEqual(heard(), []);
 
@@ -203,6 +210,12 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
   const rustle = heard();
   assert.deepEqual(rustle.map((v) => v.hz), CUES.rustle.notes.map((n) => n.hz));
   assert.equal(peakOf(rustle), dbToGain(CUES.rustle.db));
+
+  play("shuffle");
+  const shuffle = heard();
+  assert.deepEqual(shuffle.map((v) => v.hz), CUES.shuffle.notes.map((n) => n.hz));
+  assert.equal(peakOf(shuffle), dbToGain(CUES.shuffle.db));
+  assert.ok(peakOf(shuffle) <= dbToGain(MAX_DB));
 
   // A press plays its own wave, quietly; every old cue is still square.
   play("press");
@@ -243,6 +256,7 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
   play("stamp");
   play("rustle");
   play("press");
+  play("shuffle");
   await new Promise((r) => setImmediate(r));
   assert.deepEqual(heard(), []);
 
