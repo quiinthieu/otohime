@@ -61,42 +61,62 @@ export const BOTTLE_GATES = [
   sharedGate("footer"),
   { id: "deployment", cmd: "bash scripts/vercel-deploy.test.sh" },
 ];
-export const API_DEPLOYMENT_CONTROLS = [
-  "scoped identity failure accepts independently authenticated API Ready before exact-sha health",
-  "API fallback requests the uploaded deployment in the configured team with the existing token",
-  "API fallback never prints its credential",
-  "CLI scope resolver wrapped User not found uses the same authenticated API check",
-  "API Ready cannot bypass exact served-sha health",
-  ...["state-BUILDING", "state-QUEUED", "state-INITIALIZING", "state-ERROR", "state-CANCELED", "state-unknown", "wrong-project", "wrong-url", "preview", "missing-id", "public-only", "malformed", "oversized", "http-401", "http-403", "http-429", "http-500", "redirect", "hang"]
-    .map((mode) => `API ${mode} fails closed before matching health`),
-  "API redirect never forwards the credential",
-  "API fallback requires the configured project",
-  "API fallback rejects a refused token without printing it",
-  ...["identity-timeout", "mixed-identity"].map((mode) => `${mode} cannot invoke API rescue or matching health`),
+export const DEPLOYMENT_NAMES = [
+  "team-scoped bearer READY and exact-sha health succeed without user bootstrap",
+  "status resource receives exact hostname and configured team",
+  "deployment receipt binds project owner id and READY",
+  "user bootstrap 404 fixture exists beside successful deployment resource",
+  "missing TEAM is refused before upload",
+  "missing PROJECT is refused before upload",
+  "missing TOKEN is refused before upload",
+  "malformed status JSON cannot be rescued by matching health",
+  "hanging status HTTP is bounded and matching health cannot rescue it",
+  "READY plus wrong public SHA remains red",
+  "READY plus unreachable health fails closed",
+  "wrong ownerId fails association before matching health",
+  "missing ownerId fails association before matching health",
+  "wrong projectId fails association before matching health",
+  "missing projectId fails association before matching health",
+  "wrong url fails association before matching health",
+  "missing url fails association before matching health",
+  "wrong id fails association before matching health",
+  "missing id fails association before matching health",
+  "HTTP 401 fails closed before matching health",
+  "HTTP 401 diagnostics redact vendor body and token",
+  "HTTP 403 fails closed before matching health",
+  "HTTP 403 diagnostics redact vendor body and token",
+  "HTTP 404 fails closed before matching health",
+  "HTTP 404 diagnostics redact vendor body and token",
+  "HTTP 500 fails closed before matching health",
+  "HTTP 500 diagnostics redact vendor body and token",
+  "ERROR status fails closed before matching health",
+  "CANCELED status fails closed before matching health",
+  "UNKNOWN status fails closed before matching health",
+  "BUILDING status times out within bound and never reads health",
+  "QUEUED status times out within bound and never reads health",
+  "INITIALIZING status times out within bound and never reads health",
+  "wrong target fails association before matching health",
+  "missing target fails association before matching health",
+  "HTTP 429 fails closed before matching health",
+  "HTTP 429 diagnostics redact vendor body and token",
+  ...["preview", "public-only", "redirect"].map((mode) => `API ${mode} cannot bypass association or matching health`),
+  "API redirect never forwards its credential",
+  "refused API token remains red and is never printed"
 ];
-const deploymentNames = [
-  ...API_DEPLOYMENT_CONTROLS,
-  "standalone inspect without scope reproduces User not found",
-  "explicit team scope permits Ready inspect and exact-sha health",
-  "waiting inspect receives the configured team scope",
-  "diagnostic re-read receives the same team scope",
-  "scoped Ready re-read cannot rescue failed waiting inspect",
-  "missing team is refused before upload",
-  "User not found with explicit scope still fails closed before health",
-  "matching nested sha cannot impersonate the served executable",
-  ...["building", "queued", "initializing", "silent", "unknown"].map((mode) => `zero-exit ${mode} inspect fails closed before matching health`),
-];
+// Retain the exported contract used by the concurrently landed Bottle verifier.
+export const API_DEPLOYMENT_CONTROLS = DEPLOYMENT_NAMES;
+const deploymentNames = DEPLOYMENT_NAMES;
 function deploymentEvidence(output) {
   assert.doesNotMatch(output, /^not ok - /m);
   const count = Number(output.match(/^# all (\d+) assertions passed$/m)?.[1]);
-  assert.ok(count >= 59 + API_DEPLOYMENT_CONTROLS.length, "deployment fixture executes all assertions");
+  assert.ok(count >= 61, "deployment fixture executes all assertions");
   const assertions = output.split("\n").filter((line) => line.startsWith("ok - "));
   assert.equal(new Set(assertions).size, assertions.length, "duplicate deployment assertions cannot replace missing controls");
   assert.equal(assertions.length, count, "individual deployment assertions must match the summary");
   for (const name of deploymentNames) {
     assert.ok(output.split("\n").includes(`ok - ${name}`), `deployment assertion absent: ${name}`);
   }
-  return { assertions: count, required: deploymentNames, boundary: "fake Vercel CLI; real local HTTP and shell processes" };
+  return { assertions: count, required: deploymentNames, boundary: "fake upload CLI and vendor API/token; real deployment-status adapter, local HTTP and shell processes" };
 }
 
 // Importing the verifier runs no commands and never mutates another verifier's gates.

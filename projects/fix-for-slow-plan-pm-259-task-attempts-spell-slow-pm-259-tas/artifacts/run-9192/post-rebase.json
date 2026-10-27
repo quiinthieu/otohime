@@ -1,0 +1,83 @@
+{
+  "incoming_base": "ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50",
+  "tested_committed_head": "125a0306ed33a123d14b0e1984af77e712093b40",
+  "source_fingerprint": "c798ecd0c9148023d08fac51ffeba241593b82a4e2e1ba03177a604375f2020d",
+  "source_file_count": 1031,
+  "changed_upstream_executable_paths": [
+    "lib/bottle-verification.test.ts",
+    "lib/vercel-deployment-state.test.ts",
+    "scripts/vercel-deploy.sh",
+    "scripts/vercel-deploy.test.sh",
+    "scripts/vercel-deployment-state.mjs",
+    "scripts/verify-bottle-contracts.mjs"
+  ],
+  "resolved_conflicts": [
+    "lib/bottle-verification.test.ts",
+    "scripts/vercel-deploy.sh",
+    "scripts/vercel-deploy.test.sh",
+    "scripts/verify-bottle-contracts.mjs"
+  ],
+  "integration": "Keep direct scoped readiness; preserve incoming URL/config guards and require production target; compatibility verifyDeploymentReady delegates to the single HTTP implementation. Exported API_DEPLOYMENT_CONTROLS continues to name real HTTP controls.",
+  "gates": [
+    {
+      "id": "delivery",
+      "exit_code": 0,
+      "duration_ms": 1213,
+      "tap": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "skipped": 0
+      },
+      "log_sha256": "00a03d4c20b5f7cbcfebb4993ff31a2b142f828217209e830771e9c890b0a0f7",
+      "positive_assertions_and_negative_receipt_controls": "pass",
+      "assertions": null
+    },
+    {
+      "id": "unit",
+      "exit_code": 0,
+      "duration_ms": 19380,
+      "tap": {
+        "tests": 2506,
+        "pass": 2506,
+        "fail": 0,
+        "skipped": 0
+      },
+      "log_sha256": "3fa405e16aae864ab62b5eddb3e1239c3df449ece903999b0b9147a1114ed47f",
+      "positive_assertions_and_negative_receipt_controls": "pass",
+      "assertions": null
+    },
+    {
+      "id": "static",
+      "exit_code": 0,
+      "duration_ms": 26324,
+      "tap": {},
+      "log_sha256": "9630b4d972c632d390a12399a6ea9f23e9e597bed2d9f452cbe1cd5009fd5b72",
+      "positive_assertions_and_negative_receipt_controls": "pass",
+      "assertions": null
+    },
+    {
+      "id": "deployment",
+      "exit_code": 0,
+      "duration_ms": 10686,
+      "tap": {},
+      "log_sha256": "2448455e94d37a79642ba6108f6d557380d728d93c08270f189652dda5bfcff6",
+      "positive_assertions_and_negative_receipt_controls": "pass",
+      "assertions": 61
+    }
+  ],
+  "deploy_verifier_self_test": "22 ok, 0 failed",
+  "browser_gates_repeated": false,
+  "browser_reuse_reason": "All incoming executable paths are deployment helpers/tests or the Bottle receipt parser/test. Application, browser fixtures, app dependencies, build scripts, workflow and lock are unchanged. Original footer and three full serial E2E executions remain valid for those identical inputs.",
+  "relevant_files": {
+    "scripts/deployment-status.mjs": "8e94c32d4dfc88da3b0b160b5e67f7b0ffe2899fbe92d498bf01189ed59aab8a",
+    "scripts/vercel-deployment-state.mjs": "d6606a5f77d69666ed3eb4487f813329a31878e6e1db608e40758bec513278b4",
+    "scripts/vercel-deploy.sh": "973ede2b7ada96d1c3dbb57ff26021ea1e93d0fb314e55d106629d366020d85f",
+    "scripts/vercel-deploy.test.sh": "305d745005116cbbf4788e6c9fee22a2a485f3bce2dd120e5bb32673a5336c7c",
+    "scripts/verify-bottle-contracts.mjs": "a7d9bdffd3cfea55c6426750e4b2d5cde8ac9498397b8aea3dcc5ec666566579",
+    "lib/deployment-status.test.ts": "17e573df3c55988b4086a44b219b6b02bf70b681d29b4d5b5cc6232e4c13da1c",
+    "lib/vercel-deployment-state.test.ts": "60eb8586f63375ddb8ec4947f2610d4f9374ca6c68a90eb23298d64cbb000bfe",
+    "lib/bottle-verification.test.ts": "4950f959849f002a1f4b40c89ad12658fa04779ec4ba0560584a2bd14a984049"
+  },
+  "full_manifest_shared_artifact": "run-9192-local/post-rebase-full-manifest.json"
+}

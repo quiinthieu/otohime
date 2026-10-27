@@ -1,0 +1,227 @@
+{
+  "bounded": true,
+  "history_complete": false,
+  "limits": {
+    "pages_per_status": 1,
+    "runs_per_page": 2,
+    "annotations_per_check": 100
+  },
+  "reads": [
+    {
+      "status": "failure",
+      "total_count": 127,
+      "runs": [
+        {
+          "id": 40468812796,
+          "sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+          "status": "completed",
+          "conclusion": "failure",
+          "executable_fingerprints": {
+            "scripts/vercel-deploy.sh": "62fd022db618ce81fb3fdf1854c9e097493085374f3750134ca8d40128caf3aa",
+            "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+            ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36"
+          }
+        },
+        {
+          "id": 40467472536,
+          "sha": "c24320b07314dea9f590ba08c9142039951419d8",
+          "status": "completed",
+          "conclusion": "failure",
+          "executable_fingerprints": {
+            "scripts/vercel-deploy.sh": "62fd022db618ce81fb3fdf1854c9e097493085374f3750134ca8d40128caf3aa",
+            "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+            ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36"
+          }
+        }
+      ]
+    },
+    {
+      "status": "completed",
+      "total_count": 482,
+      "runs": [
+        {
+          "id": 40468812796,
+          "sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+          "status": "completed",
+          "conclusion": "failure",
+          "executable_fingerprints": {
+            "scripts/vercel-deploy.sh": "62fd022db618ce81fb3fdf1854c9e097493085374f3750134ca8d40128caf3aa",
+            "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+            ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36"
+          }
+        },
+        {
+          "id": 40467472536,
+          "sha": "c24320b07314dea9f590ba08c9142039951419d8",
+          "status": "completed",
+          "conclusion": "failure",
+          "executable_fingerprints": {
+            "scripts/vercel-deploy.sh": "62fd022db618ce81fb3fdf1854c9e097493085374f3750134ca8d40128caf3aa",
+            "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+            ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36"
+          }
+        }
+      ]
+    },
+    {
+      "status": "in_progress",
+      "total_count": 1,
+      "runs": [
+        {
+          "id": 40471181031,
+          "sha": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+          "status": "in_progress",
+          "conclusion": null,
+          "executable_fingerprints": {
+            "scripts/vercel-deploy.sh": "62fd022db618ce81fb3fdf1854c9e097493085374f3750134ca8d40128caf3aa",
+            "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+            ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36"
+          }
+        }
+      ]
+    },
+    {
+      "status": "queued",
+      "total_count": 0,
+      "runs": []
+    }
+  ],
+  "annotations": [
+    {
+      "run_id": 40468812796,
+      "check_id": 122076947059,
+      "count": 2,
+      "reported_count": 2,
+      "tails": [
+        {
+          "path": ".github",
+          "line": 45,
+          "title": "",
+          "message": "Process completed with exit code 1."
+        },
+        {
+          "path": ".github",
+          "line": 38,
+          "title": "vercel deploy",
+          "message": "unknown (inspect exited 1) https://otohime-pn49ibc00-otohime.vercel.app\ninspect --wait output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)\nstate re-read output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)"
+        }
+      ]
+    },
+    {
+      "run_id": 40468812796,
+      "check_id": 122070646619,
+      "count": 1,
+      "reported_count": 1,
+      "tails": [
+        {
+          "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+          "line": 2,
+          "title": "",
+          "message": "'resolve' is defined but never used"
+        }
+      ]
+    },
+    {
+      "run_id": 40467472536,
+      "check_id": 122072397937,
+      "count": 2,
+      "reported_count": 2,
+      "tails": [
+        {
+          "path": ".github",
+          "line": 45,
+          "title": "",
+          "message": "Process completed with exit code 1."
+        },
+        {
+          "path": ".github",
+          "line": 38,
+          "title": "vercel deploy",
+          "message": "unknown (inspect exited 1) https://otohime-holsvmwlc-otohime.vercel.app\ninspect --wait output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)\nstate re-read output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)"
+        }
+      ]
+    },
+    {
+      "run_id": 40467472536,
+      "check_id": 122066279948,
+      "count": 1,
+      "reported_count": 1,
+      "tails": [
+        {
+          "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+          "line": 2,
+          "title": "",
+          "message": "'resolve' is defined but never used"
+        }
+      ]
+    },
+    {
+      "run_id": 40468812796,
+      "check_id": 122076947059,
+      "count": 2,
+      "reported_count": 2,
+      "tails": [
+        {
+          "path": ".github",
+          "line": 45,
+          "title": "",
+          "message": "Process completed with exit code 1."
+        },
+        {
+          "path": ".github",
+          "line": 38,
+          "title": "vercel deploy",
+          "message": "unknown (inspect exited 1) https://otohime-pn49ibc00-otohime.vercel.app\ninspect --wait output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)\nstate re-read output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)"
+        }
+      ]
+    },
+    {
+      "run_id": 40468812796,
+      "check_id": 122070646619,
+      "count": 1,
+      "reported_count": 1,
+      "tails": [
+        {
+          "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+          "line": 2,
+          "title": "",
+          "message": "'resolve' is defined but never used"
+        }
+      ]
+    },
+    {
+      "run_id": 40467472536,
+      "check_id": 122072397937,
+      "count": 2,
+      "reported_count": 2,
+      "tails": [
+        {
+          "path": ".github",
+          "line": 45,
+          "title": "",
+          "message": "Process completed with exit code 1."
+        },
+        {
+          "path": ".github",
+          "line": 38,
+          "title": "vercel deploy",
+          "message": "unknown (inspect exited 1) https://otohime-holsvmwlc-otohime.vercel.app\ninspect --wait output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)\nstate re-read output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: Not able to load user because of unexpected error: User not found. (404)"
+        }
+      ]
+    },
+    {
+      "run_id": 40467472536,
+      "check_id": 122066279948,
+      "count": 1,
+      "reported_count": 1,
+      "tails": [
+        {
+          "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+          "line": 2,
+          "title": "",
+          "message": "'resolve' is defined but never used"
+        }
+      ]
+    }
+  ]
+}
