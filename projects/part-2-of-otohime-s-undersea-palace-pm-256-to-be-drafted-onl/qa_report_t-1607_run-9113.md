@@ -123,8 +123,9 @@ The raw assertion remains unread; environment attribution would be unjustified.
 GitHub [CI #485](https://github.com/quiinthieu/otohime/actions/runs/40430068517), run **40430068517**,
 head **5139d4fd9d7e4b83d53e17fb715ad576b4e38cc4**: **checks job 121945296200 succeeded**, including
 unit tests, production build, E2E, motion and both Footer probes. The production job **121950183033**
-deployed the application and was running its final terminal/press verification at the saved snapshot;
-do not read that snapshot as a completed workflow. [Native job evidence](t-1607/run-9113/delivery-current-jobs.json).
+also **succeeded**, including deployment, exact served SHA and terminal/press verification. The entire
+workflow completed **successfully**. [Final native job evidence](t-1607/run-9113/delivery-current-jobs.json),
+[workflow result](t-1607/run-9113/delivery-run.json).
 
 At **2026-10-27T01:19:15Z**, independent Chrome checked Home and `/ryugu`: both return 200, both meta
 build SHAs equal **5139d4fd9d7e4b83d53e17fb715ad576b4e38cc4**, neither has horizontal overflow or

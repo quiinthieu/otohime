@@ -25,5 +25,9 @@
     "pass": 168,
     "fail": 0
   },
-  "runtime_assets": "native workerd executed; no model/data assets required"
+  "runtime_assets": "native workerd executed; no model/data assets required",
+  "final_project_test": {
+    "exit": 0,
+    "pass": 2380
+  }
 }

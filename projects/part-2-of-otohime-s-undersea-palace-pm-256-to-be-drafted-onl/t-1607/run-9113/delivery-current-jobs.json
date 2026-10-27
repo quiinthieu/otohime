@@ -1,5 +1,5 @@
 {
-  "observed_at": "2026-10-27T01:19:38.077764+00:00",
+  "observed_at": "2026-10-27T01:21:10.808421+00:00",
   "jobs": [
     {
       "id": 121945296200,
@@ -254,8 +254,8 @@
     {
       "id": 121950183033,
       "name": "production",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "runner_name": "GitHub Actions 1000000878",
       "labels": [
         "ubuntu-24.04"
@@ -327,27 +327,35 @@
         },
         {
           "name": "Verify the deployed sha, terminal and press",
-          "status": "in_progress",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "number": 9,
           "started_at": "2026-10-27T01:18:13Z",
-          "completed_at": null
+          "completed_at": "2026-10-27T01:19:35Z"
         },
         {
           "name": "Post Run actions/setup-node@v7",
-          "status": "pending",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "number": 17,
-          "started_at": null,
-          "completed_at": null
+          "started_at": "2026-10-27T01:19:35Z",
+          "completed_at": "2026-10-27T01:19:35Z"
         },
         {
           "name": "Post Run actions/checkout@v7",
-          "status": "pending",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "number": 18,
-          "started_at": null,
-          "completed_at": null
+          "started_at": "2026-10-27T01:19:35Z",
+          "completed_at": "2026-10-27T01:19:35Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-27T01:19:35Z",
+          "completed_at": "2026-10-27T01:19:35Z"
         }
       ]
     }
