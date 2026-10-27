@@ -1,0 +1,1568 @@
+{
+  "reads": [
+    {
+      "url": "https://github.com/quiinthieu/otohime/actions?query=is%3Afailure&page=1",
+      "http_status": "200",
+      "total_count": 144,
+      "observed_count": 25,
+      "runs": [
+        {
+          "id": "40490942824",
+          "title": "pm-268/t-1601: Compile gate fixtures on supported Node 22",
+          "runNumber": 512,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40490942824"
+        },
+        {
+          "id": "40489507548",
+          "title": "fix(ci): standardize deployment authors",
+          "runNumber": 510,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/fix/deploy-release",
+            "url": "/quiinthieu/otohime/tree/refs/heads/fix/deploy-release",
+            "title": "fix/deploy-release"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40489507548"
+        },
+        {
+          "id": "40488773079",
+          "title": "pm-268/t-1601: Guard clean Riso browser verification builds",
+          "runNumber": 509,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40488773079"
+        },
+        {
+          "id": "40474532913",
+          "title": "pm-269/t-1648: Verify deployment readiness through scoped API",
+          "runNumber": 504,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40474532913"
+        },
+        {
+          "id": "40471181031",
+          "title": "pm-269/t-1648: Rebuild Bottle gates without stale Next output",
+          "runNumber": 503,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40471181031"
+        },
+        {
+          "id": "40468812796",
+          "title": "pm-269/t-1648: Require complete Bottle repository and deployment evid\u2026",
+          "runNumber": 502,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40468812796"
+        },
+        {
+          "id": "40467472536",
+          "title": "pm-269/t-1648: Require explicit Ready state before production health",
+          "runNumber": 501,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40467472536"
+        },
+        {
+          "id": "40465299263",
+          "title": "pm-270/t-1671: Certify desk fixtures and register main-lane tests",
+          "runNumber": 500,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40465299263"
+        },
+        {
+          "id": "40464199853",
+          "title": "pm-269/t-1648: Require complete named Bottle gate evidence",
+          "runNumber": 499,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40464199853"
+        },
+        {
+          "id": "40461166952",
+          "title": "pm-257/t-1609: Persist Pocket ghost controls",
+          "runNumber": 498,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40461166952"
+        },
+        {
+          "id": "40460769638",
+          "title": "pm-269/t-1648: Scope production inspection and certify Bottle gates",
+          "runNumber": 497,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40460769638"
+        },
+        {
+          "id": "40456936288",
+          "title": "pm-269/t-1648: Contain Bottle within the footer header band",
+          "runNumber": 496,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40456936288"
+        },
+        {
+          "id": "40454757987",
+          "title": "pm-269/t-1647: Preserve CI probe failures and verify rendered headings",
+          "runNumber": 495,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40454757987"
+        },
+        {
+          "id": "40450347470",
+          "title": "pm-255/t-1632: Accept only the tier-off GET /api/ask 404 in the seaso\u2026",
+          "runNumber": 494,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40450347470"
+        },
+        {
+          "id": "40448208637",
+          "title": "pm-259/t-1624: Expose browser gate crash diagnostics",
+          "runNumber": 493,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40448208637"
+        },
+        {
+          "id": "40448034730",
+          "title": "pm-259/t-1626: Fail closed on deployment diagnostics and identity",
+          "runNumber": 492,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40448034730"
+        },
+        {
+          "id": "40439524623",
+          "title": "pm-257/t-1608: Reconcile disabled ghost configuration with console ch\u2026",
+          "runNumber": 489,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40439524623"
+        },
+        {
+          "id": "40433812567",
+          "title": "pm-257/t-1608: Render idle-loaded visitor ink and bounded lifecycle",
+          "runNumber": 487,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40433812567"
+        },
+        {
+          "id": "40423130342",
+          "title": "pm-270/t-1606: Flush gate-closure child output and settle ledger phon\u2026",
+          "runNumber": 484,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40423130342"
+        },
+        {
+          "id": "40409123749",
+          "title": "pm-269/t-1588: Await the Dashboard's own page fade after its skeleton",
+          "runNumber": 480,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40409123749"
+        },
+        {
+          "id": "40405893755",
+          "title": "pm-270/t-1606: Observe browser time in the Kame clock fixture",
+          "runNumber": 479,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40405893755"
+        },
+        {
+          "id": "40395335524",
+          "title": "pm-269/t-1591: Stabilize clock checks and expose Footer failures",
+          "runNumber": 476,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40395335524"
+        },
+        {
+          "id": "40388684010",
+          "title": "pm-269/t-1588: Prove live Bottle animation cancellation",
+          "runNumber": 475,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40388684010"
+        },
+        {
+          "id": "40387187938",
+          "title": "pm-269/t-1591: Track opt-in heads entirely on device",
+          "runNumber": 474,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40387187938"
+        },
+        {
+          "id": "40380026935",
+          "title": "pm-269/t-1588: Wash up Bottles from footer and Pocket",
+          "runNumber": 472,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40380026935"
+        }
+      ],
+      "annotation_excerpts": []
+    },
+    {
+      "url": "https://github.com/quiinthieu/otohime/actions?query=is%3Afailure&page=2",
+      "http_status": "200",
+      "total_count": 144,
+      "observed_count": 25,
+      "runs": [
+        {
+          "id": "40378894466",
+          "title": "pm-270/t-1606: Drive notebook frames and verify footer title sources",
+          "runNumber": 471,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40378894466"
+        },
+        {
+          "id": "40365293940",
+          "title": "pm-269/t-1587: Include Bottle HTTP and Postgres integration coverage",
+          "runNumber": 467,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40365293940"
+        },
+        {
+          "id": "40352230491",
+          "title": "pm-264/t-1590: Verify the plain Riso footer heading",
+          "runNumber": 464,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40352230491"
+        },
+        {
+          "id": "40349872187",
+          "title": "pm-270/t-1605: Anchor the leftover-child check and bound the deploy s\u2026",
+          "runNumber": 463,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40349872187"
+        },
+        {
+          "id": "40348188828",
+          "title": "fix(ci): standardize deployment authors",
+          "runNumber": 462,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/fix/deploy-release",
+            "url": "/quiinthieu/otohime/tree/refs/heads/fix/deploy-release",
+            "title": "fix/deploy-release"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40348188828"
+        },
+        {
+          "id": "40346324813",
+          "title": "pm-264/t-1590: Preserve main checks and serialize production",
+          "runNumber": 461,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40346324813"
+        },
+        {
+          "id": "40345114517",
+          "title": "pm-259/t-1583: Repair red unit gates and publish failed CI assertions",
+          "runNumber": 460,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40345114517"
+        },
+        {
+          "id": "40343322274",
+          "title": "pm-268/t-1600: Verify served SHA after inspect failures",
+          "runNumber": 459,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40343322274"
+        },
+        {
+          "id": "40340641001",
+          "title": "pm-257/t-1607: Build bounded ghost rooms and Worker adapter",
+          "runNumber": 458,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40340641001"
+        },
+        {
+          "id": "40340021768",
+          "title": "pm-268/t-1601: Print accessible Riso heading plates",
+          "runNumber": 457,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40340021768"
+        },
+        {
+          "id": "40339124232",
+          "title": "pm-259/t-1583: Preserve deploy diagnostics and enable gated recovery",
+          "runNumber": 456,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40339124232"
+        },
+        {
+          "id": "40338754295",
+          "title": "pm-273/t-1612: Record replacement delivery SHA",
+          "runNumber": 455,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40338754295"
+        },
+        {
+          "id": "40337993898",
+          "title": "pm-271/t-1561: Render the Tamatebako in a test, real and empty changelog",
+          "runNumber": 454,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40337993898"
+        },
+        {
+          "id": "40335459968",
+          "title": "pm-273/t-1612: Persist moderated guestbook vectors behind bounded API",
+          "runNumber": 453,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40335459968"
+        },
+        {
+          "id": "40334420077",
+          "title": "pm-271/t-1562: Add opt-in palace sea sound with a Pocket switch",
+          "runNumber": 452,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40334420077"
+        },
+        {
+          "id": "40330477897",
+          "title": "pm-268/t-1600: Add Pocket print-run controls and commands",
+          "runNumber": 449,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40330477897"
+        },
+        {
+          "id": "40328273755",
+          "title": "pm-270/t-1605: Bound the Vercel production deploy and assert the serv\u2026",
+          "runNumber": 445,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40328273755"
+        },
+        {
+          "id": "40315924641",
+          "title": "pm-259/t-1583: Extend CI checks budget for browser setup",
+          "runNumber": 428,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40315924641"
+        },
+        {
+          "id": "40310239199",
+          "title": "pm-258/t-1564: Annotate failed E2E tests in CI and add a flowing-cloc\u2026",
+          "runNumber": 411,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40310239199"
+        },
+        {
+          "id": "40303724712",
+          "title": "pm-256/t-1559: Guard that npm test runs every Ryugu-jo test file",
+          "runNumber": 404,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40303724712"
+        },
+        {
+          "id": "40303396148",
+          "title": "pm-260/t-1578: Record verified probe and deployment handoff",
+          "runNumber": 403,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40303396148"
+        },
+        {
+          "id": "40298672101",
+          "title": "pm-259/t-1572: Record paper peel QA failure and repair plan",
+          "runNumber": 398,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40298672101"
+        },
+        {
+          "id": "40296784613",
+          "title": "pm-260/t-1578: Record independent QA failures and repair plan",
+          "runNumber": 393,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40296784613"
+        },
+        {
+          "id": "40295803050",
+          "title": "pm-258/t-1564: Run e2e files one at a time, give the footer walk and \u2026",
+          "runNumber": 392,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40295803050"
+        },
+        {
+          "id": "40294920931",
+          "title": "pm-260/t-1578: Add offline split part release probe",
+          "runNumber": 391,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40294920931"
+        }
+      ],
+      "annotation_excerpts": []
+    },
+    {
+      "url": "https://github.com/quiinthieu/otohime/actions?query=is%3Acompleted&page=1",
+      "http_status": "200",
+      "total_count": 514,
+      "observed_count": 25,
+      "runs": [
+        {
+          "id": "40493667173",
+          "title": "fix(ci): standardize deployment authors",
+          "runNumber": 514,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/fix/deploy-release",
+            "url": "/quiinthieu/otohime/tree/refs/heads/fix/deploy-release",
+            "title": "fix/deploy-release"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40493667173"
+        },
+        {
+          "id": "40493667124",
+          "title": "fix(ci): standardize deployment authors",
+          "runNumber": 513,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40493667124"
+        },
+        {
+          "id": "40490942824",
+          "title": "pm-268/t-1601: Compile gate fixtures on supported Node 22",
+          "runNumber": 512,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40490942824"
+        },
+        {
+          "id": "40490764205",
+          "title": "fix(ci): standardize deployment authors",
+          "runNumber": 511,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/fix/deploy-release",
+            "url": "/quiinthieu/otohime/tree/refs/heads/fix/deploy-release",
+            "title": "fix/deploy-release"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40490764205"
+        },
+        {
+          "id": "40489507548",
+          "title": "fix(ci): standardize deployment authors",
+          "runNumber": 510,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/fix/deploy-release",
+            "url": "/quiinthieu/otohime/tree/refs/heads/fix/deploy-release",
+            "title": "fix/deploy-release"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40489507548"
+        },
+        {
+          "id": "40488773079",
+          "title": "pm-268/t-1601: Guard clean Riso browser verification builds",
+          "runNumber": 509,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40488773079"
+        },
+        {
+          "id": "40486761224",
+          "title": "fix(ci): standardize deployment authors",
+          "runNumber": 508,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/fix/deploy-release",
+            "url": "/quiinthieu/otohime/tree/refs/heads/fix/deploy-release",
+            "title": "fix/deploy-release"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40486761224"
+        },
+        {
+          "id": "40485335471",
+          "title": "pm-271/t-1562: Record run-9207 commits and author",
+          "runNumber": 507,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40485335471"
+        },
+        {
+          "id": "40478220840",
+          "title": "pm-269/t-1648: Model hosted CLI identity refusal in deploy fixture",
+          "runNumber": 506,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40478220840"
+        },
+        {
+          "id": "40476115672",
+          "title": "pm-270/t-1671: Authenticate deployment readiness and assert gate evid\u2026",
+          "runNumber": 505,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40476115672"
+        },
+        {
+          "id": "40474532913",
+          "title": "pm-269/t-1648: Verify deployment readiness through scoped API",
+          "runNumber": 504,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40474532913"
+        },
+        {
+          "id": "40471181031",
+          "title": "pm-269/t-1648: Rebuild Bottle gates without stale Next output",
+          "runNumber": 503,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40471181031"
+        },
+        {
+          "id": "40468812796",
+          "title": "pm-269/t-1648: Require complete Bottle repository and deployment evid\u2026",
+          "runNumber": 502,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40468812796"
+        },
+        {
+          "id": "40467472536",
+          "title": "pm-269/t-1648: Require explicit Ready state before production health",
+          "runNumber": 501,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40467472536"
+        },
+        {
+          "id": "40465299263",
+          "title": "pm-270/t-1671: Certify desk fixtures and register main-lane tests",
+          "runNumber": 500,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40465299263"
+        },
+        {
+          "id": "40464199853",
+          "title": "pm-269/t-1648: Require complete named Bottle gate evidence",
+          "runNumber": 499,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40464199853"
+        },
+        {
+          "id": "40461166952",
+          "title": "pm-257/t-1609: Persist Pocket ghost controls",
+          "runNumber": 498,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40461166952"
+        },
+        {
+          "id": "40460769638",
+          "title": "pm-269/t-1648: Scope production inspection and certify Bottle gates",
+          "runNumber": 497,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40460769638"
+        },
+        {
+          "id": "40456936288",
+          "title": "pm-269/t-1648: Contain Bottle within the footer header band",
+          "runNumber": 496,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40456936288"
+        },
+        {
+          "id": "40454757987",
+          "title": "pm-269/t-1647: Preserve CI probe failures and verify rendered headings",
+          "runNumber": 495,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40454757987"
+        },
+        {
+          "id": "40450347470",
+          "title": "pm-255/t-1632: Accept only the tier-off GET /api/ask 404 in the seaso\u2026",
+          "runNumber": 494,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40450347470"
+        },
+        {
+          "id": "40448208637",
+          "title": "pm-259/t-1624: Expose browser gate crash diagnostics",
+          "runNumber": 493,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40448208637"
+        },
+        {
+          "id": "40448034730",
+          "title": "pm-259/t-1626: Fail closed on deployment diagnostics and identity",
+          "runNumber": 492,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40448034730"
+        },
+        {
+          "id": "40445352898",
+          "title": "pm-249/t-1569: Install missing e2e dependencies before the deploy probe",
+          "runNumber": 491,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40445352898"
+        },
+        {
+          "id": "40441825381",
+          "title": "pm-272/t-1566: Fix cassette provider probes on Bash 3.2",
+          "runNumber": 490,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40441825381"
+        }
+      ],
+      "annotation_excerpts": []
+    },
+    {
+      "url": "https://github.com/quiinthieu/otohime/actions?query=is%3Acompleted&page=2",
+      "http_status": "200",
+      "total_count": 514,
+      "observed_count": 25,
+      "runs": [
+        {
+          "id": "40439524623",
+          "title": "pm-257/t-1608: Reconcile disabled ghost configuration with console ch\u2026",
+          "runNumber": 489,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40439524623"
+        },
+        {
+          "id": "40438060093",
+          "title": "pm-272/t-1566: Read optional Lanyard game presence",
+          "runNumber": 488,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40438060093"
+        },
+        {
+          "id": "40433812567",
+          "title": "pm-257/t-1608: Render idle-loaded visitor ink and bounded lifecycle",
+          "runNumber": 487,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40433812567"
+        },
+        {
+          "id": "40432734832",
+          "title": "pm-270/t-1660: Annotate CI probe failures and await streamed headings",
+          "runNumber": 486,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40432734832"
+        },
+        {
+          "id": "40430068517",
+          "title": "pm-257/t-1607: Reject invalid fake frames and preserve rate time",
+          "runNumber": 485,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40430068517"
+        },
+        {
+          "id": "40423130342",
+          "title": "pm-270/t-1606: Flush gate-closure child output and settle ledger phon\u2026",
+          "runNumber": 484,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40423130342"
+        },
+        {
+          "id": "40420670837",
+          "title": "pm-272/t-1565: Retain motion probe failures in verifier tails",
+          "runNumber": 483,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40420670837"
+        },
+        {
+          "id": "40416521718",
+          "title": "pm-272/t-1565: Read the cassette from ListenBrainz",
+          "runNumber": 482,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40416521718"
+        },
+        {
+          "id": "40413292527",
+          "title": "pm-269/t-1591: Keep the footer Bottle above the scene",
+          "runNumber": 481,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40413292527"
+        },
+        {
+          "id": "40409123749",
+          "title": "pm-269/t-1588: Await the Dashboard's own page fade after its skeleton",
+          "runNumber": 480,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40409123749"
+        },
+        {
+          "id": "40405893755",
+          "title": "pm-270/t-1606: Observe browser time in the Kame clock fixture",
+          "runNumber": 479,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40405893755"
+        },
+        {
+          "id": "40398613267",
+          "title": "pm-269/t-1588: Measure complete Kame holds on the flowing clock",
+          "runNumber": 478,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40398613267"
+        },
+        {
+          "id": "40397362917",
+          "title": "pm-258/t-1623: Add on-demand local gate closure check",
+          "runNumber": 477,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40397362917"
+        },
+        {
+          "id": "40395335524",
+          "title": "pm-269/t-1591: Stabilize clock checks and expose Footer failures",
+          "runNumber": 476,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40395335524"
+        },
+        {
+          "id": "40388684010",
+          "title": "pm-269/t-1588: Prove live Bottle animation cancellation",
+          "runNumber": 475,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40388684010"
+        },
+        {
+          "id": "40387187938",
+          "title": "pm-269/t-1591: Track opt-in heads entirely on device",
+          "runNumber": 474,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40387187938"
+        },
+        {
+          "id": "40382662377",
+          "title": "pm-269/t-1588: Await live reduced-motion cancellation",
+          "runNumber": 473,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40382662377"
+        },
+        {
+          "id": "40380026935",
+          "title": "pm-269/t-1588: Wash up Bottles from footer and Pocket",
+          "runNumber": 472,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40380026935"
+        },
+        {
+          "id": "40378894466",
+          "title": "pm-270/t-1606: Drive notebook frames and verify footer title sources",
+          "runNumber": 471,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40378894466"
+        },
+        {
+          "id": "40372282006",
+          "title": "pm-269/t-1589: Focus the story list after React commits",
+          "runNumber": 470,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40372282006"
+        },
+        {
+          "id": "40370858209",
+          "title": "pm-269/t-1587: Allow delayed production alias readiness",
+          "runNumber": 469,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40370858209"
+        },
+        {
+          "id": "40369483638",
+          "title": "pm-269/t-1589: Stage project stories with cancellable ink babble",
+          "runNumber": 468,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40369483638"
+        },
+        {
+          "id": "40365293940",
+          "title": "pm-269/t-1587: Include Bottle HTTP and Postgres integration coverage",
+          "runNumber": 467,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40365293940"
+        },
+        {
+          "id": "40365003630",
+          "title": "pm-269/t-1587: Persist and moderate Bottle suggestions",
+          "runNumber": 466,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40365003630"
+        },
+        {
+          "id": "40358326629",
+          "title": "pm-264/t-1590: Verify the plain Riso heading in the Chromium probe",
+          "runNumber": 465,
+          "state": {
+            "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+            "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+          },
+          "branch": {
+            "name": "refs/heads/main",
+            "url": "/quiinthieu/otohime/tree/refs/heads/main",
+            "title": "main"
+          },
+          "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40358326629"
+        }
+      ],
+      "annotation_excerpts": []
+    },
+    {
+      "url": "https://github.com/quiinthieu/otohime/actions?query=is%3Ain_progress",
+      "http_status": "200",
+      "total_count": 0,
+      "observed_count": 0,
+      "runs": [],
+      "annotation_excerpts": []
+    },
+    {
+      "url": "https://github.com/quiinthieu/otohime/actions?query=is%3Aqueued",
+      "http_status": "200",
+      "total_count": 0,
+      "observed_count": 0,
+      "runs": [],
+      "annotation_excerpts": []
+    },
+    {
+      "url": "https://github.com/quiinthieu/otohime/actions/runs/40346324813/job/121654087754",
+      "http_status": "200",
+      "total_count": null,
+      "observed_count": 0,
+      "runs": [],
+      "annotation_excerpts": [
+        "Footer walk Process completed with exit code 1. Show more Show less Run npm run lint: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } checks checks failed Oct 26, 2026 in 12m 4s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. ",
+        "Process completed with exit code 1. Show more Show less Run npm run lint: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } checks checks failed Oct 26, 2026 in 12m 4s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. "
+      ]
+    }
+  ],
+  "completeness": "bounded FAILED/COMPLETED pages and current jobs only; older history and raw failure tails unread; inconclusive"
+}

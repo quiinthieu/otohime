@@ -27,6 +27,7 @@ export const GATES = [
   { id: "foundation", name: "foundation policy", cmd: `${ts} --test ${foundations.join(" ")}`, minimum: 21, required: namedTests(foundations) },
   { id: "repository", name: "repository suite under CI", cmd: "npm test", minimum: 2515, required: [
     "Footer walk reads the exact plain heading source, ignoring nested Riso plates",
+    "Footer network ownership rechecks a blank iframe when its player src arrives and rejects a footer twin",
     "walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR",
     "browser recovery rejects exit-zero, missing, renamed, skipped and failed contract evidence",
   ] },
@@ -37,9 +38,11 @@ export const GATES = [
     "/projects has one semantic .end footer after main with canonical links, scene, knobs and UTC year",
     "/does-not-exist shows the lost sheet 404", "local server logged no runtime errors", "no server left on port 4081",
   ] },
-  { id: "footer", name: "isolated footer Chrome probe", cmd: `${isolated} bash scripts/probe-end.sh`, minimum: 171, summary: "probe", required: [
+  { id: "footer", name: "isolated footer Chrome probe", cmd: `${isolated} bash scripts/probe-end.sh`, minimum: 173, summary: "probe", required: [
     "negative control: verifyCanonicalLinks rejects a corrupted canonical footer href (/broken-play !== /play)",
     "errors: zero console errors or page errors across all contexts",
+    "network delayed-src setup: the player's attached iframe starts without an embed URL",
+    "network delayed-src negative control: the same embed URL in the footer remains unexpected",
     "local 390x844 reduced-motion 403 exit: repeated full-load /admin/roles -> /projects -> full-load /admin/roles -> /dashboard preserves access denial, noindex, 1 visible footer, normal navigation, zero abort digests and zero page/console errors",
   ] },
   { id: "motion", name: "isolated signed-in motion", cmd: `${isolated} bash scripts/probe-motion-signed-in.sh`, minimum: 356, summary: "probe", required: [

@@ -1,0 +1,51 @@
+{
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "arch": "arm64",
+  "chrome": "156.0.8078.48",
+  "versions": {
+    "playwright-core": "1.64.0",
+    "next": "16.4.2",
+    "embedded-postgres": "17.10.0-beta.17",
+    "pg": "8.23.1",
+    "sharp": "0.35.5",
+    "typescript": "5.9.3",
+    "eslint": "9.39.5"
+  },
+  "real": {
+    "browser": true,
+    "context": true,
+    "box": {
+      "x": 8,
+      "y": 8,
+      "width": 1264,
+      "height": 37
+    },
+    "sharp": {
+      "format": "png",
+      "width": 3,
+      "height": 2,
+      "channels": 4,
+      "premultiplied": false,
+      "hasAlpha": true,
+      "size": 89
+    },
+    "pg": "Client",
+    "postgres": "EmbeddedPostgres"
+  },
+  "lock_sha256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+  "native_postgres_version": "postgres (PostgreSQL) 17.10",
+  "probe_docker_image": {
+    "Id": "sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb",
+    "RepoDigests": [
+      "postgres@sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb"
+    ],
+    "Architecture": "arm64",
+    "Os": "linux"
+  },
+  "probe_database_execution": "PostgreSQL 17.11 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit\n6",
+  "database_boundaries": {
+    "full_browser_and_walk": "real embedded-postgres 17.10 native binary; migrations applied by scripts/e2e.mjs",
+    "footer_and_motion": "real isolated Docker PostgreSQL from repository postgres:17-alpine selection; image digest recorded; no database fake"
+  }
+}

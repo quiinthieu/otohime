@@ -1,0 +1,30 @@
+[
+  {
+    "url": "https://github.com/quiinthieu/otohime/actions/runs/40490942824",
+    "commits": [
+      "531c0ba6bd530477590cc41ed4d8e9f1a5adf94f"
+    ],
+    "jobs": [
+      "122144414894",
+      "122144466164",
+      "122144416293",
+      "122152613930"
+    ],
+    "annotation_excerpt": "not ok - network: zero unexpected external network requests from footer pages: /music [frame unverified] -> https://www.youtube.com/embed/?playsinline=1&rel=0&origin=http%3A%2F%2Flocalhost%3A3000&enablejsapi=1&widgetid=1&forigin=http%3A%2F%2Flocalhost%3A3000%2Fmusic&aoriginsup=1&vf=6 probe: 169 ok, 1 failed",
+    "boundary": "public pre-delivery CI metadata, unrelated executable until source equivalence established"
+  },
+  {
+    "url": "https://github.com/quiinthieu/otohime/actions/runs/40493667124",
+    "commits": [
+      "85de5005ea4580a96b42feff8575f5c581a6477f"
+    ],
+    "jobs": [
+      "122153573660",
+      "122153575777",
+      "122153575741",
+      "122161799802"
+    ],
+    "annotation_excerpt": "Annotations 1 warning checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less html { scroll-behavior: smooth } You can\u2019t perform that action at this time. ",
+    "boundary": "public pre-delivery CI metadata, unrelated executable until source equivalence established"
+  }
+]

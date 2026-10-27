@@ -115,19 +115,23 @@ function isPlayerIframe(iframe) {
   );
 }
 
-// Init script: report every inserted iframe and its owner as it is inserted, so a frame that is gone before
-// Playwright can read its element (the player is destroyed on leaving /music) still has a recorded owner.
+// Report insertion and src changes: the player may attach a blank iframe before assigning its embed URL.
+// Retain ownership for a frame destroyed on leaving /music before Playwright can read its element.
 function recordIframes(player) {
   const report = (iframe) => window.__endProbeIframe?.({ src: iframe.src, player: player(iframe) });
   new MutationObserver((mutations) => {
     for (const m of mutations) {
+      if (m.type === "attributes") {
+        if (m.target.tagName === "IFRAME") report(m.target);
+        continue;
+      }
       for (const node of m.addedNodes) {
         if (node.nodeType !== 1) continue;
         if (node.tagName === "IFRAME") report(node);
         else node.querySelectorAll("iframe").forEach(report);
       }
     }
-  }).observe(document, { childList: true, subtree: true });
+  }).observe(document, { childList: true, subtree: true, attributes: true, attributeFilter: ["src"] });
 }
 
 // Reads the live element; if the frame has already detached, falls back to the insertion record for the URL it
@@ -240,7 +244,7 @@ async function open(
     if (/hydrat|did not match/i.test(e.message)) hydrationErrors.push(line);
     sink.push(line);
   });
-  // Each top-level child frame is checked once, when it attaches, so its owner is known before it loads anything.
+  // Verify early for teardown, but a blank iframe can gain its src later. Only positive ownership is cached.
   const iframes = [];
   const navigations = new WeakMap();
   if (js) {
@@ -251,10 +255,12 @@ async function open(
     const url = navigations.get(frame) ?? frame.url();
     return iframes.filter((r) => r.src === url);
   };
-  const playerFrames = new WeakMap();
-  const playerFrame = (frame) => {
-    if (!playerFrames.has(frame)) playerFrames.set(frame, verifyPlayerFrame(frame, recorded));
-    return playerFrames.get(frame);
+  const playerFrames = new WeakSet();
+  const playerFrame = async (frame) => {
+    if (playerFrames.has(frame)) return true;
+    const verified = await verifyPlayerFrame(frame, recorded);
+    if (verified) playerFrames.add(frame);
+    return verified;
   };
   page.on("frameattached", (frame) => {
     if (frame.parentFrame() === page.mainFrame()) playerFrame(frame);
@@ -2164,7 +2170,6 @@ try {
           body: `window.YT = { Player: class {
             constructor(slot, opts) {
               const f = document.createElement("iframe");
-              f.src = "https://www.youtube.com/embed/?probe=television";
               f.dataset.probePlayer = "";
               slot.replaceWith(f);
               this.f = f;
@@ -2187,6 +2192,14 @@ try {
       await page.goto(`${BASE_URL}/music`, { waitUntil: "load" });
       await hydrated(page);
       await page.locator("iframe[data-probe-player]").waitFor({ state: "attached", timeout: 10_000 });
+      // Reproduce the real player lifecycle: attach about:blank, then assign src
+      // after the eager ownership check has had a browser round trip to settle.
+      await page.frameLocator("iframe[data-probe-player]").locator("body").waitFor({ state: "attached" });
+      check("network delayed-src setup: the player's attached iframe starts without an embed URL",
+        await page.locator("iframe[data-probe-player]").getAttribute("src") === null);
+      await page.locator("iframe[data-probe-player]").evaluate((frame) => {
+        frame.src = "https://www.youtube.com/embed/?probe=television";
+      });
       // Wait for the player frame's own ad request, bounded.
       const deadline = Date.now() + 5_000;
       while (!controlTv.some((l) => l.includes("doubleclick")) && Date.now() < deadline) await page.waitForTimeout(50);
@@ -2197,6 +2210,24 @@ try {
         televisionAttributed.length > 0 && beforeInjection.pass,
         JSON.stringify({ controlTv, controlNet }),
       );
+
+      const embedUrl = "https://www.youtube.com/embed/?probe=television";
+      const twinRequest = page.waitForRequest((request) => request.url() === embedUrl && request.isNavigationRequest());
+      await page.evaluate(() => {
+        const twin = document.createElement("iframe");
+        twin.src = "https://www.youtube.com/embed/?probe=television";
+        document.querySelector("footer.end").append(twin);
+      });
+      await twinRequest;
+      // context.close below awaits the actual pending attribution; this check
+      // observes the same rejection before the remaining existing controls.
+      await page.waitForFunction(() => [...document.querySelectorAll("footer.end iframe")]
+        .some((frame) => frame.contentWindow && frame.getAttribute("src")?.includes("probe=television")));
+      const twinDeadline = Date.now() + 5_000;
+      while (!controlNet.some((line) => line.includes(`[frame unverified] -> ${embedUrl}`)) && Date.now() < twinDeadline) await page.waitForTimeout(50);
+      check("network delayed-src negative control: the same embed URL in the footer remains unexpected",
+        controlNet.some((line) => line.includes(`[frame unverified] -> ${embedUrl}`)) && !noUnexpectedExternal(controlNet).pass,
+        JSON.stringify({ controlTv, controlNet }));
 
       // Now the same traffic from places the footer or main page could make it.
       await page.evaluate((ad) => {

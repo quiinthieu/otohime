@@ -1,5 +1,137 @@
 # Complete production browser recovery — pm-259/t-1625
 
+## Recovery continuation — run-9221
+
+This section supersedes run-9205's integration status; its original evidence remains below.
+Actual profile: `codex-sol-6-1-high`; model `gpt-6.1-sol`, effort `high`;
+fleet worker `avietidol-mac-mini` (run-9221 metadata/profile flags).
+The runner integrated the rescued repair into clean local `main` at `8c9aee4`,
+whose parent is fresh `origin/main` `85de500`. Work continues on
+`pm-259/t-1625-run-9221`, without re-checking out or rebasing the rescue.
+The prior failure marker was `push_not_on_main`, despite a successful rescue-branch push.
+Final delivery therefore uses normal fast-forward pushes of the task branch and `HEAD:main`;
+there is no force push. No rescued implementation or evidence was dropped.
+
+Read AGENTS.md, the present plan, and installed Next 16.4.2 guides
+`01-app/02-guides/testing/playwright.md` and `01-app/02-guides/lazy-loading.md`.
+The extraction document and `docs/claude/software-development.md` remain absent;
+no codebase graph tool is available. No person-only sign-in/setup was required.
+
+### Observed footer defect and controls
+
+Fresh public CI run **40490942824**, commit `531c0ba`, reports:
+`not ok - network: zero unexpected external network requests from footer pages:
+/music [frame unverified] -> https://www.youtube.com/embed/...`, followed by
+`probe: 169 ok, 1 failed`. The exact annotation is retained in
+[pre-delivery CI evidence](run-9221/artifacts/pre-delivery-ci.json).
+The existing probe verified an iframe on attachment and permanently cached a false result,
+even when the player assigned its valid embed `src` afterward.
+Real Chrome using the actual probe ownership/open functions reproduced that same failure
+with an iframe attached blank before its src was assigned. No live application change is needed.
+
+`scripts/probe-end.mjs` now caches only positive frame ownership and records src mutations.
+The host, route, main-frame ownership, detached-frame ambiguity and footer exclusions remain.
+The new focused repository regression fails with `a later valid src must be verified again`
+before the fix and passes after it ([red](run-9221/artifacts/frame-cache-red.log),
+[green](run-9221/artifacts/frame-cache-green.log)). Frame fixtures in that unit test prove
+cache policy only. The production browser control attaches the player's blank iframe,
+assigns its src after attachment, and checks its actual requests. Its intentional negative
+control inserts an iframe with the **identical embed URL inside the footer** and requires
+the same network assertion to reject it. Existing main-frame, lookalike and detached-frame
+controls remain. The full-contract validator additionally requires the new regression
+and both new browser assertions; its footer floor rises from 171 to 173.
+
+The standalone [real-browser control](run-9221/artifacts/frame-attribution-control.mjs)
+runs actual probe functions with a synthetic local document and route-fulfilled embed.
+It replaces only the cache with its original implementation **in memory** for the intentional
+failure control: [old-cache red](run-9221/artifacts/frame-attribution-red.json),
+[repaired green](run-9221/artifacts/frame-attribution-green.json). This uses real Chrome,
+DOM, frames and requests, but fake page/embed bodies; it does not prove external YouTube availability.
+
+### Locked environment and complete local execution
+
+`npm ci` installed the unchanged lock on Node **22.23.3**, npm **10.9.9**, macOS arm64.
+Real Google Chrome **156.0.8078.48**, locked playwright-core **1.64.0**, Next **16.4.2**,
+embedded-postgres **17.10.0-beta.17**, pg **8.23.1**, sharp **0.35.5**,
+TypeScript **5.9.3**, ESLint **9.39.5**. Full browser/walk use native PostgreSQL **17.10**;
+footer/motion select real isolated Docker PostgreSQL via the repository wrappers, with its
+image digest, actual version and migration count recorded in native preflight.
+[Native preflight](run-9221/artifacts/native-preflight.json) constructs a browser/context,
+measures a real heading box, runs sharp's native SVG-to-PNG pipeline in memory and constructs
+pg/EmbeddedPostgres. The production runner starts real native PostgreSQL and applies Drizzle
+migrations before its production build and HTTP/browser/auth tests. Required vendored assets
+are verified by the existing prebuild and recorded with executable/config/lock hashes.
+A temporary `google-chrome` shell launcher executes the installed Chrome.app by absolute path
+so both shell probes use the locked repo Playwright; it is not a fake browser or an installer.
+
+The full serial browser command ran immediately after lock installation with `CI=true`,
+`TMPDIR=/tmp`, `GITHUB_SHA=8c9aee4`, BASE_URL/SKIP_BUILD unset. It passed **187/187**, zero
+skips, in 414796ms; build ID **rScs85-iMv6TvumieGZe9**.
+The application, browser tests and build inputs remained unchanged throughout that run;
+subsequent source changes are limited to footer-probe logic, its unit regression and evidence
+validation. The remaining isolated commands execute in order after that run, without
+substituting saved output for any unexecuted command. The composition receipt explicitly
+labels its browser step as validation of the command already executed at run start.
+
+All **7/7 named local checks** passed with zero failures/skips.
+
+| Check | Observed result | Local build ID |
+| --- | --- | --- |
+| entire isolated production browser suite | 187 tests passed; zero skipped | rScs85-iMv6TvumieGZe9 |
+| isolated footer walk | 67 assertions passed | iYbMc3NQ7XmThuTNKrjmy |
+| isolated footer Chrome probe | 173 assertions passed | VZzAWeRZzMnJD024a5tZa |
+| isolated signed-in motion | 356 assertions passed | BWLLqsRluJPiZYM7I9s0j |
+| foundation policy | 21 tests passed; zero skipped | — |
+| repository suite under CI | 2523 tests passed; zero skipped | — |
+| lint and type contracts | lint/typecheck passed; 0 errors, 10 existing warnings | — |
+
+[Full command output](run-9221/artifacts/contract.log), [receipts](run-9221/artifacts/verification.json),
+[browser output](run-9221/artifacts/browser.log),
+[code/lock/config/native/asset/build hashes](run-9221/artifacts/fingerprints.json).
+Log captures normalize trailing whitespace for Git; original output hashes are recorded,
+and exact changed captures remain in worker artifacts `pm-259-t-1625-run-9221`.
+Final source/config/lock fingerprint: `fd5697c83663a46b564138d33b71fb8b985cbd1f1aebb27653ed478333de7593`.
+The initial/final manifests differ only in `lib/end.test.ts`, `scripts/probe-end.mjs` and
+`scripts/verify-browser-recovery.mjs`; browser/build inputs are identical. The generated
+`content/history.json` is hashed as build output and restored before commit.
+
+
+Actual rendered turtle/proxy arrival-return geometry (<=4px), continuous native mouse
+approach past Peek, exact-once click suppression/native navigation, CDP touch grip versus
+body scrolling, original source text/hrefs/geometry, modal/route/capture cancellation,
+reduced motion, Save-Data, dismissal, sound/keyboard and desk/stamp exclusions all pass in
+the full browser suite. The immobilized real turtle must time out without claiming return;
+the hydrated print-run control corrupts/restores the real DOM and rejects the wrong run.
+No tests were skipped/quarantined and no geometry floor or application behavior was weakened.
+Existing explicitly fake camera/inference/WebSocket fixtures retain their stated limited scope.
+There is no async model/runtime job, callback, ingestion or capacity deferral in this task.
+
+### Bounded history and delivery boundary
+
+Fresh GitHub API reads: FAILED pages 1/2, COMPLETED page 1, current jobs and raw historical
+job 121649860247/run 40346324813 endpoints returned HTTP403 rate limits. COMPLETED page 2
+returned 25/514. Public workflow pages recovered FAILED **50/144**, COMPLETED **50/514**,
+current in-progress **0**, queued **0**. Filters overlap; older pages and raw tails are unread,
+so history completeness remains **inconclusive**.
+[API reads](run-9221/artifacts/history.json),
+[bounded public history and footer annotation](run-9221/artifacts/public-history-structured.json).
+Historical job 121649860247's public annotation still names `e2e/ink-radio.test.ts:39`
+(the landed Riso heading assertion repair is preserved); job 121654087754 in run 40346324813
+only exposes `Footer walk` exit 1. Its original raw failing assertion remains unknown.
+The new current CI annotation above establishes a distinct reproducible probe defect.
+
+Pre-delivery main CI **40493667124** succeeded on ancestor **85de500**. It is not the delivery
+commit's CI or proof that the rescued/new probe code was deployed. Engineering stops at the
+push; delivery CI is not watched and no deployed system is checked in this run.
+Platform green gate owns pushed-delivery CI/production; independent QA owns live gestures,
+content/accessibility and negative controls; acceptance owns served executable ancestry.
+Failure conditions: any missing/skipped/red gate, stale served executable, input/content/geometry
+regression or repeated deploy failure. Integration/deployment, execution demonstrated locally,
+and product delivered live are separate claims. Local execution is demonstrated; live product
+delivery remains required and unproven here.
+
+---
+
 Run `run-9205`, engineering on `main`, base `8b9826587572145c935e52d41b652938e48a2116`.
 Actual run profile: `codex-sol-6-1-high`; model `gpt-6.1-sol`, reasoning `high`,
 fleet worker `avietidol-z490` (run metadata and actual runner flags, not current defaults).

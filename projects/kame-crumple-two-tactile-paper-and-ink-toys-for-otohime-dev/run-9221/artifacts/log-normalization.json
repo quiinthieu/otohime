@@ -1,0 +1,10 @@
+{
+  "browser": {
+    "original_sha256": "4c49976eb8b057b32c28613fd6621191026414803f9de4187a0ae7497410f43e",
+    "committed_sha256": "7671863160ce250570a2e34bc9fbb3718479d57619449c76591625d06dd59877"
+  },
+  "frame-cache-red": {
+    "original_sha256": "18d82c90c62443be47697cfa55ab2c72b6eafe26bfa18d5aecbe7ec9e3a0a427",
+    "committed_sha256": "03584079769c330af097bcb0f5e2620bb81ba806314b3638168949663f08dadf"
+  }
+}

@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: Footer network ownership rechecks a blank iframe when its player src arrives and rejects a footer twin
+not ok 1 - Footer network ownership rechecks a blank iframe when its player src arrives and rejects a footer twin
+  ---
+  duration_ms: 1.106208
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/bde1d71d-822f-4436-9b24-f4620cacefd0-b681bbbb0560432872c61210c530dfce/work/otohime/lib/end.test.ts:248:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    a later valid src must be verified again
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/bde1d71d-822f-4436-9b24-f4620cacefd0-b681bbbb0560432872c61210c530dfce/work/otohime/lib/end.test.ts:263:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 71.244375

@@ -1,0 +1,10 @@
+{
+  "boundary": "real Chrome and actual probe functions; intentional control replaces only the cache in memory; synthetic page and route-fulfilled embed, no external YouTube service",
+  "chrome": "156.0.8078.48",
+  "net": [],
+  "tv": [
+    "/music [frame television] -> https://www.youtube.com/embed/?probe=delayed-src"
+  ],
+  "intentional_old_cache": false,
+  "observed_defect": false
+}

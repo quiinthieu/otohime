@@ -1,0 +1,360 @@
+# database: docker Postgres on 127.0.0.1:55360
+# browser: runner Google Chrome 156.0.8078.48  with the repo's playwright-core; nothing installed
+# browser: 156.0.8078.48 via playwright-core, channel chrome
+ok - 1366x768 sign-in as owner: lands on /dashboard
+ok - 1366x768 sign-in as owner: pagereveal carries the hop's view transition
+ok - 1366x768 sign-in as owner: the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 sign-in as owner: the hop and every streamed reveal settle
+ok - 1366x768 sign-in as owner: no page error and no console error
+ok - 1366x768 sign-in?next=/account as plain: lands on /account
+ok - 1366x768 sign-in?next=/account as plain: pagereveal carries the hop's view transition
+ok - 1366x768 sign-in?next=/account as plain: the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 sign-in?next=/account as plain: the hop and every streamed reveal settle
+ok - 1366x768 sign-in?next=/account as plain: no page error and no console error
+ok - 1366x768 owner /shore -> /dashboard (location.assign): lands on /dashboard
+ok - 1366x768 owner /shore -> /dashboard (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> /dashboard (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> /dashboard (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> /dashboard (location.assign): no page error and no console error
+ok - 1366x768 owner /shore -> /account (location.assign): lands on /account
+ok - 1366x768 owner /shore -> /account (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> /account (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> /account (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> /account (location.assign): no page error and no console error
+ok - 1366x768 owner /shore -> /admin (location.assign): lands on /admin/users
+ok - 1366x768 owner /shore -> /admin (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> /admin (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> /admin (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> /admin (location.assign): no page error and no console error
+ok - 1366x768 owner /shore -> /admin/users (location.assign): lands on /admin/users
+ok - 1366x768 owner /shore -> /admin/users (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> /admin/users (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> /admin/users (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> /admin/users (location.assign): no page error and no console error
+ok - 1366x768 owner /shore -> /admin/users/<plain id> (location.assign): lands on /admin/users/xItXzXulOuICKSjR9wHP595WVDmwR9JH
+ok - 1366x768 owner /shore -> /admin/users/<plain id> (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> /admin/users/<plain id> (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> /admin/users/<plain id> (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> /admin/users/<plain id> (location.assign): no page error and no console error
+ok - 1366x768 owner /shore -> /admin/roles (location.assign): lands on /admin/roles
+ok - 1366x768 owner /shore -> /admin/roles (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> /admin/roles (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> /admin/roles (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> /admin/roles (location.assign): no page error and no console error
+ok - 1366x768 owner /shore -> /work (location.assign): lands on /work
+ok - 1366x768 owner /shore -> /work (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> /work (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> /work (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> /work (location.assign): no page error and no console error
+ok - 1366x768 owner /shore -> / (location.assign): lands on /
+ok - 1366x768 owner /shore -> / (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> / (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> / (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> / (location.assign): no page error and no console error
+ok - 1366x768 owner /shore -> /projects (location.assign): lands on /projects
+ok - 1366x768 owner /shore -> /projects (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 owner /shore -> /projects (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 owner /shore -> /projects (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 owner /shore -> /projects (location.assign): no page error and no console error
+ok - 1366x768 plain /shore -> /dashboard (location.assign): lands on /dashboard
+ok - 1366x768 plain /shore -> /dashboard (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 plain /shore -> /dashboard (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 plain /shore -> /dashboard (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 plain /shore -> /dashboard (location.assign): no page error and no console error
+ok - 1366x768 plain /shore -> /account (location.assign): lands on /account
+ok - 1366x768 plain /shore -> /account (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 plain /shore -> /account (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 plain /shore -> /account (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 plain /shore -> /account (location.assign): no page error and no console error
+ok - 1366x768 plain /shore -> /admin/roles (location.assign): lands on /admin/roles
+ok - 1366x768 plain /shore -> /admin/roles (location.assign): pagereveal carries the hop's view transition
+ok - 1366x768 plain /shore -> /admin/roles (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 1366x768 plain /shore -> /admin/roles (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 plain /shore -> /admin/roles (location.assign): no page error and no console error
+ok - 1366x768 plain /shore -> /admin/roles (location.assign): shows the 403
+ok - 1366x768 reduced motion sign-in as owner: lands on /dashboard
+ok - 1366x768 reduced motion sign-in as owner: the hop and every streamed reveal settle
+ok - 1366x768 reduced motion sign-in as owner: no page error and no console error
+ok - 1366x768 reduced motion sign-in as owner: every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion sign-in?next=/account as plain: lands on /account
+ok - 1366x768 reduced motion sign-in?next=/account as plain: the hop and every streamed reveal settle
+ok - 1366x768 reduced motion sign-in?next=/account as plain: no page error and no console error
+ok - 1366x768 reduced motion sign-in?next=/account as plain: every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> /dashboard (location.assign): lands on /dashboard
+ok - 1366x768 reduced motion owner /shore -> /dashboard (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> /dashboard (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> /dashboard (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> /account (location.assign): lands on /account
+ok - 1366x768 reduced motion owner /shore -> /account (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> /account (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> /account (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> /admin (location.assign): lands on /admin/users
+ok - 1366x768 reduced motion owner /shore -> /admin (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> /admin (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> /admin (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> /admin/users (location.assign): lands on /admin/users
+ok - 1366x768 reduced motion owner /shore -> /admin/users (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> /admin/users (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> /admin/users (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> /admin/users/<plain id> (location.assign): lands on /admin/users/xItXzXulOuICKSjR9wHP595WVDmwR9JH
+ok - 1366x768 reduced motion owner /shore -> /admin/users/<plain id> (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> /admin/users/<plain id> (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> /admin/users/<plain id> (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> /admin/roles (location.assign): lands on /admin/roles
+ok - 1366x768 reduced motion owner /shore -> /admin/roles (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> /admin/roles (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> /admin/roles (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> /work (location.assign): lands on /work
+ok - 1366x768 reduced motion owner /shore -> /work (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> /work (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> /work (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> / (location.assign): lands on /
+ok - 1366x768 reduced motion owner /shore -> / (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> / (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> / (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion owner /shore -> /projects (location.assign): lands on /projects
+ok - 1366x768 reduced motion owner /shore -> /projects (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion owner /shore -> /projects (location.assign): no page error and no console error
+ok - 1366x768 reduced motion owner /shore -> /projects (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain /shore -> /dashboard (location.assign): lands on /dashboard
+ok - 1366x768 reduced motion plain /shore -> /dashboard (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion plain /shore -> /dashboard (location.assign): no page error and no console error
+ok - 1366x768 reduced motion plain /shore -> /dashboard (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain /shore -> /account (location.assign): lands on /account
+ok - 1366x768 reduced motion plain /shore -> /account (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion plain /shore -> /account (location.assign): no page error and no console error
+ok - 1366x768 reduced motion plain /shore -> /account (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain /shore -> /admin/roles (location.assign): lands on /admin/roles
+ok - 1366x768 reduced motion plain /shore -> /admin/roles (location.assign): the hop and every streamed reveal settle
+ok - 1366x768 reduced motion plain /shore -> /admin/roles (location.assign): no page error and no console error
+ok - 1366x768 reduced motion plain /shore -> /admin/roles (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain /shore -> /admin/roles (location.assign): shows the 403
+ok - 390x844 sign-in as owner: lands on /dashboard
+ok - 390x844 sign-in as owner: pagereveal carries the hop's view transition
+ok - 390x844 sign-in as owner: the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 sign-in as owner: the hop and every streamed reveal settle
+ok - 390x844 sign-in as owner: no page error and no console error
+ok - 390x844 sign-in?next=/account as plain: lands on /account
+ok - 390x844 sign-in?next=/account as plain: pagereveal carries the hop's view transition
+ok - 390x844 sign-in?next=/account as plain: the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 sign-in?next=/account as plain: the hop and every streamed reveal settle
+ok - 390x844 sign-in?next=/account as plain: no page error and no console error
+ok - 390x844 owner /shore -> /dashboard (location.assign): lands on /dashboard
+ok - 390x844 owner /shore -> /dashboard (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> /dashboard (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> /dashboard (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> /dashboard (location.assign): no page error and no console error
+ok - 390x844 owner /shore -> /account (location.assign): lands on /account
+ok - 390x844 owner /shore -> /account (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> /account (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> /account (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> /account (location.assign): no page error and no console error
+ok - 390x844 owner /shore -> /admin (location.assign): lands on /admin/users
+ok - 390x844 owner /shore -> /admin (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> /admin (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> /admin (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> /admin (location.assign): no page error and no console error
+ok - 390x844 owner /shore -> /admin/users (location.assign): lands on /admin/users
+ok - 390x844 owner /shore -> /admin/users (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> /admin/users (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> /admin/users (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> /admin/users (location.assign): no page error and no console error
+ok - 390x844 owner /shore -> /admin/users/<plain id> (location.assign): lands on /admin/users/xItXzXulOuICKSjR9wHP595WVDmwR9JH
+ok - 390x844 owner /shore -> /admin/users/<plain id> (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> /admin/users/<plain id> (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> /admin/users/<plain id> (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> /admin/users/<plain id> (location.assign): no page error and no console error
+ok - 390x844 owner /shore -> /admin/roles (location.assign): lands on /admin/roles
+ok - 390x844 owner /shore -> /admin/roles (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> /admin/roles (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> /admin/roles (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> /admin/roles (location.assign): no page error and no console error
+ok - 390x844 owner /shore -> /work (location.assign): lands on /work
+ok - 390x844 owner /shore -> /work (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> /work (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> /work (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> /work (location.assign): no page error and no console error
+ok - 390x844 owner /shore -> / (location.assign): lands on /
+ok - 390x844 owner /shore -> / (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> / (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> / (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> / (location.assign): no page error and no console error
+ok - 390x844 owner /shore -> /projects (location.assign): lands on /projects
+ok - 390x844 owner /shore -> /projects (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 owner /shore -> /projects (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 owner /shore -> /projects (location.assign): the hop and every streamed reveal settle
+ok - 390x844 owner /shore -> /projects (location.assign): no page error and no console error
+ok - 390x844 plain /shore -> /dashboard (location.assign): lands on /dashboard
+ok - 390x844 plain /shore -> /dashboard (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 plain /shore -> /dashboard (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 plain /shore -> /dashboard (location.assign): the hop and every streamed reveal settle
+ok - 390x844 plain /shore -> /dashboard (location.assign): no page error and no console error
+ok - 390x844 plain /shore -> /account (location.assign): lands on /account
+ok - 390x844 plain /shore -> /account (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 plain /shore -> /account (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 plain /shore -> /account (location.assign): the hop and every streamed reveal settle
+ok - 390x844 plain /shore -> /account (location.assign): no page error and no console error
+ok - 390x844 plain /shore -> /admin/roles (location.assign): lands on /admin/roles
+ok - 390x844 plain /shore -> /admin/roles (location.assign): pagereveal carries the hop's view transition
+ok - 390x844 plain /shore -> /admin/roles (location.assign): the hop's root fades out (150 ms) and in (210 ms after 150 ms), each to its end
+ok - 390x844 plain /shore -> /admin/roles (location.assign): the hop and every streamed reveal settle
+ok - 390x844 plain /shore -> /admin/roles (location.assign): no page error and no console error
+ok - 390x844 plain /shore -> /admin/roles (location.assign): shows the 403
+ok - 390x844 reduced motion sign-in as owner: lands on /dashboard
+ok - 390x844 reduced motion sign-in as owner: the hop and every streamed reveal settle
+ok - 390x844 reduced motion sign-in as owner: no page error and no console error
+ok - 390x844 reduced motion sign-in as owner: every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion sign-in?next=/account as plain: lands on /account
+ok - 390x844 reduced motion sign-in?next=/account as plain: the hop and every streamed reveal settle
+ok - 390x844 reduced motion sign-in?next=/account as plain: no page error and no console error
+ok - 390x844 reduced motion sign-in?next=/account as plain: every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> /dashboard (location.assign): lands on /dashboard
+ok - 390x844 reduced motion owner /shore -> /dashboard (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> /dashboard (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> /dashboard (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> /account (location.assign): lands on /account
+ok - 390x844 reduced motion owner /shore -> /account (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> /account (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> /account (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> /admin (location.assign): lands on /admin/users
+ok - 390x844 reduced motion owner /shore -> /admin (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> /admin (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> /admin (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> /admin/users (location.assign): lands on /admin/users
+ok - 390x844 reduced motion owner /shore -> /admin/users (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> /admin/users (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> /admin/users (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> /admin/users/<plain id> (location.assign): lands on /admin/users/xItXzXulOuICKSjR9wHP595WVDmwR9JH
+ok - 390x844 reduced motion owner /shore -> /admin/users/<plain id> (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> /admin/users/<plain id> (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> /admin/users/<plain id> (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> /admin/roles (location.assign): lands on /admin/roles
+ok - 390x844 reduced motion owner /shore -> /admin/roles (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> /admin/roles (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> /admin/roles (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> /work (location.assign): lands on /work
+ok - 390x844 reduced motion owner /shore -> /work (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> /work (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> /work (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> / (location.assign): lands on /
+ok - 390x844 reduced motion owner /shore -> / (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> / (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> / (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion owner /shore -> /projects (location.assign): lands on /projects
+ok - 390x844 reduced motion owner /shore -> /projects (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion owner /shore -> /projects (location.assign): no page error and no console error
+ok - 390x844 reduced motion owner /shore -> /projects (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain /shore -> /dashboard (location.assign): lands on /dashboard
+ok - 390x844 reduced motion plain /shore -> /dashboard (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion plain /shore -> /dashboard (location.assign): no page error and no console error
+ok - 390x844 reduced motion plain /shore -> /dashboard (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain /shore -> /account (location.assign): lands on /account
+ok - 390x844 reduced motion plain /shore -> /account (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion plain /shore -> /account (location.assign): no page error and no console error
+ok - 390x844 reduced motion plain /shore -> /account (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain /shore -> /admin/roles (location.assign): lands on /admin/roles
+ok - 390x844 reduced motion plain /shore -> /admin/roles (location.assign): the hop and every streamed reveal settle
+ok - 390x844 reduced motion plain /shore -> /admin/roles (location.assign): no page error and no console error
+ok - 390x844 reduced motion plain /shore -> /admin/roles (location.assign): every animation at load lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain /shore -> /admin/roles (location.assign): shows the 403
+ok - 1366x768 plain 403 (router.push from /dashboard) -> / by its Go home: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 1366x768 plain 403 (router.push from /dashboard) -> / by its Go home: the masthead stays out of the fading groups
+ok - 1366x768 plain 403 (router.push from /dashboard) -> / by its Go home: no page error and no console error
+ok - 1366x768 plain 403 (router.push from /dashboard) -> / by the brand mark: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 1366x768 plain 403 (router.push from /dashboard) -> / by the brand mark: the masthead stays out of the fading groups
+ok - 1366x768 plain 403 (router.push from /dashboard) -> / by the brand mark: no page error and no console error
+ok - 1366x768 plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 1366x768 plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: the masthead stays out of the fading groups
+ok - 1366x768 plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: no page error and no console error
+ok - 1366x768 plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 1366x768 plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: the masthead stays out of the fading groups
+ok - 1366x768 plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: no page error and no console error
+ok - 1366x768 plain 403 (page.goto) -> / by its Go home: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 1366x768 plain 403 (page.goto) -> / by its Go home: the masthead stays out of the fading groups
+ok - 1366x768 plain 403 (page.goto) -> / by its Go home: no page error and no console error
+ok - 1366x768 plain 403 (page.goto) -> / by the brand mark: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 1366x768 plain 403 (page.goto) -> / by the brand mark: the masthead stays out of the fading groups
+ok - 1366x768 plain 403 (page.goto) -> / by the brand mark: no page error and no console error
+ok - 1366x768 plain 403 (page.goto) -> /projects by the nav's Projects: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 1366x768 plain 403 (page.goto) -> /projects by the nav's Projects: the masthead stays out of the fading groups
+ok - 1366x768 plain 403 (page.goto) -> /projects by the nav's Projects: no page error and no console error
+ok - 1366x768 plain 403 (page.goto) -> /dashboard by the nav's Dashboard: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 1366x768 plain 403 (page.goto) -> /dashboard by the nav's Dashboard: the masthead stays out of the fading groups
+ok - 1366x768 plain 403 (page.goto) -> /dashboard by the nav's Dashboard: no page error and no console error
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> / by its Go home: completes, with every transition animation 0 ms
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> / by its Go home: every animation after it lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> / by its Go home: no page error and no console error
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> / by the brand mark: completes, with every transition animation 0 ms
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> / by the brand mark: every animation after it lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> / by the brand mark: no page error and no console error
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: completes, with every transition animation 0 ms
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: every animation after it lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: no page error and no console error
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: completes, with every transition animation 0 ms
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: every animation after it lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: no page error and no console error
+ok - 1366x768 reduced motion plain 403 (page.goto) -> / by its Go home: completes, with every transition animation 0 ms
+ok - 1366x768 reduced motion plain 403 (page.goto) -> / by its Go home: every animation after it lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain 403 (page.goto) -> / by its Go home: no page error and no console error
+ok - 1366x768 reduced motion plain 403 (page.goto) -> / by the brand mark: completes, with every transition animation 0 ms
+ok - 1366x768 reduced motion plain 403 (page.goto) -> / by the brand mark: every animation after it lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain 403 (page.goto) -> / by the brand mark: no page error and no console error
+ok - 1366x768 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: completes, with every transition animation 0 ms
+ok - 1366x768 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: every animation after it lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: no page error and no console error
+ok - 1366x768 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: completes, with every transition animation 0 ms
+ok - 1366x768 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: every animation after it lasts <= 1 ms or has finished
+ok - 1366x768 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: no page error and no console error
+ok - 390x844 plain 403 (router.push from /dashboard) -> / by its Go home: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 390x844 plain 403 (router.push from /dashboard) -> / by its Go home: the masthead stays out of the fading groups
+ok - 390x844 plain 403 (router.push from /dashboard) -> / by its Go home: no page error and no console error
+ok - 390x844 plain 403 (router.push from /dashboard) -> / by the brand mark: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 390x844 plain 403 (router.push from /dashboard) -> / by the brand mark: the masthead stays out of the fading groups
+ok - 390x844 plain 403 (router.push from /dashboard) -> / by the brand mark: no page error and no console error
+ok - 390x844 plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 390x844 plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: the masthead stays out of the fading groups
+ok - 390x844 plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: no page error and no console error
+ok - 390x844 plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 390x844 plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: the masthead stays out of the fading groups
+ok - 390x844 plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: no page error and no console error
+ok - 390x844 plain 403 (page.goto) -> / by its Go home: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 390x844 plain 403 (page.goto) -> / by its Go home: the masthead stays out of the fading groups
+ok - 390x844 plain 403 (page.goto) -> / by its Go home: no page error and no console error
+ok - 390x844 plain 403 (page.goto) -> / by the brand mark: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 390x844 plain 403 (page.goto) -> / by the brand mark: the masthead stays out of the fading groups
+ok - 390x844 plain 403 (page.goto) -> / by the brand mark: no page error and no console error
+ok - 390x844 plain 403 (page.goto) -> /projects by the nav's Projects: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 390x844 plain 403 (page.goto) -> /projects by the nav's Projects: the masthead stays out of the fading groups
+ok - 390x844 plain 403 (page.goto) -> /projects by the nav's Projects: no page error and no console error
+ok - 390x844 plain 403 (page.goto) -> /dashboard by the nav's Dashboard: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms)
+ok - 390x844 plain 403 (page.goto) -> /dashboard by the nav's Dashboard: the masthead stays out of the fading groups
+ok - 390x844 plain 403 (page.goto) -> /dashboard by the nav's Dashboard: no page error and no console error
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> / by its Go home: completes, with every transition animation 0 ms
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> / by its Go home: every animation after it lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> / by its Go home: no page error and no console error
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> / by the brand mark: completes, with every transition animation 0 ms
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> / by the brand mark: every animation after it lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> / by the brand mark: no page error and no console error
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: completes, with every transition animation 0 ms
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: every animation after it lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /projects by the nav's Projects: no page error and no console error
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: completes, with every transition animation 0 ms
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: every animation after it lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: no page error and no console error
+ok - 390x844 reduced motion plain 403 (page.goto) -> / by its Go home: completes, with every transition animation 0 ms
+ok - 390x844 reduced motion plain 403 (page.goto) -> / by its Go home: every animation after it lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain 403 (page.goto) -> / by its Go home: no page error and no console error
+ok - 390x844 reduced motion plain 403 (page.goto) -> / by the brand mark: completes, with every transition animation 0 ms
+ok - 390x844 reduced motion plain 403 (page.goto) -> / by the brand mark: every animation after it lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain 403 (page.goto) -> / by the brand mark: no page error and no console error
+ok - 390x844 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: completes, with every transition animation 0 ms
+ok - 390x844 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: every animation after it lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain 403 (page.goto) -> /projects by the nav's Projects: no page error and no console error
+ok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: completes, with every transition animation 0 ms
+ok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: every animation after it lasts <= 1 ms or has finished
+ok - 390x844 reduced motion plain 403 (page.goto) -> /dashboard by the nav's Dashboard: no page error and no console error
+ok - no-JS: plain /admin/roles: the brand mark navigates to /
+ok - negative: the probe stripped the pagereveal guard from /dashboard's HTML
+ok - negative: without the guard a sign-in logs "Transition was skipped"
+ok - the probe's accounts (*-r179310171139933@probe.test) are deleted
+probe: 356 ok, 0 failed

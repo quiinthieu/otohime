@@ -245,6 +245,28 @@ test("Footer walk reads the exact plain heading source, ignoring nested Riso pla
   assert.throws(() => verify(riso(title).replace('class="riso-source "', 'class="riso-source-imitation"')), { code: "ERR_ASSERTION" });
 });
 
+test("Footer network ownership rechecks a blank iframe when its player src arrives and rejects a footer twin", async () => {
+  const source = readFileSync(resolve(import.meta.dirname, "../scripts/probe-end.mjs"), "utf8");
+  const start = source.indexOf("  const playerFrames =");
+  const end = source.indexOf('  page.on("frameattached"', start);
+  assert.ok(start >= 0 && end > start, "exercise the actual ownership cache");
+  let checks = 0;
+  // Frame fixtures isolate caching policy; the production probe also exercises
+  // delayed src and its footer twin with real browser frames and routed URLs.
+  const playerFrame = runInNewContext(`${source.slice(start, end)}; playerFrame`, {
+    verifyPlayerFrame: async (frame: { player: boolean }) => { checks++; return frame.player; },
+    recorded: () => [],
+  });
+  const player = { player: false };
+  assert.equal(await playerFrame(player), false, "a blank iframe is unverified");
+  player.player = true;
+  assert.equal(await playerFrame(player), true, "a later valid src must be verified again");
+  const verifiedChecks = checks;
+  assert.equal(await playerFrame(player), true);
+  assert.equal(checks, verifiedChecks, "only positive ownership is cached");
+  assert.equal(await playerFrame({ player: false }), false, "a footer twin never borrows the player's ownership");
+});
+
 test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR", async () => {
   const root = resolve(import.meta.dirname, "..");
   const walkPath = resolve(root, "scripts/walk-end.sh");
