@@ -1,0 +1,20 @@
+ok - negative control: health sha 1111111111111111111111111111111111111111, EXPECT_SHA 2222222222222222222222222222222222222222 exits nonzero and skips e2e
+ok - the mismatch names the sha it saw
+ok - matching sha runs the e2e with BASE_URL (trailing slash trimmed) and exits 0
+ok - positional BASE_URL EXPECT_SHA work too
+ok - matching sha with a failing e2e exits nonzero
+ok - negative control: an e2e dependency that does not import after install exits nonzero and skips e2e
+ok - the missing dependency ran the install once and is named
+ok - dependencies that import run no install and reach the e2e
+ok - no install when the dependencies import
+ok - a stale sha that turns into EXPECT_SHA mid-poll passes (the poll retries)
+ok - a served sha that descends from EXPECT_SHA passes (a newer push deployed it)
+ok - EXPECT_SHA ahead of the served sha only by projects/** and *.md passes (report commits never deploy)
+ok - negative control: EXPECT_SHA ahead of the served sha by code exits nonzero and skips e2e (stale deploy)
+ok - the stale deploy names the sha it saw
+ok - a served sha off another branch exits nonzero and skips e2e, even when the diff is report-only
+ok - HTTP 500 from health exits nonzero
+ok - nothing listening exits nonzero
+ok - EXPECT_SHA=dev is refused with exit 2
+ok - a missing BASE_URL is refused with exit 2
+self-test: 19 ok, 0 failed

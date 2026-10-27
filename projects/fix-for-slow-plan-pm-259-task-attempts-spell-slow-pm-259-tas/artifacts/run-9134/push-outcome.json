@@ -1,0 +1,13 @@
+{
+  "classification": "infra",
+  "cause": "environment",
+  "reason": "git_push_non_fast_forward_retries_exhausted",
+  "main_attempts": 4,
+  "rebase_retries": 3,
+  "rescue_branch": "task-rescue/pm-270-t-1661-run-9134",
+  "main_delivered": false,
+  "local_verification": "pass",
+  "final_verification_round": "rebase-3",
+  "owner": "plan-manager delivery retry",
+  "failure_condition": "The tested code is absent from main; CI and independent live certification cannot complete until main delivery succeeds."
+}

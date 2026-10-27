@@ -1,0 +1,22 @@
+{
+  "scope": "final isolated footer production build",
+  "head": "c4cfd5a018ad51674a5ed872466a60884f5c1059",
+  "generated_history_sha256": "567b4666b4451d2b56d58dd4dc70115f9d37007c447190efb9fbabaf930bcaef",
+  "build_id": "JGS5RERbVQ6wTp2MacLVL",
+  ".next/build-manifest.json": {
+    "file_count": 1,
+    "digest": "911aa01deecb30068dac2117c8aad9081994d0a404f03d135eab2d9948fbb37b"
+  },
+  ".next/server/app-paths-manifest.json": {
+    "file_count": 1,
+    "digest": "04e694c3ec2ed532e3db0781847ed7e539f522ad695974d8cdbe68139beff7ef"
+  },
+  ".next/server/chunks": {
+    "file_count": 878,
+    "digest": "6cc8d4307c9d8afc263dc2b102ab5187987f36a387bbb0a058b67ed59b032011"
+  },
+  ".next/static/chunks": {
+    "file_count": 94,
+    "digest": "cd0ecf5b8bc5e0ccd60bdda178c019898a3596179393d140a62a27acc4ca8e58"
+  }
+}

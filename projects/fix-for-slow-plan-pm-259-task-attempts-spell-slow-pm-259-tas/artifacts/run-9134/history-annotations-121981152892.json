@@ -1,0 +1,26 @@
+[
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/a958913b6a17f2cefda59882dfbdfcb0cd01e453/.github",
+    "start_line": 71,
+    "start_column": null,
+    "end_line": 71,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "",
+    "message": "Process completed with exit code 1.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/a958913b6a17f2cefda59882dfbdfcb0cd01e453/.github",
+    "start_line": 63,
+    "start_column": null,
+    "end_line": 63,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "vercel deploy",
+    "message": "health check at https://otohime.dev/api/health does not report a958913b6a17f2cefda59882dfbdfcb0cd01e453 (last body: {\"ok\":true,\"sha\":\"ea79432eb9bf23f40a18586eb91408ba1a585288\"}) https://otohime-olrgoztc7-otohime.vercel.app\nunknown (inspect exited 1) https://otohime-olrgoztc7-otohime.vercel.app\ninspect --wait output (exit 1):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: User not found.\nstate re-read output (exit 1):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: User not found.",
+    "raw_details": ""
+  }
+]

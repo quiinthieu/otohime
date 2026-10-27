@@ -1,0 +1,46 @@
+{
+  "retry": 2,
+  "rejected_sha": "91e7e3baff40f0b38cade7c1dbc25572dfdc826f",
+  "upstream_base": "f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc",
+  "rebased_sha": "b14dab8573d68a16b2c228e377a8706d1d42fad2",
+  "incoming_paths": [
+    ".github/workflows/ci.yml",
+    "lib/browser-gate-diagnostics.test.ts",
+    "lib/e2e-annotate.test.ts",
+    "lib/e2e-runner.test.ts",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/delivery-recovery-evidence.md",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/analyzer-controls.json",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/ci-history.json",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/diagnostic-controls.tap",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/fingerprints.json",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/job-121600218178-raw-access.txt",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/job-121649860247-raw-access.txt",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/job-121981152892-raw-access.txt",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/latest-failed-jobs.json",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/latest-success-jobs.json",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/npm-test-tail.txt",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/real-cli-preflight-summary.md",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/real-cli-preflight.json",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/artifacts/verification.json",
+    "projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9141/engineering-report.md",
+    "scripts/browser-gate-diagnostics.mjs",
+    "scripts/ci-workflow.test.mjs",
+    "scripts/vercel-deploy.sh",
+    "scripts/vercel-deploy.test.sh",
+    "scripts/verify-deploy.sh"
+  ],
+  "requirement": "All nine task verification commands rerun; previous results historical only.",
+  "additional_verification": [
+    {
+      "command": "bash scripts/vercel-deploy.test.sh",
+      "exit_code": 0,
+      "assertions_passed": 47
+    },
+    {
+      "command": "TMPDIR=/tmp bash scripts/verify-deploy.sh --self-test",
+      "exit_code": 0,
+      "controls_passed": 22
+    }
+  ],
+  "additional_verification_boundary": "real shell with fake provider, health and e2e; no production query"
+}

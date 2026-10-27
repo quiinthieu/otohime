@@ -1,0 +1,20 @@
+{
+  "retry": 1,
+  "rejected_sha": "2e7db12aed9e44177d000baa25f402f051a5d5bb",
+  "upstream_base": "20035357a972dbc94c7fbc08b45753cc3f8e1b78",
+  "rebased_sha": "69442403d8bb292d55bf64e88692b9e7467b5ae3",
+  "incoming_code": [
+    "scripts/verify-deploy.sh"
+  ],
+  "incoming_other": [
+    "README.md",
+    "projects/**"
+  ],
+  "requirement": "All nine task verification commands rerun; previous results historical only.",
+  "additional_verification": {
+    "command": "TMPDIR=/tmp bash scripts/verify-deploy.sh --self-test",
+    "exit_code": 0,
+    "controls_passed": 19,
+    "real_fake_boundary": "real shell, fake local HTTP and e2e commands; no deployed endpoint read"
+  }
+}

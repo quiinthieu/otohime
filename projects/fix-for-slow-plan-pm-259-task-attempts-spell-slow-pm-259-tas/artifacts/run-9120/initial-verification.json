@@ -1,0 +1,114 @@
+{
+  "schema": "otohime.pm-270.local-certification.v1",
+  "plan_id": "pm-270",
+  "task_id": "t-1661",
+  "run_id": "run-9120",
+  "fingerprint": "3b49096068b94eacaa17e4915b9e6290693a3857bd12401b5b243809c6bb9e95",
+  "items": [
+    {
+      "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/main-lane-closure.test.mjs scripts/e2e-gesture-trace.test.ts",
+      "log": "closure-green.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "CI=true npm test",
+      "log": "unit.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 2429,
+        "pass": 2429,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "npm run lint && npm run typecheck && node scripts/check-gate-closure.mjs",
+      "logs": [
+        "lint.log",
+        "typecheck.log",
+        "gate-closure.json"
+      ],
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass"
+    },
+    {
+      "command": "node scripts/verify-bottle-footer.mjs",
+      "log": "footer-green.log",
+      "environment": "PATH prepends an exec launcher for installed macOS Google Chrome; verifier sets CI=true and TMPDIR=/tmp",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "bash scripts/e2e-local.sh",
+      "serial_attempt": 1,
+      "log": "e2e-1.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 180,
+        "pass": 179,
+        "fail": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "command": "bash scripts/e2e-local.sh",
+      "serial_attempt": 2,
+      "log": "e2e-2.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 180,
+        "pass": 179,
+        "fail": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "command": "bash scripts/e2e-local.sh",
+      "serial_attempt": 3,
+      "log": "e2e-3.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "tap": {
+        "tests": 180,
+        "pass": 179,
+        "fail": 0,
+        "skipped": 1
+      }
+    }
+  ],
+  "final_local_build_id": "DEVK0gmq5nNMSOzbVoLzs",
+  "execution": "demonstrated locally",
+  "integration_deployed": "not observed for delivery commit",
+  "waiting_for_capacity": false,
+  "product_delivered": "pending plan-manager CI and independent QA"
+}
