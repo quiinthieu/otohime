@@ -1,0 +1,44 @@
+{
+  "task": "pm-268/t-1601",
+  "run": "run-9238",
+  "baseline_sha": "8b0c491",
+  "red_gate_sha": "4c4bc97 (planning commit; predates implementation)",
+  "fix_plan": "fix_plan_run-9220.md",
+  "fix_plan_code_already_on_main": "9b4a2cc",
+  "environment": { "node": "v22.23.3", "next": "16.4.2", "install": "npm ci including lifecycle scripts", "chrome": "repo playwright-core launcher, TMPDIR=/tmp" },
+  "build_id": "j1h1E2UTNCv9UGGis8pev",
+  "source_sha256": {
+    "e2e/console-errors.ts": "2b068839c58584f37ecc546f5eafb1d58c78aa0cbcc1d358e6541707bb598457",
+    "e2e/riso-headings.test.ts": "f0e491fac01a72f2c6839d856e5ff0d822f3233330322fea7908971868ac220b",
+    "scripts/console-errors.test.ts": "79e64d814235a9163960028f8c51db726baded3ce6922308713f2d0ea2d391e3",
+    "lib/riso-heading.ts": "5c8d025338b6526b2d0073eed306b269e9d80b7ba56355e096ad65ec2082823b",
+    "lib/riso-heading.test.ts": "d79c52bc35298243921c459adce3b156e95de78d6e0d90e1efbbf4872ee0edb3",
+    "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+    "components/riso-heading.css": "fd64c5d5386762695074995bf4a66c8a9ec50e784120276da223439f3edad1cd",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+  },
+  "checks": {
+    "feature": { "exit": 0, "passed": 5 },
+    "unit": { "exit": 0, "passed": 2552, "failed": 0, "skipped": 0 },
+    "typecheck": { "exit": 0 },
+    "lint": { "exit": 0, "existing_warnings": 10 },
+    "browser": { "exit": 0, "passed": 6, "fresh_production_build": true }
+  },
+  "negative_controls": [
+    "scripts/console-errors.test.ts: unrelated 404 URL, query, cross-origin, 500, POST, document resource and absent response stay failures for both 404 renderings",
+    "scripts/console-errors.test.ts: application console.error with identical text but args/line/column differing, and pageerror, stay failures",
+    "e2e/riso-headings.test.ts no-JavaScript test still asserts settled server heading without data-riso-state"
+  ],
+  "boundaries": {
+    "real": "Local Next production build/server, embedded Postgres, Chrome, hydration, TitleMorph and Stamp it",
+    "fake": "console-errors unit controls feed synthetic browser events to the actual collector"
+  },
+  "history": "This run: one attempt per command, all passed; full logs read. The pre-fix public failure (QA run-9220) was not reproduced locally because local hydration is fast; the hydration wait cannot be discriminated locally. Remote CI/deployed history was not inspected (SWE stop-at-push contract).",
+  "claims": {
+    "integration_deployed": "unverified",
+    "waiting_for_capacity": false,
+    "execution_demonstrated": "local production only",
+    "product_delivered": "pending plan-manager green gate and public QA"
+  },
+  "deferred": [{ "check": "corrected browser suite against https://otohime.dev at a deployed SHA descending from this delivery; /api/health ancestry; CI production jobs", "owner": "plan-manager green gate / QA for pm-268/t-1601", "ids": "not assigned in this run", "failure_condition": "either test 1 or test 5 fails against the public origin, or the health SHA does not descend from the delivery" }]
+}

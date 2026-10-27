@@ -1,0 +1,68 @@
+== feature.log (tail)
+  duration_ms: 0.041042
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 49.03025
+
+== unit.log (tail)
+  duration_ms: 0.552959
+  type: 'test'
+  ...
+1..2534
+# tests 2552
+# suites 2
+# pass 2552
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19777.127625
+
+== typecheck.log (tail)
+
+> otohime@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+== lint.log (tail)
+<checkout>/app/(shore)/shore/page.tsx
+  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+<checkout>/app/(vinyl)/vinyl/page.tsx
+  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+<checkout>/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs
+  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (0 errors, 10 warnings)
+  0 errors and 9 warnings potentially fixable with the `--fix` option.
+
+
+== browser.log (tail)
+  duration_ms: 184.744333
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8530.173417
+
+== unit console-errors controls
+ok 2460 - only a matching disabled config response and native resource error reconcile, in either order
+ok 2461 - unrelated resources, queries, cross-origin URLs, 500s and absent responses stay failures
+ok 2462 - ordinary console.error, resource-like application errors and pageerror always fail
