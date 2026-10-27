@@ -8,6 +8,10 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 
+// Keep identity regressions in the existing CI suite without editing its shared package command.
+import "./check-deploy-author.test.mjs";
+import "./setup-owner-git.test.mjs";
+
 const workflow = readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
 const lines = workflow.split("\n");
 const indent = (line) => line.length - line.trimStart().length;
@@ -395,4 +399,14 @@ test("browser fallbacks keep the existing gate order, probe budgets and assertio
   assert.match(e2e, /GITHUB_ACTIONS === "true"/);
   assert.match(e2e, /--test-reporter=tap/);
   assert.match(e2e, /e2e-annotate.mjs/);
+});
+
+test("the author gate precedes production migrations and main checks", () => {
+  const prod = steps("production");
+  const author = prod.indexOf("node scripts/check-deploy-author.mjs");
+  assert.ok(author > prod.indexOf("actions/checkout@"), "inspect the checked-out commit");
+  assert.ok(author < prod.indexOf("npm ci"), "fail before setup, build and migrations");
+  assert.ok(author < prod.indexOf("npm run db:migrate"), "never migrate an undeployable author");
+  assert.match(prod, /DEPLOY_AUTHOR_EMAIL: quiinthieu@gmail\.com/);
+  assert.match(steps("checks"), /if: github.event_name == 'push' \|\| \(github.event_name == 'workflow_dispatch' && github.ref == 'refs\/heads\/main'\)[\s\S]*?node scripts\/check-deploy-author\.mjs/);
 });

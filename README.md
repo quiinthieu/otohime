@@ -4,6 +4,15 @@ Personal site for [otohime.dev](https://otohime.dev). One Next.js app serves the
 
 ## Local setup
 
+For the site owner's work on a new machine, set the author for this clone once and check it before committing:
+
+```bash
+bash scripts/setup-owner-git.sh --configure
+bash scripts/setup-owner-git.sh --check
+```
+
+This changes only repository-local Git config (shared by linked worktrees); it does not change your global identity. The check verifies the effective author email, including `GIT_AUTHOR_EMAIL`; an explicit `git commit --author` can still override it. Setup also chooses the `Otohime` display name required by the existing guestbook delivery check. Git does not copy clone configuration to other machines. `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` carry the repository instructions in each clone, and CI checks the committed author before deploying.
+
 ```bash
 bash scripts/dev.sh
 ```
@@ -462,7 +471,7 @@ Rules that keep this safe:
 - `drizzle-kit migrate` runs every pending migration in one transaction, so `CREATE INDEX CONCURRENTLY` won't work.
 - `<meta name="build-sha">` on any page names the commit the live site was built from, and `/api/health` answers `{ok: true, sha}` with the same commit (`dev` locally), so `curl -s https://otohime.dev/api/health` shows which commit production serves.
 - `bash scripts/verify-deploy.sh BASE_URL EXPECT_SHA` (or set `BASE_URL` and `EXPECT_SHA`) checks a deployment on demand, e.g. `bash scripts/verify-deploy.sh https://otohime.dev "$(git rev-parse HEAD)"`. It polls `/api/health` until the served `sha` serves the full 40-hex `EXPECT_SHA` (`VERIFY_TIMEOUT`, default 300 s and never more than 590 s, every `VERIFY_INTERVAL` 10 s). That holds when the served sha is `EXPECT_SHA`, when it descends from it (main keeps one pending CI run, so a newer push can deploy this commit as part of a later one), or when `EXPECT_SHA` is ahead of it only by `projects/**` and `*.md` (the push `paths-ignore`, so report commits never deploy). Ancestry comes from the local checkout, and an unknown served sha is fetched from `origin` once. Then it runs `e2e/pocket-terminal.test.ts` and `e2e/ink-press.test.ts` against `BASE_URL`; both are read-only and need Google Chrome or `CHROME_PATH`. A bare checkout works too: when `playwright-core` or `sharp` does not import it runs `npm ci` once (`VERIFY_INSTALL_CMD`), and when no browser launches it installs Playwright's Chromium once; it exits 1 before the e2e if either still fails. A sha that never matches, a non-200 answer or a failing e2e exits 1, and bad arguments exit 2. `bash scripts/verify-deploy.sh --self-test` runs it against a local fake `/api/health` (no browser). A sha mismatch, and a served sha behind `EXPECT_SHA` by code (a stale deploy), must exit nonzero without reaching the e2e, and so must an e2e dependency that still does not import after the install. The controls also cover a sha that turns right mid-poll, a newer served sha, a report-only lead, a served sha off another branch, HTTP 500, nothing listening, and a failing e2e.
-- Commits to `main` must be authored by the site owner's GitHub email, or Vercel Hobby will not deploy them.
+- Commits to `main` must be authored by the site owner's GitHub email, or Vercel Hobby will not deploy them. CI verifies the checked-out commit's author email before the main checks and again before production builds or migrations. Agent commits made on the owner's behalf must honor the repository's Git identity; check explicit author overrides when the repository email is already correct.
 - Don't run `vercel --prod` from a laptop; it skips the migration.
 - Keep the Vercel Git integration disconnected, or Vercel deploys before CI migrates.
 
