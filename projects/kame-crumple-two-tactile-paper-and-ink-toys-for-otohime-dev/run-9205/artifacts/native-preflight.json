@@ -1,0 +1,40 @@
+{
+  "node": "v22.23.3",
+  "npm": "10.9.9",
+  "platform": "linux",
+  "arch": "x64",
+  "chrome": "154.0.8037.57",
+  "playwright": "1.64.0",
+  "next": "16.4.2",
+  "embeddedPostgres": "17.10.0-beta.17",
+  "realConstruction": {
+    "browser": true,
+    "context": true,
+    "measuredBox": {
+      "x": 8,
+      "y": 8,
+      "width": 1264,
+      "height": 37
+    },
+    "sharp": {
+      "format": "png",
+      "width": 3,
+      "height": 2,
+      "channels": 4,
+      "premultiplied": false,
+      "hasAlpha": true,
+      "size": 95
+    },
+    "pgClient": "Client",
+    "embeddedPostgres": "EmbeddedPostgres"
+  },
+  "databaseExecution": "actual init/start/create and Drizzle migrations observed in full-initial.log; no mocked database",
+  "buildId": "P7ZeONv7zlOzqH80pY4FR",
+  "lockSHA256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+  "additionalLockedVersions": {
+    "typescript": "5.9.3",
+    "eslint": "9.39.5",
+    "pg": "8.23.1",
+    "sharp": "0.35.5"
+  }
+}

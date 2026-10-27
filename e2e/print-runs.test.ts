@@ -211,15 +211,26 @@ test("a stored run colors the first styled frame of every root layout, with hydr
   evidence.firstFrames = frames;
 });
 
-test("evidence: every root hydrated under each colored run", { skip: !EVIDENCE }, async () => {
+test("evidence: every root hydrated under each colored run", async () => {
   for (const run of ["sumi", "riso", "indigo"] as const) {
     const { page, errors } = await open({ storage: { [PRINT_RUN_KEY]: run } });
     for (const [root, path] of DOCUMENTS) {
       await visit(page, path);
       await hydrated(page);
-      await page.waitForTimeout(400);
-      assert.equal((await look(page, root)).printRun, run, path);
-      await page.screenshot({ path: join(EVIDENCE, `hydrated-${run}${path === "/" ? "-home" : path.replace(/\//g, "-")}.png`) });
+      const assertRun = async () => assert.equal((await look(page, root)).printRun, run, path);
+      await assertRun();
+      if (path === "/") {
+        // Real DOM negative control: the same observer must reject a wrong run.
+        // Restore it before visiting the remaining roots; no app hooks or fake browser.
+        await page.evaluate(() => document.documentElement.setAttribute("data-print-run", "house"));
+        try { await assert.rejects(assertRun, { name: "AssertionError" }); }
+        finally { await page.evaluate((run) => document.documentElement.setAttribute("data-print-run", run), run); }
+        await assertRun();
+      }
+      if (EVIDENCE) {
+        mkdirSync(EVIDENCE, { recursive: true });
+        await page.screenshot({ path: join(EVIDENCE, `hydrated-${run}${path === "/" ? "-home" : path.replace(/\//g, "-")}.png`) });
+      }
     }
     assert.deepEqual(errors, []);
   }

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "historical-e2e",
+    "url": "https://github.com/quiinthieu/otohime/actions/runs/40345114517/job/121649860247",
+    "annotation_excerpt": "Annotations 2 errors and 1 warning E2E against next start Process completed with exit code 1. Show more Show less E2E against next start: e2e/ink-radio.test.ts#L39 AssertionError [ERR_ASSERTION]: The input did not match the regular expression /<section aria-labelledby=\"ink-radio\"[^>]*>\\s*<h2 id=\"ink-radio\"[^>]*>Ink Radio/. Input: `<!DOCTYPE html><html lang=\"en\" class=\"h-full antialiased\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/2kymltn7pgfpi.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/0m4f_4b_8-sov.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/30pqe4rv77bcv.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/31_6w8v5d7luy.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/3y2jzd1z59cqx.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/2vg9178xebqwz.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/16wr9l826lhc6.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/0om590q-tq0l9.js\"/><script src=\"/_next/static/chunks/2y_wjjnipg5nm.js\" async=\"\"></script><script src=\"/_next/static/chunks/1s37vwjm584j-.js\" async=\"\"></script><script src=\"/_next/static/chunks/3dz7s82h34ptz.js\" async=\"\"></script><script src=\"/_next/static/chunks/2hoi73vy1wqpo.js\" async=\"\"></script><script src=\"/_next/static/chunks/turbopack-2c3mg3r-05n1w.js\" async=\"\"></script><script src=\"/_next/static/chunks/3_ovxg0a_m274.js\" async=\"\"></script><script src=\"/_next/static/chunks/2zaom-gq5p918.js\" async=\"\"></script><script src=\"/_next/static/chunks/1ucjpr6xais41.js\" async=\"\"></script><script src=\"/_next/static/chunks/0571t6nqzk93o.js\" async=\"\"></script><script src=\"/_next/static/chunks/3ynqz-fhc410u.js\" async=\"\"></script><script src=\"/_next/static/chunks/2p84ae7nhnlp2.js\" async=\"\"></script><script src=\"/_next/static/chunks/3h4mu9rqkwmvz.js\" async=\"\"></script><script src=\"/_next/static/chunks/3rk-q0a4e9l67.js\" async=\"\"></script><script src=\"/_next/static/chunks/20iozwpwi5-vw.js\" async=\"\"></script><script src=\"/_next/static/chunks/2k5el_cftfe_f.js\" async=\"\"></script><m",
+    "raw_log": "HTTP403 API rate limit; unread",
+    "boundary": "public annotation excerpt only, not full runner tail"
+  },
+  {
+    "id": "historical-footer",
+    "url": "https://github.com/quiinthieu/otohime/actions/runs/40346324813/job/121654087754",
+    "annotation_excerpt": "Annotations 1 error and 1 warning Footer walk Process completed with exit code 1. Show more Show less Run npm run lint: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less checks checks failed Oct 26, 2026 in 12m 4s background wait wait-all cancel parallel Loading Re-running jobs... You can\u2019t perform that action at this time. ",
+    "raw_log": "HTTP403 API rate limit; unread",
+    "boundary": "public annotation excerpt only, not full runner tail"
+  },
+  {
+    "id": "latest-failed-production",
+    "url": "https://github.com/quiinthieu/otohime/actions/runs/40474532913/job/122096077381",
+    "annotation_excerpt": "Annotations 2 errors Deploy and verify the served sha Process completed with exit code 1. Show more Show less Deploy and verify the served sha unknown (inspect exited 1) https://otohime-86gdl6rbp-otohime.vercel.app inspect --wait output (exit 1, last 4000 bytes): Vercel CLI 64.7.0 (Node.js 22.23.3) Error: Not able to load user because of unexpected error: User not found. (404) state re-read output (exit 1, last 4000 bytes): Vercel CLI 64.7.0 (Node.js 22.23.3) Error: Not able to load user because of unexpected error: User not found. (404) Show more Show less production production failed Oct 27, 2026 in 1m 29s background wait wait-all cancel parallel Loading Re-running jobs... You can\u2019t perform that action at this time. ",
+    "raw_log": "HTTP403 API rate limit; unread",
+    "boundary": "public annotation excerpt only, not full runner tail"
+  }
+]
