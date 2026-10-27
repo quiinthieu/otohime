@@ -1,5 +1,19 @@
 # Ink ghosts changelog
 
+## 2026-10-27: draw ephemeral visitor ink (pm-257/t-1608)
+
+- Add request-time, no-store `/api/ghosts` configuration. Disabled or invalid endpoints return 404; secure
+  cross-origin Worker endpoints and loopback-only local WebSockets accept no credentials, fragments or base query.
+- Load a neutral client canvas when idle on Home and Ryugu-jo, with no palace layout or stylesheet changes.
+  A body portal preserves viewport coordinates outside Home's animated container; the decoration cannot take input or focus.
+- Draw anonymous peer brush tips, 700ms trails and local/peer click ripples. Bound peers, points, ripples, traffic
+  and DPR; stop animation when fading work ends and expire silent tips after six seconds without a continuous loop.
+- Shut down transport, drawing and input observers when motion is reduced, the page is hidden/offline or unmounted.
+  Retry at most three times per mounted page, with 1s/3s backoff; full rooms terminate immediately. Disabled
+  configuration stays quiet. Expose state, other-member count and a counter of ripple draws for browser verification.
+- Add direct policy/lifecycle tests, actual route-body wiring coverage and canvas-call evidence. The existing explicit
+  `ghosts/*.test.ts` npm test glob includes both new suites. Pocket preference and production activation follow later.
+
 ## 2026-10-27: reject reserved wire bits and preserve rate time (pm-257/t-1607)
 
 - Reject RSV1/2/3 in the fake at the frame header with 1002, before buffering payloads or entering the room.

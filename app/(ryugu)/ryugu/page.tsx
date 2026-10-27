@@ -1,3 +1,4 @@
+import { GhostLoader } from "@/ghosts/loader";
 import type { Metadata } from "next";
 import history from "@/content/history.json";
 import { AmbienceToggle } from "../_components/ambience";
@@ -14,6 +15,7 @@ export const metadata: Metadata = { title: { absolute: "Ryugu-jo" } };
 export default function RyuguPage() {
   return (
     <main className="ryugu">
+      <GhostLoader room="/ryugu" />
       <header className="surface">
         <nav className="ways-out" aria-label="Site">
           {/* A plain <a>: the site is another root layout, which needs a full page load. */}

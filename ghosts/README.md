@@ -1,7 +1,7 @@
 # Ink ghosts
 
 Anonymous, short-lived cursors from other visitors on Home (`/`) and Ryugu-jo (`/ryugu`). This folder holds the
-transport. The client canvas, the Pocket switch and the deploy workflow follow in pm-257 tasks 2 to 5.
+transport and dynamically loaded client canvas. The Pocket switch and deploy workflow follow in pm-257 tasks 3 to 5.
 
 The folder is neutral and top-level on purpose. The palace may not import from `components/`, `lib/` or other route
 groups, so both roots can share `ghosts/`.
@@ -13,6 +13,9 @@ groups, so both roots can share `ghosts/`.
 | `protocol.ts` | Wire messages, limits and the frame parser. Pure: it runs in the Worker, the fake and the browser. |
 | `policy.ts` | Upgrade admission: method, `Upgrade`, exact `Origin` and one of the two rooms. |
 | `room.ts` | The pure room state machine: cap, token bucket, invalid strikes, fan-out effects and attachment validation. |
+| `config.ts`, `../app/api/ghosts/route.ts` | Request-time endpoint parsing and no-store configuration (404 when disabled). |
+| `client.ts` | Bounded client model, defensive server parser, lifecycle controller and 2D painter. |
+| `loader.tsx`, `canvas.tsx` | Idle client-only page boundary, passive input observers and decorative viewport canvas. |
 | `worker/` | The Cloudflare Worker (`src/index.ts`) and the `GhostRoom` Durable Object (`src/room-do.ts`). Its own locked package. |
 | `../scripts/ghosts-fake.mjs` | A dependency-free local fake that uses the same policy and room. It also holds the raw test client and the shared contract cases. |
 
@@ -134,11 +137,40 @@ npm run fingerprint   # the code+lock+config fingerprint and per-file hashes
 The compatibility date is pinned (`2026-10-15`). `.wrangler/`, `node_modules/`, `dist/` and `.dev.vars*` are
 git-ignored inside the package.
 
-## Not here yet
+## Client runtime
 
-- Client rendering, `/api/ghosts` and `GHOSTS_ENDPOINT` (task 2).
+Set `GHOSTS_ENDPOINT=wss://<dedicated-worker-host>/ghosts` at runtime to enable only Home and `/ryugu`.
+`GET /api/ghosts` awaits `connection()` before reading it and always returns `Cache-Control: no-store`.
+Unset or malformed values return an empty 404. Credentials, fragments, base queries and same-origin secure
+endpoints are rejected. For local production-build proof, `ws://127.0.0.1:<port>/ghosts` works only when the
+page also uses a loopback host; no hosted configuration is changed by local proof.
+
+Both pages mount the neutral idle loader. The canvas is portalled to `document.body`: Home's entrance animation
+would otherwise give a fixed descendant page-sized rather than viewport-sized bounds. Styles are inline,
+`pointer-events:none`, and the whole layer is `aria-hidden`, with no focus target or live region. Other-member
+count is separate from drawable tips; a silent connected visitor still contributes to the subdued `N here` label.
+
+The controller sends movement at most every 100ms after a 0.002 normalized deadzone. It bounds the remote map to
+24 entries, trails to 12 points, ripples to 48 and DPR to 1.5. Trails and ripples fade in 700ms; silent tips disappear
+at six seconds using one expiry timer. It requests animation frames only for fading work or a single event/resize
+redraw. `data-ghosts-state`, `data-ghosts` and cumulative `data-ghosts-ripples` expose state, other connected members
+and actual ripple paint calls, respectively. The counter alone is not proof of visible rendering.
+
+Reduced motion, hidden documents, offline state and unmount close sockets, abort configuration fetches, clear
+marks and cancel timers/frames. The adapter removes pointer/resize observers while ineligible. Config and socket
+handshakes have an eight-second attempt deadline; retryable failures allow three total attempts, delayed by 1s
+and 3s after the preceding failure. Full rooms terminate immediately. Disabled configuration stays off. The budget
+belongs to the mounted controller: the task-3 preference must toggle eligibility rather than recreate that budget.
+Local pointerdown feedback is immediate; wire clicks are limited to 5Hz alongside movement's 10Hz.
+
+The existing explicit `ghosts/*.test.ts` glob runs the client and config tests in `npm test`.
+`config.test.ts` executes the actual GET body with only Next's request-context boundary substituted. Client tests
+use an injected clock/socket/scheduler and canvas method recorder. These prove policy, lifecycle and paint calls;
+real-browser pixel and geometry evidence is distinct, and neither proves a hosted Worker deployment.
+
+## Not here yet
 - The Pocket hide switch (task 3).
 - Two-browser proof, CI wiring and the deploy workflow (task 4).
 - Production activation (task 5).
 
-No hosted deployment or credential exists yet. Nothing in this folder proves live fan-out.
+Production activation is out of scope for the client delivery. Local fake-server/browser evidence does not prove hosted fan-out.
