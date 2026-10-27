@@ -1,60 +1,86 @@
 # Washi Daruma, Emaki, and Hanafuda
 
-Plan `pm-293`, revision 1. Product-owner run `run-9229`. Prior research from `rep-5449` (`run-9228`) is preserved in [research.md](research.md). Per current platform rules, plan splitting is removed and the complete scope for all three paper-and-ink experiments lives in one task DAG on `pm-293`.
+Plan `pm-293`, revision 2 (cycle 1 change-request remediation). Product-owner run `run-9252`. Prior research from `rep-5449` (`run-9228`) is preserved in [research.md](research.md); cycle 1 acceptance and change-request findings are recorded in [acceptance_report_1.md](acceptance_report_1.md) and [change_request_1.md](change_request_1.md).
 
 ## Outcome
 
-Visitors to `otohime.dev` gain three new tactile paper-and-ink experiments backed by a shared build-time yearly digest:
+Visitors to `otohime.dev` gain three tactile paper-and-ink experiments backed by a shared build-time yearly digest, with all three cycle-1 acceptance defects resolved:
 
-1. **Shared Yearly Shipped Digest (`content/yearly-log.json`)**: A build-time index script (`scripts/yearly-log.ts`) and pure reader (`lib/yearly-log.ts`) aggregate full git commit history across all 12 calendar months along with `content/site.ts` projects/notes and `content/ledger.json` activity counts, keeping a committed fallback in `content/yearly-log.json` so shallow (`depth-1`) or offline builds remain deterministic.
-2. **Daruma Project Board (`/projects`)**: Projects in `content/site.ts` carry `started`, `shipped`, `lastActivityAt`, and optional `abandoned` metadata. On `/projects`, visitors can switch to a Daruma Shelf view where each project is a hand-drawn red SVG Daruma doll: its left eye paints in via `stroke-dashoffset` when started, its right eye paints in when shipped, and dolls wobble on hover/focus before rolling upright. Unfinished dolls rest on an unfinished shelf; projects with no activity for 90 days that have not shipped default to abandoned, and an on-demand **Daruma Kuyo** toggle (also reachable via `?kuyo=1` and testable with an injected clock) runs an ink-fire retirement ceremony without waiting for December.
-3. **Making-of Emaki (`/making-of`)**: A horizontal handscroll (`emaki`) linked from `/work` and driven by a validated public snapshot (`content/making-of.json`, maintained by `scripts/making-of-index.ts`) groups repository history by `pm-NNN` plan prefixes into scenes. Each scene depicts four reusable ink figures (`researcher`, `product_owner`, `software_engineer`, `quality_engineer`) passing a scroll along, labelled with plan title, date, public model ID per role, and a clickable link to the commit/PR on GitHub. A sticky scroll-scrubbed wrapper (and CSS `animation-timeline` where supported) translates vertical scroll into horizontal parallax while keeping a semantic `<ol>` for assistive technology and no-JS visitors; `prefers-reduced-motion` disables parallax.
-4. **Hanafuda Koi-Koi (`/play/hanafuda`)**: A playable 48-card ink-and-washi Hanafuda deck (12 monthly flower suits) vs a deterministic greedy CPU opponent (no LLM) over a 3-round match. Supports drag-to-match, tap-to-match, and full keyboard controls; announces all 12 standard yaku (`Goko`, `Shiko`, `Ame-Shiko`, `Sanko`, `Inoshikacho`, `Tane`, `Akatan`, `Aotan`, `Tan`, `Kasu`, `Hanami-zake`, `Tsukimi-zake`) with a red hanko stamp and brush-stroke `"Koi-koi?"` prompt backed by real `aria-live` text; uses React `ViewTransition` for card deal/flip and opt-in WebAudio paper-shuffle cues via `lib/sound-client.ts`; and lets visitors flip any month's card back to read what the owner shipped that month from `content/yearly-log.json`.
+1. **Making-of Emaki (`/making-of`) — Real Per-Role Run Models & Shipped Plans Only**:
+   - Each scene's per-role model (`research`, `product_owner`, `software_engineer`, `quality_engineer`) is the public model ID recorded for that role's runs on that plan in `plan-manager` (`runs.profile_flags --model`).
+   - `DEFAULT_ROLE_MODELS` is removed. Any role that never ran on a plan (such as `research` and `product_owner` on `pm-272`, or `research` on `pm-255`) is omitted from `scene.roles` in `content/making-of.json` and rendered as visibly absent (`data-testid="emaki-role-absent"`, no `data-model-id`) on `/making-of`—never defaulted.
+   - Scenes in `content/making-of.json` are limited to shipped plans (`status = 'done'` plus `pm-293`; unshipped `paused`, `abandoned`, `rejected`, or `executing` plans such as `pm-288`, `pm-287`, `pm-286`, `pm-285`, `pm-282`, `pm-279`, `pm-277`, `pm-276`, `pm-275`, `pm-273`, `pm-271`, `pm-269`, `pm-268`, `pm-260`, `pm-257`, `pm-248`, `pm-242`, `pm-240`, `pm-171` are excluded from the shipped handscroll).
+   - `scripts/making-of-index.ts --check` verifies that every scene in `content/making-of.json` is a shipped plan and that every role's `modelId` (and absence of unrun roles) matches the committed `PLAN_RUN_HISTORY` ledger, failing on any wrong or defaulted model.
+2. **Hanafuda Koi-Koi (`/play/hanafuda`) — Phone Viewport Decision & Round Banners**:
+   - At `390×844` (mobile touch viewport) as well as `1366×768`, when a finger or pointer capture forms a yaku (`koi-koi-decision`) or finishes a round/match (`round-over` / `match-over`), the prompt (`[data-testid="koi-koi-prompt"]` with red hanko stamp, brush-stroke `"Koi-koi?"` heading, and `decide-koi-koi` / `decide-shobu` buttons) and the round/match banner (`[data-testid="round-result-banner"]` with `next-round-btn` / `play-again-btn`) are docked/scrolled into the viewport (`0 <= top` and `bottom <= viewportHeight`) with keyboard focus moved to the primary action button, while preserving `aria-live="polite"` text.
+3. **Daruma Project Board (`/projects`) — Real Project States & Honest Unfinished Shelf**:
+   - All 11 projects in `content/site.ts` (`Shore`, `Capsule`, `Orrery`, `Elements`, `Vinyl`, `Rotor`, `Planisphere`, `Barometer`, `Gazette`, `Structures`, `Design system`) reflect the owner's real history: `status: "live"`, with true October 2026 `started`, `shipped`, and `lastActivityAt` dates (no pre-repo May/June 2026 dates, and no live routes marked `building` or `shelved`).
+   - Live projects display `live` badges in both Cartridges and Daruma views, have both eyes painted (`eyeState: "both"`), and match `content/yearly-log.json`.
+   - When all real projects in `content/site.ts` have shipped, the Unfinished shelf and Daruma Kuyo ceremony show an honest empty state (`0` unfinished, `0` abandoned, `"Daruma Kuyo ink-fire ceremony lit: no abandoned Daruma dolls to retire."`), while supporting an explicit opt-in fixture parameter (`?fixture=kuyo` / `window.__DARUMA_FIXTURES__`) so the unfinished shelf (`left` and `none` eye states) and Kuyo ink-fire retirement ceremony can still be demonstrated on demand without misreporting live projects.
 
-## Architecture and Interfaces
+## Completed Tasks (Kept from Revision 1)
 
-### 1. Shared Yearly Digest (`scripts/yearly-log.ts`, `lib/yearly-log.ts`, `content/yearly-log.json`)
-- **Schema (`YearlyLog`)**: `{ version: 1, head: string | null, generatedYear: number, months: Record<"01" | ... | "12", MonthlyLog> }` where each `MonthlyLog` holds `{ month: number, flower: string, commits: number, shippedProjects: { title: string, href?: string, shipped: string }[], notes: { title: string, date: string }[], highlights: { sha: string, date: string, plan: string | null, subject: string }[] }`.
-- **Fallback & Strict Check**: Like `scripts/history-index.ts`, `scripts/yearly-log.ts` updates `content/yearly-log.json` from full git history when available, splices or preserves the committed fallback in shallow checkouts, and supports `--check` to verify canonical formatting and bounds.
+- `t-1673`: Shared yearly shipped digest (`c1c885c`)
+- `t-1674`: Daruma project board and Kuyo shelf (`8b0c491`)
+- `t-1675`: Making-of Emaki handscroll (`36ba86a`)
+- `t-1676`: Hanafuda Koi-Koi engine and yaku (`5fd1284`)
+- `t-1677`: Hanafuda Koi-Koi board and monthly backs (`db788b1`)
 
-### 2. Daruma Project Board (`content/site.ts`, `lib/daruma.ts`, `components/daruma-board.tsx`, `app/(site)/(app)/projects/page.tsx`)
-- **Data contract**: Extend `Project` in `content/site.ts` with `started?: string`, `shipped?: string`, `lastActivityAt?: string`, `abandoned?: boolean`. Populate realistic dates for the existing projects in `site.projectList` plus at least one started/unfinished and one shelved/abandoned entry so both shelves and Kuyo retirement are populated out of the box. If `site.projectList` text changes, regenerate `public/ask-index.json` and `public/peeks.json`.
-- **Pure logic (`lib/daruma.ts`)**: `classifyDaruma(project, nowMs)` computes eye state (`"none" | "left" | "both"`), shelf (`"active" | "shipped" | "unfinished"`), and abandonment (`abandoned === true` or `status !== "live" && !shipped && daysSince(lastActivityAt ?? started, nowMs) >= 90`). `isKuyoSeason(nowMs, kuyoOverride)` returns true in December UTC or when `kuyoOverride` (`?kuyo=1` or toggle button) is active.
-- **UI (`components/daruma-board.tsx`)**: Renders accessible radio/toggle buttons on `/projects` (`Cartridges` vs `Daruma shelf`), red SVG Daruma dolls with `stroke-dashoffset` brush-stroke eyes, wobble-and-righting animation (disabled under `prefers-reduced-motion`), an unfinished shelf, and an on-demand `Daruma Kuyo` ink-fire toggle with `aria-live` status announcement.
+## Cycle 1 Task Graph
 
-### 3. Making-of Emaki (`scripts/making-of-index.ts`, `content/making-of.json`, `lib/making-of.ts`, `app/(site)/(app)/making-of/page.tsx`)
-- **Data contract (`MakingOfSnapshot`)**: `{ version: 1, head: string | null, scenes: MakingOfScene[] }` where each `MakingOfScene` has `{ planId: string, title: string, date: string, sha: string, commitUrl: string, commitCount: number, areas: string[], roles: { role: "research" | "product_owner" | "software_engineer" | "quality_engineer", label: string, modelId: string }[], summary: string }`. Public fields only; no emails, tokens, or private logs.
-- **Generator (`scripts/making-of-index.ts`)**: Groups git history by `pm-\d+` prefixes, merges public plan titles and role model IDs from `projects/*/plan.md` and the committed snapshot, and validates canonical JSON with `--check`.
-- **UI (`app/(site)/(app)/making-of/page.tsx`)**: Server-renders a semantic `<ol>` of scenes so no-JS and screen-reader users get every plan, date, role model badge, and commit link. Client wrapper (`_components/emaki-scroll.tsx`) maps vertical scroll progress (`0..1`) to horizontal translation and multi-layer ink parallax (clouds, pine/waves, four reusable ink figures passing a scroll), with keyboard left/right scene stepping and `prefers-reduced-motion` static layout. Linked from `/work`.
+The three remediation tasks touch disjoint files and have no inter-task dependencies (`depends_on: []`):
 
-### 4. Hanafuda Koi-Koi Engine (`lib/hanafuda/deck.ts`, `lib/hanafuda/yaku.ts`, `lib/hanafuda/engine.ts`)
-- **Deck (`lib/hanafuda/deck.ts`)**: All 48 traditional cards across months 1..12 (Pine, Plum, Cherry, Wisteria, Iris, Peony, Bush Clover, Susuki Grass, Chrysanthemum, Maple, Willow, Paulownia) with category (`hikari` bright, `tane` animal/object, `tanzaku` ribbon with `akatan`/`aotan`/`plain`, `kasu` chaff), stable IDs, flower names, and SVG motif descriptors.
-- **Yaku (`lib/hanafuda/yaku.ts`)**: Pure detector scoring `Goko` (5 brights), `Shiko` (4 dry brights), `Ame-Shiko` (4 brights with Rain Man), `Sanko` (3 dry brights), `Hanami-zake` (Curtain + Sake Cup), `Tsukimi-zake` (Moon + Sake Cup), `Inoshikacho` (Boar + Deer + Butterflies + bonus tane), `Tane` (5+ animals), `Akatan` (3 poetry ribbons), `Aotan` (3 blue ribbons), `Tan` (5+ ribbons), and `Kasu` (10+ chaff, with Sake Cup counting as tane + kasu).
-- **Engine (`lib/hanafuda/engine.ts`)**: Seeded PRNG (`mulberry32`), 3-round default match, hand/field/stock dealing (including immediate 4-of-a-kind / 4-pairs checks), hand-play matching and stock-draw matching phases, yaku detection, `"Koi-koi"` vs `"Shobu"` decision, double score on 7+ points or opponent Koi-Koi reversal, and a deterministic greedy CPU policy (prioritizes bright/tane/tanzaku captures and calls Shobu when ahead or on high-value yaku).
-
-### 5. Hanafuda Koi-Koi Board & Monthly Log Backs (`app/(site)/(app)/play/hanafuda/page.tsx`, `lib/sound.ts`)
-- **Audio (`lib/sound.ts`)**: Add a soft `shuffle` cue (or reuse/extend `rustle` + `stamp`) within the `-18 dB` ceiling, triggered only after user gesture when the site sound toggle is on.
-- **Board (`app/(site)/(app)/play/hanafuda/`)**: Playable table with CPU hand, field cards, stock pile, captured piles by category, drag-to-match plus tap-to-select and keyboard arrow/Enter matching, `ViewTransition` wrappers on card movements, red hanko stamp overlay and brush-stroke `"Koi-koi?"` modal/banner with `aria-live="polite"` text, seed/new-game controls, and a **Monthly Shipped Log** card-back inspector that flips any month's card to show what shipped that month from `content/yearly-log.json`. Linked prominently from `/play`.
-
-## Task Graph
-
-| Sequence | Title | Depends on | QA | Summary |
+| Sequence | Title | Depends on | QA | Interfaces |
 | --- | --- | --- | --- | --- |
-| 1 | Shared yearly shipped digest | — | `skip` | Build `scripts/yearly-log.ts`, `lib/yearly-log.ts`, and committed `content/yearly-log.json` with unit tests. |
-| 2 | Daruma project board and Kuyo shelf | 1 | `required` | Extend `content/site.ts` projects, implement `lib/daruma.ts` and `components/daruma-board.tsx` on `/projects` with `?kuyo=1` ink-fire toggle and Chromium E2E. |
-| 3 | Making-of Emaki handscroll | 1 | `required` | Build `scripts/making-of-index.ts`, `content/making-of.json`, `lib/making-of.ts`, and `/making-of` horizontal scroll with 4 ink figures, `<ol>` fallback, and Chromium E2E. |
-| 4 | Hanafuda Koi-Koi engine and yaku | 1 | `skip` | Implement 48-card deck, 12 yaku detectors, seeded Koi-Koi reducer, and greedy CPU in `lib/hanafuda/*` with table-driven unit tests. |
-| 5 | Hanafuda Koi-Koi board and monthly backs | 1, 4 | `required` | Build `/play/hanafuda` SVG deck, drag/tap/keyboard play, View Transitions, opt-in shuffle sound, hanko/`"Koi-koi?"` live announcements, monthly card-back log flip, and Chromium E2E. |
+| 1 | Making-of Emaki run-history models and shipped scenes | — | `required` | `lib/making-of.ts`; `lib/making-of.test.ts`; `scripts/making-of-index.ts`; `scripts/making-of-index.test.ts`; `content/making-of.json`; `app/(site)/(app)/making-of/_components/emaki-scroll.tsx`; `app/(site)/(app)/making-of/making-of.css`; `e2e/making-of.test.ts` |
+| 2 | Hanafuda mobile viewport Koi-koi and round prompts | — | `required` | `app/(site)/(app)/play/hanafuda/_components/hanafuda-board.tsx`; `app/(site)/(app)/play/hanafuda/hanafuda.css`; `e2e/hanafuda.test.ts` |
+| 3 | Truthful Daruma project states and honest unfinished shelf | — | `required` | `content/site.ts`; `content/yearly-log.json`; `lib/daruma.ts`; `lib/daruma.test.ts`; `components/daruma-board.tsx`; `app/(site)/(app)/projects/daruma.css`; `e2e/daruma.test.ts` |
+
+## Ground-Truth Plan & Run History (`plan_manager` DB)
+
+Verified from `plan_manager` (`plans` and `runs.profile_flags --model`) for `repo_id = 'otohime'` (the software engineer in Task 1 should also re-query `plan_manager` at execution time in case another plan transitions to `done`):
+
+- **Shipped plans (34 plans: `pm-293` + 33 `done` plans)**:
+  - `pm-293`: `research: "claude-sonnet-5-5"`, `product_owner: "gemini-4-argon-medium"`, `software_engineer: "gemini-4-argon-high"`, `quality_engineer: "gemini-4-argon-medium"`
+  - `pm-272`: `research: null`, `product_owner: null`, `software_engineer: "gpt-6.1-sol"`, `quality_engineer: "gpt-6.1-sol"`
+  - `pm-270`: `research: "claude-fable-5-1"`, `product_owner: "gemini-4-argon-high"`, `software_engineer: "gpt-6.1-sol"`, `quality_engineer: "claude-sonnet-5-5"`
+  - `pm-264`: `research: "claude-sonnet-5-5"`, `product_owner: "gpt-6.1-sol"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "gpt-6-sol"`
+  - `pm-259`: `research: "claude-sonnet-5-5"`, `product_owner: "gpt-6.1-sol"`, `software_engineer: "gpt-6.1-sol"`, `quality_engineer: "gpt-6-sol"`
+  - `pm-258`: `research: "claude-fable-5-1"`, `product_owner: "gpt-6.1-sol"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "gpt-6.1-sol"`
+  - `pm-256`: `research: "claude-sonnet-5-5"`, `product_owner: "gpt-6-luna"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-255`: `research: null`, `product_owner: "claude-haiku-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-sonnet-5-5"`
+  - `pm-251`: `research: "claude-opus-5-5"`, `product_owner: "claude-sonnet-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-sonnet-5-5"`
+  - `pm-250`: `research: "claude-sonnet-5-5"`, `product_owner: "claude-sonnet-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-sonnet-5-5"`
+  - `pm-249`: `research: "claude-sonnet-5-5"`, `product_owner: "claude-sonnet-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-sonnet-5-5"`
+  - `pm-247`: `research: "claude-sonnet-5-5"`, `product_owner: "gpt-6-sol"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "gpt-6-luna"`
+  - `pm-243`: `research: "claude-opus-5-5"`, `product_owner: "claude-haiku-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-sonnet-5-5"`
+  - `pm-241`: `research: "claude-fable-5-1"`, `product_owner: "gpt-6.1-sol"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-216`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "gemini-3.8-flash-high"`, `quality_engineer: "gemini-3.8-flash-high"`
+  - `pm-214`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-213`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-206`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-204`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-203`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-202`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-199`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-198`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-197`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-196`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-195`: `research: "claude-fable-5-1"`, `product_owner: "claude-sonnet-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-191`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-190`: `research: "claude-fable-5-1"`, `product_owner: "claude-sonnet-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-189`: `research: "claude-fable-5-1"`, `product_owner: "claude-sonnet-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-188`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-186`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-184`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-opus-5-5"`, `quality_engineer: "claude-opus-5-5"`
+  - `pm-181`: `research: "claude-fable-5-1"`, `product_owner: "claude-opus-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-sonnet-5-5"`
+  - `pm-180`: `research: "claude-fable-5-1"`, `product_owner: "claude-sonnet-5-5"`, `software_engineer: "claude-sonnet-5-5"`, `quality_engineer: "claude-sonnet-5-5"`
+- **Unshipped plans in git history (19 plans — excluded from shipped Emaki scenes)**:
+  - `paused`: `pm-288`, `pm-287`, `pm-286`, `pm-285`, `pm-282`, `pm-279`, `pm-276`, `pm-275`, `pm-273`, `pm-271`, `pm-269`, `pm-257`
+  - `abandoned`: `pm-277`, `pm-260`, `pm-248`, `pm-242`, `pm-240`, `pm-171`
+  - `executing`: `pm-268` (unless `done` at Task 1 build time)
 
 ## Prerequisites and Delivery Evidence
 
-- **External dependencies**: None (`prerequisites: []`, `external_dependencies_reviewed: true`). Every script, data snapshot, SVG component, and test is self-contained inside this repository and uses the existing locked dependencies (`next@16.4.2`, `react@19.3.0`, `playwright-core@1.64.0`).
-- **Verification discipline**: Gate verification runs in a fresh checkout where `node_modules` may be absent and `TMPDIR` may exceed Chrome's Unix socket path limit. Every task verification command ensures `test -d node_modules || npm ci` and normalizes `TMPDIR=/tmp`, and restores `content/history.json` if touched by a build.
-
-## Decision Log
-
-- **Single-plan DAG (`scope_adjusted`)**: Kept all three experiments and the shared digest on `pm-293` rather than splitting into three plans, matching current platform rules.
-- **Shared yearly digest (`approach_chosen`)**: Added `content/yearly-log.json` and `scripts/yearly-log.ts` because `content/history.json` is capped at 200 commits and cannot span 12 calendar months.
-- **On-demand Daruma Kuyo & injected clock (`approach_chosen`)**: Made the December ink-fire ceremony and 90-day abandonment threshold testable on demand via `?kuyo=1`, a UI toggle, and an injectable clock.
-- **Reviewed public Making-of snapshot (`approach_chosen`)**: Used a committed `content/making-of.json` snapshot validated by `scripts/making-of-index.ts` so CI and production builds never depend on internal cluster APIs.
-- **Two-stage Hanafuda delivery (`approach_chosen`)**: Separated the pure seeded Koi-Koi reducer/yaku/CPU engine (Task 4) from the interactive SVG board, audio, View Transitions, and monthly card backs (Task 5).
+- **External dependencies**: None (`prerequisites: []`, `external_dependencies_reviewed: true`). All snapshots, scripts, components, and tests are repository-owned.
+- **Verification discipline**: Every task verification command runs `(test -d node_modules || npm ci)` and normalizes `TMPDIR=/tmp`, restoring `content/history.json` after `scripts/e2e.mjs` runs.
