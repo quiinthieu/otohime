@@ -1,0 +1,86 @@
+{
+  "task": "pm-268/t-1601",
+  "run": "run-9213",
+  "baseline_sha": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+  "profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "worker": "avietidol-z490",
+  "node": "v22.23.3",
+  "next": "16.4.2",
+  "install": "npm ci with lifecycle scripts",
+  "build_id": "pbzK1M8xwejmsab1lcxOG",
+  "selected_source_sha256": {
+    "package.json": "9ae87352c2312569ee159fa30a07f901a1ad62d53bc62bd9ddd927a8b110a692",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "tsconfig.json": "31902b54fba14db30d5a63026588796ddd27599ac76e6660e2c0b3d3ec69ba2d",
+    "scripts/e2e.mjs": "5144b88ea2938181307b1eb735bb5467879c37f8d87c1236a5e8b061a4c966f9",
+    "scripts/e2e-build.test.mjs": "15ccc4fe835ca172a0b48ad88753134444c3266d89760cd1c39548d611a4a270",
+    "e2e/riso-headings.test.ts": "981cc27b27d11482a6f60d867eb66ce7373cd1692f2a342932b59514ddb0b369",
+    "e2e/console-errors.ts": "51a51d1b12f76a07e2bf9b4e3db2118ae414a57325557870b6517d0dd7b4c7ec",
+    "lib/riso-heading.ts": "5c8d025338b6526b2d0073eed306b269e9d80b7ba56355e096ad65ec2082823b",
+    "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+    "components/riso-heading.css": "fd64c5d5386762695074995bf4a66c8a9ec50e784120276da223439f3edad1cd",
+    "components/figures.tsx": "2ecbab901109fb81c9ba9ae254e6c71e765fa62807a58049dab514da335a39ff",
+    "components/stamp-heading.tsx": "275b7a55535adf2c99fa752c16c0b719f0f7da5079c94c7388ad6e473fa04150",
+    "components/stamp-island.tsx": "b65dc9ea1610c33eeb7269025db3cdd125b02cea0befd27e1736c19700df0966",
+    "components/stamp-board.tsx": "9364ccb4ba911a4fdfe4a36c940b9b922b9ab134acd4bc20af672b728a3080dc",
+    "components/handheld.tsx": "cf961ff07549140b7de2ec93985bf7363d7f82d451ae7454528b3a108ce4f1a6",
+    "components/print-run-switch.tsx": "17fe57314a79a3342fe51998927495e90d6ad8b9e55a985611def70d677ddeae",
+    "app/(site)/layout.tsx": "d585cb4de2ec3e9ea8192f25b618c0fcc309386f794901f9bf7943cde3ff2012",
+    "app/(site)/(home)/page.tsx": "81c1cd396a3aae88bdf9efcd174a2289643667bfd5ed59564f37748de19aa98b",
+    "app/(site)/(app)/work/page.tsx": "5c2955d9c602ab688590da2a231d420c99d1fa49dd3a32bee371c3cd4c9960e9",
+    "app/(site)/(app)/play/page.tsx": "cc549b2557a435f8cd6343744eb253ba89a5b2049b0e1a0de63b4c07b15ee1e3",
+    "app/(site)/(app)/notes/page.tsx": "53a54233b8422fe0a640277b3854ffa201706f8ae9d8006b138a83bfcb499c88"
+  },
+  "selected_executable_fingerprint": "21c681c9a5e72796ba3c08a6f82cc196141439d517a48435fe87a5df9aed09a5",
+  "checks": {
+    "feature": {
+      "exit": 0,
+      "passed": 5
+    },
+    "unit": {
+      "exit": 0,
+      "passed": 2510,
+      "skipped": 0
+    },
+    "typecheck": {
+      "exit": 0
+    },
+    "lint": {
+      "exit": 0,
+      "existing_warnings": 10
+    },
+    "browser": {
+      "exit": 0,
+      "passed": 6,
+      "fresh_production_build": true
+    },
+    "runner_regressions": {
+      "exit": 0,
+      "passed": 3,
+      "negative_control": "Remove actual cleanup line; stale-output compiler refuses before server/suite"
+    }
+  },
+  "boundaries": {
+    "real": "Locked Next/React production build, vendored assets, embedded Postgres/migrations, local next start and Chrome; actual observer/transition/stamp behavior. Edge-string fixture is actual component SSR/CSS, without hydration.",
+    "fake": "Runner lifecycle regression uses stand-in npm compiler/server and Postgres only."
+  },
+  "history": {
+    "local_production_runs": 3,
+    "local_production_failed": 0,
+    "local_production_completed": 3,
+    "final_output": "complete",
+    "remote": "Not inspected under SWE stop-at-push contract; no complete remote history claim."
+  },
+  "claims": {
+    "integration_deployed": "unverified; plan-manager owns post-push CI/QA",
+    "waiting_for_capacity": false,
+    "execution_demonstrated": "local production browser only",
+    "product_delivered": "independent deployed acceptance pending"
+  },
+  "rebase_retries": 1,
+  "verified_parent_sha": "6809e82cd0bb15a2a43815e662183d19c63968f5",
+  "rebase_note": "One clean rebase over QA-report-only commit 6809e82; all five contract commands rerun, including a fresh production build."
+}
