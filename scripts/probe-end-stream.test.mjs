@@ -23,7 +23,10 @@ before(async () => {
     if (req.url === "/dashboard") {
       const timer = setTimeout(() => res.end('<script>document.querySelector("main").innerHTML = "<h1>Hello, stream</h1>"</script>'), 1500);
       res.on("close", () => clearTimeout(timer));
-    } else res.end('<h1 style="display:none">Hidden heading</h1><script>document.querySelector("main").insertAdjacentHTML("beforeend", "<h1>   </h1><h1 hidden>Hidden</h1>")</script>');
+    } else {
+      const headings = '<h1>   </h1><h1 hidden>Hidden</h1><h1><span hidden>Hidden text only</span></h1><h1 style="opacity:0">Transparent heading</h1><h1 style="visibility:hidden">Invisible heading</h1>';
+      res.end(`<script>document.querySelector("main").insertAdjacentHTML("beforeend", ${JSON.stringify(headings)})</script>`);
+    }
   });
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   base = `http://127.0.0.1:${server.address().port}`;
@@ -54,6 +57,9 @@ test("missing, empty and hidden main headings fail at the 10s bound (negative co
   const page = await browser.newPage();
   try {
     await page.goto(`${base}/projects`);
+    assert.equal(await page.locator("main h1").count(), 5, "negative control must render all empty/hidden variants");
+    assert.equal(await page.locator("main h1").nth(2).innerText(), "", "hidden descendants supply no rendered text");
+    assert.equal(await page.locator("main h1").nth(3).evaluate((el) => getComputedStyle(el).opacity), "0");
     const start = performance.now();
     await assert.rejects(observeMainHeading(page), /Timeout 10000ms exceeded/);
     const elapsed = performance.now() - start;

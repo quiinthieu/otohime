@@ -123,9 +123,12 @@ jobs:
       - name: Real CPU camera and privacy verifier
         timeout-minutes: 5
         run: |
+          set -o pipefail
+          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true; exit "$status"' EXIT
           status=0
           node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
-          node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log"
+          node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true
+          exit "$status"
       - run: npm run db:migrate
       # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
       - name: E2E against next start
@@ -152,7 +155,8 @@ jobs:
           }
           status=0
           bash scripts/probe-motion-signed-in.sh 2>&1 | tee -a "$RUNNER_TEMP/motion-probe.log" || status=$?
-          node scripts/ci-probe-annotate.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log"
+          node scripts/ci-probe-annotate.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log" || true
+          exit "$status"
       - name: Footer walk
         timeout-minutes: 8
         run: |
@@ -165,7 +169,8 @@ jobs:
           }
           status=0
           EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-walk.log" || status=$?
-          node scripts/ci-probe-annotate.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log"
+          node scripts/ci-probe-annotate.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log" || true
+          exit "$status"
       - name: Footer Chromium probe
         timeout-minutes: 8
         run: |
@@ -178,7 +183,8 @@ jobs:
           }
           status=0
           EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-probe.log" || status=$?
-          node scripts/ci-probe-annotate.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log"
+          node scripts/ci-probe-annotate.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true
+          exit "$status"
 
   preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository

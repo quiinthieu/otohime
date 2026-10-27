@@ -243,7 +243,7 @@ function gateBody(name) {
 
 // Execute the actual YAML shell, not a copy of its implementation. Only external
 // server/readiness/probe behavior is replaced; Node, streams, tee and reporters are real.
-function runGate(name, log, scenario, mutate = (s) => s) {
+function runGate(name, log, scenario, mutate = (s) => s, { status = 43, serverLog = true } = {}) {
   const work = mkdtempSync(join(tmpdir(), "browser-gate-ci-"));
   try {
     mkdirSync(join(work, "scripts"));
@@ -256,15 +256,19 @@ function runGate(name, log, scenario, mutate = (s) => s) {
       import { appendFileSync } from 'node:fs';
       appendFileSync('probe-called', 'called\\n');
       process.stdout.write('workflow child stdout\\n', () => {
+        if (process.env.FIXTURE_ASSERTION === '1') {
+          console.log('not ok - fixture assertion: 50%, failed\\r\\nprobe: 0 ok, 1 failed');
+        }
         process.stderr.write('workflow child stderr: crashed before reporter\\n', () => {
           process.exitCode = Number(process.env.FIXTURE_STATUS);
         });
       });
     `);
+    copyFileSync(join(work, "fixture.mjs"), join(work, "scripts/verify-peep-box-camera.mjs"));
     for (const file of ["probe-motion-signed-in.sh", "walk-end.sh", "probe-end.sh"]) {
       writeFileSync(join(work, "scripts", file), "node fixture.mjs\n");
     }
-    writeFileSync(join(work, "next-start.log"), "existing server diagnostic\n");
+    if (serverLog) writeFileSync(join(work, "next-start.log"), "existing server diagnostic\n");
     // A stale previous log must not become this attempt's diagnostic.
     writeFileSync(join(work, log), "stale-command-diagnostic\n");
     const summary = join(work, "summary.md");
@@ -287,12 +291,45 @@ function runGate(name, log, scenario, mutate = (s) => s) {
     const result = spawnSync("bash", ["-eo", "pipefail", "-c", `${stubs}\n${mutate(gateBody(name))}`], {
       cwd: work, encoding: "utf8", timeout: 10000,
       env: { ...process.env, RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "workflow-fixture-sha", BASE_URL: "http://fixture.invalid",
-        FIXTURE_STATUS: scenario === "success" ? "0" : "43", FIXTURE_STARTUP: scenario === "startup" ? "fail" : "ok" },
+        FIXTURE_STATUS: scenario === "success" ? "0" : String(status), FIXTURE_STARTUP: scenario === "startup" ? "fail" : "ok", FIXTURE_ASSERTION: scenario === "assertion" ? "1" : "0" },
     });
     let calls = "";
     try { calls = readFileSync(join(work, "probe-called"), "utf8"); } catch {}
     return { ...result, report: readFileSync(summary, "utf8"), captured: readFileSync(join(work, log), "utf8"), calls };
   } finally { rmSync(work, { recursive: true, force: true }); }
+}
+
+const nonTapGates = [["Real CPU camera and privacy verifier", "camera-probe.log"], ...browserGates.slice(1)];
+for (const [name, log] of nonTapGates) {
+  test(`${name}: actual workflow preserves exit 7, escaped assertions, counts and missing server logs`, () => {
+    for (const serverLog of [true, false]) {
+      const result = runGate(name, log, "assertion", undefined, { status: 7, serverLog });
+      assert.equal(result.status, 7, result.stderr);
+      assert.equal(result.calls, "called\n");
+      const commands = result.stdout.split("\n").filter((line) => line.startsWith("::error "));
+      assert.ok(commands.length > 0);
+      assert.match(commands.join("\n"), /not ok - fixture assertion: 50%25, failed%0D%0Aprobe: 0 ok, 1 failed/);
+      assert.match(result.report, /not ok - fixture assertion: 50%, failed/);
+      assert.match(result.report, /probe: 0 ok, 1 failed/);
+      assert.match(result.stdout, serverLog ? /existing server diagnostic/ : /next-start.log unavailable/);
+    }
+  });
+
+  test(`${name}: a broken assertion reporter preserves the original exit 7`, () => {
+    const result = runGate(name, log, "assertion", (body) => body.replace("node scripts/ci-probe-annotate.mjs", "node scripts/missing-annotator.mjs"), { status: 7 });
+    assert.equal(result.status, 7, result.stderr);
+    assert.match(result.stderr, /MODULE_NOT_FOUND/);
+    assert.match(result.stdout, /::error .*fixture assertion/);
+    assert.match(result.report, /fixture assertion/);
+  });
+
+  test(`${name}: actual workflow exit 0 emits no annotation or summary`, () => {
+    const result = runGate(name, log, "success");
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.calls, "called\n");
+    assert.doesNotMatch(result.stdout, /::error /);
+    assert.equal(result.report, "");
+  });
 }
 
 for (const [name, log] of browserGates) {

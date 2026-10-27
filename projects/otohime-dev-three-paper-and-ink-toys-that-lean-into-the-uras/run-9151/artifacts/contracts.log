@@ -1,0 +1,285 @@
+TAP version 13
+# Subtest: CI probe annotator preserves a real exit 7 through pipefail, escaping annotation properties and data
+ok 1 - CI probe annotator preserves a real exit 7 through pipefail, escaping annotation properties and data
+  ---
+  duration_ms: 152.299625
+  ...
+# Subtest: CI probe annotator leaves a real successful child green and emits no failure diagnostics
+ok 2 - CI probe annotator leaves a real successful child green and emits no failure diagnostics
+  ---
+  duration_ms: 109.488542
+  ...
+# Subtest: CI probe annotator surfaces a crash tail and a missing next-start.log without masking exit 7
+ok 3 - CI probe annotator surfaces a crash tail and a missing next-start.log without masking exit 7
+  ---
+  duration_ms: 112.109542
+  ...
+# Subtest: CI probe annotator bounds both diagnostic channels and escapes summary HTML and code fences
+ok 4 - CI probe annotator bounds both diagnostic channels and escapes summary HTML and code fences
+  ---
+  duration_ms: 109.858167
+  ...
+# Subtest: CI probe annotator emits annotations without GITHUB_STEP_SUMMARY
+ok 5 - CI probe annotator emits annotations without GITHUB_STEP_SUMMARY
+  ---
+  duration_ms: 108.31275
+  ...
+# Subtest: CI camera's nested TAP failure survives later successful output beyond the crash-tail bound
+ok 6 - CI camera's nested TAP failure survives later successful output beyond the crash-tail bound
+  ---
+  duration_ms: 126.434834
+  ...
+# Subtest: CI probe annotation retains walk and nested TAP counts after truncating a long assertion
+ok 7 - CI probe annotation retains walk and nested TAP counts after truncating a long assertion
+  ---
+  duration_ms: 142.597417
+  ...
+# Subtest: all five task gates reject silent exit-zero output (vacuity negative control)
+ok 8 - all five task gates reject silent exit-zero output (vacuity negative control)
+  ---
+  duration_ms: 0.624083
+  ...
+# Subtest: task TAP receipts require named assertions and passing counts, rejecting renamed or skipped controls
+ok 9 - task TAP receipts require named assertions and passing counts, rejecting renamed or skipped controls
+  ---
+  duration_ms: 1.229208
+  ...
+# Subtest: footer receipts require real assertion totals, the 403 exit and the browser negative control
+ok 10 - footer receipts require real assertion totals, the 403 exit and the browser negative control
+  ---
+  duration_ms: 0.585583
+  ...
+# Subtest: static receipts require both tool invocations and generated routes; closure requires real named controls
+ok 11 - static receipts require both tool invocations and generated routes; closure requires real named controls
+  ---
+  duration_ms: 4.284791
+  ...
+# Subtest: push to main ignores report-only paths
+ok 12 - push to main ignores report-only paths
+  ---
+  duration_ms: 1.161125
+  ...
+# Subtest: report-only pushes skip, code pushes still run
+ok 13 - report-only pushes skip, code pushes still run
+  ---
+  duration_ms: 0.274542
+  ...
+# Subtest: pull_request has no path filter
+ok 14 - pull_request has no path filter
+  ---
+  duration_ms: 0.673625
+  ...
+# Subtest: manual recovery runs the same checks and production gates as a main push
+ok 15 - manual recovery runs the same checks and production gates as a main push
+  ---
+  duration_ms: 0.384583
+  ...
+# Subtest: checks and production run on ubuntu-24.04
+ok 16 - checks and production run on ubuntu-24.04
+  ---
+  duration_ms: 0.22775
+  ...
+# Subtest: each main push and manual recovery keeps its checks outside a shared workflow queue
+ok 17 - each main push and manual recovery keeps its checks outside a shared workflow queue
+  ---
+  duration_ms: 0.239166
+  ...
+# Subtest: PR checks and previews cancel stale jobs in separate PR-specific groups
+ok 18 - PR checks and previews cancel stale jobs in separate PR-specific groups
+  ---
+  duration_ms: 0.391792
+  ...
+# Subtest: only production deploys serialize after successful checks, without cancelling the running deploy
+ok 19 - only production deploys serialize after successful checks, without cancelling the running deploy
+  ---
+  duration_ms: 0.510792
+  ...
+# Subtest: production proves the deployed sha, terminal and press after the deploy
+ok 20 - production proves the deployed sha, terminal and press after the deploy
+  ---
+  duration_ms: 0.507083
+  ...
+# Subtest: verify-deploy treats exactly the push paths-ignore as report-only
+ok 21 - verify-deploy treats exactly the push paths-ignore as report-only
+  ---
+  duration_ms: 0.814875
+  ...
+# Subtest: checks uses measured 25m job and 12m E2E budgets
+ok 22 - checks uses measured 25m job and 12m E2E budgets
+  ---
+  duration_ms: 0.270459
+  ...
+# Subtest: all four non-TAP probe steps annotate the captured pipefail status
+ok 23 - all four non-TAP probe steps annotate the captured pipefail status
+  ---
+  duration_ms: 0.27375
+  ...
+# Subtest: signed-in motion normalizes unset, empty and long TMPDIR before mktemp
+ok 24 - signed-in motion normalizes unset, empty and long TMPDIR before mktemp
+  ---
+  duration_ms: 14.713416
+  ...
+# Subtest: Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+ok 25 - Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+  ---
+  duration_ms: 399.561041
+  ...
+# Subtest: Real CPU camera and privacy verifier: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+ok 26 - Real CPU camera and privacy verifier: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+  ---
+  duration_ms: 377.463167
+  ...
+# Subtest: Real CPU camera and privacy verifier: a broken assertion reporter preserves the original exit 7
+ok 27 - Real CPU camera and privacy verifier: a broken assertion reporter preserves the original exit 7
+  ---
+  duration_ms: 192.310083
+  ...
+# Subtest: Real CPU camera and privacy verifier: actual workflow exit 0 emits no annotation or summary
+ok 28 - Real CPU camera and privacy verifier: actual workflow exit 0 emits no annotation or summary
+  ---
+  duration_ms: 189.558208
+  ...
+# Subtest: Motion probe, signed in: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+ok 29 - Motion probe, signed in: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+  ---
+  duration_ms: 330.862458
+  ...
+# Subtest: Motion probe, signed in: a broken assertion reporter preserves the original exit 7
+ok 30 - Motion probe, signed in: a broken assertion reporter preserves the original exit 7
+  ---
+  duration_ms: 159.215
+  ...
+# Subtest: Motion probe, signed in: actual workflow exit 0 emits no annotation or summary
+ok 31 - Motion probe, signed in: actual workflow exit 0 emits no annotation or summary
+  ---
+  duration_ms: 227.114667
+  ...
+# Subtest: Footer walk: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+ok 32 - Footer walk: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+  ---
+  duration_ms: 390.960708
+  ...
+# Subtest: Footer walk: a broken assertion reporter preserves the original exit 7
+ok 33 - Footer walk: a broken assertion reporter preserves the original exit 7
+  ---
+  duration_ms: 167.534333
+  ...
+# Subtest: Footer walk: actual workflow exit 0 emits no annotation or summary
+ok 34 - Footer walk: actual workflow exit 0 emits no annotation or summary
+  ---
+  duration_ms: 165.41275
+  ...
+# Subtest: Footer Chromium probe: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+ok 35 - Footer Chromium probe: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+  ---
+  duration_ms: 439.613584
+  ...
+# Subtest: Footer Chromium probe: a broken assertion reporter preserves the original exit 7
+ok 36 - Footer Chromium probe: a broken assertion reporter preserves the original exit 7
+  ---
+  duration_ms: 192.48775
+  ...
+# Subtest: Footer Chromium probe: actual workflow exit 0 emits no annotation or summary
+ok 37 - Footer Chromium probe: actual workflow exit 0 emits no annotation or summary
+  ---
+  duration_ms: 185.736583
+  ...
+# Subtest: E2E against next start: real workflow captures combined command failure and identity, preserving exit 43
+ok 38 - E2E against next start: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 115.7645
+  ...
+# Subtest: E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 39 - E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 62.290459
+  ...
+# Subtest: E2E against next start: successful workflow emits no failure annotation or summary
+ok 40 - E2E against next start: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 108.670625
+  ...
+# Subtest: Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43
+ok 41 - Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 162.423125
+  ...
+# Subtest: Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 42 - Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 61.441291
+  ...
+# Subtest: Motion probe, signed in: successful workflow emits no failure annotation or summary
+ok 43 - Motion probe, signed in: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 158.671375
+  ...
+# Subtest: Footer walk: real workflow captures combined command failure and identity, preserving exit 43
+ok 44 - Footer walk: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 161.986417
+  ...
+# Subtest: Footer walk: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 45 - Footer walk: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 61.813
+  ...
+# Subtest: Footer walk: successful workflow emits no failure annotation or summary
+ok 46 - Footer walk: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 157.744708
+  ...
+# Subtest: Footer Chromium probe: real workflow captures combined command failure and identity, preserving exit 43
+ok 47 - Footer Chromium probe: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 160.343333
+  ...
+# Subtest: Footer Chromium probe: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 48 - Footer Chromium probe: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 61.336708
+  ...
+# Subtest: Footer Chromium probe: successful workflow emits no failure annotation or summary
+ok 49 - Footer Chromium probe: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 166.614916
+  ...
+# Subtest: wiring negative control: removing the EXIT fallback makes a startup crash opaque
+ok 50 - wiring negative control: removing the EXIT fallback makes a startup crash opaque
+  ---
+  duration_ms: 10.085208
+  ...
+# Subtest: reporter failure cannot replace the original workflow command exit
+ok 51 - reporter failure cannot replace the original workflow command exit
+  ---
+  duration_ms: 109.41275
+  ...
+# Subtest: browser fallbacks keep the existing gate order, probe budgets and assertion reporter
+ok 52 - browser fallbacks keep the existing gate order, probe budgets and assertion reporter
+  ---
+  duration_ms: 0.307708
+  ...
+# Subtest: Footer 403 exit calls the heading observer after navigation before reading main h1
+ok 53 - Footer 403 exit calls the heading observer after navigation before reading main h1
+  ---
+  duration_ms: 641.449292
+  ...
+# Subtest: streamed /dashboard heading arriving after 1.5s resolves the real observer
+ok 54 - streamed /dashboard heading arriving after 1.5s resolves the real observer
+  ---
+  duration_ms: 1820.010666
+  ...
+# Subtest: missing, empty and hidden main headings fail at the 10s bound (negative control)
+ok 55 - missing, empty and hidden main headings fail at the 10s bound (negative control)
+  ---
+  duration_ms: 10257.683208
+  ...
+1..55
+# tests 55
+# suites 0
+# pass 55
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13098.724334

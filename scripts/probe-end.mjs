@@ -16,7 +16,7 @@ const pg = rootRequire("pg");
 // Wait for rendered content, then leave the existing text/layout/error assertions to judge it.
 async function observeMainHeading(page) {
   const heading = await page.waitForFunction(() => [...document.querySelectorAll("main h1")].some((el) =>
-    el.textContent?.trim() && (typeof el.checkVisibility === "function" ? el.checkVisibility() : el.offsetParent !== null)),
+    el.innerText?.trim() && (typeof el.checkVisibility === "function" ? el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }) : el.offsetParent !== null)),
   null, { timeout: 10_000 });
   await heading.dispose();
 }

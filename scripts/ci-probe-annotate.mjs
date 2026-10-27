@@ -23,16 +23,19 @@ if (!step || !log || !/^\d+$/.test(rawStatus ?? "") || status > 255) {
   if (status !== 0) {
     const output = read(log, `${log} unavailable`);
     // Camera's wrapper also forwards nested TAP; retain its failed test name even if later checks pass.
-    const assertions = output.split("\n").filter((line) => /^\s*(?:#\s*)?(?:not ok(?: \d+)? -|probe:)/.test(line)).join("\n");
-    const diagnostic = assertions || tail(output, 80, 8000);
+    const lines = output.split("\n");
+    const assertions = lines.filter((line) => /^\s*(?:#\s*)?not ok(?: \d+)? -/.test(line)).join("\n");
+    const counts = tail(lines.filter((line) => /^\s*(?:#\s*)?(?:(?:probe|walk):|(?:tests|pass|fail|cancelled|skipped|todo) \d+\s*$)/.test(line)).join("\n"), 20, 500);
+    // Reserve space for counts even when one assertion alone exceeds the public annotation budget.
+    const diagnostic = (budget) => [clip(assertions || tail(output, 80, 8000), budget - 600), counts].filter(Boolean).join("\n");
     const server = tail(read(join(process.env.RUNNER_TEMP || ".", "next-start.log"), "next-start.log unavailable"), 80, 8000);
     const context = `Commit ${process.env.GITHUB_SHA || "unknown"}; probe exit ${status}`;
-    console.log(`::error title=${escapeProperty(step)}::${escapeData(`${context}\n${clip(diagnostic, 3000)}\nnext start, last 80 lines (bounded):\n${tail(server, 80, 2000)}`)}`);
+    console.log(`::error title=${escapeProperty(step)}::${escapeData(`${context}\n${diagnostic(3000)}\nnext start, last 80 lines (bounded):\n${tail(server, 80, 2000)}`)}`);
     if (process.env.GITHUB_STEP_SUMMARY) {
       try {
         appendFileSync(process.env.GITHUB_STEP_SUMMARY,
           `## ${markdown(clip(step, 200)).replace(/[\r\n]/g, " ")} failure\n\n${markdown(context)}\n\n` +
-          `\`\`\`\n${markdown(clip(diagnostic, 8000))}\n\`\`\`\n\n### next start, last 80 lines (bounded)\n\n\`\`\`\n${markdown(server)}\n\`\`\`\n`);
+          `\`\`\`\n${markdown(diagnostic(8000))}\n\`\`\`\n\n### next start, last 80 lines (bounded)\n\n\`\`\`\n${markdown(server)}\n\`\`\`\n`);
       } catch (error) { console.error(`CI probe summary unavailable: ${error.message}`); }
     }
   }
