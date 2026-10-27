@@ -1,0 +1,22 @@
+ok - keyboard: the box starts shut
+ok - keyboard: the replay is hidden until the box opens
+ok - keyboard: Enter opens the box
+ok - keyboard: labelled a changelog replay, not a rebuilt site
+ok - keyboard: one slider with its accessible name
+ok - keyboard: 200 positions
+ok - keyboard: every shown sha exists in the repository (0 unknown)
+ok - keyboard: every position matches git show (sha, UTC committer date, subject): 0 mismatches
+ok - keyboard: 200 distinct commits on 200 positions
+ok - keyboard: data-age and the computed paper/ink/shadow change at every step (0 did not)
+ok - keyboard: the paper colour never yellows going forward in time (0 steps did)
+ok - keyboard: the newest leaf is fresh paper (rgb(242, 239, 231))
+ok - keyboard: the oldest leaf is fully yellowed (rgb(214, 186, 122))
+ok - touch: a tap opens the box
+ok - touch: a tap at the scrubber's left end goes back (199 -> 0, age 1)
+ok - reduced motion: no smoke on opening (0)
+ok - reduce: the box opens
+ok - no preference (control): smoke rises on opening (1)
+ok - no preference: the smoke clears within two seconds
+ok - no-preference: the box opens
+ok - no page errors ()
+PASS

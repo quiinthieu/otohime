@@ -1,0 +1,13 @@
+ok - keyboard: the box starts shut
+ok - keyboard: the replay is hidden until the box opens
+ok - keyboard: Enter opens the box
+ok - keyboard: labelled a changelog replay, not a rebuilt site
+ok - empty: no scrubber
+ok - empty: the empty box
+ok - reduced motion: no smoke on opening (0)
+ok - reduce: the box opens
+ok - no preference (control): smoke rises on opening (1)
+ok - no preference: the smoke clears within two seconds
+ok - no-preference: the box opens
+ok - no page errors ()
+PASS

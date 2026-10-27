@@ -1,0 +1,21 @@
+ok - keyboard: the box starts shut
+ok - keyboard: the replay is hidden until the box opens
+ok - keyboard: Enter opens the box
+ok - keyboard: labelled a changelog replay, not a rebuilt site
+not ok - keyboard: one slider with its accessible name
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.getAttribute: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('slider', { name: 'Scrub back through the changelog' })
+
+    at /data/build-worker/leases/f75357ae-9dd3-40f1-8593-f7849280c0a2-aec352d014ea1a43d641aae81e0837c0/work/otohime/projects/otohime-dev-lean-into-the-name-otohime-is-the-sea-princess-o/t-1561/qa_run-9206/probe.mjs:53:37 {
+  log: [
+    "  - waiting for getByRole('slider', { name: 'Scrub back through the changelog' })"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.3
