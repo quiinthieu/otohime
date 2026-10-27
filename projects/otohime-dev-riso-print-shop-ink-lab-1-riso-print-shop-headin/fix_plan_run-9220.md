@@ -1,0 +1,9 @@
+# pm-268/t-1601 fix plan — run-9220
+
+Cause: **code** in the delivered browser contract, not a failed runner. The public user path works after hydration on the deployed feature bytes, while the committed contract reproducibly false-fails twice when run against the public HTTPS origin.
+
+1. At `e2e/console-errors.ts:20-21`, retain the exact disabled-ghost URL, 404 GET/fetch response, console location and zero-argument matching, but accept Chrome's valid reason-phrase variants `404 (Not Found)` and `404 ()`. Add a focused negative control proving an unrelated 404 and an application `console.error` with the same text still fail. The current exact string is too narrow for the public HTTPS response.
+2. At `e2e/riso-headings.test.ts:173`, wait for a real hydration signal before clicking Pocket A (for example the mounted `.riso-text[data-riso-state]` marker), then require the `console` view-transition type at line 176. Preserve the separate no-JavaScript settled-heading test. A direct public probe waiting for this marker observed `[["console"]]` and completed Stamp it/Tidy.
+3. Run `npm ci`, all five `t-1601` verification commands, and the corrected browser suite against `https://otohime.dev` after a deployed SHA descends from the new delivery. Trigger a new CI run through the normal pushed commit; do not force-push. Confirm successful checks and production jobs, `/api/health` ancestry, and one independent public negative control. If CI run `40490942824` fails before the fix, read its annotations and raw job output where authorized; do not infer a cause from an in-progress job.
+
+The older repeated `scripts/probe-end-stream.test.mjs:43` CI assertion failures (`40488773079`, `40489507548`) deserve their own bounded investigation if they recur at the new executable fingerprint; the same script also passed in run `40486761224` and passed locally in this QA run. They do not explain the two deterministic public E2E failures above.
