@@ -1,0 +1,68 @@
+[
+  {
+    "name": "preference",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test ghosts/pref.test.ts ghosts/client.test.ts",
+    "exit": 0,
+    "seconds": 0.19
+  },
+  {
+    "name": "project",
+    "cmd": "npm test",
+    "exit": 0,
+    "seconds": 44.51
+  },
+  {
+    "name": "lint",
+    "cmd": "npm run lint",
+    "exit": 0,
+    "seconds": 16.49
+  },
+  {
+    "name": "build",
+    "cmd": "npm run build",
+    "exit": 0,
+    "seconds": 24.87
+  },
+  {
+    "name": "browser",
+    "cmd": "TMPDIR=/tmp npm run test:ghosts-pref",
+    "exit": 1,
+    "seconds": 49.63
+  },
+  {
+    "name": "browser-isolated",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-name-pattern='same-origin tabs' e2e/ghosts-pref.test.ts",
+    "exit": 0,
+    "tests": 1
+  },
+  {
+    "name": "browser-rerun",
+    "cmd": "TMPDIR=/tmp npm run test:ghosts-pref",
+    "exit": 0,
+    "tests": 4
+  },
+  {
+    "name": "independent",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/t-1609/run-9175/independent.mjs",
+    "exit": 0,
+    "cases": 7
+  },
+  {
+    "name": "public",
+    "cmd": "node projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/t-1609/run-9175/public.mjs",
+    "exit": 0
+  },
+  {
+    "name": "final-project-after-report-only-fast-forward",
+    "cmd": "npm test",
+    "exit": 0,
+    "tests": 2454,
+    "sha": "f4a3d0d3f82ff257f9c981a2551a2a0d3d930d22"
+  },
+  {
+    "name": "final-lint-with-QA-probes",
+    "cmd": "npm run lint",
+    "exit": 0,
+    "warnings": 10
+  }
+]

@@ -1,0 +1,105 @@
+TAP version 13
+# Subtest: pointer policy normalizes, rejects invalid geometry and applies exact time/deadzone boundaries
+ok 1 - pointer policy normalizes, rejects invalid geometry and applies exact time/deadzone boundaries
+  ---
+  duration_ms: 0.810959
+  ...
+# Subtest: server parser rejects malformed, oversize, binary, invalid counts/ids/coordinates
+ok 2 - server parser rejects malformed, oversize, binary, invalid counts/ids/coordinates
+  ---
+  duration_ms: 0.291333
+  ...
+# Subtest: peer history and ripples stay bounded; trails fade at 700ms, tips expire at 6s without changing membership
+ok 3 - peer history and ripples stay bounded; trails fade at 700ms, tips expire at 6s without changing membership
+  ---
+  duration_ms: 0.422208
+  ...
+# Subtest: moves are <=10Hz; a lone visitor click schedules drawing and stops animation after fading
+ok 4 - moves are <=10Hz; a lone visitor click schedules drawing and stops animation after fading
+  ---
+  duration_ms: 0.887542
+  ...
+# Subtest: peer marks restart idle drawing, expire via one timer and bye removes tips
+ok 5 - peer marks restart idle drawing, expire via one timer and bye removes tips
+  ---
+  duration_ms: 0.305083
+  ...
+# Subtest: no actual paint means no ripple counter (negative control)
+ok 6 - no actual paint means no ripple counter (negative control)
+  ---
+  duration_ms: 0.253667
+  ...
+# Subtest: retry failures use exactly three attempts with +1s/+3s delays, then remain gone across toggles
+ok 7 - retry failures use exactly three attempts with +1s/+3s delays, then remain gone across toggles
+  ---
+  duration_ms: 0.631334
+  ...
+# Subtest: full is immediately terminal without retries or drawing
+ok 8 - full is immediately terminal without retries or drawing
+  ---
+  duration_ms: 0.237458
+  ...
+# Subtest: disabled config never opens a socket, and transient fetch failure retries within the same budget
+ok 9 - disabled config never opens a socket, and transient fetch failure retries within the same budget
+  ---
+  duration_ms: 0.415084
+  ...
+# Subtest: initial suppression has zero work; hidden/offline/reduced-motion eligibility cancels active work and stale callbacks
+ok 10 - initial suppression has zero work; hidden/offline/reduced-motion eligibility cancels active work and stale callbacks
+  ---
+  duration_ms: 0.577167
+  ...
+# Subtest: hung config consumes attempts and disposed/aborted config can never connect
+ok 11 - hung config consumes attempts and disposed/aborted config can never connect
+  ---
+  duration_ms: 0.166084
+  ...
+# Subtest: opt-out synchronously clears visuals and rejects already queued socket/frame/timer callbacks
+ok 12 - opt-out synchronously clears visuals and rejects already queued socket/frame/timer callbacks
+  ---
+  duration_ms: 0.253042
+  ...
+# Subtest: suppression cancels retry and handshake deadline even when a scheduler delivers cancelled callbacks
+ok 13 - suppression cancels retry and handshake deadline even when a scheduler delivers cancelled callbacks
+  ---
+  duration_ms: 0.106583
+  ...
+# Subtest: canvas painter draws brush tips, trails and only live ripple arcs
+ok 14 - canvas painter draws brush tips, trails and only live ripple arcs
+  ---
+  duration_ms: 0.190375
+  ...
+# Subtest: both pages mount the neutral idle loader; canvas is decorative, passive and style-isolated
+ok 15 - both pages mount the neutral idle loader; canvas is decorative, passive and style-isolated
+  ---
+  duration_ms: 1.4585
+  ...
+# Subtest: ghost preference parses only hidden and keeps the server snapshot suppressed
+ok 16 - ghost preference parses only hidden and keeps the server snapshot suppressed
+  ---
+  duration_ms: 0.598542
+  ...
+# Subtest: same-tab preference subscribers run synchronously, persist reloads and share one removable listener
+ok 17 - same-tab preference subscribers run synchronously, persist reloads and share one removable listener
+  ---
+  duration_ms: 0.417667
+  ...
+# Subtest: cross-tab preference changes and clear synchronize; unrelated keys and session storage are ignored
+ok 18 - cross-tab preference changes and clear synchronize; unrelated keys and session storage are ignored
+  ---
+  duration_ms: 0.262667
+  ...
+# Subtest: blocked getters, absent storage and failed writes keep a usable in-memory choice
+ok 19 - blocked getters, absent storage and failed writes keep a usable in-memory choice
+  ---
+  duration_ms: 0.306208
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 128.051083

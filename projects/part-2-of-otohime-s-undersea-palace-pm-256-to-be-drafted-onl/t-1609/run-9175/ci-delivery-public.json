@@ -1,0 +1,12 @@
+{
+  "observed_at": "2026-10-27T06:38:15.548639+00:00",
+  "url": "https://github.com/quiinthieu/otohime/actions/runs/40461166952",
+  "sha": "cce131daf5c5648830ffe50a7d756e8adc490d73",
+  "status": "In progress",
+  "checks_job_id": 122045871581,
+  "excerpts": [
+    ">\n\n      <div class=\"col tmp-mt-3 tmp-mr-3 tmp-mr-sm-6 tmp-ml-lg-3\">\n        <span class=\"mb-1 d-block text-small color-fg-muted\">Status</span>\n        <span class=\"h4 color-fg-default\">In progress</span>\n      </div>\n\n      <div class=\"col tmp-mt-3 tmp-mr-3 tmp-mr-sm-6 tmp-ml-lg-3\">\n        <span class=\"mb-1 d-block text-small color-fg-muted\">Total duration</span>\n          <a href=\"/quiinthieu/otohime/actions/runs/40461166952/usage\"\n            class=\"h4 Link--inTextBlock L",
+    "a-should-stream=\"otohime\"\n      data-external-id=\"e019db8d-b120-537f-bf97-3631f27103a8\"\n      data-concluded=\"false\"\n      \n      data-url=\"/quiinthieu/otohime/actions/runs/40461166952/graph/job/checks\"\n      data-action=\"socket:message:action-graph#updateJob\"\n      data-channel=\"eyJjIjoiY2hlY2tfcnVuczoxMjIwNDU4NzE1ODEiLCJ0IjoxNzkzMDgzMDcxfQ==--6818a0c99bbe5b7c8acdfe9b6ea2418c1a79c8c2aa5e7d29b228eaa58e535796\"\n  style=\"font-size: 0\" \n  data-targets=\"action-graph.jobs\"\n  data-j",
+    "g-graph-job\n  class=\"js-socket-channel WorkflowJob position-relative rounded-2 width-full\"\n    data-should-stream=\"otohime\"\n      data-url=\"/quiinthieu/otohime/actions/runs/40461166952/graph/job/production\"\n      data-action=\"socket:message:action-graph#updateJob\"\n      data-channel=\"eyJjIjoid29ya2Zsb3dfam9iOjQwNDYxMTY2OTUyOnByb2R1Y3Rpb24iLCJ0IjoxNzkzMDgzMDcxfQ==--0ec6c5ece03787f8b569903fc4ec212156cf607a5669c7497894e3c093f7333f\"\n  style=\"font-size: 0\" \n  data-targets=\"action-"
+  ]
+}

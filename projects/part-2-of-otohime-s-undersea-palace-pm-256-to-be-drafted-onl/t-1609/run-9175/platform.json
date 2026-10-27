@@ -1,0 +1,532 @@
+{
+  "history": [
+    {
+      "request": {
+        "status": "FAILED",
+        "offset": 0,
+        "limit": 5
+      },
+      "tasks": [
+        {
+          "id": "eb6f0b6f-7283-4981-aa50-c7efe5235177",
+          "status": "FAILED",
+          "error": "build_failed: exit 2",
+          "completedAt": "2026-10-27T06:25:44Z",
+          "title": "linego forge run f31bc71a-70fb-451c-bd6c-01a8881e1e0a",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "workerId": "viet-mac"
+        },
+        {
+          "id": "19a0d4ec-3e73-4e1d-9609-1ac1e7a21923",
+          "status": "FAILED",
+          "error": "E_ANIMATE_MAP",
+          "completedAt": "2026-10-27T05:39:17Z",
+          "title": "forge animate animate run 631b66f8 attempt 1",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "workerId": "colab-l4-a40733c9"
+        },
+        {
+          "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2a35aac9e2e3 is not on origin/main",
+          "completedAt": "2026-10-27T05:46:23Z",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "otohime",
+          "runner": "fleet",
+          "workerId": "avietidol-z490"
+        },
+        {
+          "id": "aaf41670-24d4-4664-998d-744e4d6d29bd",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "completedAt": "2026-10-27T05:25:28Z",
+          "title": "integrate bat-1",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "runner": "fleet",
+          "workerId": "avietidol-mac-mini"
+        },
+        {
+          "id": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "completedAt": "2026-10-27T05:15:21Z",
+          "title": "integrate bat-1",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "runner": "fleet",
+          "workerId": "avietidol-mac-mini"
+        }
+      ],
+      "total": 1164
+    },
+    {
+      "request": {
+        "status": "FAILED",
+        "offset": 5,
+        "limit": 5
+      },
+      "tasks": [
+        {
+          "id": "04446d49-b79f-4d19-a8d9-6286fe34c1c1",
+          "status": "FAILED",
+          "error": "task exited with code 1",
+          "completedAt": "2026-10-27T04:07:17Z",
+          "title": "Colab T4 session",
+          "branch": "main"
+        },
+        {
+          "id": "72818fa6-a037-4d9d-a79e-608a0ae654c5",
+          "status": "FAILED",
+          "error": "E_ANIMATE_MAP",
+          "completedAt": "2026-10-27T04:06:18Z",
+          "title": "forge animate animate run 93dced9a attempt 1",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "workerId": "colab-t4-04446d49"
+        },
+        {
+          "id": "47d73a78-60ad-49f0-8dfb-75959a3daa75",
+          "status": "FAILED",
+          "error": "E_ANIMATE_MAP",
+          "completedAt": "2026-10-27T04:03:02Z",
+          "title": "forge animate animate run 25ebd1db attempt 1",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "workerId": "colab-l4-fcb9d302"
+        },
+        {
+          "id": "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "completedAt": "2026-10-27T04:18:31Z",
+          "title": "environment canary auth:claude can-466",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "runner": "any"
+        },
+        {
+          "id": "899ebc8e-06d2-4172-8d43-caab66fc163a",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "completedAt": "2026-10-27T04:18:32Z",
+          "title": "environment canary env can-465",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "runner": "any"
+        }
+      ],
+      "total": 1164
+    },
+    {
+      "request": {
+        "status": "COMPLETED",
+        "offset": 0,
+        "limit": 5
+      },
+      "tasks": [
+        {
+          "id": "7b2ffbc2-79ae-4177-a4a4-7f193959b4b9",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:30:47Z",
+          "title": "linego forge run 46f2cb4e-c1df-4550-bcd3-4d8ea5676636",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "workerId": "viet-mac"
+        },
+        {
+          "id": "cd9db129-755e-4742-8cbd-b2173c6ef989",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:30:42Z",
+          "title": "linego forge run fa26c51c-4304-4985-809b-08fc0e9b7956",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "workerId": "viet-mac"
+        },
+        {
+          "id": "ff8bc5a8-a5dc-418f-b3d8-c588b97c90c0",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:29:29Z",
+          "title": "reclaim billie-mac",
+          "runner": "fleet",
+          "workerId": "billie-mac"
+        },
+        {
+          "id": "f96d6c68-0558-4c59-8dee-8a03490658c7",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:28:57Z",
+          "title": "gameplay-sim doc-job:f012ba05-d3d7-5382-8024-fa251418bad9",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "workerId": "avietidol-mac-mini"
+        },
+        {
+          "id": "8ac06802-5253-43ff-ae08-46bc3d4615a3",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:29:02Z",
+          "title": "fleet canary billie-mac",
+          "branch": "main",
+          "repoId": "mono-v2",
+          "runner": "fleet",
+          "workerId": "billie-mac"
+        }
+      ],
+      "total": 7186
+    },
+    {
+      "request": {
+        "status": "COMPLETED",
+        "offset": 5,
+        "limit": 5
+      },
+      "tasks": [
+        {
+          "id": "2edb2244-8f91-4fc7-9b7a-dadea4e71144",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:29:15Z",
+          "title": "Persist the Pocket hide preference and lifecycle controls",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "otohime",
+          "runner": "fleet",
+          "workerId": "avietidol-mac-mini"
+        },
+        {
+          "id": "1b8ffe04-1e26-4dd6-844f-45336158d044",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:27:58Z",
+          "title": "fleet canary avietidol-mac-mini",
+          "branch": "main",
+          "repoId": "mono-v2",
+          "runner": "fleet",
+          "workerId": "avietidol-mac-mini"
+        },
+        {
+          "id": "891ebd5a-665c-42d6-8a8b-1e75ffcc32b5",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:28:31Z",
+          "title": "forge animate animate run 32ad555e attempt 1",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "workerId": "colab-l4-e6641478"
+        },
+        {
+          "id": "2180e23e-724c-4eb1-8401-984cbce85ff2",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:25:41Z",
+          "title": "linego forge run dda8ca8d-f8c8-437d-8534-88e964bdc0d4",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "mono-v2",
+          "workerId": "viet-mac"
+        },
+        {
+          "id": "784e59a2-ec9b-42a9-98ce-1b4268de4cd5",
+          "status": "COMPLETED",
+          "completedAt": "2026-10-27T06:27:03Z",
+          "title": "Contain footer Bottle within reserved header band and certify Bottle UI",
+          "branch": "main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repoId": "otohime",
+          "runner": "fleet",
+          "workerId": "avietidol-mac-mini"
+        }
+      ],
+      "total": 7186
+    },
+    {
+      "request": {
+        "status": "RUNNING",
+        "offset": 0,
+        "limit": 25
+      },
+      "tasks": [
+        {
+          "id": "a38c1408-d136-4b29-bb22-c48ebb431cb4",
+          "status": "RUNNING",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "branch": "main",
+          "repoId": "otohime",
+          "runner": "fleet",
+          "workerId": "avietidol-z490"
+        },
+        {
+          "id": "c9f6cb4d-762c-4deb-8a8e-d0a658af2765",
+          "status": "RUNNING",
+          "title": "Persist the Pocket hide preference and lifecycle controls",
+          "branch": "main",
+          "repoId": "otohime",
+          "runner": "fleet",
+          "workerId": "billie-mac"
+        },
+        {
+          "id": "3132efee-1079-4769-84cd-3d672af84d05",
+          "status": "RUNNING",
+          "title": "Contain footer Bottle within reserved header band and certify Bottle UI",
+          "branch": "main",
+          "repoId": "otohime",
+          "runner": "fleet",
+          "workerId": "avietidol-mac-mini"
+        },
+        {
+          "id": "54c853ae-c70d-4083-be22-06068b8a5e63",
+          "status": "RUNNING",
+          "title": "Batched delivery P11 (continuation): fix the canary phase contract, finish the native proofs, activation and migration",
+          "branch": "main",
+          "repoId": "mono-v2",
+          "runner": "fleet",
+          "workerId": "avietidol-z490"
+        }
+      ],
+      "total": 4
+    },
+    {
+      "request": {
+        "status": "PENDING",
+        "offset": 0,
+        "limit": 25
+      },
+      "tasks": []
+    }
+  ],
+  "runs": [
+    {
+      "id": "run-9169",
+      "plan_id": "pm-257",
+      "task_id": "t-1609",
+      "role": "software_engineer",
+      "kind": "role",
+      "template_id": "coding-agent",
+      "tm_task_id": "35f1dcbe-41b8-4128-8d7e-280b9d0b20ac",
+      "repo_id": "otohime",
+      "account_id": "codex-main",
+      "worker_id": "billie-mac",
+      "runner": "fleet",
+      "git_sha": "cce131d",
+      "agent_profile": "codex-sol-6-1-high",
+      "attempt": 2,
+      "status": "succeeded",
+      "deadline_at": "2026-10-27T14:07:31.986569Z",
+      "started_at": "2026-10-27T06:07:31.986569Z",
+      "finished_at": "2026-10-27T06:27:51.530046Z",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "patch_truncated": true,
+      "not_before": "0001-01-01T00:00:00Z",
+      "status_checked_at": "2026-10-27T06:25:31.433739Z",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9174",
+      "plan_id": "pm-257",
+      "task_id": "t-1609",
+      "role": "verify",
+      "kind": "verify",
+      "template_id": "verify-runner",
+      "tm_task_id": "2edb2244-8f91-4fc7-9b7a-dadea4e71144",
+      "repo_id": "otohime",
+      "worker_id": "avietidol-mac-mini",
+      "runner": "fleet",
+      "git_sha": "cce131d",
+      "attempt": 1,
+      "status": "succeeded",
+      "deadline_at": "2026-10-27T07:02:51.530046Z",
+      "started_at": "2026-10-27T06:27:51.530046Z",
+      "finished_at": "2026-10-27T06:29:15.88036Z",
+      "not_before": "0001-01-01T00:00:00Z",
+      "status_checked_at": "0001-01-01T00:00:00Z",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9175",
+      "plan_id": "pm-257",
+      "task_id": "t-1609",
+      "role": "quality_engineer",
+      "kind": "role",
+      "template_id": "qa-agent",
+      "tm_task_id": "c9f6cb4d-762c-4deb-8a8e-d0a658af2765",
+      "repo_id": "otohime",
+      "account_id": "codex-main",
+      "worker_id": "billie-mac",
+      "runner": "fleet",
+      "agent_profile": "codex-sol-6-1-high",
+      "attempt": 1,
+      "status": "running",
+      "deadline_at": "2026-10-27T10:29:20.218146Z",
+      "started_at": "2026-10-27T06:29:20.218146Z",
+      "finished_at": "0001-01-01T00:00:00Z",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "not_before": "0001-01-01T00:00:00Z",
+      "status_checked_at": "0001-01-01T00:00:00Z",
+      "callback_apply_failures": 0
+    }
+  ],
+  "gate": {
+    "id": "ver-3646",
+    "plan_id": "pm-257",
+    "task_id": "t-1609",
+    "run_id": "run-9174",
+    "gate": "green",
+    "git_sha": "cce131d",
+    "status": "pass",
+    "created_at": "2026-10-27T06:29:15.88036Z"
+  },
+  "scope": [
+    {
+      "id": "esc-427",
+      "plan_id": "pm-257",
+      "task_id": "t-1608",
+      "reason": "operator_action",
+      "message": "Sign in to the Vercel account/team owning otohime and GitHub repo quiinthieu/otohime. Restore production CI access: verify/recover the existing VERCEL_TOKEN repository secret and the linked VERCEL_ORG_ID/VERCEL_PROJECT_ID variables (.github/workflows/ci.yml:272-274), without sending secret values in chat. Inspect protected deployment https://otohime-olrgoztc7-otohime.vercel.app with that account and recover/promote the a958913 delivery through the existing pipeline. Rerun failed production job121981152892 in workflow40439524623 (rerun failed jobs, or dispatch CI on main once access is repaired). Its Vercel CLI64.7.0 inspect calls returned 'User not found'; native checks121976229834 passed. Completion is public /api/health serving a958913b6a17f2cefda59882dfbdfcb0cd01e453. Do not activate Cloudflare ghosts; that is t-1611 scope.",
+      "blocking": false,
+      "notified_at": "2026-10-27T03:00:07.970357Z",
+      "resolution": "[decider] Cannot be done now: proceed without it. Restoring Vercel CI access (the VERCEL_TOKEN secret and the ORG/PROJECT ids) needs a person signed in to the owning Vercel team. The chore stays in the digest. No code change can repair it. Meanwhile: (1) Resume QA on t-1608 and judge it on its local and native scope at a958913b6a17f2cefda59882dfbdfcb0cd01e453. That scope is green gate ver-3626, native checks job 121976229834 and the independent locked local and two-Chrome proof in qa_report_t-1608_run-9128. Record hosted integration and product delivery as UNPROVEN, deferred to esc-427 (vercel-ci-access:otohime-production). The failure condition is production /api/health not serving a958913 or a descendant of it. Owner: operator. Do not count the failed production job 121981152892 as a code defect, and do not open a code fix cycle for it. Do not fail the task on it. Any defect QA observes in the code still fails as normal. (2) Then run t-1609 and t-1610 as contracted. They rely only on local and fake transports and need no Vercel deploy. Each later push to main reruns the existing pipeline, so a repaired token deploys the delivery without extra work. Each QA records whether production health has the delivery SHA as an ancestor. (3) t-1611 cites esc-427 in its handoff and states that live execution and product delivery are unproven until production health serves the delivered SHA. Do NOT do any of the following: deploy by hand with the Vercel CLI, create or rotate tokens, use any other account, force push, bypass or skip the production job, edit the CI workflow to get around authentication, poll, or activate Cloudflare ghosts (that is t-1611 scope).",
+      "resolved_at": "2026-10-27T03:15:00.453512Z",
+      "auto_resolve_at": "0001-01-01T00:00:00Z",
+      "fingerprint": "vercel-ci-access:otohime-production",
+      "ready_probe": {
+        "type": "http",
+        "url": "https://otohime.dev/api/health",
+        "expect_status": 200,
+        "body_contains": "a958913b6a17f2cefda59882dfbdfcb0cd01e453"
+      },
+      "probed_at": "2026-10-27T06:29:20.218146Z",
+      "probe_result": "200 OK but body lacks \"a958913b6a17f2cefda59882dfbdfcb0cd01e453\"",
+      "waived_at": "2026-10-27T03:15:00.453512Z",
+      "chore_done_at": "0001-01-01T00:00:00Z"
+    }
+  ],
+  "taskDetails": [
+    {
+      "id": "35f1dcbe-41b8-4128-8d7e-280b9d0b20ac",
+      "status": "COMPLETED",
+      "completedAt": "2026-10-27T06:27:50Z",
+      "title": "Persist the Pocket hide preference and lifecycle controls",
+      "branch": "main",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "repoId": "otohime",
+      "runner": "fleet",
+      "workerId": "billie-mac"
+    },
+    {
+      "id": "2edb2244-8f91-4fc7-9b7a-dadea4e71144",
+      "status": "COMPLETED",
+      "completedAt": "2026-10-27T06:29:15Z",
+      "title": "Persist the Pocket hide preference and lifecycle controls",
+      "branch": "main",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "repoId": "otohime",
+      "runner": "fleet",
+      "workerId": "avietidol-mac-mini"
+    }
+  ],
+  "run-9169tail": {
+    "lineCount": 1065,
+    "lines": [
+      "+  const a = h.store.subscribe(() => seen.push(h.store.get()));",
+      "+  const b = h.store.subscribe(() => seen.push(h.store.get()));",
+      "+assertion names/counts; all final command logs are retained in full beside it. The pushed commit is recorded",
+      "+This run stops at push, as required. Plan Manager owns CI/green gate and independent deployed QA for this delivery;",
+      "Pushed `main`: `cce131daf5c5648830ffe50a7d756e8adc490d73`.",
+      "+  contexts.push(ctx);",
+      "+        this.addEventListener(\"message\", event => { const msg = JSON.parse(event.data); if (msg.t === \"hi\") p.ids.push(msg.id); });",
+      " import { canvasSize, GhostModel, GhostSession, paintGhosts, parseServerFrame, pointerPoint, shouldMove, type GhostRuntime, type GhostSocket, type Snapshot } from \"./client.ts\";",
+      "   const ctx = new Proxy({}, { set: () => true, get: (_, key) => () => calls.push(String(key)) }) as CanvasRenderingContext2D;",
+      "+  const a = h.store.subscribe(() => seen.push(h.store.get()));",
+      "+  const b = h.store.subscribe(() => seen.push(h.store.get()));",
+      "+assertion names/counts; all final command logs are retained in full beside it. The pushed commit is recorded",
+      "+This run stops at push, as required. Plan Manager owns CI/green gate and independent deployed QA for this delivery;",
+      "Pushed `main`: `cce131daf5c5648830ffe50a7d756e8adc490d73`.",
+      "Command exited with code: 0"
+    ]
+  },
+  "run-9174tail": {
+    "lineCount": 55,
+    "lines": [
+      "progress phase=clone",
+      "=== task-manager coding job starting ===",
+      "  Agent    : shell",
+      "  Command  : true",
+      "  Prompt   : 0 characters from AGENT_PROMPT_FILE",
+      "  Workspace: /Users/avietidol/Library/Application Support/build-worker/leases/2edb2244-8f91-4fc7-9b7a-dadea4e71144-e3fae124515a480d32d692620bae7618/work/otohime",
+      "  Repo URL : git@github.com:quiinthieu/otohime.git",
+      "  Repo     : REPO_ID=otohime GIT_MAIN_BRANCH=main PLANS_DIR=projects",
+      "  Account  : ACCOUNT_ID=<none>",
+      "  HOME     : /Users/avietidol/Library/Application Support/build-worker/leases/2edb2244-8f91-4fc7-9b7a-dadea4e71144-e3fae124515a480d32d692620bae7618/home",
+      "  User     : uid=501(avietidol) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),33(_appstore),98(_lpadmin),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1)",
+      "  Branch   : main",
+      "  Sidecar  : enabled (shared=/Users/avietidol/Library/Application Support/build-worker/leases/2edb2244-8f91-4fc7-9b7a-dadea4e71144-e3fae124515a480d32d692620bae7618/shared)",
+      "=========================================",
+      "  github.com host key refreshed",
+      "  gitlab.com host key refreshed",
+      "  bitbucket.org host key refreshed",
+      "Cloning git@github.com:quiinthieu/otohime.git (branch: main) into /Users/avietidol/Library/Application Support/build-worker/leases/2edb2244-8f91-4fc7-9b7a-dadea4e71144-e3fae124515a480d32d692620bae7618/work/otohime...",
+      "  reference clone from /Users/avietidol/Library/Application Support/build-worker/repo/otohime (fleet mirror)",
+      "Cloning into '/Users/avietidol/Library/Application Support/build-worker/leases/2edb2244-8f91-4fc7-9b7a-dadea4e71144-e3fae124515a480d32d692620bae7618/work/otohime'...",
+      "  Cloned branch: main",
+      "  Cloned commit: cce131daf5c5648830ffe50a7d756e8adc490d73",
+      "Checking out sha cce131d",
+      "Note: switching to 'cce131d'.",
+      "",
+      "You are in 'detached HEAD' state. You can look around, make experimental",
+      "changes and commit them, and you can discard any commits you make in this",
+      "state without impacting any branches by switching back to a branch.",
+      "",
+      "If you want to create a new branch to retain commits you create, you may",
+      "do so (now or later) by using -c with the switch command. Example:",
+      "",
+      "  git switch -c <new-branch-name>",
+      "",
+      "Or undo this operation with:",
+      "",
+      "  git switch -",
+      "",
+      "Turn off this advice by setting config variable advice.detachedHead to false",
+      "",
+      "HEAD is now at cce131d pm-257/t-1609: Persist Pocket ghost controls",
+      "push guard: skipped (otohime has no scripts/git-push-safe.sh)",
+      "",
+      "progress phase=verify",
+      "=== verify-runner (agent=shell) ===",
+      "npm warmup /Users/avietidol/Library/Application Support/build-worker/leases/2edb2244-8f91-4fc7-9b7a-dadea4e71144-e3fae124515a480d32d692620bae7618/work/otohime ci",
+      "npm warmup exit 0",
+      "verify: start item=Preference policy timeout_s=300",
+      "verify: item=Preference policy status=pass exit=0 duration_ms=211",
+      "verify: start item=Project tests timeout_s=300",
+      "verify: item=Project tests status=pass exit=0 duration_ms=16923",
+      "verify: start item=Lint timeout_s=300",
+      "verify: item=Lint status=pass exit=0 duration_ms=10414",
+      "verify: start item=Production build timeout_s=900",
+      "verify: item=Production build status=pass exit=0 duration_ms=18296"
+    ]
+  }
+}
