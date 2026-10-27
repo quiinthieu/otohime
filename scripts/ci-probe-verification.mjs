@@ -26,7 +26,7 @@ export const GATES = [
   { id: "footer", cmd: "node scripts/verify-bottle-footer.mjs", required: ["CI-mode production footer walk and Chromium probe"] },
 ];
 
-function tap(output, required) {
+export function assertTapEvidence(output, required) {
   const names = output.split("\n").filter((line) => /^\s*ok \d+ - /.test(line));
   for (const name of required) {
     assert.ok(names.some((line) => line.trim().replace(/^ok \d+ - /, "") === name), `required passing test absent or skipped: ${name}`);
@@ -44,7 +44,7 @@ export function assertEvidence(id, output) {
   const gate = GATES.find((gate) => gate.id === id);
   assert.ok(gate, `unknown gate ${id}`);
   if (gate.required) {
-    const evidence = tap(output, gate.required);
+    const evidence = assertTapEvidence(output, gate.required);
     if (id === "footer") {
       for (const [label, minimum] of [["walk", 65], ["probe", 170]]) {
         const count = output.match(new RegExp(`^(?:# )?${label}: (\\d+) ok, 0 failed$`, "m"));

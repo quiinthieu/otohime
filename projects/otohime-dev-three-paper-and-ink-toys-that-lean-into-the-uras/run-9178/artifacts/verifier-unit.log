@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: Bottle layout receipt requires every named passing test and nonzero unskipped TAP
+ok 1 - Bottle layout receipt requires every named passing test and nonzero unskipped TAP
+  ---
+  duration_ms: 3.377868
+  type: 'test'
+  ...
+# Subtest: Bottle unit receipt requires every named passing test and nonzero unskipped TAP
+ok 2 - Bottle unit receipt requires every named passing test and nonzero unskipped TAP
+  ---
+  duration_ms: 1.054538
+  type: 'test'
+  ...
+# Subtest: Bottle browser receipt requires every named passing test and nonzero unskipped TAP
+ok 3 - Bottle browser receipt requires every named passing test and nonzero unskipped TAP
+  ---
+  duration_ms: 2.697286
+  type: 'test'
+  ...
+# Subtest: Bottle footer receipt requires every named passing test and nonzero unskipped TAP
+ok 4 - Bottle footer receipt requires every named passing test and nonzero unskipped TAP
+  ---
+  duration_ms: 1.066981
+  type: 'test'
+  ...
+# Subtest: Bottle footer receipt rejects summary counts without the individual walk and probe assertions
+ok 5 - Bottle footer receipt rejects summary counts without the individual walk and probe assertions
+  ---
+  duration_ms: 1.302265
+  type: 'test'
+  ...
+# Subtest: Bottle static receipt requires actual lint and typecheck output and makes only a static claim
+ok 6 - Bottle static receipt requires actual lint and typecheck output and makes only a static claim
+  ---
+  duration_ms: 0.380036
+  type: 'test'
+  ...
+# Subtest: Bottle closure receipt rejects renamed or empty controls and a fake uncertified runner
+ok 7 - Bottle closure receipt rejects renamed or empty controls and a fake uncertified runner
+  ---
+  duration_ms: 6.704154
+  type: 'test'
+  ...
+# Subtest: Bottle deployment receipt requires scoped Ready and fail-closed controls beyond an assertion count
+ok 8 - Bottle deployment receipt requires scoped Ready and fail-closed controls beyond an assertion count
+  ---
+  duration_ms: 1.233064
+  type: 'test'
+  ...
+# Subtest: Bottle verifier import preserves shared gates and single-gate CLI rejects silent exit0
+ok 9 - Bottle verifier import preserves shared gates and single-gate CLI rejects silent exit0
+  ---
+  duration_ms: 257.351074
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 367.264592

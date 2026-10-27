@@ -99,9 +99,32 @@ test("both entries share the lazy card; keyboard, safe deliberate visit, focus a
   await panel(p).getByRole("button", { name: "Close Bottle" }).click();
   await p.waitForFunction(() => document.activeElement?.getAttribute("data-bottle-entry") === "footer");
   assert.equal(await p.locator(".bottle-panel").count(), 0);
-  const bottleBounds = await p.locator('[data-bottle-entry="footer"]').boundingBox();
-  const sceneBounds = await p.locator(".end-canvas").boundingBox();
-  assert.ok(bottleBounds && sceneBounds && bottleBounds.y + bottleBounds.height <= sceneBounds.y, "Bottle stays outside the existing scene pointer area");
+  // Focus/close can still scroll the viewport. Read both boxes in one frame,
+  // as the enlarged-text checks do, rather than mixing two scroll positions.
+  const clearance = () => p.locator('[data-bottle-entry="footer"]').evaluate((el) => {
+    const bottle = el.getBoundingClientRect();
+    const scene = document.querySelector(".end-canvas")!.getBoundingClientRect();
+    return { gap: scene.top - bottle.bottom, bottleBottom: bottle.bottom, sceneTop: scene.top, scroll: scrollY };
+  });
+  const bounds = await clearance();
+  assert.ok(bounds.gap >= 0, `Bottle stays outside the existing scene pointer area: ${JSON.stringify(bounds)}`);
+  // Controlled negative evidence: moving the viewport between the old pair of
+  // reads produces a false overlap; the same-frame clearance stays invariant.
+  const scrolled = await p.evaluate(() => {
+    const bottle = document.querySelector('[data-bottle-entry="footer"]')!.getBoundingClientRect();
+    const initial = scrollY;
+    scrollTo({ top: 0, behavior: "instant" });
+    const beforeScroll = document.querySelector('[data-bottle-entry="footer"]')!.getBoundingClientRect().bottom;
+    scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+    const scene = document.querySelector(".end-canvas")!.getBoundingClientRect();
+    const movedBottle = document.querySelector('[data-bottle-entry="footer"]')!.getBoundingClientRect();
+    const control = { mixedGap: scene.top - beforeScroll, atomicGap: scene.top - movedBottle.bottom, distance: scrollY, initialBottom: bottle.bottom };
+    scrollTo({ top: initial, behavior: "instant" });
+    return control;
+  });
+  assert.ok(scrolled.distance > 44 && scrolled.mixedGap < 0, `mixed-coordinate negative control: ${JSON.stringify(scrolled)}`);
+  assert.ok(scrolled.atomicGap >= 0, "atomic geometry preserves scene clearance through a scroll");
+  assert.ok(Math.abs(scrolled.atomicGap - bounds.gap) <= 1, "scrolling preserves the actual Bottle/scene gap");
   await p.locator("[data-end-mascot]").focus();
   await p.keyboard.press("Shift+Tab");
   assert.equal(await p.evaluate(() => document.activeElement?.getAttribute("data-bottle-entry")), "footer", "Bottle precedes the unchanged legacy Tab chain");
