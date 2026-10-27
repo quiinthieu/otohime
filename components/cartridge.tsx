@@ -1,3 +1,4 @@
+import { PaperHost } from "@/components/paper-host";
 import { stableSurfaceId } from "@/lib/tactile";
 import { swatches } from "@/components/figures";
 import type { Project } from "@/content/site";
@@ -11,7 +12,7 @@ import type { CSSProperties } from "react";
 // the lift and the insert are CSS (globals.css, "Project cartridges").
 export function Cartridge({ project, children }: { project: Project; children: React.ReactNode }) {
   return (
-    <div
+    <PaperHost
       className="cartridge"
       data-paper-id={stableSurfaceId("project", project.href || project.title)}
       data-tossable="true"
@@ -21,7 +22,7 @@ export function Cartridge({ project, children }: { project: Project; children: R
     >
       <CartridgeShell status={project.status} />
       <div className="cartridge-label">{children}</div>
-    </div>
+    </PaperHost>
   );
 }
 

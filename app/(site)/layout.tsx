@@ -72,9 +72,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Typing "urashima" goes down to Ryugu-jo (components/urashima-keys.tsx). Also ahead of the pages: its capture
            listener takes the word's a's before the Pocket console can open a page with them. */}
         <UrashimaKeys />
+        {children}
+        {/* Overlays follow route content and wait for each paper host's React commit. */}
         <Suspense fallback={null}><KameLoader /></Suspense>
         <Suspense fallback={null}><TactileLoader /></Suspense>
-        {children}
         <AppearanceRuntime />
       </body>
     </html>

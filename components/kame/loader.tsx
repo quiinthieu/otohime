@@ -1,5 +1,6 @@
 "use client";
 
+import { afterPaperHydration } from "@/lib/paper-hydration";
 import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import { useEffect, useState, type ComponentType } from "react";
@@ -18,19 +19,21 @@ export function KameLoader() {
     if (!eligible) return;
     let gone = false;
     let cancel = () => {};
-    const load = () => {
-      setSlot(document.getElementById("kame-shell"));
-      if (!enabled && (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) {
-        setDeferred(true); return;
-      }
-      const go = () => { void import("./companion").then((m) => { if (!gone) setCompanion(() => m.default); }).catch(() => { if (!gone) setDeferred(true); }); };
-      if (typeof requestIdleCallback === "function") {
-        const id = requestIdleCallback(go, { timeout: 2000 }); cancel = () => cancelIdleCallback(id);
-      } else { const id = setTimeout(go, 200); cancel = () => clearTimeout(id); }
-    };
-    if (document.readyState === "complete") load();
-    else addEventListener("load", load, { once: true });
-    return () => { gone = true; cancel(); removeEventListener("load", load); };
+    return afterPaperHydration(() => {
+      const load = () => {
+        setSlot(document.getElementById("kame-shell"));
+        if (!enabled && (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) {
+          setDeferred(true); return;
+        }
+        const go = () => { void import("./companion").then((m) => { if (!gone) setCompanion(() => m.default); }).catch(() => { if (!gone) setDeferred(true); }); };
+        if (typeof requestIdleCallback === "function") {
+          const id = requestIdleCallback(go, { timeout: 2000 }); cancel = () => cancelIdleCallback(id);
+        } else { const id = setTimeout(go, 200); cancel = () => clearTimeout(id); }
+      };
+      if (document.readyState === "complete") load();
+      else addEventListener("load", load, { once: true });
+      return () => { gone = true; cancel(); removeEventListener("load", load); };
+    });
   }, [eligible, enabled, path]);
 
   if (!eligible) return null;

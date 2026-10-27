@@ -28,3 +28,37 @@ Verification covers helper edge cases, the full project unit suite, typecheck, l
 Run the browser contract through `node --experimental-strip-types scripts/e2e.mjs --test e2e/riso-headings.test.ts` after `npm ci` (including dependency lifecycle scripts). Fresh runs remove `.next` before compiling, preventing stale Turbopack font import maps from entering the build. `SKIP_BUILD=1` deliberately preserves an existing build and must only be used when its executable identity is known. `scripts/e2e-build.test.mjs`, included in `npm test`, executes the actual runner in a temporary fixture: a stale-output compiler control fails if cleanup is removed, while build reuse preserves the existing output and executes the suite. Its database/compiler/server stand-ins prove lifecycle orchestration only; the real production-browser command proves Next, embedded Postgres, assets and Chrome execution.
 
 The required unit suite also runs on the gate's Node 22.12.0. Its main-lane controls compile extracted TypeScript fixtures with the existing locked `typescript` dependency, as the Riso browser preview does. They do not depend on the newer `node:module` stripping API; all clock, layout and disabled-ghost negative controls still execute.
+
+## Route hydration and imperative paper overlays (pm-268/t-1678)
+
+`load`, an idle callback, a frame and a position after `{children}` do not establish React hydration completion. The site root now places KameLoader and TactileLoader after its route children, and both wait for explicit host acknowledgements before arming their existing load/idle policies. Companion and PaperLayer repeat the guard at the actual DOM-consumer boundary, including cached renderer chunks on navigation.
+
+`PaperHost` renders the same native `div` or `li` with its existing attributes and server-rendered children. It adds only `data-paper-host` in SSR. Its effect acknowledges that particular DOM identity in `lib/paper-hydration.ts` and exposes `data-paper-hydrated="true"`; cleanup revokes it. The registry's WeakSet, not a server attribute, grants permission. Cartridge roots inside DarumaBoard, Notes entries, footer Lines wrappers and `#kame-shell` use this host. An unhydrated card therefore blocks early footer portals and sticker insertion too. This is a boundary for these explicit mutation targets, not a claim that unrelated streamed navigation/account content has hydrated.
+
+```mermaid
+sequenceDiagram
+  participant React
+  participant Hosts as Route paper hosts
+  participant Gate as Hydration registry
+  participant Loaders as Kame/Tactile loaders
+  participant Overlays as Companion/PaperLayer
+  React->>Hosts: Hydrate and commit owning subtree
+  Hosts->>Gate: Effect acknowledges each rendered DOM identity
+  Gate->>Loaders: All current rendered hosts committed
+  Loaders->>Overlays: Document loaded + idle, or explicit Save-Data enable
+  Overlays->>Gate: Recheck before attaching DOM
+  Overlays->>Hosts: Portal controls; attach paper tools/sticker
+```
+
+Next retains previous routes in hidden Activity trees and disconnects their effects. Readiness and discovery consider hosts with rendered layout boxes; cached hidden hosts cannot deadlock the active route or receive paper mutations. Restoring a hidden route requires its own new effect acknowledgement. When Daruma replaces its cards without changing the URL, PaperLayer waits for the replacement hosts to commit, cancels the previous gestures/listeners and reattaches once using the existing route session. `pagehide` cancels pending work and removes tools; `pageshow` rechecks hosts before restoring them. Navigation/unmount cancels the gate, idle callback, frames and imperative lifecycle.
+
+The Kame browser `ready()` handshake waits for rendered host acknowledgements, initialized Riso text and the actual companion controls before a fake-clock advance, including reloads. It does not substitute elapsed host time for browser time. The original nine Kame cases and their frozen-clock negative control remain. Additional browser cases exercise three `/projects` loads in each of real/fake time, paper peel/reset, Daruma replacement, Notes navigation and a mutation audit. A held real Daruma module deliberately delays hydration while root-loader gate subscriptions are observed: an early synthetic load and 46-second clock jump must produce zero overlays; releasing the module must attach exactly one companion and sticker without any pageerror. No React error is suppressed or filtered.
+
+The dedicated `lib/paper-hydration.test.ts` covers all-host acknowledgement, empty streaming content, revoked/replaced DOM identities, cancellation, one-shot activation and hidden-route reactivation. These use object identities as a unit fake; real React hydration, imports, production assets, Postgres and browser interactions are exercised by E2E. Run both named suites plus the surrounding paper/Daruma regressions:
+
+```sh
+node --experimental-strip-types --test lib/riso-heading.test.ts lib/paper-hydration.test.ts
+node --experimental-strip-types scripts/e2e.mjs --test e2e/riso-headings.test.ts e2e/kame.test.ts e2e/tactile-tear.test.ts e2e/kame-fetch.test.ts e2e/daruma.test.ts
+```
+
+Keep TAP named tests, nonzero pass counts and zero failures/skips as behavioral evidence. Typecheck and lint separately validate static types and rules; their exit status does not prove visitor behavior. The platform still owns exact-delivery CI, deployment and independent QA after the engineer's push.

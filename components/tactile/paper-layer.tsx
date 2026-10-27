@@ -1,5 +1,6 @@
 "use client";
 
+import { afterPaperHydration, paperHydration } from "@/lib/paper-hydration";
 import { useEffect } from "react";
 import { actionsSide, createGesture, createRouteSession, discoverSurfaces, type StoragePort } from "@/lib/tactile";
 import { deckle, tearState } from "@/lib/tear";
@@ -11,13 +12,15 @@ import { bindPaperReset } from "./reset";
 const EXCLUDED = 'a,button,input,textarea,select,[contenteditable]:not([contenteditable="false"]),[role="dialog"],[data-tactile-exclude],.stamp-board,.stamp-heading,.desk-wrap,canvas';
 
 export default function PaperLayer({ route }: { route: string }) {
-  useEffect(() => {
+  useEffect(() => afterPaperHydration(() => {
     let storage: StoragePort | undefined;
     try { storage = window.sessionStorage; } catch {}
     const session = createRouteSession(route, { storage, clock: () => performance.now(), seed: 259 });
     const gesture = createGesture({ clock: () => performance.now() });
     let teardown = () => {};
     let restoreAll = () => {};
+    let cancelMount = () => {};
+    const remount = () => { cancelMount(); cancelMount = afterPaperHydration(mount); };
 
     const mount = () => {
       teardown();
@@ -28,7 +31,8 @@ export default function PaperLayer({ route }: { route: string }) {
       sticker.dataset.tossable = 'true'; sticker.dataset.paperFetchOnly = 'true'; sticker.dataset.paperLabel = 'Sea star';
       const ink = document.createElement('span'); ink.textContent = '✳'; ink.setAttribute('aria-hidden', 'true'); sticker.append(ink);
       document.getElementById('kame-shell')?.append(sticker);
-      const nodes = [...document.querySelectorAll<HTMLElement>('[data-paper-id][data-tossable]')];
+      const nodes = [...document.querySelectorAll<HTMLElement>('[data-paper-id][data-tossable]')]
+        .filter(host => host === sticker || (paperHydration.has(host) && host.getClientRects().length > 0));
       const descriptors = nodes.map(el => ({
         id: el.dataset.paperId ?? "", tossable: el.dataset.tossable === "true",
         excluded: !!el.closest(EXCLUDED) || !!el.querySelector('input,textarea,select,[contenteditable]:not([contenteditable="false"]),canvas,.stamp-board,.desk-wrap'),
@@ -143,6 +147,12 @@ export default function PaperLayer({ route }: { route: string }) {
       document.addEventListener('visibilitychange',()=>{if(document.hidden) cancel();},{signal});
       motion.addEventListener('change',cancel,{signal});
       const observer=new MutationObserver(()=>{
+        // Daruma can replace its cards without changing the route. A newly committed
+        // host is safe to enhance; its server attributes alone never grant readiness.
+        const replacements = [...document.querySelectorAll<HTMLElement>('[data-paper-host][data-paper-id][data-tossable]')];
+        if (replacements.some(host => paperHydration.has(host) && host.getClientRects().length > 0 && !nodes.includes(host))) {
+          remount(); return;
+        }
         if(nodes.some(n=>!n.isConnected)) {
           cancel();
           for(let i=nodes.length-1;i>=0;i--) if(!nodes[i].isConnected) nodes.splice(i,1);
@@ -150,7 +160,7 @@ export default function PaperLayer({ route }: { route: string }) {
         if(document.querySelector('[aria-modal="true"],dialog[open]')) cancel();
         avoidPeek();
       });
-      observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["open","aria-modal","data-side"]});
+      observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["open","aria-modal","data-side","data-paper-hydrated"]});
       teardown=()=>{events.abort();observer.disconnect();fetch.dispose();unbindReset();sticker.remove();for(const clean of cleanups) clean();gesture.cancel();teardown=()=>{};};
     };
     // Navigation API catches client hops, full-root links, history and location changes;
@@ -168,15 +178,15 @@ export default function PaperLayer({ route }: { route: string }) {
       if(url.origin!==location.origin || url.pathname!==route) {restoreAll();session.depart();}
     },{signal:life.signal,capture:true});
     window.addEventListener('popstate',()=>{if(location.pathname!==route) {restoreAll();session.depart();}},{signal:life.signal});
-    window.addEventListener('pagehide',()=>teardown(),{signal:life.signal});
-    window.addEventListener('pageshow',()=>{if(window.location.pathname===route) mount();},{signal:life.signal});
-    mount();
+    window.addEventListener('pagehide',()=>{cancelMount();teardown();},{signal:life.signal});
+    window.addEventListener('pageshow',()=>{if(window.location.pathname===route) remount();},{signal:life.signal});
+    remount();
     return () => {
-      life.abort(); teardown();
+      life.abort(); cancelMount(); teardown();
       // React can clean up the previous route before committing the new URL.
       // Reload/pagehide use their own teardown and preserve session state.
       session.depart();
     };
-  }, [route]);
+  }), [route]);
   return null;
 }
