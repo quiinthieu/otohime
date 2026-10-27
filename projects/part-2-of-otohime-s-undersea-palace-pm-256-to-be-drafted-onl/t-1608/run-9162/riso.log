@@ -1,0 +1,51 @@
+Starting embedded Postgres on 127.0.0.1:60317
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/d4cfdda7-14e2-44f1-b2b2-34520ebf619a-03f9f35f5d0c5747870d1d46b2058b33/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:60321
+TAP version 13
+# Subtest: disabled ghost config reconciles only its real resource error; unrelated errors still fail
+ok 1 - disabled ghost config reconciles only its real resource error; unrelated errors still fail
+  ---
+  duration_ms: 1266.156708
+  ...
+# Subtest: one heading name, one selectable copy, deterministic settled plates and token plate counts
+ok 2 - one heading name, one selectable copy, deterministic settled plates and token plate counts
+  ---
+  duration_ms: 2149.961041
+  ...
+# Subtest: entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+ok 3 - entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+  ---
+  duration_ms: 2272.853167
+  ...
+# Subtest: server/no-JavaScript headings are readable and mobile notes wrap without overflow
+ok 4 - server/no-JavaScript headings are readable and mobile notes wrap without overflow
+  ---
+  duration_ms: 246.685667
+  ...
+# Subtest: Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+ok 5 - Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+  ---
+  duration_ms: 3040.031958
+  ...
+# Subtest: shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+ok 6 - shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+  ---
+  duration_ms: 276.163
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9944.948416

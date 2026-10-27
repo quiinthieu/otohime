@@ -1,0 +1,19 @@
+# browser: 156.0.8078.48 via playwright-core, channel chrome
+# browser: 156.0.8078.48 via playwright-core, channel chrome
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: ghost drawing sleeps with a stationary tip
+
+12 !== 10
+
+    at file:///Users/avietidol/Library/Application%20Support/build-worker/leases/d4cfdda7-14e2-44f1-b2b2-34520ebf619a-03f9f35f5d0c5747870d1d46b2058b33/work/otohime/projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/t-1608/run-9162/independent.mjs:123:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 12,
+  expected: 10,
+  operator: 'strictEqual'
+}
+
+Node.js v22.12.0
