@@ -25,7 +25,24 @@ async function open(t: TestContext, options: BrowserContextOptions = {}, init?: 
   return { page, context };
 }
 const state = (page: Page) => page.locator("[data-kame]").getAttribute("data-state");
-const ready = (page: Page) => page.waitForSelector("[data-kame]", { state: "attached" });
+async function hydrated(page: Page) {
+  await page.waitForFunction(() => {
+    const hosts = [...document.querySelectorAll("[data-paper-host]")].filter(host => host.getClientRects().length > 0);
+    return hosts.length > 0 && hosts.every(host => host.getAttribute("data-paper-hydrated") === "true")
+      && [...document.querySelectorAll(".riso-text")].filter(text => text.getClientRects().length > 0).every(text => text.hasAttribute("data-riso-state"));
+  });
+}
+async function ready(page: Page) {
+  await hydrated(page);
+  await page.locator("[data-kame]").waitFor({ state: "attached" });
+  await page.getByRole("region", { name: "Kame companion" }).waitFor({ state: "attached" });
+}
+async function paperReady(page: Page) {
+  await page.waitForFunction(() => {
+    const surfaces = [...document.querySelectorAll("[data-paper-id][data-tossable]")].filter(host => host.getClientRects().length > 0);
+    return surfaces.length > 1 && surfaces.every(host => host.getAttribute("data-paper-active") === "true");
+  });
+}
 
 const browserElapsed = (page: Page, started: number) =>
   page.waitForFunction((started) => performance.now() - started >= 50, started, { timeout: 2_000 });
@@ -257,4 +274,112 @@ test("optional renderer is requested only after load and an idle callback; reduc
   await page.clock.fastForward(500); await page.keyboard.up("Space");
   assert.equal(await state(page), "nap");
   assert.match(await page.getByRole("status").last().textContent() ?? "", /enjoys the gentle pet/);
+});
+
+test("projects commits every paper host before overlays, with real and fake clocks across reload and navigation", async (t) => {
+  for (const clock of [false, true]) {
+    await t.test(clock ? "Playwright fake time" : "real browser time", async (t) => {
+      const { page } = await open(t, {}, () => {
+        const violations: string[] = [];
+        const committed = new WeakSet<Element>();
+        Object.assign(window, { paperHydrationViolations: violations });
+        new MutationObserver(records => {
+          for (const record of records) {
+            if (record.target instanceof Element && record.attributeName === "data-paper-hydrated"
+              && (record.target.getAttribute("data-paper-hydrated") === "true" || record.oldValue === "true")) committed.add(record.target);
+            const host = record.target instanceof Element ? record.target.closest("[data-paper-host]") : null;
+            if (!host) continue;
+            if (host.getAttribute("data-paper-hydrated") === "true") committed.add(host);
+            // Cleanup may revoke the current marker before removing paper attributes.
+            // That DOM identity already hydrated; only never-committed hosts violate ordering.
+            if (committed.has(host)) continue;
+            const attributes = ["data-paper-active", "data-paper-state", "data-fetch-state"];
+            const overlay = record.type === "attributes" && attributes.includes(record.attributeName ?? "")
+              || [...record.addedNodes].some(node => node instanceof Element && node.matches(".paper-tools,.paper-sticker,.kame-tools"));
+            if (overlay) violations.push(host.id || host.getAttribute("data-paper-id") || host.tagName);
+          }
+        }).observe(document, { childList: true, subtree: true, attributes: true, attributeOldValue: true });
+      }, clock);
+      for (let visit = 0; visit < 3; visit++) {
+        await ready(page);
+        await paperReady(page);
+        assert.equal(await page.getByRole("heading", { name: "Projects", exact: true }).count(), 1);
+        assert.equal(await page.locator("#kame-shell > .kame-tools").count(), 1);
+        assert.equal(await page.locator("#kame-shell > .paper-sticker").count(), 1);
+        if (clock) {
+          await page.clock.fastForward(46_000);
+          assert.equal(await state(page), "nap");
+          await page.getByRole("button", { name: "Call Kame", exact: true }).click();
+          assert.equal(await state(page), "follow");
+        }
+        const card = page.locator(".cartridge[data-paper-active=true]").first();
+        assert.equal(await card.locator(":scope > .paper-tools").count(), 1);
+        await card.getByRole("button", { name: "Peel corner", exact: true }).focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await card.getAttribute("data-paper-state"), "peeled");
+        await card.getByRole("button", { name: "Reset", exact: true }).focus();
+        await page.keyboard.press("Enter");
+        assert.equal(await card.getAttribute("data-paper-state"), "intact");
+
+        assert.deepEqual(await page.evaluate(() => (window as unknown as { paperHydrationViolations: string[] }).paperHydrationViolations), []);
+        if (visit < 2) await page.reload({ waitUntil: "load" });
+      }
+      // Exercise the owning client subtree after hydration, then replace its DOM.
+      await page.getByRole("button", { name: "Daruma shelf", exact: true }).click();
+      await page.locator(".daruma-board").waitFor();
+      await page.getByRole("button", { name: "Cartridges", exact: true }).click();
+      await page.locator(".cartridges").waitFor();
+      await paperReady(page);
+      await page.locator('[data-end-page="/notes"]').click();
+      await page.waitForURL("**/notes");
+      await ready(page); await paperReady(page);
+      assert.equal(await page.locator("#kame-shell > .kame-tools").count(), 1);
+      assert.equal(await page.locator("#kame-shell > .paper-sticker").count(), 1);
+      assert.deepEqual(await page.evaluate(() => (window as unknown as { paperHydrationViolations: string[] }).paperHydrationViolations), []);
+    });
+  }
+});
+
+test("an early load and 46s clock jump cannot mutate the still-unhydrated projects subtree", { timeout: 20_000 }, async (t) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  t.after(() => assert.deepEqual(errors, [], "no browser exceptions, including hydration errors"));
+  let release!: () => void;
+  const released = new Promise<void>(resolve => { release = resolve; });
+  t.after(async () => { release(); await context.close(); });
+  let held = 0;
+  await page.route("**/_next/static/chunks/*.js", async route => {
+    const response = await route.fetch();
+    const body = await response.text();
+    // Hold the real Daruma client module, leaving the root loaders free to hydrate.
+    if (body.includes('"daruma-root"')) { held++; await released; }
+    await route.fulfill({ response, body });
+  });
+  await page.addInitScript(() => {
+    Object.assign(window, { hydrationWaits: 0 });
+    const observe = MutationObserver.prototype.observe;
+    MutationObserver.prototype.observe = function (target, options) {
+      if (target === document.body && options?.childList && options.subtree && !options.attributes) {
+        (window as unknown as { hydrationWaits: number }).hydrationWaits++;
+      }
+      return observe.call(this, target, options);
+    };
+  });
+  await page.clock.install();
+  await page.goto(`${BASE}/projects`, { waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => (window as unknown as { hydrationWaits: number }).hydrationWaits >= 2);
+  assert.equal(held, 1, "the real Daruma module is held back");
+  assert.ok(await page.locator('.cartridge[data-paper-host]:not([data-paper-hydrated])').count() > 0, "server cards exist but have not committed");
+  // Deliberately hostile scheduling: load/idle and a clock jump precede the route commit.
+  await page.evaluate(() => window.dispatchEvent(new Event("load")));
+  await page.clock.fastForward(46_000);
+  assert.equal(await page.locator(".paper-tools,.paper-sticker,.kame-tools,[data-kame]").count(), 0,
+    "a footer commit and elapsed time cannot release either overlay");
+  release();
+  await page.waitForLoadState("load");
+  await ready(page); await paperReady(page);
+  assert.equal(await page.locator("#kame-shell > .kame-tools").count(), 1);
+  assert.equal(await page.locator("#kame-shell > .paper-sticker").count(), 1);
 });

@@ -301,8 +301,8 @@ test("the site root layout mounts the season layer first in <body>, ahead of eve
   // opens in the top layer, so it stands between the layer and the pages without moving either. The urashima listener
   // (components/urashima-keys.tsx) renders nothing either. Kame and the paper loader render null
   // before load/idle; their null Suspense boundaries keep dynamic routes prerenderable.
-  // Kame's ink is fixed and its controls portal into the reserved footer slot. Seasons remain first.
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*\{children\}\s*<AppearanceRuntime \/>\s*<\/body>/);
+  // Kame and paper overlays follow the route content and wait for host commits. Seasons remain first.
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?\{children\}\s*<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*<AppearanceRuntime \/>\s*<\/body>/);
   assert.equal(src.match(/<TactileLoader\b/g)?.length, 1);
   assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
   assert.equal(src.match(/<PressSound\b/g)?.length, 1);

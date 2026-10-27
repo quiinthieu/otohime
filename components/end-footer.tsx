@@ -1,3 +1,4 @@
+import { PaperHost } from "@/components/paper-host";
 import { BottleButton } from "@/components/bottle/button";
 import { RisoText } from "@/components/riso-heading";
 import { EndStage, EndTop } from "@/components/end-stage";
@@ -66,7 +67,7 @@ export function EndFooter() {
                 <p className="caption mb-2.5">Lines</p>
                 <ul className="end-lines">
                   {site.lines.map((line) => (
-                    <li key={line.label} data-paper-id={`line:${encodeURIComponent(line.label)}`} data-tossable="true" data-paper-fetch-only="true" data-paper-label={line.label}>
+                    <PaperHost as="li" key={line.label} data-paper-id={`line:${encodeURIComponent(line.label)}`} data-tossable="true" data-paper-fetch-only="true" data-paper-label={line.label}>
                       <a
                         href={line.href}
                         data-end-line={line.label}
@@ -79,7 +80,7 @@ export function EndFooter() {
                         </span>
                         <span>{line.label}</span>
                       </a>
-                    </li>
+                    </PaperHost>
                   ))}
                 </ul>
               </div>
@@ -87,7 +88,7 @@ export function EndFooter() {
           </div>
         </div>
 
-        <div id="kame-shell" />
+        <PaperHost id="kame-shell" />
 
         <div className="end-bar">
           <p className="end-credits">

@@ -1,5 +1,6 @@
 "use client";
 
+import { afterPaperHydration } from "@/lib/paper-hydration";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createKame, PET_MS, type Kame, type KameState } from "@/lib/kame";
@@ -26,7 +27,7 @@ export default function Companion() {
   const [slot, setSlot] = useState<HTMLElement | null>(null);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
+  useEffect(() => afterPaperHydration(() => {
     let storage;
     try { storage = localStorage; } catch { /* memory-only */ }
     const kame = createKame({ now: () => performance.now(), calendar: () => new Date(), storage });
@@ -197,7 +198,7 @@ export default function Companion() {
       removeEventListener("pointerup", release); removeEventListener("pointercancel", release); removeEventListener("blur", release); removeEventListener("pagehide", pageHide); removeEventListener("pageshow", syncPause);
       document.removeEventListener("visibilitychange", syncPause); media.removeEventListener("change", preference);
     };
-  }, []);
+  }), []);
 
   useEffect(() => {
     if (!focusAfter.current || !slot) return;
