@@ -99,7 +99,7 @@ at both 1366×768 and 390×844. All three cycle-1 defects are gone:
 
 ## Notes for the owner (not defects)
 
-- In 14 role slots across shipped plans, more than one model succeeded (e.g.
+- In 12 role slots across shipped plans, more than one model succeeded (e.g.
   pm-241 engineer: 4× gemini-4-argon-high, then claude-opus-5-5). The badge
   shows the latest. That is true, but listing every model would say more.
 - `qa_report_t-1680.md` claims a SQL cross-check naming pm-144, pm-209, pm-215
