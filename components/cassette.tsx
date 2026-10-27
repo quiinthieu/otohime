@@ -1,10 +1,10 @@
 import { RisoText } from "@/components/riso-heading";
 import { swatches } from "@/components/figures";
 import { site } from "@/content/site";
-import { listenTime, readTime, type MusicReading, type Game, type NowPlaying, type Track } from "@/lib/now-playing-data";
+import { listenTime, readTime, type MusicReading, type PlayReading, type Game, type NowPlaying, type Track } from "@/lib/now-playing-data";
 import type { CSSProperties } from "react";
 
-// Music's Now playing shelf: a paper cassette for the selected music source and a game cartridge for what is on Steam.
+// Music's Now playing shelf: a paper cassette for the selected music source and a game cartridge for the selected public game presence.
 // Server-rendered from a NowPlaying reading (lib/now-playing.ts reads it). The words are ordinary HTML on a
 // paper label of fixed height, so a long title wraps inside its reserved space and the page never jumps. The
 // shells are unfiltered SVGs stretched to their labels (percentage lengths, like components/cartridge.tsx).
@@ -28,7 +28,7 @@ export function NowPlayingShelf({ reading }: { reading: NowPlaying }) {
       <h2 id="now-playing" className="caption"><RisoText>{copy.heading}</RisoText></h2>
       <div className="now-playing-shelf mt-6">
         <Cassette track={reading.track} music={reading.music} />
-        <GameCart game={reading.game} fixture={reading.play.state === "fixture"} />
+        <GameCart game={reading.game} play={reading.play} />
       </div>
       <p className="mt-4 text-[12px] text-muted" data-now-playing-credit="">
         {read && reading.readAt ? (
@@ -43,8 +43,8 @@ export function NowPlayingShelf({ reading }: { reading: NowPlaying }) {
           {reading.music.source === "listenbrainz" ? copy.credit.listenbrainz : copy.credit.spotify}
         </a>
         ,{" "}
-        <a href="https://store.steampowered.com" className="underline" target="_blank" rel="noreferrer">
-          {copy.credit.steam}
+        <a href={reading.play.source === "lanyard" ? "https://github.com/Phineas/lanyard" : "https://store.steampowered.com"} className="underline" target="_blank" rel="noreferrer">
+          {reading.play.source === "lanyard" ? copy.credit.lanyard : copy.credit.steam}
         </a>
         .{reading.music.profileUrl && <> <a href={reading.music.profileUrl} className="underline" target="_blank" rel="noreferrer">{copy.profile}</a>.</>}
       </p>
@@ -85,7 +85,7 @@ function Cassette({ track, music }: { track: Track | null; music: MusicReading }
   );
 }
 
-function GameCart({ game, fixture }: { game: Game | null; fixture: boolean }) {
+function GameCart({ game, play }: { game: Game | null; play: PlayReading }) {
   const copy = site.nowPlaying;
   const playing = site.now.find((n) => n.what === "Playing")?.note ?? "";
   return (
@@ -96,7 +96,7 @@ function GameCart({ game, fixture }: { game: Game | null; fixture: boolean }) {
     >
       <CartShell />
       <figcaption className="np-label game-label">
-        <span className="np-side">{copy.cart}{fixture ? " · fixture" : ""}</span>
+        <span className="np-side">{play.source === "lanyard" ? copy.cartLanyard : copy.cart}{play.state === "fixture" ? " · fixture" : ""}</span>
         <span className="np-status" data-label="status">
           {game ? copy.inGame : copy.quiet}
         </span>

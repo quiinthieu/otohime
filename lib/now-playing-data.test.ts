@@ -267,3 +267,30 @@ test("source metadata cannot promote an unread Spotify adapter to live", () => {
   assert.equal(clean.spotify, "spotify-off");
   assert.equal(clean.track, null);
 });
+
+test("Lanyard selects only the first valid type-0 game, caps names and discards Discord identity and links", async () => {
+  const { parseLanyardGame } = await import("./now-playing-data.ts");
+  const fixtures = JSON.parse(readFileSync(new URL("./fixtures/lanyard.json", import.meta.url), "utf8"));
+  assert.deepEqual(parseLanyardGame(fixtures.game), { game: { title: "Fixture Lanyard Game", url: null } });
+  for (const key of ["empty", "spotify", "invalidActivities"]) assert.deepEqual(parseLanyardGame(fixtures[key]), { game: null }, key);
+  for (const body of [null, [], {}, fixtures.unknown, { success: true, data: { activities: {} } }, { success: "true", data: { activities: [] } }, { success: true }, { success: true, data: { activities: [] }, error: {} }]) assert.equal(parseLanyardGame(body), null);
+  const result = parseLanyardGame({ success: true, data: { activities: [null, {type:0,name:"\u0000"}, {type:"0",name:"wrong"}, {type:0,name:"\u202e" + "🎮".repeat(100)}, {type:0,name:"second"}] } });
+  assert.equal([...result!.game!.title].length, LIMITS.game);
+  assert.ok(result!.game!.title.endsWith("…"));
+  assert.doesNotMatch(JSON.stringify(result), /second|202e|discord|avatar|friend|http/);
+});
+
+test("Lanyard sanitizer never exposes a Discord profile or a guessed Steam link", () => {
+  const input = { ...QUIET, steam: "steam-live", play: { source: "lanyard", state: "fixture", profileUrl: "https://discord.com/users/123" }, game: { title: "G", url: "https://store.steampowered.com/app/10/", avatar: "private" } };
+  const result = sanitize(input);
+  assert.deepEqual(result.play, { source: "lanyard", state: "fixture", profileUrl: null });
+  assert.equal(result.steam, "steam-off");
+  assert.deepEqual(result.game, {title:"G",url:null});
+  assert.equal(sanitize({ ...input, play: {source:"lanyard",state:"quiet"} }).game, null);
+  for (const state of ["invented", null, {}, 5]) {
+    const invalid = sanitize({ ...input, play: { source: "lanyard", state } });
+    assert.deepEqual(invalid.play, { source: "lanyard", state: "quiet", profileUrl: null });
+    assert.equal(invalid.steam, "steam-off");
+    assert.equal(invalid.game, null);
+  }
+});

@@ -91,7 +91,7 @@ test("no configuration: both providers off and nothing is asked", async () => {
   const config = configFrom({});
   assert.equal(config.spotify, null);
   assert.equal(config.steam, null);
-  assert.deepEqual(config.fixture, { spotify: false, steam: false, listenbrainz: false });
+  assert.deepEqual(config.fixture, { spotify: false, steam: false, listenbrainz: false, lanyard: false });
   const r = await read(config);
   assert.deepEqual(r.result, { music: { source: null, state: "off", profileUrl: null }, play: { source: null, state: "off", profileUrl: null }, spotify: "spotify-off", track: null, steam: "steam-off", game: null, readAt: AT.toISOString() });
   assert.equal(r.calls.length, 0);
@@ -129,8 +129,8 @@ test("host overrides are honoured only as bare loopback origins", () => {
   ])
     assert.equal(loopbackOrigin(bad), null, String(bad));
   const config = configFrom({ ...SECRETS, NOW_PLAYING_SPOTIFY_API_HOST: "https://evil.example", NOW_PLAYING_STEAM_HOST: "http://10.0.0.1" });
-  assert.deepEqual(config.hosts, { accounts: "https://accounts.spotify.com", api: "https://api.spotify.com", steam: "https://api.steampowered.com", listenbrainz: "https://api.listenbrainz.org" });
-  assert.deepEqual(config.fixture, { spotify: false, steam: false, listenbrainz: false });
+  assert.deepEqual(config.hosts, { accounts: "https://accounts.spotify.com", api: "https://api.spotify.com", steam: "https://api.steampowered.com", listenbrainz: "https://api.listenbrainz.org", lanyard: "https://api.lanyard.rest" });
+  assert.deepEqual(config.fixture, { spotify: false, steam: false, listenbrainz: false, lanyard: false });
 });
 
 test("a live read: token refresh, then the track; and the public summary; nothing secret comes back", async () => {
@@ -267,7 +267,7 @@ test("readNowPlaying: one use-cache function, one cacheLife of about a minute th
   assert.deepEqual(calls, ["{ stale: 30, revalidate: 60, expire: 300 }"]);
   assert.match(CODE, /return readProviders\(configFrom\(process\.env\)\);/);
   assert.equal(CODE.match(/process\.env/g)?.length, 1);
-  assert.equal(CODE.match(/AbortSignal\.timeout\(TIMEOUT_MS\)/g)?.length, 3);
+  assert.equal(CODE.match(/AbortSignal\.timeout\(TIMEOUT_MS\)/g)?.length, 4);
   assert.doesNotMatch(CODE, /retry|retries|console\./i);
   assert.match(CODE, /^import "server-only";$/m);
 });
@@ -287,8 +287,8 @@ test("the providers' hosts, credentials and overrides appear in lib/now-playing.
   for (const file of APP) {
     if (file === join("lib", "now-playing.ts")) continue;
     const text = readFileSync(join(ROOT, file), "utf8");
-    assert.doesNotMatch(text, /accounts\.spotify\.com|api\.spotify\.com|api\.steampowered\.com/, file);
-    assert.doesNotMatch(text, /SPOTIFY_(?:CLIENT|REFRESH)|STEAM_(?:API_KEY|ID)\b|NOW_PLAYING_\w+_HOST/, file);
+    assert.doesNotMatch(text, /accounts\.spotify\.com|api\.spotify\.com|api\.steampowered\.com|api\.listenbrainz\.org|api\.lanyard\.rest/, file);
+    assert.doesNotMatch(text, /SPOTIFY_(?:CLIENT|REFRESH)|STEAM_(?:API_KEY|ID)\b|LANYARD_USER_ID|NOW_PLAYING_\w+_HOST/, file);
   }
 });
 
@@ -398,4 +398,65 @@ test("ListenBrainz hung endpoints share the four-second deadline, with no retry"
   assert.equal(r.music.state, 'quiet');
   assert.equal(calls.length, 2);
   assert.ok(Date.now() - start >= 3900 && Date.now() - start < 5500);
+});
+
+const LANYARD_ID = "123456789012345678";
+const LY = JSON.parse(readFileSync(join(ROOT, "lib/fixtures/lanyard.json"), "utf8"));
+test("Lanyard configuration uses env over the empty server default; identifiers and hosts are validated", () => {
+  assert.equal(configFrom({}).lanyard, null);
+  assert.deepEqual(configFrom({}, "", LANYARD_ID).lanyard, { id: LANYARD_ID });
+  assert.equal(configFrom({LANYARD_USER_ID:""}, "", LANYARD_ID).lanyard, null);
+  for (const id of ["1".repeat(16), "1".repeat(21), "12345678901234567x", " 123456789012345678", "123456789012345678\n"]) assert.equal(configFrom({LANYARD_USER_ID:id}).lanyard, null, id);
+  for (const id of ["1".repeat(17), "1".repeat(20)]) assert.equal(configFrom({LANYARD_USER_ID:id}).lanyard?.id, id);
+  assert.equal(configFrom({NOW_PLAYING_LANYARD_HOST:"https://evil.example"}).hosts.lanyard, "https://api.lanyard.rest");
+  assert.equal(configFrom({NOW_PLAYING_LANYARD_HOST:"http://localhost:4135"}).fixture.lanyard, true);
+});
+test("Lanyard selected games and valid empty presence keep music independent and Steam unasked", async () => {
+  for (const fixture of [false, true]) for (const key of ["game", "empty", "spotify", "invalidActivities"]) {
+    const f = fake();
+    const seen: Call[] = [];
+    const config = configFrom({...SECRETS, LANYARD_USER_ID:LANYARD_ID, ...(fixture ? {NOW_PLAYING_LANYARD_HOST:"http://127.0.0.1:4135"} : {})});
+    const r = await readProviders(config, async (url, init) => {
+      if (!url.includes("/v1/users/")) return f.fetcher(url, init);
+      seen.push({url, init}); return json(LY[key]);
+    });
+    assert.equal(r.play.source, "lanyard");
+    assert.equal(r.play.state, fixture ? "fixture" : "live");
+    assert.deepEqual(r.game, key === "game" ? {title:"Fixture Lanyard Game",url:null} : null);
+    assert.equal(r.steam, "steam-off");
+    assert.equal(r.track?.title, "Nicole Kidman");
+    assert.equal(f.calls.length, 2);
+    assert.equal(seen.length, 1);
+    assert.equal(seen[0].url, `${config.hosts.lanyard}/v1/users/${LANYARD_ID}`);
+    assert.equal(seen[0].init.redirect, "error");
+    assert.ok(seen[0].init.signal instanceof AbortSignal);
+    assert.deepEqual(seen[0].init.headers, {"user-agent":"otohime.dev/1.0 (+https://otohime.dev)",accept:"application/json"});
+    assert.doesNotMatch(JSON.stringify(r), /123456789012345678|PrivateFixture|application_id/);
+  }
+});
+test("Lanyard errors, HTML, invalid JSON, redirects and abort are quiet without provider fallback", async () => {
+  const keeper = setInterval(() => {}, 1000);
+  try {
+    for (const answer of [json(LY.unknown), json({},429), json({},500), json({},302), json({success:true,data:{activities:null}}), new Response("<html>challenge</html>", {headers:{"content-type":"text/html"}}), new Response("bad",{headers:{"content-type":"application/json"}}), new Error("redirect refused"), "hang"]) {
+      const f = fake(); let requests = 0;
+      const start = performance.now();
+      const r = await readProviders(configFrom({...SECRETS,LANYARD_USER_ID:LANYARD_ID}), async (url, init) => {
+        if (!url.includes("/v1/users/")) return f.fetcher(url, init);
+        requests++;
+        if (answer === "hang") return new Promise((_, reject) => init.signal?.addEventListener("abort", () => reject(init.signal?.reason)));
+        if (answer instanceof Error) throw answer;
+        return (answer as Response).clone();
+      });
+      assert.deepEqual(r.play, {source:"lanyard",state:"quiet",profileUrl:null});
+      assert.equal(r.game, null);
+      assert.equal(r.track?.title,"Nicole Kidman");
+      assert.equal(r.steam,"steam-off");
+      assert.equal(f.calls.length,2);
+      assert.equal(requests,1);
+      if (answer === "hang") assert.ok(performance.now()-start >= 3500 && performance.now()-start < 6500);
+    }
+    const r = await readProviders(configFrom({...SECRETS,LANYARD_USER_ID:LANYARD_ID}), async (url) => url.includes("/v1/users/") ? json(LY.game) : json({},401));
+    assert.equal(r.music.state,"quiet");
+    assert.equal(r.game?.title,"Fixture Lanyard Game");
+  } finally { clearInterval(keeper); }
 });

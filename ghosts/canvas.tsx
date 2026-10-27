@@ -18,7 +18,7 @@ export default function GhostCanvas({ room }: { room: GhostRoom }) {
     const session = new GhostSession({
       now: () => performance.now(),
       config: async signal => {
-        const response = await fetch("/api/ghosts", { cache: "no-store", credentials: "omit", signal });
+        const response = await fetch("/api/ghosts?probe=1", { cache: "no-store", credentials: "omit", signal });
         if (response.status === 404) return null;
         if (!response.ok) throw new Error("Ghost configuration unavailable");
         return response.json();

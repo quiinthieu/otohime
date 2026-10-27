@@ -56,6 +56,19 @@ test("actual GET wiring awaits connection before reading runtime env, on every r
     assert.equal(disabled.status, 404);
     assert.equal(disabled.headers.get("cache-control"), "no-store");
     assert.equal(calls, 2);
+    // Browsers log an intentional 404 as a console error even when fetch handles it.
+    // The optional canvas probes availability without changing the default 404 contract.
+    const probe = new Request("https://otohime.dev/api/ghosts?probe=1");
+    const absent = await GET(probe);
+    assert.equal(absent.status, 200);
+    assert.equal(absent.headers.get("cache-control"), "no-store");
+    assert.deepEqual(await absent.json(), null);
+    globals[key] = async () => { calls++; process.env.GHOSTS_ENDPOINT = "wss://runtime.example/ghosts"; };
+    const available = await GET(probe);
+    assert.equal(available.status, 200);
+    assert.equal(available.headers.get("cache-control"), "no-store");
+    assert.deepEqual(await available.json(), { endpoint: "wss://runtime.example/ghosts", rooms: ["/", "/ryugu"] });
+    assert.equal(calls, 4);
   } finally {
     if (old === undefined) delete process.env.GHOSTS_ENDPOINT; else process.env.GHOSTS_ENDPOINT = old;
     delete globals[key];

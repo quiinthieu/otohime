@@ -145,6 +145,11 @@ Unset or malformed values return an empty 404. Credentials, fragments, base quer
 endpoints are rejected. For local production-build proof, `ws://127.0.0.1:<port>/ghosts` works only when the
 page also uses a loopback host; no hosted configuration is changed by local proof.
 
+The optional browser canvas uses `GET /api/ghosts?probe=1`: disabled configuration returns HTTP 200 with JSON
+`null`, so an intentional off state does not create a failed subresource or browser console error. Enabled
+configuration returns the same endpoint/rooms object. The ordinary GET retains its empty disabled 404;
+both forms remain runtime-only and `no-store`.
+
 Both pages mount the neutral idle loader. The canvas is portalled to `document.body`: Home's entrance animation
 would otherwise give a fixed descendant page-sized rather than viewport-sized bounds. Styles are inline,
 `pointer-events:none`, and the whole layer is `aria-hidden`, with no focus target or live region. Other-member
