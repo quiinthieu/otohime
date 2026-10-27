@@ -82,7 +82,7 @@ This JSON array is the exact remaining proposal; numbering restarts at 1.
       "package.json",
       "content/history.json",
       "changelogs/",
-      "projects/otohime-dev-lean-into-the-name-otohime-is-the-sea-princess-o/"
+      "projects/otohime-dev-lean-into-the-name-otohime-is-the-sea-princess-o/history-build-architecture.md"
     ],
     "non_goals": [
       "Redesigning the box, scrubber, aged-paper effect, replay label, sea or sound",
