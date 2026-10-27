@@ -1,0 +1,17 @@
+{
+  "source": "Python urllib public GitHub API before delivery push",
+  "repository": "quiinthieu/otohime",
+  "attempted": [
+    "actions/runs?status=failure&per_page=5&page=1",
+    "actions/runs?status=failure&per_page=5&page=2",
+    "actions/runs?status=completed&per_page=5&page=1",
+    "actions/runs?status=completed&per_page=5&page=2",
+    "actions/runs?status=in_progress&per_page=5&page=1",
+    "actions/runs?status=queued&per_page=5&page=1",
+    "actions/runs/40471181031/jobs"
+  ],
+  "observed_error_for_each": "HTTP Error 403: rate limit exceeded",
+  "retrieved_runs": 0,
+  "completeness": "inconclusive; totals and latest hosted outcome unread",
+  "boundary": "No production endpoint check or post-push CI watch. Known historical production defect remains open."
+}

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Production deploy for the CI `production` job: upload the prebuilt output, inspect the deployment,
-# then prove https://otohime.dev serves this commit. Inspect and health must both pass.
+# then prove https://otohime.dev serves this commit. Readiness and health must both pass.
+# Only repeated CLI User-not-found failures may use a team/project-bound API Ready read instead.
 # Each wait is bounded so a hang
 # fails with a public ::error annotation instead of silently running into the job timeout
 # (run 40311256064: the old blocking `vercel deploy` hung 850 s and the health check never ran).
@@ -11,6 +12,8 @@
 # diagnostic re-read), HEALTH_URL (https://otohime.dev/api/health), HEALTH_RETRIES (10) and
 # HEALTH_RETRY_DELAY (6 s; curl reads 0 as exponential backoff, so tests use 1),
 # HEALTH_ATTEMPTS (12 reads of the body, HEALTH_POLL_DELAY 10 s apart, for an alias that lags ready).
+# The identity-error API fallback also requires the existing VERCEL_TOKEN and VERCEL_PROJECT_ID;
+# its single request is bounded at 10 s and 1 MiB, without logging credentials or API response bodies.
 #
 # The upload is retried once only when it failed fast with no deployment URL. A timed-out upload is
 # not retried (it may already have created a deployment, and a retry doubles the bound), and nothing
@@ -61,6 +64,7 @@ work=$(mktemp -d)
 upload_log=$work/upload.log
 wait_log=$work/wait.log
 state_log=$work/state.log
+api_log=$work/api.log
 trap 'rm -rf "$work"' EXIT
 
 # Strip CLI colouring before parsing or publishing diagnostics. A generic "Error:" in a request
@@ -70,6 +74,9 @@ plain() { sed -E $'s/\033\\[[0-9;]*[[:alpha:]]//g' "$1"; }
 diagnostic_tail() { plain "$1" | tail -c 4000; }
 deployment_state() {
   plain "$1" | sed -nE 's/^[[:space:]]*status[[:space:]]+[^[:alnum:]]*(Ready|Building|Queued|Initializing|Error|Canceled|Cancelled)[[:space:]]*$/\1/p' | head -n 1
+}
+identity_lookup_failed() {
+  plain "$1" | grep -E '(^|[[:space:]])Error: (Not able to load user because of unexpected error: )?User not found[.]?[[:space:]]*$' >/dev/null
 }
 
 upload() {
@@ -121,7 +128,20 @@ if [ "$status" -ne 0 ] || [ "$state" != Ready ]; then
   else
     inspect_failure="${state:-unknown} (inspect exited $status) $url$diagnostic"
   fi
-  fail "$inspect_failure"
+  # A team-scoped token can deploy while the CLI's global /user lookup fails.
+  # Do not rescue timeouts, builds, terminal errors or a failed wait with a Ready re-read.
+  # This independent read must authenticate the same token/team and bind the exact upload/project.
+  if [ "$status" -eq 1 ] && [ "$state_status" -eq 1 ] && [ -z "$state" ] \
+    && identity_lookup_failed "$wait_log" && identity_lookup_failed "$state_log"; then
+    log "scoped CLI identity lookup failed; verifying uploaded deployment through the team API"
+    if bounded "$INSPECT_TIMEOUT" node "$(dirname "$0")/vercel-deployment-state.mjs" "$url" >"$api_log" 2>&1; then
+      cat "$api_log" >&2
+    else
+      fail "$inspect_failure; API readiness failed: $(diagnostic_tail "$api_log")"
+    fi
+  else
+    fail "$inspect_failure"
+  fi
 fi
 
 expect="\"sha\":\"$GITHUB_SHA\""

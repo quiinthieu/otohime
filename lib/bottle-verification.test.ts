@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { GATES } from "../scripts/ci-probe-verification.mjs";
 import { test } from "node:test";
-import { BOTTLE_GATES, assertBottleEvidence } from "../scripts/verify-bottle-contracts.mjs";
+import { API_DEPLOYMENT_CONTROLS, BOTTLE_GATES, assertBottleEvidence } from "../scripts/verify-bottle-contracts.mjs";
 import { CONTROLS } from "../scripts/check-gate-closure.mjs";
 
 type ClosureReceipt = {
@@ -16,6 +16,17 @@ type ClosureReceipt = {
 
 const prior = new URL("../projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/", import.meta.url);
 const log = (id: string) => readFileSync(new URL(`${id}.log`, prior), "utf8");
+// Synthetic parser fixture only. The archived CLI evidence predates the API path.
+const deploymentFixture = () => {
+  const added = [
+    ...["building", "queued", "initializing", "silent", "unknown"]
+      .map((mode) => `zero-exit ${mode} inspect fails closed before matching health`),
+    ...API_DEPLOYMENT_CONTROLS,
+  ];
+  return log("deployment").replace("# all 54 assertions passed", [
+    ...added.map((name) => `ok - ${name}`), `# all ${54 + added.length} assertions passed`,
+  ].join("\n"));
+};
 const tapFixture = (names: string[]) => [
   ...names.map((name, index) => `ok ${index + 1} - ${name}`),
   `1..${names.length}`, `# tests ${names.length}`, `# pass ${names.length}`,
@@ -103,17 +114,17 @@ test("Bottle deployment receipt requires scoped Ready and fail-closed controls b
   // This tests receipt rejection only; the real shell fixture must still execute.
   const readyControls = ["building", "queued", "initializing", "silent", "unknown"]
     .map((mode) => `zero-exit ${mode} inspect fails closed before matching health`);
-  const output = log("deployment").replace("# all 54 assertions passed", [
-    ...readyControls.map((name) => `ok - ${name}`), "# all 59 assertions passed",
-  ].join("\n"));
+  assert.throws(() => assertBottleEvidence("deployment", log("deployment")));
+  const output = deploymentFixture();
   const evidence = assertBottleEvidence("deployment", output);
   assert.ok("assertions" in evidence);
-  assert.equal(evidence.assertions, 59);
+  assert.equal(evidence.assertions, 59 + API_DEPLOYMENT_CONTROLS.length);
   for (const marker of [
     "standalone inspect without scope reproduces User not found",
     "explicit team scope permits Ready inspect and exact-sha health",
     "User not found with explicit scope still fails closed before health",
     ...readyControls,
+    ...API_DEPLOYMENT_CONTROLS,
   ]) {
     assert.throws(() => assertBottleEvidence("deployment", output.replace(marker, "omitted deployment control")));
     assert.throws(() => assertBottleEvidence("deployment", output.replace(`ok - ${marker}`, `not ok - ${marker}`)));
@@ -126,13 +137,13 @@ test("Bottle deployment receipt requires scoped Ready and fail-closed controls b
 test("Bottle deployment receipt reconciles unique assertion lines with its summary", () => {
   const ready = ["building", "queued", "initializing", "silent", "unknown"]
     .map((mode) => `ok - zero-exit ${mode} inspect fails closed before matching health`);
-  const output = log("deployment").replace("# all 54 assertions passed", [...ready, "# all 59 assertions passed"].join("\n"));
+  const output = deploymentFixture();
   assertBottleEvidence("deployment", output);
   const assertion = "ok - healthy deploy exits 0";
   assert.ok(output.includes(assertion));
   assert.throws(() => assertBottleEvidence("deployment", output.replace(assertion + "\n", "")), /assertion/);
   assert.throws(() => assertBottleEvidence("deployment", output.replace(assertion, ready[0])), /duplicate/);
-  assert.throws(() => assertBottleEvidence("deployment", output.replace("# all 59", "# all 600")), /assertion/);
+  assert.throws(() => assertBottleEvidence("deployment", output.replace(/# all \d+/, "# all 600")), /assertion/);
 });
 
 test("Bottle verifier import preserves shared gates and single-gate CLI rejects silent exit0", () => {

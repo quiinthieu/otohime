@@ -1,0 +1,64 @@
+{
+  "base_sha": "c84b7e754a8daf862842f616b8e61ce367099793",
+  "node": "v22.23.3",
+  "platform": "Darwin",
+  "arch": "arm64",
+  "modules": {
+    "next": {
+      "installed": "16.4.2",
+      "locked": "16.4.2"
+    },
+    "react": {
+      "installed": "19.3.0",
+      "locked": "19.3.0"
+    },
+    "pg": {
+      "installed": "8.23.1",
+      "locked": "8.23.1"
+    },
+    "playwright-core": {
+      "installed": "1.64.0",
+      "locked": "1.64.0"
+    },
+    "embedded-postgres": {
+      "installed": "17.10.0-beta.17",
+      "locked": "17.10.0-beta.17"
+    }
+  },
+  "files": {
+    ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36",
+    "app/(site)/globals.css": "df2accbef90094bcabb881656e8d7d8b0a6fc287bb3ba91f77229e7370b86b16",
+    "components/bottle/button.css": "4b1cd7355f0989a71686eb97fcf53f82fc8b878d4d53ee6f89c208e217d7fc0d",
+    "components/bottle/button.tsx": "fd66c503666593d8104ce2f2f9dcc6fa332f40734cc34207aaf063a26dc24c98",
+    "components/bottle/panel.css": "ff4a71f6e6960e67fc35fde38f045074008251e229d46a424a91e6b3f0f4838b",
+    "components/bottle/panel.tsx": "a466c2f178d6560a1848f021fd4b7de46986fb3bd40590db77538ad7258618f7",
+    "components/end-footer.tsx": "043707b4ed9eb2b106eae92a30f2e9cb7c576f7d65c1ca6c22b0b160a3adef0d",
+    "components/handheld.tsx": "cf961ff07549140b7de2ec93985bf7363d7f82d451ae7454528b3a108ce4f1a6",
+    "e2e/bottle-ui.test.ts": "7688c4035f52b3842dcbf92267b024beda635ab2238601a3a759867603be303b",
+    "lib/bottle-footer-layout.test.ts": "45025cb8a14558860139da16fddf844e69f6e72f0b6e42f01a33f2451c5e4969",
+    "lib/bottle-verification.test.ts": "19e6eed57962af5acad2b4b2a1dfd68fb41be7cb11b1262d04c0ab8ef896e1ff",
+    "lib/bottles.test.ts": "d48f50c9c1ea598bc0935ffd370794d04c7f8c1136b539b9a52fa96aa10c4bfd",
+    "lib/bottles.ts": "7ac4b0cb7525507adf97b20979abbb3fc76d56ea4be1c505e967984f03197b84",
+    "lib/e2e-runner.test.ts": "6fe93176829330716bfcfb8c49c92a42cd813a5279711cf3d52a32440be88b0b",
+    "lib/gate-closure.test.ts": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+    "lib/vercel-deployment-state.test.ts": "60eb8586f63375ddb8ec4947f2610d4f9374ca6c68a90eb23298d64cbb000bfe",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "70541c935676e2797d8648d8e9e90447e0cf7552b560e12a26ba197df328029e",
+    "scripts/check-gate-closure.mjs": "d435846bd526ad54004f05dd899fa674f76a464bca94f5c8e2dfafb459fc5abf",
+    "scripts/ci-probe-verification.mjs": "ee73e106363d8f8bc78bb1206f6fd286de96480f953055b6f59238ddefdcbba0",
+    "scripts/e2e.mjs": "5144b88ea2938181307b1eb735bb5467879c37f8d87c1236a5e8b061a4c966f9",
+    "scripts/vercel-deploy.sh": "ce09f182cf427467e285670d929970dbb1a2d0cad06de6e24679083944eb7a2b",
+    "scripts/vercel-deploy.test.sh": "04cb2df828802adbd2b8b1da9bdb80fedf5cd5cbd8552e02a0bdd51540a16b94",
+    "scripts/vercel-deployment-state.mjs": "4fdcc50039d5340a975ad38c17622fb338b36ddf1aa5a66767070e5b017e0fc7",
+    "scripts/verify-bottle-contracts.mjs": "de6c36d191be58a1dfde2662953ce519e0a15f460304e05c22712c8f5f2a0174",
+    "scripts/verify-bottle-footer.mjs": "5af7548531fc7d21fdac3561c9396dd385c8525c4123497e94f627d51c7f7a6d"
+  },
+  "fingerprint": "366e9c901811e9ba97ede3855c482a2cc39ed886082ef13d2f6625c9c4263de9",
+  "vercel_cli": {
+    "version": "64.7.0",
+    "index_sha256": "2538efad3c4dd3dc1e8ac189a82f1e095d0bff0ee7bd741158ddff682bcc5282",
+    "preflight": "real inspect --help exits0, CLI env/scope source inspected; external npx version is outside repository lock; no hosted API authorization exercised"
+  },
+  "boundary": "Real locked Next/Postgres/Chromium gates; deployment uses actual Node22 fetch/helper/Bash/processes and local HTTP with fake CLI and vendor JSON. No hosted recovery or product delivery claim."
+}

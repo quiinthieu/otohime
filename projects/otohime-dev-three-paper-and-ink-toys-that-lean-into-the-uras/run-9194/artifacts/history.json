@@ -1,0 +1,258 @@
+{
+  "boundary": "Bounded global coding-task history; prompts and parameters excluded. Unread pages and truncated runner bodies are inconclusive.",
+  "pages": [
+    {
+      "i": 0,
+      "total": 95,
+      "tasks": [
+        {
+          "id": "b5578323-3ff2-44e5-b635-ac5559353702",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "title": "integrate bat-2",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0b458dbc-bcb4-46b3-b1f0-b91fbfe601da",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "title": "integrate bat-2",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+          "status": "FAILED",
+          "repoId": "otohime",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "error": "agent_failed: exit 3 class=infra marker=mcp_probe_failed: plan-manager timeout",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+          "status": "FAILED",
+          "repoId": "otohime",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2a35aac9e2e3 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "aaf41670-24d4-4664-998d-744e4d6d29bd",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "title": "integrate bat-1",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "total": 95,
+      "tasks": [
+        {
+          "id": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "title": "integrate bat-1",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "title": "environment canary auth:claude can-466",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "899ebc8e-06d2-4172-8d43-caab66fc163a",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "title": "environment canary env can-465",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e80be90f-766f-4877-97a4-0920424f7002",
+          "status": "FAILED",
+          "repoId": "otohime",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 8959e8d817c4 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0d9749c4-86af-41ea-b8ff-52596bb8ba62",
+          "status": "FAILED",
+          "repoId": "otohime",
+          "title": "Read optional games from Lanyard",
+          "error": "agent_failed: exit 1 class=push_failed marker=Bounded prepublication task-manager sample: RUNNING 2/2; FAILED offsets 0/2 limit2, 4/72; COMPLETED offsets 0/2 limit2, 4/1272. Incomplete project-wide history;",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "total": 1419,
+      "tasks": [
+        {
+          "id": "371528b7-8f00-4ebf-a697-2882a7d3407b",
+          "status": "COMPLETED",
+          "repoId": "mono-v2",
+          "title": "environment canary deploy can-475",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f25facb0-b4f8-400a-a486-862f3368c975",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "title": "Contain footer Bottle within reserved header band and certify Bottle UI",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "25849c87-843f-4643-88aa-a344f9231939",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "title": "fleet canary viet-mac"
+        },
+        {
+          "id": "a53f478a-34b6-4e89-8f80-be45eac87b51",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "title": "Contain footer Bottle within reserved header band and certify Bottle UI",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3d9a2698-1526-4ef8-916b-e7a4cf271c7a",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "total": 1419,
+      "tasks": [
+        {
+          "id": "83a13b29-fa1b-4737-85a8-4476f89a1198",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "title": "Contain footer Bottle within reserved header band and certify Bottle UI",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "fe1143d5-7219-44e1-a370-eb9ea03a9a19",
+          "status": "COMPLETED",
+          "repoId": "mono-v2",
+          "title": "fleet canary avietidol-mac-mini"
+        },
+        {
+          "id": "35259300-0974-45bf-9dce-76d52d86d07a",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "title": "Contain footer Bottle within reserved header band and certify Bottle UI",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8e93f952-a314-4c83-8aad-ecc564be83bc",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "title": "Contain footer Bottle within reserved header band and certify Bottle UI",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "3ee61bb5-0c96-490f-b8e0-bd6ed0d9e485",
+          "status": "COMPLETED",
+          "repoId": "mono-v2",
+          "title": "fleet canary billie-mac"
+        }
+      ]
+    }
+  ],
+  "current": {
+    "total": 3,
+    "tasks": [
+      {
+        "id": "2616654d-4d1b-4cdb-8c1c-f7c4418b3690",
+        "status": "RUNNING",
+        "repo_id": "otohime",
+        "title": "Contain footer Bottle within reserved header band and certify Bottle UI"
+      },
+      {
+        "id": "32d95e6a-9b6f-44f6-ac74-38aa3790f588",
+        "status": "RUNNING",
+        "repo_id": "otohime",
+        "title": "Certify desk swipe preconditions and shared gate fixtures"
+      },
+      {
+        "id": "b96ce384-2269-4802-8f77-ad3a85ee64f3",
+        "status": "RUNNING",
+        "repo_id": "mono-v2",
+        "title": "Batched delivery P11 (continuation 3): fix the integration RPC client, then finish the native cycles, proof, activation and migration"
+      }
+    ]
+  },
+  "ingestion": [
+    {
+      "id": "run-9189",
+      "plan_id": "pm-269",
+      "task_id": "t-1648",
+      "role": "software_engineer",
+      "kind": "role",
+      "template_id": "coding-agent",
+      "tm_task_id": "83a13b29-fa1b-4737-85a8-4476f89a1198",
+      "repo_id": "otohime",
+      "account_id": "codex-main",
+      "worker_id": "billie-mac",
+      "runner": "fleet",
+      "agent_profile": "codex-sol-6-1-high",
+      "attempt": 9,
+      "status": "succeeded",
+      "started_at": "2026-10-27T07:47:05.007391Z",
+      "finished_at": "2026-10-27T08:06:25.573448Z",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9193",
+      "plan_id": "pm-269",
+      "task_id": "t-1648",
+      "role": "quality_engineer",
+      "kind": "role",
+      "template_id": "qa-agent",
+      "tm_task_id": "f25facb0-b4f8-400a-a486-862f3368c975",
+      "repo_id": "otohime",
+      "account_id": "codex-main",
+      "worker_id": "avietidol-z490",
+      "runner": "fleet",
+      "agent_profile": "codex-sol-medium",
+      "attempt": 4,
+      "status": "succeeded",
+      "started_at": "2026-10-27T08:10:51.928098Z",
+      "finished_at": "2026-10-27T08:17:50.544015Z",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c 'model_reasoning_effort=\"medium\"'",
+      "callback_apply_failures": 0
+    }
+  ]
+}

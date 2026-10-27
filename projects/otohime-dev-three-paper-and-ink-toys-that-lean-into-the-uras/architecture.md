@@ -1,5 +1,11 @@
 # Ryugu Paper Toys architecture
 
+## Scoped API readiness fallback · pm-269/t-1648 · run-9194
+
+Both Vercel inspect calls retain the configured team scope. Only when both exit 1 with `Error: User not found` and no recognized deployment state may `scripts/vercel-deployment-state.mjs` independently read the uploaded hostname through `GET /v13/deployments/{hostname}?teamId=...`. The helper uses the existing `VERCEL_TOKEN`, requires `VERCEL_PROJECT_ID`, and accepts only an owner response matching the exact hostname/project, production target, deployment id and explicit `READY`. It makes one bounded read, rejects redirects, caps response bytes, and prints neither bearer credentials nor vendor response bodies. A nonready, refused or malformed API response still fails deployment. Other CLI failures and timeouts cannot use this fallback. The exact top-level JSON served-SHA health requirement remains after either successful readiness path. No token binding changes or new secret are introduced.
+
+The real-shell fixture executes the actual Node helper with real local HTTP and a fake CLI, including authenticated/team-bound Ready, wrong served SHA, identity mismatches, nonready states, HTTP failures, redirection, timeout and credential isolation controls. It proves orchestration and rejection behavior, not hosted authorization. The Bottle deployment receipt requires every new control; archived logs and synthetic receipt fixtures cannot certify current execution. See [run-9194-summary.md](run-9194-summary.md) for runtime identity, results and the post-push CI/QA handoff.
+
 ## Fresh isolated production builds · pm-269/t-1648 · run-9189
 
 The self-hosted `scripts/e2e.mjs` build removes its checkout's `.next` output before `npm run build`. This prevents inherited Turbopack font import maps from blocking the Bottle and footer gates before browser execution. Explicit `SKIP_BUILD=1` reuse retains the artifact and cache; remote `BASE_URL` and database-only modes bypass this build path. A failed build still exits unsuccessfully without retrying or starting a server. Normal development and hosted production build commands are unchanged.

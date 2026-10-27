@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: Bottle stylesheet reserves a rem header band with a bottom anchor and 44px targets
+ok 1 - Bottle stylesheet reserves a rem header band with a bottom anchor and 44px targets
+  ---
+  duration_ms: 0.311667
+  type: 'test'
+  ...
+# Subtest: Bottle clearance contains default, 24px and 32px text at normal and 200% roots
+ok 2 - Bottle clearance contains default, 24px and 32px text at normal and 200% roots
+  ---
+  duration_ms: 0.081292
+  type: 'test'
+  ...
+# Subtest: Bottle clearance rejects the old -2.4rem scene overlap using the same invariant
+ok 3 - Bottle clearance rejects the old -2.4rem scene overlap using the same invariant
+  ---
+  duration_ms: 0.2855
+  type: 'test'
+  ...
+# Subtest: Bottle clearance rejects the old 2.5rem top-border protrusion using the same invariant
+ok 4 - Bottle clearance rejects the old 2.5rem top-border protrusion using the same invariant
+  ---
+  duration_ms: 0.058584
+  type: 'test'
+  ...
+# Subtest: normalizes canonical URLs and plain text without fetching
+ok 5 - normalizes canonical URLs and plain text without fetching
+  ---
+  duration_ms: 1.190041
+  type: 'test'
+  ...
+# Subtest: rejects hostile URLs, fragments and trackers including encoded IPs
+ok 6 - rejects hostile URLs, fragments and trackers including encoded IPs
+  ---
+  duration_ms: 0.452375
+  type: 'test'
+  ...
+# Subtest: bounds text/kind/shape and rejects markup, controls and honeypots
+ok 7 - bounds text/kind/shape and rejects markup, controls and honeypots
+  ---
+  duration_ms: 0.438917
+  type: 'test'
+  ...
+# Subtest: twelve reviewed seeds validate and merge with deterministic curated precedence
+ok 8 - twelve reviewed seeds validate and merge with deterministic curated precedence
+  ---
+  duration_ms: 0.691167
+  type: 'test'
+  ...
+# Subtest: seeded picking does not repeat until exhausted and tolerates stale seen ids
+ok 9 - seeded picking does not repeat until exhausted and tolerates stale seen ids
+  ---
+  duration_ms: 0.236375
+  type: 'test'
+  ...
+# Subtest: untrusted enum objects never coerce or throw; canonical expansion stays bounded
+ok 10 - untrusted enum objects never coerce or throw; canonical expansion stays bounded
+  ---
+  duration_ms: 0.119958
+  type: 'test'
+  ...
+# Subtest: draw history normalizes unknown ids, resets exhaustion without immediate repeats and bounds storage
+ok 11 - draw history normalizes unknown ids, resets exhaustion without immediate repeats and bounds storage
+  ---
+  duration_ms: 3.819041
+  type: 'test'
+  ...
+# Subtest: browser snapshots fail closed on hostile links, markup and duplicate identities
+ok 12 - browser snapshots fail closed on hostile links, markup and duplicate identities
+  ---
+  duration_ms: 0.521542
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 56.905625

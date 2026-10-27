@@ -45,6 +45,7 @@ export const BOTTLE_GATES = [
   { ...sharedGate("unit"), required: [
     ...sharedGate("unit").required,
     "isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures",
+    "deployment API configuration refuses credential egress before making a request",
     ...layoutNames,
     ...["layout", "unit", "browser", "footer"].map((id) => `Bottle ${id} receipt requires every named passing test and nonzero unskipped TAP`),
     "Bottle repository receipt requires layout, picker and every verifier regression",
@@ -60,7 +61,21 @@ export const BOTTLE_GATES = [
   sharedGate("footer"),
   { id: "deployment", cmd: "bash scripts/vercel-deploy.test.sh" },
 ];
+export const API_DEPLOYMENT_CONTROLS = [
+  "scoped identity failure accepts independently authenticated API Ready before exact-sha health",
+  "API fallback requests the uploaded deployment in the configured team with the existing token",
+  "API fallback never prints its credential",
+  "CLI scope resolver wrapped User not found uses the same authenticated API check",
+  "API Ready cannot bypass exact served-sha health",
+  ...["state-BUILDING", "state-QUEUED", "state-INITIALIZING", "state-ERROR", "state-CANCELED", "state-unknown", "wrong-project", "wrong-url", "preview", "missing-id", "public-only", "malformed", "oversized", "http-401", "http-403", "http-429", "http-500", "redirect", "hang"]
+    .map((mode) => `API ${mode} fails closed before matching health`),
+  "API redirect never forwards the credential",
+  "API fallback requires the configured project",
+  "API fallback rejects a refused token without printing it",
+  ...["identity-timeout", "mixed-identity"].map((mode) => `${mode} cannot invoke API rescue or matching health`),
+];
 const deploymentNames = [
+  ...API_DEPLOYMENT_CONTROLS,
   "standalone inspect without scope reproduces User not found",
   "explicit team scope permits Ready inspect and exact-sha health",
   "waiting inspect receives the configured team scope",
@@ -74,7 +89,7 @@ const deploymentNames = [
 function deploymentEvidence(output) {
   assert.doesNotMatch(output, /^not ok - /m);
   const count = Number(output.match(/^# all (\d+) assertions passed$/m)?.[1]);
-  assert.ok(count >= 59, "deployment fixture executes all assertions");
+  assert.ok(count >= 59 + API_DEPLOYMENT_CONTROLS.length, "deployment fixture executes all assertions");
   const assertions = output.split("\n").filter((line) => line.startsWith("ok - "));
   assert.equal(new Set(assertions).size, assertions.length, "duplicate deployment assertions cannot replace missing controls");
   assert.equal(assertions.length, count, "individual deployment assertions must match the summary");

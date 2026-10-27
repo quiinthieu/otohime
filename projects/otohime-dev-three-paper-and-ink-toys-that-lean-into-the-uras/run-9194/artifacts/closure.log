@@ -1,0 +1,281 @@
+{
+  "schema": "otohime.gate-closure.v1",
+  "started_at": "2026-10-27T08:31:42.015Z",
+  "finished_at": "2026-10-27T08:31:46.383Z",
+  "runner": "real",
+  "certified": true,
+  "checkout": {
+    "root": "/Users/avietidol/Library/Application Support/build-worker/leases/2616654d-4d1b-4cdb-8c1c-f7c4418b3690-68202e7d3fe9a611bee1975043aed050/work/otohime",
+    "git_sha": "c84b7e754a8daf862842f616b8e61ce367099793",
+    "dirty": true,
+    "dirty_paths": [
+      " M content/history.json",
+      " M lib/bottle-verification.test.ts",
+      " M projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/architecture.md",
+      " M scripts/vercel-deploy.sh",
+      " M scripts/vercel-deploy.test.sh",
+      " M scripts/verify-bottle-contracts.mjs",
+      "?? lib/vercel-deployment-state.test.ts",
+      "?? projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9194/",
+      "?? scripts/vercel-deployment-state.mjs"
+    ],
+    "git_error": null
+  },
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "darwin",
+    "arch": "arm64",
+    "test_runner": "node --experimental-strip-types --test --test-reporter=tap"
+  },
+  "fingerprint": {
+    "algorithm": "sha256",
+    "files": {
+      "scripts/check-gate-closure.mjs": "d435846bd526ad54004f05dd899fa674f76a464bca94f5c8e2dfafb459fc5abf",
+      "lib/gate-closure.test.ts": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+      "lib/e2e-runner.test.ts": "6fe93176829330716bfcfb8c49c92a42cd813a5279711cf3d52a32440be88b0b",
+      "lib/end.test.ts": "da34e1db0b0d4027bc797734c2a609c67d4168e8996ec53c618fce2a87d93895",
+      "lib/urashima.test.ts": "df5472e89881014bc75dc1e91e29301193f6bd14a17f3168423a96240cc505af",
+      "scripts/e2e.mjs": "5144b88ea2938181307b1eb735bb5467879c37f8d87c1236a5e8b061a4c966f9",
+      "scripts/e2e-annotate.mjs": "9f51f1cc753de5b8690a143ac3f404a90d574d660a5d09f20fd7eebd859933f4",
+      "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+      "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+      "scripts/probe-end.mjs": "4bb429112c69b2670a7c90288ae2515a60d6c2b8555cba6a2f90e597f7ba9b22",
+      "lib/end.ts": "0e1cab423c67ed77fc7a1bf065a1e30239238e89a8506bfe7d3ab57faba578b4",
+      "lib/urashima.ts": "b0c669ac6ddc59b7ef98b1ca7b5a2249f452060e6c51e5f55b771bec1e7663a1",
+      "lib/pages.ts": "42240e734397fb3ac8d65e57a33ef016b347ce2237da18c2f57a9ce120c8dd95",
+      "content/site.ts": "2c6d59076924cf2171a915557c5354740ebd7955f30fdd25fc1a6958a88a8910",
+      "components/end-footer.tsx": "043707b4ed9eb2b106eae92a30f2e9cb7c576f7d65c1ca6c22b0b160a3adef0d",
+      "components/urashima-keys.tsx": "e19f857a64fa105992d8ba92574606105c63e46763b5a5e5282e432979143c12",
+      "components/handheld.tsx": "cf961ff07549140b7de2ec93985bf7363d7f82d451ae7454528b3a108ce4f1a6",
+      "app/(site)/layout.tsx": "d585cb4de2ec3e9ea8192f25b618c0fcc309386f794901f9bf7943cde3ff2012",
+      "app/(site)/globals.css": "df2accbef90094bcabb881656e8d7d8b0a6fc287bb3ba91f77229e7370b86b16",
+      "drizzle.config.ts": "e71aa804d5af6318de36246908d13777f49e0c1671927465eef53460b522dbd4",
+      "db/migrations": "150edbf1046b1031ae8639848fc81f8728b8395d4277d5c524f2454f5a489172",
+      ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36",
+      "package.json": "70541c935676e2797d8648d8e9e90447e0cf7552b560e12a26ba197df328029e",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+    },
+    "combined": "1eba612b7bf627d59a646393aac09d06f2f939655338730770eb9d1abe5ec068",
+    "missing": [],
+    "changed_during_run": [],
+    "ok": true
+  },
+  "preflight": {
+    "ok": true,
+    "modules": {
+      "playwright-core": {
+        "locked": "1.64.0",
+        "installed": "1.64.0",
+        "imported": true
+      },
+      "pg": {
+        "locked": "8.23.1",
+        "installed": "8.23.1",
+        "imported": true
+      },
+      "embedded-postgres": {
+        "locked": "17.10.0-beta.17",
+        "installed": "17.10.0-beta.17",
+        "imported": true
+      },
+      "@embedded-postgres/darwin-arm64": {
+        "locked": "17.10.0-beta.17",
+        "installed": "17.10.0-beta.17",
+        "imported": true
+      }
+    },
+    "assets": {
+      "postgres": {
+        "sha256": "8776e8dfcc8fd7eaaf02db978d00f225a1905b6cbe9ecdd3cf5e86cf3a00e33f",
+        "version": "postgres (PostgreSQL) 17.10"
+      },
+      "initdb": {
+        "sha256": "8aad5fa27591903ab45a9251c3b26dd3465a7daec1fc2c03cedc3ca267b35ab3",
+        "version": "initdb (PostgreSQL) 17.10"
+      },
+      "pg_ctl": {
+        "sha256": "a304fd74fffe000e06194315445f713727e2d74668deb51752a4cabb6e26c826",
+        "version": "pg_ctl (PostgreSQL) 17.10"
+      }
+    },
+    "failures": []
+  },
+  "commands": [
+    {
+      "id": "preflight",
+      "file": null,
+      "argv": [
+        "node",
+        "--input-type=module",
+        "-e"
+      ],
+      "executed": true,
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 60000,
+      "spawn_error": null,
+      "duration_ms": 186,
+      "stdout_tail": "GATE_PREFLIGHT {\"ok\":true,\"modules\":{\"playwright-core\":{\"locked\":\"1.64.0\",\"installed\":\"1.64.0\",\"imported\":true},\"pg\":{\"locked\":\"8.23.1\",\"installed\":\"8.23.1\",\"imported\":true},\"embedded-postgres\":{\"locked\":\"17.10.0-beta.17\",\"installed\":\"17.10.0-beta.17\",\"imported\":true},\"@embedded-postgres/darwin-arm64\":{\"locked\":\"17.10.0-beta.17\",\"installed\":\"17.10.0-beta.17\",\"imported\":true}},\"assets\":{\"postgres\":{\"sha256\":\"8776e8dfcc8fd7eaaf02db978d00f225a1905b6cbe9ecdd3cf5e86cf3a00e33f\",\"version\":\"postgres (PostgreSQL) 17.10\"},\"initdb\":{\"sha256\":\"8aad5fa27591903ab45a9251c3b26dd3465a7daec1fc2c03cedc3ca267b35ab3\",\"version\":\"initdb (PostgreSQL) 17.10\"},\"pg_ctl\":{\"sha256\":\"a304fd74fffe000e06194315445f713727e2d74668deb51752a4cabb6e26c826\",\"version\":\"pg_ctl (PostgreSQL) 17.10\"}},\"failures\":[]}\n",
+      "stderr_tail": "",
+      "failures": [],
+      "ok": true
+    },
+    {
+      "id": "e2e-runner",
+      "file": "lib/e2e-runner.test.ts",
+      "argv": [
+        "node",
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "--test-reporter=tap",
+        "lib/e2e-runner.test.ts"
+      ],
+      "executed": true,
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 180000,
+      "spawn_error": null,
+      "duration_ms": 4145,
+      "stdout_tail": "TAP version 13\n# Subtest: isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures\nok 1 - isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures\n  ---\n  duration_ms: 1148.185416\n  type: 'test'\n  ...\n# Subtest: scripts/e2e.mjs runs the e2e files one at a time; an explicit --test-concurrency=2 overlaps them (negative control)\nok 2 - scripts/e2e.mjs runs the e2e files one at a time; an explicit --test-concurrency=2 overlaps them (negative control)\n  ---\n  duration_ms: 1718.19475\n  type: 'test'\n  ...\n# Subtest: under GitHub Actions scripts/e2e.mjs annotates each failed test with its file, line and assertion; outside it, nothing\nok 3 - under GitHub Actions scripts/e2e.mjs annotates each failed test with its file, line and assertion; outside it, nothing\n  ---\n  duration_ms: 170.358875\n  type: 'test'\n  ...\n# Subtest: CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails\nok 4 - CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails\n  ---\n  duration_ms: 115.378333\n  type: 'test'\n  ...\n# Subtest: scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files\nok 5 - scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files\n  ---\n  duration_ms: 920.631875\n  type: 'test'\n  ...\n1..5\n# tests 5\n# suites 0\n# pass 5\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 4123.40675\n",
+      "stderr_tail": "",
+      "tap": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "required": [
+        {
+          "id": "serial_vs_parallel",
+          "name": "scripts/e2e.mjs runs the e2e files one at a time; an explicit --test-concurrency=2 overlaps them (negative control)",
+          "status": "pass"
+        },
+        {
+          "id": "actions_vs_local_reporter",
+          "name": "under GitHub Actions scripts/e2e.mjs annotates each failed test with its file, line and assertion; outside it, nothing",
+          "status": "pass"
+        },
+        {
+          "id": "ci_status_preservation",
+          "name": "CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails",
+          "status": "pass"
+        },
+        {
+          "id": "embedded_postgres_lifecycle",
+          "name": "scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files",
+          "status": "pass"
+        },
+        {
+          "id": "fresh_production_build",
+          "name": "isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures",
+          "status": "pass"
+        }
+      ],
+      "failures": [],
+      "ok": true
+    },
+    {
+      "id": "end",
+      "file": "lib/end.test.ts",
+      "argv": [
+        "node",
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "--test-reporter=tap",
+        "lib/end.test.ts"
+      ],
+      "executed": true,
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 180000,
+      "spawn_error": null,
+      "duration_ms": 323,
+      "stdout_tail": "TAP version 13\n# Subtest: idle state starts at SAVE POINT with the console resting\nok 1 - idle state starts at SAVE POINT with the console resting\n  ---\n  duration_ms: 0.581542\n  type: 'test'\n  ...\n# Subtest: each poke advances the cycle, wraps around, and changes LCD and readout\nok 2 - each poke advances the cycle, wraps around, and changes LCD and readout\n  ---\n  duration_ms: 0.298084\n  type: 'test'\n  ...\n# Subtest: the tenth poke shows the breather line and the eleventh resumes cycling\nok 3 - the tenth poke shows the breather line and the eleventh resumes cycling\n  ---\n  duration_ms: 0.093667\n  type: 'test'\n  ...\n# Subtest: a poke holds the button down for two ticks and settle releases it immediately\nok 4 - a poke holds the button down for two ticks and settle releases it immediately\n  ---\n  duration_ms: 0.098\n  type: 'test'\n  ...\n# Subtest: the Konami sequence unlocks Reached the end with lowercase or uppercase B and A\nok 5 - the Konami sequence unlocks Reached the end with lowercase or uppercase B and A\n  ---\n  duration_ms: 0.134916\n  type: 'test'\n  ...\n# Subtest: Konami prefix overlap preserves matching prefixes and wrong keys reset to zero\nok 6 - Konami prefix overlap preserves matching prefixes and wrong keys reset to zero\n  ---\n  duration_ms: 0.081916\n  type: 'test'\n  ...\n# Subtest: leaving the viewport clears partial Konami progress without losing pokes or unlock\nok 7 - leaving the viewport clears partial Konami progress without losing pokes or unlock\n  ---\n  duration_ms: 0.045\n  type: 'test'\n  ...\n# Subtest: restoration and repeated unlock preserve mascot pokes and re-display the achievement\nok 8 - restoration and repeated unlock preserve mascot pokes and re-display the achievement\n  ---\n  duration_ms: 0.104666\n  type: 'test'\n  ...\n# Subtest: site.end copy matches the required sentences, LCD bounds, and PUBLIC_PAGES count\nok 9 - site.end copy matches the required sentences, LCD bounds, and PUBLIC_PAGES count\n  ---\n  duration_ms: 0.377708\n  type: 'test'\n  ...\n# Subtest: lib/end.ts is pure and imports no browser or DOM APIs\nok 10 - lib/end.ts is pure and imports no browser or DOM APIs\n  ---\n  duration_ms: 0.395834\n  type: 'test'\n  ...\n# Subtest: Footer walk reads the exact plain heading source, ignoring nested Riso plates\nok 11 - Footer walk reads the exact plain heading source, ignoring nested Riso plates\n  ---\n  duration_ms: 2.593583\n  type: 'test'\n  ...\n# Subtest: walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR\nok 12 - walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR\n  ---\n  duration_ms: 230.861667\n  type: 'test'\n  ...\n1..12\n# tests 12\n# suites 0\n# pass 12\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 302.180292\n",
+      "stderr_tail": "",
+      "tap": {
+        "tests": 12,
+        "pass": 12,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "required": [
+        {
+          "id": "footer_heading_source",
+          "name": "Footer walk reads the exact plain heading source, ignoring nested Riso plates",
+          "status": "pass"
+        },
+        {
+          "id": "footer_walk_probe_wiring",
+          "name": "walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR",
+          "status": "pass"
+        }
+      ],
+      "failures": [],
+      "ok": true
+    },
+    {
+      "id": "urashima",
+      "file": "lib/urashima.test.ts",
+      "argv": [
+        "node",
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "--test-reporter=tap",
+        "lib/urashima.test.ts"
+      ],
+      "executed": true,
+      "exit_code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 180000,
+      "spawn_error": null,
+      "duration_ms": 86,
+      "stdout_tail": "TAP version 13\n# Subtest: the word is urashima and it leads to /ryugu, a page the palace's root layout serves\nok 1 - the word is urashima and it leads to /ryugu, a page the palace's root layout serves\n  ---\n  duration_ms: 0.381666\n  type: 'test'\n  ...\n# Subtest: typing the word completes on its last letter, and only there\nok 2 - typing the word completes on its last letter, and only there\n  ---\n  duration_ms: 0.46275\n  type: 'test'\n  ...\n# Subtest: from the third letter on, every key that keeps the word going is taken, so the console never sees the a's\nok 3 - from the third letter on, every key that keeps the word going is taken, so the console never sees the a's\n  ---\n  duration_ms: 0.075541\n  type: 'test'\n  ...\n# Subtest: a lone a, or u then a, is never taken: the console's A still opens its page\nok 4 - a lone a, or u then a, is never taken: the console's A still opens its page\n  ---\n  duration_ms: 0.099166\n  type: 'test'\n  ...\n# Subtest: a wrong key starts the word again, counting itself if it is a u\nok 5 - a wrong key starts the word again, counting itself if it is a u\n  ---\n  duration_ms: 0.064166\n  type: 'test'\n  ...\n# Subtest: case is ignored, and nonsense progress is treated as none\nok 6 - case is ignored, and nonsense progress is treated as none\n  ---\n  duration_ms: 0.0545\n  type: 'test'\n  ...\n# Subtest: the listener: capture phase on window, skips fields, dialogs, modifiers and handled keys, and loads the palace\nok 7 - the listener: capture phase on window, skips fields, dialogs, modifiers and handled keys, and loads the palace\n  ---\n  duration_ms: 0.220042\n  type: 'test'\n  ...\n# Subtest: the site root layout mounts the listener once, ahead of the pages, so it runs before the console's\nok 8 - the site root layout mounts the listener once, ahead of the pages, so it runs before the console's\n  ---\n  duration_ms: 0.268042\n  type: 'test'\n  ...\n# Subtest: Pocket: the console's menu carries a Dive chip, a plain link to the palace\nok 9 - Pocket: the console's menu carries a Dive chip, a plain link to the palace\n  ---\n  duration_ms: 0.770834\n  type: 'test'\n  ...\n# Subtest: the waterline: the last thing in the site's footer, below its bar, links down to the palace\nok 10 - the waterline: the last thing in the site's footer, below its bar, links down to the palace\n  ---\n  duration_ms: 0.511833\n  type: 'test'\n  ...\n1..10\n# tests 10\n# suites 0\n# pass 10\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 63.46175\n",
+      "stderr_tail": "",
+      "tap": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "required": [
+        {
+          "id": "waterline_structure",
+          "name": "the waterline: the last thing in the site's footer, below its bar, links down to the palace",
+          "status": "pass"
+        }
+      ],
+      "failures": [],
+      "ok": true
+    }
+  ],
+  "local_controls": "pass",
+  "failures": [],
+  "external_evidence": "inconclusive",
+  "not_proven": [
+    "deployment",
+    "global_green_gate",
+    "shared_ci_recovery",
+    "kame_browser_execution",
+    "browser_user_path",
+    "historical_raw_assertions",
+    "author_txt_bytes",
+    "personalized_presence"
+  ],
+  "scope": "Local unit regressions for the landed runner, reporter, CI-status, embedded-Postgres and footer/waterline repairs in this checkout. No browser, no network fetch, no CI history and no deployment are read or proven."
+}

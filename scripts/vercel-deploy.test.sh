@@ -12,6 +12,7 @@ work=$(mktemp -d)
 health_pid=""
 trap 'if [ -n "$health_pid" ]; then kill "$health_pid" 2>/dev/null; wait "$health_pid" 2>/dev/null; fi; rm -rf "$work"' EXIT
 mkdir -p "$work/bin"
+: >"$work/api.calls"
 failures=0
 assertions=0
 SHA=0123456789abcdef0123456789abcdef01234567
@@ -29,6 +30,26 @@ const lateReads = new Map();
 const server = createServer((req, res) => {
   appendFileSync(join(work, "health.calls"), `${req.url}\n`);
   res.setHeader("Content-Type", "application/json");
+  if (req.url.startsWith("/v13/deployments/")) {
+    const url = new URL(req.url, "http://localhost");
+    const authenticated = req.headers.authorization === "Bearer fixture-token";
+    appendFileSync(join(work, "api.calls"), JSON.stringify({ path: url.pathname, team: url.searchParams.get("teamId"), authenticated }) + "\n");
+    const mode = readFileSync(join(work, "api-mode"), "utf8");
+    if (!authenticated || url.searchParams.get("teamId") !== "team_fixture") { res.statusCode = 401; res.end('{}'); return; }
+    if (/^http-/.test(mode)) { res.statusCode = Number(mode.slice(5)); res.end('{"error":{"message":"private diagnostic"}}'); return; }
+    if (mode === "redirect") { res.writeHead(302, { location: "/credential-sink" }); res.end(); return; }
+    if (mode === "hang") return;
+    if (mode === "malformed") { res.end("not JSON"); return; }
+    if (mode === "oversized") { res.end("x".repeat(1_048_577)); return; }
+    const deployment = { id: "dpl_fixture", url: "otohime-abc123-quiinthieu.vercel.app", projectId: "prj_fixture", target: "production", readyState: "READY" };
+    if (mode.startsWith("state-")) deployment.readyState = mode.slice(6);
+    if (mode === "wrong-project") deployment.projectId = "prj_other";
+    if (mode === "wrong-url") deployment.url = "other.vercel.app";
+    if (mode === "preview") deployment.target = null;
+    if (mode === "missing-id") delete deployment.id;
+    if (mode === "public-only") { delete deployment.url; delete deployment.projectId; }
+    res.end(JSON.stringify(deployment)); return;
+  }
   if (req.url === "/transition.health.json") {
     res.end(JSON.stringify({ ok: true, sha: ++transitionReads === 1 ? "old-sha" : sha }));
     return;
@@ -98,6 +119,11 @@ case "$1" in
       diagnostic:0) printf 'Error: earlier request failed\n\033[31m  status\t● Building\033[0m\n  url\t%s\n  readyStateReason\tMissing output artifact at 50%%\nstate diagnostic tail\n' "$2" >&2; exit 7 ;;
       unavailable:*) echo 'Error: request failed; no deployment state available' >&2; exit 1 ;;
       user-not-found:*) echo 'Error: User not found' >&2; exit 1 ;;
+      user-not-found-wrapped:*) printf '\033[31mError: Not able to load user because of unexpected error: User not found.\033[0m\n' >&2; exit 1 ;;
+      identity-timeout:1) echo 'Error: User not found' >&2; sleep 6011 ;;
+      identity-timeout:0) echo 'Error: User not found' >&2; exit 1 ;;
+      mixed-identity:1) echo 'Error: User not found' >&2; exit 1 ;;
+      mixed-identity:0) printf '  status\t● Error\n' >&2; exit 1 ;;
     esac ;;
 esac
 FAKE
@@ -115,9 +141,12 @@ run() {
   export CALLS="$work/$name.calls" FAKE_URL=$URL FAKE_DEPLOY=$2 FAKE_INSPECT=$3
   : >"$CALLS"
   printf '%s' "$4" >"$work/$name.health.json"
+  printf '%s' "${API_FIXTURE-ready}" >"$work/api-mode"
   local start=$SECONDS
   out=$(env "${attempts_env[@]}" PATH="$work/bin:$PATH" GITHUB_SHA=$SHA UPLOAD_TIMEOUT=2 READY_TIMEOUT=2 INSPECT_TIMEOUT=5 \
     VERCEL_ORG_ID="${FIXTURE_TEAM-$FAKE_TEAM}" \
+    VERCEL_PROJECT_ID="${FIXTURE_PROJECT-prj_fixture}" VERCEL_TOKEN="${FIXTURE_TOKEN-fixture-token}" \
+    VERCEL_API_ORIGIN="$health_base" VERCEL_API_TIMEOUT_MS=500 \
     HEALTH_URL="$health_base/$name.health.json" HEALTH_RETRIES=0 HEALTH_RETRY_DELAY=1 HEALTH_POLL_DELAY=0 \
     bash "$here/vercel-deploy.sh" 2>&1)
   code=$?
@@ -142,8 +171,31 @@ check "diagnostic re-read receives the same team scope" 'grep -qx "inspect $URL 
 check "scoped Ready re-read cannot rescue failed waiting inspect" '[ "$code" -ne 0 ] && [[ "$out" == *"inspect --wait output (exit 7,"* ]] && ! grep -q "^/scoped-reread.health.json$" "$work/health.calls"'
 FIXTURE_TEAM= run missing-team ok scope-required "$healthy"
 check "missing team is refused before upload" '[ "$code" -ne 0 ] && [ ! -s "$CALLS" ] && [[ "$out" == *"VERCEL_ORG_ID is required"* ]]'
-run scoped-identity-error ok user-not-found "$healthy"
+FIXTURE_TOKEN= run scoped-identity-error ok user-not-found "$healthy"
 check "User not found with explicit scope still fails closed before health" '[ "$code" -ne 0 ] && [[ "$out" == *"User not found"* ]] && ! grep -q "^/scoped-identity-error.health.json$" "$work/health.calls"'
+
+run api-ready ok user-not-found "$healthy"
+check "scoped identity failure accepts independently authenticated API Ready before exact-sha health" '[ "$code" -eq 0 ] && [[ "$out" == *"API deployment Ready"* ]] && [[ "$out" == *"health: serving $SHA"* ]] && [ "$deploys" -eq 1 ] && [ "$(grep -c "^inspect" "$CALLS")" -eq 2 ]'
+check "API fallback requests the uploaded deployment in the configured team with the existing token" 'grep -qx '\''{"path":"/v13/deployments/otohime-abc123-quiinthieu.vercel.app","team":"team_fixture","authenticated":true}'\'' "$work/api.calls"'
+check "API fallback never prints its credential" '[[ "$out" != *"fixture-token"* ]]'
+run api-wrapped-identity ok user-not-found-wrapped "$healthy"
+check "CLI scope resolver wrapped User not found uses the same authenticated API check" '[ "$code" -eq 0 ] && [[ "$out" == *"API deployment Ready"* ]] && [[ "$out" == *"health: serving $SHA"* ]]'
+run api-wrong-health ok user-not-found "$old"
+check "API Ready cannot bypass exact served-sha health" '[ "$code" -ne 0 ] && [[ "$out" == *"API deployment Ready"* ]] && [[ "$out" == *"health check"* ]]'
+for mode in state-BUILDING state-QUEUED state-INITIALIZING state-ERROR state-CANCELED state-unknown wrong-project wrong-url preview missing-id public-only malformed oversized http-401 http-403 http-429 http-500 redirect hang; do
+  API_FIXTURE=$mode run "api-$mode" ok user-not-found "$healthy"
+  check "API $mode fails closed before matching health" '[ "$code" -ne 0 ] && [[ "$out" == *"::error"* ]] && ! grep -q "^/api-$mode.health.json$" "$work/health.calls"'
+done
+check "API redirect never forwards the credential" '! grep -q "^/credential-sink$" "$work/health.calls"'
+FIXTURE_PROJECT= run api-missing-project ok user-not-found "$healthy"
+check "API fallback requires the configured project" '[ "$code" -ne 0 ] && ! grep -q "^/api-missing-project.health.json$" "$work/health.calls"'
+FIXTURE_TOKEN=wrong-fixture-token run api-wrong-token ok user-not-found "$healthy"
+check "API fallback rejects a refused token without printing it" '[ "$code" -ne 0 ] && [[ "$out" != *"wrong-fixture-token"* ]] && ! grep -q "^/api-wrong-token.health.json$" "$work/health.calls"'
+api_reads=$(wc -l <"$work/api.calls")
+for mode in identity-timeout mixed-identity; do
+  run "$mode" ok "$mode" "$healthy"
+  check "$mode cannot invoke API rescue or matching health" '[ "$code" -ne 0 ] && [ "$(wc -l <"$work/api.calls")" -eq "$api_reads" ] && ! grep -q "^/$mode.health.json$" "$work/health.calls"'
+done
 
 # A zero CLI exit is not readiness evidence. Even matching alias health cannot
 # turn an absent, unknown or nonterminal deployment state into Ready.
