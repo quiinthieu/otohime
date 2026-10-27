@@ -1,0 +1,4713 @@
+{
+ "40433812567": [
+  {
+   "id": 121957596650,
+   "name": "checks",
+   "head_sha": "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T01:39:01Z",
+   "completed_at": "2026-10-27T01:52:15Z",
+   "runner_name": "GitHub Actions 1000000880",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:39:02Z",
+     "completed_at": "2026-10-27T01:39:04Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:39:04Z",
+     "completed_at": "2026-10-27T01:39:11Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:39:11Z",
+     "completed_at": "2026-10-27T01:39:12Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:39:12Z",
+     "completed_at": "2026-10-27T01:39:12Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:39:12Z",
+     "completed_at": "2026-10-27T01:39:16Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:39:16Z",
+     "completed_at": "2026-10-27T01:39:21Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:39:21Z",
+     "completed_at": "2026-10-27T01:39:39Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:39:39Z",
+     "completed_at": "2026-10-27T01:40:07Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:40:07Z",
+     "completed_at": "2026-10-27T01:40:25Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:40:25Z",
+     "completed_at": "2026-10-27T01:41:21Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T01:41:21Z",
+     "completed_at": "2026-10-27T01:41:21Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:41:21Z",
+     "completed_at": "2026-10-27T01:41:28Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:41:28Z",
+     "completed_at": "2026-10-27T01:41:51Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:41:51Z",
+     "completed_at": "2026-10-27T01:41:51Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:41:51Z",
+     "completed_at": "2026-10-27T01:41:53Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:41:53Z",
+     "completed_at": "2026-10-27T01:42:27Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:42:27Z",
+     "completed_at": "2026-10-27T01:43:41Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:43:41Z",
+     "completed_at": "2026-10-27T01:43:42Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T01:43:42Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T01:52:11Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T01:52:11Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T01:52:11Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T01:52:11Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T01:52:11Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:52:11Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:52:11Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T01:52:11Z",
+     "completed_at": "2026-10-27T01:52:11Z"
+    }
+   ]
+  },
+  {
+   "id": 121957597654,
+   "name": "preview",
+   "head_sha": "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T01:38:59Z",
+   "completed_at": "2026-10-27T01:38:59Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 121957627035,
+   "name": "cleanup",
+   "head_sha": "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T01:39:05Z",
+   "completed_at": "2026-10-27T01:38:59Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 121961770338,
+   "name": "production",
+   "head_sha": "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T01:52:15Z",
+   "completed_at": "2026-10-27T01:52:15Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": []
+  }
+ ],
+ "40439524623": [
+  {
+   "id": 121976229834,
+   "name": "checks",
+   "head_sha": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+   "conclusion": "success",
+   "started_at": "2026-10-27T02:37:42Z",
+   "completed_at": "2026-10-27T02:53:22Z",
+   "runner_name": "GitHub Actions 1000000883",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:37:42Z",
+     "completed_at": "2026-10-27T02:37:44Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:37:44Z",
+     "completed_at": "2026-10-27T02:37:53Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:37:53Z",
+     "completed_at": "2026-10-27T02:37:55Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:37:55Z",
+     "completed_at": "2026-10-27T02:37:55Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:37:55Z",
+     "completed_at": "2026-10-27T02:37:58Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:37:58Z",
+     "completed_at": "2026-10-27T02:38:05Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:38:05Z",
+     "completed_at": "2026-10-27T02:38:17Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:38:17Z",
+     "completed_at": "2026-10-27T02:38:38Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:38:38Z",
+     "completed_at": "2026-10-27T02:38:53Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:38:53Z",
+     "completed_at": "2026-10-27T02:39:32Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T02:39:32Z",
+     "completed_at": "2026-10-27T02:39:32Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:39:32Z",
+     "completed_at": "2026-10-27T02:39:38Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:39:38Z",
+     "completed_at": "2026-10-27T02:40:01Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:40:01Z",
+     "completed_at": "2026-10-27T02:40:01Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:40:01Z",
+     "completed_at": "2026-10-27T02:40:02Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:40:02Z",
+     "completed_at": "2026-10-27T02:40:29Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:40:29Z",
+     "completed_at": "2026-10-27T02:41:35Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:41:35Z",
+     "completed_at": "2026-10-27T02:41:35Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:41:35Z",
+     "completed_at": "2026-10-27T02:49:11Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:49:11Z",
+     "completed_at": "2026-10-27T02:52:01Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:52:01Z",
+     "completed_at": "2026-10-27T02:52:03Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:52:03Z",
+     "completed_at": "2026-10-27T02:53:06Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:06Z",
+     "completed_at": "2026-10-27T02:53:06Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:06Z",
+     "completed_at": "2026-10-27T02:53:19Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:19Z",
+     "completed_at": "2026-10-27T02:53:19Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:19Z",
+     "completed_at": "2026-10-27T02:53:19Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:19Z",
+     "completed_at": "2026-10-27T02:53:19Z"
+    }
+   ]
+  },
+  {
+   "id": 121976231114,
+   "name": "preview",
+   "head_sha": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T02:37:40Z",
+   "completed_at": "2026-10-27T02:37:39Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 121976278309,
+   "name": "cleanup",
+   "head_sha": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T02:37:49Z",
+   "completed_at": "2026-10-27T02:37:39Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 121981152892,
+   "name": "production",
+   "head_sha": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T02:53:24Z",
+   "completed_at": "2026-10-27T02:57:09Z",
+   "runner_name": "GitHub Actions 1000000885",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:25Z",
+     "completed_at": "2026-10-27T02:53:26Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:26Z",
+     "completed_at": "2026-10-27T02:53:34Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:34Z",
+     "completed_at": "2026-10-27T02:53:41Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:41Z",
+     "completed_at": "2026-10-27T02:53:53Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:53:53Z",
+     "completed_at": "2026-10-27T02:54:08Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:54:08Z",
+     "completed_at": "2026-10-27T02:54:43Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:54:43Z",
+     "completed_at": "2026-10-27T02:54:46Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T02:54:46Z",
+     "completed_at": "2026-10-27T02:57:07Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T02:57:07Z",
+     "completed_at": "2026-10-27T02:57:07Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T02:57:07Z",
+     "completed_at": "2026-10-27T02:57:07Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:57:07Z",
+     "completed_at": "2026-10-27T02:57:07Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T02:57:07Z",
+     "completed_at": "2026-10-27T02:57:07Z"
+    }
+   ]
+  }
+ ],
+ "40448034730": [
+  {
+   "id": 122003868081,
+   "name": "checks",
+   "head_sha": "7735e74f801c5fab18abf1f944fec5b464ee11d1",
+   "conclusion": "success",
+   "started_at": "2026-10-27T04:08:02Z",
+   "completed_at": "2026-10-27T04:25:28Z",
+   "runner_name": "GitHub Actions 1000000890",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:08:02Z",
+     "completed_at": "2026-10-27T04:08:03Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:08:03Z",
+     "completed_at": "2026-10-27T04:08:09Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:08:09Z",
+     "completed_at": "2026-10-27T04:08:11Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:08:11Z",
+     "completed_at": "2026-10-27T04:08:11Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:08:11Z",
+     "completed_at": "2026-10-27T04:08:13Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:08:13Z",
+     "completed_at": "2026-10-27T04:08:16Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:08:16Z",
+     "completed_at": "2026-10-27T04:08:34Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:08:34Z",
+     "completed_at": "2026-10-27T04:09:02Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:09:02Z",
+     "completed_at": "2026-10-27T04:09:21Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:09:21Z",
+     "completed_at": "2026-10-27T04:10:10Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:10:10Z",
+     "completed_at": "2026-10-27T04:10:10Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:10Z",
+     "completed_at": "2026-10-27T04:10:23Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:23Z",
+     "completed_at": "2026-10-27T04:10:58Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:58Z",
+     "completed_at": "2026-10-27T04:10:58Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:58Z",
+     "completed_at": "2026-10-27T04:11:00Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:11:00Z",
+     "completed_at": "2026-10-27T04:11:15Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:11:15Z",
+     "completed_at": "2026-10-27T04:12:34Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:12:34Z",
+     "completed_at": "2026-10-27T04:12:35Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:12:35Z",
+     "completed_at": "2026-10-27T04:21:10Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:21:10Z",
+     "completed_at": "2026-10-27T04:23:59Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:23:59Z",
+     "completed_at": "2026-10-27T04:24:01Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:24:01Z",
+     "completed_at": "2026-10-27T04:25:11Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:11Z",
+     "completed_at": "2026-10-27T04:25:12Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:12Z",
+     "completed_at": "2026-10-27T04:25:26Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:26Z",
+     "completed_at": "2026-10-27T04:25:26Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:26Z",
+     "completed_at": "2026-10-27T04:25:27Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:27Z",
+     "completed_at": "2026-10-27T04:25:27Z"
+    }
+   ]
+  },
+  {
+   "id": 122003869064,
+   "name": "preview",
+   "head_sha": "7735e74f801c5fab18abf1f944fec5b464ee11d1",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T04:08:00Z",
+   "completed_at": "2026-10-27T04:08:00Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122003869211,
+   "name": "cleanup",
+   "head_sha": "7735e74f801c5fab18abf1f944fec5b464ee11d1",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T04:08:00Z",
+   "completed_at": "2026-10-27T04:08:00Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122009123224,
+   "name": "production",
+   "head_sha": "7735e74f801c5fab18abf1f944fec5b464ee11d1",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T04:27:11Z",
+   "completed_at": "2026-10-27T04:28:53Z",
+   "runner_name": "GitHub Actions 1000000893",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:27:12Z",
+     "completed_at": "2026-10-27T04:27:13Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:27:13Z",
+     "completed_at": "2026-10-27T04:27:15Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:27:15Z",
+     "completed_at": "2026-10-27T04:27:18Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:27:18Z",
+     "completed_at": "2026-10-27T04:27:34Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:27:34Z",
+     "completed_at": "2026-10-27T04:27:49Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:27:49Z",
+     "completed_at": "2026-10-27T04:28:33Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:28:33Z",
+     "completed_at": "2026-10-27T04:28:36Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T04:28:36Z",
+     "completed_at": "2026-10-27T04:28:51Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:28:51Z",
+     "completed_at": "2026-10-27T04:28:51Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:28:51Z",
+     "completed_at": "2026-10-27T04:28:51Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:28:51Z",
+     "completed_at": "2026-10-27T04:28:51Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:28:51Z",
+     "completed_at": "2026-10-27T04:28:51Z"
+    }
+   ]
+  }
+ ],
+ "40448208637": [
+  {
+   "id": 122004439403,
+   "name": "checks",
+   "head_sha": "f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc",
+   "conclusion": "success",
+   "started_at": "2026-10-27T04:09:54Z",
+   "completed_at": "2026-10-27T04:25:02Z",
+   "runner_name": "GitHub Actions 1000000891",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:09:55Z",
+     "completed_at": "2026-10-27T04:09:56Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:09:56Z",
+     "completed_at": "2026-10-27T04:10:04Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:04Z",
+     "completed_at": "2026-10-27T04:10:05Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:05Z",
+     "completed_at": "2026-10-27T04:10:06Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:06Z",
+     "completed_at": "2026-10-27T04:10:08Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:08Z",
+     "completed_at": "2026-10-27T04:10:12Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:12Z",
+     "completed_at": "2026-10-27T04:10:22Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:22Z",
+     "completed_at": "2026-10-27T04:10:41Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:41Z",
+     "completed_at": "2026-10-27T04:10:54Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:10:54Z",
+     "completed_at": "2026-10-27T04:11:47Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:11:47Z",
+     "completed_at": "2026-10-27T04:11:47Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:11:47Z",
+     "completed_at": "2026-10-27T04:11:59Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:11:59Z",
+     "completed_at": "2026-10-27T04:12:36Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:12:36Z",
+     "completed_at": "2026-10-27T04:12:36Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:12:36Z",
+     "completed_at": "2026-10-27T04:12:38Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:12:38Z",
+     "completed_at": "2026-10-27T04:12:47Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:12:47Z",
+     "completed_at": "2026-10-27T04:13:51Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:13:51Z",
+     "completed_at": "2026-10-27T04:13:51Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:13:51Z",
+     "completed_at": "2026-10-27T04:21:02Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:21:02Z",
+     "completed_at": "2026-10-27T04:23:49Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:23:49Z",
+     "completed_at": "2026-10-27T04:23:50Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:23:50Z",
+     "completed_at": "2026-10-27T04:24:49Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:24:49Z",
+     "completed_at": "2026-10-27T04:24:49Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:24:49Z",
+     "completed_at": "2026-10-27T04:24:59Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:24:59Z",
+     "completed_at": "2026-10-27T04:24:59Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:24:59Z",
+     "completed_at": "2026-10-27T04:24:59Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:24:59Z",
+     "completed_at": "2026-10-27T04:24:59Z"
+    }
+   ]
+  },
+  {
+   "id": 122004440606,
+   "name": "preview",
+   "head_sha": "f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T04:09:53Z",
+   "completed_at": "2026-10-27T04:09:52Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122004440676,
+   "name": "cleanup",
+   "head_sha": "f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T04:09:53Z",
+   "completed_at": "2026-10-27T04:09:52Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122008987455,
+   "name": "production",
+   "head_sha": "f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T04:25:04Z",
+   "completed_at": "2026-10-27T04:27:10Z",
+   "runner_name": "GitHub Actions 1000000892",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:04Z",
+     "completed_at": "2026-10-27T04:25:05Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:05Z",
+     "completed_at": "2026-10-27T04:25:07Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:07Z",
+     "completed_at": "2026-10-27T04:25:13Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:13Z",
+     "completed_at": "2026-10-27T04:25:34Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:34Z",
+     "completed_at": "2026-10-27T04:25:51Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:25:51Z",
+     "completed_at": "2026-10-27T04:26:48Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:26:48Z",
+     "completed_at": "2026-10-27T04:26:52Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T04:26:52Z",
+     "completed_at": "2026-10-27T04:27:08Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:27:08Z",
+     "completed_at": "2026-10-27T04:27:08Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:27:08Z",
+     "completed_at": "2026-10-27T04:27:08Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:27:08Z",
+     "completed_at": "2026-10-27T04:27:08Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:27:08Z",
+     "completed_at": "2026-10-27T04:27:08Z"
+    }
+   ]
+  }
+ ],
+ "40450347470": [
+  {
+   "id": 122011347151,
+   "name": "checks",
+   "head_sha": "cabb78bb430631a84855b3622d1906293bee977d",
+   "conclusion": "success",
+   "started_at": "2026-10-27T04:33:06Z",
+   "completed_at": "2026-10-27T04:50:53Z",
+   "runner_name": "GitHub Actions 1000000894",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:33:07Z",
+     "completed_at": "2026-10-27T04:33:09Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:33:09Z",
+     "completed_at": "2026-10-27T04:33:18Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:33:18Z",
+     "completed_at": "2026-10-27T04:33:20Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:33:20Z",
+     "completed_at": "2026-10-27T04:33:20Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:33:20Z",
+     "completed_at": "2026-10-27T04:33:24Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:33:24Z",
+     "completed_at": "2026-10-27T04:33:28Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:33:28Z",
+     "completed_at": "2026-10-27T04:33:44Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:33:44Z",
+     "completed_at": "2026-10-27T04:34:10Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:34:10Z",
+     "completed_at": "2026-10-27T04:34:28Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:34:28Z",
+     "completed_at": "2026-10-27T04:35:38Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:35:38Z",
+     "completed_at": "2026-10-27T04:35:38Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:35:38Z",
+     "completed_at": "2026-10-27T04:35:51Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:35:51Z",
+     "completed_at": "2026-10-27T04:36:26Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:36:26Z",
+     "completed_at": "2026-10-27T04:36:26Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:36:26Z",
+     "completed_at": "2026-10-27T04:36:28Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:36:28Z",
+     "completed_at": "2026-10-27T04:36:42Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:36:42Z",
+     "completed_at": "2026-10-27T04:38:03Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:38:03Z",
+     "completed_at": "2026-10-27T04:38:03Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:38:03Z",
+     "completed_at": "2026-10-27T04:46:34Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:46:34Z",
+     "completed_at": "2026-10-27T04:49:25Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:49:25Z",
+     "completed_at": "2026-10-27T04:49:27Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:49:27Z",
+     "completed_at": "2026-10-27T04:50:36Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:50:36Z",
+     "completed_at": "2026-10-27T04:50:36Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:50:36Z",
+     "completed_at": "2026-10-27T04:50:49Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:50:49Z",
+     "completed_at": "2026-10-27T04:50:50Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:50:50Z",
+     "completed_at": "2026-10-27T04:50:50Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:50:50Z",
+     "completed_at": "2026-10-27T04:50:50Z"
+    }
+   ]
+  },
+  {
+   "id": 122011348585,
+   "name": "cleanup",
+   "head_sha": "cabb78bb430631a84855b3622d1906293bee977d",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T04:33:05Z",
+   "completed_at": "2026-10-27T04:33:04Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122011348889,
+   "name": "preview",
+   "head_sha": "cabb78bb430631a84855b3622d1906293bee977d",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T04:33:05Z",
+   "completed_at": "2026-10-27T04:33:04Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122016574291,
+   "name": "production",
+   "head_sha": "cabb78bb430631a84855b3622d1906293bee977d",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T04:50:55Z",
+   "completed_at": "2026-10-27T04:52:40Z",
+   "runner_name": "GitHub Actions 1000000895",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:50:55Z",
+     "completed_at": "2026-10-27T04:50:56Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:50:56Z",
+     "completed_at": "2026-10-27T04:50:58Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:50:58Z",
+     "completed_at": "2026-10-27T04:51:00Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:51:00Z",
+     "completed_at": "2026-10-27T04:51:19Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:51:19Z",
+     "completed_at": "2026-10-27T04:51:34Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:51:34Z",
+     "completed_at": "2026-10-27T04:52:20Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:52:20Z",
+     "completed_at": "2026-10-27T04:52:23Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T04:52:23Z",
+     "completed_at": "2026-10-27T04:52:38Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:52:38Z",
+     "completed_at": "2026-10-27T04:52:38Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T04:52:38Z",
+     "completed_at": "2026-10-27T04:52:38Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:52:38Z",
+     "completed_at": "2026-10-27T04:52:38Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T04:52:38Z",
+     "completed_at": "2026-10-27T04:52:38Z"
+    }
+   ]
+  }
+ ],
+ "40454757987": [
+  {
+   "id": 122025376638,
+   "name": "checks",
+   "head_sha": "d6221b79b9c796d7c85c975bd122c7bed6d351e1",
+   "conclusion": "success",
+   "started_at": "2026-10-27T05:20:28Z",
+   "completed_at": "2026-10-27T05:38:04Z",
+   "runner_name": "GitHub Actions 1000000896",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:20:29Z",
+     "completed_at": "2026-10-27T05:20:32Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:20:32Z",
+     "completed_at": "2026-10-27T05:20:43Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:20:43Z",
+     "completed_at": "2026-10-27T05:20:49Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:20:49Z",
+     "completed_at": "2026-10-27T05:20:49Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:20:49Z",
+     "completed_at": "2026-10-27T05:20:53Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:20:53Z",
+     "completed_at": "2026-10-27T05:20:59Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:20:59Z",
+     "completed_at": "2026-10-27T05:21:16Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:21:16Z",
+     "completed_at": "2026-10-27T05:21:43Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:21:43Z",
+     "completed_at": "2026-10-27T05:22:01Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:22:01Z",
+     "completed_at": "2026-10-27T05:22:58Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T05:22:58Z",
+     "completed_at": "2026-10-27T05:22:58Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:22:58Z",
+     "completed_at": "2026-10-27T05:23:11Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:23:11Z",
+     "completed_at": "2026-10-27T05:23:46Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:23:46Z",
+     "completed_at": "2026-10-27T05:23:46Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:23:46Z",
+     "completed_at": "2026-10-27T05:23:48Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:23:48Z",
+     "completed_at": "2026-10-27T05:24:02Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:24:02Z",
+     "completed_at": "2026-10-27T05:25:19Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:25:19Z",
+     "completed_at": "2026-10-27T05:25:20Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:25:20Z",
+     "completed_at": "2026-10-27T05:33:47Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:33:47Z",
+     "completed_at": "2026-10-27T05:36:38Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:36:38Z",
+     "completed_at": "2026-10-27T05:36:40Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:36:40Z",
+     "completed_at": "2026-10-27T05:37:50Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:37:50Z",
+     "completed_at": "2026-10-27T05:37:50Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:37:50Z",
+     "completed_at": "2026-10-27T05:38:01Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:01Z",
+     "completed_at": "2026-10-27T05:38:02Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:02Z",
+     "completed_at": "2026-10-27T05:38:02Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:02Z",
+     "completed_at": "2026-10-27T05:38:02Z"
+    }
+   ]
+  },
+  {
+   "id": 122025378137,
+   "name": "cleanup",
+   "head_sha": "d6221b79b9c796d7c85c975bd122c7bed6d351e1",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T05:20:27Z",
+   "completed_at": "2026-10-27T05:20:26Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122025378193,
+   "name": "preview",
+   "head_sha": "d6221b79b9c796d7c85c975bd122c7bed6d351e1",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T05:20:27Z",
+   "completed_at": "2026-10-27T05:20:26Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122030716428,
+   "name": "production",
+   "head_sha": "d6221b79b9c796d7c85c975bd122c7bed6d351e1",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T05:38:06Z",
+   "completed_at": "2026-10-27T05:39:19Z",
+   "runner_name": "GitHub Actions 1000000897",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:07Z",
+     "completed_at": "2026-10-27T05:38:08Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:08Z",
+     "completed_at": "2026-10-27T05:38:09Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:09Z",
+     "completed_at": "2026-10-27T05:38:15Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:15Z",
+     "completed_at": "2026-10-27T05:38:25Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:25Z",
+     "completed_at": "2026-10-27T05:38:37Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:38:37Z",
+     "completed_at": "2026-10-27T05:39:04Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:39:04Z",
+     "completed_at": "2026-10-27T05:39:07Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T05:39:07Z",
+     "completed_at": "2026-10-27T05:39:17Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T05:39:17Z",
+     "completed_at": "2026-10-27T05:39:17Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T05:39:17Z",
+     "completed_at": "2026-10-27T05:39:17Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:39:17Z",
+     "completed_at": "2026-10-27T05:39:18Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:39:18Z",
+     "completed_at": "2026-10-27T05:39:18Z"
+    }
+   ]
+  }
+ ],
+ "40456936288": [
+  {
+   "id": 122032343083,
+   "name": "checks",
+   "head_sha": "e120461717f7e69c17d88f7512e776206d8fe664",
+   "conclusion": "success",
+   "started_at": "2026-10-27T05:43:31Z",
+   "completed_at": "2026-10-27T06:00:51Z",
+   "runner_name": "GitHub Actions 1000000898",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:43:32Z",
+     "completed_at": "2026-10-27T05:43:33Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:43:33Z",
+     "completed_at": "2026-10-27T05:43:40Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:43:40Z",
+     "completed_at": "2026-10-27T05:43:42Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:43:42Z",
+     "completed_at": "2026-10-27T05:43:42Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:43:42Z",
+     "completed_at": "2026-10-27T05:43:45Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:43:45Z",
+     "completed_at": "2026-10-27T05:43:49Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:43:49Z",
+     "completed_at": "2026-10-27T05:44:04Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:44:04Z",
+     "completed_at": "2026-10-27T05:44:29Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:44:29Z",
+     "completed_at": "2026-10-27T05:44:47Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:44:47Z",
+     "completed_at": "2026-10-27T05:45:40Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T05:45:40Z",
+     "completed_at": "2026-10-27T05:45:40Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:45:40Z",
+     "completed_at": "2026-10-27T05:45:52Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:45:52Z",
+     "completed_at": "2026-10-27T05:46:27Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:46:27Z",
+     "completed_at": "2026-10-27T05:46:28Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:46:28Z",
+     "completed_at": "2026-10-27T05:46:29Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:46:29Z",
+     "completed_at": "2026-10-27T05:46:43Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:46:43Z",
+     "completed_at": "2026-10-27T05:48:02Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:48:02Z",
+     "completed_at": "2026-10-27T05:48:02Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:48:02Z",
+     "completed_at": "2026-10-27T05:56:31Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:56:31Z",
+     "completed_at": "2026-10-27T05:59:23Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:59:23Z",
+     "completed_at": "2026-10-27T05:59:25Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T05:59:25Z",
+     "completed_at": "2026-10-27T06:00:33Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:33Z",
+     "completed_at": "2026-10-27T06:00:33Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:33Z",
+     "completed_at": "2026-10-27T06:00:48Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:48Z",
+     "completed_at": "2026-10-27T06:00:48Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:48Z",
+     "completed_at": "2026-10-27T06:00:48Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:48Z",
+     "completed_at": "2026-10-27T06:00:48Z"
+    }
+   ]
+  },
+  {
+   "id": 122032344502,
+   "name": "cleanup",
+   "head_sha": "e120461717f7e69c17d88f7512e776206d8fe664",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T05:43:29Z",
+   "completed_at": "2026-10-27T05:43:29Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122032344522,
+   "name": "preview",
+   "head_sha": "e120461717f7e69c17d88f7512e776206d8fe664",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T05:43:29Z",
+   "completed_at": "2026-10-27T05:43:29Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122037570828,
+   "name": "production",
+   "head_sha": "e120461717f7e69c17d88f7512e776206d8fe664",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T06:00:53Z",
+   "completed_at": "2026-10-27T06:02:40Z",
+   "runner_name": "GitHub Actions 1000000899",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:54Z",
+     "completed_at": "2026-10-27T06:00:55Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:55Z",
+     "completed_at": "2026-10-27T06:00:56Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:56Z",
+     "completed_at": "2026-10-27T06:00:59Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:00:59Z",
+     "completed_at": "2026-10-27T06:01:18Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:01:18Z",
+     "completed_at": "2026-10-27T06:01:33Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:01:33Z",
+     "completed_at": "2026-10-27T06:02:20Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:02:20Z",
+     "completed_at": "2026-10-27T06:02:23Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T06:02:23Z",
+     "completed_at": "2026-10-27T06:02:38Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:02:38Z",
+     "completed_at": "2026-10-27T06:02:38Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:02:38Z",
+     "completed_at": "2026-10-27T06:02:38Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:02:38Z",
+     "completed_at": "2026-10-27T06:02:39Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:02:39Z",
+     "completed_at": "2026-10-27T06:02:39Z"
+    }
+   ]
+  }
+ ],
+ "40460769638": [
+  {
+   "id": 122044564423,
+   "name": "checks",
+   "head_sha": "f08f670eb8bd5c699463062c4d00f08c4d486cfa",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T06:23:04Z",
+   "completed_at": "2026-10-27T06:33:55Z",
+   "runner_name": "GitHub Actions 1000000900",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:04Z",
+     "completed_at": "2026-10-27T06:23:05Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:05Z",
+     "completed_at": "2026-10-27T06:23:14Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:14Z",
+     "completed_at": "2026-10-27T06:23:15Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:15Z",
+     "completed_at": "2026-10-27T06:23:15Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:15Z",
+     "completed_at": "2026-10-27T06:23:18Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:18Z",
+     "completed_at": "2026-10-27T06:23:21Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:21Z",
+     "completed_at": "2026-10-27T06:23:32Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:32Z",
+     "completed_at": "2026-10-27T06:23:51Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:23:51Z",
+     "completed_at": "2026-10-27T06:24:04Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:24:04Z",
+     "completed_at": "2026-10-27T06:24:41Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:24:41Z",
+     "completed_at": "2026-10-27T06:24:41Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:24:41Z",
+     "completed_at": "2026-10-27T06:24:53Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:24:53Z",
+     "completed_at": "2026-10-27T06:25:28Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:25:28Z",
+     "completed_at": "2026-10-27T06:25:28Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:25:28Z",
+     "completed_at": "2026-10-27T06:25:29Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:25:29Z",
+     "completed_at": "2026-10-27T06:25:40Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:25:40Z",
+     "completed_at": "2026-10-27T06:26:42Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:26:42Z",
+     "completed_at": "2026-10-27T06:26:43Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T06:26:43Z",
+     "completed_at": "2026-10-27T06:33:52Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:33:52Z",
+     "completed_at": "2026-10-27T06:33:52Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:33:52Z",
+     "completed_at": "2026-10-27T06:33:52Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:33:52Z",
+     "completed_at": "2026-10-27T06:33:52Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:33:52Z",
+     "completed_at": "2026-10-27T06:33:52Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:33:52Z",
+     "completed_at": "2026-10-27T06:33:52Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:33:52Z",
+     "completed_at": "2026-10-27T06:33:53Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:33:53Z",
+     "completed_at": "2026-10-27T06:33:53Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:33:53Z",
+     "completed_at": "2026-10-27T06:33:53Z"
+    }
+   ]
+  },
+  {
+   "id": 122044565682,
+   "name": "preview",
+   "head_sha": "f08f670eb8bd5c699463062c4d00f08c4d486cfa",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T06:23:02Z",
+   "completed_at": "2026-10-27T06:23:02Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122044566167,
+   "name": "cleanup",
+   "head_sha": "f08f670eb8bd5c699463062c4d00f08c4d486cfa",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T06:23:02Z",
+   "completed_at": "2026-10-27T06:23:02Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122048076161,
+   "name": "production",
+   "head_sha": "f08f670eb8bd5c699463062c4d00f08c4d486cfa",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T06:33:55Z",
+   "completed_at": "2026-10-27T06:33:55Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": []
+  }
+ ],
+ "40461166952": [
+  {
+   "id": 122045871581,
+   "name": "checks",
+   "head_sha": "cce131daf5c5648830ffe50a7d756e8adc490d73",
+   "conclusion": "success",
+   "started_at": "2026-10-27T06:27:01Z",
+   "completed_at": "2026-10-27T06:45:21Z",
+   "runner_name": "GitHub Actions 1000000901",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:27:02Z",
+     "completed_at": "2026-10-27T06:27:03Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:27:03Z",
+     "completed_at": "2026-10-27T06:27:11Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:27:11Z",
+     "completed_at": "2026-10-27T06:27:13Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:27:13Z",
+     "completed_at": "2026-10-27T06:27:13Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:27:13Z",
+     "completed_at": "2026-10-27T06:27:17Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:27:17Z",
+     "completed_at": "2026-10-27T06:27:22Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:27:22Z",
+     "completed_at": "2026-10-27T06:27:40Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:27:40Z",
+     "completed_at": "2026-10-27T06:28:06Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:28:06Z",
+     "completed_at": "2026-10-27T06:28:25Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:28:25Z",
+     "completed_at": "2026-10-27T06:29:15Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:29:15Z",
+     "completed_at": "2026-10-27T06:29:15Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:29:15Z",
+     "completed_at": "2026-10-27T06:29:28Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:29:28Z",
+     "completed_at": "2026-10-27T06:30:04Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:30:04Z",
+     "completed_at": "2026-10-27T06:30:04Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:30:04Z",
+     "completed_at": "2026-10-27T06:30:06Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:30:06Z",
+     "completed_at": "2026-10-27T06:30:34Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:30:34Z",
+     "completed_at": "2026-10-27T06:31:50Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:31:50Z",
+     "completed_at": "2026-10-27T06:31:51Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:31:51Z",
+     "completed_at": "2026-10-27T06:40:58Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:40:58Z",
+     "completed_at": "2026-10-27T06:43:49Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:43:49Z",
+     "completed_at": "2026-10-27T06:43:51Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:43:51Z",
+     "completed_at": "2026-10-27T06:44:59Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:44:59Z",
+     "completed_at": "2026-10-27T06:44:59Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:44:59Z",
+     "completed_at": "2026-10-27T06:45:18Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:45:18Z",
+     "completed_at": "2026-10-27T06:45:18Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:45:18Z",
+     "completed_at": "2026-10-27T06:45:18Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:45:18Z",
+     "completed_at": "2026-10-27T06:45:18Z"
+    }
+   ]
+  },
+  {
+   "id": 122045873000,
+   "name": "preview",
+   "head_sha": "cce131daf5c5648830ffe50a7d756e8adc490d73",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T06:26:59Z",
+   "completed_at": "2026-10-27T06:26:59Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122045873159,
+   "name": "cleanup",
+   "head_sha": "cce131daf5c5648830ffe50a7d756e8adc490d73",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T06:26:59Z",
+   "completed_at": "2026-10-27T06:26:59Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122051691015,
+   "name": "production",
+   "head_sha": "cce131daf5c5648830ffe50a7d756e8adc490d73",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T06:45:23Z",
+   "completed_at": "2026-10-27T06:47:11Z",
+   "runner_name": "GitHub Actions 1000000902",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:45:24Z",
+     "completed_at": "2026-10-27T06:45:25Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:45:25Z",
+     "completed_at": "2026-10-27T06:45:26Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:45:26Z",
+     "completed_at": "2026-10-27T06:45:29Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:45:29Z",
+     "completed_at": "2026-10-27T06:45:48Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:45:48Z",
+     "completed_at": "2026-10-27T06:46:03Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:46:03Z",
+     "completed_at": "2026-10-27T06:46:53Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:46:53Z",
+     "completed_at": "2026-10-27T06:46:56Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T06:46:56Z",
+     "completed_at": "2026-10-27T06:47:10Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:47:10Z",
+     "completed_at": "2026-10-27T06:47:10Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:47:10Z",
+     "completed_at": "2026-10-27T06:47:10Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:47:10Z",
+     "completed_at": "2026-10-27T06:47:10Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:47:10Z",
+     "completed_at": "2026-10-27T06:47:10Z"
+    }
+   ]
+  }
+ ],
+ "40464199853": [
+  {
+   "id": 122055594240,
+   "name": "checks",
+   "head_sha": "f3512e8635b22e38fee3e2f3db20b37c3b57b227",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T06:57:39Z",
+   "completed_at": "2026-10-27T07:14:34Z",
+   "runner_name": "GitHub Actions 1000000903",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:57:39Z",
+     "completed_at": "2026-10-27T06:57:40Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:57:40Z",
+     "completed_at": "2026-10-27T06:57:46Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:57:46Z",
+     "completed_at": "2026-10-27T06:57:48Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:57:48Z",
+     "completed_at": "2026-10-27T06:57:48Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:57:48Z",
+     "completed_at": "2026-10-27T06:57:50Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:57:50Z",
+     "completed_at": "2026-10-27T06:57:53Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:57:53Z",
+     "completed_at": "2026-10-27T06:58:11Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:58:11Z",
+     "completed_at": "2026-10-27T06:58:39Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:58:39Z",
+     "completed_at": "2026-10-27T06:58:58Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:58:58Z",
+     "completed_at": "2026-10-27T06:59:56Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T06:59:56Z",
+     "completed_at": "2026-10-27T06:59:56Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T06:59:56Z",
+     "completed_at": "2026-10-27T07:00:09Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:00:09Z",
+     "completed_at": "2026-10-27T07:00:45Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:00:45Z",
+     "completed_at": "2026-10-27T07:00:45Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:00:45Z",
+     "completed_at": "2026-10-27T07:00:46Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:00:46Z",
+     "completed_at": "2026-10-27T07:01:02Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:01:02Z",
+     "completed_at": "2026-10-27T07:02:21Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:02:21Z",
+     "completed_at": "2026-10-27T07:02:22Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:02:22Z",
+     "completed_at": "2026-10-27T07:11:39Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T07:11:39Z",
+     "completed_at": "2026-10-27T07:14:32Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:14:32Z",
+     "completed_at": "2026-10-27T07:14:32Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:14:32Z",
+     "completed_at": "2026-10-27T07:14:32Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:14:32Z",
+     "completed_at": "2026-10-27T07:14:32Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:14:32Z",
+     "completed_at": "2026-10-27T07:14:32Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:14:32Z",
+     "completed_at": "2026-10-27T07:14:32Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:14:32Z",
+     "completed_at": "2026-10-27T07:14:33Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:14:33Z",
+     "completed_at": "2026-10-27T07:14:33Z"
+    }
+   ]
+  },
+  {
+   "id": 122055596132,
+   "name": "cleanup",
+   "head_sha": "f3512e8635b22e38fee3e2f3db20b37c3b57b227",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T06:57:37Z",
+   "completed_at": "2026-10-27T06:57:37Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122055596186,
+   "name": "preview",
+   "head_sha": "f3512e8635b22e38fee3e2f3db20b37c3b57b227",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T06:57:37Z",
+   "completed_at": "2026-10-27T06:57:37Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122061220637,
+   "name": "production",
+   "head_sha": "f3512e8635b22e38fee3e2f3db20b37c3b57b227",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T07:14:34Z",
+   "completed_at": "2026-10-27T07:14:34Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": []
+  }
+ ],
+ "40465299263": [
+  {
+   "id": 122059113982,
+   "name": "checks",
+   "head_sha": "4c64080b37d734c9473201cf00ca86e7d3c1100d",
+   "conclusion": "success",
+   "started_at": "2026-10-27T07:08:17Z",
+   "completed_at": "2026-10-27T07:26:38Z",
+   "runner_name": "GitHub Actions 1000000904",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:08:17Z",
+     "completed_at": "2026-10-27T07:08:18Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:08:18Z",
+     "completed_at": "2026-10-27T07:08:24Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:08:24Z",
+     "completed_at": "2026-10-27T07:08:26Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:08:26Z",
+     "completed_at": "2026-10-27T07:08:26Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:08:26Z",
+     "completed_at": "2026-10-27T07:08:28Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:08:28Z",
+     "completed_at": "2026-10-27T07:08:31Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:08:31Z",
+     "completed_at": "2026-10-27T07:08:49Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:08:49Z",
+     "completed_at": "2026-10-27T07:09:16Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:09:16Z",
+     "completed_at": "2026-10-27T07:09:35Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:09:35Z",
+     "completed_at": "2026-10-27T07:10:37Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:10:37Z",
+     "completed_at": "2026-10-27T07:10:37Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:10:37Z",
+     "completed_at": "2026-10-27T07:10:50Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:10:50Z",
+     "completed_at": "2026-10-27T07:11:26Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:11:26Z",
+     "completed_at": "2026-10-27T07:11:27Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:11:27Z",
+     "completed_at": "2026-10-27T07:11:28Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:11:28Z",
+     "completed_at": "2026-10-27T07:11:44Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:11:44Z",
+     "completed_at": "2026-10-27T07:13:01Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:13:01Z",
+     "completed_at": "2026-10-27T07:13:02Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:13:02Z",
+     "completed_at": "2026-10-27T07:22:14Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:22:14Z",
+     "completed_at": "2026-10-27T07:25:07Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:25:07Z",
+     "completed_at": "2026-10-27T07:25:09Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:25:09Z",
+     "completed_at": "2026-10-27T07:26:18Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:18Z",
+     "completed_at": "2026-10-27T07:26:18Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:18Z",
+     "completed_at": "2026-10-27T07:26:36Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:36Z",
+     "completed_at": "2026-10-27T07:26:36Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:36Z",
+     "completed_at": "2026-10-27T07:26:36Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:36Z",
+     "completed_at": "2026-10-27T07:26:36Z"
+    }
+   ]
+  },
+  {
+   "id": 122059115074,
+   "name": "cleanup",
+   "head_sha": "4c64080b37d734c9473201cf00ca86e7d3c1100d",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T07:08:15Z",
+   "completed_at": "2026-10-27T07:08:14Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122059115171,
+   "name": "preview",
+   "head_sha": "4c64080b37d734c9473201cf00ca86e7d3c1100d",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T07:08:15Z",
+   "completed_at": "2026-10-27T07:08:14Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122065192584,
+   "name": "production",
+   "head_sha": "4c64080b37d734c9473201cf00ca86e7d3c1100d",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T07:26:40Z",
+   "completed_at": "2026-10-27T07:28:08Z",
+   "runner_name": "GitHub Actions 1000000905",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:40Z",
+     "completed_at": "2026-10-27T07:26:41Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:41Z",
+     "completed_at": "2026-10-27T07:26:44Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:44Z",
+     "completed_at": "2026-10-27T07:26:48Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:26:48Z",
+     "completed_at": "2026-10-27T07:27:02Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:27:02Z",
+     "completed_at": "2026-10-27T07:27:15Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:27:15Z",
+     "completed_at": "2026-10-27T07:27:51Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:27:51Z",
+     "completed_at": "2026-10-27T07:27:54Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T07:27:54Z",
+     "completed_at": "2026-10-27T07:28:07Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:28:07Z",
+     "completed_at": "2026-10-27T07:28:07Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:28:07Z",
+     "completed_at": "2026-10-27T07:28:07Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:28:07Z",
+     "completed_at": "2026-10-27T07:28:07Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:28:07Z",
+     "completed_at": "2026-10-27T07:28:07Z"
+    }
+   ]
+  }
+ ],
+ "40467472536": [
+  {
+   "id": 122066279948,
+   "name": "checks",
+   "head_sha": "c24320b07314dea9f590ba08c9142039951419d8",
+   "conclusion": "success",
+   "started_at": "2026-10-27T07:30:02Z",
+   "completed_at": "2026-10-27T07:48:30Z",
+   "runner_name": "GitHub Actions 1000000906",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:30:03Z",
+     "completed_at": "2026-10-27T07:30:04Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:30:04Z",
+     "completed_at": "2026-10-27T07:30:11Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:30:11Z",
+     "completed_at": "2026-10-27T07:30:13Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:30:13Z",
+     "completed_at": "2026-10-27T07:30:13Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:30:13Z",
+     "completed_at": "2026-10-27T07:30:17Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:30:17Z",
+     "completed_at": "2026-10-27T07:30:22Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:30:22Z",
+     "completed_at": "2026-10-27T07:30:40Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:30:40Z",
+     "completed_at": "2026-10-27T07:31:08Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:31:08Z",
+     "completed_at": "2026-10-27T07:31:27Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:31:27Z",
+     "completed_at": "2026-10-27T07:32:29Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:32:29Z",
+     "completed_at": "2026-10-27T07:32:29Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:32:29Z",
+     "completed_at": "2026-10-27T07:32:42Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:32:42Z",
+     "completed_at": "2026-10-27T07:33:19Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:33:19Z",
+     "completed_at": "2026-10-27T07:33:20Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:33:20Z",
+     "completed_at": "2026-10-27T07:33:21Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:33:21Z",
+     "completed_at": "2026-10-27T07:33:36Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:33:36Z",
+     "completed_at": "2026-10-27T07:34:52Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:34:52Z",
+     "completed_at": "2026-10-27T07:34:53Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:34:53Z",
+     "completed_at": "2026-10-27T07:44:07Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:44:07Z",
+     "completed_at": "2026-10-27T07:46:56Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:46:56Z",
+     "completed_at": "2026-10-27T07:46:58Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:46:58Z",
+     "completed_at": "2026-10-27T07:48:08Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:08Z",
+     "completed_at": "2026-10-27T07:48:08Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:08Z",
+     "completed_at": "2026-10-27T07:48:27Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:27Z",
+     "completed_at": "2026-10-27T07:48:27Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:27Z",
+     "completed_at": "2026-10-27T07:48:27Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:27Z",
+     "completed_at": "2026-10-27T07:48:27Z"
+    }
+   ]
+  },
+  {
+   "id": 122066281123,
+   "name": "preview",
+   "head_sha": "c24320b07314dea9f590ba08c9142039951419d8",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T07:30:00Z",
+   "completed_at": "2026-10-27T07:29:59Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122066322320,
+   "name": "cleanup",
+   "head_sha": "c24320b07314dea9f590ba08c9142039951419d8",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T07:30:07Z",
+   "completed_at": "2026-10-27T07:29:59Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122072397937,
+   "name": "production",
+   "head_sha": "c24320b07314dea9f590ba08c9142039951419d8",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T07:48:32Z",
+   "completed_at": "2026-10-27T07:49:51Z",
+   "runner_name": "GitHub Actions 1000000908",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:32Z",
+     "completed_at": "2026-10-27T07:48:34Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:34Z",
+     "completed_at": "2026-10-27T07:48:36Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:36Z",
+     "completed_at": "2026-10-27T07:48:39Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:39Z",
+     "completed_at": "2026-10-27T07:48:52Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:52Z",
+     "completed_at": "2026-10-27T07:49:05Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:49:05Z",
+     "completed_at": "2026-10-27T07:49:35Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:49:35Z",
+     "completed_at": "2026-10-27T07:49:38Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T07:49:38Z",
+     "completed_at": "2026-10-27T07:49:50Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:49:50Z",
+     "completed_at": "2026-10-27T07:49:50Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:49:50Z",
+     "completed_at": "2026-10-27T07:49:50Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:49:50Z",
+     "completed_at": "2026-10-27T07:49:50Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:49:50Z",
+     "completed_at": "2026-10-27T07:49:50Z"
+    }
+   ]
+  }
+ ],
+ "40468812796": [
+  {
+   "id": 122070646619,
+   "name": "checks",
+   "head_sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+   "conclusion": "success",
+   "started_at": "2026-10-27T07:43:19Z",
+   "completed_at": "2026-10-27T08:01:40Z",
+   "runner_name": "GitHub Actions 1000000907",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:43:20Z",
+     "completed_at": "2026-10-27T07:43:21Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:43:21Z",
+     "completed_at": "2026-10-27T07:43:27Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:43:27Z",
+     "completed_at": "2026-10-27T07:43:29Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:43:29Z",
+     "completed_at": "2026-10-27T07:43:29Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:43:29Z",
+     "completed_at": "2026-10-27T07:43:31Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:43:31Z",
+     "completed_at": "2026-10-27T07:43:34Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:43:34Z",
+     "completed_at": "2026-10-27T07:43:51Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:43:51Z",
+     "completed_at": "2026-10-27T07:44:18Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:44:18Z",
+     "completed_at": "2026-10-27T07:44:37Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:44:37Z",
+     "completed_at": "2026-10-27T07:45:39Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T07:45:39Z",
+     "completed_at": "2026-10-27T07:45:39Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:45:39Z",
+     "completed_at": "2026-10-27T07:45:52Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:45:52Z",
+     "completed_at": "2026-10-27T07:46:27Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:46:27Z",
+     "completed_at": "2026-10-27T07:46:28Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:46:28Z",
+     "completed_at": "2026-10-27T07:46:29Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:46:29Z",
+     "completed_at": "2026-10-27T07:46:44Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:46:44Z",
+     "completed_at": "2026-10-27T07:48:03Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:03Z",
+     "completed_at": "2026-10-27T07:48:04Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:48:04Z",
+     "completed_at": "2026-10-27T07:57:18Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T07:57:18Z",
+     "completed_at": "2026-10-27T08:00:10Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:00:10Z",
+     "completed_at": "2026-10-27T08:00:12Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:00:12Z",
+     "completed_at": "2026-10-27T08:01:20Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:20Z",
+     "completed_at": "2026-10-27T08:01:20Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:20Z",
+     "completed_at": "2026-10-27T08:01:38Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:38Z",
+     "completed_at": "2026-10-27T08:01:38Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:38Z",
+     "completed_at": "2026-10-27T08:01:39Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:39Z",
+     "completed_at": "2026-10-27T08:01:39Z"
+    }
+   ]
+  },
+  {
+   "id": 122070648092,
+   "name": "preview",
+   "head_sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T07:43:18Z",
+   "completed_at": "2026-10-27T07:43:17Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122070649077,
+   "name": "cleanup",
+   "head_sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T07:43:18Z",
+   "completed_at": "2026-10-27T07:43:17Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122076947059,
+   "name": "production",
+   "head_sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T08:01:42Z",
+   "completed_at": "2026-10-27T08:03:29Z",
+   "runner_name": "GitHub Actions 1000000909",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:43Z",
+     "completed_at": "2026-10-27T08:01:44Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:44Z",
+     "completed_at": "2026-10-27T08:01:45Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:45Z",
+     "completed_at": "2026-10-27T08:01:48Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:01:48Z",
+     "completed_at": "2026-10-27T08:02:07Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:02:07Z",
+     "completed_at": "2026-10-27T08:02:22Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:02:22Z",
+     "completed_at": "2026-10-27T08:03:09Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:03:09Z",
+     "completed_at": "2026-10-27T08:03:12Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T08:03:12Z",
+     "completed_at": "2026-10-27T08:03:27Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:03:27Z",
+     "completed_at": "2026-10-27T08:03:27Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:03:27Z",
+     "completed_at": "2026-10-27T08:03:27Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:03:27Z",
+     "completed_at": "2026-10-27T08:03:28Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:03:28Z",
+     "completed_at": "2026-10-27T08:03:28Z"
+    }
+   ]
+  }
+ ],
+ "40471181031": [
+  {
+   "id": 122078397054,
+   "name": "checks",
+   "head_sha": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+   "conclusion": "success",
+   "started_at": "2026-10-27T08:05:52Z",
+   "completed_at": "2026-10-27T08:21:45Z",
+   "runner_name": "GitHub Actions 1000000910",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:05:53Z",
+     "completed_at": "2026-10-27T08:05:55Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:05:55Z",
+     "completed_at": "2026-10-27T08:06:07Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:06:07Z",
+     "completed_at": "2026-10-27T08:06:09Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:06:09Z",
+     "completed_at": "2026-10-27T08:06:09Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:06:09Z",
+     "completed_at": "2026-10-27T08:06:12Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:06:12Z",
+     "completed_at": "2026-10-27T08:06:15Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:06:15Z",
+     "completed_at": "2026-10-27T08:06:25Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:06:25Z",
+     "completed_at": "2026-10-27T08:06:43Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:06:43Z",
+     "completed_at": "2026-10-27T08:06:55Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:06:55Z",
+     "completed_at": "2026-10-27T08:07:47Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:07:47Z",
+     "completed_at": "2026-10-27T08:07:47Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:07:47Z",
+     "completed_at": "2026-10-27T08:08:00Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:08:00Z",
+     "completed_at": "2026-10-27T08:08:37Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:08:37Z",
+     "completed_at": "2026-10-27T08:08:37Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:08:37Z",
+     "completed_at": "2026-10-27T08:08:38Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:08:38Z",
+     "completed_at": "2026-10-27T08:08:47Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:08:47Z",
+     "completed_at": "2026-10-27T08:10:05Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:10:05Z",
+     "completed_at": "2026-10-27T08:10:05Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:10:05Z",
+     "completed_at": "2026-10-27T08:17:41Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:17:41Z",
+     "completed_at": "2026-10-27T08:20:30Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:20:30Z",
+     "completed_at": "2026-10-27T08:20:31Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:20:31Z",
+     "completed_at": "2026-10-27T08:21:32Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:21:32Z",
+     "completed_at": "2026-10-27T08:21:32Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:21:32Z",
+     "completed_at": "2026-10-27T08:21:43Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:21:43Z",
+     "completed_at": "2026-10-27T08:21:43Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:21:43Z",
+     "completed_at": "2026-10-27T08:21:43Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:21:43Z",
+     "completed_at": "2026-10-27T08:21:43Z"
+    }
+   ]
+  },
+  {
+   "id": 122078398626,
+   "name": "cleanup",
+   "head_sha": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T08:05:50Z",
+   "completed_at": "2026-10-27T08:05:50Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122078399092,
+   "name": "preview",
+   "head_sha": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T08:05:50Z",
+   "completed_at": "2026-10-27T08:05:50Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122084239061,
+   "name": "production",
+   "head_sha": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T08:21:48Z",
+   "completed_at": "2026-10-27T08:23:45Z",
+   "runner_name": "GitHub Actions 1000000911",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:21:49Z",
+     "completed_at": "2026-10-27T08:21:51Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:21:51Z",
+     "completed_at": "2026-10-27T08:21:57Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:21:57Z",
+     "completed_at": "2026-10-27T08:22:06Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:22:06Z",
+     "completed_at": "2026-10-27T08:22:25Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:22:25Z",
+     "completed_at": "2026-10-27T08:22:40Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:22:40Z",
+     "completed_at": "2026-10-27T08:23:27Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:23:27Z",
+     "completed_at": "2026-10-27T08:23:30Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T08:23:30Z",
+     "completed_at": "2026-10-27T08:23:42Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:23:42Z",
+     "completed_at": "2026-10-27T08:23:42Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:23:42Z",
+     "completed_at": "2026-10-27T08:23:42Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:23:42Z",
+     "completed_at": "2026-10-27T08:23:42Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:23:42Z",
+     "completed_at": "2026-10-27T08:23:42Z"
+    }
+   ]
+  }
+ ],
+ "40474532913": [
+  {
+   "id": 122089383442,
+   "name": "checks",
+   "head_sha": "ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50",
+   "conclusion": "success",
+   "started_at": "2026-10-27T08:35:12Z",
+   "completed_at": "2026-10-27T08:52:16Z",
+   "runner_name": "GitHub Actions 1000000912",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:35:13Z",
+     "completed_at": "2026-10-27T08:35:15Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:35:15Z",
+     "completed_at": "2026-10-27T08:35:24Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:35:24Z",
+     "completed_at": "2026-10-27T08:35:27Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:35:27Z",
+     "completed_at": "2026-10-27T08:35:27Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:35:27Z",
+     "completed_at": "2026-10-27T08:35:32Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:35:32Z",
+     "completed_at": "2026-10-27T08:35:37Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:35:37Z",
+     "completed_at": "2026-10-27T08:35:50Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:35:50Z",
+     "completed_at": "2026-10-27T08:36:11Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:36:11Z",
+     "completed_at": "2026-10-27T08:36:26Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:36:26Z",
+     "completed_at": "2026-10-27T08:37:23Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:37:23Z",
+     "completed_at": "2026-10-27T08:37:23Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:37:23Z",
+     "completed_at": "2026-10-27T08:37:41Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:37:41Z",
+     "completed_at": "2026-10-27T08:38:15Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:38:15Z",
+     "completed_at": "2026-10-27T08:38:16Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:38:16Z",
+     "completed_at": "2026-10-27T08:38:17Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:38:17Z",
+     "completed_at": "2026-10-27T08:38:29Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:38:29Z",
+     "completed_at": "2026-10-27T08:39:59Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:39:59Z",
+     "completed_at": "2026-10-27T08:40:00Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:40:00Z",
+     "completed_at": "2026-10-27T08:48:03Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:48:03Z",
+     "completed_at": "2026-10-27T08:50:54Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:50:54Z",
+     "completed_at": "2026-10-27T08:50:55Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:50:55Z",
+     "completed_at": "2026-10-27T08:51:59Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:51:59Z",
+     "completed_at": "2026-10-27T08:51:59Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:51:59Z",
+     "completed_at": "2026-10-27T08:52:13Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:13Z",
+     "completed_at": "2026-10-27T08:52:13Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:13Z",
+     "completed_at": "2026-10-27T08:52:13Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:13Z",
+     "completed_at": "2026-10-27T08:52:13Z"
+    }
+   ]
+  },
+  {
+   "id": 122089384778,
+   "name": "cleanup",
+   "head_sha": "ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T08:35:10Z",
+   "completed_at": "2026-10-27T08:35:10Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122089384875,
+   "name": "preview",
+   "head_sha": "ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T08:35:10Z",
+   "completed_at": "2026-10-27T08:35:10Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122096077381,
+   "name": "production",
+   "head_sha": "ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50",
+   "conclusion": "failure",
+   "started_at": "2026-10-27T08:52:18Z",
+   "completed_at": "2026-10-27T08:53:47Z",
+   "runner_name": "GitHub Actions 1000000914",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:19Z",
+     "completed_at": "2026-10-27T08:52:20Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:20Z",
+     "completed_at": "2026-10-27T08:52:22Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:22Z",
+     "completed_at": "2026-10-27T08:52:27Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:27Z",
+     "completed_at": "2026-10-27T08:52:40Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:40Z",
+     "completed_at": "2026-10-27T08:52:53Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:52:53Z",
+     "completed_at": "2026-10-27T08:53:29Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:53:29Z",
+     "completed_at": "2026-10-27T08:53:31Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "failure",
+     "started_at": "2026-10-27T08:53:31Z",
+     "completed_at": "2026-10-27T08:53:44Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:53:44Z",
+     "completed_at": "2026-10-27T08:53:44Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:53:44Z",
+     "completed_at": "2026-10-27T08:53:44Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:53:44Z",
+     "completed_at": "2026-10-27T08:53:45Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:53:45Z",
+     "completed_at": "2026-10-27T08:53:45Z"
+    }
+   ]
+  }
+ ],
+ "40476115672": [
+  {
+   "id": 122094641290,
+   "name": "checks",
+   "head_sha": "741f59c4b01e369a46bd4c8ee5a63116b32db17c",
+   "conclusion": "success",
+   "started_at": "2026-10-27T08:48:41Z",
+   "completed_at": "2026-10-27T09:05:23Z",
+   "runner_name": "GitHub Actions 1000000913",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:48:42Z",
+     "completed_at": "2026-10-27T08:48:43Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:48:43Z",
+     "completed_at": "2026-10-27T08:48:53Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:48:53Z",
+     "completed_at": "2026-10-27T08:48:55Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:48:55Z",
+     "completed_at": "2026-10-27T08:48:55Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:48:55Z",
+     "completed_at": "2026-10-27T08:48:57Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:48:57Z",
+     "completed_at": "2026-10-27T08:49:00Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:49:00Z",
+     "completed_at": "2026-10-27T08:49:13Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:49:13Z",
+     "completed_at": "2026-10-27T08:49:33Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:49:33Z",
+     "completed_at": "2026-10-27T08:49:48Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:49:48Z",
+     "completed_at": "2026-10-27T08:50:47Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T08:50:47Z",
+     "completed_at": "2026-10-27T08:50:47Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:50:47Z",
+     "completed_at": "2026-10-27T08:50:58Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:50:58Z",
+     "completed_at": "2026-10-27T08:51:35Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:51:35Z",
+     "completed_at": "2026-10-27T08:51:36Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:51:36Z",
+     "completed_at": "2026-10-27T08:51:37Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:51:37Z",
+     "completed_at": "2026-10-27T08:51:48Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:51:48Z",
+     "completed_at": "2026-10-27T08:53:18Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:53:18Z",
+     "completed_at": "2026-10-27T08:53:19Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T08:53:19Z",
+     "completed_at": "2026-10-27T09:01:12Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:01:12Z",
+     "completed_at": "2026-10-27T09:04:03Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:04:03Z",
+     "completed_at": "2026-10-27T09:04:05Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:04:05Z",
+     "completed_at": "2026-10-27T09:05:07Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:07Z",
+     "completed_at": "2026-10-27T09:05:07Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:07Z",
+     "completed_at": "2026-10-27T09:05:20Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:20Z",
+     "completed_at": "2026-10-27T09:05:20Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:20Z",
+     "completed_at": "2026-10-27T09:05:20Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:20Z",
+     "completed_at": "2026-10-27T09:05:20Z"
+    }
+   ]
+  },
+  {
+   "id": 122094642499,
+   "name": "cleanup",
+   "head_sha": "741f59c4b01e369a46bd4c8ee5a63116b32db17c",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T08:48:40Z",
+   "completed_at": "2026-10-27T08:48:39Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122094642922,
+   "name": "preview",
+   "head_sha": "741f59c4b01e369a46bd4c8ee5a63116b32db17c",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T08:48:40Z",
+   "completed_at": "2026-10-27T08:48:39Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122101385195,
+   "name": "production",
+   "head_sha": "741f59c4b01e369a46bd4c8ee5a63116b32db17c",
+   "conclusion": "success",
+   "started_at": "2026-10-27T09:05:25Z",
+   "completed_at": "2026-10-27T09:09:03Z",
+   "runner_name": "GitHub Actions 1000000915",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:26Z",
+     "completed_at": "2026-10-27T09:05:27Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:27Z",
+     "completed_at": "2026-10-27T09:05:29Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:29Z",
+     "completed_at": "2026-10-27T09:05:37Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:37Z",
+     "completed_at": "2026-10-27T09:05:52Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:05:52Z",
+     "completed_at": "2026-10-27T09:06:06Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:06Z",
+     "completed_at": "2026-10-27T09:06:42Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:42Z",
+     "completed_at": "2026-10-27T09:06:45Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:45Z",
+     "completed_at": "2026-10-27T09:07:24Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:07:24Z",
+     "completed_at": "2026-10-27T09:09:01Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:09:01Z",
+     "completed_at": "2026-10-27T09:09:01Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:09:01Z",
+     "completed_at": "2026-10-27T09:09:01Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:09:01Z",
+     "completed_at": "2026-10-27T09:09:02Z"
+    }
+   ]
+  }
+ ],
+ "40478220840": [
+  {
+   "id": 122101643247,
+   "name": "checks",
+   "head_sha": "103f0c5511d4590e66a8a83b1a35acfe870e7ca3",
+   "conclusion": "success",
+   "started_at": "2026-10-27T09:06:03Z",
+   "completed_at": "2026-10-27T09:23:04Z",
+   "runner_name": "GitHub Actions 1000000916",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:03Z",
+     "completed_at": "2026-10-27T09:06:05Z"
+    },
+    {
+     "name": "Initialize containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:05Z",
+     "completed_at": "2026-10-27T09:06:15Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:15Z",
+     "completed_at": "2026-10-27T09:06:18Z"
+    },
+    {
+     "name": "Check guestbook delivery author",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:18Z",
+     "completed_at": "2026-10-27T09:06:18Z"
+    },
+    {
+     "name": "Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:18Z",
+     "completed_at": "2026-10-27T09:06:20Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:20Z",
+     "completed_at": "2026-10-27T09:06:24Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:24Z",
+     "completed_at": "2026-10-27T09:06:37Z"
+    },
+    {
+     "name": "Run npm run lint",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:06:37Z",
+     "completed_at": "2026-10-27T09:07:01Z"
+    },
+    {
+     "name": "Run npm run typecheck",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:07:01Z",
+     "completed_at": "2026-10-27T09:07:16Z"
+    },
+    {
+     "name": "npm test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:07:16Z",
+     "completed_at": "2026-10-27T09:08:14Z"
+    },
+    {
+     "name": "Annotate failed unit tests",
+     "conclusion": "skipped",
+     "started_at": "2026-10-27T09:08:14Z",
+     "completed_at": "2026-10-27T09:08:14Z"
+    },
+    {
+     "name": "Run bash scripts/vercel-deploy.test.sh",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:08:14Z",
+     "completed_at": "2026-10-27T09:08:25Z"
+    },
+    {
+     "name": "Run bash scripts/verify-deploy.sh --self-test",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:08:25Z",
+     "completed_at": "2026-10-27T09:09:01Z"
+    },
+    {
+     "name": "Run npm run ask:check",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:09:01Z",
+     "completed_at": "2026-10-27T09:09:01Z"
+    },
+    {
+     "name": "Migrations match db/schema.ts",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:09:01Z",
+     "completed_at": "2026-10-27T09:09:02Z"
+    },
+    {
+     "name": "Run npm run build",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:09:02Z",
+     "completed_at": "2026-10-27T09:09:15Z"
+    },
+    {
+     "name": "Real CPU camera and privacy verifier",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:09:15Z",
+     "completed_at": "2026-10-27T09:10:48Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:10:48Z",
+     "completed_at": "2026-10-27T09:10:49Z"
+    },
+    {
+     "name": "E2E against next start",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:10:49Z",
+     "completed_at": "2026-10-27T09:18:55Z"
+    },
+    {
+     "name": "Motion probe, signed in",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:18:55Z",
+     "completed_at": "2026-10-27T09:21:47Z"
+    },
+    {
+     "name": "Footer walk",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:21:47Z",
+     "completed_at": "2026-10-27T09:21:48Z"
+    },
+    {
+     "name": "Footer Chromium probe",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:21:48Z",
+     "completed_at": "2026-10-27T09:22:51Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:22:51Z",
+     "completed_at": "2026-10-27T09:22:51Z"
+    },
+    {
+     "name": "Post Run actions/cache@v6",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:22:51Z",
+     "completed_at": "2026-10-27T09:23:01Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:01Z",
+     "completed_at": "2026-10-27T09:23:01Z"
+    },
+    {
+     "name": "Stop containers",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:01Z",
+     "completed_at": "2026-10-27T09:23:02Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:02Z",
+     "completed_at": "2026-10-27T09:23:02Z"
+    }
+   ]
+  },
+  {
+   "id": 122101645265,
+   "name": "preview",
+   "head_sha": "103f0c5511d4590e66a8a83b1a35acfe870e7ca3",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T09:06:01Z",
+   "completed_at": "2026-10-27T09:06:01Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122101645790,
+   "name": "cleanup",
+   "head_sha": "103f0c5511d4590e66a8a83b1a35acfe870e7ca3",
+   "conclusion": "skipped",
+   "started_at": "2026-10-27T09:06:01Z",
+   "completed_at": "2026-10-27T09:06:01Z",
+   "runner_name": null,
+   "labels": [
+    "ubuntu-latest"
+   ],
+   "steps": []
+  },
+  {
+   "id": 122108815375,
+   "name": "production",
+   "head_sha": "103f0c5511d4590e66a8a83b1a35acfe870e7ca3",
+   "conclusion": "success",
+   "started_at": "2026-10-27T09:23:06Z",
+   "completed_at": "2026-10-27T09:25:48Z",
+   "runner_name": "GitHub Actions 1000000917",
+   "labels": [
+    "ubuntu-24.04"
+   ],
+   "steps": [
+    {
+     "name": "Set up job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:06Z",
+     "completed_at": "2026-10-27T09:23:07Z"
+    },
+    {
+     "name": "Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:07Z",
+     "completed_at": "2026-10-27T09:23:09Z"
+    },
+    {
+     "name": "Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:09Z",
+     "completed_at": "2026-10-27T09:23:13Z"
+    },
+    {
+     "name": "Run npm ci",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:13Z",
+     "completed_at": "2026-10-27T09:23:23Z"
+    },
+    {
+     "name": "Run npx vercel@64 pull --yes --environment=production",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:23Z",
+     "completed_at": "2026-10-27T09:23:35Z"
+    },
+    {
+     "name": "Run npx vercel@64 build --prod",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:23:35Z",
+     "completed_at": "2026-10-27T09:24:05Z"
+    },
+    {
+     "name": "Run npm run db:migrate",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:24:05Z",
+     "completed_at": "2026-10-27T09:24:08Z"
+    },
+    {
+     "name": "Deploy and verify the served sha",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:24:08Z",
+     "completed_at": "2026-10-27T09:24:37Z"
+    },
+    {
+     "name": "Verify the deployed sha, terminal and press",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:24:37Z",
+     "completed_at": "2026-10-27T09:25:45Z"
+    },
+    {
+     "name": "Post Run actions/setup-node@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:25:45Z",
+     "completed_at": "2026-10-27T09:25:45Z"
+    },
+    {
+     "name": "Post Run actions/checkout@v7",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:25:45Z",
+     "completed_at": "2026-10-27T09:25:46Z"
+    },
+    {
+     "name": "Complete job",
+     "conclusion": "success",
+     "started_at": "2026-10-27T09:25:46Z",
+     "completed_at": "2026-10-27T09:25:46Z"
+    }
+   ]
+  }
+ ]
+}
