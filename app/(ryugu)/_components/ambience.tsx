@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createAmbience, PALACE_SOUND_KEY, soundLabel, type Ambience, type Ctx, type Status } from "../_lib/ambience";
+import { ambienceSession, createAmbience, PALACE_SOUND_KEY, soundLabel, type Ambience, type Ctx, type Status } from "../_lib/ambience";
 
 type AudioCtor = new () => AudioContext;
 const audioCtor = (): AudioCtor | null => {
@@ -20,17 +20,21 @@ function storage(): Storage | null {
 
 // The palace's sound button, on the paper strip beside the way back up. Served off; the stored preference is read
 // after hydration (../_lib/ambience.ts). Nothing plays until a click or key press in the palace, and the water stops
-// when sound is switched off here or in Pocket, sleeps while the page is hidden, and ends when the palace is left.
+// when sound is switched off here or in Pocket, sleeps while the page is hidden, and ends when the palace is left. A
+// palace brought back by the browser's Back button (bfcache) starts again from the stored preference.
 export function AmbienceToggle() {
   const ambience = useRef<Ambience>(null);
   const [status, setStatus] = useState<Status>("off");
 
   useEffect(() => {
     const ctor = audioCtor();
-    const a = createAmbience({ make: () => (ctor ? (new ctor() as Ctx) : null), available: ctor !== null, storage: storage() });
-    const sync = () => setStatus(a.status());
-    const unsubscribe = a.subscribe(sync);
-    ambience.current = a;
+    const sync = () => setStatus(session.current().status());
+    const session = ambienceSession(
+      () => createAmbience({ make: () => (ctor ? (new ctor() as Ctx) : null), available: ctor !== null, storage: storage() }),
+      sync,
+    );
+    const a = () => session.current();
+    ambience.current = a();
     sync();
 
     // The first click or key press anywhere in the palace may start it, but not the press that is the button's own
@@ -40,26 +44,31 @@ export function AmbienceToggle() {
       if (key === "Escape") return;
       const own = event.target instanceof Element && event.target.closest("[data-ambience]");
       if (own && (key === null || key === "Enter" || key === " ")) return;
-      a.gesture();
+      a().gesture();
     };
     const stored = (event: StorageEvent) => {
-      if (event.key === PALACE_SOUND_KEY) a.stored(event.newValue);
-      else if (event.key === null) a.stored(null); // storage cleared
+      if (event.key === PALACE_SOUND_KEY) a().stored(event.newValue);
+      else if (event.key === null) a().stored(null); // storage cleared
     };
-    const visibility = () => a.visibility(document.hidden);
+    const visibility = () => a().visibility(document.hidden);
+    const show = (event: PageTransitionEvent) => {
+      session.show(event.persisted);
+      ambience.current = a();
+    };
     addEventListener("click", gesture);
     addEventListener("keydown", gesture);
     addEventListener("storage", stored);
-    addEventListener("pagehide", a.close);
+    addEventListener("pagehide", session.hide);
+    addEventListener("pageshow", show);
     document.addEventListener("visibilitychange", visibility);
     return () => {
       removeEventListener("click", gesture);
       removeEventListener("keydown", gesture);
       removeEventListener("storage", stored);
-      removeEventListener("pagehide", a.close);
+      removeEventListener("pagehide", session.hide);
+      removeEventListener("pageshow", show);
       document.removeEventListener("visibilitychange", visibility);
-      unsubscribe();
-      a.close();
+      session.dispose();
       ambience.current = null;
     };
   }, []);

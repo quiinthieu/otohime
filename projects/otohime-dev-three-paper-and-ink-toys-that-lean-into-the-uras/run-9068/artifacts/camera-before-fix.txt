@@ -1,0 +1,14 @@
+# Subtest: camera opt-in absence, denial and late permission cancellation (fake media/worker)
+not ok 1 - camera opt-in absence, denial and late permission cancellation (fake media/worker)
+  ---
+  duration_ms: 33291.691
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/de104a54-00b2-426f-8f4d-64db79f24494-40d269b55f706c931c858e6e6cdeb7a1/work/otohime/e2e/peep-box-camera.test.ts:58:1'
+  failureType: 'testCodeFailure'
+  error: 'page.waitForFunction: Timeout 30000ms exceeded.'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    stopped (/Users/avietidol/Library/Application Support/build-worker/leases/de104a54-00b2-426f-8f4d-64db79f24494-40d269b55f706c931c858e6e6cdeb7a1/work/otohime/e2e/peep-box-camera.test.ts:53:10)
+    TestContext.<anonymous> (/Users/avietidol/Library/Application Support/build-worker/leases/de104a54-00b2-426f-8f4d-64db79f24494-40d269b55f706c931c858e6e6cdeb7a1/work/otohime/e2e/peep-box-camera.test.ts:69:9)
+  ...

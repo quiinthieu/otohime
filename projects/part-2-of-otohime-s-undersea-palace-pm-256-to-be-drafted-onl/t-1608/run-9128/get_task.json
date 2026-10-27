@@ -1,0 +1,144 @@
+{
+  "task": {
+    "id": "t-1608",
+    "plan_id": "pm-257",
+    "sequence": 2,
+    "title": "Render dynamically loaded ink cursors and ripples",
+    "role": "software_engineer",
+    "status": "qa_running",
+    "acceptance_criteria": "Configured Home and /ryugu dynamically draw anonymous peer cursors, fading trails and click ripples without intercepting controls. An unset endpoint, reduced motion or lost connection leaves the page usable and quiet, and the palace isolation suite remains green.",
+    "contract": {
+      "problem": "Home and Ryugu-jo have no ephemeral visitor layer or safe runtime switch, and their separate root layouts must remain isolated.",
+      "action_items": [
+        "Read the installed Next guides for connection(), route handlers and lazy loading. Add GET /api/ghosts with await connection(), runtime GHOSTS_ENDPOINT parsing and no-store responses: unset/malformed is 404; configured is {endpoint,rooms:['/','/ryugu']}. Allow wss for a dedicated cross-origin production Worker, ws only for localhost development; forbid credentials, fragments and unexpected base query parameters.",
+        "Declare and test pure transport/render policy in ghosts/client.ts: normalized pointer coordinates, movement deadzone 0.002, at most one movement every 100ms, bounded remote map (24), 12 points per ghost, 700ms fading trails, six-second silent-tip expiry and resize/DPR cap 1.5. Defend against malformed server frames.",
+        "Create neutral ghosts/loader.tsx as a client boundary using dynamic import with ssr:false after requestIdleCallback with cancellable timeout fallback. Both Home and the palace import this neutral boundary; mount it from pages, never the palace layout. Add inline-styled fixed pointer-events:none decorative canvas and subdued 'N here' only for other connected members.",
+        "Render brush tips, trails and immediate local pointerdown ripples (also accept peer click events). Animate while visible and any drawable local ripple, remote ripple or fading trail exists; cease rAF when clear, and restart on events. Canvas must not intercept input, alter focus or announce high-frequency updates.",
+        "Ship safe lifecycle from the first mount: reduced motion means no socket/drawing; hidden, offline or unmounted closes transport and cancels frames/timers/listeners; config 404 or full yields no drawing or error UI. On retryable failure allow three total attempts per mounted page session (immediate, +1s, +3s), then gone; full terminates immediately. Preference wiring follows in task 3.",
+        "Expose data-ghosts-state=off|connecting|on|gone, data-ghosts=other-member-count and a cumulative data-ghosts-ripples draw counter that advances only when a ripple is actually drawn. Test route config via a pure helper and actual route wiring; register explicit test globs and preserve existing isolation, CSS and hydration tests."
+      ],
+      "interfaces": "app/api/ghosts/route.ts; ghosts/config.ts; ghosts/config.test.ts; ghosts/client.ts; ghosts/client.test.ts; ghosts/canvas.tsx; ghosts/loader.tsx; app/(site)/(home)/page.tsx; app/(ryugu)/ryugu/page.tsx; package.json; changelogs/",
+      "non_goals": [
+        "Changing palace layout/CSS or static sea",
+        "Other site rooms",
+        "Pocket preference UI (task 3)",
+        "Production activation"
+      ],
+      "verification": [
+        {
+          "name": "Client and config behaviors",
+          "cwd": ".",
+          "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test ghosts/client.test.ts ghosts/config.test.ts",
+          "expect": "exit0",
+          "timeout_s": 300
+        },
+        {
+          "name": "Project tests",
+          "cwd": ".",
+          "cmd": "npm test",
+          "expect": "exit0",
+          "timeout_s": 300
+        },
+        {
+          "name": "Lint",
+          "cwd": ".",
+          "cmd": "npm run lint",
+          "expect": "exit0",
+          "timeout_s": 300
+        },
+        {
+          "name": "Production build",
+          "cwd": ".",
+          "cmd": "npm run build",
+          "expect": "exit0",
+          "timeout_s": 900
+        }
+      ]
+    },
+    "prompt_source": "projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/fix_plan_t-1608_run-9121.md",
+    "fix_cycle": 1,
+    "run_retries": 0,
+    "queue_ttl_relaunches": 0,
+    "lease_run_id": "run-9128",
+    "lease_until": "2026-10-27T02:56:09.041736Z",
+    "depends_on": [
+      "t-1607"
+    ],
+    "footprint": [
+      "app/(ryugu)/ryugu/page.tsx",
+      "app/(site)/(home)/page.tsx",
+      "app/api/ghosts/route.ts",
+      "changelogs/ghosts.md",
+      "e2e/console-errors.ts",
+      "e2e/ghosts-config.test.ts",
+      "e2e/riso-headings.test.ts",
+      "ghosts/README.md",
+      "ghosts/canvas.tsx",
+      "ghosts/client.test.ts",
+      "ghosts/client.ts",
+      "ghosts/config.test.ts",
+      "ghosts/config.ts",
+      "ghosts/loader.tsx",
+      "package.json",
+      "projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/t-1608-run-9116.md",
+      "projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/t-1608-run-9124.md",
+      "scripts/console-errors.test.ts"
+    ],
+    "started_at": "2026-10-27T01:22:35.398631Z",
+    "created_at": "2026-10-26T13:19:59.724622Z",
+    "updated_at": "2026-10-27T02:40:26.178051Z"
+  },
+  "green_gate": {
+    "id": "ver-3626",
+    "plan_id": "pm-257",
+    "task_id": "t-1608",
+    "run_id": "run-9126",
+    "gate": "green",
+    "git_sha": "a958913",
+    "status": "pass",
+    "items": [
+      {
+        "name": "Client and config behaviors",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test ghosts/client.test.ts ghosts/config.test.ts",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 414,
+        "stdout_tail": "TAP version 13\n# Subtest: pointer policy normalizes, rejects invalid geometry and applies exact time/deadzone boundaries\nok 1 - pointer policy normalizes, rejects invalid geometry and applies exact time/deadzone boundaries\n  ---\n  duration_ms: 1.430053\n  type: 'test'\n  ...\n# Subtest: server parser rejects malformed, oversize, binary, invalid counts/ids/coordinates\nok 2 - server parser rejects malformed, oversize, binary, invalid counts/ids/coordinates\n  ---\n  duration_ms: 0.999531\n  type: 'test'\n  ...\n# Subtest: peer history and ripples stay bounded; trails fade at 700ms, tips expire at 6s without changing membership\nok 3 - peer history and ripples stay bounded; trails fade at 700ms, tips expire at 6s without changing membership\n  ---\n  duration_ms: 0.592352\n  type: 'test'\n  ...\n# Subtest: moves are <=10Hz; a lone visitor click schedules drawing and stops animation after fading\nok 4 - moves are <=10Hz; a lone visitor click schedules drawing and stops animation after fading\n  ---\n  duration_ms: 1.544324\n  type: 'test'\n  ...\n# Subtest: peer marks restart idle drawing, expire via one timer and bye removes tips\nok 5 - peer marks restart idle drawing, expire via one timer and bye removes tips\n  ---\n  duration_ms: 0.4986\n  type: 'test'\n  ...\n# Subtest: no actual paint means no ripple counter (negative control)\nok 6 - no actual paint means no ripple counter (negative control)\n  ---\n  duration_ms: 0.368926\n  type: 'test'\n  ...\n# Subtest: retry failures use exactly three attempts with +1s/+3s delays, then remain gone across toggles\nok 7 - retry failures use exactly three attempts with +1s/+3s delays, then remain gone across toggles\n  ---\n  duration_ms: 0.605495\n  type: 'test'\n  ...\n# Subtest: full is immediately terminal without retries or drawing\nok 8 - full is immediately terminal without retries or drawing\n  ---\n  duration_ms: 0.744058\n  type: 'test'\n  ...\n# Subtest: disabled config never opens a socket, and transient fetch failure retries within the same budget\nok 9 - disabled config never opens a socket, and transient fetch failure retries within the same budget\n  ---\n  duration_ms: 0.55155\n  type: 'test'\n  ...\n# Subtest: initial suppression has zero work; hidden/offline/reduced-motion eligibility cancels active work and stale callbacks\nok 10 - initial suppression has zero work; hidden/offline/reduced-motion eligibility cancels active work and stale callbacks\n  ---\n  duration_ms: 0.732436\n  type: 'test'\n  ...\n# Subtest: hung config consumes attempts and disposed/aborted config can never connect\nok 11 - hung config consumes attempts and disposed/aborted config can never connect\n  ---\n  duration_ms: 0.278238\n  type: 'test'\n  ...\n# Subtest: canvas painter draws brush tips, trails and only live ripple arcs\nok 12 - canvas painter draws brush tips, trails and only live ripple arcs\n  ---\n  duration_ms: 0.269069\n  type: 'test'\n  ...\n# Subtest: both pages mount the neutral idle loader; canvas is decorative, passive and style-isolated\nok 13 - both pages mount the neutral idle loader; canvas is decorative, passive and style-isolated\n  ---\n  duration_ms: 0.584374\n  type: 'test'\n  ...\n# Subtest: only a dedicated secure Worker or local loopback proof endpoint is accepted\nok 14 - only a dedicated secure Worker or local loopback proof endpoint is accepted\n  ---\n  duration_ms: 0.887425\n  type: 'test'\n  ...\n# Subtest: responses never cache configuration or the disabled result\nok 15 - responses never cache configuration or the disabled result\n  ---\n  duration_ms: 13.531051\n  type: 'test'\n  ...\n# Subtest: actual GET wiring awaits connection before reading runtime env, on every request\nok 16 - actual GET wiring awaits connection before reading runtime env, on every request\n  ---\n  duration_ms: 39.198442\n  type: 'test'\n  ...\n1..16\n# tests 16\n# suites 0\n# pass 16\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 381.13141\n"
+      },
+      {
+        "name": "Project tests",
+        "cmd": "npm test",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 16374,
+        "stdout_tail": " Subtest: the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out\nok 2373 - the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out\n  ---\n  duration_ms: 93.044119\n  type: 'test'\n  ...\n# Subtest: without git, outside a repository, or in an empty one, the committed fallback is used as it is\nok 2374 - without git, outside a repository, or in an empty one, the committed fallback is used as it is\n  ---\n  duration_ms: 54.23499\n  type: 'test'\n  ...\n# Subtest: a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte\nok 2375 - a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte\n  ---\n  duration_ms: 81.379906\n  type: 'test'\n  ...\n# Subtest: a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history\nok 2376 - a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history\n  ---\n  duration_ms: 96.037236\n  type: 'test'\n  ...\n# Subtest: a git log that cannot be parsed falls back instead of failing the build\nok 2377 - a git log that cannot be parsed falls back instead of failing the build\n  ---\n  duration_ms: 25.803615\n  type: 'test'\n  ...\n# Subtest: --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness\nok 2378 - --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness\n  ---\n  duration_ms: 173.57508\n  type: 'test'\n  ...\n# Subtest: the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file\nok 2379 - the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file\n  ---\n  duration_ms: 533.293394\n  type: 'test'\n  ...\n# Subtest: the committed content/history.json is a well-formed, bounded, canonical index\nok 2380 - the committed content/history.json is a well-formed, bounded, canonical index\n  ---\n  duration_ms: 1.50883\n  type: 'test'\n  ...\n# Subtest: package.json builds the index before next build and exposes history:index and history:check\nok 2381 - package.json builds the index before next build and exposes history:index and history:check\n  ---\n  duration_ms: 0.272174\n  type: 'test'\n  ...\n# Subtest: Chrome through the repo's playwright-core when PW_PREFIX is unset\nok 2382 - Chrome through the repo's playwright-core when PW_PREFIX is unset\n  ---\n  duration_ms: 2.108448\n  type: 'test'\n  ...\n# Subtest: PW_PREFIX's playwright when it is set, and Chrome is not tried\nok 2383 - PW_PREFIX's playwright when it is set, and Chrome is not tried\n  ---\n  duration_ms: 1.187938\n  type: 'test'\n  ...\n# Subtest: a clear error when Chrome is absent and PW_PREFIX is unset\nok 2384 - a clear error when Chrome is absent and PW_PREFIX is unset\n  ---\n  duration_ms: 0.891282\n  type: 'test'\n  ...\n# Subtest: a clear error when playwright-core itself is missing\nok 2385 - a clear error when playwright-core itself is missing\n  ---\n  duration_ms: 0.340687\n  type: 'test'\n  ...\n# Subtest: a clear error when PW_PREFIX is set but its playwright is not there\nok 2386 - a clear error when PW_PREFIX is set but its playwright is not there\n  ---\n  duration_ms: 0.365532\n  type: 'test'\n  ...\n# Subtest: the default loader resolves the repo's locked playwright-core\nok 2387 - the default loader resolves the repo's locked playwright-core\n  ---\n  duration_ms: 2.567123\n  type: 'test'\n  ...\n# Subtest: probe title: the plain Riso source inside h2\\#end-title, never the decorative plates\nok 2388 - probe title: the plain Riso source inside h2\\#end-title, never the decorative plates\n  ---\n  duration_ms: 1532.381004\n  type: 'test'\n  ...\n# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs\nok 2389 - probe bounds: measured after the one-shot ink lands, from the visible glyphs\n  ---\n  duration_ms: 1234.923798\n  type: 'test'\n  ...\n1..2389\n# tests 2407\n# suites 2\n# pass 2407\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 16238.031776\n"
+      },
+      {
+        "name": "Lint",
+        "cmd": "npm run lint",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 17000,
+        "stdout_tail": "\n> otohime@0.1.0 lint\n> eslint\n\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(articles)/_components/masthead.tsx\n  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(barometer)/barometer/page.tsx\n  44:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(capsule)/capsule/page.tsx\n  26:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(elements)/elements/page.tsx\n  22:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(orrery)/_components/chrome.tsx\n  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(planisphere)/planisphere/page.tsx\n  59:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(rotor)/rotor/page.tsx\n  37:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(shore)/shore/page.tsx\n  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/app/(vinyl)/vinyl/page.tsx\n  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs\n  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars\n\n✖ 10 problems (0 errors, 10 warnings)\n  0 errors and 9 warnings potentially fixable with the `--fix` option.\n\n"
+      },
+      {
+        "name": "Production build",
+        "cmd": "npm run build",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 22583,
+        "stdout_tail": "MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts)\n\nPeep-box vision-0.10.32-face-1: vendored\nledger: kept content/ledger.json (no GITHUB_TOKEN)\nhistory:index: git (full history): 200 of 586 commits in /data/build-worker/leases/90b5551f-8342-40f7-b204-0c620c185d83-e1459266108aedd68620fa38e3fd1c7a/work/otohime/content/history.json\n\n> otohime@0.1.0 build\n> next build\n\n▲ Next.js 16.4.2 (Turbopack)\n✓ Running next.config.ts took 26ms\nAttention: Next.js now collects completely anonymous telemetry regarding usage.\nThis information is used to shape Next.js' roadmap and prioritize features.\nYou can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:\nhttps://nextjs.org/telemetry\n\n- Cache Components enabled\n- Partial Prefetching enabled\n- Experiments (use with caution):\n  ✓ authInterrupts\n  ✓ globalNotFound\n\n  Creating an optimized production build ...\n✓ Compiled successfully in 4.8s\n  Running TypeScript ...\n  Finished TypeScript in 12.6s ...\n  Collecting page data using 19 workers ...\n  Generating static pages using 19 workers (0/206) ...\n  Generating static pages using 19 workers (51/206) \n  Generating static pages using 19 workers (102/206) \n  Generating static pages using 19 workers (154/206) \n✓ Generating static pages using 19 workers (206/206) in 1997ms\n  Finalizing page optimization ...\n\nRoute (app)                             Revalidate  Expire\n┌ ◐ /                                           1d      1w\n├ ○ /_not-found\n├ ◐ /account                                    1d      1w\n├ ◐ /admin                                      1d      1w\n├ ◐ /admin/bottles                              1d      1w\n├ ◐ /admin/roles                                1d      1w\n├ ◐ /admin/users                                1d      1w\n├   /admin/users/[id]                           1d      1w\n│ └ ◐ /admin/users/[id]                         1d      1w\n├ ƒ /api/admin/bottles\n├ ƒ /api/admin/bottles/[id]\n├ ƒ /api/ask\n├ ƒ /api/auth/[...all]\n├ ƒ /api/bottles\n├ ƒ /api/bottles/suggestions\n├ ƒ /api/ghosts\n├ ƒ /api/guestbook\n├ ƒ /api/health\n├ ƒ /api/now-playing\n├ ○ /articles\n├   /articles/[slug]\n│ ├ ◐ /articles/[slug]\n│ ├ ○ /articles/why-the-sky-is-blue\n│ ├ ○ /articles/why-we-need-a-leap-day\n│ └ ◐ [+4 more paths]\n├ ƒ /barometer\n├ ○ /capsule\n├ ◐ /dashboard                                  1d      1w\n├ ○ /design-system\n├ ◐ /desk                                       1d      1w\n├ ○ /desk/opengraph-image-blg90x\n├ ○ /elements\n├   /elements/[symbol]\n│ ├ ◐ /elements/[symbol]\n│ ├ ○ /elements/h\n│ ├ ○ /elements/he\n│ └ ◐ [+116 more paths]\n├ ○ /forgot-password\n├ ○ /icon.svg\n├ ◐ /ledger                                     1d      1w\n├ ○ /ledger/opengraph-image-1olq6y\n├ ƒ /music                                      1d      1w\n├ ○ /music/opengraph-image-rp137v\n├ ◐ /notes                                      1d      1w\n├ ○ /notes/opengraph-image-rplwnn\n├ ○ /og\n├ ○ /orrery\n├   /orrery/[body]\n│ ├ ◐ /orrery/[body]\n│ ├ ○ /orrery/sun\n│ ├ ○ /orrery/mercury\n│ └ ◐ [+12 more paths]\n├ ƒ /planisphere\n├ ◐ /play                                       1d      1w\n├ ○ /play/opengraph-image-blpn7k\n├ ◐ /postcard                                   1d      1w\n├ ƒ /postcard/image\n├ ○ /postcard/opengraph-image-1x4cxz\n├ ◐ /postcard/view                              1d      1w\n├ ◐ /projects                                   1d      1w\n├ ○ /projects/opengraph-image-1ndqzi\n├ ○ /reset-password\n├ ƒ /rotor\n├ ○ /ryugu\n├ ○ /shore\n├ ○ /sign-in\n├ ◐ /sketches                                   1d      1w\n├ ƒ /sketches/download/[filename]\n├ ○ /sketches/opengraph-image-t812bo\n├ ○ /structures\n├   /structures/[slug]\n│ ├ ◐ /structures/[slug]\n│ ├ ○ /structures/array\n│ ├ ○ /structures/linked-list\n│ └ ◐ [+6 more paths]\n├ ○ /vinyl\n├ ◐ /work                                       1d      1w\n├ ○ /work/opengraph-image-blv499\n└ ◐ /zine\n\n\nƒ Proxy (Middleware)\n\n○  (Static)             prerendered as static content\n◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content\nƒ  (Dynamic)            server-rendered on demand\n\n",
+        "stderr_tail": "tion or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n2026-10-27T02:40:15.422Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n2026-10-27T02:40:15.423Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-27T02:40:15.437Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-27T02:40:15.470Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n2026-10-27T02:40:15.474Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-27T02:40:15.479Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-27T02:40:15.511Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-27T02:40:15.913Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n"
+      }
+    ],
+    "created_at": "2026-10-27T02:40:23.876073Z"
+  }
+}

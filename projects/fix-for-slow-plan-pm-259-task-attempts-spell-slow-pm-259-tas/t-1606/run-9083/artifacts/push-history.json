@@ -1,0 +1,18 @@
+{
+  "attempts": [
+    {
+      "commit": "3544ec2837a6ecd57bc3d17cf1f7728faf73264d",
+      "exit": 1,
+      "result": "HEAD -> main rejected: fetch first"
+    },
+    {
+      "commit": "3304f29a9f355f8b875f0fa0fd7ff741b91a242d",
+      "exit": 1,
+      "result": "HEAD -> main rejected: fetch first"
+    }
+  ],
+  "rebase_cycles": 2,
+  "integrated_parent": "9349b88c75876c3149b9caa520e05e93f62e1a38",
+  "conflict_resolution": "Keep 98ff28c full 600ms measured hold, add isolated clock regression and bounded pet-state wait.",
+  "second_rebase_scope": "projects only; executable fingerprint unchanged"
+}

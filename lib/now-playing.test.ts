@@ -3,7 +3,9 @@
 // server-only becomes an empty module and cacheLife throws (readNowPlaying itself only runs inside Next; its
 // shape is read as text below).
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
 import { register } from "node:module";
 import { join, relative, resolve } from "node:path";
 import { test } from "node:test";
@@ -91,9 +93,9 @@ test("no configuration: both providers off and nothing is asked", async () => {
   const config = configFrom({});
   assert.equal(config.spotify, null);
   assert.equal(config.steam, null);
-  assert.deepEqual(config.fixture, { spotify: false, steam: false });
+  assert.deepEqual(config.fixture, { spotify: false, steam: false, listenbrainz: false, lanyard: false });
   const r = await read(config);
-  assert.deepEqual(r.result, { spotify: "spotify-off", track: null, steam: "steam-off", game: null, readAt: AT.toISOString() });
+  assert.deepEqual(r.result, { music: { source: null, state: "off", profileUrl: null }, play: { source: null, state: "off", profileUrl: null }, spotify: "spotify-off", track: null, steam: "steam-off", game: null, readAt: AT.toISOString() });
   assert.equal(r.calls.length, 0);
 });
 
@@ -129,13 +131,15 @@ test("host overrides are honoured only as bare loopback origins", () => {
   ])
     assert.equal(loopbackOrigin(bad), null, String(bad));
   const config = configFrom({ ...SECRETS, NOW_PLAYING_SPOTIFY_API_HOST: "https://evil.example", NOW_PLAYING_STEAM_HOST: "http://10.0.0.1" });
-  assert.deepEqual(config.hosts, { accounts: "https://accounts.spotify.com", api: "https://api.spotify.com", steam: "https://api.steampowered.com" });
-  assert.deepEqual(config.fixture, { spotify: false, steam: false });
+  assert.deepEqual(config.hosts, { accounts: "https://accounts.spotify.com", api: "https://api.spotify.com", steam: "https://api.steampowered.com", listenbrainz: "https://api.listenbrainz.org", lanyard: "https://api.lanyard.rest" });
+  assert.deepEqual(config.fixture, { spotify: false, steam: false, listenbrainz: false, lanyard: false });
 });
 
 test("a live read: token refresh, then the track; and the public summary; nothing secret comes back", async () => {
   const r = await read(configFrom(SECRETS));
   assert.deepEqual(r.result, {
+    music: { source: "spotify", state: "live", profileUrl: null },
+    play: { source: "steam", state: "live", profileUrl: null },
     spotify: "spotify-live",
     track: { title: "Nicole Kidman", artists: "ADÉLA", url: "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC", playing: true },
     steam: "steam-live",
@@ -265,7 +269,7 @@ test("readNowPlaying: one use-cache function, one cacheLife of about a minute th
   assert.deepEqual(calls, ["{ stale: 30, revalidate: 60, expire: 300 }"]);
   assert.match(CODE, /return readProviders\(configFrom\(process\.env\)\);/);
   assert.equal(CODE.match(/process\.env/g)?.length, 1);
-  assert.equal(CODE.match(/AbortSignal\.timeout\(TIMEOUT_MS\)/g)?.length, 2);
+  assert.equal(CODE.match(/AbortSignal\.timeout\(TIMEOUT_MS\)/g)?.length, 4);
   assert.doesNotMatch(CODE, /retry|retries|console\./i);
   assert.match(CODE, /^import "server-only";$/m);
 });
@@ -285,8 +289,8 @@ test("the providers' hosts, credentials and overrides appear in lib/now-playing.
   for (const file of APP) {
     if (file === join("lib", "now-playing.ts")) continue;
     const text = readFileSync(join(ROOT, file), "utf8");
-    assert.doesNotMatch(text, /accounts\.spotify\.com|api\.spotify\.com|api\.steampowered\.com/, file);
-    assert.doesNotMatch(text, /SPOTIFY_(?:CLIENT|REFRESH)|STEAM_(?:API_KEY|ID)\b|NOW_PLAYING_\w+_HOST/, file);
+    assert.doesNotMatch(text, /accounts\.spotify\.com|api\.spotify\.com|api\.steampowered\.com|api\.listenbrainz\.org|api\.lanyard\.rest/, file);
+    assert.doesNotMatch(text, /SPOTIFY_(?:CLIENT|REFRESH)|STEAM_(?:API_KEY|ID)\b|LANYARD_USER_ID|NOW_PLAYING_\w+_HOST/, file);
   }
 });
 
@@ -321,4 +325,172 @@ test("the page and the API both await connection() before the one cached reader"
   assert.doesNotMatch(route, /searchParams|request\.|req\.|revalidate(?:Tag|Path)|updateTag|cookies\(|headers\(/);
   assert.match(route, /sanitize\(/);
   assert.equal(relative(ROOT, join(ROOT, "app/api/now-playing/route.ts")), "app/api/now-playing/route.ts");
+});
+
+const LB = JSON.parse(readFileSync(join(ROOT, 'lib/fixtures/listenbrainz.json'), 'utf8'));
+test("ListenBrainz configuration: explicit env beats public default; invalid names are off", () => {
+  assert.equal(configFrom({}, "Owner").listenbrainz?.user, "Owner");
+  assert.equal(configFrom({ LISTENBRAINZ_USER: "Env Owner" }, "Owner").listenbrainz?.user, "Env Owner");
+  for (const user of ["", "../other", "x/y", "x\ny", "a".repeat(65)]) assert.equal(configFrom({ LISTENBRAINZ_USER: user }, "Owner").listenbrainz, null);
+  assert.equal(configFrom({ LISTENBRAINZ_USER: "Owner", NOW_PLAYING_LISTENBRAINZ_HOST: "https://evil.example" }).hosts.listenbrainz, "https://api.listenbrainz.org");
+});
+test("ListenBrainz reads concurrently under one abort budget and wins selection without reading Spotify", async () => {
+  const calls: Call[] = [];
+  const config = configFrom({ ...SECRETS, LISTENBRAINZ_USER: "Nhạc Owner", NOW_PLAYING_LISTENBRAINZ_HOST: "http://127.0.0.1:4134" });
+  let release!: () => void;
+  const bothStarted = new Promise<void>((resolve) => { release = resolve; });
+  const fetcher = async (url: string, init: RequestInit) => {
+    calls.push({ url, init });
+    if (url.includes("steampowered")) return json(PLAYER());
+    if (calls.filter(c => c.url.includes("4134")).length === 2) release();
+    await bothStarted;
+    return json(url.endsWith("playing-now") ? LB.current : LB.last);
+  };
+  const r = await readProviders(config, fetcher, () => AT);
+  assert.equal(r.music.source, "listenbrainz");
+  assert.equal(r.music.state, "fixture");
+  assert.equal(r.spotify, "spotify-off");
+  assert.equal(r.track?.playing, true);
+  assert.equal(r.track?.title, "Fixture Brainz Track");
+  assert.equal(r.play.source, "steam");
+  assert.equal(calls.length, 3);
+  const lb = calls.filter(c => c.url.includes("4134"));
+  assert.equal(lb[0].init.signal, lb[1].init.signal);
+  for (const c of lb) {
+    assert.ok(c.url.includes('/1/user/Nh%E1%BA%A1c%20Owner/'));
+    assert.equal(c.init.redirect, "error");
+    assert.equal(new Headers(c.init.headers).get('user-agent'), 'otohime.dev/1.0 (+https://otohime.dev)');
+    assert.equal(new Headers(c.init.headers).get('accept'), 'application/json');
+  }
+});
+test("ListenBrainz endpoint failures isolate, valid empty connects, selected failures never fall back", async () => {
+  const config = configFrom({ ...SECRETS, LISTENBRAINZ_USER: "Owner" });
+  for (const [current, last, state, title] of [
+    [LB.emptyCurrent, LB.last, "live", "Fixture Last Track"],
+    [LB.current, new Response("", {status:429}), "live", "Fixture Brainz Track"],
+    [new Response("<html>challenge</html>", {headers:{'content-type':'text/html'}}), LB.last, "live", "Fixture Last Track"],
+    [LB.emptyCurrent, LB.emptyLast, "live", null],
+    [{ error: "bad" }, { error: "bad" }, "quiet", null],
+    [new Response("{bad", {headers:{'content-type':'application/json'}}), new Response("",{status:404}), "quiet", null],
+    [new Response("", {status:302, headers:{location:'https://evil.example'}}), null, "quiet", null],
+  ] as const) {
+    const calls: string[] = [];
+    const r = await readProviders(config, async (url) => {
+      calls.push(url);
+      if (url.includes('steampowered')) return json(PLAYER());
+      const body = url.endsWith('playing-now') ? current : last;
+      return body instanceof Response ? body.clone() : json(body);
+    });
+    assert.equal(r.music.state, state);
+    assert.equal(r.track?.title ?? null, title);
+    assert.equal(r.spotify, 'spotify-off');
+    assert.equal(r.steam, 'steam-live');
+    assert.equal(calls.length, 3);
+    assert.ok(!calls.some(url => url.includes('spotify')));
+  }
+});
+test("ListenBrainz hung endpoints share the four-second deadline, with no retry", async () => {
+  const alive = setInterval(() => {}, 1000);
+  const calls: Call[] = [];
+  const start = Date.now();
+  const r = await readProviders(configFrom({LISTENBRAINZ_USER:'Owner'}), async (url, init) => {
+    calls.push({url,init});
+    return new Promise((_, reject) => init.signal?.addEventListener('abort', () => reject(init.signal?.reason)));
+  }).finally(() => clearInterval(alive));
+  assert.equal(r.music.state, 'quiet');
+  assert.equal(calls.length, 2);
+  assert.ok(Date.now() - start >= 3900 && Date.now() - start < 5500);
+});
+
+const LANYARD_ID = "123456789012345678";
+const LY = JSON.parse(readFileSync(join(ROOT, "lib/fixtures/lanyard.json"), "utf8"));
+test("cassette public-provider loop explicitly selects Steam or Lanyard and reaches every browser face", () => {
+  const script = readFileSync(join(ROOT, "scripts/probe-cassette.sh"), "utf8");
+  const start = script.indexOf("for face in brainz last lanyard; do");
+  const end = script.indexOf("\ndone", start);
+  assert.ok(start >= 0 && end > start, "the real public-provider loop is present");
+  const dir = mkdtempSync(join(tmpdir(), "cassette-loop-"));
+  try {
+    // Execute the real orchestration loop with fake server/browser ports. The full browser walk
+    // supplies the actual Next/Chromium coverage; this control tests every invocation's selection.
+    const child = spawnSync(process.env.NOW_PLAYING_TEST_BASH ?? "bash", ["-u", "-c", `
+FAKE_DIR="$1"
+FAKE_PORT=4135
+CREDS=(STEAM_ID=76561197960435530)
+SENTINELS=fixture
+SERVER_PID=""
+FAILED=0
+kill_group() { :; }
+start_server() { printf 'START:%s\\n' "$face"; printf 'ARG:%s\\n' "$@"; }
+probe() { printf 'PROBE:%s\\n' "$1"; }
+${script.slice(start, end + "\ndone".length)}
+exit "$FAILED"
+`, "cassette-loop", dir], { encoding: "utf8" });
+    assert.equal(child.status, 0, child.stderr);
+    assert.deepEqual(child.stdout.match(/^PROBE:.*$/gm), ["PROBE:brainz", "PROBE:last", "PROBE:lanyard"]);
+    for (const face of ["brainz", "last", "lanyard"]) {
+      const invocation = child.stdout.split(`START:${face}\n`)[1]?.split(`PROBE:${face}\n`)[0];
+      assert.ok(invocation, `${face}: reaches the probe`);
+      assert.match(invocation, face === "lanyard" ? /^ARG:LANYARD_USER_ID=123456789012345678$/m : /^ARG:LANYARD_USER_ID=$/m, `${face}: explicit game selection`);
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("Lanyard configuration uses env over the empty server default; identifiers and hosts are validated", () => {
+  assert.equal(configFrom({}).lanyard, null);
+  assert.deepEqual(configFrom({}, "", LANYARD_ID).lanyard, { id: LANYARD_ID });
+  assert.equal(configFrom({LANYARD_USER_ID:""}, "", LANYARD_ID).lanyard, null);
+  for (const id of ["1".repeat(16), "1".repeat(21), "12345678901234567x", " 123456789012345678", "123456789012345678\n"]) assert.equal(configFrom({LANYARD_USER_ID:id}).lanyard, null, id);
+  for (const id of ["1".repeat(17), "1".repeat(20)]) assert.equal(configFrom({LANYARD_USER_ID:id}).lanyard?.id, id);
+  assert.equal(configFrom({NOW_PLAYING_LANYARD_HOST:"https://evil.example"}).hosts.lanyard, "https://api.lanyard.rest");
+  assert.equal(configFrom({NOW_PLAYING_LANYARD_HOST:"http://localhost:4135"}).fixture.lanyard, true);
+});
+test("Lanyard selected games and valid empty presence keep music independent and Steam unasked", async () => {
+  for (const fixture of [false, true]) for (const key of ["game", "empty", "spotify", "invalidActivities"]) {
+    const f = fake();
+    const seen: Call[] = [];
+    const config = configFrom({...SECRETS, LANYARD_USER_ID:LANYARD_ID, ...(fixture ? {NOW_PLAYING_LANYARD_HOST:"http://127.0.0.1:4135"} : {})});
+    const r = await readProviders(config, async (url, init) => {
+      if (!url.includes("/v1/users/")) return f.fetcher(url, init);
+      seen.push({url, init}); return json(LY[key]);
+    });
+    assert.equal(r.play.source, "lanyard");
+    assert.equal(r.play.state, fixture ? "fixture" : "live");
+    assert.deepEqual(r.game, key === "game" ? {title:"Fixture Lanyard Game",url:null} : null);
+    assert.equal(r.steam, "steam-off");
+    assert.equal(r.track?.title, "Nicole Kidman");
+    assert.equal(f.calls.length, 2);
+    assert.equal(seen.length, 1);
+    assert.equal(seen[0].url, `${config.hosts.lanyard}/v1/users/${LANYARD_ID}`);
+    assert.equal(seen[0].init.redirect, "error");
+    assert.ok(seen[0].init.signal instanceof AbortSignal);
+    assert.deepEqual(seen[0].init.headers, {"user-agent":"otohime.dev/1.0 (+https://otohime.dev)",accept:"application/json"});
+    assert.doesNotMatch(JSON.stringify(r), /123456789012345678|PrivateFixture|application_id/);
+  }
+});
+test("Lanyard errors, HTML, invalid JSON, redirects and abort are quiet without provider fallback", async () => {
+  const keeper = setInterval(() => {}, 1000);
+  try {
+    for (const answer of [json(LY.unknown), json({},429), json({},500), json({},302), json({success:true,data:{activities:null}}), new Response("<html>challenge</html>", {headers:{"content-type":"text/html"}}), new Response("bad",{headers:{"content-type":"application/json"}}), new Error("redirect refused"), "hang"]) {
+      const f = fake(); let requests = 0;
+      const start = performance.now();
+      const r = await readProviders(configFrom({...SECRETS,LANYARD_USER_ID:LANYARD_ID}), async (url, init) => {
+        if (!url.includes("/v1/users/")) return f.fetcher(url, init);
+        requests++;
+        if (answer === "hang") return new Promise((_, reject) => init.signal?.addEventListener("abort", () => reject(init.signal?.reason)));
+        if (answer instanceof Error) throw answer;
+        return (answer as Response).clone();
+      });
+      assert.deepEqual(r.play, {source:"lanyard",state:"quiet",profileUrl:null});
+      assert.equal(r.game, null);
+      assert.equal(r.track?.title,"Nicole Kidman");
+      assert.equal(r.steam,"steam-off");
+      assert.equal(f.calls.length,2);
+      assert.equal(requests,1);
+      if (answer === "hang") assert.ok(performance.now()-start >= 3500 && performance.now()-start < 6500);
+    }
+    const r = await readProviders(configFrom({...SECRETS,LANYARD_USER_ID:LANYARD_ID}), async (url) => url.includes("/v1/users/") ? json(LY.game) : json({},401));
+    assert.equal(r.music.state,"quiet");
+    assert.equal(r.game?.title,"Fixture Lanyard Game");
+  } finally { clearInterval(keeper); }
 });

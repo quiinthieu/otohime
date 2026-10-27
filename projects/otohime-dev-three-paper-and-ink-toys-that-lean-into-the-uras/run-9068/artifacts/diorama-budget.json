@@ -1,0 +1,44 @@
+[
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "gzipBytes": 10772,
+    "attributableCLS": 0,
+    "browser": "156.0.8078.48",
+    "chunks": [
+      {
+        "path": "/_next/static/chunks/18ul534_jsn8r.js",
+        "sha256": "7aeca39e44d3ba6660371e1e5fbd11f646435b7932590346a9637cdeb328e6cf",
+        "gzipBytes": 5278
+      },
+      {
+        "path": "/_next/static/chunks/1agw996c7h4o6.js",
+        "sha256": "d64bcd8dc6c04fcb8477b010f6ea69b9ea1d558acca627e8323736a626e748cc",
+        "gzipBytes": 4956
+      }
+    ]
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "gzipBytes": 10772,
+    "attributableCLS": 0,
+    "browser": "156.0.8078.48",
+    "chunks": [
+      {
+        "path": "/_next/static/chunks/18ul534_jsn8r.js",
+        "sha256": "7aeca39e44d3ba6660371e1e5fbd11f646435b7932590346a9637cdeb328e6cf",
+        "gzipBytes": 5278
+      },
+      {
+        "path": "/_next/static/chunks/1agw996c7h4o6.js",
+        "sha256": "d64bcd8dc6c04fcb8477b010f6ea69b9ea1d558acca627e8323736a626e748cc",
+        "gzipBytes": 4956
+      }
+    ]
+  }
+]

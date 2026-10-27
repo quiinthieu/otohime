@@ -1,0 +1,200 @@
+TAP version 13
+# Subtest: pre-test crash exposes real combined stdout/stderr, identity and server tail while preserving exit 37
+ok 1 - pre-test crash exposes real combined stdout/stderr, identity and server tail while preserving exit 37
+  ---
+  duration_ms: 121.292791
+  ...
+# Subtest: successful real command creates no failure annotation or summary, even with error-looking output
+ok 2 - successful real command creates no failure annotation or summary, even with error-looking output
+  ---
+  duration_ms: 112.196208
+  ...
+# Subtest: missing and empty logs have explicit actionable placeholders and keep the original red status
+ok 3 - missing and empty logs have explicit actionable placeholders and keep the original red status
+  ---
+  duration_ms: 353.673166
+  ...
+# Subtest: bounded tails retain the end of large fully flushed child streams, removing ANSI and escaping percent/CR/LF/Markdown
+ok 4 - bounded tails retain the end of large fully flushed child streams, removing ANSI and escaping percent/CR/LF/Markdown
+  ---
+  duration_ms: 120.632792
+  ...
+# Subtest: missing or unwritable step summary cannot mask the original status or suppress annotation
+ok 5 - missing or unwritable step summary cannot mask the original status or suppress annotation
+  ---
+  duration_ms: 228.590959
+  ...
+# Subtest: real node:test assertion retains TAP, public assertion annotation and summary, without duplicating the failed parent
+ok 6 - real node:test assertion retains TAP, public assertion annotation and summary, without duplicating the failed parent
+  ---
+  duration_ms: 127.847041
+  ...
+# Subtest: fallback preserves real per-assertion reporter diagnostics beside the combined tail and original failure
+ok 7 - fallback preserves real per-assertion reporter diagnostics beside the combined tail and original failure
+  ---
+  duration_ms: 197.583084
+  ...
+# Subtest: real successful node:test assertion has TAP evidence and no failure annotation or summary
+ok 8 - real successful node:test assertion has TAP evidence and no failure annotation or summary
+  ---
+  duration_ms: 122.607167
+  ...
+# Subtest: assertion annotations escape command properties and percent/CR/LF while bounding errors and summary fences
+ok 9 - assertion annotations escape command properties and percent/CR/LF while bounding errors and summary fences
+  ---
+  duration_ms: 0.480542
+  ...
+# Subtest: push to main ignores report-only paths
+ok 10 - push to main ignores report-only paths
+  ---
+  duration_ms: 1.157167
+  ...
+# Subtest: report-only pushes skip, code pushes still run
+ok 11 - report-only pushes skip, code pushes still run
+  ---
+  duration_ms: 0.263458
+  ...
+# Subtest: pull_request has no path filter
+ok 12 - pull_request has no path filter
+  ---
+  duration_ms: 0.069041
+  ...
+# Subtest: manual recovery runs the same checks and production gates as a main push
+ok 13 - manual recovery runs the same checks and production gates as a main push
+  ---
+  duration_ms: 1.368583
+  ...
+# Subtest: checks and production run on ubuntu-24.04
+ok 14 - checks and production run on ubuntu-24.04
+  ---
+  duration_ms: 0.595375
+  ...
+# Subtest: each main push and manual recovery keeps its checks outside a shared workflow queue
+ok 15 - each main push and manual recovery keeps its checks outside a shared workflow queue
+  ---
+  duration_ms: 0.299833
+  ...
+# Subtest: PR checks and previews cancel stale jobs in separate PR-specific groups
+ok 16 - PR checks and previews cancel stale jobs in separate PR-specific groups
+  ---
+  duration_ms: 0.3765
+  ...
+# Subtest: only production deploys serialize after successful checks, without cancelling the running deploy
+ok 17 - only production deploys serialize after successful checks, without cancelling the running deploy
+  ---
+  duration_ms: 0.244333
+  ...
+# Subtest: production proves the deployed sha, terminal and press after the deploy
+ok 18 - production proves the deployed sha, terminal and press after the deploy
+  ---
+  duration_ms: 0.699083
+  ...
+# Subtest: verify-deploy treats exactly the push paths-ignore as report-only
+ok 19 - verify-deploy treats exactly the push paths-ignore as report-only
+  ---
+  duration_ms: 0.504666
+  ...
+# Subtest: checks uses measured 25m job and 12m E2E budgets
+ok 20 - checks uses measured 25m job and 12m E2E budgets
+  ---
+  duration_ms: 0.269291
+  ...
+# Subtest: all four non-TAP probe steps annotate the captured pipefail status
+ok 21 - all four non-TAP probe steps annotate the captured pipefail status
+  ---
+  duration_ms: 0.257291
+  ...
+# Subtest: signed-in motion normalizes unset, empty and long TMPDIR before mktemp
+ok 22 - signed-in motion normalizes unset, empty and long TMPDIR before mktemp
+  ---
+  duration_ms: 23.017167
+  ...
+# Subtest: Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+ok 23 - Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+  ---
+  duration_ms: 349.326292
+  ...
+# Subtest: E2E against next start: real workflow captures combined command failure and identity, preserving exit 43
+ok 24 - E2E against next start: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 119.218791
+  ...
+# Subtest: E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 25 - E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 62.725084
+  ...
+# Subtest: E2E against next start: successful workflow emits no failure annotation or summary
+ok 26 - E2E against next start: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 111.985375
+  ...
+# Subtest: Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43
+ok 27 - Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 174.920917
+  ...
+# Subtest: Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 28 - Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 63.352125
+  ...
+# Subtest: Motion probe, signed in: successful workflow emits no failure annotation or summary
+ok 29 - Motion probe, signed in: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 164.568625
+  ...
+# Subtest: Footer walk: real workflow captures combined command failure and identity, preserving exit 43
+ok 30 - Footer walk: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 170.206583
+  ...
+# Subtest: Footer walk: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 31 - Footer walk: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 63.591209
+  ...
+# Subtest: Footer walk: successful workflow emits no failure annotation or summary
+ok 32 - Footer walk: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 155.820583
+  ...
+# Subtest: Footer Chromium probe: real workflow captures combined command failure and identity, preserving exit 43
+ok 33 - Footer Chromium probe: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 164.111708
+  ...
+# Subtest: Footer Chromium probe: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 34 - Footer Chromium probe: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 61.471542
+  ...
+# Subtest: Footer Chromium probe: successful workflow emits no failure annotation or summary
+ok 35 - Footer Chromium probe: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 155.901083
+  ...
+# Subtest: wiring negative control: removing the EXIT fallback makes a startup crash opaque
+ok 36 - wiring negative control: removing the EXIT fallback makes a startup crash opaque
+  ---
+  duration_ms: 9.611292
+  ...
+# Subtest: reporter failure cannot replace the original workflow command exit
+ok 37 - reporter failure cannot replace the original workflow command exit
+  ---
+  duration_ms: 104.182375
+  ...
+# Subtest: browser fallbacks keep the existing gate order, probe budgets and assertion reporter
+ok 38 - browser fallbacks keep the existing gate order, probe budgets and assertion reporter
+  ---
+  duration_ms: 0.298333
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2033.720167

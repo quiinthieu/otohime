@@ -1,0 +1,89 @@
+ok - standalone inspect without scope reproduces User not found
+ok - explicit team scope permits Ready inspect and exact-sha health
+ok - waiting inspect receives the configured team scope
+ok - diagnostic re-read receives the same team scope
+ok - scoped Ready re-read cannot rescue failed waiting inspect
+ok - missing team is refused before upload
+ok - User not found with explicit scope still fails closed before health
+ok - scoped identity failure accepts independently authenticated API Ready before exact-sha health
+ok - API fallback requests the uploaded deployment in the configured team with the existing token
+ok - API fallback never prints its credential
+ok - CLI scope resolver wrapped User not found uses the same authenticated API check
+ok - API Ready cannot bypass exact served-sha health
+ok - API state-BUILDING fails closed before matching health
+ok - API state-QUEUED fails closed before matching health
+ok - API state-INITIALIZING fails closed before matching health
+ok - API state-ERROR fails closed before matching health
+ok - API state-CANCELED fails closed before matching health
+ok - API state-unknown fails closed before matching health
+ok - API wrong-project fails closed before matching health
+ok - API wrong-url fails closed before matching health
+ok - API preview fails closed before matching health
+ok - API missing-id fails closed before matching health
+ok - API public-only fails closed before matching health
+ok - API malformed fails closed before matching health
+ok - API oversized fails closed before matching health
+ok - API http-401 fails closed before matching health
+ok - API http-403 fails closed before matching health
+ok - API http-429 fails closed before matching health
+ok - API http-500 fails closed before matching health
+ok - API redirect fails closed before matching health
+ok - API hang fails closed before matching health
+ok - API redirect never forwards the credential
+ok - API fallback requires the configured project
+ok - API fallback rejects a refused token without printing it
+ok - identity-timeout cannot invoke API rescue or matching health
+ok - mixed-identity cannot invoke API rescue or matching health
+ok - zero-exit building inspect fails closed before matching health
+ok - zero-exit queued inspect fails closed before matching health
+ok - zero-exit initializing inspect fails closed before matching health
+ok - zero-exit silent inspect fails closed before matching health
+ok - zero-exit unknown inspect fails closed before matching health
+ok - hanging upload exits non-zero
+ok - hanging upload fails within the bound (4s <= 15s)
+ok - hanging upload makes exactly one deploy call (got 1)
+ok - hanging upload never inspects
+ok - hanging upload prints ::error
+ok - hanging upload leaves no child running
+ok - fast upload failure is retried once and then succeeds
+ok - two fast upload failures stop after the one retry
+ok - two fast upload failures print ::error
+ok - upload with a URL is not retried (got 1 deploys)
+ok - hanging inspect exits non-zero
+ok - hanging inspect fails within the bound (4s <= 20s)
+ok - hanging inspect prints ::error with state and URL
+ok - hanging inspect makes one deploy and two inspects
+ok - hanging inspect leaves no child running
+ok - failed inspect cannot be rescued by matching health
+ok - failed inspect never reaches matching health
+ok - labelled Error fails closed even when inspect exits zero
+ok - cancelled deployment fails with original inspect exit and reason
+ok - timed out inspect is bounded and matching health cannot rescue it
+ok - state re-read timeout retains both exits and stderr within its bound
+ok - state re-read timeout leaves no child running
+ok - failed inspect retains its full diagnostic in one escaped annotation
+ok - state re-read reason and distinct command exits are retained in that annotation
+ok - deployment state comes only from the status field, without ANSI
+ok - failed inspect plus wrong sha fails before health polling
+ok - CLI request errors fail with unknown deployment state, not labelled Error
+ok - oversized vendor output has one bounded annotation with both actionable tails
+ok - ready inspect accepts an old-to-expected alias transition
+ok - alias transition makes exactly two real HTTP requests
+ok - ready inspect accepts the exact sha on the fifth of twelve reads
+ok - late alias transition makes one upload, one inspect and five HTTP requests
+ok - production default allows the fifth-read transition without another upload
+ok - healthy deploy exits 0
+ok - healthy deploy uploads with --no-wait
+ok - healthy deploy waits on the printed URL in its team scope
+ok - healthy deploy prints no ::error
+ok - health with another sha exits non-zero
+ok - health with another sha prints ::error
+ok - matching sha in an unhealthy body cannot pass
+ok - matching nested sha cannot impersonate the served executable
+ok - malformed health cannot pass by containing a matching sha
+ok - valid formatted JSON health passes exact source identity
+ok - ready inspect plus unreachable health fails with a public diagnostic
+ok - missing GITHUB_SHA is refused before any upload
+ok - deployment scripts parse as Bash without executing
+ok - syntax negative control rejects malformed Bash
+# all 88 assertions passed

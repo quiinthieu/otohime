@@ -1,0 +1,45 @@
+{
+  "last_green_checks": {
+    "run": 40330477897,
+    "job": 121601102988,
+    "sha": "074059495faf4bee48e8f655584dfd4487089b41"
+  },
+  "last_green_entire_workflow": {
+    "run": 40325669520,
+    "sha": "542c6206"
+  },
+  "latest_completed_failures": [
+    {
+      "run": 40346324813,
+      "job": 121654087754,
+      "sha": "74522bc0",
+      "step": "Footer walk"
+    },
+    {
+      "run": 40349872187,
+      "job": 121666695821,
+      "sha": "e03cf1cc",
+      "step": "Footer walk"
+    }
+  ],
+  "configuration_commits_since_green_checks": [
+    "e03cf1c pm-270/t-1605: Anchor the leftover-child check and bound the deploy step at 12 minutes",
+    "74522bc pm-264/t-1590: Preserve main checks and serialize production",
+    "17bca22 pm-259/t-1583: Repair red unit gates and publish failed CI assertions",
+    "c1b26f1 pm-259/t-1583: Preserve deploy diagnostics and enable gated recovery",
+    "658f6fc pm-273/t-1612: Guard guestbook delivery provenance",
+    "5dcfe98 pm-270/t-1604: Drive the probes with locked playwright-core and the runner's Chrome"
+  ],
+  "footer_regression": "components/end-footer.tsx changed to RisoText after 0740594; verifier at scripts/walk-end.sh:239 compared all heading text, including decorative copies",
+  "fix_already_on_checkout": {
+    "sha": "ab348743f001460a066f5233c4d99f95af8b15ba",
+    "file": "scripts/walk-end.sh",
+    "line": 241,
+    "behavior": "extract .riso-source within end-title before comparison"
+  },
+  "local_footer_walk": {
+    "checks": 65,
+    "failures": 0,
+    "scope": "public/anonymous HTTP walk, no privileged accounts; independent of browser gesture test"
+  }
+}

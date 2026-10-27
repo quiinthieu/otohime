@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+not ok 1 - a narrow window and a wide touch tablet get the stacked desk too; the same touch swipe drags on a wide mouse desk
+  ---
+  duration_ms: 7366.122899
+  type: 'test'
+  location: '/tmp/pm270-run9073-negative.ts:680:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    music is dragging after the first move past 6px
+    pointer events the page saw:
+    +0ms pointerdown touch#2 (892.8,218.4) span.desk-tape
+    +32ms pointermove touch#2 (904.8,218.4) span.desk-tape
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'fail'
+  stack: |-
+    shows (file:///tmp/pm270-run9073-negative.ts:296:14)
+    async swipe (file:///tmp/pm270-run9073-negative.ts:311:9)
+    async TestContext.<anonymous> (file:///tmp/pm270-run9073-negative.ts:692:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8107.443861

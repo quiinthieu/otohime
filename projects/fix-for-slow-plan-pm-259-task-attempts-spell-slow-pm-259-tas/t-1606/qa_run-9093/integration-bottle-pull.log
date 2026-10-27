@@ -1,0 +1,53 @@
+From github.com:quiinthieu/otohime
+   2540012..132ceba  main       -> origin/main
+Updating c77fc93..132ceba
+Fast-forward
+ components/bottle/button.css                       |    2 +-
+ e2e/bottle-ui.test.ts                              |   48 +
+ .../architecture.md                                |    4 +
+ .../plan.md                                        |  528 +---------
+ .../prerequisite-probe.md                          |   12 +
+ .../prerequisites.json                             |   69 ++
+ .../run-9095-summary.md                            |   33 +
+ .../run-9095/artifacts/assets.log                  |    2 +
+ .../run-9095/artifacts/camera-build.txt            |    1 +
+ .../run-9095/artifacts/camera-verification.json    |  129 +++
+ .../run-9095/artifacts/camera.log                  |  179 ++++
+ .../run-9095/artifacts/executable.json             |  127 +++
+ .../run-9095/artifacts/focused.log                 |   50 +
+ .../run-9095/artifacts/footer-build.txt            |    1 +
+ .../run-9095/artifacts/footer.log                  |  390 +++++++
+ .../run-9095/artifacts/geometry-red.log            |  192 ++++
+ .../run-9095/artifacts/geometry-scale.log          |   33 +
+ .../run-9095/artifacts/history.json                |  228 +++++
+ .../run-9095/artifacts/ingestion.json              |   66 ++
+ .../run-9095/artifacts/lint-types.log              |   44 +
+ .../run-9095/artifacts/run-profile.json            |   12 +
+ .../run-9095/artifacts/serial-e2e-build.txt        |    1 +
+ .../run-9095/artifacts/serial-e2e.log              | 1069 ++++++++++++++++++++
+ .../run-9095/artifacts/unit.log                    |   12 +
+ .../run-9095/artifacts/verification.json           |   68 ++
+ .../tasks.json                                     |  237 +++++
+ 26 files changed, 3064 insertions(+), 473 deletions(-)
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/prerequisite-probe.md
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/prerequisites.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095-summary.md
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/assets.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/camera-build.txt
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/camera-verification.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/camera.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/executable.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/focused.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/footer-build.txt
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/footer.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/geometry-red.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/geometry-scale.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/history.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/ingestion.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/lint-types.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/run-profile.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/serial-e2e-build.txt
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/serial-e2e.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/unit.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9095/artifacts/verification.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/tasks.json

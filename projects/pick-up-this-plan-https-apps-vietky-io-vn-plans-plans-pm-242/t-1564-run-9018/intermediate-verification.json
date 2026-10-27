@@ -1,0 +1,61 @@
+{
+  "source_sha": "17bca22d109414873c566d676f63696907c2f2d4",
+  "items": [
+    {
+      "name": "unit",
+      "cmd": "npm test",
+      "source_sha": "17bca22d109414873c566d676f63696907c2f2d4",
+      "exit": 0,
+      "seconds": 6.49
+    },
+    {
+      "name": "lint",
+      "cmd": "npm run lint",
+      "source_sha": "17bca22d109414873c566d676f63696907c2f2d4",
+      "exit": 0,
+      "seconds": 8.08
+    },
+    {
+      "name": "typecheck",
+      "cmd": "npm run typecheck",
+      "source_sha": "17bca22d109414873c566d676f63696907c2f2d4",
+      "exit": 0,
+      "seconds": 1.86
+    },
+    {
+      "name": "build",
+      "cmd": "npm run build",
+      "source_sha": "17bca22d109414873c566d676f63696907c2f2d4",
+      "exit": 0,
+      "seconds": 4.83
+    },
+    {
+      "name": "walk",
+      "cmd": "SKIP_BUILD=1 bash scripts/walk-end.sh",
+      "source_sha": "17bca22d109414873c566d676f63696907c2f2d4",
+      "exit": 1,
+      "seconds": 5.86
+    },
+    {
+      "name": "probe",
+      "cmd": "SKIP_BUILD=1 bash scripts/probe-end.sh",
+      "source_sha": "17bca22d109414873c566d676f63696907c2f2d4",
+      "exit": 1,
+      "seconds": 60.89
+    },
+    {
+      "name": "e2e",
+      "cmd": "SKIP_BUILD=1 npm run test:e2e",
+      "source_sha": "17bca22d109414873c566d676f63696907c2f2d4",
+      "exit": 1,
+      "seconds": 287.74
+    }
+  ],
+  "e2e": {
+    "tests": 139,
+    "pass": 137,
+    "fail": 1,
+    "skip": 1
+  },
+  "assertion": "ink-radio.test.ts:39 expected direct heading text before Riso source spans; repaired later by 74522bc"
+}

@@ -1,0 +1,44 @@
+pm-269/t-1587 run-9049
+Agent profile: codex-sol-6-1-high; model gpt-6.1-sol; effort high (actual board run profile_flags).
+Node v22.23.3; Next 16.4.2; pg 8.23.1; Drizzle ORM 0.45.4; drizzle-kit 0.31.11; Better Auth 1.7.10; embedded-postgres 17.10.0-beta.17; playwright-core 1.64.0; Chrome 154.0.8037.57.
+
+Bottle validation/service contract: 9 passed, 0 failed.
+Repository npm test: 2337 passed, 0 failed.
+Lint: exit 0, 10 existing warnings. Typecheck: exit 0.
+Production build and isolated Bottle HTTP/Postgres/migration/Chromium: 11 passed, 0 failed.
+Drizzle check: exit 0. db:generate: no schema changes.
+Exact clean migration-status gate: exit 0 after implementation commit; rerun before the final delivery push.
+Additional existing RBAC HTTP suite: 22 passed, 0 failed (same production build, fresh Postgres).
+Red-before-green: missing initial exports/HTTP module; later coercion and canonical-expansion regressions failed (2 cases) before correction.
+
+Executable/source fingerprint SHA256: 7faf70283aa8ce3ad4260a740c6657b6c8b7cfced65c1bb2cb73f73f701f0974
+937a7c0b16afbd29359454b2578e8ede787c8f02b5fc9c8476e6e1d8fca073b5  app/(site)/(app)/admin/bottles/page.tsx
+fa6d1e9c4eab1d275814ec7d9e1ec5e528a35d60e44484b7fa82a7a7713f7fe0  app/(site)/(app)/admin/bottles/review-controls.tsx
+859fc9e993843bb6387786533ca53faca4603368e99d0c49de3576142a1ba3bc  app/(site)/(app)/layout.tsx
+983d05c9cdd828bd654e38254fdd75e7c261f61ca5963b89e2033bef291d7309  app/api/admin/bottles/[id]/route.ts
+5683683b3ac83d88e0c4bc1ba8d5c3498c7fd26789f753bf7617367958f994c1  app/api/admin/bottles/route.ts
+e1116787c829f0027371edf38618c1bcbe36e001e6cdb33e82e505a5de167f79  app/api/bottles/route.ts
+84f30e64b6e9e28050a8a741faa82aad8d5b9d107a99127f3f5a31f754692227  app/api/bottles/suggestions/route.ts
+4ac9c4673ec4a60fb7f9e576c0531b4af097b6e6dfb36b9b61e4c19f844202b3  content/bottles.json
+916184939e015fae0a745fcd31572511eede78d7b35f0986fd10f7d3f262aeae  db/migrations/0005_magenta_william_stryker.sql
+d626d18cf732c138d582b123797b144c517aa17156b36275071102260d054329  db/migrations/meta/0005_snapshot.json
+56308d9b89b7da207c698a0a7ed49775e921bb4bbad9cbce6b365ed8ea74e92f  db/migrations/meta/_journal.json
+37941a56665999672e646ab20bb2baef3b9939d590cdaf7d104edc7860264905  db/schema.ts
+7d8875b9de71d79b773c2e06e76d2203b6ac00d0eb8f59d90e1b2a7761220291  e2e/bottles-api.test.ts
+b66fef76baa2022ce6ff195335183fdfc9169d34fba1c7d19c312b266d471a6e  lib/bottles-http.test.ts
+ad1cb93cd27427d19ab0e19d22976b26ec3fc6c3ae6c765df5648217df12f9df  lib/bottles-http.ts
+9dccc66500833fcfa8a915520b04867e53e55bc40581b6a754548c64a6abef19  lib/bottles-server.ts
+8f0bee3c6afe8770860067efeb2f7b51190e8f25acec94f568678138833210ae  lib/bottles-service.test.ts
+44cc9b65f9c787c26b57562589f9805e73ae0966f0de301750df8dfa147f1d0d  lib/bottles-service.ts
+ed32355bd154f0bd90b0b0e75c262f1bc72a98902bb1b39884fa32b9e1a6983d  lib/bottles-store-contract.ts
+5560c733e5510e94a1fb0098e7899adfecab85d97d239860e728a776cdeef5d1  lib/bottles-store.ts
+908a127e2fde877b72c7cce4bd72cbdc6fce6065f957f9ea17496750575b44c0  lib/bottles.test.ts
+d543504cedbd38ad3a4666a49a1f28ed29c5b2813f967be767530c6b01139e01  lib/bottles.ts
+f9fc8962881c807550a8e16b63bff0ffca02a515fa04b43b88cdf61e20381d6c  lib/permissions.ts
+0321d5e23b1a93b09761f2049ef5b9edf2843067e1be089664296063b9fa096b  next.config.ts
+2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b  package-lock.json
+
+Real boundary: installed locked imports, production Next build/server, real embedded Postgres and generated migrations, actual browser/session/API, reconstruction and failed-database fallback.
+Fake boundary: in-memory contract store; fetch trap in integration handler process. Negative control: trap demonstrably rejects a fetch before asserting zero handler fetches. Separate Next HTTP routes tested end to end; server-wide egress is not instrumented.
+History: complete local test outputs inspected. No external executable jobs/queue/callbacks exist in this feature; platform FAILED/COMPLETED history is not applicable. CI/deployed proof intentionally unobserved and owned by plan-manager after push.
+No known remaining feature defects.

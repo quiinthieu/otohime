@@ -21,6 +21,7 @@
 // ends at its resting pose.
 import { createRequire } from "node:module";
 import path from "node:path";
+import { createProbeChecks } from "./probe-checks.mjs";
 
 const require = createRequire(path.join(process.env.PW_PREFIX, "package.json"));
 const { chromium } = require("playwright");
@@ -30,17 +31,7 @@ const PHONE = { width: 390, height: 844 };
 const DESKTOP = { width: 1366, height: 768 };
 const PROJECTS = ["shore", "capsule", "orrery", "elements", "vinyl", "rotor", "planisphere", "barometer", "articles", "structures", "design-system"];
 
-let ok = 0;
-let failed = 0;
-function check(name, pass, detail = "") {
-  if (pass) {
-    ok++;
-    console.log(`ok - ${name}`);
-  } else {
-    failed++;
-    console.log(`not ok - ${name}${detail ? `: ${detail}` : ""}`);
-  }
-}
+const { check, finish } = createProbeChecks();
 
 const errors = [];
 
@@ -744,5 +735,4 @@ try {
   await browser.close();
 }
 
-console.log(`probe: ${ok} ok, ${failed} failed`);
-process.exit(failed === 0 ? 0 : 1);
+process.exitCode = finish();

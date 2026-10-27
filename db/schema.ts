@@ -148,3 +148,26 @@ export const guestbookUsage = pgTable("guestbook_usage", {
   count: integer("count").notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 }).defaultNow().notNull(),
 }, (table) => [check("guestbook_usage_count_check", sql`${table.count} >= 0`)]);
+
+// Bottle suggestions are never public before an owner/admin's explicit approval.
+export const bottleSuggestion = pgTable("bottle_suggestion", {
+  id: text("id").primaryKey(),
+  url: text("url").notNull().unique(),
+  title: text("title").notNull(),
+  note: text("note").notNull(),
+  kind: text("kind").notNull(),
+  status: text("status").notNull().default("pending"),
+  submitterHmac: text("submitter_hmac").notNull(),
+  createdAt: timestamp("created_at", {withTimezone:true,precision:6}).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", {withTimezone:true,precision:6}).defaultNow().notNull(),
+}, table => [
+  index("bottle_review_idx").on(table.status,table.id),
+  check("bottle_status_check", sql`${table.status} in ('pending','approved','rejected')`),
+  check("bottle_kind_check", sql`${table.kind} in ('site','toy','art')`),
+  check("bottle_text_check", sql`char_length(${table.title}) between 1 and 80 and char_length(${table.note}) between 1 and 80 and char_length(${table.url}) <= 2048`),
+]);
+export const bottleUsage = pgTable("bottle_usage", {
+  bucket: text("bucket").primaryKey(),
+  count: integer("count").notNull(),
+  updatedAt: timestamp("updated_at", {withTimezone:true,precision:6}).defaultNow().notNull(),
+}, table => [check("bottle_usage_count_check",sql`${table.count} between 0 and 5`)]);

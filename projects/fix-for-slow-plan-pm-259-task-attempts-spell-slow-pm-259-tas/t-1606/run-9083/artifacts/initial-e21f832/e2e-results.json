@@ -1,0 +1,35 @@
+[
+  {
+    "repeat": 1,
+    "exit": 0,
+    "duration_seconds": 437.052,
+    "log": "e2e-1.log",
+    "build": "build-1.json",
+    "tests": 177,
+    "pass": 176,
+    "fail": 0,
+    "skipped": 1
+  },
+  {
+    "repeat": 2,
+    "exit": 0,
+    "duration_seconds": 414.522,
+    "log": "e2e-2.log",
+    "build": "build-2.json",
+    "tests": 177,
+    "pass": 176,
+    "fail": 0,
+    "skipped": 1
+  },
+  {
+    "repeat": 3,
+    "exit": 0,
+    "duration_seconds": 393.586,
+    "log": "e2e-3.log",
+    "build": "build-3.json",
+    "tests": 177,
+    "pass": 176,
+    "fail": 0,
+    "skipped": 1
+  }
+]

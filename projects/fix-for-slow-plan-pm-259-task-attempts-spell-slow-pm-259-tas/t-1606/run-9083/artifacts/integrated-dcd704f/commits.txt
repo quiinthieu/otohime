@@ -1,0 +1,7 @@
+Base: dcd704f9d58b0bf516efa40e742c17af2d7fe075
+Prior swipe implementation: 0b349dc012c0591ded5f82d28d0cf3395b71567c
+Prior resumed delivery: 52ec0904d93171262d262a21c0d61cf27d3ae8e2
+Delivery: HEAD (the commit containing this artifact; resolved SHA is recorded in plan_manager_submit_report.git_sha)
+Subject: pm-270/t-1606: Observe browser time in the Kame clock fixture
+Branch: main
+Source fingerprint: 08e0a813d13750d7430ca49d90abceba561b43a2133f9759a3b3f60bc0be7a31

@@ -1,0 +1,33 @@
+{
+  "observed_at": "2026-10-27T01:17:41.302252+00:00",
+  "delivery_sha": "5139d4fd9d7e4b83d53e17fb715ad576b4e38cc4",
+  "tested_integrated_head": "7666778e99e21c3bb475d3d66c6798061b7115d5",
+  "node": "v22.23.3",
+  "platform": "darwin/arm64",
+  "workerd": "workerd 2026-10-19",
+  "root_npm_ci_exit": 0,
+  "worker_npm_ci_exit": 0,
+  "rebased_project_tests": {
+    "exit": 0,
+    "pass": 2380
+  },
+  "rebased_worker_tests": {
+    "exit": 0,
+    "pass": 17
+  },
+  "rebased_build_exit": 0,
+  "final_lint_exit": 0,
+  "final_lint_warnings": 10,
+  "final_independent_pass": 14,
+  "browser_transport_exit": 0,
+  "live_footer_baseline": {
+    "sha": "baec1f88e602e9ad50ebecb9827a476f939495af",
+    "pass": 168,
+    "fail": 0
+  },
+  "runtime_assets": "native workerd executed; no model/data assets required",
+  "final_project_test": {
+    "exit": 0,
+    "pass": 2380
+  }
+}

@@ -1,181 +1,171 @@
 #!/usr/bin/env bash
-# Proves scripts/vercel-deploy.sh against a fake `npx` first on PATH (no network, no Vercel token):
-# a hanging upload fails inside its bound with no second deployment, and public exact-SHA health
-# decides success even when inspect fails. Real curl reads a local HTTP fixture (no vendor network).
-# One "ok -" / "not ok -" line per assertion, including wrong/unreachable health negative controls.
-#
-#   bash scripts/vercel-deploy.test.sh
+# Real deployment-status client, real shell/curl and local HTTP; only the upload CLI and vendor API/token are fake.
 set -u
-
 here=$(cd "$(dirname "$0")" && pwd)
 work=$(mktemp -d)
 health_pid=""
 trap 'if [ -n "$health_pid" ]; then kill "$health_pid" 2>/dev/null; wait "$health_pid" 2>/dev/null; fi; rm -rf "$work"' EXIT
 mkdir -p "$work/bin"
 failures=0
+assertions=0
 SHA=0123456789abcdef0123456789abcdef01234567
-URL=https://otohime-abc123-quiinthieu.vercel.app
-
-# The alias changes by request count, not elapsed time: exercise retry without a soak or vendor calls.
+URL=https://otohime-fixture.vercel.app
 node --input-type=module - "$work" "$SHA" <<'SERVER' &
 import { createServer } from "node:http";
 import { readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 const [work, sha] = process.argv.slice(2);
-let transitionReads = 0;
+let healthReads = 0, statusReads = 0, previous = "";
 const server = createServer((req, res) => {
-  appendFileSync(join(work, "health.calls"), `${req.url}\n`);
+  const fixture = JSON.parse(readFileSync(join(work, "fixture.json")));
+  if (fixture.name !== previous) { previous = fixture.name; healthReads = statusReads = 0; }
+  appendFileSync(join(work, "http.calls"), `${req.url}\n`);
   res.setHeader("Content-Type", "application/json");
-  if (req.url === "/transition.health.json") {
-    res.end(JSON.stringify({ ok: true, sha: ++transitionReads === 1 ? "old-sha" : sha }));
+  if (req.url === "/v2/user") { res.writeHead(404); res.end('{"error":"User not found"}'); return; }
+  if (req.url.startsWith("/v13/deployments/")) {
+    if (req.headers.authorization !== "Bearer synthetic-token" || req.url !== "/v13/deployments/otohime-fixture.vercel.app?teamId=team_fixture") { res.writeHead(403); res.end('{}'); return; }
+    const mode = fixture.mode;
+    if (/^\d+$/.test(mode)) { res.writeHead(Number(mode)); res.end('synthetic-token private vendor diagnostic'); return; }
+    if (mode === "hang") return;
+    if (mode === "redirect") { res.writeHead(302, { Location: "/credential-sink" }); res.end(); return; }
+    if (mode === "malformed") { res.end('invalid JSON synthetic-token'); return; }
+    const body = { id: "dpl_fixture", url: "otohime-fixture.vercel.app", ownerId: "team_fixture", projectId: "prj_fixture", target: "production", readyState: "READY" };
+    if (mode === "transition") body.readyState = ++statusReads === 1 ? "BUILDING" : "READY";
+    if (mode === "preview") body.target = null;
+    if (mode === "public-only") { res.end(JSON.stringify({id: body.id, readyState: body.readyState})); return; }
+    if (mode.startsWith("state:")) body.readyState = mode.slice(6);
+    if (mode.startsWith("wrong:")) body[mode.slice(6)] = "wrong";
+    if (mode.startsWith("missing:")) delete body[mode.slice(8)];
+    res.end(JSON.stringify(body)); return;
+  }
+  if (req.url === "/health") {
+    ++healthReads;
+    res.end(fixture.health === "transition" ? JSON.stringify({ ok: true, sha: healthReads < 5 ? "old-sha" : sha }) : fixture.health);
     return;
   }
-  try { res.end(readFileSync(join(work, req.url.slice(1)))); }
-  catch { res.statusCode = 503; res.end('{"ok":false}'); }
+  res.writeHead(404); res.end('{}');
 });
 server.listen(0, "127.0.0.1", () => writeFileSync(join(work, "port"), String(server.address().port)));
 SERVER
 health_pid=$!
 for ((i=0; i<50; i++)); do [ -s "$work/port" ] && break; sleep 0.1; done
-if [ ! -s "$work/port" ]; then echo 'not ok - local health fixture started'; exit 1; fi
-health_base="http://127.0.0.1:$(cat "$work/port")"
-
-# Fake npx: `npx vercel@64 <cmd> ...`. Every call is appended to $CALLS. FAKE_DEPLOY and FAKE_INSPECT
-# pick the behaviour; the hangs run `sleep` as a child (not exec) so the bound must kill the group.
+[ -s "$work/port" ] || { echo 'not ok - HTTP fixture starts'; exit 1; }
+base="http://127.0.0.1:$(cat "$work/port")"
 cat >"$work/bin/npx" <<'FAKE'
 #!/usr/bin/env bash
-shift # vercel@64
+shift
 echo "$*" >>"$CALLS"
-case "$1" in
-  deploy)
-    n=$(grep -c '^deploy' "$CALLS")
-    mode=$FAKE_DEPLOY
-    [ "$mode" = fail-once ] && { [ "$n" -eq 1 ] && mode=fail || mode=ok; }
-    case "$mode" in
-      ok) echo "Uploading [====] 100%" >&2; echo "$FAKE_URL" ;;
-      hang) echo "Uploading [==  ] 50%" >&2; sleep 6011 ;;
-      fail) echo "Error: socket hang up" >&2; exit 1 ;;
-      fail-with-url) echo "$FAKE_URL"; echo "Error: alias lookup failed" >&2; exit 1 ;;
-    esac ;;
-  inspect)
-    case " $* " in *" --wait "*) wait=1 ;; *) wait=0 ;; esac
-    case "$FAKE_INSPECT:$wait" in
-      ok:*) printf '  status\t● Ready\n  url\t%s\n' "$2" >&2 ;;
-      hang:1) echo "waiting for deployment" >&2; sleep 6011 ;;
-      hang:0) printf '  status\t● Building\n  url\t%s\n' "$2" >&2 ;;
-      error:*) printf '  status\t● Error\n  url\t%s\n' "$2" >&2; exit 1 ;;
-      diagnostic:1) printf 'Error: build failed at 50%%\r\nmissing required artifact\n::warning::not a workflow command\n' >&2; exit 1 ;;
-      diagnostic:0) printf 'Error: earlier request failed\n\033[31m  status\t● Building\033[0m\n  url\t%s\nstate diagnostic tail\n' "$2" >&2; exit 1 ;;
-      unavailable:*) echo 'Error: request failed; no deployment state available' >&2; exit 1 ;;
-    esac ;;
+# Hosted CLI 64.7.0 transcript (jobs 122084239061, 122096077381): every non-deploy command fails its user bootstrap.
+[ "$1" = deploy ] || { echo 'Error: Not able to load user because of unexpected error: User not found. (404)' >&2; exit 1; }
+mode=$FAKE_DEPLOY
+[ "$mode" = fail-once ] && { [ "$(wc -l < "$CALLS")" -eq 1 ] && mode=fail || mode=ok; }
+case "$mode" in
+  ok) echo "$FAKE_URL" ;;
+  hang) sleep 6011 ;;
+  fail) echo 'Error: socket hang up' >&2; exit 1 ;;
+  fail-with-url) echo "$FAKE_URL"; exit 1 ;;
 esac
 FAKE
 chmod +x "$work/bin/npx"
-
-ok() { echo "ok - $1"; }
-not_ok() { echo "not ok - $1"; failures=$((failures + 1)); }
-check() { if eval "$2"; then ok "$1"; else not_ok "$1"; fi; }
-
-# run NAME DEPLOY INSPECT HEALTH_BODY: runs the script, sets $code, $out, $elapsed and $calls.
+check() {
+  assertions=$((assertions + 1))
+  if eval "$2"; then echo "ok - $1"; else echo "not ok - $1"; failures=$((failures + 1)); printf '%s\n' "$out" | tail -10; fi
+}
 run() {
   local name=$1
-  export CALLS="$work/$name.calls" FAKE_URL=$URL FAKE_DEPLOY=$2 FAKE_INSPECT=$3
-  : >"$CALLS"
-  printf '%s' "$4" >"$work/$name.health.json"
+  export CALLS="$work/upload.calls" FAKE_URL=$URL FAKE_DEPLOY=$2
+  : >"$CALLS"; : >"$work/http.calls"
+  node -e 'require("fs").writeFileSync(process.argv[1],JSON.stringify({name:process.argv[2],mode:process.argv[3],health:process.argv[4]}))' "$work/fixture.json" "$name" "$3" "$4"
   local start=$SECONDS
-  out=$(PATH="$work/bin:$PATH" GITHUB_SHA=$SHA UPLOAD_TIMEOUT=2 READY_TIMEOUT=2 INSPECT_TIMEOUT=5 \
-    HEALTH_URL="$health_base/$name.health.json" HEALTH_RETRIES=0 HEALTH_RETRY_DELAY=1 HEALTH_ATTEMPTS=2 HEALTH_POLL_DELAY=0 \
-    bash "$here/vercel-deploy.sh" 2>&1)
-  code=$?
-  elapsed=$((SECONDS - start))
-  calls=$(cat "$CALLS")
-  deploys=$(grep -c '^deploy' "$CALLS")
+  out=$(env PATH="$work/bin:$PATH" GITHUB_SHA=$SHA UPLOAD_TIMEOUT=2 READY_TIMEOUT=1 INSPECT_TIMEOUT=1 STATUS_POLL_DELAY=0.01 \
+    VERCEL_TOKEN="${FIXTURE_TOKEN-synthetic-token}" VERCEL_ORG_ID="${FIXTURE_TEAM-team_fixture}" VERCEL_PROJECT_ID="${FIXTURE_PROJECT-prj_fixture}" \
+    VERCEL_API_URL="$base" HEALTH_URL="${FIXTURE_HEALTH_URL-$base/health}" HEALTH_RETRIES=0 HEALTH_RETRY_DELAY=1 HEALTH_ATTEMPTS=6 HEALTH_POLL_DELAY=0 \
+    bash "${FIXTURE_SCRIPT-$here/vercel-deploy.sh}" 2>&1)
+  code=$?; elapsed=$((SECONDS - start))
+  deploys=$(wc -l <"$CALLS")
 }
-
 healthy="{\"ok\":true,\"sha\":\"$SHA\"}"
-old='{"ok":true,"sha":"ae4607d000000000000000000000000000000000"}'
-
-# (a) Hanging upload: fails inside UPLOAD_TIMEOUT plus the kill grace, never a second deployment.
-run hang-upload hang ok "$healthy"
-check "hanging upload exits non-zero" '[ "$code" -ne 0 ]'
-check "hanging upload fails within the bound (${elapsed}s <= 15s)" '[ "$elapsed" -le 15 ]'
-check "hanging upload makes exactly one deploy call (got $deploys)" '[ "$deploys" -eq 1 ]'
-check "hanging upload never inspects" '! grep -q "^inspect" "$CALLS"'
-check "hanging upload prints ::error" 'grep -q "^::error title=vercel deploy::upload timed out" <<<"$out"'
-check "hanging upload leaves no child running" '! pgrep -f "sleep 6011" >/dev/null'
-
-# Fast upload failure with no URL: retried exactly once.
-run fail-once fail-once ok "$healthy"
-check "fast upload failure is retried once and then succeeds" '[ "$code" -eq 0 ] && [ "$deploys" -eq 2 ]'
-run fail-twice fail ok "$healthy"
-check "two fast upload failures stop after the one retry" '[ "$code" -ne 0 ] && [ "$deploys" -eq 2 ]'
-check "two fast upload failures print ::error" 'grep -q "^::error title=vercel deploy::upload exited 1 with no deployment URL" <<<"$out"'
-
-# A failed upload that printed a URL is never retried.
-run fail-with-url fail-with-url ok "$healthy"
-check "upload with a URL is not retried (got $deploys deploys)" '[ "$deploys" -eq 1 ] && [ "$code" -eq 0 ]'
-
-# (b) Hanging inspect: the state is re-read once and published with the URL.
-run hang-inspect ok hang "$old"
-check "hanging inspect exits non-zero" '[ "$code" -ne 0 ]'
-check "hanging inspect fails within the bound (${elapsed}s <= 20s)" '[ "$elapsed" -le 20 ]'
-check "hanging inspect prints ::error with state and URL" '[[ "$out" == *"Building after 2s $URL"* ]] && [[ "$out" == *"last body: $old"* ]]'
-check "hanging inspect makes one deploy and two inspects" '[ "$deploys" -eq 1 ] && [ "$(grep -c "^inspect" "$CALLS")" -eq 2 ]'
-check "hanging inspect leaves no child running" '! pgrep -f "sleep 6011" >/dev/null'
-
-# Nonzero inspect cannot veto an observed exact-SHA deployment (the original production regression).
-run error-inspect ok error "$healthy"
-check "inspect exit 1 passes when public health serves the exact sha" '[ "$code" -eq 0 ] && [[ "$out" == *"health: serving $SHA"* ]] && [[ "$out" != *"::error"* ]]'
-check "successful fallback retains inspect state and exit diagnostic" '[[ "$out" == *"Error (inspect exited 1) $URL"* ]]'
-run timeout-healthy ok hang "$healthy"
-check "timed out inspect is bounded and matching health still proves success" '[ "$code" -eq 0 ] && [ "$elapsed" -le 20 ] && [[ "$out" == *"health: serving $SHA"* ]]'
-
-# Public annotations must retain both command outputs, not mistake CLI errors for deployment state,
-# and encode arbitrary multiline output as one workflow command when health also fails.
-run diagnostic-inspect ok diagnostic "$old"
-annotation=$(grep '^::error title=vercel deploy::' <<<"$out")
-check "failed inspect retains its full diagnostic in one escaped annotation" '[[ "$annotation" == *"Error: build failed at 50%25%0D%0Amissing required artifact%0A::warning::not a workflow command"* ]]'
-check "state re-read diagnostic is retained in that annotation" '[[ "$annotation" == *"state diagnostic tail"* ]]'
-check "deployment state comes only from the status field, without ANSI" '[[ "$annotation" == *"Building (inspect exited 1) $URL"* ]] && [[ "$annotation" != *$'"'"'\033'"'"'* ]]'
-check "failed inspect plus wrong sha fails after bounded health attempts" '[ "$code" -ne 0 ] && [[ "$out" == *"attempt 2/2"* ]] && [[ "$annotation" == *"last body: $old"* ]]'
-run unavailable-inspect ok unavailable "$old"
-check "CLI request errors are unknown deployment state, with diagnostic" '[[ "$out" == *"unknown (inspect exited 1) $URL"* ]] && [[ "$out" == *"no deployment state available"* ]]'
-
-run transition ok error "$healthy"
-check "inspect exit 1 accepts an old-to-expected alias transition" '[ "$code" -eq 0 ] && [[ "$out" == *"old-sha"* ]] && [[ "$out" == *"attempt 2/2"* ]] && [[ "$out" == *"health: serving $SHA"* ]]'
-check "alias transition makes exactly two real HTTP requests" '[ "$(grep -c "^/transition.health.json$" "$work/health.calls")" -eq 2 ]'
-
-# (c) Healthy fake: succeeds with one deploy, a waiting inspect on that URL, and the sha served.
-run healthy ok ok "$healthy"
-check "healthy deploy exits 0" '[ "$code" -eq 0 ]'
-check "healthy deploy uploads with --no-wait" 'grep -qx "deploy --prebuilt --prod --archive=tgz --no-wait" "$CALLS"'
-check "healthy deploy waits on the printed URL" 'grep -qx "inspect $URL --wait --timeout 6m --logs" "$CALLS"'
-check "healthy deploy prints no ::error" '! grep -q "::error" <<<"$out"'
-
-# (d) Health body reports another sha: fails after its attempts.
-run other-sha ok ok "$old"
-check "health with another sha exits non-zero" '[ "$code" -ne 0 ]'
-check "health with another sha prints ::error" 'grep -q "^::error title=vercel deploy::health check at .* does not report $SHA" <<<"$out"'
-
-# Stop the real HTTP fixture: a connection failure must not be excused by an inspect diagnostic.
-kill "$health_pid"
-wait "$health_pid" 2>/dev/null
-health_pid=""
-export FAKE_INSPECT=error
-out=$(PATH="$work/bin:$PATH" GITHUB_SHA=$SHA HEALTH_URL="$health_base/missing.json" HEALTH_RETRIES=0 \
-  HEALTH_RETRY_DELAY=1 HEALTH_ATTEMPTS=1 bash "$here/vercel-deploy.sh" 2>&1)
-code=$?
-check "inspect exit 1 plus unreachable health fails with both diagnostics" '[ "$code" -ne 0 ] && [[ "$out" == *"last body: none"* ]] && [[ "$out" == *"Error (inspect exited 1)"* ]]'
-
-# Missing GITHUB_SHA is refused before any upload.
-: >"$CALLS"
-out=$(PATH="$work/bin:$PATH" GITHUB_SHA= bash "$here/vercel-deploy.sh" 2>&1)
-code=$?
-check "missing GITHUB_SHA is refused before any upload" '[ "$code" -ne 0 ] && [ ! -s "$CALLS" ]'
-
-if [ "$failures" -ne 0 ]; then
-  echo "# $failures check(s) failed; last output:"
-  echo "$out" | sed 's/^/#   /'
-  exit 1
-fi
-echo "# all checks passed"
+old='{"ok":true,"sha":"old-sha"}'
+run ready ok ready "$healthy"
+check "team-scoped bearer READY and exact-sha health succeed without user bootstrap" '[ "$code" -eq 0 ] && [[ "$out" == *"health: serving $SHA"* ]]'
+check "status resource receives exact hostname and configured team" 'grep -qx "/v13/deployments/otohime-fixture.vercel.app?teamId=team_fixture" "$work/http.calls"'
+check "deployment receipt binds project owner id and READY" '[[ "$out" == *"\"id\":\"dpl_fixture\""* ]] && [[ "$out" == *"\"ownerId\":\"team_fixture\""* ]] && [[ "$out" == *"\"projectId\":\"prj_fixture\""* ]] && [[ "$out" == *"\"readyState\":\"READY\""* ]]'
+check "healthy upload keeps no-wait and does not invoke CLI inspect" 'grep -qx "deploy --prebuilt --prod --archive=tgz --no-wait" "$CALLS" && [ "$deploys" -eq 1 ]'
+check "adapter never requests user bootstrap" '! grep -q "^/v2/user" "$work/http.calls"'
+user_status=$(curl -s -o /dev/null -w '%{http_code}' "$base/v2/user")
+check "user bootstrap 404 fixture exists beside successful deployment resource" '[ "$user_status" = 404 ]'
+check "healthy adapter never prints token or public error" '[[ "$out" != *synthetic-token* ]] && [[ "$out" != *::error* ]]'
+for field in ownerId projectId url id target; do
+  for mutation in wrong missing; do
+    run "$mutation-$field" ok "$mutation:$field" "$healthy"
+    check "$mutation $field fails association before matching health" '[ "$code" -ne 0 ] && [[ "$out" == *"association mismatch"* ]] && ! grep -qx /health "$work/http.calls"'
+  done
+done
+for status in 401 403 404 429 500; do
+  run "http-$status" ok "$status" "$healthy"
+  check "HTTP $status fails closed before matching health" '[ "$code" -ne 0 ] && [[ "$out" == *"HTTP $status"* ]] && ! grep -qx /health "$work/http.calls"'
+  check "HTTP $status diagnostics redact vendor body and token" '[[ "$out" != *synthetic-token* ]] && [[ "$out" != *"private vendor"* ]]'
+done
+for mode in preview public-only redirect; do
+  run "$mode" ok "$mode" "$healthy"
+  check "API $mode cannot bypass association or matching health" '[ "$code" -ne 0 ] && ! grep -qx /health "$work/http.calls"'
+done
+check "API redirect never forwards its credential" '! grep -qx /credential-sink "$work/http.calls"'
+FIXTURE_TOKEN=wrong-token run wrong-token ok ready "$healthy"
+check "refused API token remains red and is never printed" '[ "$code" -ne 0 ] && [[ "$out" != *wrong-token* ]] && ! grep -qx /health "$work/http.calls"'
+run malformed ok malformed "$healthy"
+check "malformed status JSON cannot be rescued by matching health" '[ "$code" -ne 0 ] && [[ "$out" == *"malformed JSON"* ]] && ! grep -qx /health "$work/http.calls"'
+for state in ERROR CANCELED UNKNOWN; do
+  run "state-$state" ok "state:$state" "$healthy"
+  check "$state status fails closed before matching health" '[ "$code" -ne 0 ] && ! grep -qx /health "$work/http.calls"'
+done
+for state in BUILDING QUEUED INITIALIZING; do
+  run "state-$state" ok "state:$state" "$healthy"
+  check "$state status times out within bound and never reads health" '[ "$code" -ne 0 ] && [ "$elapsed" -le 5 ] && [[ "$out" == *"timeout; last state $state"* ]] && ! grep -qx /health "$work/http.calls"'
+done
+run hang-status ok hang "$healthy"
+check "hanging status HTTP is bounded and matching health cannot rescue it" '[ "$code" -ne 0 ] && [ "$elapsed" -le 5 ] && [[ "$out" == *timeout* ]] && ! grep -qx /health "$work/http.calls"'
+for field in TEAM PROJECT TOKEN; do
+  case "$field" in TEAM) FIXTURE_TEAM= run missing-team ok ready "$healthy" ;; PROJECT) FIXTURE_PROJECT= run missing-project ok ready "$healthy" ;; TOKEN) FIXTURE_TOKEN= run missing-token ok ready "$healthy" ;; esac
+  check "missing $field is refused before upload" '[ "$code" -ne 0 ] && [ "$deploys" -eq 0 ]'
+done
+run building-ready ok transition "$healthy"
+check "BUILDING to READY transition proceeds to exact-sha health" '[ "$code" -eq 0 ] && [[ "$out" == *BUILDING* ]] && [[ "$out" == *READY* ]]'
+run hang-upload hang ready "$healthy"
+check "hanging upload is bounded without duplicate deployment" '[ "$code" -ne 0 ] && [ "$elapsed" -le 15 ] && [ "$deploys" -eq 1 ] && [[ "$out" == *"upload timed out"* ]]'
+check "hanging upload never requests deployment status" '[ ! -s "$work/http.calls" ]'
+check "hanging upload leaves no child" '! pgrep -f "^sleep 6011$" >/dev/null'
+run fail-once fail-once ready "$healthy"
+check "fast upload failure retries exactly once" '[ "$code" -eq 0 ] && [ "$deploys" -eq 2 ]'
+run fail-twice fail ready "$healthy"
+check "two upload failures stop at one retry" '[ "$code" -ne 0 ] && [ "$deploys" -eq 2 ]'
+run fail-with-url fail-with-url ready "$healthy"
+check "failed upload with URL reuses deployment without retry" '[ "$code" -eq 0 ] && [ "$deploys" -eq 1 ]'
+run wrong-sha ok ready "$old"
+check "READY plus wrong public SHA remains red" '[ "$code" -ne 0 ] && [[ "$out" == *"health check"* ]]'
+for body in "{\"ok\":false,\"sha\":\"$SHA\"}" "{\"ok\":true,\"previous\":{\"sha\":\"$SHA\"}}" "not-json $healthy"; do
+  run "bad-health-$assertions" ok ready "$body"
+  check "invalid health body $assertions cannot impersonate exact healthy SHA" '[ "$code" -ne 0 ]'
+done
+run transition ok ready transition
+check "alias transition keeps twelve-read production budget and accepts fifth exact SHA" '[ "$code" -eq 0 ] && [[ "$out" == *"attempt 5/6"* ]] && [ "$(grep -c "^/health$" "$work/http.calls")" -eq 5 ] && [ "$deploys" -eq 1 ]'
+check "production defaults preserve upload ready and health budgets" 'grep -q "HEALTH_ATTEMPTS=\${HEALTH_ATTEMPTS:-12}" "$here/vercel-deploy.sh" && grep -q "READY_TIMEOUT=\${READY_TIMEOUT:-420}" "$here/vercel-deploy.sh"'
+run pretty ok ready "{ \"ok\": true, \"sha\": \"$SHA\" }"
+check "formatted exact healthy SHA is accepted" '[ "$code" -eq 0 ]'
+FIXTURE_HEALTH_URL=http://127.0.0.1:1/health run unreachable ok ready "$healthy"
+check "READY plus unreachable health fails closed" '[ "$code" -ne 0 ] && [[ "$out" == *"health check"* ]] && [[ "$out" == *"last body, first 1000 bytes: none"* ]]'
+# Negative control: a readiness step that depends on the CLI's user bootstrap fails with the real transcript.
+mkdir -p "$work/inspect"
+cp "$here/deployment-status.mjs" "$work/inspect/"
+perl -pe 's/^(echo "deployment: \$url")$/$1\nnpx vercel\@64 inspect "\$url" --scope "\$VERCEL_ORG_ID" --wait >"\$wait_log" 2>&1 || fail "inspect: \$(diagnostic_tail "\$wait_log")"/' \
+  "$here/vercel-deploy.sh" >"$work/inspect/vercel-deploy.sh"
+FIXTURE_SCRIPT="$work/inspect/vercel-deploy.sh" run scoped-inspect ok ready "$healthy"
+check "scoped CLI inspect reproduces hosted User not found (404) and never reaches health" '[ "$code" -ne 0 ] && grep -q "^inspect " "$CALLS" && [[ "$out" == *"User not found. (404)"* ]] && ! grep -qx /health "$work/http.calls"'
+run ready ok ready "$healthy"
+check "API readiness succeeds beside the hosted CLI identity refusal without any CLI inspect" '[ "$code" -eq 0 ] && ! grep -q "^inspect " "$CALLS" && [[ "$out" != *"User not found"* ]]'
+check "deployment shell and adapter parse without executing" 'bash -n "$here/vercel-deploy.sh" "$here/vercel-deploy.test.sh" && node --check "$here/deployment-status.mjs"'
+printf 'if then\n' >"$work/invalid.sh"
+check "syntax negative control rejects malformed Bash" '! bash -n "$work/invalid.sh" 2>/dev/null'
+check "missing GITHUB_SHA is refused before upload" '! GITHUB_SHA= bash "$here/vercel-deploy.sh" >/dev/null 2>&1'
+if [ "$assertions" -eq 0 ] || [ "$failures" -ne 0 ]; then echo "# $failures assertions failed"; exit 1; fi
+echo "# all $assertions assertions passed"

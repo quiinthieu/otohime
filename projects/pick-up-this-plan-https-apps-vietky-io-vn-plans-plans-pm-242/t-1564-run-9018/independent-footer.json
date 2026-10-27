@@ -1,0 +1,23 @@
+{
+  "real": true,
+  "base": "http://localhost:51207",
+  "chrome": "156.0.8078.48",
+  "pgUserCount": 0,
+  "embeddedAdapterConstructed": true,
+  "baseline": {
+    "title": "You've reached the end of the internet.You've reached the end of the internet.",
+    "semantic": "You've reached the end of the internet.",
+    "visual": "You've reached the end of the internet.",
+    "scene": 3,
+    "wave": 1,
+    "last": true
+  },
+  "controls": {
+    "missingRejected": true,
+    "restored": true,
+    "lastReachable": true,
+    "excludedRejected": true,
+    "tabRestored": true,
+    "semanticOnly": "You've reached the end of the internet."
+  }
+}

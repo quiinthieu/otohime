@@ -1,7 +1,7 @@
 # Ink ghosts
 
 Anonymous, short-lived cursors from other visitors on Home (`/`) and Ryugu-jo (`/ryugu`). This folder holds the
-transport. The client canvas, the Pocket switch and the deploy workflow follow in pm-257 tasks 2 to 5.
+transport, persistent Pocket switch and dynamically loaded client canvas. Deploy automation follows in pm-257 tasks 4 to 5.
 
 The folder is neutral and top-level on purpose. The palace may not import from `components/`, `lib/` or other route
 groups, so both roots can share `ghosts/`.
@@ -13,6 +13,10 @@ groups, so both roots can share `ghosts/`.
 | `protocol.ts` | Wire messages, limits and the frame parser. Pure: it runs in the Worker, the fake and the browser. |
 | `policy.ts` | Upgrade admission: method, `Upgrade`, exact `Origin` and one of the two rooms. |
 | `room.ts` | The pure room state machine: cap, token bucket, invalid strikes, fan-out effects and attachment validation. |
+| `config.ts`, `../app/api/ghosts/route.ts` | Request-time endpoint parsing and no-store configuration (404 when disabled). |
+| `client.ts` | Bounded client model, defensive server parser, lifecycle controller and 2D painter. |
+| `loader.tsx`, `canvas.tsx` | Idle client-only page boundary, passive input observers and decorative viewport canvas. |
+| `pref.ts`, `pref-client.ts` | Pure preference store and React `useSyncExternalStore` adapter shared by both roots. |
 | `worker/` | The Cloudflare Worker (`src/index.ts`) and the `GhostRoom` Durable Object (`src/room-do.ts`). Its own locked package. |
 | `../scripts/ghosts-fake.mjs` | A dependency-free local fake that uses the same policy and room. It also holds the raw test client and the shared contract cases. |
 
@@ -44,6 +48,10 @@ These are defined once in `protocol.ts` and enforced by `room.ts`.
 | Frame size | 128 UTF-8 bytes | A larger frame is invalid. The fake ends a frame over 1 KiB on the wire with 1009 without buffering it. |
 | Rate | 15-token bucket, refills 15/s, per connection | Every incoming frame spends a token, invalid ones included. With no token left, the frame is dropped unread and nothing fans out. |
 | Invalid frames | 5 | Binary, oversize and malformed frames count. The fifth closes 1008. Valid frames don't reset the count. |
+
+The fake rejects any RSV1/2/3 wire bit with 1002 before reading the payload; no WebSocket extensions are
+negotiated. The same masked-wire cases run against workerd. Bucket timestamps retain their high-water mark
+across clock rollback and attachment restoration: time recovery alone never grants tokens.
 
 ## Admission
 
@@ -130,11 +138,65 @@ npm run fingerprint   # the code+lock+config fingerprint and per-file hashes
 The compatibility date is pinned (`2026-10-15`). `.wrangler/`, `node_modules/`, `dist/` and `.dev.vars*` are
 git-ignored inside the package.
 
-## Not here yet
+## Client runtime
 
-- Client rendering, `/api/ghosts` and `GHOSTS_ENDPOINT` (task 2).
-- The Pocket hide switch (task 3).
+Set `GHOSTS_ENDPOINT=wss://<dedicated-worker-host>/ghosts` at runtime to enable only Home and `/ryugu`.
+`GET /api/ghosts` awaits `connection()` before reading it and always returns `Cache-Control: no-store`.
+Unset or malformed values return an empty 404. Credentials, fragments, base queries and same-origin secure
+endpoints are rejected. For local production-build proof, `ws://127.0.0.1:<port>/ghosts` works only when the
+page also uses a loopback host; no hosted configuration is changed by local proof.
+
+The optional browser canvas uses `GET /api/ghosts?probe=1`: disabled configuration returns HTTP 200 with JSON
+`null`, so an intentional off state does not create a failed subresource or browser console error. Enabled
+configuration returns the same endpoint/rooms object. The ordinary GET retains its empty disabled 404;
+both forms remain runtime-only and `no-store`.
+
+Both pages mount the neutral idle loader. The canvas is portalled to `document.body`: Home's entrance animation
+would otherwise give a fixed descendant page-sized rather than viewport-sized bounds. Styles are inline,
+`pointer-events:none`, and the whole layer is `aria-hidden`, with no focus target or live region. Other-member
+count is separate from drawable tips; a silent connected visitor still contributes to the subdued `N here` label.
+
+The controller sends movement at most every 100ms after a 0.002 normalized deadzone. It bounds the remote map to
+24 entries, trails to 12 points, ripples to 48 and DPR to 1.5. Trails and ripples fade in 700ms; silent tips disappear
+at six seconds using one expiry timer. It requests animation frames only for fading work or a single event/resize
+redraw. `data-ghosts-state`, `data-ghosts` and `data-ghosts-ripples` expose state, other connected members
+and actual ripple paint calls, respectively. The counter alone is not proof of visible rendering.
+The paint counter accumulates during an eligible connection and resets with the visuals when suppressed.
+
+Reduced motion, hidden documents, offline state and unmount close sockets, abort configuration fetches, clear
+marks and cancel timers/frames. The adapter removes pointer/resize observers while ineligible. Config and socket
+handshakes have an eight-second attempt deadline; retryable failures allow three total attempts, delayed by 1s
+and 3s after the preceding failure. Full rooms terminate immediately. Disabled configuration stays off. The budget
+belongs to the mounted controller: preference changes toggle eligibility rather than recreate that budget.
+Local pointerdown feedback is immediate; wire clicks are limited to 5Hz alongside movement's 10Hz.
+
+Home's menu-only **Ghosts on/off** chip follows Dive and Sea sound. `aria-pressed=true` means ghosts enabled.
+It uses the existing native button primitive, so Enter, Space and touch activate the switch without starting the game.
+`localStorage["ghosts"] === "hidden"` suppresses ghosts; enabling removes the key. Missing or malformed values
+allow ghosts only when endpoint configuration and lifecycle eligibility also permit them. Server/hydration snapshots
+stay hidden. Blocked storage falls back to memory for the current JavaScript page; persistence across full reloads
+or other tabs cannot be provided when storage is denied.
+
+The store notifies same-tab subscribers synchronously, follows localStorage events from other tabs (including
+clear), ignores sessionStorage events, and removes its window listener when the last subscriber leaves. Both
+loaders check the preference before fetching configuration. After the idle canvas first mounts, it stays mounted
+to retain the attempt budget. Its direct preference subscription immediately closes transport, clears local and
+remote ink, aborts config, cancels frames/retries and detaches input observers. Generation guards reject callbacks
+already queued by a stopped connection. Motion, visibility and online changes reconcile the same session.
+
+The existing explicit `ghosts/*.test.ts` glob runs the client and config tests in `npm test`.
+`config.test.ts` executes the actual GET body with only Next's request-context boundary substituted. Client tests
+use an injected clock/socket/scheduler and canvas method recorder. These prove policy, lifecycle and paint calls;
+real-browser pixel and geometry evidence is distinct, and neither proves a hosted Worker deployment.
+
+After `npm ci && npm run build`, `TMPDIR=/tmp npm run test:ghosts-pref` starts its own production Next server,
+local fake and real Chrome. It asserts synchronous clearing, keyboard/touch behavior, persistence, cross-tab/route
+updates, initial/dynamic suppression, fresh anonymous joins and budget exhaustion. Its pixel assertion rejects a
+disabled-paint negative control. Visibility and offline changes are injected browser properties/events; motion uses
+Chrome media emulation. No production configuration, Cloudflare credentials or database is required.
+
+## Not here yet
 - Two-browser proof, CI wiring and the deploy workflow (task 4).
 - Production activation (task 5).
 
-No hosted deployment or credential exists yet. Nothing in this folder proves live fan-out.
+Production activation is out of scope for the client delivery. Local fake-server/browser evidence does not prove hosted fan-out.

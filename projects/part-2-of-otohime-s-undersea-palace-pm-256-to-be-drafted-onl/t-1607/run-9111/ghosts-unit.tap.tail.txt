@@ -1,0 +1,22 @@
+  ...
+# Subtest: rollback and recovery preserve the bucket time high-water mark
+ok 24 - rollback and recovery preserve the bucket time high-water mark
+  ---
+  duration_ms: 0.071917
+  type: 'test'
+  ...
+# Subtest: rollback and recovery preserve the bucket time high-water mark across attachment restoration
+ok 25 - rollback and recovery preserve the bucket time high-water mark across attachment restoration
+  ---
+  duration_ms: 0.046334
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 87.961583

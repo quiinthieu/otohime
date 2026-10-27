@@ -1,0 +1,50 @@
+506	pm-269/t-1648: Model hosted CLI identity refusal in deploy fixture
+505	pm-270/t-1671: Authenticate deployment readiness and assert gate evid…
+504	pm-269/t-1648: Verify deployment readiness through scoped API
+503	pm-269/t-1648: Rebuild Bottle gates without stale Next output
+502	pm-269/t-1648: Require complete Bottle repository and deployment evid…
+501	pm-269/t-1648: Require explicit Ready state before production health
+500	pm-270/t-1671: Certify desk fixtures and register main-lane tests
+499	pm-269/t-1648: Require complete named Bottle gate evidence
+498	pm-257/t-1609: Persist Pocket ghost controls
+497	pm-269/t-1648: Scope production inspection and certify Bottle gates
+496	pm-269/t-1648: Contain Bottle within the footer header band
+495	pm-269/t-1647: Preserve CI probe failures and verify rendered headings
+494	pm-255/t-1632: Accept only the tier-off GET /api/ask 404 in the seaso…
+493	pm-259/t-1624: Expose browser gate crash diagnostics
+492	pm-259/t-1626: Fail closed on deployment diagnostics and identity
+491	pm-249/t-1569: Install missing e2e dependencies before the deploy probe
+490	pm-272/t-1566: Fix cassette provider probes on Bash 3.2
+489	pm-257/t-1608: Reconcile disabled ghost configuration with console ch…
+488	pm-272/t-1566: Read optional Lanyard game presence
+487	pm-257/t-1608: Render idle-loaded visitor ink and bounded lifecycle
+486	pm-270/t-1660: Annotate CI probe failures and await streamed headings
+485	pm-257/t-1607: Reject invalid fake frames and preserve rate time
+484	pm-270/t-1606: Flush gate-closure child output and settle ledger phon…
+483	pm-272/t-1565: Retain motion probe failures in verifier tails
+482	pm-272/t-1565: Read the cassette from ListenBrainz
+481	pm-269/t-1591: Keep the footer Bottle above the scene
+480	pm-269/t-1588: Await the Dashboard's own page fade after its skeleton
+479	pm-270/t-1606: Observe browser time in the Kame clock fixture
+478	pm-269/t-1588: Measure complete Kame holds on the flowing clock
+477	pm-258/t-1623: Add on-demand local gate closure check
+476	pm-269/t-1591: Stabilize clock checks and expose Footer failures
+475	pm-269/t-1588: Prove live Bottle animation cancellation
+474	pm-269/t-1591: Track opt-in heads entirely on device
+473	pm-269/t-1588: Await live reduced-motion cancellation
+472	pm-269/t-1588: Wash up Bottles from footer and Pocket
+471	pm-270/t-1606: Drive notebook frames and verify footer title sources
+470	pm-269/t-1589: Focus the story list after React commits
+469	pm-269/t-1587: Allow delayed production alias readiness
+468	pm-269/t-1589: Stage project stories with cancellable ink babble
+467	pm-269/t-1587: Include Bottle HTTP and Postgres integration coverage
+466	pm-269/t-1587: Persist and moderate Bottle suggestions
+465	pm-264/t-1590: Verify the plain Riso heading in the Chromium probe
+464	pm-264/t-1590: Verify the plain Riso footer heading
+463	pm-270/t-1605: Anchor the leftover-child check and bound the deploy s…
+461	pm-264/t-1590: Preserve main checks and serialize production
+460	pm-259/t-1583: Repair red unit gates and publish failed CI assertions
+459	pm-268/t-1600: Verify served SHA after inspect failures
+458	pm-257/t-1607: Build bounded ghost rooms and Worker adapter
+457	pm-268/t-1601: Print accessible Riso heading plates
+456	pm-259/t-1583: Preserve deploy diagnostics and enable gated recovery

@@ -1,0 +1,9 @@
+{
+  "run_id": "run-9192",
+  "task_id": "32d95e6a-9b6f-44f6-ac74-38aa3790f588",
+  "runner": "fleet",
+  "worker_id": "avietidol-z490",
+  "agent_profile": "codex-sol-6-1-high",
+  "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+  "callback_apply_failures": 0
+}

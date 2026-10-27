@@ -37,6 +37,12 @@ case "$PORT" in
     PORT=$((PORT + 10))
     ;;
 esac
+# Keep Chromium's SingletonSocket within macOS's 104-byte sun_path limit, as in probe-end.sh.
+export TMPDIR="${TMPDIR:-/tmp}"
+if [ "${#TMPDIR}" -gt 48 ]; then
+  export TMPDIR="/tmp"
+fi
+
 BASE_URL="${BASE_URL:-}"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/probe-motion-signed-in.XXXXXX")"
 RUN="r$(date +%s)$$"

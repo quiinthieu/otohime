@@ -1,0 +1,69 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-286",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "Toy code and assets are repository-owned browser work, but task execution, git delivery, CI and production deployment use the existing externally operated capabilities below. No new runtime service, paid product API, account, or secret is required.",
+  "prerequisites": [
+    {
+      "id": "github:otohime:git",
+      "owner": "agent",
+      "required_setup": "Existing GitHub repository quiinthieu/otohime and registered otohime SSH origin permit repository read and main push without force; existing repository/account cost authority, no new purchase. The checkout push proves write separately from a control-plane read probe.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "git_host_read",
+        "target": "repo:otohime",
+        "expect": "readable"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "fleet:otohime:software-engineer",
+      "owner": "agent",
+      "required_setup": "Existing task-manager repo otohime has an enabled software_engineer account and execution runner with Node 22, locked npm install, browser/Chrome, network access for npm and git SSH origin. Existing fleet placement and cost authority; scheduler places work, not a person.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "task_manager_capability",
+        "target": "account:otohime:software_engineer",
+        "expect": "eligible"
+      },
+      "probe_context": [
+        "execution_runner"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "github:otohime:actions",
+      "owner": "agent",
+      "required_setup": "Existing GitHub Actions for quiinthieu/otohime runs checks and production deploy on main with hosted runner, Node 22, contents:read workflow token, npm access and current deployment configuration under existing account and cost authority. No new credential requested.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "service_capability",
+        "target": "github:quiinthieu/otohime:actions",
+        "expect": "CI workflow enabled with runnable checks and production jobs"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "vercel:otohime:production",
+      "owner": "agent",
+      "required_setup": "Existing Vercel project for otohime.dev under quiinthieu's account and existing cost authority. Existing GitHub Actions VERCEL_TOKEN has deploy scope for that project and VERCEL_ORG_ID/VERCEL_PROJECT_ID identify it; no new key, billing or project setup requested. Provider-managed secret names are documented without values; control-plane site reachability does not prove runner credential attachment.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "service_capability",
+        "target": "https://otohime.dev/api/health",
+        "expect": "HTTP 200 with full sha from production"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    }
+  ]
+}

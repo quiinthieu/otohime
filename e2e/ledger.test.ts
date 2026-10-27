@@ -384,17 +384,102 @@ test("under reduced motion Press lands the final year at once: no replay, no tra
   assert.deepEqual(errors, []);
 });
 
+// The sheet's layout once it can be measured: the scroller and the sheet are visible with nonzero boxes, and their
+// geometry is the same across two animation frames. Hydrated props (open) do not mean the layout is usable. It does
+// not wait for the sheet to overflow, because that is what the phone test checks. Every frame is a sample, and the
+// last LAYOUT_FRAMES of them come back for the failure message.
+const LAYOUT_FRAMES = 40;
+type LayoutSample = {
+  t: number;
+  ready: string;
+  fonts: string;
+  innerWidth: number;
+  visualWidth: number | null;
+  rootFont: string;
+  visible: boolean;
+  scrollWidth: number;
+  clientWidth: number;
+  sheetWidth: number;
+  sheetMinWidth: string;
+  pageScrollWidth: number;
+};
+type Layout = { settled: boolean; frames: number; samples: LayoutSample[]; last: LayoutSample };
+
+const settledLayout = (page: Page, timeoutMs = 10_000) =>
+  page.evaluate(
+    async ([keep, timeoutMs]) => {
+      const frame = () => new Promise((done) => requestAnimationFrame(done));
+      const sample = (): LayoutSample => {
+        const scroller = document.querySelector<HTMLElement>(".ledger-scroll");
+        const sheet = document.querySelector<SVGElement>(".ledger-sheet");
+        const a = scroller?.getBoundingClientRect();
+        const b = sheet?.getBoundingClientRect();
+        return {
+          t: Math.round(performance.now()),
+          ready: document.readyState,
+          fonts: document.fonts.status,
+          innerWidth,
+          visualWidth: visualViewport?.width ?? null,
+          rootFont: getComputedStyle(document.documentElement).fontSize,
+          visible: !!(a && b && a.width > 0 && a.height > 0 && b.width > 0 && b.height > 0 && scroller!.checkVisibility()),
+          scrollWidth: scroller?.scrollWidth ?? 0,
+          clientWidth: scroller?.clientWidth ?? 0,
+          sheetWidth: b ? Math.round(b.width * 100) / 100 : 0,
+          sheetMinWidth: sheet ? getComputedStyle(sheet).minWidth : "",
+          pageScrollWidth: document.documentElement.scrollWidth,
+        };
+      };
+      const same = (x: LayoutSample, y: LayoutSample) =>
+        (["innerWidth", "visualWidth", "rootFont", "scrollWidth", "clientWidth", "sheetWidth", "sheetMinWidth"] as const).every(
+          (k) => x[k] === y[k],
+        );
+      const samples: LayoutSample[] = [];
+      const start = performance.now();
+      let frames = 0;
+      let settled = false;
+      let prev: LayoutSample | null = null;
+      while (performance.now() - start < timeoutMs) {
+        await frame();
+        frames++;
+        const now = sample();
+        samples.push(now);
+        if (samples.length > keep) samples.shift();
+        if (prev && prev.visible && now.visible && now.ready === "complete" && same(prev, now)) {
+          settled = true;
+          break;
+        }
+        prev = now;
+      }
+      return { settled, frames, samples, last: samples[samples.length - 1] ?? sample() };
+    },
+    [LAYOUT_FRAMES, timeoutMs] as [number, number],
+  ) as Promise<Layout>;
+
+const formatLayout = ({ settled, frames, samples, last }: Layout) =>
+  [
+    `layout ${settled ? "settled" : "not settled"} after ${frames} frames: inner ${last.innerWidth}px, visual ${last.visualWidth}px, ` +
+      `root font ${last.rootFont}, ready ${last.ready}, fonts ${last.fonts}`,
+    `scroller scroll ${last.scrollWidth} / client ${last.clientWidth}, sheet ${last.sheetWidth}px (min-width ${last.sheetMinWidth}), ` +
+      `page scroll ${last.pageScrollWidth}`,
+    ...samples.map(
+      (s) =>
+        `  +${s.t - samples[0].t}ms ${s.visible ? "visible" : "hidden"} ${s.ready} scroll ${s.scrollWidth}/${s.clientWidth} ` +
+        `sheet ${s.sheetWidth} min ${s.sheetMinWidth} inner ${s.innerWidth} visual ${s.visualWidth} font ${s.rootFont}`,
+    ),
+  ].join("\n");
+
+// The phone layout checks, on a settled layout, with the geometry in every message.
+function assertPhoneLayout(layout: Layout) {
+  const why = formatLayout(layout);
+  assert.ok(layout.settled, `the ledger's layout settles on a phone\n${why}`);
+  const { pageScrollWidth, innerWidth, scrollWidth, clientWidth } = layout.last;
+  assert.ok(pageScrollWidth - innerWidth <= 0, `the page does not scroll sideways (${pageScrollWidth - innerWidth}px over)\n${why}`);
+  assert.ok(scrollWidth > clientWidth, `the year scrolls inside its frame\n${why}`);
+}
+
 test("on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt", { timeout: TIMEOUT }, async () => {
   const page = await open({ phone: true });
-  const layout = await page.evaluate(() => {
-    const scroller = document.querySelector(".ledger-scroll")!;
-    return {
-      pageOverflow: document.documentElement.scrollWidth - innerWidth,
-      sheetScrolls: scroller.scrollWidth > scroller.clientWidth,
-    };
-  });
-  assert.ok(layout.pageOverflow <= 0, `the page does not scroll sideways (${layout.pageOverflow}px over)`);
-  assert.ok(layout.sheetScrolls, "the year scrolls inside its frame");
+  assertPhoneLayout(await settledLayout(page));
 
   const chip = pressButton(page, "Press");
   const box = await chip.boundingBox();
@@ -413,5 +498,34 @@ test("on a phone the sheet scrolls inside its frame, Press works by touch and a 
   assert.equal(await page.locator('.ledger-cell[data-i="0"]').getAttribute("data-open"), "");
   await page.getByRole("heading", { level: 1 }).tap();
   assert.equal(await receipt(page), null, "a tap elsewhere puts it away");
+  assert.deepEqual(errors, []);
+});
+
+test("on a phone the layout check waits for a sheet shown after hydration, and fails a sheet without its minimum width", { timeout: TIMEOUT }, async () => {
+  // Shown late: the frame is hidden when hydration is done and shown 400ms later. Measured right away it would
+  // not scroll, so the check has to wait for the visible, stable layout.
+  const late = await open({ phone: true });
+  const hide = await late.addStyleTag({ content: ".ledger-scroll { display: none !important; }" });
+  const early = await hide.evaluate((style: Element) => {
+    const scroller = document.querySelector(".ledger-scroll")!;
+    setTimeout(() => style.remove(), 400);
+    return { scrollWidth: scroller.scrollWidth, clientWidth: scroller.clientWidth };
+  });
+  assert.ok(!(early.scrollWidth > early.clientWidth), `hydrated but hidden, the frame does not scroll yet (${JSON.stringify(early)})`);
+  const shown = await settledLayout(late);
+  assert.ok(shown.samples.some((s) => !s.visible), `the check saw the hidden frame before it settled\n${formatLayout(shown)}`);
+  assertPhoneLayout(shown);
+
+  // Without the 46rem minimum, the sheet fits the column and the same check fails, with its geometry.
+  const bare = await open({ phone: true });
+  await bare.addStyleTag({ content: ".ledger-sheet { min-width: 0 !important; }" });
+  const fits = await settledLayout(bare);
+  assert.ok(fits.settled, formatLayout(fits));
+  assert.throws(() => assertPhoneLayout(fits), (e: Error) => {
+    assert.match(e.message, /^the year scrolls inside its frame\n/);
+    assert.match(e.message, /min-width 0px/);
+    assert.match(e.message, /scroller scroll (\d+) \/ client \1,/);
+    return true;
+  });
   assert.deepEqual(errors, []);
 });

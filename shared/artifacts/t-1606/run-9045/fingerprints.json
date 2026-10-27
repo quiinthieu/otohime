@@ -1,0 +1,64 @@
+{
+  "sourceBase": "608c92e57e3a774b77805ff7d82d9a58041a0748",
+  "profile": {
+    "agent": "Codex (GPT-6)",
+    "role": "software_engineer",
+    "run": "run-9045",
+    "effort": "not exposed"
+  },
+  "node": "v22.12.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "next": "16.4.2",
+  "playwrightCore": "1.64.0",
+  "chrome": "Google Chrome 155.0.8059.86",
+  "postgresImage": [
+    "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24"
+  ],
+  "files": {
+    "package-lock.json": "2d0ec0bea389a532592da1c7a96f8eb6452a90f055fa37cebb8a39d771791a8b",
+    "next.config.ts": "0321d5e23b1a93b09761f2049ef5b9edf2843067e1be089664296063b9fa096b",
+    "components/riso-heading.tsx": "a725d673449386c6ebe8899c0898ae659bda20a11af662b9ed7a5432ab4912e5",
+    "scripts/probe-end.mjs": "a97e531e8c9a3dd3a61c6f9755d8969ab5d92ed8434246fec16a114eda290967",
+    "scripts/probe-end-heading.mjs": "a2ecdea9e46717ce4e2b154c7a4c09e071b4f60d19ebc0090f5260f3e15fd57d",
+    "e2e/probe-end.test.ts": "c49759e8b0b6fc01ae83f06729c6e6b369768577ae4259b7f4a33debbb4199bb",
+    "e2e/desk.test.ts": "e2b221a6abcf9001dc3db8c7ca5c91bd12c414819cdbe5eed3d9c55849e9d903",
+    "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+    "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+    "app/(site)/(app)/desk/_components/ink-desk.tsx": "012876f0500aadc288ad2f4de791093403cc9d071cd7d6eea528602f6f6ac7f5",
+    "components/end-footer.tsx": "f022a58c921430992ab3b466eb9f720ac8e1eea34b0a9137e655d6f6527f75a7",
+    "content/site.ts": "64a62e89c7aaa7f839e6c342dda8f991890b0c8031c4c1f1fd7e29f3d13e21ac",
+    "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+    "scripts/e2e-local.sh": "263cbd935fb5620ea5da39a0ea72ee7ca9447de527354f00386429cd349468f4"
+  },
+  "productionBuilds": [
+    {
+      "suite": 1,
+      "buildId": "SEqU0__ZJrkr6yK57wZqk",
+      "buildSha": "dev",
+      "prerenderManifest": "bb2cb380adb74d78f7d9a42df97181b63e526a1fa9ab4fe5343050da3ae8d585",
+      "buildManifest": "df1849eeb216d37c32a260cda0a0b3a45f1aae02c3e0bf42537ccf9327eae608"
+    },
+    {
+      "suite": 2,
+      "buildId": "HVNmNL0nipCiQnMBvBX3-",
+      "buildSha": "dev",
+      "prerenderManifest": "bb2cb380adb74d78f7d9a42df97181b63e526a1fa9ab4fe5343050da3ae8d585",
+      "buildManifest": "85c29d1112444d4869a8d4e2cb927334851e2a69980b1fe9e6efd5b99f2e0d38"
+    },
+    {
+      "suite": 3,
+      "buildId": "3n0GnZmLOvQ-5E09btTmI",
+      "buildSha": "dev",
+      "prerenderManifest": "bb2cb380adb74d78f7d9a42df97181b63e526a1fa9ab4fe5343050da3ae8d585",
+      "buildManifest": "8437a12b8e355dae58628f9589fc385f51b471490116c017eea267ea91dc887d"
+    }
+  ],
+  "chromeCliLauncher": {
+    "path": "/tmp/otohime-run-9045-bin/google-chrome",
+    "exec": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "reason": "expose the real macOS Chrome to the shell wrapper by its expected CLI name; the browser still launches via channel chrome"
+  },
+  "executableFingerprint": "9c6c9947eff0d19f0b432a6ad28d6a7be7687658f523d256461203bb24bcbb5a",
+  "originalProbeSha256": "65a5df6fd685093a27fd22e31a51c040ee281250258a13b61e315e2b95edd09f"
+}

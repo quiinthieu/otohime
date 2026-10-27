@@ -1,0 +1,87 @@
+{
+  "verificationRun": {
+    "id": "run-9106",
+    "plan_id": "pm-270",
+    "task_id": "t-1606",
+    "role": "verify",
+    "kind": "verify",
+    "template_id": "verify-runner",
+    "tm_task_id": "7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8",
+    "repo_id": "otohime",
+    "worker_id": "avietidol-mac-mini",
+    "runner": "fleet",
+    "git_sha": "c6d09f0",
+    "attempt": 5,
+    "status": "succeeded",
+    "deadline_at": "2026-10-27T01:14:48.394114Z",
+    "started_at": "2026-10-26T23:57:48.394114Z",
+    "finished_at": "2026-10-27T00:18:38.687367Z",
+    "not_before": "0001-01-01T00:00:00Z",
+    "status_checked_at": "2026-10-27T00:17:39.48221Z",
+    "callback_apply_failures": 0
+  },
+  "current": [
+    {
+      "status": "RUNNING",
+      "total": 2,
+      "tasks": [
+        {
+          "id": "fc2ac555-25a5-4fcc-ad30-d6b189dff186",
+          "status": "RUNNING"
+        },
+        {
+          "id": "b6ec5208-4c82-48f8-a6ea-75ba8d8a09b0",
+          "status": "RUNNING"
+        }
+      ],
+      "emptyPayload": false
+    },
+    {
+      "status": "PENDING",
+      "total": null,
+      "tasks": [],
+      "emptyPayload": true
+    }
+  ],
+  "ingestion": [
+    {
+      "id": "6002a5a7-1af8-4933-a036-7987c8e7f8f8",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T23:28:12Z",
+      "updatedAt": "2026-10-26T23:57:51Z",
+      "completedAt": "2026-10-26T23:57:47Z",
+      "title": "Desk swipe observes its preconditions",
+      "priority": 5,
+      "branch": "main",
+      "startedAt": "2026-10-26T23:28:17Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackNextAt": "2026-10-26T23:58:03Z",
+      "repoId": "otohime",
+      "accountId": "claude-kqviet",
+      "runner": "fleet",
+      "workerId": "avietidol-z490"
+    },
+    {
+      "id": "7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-26T23:57:51Z",
+      "updatedAt": "2026-10-27T00:18:39Z",
+      "completedAt": "2026-10-27T00:18:38Z",
+      "title": "Desk swipe observes its preconditions",
+      "priority": 7,
+      "branch": "main",
+      "startedAt": "2026-10-26T23:57:57Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackNextAt": "2026-10-27T00:18:53Z",
+      "repoId": "otohime",
+      "runner": "fleet",
+      "workerId": "avietidol-mac-mini"
+    }
+  ]
+}

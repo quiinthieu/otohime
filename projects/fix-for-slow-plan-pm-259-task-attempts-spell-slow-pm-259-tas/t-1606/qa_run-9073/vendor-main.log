@@ -1,0 +1,5 @@
+
+> otohime@0.1.0 peep-box:vendor
+> node scripts/vendor-peep-box.mjs
+
+Peep-box vision-0.10.32-face-1: vendored

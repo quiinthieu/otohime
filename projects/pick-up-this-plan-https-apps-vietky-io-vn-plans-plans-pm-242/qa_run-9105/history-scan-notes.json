@@ -1,0 +1,22 @@
+{
+  "global_complete": false,
+  "failed_read": 10,
+  "failed_total": 1128,
+  "completed_read": 10,
+  "completed_total": 6473,
+  "running_read": 3,
+  "pending_read": 0,
+  "pending_response": {},
+  "pm272_runs_read": 5,
+  "sample_failed_tool_tail_bytes": 64715,
+  "sample_failed_tool_tail_sha256": "f4352300ec7ca7f441a7106dbf43179ae797bb4a021212a771edc7e2d2c1c47d",
+  "sample_failed_repo_tail_lines": 80,
+  "prior_verifier": {
+    "id": "9c4ad5ab-2229-485f-bbbf-4920106ac0ca",
+    "status": "COMPLETED",
+    "callback": "delivered",
+    "callback_attempts": 1,
+    "persisted_gate": "ver-3616",
+    "command_failure": "Reduced motion exit 1; original assertion absent"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "node": "v22.12.0",
+  "versions": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "playwright-core": "1.64.0"
+  },
+  "base_sha": "f08f670eb8bd5c699463062c4d00f08c4d486cfa",
+  "profile": {
+    "id": "codex-sol-6-1-high",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "source": "plan_manager_get_run run-9169 profile_flags"
+  },
+  "next_build_id": "Jlutf60q7l40JynYZTUgy",
+  "fingerprint": "d7bbae901950edee02d9867e05698478d46de73f7ab073be1921ff41b253fb15",
+  "hashes": {
+    "package.json": "1abf140349b2b773a6416a1b3153a693e5a1850f516ccc199fa38a8ad47bcfdc",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "tsconfig.json": "31902b54fba14db30d5a63026588796ddd27599ac76e6660e2c0b3d3ec69ba2d",
+    "ghosts/protocol.ts": "d51891a13a41c804e67903408e0db555e94ae3435a6cca6229cb33e928bc9278",
+    "ghosts/config.ts": "5abc5d9c392c7677fba3f9c93eddbe8cfa1f3a51fcd443f7a47992707343b09c",
+    "ghosts/client.ts": "1ce4dc895345ccb827a439a1776d32bc12e586d8294070a561883229d2b06beb",
+    "ghosts/pref.ts": "b432800f3bba456fc17b634ce8900ccfca8cf066c724da69710454697ce9775a",
+    "ghosts/pref-client.ts": "b2da0234089c233f61e8ef600bfa71b9303f1445e63e9f7726ea445598d58aaa",
+    "ghosts/canvas.tsx": "e051194475f74d4b4e60e7869d7d6650340aaea3150d254800760fa38adb74c0",
+    "ghosts/loader.tsx": "54c1d2f7003e26e55b9b0b6ac503f3fda2f6e6828e1bfeebf5077be908a968a5",
+    "components/handheld.tsx": "cf961ff07549140b7de2ec93985bf7363d7f82d451ae7454528b3a108ce4f1a6",
+    "components/machine.tsx": "5785b7c15df2855a76d12fc88b3907a435b189a52f0e413ac92047ebbc079881",
+    "app/(site)/(home)/page.tsx": "81c1cd396a3aae88bdf9efcd174a2289643667bfd5ed59564f37748de19aa98b",
+    "app/(ryugu)/ryugu/page.tsx": "595fa85e3bf3f4ea6763201039a1509a13c6d7a77e4b9f2045c8b340da7bfb15",
+    "app/api/ghosts/route.ts": "dd4dd043aae764381f5c2244e98cbe01d94dac4ea8703f9c98eed508fb204166",
+    "ghosts/pref.test.ts": "5e618c4b01ccbf1ddfbffbbb46c5fe7b748c1ad5b2fd3d64e88c0b1df8b5ec00",
+    "ghosts/client.test.ts": "969e007536ac139b5bc0f97d5c6328ad74a6d3aac41c4984d8190f2fc326bd35",
+    "e2e/ghosts-pref.test.ts": "be22a80aef2b65def0ad57316fa3c0008092e2039f5678ff536872bf35f31cbc",
+    "scripts/ghosts-fake.mjs": "ddac9c8f9f0954e20d3d9badf3c8d274953cf38558578f7fa73c1c8d1b3c5e21"
+  },
+  "compiled_routes": {
+    "/(site)/(home)/page": "b47e7523b8c8ca87f5964f1e114667d71f45bdcbe776a1f65e0cc47e4e8c153a",
+    "/(ryugu)/ryugu/page": "6e05a8d06ba4f87b6bd1bb13faf61e0e1c8e335cd11bec2e83327925b703e6d8",
+    "/api/ghosts/route": "d3281d5583339e07125c01fe4b2c72508b24a3d7e26e67e1172dd0f400ee78db"
+  },
+  "real_imports": [
+    "GhostSession",
+    "ghostsPreferenceStore",
+    "React.useSyncExternalStore",
+    "ReactDOM.createPortal"
+  ],
+  "real_construction": "Production Chrome suite constructs GhostSession through compiled canvas and opens real WebSocket to local fake; pixel assertions exercise the real 2D context.",
+  "production_execution": "unproven; no deployed checks in this SWE run",
+  "previous_build_id": "q4fmde8N6hNyGnub59bKJ",
+  "rebase": {
+    "retry": 2,
+    "executable_fingerprint_unchanged": true,
+    "upstream_paths": [
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/architecture.md",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171-summary.md",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/browser-build.txt",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/browser.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/cli-preflight.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/closure.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/deployment-red.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/deployment.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/executable.json",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/footer-build.txt",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/footer.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/history.json",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/layout.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/prior-runner.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/sample-failure-runner.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/static.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/unit.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/verification-run.log",
+      "projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/verification.json",
+      "scripts/vercel-deploy.sh",
+      "scripts/vercel-deploy.test.sh",
+      "scripts/verify-bottle-contracts.mjs"
+    ]
+  }
+}

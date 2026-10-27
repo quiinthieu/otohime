@@ -1,0 +1,14 @@
+{
+  "url": "https://api.github.com/repos/quiinthieu/otohime/actions/workflows/ci.yml/runs?status=queued&per_page=20",
+  "status": "200",
+  "body": {
+    "total_count": 0,
+    "workflow_runs": []
+  },
+  "initialProbe": {
+    "url": "https://api.github.com/repos/quiinthieu/otohime/actions/workflows/ci.yml/runs?status=queued&per_page=20",
+    "status": null,
+    "body": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)>"
+  },
+  "stderr": ""
+}

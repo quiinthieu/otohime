@@ -1,0 +1,65 @@
+{
+  "98ff28c": {
+    "sha": "98ff28cd58389fa912dbe0e4e2dde95eddb9e3c4",
+    "git_identity": "Otohime <quiinthieu@gmail.com> / Otohime <quiinthieu@gmail.com>",
+    "files": {
+      "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+      "e2e/kame.test.ts": "042d42413e39f0a0da8605f80b913721f74e121625fa74377795880301eeb562",
+      "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      ".github/workflows/ci.yml": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+      "scripts/vercel-deploy.sh": "d9007464d32940bc2311f8529c1dea2cced20d97e7d4e520199884227e56d9ba",
+      "scripts/probe-motion-signed-in.mjs": "e71cbb84be8a6f4412943cd300e02b0eb940e63e2367fd59d50729be39a7731b"
+    }
+  },
+  "9d3f746": {
+    "sha": "9d3f7463d69b852c8a40b8b94b560a9ecdfe31ca",
+    "git_identity": "Codex <noreply@openai.com> / Codex <noreply@openai.com>",
+    "files": {
+      "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+      "e2e/kame.test.ts": "1770d7cdb691b722ffe3e09554d4c7e2e3b316dce8490c434f105860ddc2ce5f",
+      "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      ".github/workflows/ci.yml": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+      "scripts/vercel-deploy.sh": "d9007464d32940bc2311f8529c1dea2cced20d97e7d4e520199884227e56d9ba",
+      "scripts/probe-motion-signed-in.mjs": "e71cbb84be8a6f4412943cd300e02b0eb940e63e2367fd59d50729be39a7731b"
+    }
+  },
+  "556a3ec": {
+    "sha": "556a3ecc97289f75f4e245ef8f6151d807284a35",
+    "git_identity": "Otohime <quiinthieu@gmail.com> / Otohime <quiinthieu@gmail.com>",
+    "files": {
+      "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+      "e2e/kame.test.ts": "1770d7cdb691b722ffe3e09554d4c7e2e3b316dce8490c434f105860ddc2ce5f",
+      "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      ".github/workflows/ci.yml": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+      "scripts/vercel-deploy.sh": "d9007464d32940bc2311f8529c1dea2cced20d97e7d4e520199884227e56d9ba",
+      "scripts/probe-motion-signed-in.mjs": "6b36e65d5a7b6d2e36d1dccbba4e0a3f122c57d4364dd0b5d04ed6b6c69ee3c4"
+    }
+  },
+  "delivery_live_ancestry_exit": 1,
+  "prior_swipe_live_ancestry_exit": 0,
+  "ci_environment_comparison": {
+    "last_green": {
+      "run": 40398613267,
+      "checks": 121838179108,
+      "production": 121847200125,
+      "runner": "GitHub Actions 1000000866",
+      "labels": [
+        "ubuntu-24.04"
+      ]
+    },
+    "delivery_failed_production": {
+      "run": 40405893755,
+      "checks": 121863417905,
+      "production": 121871360439,
+      "runner": "GitHub Actions 1000000868",
+      "labels": [
+        "ubuntu-24.04"
+      ]
+    },
+    "ci_config_log": "",
+    "raw_logs": "403 for both jobs; exact CLI diagnostic preserved in public failure annotation; no CI binary fingerprint claimed"
+  }
+}

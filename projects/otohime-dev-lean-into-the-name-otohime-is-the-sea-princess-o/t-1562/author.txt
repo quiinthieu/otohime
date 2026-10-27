@@ -1,0 +1,6 @@
+# t-1562 commit identity (run-9207): git log -1 --format='%an <%ae>%n%cn <%ce>%n%(trailers)' <sha>
+## cf9e3e5 (delivery, run-9207)
+Otohime <quiinthieu@gmail.com>
+Otohime <quiinthieu@gmail.com>
+
+(no trailers)

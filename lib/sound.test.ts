@@ -322,3 +322,10 @@ test("the toggle reads storage only through the external store", () => {
   assert.match(toggle, /useSyncExternalStore/);
   assert.match(toggle, /aria-pressed/);
 });
+
+
+test("the wooden clapper is bounded and quieter than console cues", async () => {
+  const { CLAPPER, cueLength } = await import("./sound.ts");
+  assert.equal(CLAPPER.notes.length,2); assert.equal(CLAPPER.wave,"triangle");
+  assert.ok(CLAPPER.db <= -30); assert.ok(cueLength(CLAPPER) < .1);
+});

@@ -1,0 +1,105 @@
+{
+  "gate": {
+    "id": "ver-3618",
+    "plan_id": "pm-270",
+    "task_id": "t-1606",
+    "run_id": "run-9106",
+    "gate": "green",
+    "git_sha": "c6d09f0",
+    "status": "pass",
+    "items": [
+      {
+        "name": "trace helper unit test",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 122,
+        "stdout_tail": "TAP version 13\n# Subtest: the bound is 40 and a short gesture is kept whole, in order\nok 1 - the bound is 40 and a short gesture is kept whole, in order\n  ---\n  duration_ms: 0.579375\n  type: 'test'\n  ...\n# Subtest: a long drag keeps at most 40 records, and the press and the let-go survive\nok 2 - a long drag keeps at most 40 records, and the press and the let-go survive\n  ---\n  duration_ms: 0.140708\n  type: 'test'\n  ...\n# Subtest: with no move left to drop, the oldest record goes\nok 3 - with no move left to drop, the oldest record goes\n  ---\n  duration_ms: 0.063584\n  type: 'test'\n  ...\n# Subtest: anything but pointer down/move/up/cancel is ignored, and the trace is not changed in place\nok 4 - anything but pointer down/move/up/cancel is ignored, and the trace is not changed in place\n  ---\n  duration_ms: 0.049417\n  type: 'test'\n  ...\n# Subtest: the format: times from the first record, the pointer, the point, the target and the drag state\nok 5 - the format: times from the first record, the pointer, the point, the target and the drag state\n  ---\n  duration_ms: 0.217459\n  type: 'test'\n  ...\n1..5\n# tests 5\n# suites 0\n# pass 5\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 48.201458\n"
+      },
+      {
+        "name": "lint and types",
+        "cmd": "npm run lint && npm run typecheck",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 17317,
+        "stdout_tail": "\n> otohime@0.1.0 lint\n> eslint\n\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(articles)/_components/masthead.tsx\n  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(barometer)/barometer/page.tsx\n  44:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(capsule)/capsule/page.tsx\n  26:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(elements)/elements/page.tsx\n  22:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(orrery)/_components/chrome.tsx\n  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(planisphere)/planisphere/page.tsx\n  59:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(rotor)/rotor/page.tsx\n  37:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(shore)/shore/page.tsx\n  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/app/(vinyl)/vinyl/page.tsx\n  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/Users/avietidol/Library/Application Support/build-worker/leases/7c5e37a0-d0d0-4281-a8ad-a7c8c8c356c8-f5c5867ceeefab0dc72da74f57f8f9a7/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs\n  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars\n\n✖ 10 problems (0 errors, 10 warnings)\n  0 errors and 9 warnings potentially fixable with the `--fix` option.\n\n\n> otohime@0.1.0 typecheck\n> next typegen && tsc --noEmit\n\nGenerating route types...\n✓ Types generated successfully\n"
+      },
+      {
+        "name": "unit tests",
+        "cmd": "npm test",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 19326,
+        "stdout_tail": "st: the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out\nok 2344 - the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out\n  ---\n  duration_ms: 401.70425\n  type: 'test'\n  ...\n# Subtest: without git, outside a repository, or in an empty one, the committed fallback is used as it is\nok 2345 - without git, outside a repository, or in an empty one, the committed fallback is used as it is\n  ---\n  duration_ms: 590.253041\n  type: 'test'\n  ...\n# Subtest: a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte\nok 2346 - a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte\n  ---\n  duration_ms: 843.269917\n  type: 'test'\n  ...\n# Subtest: a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history\nok 2347 - a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history\n  ---\n  duration_ms: 800.87475\n  type: 'test'\n  ...\n# Subtest: a git log that cannot be parsed falls back instead of failing the build\nok 2348 - a git log that cannot be parsed falls back instead of failing the build\n  ---\n  duration_ms: 186.813792\n  type: 'test'\n  ...\n# Subtest: --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness\nok 2349 - --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness\n  ---\n  duration_ms: 1074.100792\n  type: 'test'\n  ...\n# Subtest: the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file\nok 2350 - the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file\n  ---\n  duration_ms: 879.159375\n  type: 'test'\n  ...\n# Subtest: the committed content/history.json is a well-formed, bounded, canonical index\nok 2351 - the committed content/history.json is a well-formed, bounded, canonical index\n  ---\n  duration_ms: 0.839042\n  type: 'test'\n  ...\n# Subtest: package.json builds the index before next build and exposes history:index and history:check\nok 2352 - package.json builds the index before next build and exposes history:index and history:check\n  ---\n  duration_ms: 0.153334\n  type: 'test'\n  ...\n# Subtest: Chrome through the repo's playwright-core when PW_PREFIX is unset\nok 2353 - Chrome through the repo's playwright-core when PW_PREFIX is unset\n  ---\n  duration_ms: 0.589583\n  type: 'test'\n  ...\n# Subtest: PW_PREFIX's playwright when it is set, and Chrome is not tried\nok 2354 - PW_PREFIX's playwright when it is set, and Chrome is not tried\n  ---\n  duration_ms: 0.361791\n  type: 'test'\n  ...\n# Subtest: a clear error when Chrome is absent and PW_PREFIX is unset\nok 2355 - a clear error when Chrome is absent and PW_PREFIX is unset\n  ---\n  duration_ms: 0.571416\n  type: 'test'\n  ...\n# Subtest: a clear error when playwright-core itself is missing\nok 2356 - a clear error when playwright-core itself is missing\n  ---\n  duration_ms: 0.163625\n  type: 'test'\n  ...\n# Subtest: a clear error when PW_PREFIX is set but its playwright is not there\nok 2357 - a clear error when PW_PREFIX is set but its playwright is not there\n  ---\n  duration_ms: 0.147709\n  type: 'test'\n  ...\n# Subtest: the default loader resolves the repo's locked playwright-core\nok 2358 - the default loader resolves the repo's locked playwright-core\n  ---\n  duration_ms: 2.365458\n  type: 'test'\n  ...\n# Subtest: probe title: the plain Riso source inside h2\\#end-title, never the decorative plates\nok 2359 - probe title: the plain Riso source inside h2\\#end-title, never the decorative plates\n  ---\n  duration_ms: 3593.21175\n  type: 'test'\n  ...\n# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs\nok 2360 - probe bounds: measured after the one-shot ink lands, from the visible glyphs\n  ---\n  duration_ms: 1893.339875\n  type: 'test'\n  ...\n1..2360\n# tests 2374\n# suites 2\n# pass 2374\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 19053.416333\n"
+      },
+      {
+        "name": "e2e x3",
+        "cmd": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 1174027,
+        "stdout_tail": "artridge or machine styling\nok 165 - the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling\n  ---\n  duration_ms: 758.056416\n  type: 'test'\n  ...\n# Subtest: with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer\nok 166 - with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer\n  ---\n  duration_ms: 2230.162708\n  type: 'test'\n  ...\n# Subtest: while the page is hidden the loop stops, and it comes back when the page is seen again\nok 167 - while the page is hidden the loop stops, and it comes back when the page is seen again\n  ---\n  duration_ms: 1871.981041\n  type: 'test'\n  ...\n# Subtest: without WebGL the sea is static: the served caustic and fish, and no frame runs\nok 168 - without WebGL the sea is static: the served caustic and fish, and no frame runs\n  ---\n  duration_ms: 1686.41375\n  type: 'test'\n  ...\n# Subtest: under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate\nok 169 - under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate\n  ---\n  duration_ms: 1398.444833\n  type: 'test'\n  ...\n# Subtest: the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages\nok 170 - the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages\n  ---\n  duration_ms: 2477.767916\n  type: 'test'\n  ...\n# Subtest: the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog\nok 171 - the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog\n  ---\n  duration_ms: 964.415292\n  type: 'test'\n  ...\n# Subtest: under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back\nok 172 - under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back\n  ---\n  duration_ms: 1229.495166\n  type: 'test'\n  ...\n# Subtest: server and no-JS baseline: all cards remain readable links without toy controls\nok 173 - server and no-JS baseline: all cards remain readable links without toy controls\n  ---\n  duration_ms: 1800.459416\n  type: 'test'\n  ...\n# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup\nok 174 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup\n  ---\n  duration_ms: 3613.2745\n  type: 'test'\n  ...\n# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics\nok 175 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics\n  ---\n  duration_ms: 3191.216667\n  type: 'test'\n  ...\n# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable\nok 176 - blocked storage and live reduced motion keep instant keyboard operations usable\n  ---\n  duration_ms: 1248.525292\n  type: 'test'\n  ...\n# Subtest: Save-Data loads paper only after explicit enabling\nok 177 - Save-Data loads paper only after explicit enabling\n  ---\n  duration_ms: 1186.044208\n  type: 'test'\n  ...\n# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded\nok 178 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded\n  ---\n  duration_ms: 6517.161292\n  type: 'test'\n  ...\n# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload\nok 179 - renderer import waits for window load and the idle callback; server markup has no toy preload\n  ---\n  duration_ms: 1019.986458\n  type: 'test'\n  ...\n# Subtest: existing desktop desk and stamp gestures keep their own controls\nok 180 - existing desktop desk and stamp gestures keep their own controls\n  ---\n  duration_ms: 2419.931208\n  type: 'test'\n  ...\n1..180\n# tests 180\n# suites 0\n# pass 179\n# fail 0\n# cancelled 0\n# skipped 1\n# todo 0\n# duration_ms 386572.017375\n",
+        "stderr_tail": "◇ injected env (0) from .env\n◇ injected env (0) from .env\n◇ injected env (0) from .env\n"
+      }
+    ],
+    "created_at": "2026-10-27T00:18:38.687367Z"
+  },
+  "runs": [
+    {
+      "id": "run-9108",
+      "plan_id": "pm-270",
+      "task_id": "t-1606",
+      "role": "quality_engineer",
+      "kind": "role",
+      "template_id": "qa-agent",
+      "tm_task_id": "fc2ac555-25a5-4fcc-ad30-d6b189dff186",
+      "repo_id": "otohime",
+      "account_id": "codex-main",
+      "worker_id": "avietidol-z490",
+      "runner": "fleet",
+      "agent_profile": "codex-sol-6-1-high",
+      "attempt": 5,
+      "status": "running",
+      "deadline_at": "2026-10-27T04:21:03.765299Z",
+      "started_at": "2026-10-27T00:21:03.765299Z",
+      "finished_at": "0001-01-01T00:00:00Z",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "not_before": "0001-01-01T00:00:00Z",
+      "status_checked_at": "0001-01-01T00:00:00Z",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9103",
+      "plan_id": "pm-270",
+      "task_id": "t-1606",
+      "role": "software_engineer",
+      "kind": "role",
+      "template_id": "coding-agent",
+      "tm_task_id": "6002a5a7-1af8-4933-a036-7987c8e7f8f8",
+      "repo_id": "otohime",
+      "account_id": "claude-kqviet",
+      "worker_id": "avietidol-z490",
+      "runner": "fleet",
+      "git_sha": "c6d09f0",
+      "agent_profile": "claude-opus-high",
+      "attempt": 4,
+      "status": "succeeded",
+      "deadline_at": "2026-10-27T07:27:52.999553Z",
+      "started_at": "2026-10-26T23:27:52.999553Z",
+      "finished_at": "2026-10-26T23:57:48.394114Z",
+      "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "patch_truncated": true,
+      "not_before": "0001-01-01T00:00:00Z",
+      "status_checked_at": "2026-10-26T23:51:03.002658Z",
+      "callback_apply_failures": 0
+    }
+  ]
+}

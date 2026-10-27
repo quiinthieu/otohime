@@ -1,0 +1,30 @@
+{
+  "ghosts-unit-red.tap": [
+    "not ok 24 - rollback and recovery preserve the bucket time high-water mark",
+    "  error: |-",
+    "not ok 25 - rollback and recovery preserve the bucket time high-water mark across attachment restoration",
+    "  error: |-",
+    "# pass 23",
+    "# fail 2"
+  ],
+  "ghosts-fake-red.tap": [
+    "    not ok 6 - RSV1 without a negotiated extension closes 1002 without fan-out",
+    "      error: 'timed out waiting for protocol rejection releases member; got [{\"t\":\"hi\",\"id\":\"5ba0efaf-c871-4353-8cd5-4d3d469b75e3\",\"n\":2},{\"t\":\"m\",\"id\":\"f7ca5e87-d42a-46c2-91eb-df3f0afbdf41\",\"x\":0.2,\"y\":0.4},{\"t\":\"m\",\"id\":\"f7ca5e87-d42a-46c2-91eb-df3f0afbdf41\",\"x\":0.3,\"y\":0.6}]'",
+    "    not ok 7 - RSV2 without a negotiated extension closes 1002 without fan-out",
+    "      error: 'timed out waiting for protocol rejection releases member; got [{\"t\":\"hi\",\"id\":\"befde548-565c-45fc-a1c0-9fa930d8cdd1\",\"n\":2},{\"t\":\"m\",\"id\":\"3cf58ffa-f605-4df0-ab09-4382edd4ae60\",\"x\":0.2,\"y\":0.4},{\"t\":\"m\",\"id\":\"3cf58ffa-f605-4df0-ab09-4382edd4ae60\",\"x\":0.3,\"y\":0.6}]'",
+    "    not ok 8 - RSV3 without a negotiated extension closes 1002 without fan-out",
+    "      error: 'timed out waiting for protocol rejection releases member; got [{\"t\":\"hi\",\"id\":\"aed585b8-97b1-4a68-8b1d-44bbca780971\",\"n\":2},{\"t\":\"m\",\"id\":\"280c3b60-85a1-4450-8a98-ea36231a5703\",\"x\":0.2,\"y\":0.4},{\"t\":\"m\",\"id\":\"280c3b60-85a1-4450-8a98-ea36231a5703\",\"x\":0.3,\"y\":0.6}]'",
+    "not ok 1 - shared contract against the fake",
+    "  error: '3 subtests failed'",
+    "# pass 18",
+    "# fail 3"
+  ],
+  "ghosts-header-red.tap": [
+    "    not ok 1 - reserved bits are rejected from the header before buffering or receiving a payload",
+    "      error: 'no close within 3000 ms'",
+    "not ok 1 - fake-only behaviour",
+    "  error: '1 subtest failed'",
+    "# pass 0",
+    "# fail 1"
+  ]
+}

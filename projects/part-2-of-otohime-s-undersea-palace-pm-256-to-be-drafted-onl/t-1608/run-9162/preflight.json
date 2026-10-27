@@ -1,0 +1,21 @@
+{
+  "node": "v22.12.0",
+  "versions": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "playwright-core": "1.64.0",
+    "embedded-postgres": "17.10.0-beta.17"
+  },
+  "realGhostSession": "function",
+  "realConfigResponse": "function",
+  "realServerImport": "function",
+  "pgConstructed": true,
+  "embeddedPostgresImport": "function",
+  "canvasSize": {
+    "width": 1200,
+    "height": 900,
+    "ratio": 1.5
+  },
+  "priorProbeCorrection": "Read metadata from installed package files; embedded-postgres intentionally does not export package.json. Prior failure was QA metadata inspection, not an application import."
+}

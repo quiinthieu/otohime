@@ -1,0 +1,60 @@
+{
+  "tasks": [
+    {
+      "id": "35259300-0974-45bf-9dce-76d52d86d07a",
+      "status": "COMPLETED",
+      "repoId": "otohime",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "raw_log_boundary": "Bounded tool tail; earlier bodies unread."
+    },
+    {
+      "id": "8e93f952-a314-4c83-8aad-ecc564be83bc",
+      "status": "COMPLETED",
+      "repoId": "otohime",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "raw_log_boundary": "Bounded tool tail; earlier bodies unread."
+    },
+    {
+      "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+      "status": "FAILED",
+      "repoId": "otohime",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "error": "agent_failed: exit 3 class=infra marker=mcp_probe_failed: plan-manager timeout",
+      "raw_log_boundary": "Bounded tool tail; earlier bodies unread."
+    }
+  ],
+  "runs": [
+    {
+      "id": "run-9187",
+      "task": "8e93f952-a314-4c83-8aad-ecc564be83bc",
+      "status": "succeeded",
+      "git_sha": "7432e70",
+      "callback_apply_failures": 0,
+      "reports": [
+        {
+          "id": "rep-5415",
+          "kind": "summary",
+          "git_sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e"
+        }
+      ]
+    },
+    {
+      "id": "run-9188",
+      "task": "35259300-0974-45bf-9dce-76d52d86d07a",
+      "status": "succeeded",
+      "git_sha": "7432e70",
+      "callback_apply_failures": 0,
+      "reports": []
+    },
+    {
+      "id": "run-9183",
+      "task": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+      "status": "failed",
+      "callback_apply_failures": 0,
+      "reports": []
+    }
+  ]
+}

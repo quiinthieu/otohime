@@ -1,0 +1,69 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-269",
+  "revision": 2,
+  "external_dependencies_reviewed": true,
+  "reason": "Bottle, Kamishibai Theatre, and Peep-box Diorama are repository-owned Next.js/browser features using locked npm packages, committed source manifests, and disposable embedded Postgres in verification. Delivery relies on existing registered GitHub SSH access, fleet execution runners, GitHub Actions CI, and Vercel production deployment under existing account and cost authority; no new runtime service, paid API, account, or secret is needed.",
+  "prerequisites": [
+    {
+      "id": "github:otohime:git",
+      "owner": "agent",
+      "required_setup": "Existing GitHub repository quiinthieu/otohime on main with registered otohime SSH deploy key permitting read and non-force main push under existing repository owner and cost authority; no new credential or spend. Checkout git push proves write separately from control-plane read.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "git_host_read",
+        "target": "repo:otohime",
+        "expect": "readable"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "fleet:otohime:software-engineer",
+      "owner": "agent",
+      "required_setup": "Existing task-manager repo otohime placement on an enabled software_engineer execution account and fleet worker with Node 22, locked npm ci, Chrome/Playwright Core, embedded Postgres 17, network access for pinned MediaPipe model/fixture fetch, and SSH origin under existing fleet cost authority; runtime placement is platform-scheduled, never an operator chore.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "task_manager_capability",
+        "target": "account:otohime:software_engineer",
+        "expect": "eligible"
+      },
+      "probe_context": [
+        "execution_runner"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "github:otohime:actions",
+      "owner": "agent",
+      "required_setup": "Existing GitHub Actions workflow (.github/workflows/ci.yml) enabled on quiinthieu/otohime main pushes with ubuntu-24.04 hosted runner, Postgres 17 service, Node 22, Google Chrome, contents:read token, and existing repository variables/secrets under quiinthieu's existing Actions cost authority.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "service_capability",
+        "target": "github:quiinthieu/otohime:actions",
+        "expect": "CI workflow enabled with runnable checks and production jobs"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "vercel:otohime:production",
+      "owner": "agent",
+      "required_setup": "Existing Vercel production project serving https://otohime.dev under quiinthieu's account and existing cost authority, wired to GitHub Actions via existing provider-managed VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, and DATABASE_URL_UNPOOLED; no new secret, project, or billing change.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "service_capability",
+        "target": "https://otohime.dev/api/health",
+        "expect": "HTTP 200 with full sha from production"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    }
+  ]
+}

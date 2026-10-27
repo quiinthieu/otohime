@@ -1,0 +1,7 @@
+commit baec1f88e602e9ad50ebecb9827a476f939495af
+Author:     Otohime <quiinthieu@gmail.com>
+AuthorDate: Tue Oct 27 06:34:13 2026 +0700
+Commit:     Otohime <quiinthieu@gmail.com>
+CommitDate: Tue Oct 27 06:34:13 2026 +0700
+
+    pm-272/t-1565: Retain motion probe failures in verifier tails

@@ -1,0 +1,10 @@
+{
+  "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/122009123224/logs",
+  "http": "403",
+  "curl_exit": 0,
+  "data": {
+    "message": "Must have admin rights to Repository.",
+    "documentation_url": "https://docs.github.com/rest/actions/workflow-jobs#download-job-logs-for-a-workflow-run",
+    "status": "403"
+  }
+}

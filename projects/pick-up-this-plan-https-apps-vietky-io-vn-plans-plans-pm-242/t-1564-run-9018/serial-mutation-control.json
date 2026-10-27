@@ -1,0 +1,13 @@
+{
+  "boundary": "isolated copy of the actual runner and regression; node:test fixture files only; no repository source mutated",
+  "results": [
+    {
+      "control": "serial-removed",
+      "exit": 1
+    },
+    {
+      "control": "serial-restored",
+      "exit": 0
+    }
+  ]
+}

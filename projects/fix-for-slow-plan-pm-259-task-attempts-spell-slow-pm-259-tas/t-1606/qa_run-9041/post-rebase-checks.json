@@ -1,0 +1,47 @@
+{
+  "source_sha": "907a131b78eb75b7c525d4cb21854930d15c09de",
+  "changes_since_production_e2e": "projects/** only; all stored executable fingerprints identical",
+  "e2e_rerun": false,
+  "checks": {
+    "trace": {
+      "exit_code": 0,
+      "sha256": "ff59f58f5e38abd61c6501c9109d48b576060b138ac794da9efd7ad04c08b59a",
+      "lines": 40,
+      "not_ok_lines": [],
+      "tap_totals": [
+        "# tests 5",
+        "# pass 5",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0"
+      ]
+    },
+    "lint": {
+      "exit_code": 0,
+      "sha256": "01796243f62f9c2be1b65345959b82f6310075f36b5bd4f5eda918d7f28cff8d",
+      "lines": 38,
+      "not_ok_lines": [],
+      "tap_totals": []
+    },
+    "types": {
+      "exit_code": 0,
+      "sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326",
+      "lines": 6,
+      "not_ok_lines": [],
+      "tap_totals": []
+    },
+    "unit": {
+      "exit_code": 0,
+      "sha256": "f007881d6a8a1993a7690aa02c5252b21ad77a6e799b140041e32b4331f3b2c6",
+      "lines": 13958,
+      "not_ok_lines": [],
+      "tap_totals": [
+        "# tests 2321",
+        "# pass 2321",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0"
+      ]
+    }
+  }
+}

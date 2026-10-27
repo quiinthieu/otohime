@@ -1,0 +1,55 @@
+{
+  "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121957596650/annotations?per_page=100",
+  "http": "200",
+  "curl_exit": 0,
+  "data": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/ebbb06d09e6030f6a56b323247e879efdb76fcb6/.github",
+      "start_line": 1238,
+      "start_column": null,
+      "end_line": 1238,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "Process completed with exit code 1.",
+      "raw_details": ""
+    },
+    {
+      "path": "e2e/riso-headings.test.ts",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/ebbb06d09e6030f6a56b323247e879efdb76fcb6/e2e/riso-headings.test.ts",
+      "start_line": 91,
+      "start_column": null,
+      "end_line": 91,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "E2E failed: entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately",
+      "message": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Failed to load resource: the server responded with a status of 404 (Not Found)'\n+ ]\n- []\n\n    at TestContext.<anonymous> (file:///home/runner/work/otohime/otohime/e2e/riso-headings.test.ts:110:12)\n    at async Test.run (node:internal/test_runner/test:1054:7)\n    at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)",
+      "raw_details": ""
+    },
+    {
+      "path": "e2e/riso-headings.test.ts",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/ebbb06d09e6030f6a56b323247e879efdb76fcb6/e2e/riso-headings.test.ts",
+      "start_line": 62,
+      "start_column": null,
+      "end_line": 62,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "E2E failed: one heading name, one selectable copy, deterministic settled plates and token plate counts",
+      "message": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Failed to load resource: the server responded with a status of 404 (Not Found)',\n+   'Failed to load resource: the server responded with a status of 404 (Not Found)'\n+ ]\n- []\n\n    at TestContext.<anonymous> (file:///home/runner/work/otohime/otohime/e2e/riso-headings.test.ts:87:42)\n    at async Test.run (node:internal/test_runner/test:1054:7)\n    at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)",
+      "raw_details": ""
+    },
+    {
+      "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/ebbb06d09e6030f6a56b323247e879efdb76fcb6/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "start_line": 2,
+      "start_column": 46,
+      "end_line": 2,
+      "end_column": 46,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "'resolve' is defined but never used",
+      "raw_details": ""
+    }
+  ]
+}

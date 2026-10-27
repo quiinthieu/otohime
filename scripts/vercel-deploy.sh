@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # Production deploy for the CI `production` job: upload the prebuilt output, inspect the deployment,
-# then prove https://otohime.dev serves this commit. Public health decides even if inspect fails.
+# then prove https://otohime.dev serves this commit. Authenticated READY and health must both pass.
 # Each wait is bounded so a hang
 # fails with a public ::error annotation instead of silently running into the job timeout
 # (run 40311256064: the old blocking `vercel deploy` hung 850 s and the health check never ran).
 #
 #   bash scripts/vercel-deploy.sh            # in CI, after `vercel pull` and `vercel build --prod`
 #
-# Env: GITHUB_SHA (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
-# diagnostic re-read), HEALTH_URL (https://otohime.dev/api/health), HEALTH_RETRIES (10) and
+# Env: GITHUB_SHA, VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
+# per-request bound), HEALTH_URL (https://otohime.dev/api/health), HEALTH_RETRIES (10) and
 # HEALTH_RETRY_DELAY (6 s; curl reads 0 as exponential backoff, so tests use 1),
-# HEALTH_ATTEMPTS (3 reads of the body, HEALTH_POLL_DELAY 10 s apart, for an alias that lags ready).
+# HEALTH_ATTEMPTS (12 reads of the body, HEALTH_POLL_DELAY 10 s apart, for an alias that lags ready).
 #
 # The upload is retried once only when it failed fast with no deployment URL. A timed-out upload is
 # not retried (it may already have created a deployment, and a retry doubles the bound), and nothing
@@ -18,13 +18,16 @@
 set -euo pipefail
 
 : "${GITHUB_SHA:?GITHUB_SHA is required}"
+: "${VERCEL_ORG_ID:?VERCEL_ORG_ID is required}"
+: "${VERCEL_PROJECT_ID:?VERCEL_PROJECT_ID is required}"
+: "${VERCEL_TOKEN:?VERCEL_TOKEN is required}"
 UPLOAD_TIMEOUT=${UPLOAD_TIMEOUT:-300}
 READY_TIMEOUT=${READY_TIMEOUT:-420}
 INSPECT_TIMEOUT=${INSPECT_TIMEOUT:-60}
 HEALTH_URL=${HEALTH_URL:-https://otohime.dev/api/health}
 HEALTH_RETRIES=${HEALTH_RETRIES:-10}
 HEALTH_RETRY_DELAY=${HEALTH_RETRY_DELAY:-6}
-HEALTH_ATTEMPTS=${HEALTH_ATTEMPTS:-3}
+HEALTH_ATTEMPTS=${HEALTH_ATTEMPTS:-12}
 HEALTH_POLL_DELAY=${HEALTH_POLL_DELAY:-10}
 
 log() { printf '[vercel-deploy %s] %s\n' "$(date -u +%H:%M:%SZ)" "$*" >&2; }
@@ -59,16 +62,12 @@ deploy_url() { grep -Eo 'https://[A-Za-z0-9.-]+\.vercel\.app' "$1" | tail -n 1 |
 work=$(mktemp -d)
 upload_log=$work/upload.log
 wait_log=$work/wait.log
-state_log=$work/state.log
 trap 'rm -rf "$work"' EXIT
 
-# Strip CLI colouring before parsing or publishing diagnostics. A generic "Error:" in a request
-# failure is not a deployment's status. Only the labelled field may name deployment state.
+# Strip CLI colouring before publishing bounded upload diagnostics. Readiness uses JSON.
 plain() { sed -E $'s/\033\\[[0-9;]*[[:alpha:]]//g' "$1"; }
-deployment_state() {
-  plain "$1" | sed -nE 's/^[[:space:]]*status[[:space:]]+[^[:alnum:]]*(Ready|Building|Queued|Initializing|Error|Canceled|Cancelled)[[:space:]]*$/\1/p' | head -n 1
-}
-
+# Public annotations have a fixed output budget; keep the actionable tail of vendor diagnostics.
+diagnostic_tail() { plain "$1" | tail -c 4000; }
 upload() {
   log "upload: vercel deploy --prebuilt --prod --no-wait (bound ${UPLOAD_TIMEOUT}s)"
   local status=0
@@ -84,7 +83,7 @@ upload || status=$?
 url=$(deploy_url "$upload_log")
 if [ "$status" -ne 0 ] && [ -z "$url" ]; then
   if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
-    fail "upload timed out after ${UPLOAD_TIMEOUT}s with no deployment URL (not retried)"
+    fail "upload timed out after ${UPLOAD_TIMEOUT}s with no deployment URL (not retried, exit $status): $(diagnostic_tail "$upload_log")"
   fi
   log "upload exited $status with no deployment URL; retrying once"
   : >"$upload_log"
@@ -92,31 +91,17 @@ if [ "$status" -ne 0 ] && [ -z "$url" ]; then
   upload || status=$?
   url=$(deploy_url "$upload_log")
 fi
-[ -n "$url" ] || fail "upload exited $status with no deployment URL"
+[ -n "$url" ] || fail "upload exited $status with no deployment URL: $(diagnostic_tail "$upload_log")"
 [ "$status" -eq 0 ] || log "upload exited $status but printed $url; waiting on it, not retrying"
 echo "deployment: $url"
 
-log "ready: vercel inspect --wait (bound ${READY_TIMEOUT}s)"
+# Authenticate directly against the deployment resource. The CLI's /v2/user bootstrap
+# can fail for an otherwise valid CI principal. Receipts expose only deployment identity/state.
+log "ready: team-scoped deployment API (bound ${READY_TIMEOUT}s)"
 status=0
-inspect_failure=""
-bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
+bounded "$((READY_TIMEOUT + 2))" node "$(dirname "$0")/deployment-status.mjs" "$url" >"$wait_log" 2>&1 || status=$?
 cat "$wait_log" >&2
-if [ "$status" -ne 0 ]; then
-  log "inspect --wait exited $status; reading the deployment state once more"
-  state_status=0
-  bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" >"$state_log" 2>&1 || state_status=$?
-  cat "$state_log" >&2
-  state=$(deployment_state "$state_log")
-  diagnostic=$(printf '\ninspect --wait output (exit %s):\n%s\nstate re-read output (exit %s):\n%s' \
-    "$status" "$(plain "$wait_log")" "$state_status" "$(plain "$state_log")")
-  if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
-    inspect_failure="${state:-unknown} after ${READY_TIMEOUT}s $url$diagnostic"
-  else
-    inspect_failure="${state:-unknown} (inspect exited $status) $url$diagnostic"
-  fi
-  log "$inspect_failure"
-  log "inspect could not confirm readiness; checking the public commit before deciding"
-fi
+[ "$status" -eq 0 ] || fail "deployment readiness failed (exit $status) $url: $(diagnostic_tail "$wait_log")"
 
 expect="\"sha\":\"$GITHUB_SHA\""
 body=""
@@ -124,7 +109,15 @@ for attempt in $(seq 1 "$HEALTH_ATTEMPTS"); do
   log "health: $HEALTH_URL attempt $attempt/$HEALTH_ATTEMPTS, expecting $expect"
   body=$(curl -fsS --max-time 20 --retry "$HEALTH_RETRIES" --retry-all-errors --retry-delay "$HEALTH_RETRY_DELAY" "$HEALTH_URL") || body=""
   echo "$body"
-  case "$body" in *"$expect"*) log "health: serving $GITHUB_SHA"; exit 0 ;; esac
+  if printf '%s' "$body" | node -e '
+    let body = "";
+    process.stdin.on("data", chunk => body += chunk);
+    process.stdin.on("end", () => {
+      try { const h = JSON.parse(body); process.exit(h.ok === true && h.sha === process.argv[1] ? 0 : 1); }
+      catch { process.exit(1); }
+    });' "$GITHUB_SHA"; then
+    log "health: serving $GITHUB_SHA"; exit 0
+  fi
   [ "$attempt" -lt "$HEALTH_ATTEMPTS" ] && sleep "$HEALTH_POLL_DELAY"
 done
-fail "health check at $HEALTH_URL does not report $GITHUB_SHA (last body: ${body:-none}) $url${inspect_failure:+$'\n'}$inspect_failure"
+fail "health check at $HEALTH_URL does not report $GITHUB_SHA (last body, first 1000 bytes: $(printf '%s' "${body:-none}" | head -c 1000)) $url"

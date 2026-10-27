@@ -1268,7 +1268,8 @@
   }
 
   .end-inner {
-    padding-block: 2.5rem 2.25rem;
+    /* Reserve the Bottle header band, including enlarged text and its scene gap. */
+    padding-block: 3.75rem 2.25rem;
   }
 
   .end-grid {
@@ -2374,6 +2375,12 @@
 .np-status {
   color: #4b453b;
   font-size: 12px;
+}
+
+.np-listened-at {
+  color: #4b453b;
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .np-title {

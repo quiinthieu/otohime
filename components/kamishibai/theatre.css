@@ -1,0 +1,36 @@
+.kamishibai { margin-top: 2.5rem; color: var(--ink); }
+.kamishibai h2 { font-size: 1.3rem; font-weight: 650; margin: 1.5rem 0 .5rem; }
+.kamishibai h3, .kamishibai h4 { font-weight: 650; }
+.kamishibai p { line-height: 1.6; }
+.kamishibai .kamishibai-enable { margin: 1rem 0; }
+.kamishibai .kamishibai-filter { position: absolute; }
+.kamishibai .kamishibai-stories section { margin-top: 2rem; }
+.kamishibai .kamishibai-stories h3 { text-decoration: underline; font-size: 1.15rem; }
+.kamishibai .kamishibai-stories ol { list-style: decimal; padding-inline-start: 1.5rem; }
+.kamishibai .kamishibai-stories li { padding: .75rem; margin: 1rem 0; background: var(--paper-2); border-bottom: 1px solid var(--ink); }
+.kamishibai .kamishibai-art { width: 100%; height: auto; max-height: 180px; }
+.kamishibai .kamishibai-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin: 1rem 0; }
+.kamishibai button, .kamishibai select { min-height: 44px; max-width: 100%; }
+.kamishibai select { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); padding: .4rem; }
+.kamishibai button[aria-disabled="true"] { opacity: .5; cursor: default; }
+.kamishibai .kamishibai-stage-label { text-align: center; font-variant: small-caps; }
+.kamishibai .kamishibai-wood { padding: clamp(12px, 3vw, 28px); border: 2px solid var(--ink); border-radius: 10px 9px 2px 4px; background: repeating-linear-gradient(3deg, transparent 0 7px, #231e1622 8px 9px), #8d6445; box-shadow: 3px 5px 0 var(--ink); }
+.kamishibai .kamishibai-stack { padding: 4px 6px 8px 0; background: var(--paper-2); border: 1px solid var(--ink); box-shadow: 3px 3px 0 var(--paper), 5px 5px 0 var(--ink); }
+.kamishibai .kamishibai-card { background: var(--paper); padding: clamp(12px, 2vw, 24px); min-height: 340px; border: 1px solid var(--ink); }
+.kamishibai .kamishibai-card h3 { font-size: 1.2rem; margin: .5rem 0; }
+.kamishibai .kamishibai-hint { font-size: .85rem; }
+.kamishibai-list[hidden] { display: none; }
+::view-transition-old(.kamishibai-next) { animation: kamishibai-out-left 220ms ease-in both; }
+::view-transition-new(.kamishibai-next) { animation: kamishibai-in-right 260ms ease-out both; }
+::view-transition-old(.kamishibai-prev) { animation: kamishibai-out-right 220ms ease-in both; }
+::view-transition-new(.kamishibai-prev) { animation: kamishibai-in-left 260ms ease-out both; }
+@keyframes kamishibai-out-left { to { transform: translateX(-64px); opacity: 0; } }
+@keyframes kamishibai-out-right { to { transform: translateX(64px); opacity: 0; } }
+@keyframes kamishibai-in-left { from { transform: translateX(-64px); opacity: 0; } }
+@keyframes kamishibai-in-right { from { transform: translateX(64px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .kamishibai .kamishibai-enhanced { display: none; }
+  .kamishibai .kamishibai-list[hidden] { display: block; }
+  ::view-transition-old(.kamishibai-next), ::view-transition-new(.kamishibai-next),
+  ::view-transition-old(.kamishibai-prev), ::view-transition-new(.kamishibai-prev) { animation: none; }
+}

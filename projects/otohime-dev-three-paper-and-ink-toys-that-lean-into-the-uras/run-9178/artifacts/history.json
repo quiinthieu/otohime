@@ -1,0 +1,159 @@
+{
+  "schema": "otohime.run-history.v1",
+  "completeness": "incomplete; bounded global coding_task pages only, no GitHub pipeline or deployed endpoint read",
+  "pages": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 5,
+      "total": 92,
+      "tasks": [
+        {
+          "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2a35aac9e2e3 is not on origin/main"
+        },
+        {
+          "id": "aaf41670-24d4-4664-998d-744e4d6d29bd",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid"
+        },
+        {
+          "id": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid"
+        },
+        {
+          "id": "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8"
+        },
+        {
+          "id": "899ebc8e-06d2-4172-8d43-caab66fc163a",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 5,
+      "limit": 5,
+      "total": 92,
+      "tasks": [
+        {
+          "id": "e80be90f-766f-4877-97a4-0920424f7002",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 8959e8d817c4 is not on origin/main"
+        },
+        {
+          "id": "0d9749c4-86af-41ea-b8ff-52596bb8ba62",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=Bounded prepublication task-manager sample: RUNNING 2/2; FAILED offsets 0/2 limit2, 4/72; COMPLETED offsets 0/2 limit2, 4/1272. Incomplete project-wide history;"
+        },
+        {
+          "id": "4ea09eb3-0d41-41ba-9617-bd8efae6d553",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 01c659246c00 is not on origin/main"
+        },
+        {
+          "id": "7e3c8ba6-7fb6-4af7-95f0-998bb05d4e9f",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 90b623bced6e is not on origin/main"
+        },
+        {
+          "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 5,
+      "total": 1437,
+      "tasks": [
+        {
+          "id": "601b360a-3657-4898-92c6-9efaacf3e09f",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "8ac06802-5253-43ff-ae08-46bc3d4615a3",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "2edb2244-8f91-4fc7-9b7a-dadea4e71144",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "3132efee-1079-4769-84cd-3d672af84d05",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "1b8ffe04-1e26-4dd6-844f-45336158d044",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 5,
+      "limit": 5,
+      "total": 1437,
+      "tasks": [
+        {
+          "id": "784e59a2-ec9b-42a9-98ce-1b4268de4cd5",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "6c33ad97-3c83-4a7e-ad97-3d583e4b94cf",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "ce9feca1-d1e2-4620-ade9-a7aa387020cd",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "35f1dcbe-41b8-4128-8d7e-280b9d0b20ac",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "14150a34-fc1e-4af3-809d-54e932ad0d72",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 5,
+      "total": 4,
+      "tasks": [
+        {
+          "id": "11dab240-f8ae-4a20-be15-5e43fd9e76a8",
+          "status": "RUNNING"
+        },
+        {
+          "id": "a38c1408-d136-4b29-bb22-c48ebb431cb4",
+          "status": "RUNNING"
+        },
+        {
+          "id": "c9f6cb4d-762c-4deb-8a8e-d0a658af2765",
+          "status": "RUNNING"
+        },
+        {
+          "id": "54c853ae-c70d-4083-be22-06068b8a5e63",
+          "status": "RUNNING"
+        }
+      ]
+    }
+  ],
+  "prior_delivery": {
+    "run_id": "run-9171",
+    "status": "succeeded",
+    "tm_task_id": "6c33ad97-3c83-4a7e-ad97-3d583e4b94cf",
+    "callback_apply_failures": 0
+  }
+}
+

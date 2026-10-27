@@ -1,0 +1,333 @@
+[
+  {
+    "sequence": 1,
+    "title": "Loom pattern and sound engine",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [],
+    "problem": "The site has no shareable sequencer model or scheduled four-voice sound, and a second AudioContext would bypass its muted-by-default switch.",
+    "action_items": [
+      "Read the relevant installed Next guide before editing Next code; install from the committed npm lock on Node 22.",
+      "Implement pure eight-row mask operations, strict 16-step hash codec with bounded tempo/swing, and test round-trip, invalid input, wrap and timing math.",
+      "Define eight row-to-voice mappings covering four timbres. Schedule oscillator and reusable seeded filtered-noise voices ahead against the shared AudioContext, with gain bounded by MAX_DB; export a guarded context access path from sound-client only for a user gesture with sound on.",
+      "Stop scheduling and release nodes on sound-off, visibility hidden, pagehide and unmount. Add tests for mute/default/autoplay boundary and deterministic scheduler data.",
+      "Write task-1-evidence.md with the delivery SHA, checkout test results, real/fake boundaries, and any observed defects or unread evidence; keep deployment claims for QA and acceptance."
+    ],
+    "interfaces": [
+      "lib/loom.ts",
+      "lib/loom.test.ts",
+      "lib/loom-audio.ts",
+      "lib/sound-client.ts",
+      "lib/sound.ts",
+      "projects/otohime-dev-two-new-ink-toys-1-ink-loom-play-loom-a-paper-st/task-1-evidence.md"
+    ],
+    "non_goals": [
+      "Loom route or score UI",
+      "a second AudioContext",
+      "server audio or saved patterns"
+    ],
+    "acceptance_criteria": "The pure codec round-trips a 16×8 pattern through the URL hash and rejects malformed input safely. Eight rows trigger four bounded Web Audio timbres through the site's existing off-by-default context after a Play gesture; scheduling stops when hidden or muted.",
+    "verification": [
+      {
+        "name": "loom model and audio tests",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/loom.test.ts lib/sound.test.ts",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "full unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "typecheck",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Loom route and score print",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "1"
+    ],
+    "problem": "Visitors cannot stamp, hear, share or print a looping ink score because the route and browser controls do not exist.",
+    "action_items": [
+      "Build /play/loom with 16×8 keyboard-accessible stamp controls, clear/play/stop, accessible paper-style tempo and swing range dials, a readable playhead and responsive layout.",
+      "Restore and debounce-write the validated URL hash with history.replaceState. Keep the loop visually running when site sound is off, and never create audio before a user gesture.",
+      "Render blots with the existing tagged SVG ink filter and an appearance-compatible id; animate brief bleed at the playhead only when motion is allowed. Use a static indicator under reduced motion.",
+      "Implement a pure score drawing plan and browser canvas-to-PNG download with title, tempo, swing, row labels and every blot. Handle unavailable canvas/download without losing the pattern.",
+      "Add focused unit and Playwright tests for hash reload, keyboard grid/dials, mute/audio unlock, reduced motion and PNG download.",
+      "Write task-2-evidence.md with the delivery SHA, checkout test results, real/fake boundaries, and any observed defects or unread evidence; keep deployment claims for QA and acceptance."
+    ],
+    "interfaces": [
+      "app/(site)/(app)/play/loom/",
+      "components/ink-loom.tsx",
+      "components/ink-loom.css",
+      "lib/loom-score.ts",
+      "lib/loom-score.test.ts",
+      "e2e/loom.test.ts",
+      "projects/otohime-dev-two-new-ink-toys-1-ink-loom-play-loom-a-paper-st/task-2-evidence.md"
+    ],
+    "non_goals": [
+      "server persistence",
+      "audio while muted",
+      "MIDI export",
+      "navigation label changes"
+    ],
+    "acceptance_criteria": "At /play/loom a visitor can stamp and loop all 16×8 cells, adjust tempo and swing, reload or share the hash to restore the pattern, and download a score-like PNG. Reduced motion has no sweep or bleed and sound stays off until enabled and Play is pressed.",
+    "verification": [
+      {
+        "name": "score and model tests",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/loom.test.ts lib/loom-score.test.ts",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "full unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "browser suite",
+        "cwd": ".",
+        "cmd": "npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1500
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Deterministic seal model",
+    "role": "software_engineer",
+    "qa": "skip",
+    "depends_on": [],
+    "problem": "There is no bounded, deterministic model for a visitor seal or standalone SVG export.",
+    "action_items": [
+      "Implement NFKC name normalization, control stripping and a 12-character cap, including empty-name behavior and safe filename data.",
+      "Derive a stable seed and deterministic round/square border, glyph placement, vermilion fill and carved-edge noise from the normalized name. Produce a self-contained SVG string without injected markup or external assets.",
+      "Test identical normalized names, different names, both shapes, Unicode/CJK text, hostile input, bounded geometry and stable SVG bytes.",
+      "Write task-3-evidence.md with the delivery SHA, checkout test results, real/fake boundaries, and any observed defects or unread evidence; keep deployment claims for QA and acceptance."
+    ],
+    "interfaces": [
+      "lib/hanko.ts",
+      "lib/hanko.test.ts",
+      "projects/otohime-dev-two-new-ink-toys-1-ink-loom-play-loom-a-paper-st/task-3-evidence.md"
+    ],
+    "non_goals": [
+      "UI route",
+      "server persistence",
+      "custom fonts",
+      "PNG renderer"
+    ],
+    "acceptance_criteria": "The same normalized name and shape always produce byte-identical, bounded, standalone seal SVG; both round and square seals and Unicode names are supported without unsafe markup.",
+    "verification": [
+      {
+        "name": "seal model tests",
+        "cwd": ".",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/hanko.test.ts",
+        "expect": "exit0",
+        "timeout_s": 300
+      },
+      {
+        "name": "full unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "typecheck",
+        "cwd": ".",
+        "cmd": "npm run typecheck",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 4,
+    "title": "Hanko maker and downloads",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "3"
+    ],
+    "problem": "Visitors have no way to make, stamp or export their personal seal.",
+    "action_items": [
+      "Read relevant installed Next route/client guides; build /play/hanko with labeled name entry, round/square choice, preview and explicit Press action. Use React elements, never innerHTML.",
+      "Animate the press and call the existing sound-gated stamp cue on the gesture. Present it instantly under reduced motion, and maintain contrast in both site themes.",
+      "Download the standalone SVG from the model and a high-resolution PNG drawn directly onto canvas, including glyph text. Handle canvas or Blob errors accessibly; add safe filenames.",
+      "Add Playwright tests for deterministic reload, round/square choice, reduced motion, muted-by-default, SVG/PNG downloads and long/control-character names.",
+      "Write task-4-evidence.md with the delivery SHA, checkout test results, real/fake boundaries, and any observed defects or unread evidence; keep deployment claims for QA and acceptance."
+    ],
+    "interfaces": [
+      "app/(site)/(app)/play/hanko/",
+      "components/hanko-press.tsx",
+      "components/hanko-press.css",
+      "lib/hanko-png.ts",
+      "e2e/hanko.test.ts",
+      "projects/otohime-dev-two-new-ink-toys-1-ink-loom-play-loom-a-paper-st/task-4-evidence.md"
+    ],
+    "non_goals": [
+      "server image rendering",
+      "remote font or asset",
+      "account data",
+      "public seal gallery"
+    ],
+    "acceptance_criteria": "At /play/hanko a visitor types a name, chooses a round or square seal, presses it with a sound-gated thunk, and downloads complete SVG and PNG files. Same input remains visually stable across reloads; reduced motion removes the press animation.",
+    "verification": [
+      {
+        "name": "full unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "browser suite",
+        "cwd": ".",
+        "cmd": "npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1500
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 5,
+    "title": "Visitor seals on Notes and footer",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "3",
+      "4"
+    ],
+    "problem": "A visitor's own saved hanko does not appear as a site signature after making it.",
+    "action_items": [
+      "Store the normalized name and shape locally only after the visitor presses Save as my seal. Read it through a shared client subscription with a deterministic site seal as the server and blocked-storage fallback.",
+      "Embed the small seal component on Notes and in the cached server footer without turning either page into a client page. Update same-tab and cross-tab signatures without hydration mismatch.",
+      "Add unit and browser checks for save, Notes/footer navigation and reload, storage denial, no personal name in requests, and stable fallback. Update any text-pinned tests deliberately.",
+      "Write task-5-evidence.md with the delivery SHA, checkout test results, real/fake boundaries, and any observed defects or unread evidence; keep deployment claims for QA and acceptance."
+    ],
+    "interfaces": [
+      "lib/hanko-preference.ts",
+      "lib/hanko-preference.test.ts",
+      "components/hanko-press.tsx",
+      "components/hanko-signature.tsx",
+      "app/(site)/(app)/notes/page.tsx",
+      "components/end-footer.tsx",
+      "e2e/hanko.test.ts",
+      "projects/otohime-dev-two-new-ink-toys-1-ink-loom-play-loom-a-paper-st/task-5-evidence.md"
+    ],
+    "non_goals": [
+      "server storage",
+      "visitor tracking",
+      "publishing names",
+      "replacing Notes content"
+    ],
+    "acceptance_criteria": "After a visitor saves a seal, their own hanko appears on Notes and in the footer across navigation and reload on that device. With no stored preference or blocked storage, both show a stable site seal and the pages hydrate cleanly.",
+    "verification": [
+      {
+        "name": "full unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "browser suite",
+        "cwd": ".",
+        "cmd": "npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1500
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  },
+  {
+    "sequence": 6,
+    "title": "Play discovery and ink integration",
+    "role": "software_engineer",
+    "qa": "required",
+    "depends_on": [
+      "2",
+      "4",
+      "5"
+    ],
+    "problem": "The two new toys need clear entry points and the site's appearance and regression suites must cover their SVG ink.",
+    "action_items": [
+      "Add accessible Ink Loom and Hanko Press links with short descriptions to the existing Play page; preserve current toys and pinned global navigation labels.",
+      "Register new tagged SVG filter sources in the appearance regression and verify filter ids and reduced-motion behavior. Update the changelog and any relevant existing page tests.",
+      "Run the complete unit, browser, typecheck and lint gates at the delivery SHA, fix observed failures and document any environment-only limit with exact evidence.",
+      "Write task-6-evidence.md with the delivery SHA, checkout test results, real/fake boundaries, and any observed defects or unread evidence; keep deployment claims for QA and acceptance."
+    ],
+    "interfaces": [
+      "app/(site)/(app)/play/page.tsx",
+      "lib/appearance-client.test.ts",
+      "e2e/",
+      "changelogs/",
+      "projects/otohime-dev-two-new-ink-toys-1-ink-loom-play-loom-a-paper-st/task-6-evidence.md"
+    ],
+    "non_goals": [
+      "global navigation changes",
+      "new toy features beyond this plan",
+      "server storage or provider configuration"
+    ],
+    "acceptance_criteria": "The Play page offers working links to both toys, existing Play content remains, the appearance tests cover both new SVG ink surfaces, and the full local gates pass at the delivery SHA.",
+    "verification": [
+      {
+        "name": "full unit suite",
+        "cwd": ".",
+        "cmd": "npm test",
+        "expect": "exit0",
+        "timeout_s": 900
+      },
+      {
+        "name": "browser suite",
+        "cwd": ".",
+        "cmd": "npm run test:e2e",
+        "expect": "exit0",
+        "timeout_s": 1500
+      },
+      {
+        "name": "typecheck and lint",
+        "cwd": ".",
+        "cmd": "npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ]
+  }
+]

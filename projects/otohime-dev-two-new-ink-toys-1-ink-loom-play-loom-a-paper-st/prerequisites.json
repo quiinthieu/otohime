@@ -1,0 +1,45 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-285",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "The toys are repository-owned browser code using existing packages and assets. Delivery uses the already registered GitHub repository, task-manager account, GitHub Actions, and Vercel production project. No new account, spend, runtime service or secret is needed. Control-plane readiness does not prove execution-runner access or a production deploy.",
+  "prerequisites": [
+    {
+      "id": "git:otohime:ssh-delivery",
+      "owner": "agent",
+      "required_setup": "GitHub repository quiinthieu/otohime on main, existing git-key-otohime SSH deploy key with repository read/write scope in the registered otohime task-manager repo. Existing account owner quiinthieu and existing cost authority; no new purchase. The control-plane secret-presence probe checks registration only; lease-side git push separately demonstrates write.",
+      "secret_refs": [{ "secret": "git-key-otohime", "key": "private_key" }],
+      "probe": { "kind": "secret_key_exists", "target": "git-key-otohime/private_key", "expect": "present" },
+      "probe_context": ["control_plane"],
+      "state": "unknown"
+    },
+    {
+      "id": "fleet:otohime:software-engineer",
+      "owner": "agent",
+      "required_setup": "Registered otohime software_engineer execution account and fleet worker with Node 22, locked npm install, Chrome for browser checks, and SSH origin access. Existing platform allocation and account/cost authority; scheduler places the work. This capability probe concerns runner placement, not a person launching a machine.",
+      "secret_refs": [],
+      "probe": { "kind": "task_manager_capability", "target": "account:otohime:software_engineer", "expect": "eligible" },
+      "probe_context": ["execution_runner"],
+      "state": "unknown"
+    },
+    {
+      "id": "github:otohime:actions",
+      "owner": "operator",
+      "required_setup": "Existing GitHub Actions on quiinthieu/otohime enabled for main pushes, with hosted Ubuntu runner, Node 22, npm registry access, contents:read workflow token and existing deployment configuration. Repository owner quiinthieu has existing Actions cost authority. A control-plane service probe does not establish runner execution.",
+      "secret_refs": [],
+      "probe": { "kind": "service_capability", "target": "github-actions:otohime", "expect": "status:200" },
+      "probe_context": ["control_plane"],
+      "state": "unknown"
+    },
+    {
+      "id": "vercel:otohime:production",
+      "owner": "operator",
+      "required_setup": "Existing Vercel otohime production project serving otohime.dev under quiinthieu's account and current cost authority. GitHub Actions VERCEL_TOKEN has deploy access scoped to the project and VERCEL_ORG_ID/VERCEL_PROJECT_ID select it. No new key, project, billing authorization or service is requested; a service probe cannot establish runner credential attachment.",
+      "secret_refs": [{ "secret": "github:quiinthieu/otohime:actions", "key": "VERCEL_TOKEN" }],
+      "probe": { "kind": "service_capability", "target": "vercel:otohime", "expect": "status:200" },
+      "probe_context": ["control_plane"],
+      "state": "unknown"
+    }
+  ]
+}

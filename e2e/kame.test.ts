@@ -27,6 +27,41 @@ async function open(t: TestContext, options: BrowserContextOptions = {}, init?: 
 const state = (page: Page) => page.locator("[data-kame]").getAttribute("data-state");
 const ready = (page: Page) => page.waitForSelector("[data-kame]", { state: "attached" });
 
+const browserElapsed = (page: Page, started: number) =>
+  page.waitForFunction((started) => performance.now() - started >= 50, started, { timeout: 2_000 });
+
+test("clock fixture observes browser elapsed time rather than host delay", async (t) => {
+  const context = await browser.newContext();
+  t.after(() => context.close());
+  const page = await context.newPage();
+  await page.clock.install({ time: new Date("2026-10-26T03:00:00Z") });
+  await page.clock.pauseAt(new Date("2026-10-26T04:00:00Z"));
+  const arm = () => page.evaluate(() => {
+    document.documentElement.dataset.clockFired = "false";
+    setTimeout(() => { document.documentElement.dataset.clockFired = "true"; }, 500);
+    return performance.now();
+  });
+  const fired = () => page.evaluate(() => document.documentElement.dataset.clockFired);
+  const started = await arm();
+  // The wait consumes real host time but must reject while browser time is frozen.
+  // Replacing the observed precondition with waitForTimeout(50) fails this control.
+  await assert.rejects(browserElapsed(page, started), { name: "TimeoutError" });
+  assert.equal(await page.evaluate(() => performance.now()) - started, 0);
+  await page.clock.runFor(499);
+  assert.equal(await fired(), "false", "host time cannot supply the missing virtual millisecond");
+  await page.clock.runFor(1);
+  assert.equal(await fired(), "true", "the paused timer fires at exactly 500ms");
+
+  await page.clock.resume();
+  const resumed = await arm();
+  await browserElapsed(page, resumed);
+  const elapsed = await page.evaluate(() => performance.now()) - resumed;
+  assert.ok(elapsed >= 50, `browser clock advanced ${elapsed}ms`);
+  await page.clock.runFor(499);
+  assert.equal(await fired(), "true", "observed browser time adds to runFor(499)");
+  t.diagnostic(`observed browser elapsed before runFor(499): ${elapsed}ms`);
+});
+
 test("server baseline has only an inert shell; no JS retains public links", async (t) => {
   const html = await (await fetch(`${BASE}/projects`)).text();
   assert.match(html, /id="kame-shell"/);
@@ -93,11 +128,18 @@ test("keyboard hold threshold, focus loss, live reduced motion and Pocket pause"
   assert.notEqual(await state(page), "pet");
   await page.clock.runFor(1); assert.equal(await state(page), "pet");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
-  // Negative control for that pause: an installed clock flows with real time until paused, so on a flowing one 50 real
-  // ms beside the same runFor(499) already pet Kame. Paused again after, as before.
+  // Measure the entire resumed hold on the flowing page clock. Host/protocol
+  // delay and a second virtual advance cannot stand in for an elapsed hold.
   await page.clock.resume();
-  await page.keyboard.down("Space"); await page.waitForTimeout(50); await page.clock.runFor(499);
-  assert.equal(await state(page), "pet", "a flowing clock adds real time to runFor");
+  await pet.focus();
+  assert.equal(await pet.evaluate((button) => document.activeElement === button), true);
+  await page.keyboard.down("Space");
+  const started = await page.evaluate(() => Date.now());
+  await page.waitForFunction((started) => Date.now() - started >= 600, started, { timeout: 5_000 });
+  const elapsed = await page.evaluate(() => Date.now()) - started;
+  assert.ok(elapsed >= 600, `resumed page clock advanced ${elapsed}ms`);
+  await page.locator('[data-kame][data-state="pet"]').waitFor({ state: "attached", timeout: 2_000 });
+  assert.equal(await state(page), "pet", "the focused key remains held beyond the 500ms threshold");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
   await page.keyboard.down("Enter"); await page.clock.runFor(500); assert.equal(await state(page), "pet");

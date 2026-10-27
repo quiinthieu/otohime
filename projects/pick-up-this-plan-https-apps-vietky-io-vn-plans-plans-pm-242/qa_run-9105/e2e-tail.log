@@ -1,0 +1,28 @@
+ok 176 - Save-Data loads paper only after explicit enabling
+  ---
+  duration_ms: 1750.325916
+  ...
+# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+ok 177 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+  ---
+  duration_ms: 5907.915541
+  ...
+# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload
+ok 178 - renderer import waits for window load and the idle callback; server markup has no toy preload
+  ---
+  duration_ms: 1145.492208
+  ...
+# Subtest: existing desktop desk and stamp gestures keep their own controls
+ok 179 - existing desktop desk and stamp gestures keep their own controls
+  ---
+  duration_ms: 3159.2135
+  ...
+1..179
+# tests 179
+# suites 0
+# pass 178
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 433973.76525

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "ghosts-unit",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'ghosts/*.test.ts'",
+    "exit": 0,
+    "seconds": 0.13
+  },
+  {
+    "name": "ghosts-fake",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/ghosts-fake.test.mjs",
+    "exit": 0,
+    "seconds": 1.24
+  },
+  {
+    "name": "project-test",
+    "cmd": "npm test",
+    "exit": 0,
+    "seconds": 18.96
+  },
+  {
+    "name": "lint",
+    "cmd": "npm run lint",
+    "exit": 0,
+    "seconds": 9.07
+  },
+  {
+    "name": "build",
+    "cmd": "npm run build",
+    "exit": 0,
+    "seconds": 12.36
+  }
+]

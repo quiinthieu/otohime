@@ -1,0 +1,206 @@
+[
+  {
+    "status": "FAILED",
+    "pages": [
+      {
+        "total": 94,
+        "tasks": [
+          {
+            "id": "0b458dbc-bcb4-46b3-b1f0-b91fbfe601da",
+            "status": "FAILED",
+            "repoId": "mono-v2",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid"
+          },
+          {
+            "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+            "status": "FAILED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "agent_failed: exit 3 class=infra marker=mcp_probe_failed: plan-manager timeout"
+          },
+          {
+            "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+            "status": "FAILED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2a35aac9e2e3 is not on origin/main"
+          },
+          {
+            "id": "aaf41670-24d4-4664-998d-744e4d6d29bd",
+            "status": "FAILED",
+            "repoId": "mono-v2",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid"
+          },
+          {
+            "id": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+            "status": "FAILED",
+            "repoId": "mono-v2",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid"
+          }
+        ]
+      },
+      {
+        "total": 94,
+        "tasks": [
+          {
+            "id": "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+            "status": "FAILED",
+            "repoId": "mono-v2",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8"
+          },
+          {
+            "id": "899ebc8e-06d2-4172-8d43-caab66fc163a",
+            "status": "FAILED",
+            "repoId": "mono-v2",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8"
+          },
+          {
+            "id": "e80be90f-766f-4877-97a4-0920424f7002",
+            "status": "FAILED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 8959e8d817c4 is not on origin/main"
+          },
+          {
+            "id": "0d9749c4-86af-41ea-b8ff-52596bb8ba62",
+            "status": "FAILED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "agent_failed: exit 1 class=push_failed marker=Bounded prepublication task-manager sample: RUNNING 2/2; FAILED offsets 0/2 limit2, 4/72; COMPLETED offsets 0/2 limit2, 4/1272. Incomplete project-wide history;"
+          },
+          {
+            "id": "4ea09eb3-0d41-41ba-9617-bd8efae6d553",
+            "status": "FAILED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1,
+            "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 01c659246c00 is not on origin/main"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "status": "COMPLETED",
+    "pages": [
+      {
+        "total": 1429,
+        "tasks": [
+          {
+            "id": "3ee61bb5-0c96-490f-b8e0-bd6ed0d9e485",
+            "status": "COMPLETED",
+            "repoId": "mono-v2"
+          },
+          {
+            "id": "db3f2495-a01d-4c45-824b-4fc64e655974",
+            "status": "COMPLETED",
+            "repoId": "mono-v2"
+          },
+          {
+            "id": "723ea420-6d52-4aab-aebd-1aacbac96574",
+            "status": "COMPLETED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1
+          },
+          {
+            "id": "b97a55fc-4e3c-4da8-8e1a-18cc8882eef3",
+            "status": "COMPLETED",
+            "repoId": "mono-v2",
+            "callbackState": "delivered",
+            "callbackAttempts": 1
+          },
+          {
+            "id": "0bb689a3-795c-4c5b-b4b0-5f1afa769149",
+            "status": "COMPLETED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1
+          }
+        ]
+      },
+      {
+        "total": 1429,
+        "tasks": [
+          {
+            "id": "04e5260a-9667-4445-9a1f-a73ffbfd3c48",
+            "status": "COMPLETED",
+            "repoId": "otohime"
+          },
+          {
+            "id": "7456d7fb-3771-4fab-ba84-a87873900f85",
+            "status": "COMPLETED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1
+          },
+          {
+            "id": "9597468c-25d3-4162-83a8-2d4b1dae6184",
+            "status": "COMPLETED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1
+          },
+          {
+            "id": "a10f2248-8206-436f-a627-93274762d3eb",
+            "status": "COMPLETED",
+            "repoId": "mono-v2",
+            "callbackState": "delivered",
+            "callbackAttempts": 1
+          },
+          {
+            "id": "11dab240-f8ae-4a20-be15-5e43fd9e76a8",
+            "status": "COMPLETED",
+            "repoId": "otohime",
+            "callbackState": "delivered",
+            "callbackAttempts": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "status": "RUNNING",
+    "pages": [
+      {
+        "total": 4,
+        "tasks": [
+          {
+            "id": "8e93f952-a314-4c83-8aad-ecc564be83bc",
+            "status": "RUNNING",
+            "repoId": "otohime"
+          },
+          {
+            "id": "b5578323-3ff2-44e5-b635-ac5559353702",
+            "status": "RUNNING",
+            "repoId": "mono-v2"
+          },
+          {
+            "id": "e8f3cf31-fdae-45a9-b5f3-d76537a7e9f5",
+            "status": "RUNNING",
+            "repoId": "otohime"
+          },
+          {
+            "id": "454ae664-c0a1-4046-bd92-f7b9a3d0ccd0",
+            "status": "RUNNING",
+            "repoId": "mono-v2"
+          }
+        ]
+      }
+    ]
+  }
+]

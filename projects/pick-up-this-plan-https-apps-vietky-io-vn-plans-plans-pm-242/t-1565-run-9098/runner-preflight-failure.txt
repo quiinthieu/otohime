@@ -1,0 +1,48 @@
+ok - music: build-sha
+ok - music: 200
+ok - music: one shelf
+ok - music: shelf in the first HTML, outside any boundary
+ok - music: shelf markup
+ok - music: one cassette, quiet
+ok - music: one cartridge, quiet
+ok - music: reels still
+ok - music: the quiet tape's words
+ok - music: the playlist link
+ok - music: static game line (Hades II, one more run)
+ok - music: Spotify credit
+ok - music: Steam credit
+ok - music: providers off
+ok - music: says it was not read live
+ok - music: no read stamp
+ok - music: television still there
+not ok - music: listings still there: missing: >Listings</h2>
+ok - music: Ink Radio still there
+ok - music: no owner tools for a visitor
+ok - control: a shelf after streamed content is caught
+ok - control: a cassette that is not quiet is caught
+ok - api: 200
+ok - api, nothing configured: both providers off
+ok - build: the API is not prerendered, and /music's shell is empty
+ok - build: no prerendered reading on disk
+not ok - ready: our server did not answer at http://localhost:4121 after 60 tries
+  ^
+
+Error: Cannot find module '/Users/avietidol/Library/Application'
+Require stack:
+- internal/preload
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)
+    at Function._load (node:internal/modules/cjs/loader:1216:25)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Module.require (node:internal/modules/cjs/loader:1527:12)
+    at node:internal/modules/cjs/loader:2071:12
+    at loadPreloadModules (node:internal/process/pre_execution:756:5)
+    at setupUserModules (node:internal/process/pre_execution:231:5)
+    at prepareExecution (node:internal/process/pre_execution:159:5) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [ 'internal/preload' ]
+}
+
+Node.js v22.23.3
+walk: 25 ok, 2 failed

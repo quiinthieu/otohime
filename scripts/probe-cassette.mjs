@@ -21,7 +21,7 @@ import { LIMITS } from "../lib/now-playing-data.ts";
 
 
 const BASE_URL = process.env.BASE_URL;
-const FACE = process.env.FACE === "live" ? "live" : "quiet";
+const FACE = ["live", "brainz", "last", "lanyard"].includes(process.env.FACE) ? process.env.FACE : "quiet";
 const SHOTS_DIR = process.env.SHOTS_DIR || "";
 const SENTINELS = (process.env.SENTINELS || "").split(",").filter(Boolean);
 const PHONE = { width: 390, height: 844 };
@@ -140,6 +140,8 @@ async function measure(page) {
       cart: document.querySelector(".game-cart")?.dataset.face,
       spin: document.querySelector(".tape")?.hasAttribute("data-spin"),
       text: section?.innerText ?? "",
+      creditLinks: [...credit.querySelectorAll("a")].map(a => a.href),
+      gameSide: document.querySelector(".game-cart .np-side")?.textContent ?? "",
       overflowX: document.scrollingElement.scrollWidth - document.scrollingElement.clientWidth,
       labels,
       creditContrast: credit ? Math.min(...[credit, ...credit.querySelectorAll("a, time")].map(contrast)) : 0,
@@ -177,8 +179,17 @@ async function viewing(browser, name, opts) {
     check(`${name}: quiet cassette and quiet cartridge`, m.face === "quiet" && m.cart === "quiet" && !m.spin, `${m.face}/${m.cart}`);
     check(`${name}: the quiet words`, /Nothing on the deck right now\./.test(m.text) && /Quiet/.test(m.text), m.text.slice(0, 160));
   } else {
-    check(`${name}: the fixture track and game`, m.face === "track" && m.cart === "game" && m.spin, `${m.face}/${m.cart}/${m.spin}`);
+    check(`${name}: the fixture track and game`, m.face === "track" && m.cart === "game" && m.spin === (FACE !== "last"), `${m.face}/${m.cart}/${m.spin}`);
     check(`${name}: the long labels arrive capped`, m.text.includes(LONG_TITLE) && m.text.includes(LONG_GAME), m.text.slice(0, 200));
+  }
+  if (FACE === "brainz" || FACE === "last") {
+    check(`${name}: fixture source and credit`, m.text.includes("ListenBrainz") && /fixture/i.test(m.text));
+    if (FACE === "last") check(`${name}: full old UTC timestamp, still reels`, m.text.includes("2000-01-01 · 00:00:00 UTC") && !m.spin && m.running === 0);
+  }
+  if (FACE === "lanyard") {
+    check(`${name}: Lanyard fixture credit, no store or Discord identity link`, m.gameSide === "Cartridge · Lanyard · fixture" && m.creditLinks.includes("https://github.com/Phineas/lanyard") && m.text.includes("game presence from Lanyard / Discord") && m.links.every(l => !/steam|discord/.test(l.href)), JSON.stringify({gameSide:m.gameSide,text:m.text,links:m.links}));
+    const api = await (await page.request.get(`${BASE_URL}/api/now-playing`)).json();
+    check(`${name}: API and rendered game agree`, api.play.source === "lanyard" && api.play.state === "fixture" && api.game?.title === LONG_GAME && api.game.url === null && m.text.includes(api.game.title));
   }
   check(`${name}: labels fit, nothing scrolls sideways`, fits(m), fitDetail(m));
   check(`${name}: label and credit text at least 4.5:1`, legible(m), JSON.stringify({ labels: m.labels.map((l) => l.minContrast.toFixed(2)), credit: m.creditContrast.toFixed(2) }));
@@ -219,7 +230,8 @@ async function controls(browser) {
 async function reels(browser) {
   {
     const { context, page } = await open(browser);
-    const spinning = FACE === "live";
+    const spinning = FACE === "live" || FACE === "brainz" || FACE === "lanyard";
+    if (FACE === "last") check("last listen: reels naturally still", (await measure(page)).running === 0);
     if (!spinning) await page.evaluate(() => document.querySelector(".tape").setAttribute("data-spin", ""));
     let m = await measure(page);
     check("reels: a playing tape's reels turn", m.running === 2, `running ${m.running}`);
@@ -237,7 +249,7 @@ async function reels(browser) {
   }
   {
     const { context, page } = await open(browser, { reduced: true });
-    if (FACE !== "live") await page.evaluate(() => document.querySelector(".tape").setAttribute("data-spin", ""));
+    if (FACE !== "live" && FACE !== "brainz" && FACE !== "lanyard") await page.evaluate(() => document.querySelector(".tape").setAttribute("data-spin", ""));
     const m = await measure(page);
     check("reels: under reduced motion from the start they stand still", m.running === 0, `running ${m.running}`);
     await context.close();
@@ -276,7 +288,9 @@ async function noJs(browser) {
   check("no-JS: the shelf is there and visible", m.present && m.visible);
   if (FACE === "quiet") check("no-JS: the quiet face", m.face === "quiet" && /Nothing on the deck right now\./.test(m.text), m.text.slice(0, 160));
   else check("no-JS: the fixture reading, not a fallback", m.face === "track" && m.text.includes(LONG_TITLE) && m.text.includes(LONG_GAME), m.text.slice(0, 160));
-  check("no-JS: a read stamp only when read", FACE === "live" ? /Read \d\d:\d\d UTC/.test(m.text) : /Not read live/.test(m.text), m.text.slice(-200));
+  if (FACE === "lanyard") check("no-JS: credited Lanyard game without store link", m.cart === "game" && m.text.includes("Lanyard") && m.links.every(l => !/steam|discord/.test(l.href)));
+  if (FACE === "last") check("no-JS: last UTC date and stationary reels", m.text.includes("2000-01-01 · 00:00:00 UTC") && !m.spin);
+  check("no-JS: a read stamp only when read", FACE !== "quiet" ? /Read \d\d:\d\d UTC/.test(m.text) : /Not read live/.test(m.text), m.text.slice(-200));
   await context.close();
 }
 
@@ -372,7 +386,47 @@ async function fakeProviders() {
     }
     return { response: { players: [p] } };
   };
+  const brainzFixtures = JSON.parse(readFileSync(new URL("../lib/fixtures/listenbrainz.json", import.meta.url), "utf8"));
+  const lanyardFixtures = JSON.parse(readFileSync(new URL("../lib/fixtures/lanyard.json", import.meta.url), "utf8"));
   const roles = {
+    lanyard: (req, res) => {
+      const ok = req.method === "GET" && req.url === "/v1/users/123456789012345678"
+        && req.headers["user-agent"] === "otohime.dev/1.0 (+https://otohime.dev)" && req.headers.accept === "application/json" && !req.headers.authorization;
+      if (!ok) return [false, () => send(res, 400, {error:"invalid request"})];
+      const value = mode().lanyard ?? "game";
+      if (["429", "500"].includes(value)) return [true, () => send(res, +value, {success:false})];
+      if (value === "html") return [true, () => send(res, 200, "<html>challenge</html>", "text/html")];
+      if (value === "bad-json") return [true, () => send(res, 200, "{not json")];
+      if (value === "malformed") return [true, () => send(res, 200, {success:true,data:{activities:null}})];
+      if (value === "redirect") return [true, () => {res.writeHead(302, {location:"http://127.0.0.1:9/forbidden"});res.end();}];
+      const body = structuredClone(lanyardFixtures[value] ?? lanyardFixtures.game);
+      if (value === "long") body.data.activities = [{type:0,name:"\u0000" + "M".repeat(200)}];
+      const answer = () => send(res, 200, body);
+      return [true, value === "slow" ? () => later(10_000, answer) : answer];
+    },
+    listenbrainz: (req, res) => {
+      const now = req.url.endsWith("/playing-now");
+      const ok = req.method === "GET" && ["/1/user/Fixture%20Owner/playing-now", "/1/user/Fixture%20Owner/listens?count=1"].includes(req.url)
+        && req.headers["user-agent"] === "otohime.dev/1.0 (+https://otohime.dev)" && req.headers.accept === "application/json" && !req.headers.authorization;
+      const m = mode();
+      if (!ok) return [false, () => send(res, 400, {error:"invalid request"})];
+      const value = (now ? m.lbNow : m.lbLast) ?? "ok";
+      if (["404", "429", "500"].includes(value)) return [true, () => send(res, +value, {code:+value,error:"fixture failure"})];
+      if (value === "html") return [true, () => send(res, 200, "<html>Verifying your browser</html>", "text/html")];
+      if (value === "bad-json") return [true, () => send(res, 200, "{not json")];
+      if (value === "error") return [true, () => send(res, 200, {error:"fixture"})];
+      if (value === "redirect") return [true, () => {res.writeHead(302, {location:"http://127.0.0.1:9/forbidden"});res.end();}];
+      let body = structuredClone(brainzFixtures[value === "empty" ? (now ? "emptyCurrent" : "emptyLast") : now ? "current" : "last"]);
+      if (value === "long" || value === "old") {
+        const listen = body.payload.listens[0];
+        listen.track_metadata.track_name = "W".repeat(300);
+        listen.track_metadata.artist_name = "A".repeat(300);
+        if (!now) listen.listened_at = 946684800;
+      }
+      if (value === "unsafe") body.payload.listens[0].track_metadata.additional_info = {spotify_id:"javascript:alert(1)",origin_url:"https://evil.example/track"};
+      const answer = () => send(res, 200, body);
+      return [true, value === "slow" ? () => later(10_000, answer) : answer];
+    },
     token: (req, res, body) => {
       const params = new URLSearchParams(body);
       const ok =
@@ -416,7 +470,7 @@ async function fakeProviders() {
       return [true, s === "slow" ? () => later(10_000, answer) : answer];
     },
   };
-  const ports = { token: env.FAKE_TOKEN_PORT, api: env.FAKE_API_PORT, steam: env.FAKE_STEAM_PORT };
+  const ports = { lanyard: env.FAKE_LANYARD_PORT ?? String(Number(env.FAKE_STEAM_PORT) + 2), token: env.FAKE_TOKEN_PORT, api: env.FAKE_API_PORT, steam: env.FAKE_STEAM_PORT, listenbrainz: env.FAKE_LISTENBRAINZ_PORT ?? String(Number(env.FAKE_STEAM_PORT) + 1) };
   await Promise.all(
     Object.entries(ports).map(
       ([role, port]) =>

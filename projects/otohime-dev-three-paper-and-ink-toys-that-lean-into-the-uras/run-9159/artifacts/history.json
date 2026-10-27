@@ -1,0 +1,202 @@
+{
+  "scope": "bounded task-manager coding_task history, not CI history; project_id=otohime returned empty and global bounded fallback used",
+  "complete": false,
+  "samples": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 10,
+      "total": 91,
+      "ids": [
+        "aaf41670-24d4-4664-998d-744e4d6d29bd",
+        "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+        "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+        "899ebc8e-06d2-4172-8d43-caab66fc163a",
+        "e80be90f-766f-4877-97a4-0920424f7002",
+        "0d9749c4-86af-41ea-b8ff-52596bb8ba62",
+        "4ea09eb3-0d41-41ba-9617-bd8efae6d553",
+        "7e3c8ba6-7fb6-4af7-95f0-998bb05d4e9f",
+        "a70403e1-d4fc-4944-8233-2ee4127908b3",
+        "980c6385-7c10-4d4b-a913-43e9c9333678"
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 10,
+      "limit": 10,
+      "total": 91,
+      "ids": [
+        "30fd1015-8571-485d-a7b3-c88008526b4b",
+        "511dad8b-c45a-486d-a323-9822f9475c8b",
+        "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+        "7744f3fc-a925-4d82-b519-df41899c4c45",
+        "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+        "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+        "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+        "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+        "e8ee460d-78b2-476e-81e2-0dceda68e020",
+        "0d081765-06f9-4a1e-9de4-28107aa0608b"
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 10,
+      "total": 1435,
+      "ids": [
+        "9e1367e5-2da2-483b-9d39-91b41b83acf7",
+        "7b17dd56-14d4-4b5f-85e2-33a65ca805ed",
+        "fa4589e8-81d9-492f-9976-a7ad2735e351",
+        "f064cbe7-9854-40d2-a678-422912b1ec60",
+        "f9bff22b-7160-41ad-8cc8-198a6c5f0d09",
+        "4e3ad001-b441-4260-978b-a5e20a6317dd",
+        "c12fa4b2-3bee-44cd-bff5-0b38e0bee4ac",
+        "70e33b0a-5f9c-4f13-912a-25b8fb4040a6",
+        "4a9ab935-7a86-4edd-9bdc-9dec802431c7",
+        "0f24e632-e0bd-472c-a673-d13d36bf8deb"
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 10,
+      "limit": 10,
+      "total": 1435,
+      "ids": [
+        "b5c2c4d5-a047-4eeb-ab74-2d18a211df48",
+        "b0649521-678d-42a4-bfea-f79c6cec2739",
+        "1d1ed51c-158d-4f9e-9c29-184840161205",
+        "8f366729-b68b-49c3-ad45-9c979fc71f20",
+        "75effae3-e815-4af7-93ae-5ab193fc1564",
+        "3df8e4dc-3559-4e49-80b0-e684e1d0f68c",
+        "37f6b616-a38d-4474-a977-3855684c23dc",
+        "88b6761f-ab19-4be3-af8d-c52573931c93",
+        "e64427a6-dbfe-4c1c-8c18-9f6f5152f754",
+        "362fdc99-4853-4a1b-ab6c-b51810f3debd"
+      ]
+    }
+  ],
+  "planRuns": [
+    {
+      "status": "failed",
+      "count": 0,
+      "ids": [],
+      "pagination": "API exposes no pagination"
+    },
+    {
+      "status": "succeeded",
+      "count": 15,
+      "ids": [
+        "run-9049",
+        "run-9051",
+        "run-9057",
+        "run-9058",
+        "run-9061",
+        "run-9064",
+        "run-9068",
+        "run-9075",
+        "run-9079",
+        "run-9082",
+        "run-9091",
+        "run-9095",
+        "run-9149",
+        "run-9151",
+        "run-9158"
+      ],
+      "pagination": "API exposes no pagination"
+    },
+    {
+      "status": "running",
+      "count": 1,
+      "ids": [
+        "run-9159"
+      ],
+      "pagination": "API exposes no pagination"
+    }
+  ],
+  "priorRun": {
+    "id": "run-9158",
+    "tm_task_id": "9e1367e5-2da2-483b-9d39-91b41b83acf7",
+    "status": "succeeded",
+    "reports": [],
+    "log_source": "task_manager",
+    "logs": [
+      "progress phase=clone",
+      "=== task-manager coding job starting ===",
+      "  Agent    : codex",
+      "  Command  : codex exec --dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"' -- \"${AGENT_PROMPT_ARG}\"",
+      "  Prompt   : 19697 characters from AGENT_PROMPT_FILE",
+      "  Workspace: /Users/avietidol/Library/Application Support/build-worker/leases/9e1367e5-2da2-483b-9d39-91b41b83acf7-6b292902464e6ed798f15f175753d44b/work/otohime",
+      "  Repo URL : git@github.com:quiinthieu/otohime.git",
+      "  Repo     : REPO_ID=otohime GIT_MAIN_BRANCH=main PLANS_DIR=projects",
+      "  Account  : ACCOUNT_ID=codex-main",
+      "  HOME     : /Users/avietidol/Library/Application Support/build-worker/leases/9e1367e5-2da2-483b-9d39-91b41b83acf7-6b292902464e6ed798f15f175753d44b/home",
+      "  User     : uid=501(avietidol) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),33(_appstore),98(_lpadmin),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1)",
+      "  Branch   : main",
+      "  Sidecar  : enabled (shared=/Users/avietidol/Library/Application Support/build-worker/leases/9e1367e5-2da2-483b-9d39-91b41b83acf7-6b292902464e6ed798f15f175753d44b/shared)",
+      "=========================================",
+      "  github.com host key refreshed",
+      "  gitlab.com host key refreshed",
+      "  bitbucket.org host key refreshed",
+      "Cloning git@github.com:quiinthieu/otohime.git (branch: main) into /Users/avietidol/Library/Application Support/build-worker/leases/9e1367e5-2da2-483b-9d39-91b41b83acf7-6b292902464e6ed798f15f175753d44b/work/otohime...",
+      "  reference clone from /Users/avietidol/Library/Application Support/build-worker/repo/otohime (fleet mirror)",
+      "Cloning into '/Users/avietidol/Library/Application Support/build-worker/leases/9e1367e5-2da2-483b-9d39-91b41b83acf7-6b292902464e6ed798f15f175753d44b/work/otohime'...",
+      "  Cloned branch: main",
+      "  Cloned commit: d6221b79b9c796d7c85c975bd122c7bed6d351e1",
+      "push guard: skipped (otohime has no scripts/git-push-safe.sh)",
+      "",
+      "=== red gate (pre_verify_spec) ===",
+      "progress phase=red_gate status=running items=6",
+      "npm warmup /Users/avietidol/Library/Application Support/build-worker/leases/9e1367e5-2da2-483b-9d39-91b41b83acf7-6b292902464e6ed798f15f175753d44b/work/otohime ci",
+      "npm warmup exit 0",
+      "verify: start item=Bottle layout and picker unit contracts timeout_s=300",
+      "verify: item=Bottle layout and picker unit contracts status=pass exit=0 duration_ms=98",
+      "verify: start item=repository unit suite timeout_s=300",
+      "verify: item=repository unit suite status=pass exit=0 duration_ms=17335",
+      "verify: start item=lint and type contracts timeout_s=300",
+      "verify: item=lint and type contracts status=pass exit=0 duration_ms=14235",
+      "verify: start item=gate closure invariants timeout_s=300",
+      "verify: item=gate closure invariants status=pass exit=0 duration_ms=3372",
+      "verify: start item=Bottle production-browser flow and enlarged-text containment timeout_s=900",
+      "verify: item=Bottle production-browser flow and enlarged-text containment status=pass exit=0 duration_ms=28124",
+      "verify: start item=CI-mode isolated footer walk and Chromium probe timeout_s=900",
+      "verify: running 60s/900s, last: # ok - 390x844 mobile disclosure: Enter on 'Customize scene' summary opens the panel and exposes wobble/swatches",
+      "verify: item=CI-mode isolated footer walk and Chromium probe status=pass exit=0 duration_ms=86320",
+      "progress phase=red_gate status=pass result=red_gate_already_green",
+      "RESULT: red_gate_already_green \u2014 every verification item passes before any change; agent CLI not started"
+    ]
+  },
+  "profile": {
+    "agent_profile": "codex-sol-6-1-high",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "worker_id": "avietidol-mac-mini",
+    "runner": "fleet",
+    "account_id": "codex-main"
+  },
+  "current": {
+    "total": 2,
+    "ids": [
+      "6ae85d63-b33e-4c48-bf72-e67f8f485ba3",
+      "d2ee32db-f340-4c71-8db0-100120ecd783"
+    ]
+  },
+  "persistedTask": {
+    "id": "9e1367e5-2da2-483b-9d39-91b41b83acf7",
+    "status": "COMPLETED"
+  },
+  "ingestionBoundary": "Task-manager COMPLETED for run-9158 agrees with plan-manager persisted succeeded, no report and raw runner tail red_gate_already_green: agent CLI not started. Transport callbacks themselves are not observable here; no callback-completeness claim.",
+  "failedTail": {
+    "id": "aaf41670-24d4-4664-998d-744e4d6d29bd",
+    "scope": "unrelated pm-289 integration publication, not the Bottle executable",
+    "tail": [
+      "integration: publication receipt missing, stale or not on main",
+      "batch_publish_failed: integration publication receipt invalid",
+      "progress phase=rescue",
+      "=== rescue: preserving workspace of failed task (exit code 1, phase agent, budget 60s) ===",
+      "On branch delivery/pm-289/r1/c1/integration",
+      "nothing to commit, working tree clean",
+      "Everything up-to-date",
+      "rescue: pushed working state to branch delivery/pm-289/r1/c1/integration",
+      "=== rescue: done ==="
+    ]
+  }
+}

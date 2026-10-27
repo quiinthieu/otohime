@@ -1,0 +1,102 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-288",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "The design uses existing repository, execution fleet, CI, Vercel and Postgres capabilities; public GitHub activity and checked-in job data require no new credential. No new KV, paid API, or account is needed.",
+  "prerequisites": [
+    {
+      "id": "github:otohime:git",
+      "owner": "agent",
+      "required_setup": "GitHub repository quiinthieu/otohime is readable and the registered SSH origin permits main push under existing repository/account authority and cost arrangement; no new credential requested. Control-plane read does not prove checkout push.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "git_host_read",
+        "target": "repo:otohime",
+        "expect": "readable"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "fleet:otohime:software-engineer",
+      "owner": "agent",
+      "required_setup": "Existing task-manager otohime software_engineer account and execution runner provide Node 22, locked npm install, Chrome/browser, npm network and registered Git SSH; scheduler owns placement under existing cost authority.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "task_manager_capability",
+        "target": "account:otohime:software_engineer",
+        "expect": "eligible"
+      },
+      "probe_context": [
+        "execution_runner"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "github:otohime:actions",
+      "owner": "agent",
+      "required_setup": "GitHub Actions on quiinthieu/otohime can run current checks and deploy workflow on main using hosted runners, Node 22, repository read token and existing GitHub Actions configuration under existing account/cost authority.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "service_capability",
+        "target": "github:quiinthieu/otohime:actions",
+        "expect": "CI workflow enabled with runnable checks and production jobs"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "vercel:otohime:production",
+      "owner": "agent",
+      "required_setup": "Existing Vercel project for otohime.dev under the current account/cost authority has its GitHub Actions deployment configured with repository-managed VERCEL_TOKEN deploy permission and VERCEL_ORG_ID/VERCEL_PROJECT_ID project placement. No new project or credential requested; site reachability is only a control-plane probe.",
+      "secret_refs": [
+        {
+          "secret": "VERCEL_TOKEN",
+          "key": "value"
+        }
+      ],
+      "probe": {
+        "kind": "service_capability",
+        "target": "https://otohime.dev/api/health",
+        "expect": "HTTP 200 with full sha from production"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "neon:otohime:postgres",
+      "owner": "agent",
+      "required_setup": "Existing Neon Postgres project for otohime.dev permits the GitHub Actions deployment job to create a migration branch, run Drizzle migrations using DATABASE_URL_UNPOOLED, and supply pooled DATABASE_URL to Vercel under current database/project cost authority. Migration job must independently prove runner secrets and DDL permission.",
+      "secret_refs": [
+        {
+          "secret": "NEON_API_KEY",
+          "key": "value"
+        },
+        {
+          "secret": "NEON_PROJECT_ID",
+          "key": "value"
+        },
+        {
+          "secret": "DATABASE_URL_UNPOOLED",
+          "key": "value"
+        }
+      ],
+      "probe": {
+        "kind": "service_capability",
+        "target": "https://otohime.dev/api/health",
+        "expect": "HTTP 200 from app backed by existing Postgres deployment"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    }
+  ]
+}

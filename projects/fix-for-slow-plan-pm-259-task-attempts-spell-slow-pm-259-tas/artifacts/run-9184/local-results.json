@@ -1,0 +1,218 @@
+{
+  "status": "all original five gates and three serial E2E invocations passed at 72c769c",
+  "fast_and_footer": [
+    {
+      "index": 0,
+      "name": "origin/main delivery state and main lane closure unit contracts",
+      "exit_code": 0,
+      "duration_s": 1.57,
+      "log": "/tmp/pm270-run9184-check-0.log",
+      "log_sha256": "0d3fc068b54f25f184ff99ecad3bb2e441553dee936cc78a08490f280fd57d8a",
+      "tap_totals": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt_tail": "ok 25 - ledger's actual sampler waits for visible two-frame geometry and still rejects a sheet that fits\n  ---\n  duration_ms: 929.282771\n  type: 'test'\n  ...\n# Subtest: disabled ghost probe is console-clean; direct configuration HTTP 404 remains detectable\nok 26 - disabled ghost probe is console-clean; direct configuration HTTP 404 remains detectable\n  ---\n  duration_ms: 299.874027\n  type: 'test'\n  ...\n1..26\n# tests 26\n# suites 0\n# pass 26\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1513.335232"
+    },
+    {
+      "index": 1,
+      "name": "full CI unit suite",
+      "exit_code": 0,
+      "duration_s": 17.0,
+      "log": "/tmp/pm270-run9184-check-1.log",
+      "log_sha256": "cd25978eb8c09f1fcb4466234a48432478a3075548152e3a2e3ea973b0dc5c5f",
+      "tap_totals": {
+        "tests": 2498,
+        "pass": 2498,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt_tail": "ok 2479 - streamed /dashboard heading arriving after 1.5s resolves the real observer\n  ---\n  duration_ms: 1644.904592\n  type: 'test'\n  ...\n# Subtest: missing, empty and hidden main headings fail at the 10s bound (negative control)\nok 2480 - missing, empty and hidden main headings fail at the 10s bound (negative control)\n  ---\n  duration_ms: 10163.319634\n  type: 'test'\n  ...\n1..2480\n# tests 2498\n# suites 2\n# pass 2498\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 16827.444936"
+    },
+    {
+      "index": 2,
+      "name": "lint, typecheck, and gate closure",
+      "exit_code": 0,
+      "duration_s": 33.04,
+      "log": "/tmp/pm270-run9184-check-2.log",
+      "log_sha256": "10f02de9ac2d4a94c61870f7826727576ae6a8e032290efd7bfc527913ee9dbf",
+      "tap_totals": {},
+      "receipt_tail": "      ],\n      \"failures\": [],\n      \"ok\": true\n    }\n  ],\n  \"local_controls\": \"pass\",\n  \"failures\": [],\n  \"external_evidence\": \"inconclusive\",\n  \"not_proven\": [\n    \"deployment\",\n    \"global_green_gate\",\n    \"shared_ci_recovery\",\n    \"kame_browser_execution\",\n    \"browser_user_path\",\n    \"historical_raw_assertions\",\n    \"author_txt_bytes\",\n    \"personalized_presence\"\n  ],\n  \"scope\": \"Local unit regressions for the landed runner, reporter, CI-status, embedded-Postgres and footer/waterline repairs in this checkout. No browser, no network fetch, no CI history and no deployment are read or proven.\"\n}"
+    },
+    {
+      "index": 3,
+      "name": "CI-mode isolated footer walk and Chromium probe",
+      "exit_code": 0,
+      "duration_s": 90.25,
+      "log": "/tmp/pm270-run9184-check-3.log",
+      "log_sha256": "2feacffe621a07d2b9e66ccc782e07d6fe36ffd074d36a8af9bed7c6249c155d",
+      "tap_totals": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "receipt_tail": "# ok - errors: zero hydration errors across all contexts\n# ok - errors: zero console errors or page errors across all contexts\n# \\# network: 53 external requests attributed to /music's existing television\n# ok - network: zero unexpected external network requests from footer pages\n# probe: 170 ok, 0 failed\n# Subtest: CI-mode production footer walk and Chromium probe\nok 1 - CI-mode production footer walk and Chromium probe\n  ---\n  duration_ms: 60709.407489\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 60754.442186"
+    }
+  ],
+  "serial_e2e": [
+    {
+      "attempt": 1,
+      "exit_code": 0,
+      "duration_s": 411.17,
+      "log": "/tmp/pm270-run9184-e2e-1.log",
+      "log_sha256": "b9675bc95fff19b4b2eaa13118d8b77a9983b2723d60c4afafabb93d72813994",
+      "build_id": "HQCBJnzN996Dov2bPfZqu",
+      "tap_totals": {
+        "tests": 187,
+        "pass": 186,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 1,
+        "todo": 0
+      }
+    },
+    {
+      "attempt": 2,
+      "exit_code": 0,
+      "duration_s": 411.35,
+      "log": "/tmp/pm270-run9184-e2e-2.log",
+      "log_sha256": "784209d62b7ae1098171c6575dbeed1fc8ea629287718a3119f41d7f3d7b12e6",
+      "build_id": "J7Q0Tl2jJOqAhDkqddFtc",
+      "tap_totals": {
+        "tests": 187,
+        "pass": 186,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 1,
+        "todo": 0
+      }
+    },
+    {
+      "attempt": 3,
+      "exit_code": 0,
+      "duration_s": 412.44,
+      "log": "/tmp/pm270-run9184-e2e-3.log",
+      "log_sha256": "de37d39f417e228ce1d47b8f0ebfc3907ead6e83ec0478fec94761a8c45d1692",
+      "build_id": "teSEGLwDwZdDn_6GezehJ",
+      "tap_totals": {
+        "tests": 187,
+        "pass": 186,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 1,
+        "todo": 0
+      }
+    }
+  ],
+  "preflight": {
+    "exit_code": 0,
+    "real_imports": [
+      "next",
+      "playwright-core",
+      "pg",
+      "embedded-postgres",
+      "drizzle-orm/node-postgres",
+      "@better-auth/drizzle-adapter",
+      "better-auth"
+    ],
+    "real_construction": [
+      "pg.Pool",
+      "drizzle with repository db/schema.ts",
+      "drizzleAdapter",
+      "betterAuth awaited $context"
+    ],
+    "adapter_id": "drizzle",
+    "network": "no DB query during import/construction; footer and E2E execute real migrated DB"
+  },
+  "environment": {
+    "CI": true,
+    "TMPDIR": "/tmp",
+    "node": "22.23.3",
+    "npm": "10.9.9",
+    "lock": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+  },
+  "last_build_artifacts": {
+    ".next/BUILD_ID": "f9924b0906371b8b83a3749cb590eec35a4e43d2e82aefd4a319bed2c84420c1",
+    ".next/build-manifest.json": "5438acacd9b5ec7659a1e14dd2f83f03dff3c922110257aed2aaaed9f19592b9",
+    ".next/server/app-paths-manifest.json": "a766496cb41139e08ad6d975a9c0993469ef5e62f07998118797b14eb18394bc"
+  },
+  "post_rebase_base": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+  "post_rebase_fast": [
+    {
+      "index": 0,
+      "exit_code": 0,
+      "duration_s": 1.42,
+      "log": "/tmp/pm270-run9184-post-rebase-0.log",
+      "log_sha256": "5dd52bb71825a26dccbd093a34eceb423a105ad9bf30310505c1e0e10efdfc30",
+      "tap_totals": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "index": 1,
+      "exit_code": 0,
+      "duration_s": 17.04,
+      "log": "/tmp/pm270-run9184-post-rebase-1.log",
+      "log_sha256": "5d8e7cc31ec3070f093f53666a7bcf048c1965bd8ab941ae8ab673bc186bf99b",
+      "tap_totals": {
+        "tests": 2500,
+        "pass": 2500,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "index": 2,
+      "exit_code": 0,
+      "duration_s": 24.02,
+      "log": "/tmp/pm270-run9184-post-rebase-2.log",
+      "log_sha256": "aceacc542bd11dd58c481bfa9587cbd661181be0b4f062f06d7a2968506997cb",
+      "tap_totals": {}
+    }
+  ],
+  "post_rebase_deployment": {
+    "exit_code": 0,
+    "assertions": 59,
+    "log_sha256": "2bb4e3365912471a817a7e51d79a33c0a33be6577ac6334ce7218073c7967cd2",
+    "receipt_parser": {
+      "real_import": "scripts/verify-bottle-contracts.mjs",
+      "input": "actual freshly executed 59-assertion shell fixture output",
+      "result": {
+        "assertions": 59,
+        "required": [
+          "standalone inspect without scope reproduces User not found",
+          "explicit team scope permits Ready inspect and exact-sha health",
+          "waiting inspect receives the configured team scope",
+          "diagnostic re-read receives the same team scope",
+          "scoped Ready re-read cannot rescue failed waiting inspect",
+          "missing team is refused before upload",
+          "User not found with explicit scope still fails closed before health",
+          "matching nested sha cannot impersonate the served executable",
+          "zero-exit building inspect fails closed before matching health",
+          "zero-exit queued inspect fails closed before matching health",
+          "zero-exit initializing inspect fails closed before matching health",
+          "zero-exit silent inspect fails closed before matching health",
+          "zero-exit unknown inspect fails closed before matching health"
+        ],
+        "boundary": "fake Vercel CLI; real local HTTP and shell processes"
+      },
+      "boundary": "real receipt parser and shell; fake Vercel/health, no production readiness claim"
+    }
+  }
+}

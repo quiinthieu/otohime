@@ -1,0 +1,34 @@
+{
+  "browser": "156.0.8078.48",
+  "health": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "sha": "baec1f88e602e9ad50ebecb9827a476f939495af"
+    }
+  },
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Otohime",
+      "headings": [
+        "OtohimeOtohime"
+      ],
+      "horizontalOverflow": false,
+      "pageErrors": [],
+      "ghostCanvas": 0
+    },
+    {
+      "path": "/ryugu",
+      "status": 200,
+      "title": "Ryugu-jo",
+      "headings": [
+        "Ryugu-jo"
+      ],
+      "horizontalOverflow": false,
+      "pageErrors": [],
+      "ghostCanvas": 0
+    }
+  ]
+}

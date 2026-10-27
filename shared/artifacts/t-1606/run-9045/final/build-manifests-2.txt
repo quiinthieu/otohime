@@ -1,0 +1,2 @@
+79747af130848faa2e8ec669f2dbe5a45923b20a9bd5f8d56aa0831c0b6def8e  .next/prerender-manifest.json
+66711f604323a67c2270a7e2cdba772bba71671deb1681f4968ee728a14ba3ef  .next/build-manifest.json

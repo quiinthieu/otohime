@@ -1,0 +1,47 @@
+Starting embedded Postgres on 127.0.0.1:50138
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/1ac7f9bb-1e4d-491e-b768-b00a8cecdc5f-cf3438b349b387cadb2f9d9bd79ac660/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:50141
+TAP version 13
+# Subtest: a day's receipt opens from the keyboard: Tab to the last day, arrows to an inked one, Enter pins, Escape closes
+ok 1 - a day's receipt opens from the keyboard: Tab to the last day, arrows to an inked one, Enter pins, Escape closes
+  ---
+  duration_ms: 992.106166
+  ...
+# Subtest: Press replays the year in date order, a day per tick, with a stamp thud every seventh day
+ok 2 - Press replays the year in date order, a day per tick, with a stamp thud every seventh day
+  ---
+  duration_ms: 7614.660083
+  ...
+# 365 days in 192 ticks, 53 thuds, 375 transitions
+# Subtest: under reduced motion Press lands the final year at once: no replay, no transition or animation in the ledger
+ok 3 - under reduced motion Press lands the final year at once: no replay, no transition or animation in the ledger
+  ---
+  duration_ms: 1065.827208
+  ...
+# Subtest: on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt
+ok 4 - on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt
+  ---
+  duration_ms: 7785.672166
+  ...
+# Subtest: on a phone the layout check waits for a sheet shown after hydration, and fails a sheet without its minimum width
+ok 5 - on a phone the layout check waits for a sheet shown after hydration, and fails a sheet without its minimum width
+  ---
+  duration_ms: 1048.071583
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19073.851083

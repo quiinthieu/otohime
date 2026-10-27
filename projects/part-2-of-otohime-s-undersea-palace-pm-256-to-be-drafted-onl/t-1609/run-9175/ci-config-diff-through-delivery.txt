@@ -1,0 +1,211 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index a13d399..e1be1e8 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -123,67 +123,68 @@ jobs:
+       - name: Real CPU camera and privacy verifier
+         timeout-minutes: 5
+         run: |
++          set -o pipefail
++          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true; exit "$status"' EXIT
+           status=0
+           node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
+-          node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log"
++          node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true
++          exit "$status"
+       - run: npm run db:migrate
+-      # The job log needs a token to read: a failed test is also an annotation and a step summary section
+-      # (scripts/e2e-annotate.mjs), and a red step adds the server's last lines there, with what ran.
++      # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
+       - name: E2E against next start
+         timeout-minutes: 12
+         run: |
++          set -o pipefail
++          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "E2E against next start" "$status" "$RUNNER_TEMP/e2e.log" || true; exit "$status"' EXIT
++          : >"$RUNNER_TEMP/e2e.log"
+           npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
+-          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
+-          status=0
+-          npm run test:e2e || status=$?
+-          if [ "$status" -ne 0 ]; then
+-            {
+-              echo "## E2E environment"
+-              echo
+-              echo "- commit $GITHUB_SHA, build $(cat .next/BUILD_ID), node $(node -v), $(google-chrome --version 2>/dev/null || echo 'no google-chrome'), $(nproc) CPUs"
+-              echo
+-              echo "### next start, last 80 lines"
+-              echo
+-              echo '```'
+-              tail -n 80 "$RUNNER_TEMP/next-start.log" | sed 's/```/ˋˋˋ/g'
+-              echo '```'
+-            } >>"$GITHUB_STEP_SUMMARY"
+-            tail -n 80 "$RUNNER_TEMP/next-start.log"
+-          fi
+-          exit "$status"
++          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
++          npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
+       # Signs in through the form against the same server and database, so a page error on the hop into a
+       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
+       - name: Motion probe, signed in
+         timeout-minutes: 8
+         run: |
++          set -o pipefail
++          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log" || true; exit "$status"' EXIT
++          : >"$RUNNER_TEMP/motion-probe.log"
+           # The server the e2e step left running; start one again if it has gone.
+           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
+             npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
+-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
++            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/motion-probe.log"
+           }
+           status=0
+-          bash scripts/probe-motion-signed-in.sh 2>&1 | tee "$RUNNER_TEMP/motion-probe.log" || status=$?
+-          node scripts/ci-probe-annotate.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log"
++          bash scripts/probe-motion-signed-in.sh 2>&1 | tee -a "$RUNNER_TEMP/motion-probe.log" || status=$?
++          node scripts/ci-probe-annotate.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log" || true
++          exit "$status"
+       - name: Footer walk
+         timeout-minutes: 8
+         run: |
++          set -o pipefail
++          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log" || true; exit "$status"' EXIT
++          : >"$RUNNER_TEMP/footer-walk.log"
+           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
+             npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
+-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
++            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/footer-walk.log"
+           }
+           status=0
+-          EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh 2>&1 | tee "$RUNNER_TEMP/footer-walk.log" || status=$?
+-          node scripts/ci-probe-annotate.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log"
++          EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-walk.log" || status=$?
++          node scripts/ci-probe-annotate.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log" || true
++          exit "$status"
+       - name: Footer Chromium probe
+         timeout-minutes: 8
+         run: |
++          set -o pipefail
++          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true; exit "$status"' EXIT
++          : >"$RUNNER_TEMP/footer-probe.log"
+           curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
+             npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
+-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health"
++            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/footer-probe.log"
+           }
+           status=0
+-          EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee "$RUNNER_TEMP/footer-probe.log" || status=$?
+-          node scripts/ci-probe-annotate.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log"
++          EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-probe.log" || status=$?
++          node scripts/ci-probe-annotate.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true
++          exit "$status"
+
+   preview:
+     if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+diff --git a/scripts/vercel-deploy.sh b/scripts/vercel-deploy.sh
+index 29b015d..187dd89 100755
+--- a/scripts/vercel-deploy.sh
++++ b/scripts/vercel-deploy.sh
+@@ -1,13 +1,13 @@
+ #!/usr/bin/env bash
+ # Production deploy for the CI `production` job: upload the prebuilt output, inspect the deployment,
+-# then prove https://otohime.dev serves this commit. Public health decides even if inspect fails.
++# then prove https://otohime.dev serves this commit. Inspect and health must both pass.
+ # Each wait is bounded so a hang
+ # fails with a public ::error annotation instead of silently running into the job timeout
+ # (run 40311256064: the old blocking `vercel deploy` hung 850 s and the health check never ran).
+ #
+ #   bash scripts/vercel-deploy.sh            # in CI, after `vercel pull` and `vercel build --prod`
+ #
+-# Env: GITHUB_SHA (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
++# Env: GITHUB_SHA and VERCEL_ORG_ID (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
+ # diagnostic re-read), HEALTH_URL (https://otohime.dev/api/health), HEALTH_RETRIES (10) and
+ # HEALTH_RETRY_DELAY (6 s; curl reads 0 as exponential backoff, so tests use 1),
+ # HEALTH_ATTEMPTS (12 reads of the body, HEALTH_POLL_DELAY 10 s apart, for an alias that lags ready).
+@@ -18,6 +18,7 @@
+ set -euo pipefail
+
+ : "${GITHUB_SHA:?GITHUB_SHA is required}"
++: "${VERCEL_ORG_ID:?VERCEL_ORG_ID is required}"
+ UPLOAD_TIMEOUT=${UPLOAD_TIMEOUT:-300}
+ READY_TIMEOUT=${READY_TIMEOUT:-420}
+ INSPECT_TIMEOUT=${INSPECT_TIMEOUT:-60}
+@@ -65,6 +66,8 @@ trap 'rm -rf "$work"' EXIT
+ # Strip CLI colouring before parsing or publishing diagnostics. A generic "Error:" in a request
+ # failure is not a deployment's status. Only the labelled field may name deployment state.
+ plain() { sed -E $'s/\033\\[[0-9;]*[[:alpha:]]//g' "$1"; }
++# Public annotations have a fixed output budget; keep the actionable tail of vendor diagnostics.
++diagnostic_tail() { plain "$1" | tail -c 4000; }
+ deployment_state() {
+   plain "$1" | sed -nE 's/^[[:space:]]*status[[:space:]]+[^[:alnum:]]*(Ready|Building|Queued|Initializing|Error|Canceled|Cancelled)[[:space:]]*$/\1/p' | head -n 1
+ }
+@@ -84,7 +87,7 @@ upload || status=$?
+ url=$(deploy_url "$upload_log")
+ if [ "$status" -ne 0 ] && [ -z "$url" ]; then
+   if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
+-    fail "upload timed out after ${UPLOAD_TIMEOUT}s with no deployment URL (not retried)"
++    fail "upload timed out after ${UPLOAD_TIMEOUT}s with no deployment URL (not retried, exit $status): $(diagnostic_tail "$upload_log")"
+   fi
+   log "upload exited $status with no deployment URL; retrying once"
+   : >"$upload_log"
+@@ -92,30 +95,32 @@ if [ "$status" -ne 0 ] && [ -z "$url" ]; then
+   upload || status=$?
+   url=$(deploy_url "$upload_log")
+ fi
+-[ -n "$url" ] || fail "upload exited $status with no deployment URL"
++[ -n "$url" ] || fail "upload exited $status with no deployment URL: $(diagnostic_tail "$upload_log")"
+ [ "$status" -eq 0 ] || log "upload exited $status but printed $url; waiting on it, not retrying"
+ echo "deployment: $url"
+
+-log "ready: vercel inspect --wait (bound ${READY_TIMEOUT}s)"
++# Standalone inspect cannot infer the linked project's team context like deploy can.
++log "ready: vercel inspect --wait with configured team scope (bound ${READY_TIMEOUT}s)"
+ status=0
+-inspect_failure=""
+-bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
++bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --scope "$VERCEL_ORG_ID" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
+ cat "$wait_log" >&2
+-if [ "$status" -ne 0 ]; then
++state=$(deployment_state "$wait_log")
++case "$state" in Error|Canceled|Cancelled) terminal=1 ;; *) terminal=0 ;; esac
++if [ "$status" -ne 0 ] || [ "$terminal" -eq 1 ]; then
+   log "inspect --wait exited $status; reading the deployment state once more"
+   state_status=0
+-  bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" >"$state_log" 2>&1 || state_status=$?
++  bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" --scope "$VERCEL_ORG_ID" >"$state_log" 2>&1 || state_status=$?
+   cat "$state_log" >&2
+-  state=$(deployment_state "$state_log")
+-  diagnostic=$(printf '\ninspect --wait output (exit %s):\n%s\nstate re-read output (exit %s):\n%s' \
+-    "$status" "$(plain "$wait_log")" "$state_status" "$(plain "$state_log")")
++  # A failed re-read cannot erase the terminal state reported by the waiting command.
++  state=${state:-$(deployment_state "$state_log")}
++  diagnostic=$(printf '\ninspect --wait output (exit %s, last 4000 bytes):\n%s\nstate re-read output (exit %s, last 4000 bytes):\n%s' \
++    "$status" "$(diagnostic_tail "$wait_log")" "$state_status" "$(diagnostic_tail "$state_log")")
+   if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
+     inspect_failure="${state:-unknown} after ${READY_TIMEOUT}s $url$diagnostic"
+   else
+     inspect_failure="${state:-unknown} (inspect exited $status) $url$diagnostic"
+   fi
+-  log "$inspect_failure"
+-  log "inspect could not confirm readiness; checking the public commit before deciding"
++  fail "$inspect_failure"
+ fi
+
+ expect="\"sha\":\"$GITHUB_SHA\""
+@@ -124,7 +129,15 @@ for attempt in $(seq 1 "$HEALTH_ATTEMPTS"); do
+   log "health: $HEALTH_URL attempt $attempt/$HEALTH_ATTEMPTS, expecting $expect"
+   body=$(curl -fsS --max-time 20 --retry "$HEALTH_RETRIES" --retry-all-errors --retry-delay "$HEALTH_RETRY_DELAY" "$HEALTH_URL") || body=""
+   echo "$body"
+-  case "$body" in *"$expect"*) log "health: serving $GITHUB_SHA"; exit 0 ;; esac
++  if printf '%s' "$body" | node -e '
++    let body = "";
++    process.stdin.on("data", chunk => body += chunk);
++    process.stdin.on("end", () => {
++      try { const h = JSON.parse(body); process.exit(h.ok === true && h.sha === process.argv[1] ? 0 : 1); }
++      catch { process.exit(1); }
++    });' "$GITHUB_SHA"; then
++    log "health: serving $GITHUB_SHA"; exit 0
++  fi
+   [ "$attempt" -lt "$HEALTH_ATTEMPTS" ] && sleep "$HEALTH_POLL_DELAY"
+ done
+-fail "health check at $HEALTH_URL does not report $GITHUB_SHA (last body: ${body:-none}) $url${inspect_failure:+$'\n'}$inspect_failure"
++fail "health check at $HEALTH_URL does not report $GITHUB_SHA (last body, first 1000 bytes: $(printf '%s' "${body:-none}" | head -c 1000)) $url"

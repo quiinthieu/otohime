@@ -1,0 +1,80 @@
++  "id": "run-9187",
++  "tm_task_id": "8e93f952-a314-4c83-8aad-ecc564be83bc",
++  "agent_profile": "codex-sol-6-1-high",
++  "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
++  "worker_id": "billie-mac",
++  "account_id": "codex-main",
++  "runner": "fleet"
++}
+diff --git a/projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9187/artifacts/task-ingestion.json b/projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9187/artifacts/task-ingestion.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..51309f32e8e6631e7e3206b2e93f17dbe2c80d3c
+--- /dev/null
++++ b/projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9187/artifacts/task-ingestion.json
+@@ -0,0 +1,26 @@
++{
++  "boundary": "Persisted fields only; callback transport internals and earlier log bodies are unproven.",
++  "tasks": [
++    {
++      "status": "fulfilled",
++      "value": {
++        "id": "723ea420-6d52-4aab-aebd-1aacbac96574",
++        "status": "COMPLETED",
++        "repoId": "otohime",
++        "callbackState": "delivered",
++        "callbackAttempts": 1
++      }
++    },
++    {
++      "status": "fulfilled",
++      "value": {
++        "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
++        "status": "FAILED",
++        "repoId": "otohime",
++        "callbackState": "delivered",
++        "callbackAttempts": 1,
++        "error": "agent_failed: exit 3 class=infra marker=mcp_probe_failed: plan-manager timeout"
++      }
++    }
++  ]
++}
+diff --git a/scripts/verify-bottle-contracts.mjs b/scripts/verify-bottle-contracts.mjs
+index ced794e9b8f8be6b4584b0f2fa74631343b34cdb..e5b6facadd98c8b8b56b6d3c32336e4457b2a54c
+--- a/scripts/verify-bottle-contracts.mjs
++++ b/scripts/verify-bottle-contracts.mjs
+@@ -44,9 +44,15 @@
+   { id: "layout", cmd: `node ${flags} --test lib/bottle-footer-layout.test.ts lib/bottles.test.ts`, required: layoutNames },
+   { ...sharedGate("unit"), required: [
+     ...sharedGate("unit").required,
++    ...layoutNames,
++    ...["layout", "unit", "browser", "footer"].map((id) => `Bottle ${id} receipt requires every named passing test and nonzero unskipped TAP`),
++    "Bottle repository receipt requires layout, picker and every verifier regression",
+     "Bottle verifier import preserves shared gates and single-gate CLI rejects silent exit0",
+     "Bottle closure receipt rejects renamed or empty controls and a fake uncertified runner",
+     "Bottle footer receipt rejects summary counts without the individual walk and probe assertions",
++    "Bottle static receipt requires actual lint and typecheck output and makes only a static claim",
++    "Bottle deployment receipt requires scoped Ready and fail-closed controls beyond an assertion count",
++    "Bottle deployment receipt reconciles unique assertion lines with its summary",
+   ] },
+   ...["static", "closure"].map(sharedGate),
+   { id: "browser", cmd: `node ${flags} scripts/e2e.mjs --test e2e/bottle-ui.test.ts`, required: browserNames },
+@@ -68,6 +74,9 @@
+   assert.doesNotMatch(output, /^not ok - /m);
+   const count = Number(output.match(/^# all (\d+) assertions passed$/m)?.[1]);
+   assert.ok(count >= 59, "deployment fixture executes all assertions");
++  const assertions = output.split("\n").filter((line) => line.startsWith("ok - "));
++  assert.equal(new Set(assertions).size, assertions.length, "duplicate deployment assertions cannot replace missing controls");
++  assert.equal(assertions.length, count, "individual deployment assertions must match the summary");
+   for (const name of deploymentNames) {
+     assert.ok(output.split("\n").includes(`ok - ${name}`), `deployment assertion absent: ${name}`);
+   }
+
+tokens used
+138,500
+Pushed `main` at `7432e70ebea0cb70cba1a12278b837a0c3e1473e`.
+
+Strengthened Bottle gate evidence with two regressions. All six required local gates and 59 deployment-fixture assertions pass.
+
+Summary submitted. Hosted CI and deployed acceptance remain unverified, owned by plan-manager/QA.
+---
+Command exited with code: 0

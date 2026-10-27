@@ -1,0 +1,228 @@
+[
+  {
+    "id": "layout",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/bottle-footer-layout.test.ts lib/bottles.test.ts",
+    "required": [
+      "Bottle stylesheet reserves a rem header band with a bottom anchor and 44px targets",
+      "Bottle clearance contains default, 24px and 32px text at normal and 200% roots",
+      "Bottle clearance rejects the old -2.4rem scene overlap using the same invariant",
+      "Bottle clearance rejects the old 2.5rem top-border protrusion using the same invariant",
+      "draw history normalizes unknown ids, resets exhaustion without immediate repeats and bounds storage"
+    ],
+    "exit_code": 0,
+    "duration_ms": 79,
+    "log_sha256": "529c6f45cbc8a551a53fd76aac38dc6945c796c0453b28b2c38ff1c33e30e0b5",
+    "evidence": {
+      "tests": 12,
+      "required": [
+        "Bottle stylesheet reserves a rem header band with a bottom anchor and 44px targets",
+        "Bottle clearance contains default, 24px and 32px text at normal and 200% roots",
+        "Bottle clearance rejects the old -2.4rem scene overlap using the same invariant",
+        "Bottle clearance rejects the old 2.5rem top-border protrusion using the same invariant",
+        "draw history normalizes unknown ids, resets exhaustion without immediate repeats and bounds storage"
+      ]
+    },
+    "evidence_negative_controls": "pass"
+  },
+  {
+    "id": "unit",
+    "cmd": "npm test",
+    "required": [
+      "all four non-TAP probe steps annotate the captured pipefail status",
+      "Footer walk reads the exact plain heading source, ignoring nested Riso plates",
+      "walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR"
+    ],
+    "exit_code": 0,
+    "duration_ms": 16147,
+    "log_sha256": "d576efbd667284355857fa5f4a2f3693c8c6d0aab6d042bae75f48f2a469fe60",
+    "evidence": {
+      "tests": 2448,
+      "required": [
+        "all four non-TAP probe steps annotate the captured pipefail status",
+        "Footer walk reads the exact plain heading source, ignoring nested Riso plates",
+        "walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR"
+      ]
+    },
+    "evidence_negative_controls": "pass"
+  },
+  {
+    "id": "static",
+    "cmd": "npm run lint && npm run typecheck",
+    "exit_code": 0,
+    "duration_ms": 9315,
+    "log_sha256": "9f7a254007f6ac0559ee7af819ee79e489fe35cdbe9029eae9c789820b39a6a3",
+    "evidence": {
+      "tools": [
+        "eslint",
+        "next typegen",
+        "tsc --noEmit"
+      ],
+      "boundary": "static analysis only"
+    },
+    "evidence_negative_controls": "pass"
+  },
+  {
+    "id": "closure",
+    "cmd": "node scripts/check-gate-closure.mjs",
+    "exit_code": 0,
+    "duration_ms": 3136,
+    "log_sha256": "108a5a848cf0b70e8e2415b814b75ad61ab66320e89efda5f1340ad662a609b3",
+    "evidence": {
+      "required": [
+        {
+          "id": "serial_vs_parallel",
+          "name": "scripts/e2e.mjs runs the e2e files one at a time; an explicit --test-concurrency=2 overlaps them (negative control)",
+          "status": "pass"
+        },
+        {
+          "id": "actions_vs_local_reporter",
+          "name": "under GitHub Actions scripts/e2e.mjs annotates each failed test with its file, line and assertion; outside it, nothing",
+          "status": "pass"
+        },
+        {
+          "id": "ci_status_preservation",
+          "name": "CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails",
+          "status": "pass"
+        },
+        {
+          "id": "embedded_postgres_lifecycle",
+          "name": "scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files",
+          "status": "pass"
+        },
+        {
+          "id": "footer_heading_source",
+          "name": "Footer walk reads the exact plain heading source, ignoring nested Riso plates",
+          "status": "pass"
+        },
+        {
+          "id": "footer_walk_probe_wiring",
+          "name": "walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR",
+          "status": "pass"
+        },
+        {
+          "id": "waterline_structure",
+          "name": "the waterline: the last thing in the site's footer, below its bar, links down to the palace",
+          "status": "pass"
+        }
+      ],
+      "fingerprint": {
+        "algorithm": "sha256",
+        "files": {
+          "scripts/check-gate-closure.mjs": "38bf3c064f9e66ee51c927081997c5336e69ea469a3928ff57ec57884ca9aff2",
+          "lib/gate-closure.test.ts": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+          "lib/e2e-runner.test.ts": "ab7823ea2df59b7412eec57c1ca97d6e15502b524f494468fecae7e0b4404c80",
+          "lib/end.test.ts": "da34e1db0b0d4027bc797734c2a609c67d4168e8996ec53c618fce2a87d93895",
+          "lib/urashima.test.ts": "df5472e89881014bc75dc1e91e29301193f6bd14a17f3168423a96240cc505af",
+          "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+          "scripts/e2e-annotate.mjs": "9f51f1cc753de5b8690a143ac3f404a90d574d660a5d09f20fd7eebd859933f4",
+          "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+          "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+          "scripts/probe-end.mjs": "4bb429112c69b2670a7c90288ae2515a60d6c2b8555cba6a2f90e597f7ba9b22",
+          "lib/end.ts": "0e1cab423c67ed77fc7a1bf065a1e30239238e89a8506bfe7d3ab57faba578b4",
+          "lib/urashima.ts": "b0c669ac6ddc59b7ef98b1ca7b5a2249f452060e6c51e5f55b771bec1e7663a1",
+          "lib/pages.ts": "42240e734397fb3ac8d65e57a33ef016b347ce2237da18c2f57a9ce120c8dd95",
+          "content/site.ts": "2c6d59076924cf2171a915557c5354740ebd7955f30fdd25fc1a6958a88a8910",
+          "components/end-footer.tsx": "043707b4ed9eb2b106eae92a30f2e9cb7c576f7d65c1ca6c22b0b160a3adef0d",
+          "components/urashima-keys.tsx": "e19f857a64fa105992d8ba92574606105c63e46763b5a5e5282e432979143c12",
+          "components/handheld.tsx": "a400cad3a73b47fbedbcbd146e801bbc88be303d8394e886a80b53f2623cc1c0",
+          "app/(site)/layout.tsx": "d585cb4de2ec3e9ea8192f25b618c0fcc309386f794901f9bf7943cde3ff2012",
+          "app/(site)/globals.css": "df2accbef90094bcabb881656e8d7d8b0a6fc287bb3ba91f77229e7370b86b16",
+          "drizzle.config.ts": "e71aa804d5af6318de36246908d13777f49e0c1671927465eef53460b522dbd4",
+          "db/migrations": "150edbf1046b1031ae8639848fc81f8728b8395d4277d5c524f2454f5a489172",
+          ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36",
+          "package.json": "b43340c2d2ad12c024f0d3cb0b71688e895a6715e494706be759b6323ff20112",
+          "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+        },
+        "combined": "8357a3cd96f168ef2f1a86856e99738abc99e655e58e9dfcac2deb860ac55e5d",
+        "missing": [],
+        "changed_during_run": [],
+        "ok": true
+      }
+    },
+    "evidence_negative_controls": "pass"
+  },
+  {
+    "id": "browser",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/bottle-ui.test.ts",
+    "required": [
+      "both entries share the lazy card; keyboard, safe deliberate visit, focus and modal coexistence",
+      "footer Bottle contains enlarged text and growing 200% root text at 1366",
+      "footer Bottle contains enlarged text and growing 200% root text at 768",
+      "footer Bottle contains enlarged text and growing 200% root text at 390",
+      "repeat exhaustion, stale stored ids, cross-entry history and bounded persistence",
+      "readable but unwritable storage keeps visit history across both entries",
+      "touch, blocked storage, offline pool and live reduced motion stay usable",
+      "empty and single pools and malformed stored history remain usable",
+      "real suggestion is pending in Postgres and absent from the public pool; validation stays local",
+      "suggestion failures retain input, render inert reasons, prevent duplicates and honor 429",
+      "no-JS baseline retains footer/Pocket links and explains Bottle activation",
+      "lazy network boundaries, emitted gzip budgets and open/close CLS at 1366",
+      "lazy network boundaries, emitted gzip budgets and open/close CLS at 390",
+      "browser Back closes the shared-footer modal without an orphaned overlay"
+    ],
+    "exit_code": 0,
+    "duration_ms": 25123,
+    "log_sha256": "c1ca9f3fef750da11111429ea30620c1a76ad8ba4ee4ae5bd8329f7a600cd663",
+    "build_id": "z0kaoXqMz4xzyp9NHSXfo",
+    "evidence": {
+      "tests": 14,
+      "required": [
+        "both entries share the lazy card; keyboard, safe deliberate visit, focus and modal coexistence",
+        "footer Bottle contains enlarged text and growing 200% root text at 1366",
+        "footer Bottle contains enlarged text and growing 200% root text at 768",
+        "footer Bottle contains enlarged text and growing 200% root text at 390",
+        "repeat exhaustion, stale stored ids, cross-entry history and bounded persistence",
+        "readable but unwritable storage keeps visit history across both entries",
+        "touch, blocked storage, offline pool and live reduced motion stay usable",
+        "empty and single pools and malformed stored history remain usable",
+        "real suggestion is pending in Postgres and absent from the public pool; validation stays local",
+        "suggestion failures retain input, render inert reasons, prevent duplicates and honor 429",
+        "no-JS baseline retains footer/Pocket links and explains Bottle activation",
+        "lazy network boundaries, emitted gzip budgets and open/close CLS at 1366",
+        "lazy network boundaries, emitted gzip budgets and open/close CLS at 390",
+        "browser Back closes the shared-footer modal without an orphaned overlay"
+      ]
+    },
+    "evidence_negative_controls": "pass"
+  },
+  {
+    "id": "footer",
+    "cmd": "node scripts/verify-bottle-footer.mjs",
+    "required": [
+      "CI-mode production footer walk and Chromium probe"
+    ],
+    "exit_code": 0,
+    "duration_ms": 74626,
+    "log_sha256": "1f89f443b9f444ffeb0a392995300ec19e6f4615a7bec3197181ee010fb60b9e",
+    "build_id": "fnsD91z-XUi8Jhgzw41F4",
+    "evidence": {
+      "tests": 1,
+      "required": [
+        "CI-mode production footer walk and Chromium probe"
+      ]
+    },
+    "evidence_negative_controls": "pass"
+  },
+  {
+    "id": "deployment",
+    "cmd": "bash scripts/vercel-deploy.test.sh",
+    "exit_code": 0,
+    "duration_ms": 22125,
+    "log_sha256": "74999646532f2a1e80ed7ebffe2b7ecfa25243a6f2b789a9431db9769946d7e1",
+    "evidence": {
+      "assertions": 54,
+      "required": [
+        "standalone inspect without scope reproduces User not found",
+        "explicit team scope permits Ready inspect and exact-sha health",
+        "waiting inspect receives the configured team scope",
+        "diagnostic re-read receives the same team scope",
+        "scoped Ready re-read cannot rescue failed waiting inspect",
+        "missing team is refused before upload",
+        "User not found with explicit scope still fails closed before health",
+        "matching nested sha cannot impersonate the served executable"
+      ],
+      "boundary": "fake Vercel CLI; real local HTTP and shell processes"
+    },
+    "evidence_negative_controls": "pass"
+  }
+]

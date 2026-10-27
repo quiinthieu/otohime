@@ -2,15 +2,19 @@
 import { createAccessControl } from "better-auth/plugins/access";
 import { adminAc, defaultStatements, userAc } from "better-auth/plugins/admin/access";
 
-// Better Auth's admin statements plus the songs owners put on /music.
-export const ac = createAccessControl({ ...defaultStatements, song: ["create", "delete"] });
+// Better Auth statements plus owner songs and owner/admin Bottle moderation.
+export const ac = createAccessControl({
+  ...defaultStatements,
+  song: ["create", "delete"],
+  bottle: ["moderate"],
+});
 
 export const statements = ac.statements;
 
 // Highest first: the roles page renders its columns in this order.
 export const roles = {
   owner: ac.newRole(ac.statements), // everything, incl. impersonate-admins and song
-  admin: ac.newRole({ ...adminAc.statements }), // Better Auth's admin set; no song
+  admin: ac.newRole({ ...adminAc.statements, bottle: ["moderate"] }), // Better Auth's admin set; no song
   user: ac.newRole({ ...userAc.statements }), // nothing
 };
 

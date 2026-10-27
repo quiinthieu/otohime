@@ -1,0 +1,23 @@
+{
+  "observed_at": "2026-10-26T23:10:56.949538+00:00",
+  "delivery": "9d3f7463d69b852c8a40b8b94b560a9ecdfe31ca",
+  "health": {
+    "url": "https://otohime.dev/api/health",
+    "status": 200,
+    "body": {
+      "ok": true,
+      "sha": "25400127ac6ccc51c607f37a32eb804fc5b35b06"
+    }
+  },
+  "page": {
+    "url": "https://otohime.dev/desk",
+    "status": 200,
+    "build_sha": [
+      "25400127ac6ccc51c607f37a32eb804fc5b35b06"
+    ]
+  },
+  "delivery_ancestor_exit": 0,
+  "original_swipe_ancestor_exit": 0,
+  "plan_prerequisite_ancestor_exit": 0,
+  "bottle_repair_ancestor_exit": 0
+}

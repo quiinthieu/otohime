@@ -1,0 +1,14 @@
+{
+  "task": {
+    "id": "3cdd55f5-5dea-4e9c-b1a9-6e44cbb70f7f",
+    "projectId": "plan-manager",
+    "taskType": "coding_task",
+    "status": "COMPLETED",
+    "createdAt": "2026-10-26T20:28:55Z",
+    "updatedAt": "2026-10-26T21:38:01Z",
+    "completedAt": "2026-10-26T21:37:58Z",
+    "startedAt": "2026-10-26T20:29:52Z",
+    "callbackState": "delivered",
+    "callbackAttempts": 1
+  }
+}

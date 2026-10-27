@@ -1,0 +1,9 @@
+{
+  "url": "https://github.com/quiinthieu/otohime/actions/workflows/ci.yml?query=branch%3Amain",
+  "status": 200,
+  "observed_at": "2026-10-26T22:57:16.761562+00:00",
+  "read_limit": "one public index page; first20 run link excerpts",
+  "rows": [],
+  "complete": false,
+  "interpretation": "No run links were extracted from this public page; this is a no-match result, never evidence of zero runs. New 2540012 CI identity remains unread while the API is rate-limited."
+}

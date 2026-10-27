@@ -1,0 +1,17 @@
+{
+  "sha": "98ff28cd58389fa912dbe0e4e2dde95eddb9e3c4",
+  "initial": {
+    "buttonHeight": 36,
+    "buttonBottom": 11307.75,
+    "sceneTop": 11310.140625,
+    "gap": 2.390625
+  },
+  "increasedFont": {
+    "buttonHeight": 43.1875,
+    "buttonBottom": 11314.9375,
+    "sceneTop": 11310.140625,
+    "gap": -4.796875
+  },
+  "boundary": "real Chrome and live CSS; intentional 24px browser-only style perturbation",
+  "existingDefectConfirmed": true
+}

@@ -1,0 +1,17 @@
+.bottle-panel { width: min(32rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); overflow: auto; padding: 1.25rem; color: var(--ink); background: var(--paper); border: 1px solid currentColor; border-radius: 3px; box-shadow: 4px 5px 0 color-mix(in srgb, var(--ink) 18%, transparent); }
+.bottle-panel:not([open]) { display: none; }
+.bottle-panel::backdrop { background: #231e1970; }
+.bottle-panel header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.bottle-panel h2, .bottle-panel h3 { font-weight: 600; }
+.bottle-panel p { margin-block: .75rem; }
+.bottle-notice { height: 3.6em; overflow: auto; }
+.bottle-card-slot { height: 17rem; padding-block: 1rem; }
+.bottle-card { height: 100%; overflow: auto; border: 1px dashed currentColor; padding: 1rem; background: color-mix(in srgb, var(--paper) 94%, var(--ink)); }
+.bottle-panel details { margin-top: 1.5rem; border-top: 1px solid; padding-top: 1rem; }
+.bottle-panel summary { cursor: pointer; }
+.bottle-panel label { display: block; margin-block: .75rem; }
+.bottle-panel input, .bottle-panel textarea, .bottle-panel select { display: block; width: 100%; padding: .4rem; border: 1px solid currentColor; border-radius: 2px; font: inherit; background: var(--paper); color: var(--ink); }
+.bottle-panel .bottle-honey { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.bottle-panel :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+.bottle-card a { white-space: normal; overflow-wrap: anywhere; }

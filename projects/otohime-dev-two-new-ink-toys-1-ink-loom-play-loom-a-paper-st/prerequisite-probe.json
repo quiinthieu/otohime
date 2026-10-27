@@ -1,0 +1,15 @@
+{
+  "plan_id": "pm-285",
+  "revision": 1,
+  "observed_at": "2026-10-26T19:06:55Z",
+  "manifest_generation": 1,
+  "delivery_workflow": "legacy_v1",
+  "admission_mode": "shadow",
+  "results": [
+    {"prerequisite_id":"git:otohime:ssh-delivery","state":"failed","detail":"secret git-key-otohime is not a managed secret plan-manager reads (managed: ci-tokens, plan-manager, task-manager-secrets)"},
+    {"prerequisite_id":"fleet:otohime:software-engineer","state":"unknown","detail":"task-manager accounts/rank adapter HTTP 400: repo and provider (or account_id) are required"},
+    {"prerequisite_id":"github:otohime:actions","state":"failed","detail":"service github-actions is not allowlisted"},
+    {"prerequisite_id":"vercel:otohime:production","state":"failed","detail":"service vercel is not allowlisted"}
+  ],
+  "interpretation": "No typed probe proved readiness. The observed failures are adapter coverage and request-shape limitations; no operator-owned physical setup gap was established. Do not infer execution-runner or deployed readiness."
+}

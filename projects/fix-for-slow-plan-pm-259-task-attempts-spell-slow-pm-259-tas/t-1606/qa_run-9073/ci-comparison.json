@@ -1,0 +1,52 @@
+{
+  "last_green": {
+    "id": 121745878013,
+    "name": "checks",
+    "conclusion": "success",
+    "runner_name": "GitHub Actions 1000000853",
+    "runner_group_name": "GitHub Actions",
+    "labels": [
+      "ubuntu-24.04"
+    ],
+    "started_at": "2026-10-26T17:49:55Z",
+    "completed_at": "2026-10-26T18:01:42Z"
+  },
+  "delivery_failure": {
+    "id": 121769441639,
+    "name": "checks",
+    "conclusion": "failure",
+    "runner_name": "GitHub Actions 1000000856",
+    "runner_group_name": "GitHub Actions",
+    "labels": [
+      "ubuntu-24.04"
+    ],
+    "started_at": "2026-10-26T18:34:21Z",
+    "completed_at": "2026-10-26T18:43:47Z"
+  },
+  "footer_failure": {
+    "id": 121773440006,
+    "name": "checks",
+    "conclusion": "failure",
+    "runner_name": "GitHub Actions 1000000857",
+    "runner_group_name": "GitHub Actions",
+    "labels": [
+      "ubuntu-24.04"
+    ],
+    "started_at": "2026-10-26T18:41:56Z",
+    "completed_at": "2026-10-26T18:54:20Z"
+  },
+  "deployed_green": {
+    "id": 121782720843,
+    "name": "checks",
+    "conclusion": "success",
+    "runner_name": "GitHub Actions 1000000858",
+    "runner_group_name": "GitHub Actions",
+    "labels": [
+      "ubuntu-24.04"
+    ],
+    "started_at": "2026-10-26T18:59:31Z",
+    "completed_at": "2026-10-26T19:15:24Z"
+  },
+  "workflow_log": "git log 4b8278a..01dfe6b -- .github/workflows/ci.yml returns no commits",
+  "attribution": "code: unsafe browser-clock fixture premise; no environment change identified"
+}

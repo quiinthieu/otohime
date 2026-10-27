@@ -1,0 +1,38 @@
+[
+  {
+    "path": "/api/health",
+    "status": "200",
+    "body": "{\"ok\":true,\"sha\":\"d6221b79b9c796d7c85c975bd122c7bed6d351e1\"}",
+    "headers": [
+      "cache-control: public, max-age=0, must-revalidate",
+      "content-type: application/json",
+      "x-matched-path: /api/health",
+      "x-vercel-cache: MISS"
+    ],
+    "ancestry": {
+      "a6723c1b52f25ad9259c23eb33ebd9cafb01b788": 1,
+      "a958913b6a17f2cefda59882dfbdfcb0cd01e453": 0
+    }
+  },
+  {
+    "path": "/api/ghosts",
+    "status": "404",
+    "body": "",
+    "headers": [
+      "cache-control: no-store",
+      "x-matched-path: /api/ghosts",
+      "x-vercel-cache: MISS"
+    ]
+  },
+  {
+    "path": "/api/ghosts?probe=1",
+    "status": "200",
+    "body": "null",
+    "headers": [
+      "cache-control: no-store",
+      "content-type: application/json",
+      "x-matched-path: /api/ghosts",
+      "x-vercel-cache: MISS"
+    ]
+  }
+]

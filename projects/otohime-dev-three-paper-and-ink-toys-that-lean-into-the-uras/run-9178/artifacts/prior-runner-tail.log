@@ -1,0 +1,66 @@
+Bounded last 65 lines from task_manager_get_task_logs; earlier raw output is unread.
+# all 54 assertions passed
+
+exec
+/bin/zsh -lc "cp /tmp/t-1648-verification.log projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/verification-run.log
+node --input-type=module <<'JS'
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const dir='projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts';
+const r=JSON.parse(readFileSync(dir+'/verification.json'));
+assert.deepEqual(r.map(x=>x.id),['layout','unit','static','closure','browser','footer','deployment']);
+assert.ok(r.every(x=>x.exit_code===0&&x.evidence_negative_controls==='pass'));
+assert.equal(r.at(-1).evidence.assertions,54);
+console.log(JSON.stringify(r.map(x=>({id:x.id,tests:x.evidence.tests,assertions:x.evidence.assertions,build:x.build_id}))));
+JS
+git restore content/history.json
+git diff --check && git add projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171-summary.md projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171 && git commit --amend --no-edit && git rev-parse HEAD > ../../shared/artifacts/commits.txt && git status --short && git push origin HEAD" in /Users/avietidol/Library/Application Support/build-worker/leases/6c33ad97-3c83-4a7e-ad97-3d583e4b94cf-fa95a626641cf537835abd3834ba04be/work/otohime
+ succeeded in 4271ms:
+[{"id":"layout","tests":12},{"id":"unit","tests":2448},{"id":"static"},{"id":"closure"},{"id":"browser","tests":14,"build":"z0kaoXqMz4xzyp9NHSXfo"},{"id":"footer","tests":1,"build":"fnsD91z-XUi8Jhgzw41F4"},{"id":"deployment","assertions":54}]
+[main f08f670] pm-269/t-1648: Scope production inspection and certify Bottle gates
+ Date: Tue Oct 27 13:19:58 2026 +0700
+ 22 files changed, 16860 insertions(+), 6 deletions(-)
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171-summary.md
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/browser-build.txt
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/browser.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/cli-preflight.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/closure.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/deployment-red.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/deployment.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/executable.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/footer-build.txt
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/footer.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/history.json
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/layout.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/prior-runner.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/sample-failure-runner.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/static.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/unit.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/verification-run.log
+ create mode 100644 projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/verification.json
+ create mode 100644 scripts/verify-bottle-contracts.mjs
+To github.com:quiinthieu/otohime.git
+   e9b32bf..f08f670  HEAD -> main
+
+exec
+/bin/zsh -lc 'cat ../../shared/artifacts/commits.txt' in /Users/avietidol/Library/Application Support/build-worker/leases/6c33ad97-3c83-4a7e-ad97-3d583e4b94cf-fa95a626641cf537835abd3834ba04be/work/otohime
+ succeeded in 0ms:
+f08f670eb8bd5c699463062c4d00f08c4d486cfa
+
+mcp: plan-manager/plan_manager_submit_report started
+mcp: plan-manager/plan_manager_submit_report (completed)
+codex
+Pushed `main`: `f08f670eb8bd5c699463062c4d00f08c4d486cfa`.
+
+Added Vercel team scope to both inspect calls and regression coverage. All six Bottle gates and 54 deployment assertions pass after rebase.
+
+Summary submitted. New production CI and deployed QA remain pending with plan-manager.
+tokens used
+124,290
+Pushed `main`: `f08f670eb8bd5c699463062c4d00f08c4d486cfa`.
+
+Added Vercel team scope to both inspect calls and regression coverage. All six Bottle gates and 54 deployment assertions pass after rebase.
+
+Summary submitted. New production CI and deployed QA remain pending with plan-manager.
+---
+Command exited with code: 0

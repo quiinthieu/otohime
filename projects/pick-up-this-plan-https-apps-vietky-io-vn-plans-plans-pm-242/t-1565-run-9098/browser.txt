@@ -1,0 +1,202 @@
+# FACE=quiet
+ok - desktop light: the shelf is on the page
+ok - desktop light: quiet cassette and quiet cartridge
+ok - desktop light: the quiet words
+ok - desktop light: labels fit, nothing scrolls sideways
+ok - desktop light: label and credit text at least 4.5:1
+ok - desktop light: links are at least 24 px tall
+ok - desktop light: capped labels fit the reserved space
+ok - desktop light: the label keeps its height when full
+ok - desktop dark: the shelf is on the page
+ok - desktop dark: quiet cassette and quiet cartridge
+ok - desktop dark: the quiet words
+ok - desktop dark: labels fit, nothing scrolls sideways
+ok - desktop dark: label and credit text at least 4.5:1
+ok - desktop dark: links are at least 24 px tall
+ok - desktop dark: capped labels fit the reserved space
+ok - desktop dark: the label keeps its height when full
+ok - phone light: the shelf is on the page
+ok - phone light: quiet cassette and quiet cartridge
+ok - phone light: the quiet words
+ok - phone light: labels fit, nothing scrolls sideways
+ok - phone light: label and credit text at least 4.5:1
+ok - phone light: links are at least 24 px tall
+ok - phone light: capped labels fit the reserved space
+ok - phone light: the label keeps its height when full
+ok - phone dark: the shelf is on the page
+ok - phone dark: quiet cassette and quiet cartridge
+ok - phone dark: the quiet words
+ok - phone dark: labels fit, nothing scrolls sideways
+ok - phone dark: label and credit text at least 4.5:1
+ok - phone dark: links are at least 24 px tall
+ok - phone dark: capped labels fit the reserved space
+ok - phone dark: the label keeps its height when full
+ok - control: an unbroken label is caught overflowing
+ok - control: undone, the labels fit again
+ok - control: grey label text is caught below 4.5:1
+ok - control: undone, the label text is legible again
+ok - reels: a playing tape's reels turn
+ok - reels: reduced motion switched on mid-play stops them
+ok - reels: and switched off, they turn again
+ok - control: a tape that is not playing stands still
+ok - reels: under reduced motion from the start they stand still
+ok - keyboard light: Tab reaches the cassette's link
+ok - keyboard light: its focus ring is drawn in label ink
+ok - keyboard dark: Tab reaches the cassette's link
+ok - keyboard dark: its focus ring is drawn in label ink
+ok - no-JS: the shelf is there and visible
+ok - no-JS: the quiet face
+ok - no-JS: a read stamp only when read
+ok - scripts were scanned
+ok - no console or page errors
+probe: 50 ok, 0 failed
+# FACE=live
+ok - desktop light: the shelf is on the page
+ok - desktop light: the fixture track and game
+ok - desktop light: the long labels arrive capped
+ok - desktop light: labels fit, nothing scrolls sideways
+ok - desktop light: label and credit text at least 4.5:1
+ok - desktop light: links are at least 24 px tall
+ok - desktop dark: the shelf is on the page
+ok - desktop dark: the fixture track and game
+ok - desktop dark: the long labels arrive capped
+ok - desktop dark: labels fit, nothing scrolls sideways
+ok - desktop dark: label and credit text at least 4.5:1
+ok - desktop dark: links are at least 24 px tall
+ok - phone light: the shelf is on the page
+ok - phone light: the fixture track and game
+ok - phone light: the long labels arrive capped
+ok - phone light: labels fit, nothing scrolls sideways
+ok - phone light: label and credit text at least 4.5:1
+ok - phone light: links are at least 24 px tall
+ok - phone dark: the shelf is on the page
+ok - phone dark: the fixture track and game
+ok - phone dark: the long labels arrive capped
+ok - phone dark: labels fit, nothing scrolls sideways
+ok - phone dark: label and credit text at least 4.5:1
+ok - phone dark: links are at least 24 px tall
+ok - control: an unbroken label is caught overflowing
+ok - control: undone, the labels fit again
+ok - control: grey label text is caught below 4.5:1
+ok - control: undone, the label text is legible again
+ok - reels: a playing tape's reels turn
+ok - reels: reduced motion switched on mid-play stops them
+ok - reels: and switched off, they turn again
+ok - control: a tape that is not playing stands still
+ok - reels: under reduced motion from the start they stand still
+ok - keyboard light: Tab reaches the cassette's link
+ok - keyboard light: its focus ring is drawn in label ink
+ok - keyboard dark: Tab reaches the cassette's link
+ok - keyboard dark: its focus ring is drawn in label ink
+ok - no-JS: the shelf is there and visible
+ok - no-JS: the fixture reading, not a fallback
+ok - no-JS: a read stamp only when read
+ok - no secret in any of the 344 responses the browser received
+ok - scripts were scanned
+ok - no console or page errors
+probe: 43 ok, 0 failed
+# FACE=brainz
+ok - desktop light: the shelf is on the page
+ok - desktop light: the fixture track and game
+ok - desktop light: the long labels arrive capped
+ok - desktop light: fixture source and credit
+ok - desktop light: labels fit, nothing scrolls sideways
+ok - desktop light: label and credit text at least 4.5:1
+ok - desktop light: links are at least 24 px tall
+ok - desktop dark: the shelf is on the page
+ok - desktop dark: the fixture track and game
+ok - desktop dark: the long labels arrive capped
+ok - desktop dark: fixture source and credit
+ok - desktop dark: labels fit, nothing scrolls sideways
+ok - desktop dark: label and credit text at least 4.5:1
+ok - desktop dark: links are at least 24 px tall
+ok - phone light: the shelf is on the page
+ok - phone light: the fixture track and game
+ok - phone light: the long labels arrive capped
+ok - phone light: fixture source and credit
+ok - phone light: labels fit, nothing scrolls sideways
+ok - phone light: label and credit text at least 4.5:1
+ok - phone light: links are at least 24 px tall
+ok - phone dark: the shelf is on the page
+ok - phone dark: the fixture track and game
+ok - phone dark: the long labels arrive capped
+ok - phone dark: fixture source and credit
+ok - phone dark: labels fit, nothing scrolls sideways
+ok - phone dark: label and credit text at least 4.5:1
+ok - phone dark: links are at least 24 px tall
+ok - control: an unbroken label is caught overflowing
+ok - control: undone, the labels fit again
+ok - control: grey label text is caught below 4.5:1
+ok - control: undone, the label text is legible again
+ok - reels: a playing tape's reels turn
+ok - reels: reduced motion switched on mid-play stops them
+ok - reels: and switched off, they turn again
+ok - control: a tape that is not playing stands still
+ok - reels: under reduced motion from the start they stand still
+ok - keyboard light: Tab reaches the cassette's link
+ok - keyboard light: its focus ring is drawn in label ink
+ok - keyboard dark: Tab reaches the cassette's link
+ok - keyboard dark: its focus ring is drawn in label ink
+ok - no-JS: the shelf is there and visible
+ok - no-JS: the fixture reading, not a fallback
+ok - no-JS: a read stamp only when read
+ok - no secret in any of the 343 responses the browser received
+ok - scripts were scanned
+ok - no console or page errors
+probe: 47 ok, 0 failed
+# FACE=last
+ok - desktop light: the shelf is on the page
+ok - desktop light: the fixture track and game
+ok - desktop light: the long labels arrive capped
+ok - desktop light: fixture source and credit
+ok - desktop light: full old UTC timestamp, still reels
+ok - desktop light: labels fit, nothing scrolls sideways
+ok - desktop light: label and credit text at least 4.5:1
+ok - desktop light: links are at least 24 px tall
+ok - desktop dark: the shelf is on the page
+ok - desktop dark: the fixture track and game
+ok - desktop dark: the long labels arrive capped
+ok - desktop dark: fixture source and credit
+ok - desktop dark: full old UTC timestamp, still reels
+ok - desktop dark: labels fit, nothing scrolls sideways
+ok - desktop dark: label and credit text at least 4.5:1
+ok - desktop dark: links are at least 24 px tall
+ok - phone light: the shelf is on the page
+ok - phone light: the fixture track and game
+ok - phone light: the long labels arrive capped
+ok - phone light: fixture source and credit
+ok - phone light: full old UTC timestamp, still reels
+ok - phone light: labels fit, nothing scrolls sideways
+ok - phone light: label and credit text at least 4.5:1
+ok - phone light: links are at least 24 px tall
+ok - phone dark: the shelf is on the page
+ok - phone dark: the fixture track and game
+ok - phone dark: the long labels arrive capped
+ok - phone dark: fixture source and credit
+ok - phone dark: full old UTC timestamp, still reels
+ok - phone dark: labels fit, nothing scrolls sideways
+ok - phone dark: label and credit text at least 4.5:1
+ok - phone dark: links are at least 24 px tall
+ok - control: an unbroken label is caught overflowing
+ok - control: undone, the labels fit again
+ok - control: grey label text is caught below 4.5:1
+ok - control: undone, the label text is legible again
+ok - last listen: reels naturally still
+ok - reels: a playing tape's reels turn
+ok - reels: reduced motion switched on mid-play stops them
+ok - reels: and switched off, they turn again
+ok - control: a tape that is not playing stands still
+ok - reels: under reduced motion from the start they stand still
+ok - keyboard light: Tab reaches the cassette's link
+ok - keyboard light: its focus ring is drawn in label ink
+ok - keyboard dark: Tab reaches the cassette's link
+ok - keyboard dark: its focus ring is drawn in label ink
+ok - no-JS: the shelf is there and visible
+ok - no-JS: the fixture reading, not a fallback
+ok - no-JS: last UTC date and stationary reels
+ok - no-JS: a read stamp only when read
+ok - no secret in any of the 343 responses the browser received
+ok - scripts were scanned
+ok - no console or page errors
+probe: 53 ok, 0 failed
+probe-cassette: 0 failed pass(es)

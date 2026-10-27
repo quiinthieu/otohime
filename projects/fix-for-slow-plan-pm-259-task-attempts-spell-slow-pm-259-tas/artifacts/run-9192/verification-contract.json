@@ -1,0 +1,35 @@
+{
+  "note": "Executable replacement commands for PO/plan-manager to adopt; SWE does not mutate board verification metadata. Pre-push delivery uses MAIN_DELIVERY_REF=HEAD. Run npm ci in a clean checkout first.",
+  "verification": [
+    {
+      "name": "origin/main delivery state and main lane closure unit contracts",
+      "cwd": ".",
+      "cmd": "node scripts/verify-main-lane.mjs --gate delivery /tmp/pm270-t1671-delivery",
+      "expect": "match:Verified delivery: named positive assertions and silent-exit negative control passed"
+    },
+    {
+      "name": "full CI unit suite",
+      "cwd": ".",
+      "cmd": "node scripts/verify-main-lane.mjs --gate unit /tmp/pm270-t1671-unit",
+      "expect": "match:Verified unit: named positive assertions and silent-exit negative control passed"
+    },
+    {
+      "name": "lint, typecheck, and gate closure",
+      "cwd": ".",
+      "cmd": "node scripts/verify-main-lane.mjs --gate static /tmp/pm270-t1671-static",
+      "expect": "match:Verified static: named positive assertions and silent-exit negative control passed"
+    },
+    {
+      "name": "CI-mode isolated footer walk and Chromium probe",
+      "cwd": ".",
+      "cmd": "node scripts/verify-main-lane.mjs --gate footer /tmp/pm270-t1671-footer",
+      "expect": "match:Verified footer: named positive assertions and silent-exit negative control passed"
+    },
+    {
+      "name": "serial production E2E x3",
+      "cwd": ".",
+      "cmd": "node scripts/verify-main-lane.mjs --gate e2e /tmp/pm270-t1671-e2e",
+      "expect": "match:Verified e2e-3: named positive assertions and silent-exit negative control passed"
+    }
+  ]
+}

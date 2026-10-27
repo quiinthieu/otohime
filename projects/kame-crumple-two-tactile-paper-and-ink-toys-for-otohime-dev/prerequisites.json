@@ -1,0 +1,84 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-259",
+  "revision": 3,
+  "external_dependencies_reviewed": true,
+  "reason": "Browser features are repository-owned, but saving, running CI and deploying require the existing GitHub/fleet/Vercel/Neon capabilities below. Secret values are never requested; provider-side secret names are configuration references, not invented platform-managed secret keys.",
+  "prerequisites": [
+    {
+      "id": "github:otohime:git",
+      "owner": "agent",
+      "required_setup": "GitHub quiinthieu/otohime, registered otohime deploy key (git-key-otohime), read repository and push main without force; existing operator-owned repository and existing platform-funded delivery authority; no new account or spend.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "git_host_read",
+        "target": "repo:otohime",
+        "expect": "readable"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "fleet:otohime:node22-chrome",
+      "owner": "agent",
+      "required_setup": "Task-manager registered repo otohime with an enabled coding account and fleet/cluster execution on Node 22, locked npm install, real Chrome/Chromium, native embedded PostgreSQL17 or CI postgres17 service, git and network to npm/fonts. Existing operator-authorized fleet allocation, no paid runtime purchase; scheduler places jobs. Execution must also reach origin over SSH and construct the locked browser/database adapters; control-plane service probes do not establish this.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "task_manager_capability",
+        "target": "account:otohime:software_engineer",
+        "expect": "eligible"
+      },
+      "probe_context": [
+        "execution_runner"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "github:otohime:actions",
+      "owner": "agent",
+      "required_setup": "GitHub Actions for quiinthieu/otohime, CI workflow enabled on main push and workflow_dispatch, Ubuntu24.04 hosted runner with Chrome and postgres17 service. Workflow contents:read; production deployment uses existing repository secrets/variables. Public annotations/step summaries readable; authenticated raw historical logs optional because repository diagnostics provide a replacement. Existing repository owner's Actions allowance.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "service_capability",
+        "target": "github:quiinthieu/otohime:actions",
+        "expect": "CI workflow enabled with runnable checks and production jobs"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "vercel:otohime:production",
+      "owner": "agent",
+      "required_setup": "Existing Vercel project serving otohime.dev, selected by GitHub variables VERCEL_ORG_ID and VERCEL_PROJECT_ID; GitHub secret VERCEL_TOKEN has deploy/inspect access to that project. Existing production DATABASE_URL, BETTER_AUTH_SECRET and BETTER_AUTH_URL=https://otohime.dev; main deployment allowed for Otohime <quiinthieu@gmail.com>. Existing operator-owned billing/account; no new spend authority. Provider secrets stay in provider, no platform-managed secret reference is known.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "service_capability",
+        "target": "https://otohime.dev/api/health",
+        "expect": "HTTP 200 with full sha from production"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    },
+    {
+      "id": "neon:otohime:production",
+      "owner": "agent",
+      "required_setup": "Existing otohime production PostgreSQL on Neon; GitHub secret DATABASE_URL_UNPOOLED permits existing migration step, Vercel pooled DATABASE_URL permits existing application reads. Same database as registered production site; no new project/schema/billing changes. NEON_API_KEY and NEON_PROJECT_ID are preview-only and are outside this main-only recovery scope. Provider-side configuration only; no managed secret key is known.",
+      "secret_refs": [],
+      "probe": {
+        "kind": "service_capability",
+        "target": "neon:otohime:production",
+        "expect": "existing main migration connection and deployed public project/note reads available"
+      },
+      "probe_context": [
+        "control_plane"
+      ],
+      "state": "unknown"
+    }
+  ]
+}

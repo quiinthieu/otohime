@@ -1,0 +1,91 @@
+{
+  "head": "3912d2b2dd49266e85faf35c7ffebb7c89e3a87e",
+  "build_id": "Q_JOgQOW-VpTIjtetWmU0",
+  "repeat": 2,
+  "files": {
+    ".next/BUILD_ID": {
+      "sha256": "13a1cec838d73f2424c9ad9d118666e79a54998e0760642551c4f5b93001065a",
+      "bytes": 21
+    },
+    ".next/build-manifest.json": {
+      "sha256": "5b7e7c98324def7539f9fdf3b91a880dadd0d68e8bd0b19b2f379af549e6699b",
+      "bytes": 14054
+    },
+    ".next/app-path-routes-manifest.json": {
+      "sha256": "8bc496b9855258f66deeaee764c4de99ccbcf0e53b5de4a982c6e267452d8720",
+      "bytes": 3276
+    },
+    ".next/server/app/desk.html": {
+      "sha256": "30c7e26a6e0ede4d635250f1316f470a20c63adc5c072cbcba53973c605d55dc",
+      "bytes": 49972
+    },
+    ".next/server/app/desk.meta": {
+      "sha256": "f283ed435a71d0efa841e7f2acb94f756ed4e0fde33961f5bbd96c7a7543f7a7",
+      "bytes": 5013
+    },
+    ".next/server/app/(site)/(app)/desk/page.js": {
+      "sha256": "c68c485c56ac07ffcca4782e8f84ee8b9788cea8fe1cbb8a9db179e3b584d6bd",
+      "bytes": 3132
+    },
+    ".next/server/app/(site)/(app)/desk/page_client-reference-manifest.js": {
+      "sha256": "a45f01f43d29c125db60dce83ced99000a97f5f68e725d378bcde9826186cf7e",
+      "bytes": 38257
+    },
+    "content/history.json": {
+      "sha256": "ffb0fa2719c8c4ce3a8f8190acc0d76aeb5873fe1afa6a249ebabd3f39643aad",
+      "bytes": 42591
+    },
+    "package-lock.json": {
+      "sha256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "bytes": 353159
+    },
+    "next.config.ts": {
+      "sha256": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+      "bytes": 2233
+    },
+    ".github/workflows/ci.yml": {
+      "sha256": "edbcece5c9b57d35f8554fd6988ae53f1f7ca1100478d61bb22819d5b94e26a2",
+      "bytes": 15024
+    },
+    "content/peep-box-assets.json": {
+      "sha256": "394a48c908ab02b5034413604fc4e2a6fa623fb1dc500de009a3692078a64fb6",
+      "bytes": 2601
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/NOTICE.txt": {
+      "sha256": "9758d7fdc0da7dfdca3ef7ffdcf543a98622e67566916c77c8268daa24426168",
+      "bytes": 1924
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/Apache-2.0.txt": {
+      "sha256": "8707eef0533987efc5b155d64761eeb6e20793f50b9bd1a68dad1cf4719d0ed8",
+      "bytes": 12331
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/head-worker.js": {
+      "sha256": "abded2a89252b128933ca06c8a4c9501e128029aaf9df049f231bc7428b5337a",
+      "bytes": 6799
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/face_landmarker.task": {
+      "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+      "bytes": 3758596
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/vision_bundle.cjs": {
+      "sha256": "43c65a77825c5d5af7456d4781a64cd15cb3e53f479ff1f923c12b5adecf2b44",
+      "bytes": 137315
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/wasm/vision_wasm_nosimd_internal.wasm": {
+      "sha256": "924274fcd5ac8985f6570a8573e7971b7bd2d580ba1b8f3beb0ba8f95db6347c",
+      "bytes": 10647962
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/wasm/vision_wasm_nosimd_internal.js": {
+      "sha256": "9f8fc960e363f0fb2f42f7937b97ae9cf9a5630490f71031fa90caa9bb121938",
+      "bytes": 204669
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/wasm/vision_wasm_internal.js": {
+      "sha256": "6f6b86509cf9e163ea1cfec7edc8cf53732699c04781e4c21c557c1ba402310e",
+      "bytes": 204816
+    },
+    "public/vendor/peep-box/vision-0.10.32-face-1/wasm/vision_wasm_internal.wasm": {
+      "sha256": "cb3ec20026a9aecc2a81a93c25630ceb5389297ddb7a5f0bd61dd09cde606b9b",
+      "bytes": 11453626
+    }
+  }
+}

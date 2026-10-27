@@ -1,0 +1,20 @@
+▲ Next.js 16.4.2
+- Local:         http://localhost:62366
+- Network:       http://localhost:62366
+✓ Ready in 132ms
+✓ Running next.config.ts took 28ms
+▲ Next.js 16.4.2
+- Local:         http://localhost:62459
+- Network:       http://localhost:62459
+✓ Ready in 91ms
+✓ Running next.config.ts took 23ms
+▲ Next.js 16.4.2
+- Local:         http://localhost:62459
+- Network:       http://localhost:62459
+✓ Ready in 149ms
+✓ Running next.config.ts took 35ms
+▲ Next.js 16.4.2
+- Local:         http://localhost:62459
+- Network:       http://localhost:62459
+✓ Ready in 107ms
+✓ Running next.config.ts took 33ms

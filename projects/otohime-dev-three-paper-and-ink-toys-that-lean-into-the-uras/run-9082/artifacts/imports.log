@@ -1,0 +1,8 @@
+Node v22.23.3
+next 16.4.2
+react 19.3.0
+react-dom 19.3.0
+pg 8.23.1
+playwright-core 1.64.0
+embedded-postgres 17.10.0-beta.17
+Chrome 154.0.8037.57

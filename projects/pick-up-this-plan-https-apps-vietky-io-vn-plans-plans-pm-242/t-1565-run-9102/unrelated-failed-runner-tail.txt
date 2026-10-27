@@ -1,0 +1,15 @@
+---
+Command exited with code: 0
+push_not_on_main: HEAD 6bd9ac7769067a212ffb6509a21d4cd8e7dc5bfa is not on origin/main (2 commit(s) since 5abaebc70f9f4efb627fe9a0e7db81717dc77533); cutting task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3
+progress phase=rescue
+=== rescue: preserving workspace of failed task (exit code 1, phase agent, budget 60s) ===
+On branch qa/pm-270-t-1606-run-9070
+nothing to commit, working tree clean
+remote:
+remote: Create a pull request for 'task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3' on GitHub by visiting:
+remote:      https://github.com/quiinthieu/otohime/pull/new/task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3
+remote:
+To github.com:quiinthieu/otohime.git
+ * [new branch]      HEAD -> task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3
+rescue: pushed working state to branch task-rescue/a70403e1-d4fc-4944-8233-2ee4127908b3
+=== rescue: done ===

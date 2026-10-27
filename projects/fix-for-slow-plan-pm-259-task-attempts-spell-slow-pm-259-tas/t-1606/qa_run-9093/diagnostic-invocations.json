@@ -1,0 +1,16 @@
+{
+  "preflight_initial_invocation": {
+    "exit_code": 1,
+    "cause": "QA diagnostic import path used six parent traversals instead of four",
+    "error_code": "ERR_MODULE_NOT_FOUND",
+    "path_suffix": "/db/schema.ts outside work/otohime",
+    "raw_stderr": "inspected in tool output, not retained on disk before the successful rerun overwrote preflight.stderr; no claim of complete archived initial stderr"
+  },
+  "preflight_corrected_invocation": {
+    "exit_code": 0,
+    "result": "preflight.json",
+    "stderr": "preflight.stderr",
+    "integrated_result": "preflight-integrated.json",
+    "integrated_stderr": "preflight-integrated.stderr"
+  }
+}

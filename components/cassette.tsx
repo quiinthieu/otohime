@@ -1,10 +1,10 @@
 import { RisoText } from "@/components/riso-heading";
 import { swatches } from "@/components/figures";
 import { site } from "@/content/site";
-import { readTime, type Game, type NowPlaying, type Track } from "@/lib/now-playing-data";
+import { listenTime, readTime, type MusicReading, type PlayReading, type Game, type NowPlaying, type Track } from "@/lib/now-playing-data";
 import type { CSSProperties } from "react";
 
-// Music's Now playing shelf: a paper cassette for what is on Spotify and a game cartridge for what is on Steam.
+// Music's Now playing shelf: a paper cassette for the selected music source and a game cartridge for the selected public game presence.
 // Server-rendered from a NowPlaying reading (lib/now-playing.ts reads it). The words are ordinary HTML on a
 // paper label of fixed height, so a long title wraps inside its reserved space and the page never jumps. The
 // shells are unfiltered SVGs stretched to their labels (percentage lengths, like components/cartridge.tsx).
@@ -12,7 +12,7 @@ import type { CSSProperties } from "react";
 // line of site.now. The reels turn only while a track plays, never under reduced motion (globals.css).
 export function NowPlayingShelf({ reading }: { reading: NowPlaying }) {
   const copy = site.nowPlaying;
-  const read = reading.readAt && (reading.spotify !== "spotify-off" || reading.steam !== "steam-off");
+  const read = reading.readAt && (reading.music.state !== "off" || reading.play.state !== "off");
   return (
     <section
       aria-labelledby="now-playing"
@@ -20,11 +20,15 @@ export function NowPlayingShelf({ reading }: { reading: NowPlaying }) {
       data-now-playing=""
       data-spotify={reading.spotify}
       data-steam={reading.steam}
+      data-music-source={reading.music.source ?? "none"}
+      data-music-state={reading.music.state}
+      data-play-source={reading.play.source ?? "none"}
+      data-play-state={reading.play.state}
     >
       <h2 id="now-playing" className="caption"><RisoText>{copy.heading}</RisoText></h2>
       <div className="now-playing-shelf mt-6">
-        <Cassette track={reading.track} />
-        <GameCart game={reading.game} />
+        <Cassette track={reading.track} music={reading.music} />
+        <GameCart game={reading.game} play={reading.play} />
       </div>
       <p className="mt-4 text-[12px] text-muted" data-now-playing-credit="">
         {read && reading.readAt ? (
@@ -34,21 +38,23 @@ export function NowPlayingShelf({ reading }: { reading: NowPlaying }) {
         ) : (
           copy.unread
         )}{" "}
-        <a href="https://www.spotify.com" className="underline" target="_blank" rel="noreferrer">
-          {copy.credit.spotify}
+        {(reading.music.state === "fixture" || reading.play.state === "fixture") && <span>Fixture. </span>}
+        <a href={reading.music.source === "listenbrainz" ? "https://listenbrainz.org" : "https://www.spotify.com"} className="underline" target="_blank" rel="noreferrer">
+          {reading.music.source === "listenbrainz" ? copy.credit.listenbrainz : copy.credit.spotify}
         </a>
         ,{" "}
-        <a href="https://store.steampowered.com" className="underline" target="_blank" rel="noreferrer">
-          {copy.credit.steam}
+        <a href={reading.play.source === "lanyard" ? "https://github.com/Phineas/lanyard" : "https://store.steampowered.com"} className="underline" target="_blank" rel="noreferrer">
+          {reading.play.source === "lanyard" ? copy.credit.lanyard : copy.credit.steam}
         </a>
-        .
+        .{reading.music.profileUrl && <> <a href={reading.music.profileUrl} className="underline" target="_blank" rel="noreferrer">{copy.profile}</a>.</>}
       </p>
     </section>
   );
 }
 
-function Cassette({ track }: { track: Track | null }) {
+function Cassette({ track, music }: { track: Track | null; music: MusicReading }) {
   const copy = site.nowPlaying;
+  const brainz = music.source === "listenbrainz";
   const playlist = `https://open.spotify.com/playlist/${site.playlist}`;
   return (
     <figure
@@ -59,9 +65,9 @@ function Cassette({ track }: { track: Track | null }) {
     >
       <TapeShell />
       <figcaption className="np-label tape-label">
-        <span className="np-side">{copy.tape}</span>
+        <span className="np-side">{brainz ? copy.tapeListenBrainz : copy.tape}{music.state === "fixture" ? " · fixture" : ""}</span>
         <span className="np-status" data-label="status">
-          {track ? (track.playing ? copy.playing : copy.paused) : copy.quiet}
+          {track ? (track.playing ? copy.playing : brainz ? copy.last : copy.paused) : copy.quiet}
         </span>
         <span className="np-title" data-label="title">
           {track ? track.title : copy.quietTape}
@@ -69,8 +75,9 @@ function Cassette({ track }: { track: Track | null }) {
         <span className="np-sub" data-label="sub">
           {track ? track.artists : copy.quietTapeNote}
         </span>
-        <a className="np-link" href={track?.url ?? playlist} target="_blank" rel="noreferrer">
-          {track?.url ? copy.track : copy.playlist} <span aria-hidden="true">→</span>
+        {track?.listenedAt && <time className="np-listened-at" dateTime={track.listenedAt}>{listenTime(track.listenedAt)}</time>}
+        <a className="np-link" href={track ? track.url ?? music.profileUrl ?? playlist : playlist} target="_blank" rel="noreferrer">
+          {track?.url ? (brainz ? copy.publicTrack : copy.track) : track && music.profileUrl ? copy.profile : copy.playlist} <span aria-hidden="true">→</span>
         </a>
       </figcaption>
       <Reels />
@@ -78,7 +85,7 @@ function Cassette({ track }: { track: Track | null }) {
   );
 }
 
-function GameCart({ game }: { game: Game | null }) {
+function GameCart({ game, play }: { game: Game | null; play: PlayReading }) {
   const copy = site.nowPlaying;
   const playing = site.now.find((n) => n.what === "Playing")?.note ?? "";
   return (
@@ -89,7 +96,7 @@ function GameCart({ game }: { game: Game | null }) {
     >
       <CartShell />
       <figcaption className="np-label game-label">
-        <span className="np-side">{copy.cart}</span>
+        <span className="np-side">{play.source === "lanyard" ? copy.cartLanyard : copy.cart}{play.state === "fixture" ? " · fixture" : ""}</span>
         <span className="np-status" data-label="status">
           {game ? copy.inGame : copy.quiet}
         </span>

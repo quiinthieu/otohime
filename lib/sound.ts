@@ -76,3 +76,6 @@ export const storeSound = (on: boolean) => (on ? "on" : "off");
 export const PURR: Cue = { db: -34, wave: "triangle", notes: [
   note(147, 0, 0.008, 0.09), note(165, 0.09, 0.008, 0.09), note(147, 0.18, 0.008, 0.09),
 ] };
+
+// Wooden clappers: a quiet pair of short, low triangle taps.
+export const CLAPPER: Cue = { db: -30, wave: "triangle", notes: [note(180, 0, 0.002, 0.025), note(120, 0.04, 0.002, 0.03)] };

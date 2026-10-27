@@ -1,0 +1,102 @@
+{
+  "delivery": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+  "checks": [
+    {
+      "name": "focused",
+      "log": "focused.log",
+      "exit": 0,
+      "pass": 16,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "name": "project",
+      "log": "npm-test.log",
+      "exit": 0,
+      "pass": 2407,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "name": "full-e2e",
+      "log": "e2e.log",
+      "exit": 0,
+      "pass": 181,
+      "fail": 0,
+      "skip": 1
+    },
+    {
+      "name": "riso",
+      "log": "riso.log",
+      "exit": 0,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "name": "lint",
+      "log": "lint.log",
+      "exit": 0
+    },
+    {
+      "name": "qa-lint",
+      "log": "qa-lint.log",
+      "exit": 0
+    },
+    {
+      "name": "build",
+      "log": "build.log",
+      "exit": 0
+    },
+    {
+      "name": "locked-dependencies",
+      "log": "npm-ci.log",
+      "exit": 0
+    },
+    {
+      "name": "independent-two-browser-pixels",
+      "result": "independent-results.json",
+      "exit": 0,
+      "negativeControl": {
+        "negativeControl": "suppress native stroke/fill",
+        "assertionRejected": true,
+        "pixels": 0,
+        "drawCounter": 2
+      }
+    },
+    {
+      "name": "final pre-commit npm test",
+      "exit": 0,
+      "pass": 2407,
+      "fail": 0,
+      "skip": 0,
+      "log": "final-npm-test.log"
+    },
+    {
+      "name": "final pre-commit lint",
+      "exit": 0,
+      "log": "final-lint.log"
+    },
+    {
+      "name": "native production deployment",
+      "status": "failure",
+      "runId": "40439524623",
+      "jobId": "121981152892",
+      "cause": "environment"
+    },
+    {
+      "name": "deployed ancestry",
+      "exit": 1,
+      "delivery": "a958913b6a17f2cefda59882dfbdfcb0cd01e453",
+      "deployed": "ea79432eb9bf23f40a18586eb91408ba1a585288"
+    }
+  ],
+  "publicationRebase": {
+    "upstream": "79f7813e939d92610a86540c71783c02973d737e",
+    "ghostExecutableUnchanged": true,
+    "projectTestPass": 2408,
+    "fail": 0,
+    "skip": 0,
+    "log": "rebase-npm-test.log"
+  }
+}

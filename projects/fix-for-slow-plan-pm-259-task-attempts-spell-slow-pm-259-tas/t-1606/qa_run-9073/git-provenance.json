@@ -1,0 +1,11 @@
+{
+  "run": "run-9073",
+  "evidence_commit": "967f14be5ce7c9e54c08b36c0f6c7f1cb639b5f3",
+  "actual_profile": "codex-sol-6-1-high",
+  "actual_model": "gpt-6.1-sol",
+  "actual_effort": "high",
+  "inherited_git_author": "Claude Code <noreply@anthropic.com>",
+  "inherited_git_committer": "Claude Code <noreply@anthropic.com>",
+  "cause": "exported GIT_AUTHOR_* and GIT_COMMITTER_* override git config",
+  "correction": "forward-only note committed with explicit Codex identity; no rewrite"
+}

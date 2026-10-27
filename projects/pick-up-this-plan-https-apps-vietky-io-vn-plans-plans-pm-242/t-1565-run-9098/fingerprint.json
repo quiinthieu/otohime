@@ -1,0 +1,71 @@
+{
+  "schema": "otohime.listenbrainz-verification.v1",
+  "created_utc": "2026-10-26T22:58:46.376853+00:00",
+  "base_sha": "132cebabaf9aa717e09866f1d8ac6500f90ad984",
+  "authored_changes": "delivery commit adding this evidence; git_sha supplied in plan-manager summary",
+  "node": "v22.23.3",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "architecture": "arm64",
+  "versions": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "playwright-core": "1.64.0",
+    "pg": "8.23.1",
+    "embedded-postgres": "17.10.0-beta.17"
+  },
+  "run": {
+    "id": "run-9098",
+    "task": "t-1565",
+    "task_manager_id": "28222520-a6e6-46a2-bc2a-9ff51581856e",
+    "agent": "codex",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "account": "codex-main",
+    "worker": "avietidol-mac-mini",
+    "profile_id": "not exposed by actual task record"
+  },
+  "build_id": "2tdRJKr0viqN2g50waPDp",
+  "build_sha_label": "0123456789abcdef0123456789abcdef01234567",
+  "source_sha256": {
+    "lib/now-playing.ts": "c4e6fe8a973d40e56466dcbe8f5ae63fb369661cefeb4b19039b74b5b7f23b4f",
+    "lib/now-playing-data.ts": "6d5fff0492f4f71b850b8f8ee020f691d8a29514174ff63d5117479db421d372",
+    "lib/now-playing.test.ts": "11ba0fca0fc11fba1610d15475438abe36424835ca438876703d528c01b4e2ed",
+    "lib/now-playing-data.test.ts": "c0c595101cc8a9494ae325619334a3e4a93cc1563d95230d193fa0b8b8f2c4aa",
+    "lib/fixtures/listenbrainz.json": "f2785a4800e33a8bb51603adc17ffa8784d72f56971a6c9df7aeb5f4a2d2034b",
+    "components/cassette.tsx": "0cc3b418681feb5d4dce5db112d667ad1f2c5faffa5be5d8a8b8925c7216d5d4",
+    "content/site.ts": "536ae680c226384efbdeb3cecbdfbf2a4ce74ab128e101312a8dd2e16b695b12",
+    "content/now-playing.ts": "a0593164ef11e808ad3b8a7885038628ae1fa6233f7bd35034421a78e732f4b2",
+    "app/api/now-playing/route.ts": "e2e58d2903692a885bf8950da4f72aef6046cbe7339172537d2c238ae88303ce",
+    "app/(site)/(app)/music/page.tsx": "a56b0e6a39b382a0424dca306a6e0a93aa47f84b817a9f2294c75bfae93cf5c9",
+    "app/(site)/globals.css": "b08a5d803ab8b0c235eb9f1e68139cc54afc672573e0467059a2efd10927c6c5",
+    "scripts/walk-now-playing.sh": "bd416fbb60809f2130effd4422a5948fa7a449223df0862a15186f49675d4431",
+    "scripts/probe-cassette.sh": "958736b6fd3bfb37a5dfa56a63343ce6013e60838b4dcc6d17917f48b556ce6e",
+    "scripts/probe-cassette.mjs": "522c2a4baeeffdbae292a3b8e7573c7ea9398492b062d9917d1910fd079a1530",
+    "scripts/probe-motion.sh": "cda5ca4e95d260f99bc16ad55ef0a8931812b788b53d24906708e760754a4082",
+    "scripts/probe-motion.mjs": "f4338f410d35be646cae10e288673bf27a1fc285cd5640c3220e4d684ef662cd",
+    "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+    "components/bottle/button.css": "9b05ad00633d91e00c43e1b0da45e193b977eb3ba54cf28a04654154acd22a23",
+    "e2e/bottle-ui.test.ts": "c093506a63ef8076f13ce4b5c06958c683baa5a1e520098f26b42b12adfd8fa0",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "package.json": "cc0c85cfdc4261781ddeea43ceaad9c743f6269e1f8a0fbbf5ecc849a96a501d",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "public/ask-index.json": "60585acb30cb33a47e7111b186b1028a57a283489e455dcd1a3ed56bf087bf39"
+  },
+  "executable_fingerprint": "42999ce15ba64e2f7cd5968a2b4013ee2ad9a962443b4d079b456edd7487c021",
+  "build_asset_count": 998,
+  "build_asset_manifest_sha256": "0bffb77cf6a443c63dbe134b3e7df32b767ea218a01f4c4477033cca664c73ce",
+  "real_postgres_binaries_sha256": {
+    "node_modules/@embedded-postgres/darwin-arm64/native/bin/initdb": "8aad5fa27591903ab45a9251c3b26dd3465a7daec1fc2c03cedc3ca267b35ab3",
+    "node_modules/@embedded-postgres/darwin-arm64/native/bin/postgres": "8776e8dfcc8fd7eaaf02db978d00f225a1905b6cbe9ecdd3cf5e86cf3a00e33f"
+  },
+  "provider_model_assets": "none",
+  "real_fake_boundary": "Real production Next server/Node fetch/Chromium/Postgres; fake ListenBrainz/Spotify/Steam replies. No live owner feed or deployed verification.",
+  "history": {
+    "current_tasks_read": 1,
+    "historical_failed_read": 0,
+    "historical_completed_read": 0,
+    "completeness": "incomplete/inconclusive; no historical or deployed success inferred; SWE stops at push",
+    "runner_baseline_items_read": 9,
+    "runner_baseline_failed_tails_read": 1
+  }
+}

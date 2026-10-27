@@ -1,0 +1,42 @@
+{
+  "environment": {
+    "TMPDIR": "/tmp",
+    "SKIP_BUILD": "1"
+  },
+  "checks": [
+    {
+      "name": "unit-integrated",
+      "cmd": "npm test",
+      "exit": 0,
+      "seconds": 44.59,
+      "sha256": "a9563e84bd8e60d7610f9a8fe9cfdba087cc13e5b7d5ed37a0f2bacf284325b6",
+      "bytes": 437632
+    },
+    {
+      "name": "lint-integrated",
+      "cmd": "npm run lint",
+      "exit": 0,
+      "seconds": 16.12,
+      "sha256": "b429a9329a020370bc27b86bdbd25c1cee316a46a191da460faf9e3fdbc234de",
+      "bytes": 3181
+    },
+    {
+      "name": "types-integrated",
+      "cmd": "npm run typecheck",
+      "exit": 0,
+      "seconds": 11.5,
+      "sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326",
+      "bytes": 118
+    },
+    {
+      "name": "ledger-integrated",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/ledger.test.ts",
+      "exit": 0,
+      "seconds": 21.93,
+      "sha256": "a87538b23aca5206f5a8748c6b1c3421ddbf798819d8cb1b8e374e2c6a0acc08",
+      "bytes": 2065
+    }
+  ],
+  "full_delivery_suite": "verification.json",
+  "scope": "Full unit/lint/types and complete changed ledger E2E file at c6d09f0; unchanged executable inputs retain full nine-command delivery evidence."
+}

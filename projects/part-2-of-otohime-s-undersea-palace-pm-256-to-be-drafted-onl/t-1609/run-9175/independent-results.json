@@ -1,0 +1,125 @@
+{
+  "at": "2026-10-27T06:33:52.923Z",
+  "cases": [
+    {
+      "name": "native peer pixels across two Chrome processes",
+      "pass": true,
+      "pixels": 167
+    },
+    {
+      "name": "synchronous Home close/clear and native cross-tab palace suppression",
+      "pass": true,
+      "sync": {
+        "sockets": 1,
+        "closes": 1,
+        "sent": 2,
+        "ids": [
+          "2b40c13b-a4c2-422c-881b-900bca6fe043"
+        ],
+        "paints": 5,
+        "clears": 7,
+        "configs": 1,
+        "storage": 0,
+        "stored": "hidden"
+      },
+      "palace": {
+        "sockets": 1,
+        "closes": 1,
+        "sent": 2,
+        "ids": [
+          "fb74db7b-aba9-4fe4-a425-b8c92be0b4d7"
+        ],
+        "paints": 2,
+        "clears": 4,
+        "configs": 1,
+        "storage": 2
+      }
+    },
+    {
+      "name": "hidden preference survives full palace reload before config fetch",
+      "pass": true,
+      "stats": {
+        "sockets": 0,
+        "closes": 0,
+        "sent": 0,
+        "ids": [],
+        "paints": 0,
+        "clears": 0,
+        "configs": 0,
+        "storage": 0
+      }
+    },
+    {
+      "name": "native storage clear from other tab restores palace eligibility",
+      "pass": true,
+      "stats": {
+        "sockets": 2,
+        "closes": 1,
+        "sent": 0,
+        "ids": [
+          "79bf176d-2966-4e06-8750-d008ae2dd8ec",
+          "de6f19fc-3de2-416d-a51d-3172ff3a3dcc"
+        ],
+        "paints": 0,
+        "clears": 3,
+        "configs": 2,
+        "storage": 4
+      }
+    },
+    {
+      "name": "motion closes and clears, then reconnects once",
+      "pass": true,
+      "stats": {
+        "sockets": 2,
+        "closes": 1,
+        "sent": 2,
+        "ids": [
+          "1a502cdc-acce-4123-b25b-f5a878d8d80b",
+          "5e422b23-d050-4480-9370-7c114fbd6c6d"
+        ],
+        "paints": 0,
+        "clears": 3,
+        "configs": 2,
+        "storage": 0
+      }
+    },
+    {
+      "name": "offline closes and clears, then reconnects once",
+      "pass": true,
+      "stats": {
+        "sockets": 2,
+        "closes": 1,
+        "sent": 2,
+        "ids": [
+          "019d6f9a-5dfd-4e37-97f0-69f08723f5bb",
+          "ac851595-90df-4ac9-8d0c-bb3fe24cc6d5"
+        ],
+        "paints": 1,
+        "clears": 4,
+        "configs": 2,
+        "storage": 0
+      }
+    },
+    {
+      "name": "blocked storage-listener negative control rejects normal cross-tab assertion",
+      "pass": true,
+      "observed": "on",
+      "stats": {
+        "sockets": 1,
+        "closes": 0,
+        "sent": 1,
+        "ids": [
+          "e5437249-98a7-43c9-8c74-67b9100fbd4a"
+        ],
+        "paints": 0,
+        "clears": 1,
+        "configs": 1,
+        "storage": 2
+      }
+    }
+  ],
+  "errors": [],
+  "browser": "156.0.8078.48",
+  "realProcesses": 2,
+  "pass": true
+}

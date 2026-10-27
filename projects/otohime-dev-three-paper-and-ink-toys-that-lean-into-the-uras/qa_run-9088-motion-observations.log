@@ -1,0 +1,14 @@
+## pm269-motion.log
+6: # browser: 156.0.8078.4 via playwright from PW_PREFIX /Users/avietidol/Library/Application Support/build-worker/leases/e50e2d44-eebe-4e8f-8442-68be103ab47e-f57bea79db22c4b6d7140739db6dfca6/tmp/probe-motion-signed-in.KaCysP/playwright
+272: not ok - 1366x768 plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms): old(root) -ua-view-transition-fade-out 0+250, old(_t_3_) fade-out 0+150, new(nav-current) -ua-view-transition-fade-in 0+320
+320: not ok - 390x844 plain 403 (router.push from /dashboard) -> /dashboard by the nav's Dashboard: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms): old(root) -ua-view-transition-fade-out 0+250, old(_t_3_) fade-out 0+150, new(nav-current) -ua-view-transition-fade-in 0+320
+361: ok - negative: without the guard a sign-in logs "Transition was skipped"
+362: ok - the probe's accounts (*-r179304859383564@probe.test) are deleted
+363: probe: 354 ok, 2 failed
+## pm269-motion-chrome.log
+2: # browser: runner Google Chrome 156.0.8078.48  with the repo's playwright-core; nothing installed
+3: # browser: 156.0.8078.48 via playwright-core, channel chrome
+281: not ok - 1366x768 plain 403 (page.goto) -> /dashboard by the nav's Dashboard: the 403 fades out (150 ms) and the next page fades in (210 ms after 150 ms): old(root) -ua-view-transition-fade-out 0+250, old(_t_0_) fade-out 0+150, new(nav-current) -ua-view-transition-fade-in 0+320
+358: ok - negative: without the guard a sign-in logs "Transition was skipped"
+359: ok - the probe's accounts (*-r179304882385026@probe.test) are deleted
+360: probe: 355 ok, 1 failed

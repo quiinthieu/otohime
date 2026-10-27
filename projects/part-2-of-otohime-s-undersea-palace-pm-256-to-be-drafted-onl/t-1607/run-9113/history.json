@@ -1,0 +1,420 @@
+{
+  "complete": false,
+  "pageSize": 10,
+  "offsets": [
+    0,
+    10
+  ],
+  "pages": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "total": 1138,
+      "rows": [
+        {
+          "id": "48d0a22b-6d08-4b7d-8796-bacdaa090b3c",
+          "title": "forge animate animate run 0b2ffb20 attempt 1",
+          "status": "FAILED",
+          "run": "0b2ffb20-c314-5e64-ab01-c058cc5cef67",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "bc894a90-0610-4bf0-ba66-b08ddb65049c",
+          "title": "forge animate animate run 2a8126f5 attempt 1",
+          "status": "FAILED",
+          "run": "2a8126f5-4c8a-5cbd-b84e-3e929b78808f",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "395a6b11-7cce-4e40-ba52-807fc549944b",
+          "title": "Colab T4 session",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "71e8e810-0954-45d4-a2e6-117a56874af7",
+          "title": "Colab T4 session",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "4c91b23d-c87e-404a-beb5-d252794fb587",
+          "title": "Colab T4 session",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        },
+        {
+          "id": "048d59f7-e4ee-409f-8fb7-048fca2cc6ea",
+          "title": "forge animate animate run 0772a433 attempt 1",
+          "status": "FAILED",
+          "run": "0772a433-fed3-5299-ba99-054e6b20e3c7",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "4c20e3f0-899c-4849-b528-d3534f067600",
+          "title": "forge animate animate run b955dace attempt 1",
+          "status": "FAILED",
+          "run": "b955dace-0af9-53aa-a488-bf799b911a57",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "099b4019-bbdf-4b54-9033-ded8ea2deed2",
+          "title": "forge animate animate run a7cbb7ba attempt 1",
+          "status": "FAILED",
+          "run": "a7cbb7ba-113e-500f-8e24-1c2a518dee00",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dbd11b30-c057-42ab-ae29-35ec993e970f",
+          "title": "forge animate animate run 237912e7 attempt 1",
+          "status": "FAILED",
+          "run": "237912e7-d6b3-5ed2-99f4-0ee95e12dc9f",
+          "error": "E_ANIMATE_MAP",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "49f5d126-f235-4fe7-92fb-9ea6ccb0e698",
+          "title": "Colab L4 session",
+          "status": "FAILED",
+          "error": "task exited with code 1"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 10,
+      "total": 1138,
+      "rows": [
+        {
+          "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+          "title": "Desk swipe observes its preconditions",
+          "status": "FAILED",
+          "run": "run-9070",
+          "plan": "pm-270",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "dfd4968b-2d12-4210-8f59-31ed282e5d2a",
+          "title": "self_update avietidol-mac-mini",
+          "status": "FAILED",
+          "error": "version_mismatch: published 8d968e279dd9, asked for 59ad87b456df"
+        },
+        {
+          "id": "980c6385-7c10-4d4b-a913-43e9c9333678",
+          "title": "Desk swipe observes its preconditions",
+          "status": "FAILED",
+          "run": "run-9045",
+          "plan": "pm-270",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4088d29ec0d9 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "30fd1015-8571-485d-a7b3-c88008526b4b",
+          "title": "Batched delivery P4: dependency readiness and implemented tasks",
+          "status": "FAILED",
+          "error": "agent_timeout"
+        },
+        {
+          "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+          "title": "product_owner pm-277",
+          "status": "FAILED",
+          "run": "run-9019",
+          "plan": "pm-277",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+          "title": "Complete safe Kame fetch on the landed paper registry",
+          "status": "FAILED",
+          "run": "run-8968",
+          "plan": "pm-259",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0e2bbe863f6e is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+          "title": "Add the Pocket print-run switch and commands",
+          "status": "FAILED",
+          "run": "run-8934",
+          "plan": "pm-268",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+          "title": "Desk swipe observes its preconditions",
+          "status": "FAILED",
+          "run": "run-8895",
+          "plan": "pm-270",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+          "title": "Build the pointer and gyro Peep-box",
+          "status": "FAILED",
+          "run": "run-8856",
+          "plan": "pm-264",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+          "title": "Complete safe Kame fetch on the landed paper registry",
+          "status": "FAILED",
+          "run": "run-8848",
+          "plan": "pm-259",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "total": 6756,
+      "rows": [
+        {
+          "id": "7e20ed70-751a-4e5b-a8d9-0277ea19ed8c",
+          "title": "gameplay-sim doc-job:d44e81ce-4376-5e6d-a89c-d64f74330767",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ce7f3279-b927-4167-ad31-16a030d7099d",
+          "title": "review run-9adf36641679-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "d9daef85-ae87-48ea-83fd-5f0a2c7a5647",
+          "title": "review run-8164c0e5553d-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "22e18b86-2d8b-4ea7-837c-ebfe1e941a4b",
+          "title": "review run-a5344600d0ab-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "49a7a33e-01ad-4085-a91a-9149c864abd0",
+          "title": "review run-9adf36641679-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "6a046eb9-007b-4b4a-b039-0c5d62570a27",
+          "title": "review run-93f9fd79d70e-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "efbb4b79-282e-4bfb-b70b-ad437a9bed32",
+          "title": "review run-8164c0e5553d-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "44347160-78a3-45e5-aac4-f884e02a6a6e",
+          "title": "review run-7dff77073617-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "35265597-7324-4166-a6d2-878d55f8174f",
+          "title": "linego forge run 8bb4b255-3119-4578-959b-fb73bb3f031f",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "22a5a9ae-cdbf-43e0-a790-cad45a0813c4",
+          "title": "linego forge run 57dab4c7-d018-4b0f-8304-359269e5e5b1",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 10,
+      "total": 6756,
+      "rows": [
+        {
+          "id": "c7fb8a41-e7f3-4df5-806b-1e8a52ab9e54",
+          "title": "review run-a5344600d0ab-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "526dcaf0-0fe4-43d0-af18-1f3f015ef459",
+          "title": "review run-9adf36641679-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b535dacd-39bb-42ab-8f14-45fa875cc260",
+          "title": "review run-93f9fd79d70e-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a3cfd7b7-e323-41fc-b32c-927333d3da45",
+          "title": "review run-8164c0e5553d-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "385f9c0b-6240-4c71-b107-72a1ebf45eb7",
+          "title": "review run-7dff77073617-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "c6d190ce-7011-4be3-bb1f-c1d87a08d085",
+          "title": "review run-a5344600d0ab-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e488ab9f-f92b-4704-9604-b800ec46899c",
+          "title": "review run-9adf36641679-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2ff96d18-eb05-44ae-b6bb-ef81bf526fea",
+          "title": "review run-93f9fd79d70e-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "1cb3b378-57c4-4aac-8418-7fd13b2dff51",
+          "title": "review run-8164c0e5553d-hg-037e19d03f985d489471 v3 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "b0c7877e-68ec-49ae-88f7-b9ec6ad1b2b5",
+          "title": "review run-a5344600d0ab-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "COMPLETED",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "total": 9,
+      "rows": [
+        {
+          "id": "6a34cbe1-ed1b-4d67-bbfc-df5ff832c3e3",
+          "title": "environment canary deploy can-459",
+          "status": "RUNNING",
+          "run": "can-459",
+          "plan": "pm-platform"
+        },
+        {
+          "id": "b829e28a-d90c-4014-b3eb-2ff77a6037eb",
+          "title": "review run-93f9fd79d70e-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "RUNNING"
+        },
+        {
+          "id": "6f77e521-ebd5-4855-be26-436a85a69991",
+          "title": "review run-7dff77073617-hg-037e19d03f985d489471 v2 via claude/claude-sonnet-5-5",
+          "status": "RUNNING"
+        },
+        {
+          "id": "2c52f04d-1b40-4be8-ba48-2ae97c0415ea",
+          "title": "Build bounded ghost rooms and Worker adapter",
+          "status": "RUNNING",
+          "run": "run-9113",
+          "plan": "pm-257"
+        },
+        {
+          "id": "044adce2-3195-49ea-8f51-5d5009507a0f",
+          "title": "forge generate trellis run cfcc77f6 attempt 1",
+          "status": "RUNNING",
+          "run": "cfcc77f6-86a2-53c1-a705-72dec82aacbb"
+        },
+        {
+          "id": "6115ced8-737f-42c9-8e91-b54224c78156",
+          "title": "Colab L4 session",
+          "status": "RUNNING"
+        },
+        {
+          "id": "f952e719-909a-4108-b784-38c78fee9c49",
+          "title": "product_owner pm-270",
+          "status": "RUNNING",
+          "run": "run-9110",
+          "plan": "pm-270"
+        },
+        {
+          "id": "7e3c8ba6-7fb6-4af7-95f0-998bb05d4e9f",
+          "title": "Read optional games from Lanyard",
+          "status": "RUNNING",
+          "run": "run-9109",
+          "plan": "pm-272"
+        },
+        {
+          "id": "bf936211-7d6f-49e7-b1c1-a081b827f5e1",
+          "title": "Batched delivery P7: plan-wide final QA owns completion and repair",
+          "status": "RUNNING"
+        }
+      ]
+    },
+    {
+      "status": "PENDING",
+      "offset": 0,
+      "total": 1,
+      "rows": [
+        {
+          "id": "a6ed4a8d-5f7a-483a-ae8b-b4bd1fcc22b2",
+          "title": "forge rig unirig run 0c120da1 attempt 1",
+          "status": "PENDING",
+          "run": "0c120da1-e76d-5362-af80-8822aadb921c"
+        }
+      ]
+    }
+  ]
+}

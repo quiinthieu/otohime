@@ -1,0 +1,64 @@
+{
+  "base_sha": "5c2ecc5bb65aba6ab0fb9445cf8285beb4f95ae4",
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "arch": "arm64",
+  "versions": {
+    "next": {
+      "locked": "16.4.2",
+      "installed": "16.4.2"
+    },
+    "react": {
+      "locked": "19.3.0",
+      "installed": "19.3.0"
+    },
+    "react-dom": {
+      "locked": "19.3.0",
+      "installed": "19.3.0"
+    },
+    "playwright-core": {
+      "locked": "1.64.0",
+      "installed": "1.64.0"
+    },
+    "pg": {
+      "locked": "8.23.1",
+      "installed": "8.23.1"
+    },
+    "embedded-postgres": {
+      "locked": "17.10.0-beta.17",
+      "installed": "17.10.0-beta.17"
+    }
+  },
+  "files": {
+    ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36",
+    "app/(site)/globals.css": "df2accbef90094bcabb881656e8d7d8b0a6fc287bb3ba91f77229e7370b86b16",
+    "app/(site)/layout.tsx": "d585cb4de2ec3e9ea8192f25b618c0fcc309386f794901f9bf7943cde3ff2012",
+    "app/api/health/route.ts": "561b91f96d951d5f7025fc9737bf0ad4db4aa8f8572144177b1677e5c544c9d2",
+    "components/bottle/button.css": "4b1cd7355f0989a71686eb97fcf53f82fc8b878d4d53ee6f89c208e217d7fc0d",
+    "components/bottle/button.tsx": "fd66c503666593d8104ce2f2f9dcc6fa332f40734cc34207aaf063a26dc24c98",
+    "components/bottle/panel.css": "ff4a71f6e6960e67fc35fde38f045074008251e229d46a424a91e6b3f0f4838b",
+    "components/bottle/panel.tsx": "a466c2f178d6560a1848f021fd4b7de46986fb3bd40590db77538ad7258618f7",
+    "components/end-footer.tsx": "043707b4ed9eb2b106eae92a30f2e9cb7c576f7d65c1ca6c22b0b160a3adef0d",
+    "components/handheld.tsx": "a400cad3a73b47fbedbcbd146e801bbc88be303d8394e886a80b53f2623cc1c0",
+    "content/bottles.json": "4ac9c4673ec4a60fb7f9e576c0531b4af097b6e6dfb36b9b61e4c19f844202b3",
+    "e2e/bottle-ui.test.ts": "b5bb3909b7eca9904d59de6a908b4ef4c9caf1290e08890f6efc0325d9d031d4",
+    "lib/bottle-footer-layout.test.ts": "45025cb8a14558860139da16fddf844e69f6e72f0b6e42f01a33f2451c5e4969",
+    "lib/bottles.ts": "7ac4b0cb7525507adf97b20979abbb3fc76d56ea4be1c505e967984f03197b84",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "b43340c2d2ad12c024f0d3cb0b71688e895a6715e494706be759b6323ff20112",
+    "scripts/ci-probe-verification.mjs": "7f903239731d4ba61a39ac1a8356ef4e00abb7e49ab33a5b3938bfbfe9cdc170",
+    "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+    "scripts/vercel-deploy.sh": "9e83595a4e8e9c20ce4981be302e521230a7bb32de0514fe585268c28a3844dd",
+    "scripts/vercel-deploy.test.sh": "af8129d4d6ee79faaaa0aa3d704477e2b571d38cc25ef5420c5e3c15f654671f",
+    "scripts/verify-bottle-contracts.mjs": "3799c4ebf4690add55982f3e6ca59c692d523a6dbf1f50b7d5abdfbcbe56cf41",
+    "scripts/verify-bottle-footer.mjs": "5af7548531fc7d21fdac3561c9396dd385c8525c4123497e94f627d51c7f7a6d",
+    "scripts/verify-deploy.sh": "7cd0751ea5ff2482921fc73b8da8f18e2a1cb512cdefa56b498803e8644d9d0a"
+  },
+  "combined_sha256": "3c2a8b5738410768009afe3ddf4a6f6ddeab71f1da7f9eb19812e62d2758d825",
+  "vercel_cli_preflight": "64.7.0 inspect --help; --scope supported; no authorization request",
+  "bottle_unchanged": true,
+  "revalidated_checkout": "67203cf022f0aa4158b061ca8004f3c050acf24f",
+  "rebased_onto": "e9b32bf",
+  "delivery_contains_e120461": true
+}

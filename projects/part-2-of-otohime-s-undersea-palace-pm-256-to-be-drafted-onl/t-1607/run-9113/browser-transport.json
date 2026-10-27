@@ -1,0 +1,17 @@
+{
+  "browser": "156.0.8078.48",
+  "real": "three isolated Chrome contexts, real browser WebSocket",
+  "fake": "local dependency-free fan-out server; synthetic page only",
+  "clients": 3,
+  "rooms": [
+    "/",
+    "/ryugu"
+  ],
+  "move": true,
+  "click": true,
+  "noEcho": true,
+  "roomIsolation": true,
+  "badOriginRejected": true,
+  "cookieHeadersPresent": false,
+  "productCanvasTested": false
+}

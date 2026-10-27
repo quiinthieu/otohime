@@ -1,0 +1,484 @@
+TAP version 13
+# Subtest: CI probe annotator preserves a real exit 7 through pipefail, escaping annotation properties and data
+ok 1 - CI probe annotator preserves a real exit 7 through pipefail, escaping annotation properties and data
+  ---
+  duration_ms: 112.60375
+  ...
+# Subtest: CI probe annotator leaves a real successful child green and emits no failure diagnostics
+ok 2 - CI probe annotator leaves a real successful child green and emits no failure diagnostics
+  ---
+  duration_ms: 107.833583
+  ...
+# Subtest: CI probe annotator surfaces a crash tail and a missing next-start.log without masking exit 7
+ok 3 - CI probe annotator surfaces a crash tail and a missing next-start.log without masking exit 7
+  ---
+  duration_ms: 139.41025
+  ...
+# Subtest: CI probe annotator bounds both diagnostic channels and escapes summary HTML and code fences
+ok 4 - CI probe annotator bounds both diagnostic channels and escapes summary HTML and code fences
+  ---
+  duration_ms: 140.766792
+  ...
+# Subtest: CI probe annotator emits annotations without GITHUB_STEP_SUMMARY
+ok 5 - CI probe annotator emits annotations without GITHUB_STEP_SUMMARY
+  ---
+  duration_ms: 141.328083
+  ...
+# Subtest: CI camera's nested TAP failure survives later successful output beyond the crash-tail bound
+ok 6 - CI camera's nested TAP failure survives later successful output beyond the crash-tail bound
+  ---
+  duration_ms: 114.892167
+  ...
+# Subtest: CI probe annotation retains walk and nested TAP counts after truncating a long assertion
+not ok 7 - CI probe annotation retains walk and nested TAP counts after truncating a long assertion
+  ---
+  duration_ms: 106.931
+  location: '/private/tmp/t1647-baseline-f91gal30/scripts/ci-probe-annotate.test.mjs:84:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /walk: 64 ok, 1 failed%0A# tests 65%0A# pass 64%0A# fail 1/. Input:
+    
+    '::error title=Footer%3A 50%25%2C%0D%0Aforged::Commit fixture-sha; probe exit 7%0Anot ok - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx%0A… (truncated)%0Anext start, last 80 lines (bounded):%0Aserver diagnostic'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: '::error title=Footer%3A 50%25%2C%0D%0Aforged::Commit fixture-sha; probe exit 7%0Anot ok - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx%0A… (truncated)%0Anext start, last 80 lines (bounded):%0Aserver diagnostic'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/t1647-baseline-f91gal30/scripts/ci-probe-annotate.test.mjs:89:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:934:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:633:18)
+    Test.postRun (node:internal/test_runner/test:1045:19)
+    Test.run (node:internal/test_runner/test:973:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:633:7)
+  ...
+# Subtest: all five task gates reject silent exit-zero output (vacuity negative control)
+ok 8 - all five task gates reject silent exit-zero output (vacuity negative control)
+  ---
+  duration_ms: 0.452708
+  ...
+# Subtest: task TAP receipts require named assertions and passing counts, rejecting renamed or skipped controls
+ok 9 - task TAP receipts require named assertions and passing counts, rejecting renamed or skipped controls
+  ---
+  duration_ms: 1.199209
+  ...
+# Subtest: footer receipts require real assertion totals, the 403 exit and the browser negative control
+ok 10 - footer receipts require real assertion totals, the 403 exit and the browser negative control
+  ---
+  duration_ms: 0.575708
+  ...
+# Subtest: static receipts require both tool invocations and generated routes; closure requires real named controls
+ok 11 - static receipts require both tool invocations and generated routes; closure requires real named controls
+  ---
+  duration_ms: 3.908958
+  ...
+# Subtest: push to main ignores report-only paths
+ok 12 - push to main ignores report-only paths
+  ---
+  duration_ms: 1.122916
+  ...
+# Subtest: report-only pushes skip, code pushes still run
+ok 13 - report-only pushes skip, code pushes still run
+  ---
+  duration_ms: 0.260125
+  ...
+# Subtest: pull_request has no path filter
+ok 14 - pull_request has no path filter
+  ---
+  duration_ms: 0.073792
+  ...
+# Subtest: manual recovery runs the same checks and production gates as a main push
+ok 15 - manual recovery runs the same checks and production gates as a main push
+  ---
+  duration_ms: 0.667584
+  ...
+# Subtest: checks and production run on ubuntu-24.04
+ok 16 - checks and production run on ubuntu-24.04
+  ---
+  duration_ms: 0.401084
+  ...
+# Subtest: each main push and manual recovery keeps its checks outside a shared workflow queue
+ok 17 - each main push and manual recovery keeps its checks outside a shared workflow queue
+  ---
+  duration_ms: 0.256833
+  ...
+# Subtest: PR checks and previews cancel stale jobs in separate PR-specific groups
+ok 18 - PR checks and previews cancel stale jobs in separate PR-specific groups
+  ---
+  duration_ms: 0.457167
+  ...
+# Subtest: only production deploys serialize after successful checks, without cancelling the running deploy
+ok 19 - only production deploys serialize after successful checks, without cancelling the running deploy
+  ---
+  duration_ms: 0.492959
+  ...
+# Subtest: production proves the deployed sha, terminal and press after the deploy
+ok 20 - production proves the deployed sha, terminal and press after the deploy
+  ---
+  duration_ms: 0.497334
+  ...
+# Subtest: verify-deploy treats exactly the push paths-ignore as report-only
+ok 21 - verify-deploy treats exactly the push paths-ignore as report-only
+  ---
+  duration_ms: 0.4535
+  ...
+# Subtest: checks uses measured 25m job and 12m E2E budgets
+ok 22 - checks uses measured 25m job and 12m E2E budgets
+  ---
+  duration_ms: 0.258083
+  ...
+# Subtest: all four non-TAP probe steps annotate the captured pipefail status
+ok 23 - all four non-TAP probe steps annotate the captured pipefail status
+  ---
+  duration_ms: 0.251834
+  ...
+# Subtest: signed-in motion normalizes unset, empty and long TMPDIR before mktemp
+ok 24 - signed-in motion normalizes unset, empty and long TMPDIR before mktemp
+  ---
+  duration_ms: 14.093584
+  ...
+# Subtest: Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+ok 25 - Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+  ---
+  duration_ms: 421.36575
+  ...
+# Subtest: Real CPU camera and privacy verifier: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+ok 26 - Real CPU camera and privacy verifier: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+  ---
+  duration_ms: 267.27875
+  ...
+# Subtest: Real CPU camera and privacy verifier: a broken assertion reporter preserves the original exit 7
+not ok 27 - Real CPU camera and privacy verifier: a broken assertion reporter preserves the original exit 7
+  ---
+  duration_ms: 103.500416
+  location: '/private/tmp/t1647-baseline-f91gal30/scripts/ci-workflow.test.mjs:318:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:internal/modules/cjs/loader:1252
+      throw err;
+      ^
+    
+    Error: Cannot find module '/Users/avietidol/Library/Application Support/build-worker/leases/4e3ad001-b441-4260-978b-a5e20a6317dd-910bd257b4725a9dac0f0ee4e8804a99/tmp/browser-gate-ci-IgFwMD/scripts/missing-annotator.mjs'
+        at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+        at Function._load (node:internal/modules/cjs/loader:1075:27)
+        at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+        at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+        at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+        at node:internal/main/run_main_module:36:49 {
+      code: 'MODULE_NOT_FOUND',
+      requireStack: []
+    }
+    
+    Node.js v22.12.0
+    
+    
+    1 !== 7
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 7
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    Function._load (node:internal/modules/cjs/loader:1075:27)
+    TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    node:internal/main/run_main_module:36:49 {
+    TestContext.<anonymous> (file:///private/tmp/t1647-baseline-f91gal30/scripts/ci-workflow.test.mjs:320:12)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:934:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:633:18)
+    Test.postRun (node:internal/test_runner/test:1045:19)
+    Test.run (node:internal/test_runner/test:973:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:633:7)
+  ...
+# Subtest: Real CPU camera and privacy verifier: actual workflow exit 0 emits no annotation or summary
+ok 28 - Real CPU camera and privacy verifier: actual workflow exit 0 emits no annotation or summary
+  ---
+  duration_ms: 105.121125
+  ...
+# Subtest: Motion probe, signed in: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+ok 29 - Motion probe, signed in: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+  ---
+  duration_ms: 328.531291
+  ...
+# Subtest: Motion probe, signed in: a broken assertion reporter preserves the original exit 7
+not ok 30 - Motion probe, signed in: a broken assertion reporter preserves the original exit 7
+  ---
+  duration_ms: 162.92925
+  location: '/private/tmp/t1647-baseline-f91gal30/scripts/ci-workflow.test.mjs:318:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:internal/modules/cjs/loader:1252
+      throw err;
+      ^
+    
+    Error: Cannot find module '/Users/avietidol/Library/Application Support/build-worker/leases/4e3ad001-b441-4260-978b-a5e20a6317dd-910bd257b4725a9dac0f0ee4e8804a99/tmp/browser-gate-ci-NhPzJH/scripts/missing-annotator.mjs'
+        at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+        at Function._load (node:internal/modules/cjs/loader:1075:27)
+        at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+        at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+        at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+        at node:internal/main/run_main_module:36:49 {
+      code: 'MODULE_NOT_FOUND',
+      requireStack: []
+    }
+    
+    Node.js v22.12.0
+    
+    
+    1 !== 7
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 7
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    Function._load (node:internal/modules/cjs/loader:1075:27)
+    TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    node:internal/main/run_main_module:36:49 {
+    TestContext.<anonymous> (file:///private/tmp/t1647-baseline-f91gal30/scripts/ci-workflow.test.mjs:320:12)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:934:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:633:18)
+    Test.postRun (node:internal/test_runner/test:1045:19)
+    Test.run (node:internal/test_runner/test:973:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:633:7)
+  ...
+# Subtest: Motion probe, signed in: actual workflow exit 0 emits no annotation or summary
+ok 31 - Motion probe, signed in: actual workflow exit 0 emits no annotation or summary
+  ---
+  duration_ms: 162.676
+  ...
+# Subtest: Footer walk: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+ok 32 - Footer walk: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+  ---
+  duration_ms: 335.864416
+  ...
+# Subtest: Footer walk: a broken assertion reporter preserves the original exit 7
+not ok 33 - Footer walk: a broken assertion reporter preserves the original exit 7
+  ---
+  duration_ms: 163.766833
+  location: '/private/tmp/t1647-baseline-f91gal30/scripts/ci-workflow.test.mjs:318:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:internal/modules/cjs/loader:1252
+      throw err;
+      ^
+    
+    Error: Cannot find module '/Users/avietidol/Library/Application Support/build-worker/leases/4e3ad001-b441-4260-978b-a5e20a6317dd-910bd257b4725a9dac0f0ee4e8804a99/tmp/browser-gate-ci-eUqslv/scripts/missing-annotator.mjs'
+        at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+        at Function._load (node:internal/modules/cjs/loader:1075:27)
+        at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+        at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+        at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+        at node:internal/main/run_main_module:36:49 {
+      code: 'MODULE_NOT_FOUND',
+      requireStack: []
+    }
+    
+    Node.js v22.12.0
+    
+    
+    1 !== 7
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 7
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    Function._load (node:internal/modules/cjs/loader:1075:27)
+    TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    node:internal/main/run_main_module:36:49 {
+    TestContext.<anonymous> (file:///private/tmp/t1647-baseline-f91gal30/scripts/ci-workflow.test.mjs:320:12)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:934:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:633:18)
+    Test.postRun (node:internal/test_runner/test:1045:19)
+    Test.run (node:internal/test_runner/test:973:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:633:7)
+  ...
+# Subtest: Footer walk: actual workflow exit 0 emits no annotation or summary
+ok 34 - Footer walk: actual workflow exit 0 emits no annotation or summary
+  ---
+  duration_ms: 168.155875
+  ...
+# Subtest: Footer Chromium probe: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+ok 35 - Footer Chromium probe: actual workflow preserves exit 7, escaped assertions, counts and missing server logs
+  ---
+  duration_ms: 414.196958
+  ...
+# Subtest: Footer Chromium probe: a broken assertion reporter preserves the original exit 7
+not ok 36 - Footer Chromium probe: a broken assertion reporter preserves the original exit 7
+  ---
+  duration_ms: 162.99775
+  location: '/private/tmp/t1647-baseline-f91gal30/scripts/ci-workflow.test.mjs:318:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    node:internal/modules/cjs/loader:1252
+      throw err;
+      ^
+    
+    Error: Cannot find module '/Users/avietidol/Library/Application Support/build-worker/leases/4e3ad001-b441-4260-978b-a5e20a6317dd-910bd257b4725a9dac0f0ee4e8804a99/tmp/browser-gate-ci-Daf6O7/scripts/missing-annotator.mjs'
+        at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+        at Function._load (node:internal/modules/cjs/loader:1075:27)
+        at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+        at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+        at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+        at node:internal/main/run_main_module:36:49 {
+      code: 'MODULE_NOT_FOUND',
+      requireStack: []
+    }
+    
+    Node.js v22.12.0
+    
+    
+    1 !== 7
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 7
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    Function._load (node:internal/modules/cjs/loader:1075:27)
+    TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    node:internal/main/run_main_module:36:49 {
+    TestContext.<anonymous> (file:///private/tmp/t1647-baseline-f91gal30/scripts/ci-workflow.test.mjs:320:12)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:934:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:633:18)
+    Test.postRun (node:internal/test_runner/test:1045:19)
+    Test.run (node:internal/test_runner/test:973:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:633:7)
+  ...
+# Subtest: Footer Chromium probe: actual workflow exit 0 emits no annotation or summary
+ok 37 - Footer Chromium probe: actual workflow exit 0 emits no annotation or summary
+  ---
+  duration_ms: 182.736959
+  ...
+# Subtest: E2E against next start: real workflow captures combined command failure and identity, preserving exit 43
+ok 38 - E2E against next start: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 116.328167
+  ...
+# Subtest: E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 39 - E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 64.015584
+  ...
+# Subtest: E2E against next start: successful workflow emits no failure annotation or summary
+ok 40 - E2E against next start: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 114.129292
+  ...
+# Subtest: Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43
+ok 41 - Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 170.622125
+  ...
+# Subtest: Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 42 - Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 64.167167
+  ...
+# Subtest: Motion probe, signed in: successful workflow emits no failure annotation or summary
+ok 43 - Motion probe, signed in: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 163.561292
+  ...
+# Subtest: Footer walk: real workflow captures combined command failure and identity, preserving exit 43
+ok 44 - Footer walk: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 175.1315
+  ...
+# Subtest: Footer walk: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 45 - Footer walk: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 64.059166
+  ...
+# Subtest: Footer walk: successful workflow emits no failure annotation or summary
+ok 46 - Footer walk: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 203.83525
+  ...
+# Subtest: Footer Chromium probe: real workflow captures combined command failure and identity, preserving exit 43
+ok 47 - Footer Chromium probe: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 219.845708
+  ...
+# Subtest: Footer Chromium probe: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 48 - Footer Chromium probe: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 67.337916
+  ...
+# Subtest: Footer Chromium probe: successful workflow emits no failure annotation or summary
+ok 49 - Footer Chromium probe: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 164.440083
+  ...
+# Subtest: wiring negative control: removing the EXIT fallback makes a startup crash opaque
+ok 50 - wiring negative control: removing the EXIT fallback makes a startup crash opaque
+  ---
+  duration_ms: 10.059541
+  ...
+# Subtest: reporter failure cannot replace the original workflow command exit
+ok 51 - reporter failure cannot replace the original workflow command exit
+  ---
+  duration_ms: 110.836083
+  ...
+# Subtest: browser fallbacks keep the existing gate order, probe budgets and assertion reporter
+ok 52 - browser fallbacks keep the existing gate order, probe budgets and assertion reporter
+  ---
+  duration_ms: 0.299458
+  ...
+# Subtest: Footer 403 exit calls the heading observer after navigation before reading main h1
+ok 53 - Footer 403 exit calls the heading observer after navigation before reading main h1
+  ---
+  duration_ms: 282.143083
+  ...
+# Subtest: streamed /dashboard heading arriving after 1.5s resolves the real observer
+ok 54 - streamed /dashboard heading arriving after 1.5s resolves the real observer
+  ---
+  duration_ms: 1795.616375
+  ...
+# Subtest: missing, empty and hidden main headings fail at the 10s bound (negative control)
+not ok 55 - missing, empty and hidden main headings fail at the 10s bound (negative control)
+  ---
+  duration_ms: 199.184667
+  location: '/private/tmp/t1647-baseline-f91gal30/scripts/probe-end-stream.test.mjs:56:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///private/tmp/t1647-baseline-f91gal30/scripts/probe-end-stream.test.mjs:64:5)
+    async Test.run (node:internal/test_runner/test:935:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:633:7)
+  ...
+1..55
+# tests 55
+# suites 0
+# pass 49
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4782.11525

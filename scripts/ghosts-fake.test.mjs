@@ -123,6 +123,18 @@ describe("fake-only behaviour", () => {
     a.sendText(JSON.stringify({ t: "m", x: 0, y: 0, pad: "x".repeat(2000) }));
     assert.equal((await a.waitClosed()).code, 1009);
   });
+
+  test("reserved bits are rejected from the header before buffering or receiving a payload", async () => {
+    fake.reset();
+    for (const reserved of [0x40, 0x20, 0x10]) {
+      const client = await rawConnect(fake.base, { origin: ORIGIN });
+      await client.next((m) => m.t === "hi");
+      // Only the first two bytes arrive: RSV on a masked text frame declaring a 64-bit length.
+      client.sendRaw(Buffer.from([0x81 | reserved, 0xff]));
+      assert.equal((await client.waitClosed()).code, 1002);
+    }
+    assert.equal(fake.log().entries.some((entry) => entry.kind === "frame"), false, "no room receive or coordinates logged");
+  });
 });
 
 test("teardown is deterministic: close() resolves with open sockets and frees the port", async () => {

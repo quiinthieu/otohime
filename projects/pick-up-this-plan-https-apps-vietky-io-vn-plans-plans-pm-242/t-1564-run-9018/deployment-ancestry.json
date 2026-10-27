@@ -1,0 +1,22 @@
+{
+  "captured_at": "2026-10-26T14:54:47.977206Z",
+  "health_url": "https://otohime.dev/api/health",
+  "health_status": 200,
+  "health_sha": "074059495faf4bee48e8f655584dfd4487089b41",
+  "meta_url": "https://otohime.dev/",
+  "meta_status": 200,
+  "meta_build_sha": [
+    "074059495faf4bee48e8f655584dfd4487089b41"
+  ],
+  "ancestry": {
+    "841ca69": 0,
+    "15fd171": 0,
+    "3351f78": 0
+  },
+  "main_ancestry": {
+    "841ca69": 0,
+    "15fd171": 0,
+    "9ddd084": 0,
+    "3351f78": 0
+  }
+}

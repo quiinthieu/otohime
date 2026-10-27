@@ -1,0 +1,10 @@
+{
+  "real": true,
+  "producer": "actual Node children, callback-flushed",
+  "copied_test_sha256": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+  "mutated_cap": 2000000,
+  "negative_exit": 1,
+  "negative_assertion": "output over the bound is cut to the bound: 1200000 != 1000000",
+  "original_cap": 1000000,
+  "positive_exit": 0
+}

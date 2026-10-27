@@ -1,0 +1,18 @@
+{
+  "rebased_parent": "cd54d4b",
+  "previous_full_verification_source": "19f42646e2231cd909df6a2e73a513e11757e4ed",
+  "changes_outside_projects": [],
+  "checks": [
+    {
+      "command": "npm test",
+      "exit": 0,
+      "seconds": 6.44
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "seconds": 7.47
+    }
+  ],
+  "scope": "Only projects Markdown arrived on main; relevant executable, lock, configuration and test sources are unchanged from the final full seven-check snapshot."
+}

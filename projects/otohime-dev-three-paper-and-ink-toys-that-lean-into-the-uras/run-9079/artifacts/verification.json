@@ -1,0 +1,37 @@
+[
+  {
+    "name": "focused",
+    "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/head-tracker.test.ts lib/peep-box-assets.test.ts",
+    "exit_code": 0
+  },
+  {
+    "name": "unit",
+    "command": "npm test",
+    "exit_code": 0
+  },
+  {
+    "name": "lint-types",
+    "command": "npm run lint && npm run typecheck",
+    "exit_code": 0
+  },
+  {
+    "name": "assets",
+    "command": "node scripts/vendor-peep-box.mjs && node scripts/vendor-peep-box.mjs --check",
+    "exit_code": 0
+  },
+  {
+    "name": "camera-verifier",
+    "command": "node scripts/verify-peep-box-camera.mjs",
+    "exit_code": 0
+  },
+  {
+    "name": "serial-e2e",
+    "command": "npm run test:e2e",
+    "exit_code": 0
+  },
+  {
+    "name": "footer",
+    "command": "node scripts/verify-bottle-footer.mjs",
+    "exit_code": 0
+  }
+]

@@ -3,6 +3,7 @@
 import { bootStyle, booted, chimeAllowed, finishBoot, splashStyle } from "@/lib/boot";
 import { box, CONSOLE_TRANSITION, Inked, TitleMorph } from "@/components/figures";
 import { Chip, Machine, useTick } from "@/components/machine";
+import { BottleButton } from "@/components/bottle/button";
 import { PrintRunSwitch } from "@/components/print-run-switch";
 import { site } from "@/content/site";
 import { CONSOLE_MENU, LCD, menuBaseline } from "@/lib/pages";
@@ -23,6 +24,7 @@ import {
 import { getPalaceSound, getServerPalaceSound, setPalaceSound, subscribePalaceSound } from "@/lib/palace-sound";
 import { play } from "@/lib/sound-client";
 import { PALACE_HREF } from "@/lib/urashima";
+import { setGhostsHidden, useGhostsHidden } from "@/ghosts/pref-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent, useReducer, useRef, useState, useSyncExternalStore } from "react";
@@ -78,6 +80,7 @@ export function Handheld() {
   const reduced = useSyncExternalStore(onReducedChange, () => matchMedia(REDUCED).matches, () => false);
   // The palace's sea sound, switched here and heard only down in Ryugu-jo (lib/palace-sound.ts).
   const seaSound = useSyncExternalStore(subscribePalaceSound, getPalaceSound, getServerPalaceSound);
+  const ghostsHidden = useGhostsHidden();
   const lcdRef = useRef<SVGRectElement>(null);
   const [onscreen, setOnscreen] = useState(true);
   // The page A is opening: its label shows over the LCD until the navigation takes it (or LABEL_MS passes).
@@ -271,6 +274,7 @@ export function Handheld() {
   // footer's own Konami listener (which skips handled keys) never counts console input.
   const onKey = useEffectEvent((event: KeyboardEvent) => {
     if (event.metaKey || event.ctrlKey || event.altKey || event.defaultPrevented) return;
+    if (document.querySelector("dialog[open]")) return;
     const target = event.target instanceof Element ? event.target : null;
     if (
       target?.closest("input, textarea, select, [contenteditable]:not([contenteditable='false'])") ||
@@ -521,12 +525,16 @@ export function Handheld() {
               <Chip aria-pressed={seaSound} aria-label={P.seaSoundLabel} data-pocket-sea-sound="" onClick={() => setPalaceSound(!seaSound)}>
                 {P.seaSound}
               </Chip>
+              <Chip aria-pressed={!ghostsHidden} data-pocket-ghosts="" onClick={() => setGhostsHidden(!ghostsHidden)}>
+                Ghosts {ghostsHidden ? "off" : "on"}
+              </Chip>
             </>
           )}
           <Chip onClick={() => input("b")} aria-pressed={s.game === true}>
             {s.game ? P.menu : P.play}
           </Chip>
           <PrintRunSwitch />
+          <BottleButton entry="pocket" />
         </>
       }
     />

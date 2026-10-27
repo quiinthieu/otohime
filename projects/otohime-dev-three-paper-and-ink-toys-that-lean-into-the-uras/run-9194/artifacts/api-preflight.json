@@ -1,0 +1,7 @@
+{
+  "node": "v22.23.3",
+  "helper_import": true,
+  "fetch": "function",
+  "abort_timeout": "function",
+  "boundary": "Real Node built-in adapter construction. Real HTTP/API-helper execution is demonstrated separately by the shell fixture against local fake vendor responses; hosted authentication is unproven."
+}

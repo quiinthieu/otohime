@@ -1,0 +1,367 @@
+{
+  "sampled_at": "2026-10-27T06:16:44.166Z",
+  "history_complete": false,
+  "samples": [
+    {
+      "i": 0,
+      "total": 92,
+      "count": 10,
+      "tasks": [
+        {
+          "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+          "run_id": "run-9161",
+          "plan_id": "pm-270",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2a35aac9e2e3 is not on origin/main",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "aaf41670-24d4-4664-998d-744e4d6d29bd",
+          "run_id": "run-9156",
+          "plan_id": "pm-289",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+          "run_id": "run-9153",
+          "plan_id": "pm-289",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+          "run_id": "can-466",
+          "plan_id": "pm-platform",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8"
+        },
+        {
+          "id": "899ebc8e-06d2-4172-8d43-caab66fc163a",
+          "run_id": "can-465",
+          "plan_id": "pm-platform",
+          "status": "FAILED",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8"
+        },
+        {
+          "id": "e80be90f-766f-4877-97a4-0920424f7002",
+          "run_id": "run-9134",
+          "plan_id": "pm-270",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 8959e8d817c4 is not on origin/main",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "0d9749c4-86af-41ea-b8ff-52596bb8ba62",
+          "run_id": "run-9127",
+          "plan_id": "pm-272",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=Bounded prepublication task-manager sample: RUNNING 2/2; FAILED offsets 0/2 limit2, 4/72; COMPLETED offsets 0/2 limit2, 4/1272. Incomplete project-wide history;",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "4ea09eb3-0d41-41ba-9617-bd8efae6d553",
+          "run_id": "run-9120",
+          "plan_id": "pm-270",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 01c659246c00 is not on origin/main",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "7e3c8ba6-7fb6-4af7-95f0-998bb05d4e9f",
+          "run_id": "run-9109",
+          "plan_id": "pm-272",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 90b623bced6e is not on origin/main",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+          "run_id": "run-9070",
+          "plan_id": "pm-270",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 6bd9ac776906 is not on origin/main",
+          "worker": "billie-mac"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "total": 92,
+      "count": 10,
+      "tasks": [
+        {
+          "id": "980c6385-7c10-4d4b-a913-43e9c9333678",
+          "run_id": "run-9045",
+          "plan_id": "pm-270",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4088d29ec0d9 is not on origin/main",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "30fd1015-8571-485d-a7b3-c88008526b4b",
+          "status": "FAILED",
+          "error": "agent_timeout",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+          "run_id": "run-9019",
+          "plan_id": "pm-277",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+          "run_id": "run-8968",
+          "plan_id": "pm-259",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0e2bbe863f6e is not on origin/main",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+          "run_id": "run-8934",
+          "plan_id": "pm-268",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=unknown marker=none",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+          "run_id": "run-8895",
+          "plan_id": "pm-270",
+          "status": "FAILED",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+          "run_id": "run-8856",
+          "plan_id": "pm-264",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a021df91b875 is not on origin/main",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+          "run_id": "run-8848",
+          "plan_id": "pm-259",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD b3358e1739f2 is not on origin/main",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+          "run_id": "run-8828",
+          "plan_id": "pm-256",
+          "status": "FAILED",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+          "run_id": "run-8819",
+          "plan_id": "pm-264",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 85b0eb1ae9c6 is not on origin/main",
+          "worker": "avietidol-z490"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "total": 1428,
+      "count": 10,
+      "tasks": [
+        {
+          "id": "ce9feca1-d1e2-4620-ade9-a7aa387020cd",
+          "run_id": "run-9170",
+          "plan_id": "pm-269",
+          "status": "COMPLETED",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "14150a34-fc1e-4af3-809d-54e932ad0d72",
+          "run_id": "run-9167",
+          "plan_id": "pm-257",
+          "status": "COMPLETED",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "516c7047-ec6f-4f35-a788-ea07692042e8",
+          "run_id": "can-472",
+          "plan_id": "pm-platform",
+          "status": "COMPLETED",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "ac5e2736-9b94-4d1b-8aaa-f9ac0375aa1a",
+          "status": "COMPLETED",
+          "worker": "viet-mac"
+        },
+        {
+          "id": "619774eb-dc9e-4ba4-9fb1-e7f4d6460376",
+          "run_id": "run-9164",
+          "plan_id": "pm-269",
+          "status": "COMPLETED",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "fda85e13-1492-4f73-ac24-7954ed8150cc",
+          "status": "COMPLETED",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "dffb737b-65d4-415e-90bd-89e6d702ffb5",
+          "run_id": "run-9163",
+          "plan_id": "pm-269",
+          "status": "COMPLETED",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "d4cfdda7-14e2-44f1-b2b2-34520ebf619a",
+          "run_id": "run-9162",
+          "plan_id": "pm-257",
+          "status": "COMPLETED",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "9fbc1895-9d48-4859-8ff1-3a3d22674959",
+          "run_id": "run-9160",
+          "plan_id": "pm-257",
+          "status": "COMPLETED",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "6ae85d63-b33e-4c48-bf72-e67f8f485ba3",
+          "run_id": "run-9159",
+          "plan_id": "pm-269",
+          "status": "COMPLETED",
+          "worker": "avietidol-mac-mini"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "total": 1428,
+      "count": 10,
+      "tasks": [
+        {
+          "id": "9e1367e5-2da2-483b-9d39-91b41b83acf7",
+          "run_id": "run-9158",
+          "plan_id": "pm-269",
+          "status": "COMPLETED",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "7b17dd56-14d4-4b5f-85e2-33a65ca805ed",
+          "status": "COMPLETED",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "fa4589e8-81d9-492f-9976-a7ad2735e351",
+          "run_id": "run-9157",
+          "plan_id": "pm-269",
+          "status": "COMPLETED",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "f064cbe7-9854-40d2-a678-422912b1ec60",
+          "run_id": "run-9154",
+          "plan_id": "pm-257",
+          "status": "COMPLETED",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "f9bff22b-7160-41ad-8cc8-198a6c5f0d09",
+          "run_id": "run-9152",
+          "plan_id": "pm-289",
+          "status": "COMPLETED",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "4e3ad001-b441-4260-978b-a5e20a6317dd",
+          "run_id": "run-9151",
+          "plan_id": "pm-269",
+          "status": "COMPLETED",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "c12fa4b2-3bee-44cd-bff5-0b38e0bee4ac",
+          "run_id": "run-9150",
+          "plan_id": "pm-289",
+          "status": "COMPLETED",
+          "worker": "avietidol-z490"
+        },
+        {
+          "id": "70e33b0a-5f9c-4f13-912a-25b8fb4040a6",
+          "run_id": "run-9149",
+          "plan_id": "pm-269",
+          "status": "COMPLETED",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "4a9ab935-7a86-4edd-9bdc-9dec802431c7",
+          "run_id": "run-9148",
+          "plan_id": "pm-289",
+          "status": "COMPLETED",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "0f24e632-e0bd-472c-a673-d13d36bf8deb",
+          "status": "COMPLETED",
+          "worker": "viet-mac"
+        }
+      ]
+    },
+    {
+      "i": 4,
+      "total": 3,
+      "count": 3,
+      "tasks": [
+        {
+          "id": "6c33ad97-3c83-4a7e-ad97-3d583e4b94cf",
+          "run_id": "run-9171",
+          "plan_id": "pm-269",
+          "status": "RUNNING",
+          "worker": "avietidol-mac-mini"
+        },
+        {
+          "id": "35f1dcbe-41b8-4128-8d7e-280b9d0b20ac",
+          "run_id": "run-9169",
+          "plan_id": "pm-257",
+          "status": "RUNNING",
+          "worker": "billie-mac"
+        },
+        {
+          "id": "571d051d-5560-48ee-8ddb-cbfeed94eb6c",
+          "run_id": "run-9166",
+          "plan_id": "pm-270",
+          "status": "RUNNING",
+          "worker": "avietidol-mac-mini"
+        }
+      ]
+    }
+  ],
+  "prior_ingestion": {
+    "id": "run-9170",
+    "status": "succeeded",
+    "task_id": "t-1648",
+    "tm_task_id": "ce9feca1-d1e2-4620-ade9-a7aa387020cd",
+    "callback_apply_failures": 0,
+    "reports": []
+  },
+  "actual_run": {
+    "run_id": "run-9171",
+    "profile": "codex-sol-6-1-high",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "account": "codex-main",
+    "worker": "avietidol-mac-mini",
+    "runner": "fleet",
+    "callback_apply_failures": 0
+  }
+}

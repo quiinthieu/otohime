@@ -1,0 +1,4 @@
+{
+  "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/121874634016/annotations?per_page=100",
+  "error": "HTTP Error 403: rate limit exceeded"
+}

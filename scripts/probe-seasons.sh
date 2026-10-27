@@ -31,7 +31,10 @@
 # dial, theme toggle, heading and the open Ask console paint over it, and no season's layer adds sideways scroll
 # (negative controls: a layer at z-index 9999 covers the masthead and a non-modal Ask dialog, a pick with motion
 # welcome runs the dial's transitions, a wide absolute layer adds scroll, and a dial transition put back in
-# globals.css is caught).
+# globals.css is caught). No console or page errors, with one allowance: the joint check accepts only the tier-off
+# GET /api/ask 404 (lib/ask-tier.ts enabled:false, ASK_LLM unset) that the Ask console asks on open; a POST, another
+# status, another URL or a page error still fails (negative control: another URL's 404, a GET /api/ask answered 500
+# in the browser and a console.error, injected into the same page, are each counted). The probe never POSTs.
 #
 # Env: PORT (4141, or a free port when that default is busy; a port Next reserves is bumped by 10), BASE_URL (remote mode), SKIP_BUILD=1, EXPECT_SHA (checked if set).
 # Playwright is installed into a temp prefix at run time; package.json stays unchanged.

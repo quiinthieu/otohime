@@ -1,0 +1,28 @@
+{
+  "boundary": "Persisted task and plan-manager fields; transport internals and earlier raw log bodies unproven.",
+  "run": {
+    "id": "run-9171",
+    "status": "succeeded",
+    "callback_apply_failures": 0
+  },
+  "tasks": [
+    {
+      "id": "6c33ad97-3c83-4a7e-ad97-3d583e4b94cf",
+      "status": "COMPLETED",
+      "repoId": "otohime",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "resultUrl": "{\"agent\":\"codex\",\"artifacts\":[{\"content_type\":\"application/octet-stream\",\"name\":\"author.txt\",\"sha256\":\"7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada\",\"size\":44},{\"content_type\":\"application/octet-stream\",\"name\":\"changed-files.txt\",\"sha256\":\"6e827a28f315ed4779084f92a4fbe0fefaa270992ae336e746ef2befabf4faf8\",\"size\":2044},{\"content_type\":\"application/octet-stream\",\"name\":\"changes.patch\",\"sha256\":\"f31c459bcc3af78a8127ce099713b8a377c52969e980c017e546c07160d09eea\",\"size\":649515},{\"content_type\":\"application/octet-stream\",\"name\":\"commits.txt\",\"sha256\":\"1b9d7497bea54c15758688c1606a10f7524d17786a82b0a1bbf297c755d06541\",\"size\":238},{\"content_type\":\"application/octet-stream\",\"name\":\"diffstat.txt\",\"sha256\":\"1221a1fb2ac9dc355d4a261921f8ba623dd56aef5203560d1006c19134e11e9c\",\"size\":1516},{\"content_type\":\"application/json\",\"name\":\"footprint.json\",\"sha256\":\"f30e4b8d0922832cf49c1836d0d442766068271bd3809bbf5821347beb9dc25e\",\"size\":2314},{\"content_type\":\"application/octet-stream\",\"name\":\"uncommitted.txt\",\"sha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"size\":0},{\"content_type\":\"application/json\",\"name\":\"usage.json\",\"sha256\":\"54c8f1b1e2badfc04b444113feb189e77c610be306e35e55d0545b9ec4fdb05c\",\"size\":223}],\"duration_s\":609,\"exit_code\":0,\"recordings\":[],\"repo_id\":\"otohime\",\"usage\":{\"cpu_cores\":0.02,\"cpu_seconds\":216.27,\"io_sampler\":\"rusage\",\"peak_cpu_cores\":5.69,\"peak_rss_mb\":7349.84,\"read_bytes\":448946176,\"rss_mb\":339.48,\"sampler\":\"ps\",\"samples\":121,\"write_bytes\":1832701952},\"worker_id\":\"avietidol-mac-mini\"}"
+    },
+    {
+      "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+      "status": "FAILED",
+      "repoId": "otohime",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2a35aac9e2e3 is not on origin/main",
+      "resultUrl": "{\"agent\":\"codex\",\"artifacts\":[{\"content_type\":\"application/octet-stream\",\"name\":\"author.txt\",\"sha256\":\"00efa546dccdd65ef38d5346c1ed62011f266ca2ed303d858b6bb135125c35a1\",\"size\":49},{\"content_type\":\"application/octet-stream\",\"name\":\"changed-files.txt\",\"sha256\":\"95119ef18b570bae274135ddb43d4f9daf9bee6869c577fbc517c85060bdca33\",\"size\":14146},{\"content_type\":\"application/octet-stream\",\"name\":\"changes.patch\",\"sha256\":\"1292763372c80fa9ed4b836ccf76ec63065875bf8199bee8229f11a596a3a7fb\",\"size\":6817726},{\"content_type\":\"application/octet-stream\",\"name\":\"commits.txt\",\"sha256\":\"baacd457dba5acee689f0db9c7a73be645043e3d61e82d4dec788184d0f95412\",\"size\":152},{\"content_type\":\"application/octet-stream\",\"name\":\"diffstat.txt\",\"sha256\":\"59ec4ac14af518d90d65aaa24e416ffa975d7421c551f8233cf50378d8015cb7\",\"size\":8288},{\"content_type\":\"application/json\",\"name\":\"failure.json\",\"sha256\":\"c011aef7382d1fd9897834b11361b05f6593c208b5b09955ba86b38cbfcdedc8\",\"size\":2334},{\"content_type\":\"application/json\",\"name\":\"footprint.json\",\"sha256\":\"9893709c669a625e3d821c71c756e3dc007fae6ef117b892895877cd987b2bd1\",\"size\":14737},{\"content_type\":\"application/json\",\"name\":\"red_gate.json\",\"sha256\":\"0c1fd15097afaa740b12eb2c65a96b38bf9335c1dc7d764fee16ef34a0a82307\",\"size\":71},{\"content_type\":\"application/json\",\"name\":\"rescue.json\",\"sha256\":\"f586b91b7804e25a4be942c515da504b80ee500a9c7055aed3f828b40de481ef\",\"size\":16322},{\"content_type\":\"application/json\",\"name\":\"resume.json\",\"sha256\":\"90bc47145cfefb2aaccdd69ae8f2a4947ce9d5eb590a499a3fead542e404ea11\",\"size\":121},{\"content_type\":\"application/octet-stream\",\"name\":\"uncommitted.txt\",\"sha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"size\":0},{\"content_type\":\"application/json\",\"name\":\"usage.json\",\"sha256\":\"b85f453d9dad0bab106544697bb186b94442dc2ca19283a29102d29749020102\",\"size\":221},{\"content_type\":\"application/json\",\"name\":\"verification.json\",\"sha256\":\"d2090e5eb0241053b424b1b2d27995614e2ac76b4f533dd497955f637d763f51\",\"size\":22826}],\"duration_s\":569,\"exit_code\":1,\"recordings\":[],\"repo_id\":\"otohime\",\"usage\":{\"cpu_cores\":0.01,\"cpu_seconds\":1198.17,\"io_sampler\":\"proc\",\"peak_cpu_cores\":12.21,\"peak_rss_mb\":8839.02,\"read_bytes\":253952,\"rss_mb\":8.49,\"sampler\":\"proc\",\"samples\":114,\"write_bytes\":7510016000},\"worker_id\":\"avietidol-z490\"}"
+    }
+  ]
+}
+

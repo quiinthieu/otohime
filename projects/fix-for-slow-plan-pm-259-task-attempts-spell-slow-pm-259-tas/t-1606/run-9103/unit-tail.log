@@ -1,0 +1,400 @@
+ok 2308 - site.zine names four real projects and a real sketch
+  ---
+  duration_ms: 0.263475
+  type: 'test'
+  ...
+# Subtest: zinePages lays the site out in reading order with the right picks
+ok 2309 - zinePages lays the site out in reading order with the right picks
+  ---
+  duration_ms: 0.622277
+  type: 'test'
+  ...
+# Subtest: every page stays inside its budget, even with oversized content
+ok 2310 - every page stays inside its budget, even with oversized content
+  ---
+  duration_ms: 1.058135
+  type: 'test'
+  ...
+# Subtest: zinePages refuses a site.zine that names something the site does not have
+ok 2311 - zinePages refuses a site.zine that names something the site does not have
+  ---
+  duration_ms: 0.653965
+  type: 'test'
+  ...
+# Subtest: push to main ignores report-only paths
+ok 2312 - push to main ignores report-only paths
+  ---
+  duration_ms: 2.915968
+  type: 'test'
+  ...
+# Subtest: report-only pushes skip, code pushes still run
+ok 2313 - report-only pushes skip, code pushes still run
+  ---
+  duration_ms: 0.623305
+  type: 'test'
+  ...
+# Subtest: pull_request has no path filter
+ok 2314 - pull_request has no path filter
+  ---
+  duration_ms: 0.239472
+  type: 'test'
+  ...
+# Subtest: manual recovery runs the same checks and production gates as a main push
+ok 2315 - manual recovery runs the same checks and production gates as a main push
+  ---
+  duration_ms: 0.953897
+  type: 'test'
+  ...
+# Subtest: checks and production run on ubuntu-24.04
+ok 2316 - checks and production run on ubuntu-24.04
+  ---
+  duration_ms: 2.830673
+  type: 'test'
+  ...
+# Subtest: each main push and manual recovery keeps its checks outside a shared workflow queue
+ok 2317 - each main push and manual recovery keeps its checks outside a shared workflow queue
+  ---
+  duration_ms: 0.583294
+  type: 'test'
+  ...
+# Subtest: PR checks and previews cancel stale jobs in separate PR-specific groups
+ok 2318 - PR checks and previews cancel stale jobs in separate PR-specific groups
+  ---
+  duration_ms: 0.952792
+  type: 'test'
+  ...
+# Subtest: only production deploys serialize after successful checks, without cancelling the running deploy
+ok 2319 - only production deploys serialize after successful checks, without cancelling the running deploy
+  ---
+  duration_ms: 0.900517
+  type: 'test'
+  ...
+# Subtest: production proves the deployed sha, terminal and press after the deploy
+ok 2320 - production proves the deployed sha, terminal and press after the deploy
+  ---
+  duration_ms: 1.518798
+  type: 'test'
+  ...
+# Subtest: verify-deploy treats exactly the push paths-ignore as report-only
+ok 2321 - verify-deploy treats exactly the push paths-ignore as report-only
+  ---
+  duration_ms: 0.570998
+  type: 'test'
+  ...
+# Subtest: Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+ok 2322 - Footer CI step preserves probe failure and surfaces assertions with a bounded server tail
+  ---
+  duration_ms: 40.150197
+  type: 'test'
+  ...
+# Subtest: the bound is 40 and a short gesture is kept whole, in order
+ok 2323 - the bound is 40 and a short gesture is kept whole, in order
+  ---
+  duration_ms: 1.84706
+  type: 'test'
+  ...
+# Subtest: a long drag keeps at most 40 records, and the press and the let-go survive
+ok 2324 - a long drag keeps at most 40 records, and the press and the let-go survive
+  ---
+  duration_ms: 0.507154
+  type: 'test'
+  ...
+# Subtest: with no move left to drop, the oldest record goes
+ok 2325 - with no move left to drop, the oldest record goes
+  ---
+  duration_ms: 0.243315
+  type: 'test'
+  ...
+# Subtest: anything but pointer down/move/up/cancel is ignored, and the trace is not changed in place
+ok 2326 - anything but pointer down/move/up/cancel is ignored, and the trace is not changed in place
+  ---
+  duration_ms: 0.17726
+  type: 'test'
+  ...
+# Subtest: the format: times from the first record, the pointer, the point, the target and the drag state
+ok 2327 - the format: times from the first record, the pointer, the point, the target and the drag state
+  ---
+  duration_ms: 0.506626
+  type: 'test'
+  ...
+# Subtest: shared contract against the fake
+    # Subtest: two clients in one room exchange anonymous move and click events
+    ok 1 - two clients in one room exchange anonymous move and click events
+      ---
+      duration_ms: 314.938207
+      type: 'test'
+      ...
+    # Subtest: a leaving member is announced with bye and the new count
+    ok 2 - a leaving member is announced with bye and the new count
+      ---
+      duration_ms: 4.78125
+      type: 'test'
+      ...
+    # Subtest: the two rooms cannot communicate
+    ok 3 - the two rooms cannot communicate
+      ---
+      duration_ms: 305.095993
+      type: 'test'
+      ...
+    # Subtest: bad upgrades are refused with the shared statuses
+    ok 4 - bad upgrades are refused with the shared statuses
+      ---
+      duration_ms: 13.246495
+      type: 'test'
+      ...
+    # Subtest: binary, oversize and malformed frames are dropped and the fifth closes 1008
+    ok 5 - binary, oversize and malformed frames are dropped and the fifth closes 1008
+      ---
+      duration_ms: 5.109412
+      type: 'test'
+      ...
+    # Subtest: a burst is cut at the 15-token bucket without fan-out of the excess
+    ok 6 - a burst is cut at the 15-token bucket without fan-out of the excess
+      ---
+      duration_ms: 303.744931
+      type: 'test'
+      ...
+    # Subtest: the room holds 24; the next socket hears full and is closed 1013
+    ok 7 - the room holds 24; the next socket hears full and is closed 1013
+      ---
+      duration_ms: 52.088774
+      type: 'test'
+      ...
+    # Subtest: GET /version is public build metadata only
+    ok 8 - GET /version is public build metadata only
+      ---
+      duration_ms: 19.877913
+      type: 'test'
+      ...
+    1..8
+ok 2328 - shared contract against the fake
+  ---
+  duration_ms: 1030.241869
+  type: 'suite'
+  ...
+# Subtest: fake-only behaviour
+    # Subtest: readiness and the injected id source
+    ok 1 - readiness and the injected id source
+      ---
+      duration_ms: 9.29786
+      type: 'test'
+      ...
+    # Subtest: controls answer loopback callers without an Origin only
+    ok 2 - controls answer loopback callers without an Origin only
+      ---
+      duration_ms: 8.923197
+      type: 'test'
+      ...
+    # Subtest: refuse mode answers upgrades 503
+    ok 3 - refuse mode answers upgrades 503
+      ---
+      duration_ms: 5.588896
+      type: 'test'
+      ...
+    # Subtest: full mode sends full and closes 1013
+    ok 4 - full mode sends full and closes 1013
+      ---
+      duration_ms: 1.549747
+      type: 'test'
+      ...
+    # Subtest: flap mode greets, then drops the connection abnormally
+    ok 5 - flap mode greets, then drops the connection abnormally
+      ---
+      duration_ms: 35.459964
+      type: 'test'
+      ...
+    # Subtest: the log keeps coordinates and header-presence booleans, never header values, and is capped
+    ok 6 - the log keeps coordinates and header-presence booleans, never header values, and is capped
+      ---
+      duration_ms: 26.397782
+      type: 'test'
+      ...
+    # Subtest: reset closes every socket and clears the log
+    ok 7 - reset closes every socket and clears the log
+      ---
+      duration_ms: 5.511555
+      type: 'test'
+      ...
+    # Subtest: an unmasked or oversized wire frame ends the connection
+    ok 8 - an unmasked or oversized wire frame ends the connection
+      ---
+      duration_ms: 1.325645
+      type: 'test'
+      ...
+    1..8
+ok 2329 - fake-only behaviour
+  ---
+  duration_ms: 96.574539
+  type: 'suite'
+  ...
+# Subtest: teardown is deterministic: close() resolves with open sockets and frees the port
+ok 2330 - teardown is deterministic: close() resolves with open sockets and frees the port
+  ---
+  duration_ms: 2.791142
+  type: 'test'
+  ...
+# Subtest: the CLI prints its ready line and exits on SIGTERM
+ok 2331 - the CLI prints its ready line and exits on SIGTERM
+  ---
+  duration_ms: 119.903778
+  type: 'test'
+  ...
+# Subtest: a plan/task prefix is split off the subject, and anything else is left as written
+ok 2332 - a plan/task prefix is split off the subject, and anything else is left as written
+  ---
+  duration_ms: 1.561664
+  type: 'test'
+  ...
+# Subtest: subjects lose control characters and runs of space, and are capped with an ellipsis
+ok 2333 - subjects lose control characters and runs of space, and are capped with an ellipsis
+  ---
+  duration_ms: 0.396599
+  type: 'test'
+  ...
+# Subtest: changed paths summarize into at most AREAS_MAX areas, most files first, ties by name
+ok 2334 - changed paths summarize into at most AREAS_MAX areas, most files first, ties by name
+  ---
+  duration_ms: 0.484595
+  type: 'test'
+  ...
+# Subtest: git log text parses into entries with dates in UTC, line counts and binary files counted as files
+ok 2335 - git log text parses into entries with dates in UTC, line counts and binary files counted as files
+  ---
+  duration_ms: 1.32468
+  type: 'test'
+  ...
+# Subtest: validation rejects every malformed field, including optional-looking ones, and over-long lists
+ok 2336 - validation rejects every malformed field, including optional-looking ones, and over-long lists
+  ---
+  duration_ms: 1.185957
+  type: 'test'
+  ...
+# Subtest: serialization is canonical: one entry per line, stable bytes, and it round-trips
+ok 2337 - serialization is canonical: one entry per line, stable bytes, and it round-trips
+  ---
+  duration_ms: 34.037825
+  type: 'test'
+  ...
+# Subtest: fixture and inherited git runners suppress auto-maintenance, with a real enabled control
+ok 2338 - fixture and inherited git runners suppress auto-maintenance, with a real enabled control
+  ---
+  duration_ms: 37.782929
+  type: 'test'
+  ...
+# Subtest: a full clone is indexed newest first with dates, prefixes and file summaries, and the same bytes every run
+ok 2339 - a full clone is indexed newest first with dates, prefixes and file summaries, and the same bytes every run
+  ---
+  duration_ms: 72.381933
+  type: 'test'
+  ...
+# Subtest: the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out
+ok 2340 - the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out
+  ---
+  duration_ms: 104.999034
+  type: 'test'
+  ...
+# Subtest: without git, outside a repository, or in an empty one, the committed fallback is used as it is
+ok 2341 - without git, outside a repository, or in an empty one, the committed fallback is used as it is
+  ---
+  duration_ms: 60.298323
+  type: 'test'
+  ...
+# Subtest: a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+ok 2342 - a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+  ---
+  duration_ms: 76.754934
+  type: 'test'
+  ...
+# Subtest: a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+ok 2343 - a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+  ---
+  duration_ms: 113.795193
+  type: 'test'
+  ...
+# Subtest: a git log that cannot be parsed falls back instead of failing the build
+ok 2344 - a git log that cannot be parsed falls back instead of failing the build
+  ---
+  duration_ms: 37.920638
+  type: 'test'
+  ...
+# Subtest: --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+ok 2345 - --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+  ---
+  duration_ms: 221.809821
+  type: 'test'
+  ...
+# Subtest: the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+ok 2346 - the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+  ---
+  duration_ms: 566.063786
+  type: 'test'
+  ...
+# Subtest: the committed content/history.json is a well-formed, bounded, canonical index
+ok 2347 - the committed content/history.json is a well-formed, bounded, canonical index
+  ---
+  duration_ms: 2.033899
+  type: 'test'
+  ...
+# Subtest: package.json builds the index before next build and exposes history:index and history:check
+ok 2348 - package.json builds the index before next build and exposes history:index and history:check
+  ---
+  duration_ms: 0.389396
+  type: 'test'
+  ...
+# Subtest: Chrome through the repo's playwright-core when PW_PREFIX is unset
+ok 2349 - Chrome through the repo's playwright-core when PW_PREFIX is unset
+  ---
+  duration_ms: 2.267215
+  type: 'test'
+  ...
+# Subtest: PW_PREFIX's playwright when it is set, and Chrome is not tried
+ok 2350 - PW_PREFIX's playwright when it is set, and Chrome is not tried
+  ---
+  duration_ms: 2.640351
+  type: 'test'
+  ...
+# Subtest: a clear error when Chrome is absent and PW_PREFIX is unset
+ok 2351 - a clear error when Chrome is absent and PW_PREFIX is unset
+  ---
+  duration_ms: 1.951822
+  type: 'test'
+  ...
+# Subtest: a clear error when playwright-core itself is missing
+ok 2352 - a clear error when playwright-core itself is missing
+  ---
+  duration_ms: 0.559998
+  type: 'test'
+  ...
+# Subtest: a clear error when PW_PREFIX is set but its playwright is not there
+ok 2353 - a clear error when PW_PREFIX is set but its playwright is not there
+  ---
+  duration_ms: 0.353966
+  type: 'test'
+  ...
+# Subtest: the default loader resolves the repo's locked playwright-core
+ok 2354 - the default loader resolves the repo's locked playwright-core
+  ---
+  duration_ms: 2.682597
+  type: 'test'
+  ...
+# Subtest: probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+ok 2355 - probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+  ---
+  duration_ms: 1336.563299
+  type: 'test'
+  ...
+# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs
+ok 2356 - probe bounds: measured after the one-shot ink lands, from the visible glyphs
+  ---
+  duration_ms: 1263.765952
+  type: 'test'
+  ...
+1..2356
+# tests 2370
+# suites 2
+# pass 2370
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16051.998951

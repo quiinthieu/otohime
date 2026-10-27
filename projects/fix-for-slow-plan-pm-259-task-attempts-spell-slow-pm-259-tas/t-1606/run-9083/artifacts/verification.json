@@ -1,0 +1,94 @@
+{
+  "verification": [
+    {
+      "name": "trace helper unit test",
+      "cwd": ".",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+      "expect": "exit0",
+      "status": "pass",
+      "exit": 0,
+      "pass_count": 5,
+      "log": "trace.log"
+    },
+    {
+      "name": "lint and types",
+      "cwd": ".",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "status": "pass",
+      "exit": 0,
+      "logs": [
+        "lint.log",
+        "typecheck.log"
+      ]
+    },
+    {
+      "name": "unit tests",
+      "cwd": ".",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "status": "pass",
+      "exit": 0,
+      "pass_count": 2363,
+      "log": "unit.log"
+    },
+    {
+      "name": "e2e x3",
+      "cwd": ".",
+      "cmd": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
+      "expect": "exit0",
+      "status": "pass",
+      "evidence_capture": "verify.py invokes the same three scripts in order, exits on first failure and snapshots each production build.",
+      "exit": 0,
+      "repeats": [
+        {
+          "repeat": 1,
+          "exit": 0,
+          "duration_seconds": 380.257,
+          "log": "e2e-1.log",
+          "build": "build-1.json",
+          "tests": 177,
+          "pass": 176,
+          "fail": 0,
+          "skipped": 1
+        },
+        {
+          "repeat": 2,
+          "exit": 0,
+          "duration_seconds": 381.304,
+          "log": "e2e-2.log",
+          "build": "build-2.json",
+          "tests": 177,
+          "pass": 176,
+          "fail": 0,
+          "skipped": 1
+        },
+        {
+          "repeat": 3,
+          "exit": 0,
+          "duration_seconds": 383.431,
+          "log": "e2e-3.log",
+          "build": "build-3.json",
+          "tests": 177,
+          "pass": 176,
+          "fail": 0,
+          "skipped": 1
+        }
+      ]
+    }
+  ],
+  "controls": {
+    "clock_regression": {
+      "status": "pass",
+      "exit": 0,
+      "log": "clock-regression.log"
+    },
+    "host_delay_mutation": {
+      "status": "pass",
+      "exit": 1,
+      "expect": "exit1",
+      "assertion": "Missing expected rejection (TimeoutError).",
+      "log": "clock-negative-control.log"
+    }
+  }
+}

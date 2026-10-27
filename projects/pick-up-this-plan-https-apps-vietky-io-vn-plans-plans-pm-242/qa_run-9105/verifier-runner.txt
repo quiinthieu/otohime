@@ -1,0 +1,74 @@
+progress phase=clone
+=== task-manager coding job starting ===
+  Agent    : shell
+  Command  : true
+  Prompt   : 0 characters from AGENT_PROMPT_FILE
+  Workspace: /Users/avietidol/Library/Application Support/build-worker/leases/3a391704-efff-4b43-9b16-e8c53f895fc2-e2feb24c4cc6f6ca0267f659ebcc2328/work/otohime
+  Repo URL : git@github.com:quiinthieu/otohime.git
+  Repo     : REPO_ID=otohime GIT_MAIN_BRANCH=main PLANS_DIR=projects
+  Account  : ACCOUNT_ID=<none>
+  HOME     : /Users/avietidol/Library/Application Support/build-worker/leases/3a391704-efff-4b43-9b16-e8c53f895fc2-e2feb24c4cc6f6ca0267f659ebcc2328/home
+  User     : uid=502(avietidol) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),702(com.apple.sharepoint.group.2),33(_appstore),98(_lpadmin),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1)
+  Branch   : main
+  Sidecar  : enabled (shared=/Users/avietidol/Library/Application Support/build-worker/leases/3a391704-efff-4b43-9b16-e8c53f895fc2-e2feb24c4cc6f6ca0267f659ebcc2328/shared)
+=========================================
+  github.com host key refreshed
+  gitlab.com host key refreshed
+  bitbucket.org host key refreshed
+Cloning git@github.com:quiinthieu/otohime.git (branch: main) into /Users/avietidol/Library/Application Support/build-worker/leases/3a391704-efff-4b43-9b16-e8c53f895fc2-e2feb24c4cc6f6ca0267f659ebcc2328/work/otohime...
+  reference clone from /Users/avietidol/Library/Application Support/build-worker/repo/otohime (fleet mirror)
+Cloning into '/Users/avietidol/Library/Application Support/build-worker/leases/3a391704-efff-4b43-9b16-e8c53f895fc2-e2feb24c4cc6f6ca0267f659ebcc2328/work/otohime'...
+  Cloned branch: main
+  Cloned commit: baec1f88e602e9ad50ebecb9827a476f939495af
+Checking out sha baec1f8
+Note: switching to 'baec1f8'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at baec1f8 pm-272/t-1565: Retain motion probe failures in verifier tails
+push guard: skipped (otohime has no scripts/git-push-safe.sh)
+
+progress phase=verify
+=== verify-runner (agent=shell) ===
+npm warmup /Users/avietidol/Library/Application Support/build-worker/leases/3a391704-efff-4b43-9b16-e8c53f895fc2-e2feb24c4cc6f6ca0267f659ebcc2328/work/otohime ci
+npm warmup exit 0
+verify: start item=Project tests timeout_s=300
+verify: item=Project tests status=pass exit=0 duration_ms=43012
+verify: start item=Lint timeout_s=300
+verify: item=Lint status=pass exit=0 duration_ms=16354
+verify: start item=Typecheck timeout_s=300
+verify: item=Typecheck status=pass exit=0 duration_ms=10651
+verify: start item=Build timeout_s=600
+verify: item=Build status=pass exit=0 duration_ms=24908
+verify: start item=Search content index timeout_s=300
+verify: item=Search content index status=pass exit=0 duration_ms=461
+verify: start item=Provider HTTP contract timeout_s=900
+verify: item=Provider HTTP contract status=pass exit=0 duration_ms=59337
+verify: start item=Cassette browser matrix timeout_s=900
+verify: item=Cassette browser matrix status=pass exit=0 duration_ms=41309
+verify: start item=Reduced motion timeout_s=900
+verify: running 60s/900s, last: ok - 390x844 reduced motion /projects -> /planisphere: every animation at load lasts <= 1 ms or has finished
+verify: running 120s/900s, last: ok - 390x844 reduced motion / -> /work by the console menu: every animation after it lasts <= 1 ms or has finished
+verify: item=Reduced motion status=pass exit=0 duration_ms=144078
+verify: start item=Application end to end timeout_s=900
+verify: running 60s/900s, last:   ...
+verify: running 120s/900s, last:   ...
+verify: running 180s/900s, last:   ...
+verify: running 240s/900s, last: # lifecycle control: revoke
+verify: running 300s/900s, last:   ...
+verify: running 360s/900s, last:   ...
+verify: running 420s/900s, last:   ...
+verify: item=Application end to end status=pass exit=0 duration_ms=440794

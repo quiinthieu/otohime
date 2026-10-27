@@ -1,0 +1,12 @@
+{
+  "id": "run-9095",
+  "plan_id": "pm-269",
+  "task_id": "t-1591",
+  "tm_task_id": "92991a43-e9f7-40c4-952d-c4703a43c68f",
+  "worker_id": "billie-mac",
+  "runner": "fleet",
+  "agent_profile": "codex-sol-6-1-high",
+  "started_at": "2026-10-26T22:04:16.461721Z",
+  "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+  "callback_apply_failures": 0
+}

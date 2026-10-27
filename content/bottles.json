@@ -1,0 +1,86 @@
+[
+  {
+    "id": "neal",
+    "url": "https://neal.fun/",
+    "title": "Neal.fun",
+    "note": "Tiny web worlds, each with a new rule to discover.",
+    "kind": "toy"
+  },
+  {
+    "id": "nicky",
+    "url": "https://ncase.me/",
+    "title": "Nicky Case",
+    "note": "Play your way through a shelf of curious explanations.",
+    "kind": "site"
+  },
+  {
+    "id": "ciechanowski",
+    "url": "https://ciechanow.ski/",
+    "title": "Bartosz Ciechanowski",
+    "note": "Turn a diagram and let a difficult idea become tangible.",
+    "kind": "site"
+  },
+  {
+    "id": "pudding",
+    "url": "https://pudding.cool/",
+    "title": "The Pudding",
+    "note": "Stories that let data draw outside the lines.",
+    "kind": "site"
+  },
+  {
+    "id": "red-blob",
+    "url": "https://www.redblobgames.com/",
+    "title": "Red Blob Games",
+    "note": "Follow a wandering path into the craft of game maps.",
+    "kind": "site"
+  },
+  {
+    "id": "patatap",
+    "url": "https://patatap.com/",
+    "title": "Patatap",
+    "note": "Tap out shapes and sound; expect bright flashes.",
+    "kind": "toy"
+  },
+  {
+    "id": "window-swap",
+    "url": "https://www.window-swap.com/",
+    "title": "WindowSwap",
+    "note": "Borrow a quiet view from somebody else’s window.",
+    "kind": "art"
+  },
+  {
+    "id": "explorables",
+    "url": "https://explorabl.es/",
+    "title": "Explorable Explanations",
+    "note": "A cupboard of lessons best learned by playing.",
+    "kind": "site"
+  },
+  {
+    "id": "pixel-moon",
+    "url": "https://www.joshworth.com/dev/pixelspace/pixelspace_solarsystem.html",
+    "title": "If the Moon Were Only 1 Pixel",
+    "note": "Scroll through the enormous pauses between our planets.",
+    "kind": "art"
+  },
+  {
+    "id": "silk",
+    "url": "https://weavesilk.com/",
+    "title": "Silk",
+    "note": "Draw a thread and watch its mirrored companions bloom.",
+    "kind": "art"
+  },
+  {
+    "id": "neon-flames",
+    "url": "https://29a.ch/sandbox/2011/neonflames/",
+    "title": "Neonflames",
+    "note": "Paint a small nebula in the dark.",
+    "kind": "art"
+  },
+  {
+    "id": "little-alchemy",
+    "url": "https://littlealchemy2.com/",
+    "title": "Little Alchemy 2",
+    "note": "Combine small elements and follow your hunches.",
+    "kind": "toy"
+  }
+]

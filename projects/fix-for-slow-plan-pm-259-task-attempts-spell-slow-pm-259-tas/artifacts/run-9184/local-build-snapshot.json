@@ -1,0 +1,10 @@
+{
+  "purpose": "local production build snapshot during serial E2E run 2; test completion is recorded separately",
+  "build_id": "J7Q0Tl2jJOqAhDkqddFtc",
+  "artifacts": {
+    ".next/BUILD_ID": "3fb94f498a789421d7ec76c8c47861a445b9a273bee5907a28523b2d7960ff69",
+    ".next/build-manifest.json": "358dec76341549f8a7ee3e0c232747ad01ff9f2071f513c961535f0c3a90791f",
+    ".next/server/app-paths-manifest.json": "a766496cb41139e08ad6d975a9c0993469ef5e62f07998118797b14eb18394bc"
+  },
+  "snapshot_run": 2
+}

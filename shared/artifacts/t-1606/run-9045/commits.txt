@@ -1,0 +1,15 @@
+Plan/task/run: pm-270/t-1606/run-9045
+Branch: task-rescue/pm-270-t-1606-run-9045
+Main integration: infra failure; four non-fast-forward push rejections after three rebases; tested code preserved on rescue branch.
+Initial base: 608c92e57e3a774b77805ff7d82d9a58041a0748
+Upstream footer repair: 9bb1daea85c600788c8209819e5c4d69e08b3a46
+Final base: 1e039a34a27b102173527ac04ce1765e359898d6
+Prior desk implementation: 0b349dc012c0591ded5f82d28d0cf3395b71567c
+Prior verification delivery: 3ae76a4dc84456cd8b7bebb74023eb7989eb3721
+
+This artifact is saved in the single delivery commit together with the production-markup
+regression, complete verification logs and summary_run-9045.md.
+Resolve that immutable delivery identity without a self-referential hash:
+git log -1 --format=%H -- projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/summary_run-9045.md
+
+The pushed hash is also supplied as git_sha on the plan-manager summary report.

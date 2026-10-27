@@ -18,6 +18,7 @@ const MINE: NavItem[] = [
 const ADMIN: NavItem[] = [
   { href: "/admin/users", label: "Users" },
   { href: "/admin/roles", label: "Roles" },
+  { href: "/admin/bottles", label: "Bottles" },
 ];
 
 // The pages with the sidebar. The chrome prerenders; the nav reads the

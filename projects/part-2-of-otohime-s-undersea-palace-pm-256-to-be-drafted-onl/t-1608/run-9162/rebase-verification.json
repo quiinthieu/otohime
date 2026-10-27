@@ -1,0 +1,54 @@
+[
+  {
+    "name": "focused",
+    "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test ghosts/client.test.ts ghosts/config.test.ts",
+    "exit": 0,
+    "seconds": 0.94,
+    "tail": [
+      "ok 15 - responses never cache configuration or the disabled result",
+      "  ---",
+      "  duration_ms: 19.766958",
+      "  ...",
+      "# Subtest: actual GET wiring awaits connection before reading runtime env, on every request",
+      "ok 16 - actual GET wiring awaits connection before reading runtime env, on every request",
+      "  ---",
+      "  duration_ms: 63.101166",
+      "  ...",
+      "1..16",
+      "# tests 16",
+      "# suites 0",
+      "# pass 16",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0",
+      "# todo 0",
+      "# duration_ms 822.250042"
+    ]
+  },
+  {
+    "name": "project",
+    "cmd": "npm test",
+    "exit": 0,
+    "seconds": 54.1,
+    "tail": [
+      "ok 2429 - probe title: the plain Riso source inside h2\\#end-title, never the decorative plates",
+      "  ---",
+      "  duration_ms: 7572.706709",
+      "  ...",
+      "# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs",
+      "ok 2430 - probe bounds: measured after the one-shot ink lands, from the visible glyphs",
+      "  ---",
+      "  duration_ms: 4486.409958",
+      "  ...",
+      "1..2430",
+      "# tests 2448",
+      "# suites 2",
+      "# pass 2448",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0",
+      "# todo 0",
+      "# duration_ms 53682.103333"
+    ]
+  }
+]

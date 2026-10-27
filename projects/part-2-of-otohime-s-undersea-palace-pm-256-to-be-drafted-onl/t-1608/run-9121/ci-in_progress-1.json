@@ -1,0 +1,31 @@
+{
+  "total_count": 2,
+  "workflow_runs": [
+    {
+      "id": 40433812567,
+      "run_number": 487,
+      "name": "CI",
+      "head_sha": "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-10-27T01:38:58Z",
+      "updated_at": "2026-10-27T01:39:02Z",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40433812567",
+      "fingerprint": "93c27bf76da4d48eb0838a2fbc80884c2c595c6fc98c846225de4174f0657950",
+      "matchesDelivery": true
+    },
+    {
+      "id": 40432734832,
+      "run_number": 486,
+      "name": "CI",
+      "head_sha": "4c9f325055c6da83fbe12afe6ffeb5858efd2a89",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-10-27T01:28:07Z",
+      "updated_at": "2026-10-27T01:45:15Z",
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40432734832",
+      "fingerprint": null,
+      "matchesDelivery": false
+    }
+  ]
+}

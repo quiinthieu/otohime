@@ -6,6 +6,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ts from "typescript";
 import { chromium, type Browser, type Page } from "playwright-core";
+import { collectBrowserErrors } from "./console-errors.ts";
 const BASE = process.env.BASE_URL ?? "http://localhost:4000";
 let browser: Browser;
 before(async () => {
@@ -16,9 +17,14 @@ after(async () => { await browser?.close(); });
 async function open(options: Parameters<Browser["newContext"]>[0] = {}) {
   const context = await browser.newContext({ viewport: { width: 1366, height: 900 }, ...options });
   const page = await context.newPage();
-  const errors: string[] = [];
-  page.on("pageerror", e => errors.push(e.message));
-  page.on("console", msg => { if (msg.type() === "error") errors.push(msg.text()); });
+  const errors = collectBrowserErrors(BASE);
+  page.on("pageerror", e => errors.pageError(e.message));
+  page.on("response", response => errors.response({ url: response.url(), status: response.status(), method: response.request().method(), resourceType: response.request().resourceType() }));
+  page.on("console", msg => {
+    if (msg.type() !== "error") return;
+    const location = msg.location();
+    errors.console({ text: msg.text(), url: location.url, line: location.lineNumber, column: location.columnNumber, args: msg.args().length });
+  });
   await page.addInitScript(() => {
     const state = window as unknown as { risoEntries: Record<string, number>; risoTransitions: string[][]; risoObservers: number };
     state.risoEntries = {};
@@ -59,6 +65,41 @@ async function noDuplicateNames(page: Page) {
   assert.equal(await page.locator(".riso-char").evaluateAll(els => els.every(el => getComputedStyle(el).viewTransitionName === "none")), true);
 }
 
+test("disabled ghost config reconciles only its real resource error; unrelated errors still fail", async () => {
+  // Reduced motion prevents the idle canvas from making another config request.
+  const { context, page, errors } = await open({ reducedMotion: "reduce" });
+  try {
+    const [response, , body] = await Promise.all([
+      page.waitForResponse(`${BASE}/api/ghosts`),
+      page.waitForEvent("console", { predicate: msg => msg.type() === "error" && msg.location().url === `${BASE}/api/ghosts` }),
+      page.evaluate(async () => (await fetch("/api/ghosts")).text()),
+    ]);
+    assert.equal(response.status(), 404);
+    assert.equal(response.headers()["cache-control"], "no-store");
+    assert.equal(body, "");
+    assert.deepEqual(errors.unexpected, []);
+
+    for (const [path, status] of [["/missing-console-control", 404], ["/api/ghosts", 500]] as const) {
+      await page.route(`${BASE}${path}`, route => route.fulfill({ status, body: "negative control" }));
+      const countBefore: number = errors.unexpected.length;
+      await Promise.all([
+        page.waitForEvent("console", { predicate: msg => msg.type() === "error" && msg.location().url === `${BASE}${path}` }),
+        page.evaluate(path => fetch(path), path),
+      ]);
+      assert.equal(errors.unexpected.length, countBefore + 1, `${path} ${status} remains unexpected`);
+    }
+    const countBefore: number = errors.unexpected.length;
+    const resourceText = "Failed to load resource: the server responded with a status of 404 (Not Found)";
+    await page.evaluate(text => console.error(text), resourceText);
+    assert.equal(errors.unexpected.length, countBefore + 1, "same-text application console.error stays unexpected");
+    await Promise.all([
+      page.waitForEvent("pageerror"),
+      page.evaluate(() => { setTimeout(() => { throw new Error("pageerror negative control"); }, 0); }),
+    ]);
+    assert.equal(errors.unexpected.at(-1), "pageerror negative control");
+  } finally { await context.close(); }
+});
+
 test("one heading name, one selectable copy, deterministic settled plates and token plate counts", async () => {
   const { context, page, errors } = await open();
   try {
@@ -84,7 +125,7 @@ test("one heading name, one selectable copy, deterministic settled plates and to
     await page.getByRole("region", { name: "Pocket console", exact: true }).getByText("Sumi black", { exact: true }).click();
     assert.equal(await page.locator("h1 .riso-char").first().evaluate(el => getComputedStyle(el, "::after").opacity), "0");
     assert.equal(await page.getByRole("heading", { name: "Otohime", exact: true }).count(), 1);
-    await noDuplicateNames(page); assert.deepEqual(errors, []);
+    await noDuplicateNames(page); assert.deepEqual(errors.unexpected, []);
   } finally { await context.close(); }
 });
 
@@ -107,7 +148,7 @@ test("entry runs once per mount, h2 navigation, reduced motion, forced colors an
       const data = await about.locator(".riso-char").first().evaluate(el => ({ a: getComputedStyle(el.querySelector(".riso-anchor")!).animationName, ghost: getComputedStyle(el, "::before").display, anchor: getComputedStyle(el.querySelector(".riso-anchor")!).color }));
       assert.equal(data.a, "none"); assert.equal(data.ghost, "none"); assert.notEqual(data.anchor, "rgba(0, 0, 0, 0)");
     }
-    assert.deepEqual(errors, []);
+    assert.deepEqual(errors.unexpected, []);
   } finally { await context.close(); }
 });
 
@@ -121,7 +162,7 @@ test("server/no-JavaScript headings are readable and mobile notes wrap without o
     assert.equal(await page.locator("h1 h1,h1 h2,h2 h1,h2 h2").count(), 0);
     assert.ok(await page.locator("main h2 .riso-text").count());
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-    assert.deepEqual(errors, []);
+    assert.deepEqual(errors.unexpected, []);
   } finally { await context.close(); }
 });
 
@@ -152,7 +193,7 @@ test("Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the sourc
     await page.locator(".stamp-board").waitFor({ state: "detached" });
     await page.waitForFunction(() => document.activeElement?.matches(".stamp-chip"));
     await heading.locator(".riso-visual").waitFor({ state: "visible" });
-    await noDuplicateNames(page); assert.deepEqual(errors, []);
+    await noDuplicateNames(page); assert.deepEqual(errors.unexpected, []);
   } finally { await context.close(); }
 });
 
@@ -187,6 +228,6 @@ test("shared preview handles empty, Unicode, preserved whitespace and very long 
     assert.ok(geometry.lines > 5);
     assert.ok(geometry.width <= geometry.viewport, JSON.stringify(geometry));
     assert.equal(geometry.selected, title);
-    assert.deepEqual(errors, []);
+    assert.deepEqual(errors.unexpected, []);
   } finally { await context.close(); }
 });

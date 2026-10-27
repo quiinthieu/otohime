@@ -1,0 +1,32 @@
+[
+  {
+    "status": "fulfilled",
+    "value": {
+      "run": {
+        "id": "run-9182",
+        "tm_task_id": "723ea420-6d52-4aab-aebd-1aacbac96574",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      "reports": [
+        {
+          "id": "rep-5414",
+          "git_sha": "c24320b07314dea9f590ba08c9142039951419d8",
+          "kind": "summary"
+        }
+      ]
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "run": {
+        "id": "run-9183",
+        "tm_task_id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+        "status": "failed",
+        "callback_apply_failures": 0
+      },
+      "reports": []
+    }
+  }
+]

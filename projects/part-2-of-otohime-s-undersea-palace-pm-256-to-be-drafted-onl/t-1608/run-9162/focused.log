@@ -1,0 +1,90 @@
+TAP version 13
+# Subtest: pointer policy normalizes, rejects invalid geometry and applies exact time/deadzone boundaries
+ok 1 - pointer policy normalizes, rejects invalid geometry and applies exact time/deadzone boundaries
+  ---
+  duration_ms: 1.31725
+  ...
+# Subtest: server parser rejects malformed, oversize, binary, invalid counts/ids/coordinates
+ok 2 - server parser rejects malformed, oversize, binary, invalid counts/ids/coordinates
+  ---
+  duration_ms: 0.344959
+  ...
+# Subtest: peer history and ripples stay bounded; trails fade at 700ms, tips expire at 6s without changing membership
+ok 3 - peer history and ripples stay bounded; trails fade at 700ms, tips expire at 6s without changing membership
+  ---
+  duration_ms: 0.430667
+  ...
+# Subtest: moves are <=10Hz; a lone visitor click schedules drawing and stops animation after fading
+ok 4 - moves are <=10Hz; a lone visitor click schedules drawing and stops animation after fading
+  ---
+  duration_ms: 0.90075
+  ...
+# Subtest: peer marks restart idle drawing, expire via one timer and bye removes tips
+ok 5 - peer marks restart idle drawing, expire via one timer and bye removes tips
+  ---
+  duration_ms: 0.303875
+  ...
+# Subtest: no actual paint means no ripple counter (negative control)
+ok 6 - no actual paint means no ripple counter (negative control)
+  ---
+  duration_ms: 0.247291
+  ...
+# Subtest: retry failures use exactly three attempts with +1s/+3s delays, then remain gone across toggles
+ok 7 - retry failures use exactly three attempts with +1s/+3s delays, then remain gone across toggles
+  ---
+  duration_ms: 0.292333
+  ...
+# Subtest: full is immediately terminal without retries or drawing
+ok 8 - full is immediately terminal without retries or drawing
+  ---
+  duration_ms: 0.50425
+  ...
+# Subtest: disabled config never opens a socket, and transient fetch failure retries within the same budget
+ok 9 - disabled config never opens a socket, and transient fetch failure retries within the same budget
+  ---
+  duration_ms: 0.423292
+  ...
+# Subtest: initial suppression has zero work; hidden/offline/reduced-motion eligibility cancels active work and stale callbacks
+ok 10 - initial suppression has zero work; hidden/offline/reduced-motion eligibility cancels active work and stale callbacks
+  ---
+  duration_ms: 0.591375
+  ...
+# Subtest: hung config consumes attempts and disposed/aborted config can never connect
+ok 11 - hung config consumes attempts and disposed/aborted config can never connect
+  ---
+  duration_ms: 0.164792
+  ...
+# Subtest: canvas painter draws brush tips, trails and only live ripple arcs
+ok 12 - canvas painter draws brush tips, trails and only live ripple arcs
+  ---
+  duration_ms: 0.150791
+  ...
+# Subtest: both pages mount the neutral idle loader; canvas is decorative, passive and style-isolated
+ok 13 - both pages mount the neutral idle loader; canvas is decorative, passive and style-isolated
+  ---
+  duration_ms: 1.634083
+  ...
+# Subtest: only a dedicated secure Worker or local loopback proof endpoint is accepted
+ok 14 - only a dedicated secure Worker or local loopback proof endpoint is accepted
+  ---
+  duration_ms: 0.56125
+  ...
+# Subtest: responses never cache configuration or the disabled result
+ok 15 - responses never cache configuration or the disabled result
+  ---
+  duration_ms: 8.014083
+  ...
+# Subtest: actual GET wiring awaits connection before reading runtime env, on every request
+ok 16 - actual GET wiring awaits connection before reading runtime env, on every request
+  ---
+  duration_ms: 26.150042
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 320.118375

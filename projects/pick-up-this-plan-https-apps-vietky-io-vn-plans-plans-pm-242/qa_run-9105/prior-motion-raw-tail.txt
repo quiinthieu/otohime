@@ -1,0 +1,61 @@
+n.assign): pagereveal carries a view transition of type hop
+ok - 1366x768 /shore -> /does-not-exist (location.assign): the hop fades /shore out and the 404 in
+ok - 1366x768 /shore -> /does-not-exist (location.assign): no page error and no console error
+ok - 390x844 /shore -> /does-not-exist (location.assign): pagereveal carries a view transition of type hop
+ok - 390x844 /shore -> /does-not-exist (location.assign): the hop fades /shore out and the 404 in
+ok - 390x844 /shore -> /does-not-exist (location.assign): no page error and no console error
+ok - no-JS: /does-not-exist answers 404
+ok - no-JS: /does-not-exist shows the lost sheet
+ok - no-JS: the 404's Go home navigates to /
+ok - site: /projects has 11 row rise animations
+ok - site: the rows' delays increase, 40 ms apart
+ok - site: the last row is up within 0.8 s
+ok - site: /sign-in answers 200
+ok - site: /does-not-exist answers 404
+ok - site reduced motion: every /projects row's effective delay is <= 1 ms
+ok - site reduced motion: every animation on /projects lasts <= 1 ms or has finished
+ok - site reduced motion: /sign-in answers 200
+ok - site reduced motion: every animation on /sign-in lasts <= 1 ms or has finished
+ok - site reduced motion: /does-not-exist answers 404
+ok - site reduced motion: every animation on /does-not-exist lasts <= 1 ms or has finished
+ok - site: /projects, /sign-in and /does-not-exist load with no console error or page error
+# instruments: /barometer?city=tokyo shows the reading face
+ok - instruments: /barometer starts its 4 instrument animations, one per part
+ok - instruments: /barometer's parts settle in turn, 0.15 s apart, each over 1.1 s
+ok - instruments: /barometer's four start together and differ only by their delay
+ok - instruments: /barometer's instrument animations at load are its own, none longer than 1.1 s
+ok - instruments: /planisphere draws every one of its 150 lines on over 0.9 s
+ok - instruments: /planisphere's stars fade up as one group 0.4 s in
+ok - instruments: /planisphere's names, ecliptic, Sun and Moon fade up from 1.3 s
+ok - instruments: no single star animates on its own
+ok - instruments: ArrowRight turns the wheel
+ok - instruments: after ArrowRight the disc runs only its transform transition
+ok - instruments: after ArrowRight only transform transitions on the disc and rim are new
+ok - instruments: the turn replays no line draw and remounts no line
+ok - instruments: /rotor rolls no window at load
+ok - instruments: pressing A on /rotor steps the windows AAA -> AAB
+ok - instruments: pressing A rolls exactly one window, on twos in 170 ms
+ok - instruments: the window that rolled is the right rotor's, now B
+# instruments reduced motion: /barometer?city=tokyo shows the reading face
+ok - instruments reduced motion: /barometer starts none of its instrument animations
+ok - instruments reduced motion: every animation on /barometer lasts <= 1 ms or has finished
+ok - instruments reduced motion: /planisphere starts no draw-on or fade
+ok - instruments reduced motion: ArrowRight turns the wheel
+ok - instruments reduced motion: the turn adds no animation or transition
+ok - instruments reduced motion: the turn replays no line draw and remounts no line
+ok - instruments reduced motion: /rotor rolls no window at load
+ok - instruments reduced motion: pressing A on /rotor steps the windows AAA -> AAB
+ok - instruments reduced motion: pressing A rolls no window
+ok - instruments reduced motion: after pressing A every animation lasts <= 1 ms or has finished
+ok - no-JS: /barometer is not hydrated
+ok - no-JS: /barometer's four parts end at their resting transform
+ok - no-JS: /planisphere is not hydrated
+ok - no-JS: /planisphere's lines end drawn (stroke-dashoffset 0)
+ok - no-JS: /planisphere's stars, names and markers end at their resting opacity
+ok - no-JS: /rotor is not hydrated
+ok - no-JS: /rotor's windows stand still, reading AAA
+ok - negative: the probe stripped @view-transition from /shore's HTML and CSS
+ok - negative: /projects -> /shore without the rule reveals with no transition
+ok - no console errors or page errors
+probe: 511 ok, 1 failed
+

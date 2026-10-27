@@ -15,7 +15,8 @@
 #    listening exits 1 and names what it last saw.
 # 2. Runs e2e/pocket-terminal.test.ts and e2e/ink-press.test.ts against BASE_URL (scripts/e2e.mjs runs the suite
 #    as it is when BASE_URL is set). Both are read-only: no form posts, no sign-in. They need Google Chrome or
-#    CHROME_PATH, like npm run test:e2e.
+#    CHROME_PATH, like npm run test:e2e. A bare checkout is fine: when playwright-core or sharp does not import,
+#    it runs npm ci once (VERIFY_INSTALL_CMD), and when no browser launches it installs Playwright's Chromium once.
 # Exit 0 only when both hold; 1 on a failed check; 2 on bad arguments.
 # VERIFY_E2E_CMD replaces step 2 with a shell command (the self-test uses it; never set it in CI).
 set -u
@@ -54,6 +55,64 @@ serves() {
   HOW="report-only ahead"
 }
 
+# Lists which of the given packages fail a real import from this checkout (nothing when all load).
+missing_deps() {
+  [ $# -eq 0 ] && return 0
+  node --input-type=module -e '
+for (const m of process.argv.slice(1)) {
+  try { await import(m); } catch { console.log(m); }
+}' "$@" 2>/dev/null || echo "node"
+}
+
+# Can playwright-core start a browser the way the e2e does (CHROME_PATH, else Chrome, else its own Chromium)?
+browser_launches() {
+  node --input-type=module -e '
+const { chromium } = await import("playwright-core");
+const tries = process.env.CHROME_PATH ? [{ executablePath: process.env.CHROME_PATH }] : [{ channel: "chrome" }, {}];
+for (const o of tries) {
+  try { await (await chromium.launch(o)).close(); process.exit(0); } catch {}
+}
+process.exit(1);' >/dev/null 2>&1
+}
+
+# The e2e imports playwright-core and sharp and drives a browser; a bare checkout (no npm ci) has neither, and the
+# suite would only fail with ERR_MODULE_NOT_FOUND. So import them first, run VERIFY_INSTALL_CMD (npm ci) once when
+# one fails, and install Playwright's Chromium once when no browser launches. In CI, after npm ci, both are no-ops.
+# VERIFY_E2E_DEPS lists the packages (default playwright-core sharp; none with VERIFY_E2E_CMD, unless set).
+preflight() {
+  local deps missing
+  if [ -n "${VERIFY_E2E_DEPS+set}" ]; then
+    deps="$VERIFY_E2E_DEPS"
+  elif [ -n "${VERIFY_E2E_CMD:-}" ]; then
+    deps=""
+  else
+    deps="playwright-core sharp"
+  fi
+  # shellcheck disable=SC2086 # deps is a word list
+  missing="$(missing_deps $deps | tr '\n' ' ')"
+  if [ -n "${missing// /}" ]; then
+    echo "# e2e dependencies do not import (${missing% }); installing: ${VERIFY_INSTALL_CMD:-npm ci --no-audit --no-fund}"
+    bash -c "${VERIFY_INSTALL_CMD:-npm ci --no-audit --no-fund}" >&2 || true
+    # shellcheck disable=SC2086
+    missing="$(missing_deps $deps | tr '\n' ' ')"
+    if [ -n "${missing// /}" ]; then
+      echo "not ok - e2e dependencies still do not import after install: ${missing% }"
+      return 1
+    fi
+    echo "ok - e2e dependencies import after install"
+  fi
+  [ -n "${VERIFY_E2E_CMD:-}" ] && return 0
+  if ! browser_launches; then
+    echo "# no browser launches (CHROME_PATH, Google Chrome, Playwright Chromium); installing Playwright's Chromium"
+    node node_modules/playwright-core/cli.js install chromium >&2 || true
+    if ! browser_launches; then
+      echo "not ok - no browser launches for the e2e: install Google Chrome or set CHROME_PATH"
+      return 1
+    fi
+    echo "ok - Playwright's Chromium launches"
+  fi
+}
+
 verify() {
   local base="${1:-${BASE_URL:-}}" want="${2:-${EXPECT_SHA:-}}"
   local timeout="${VERIFY_TIMEOUT:-300}" interval="${VERIFY_INTERVAL:-10}"
@@ -80,7 +139,14 @@ verify() {
     body="$(curl -sS --max-time 10 -H 'Cache-Control: no-cache' -w '\n%{http_code}' "$base/api/health?verify=$(date +%s)" 2>&1)"
     code="${body##*$'\n'}"
     body="${body%$'\n'*}"
-    got="$(printf '%s' "$body" | grep -oE '"sha"[[:space:]]*:[[:space:]]*"[^"]*"' | head -n 1 | sed -E 's/.*"([^"]*)"$/\1/')"
+    # A nested SHA, malformed JSON or an unhealthy response is not executable identity.
+    got="$(printf '%s' "$body" | node -e '
+      let body = "";
+      process.stdin.on("data", chunk => body += chunk);
+      process.stdin.on("end", () => {
+        try { const h = JSON.parse(body); if (h.ok === true && typeof h.sha === "string") console.log(h.sha); }
+        catch { /* Invalid health cannot establish identity. */ }
+      });')"
     if [ "$code" = "200" ] && serves "$want" "$got"; then
       echo "ok - /api/health sha $got serves $want ($HOW, try $tries)"
       break
@@ -97,6 +163,8 @@ verify() {
     echo "# try $tries: $seen, want $want; again in ${interval}s"
     sleep "$interval"
   done
+
+  preflight || return 1
 
   echo "# running the Pocket Terminal and Ink Poster Press e2e against $base"
   local status=0
@@ -122,6 +190,7 @@ const server = http.createServer((req, res) => {
   if (!req.url.startsWith("/api/health")) { res.writeHead(404); return res.end(); }
   count++;
   if (sha === "500") { res.writeHead(500, { "content-type": "text/plain" }); return res.end("boom"); }
+  if (sha.startsWith("body:")) { res.writeHead(200, { "content-type": "application/json" }); return res.end(sha.slice(5)); }
   const now = old && count <= Number(n) ? old : sha;
   res.writeHead(200, { "content-type": "application/json" });
   res.end(JSON.stringify({ ok: true, sha: now }));
@@ -212,6 +281,31 @@ self_test() {
   expect "matching sha with a failing e2e exits nonzero" nonzero skipped \
     BASE_URL="$base" EXPECT_SHA="$A" VERIFY_E2E_CMD="exit 1"
 
+  # A bare checkout: a dependency that never imports makes the install run once, then exits nonzero before the e2e;
+  # one that imports runs no install.
+  expect "negative control: an e2e dependency that does not import after install exits nonzero and skips e2e" \
+    nonzero skipped BASE_URL="$base" EXPECT_SHA="$A" VERIFY_E2E_DEPS="verify-deploy-no-such-package" \
+    VERIFY_INSTALL_CMD='touch "$MARK.install"' VERIFY_E2E_CMD='touch "$MARK"'
+  if [ -f "$work/e2e-ran.install" ] && grep -qF "still do not import after install: verify-deploy-no-such-package" "$work/out"; then
+    pass=$((pass + 1))
+    echo "ok - the missing dependency ran the install once and is named"
+  else
+    fail=$((fail + 1))
+    echo "not ok - the missing dependency did not run the install or is not named"
+    sed 's/^/#   /' "$work/out"
+  fi
+  rm -f "$work/e2e-ran.install"
+  expect "dependencies that import run no install and reach the e2e" 0 ran \
+    BASE_URL="$base" EXPECT_SHA="$A" EXPECT_BASE="$base" VERIFY_E2E_DEPS="node:fs node:test" \
+    VERIFY_INSTALL_CMD='touch "$MARK.install"' VERIFY_E2E_CMD="$reached"
+  if [ ! -f "$work/e2e-ran.install" ]; then
+    pass=$((pass + 1))
+    echo "ok - no install when the dependencies import"
+  else
+    fail=$((fail + 1))
+    echo "not ok - the install ran although the dependencies import"
+  fi
+
   serve "$B" "$A" 2
   base="http://127.0.0.1:$port"
   expect "a stale sha that turns into EXPECT_SHA mid-poll passes (the poll retries)" 0 ran \
@@ -242,6 +336,13 @@ self_test() {
   expect "a served sha off another branch exits nonzero and skips e2e, even when the diff is report-only" nonzero skipped \
     BASE_URL="$base" EXPECT_SHA="$C2" VERIFY_E2E_CMD='touch "$MARK"'
 
+  for body in "{\"ok\":false,\"sha\":\"$C3\"}" "{\"ok\":true,\"old\":{\"sha\":\"$C3\"}}" "invalid {\"ok\":true,\"sha\":\"$C3\"}"; do
+    serve "body:$body"
+    base="http://127.0.0.1:$port"
+    expect "negative control: invalid health identity $body skips e2e" nonzero skipped \
+      BASE_URL="$base" EXPECT_SHA="$C3" VERIFY_E2E_CMD='touch "$MARK"'
+  done
+
   serve 500
   base="http://127.0.0.1:$port"
   expect "HTTP 500 from health exits nonzero" nonzero skipped \
@@ -256,7 +357,7 @@ self_test() {
   expect "a missing BASE_URL is refused with exit 2" 2 skipped BASE_URL= EXPECT_SHA="$A"
 
   echo "self-test: $pass ok, $fail failed"
-  [ "$fail" -eq 0 ]
+  [ "$pass" -gt 0 ] && [ "$fail" -eq 0 ]
 }
 
 if [ "${1:-}" = "--self-test" ]; then

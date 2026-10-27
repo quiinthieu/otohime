@@ -1,0 +1,65 @@
+ # (a) Hanging upload: fails inside UPLOAD_TIMEOUT plus the kill grace, never a second deployment.
+ run hang-upload hang ok "$healthy"
+ check "hanging upload exits non-zero" '[ "$code" -ne 0 ]'
+diff --git a/scripts/verify-bottle-contracts.mjs b/scripts/verify-bottle-contracts.mjs
+index ffb755a0892dcd05abcf288fb3e29108243931d9..ced794e9b8f8be6b4584b0f2fa74631343b34cdb
+--- a/scripts/verify-bottle-contracts.mjs
++++ b/scripts/verify-bottle-contracts.mjs
+@@ -62,11 +62,12 @@
+   "missing team is refused before upload",
+   "User not found with explicit scope still fails closed before health",
+   "matching nested sha cannot impersonate the served executable",
++  ...["building", "queued", "initializing", "silent", "unknown"].map((mode) => `zero-exit ${mode} inspect fails closed before matching health`),
+ ];
+ function deploymentEvidence(output) {
+   assert.doesNotMatch(output, /^not ok - /m);
+   const count = Number(output.match(/^# all (\d+) assertions passed$/m)?.[1]);
+-  assert.ok(count >= 53, "deployment fixture executes all assertions");
++  assert.ok(count >= 59, "deployment fixture executes all assertions");
+   for (const name of deploymentNames) {
+     assert.ok(output.split("\n").includes(`ok - ${name}`), `deployment assertion absent: ${name}`);
+   }
+
+progress phase=clone
+=== task-manager coding job starting ===
+  Agent    : codex
+  Command  : codex exec --dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort="high"' -- < "${AGENT_PROMPT_ARG_FILE}"
+  Prompt   : 140924 characters from AGENT_PROMPT_FILE
+  Workspace: /Users/avietidol/Library/Application Support/build-worker/leases/723ea420-6d52-4aab-aebd-1aacbac96574-c92b147ab568ca49ee66b8ebf3ed75a7/work/otohime
+  Repo URL : git@github.com:quiinthieu/otohime.git
+  Repo     : REPO_ID=otohime GIT_MAIN_BRANCH=main PLANS_DIR=projects
+  Account  : ACCOUNT_ID=codex-main
+  HOME     : /Users/avietidol/Library/Application Support/build-worker/leases/723ea420-6d52-4aab-aebd-1aacbac96574-c92b147ab568ca49ee66b8ebf3ed75a7/home
+  User     : uid=501(avietidol) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),33(_appstore),98(_lpadmin),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1)
+  Branch   : main
+  Sidecar  : enabled (shared=/Users/avietidol/Library/Application Support/build-worker/leases/723ea420-6d52-4aab-aebd-1aacbac96574-c92b147ab568ca49ee66b8ebf3ed75a7/shared)
+=========================================
+  github.com host key refreshed
+  gitlab.com host key refreshed
+  bitbucket.org host key refreshed
+Cloning git@github.com:quiinthieu/otohime.git (branch: main) into /Users/avietidol/Library/Application Support/build-worker/leases/723ea420-6d52-4aab-aebd-1aacbac96574-c92b147ab568ca49ee66b8ebf3ed75a7/work/otohime...
+  reference clone from /Users/avietidol/Library/Application Support/build-worker/repo/otohime (fleet mirror)
+Cloning into '/Users/avietidol/Library/Application Support/build-worker/leases/723ea420-6d52-4aab-aebd-1aacbac96574-c92b147ab568ca49ee66b8ebf3ed75a7/work/otohime'...
+  Cloned branch: main
+  Cloned commit: c24320b07314dea9f590ba08c9142039951419d8
+push guard: skipped (otohime has no scripts/git-push-safe.sh)
+
+=== red gate (pre_verify_spec) ===
+progress phase=red_gate status=running items=6
+npm warmup /Users/avietidol/Library/Application Support/build-worker/leases/723ea420-6d52-4aab-aebd-1aacbac96574-c92b147ab568ca49ee66b8ebf3ed75a7/work/otohime ci
+npm warmup exit 0
+verify: start item=Bottle layout and picker unit contracts timeout_s=300
+verify: item=Bottle layout and picker unit contracts status=pass exit=0 duration_ms=213
+verify: start item=repository unit suite timeout_s=300
+verify: item=repository unit suite status=pass exit=0 duration_ms=17056
+verify: start item=lint and type contracts timeout_s=300
+verify: item=lint and type contracts status=pass exit=0 duration_ms=13689
+verify: start item=gate closure invariants timeout_s=300
+verify: item=gate closure invariants status=pass exit=0 duration_ms=3415
+verify: start item=Bottle production-browser flow and enlarged-text containment timeout_s=900
+verify: item=Bottle production-browser flow and enlarged-text containment status=pass exit=0 duration_ms=30145
+verify: start item=CI-mode isolated footer walk and Chromium probe timeout_s=900
+verify: running 60s/900s, last: # ok - entrance & offscreen pause: before scrolling to footer on /projects, data-seen and data-active are unset and ambient loops are paused
+verify: item=CI-mode isolated footer walk and Chromium probe status=pass exit=0 duration_ms=85085
+progress phase=red_gate status=pass result=red_gate_already_green
+RESULT: red_gate_already_green — every verification item passes before any change; agent CLI not started

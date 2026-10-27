@@ -1,0 +1,18 @@
+{
+  "receipts": [
+    {
+      "url": "https://otohime.dev/api/health",
+      "status": 200,
+      "at": "2026-10-27T00:44:40.096936+00:00",
+      "body": "{\"ok\":true,\"sha\":\"baec1f88e602e9ad50ebecb9827a476f939495af\"}"
+    },
+    {
+      "url": "https://otohime.dev/desk",
+      "status": 200,
+      "at": "2026-10-27T00:44:42.231586+00:00",
+      "body": "<meta name=\"build-sha\" content=\"baec1f88e602e9ad50ebecb9827a476f939495af\""
+    }
+  ],
+  "served_sha": "baec1f88e602e9ad50ebecb9827a476f939495af",
+  "delivery_ancestor_exit": 1
+}

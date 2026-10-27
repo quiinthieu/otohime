@@ -1,0 +1,67 @@
+{
+  "run": "run-9041",
+  "role": "quality_engineer",
+  "agent_profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "runner": "fleet",
+  "worker_id": "avietidol-z490",
+  "account_id": "codex-main",
+  "software_engineer": {
+    "run": "run-9006",
+    "profile": "claude-opus-high",
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "worker": "avietidol-z490",
+    "callback_apply_failures": 0
+  },
+  "green_gate": {
+    "id": "ver-3593",
+    "run": "run-9036",
+    "sha": "3ae76a4",
+    "status": "pass",
+    "worker": "avietidol-mac-mini",
+    "callback_apply_failures": 0,
+    "model": "not exposed on recorded gate run"
+  },
+  "locked_preflight": {
+    "node": "v22.23.3",
+    "next": "16.4.2",
+    "playwright-core": "1.64.0",
+    "pg": "8.23.1",
+    "drizzle-orm": "0.45.4",
+    "real_imports_and_drizzle_construction": true
+  },
+  "raw_log_denials": {
+    "121666695821": 403,
+    "121654087754": 403,
+    "121649860247": 403,
+    "121613136055": 403
+  },
+  "history_completeness": {
+    "pages": 2,
+    "page_size": 30,
+    "read": 60,
+    "api_total": 444,
+    "complete": false,
+    "counts": {
+      "failure": 16,
+      "success": 6,
+      "cancelled": 37,
+      "in_progress": 1
+    },
+    "jobs_read_for_initial_runs": 13,
+    "annotations_read_for_failed_jobs": 4,
+    "raw_failure_logs_read": 0
+  },
+  "missing_instructions": [
+    "projects/20260921222547_plan_manager_chief_of_staff_extraction.md",
+    "docs/claude/software-development.md"
+  ],
+  "postgres": {
+    "version": "17.11",
+    "image": "postgres:17-alpine",
+    "digest": "sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb",
+    "real_migrations": true
+  }
+}

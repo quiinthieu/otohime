@@ -1,0 +1,64 @@
+{
+  "status": "pass",
+  "base_sha": "132cebabaf9aa717e09866f1d8ac6500f90ad984",
+  "environment": "Node 22.23.3/macOS arm64; TMPDIR=/tmp for Chromium walks/E2E",
+  "items": [
+    {
+      "name": "Project tests",
+      "cmd": "npm test",
+      "exit_code": 0,
+      "result": "2370 passed; 0 failed; 0 skipped"
+    },
+    {
+      "name": "Lint",
+      "cmd": "npm run lint",
+      "exit_code": 0,
+      "result": "0 errors; 10 existing warnings"
+    },
+    {
+      "name": "Typecheck",
+      "cmd": "npm run typecheck",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "name": "Build",
+      "cmd": "npm run build",
+      "exit_code": 0,
+      "result": "passed; full HTTP walk also ran an instrumented fixture build"
+    },
+    {
+      "name": "Search content index",
+      "cmd": "npm run ask:check",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "name": "Provider HTTP contract",
+      "cmd": "SKIP_BUILD=1 bash scripts/walk-now-playing.sh",
+      "exit_code": 0,
+      "result": "278 passed; 0 failed; zero provider requests during fixture build"
+    },
+    {
+      "name": "Cassette browser matrix",
+      "cmd": "SKIP_BUILD=1 bash scripts/probe-cassette.sh",
+      "exit_code": 0,
+      "result": "193 passed across four faces; 0 failed"
+    },
+    {
+      "name": "Reduced motion",
+      "cmd": "SKIP_BUILD=1 bash scripts/probe-motion.sh",
+      "exit_code": 0,
+      "result": "512 passed; 0 failed"
+    },
+    {
+      "name": "Application end to end",
+      "cmd": "SKIP_BUILD=1 npm run test:e2e",
+      "exit_code": 0,
+      "result": "179 total; 178 passed; 0 failed; 1 existing skip: evidence: every root hydrated under each colored run"
+    }
+  ],
+  "logs": "Complete bounded HTTP/browser output; bounded unit/lint/types/build/motion/E2E tails. Prior harness failures and runner baseline retained separately.",
+  "CI": "Not observed; SWE stops at push. Plan-manager owns green gate and deployed QA.",
+  "owner_live_output": "not observed; default account remains empty"
+}

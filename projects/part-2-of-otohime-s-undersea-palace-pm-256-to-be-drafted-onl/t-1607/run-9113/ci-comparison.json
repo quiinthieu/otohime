@@ -1,0 +1,30 @@
+{
+  "green": {
+    "run": 40420670837,
+    "number": 483,
+    "sha": "baec1f88e602e9ad50ebecb9827a476f939495af",
+    "job": 121914004901,
+    "runner": "GitHub Actions 1000000874",
+    "labels": [
+      "ubuntu-24.04"
+    ]
+  },
+  "red": {
+    "run": 40423130342,
+    "number": 484,
+    "sha": "c6d09f0067cb3f3ea77a75b723edc72918013c24",
+    "job": 121922175659,
+    "runner": "GitHub Actions 1000000876",
+    "labels": [
+      "ubuntu-24.04"
+    ],
+    "failedStep": "Footer Chromium probe"
+  },
+  "rawLogs": {
+    "green": 403,
+    "red": 403
+  },
+  "jobOutputSummary": null,
+  "ciConfigLog": "",
+  "scope": "old Worker fingerprint, not current fixed transport; raw assertion unavailable; causal attribution inconclusive"
+}

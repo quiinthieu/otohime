@@ -1,0 +1,40 @@
+{
+  "base_sha": "c24320b07314dea9f590ba08c9142039951419d8",
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "arch": "arm64",
+  "modules": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "playwright-core": "1.64.0",
+    "embedded-postgres": "17.10.0-beta.17",
+    "pg": "8.23.1"
+  },
+  "files": {
+    ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36",
+    "app/(site)/globals.css": "df2accbef90094bcabb881656e8d7d8b0a6fc287bb3ba91f77229e7370b86b16",
+    "components/bottle/button.css": "4b1cd7355f0989a71686eb97fcf53f82fc8b878d4d53ee6f89c208e217d7fc0d",
+    "components/bottle/button.tsx": "fd66c503666593d8104ce2f2f9dcc6fa332f40734cc34207aaf063a26dc24c98",
+    "components/bottle/panel.css": "ff4a71f6e6960e67fc35fde38f045074008251e229d46a424a91e6b3f0f4838b",
+    "components/bottle/panel.tsx": "a466c2f178d6560a1848f021fd4b7de46986fb3bd40590db77538ad7258618f7",
+    "components/end-footer.tsx": "043707b4ed9eb2b106eae92a30f2e9cb7c576f7d65c1ca6c22b0b160a3adef0d",
+    "components/handheld.tsx": "cf961ff07549140b7de2ec93985bf7363d7f82d451ae7454528b3a108ce4f1a6",
+    "e2e/bottle-ui.test.ts": "7688c4035f52b3842dcbf92267b024beda635ab2238601a3a759867603be303b",
+    "lib/bottle-footer-layout.test.ts": "45025cb8a14558860139da16fddf844e69f6e72f0b6e42f01a33f2451c5e4969",
+    "lib/bottle-verification.test.ts": "f172928af8693ea8ac9611e6b0a76c3fcf6b487d1ea08110ed6a8b5390d7ad4c",
+    "lib/bottles.test.ts": "d48f50c9c1ea598bc0935ffd370794d04c7f8c1136b539b9a52fa96aa10c4bfd",
+    "lib/bottles.ts": "7ac4b0cb7525507adf97b20979abbb3fc76d56ea4be1c505e967984f03197b84",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "70541c935676e2797d8648d8e9e90447e0cf7552b560e12a26ba197df328029e",
+    "scripts/check-gate-closure.mjs": "38bf3c064f9e66ee51c927081997c5336e69ea469a3928ff57ec57884ca9aff2",
+    "scripts/ci-probe-verification.mjs": "ee73e106363d8f8bc78bb1206f6fd286de96480f953055b6f59238ddefdcbba0",
+    "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+    "scripts/vercel-deploy.sh": "62fd022db618ce81fb3fdf1854c9e097493085374f3750134ca8d40128caf3aa",
+    "scripts/vercel-deploy.test.sh": "135c47c7b87939f3d6f3bf2af0a67035448c0f2b39750ebca0e948965374ab7d",
+    "scripts/verify-bottle-contracts.mjs": "0ea2f8332154e98028fd86e6778827249d623b0dd63841855d3f7069bc3ceeb0",
+    "scripts/verify-bottle-footer.mjs": "5af7548531fc7d21fdac3561c9396dd385c8525c4123497e94f627d51c7f7a6d"
+  },
+  "fingerprint": "f307704d3601a481d755ef6befe739d9293eae7a518b96e26a55397c72f279e4",
+  "boundary": "Real verifier import and locked module versions. Closure log preflights actual adapters/binaries; browser/footer logs prove production builds, migrated Postgres and Chrome. Vercel CLI and edge-case responses are fixtures; hosted execution remains unproven."
+}

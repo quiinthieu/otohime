@@ -1,0 +1,99 @@
+{
+  "checkout": "132cebabaf9aa717e09866f1d8ac6500f90ad984",
+  "source_fingerprint": "dc531c430da2e451969dfa909f7d1934a9eb62f154562bac6d616a00f7dfcace",
+  "verification": [
+    {
+      "name": "trace helper unit test",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "counts": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "skipped": 0
+      },
+      "log": "trace.log"
+    },
+    {
+      "name": "lint and types",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "logs": [
+        "lint.log",
+        "typecheck.log"
+      ]
+    },
+    {
+      "name": "unit tests",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "exit_code": 1,
+      "status": "fail",
+      "counts": {
+        "tests": 2363,
+        "pass": 2362,
+        "fail": 1,
+        "skipped": 0
+      },
+      "failure": "lib/gate-closure.test.ts:185",
+      "log": "unit.log"
+    },
+    {
+      "name": "e2e x3",
+      "cmd": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
+      "expect": "exit0",
+      "status": "pass",
+      "exit_code": 0,
+      "repeats": [
+        {
+          "repeat": 1,
+          "exit": 0,
+          "duration_seconds": 383.992,
+          "log": "e2e-1.log",
+          "build": "build-1.json",
+          "counts": {
+            "tests": 179,
+            "pass": 178,
+            "fail": 0,
+            "skipped": 1
+          }
+        },
+        {
+          "repeat": 2,
+          "exit": 0,
+          "duration_seconds": 392.406,
+          "log": "e2e-2.log",
+          "build": "build-2.json",
+          "counts": {
+            "tests": 179,
+            "pass": 178,
+            "fail": 0,
+            "skipped": 1
+          }
+        },
+        {
+          "repeat": 3,
+          "exit": 0,
+          "duration_seconds": 393.976,
+          "log": "e2e-3.log",
+          "build": "build-3.json",
+          "counts": {
+            "tests": 179,
+            "pass": 178,
+            "fail": 0,
+            "skipped": 1
+          }
+        }
+      ]
+    }
+  ],
+  "overall_qa_verdict": "fail",
+  "retained_defects": [
+    "lib/gate-closure.test.ts:185 actual failed unit suite and real flushed-child control",
+    "e2e/ledger.test.ts:397 actual failed integrated-c77fc93 production suite on unchanged ledger source"
+  ]
+}

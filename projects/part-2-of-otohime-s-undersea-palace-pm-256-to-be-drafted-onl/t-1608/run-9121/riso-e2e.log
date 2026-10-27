@@ -1,0 +1,129 @@
+Starting embedded Postgres on 127.0.0.1:61537
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:61542
+TAP version 13
+# Subtest: one heading name, one selectable copy, deterministic settled plates and token plate counts
+not ok 1 - one heading name, one selectable copy, deterministic settled plates and token plate counts
+  ---
+  duration_ms: 2375.874042
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/e2e/riso-headings.test.ts:62:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+    + [
+    +   'Failed to load resource: the server responded with a status of 404 (Not Found)',
+    +   'Failed to load resource: the server responded with a status of 404 (Not Found)'
+    + ]
+    - []
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'Failed to load resource: the server responded with a status of 404 (Not Found)'
+    1: 'Failed to load resource: the server responded with a status of 404 (Not Found)'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/e2e/riso-headings.test.ts:87:42)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+not ok 2 - entry runs once per mount, h2 navigation, reduced motion, forced colors and print settle immediately
+  ---
+  duration_ms: 1807.326625
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/e2e/riso-headings.test.ts:91:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+    + [
+    +   'Failed to load resource: the server responded with a status of 404 (Not Found)'
+    + ]
+    - []
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'Failed to load resource: the server responded with a status of 404 (Not Found)'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/e2e/riso-headings.test.ts:110:12)
+    runNextTicks (node:internal/process/task_queues:64:5)
+    process.processImmediate (node:internal/timers:452:9)
+    process.callbackTrampoline (node:internal/async_hooks:130:17)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: server/no-JavaScript headings are readable and mobile notes wrap without overflow
+ok 3 - server/no-JavaScript headings are readable and mobile notes wrap without overflow
+  ---
+  duration_ms: 146.294792
+  type: 'test'
+  ...
+# Subtest: Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+not ok 4 - Pocket A to Work keeps TitleMorph ownership; Play stamps exactly the source letters and tidies
+  ---
+  duration_ms: 2481.313042
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/e2e/riso-headings.test.ts:128:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+    + [
+    +   'Failed to load resource: the server responded with a status of 404 (Not Found)'
+    + ]
+    - []
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'Failed to load resource: the server responded with a status of 404 (Not Found)'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4-9ea789166e4277520de9282543527742/work/otohime/e2e/riso-headings.test.ts:155:42)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+ok 5 - shared preview handles empty, Unicode, preserved whitespace and very long wrapped headings
+  ---
+  duration_ms: 170.302917
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 2
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7320.598459
+The suite failed. The end of the server's log:
+
+> otohime@0.1.0 start
+> next start
+
+▲ Next.js 16.4.2
+- Local:         http://localhost:61542
+- Network:       http://192.168.100.130:61542
+✓ Ready in 95ms
+✓ Running next.config.ts took 59ms

@@ -1,0 +1,197 @@
+{
+  "complete": false,
+  "note": "Bounded two-page history only; 10 FAILED, 10 COMPLETED, 2 current. History outside these pages unread. Raw failed assertion absent from persisted 4KiB stdout tail.",
+  "pages": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 5,
+      "total": 91,
+      "rows": [
+        {
+          "id": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+          "status": "FAILED",
+          "plan": "pm-270",
+          "run": "run-9070",
+          "callback": "delivered"
+        },
+        {
+          "id": "980c6385-7c10-4d4b-a913-43e9c9333678",
+          "status": "FAILED",
+          "plan": "pm-270",
+          "run": "run-9045",
+          "callback": "delivered"
+        },
+        {
+          "id": "511dad8b-c45a-486d-a323-9822f9475c8b",
+          "status": "FAILED",
+          "plan": "pm-277",
+          "run": "run-9019",
+          "callback": "delivered"
+        },
+        {
+          "id": "9ba74ec0-4222-4d33-b1b0-3f2349dd716e",
+          "status": "FAILED",
+          "plan": "pm-259",
+          "run": "run-8968",
+          "callback": "delivered"
+        },
+        {
+          "id": "7744f3fc-a925-4d82-b519-df41899c4c45",
+          "status": "FAILED",
+          "plan": "pm-268",
+          "run": "run-8934",
+          "callback": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 5,
+      "total": 1419,
+      "rows": [
+        {
+          "id": "536a52a1-3fde-49aa-876c-b51f64fb8ee9",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "can-456",
+          "callback": "delivered"
+        },
+        {
+          "id": "9b2edcdf-cce3-4015-bbb9-ef0fd225d629",
+          "status": "COMPLETED",
+          "plan": "pm-287",
+          "run": "run-9101",
+          "callback": "delivered"
+        },
+        {
+          "id": "9c4ad5ab-2229-485f-bbbf-4920106ac0ca",
+          "status": "COMPLETED",
+          "plan": "pm-272",
+          "run": "run-9100",
+          "callback": "delivered"
+        },
+        {
+          "id": "a195689c-0d68-4278-96db-b81326ee1ded",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "can-455",
+          "callback": "delivered"
+        },
+        {
+          "id": "72d9f766-b18a-43fb-ae1b-c6fc7ef45122",
+          "status": "COMPLETED",
+          "plan": "pm-287",
+          "run": "run-9099",
+          "callback": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 5,
+      "total": 2,
+      "rows": [
+        {
+          "id": "ac91ee64-8dae-40c7-b9a9-eec10d7eb9ba",
+          "status": "RUNNING",
+          "plan": "pm-272",
+          "run": "run-9102"
+        },
+        {
+          "id": "d35e7175-b833-4fa1-948d-25ecfbffbaf5",
+          "status": "RUNNING",
+          "plan": "pm-270",
+          "run": "run-9093"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 5,
+      "limit": 5,
+      "total": 91,
+      "rows": [
+        {
+          "id": "a77d28f7-b32a-47a4-a0b2-e75e8709f26b",
+          "status": "FAILED",
+          "plan": "pm-270",
+          "run": "run-8895",
+          "callback": "delivered"
+        },
+        {
+          "id": "a7d6a38f-7400-4d5e-840f-935c6002a3c0",
+          "status": "FAILED",
+          "plan": "pm-264",
+          "run": "run-8856",
+          "callback": "delivered"
+        },
+        {
+          "id": "45180bac-b0b3-4995-ba8d-ecc26ff0357b",
+          "status": "FAILED",
+          "plan": "pm-259",
+          "run": "run-8848",
+          "callback": "delivered"
+        },
+        {
+          "id": "d1ab959c-5977-4c77-b1ac-6347df0f3b1e",
+          "status": "FAILED",
+          "plan": "pm-256",
+          "run": "run-8828",
+          "callback": "delivered"
+        },
+        {
+          "id": "e8ee460d-78b2-476e-81e2-0dceda68e020",
+          "status": "FAILED",
+          "plan": "pm-264",
+          "run": "run-8819",
+          "callback": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 5,
+      "limit": 5,
+      "total": 1419,
+      "rows": [
+        {
+          "id": "6b049c0c-3c9a-4fcc-9720-9d83269b6ad1",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "can-454",
+          "callback": "delivered"
+        },
+        {
+          "id": "e741db6d-ed7b-4293-9cbd-b6f0ef930686",
+          "status": "COMPLETED",
+          "plan": "pm-platform",
+          "run": "harvest-d4fdf93c4d8b3949"
+        },
+        {
+          "id": "28222520-a6e6-46a2-bc2a-9ff51581856e",
+          "status": "COMPLETED",
+          "plan": "pm-272",
+          "run": "run-9098",
+          "callback": "delivered"
+        },
+        {
+          "id": "1935d6a1-d031-4f3c-a779-d17addfbc700",
+          "status": "COMPLETED",
+          "plan": "pm-269",
+          "run": "run-9097",
+          "callback": "delivered"
+        },
+        {
+          "id": "9c070178-1d31-4637-9e15-d79a2c824ce4",
+          "status": "COMPLETED",
+          "plan": "pm-269",
+          "run": "run-9096",
+          "callback": "delivered"
+        }
+      ]
+    }
+  ]
+}

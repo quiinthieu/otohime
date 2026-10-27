@@ -1,0 +1,703 @@
+{
+  "hashRule": "SHA256 of sorted path + NUL + SHA256(bytes) + newline",
+  "files": [
+    ".github/workflows/ci.yml",
+    "app/(ryugu)/layout.tsx",
+    "app/(ryugu)/ryugu/page.tsx",
+    "app/(site)/(home)/page.tsx",
+    "app/api/ghosts/route.ts",
+    "e2e/console-errors.ts",
+    "e2e/ghosts-config.test.ts",
+    "e2e/riso-headings.test.ts",
+    "ghosts/canvas.tsx",
+    "ghosts/client.ts",
+    "ghosts/config.ts",
+    "ghosts/loader.tsx",
+    "ghosts/policy.ts",
+    "ghosts/protocol.ts",
+    "ghosts/room.ts",
+    "next.config.ts",
+    "package-lock.json",
+    "package.json",
+    "scripts/ghosts-fake.mjs",
+    "tsconfig.json"
+  ],
+  "historicalRows": [
+    {
+      "runId": 40433812567,
+      "sha": "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40423130342,
+      "sha": "c6d09f0067cb3f3ea77a75b723edc72918013c24",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40409123749,
+      "sha": "556a3ecc97289f75f4e245ef8f6151d807284a35",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40405893755,
+      "sha": "9d3f7463d69b852c8a40b8b94b560a9ecdfe31ca",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40395335524,
+      "sha": "e21f83206f8ce94a86e7cd2e8eb2144ef629f9a3",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40388684010,
+      "sha": "45c8d92af04883ce42a59bc9dc53d48daa921644",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40387187938,
+      "sha": "3912d2b2dd49266e85faf35c7ffebb7c89e3a87e",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40380026935,
+      "sha": "5abaebc70f9f4efb627fe9a0e7db81717dc77533",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40378894466,
+      "sha": "52ec0904d93171262d262a21c0d61cf27d3ae8e2",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40365293940,
+      "sha": "70fe59359fb0aff96d990f5a4b37a4b3920f1c32",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40352230491,
+      "sha": "ab348743f001460a066f5233c4d99f95af8b15ba",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40349872187,
+      "sha": "e03cf1cc366933aa92f92f00b76bbeae2d3a8923",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40348188828,
+      "sha": "4642f03d83630ebcb6f9de6a1e93ff7086d31fb5",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40346324813,
+      "sha": "74522bc0e21d80d4ddd512cbe84954aab27d15d1",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40345114517,
+      "sha": "17bca22d109414873c566d676f63696907c2f2d4",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40343322274,
+      "sha": "5ad49062c0a3583a70f3c7075e81c324e51adc57",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40340641001,
+      "sha": "ae6573a10e499b644491bb1f9ac36588cafbb387",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40340021768,
+      "sha": "c121b20f9687577fbd3118ecc1c64466ab60c9ea",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40339124232,
+      "sha": "c1b26f10581ccd52cf66cd0c8f09d5e4f94fe868",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "e2e/riso-headings.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40338754295,
+      "sha": "3c3772b20fb379c962f1c4fde95e036c12821ca6",
+      "conclusion": "failure",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "e2e/riso-headings.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40438060093,
+      "sha": "ea79432eb9bf23f40a18586eb91408ba1a585288",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40432734832,
+      "sha": "4c9f325055c6da83fbe12afe6ffeb5858efd2a89",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40430068517,
+      "sha": "5139d4fd9d7e4b83d53e17fb715ad576b4e38cc4",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40420670837,
+      "sha": "baec1f88e602e9ad50ebecb9827a476f939495af",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40416521718,
+      "sha": "bf4ceb0cfb25aebd2869df4262c4a9984cbebfa1",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40413292527,
+      "sha": "25400127ac6ccc51c607f37a32eb804fc5b35b06",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40398613267,
+      "sha": "98ff28cd58389fa912dbe0e4e2dde95eddb9e3c4",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40397362917,
+      "sha": "cfd9714ec9e6813e21085284443ceb46a96b5889",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40382662377,
+      "sha": "01dfe6b0e79fb286927057cccadfe29da83214cb",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40372282006,
+      "sha": "4b8278a46fe27151dd115e31e0bba2a9b18ac0cf",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40370858209,
+      "sha": "9bdb3b24229ca3e9ebdc2c7438cc2e739140bdb3",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40369483638,
+      "sha": "6453315e3d1cb2e0977c5177fe8a48e739115d47",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40365003630,
+      "sha": "1c77142e280a3cb93304cc9ae5195fa5e73d80d2",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40358326629,
+      "sha": "9bb1daea85c600788c8209819e5c4d69e08b3a46",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40325669520,
+      "sha": "542c62068564fafaf7045560135064cbdb866f91",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "e2e/riso-headings.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40323285817,
+      "sha": "9cb3833903055754efe1164d3edd17649d9183e1",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "e2e/riso-headings.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40322791706,
+      "sha": "fd99b92fedd82b7953df5b6c414c9bfa339fc974",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "e2e/riso-headings.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40319672622,
+      "sha": "bca260a26e5cf56d574dbebde34c0ee6cc0fc565",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "e2e/riso-headings.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40314442551,
+      "sha": "0abec76d8145fb16f1a5e31cfe78898ff61819ff",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "e2e/riso-headings.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    },
+    {
+      "runId": 40306337481,
+      "sha": "ae4607dafc28c6f732fdb7ee2ff2f1c7953ed4d3",
+      "conclusion": "success",
+      "sourceHash": null,
+      "missingPaths": [
+        "app/api/ghosts/route.ts",
+        "e2e/console-errors.ts",
+        "e2e/ghosts-config.test.ts",
+        "e2e/riso-headings.test.ts",
+        "ghosts/canvas.tsx",
+        "ghosts/client.ts",
+        "ghosts/config.ts",
+        "ghosts/loader.tsx",
+        "ghosts/policy.ts",
+        "ghosts/protocol.ts",
+        "ghosts/room.ts",
+        "scripts/ghosts-fake.mjs"
+      ],
+      "matchesCurrent": false
+    }
+  ],
+  "currentFingerprint": "0ef55308de4e7d3bed6593f52b59ff68a0774a254c5b4de62277dcc8e3c0510a",
+  "historyComplete": false
+}

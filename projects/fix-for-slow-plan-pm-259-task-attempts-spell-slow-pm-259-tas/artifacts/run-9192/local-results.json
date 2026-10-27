@@ -1,0 +1,198 @@
+{
+  "schema": "otohime.t1671.local-verification.v2",
+  "tested_base": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+  "final_source_fingerprint": "c798ecd0c9148023d08fac51ffeba241593b82a4e2e1ba03177a604375f2020d",
+  "gates": [
+    {
+      "id": "delivery",
+      "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/main-lane-closure.test.mjs scripts/e2e-gesture-trace.test.ts",
+      "duration_ms": 1202,
+      "log_sha256": "92aacc0a244b01723a252b656c7d9ac49d337df363f7646b0a31fc2944440d79",
+      "exit_code": 0,
+      "tap": {
+        "tests": 26,
+        "pass": 26,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "positive_evidence": {
+        "tests": 26,
+        "required_assertion_count": 26,
+        "required_names_sha256": "0a8dd1b81310ad6a8453d977e869bf89e01d11008c2ba2336f2956b6131fe9a8"
+      },
+      "silent_exit_negative_control": "pass",
+      "raw_log_shared_artifact": "run-9192-local/final-delivery/delivery.log"
+    },
+    {
+      "id": "unit",
+      "command": "CI=true npm test",
+      "duration_ms": 19235,
+      "log_sha256": "6bf56135a177cd74a65bccebbdf71b8c21d3643dd88560983909c2366d9fae5c",
+      "exit_code": 0,
+      "tap": {
+        "tests": 2505,
+        "pass": 2505,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "positive_evidence": {
+        "tests": 2505,
+        "required_assertion_count": 33,
+        "required_names_sha256": "3bf4442f440b42d24a4691d0b5b8686cb60548aa1d079a58bffb5d0a576f1248"
+      },
+      "silent_exit_negative_control": "pass",
+      "raw_log_shared_artifact": "run-9192-local/final-unit/unit.log"
+    },
+    {
+      "id": "static",
+      "command": "npm run lint && npm run typecheck && node scripts/check-gate-closure.mjs",
+      "duration_ms": 25502,
+      "log_sha256": "9694c77f4b73eb5b28a6e5042255ed5beb5afdf798dc20e027e4dee120b68ae3",
+      "exit_code": 0,
+      "tap": {},
+      "positive_evidence": {
+        "tools": [
+          "eslint",
+          "next typegen",
+          "tsc --noEmit"
+        ],
+        "closure": "real runner, certified, exact named controls, passing real preflight and fingerprint validated"
+      },
+      "silent_exit_negative_control": "pass",
+      "raw_log_shared_artifact": "run-9192-local/final-static/static.log"
+    },
+    {
+      "id": "footer",
+      "command": "node scripts/verify-bottle-footer.mjs",
+      "duration_ms": 90600,
+      "log_sha256": "588ecee85c6117a63e221a5a067dbaff49878a3536339908ff4615b185115b56",
+      "build_id": "8E-sASTQ631UEDJLpCy67",
+      "exit_code": 0,
+      "tap": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "positive_evidence": {
+        "assertions": {
+          "walk": 65,
+          "probe": 170
+        },
+        "tests": 1,
+        "required_assertion_count": 1,
+        "required_names_sha256": "6447fdcc299d20621a6128404caf8fb4792af61eae15514da3ed2920c16a6d83"
+      },
+      "silent_exit_negative_control": "pass",
+      "raw_log_shared_artifact": "run-9192-local/full-final/footer.log"
+    },
+    {
+      "id": "e2e-1",
+      "command": "bash scripts/e2e-local.sh",
+      "duration_ms": 411374,
+      "log_sha256": "e1e95f34aea53f7932a6a6d790d25d1048efdd126a5cbcb13a35c84e2737aa17",
+      "build_id": "etGNPBKk1TopRJrhVNKIS",
+      "exit_code": 0,
+      "tap": {
+        "tests": 187,
+        "pass": 186,
+        "fail": 0,
+        "skipped": 1,
+        "cancelled": 0
+      },
+      "positive_evidence": {
+        "existing_skip": "ok 132 - evidence: every root hydrated under each colored run # SKIP",
+        "tests": 186,
+        "required_assertion_count": 3,
+        "required_names_sha256": "ce4ecef376019d066fe555b803c6ec971f6a5a58162a21cac1f3d6f4d61bcd71"
+      },
+      "silent_exit_negative_control": "pass",
+      "raw_log_shared_artifact": "run-9192-local/full-final/e2e-1.log"
+    },
+    {
+      "id": "e2e-2",
+      "command": "bash scripts/e2e-local.sh",
+      "duration_ms": 410083,
+      "log_sha256": "5132be8df43da0940ccfa8759f0e18ad8aeff0066e422c6fa7616506d5c622e0",
+      "build_id": "mSS5zcuahC7YnjjOtdV24",
+      "exit_code": 0,
+      "tap": {
+        "tests": 187,
+        "pass": 186,
+        "fail": 0,
+        "skipped": 1,
+        "cancelled": 0
+      },
+      "positive_evidence": {
+        "existing_skip": "ok 132 - evidence: every root hydrated under each colored run # SKIP",
+        "tests": 186,
+        "required_assertion_count": 3,
+        "required_names_sha256": "ce4ecef376019d066fe555b803c6ec971f6a5a58162a21cac1f3d6f4d61bcd71"
+      },
+      "silent_exit_negative_control": "pass",
+      "raw_log_shared_artifact": "run-9192-local/full-final/e2e-2.log"
+    },
+    {
+      "id": "e2e-3",
+      "command": "bash scripts/e2e-local.sh",
+      "duration_ms": 420177,
+      "log_sha256": "f375751bb3c344aa01a67a71c66be9184d800bcdbec527bf89ebfd7fff1a68f6",
+      "build_id": "GPjhSjroQ_l7NErx44J2c",
+      "exit_code": 0,
+      "tap": {
+        "tests": 187,
+        "pass": 186,
+        "fail": 0,
+        "skipped": 1,
+        "cancelled": 0
+      },
+      "positive_evidence": {
+        "existing_skip": "ok 132 - evidence: every root hydrated under each colored run # SKIP",
+        "tests": 186,
+        "required_assertion_count": 3,
+        "required_names_sha256": "ce4ecef376019d066fe555b803c6ec971f6a5a58162a21cac1f3d6f4d61bcd71"
+      },
+      "silent_exit_negative_control": "pass",
+      "raw_log_shared_artifact": "run-9192-local/full-final/e2e-3.log"
+    },
+    {
+      "id": "deployment",
+      "duration_ms": 9978,
+      "log_sha256": "91dd9805f0b27da06845dec5ad12090de427853b872caaaf143a3ba5c90798e3",
+      "exit_code": 0,
+      "tap": {},
+      "positive_evidence": {
+        "assertions": 52,
+        "boundary": "fake upload CLI and vendor API/token; real deployment-status adapter, local HTTP and shell processes",
+        "required_assertion_count": 33,
+        "required_names_sha256": "1688fd56766dbeddff1f95e446ae2eae4a8f2da1dd1a391f4ad525872c477070"
+      },
+      "silent_exit_negative_control": "pass",
+      "raw_log_shared_artifact": "run-9192-local/final-deployment/deployment.log"
+    }
+  ],
+  "verify_deploy_self_test": {
+    "pass": 22,
+    "fail": 0,
+    "log_sha256": "86cc19110b1a6daf668ce3d3b0aa08b56427db12bf4b0e3d6f7f5a07ea72fd29"
+  },
+  "delivery_negative_control": "4c64080^ rejected for missing npm test registration",
+  "development_negative_controls": {
+    "missing_modules_before_implementation": "failed as expected",
+    "symlinked_entrypoint_silent_success": "caught by shell HTTP request and receipt assertions; fixed with realpath guard and regression",
+    "typecheck_callback_signature": "fixed; final static passes"
+  },
+  "browser_scope": "Real production app, Chrome 154, migrated PostgreSQL; first footer/E2E build preceded final adapter-only diagnostic and receipt-test edits, which do not enter app bundles; E2E 2/3 and final fast gates used the final source fingerprint. Raw receipts retain the initial 2504-unit run; final unit suite has 2505.",
+  "not_proven": [
+    "actual Vercel CI credential authorization",
+    "successor CI checks/production and final terminal/press verification",
+    "deployment of this repair",
+    "live build-sha advancement",
+    "elimination of separately owned motion/Bottle flakes"
+  ],
+  "pre_rebase_source_fingerprint": "8a895779bf68bcac91b3144a65dd40268cfec70120a546fd2bd484c95487f848",
+  "post_rebase_evidence": "post-rebase.json"
+}

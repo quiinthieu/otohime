@@ -1,0 +1,14 @@
+[
+  {
+    "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/baec1f88e602e9ad50ebecb9827a476f939495af/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+    "start_line": 2,
+    "start_column": 46,
+    "end_line": 2,
+    "end_column": 46,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "'resolve' is defined but never used",
+    "raw_details": ""
+  }
+]

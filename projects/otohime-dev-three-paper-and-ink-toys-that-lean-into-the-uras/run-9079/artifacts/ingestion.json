@@ -1,0 +1,35 @@
+{
+  "priorRun": {
+    "id": "run-9068",
+    "tm_task_id": "de104a54-00b2-426f-8f4d-64db79f24494",
+    "git_sha": "3912d2b",
+    "status": "succeeded",
+    "finished_at": "2026-10-26T19:30:36.80619Z",
+    "callback_apply_failures": 0
+  },
+  "relevantCompleted": {
+    "task": "de104a54-00b2-426f-8f4d-64db79f24494",
+    "status": "COMPLETED",
+    "callbackState": "delivered",
+    "callbackAttempts": 1,
+    "rawTailCharacters": 67128,
+    "rawTailTruncated": true,
+    "observedTerminal": "git push origin HEAD: 2343421..3912d2b HEAD -> main; command exited 0"
+  },
+  "failedSample": {
+    "task": "a70403e1-d4fc-4944-8233-2ee4127908b3",
+    "status": "FAILED",
+    "callbackState": "delivered",
+    "callbackAttempts": 1,
+    "rawTailCharacters": 67243,
+    "rawTailTruncated": true,
+    "observedTerminal": "push_not_on_main: HEAD 6bd9ac776906 not on origin/main; rescue pushed",
+    "cameraInferenceEvidence": false
+  },
+  "current": {
+    "task": "6bdc97f5-cd29-4168-aec1-0bfc36cafc8b",
+    "run": "run-9079",
+    "status": "RUNNING",
+    "callback": "pending exit; not yet ingested"
+  }
+}

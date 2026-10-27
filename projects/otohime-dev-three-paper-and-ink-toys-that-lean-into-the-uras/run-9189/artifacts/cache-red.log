@@ -1,0 +1,41 @@
+TAP version 13
+# Subtest: isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures
+not ok 1 - isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures
+  ---
+  duration_ms: 53.175292
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/lib/e2e-runner.test.ts:16:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /clean-build/. Input:
+    
+    'Starting embedded Postgres on 127.0.0.1:55131\n' +
+      'Applying migrations\n' +
+      'Building\n' +
+      'stale-output\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    Starting embedded Postgres on 127.0.0.1:55131
+    Applying migrations
+    Building
+    stale-output
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/lib/e2e-runner.test.ts:58:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 155.769792

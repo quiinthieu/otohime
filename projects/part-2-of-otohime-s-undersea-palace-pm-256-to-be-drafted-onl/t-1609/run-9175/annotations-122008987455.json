@@ -1,0 +1,31 @@
+{
+  "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/122008987455/annotations?per_page=100",
+  "http": "200",
+  "curl_exit": 0,
+  "data": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc/.github",
+      "start_line": 45,
+      "start_column": null,
+      "end_line": 45,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "Process completed with exit code 1.",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc/.github",
+      "start_line": 38,
+      "start_column": null,
+      "end_line": 38,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "vercel deploy",
+      "message": "unknown (inspect exited 1) https://otohime-bdutxbcyi-otohime.vercel.app\ninspect --wait output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: User not found.\nstate re-read output (exit 1, last 4000 bytes):\nVercel CLI 64.7.0 (Node.js 22.23.3)\nError: User not found.",
+      "raw_details": ""
+    }
+  ]
+}

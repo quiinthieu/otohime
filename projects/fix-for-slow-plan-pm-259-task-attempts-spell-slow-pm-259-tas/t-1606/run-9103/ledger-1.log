@@ -1,0 +1,41 @@
+TAP version 13
+# Subtest: a day's receipt opens from the keyboard: Tab to the last day, arrows to an inked one, Enter pins, Escape closes
+ok 1 - a day's receipt opens from the keyboard: Tab to the last day, arrows to an inked one, Enter pins, Escape closes
+  ---
+  duration_ms: 731.483047
+  type: 'test'
+  ...
+# Subtest: Press replays the year in date order, a day per tick, with a stamp thud every seventh day
+ok 2 - Press replays the year in date order, a day per tick, with a stamp thud every seventh day
+  ---
+  duration_ms: 8135.769974
+  type: 'test'
+  ...
+# 365 days in 351 ticks, 53 thuds, 375 transitions
+# Subtest: under reduced motion Press lands the final year at once: no replay, no transition or animation in the ledger
+ok 3 - under reduced motion Press lands the final year at once: no replay, no transition or animation in the ledger
+  ---
+  duration_ms: 1062.015556
+  type: 'test'
+  ...
+# Subtest: on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt
+ok 4 - on a phone the sheet scrolls inside its frame, Press works by touch and a tapped day shows its receipt
+  ---
+  duration_ms: 7367.912307
+  type: 'test'
+  ...
+# Subtest: on a phone the layout check waits for a sheet shown after hydration, and fails a sheet without its minimum width
+ok 5 - on a phone the layout check waits for a sheet shown after hydration, and fails a sheet without its minimum width
+  ---
+  duration_ms: 1087.593378
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18900.739109

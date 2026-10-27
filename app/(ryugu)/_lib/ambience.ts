@@ -257,6 +257,30 @@ export function createAmbience({ make, available = true, storage }: { make: () =
 
 export type Ambience = ReturnType<typeof createAmbience>;
 
+/** One mounted palace's ambience across back/forward-cache visits. Leaving (pagehide) closes it for good, but a page
+ * the browser restores from its cache (pageshow, persisted) keeps the mounted button, so it gets a fresh ambience that
+ * reads the stored preference again and, like any first visit, waits for a gesture. `onChange` hears every status. */
+export function ambienceSession(open: () => Ambience, onChange: () => void) {
+  let a = open();
+  let unsubscribe = a.subscribe(onChange);
+  return {
+    current: () => a,
+    hide: () => a.close(),
+    show(persisted: boolean) {
+      if (!persisted) return;
+      unsubscribe();
+      a.close();
+      a = open();
+      unsubscribe = a.subscribe(onChange);
+      onChange();
+    },
+    dispose() {
+      unsubscribe();
+      a.close();
+    },
+  };
+}
+
 // The button's words for each status. Never claims to play when the browser cannot.
 export function soundLabel(status: Status): { text: string; pressed: boolean; disabled: boolean; note: string } {
   switch (status) {

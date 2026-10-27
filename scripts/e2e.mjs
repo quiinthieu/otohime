@@ -2,7 +2,8 @@
 // Without it, the suite brings its own: a throwaway embedded Postgres 17 (real binaries from the
 // embedded-postgres package, no docker), the migrations, a production build and `next start`, on free ports.
 // The server, the database and its files are removed on exit, however it ends.
-//   SKIP_BUILD  1 reuses the existing .next build
+// Fresh builds discard .next first: a lease's stale Turbopack font import map can break an otherwise unchanged build.
+//   SKIP_BUILD  1 reuses the existing .next build and leaves its output/cache intact
 // The test files run one at a time: several count animation frames (the desk's leaves, the Ink Press's and Ryugu-jo's
 // WebGL loops), and files run side by side starve each other's browsers of them (the leaves turned through 6 poses
 // and the sea drew 7 to 10 frames with eleven files at once), so a correct page fails its frame floor. A later
@@ -141,6 +142,7 @@ async function main() {
   };
 
   if (process.env.SKIP_BUILD !== "1") {
+    rmSync(path.join(ROOT, ".next"), { recursive: true, force: true });
     console.log("Building");
     if ((await run("npm", ["run", "build"], env)) !== 0) return 1;
   }

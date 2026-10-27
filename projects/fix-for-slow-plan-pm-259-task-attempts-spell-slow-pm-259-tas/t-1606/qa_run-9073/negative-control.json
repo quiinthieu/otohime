@@ -1,0 +1,8 @@
+{
+  "exit_code": 1,
+  "expected_exit": 1,
+  "mutation": "tablet drags:false to drags:true; all other behavior unchanged",
+  "target": "real live production",
+  "trace_assertion_observed": true,
+  "fixture_sha256": "2bb4dfd7623c2c3aeb6663dc0fdf1b44738f668ccb9b4c2368f3645952bf2ca4"
+}

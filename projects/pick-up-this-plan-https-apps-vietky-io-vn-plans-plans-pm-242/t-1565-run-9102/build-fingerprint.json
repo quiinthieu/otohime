@@ -1,0 +1,22 @@
+{
+  "build_id": "9Um1DWnRHVkx-AzlTwBBN",
+  "files": [
+    {
+      "path": ".next/BUILD_ID",
+      "sha256": "b96a9c176a97ad5729eec1981e6693a3fc61ec7620af5d0473a115369dc5ae9f"
+    },
+    {
+      "path": ".next/server/app/api/now-playing/route.js",
+      "sha256": "26ffe1c3a588c8d80f019e86ca3aa202088d41a921beac4cbba096d3a0793130"
+    }
+  ],
+  "client_assets": {
+    "count": 93,
+    "manifest_sha256": "f1eb04c35b0ef19efce335df6c318bda4b32638ab15492920bb55c2fe64796a3"
+  },
+  "server_assets": {
+    "count": 868,
+    "manifest_sha256": "7aeb8073c0bed380601ddd37f8bc89a73cf8ef4284615ca15212a353a2ca06a4"
+  },
+  "note": "Built by the instrumented HTTP walk; fixture SHA is only a public label. Source identity is in source-fingerprint.json."
+}

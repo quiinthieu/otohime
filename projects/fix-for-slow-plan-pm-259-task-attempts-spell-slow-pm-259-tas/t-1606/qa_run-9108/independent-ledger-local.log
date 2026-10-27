@@ -1,0 +1,1 @@
+{"base":"http://localhost:4027","browser":"154.0.8037.57","build":"dev","original":{"client":348,"scroll":756,"sheet":736,"min":"736px","page":390,"viewport":390},"moved":200,"negative":{"client":348,"scroll":348,"sheet":328,"min":"0px","page":390,"viewport":390},"negativeControl":"missing minimum rejects overflow and cannot scroll","errors":[]}

@@ -1,0 +1,41 @@
+
+> otohime@0.1.0 lint
+> eslint
+
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(articles)/_components/masthead.tsx
+  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(barometer)/barometer/page.tsx
+  44:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(capsule)/capsule/page.tsx
+  26:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(elements)/elements/page.tsx
+  22:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(orrery)/_components/chrome.tsx
+  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(planisphere)/planisphere/page.tsx
+  59:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(rotor)/rotor/page.tsx
+  37:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(shore)/shore/page.tsx
+  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/app/(vinyl)/vinyl/page.tsx
+  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/lib/e2e-runner.test.ts
+  23:5  error  Do not assign to the variable `module`. See: https://nextjs.org/docs/messages/no-assign-module-variable  @next/next/no-assign-module-variable
+
+/Users/avietidol/Library/Application Support/build-worker/leases/83a13b29-fa1b-4737-85a8-4476f89a1198-b7e29f5393f2a5ba6def9e4870d3b528/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs
+  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 11 problems (1 error, 10 warnings)
+  0 errors and 9 warnings potentially fixable with the `--fix` option.
+

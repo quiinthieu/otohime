@@ -1,0 +1,48 @@
+▲ Next.js 16.4.2
+- Local:         http://localhost:63166
+- Network:       http://192.168.100.68:63166
+✓ Ready in 84ms
+✓ Running next.config.ts took 25ms
+2026-10-26T23:55:25.355Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.
+⨯ unhandledRejection: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+⨯ [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.] {
+  digest: '1923974184'
+}
+listSongs failed Error: Failed query: select "id", "title", "artist", "note", "colour", "video", "position", "created_by", "created_at" from "song" order by "song"."position" asc, "song"."created_at" asc
+params: 
+    at o.queryWithCache (.next/server/chunks/ssr/_0sx7htieab1ga._.js:492:42139)
+    at async (.next/server/chunks/ssr/_0sx7htieab1ga._.js:492:15180)
+    at async (.next/server/chunks/ssr/lib_0_l9hlry0fgmv._.js:1:9732)
+    at async y (.next/server/chunks/ssr/_1zgevvchrtksf._.js:1:993) {
+  query: 'select "id", "title", "artist", "note", "colour", "video", "position", "created_by", "created_at" from "song" order by "song"."position" asc, "song"."created_at" asc',
+  params: [],
+  [cause]: AggregateError: 
+      at async (.next/server/chunks/ssr/_0sx7htieab1ga._.js:492:15390)
+      at async o.queryWithCache (.next/server/chunks/ssr/_0sx7htieab1ga._.js:492:42114)
+      at async (.next/server/chunks/ssr/_0sx7htieab1ga._.js:492:15180)
+      at async (.next/server/chunks/ssr/lib_0_l9hlry0fgmv._.js:1:9732)
+      at async y (.next/server/chunks/ssr/_1zgevvchrtksf._.js:1:993) {
+    code: 'ECONNREFUSED',
+    [errors]: [
+      Error: connect ECONNREFUSED ::1:5432
+          at ignore-listed frames {
+        errno: -61,
+        code: 'ECONNREFUSED',
+        syscall: 'connect',
+        address: '::1',
+        port: 5432
+      },
+      Error: connect ECONNREFUSED 127.0.0.1:5432
+          at ignore-listed frames {
+        errno: -61,
+        code: 'ECONNREFUSED',
+        syscall: 'connect',
+        address: '127.0.0.1',
+        port: 5432
+      }
+    ]
+  }
+}
+⨯ [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.] {
+  digest: '1923974184'
+}

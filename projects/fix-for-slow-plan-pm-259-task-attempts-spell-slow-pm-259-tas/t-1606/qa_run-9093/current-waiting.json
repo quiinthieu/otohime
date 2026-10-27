@@ -1,0 +1,9 @@
+{
+  "url": "https://api.github.com/repos/quiinthieu/otohime/actions/workflows/ci.yml/runs?branch=main&status=waiting&per_page=20",
+  "status": 200,
+  "observed_at": "2026-10-26T22:02:17.166884+00:00",
+  "data": {
+    "total_count": 0,
+    "workflow_runs": []
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "run-9187",
+  "tm_task_id": "8e93f952-a314-4c83-8aad-ecc564be83bc",
+  "agent_profile": "codex-sol-6-1-high",
+  "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+  "worker_id": "billie-mac",
+  "account_id": "codex-main",
+  "runner": "fleet"
+}

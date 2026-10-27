@@ -1,3 +1,4 @@
+import { GhostLoader } from "@/ghosts/loader";
 import { RisoText } from "@/components/riso-heading";
 import { AskConsoleLoader } from "@/components/ask-console-loader";
 import { Handheld } from "@/components/handheld";
@@ -14,6 +15,7 @@ export default function HomePage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise">
+        <GhostLoader room="/" />
         <section className="grid min-h-[calc(100dvh-8rem)] items-center gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
           <div>
             <p className="caption">Fig. 01 — Home</p>

@@ -1,0 +1,30 @@
+{
+  "source_cohort": "80b6b8b394a5e4597bbd1be4920e4c16fee52656ede4730d8967374aa0f644e4",
+  "files": {
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    ".github/workflows/ci.yml": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+    "scripts/vercel-deploy.sh": "d9007464d32940bc2311f8529c1dea2cced20d97e7d4e520199884227e56d9ba",
+    "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+    "scripts/probe-end.mjs": "958029c7b17fbd50345b1e949ddd6beab7a37ec88455be0e83ee0e21850b70af",
+    "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+    "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+    "e2e/kame.test.ts": "1770d7cdb691b722ffe3e09554d4c7e2e3b316dce8490c434f105860ddc2ce5f",
+    "e2e/ledger.test.ts": "99363dab11aa76ddd67484744007d877edcebdfd3cfbad11c589a2368e25adab",
+    "lib/gate-closure.test.ts": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+    "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+    "components/end-footer.tsx": "043707b4ed9eb2b106eae92a30f2e9cb7c576f7d65c1ca6c22b0b160a3adef0d",
+    "components/bottle/button.css": "9b05ad00633d91e00c43e1b0da45e193b977eb3ba54cf28a04654154acd22a23"
+  },
+  "runs": [
+    {
+      "id": 40423130342,
+      "sha": "c6d09f0067cb3f3ea77a75b723edc72918013c24",
+      "conclusion": "failure"
+    }
+  ],
+  "ci_artifact_hashes": "unobserved: private logs",
+  "ci_browser_hash": "unobserved: private logs",
+  "local_artifacts": "build-1.json, build-2.json, build-3.json",
+  "old_history_complete": false
+}

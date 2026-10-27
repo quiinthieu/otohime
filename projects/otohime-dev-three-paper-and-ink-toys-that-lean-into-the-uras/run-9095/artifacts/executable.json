@@ -1,0 +1,127 @@
+{
+  "algorithm": "sorted path + NUL + bytes + NUL, SHA256",
+  "sha256": "b6bd5dc14585d20fc5a49eade7a2bd278d4bf0320ccdf1b4e03b1ccb415207a2",
+  "files": {
+    ".github/workflows/ci.yml": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+    "app/(site)/globals.css": "06ddbe30668c4456062cf103a9c4cb0f64d7771f9a96296d3807f467d0dfc3f7",
+    "components/bottle/button.css": "9b05ad00633d91e00c43e1b0da45e193b977eb3ba54cf28a04654154acd22a23",
+    "components/bottle/button.tsx": "fd66c503666593d8104ce2f2f9dcc6fa332f40734cc34207aaf063a26dc24c98",
+    "components/end-footer.tsx": "043707b4ed9eb2b106eae92a30f2e9cb7c576f7d65c1ca6c22b0b160a3adef0d",
+    "components/end-stage.tsx": "c423208e47eebea1fdf0821ad9b7bf32df0cc9edc0f3024c9e78b72e82537255",
+    "components/peep-box/active.tsx": "2bcee3062564e51e87ea2ca3f365d90a3bbc31b3a53a307d990bf4b988dd8b5e",
+    "components/peep-box/camera.ts": "d2a8eea0e71aeac20fd4613ba3a3ade127c9506ecaf812f4a0333ca0f3f2bbcb",
+    "components/peep-box/head-worker.js": "9672259c6d2200c70497517c441d721ec0ea28a2204748c8b3b9054982f89735",
+    "components/peep-box/loader.tsx": "d4917ca7acdff500c25dd6ffb6773f66295e7d484d33af5e855b97b57d660f08",
+    "components/peep-box/peep-box.css": "c011f19dbf96d651802a83d45a63821b15352b12b8482244ed610043a8df31d0",
+    "components/peep-box/scene.tsx": "0cced0aa544647bfedf08183caf02c09c5cd5c93c69a901305ecc2fb09040869",
+    "content/peep-box-assets.json": "394a48c908ab02b5034413604fc4e2a6fa623fb1dc500de009a3692078a64fb6",
+    "content/peep-box-test-assets.json": "a3a6bb98eaef071b6c5f756e76db3b2291a735f3767716f33f985fc08ce585a5",
+    "e2e/bottle-ui.test.ts": "c093506a63ef8076f13ce4b5c06958c683baa5a1e520098f26b42b12adfd8fa0",
+    "e2e/kame.test.ts": "1770d7cdb691b722ffe3e09554d4c7e2e3b316dce8490c434f105860ddc2ce5f",
+    "e2e/peep-box-camera.test.ts": "d8b82f50dd985cd5e1a018bf8ce5d6b4c972afcf877be9465afb31aeddca8c97",
+    "e2e/peep-box-face-fixture.ts": "25ba46899216893ced94f1b80e5019d305c92a01b453e732138eb0a72d53aa9b",
+    "lib/head-tracker.test.ts": "f989180fd9cb2550129b7dc2415e088194823afba5054b3705e619faa2a200d4",
+    "lib/head-tracker.ts": "46d7c1b679a0b78827558c8bd96ff0d342c7a98aca2aa2bf74ab1fdd9e629a99",
+    "lib/peep-box-assets.test.ts": "a007789b6feaca85282e4a8e943c65a27a9cbe7dcb069c979676906dbc584cf5",
+    "lib/peep-box.ts": "4e6663734b5a3b2097e49d6f287c36c3ba61133c7eea3ab2764eb3c7749062d7",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "cc0c85cfdc4261781ddeea43ceaad9c743f6269e1f8a0fbbf5ecc849a96a501d",
+    "scripts/ci-workflow.test.mjs": "f4e67e580c6842e6d28d390d0d62fe753fa7b25a8f5e244162baa6004c7ff242",
+    "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+    "scripts/vendor-peep-box.mjs": "0dd1538f319dab0456ee0d0b85d006b1447b837102c5ab0e8a771a412e0a2075",
+    "scripts/verify-peep-box-camera.mjs": "d7cbfa3274857ef591cfa29a3caa68b62300a9ea3332dc638ff66b03f54f605b"
+  },
+  "priorFingerprint": "3d11a6efcacbf1254ef0f0b27b44e1d5db3d9ef82c87c54e2a4163202e67e3f5",
+  "unchangedCameraInputs": [
+    "components/peep-box/active.tsx",
+    "components/peep-box/camera.ts",
+    "components/peep-box/head-worker.js",
+    "components/peep-box/loader.tsx",
+    "components/peep-box/peep-box.css",
+    "components/peep-box/scene.tsx",
+    "content/peep-box-assets.json",
+    "content/peep-box-test-assets.json",
+    "lib/head-tracker.ts",
+    "lib/peep-box.ts",
+    "next.config.ts",
+    "package-lock.json",
+    "package.json",
+    "scripts/vendor-peep-box.mjs",
+    "scripts/verify-peep-box-camera.mjs"
+  ],
+  "changedCameraInputs": [],
+  "node": "v22.12.0",
+  "imports": {
+    "@mediapipe/tasks-vision": {
+      "imported": true,
+      "version": "0.10.32"
+    },
+    "next": {
+      "imported": true,
+      "version": "16.4.2"
+    },
+    "react": {
+      "imported": true,
+      "version": "19.3.0"
+    },
+    "react-dom": {
+      "imported": true,
+      "version": "19.3.0"
+    },
+    "pg": {
+      "imported": true,
+      "version": "8.23.1"
+    },
+    "playwright-core": {
+      "imported": true,
+      "version": "1.64.0"
+    },
+    "embedded-postgres": {
+      "imported": true,
+      "version": "17.10.0-beta.17"
+    }
+  },
+  "workerSHA256": "abded2a89252b128933ca06c8a4c9501e128029aaf9df049f231bc7428b5337a",
+  "assets": [
+    {
+      "file": "vision_bundle.cjs",
+      "sha256": "43c65a77825c5d5af7456d4781a64cd15cb3e53f479ff1f923c12b5adecf2b44",
+      "size": 137315
+    },
+    {
+      "file": "wasm/vision_wasm_internal.js",
+      "sha256": "6f6b86509cf9e163ea1cfec7edc8cf53732699c04781e4c21c557c1ba402310e",
+      "size": 204816
+    },
+    {
+      "file": "wasm/vision_wasm_internal.wasm",
+      "sha256": "cb3ec20026a9aecc2a81a93c25630ceb5389297ddb7a5f0bd61dd09cde606b9b",
+      "size": 11453626
+    },
+    {
+      "file": "wasm/vision_wasm_nosimd_internal.js",
+      "sha256": "9f8fc960e363f0fb2f42f7937b97ae9cf9a5630490f71031fa90caa9bb121938",
+      "size": 204669
+    },
+    {
+      "file": "wasm/vision_wasm_nosimd_internal.wasm",
+      "sha256": "924274fcd5ac8985f6570a8573e7971b7bd2d580ba1b8f3beb0ba8f95db6347c",
+      "size": 10647962
+    },
+    {
+      "file": "face_landmarker.task",
+      "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+      "size": 3758596
+    }
+  ],
+  "fixture": {
+    "file": "astronaut.png",
+    "url": "https://raw.githubusercontent.com/scikit-image/scikit-image/c1af2bf80d2c8845bbbf06222f87e8b58a8e5c1e/skimage/data/astronaut.png",
+    "sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+    "size": 791555,
+    "license": "Public domain (NASA)",
+    "terms": "NASA photograph of Eileen Collins. No known copyright restrictions; released into the public domain. No endorsement implied. Verification only; never deployed.",
+    "licenseEvidence": "https://scikit-image.org/docs/0.19.x/api/skimage.data.html#skimage.data.astronaut"
+  }
+}

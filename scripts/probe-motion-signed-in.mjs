@@ -200,18 +200,34 @@ function watchFades() {
 }
 
 // Clicks `selector` (the first one visible) and waits for `to`, then for the new side to fade in and every
-// transition animation to end. Returns the fades and the named elements the change ran.
-async function swap(page, selector, to) {
+// transition animation to end. Returns the fades and the named elements the change ran. With `motion`, the
+// wait is for the page's own fade-in (210 ms after 150 ms), which may come in a later transition than the click's.
+async function swap(page, selector, to, motion = false) {
   await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  // The way in (a router.push) may still be fading the 403 in; read after the reset, its page-in would pass
+  // for the next page's.
+  await page
+    .waitForFunction(
+      () => !document.__reactViewTransition && !document.getAnimations().some((a) => a.effect?.pseudoElement?.startsWith("::view-transition") && a.playState === "running"),
+      null,
+      { timeout: 4000 },
+    )
+    .catch(() => {});
   await page.evaluate(() => window.__fadesReset());
   const target = page.locator(selector).filter({ visible: true }).first();
   // The masthead's Sign in streams in behind its own boundary.
   await target.waitFor({ timeout: 15_000 });
   await Promise.all([page.waitForURL((u) => u.pathname === to, { timeout: 15_000 }), target.click()]);
-  return settleFades(page);
+  return settleFades(page, motion);
 }
-async function settleFades(page) {
-  await page.waitForFunction(() => window.__fades.some((f) => f.side === "new" && /fade-in$/.test(f.name)), null, { timeout: 4000 }).catch(() => {});
+// A room with a loading.tsx (/dashboard) changes twice: the 403 gives way to its skeleton (with the nav pill's
+// own 320 ms fade-in), and the page fades in over the skeleton only once it has streamed. Any fade-in is not the
+// page's, so under motion this waits, bounded, for the page's; a page that never fades in fails the caller's check.
+async function settleFades(page, motion = false) {
+  const arrived = motion
+    ? () => window.__fades.some((f) => f.side === "new" && /fade-in$/.test(f.name) && f.duration === 210 && f.delay === 150)
+    : () => window.__fades.some((f) => f.side === "new" && /fade-in$/.test(f.name));
+  await page.waitForFunction(arrived, null, { timeout: motion ? 10_000 : 4000 }).catch(() => {});
   await page
     .waitForFunction(
       () => !document.documentElement.getAnimations({ subtree: true }).some((a) => a.effect?.pseudoElement?.startsWith("::view-transition") && a.playState === "running"),
@@ -377,7 +393,7 @@ try {
               try {
                 await go(page);
                 await page.locator(LOCKED).waitFor({ timeout: 15_000 });
-                const r = await swap(page, selector, to);
+                const r = await swap(page, selector, to, !reduced);
                 if (reduced) {
                   const anims = await loadAnimations(page);
                   check(`${label}: completes, with every transition animation 0 ms`, r.fades.every((f) => f.duration <= 1 && f.delay <= 1), showFades(r.fades));

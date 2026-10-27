@@ -1,0 +1,19 @@
+{
+  "npm_ci": 0,
+  "contract_trace_lint_types_units_chain": 0,
+  "production_e2e_three_repeat_loop": 0,
+  "child_negative_control_driver": 0,
+  "desk_and_clock_negative_control_driver": 0,
+  "preflight_plus_initial_live_browser_combined": {
+    "exit_code": 1,
+    "preflight": "constructed successfully, JSON complete and stderr empty",
+    "failed_component": "initial independent desk navigation ERR_NETWORK_CHANGED"
+  },
+  "independent_live_retry_plus_footer_combined": {
+    "exit_code": 1,
+    "independent_desk_retry": "pass, six contexts",
+    "failed_component": "Footer aggregate console check, icon.svg ERR_NETWORK_CHANGED"
+  },
+  "independent_local_ledger_and_desk": 0,
+  "supplemental_local_footer": 0
+}

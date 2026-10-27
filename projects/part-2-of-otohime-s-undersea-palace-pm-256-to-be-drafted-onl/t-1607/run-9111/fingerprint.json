@@ -1,0 +1,14 @@
+{
+  "fingerprint": "24da92a191ac0825a41cb0ac9963d2483bb7436cd2360967f32981fd0c91cd6f",
+  "files": {
+    "../policy.ts": "12be2480beb3db8ecf0f11daa6ede1472040a1814be1fa98240d68186c5a206b",
+    "../protocol.ts": "d51891a13a41c804e67903408e0db555e94ae3435a6cca6229cb33e928bc9278",
+    "../room.ts": "c7cb50c937a8f621584a1f0bfb33a0c8ee673731b3a701150dd5241d8eb3dccb",
+    "package-lock.json": "b49cf8d37759e18044b6e137747cd9f2a059c0c19515006f9a2db4e12f9e7bd7",
+    "package.json": "3818cacdf884801c22a86b780d9b361c74b92bc93a424593269cf815b226ccde",
+    "src/index.ts": "191e2167418f54559e31fd20acfcd6bcf313598ac865bb293b3412c36ad9e23b",
+    "src/room-do.ts": "01e6dee412ca3c6c2a8e7ea11b8175459c750ed3c9126e38d8e89e2b5120495e",
+    "src/version.ts": "0c0313f4e86dfcb80f123705643257b766ffe99627d3aea44bd01de04cccdab8",
+    "wrangler.jsonc": "8aca7620a5647b9f87ec25710b364926126dee26189a37c1dfbbd4e965df0781"
+  }
+}

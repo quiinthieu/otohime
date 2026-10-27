@@ -1,0 +1,17 @@
+# database: docker Postgres on 127.0.0.1:44119
+# browser: runner Google Chrome 154.0.8037.57  with the repo's playwright-core; nothing installed
+file:///data/build-worker/leases/d35e7175-b833-4fa1-948d-25ecfbffbaf5-54349f720e67ccba8fee080a889a1106/work/otohime/scripts/probe-browser.mjs:39
+      throw new Error(
+            ^
+
+Error: probe-browser: no browser. The repo's playwright-core could not launch Chrome (browserType.launch: Target page, context or browser has been closed), and PW_PREFIX is not set, so there is no Playwright Chromium to fall back to. Install Google Chrome, or run through the probe's .sh script, which installs Playwright into PW_PREFIX.
+    at launchBrowser (file:///data/build-worker/leases/d35e7175-b833-4fa1-948d-25ecfbffbaf5-54349f720e67ccba8fee080a889a1106/work/otohime/scripts/probe-browser.mjs:39:13)
+    at async file:///data/build-worker/leases/d35e7175-b833-4fa1-948d-25ecfbffbaf5-54349f720e67ccba8fee080a889a1106/work/otohime/scripts/probe-motion-signed-in.mjs:292:17
+
+Node.js v22.23.3
+# server.log (last 20 lines):
+▲ Next.js 16.4.2
+- Local:         http://localhost:4063
+- Network:       http://192.168.100.241:4063
+✓ Ready in 101ms
+✓ Running next.config.ts took 30ms

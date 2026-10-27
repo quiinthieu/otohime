@@ -1,0 +1,26 @@
+[
+  {
+    "name": "desk-trace",
+    "exit_code": 1,
+    "expected_failure": "music is dragging after the first move past 6px",
+    "source": "e2e/desk.test.ts",
+    "only_mutation": {
+      "old": "await swipe(tablet, \"music\", 120, 0, { drags: false });",
+      "new": "await swipe(tablet, \"music\", 120, 0, { drags: true });"
+    },
+    "base_url": "https://otohime.dev",
+    "runtime": "real locked Chrome/Playwright; deliberate test mutation"
+  },
+  {
+    "name": "clock-host-delay",
+    "exit_code": 1,
+    "expected_failure": "Missing expected rejection",
+    "source": "e2e/kame.test.ts",
+    "only_mutation": {
+      "old": "page.waitForFunction((started) => performance.now() - started >= 50, started, { timeout: 2_000 })",
+      "new": "page.waitForTimeout(50)"
+    },
+    "base_url": "https://otohime.dev",
+    "runtime": "real locked Chrome/Playwright; deliberate test mutation"
+  }
+]

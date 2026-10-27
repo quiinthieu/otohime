@@ -9,7 +9,7 @@
 // The pond's water (startWater / stopWater) is the one looped layer: seeded brown noise under a 500 Hz low-pass,
 // swelling slowly, about -36 dB. It starts only from a click while sound is on and stops when the page is hidden,
 // on pagehide, when sound is switched off, or when the pond asks (out of view, unmounted). No audio files.
-import { CUES, cueGain, dbToGain, envelope, noteEnd, parseSound, PURR, SOUND_KEY, storeSound, type Cue, type CueName } from "./sound.ts";
+import { CLAPPER, CUES, cueGain, dbToGain, envelope, noteEnd, parseSound, PURR, SOUND_KEY, storeSound, type Cue, type CueName, type Note } from "./sound.ts";
 
 let on = false;
 let loaded = false;
@@ -33,6 +33,7 @@ function onStorage(event: StorageEvent) {
   if (!on) {
     stopPurr();
     stopWater();
+    stopStoryVoice();
     mute();
   }
   emit();
@@ -65,6 +66,7 @@ export function setSound(next: boolean) {
   else {
     stopPurr();
     stopWater();
+    stopStoryVoice();
     mute();
   }
 }
@@ -73,6 +75,7 @@ let ctx: AudioContext | null = null;
 
 function close() {
   stopPurr();
+  stopStoryVoice();
   const c = ctx;
   ctx = null;
   void c?.close().catch(() => {});
@@ -286,4 +289,41 @@ export function stopWater() {
   } catch {
     // the context is already closed: nothing is playing
   }
+}
+
+// The theatre supplies pure notes only after deliberate input; no second context.
+let voiceGeneration = 0;
+let cancelVoice: (() => void) | null = null;
+let voiceTimer: ReturnType<typeof setTimeout> | undefined;
+function hiddenVoice() { if (document.visibilityState === "hidden") stopStoryVoice(); }
+export function stopStoryVoice() {
+  voiceGeneration++;
+  cancelVoice?.(); cancelVoice = null;
+  clearTimeout(voiceTimer); voiceTimer = undefined;
+  if (typeof document !== "undefined") document.removeEventListener("visibilitychange", hiddenVoice);
+  removeEventListener("pagehide", stopStoryVoice);
+}
+/** At most 28 babble + two clapper oscillators, each with one gain. */
+export function startStoryVoice(notes: readonly Note[]): boolean {
+  stopStoryVoice(); load();
+  if (!on || (typeof document !== "undefined" && document.visibilityState === "hidden")) return false;
+  // Fail closed for malformed callers as well as capping nodes and time.
+  const bounded = notes.slice(0, 28).filter(n => Object.values(n).every(Number.isFinite) &&
+    n.hz >= 100 && n.hz <= 1000 && n.at >= 0.1 && n.attack > 0 && n.decay > 0 && noteEnd(n) <= 2.3);
+  const c = unlock();
+  if (!c) return false;
+  const generation = voiceGeneration;
+  const asked = performance.now();
+  const begin = () => {
+    if (generation !== voiceGeneration || !on || ctx !== c || performance.now() - asked >= 250) return;
+    const clapper = schedule(c, CLAPPER);
+    const voice = schedule(c, { db: -32, wave: "triangle", notes: bounded });
+    cancelVoice = () => { clapper(); voice(); };
+    voiceTimer = setTimeout(stopStoryVoice, 2400);
+  };
+  document.addEventListener("visibilitychange", hiddenVoice);
+  addEventListener("pagehide", stopStoryVoice);
+  if (c.state === "running") begin();
+  else void c.resume().then(begin, () => { if (generation === voiceGeneration) stopStoryVoice(); });
+  return true;
 }

@@ -1,0 +1,32 @@
+{
+  "node": "v22.23.3",
+  "platform": "linux",
+  "arch": "x64",
+  "next": "16.4.2",
+  "playwright": "1.64.0",
+  "chrome": "154.0.8037.57",
+  "drizzleAdapterConstructed": true,
+  "betterAuthContextInitialized": true,
+  "schemaTables": [
+    "account",
+    "accountRelations",
+    "askUsage",
+    "bottleSuggestion",
+    "bottleUsage",
+    "guestbookEntry",
+    "guestbookUsage",
+    "session",
+    "sessionRelations",
+    "song",
+    "user",
+    "userRelations",
+    "verification"
+  ],
+  "databaseQuery": "not part of construction preflight; production suites migrate and exercise real Docker Postgres",
+  "os": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+  "postgres_image": [
+    "postgres@sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb"
+  ],
+  "chrome_executable_sha256": "4d2512ae84986bf987e6ea8ef14ca1af555ae574fbaff5b5a8c78a8dd73fa36f",
+  "lock_sha256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+}

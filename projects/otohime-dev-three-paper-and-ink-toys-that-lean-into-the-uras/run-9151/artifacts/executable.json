@@ -1,0 +1,89 @@
+{
+  "base_sha": "d49726913796ad09791a67968d47bd423b808eb5",
+  "profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "account": "codex-main",
+  "worker": "billie-mac",
+  "runner": "fleet",
+  "node": "v22.12.0",
+  "chrome": "Google Chrome 156.0.8078.48",
+  "packages": {
+    "next": {
+      "locked": "16.4.2",
+      "installed": "16.4.2"
+    },
+    "react": {
+      "locked": "19.3.0",
+      "installed": "19.3.0"
+    },
+    "playwright-core": {
+      "locked": "1.64.0",
+      "installed": "1.64.0"
+    },
+    "pg": {
+      "locked": "8.23.1",
+      "installed": "8.23.1"
+    },
+    "embedded-postgres": {
+      "locked": "17.10.0-beta.17",
+      "installed": "17.10.0-beta.17"
+    },
+    "@mediapipe/tasks-vision": {
+      "locked": "0.10.32",
+      "installed": "0.10.32"
+    }
+  },
+  "files": {
+    ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36",
+    "package.json": "b43340c2d2ad12c024f0d3cb0b71688e895a6715e494706be759b6323ff20112",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "scripts/ci-probe-annotate.mjs": "b055bd97d9f63c122bcd47f5b8c135a7dad42012df766f56e1faa3e71f466707",
+    "scripts/ci-probe-annotate.test.mjs": "af7229def539181765b92646ce5bc3848fbc18076d30556a04d033b7ba35c0ca",
+    "scripts/ci-workflow.test.mjs": "eeb055d897f1d50d586881715b3dd4d4d5516f1073f17cc6f7dfb766a33a1420",
+    "scripts/ci-probe-verification.mjs": "7f903239731d4ba61a39ac1a8356ef4e00abb7e49ab33a5b3938bfbfe9cdc170",
+    "scripts/probe-end.mjs": "4bb429112c69b2670a7c90288ae2515a60d6c2b8555cba6a2f90e597f7ba9b22",
+    "scripts/probe-end-stream.test.mjs": "9af89024a1767cf74d1baf9634164d96f4ff912fcc4a8a2c734c9e4aaec2c817",
+    "scripts/browser-gate-diagnostics.mjs": "650d8d18ad0f8b1690a17120257e03c8787036221eb05d6ee14b8ce480a57792",
+    "scripts/e2e-annotate.mjs": "9f51f1cc753de5b8690a143ac3f404a90d574d660a5d09f20fd7eebd859933f4",
+    "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+    "scripts/probe-end-dom.mjs": "8af95772dc3723dd61b2b9cc69d66da3fa1ffeae2c28380ff388727adb5562c1",
+    "scripts/probe-motion-signed-in.mjs": "6b36e65d5a7b6d2e36d1dccbba4e0a3f122c57d4364dd0b5d04ed6b6c69ee3c4",
+    "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+    "scripts/walk-end.sh": "379bee702533f74d321c56b18f1eb01c3ea884e8b9f232de6cd37c5961578d15",
+    "scripts/e2e.mjs": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+    "scripts/verify-bottle-footer.mjs": "5af7548531fc7d21fdac3561c9396dd385c8525c4123497e94f627d51c7f7a6d",
+    "scripts/check-gate-closure.mjs": "38bf3c064f9e66ee51c927081997c5336e69ea469a3928ff57ec57884ca9aff2",
+    "content/peep-box-assets.json": "394a48c908ab02b5034413604fc4e2a6fa623fb1dc500de009a3692078a64fb6"
+  },
+  "executable_fingerprint": "2b6e3deab1145a2bc1abd40a2e5b496e109c7a27ed1a3e1f17214113f16dd4b9",
+  "history": {
+    "current_jobs_read": 0,
+    "failed_read": 0,
+    "completed_read": 0,
+    "completeness": "not inspected; no CI or deployment claims"
+  },
+  "build": {
+    "id": "HlVSeH4t6MXyGJ4wRWNer",
+    "working_tree_source_fingerprint": "2b6e3deab1145a2bc1abd40a2e5b496e109c7a27ed1a3e1f17214113f16dd4b9",
+    "generated_files": {
+      ".next/BUILD_ID": "8557cea638924af1b17a066b74414218c24289510af7e889b48ed3e7e21a0ce0",
+      ".next/app-path-routes-manifest.json": "93725c3fce307fba4e8b13a85bdd24c9a584ec84340cd7c4d22ffec0ff094026",
+      ".next/server/app-paths-manifest.json": "a766496cb41139e08ad6d975a9c0993469ef5e62f07998118797b14eb18394bc",
+      ".next/routes-manifest.json": "e742b06d17f743db47d43f49751487fb3e7f1f4f5df98d7caa04ffec314f0662",
+      "content/history.json": "168103912171689bbe703316ed438f72ee6cc64cf849e39c613d3040de2fccc2"
+    },
+    "generated_vendor": {
+      "public/vendor/peep-box/vision-0.10.32-face-1/Apache-2.0.txt": "8707eef0533987efc5b155d64761eeb6e20793f50b9bd1a68dad1cf4719d0ed8",
+      "public/vendor/peep-box/vision-0.10.32-face-1/NOTICE.txt": "9758d7fdc0da7dfdca3ef7ffdcf543a98622e67566916c77c8268daa24426168",
+      "public/vendor/peep-box/vision-0.10.32-face-1/face_landmarker.task": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+      "public/vendor/peep-box/vision-0.10.32-face-1/head-worker.js": "abded2a89252b128933ca06c8a4c9501e128029aaf9df049f231bc7428b5337a",
+      "public/vendor/peep-box/vision-0.10.32-face-1/vision_bundle.cjs": "43c65a77825c5d5af7456d4781a64cd15cb3e53f479ff1f923c12b5adecf2b44",
+      "public/vendor/peep-box/vision-0.10.32-face-1/wasm/vision_wasm_internal.js": "6f6b86509cf9e163ea1cfec7edc8cf53732699c04781e4c21c557c1ba402310e",
+      "public/vendor/peep-box/vision-0.10.32-face-1/wasm/vision_wasm_internal.wasm": "cb3ec20026a9aecc2a81a93c25630ceb5389297ddb7a5f0bd61dd09cde606b9b",
+      "public/vendor/peep-box/vision-0.10.32-face-1/wasm/vision_wasm_nosimd_internal.js": "9f8fc960e363f0fb2f42f7937b97ae9cf9a5630490f71031fa90caa9bb121938",
+      "public/vendor/peep-box/vision-0.10.32-face-1/wasm/vision_wasm_nosimd_internal.wasm": "924274fcd5ac8985f6570a8573e7971b7bd2d580ba1b8f3beb0ba8f95db6347c"
+    },
+    "history_index": "Generated by prebuild; restored to committed fallback after verification to avoid unrelated content changes."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "tested_head": "45c8d92af04883ce42a59bc9dc53d48daa921644",
+  "delivery": "52ec0904d93171262d262a21c0d61cf27d3ae8e2",
+  "items": [
+    {
+      "name": "trace helper",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+      "exit_code": 0,
+      "pass": 5,
+      "log": "trace-final.log"
+    },
+    {
+      "name": "lint and types",
+      "cmd": "npm run lint && npm run typecheck",
+      "exit_code": 0,
+      "logs": [
+        "lint-final.log",
+        "types-final.log"
+      ]
+    },
+    {
+      "name": "unit",
+      "cmd": "npm test",
+      "exit_code": 0,
+      "pass": 2354,
+      "log": "unit-final.log"
+    },
+    {
+      "name": "production E2E x3",
+      "cmd": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
+      "exit_code": 1,
+      "status": "fail",
+      "failure": "e2e/kame.test.ts:100, swim != pet; repeat3 not reached"
+    }
+  ],
+  "phases": {
+    "main": [
+      {
+        "repeat": 1,
+        "complete": true,
+        "counts": {
+          "tests": 176,
+          "pass": 175,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1
+        },
+        "duration_ms": 394529.232775,
+        "log": "e2e-main-1.log"
+      },
+      {
+        "repeat": 2,
+        "complete": true,
+        "counts": {
+          "tests": 176,
+          "pass": 175,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1
+        },
+        "duration_ms": 385444.830575,
+        "log": "e2e-main-2.log"
+      },
+      {
+        "repeat": 3,
+        "complete": true,
+        "counts": {
+          "tests": 176,
+          "pass": 175,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1
+        },
+        "duration_ms": 405511.378759,
+        "log": "e2e-main-3.log"
+      }
+    ],
+    "head": [
+      {
+        "repeat": 1,
+        "complete": true,
+        "counts": {
+          "tests": 176,
+          "pass": 175,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1
+        },
+        "duration_ms": 378957.643266,
+        "log": "e2e-head-1.log"
+      },
+      {
+        "repeat": 2,
+        "complete": true,
+        "counts": {
+          "tests": 176,
+          "pass": 174,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 1
+        },
+        "duration_ms": 382578.805181,
+        "log": "e2e-head-2.log"
+      }
+    ]
+  }
+}

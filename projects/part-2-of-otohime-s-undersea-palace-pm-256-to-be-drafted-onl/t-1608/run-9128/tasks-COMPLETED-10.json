@@ -1,0 +1,114 @@
+{
+  "total": 7089,
+  "limit": 10,
+  "offset": 10,
+  "tasks": [
+    {
+      "id": "b80b151c-5f27-446f-b127-47342ae2058d",
+      "projectId": "linego",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:25:04Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    },
+    {
+      "id": "fe280fb6-429c-4fe1-a6f7-c0a3e3d8c2a1",
+      "projectId": "linego",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:25:04Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    },
+    {
+      "id": "0c4aee07-63e7-4188-b6b2-9bb8751b761c",
+      "projectId": "gameplay-studio",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:24:58Z",
+      "params": {}
+    },
+    {
+      "id": "d92b882c-fe79-496a-9f99-33fd2cbb6390",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:24:54Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "commit_attribution": "none",
+        "git_sha": "ea79432",
+        "plan_id": "pm-272",
+        "run_id": "run-9125"
+      }
+    },
+    {
+      "id": "14e72a25-244d-4e01-be21-049b76f419cb",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:23:06Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "30ec7fc8-84f4-5d4f-a02d-affe9f64088e"
+      }
+    },
+    {
+      "id": "4f163281-6383-451f-b939-2543ee99e509",
+      "projectId": "gameplay-sim",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:22:33Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    },
+    {
+      "id": "35cfa948-3ed6-4c87-a782-5d915ab0761e",
+      "projectId": "maintenance",
+      "taskType": "maintenance_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:22:13Z",
+      "params": {}
+    },
+    {
+      "id": "c1901969-dde9-4904-bd75-b88611314529",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:21:07Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "2d3df401-75da-5fb3-8275-77cd047096de"
+      }
+    },
+    {
+      "id": "7d66000b-b764-49ae-84e5-10b8f8a7a2fa",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:21:00Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "c278b8ec-5bd3-56bd-a0a5-3f55a8bc40a5"
+      }
+    },
+    {
+      "id": "834d66cc-3471-4820-a67b-71fe19b88afc",
+      "projectId": "gameplay-sim",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:20:35Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    }
+  ]
+}

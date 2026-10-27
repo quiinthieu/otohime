@@ -1,0 +1,22 @@
+    # browser: runner Google Chrome 999.0.0.0 with the repo's playwright-core; nothing installed
+
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///work/lib/end.test.ts:336:16)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..11
+# tests 11
+# suites 0
+  ...
+1..2362
+# tests 2380
+# suites 2
+# pass 2374
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15877.317673

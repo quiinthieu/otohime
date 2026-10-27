@@ -1,0 +1,15 @@
+Plan/task/run: pm-270/t-1606/run-9065
+Branch and delivery target: main (origin/main)
+Rescued HEAD at start: 87c9863bc4a9d4a349dc64b5f1cf8547bc1f92c5
+Initial upstream: a688012e0c982c55cd461ac9d12e9c4c54a602ff
+Original swipe implementation: 0b349dc012c0591ded5f82d28d0cf3395b71567c
+Existing verification delivery: 3ae76a4dc84456cd8b7bebb74023eb7989eb3721
+Existing footer reader repair: 9bb1daea85c600788c8209819e5c4d69e08b3a46
+
+Keep the rescued production footer regressions, notebook clock fixture and historical evidence.
+No rescued change is dropped. New run evidence is added to the single unpushed delivery commit.
+Resolve its final immutable identity without a self-referential hash:
+git log -1 --format=%H -- projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/summary_run-9065.md
+
+The plan-manager summary supplies the actual successfully pushed git_sha.
+CI and deployed verification belong to plan-manager QA/acceptance after push.

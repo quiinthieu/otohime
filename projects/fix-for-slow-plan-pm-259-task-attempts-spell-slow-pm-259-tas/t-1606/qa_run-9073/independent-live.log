@@ -1,0 +1,19 @@
+{"base":"https://otohime.dev","browser":"154.0.8037.57","node":"v22.23.3","playwright":"1.64.0"}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+false !== true
+
+    at file:///data/build-worker/leases/afad9c86-6cbf-4cea-9303-c83f49cef7d9-65c35cbde8efccbb817d3d15c5be2b6b/work/otohime/projects/fix-for-slow-plan-pm-259-task-attempts-spell-slow-pm-259-tas/t-1606/qa_run-9073/independent-desk.mjs:44:14 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3

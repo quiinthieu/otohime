@@ -1,0 +1,22 @@
+{
+  "node": "v22.12.0",
+  "npm": "10.9.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "versions": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "playwright-core": "1.64.0"
+  },
+  "imports": {
+    "Next": "function",
+    "React": "function",
+    "ReactDOM": "function",
+    "Chrome": "function",
+    "GhostSession": "function",
+    "paintGhosts": "function",
+    "preferenceStore": "function"
+  },
+  "construction": "Actual production GhostSession, React adapter and canvas constructed by independent Chrome probe; compiled GET executed with real Next request context. No Cloudflare worker change or hosted adapter claim."
+}

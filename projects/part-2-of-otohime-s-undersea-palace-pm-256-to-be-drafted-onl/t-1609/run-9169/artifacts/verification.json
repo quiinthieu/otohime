@@ -1,0 +1,40 @@
+{
+  "preference": {
+    "tests": 19,
+    "fail": 0,
+    "skipped": 0,
+    "named": 19
+  },
+  "project": {
+    "tests": 2454,
+    "fail": 0,
+    "skipped": 0,
+    "named": 2436
+  },
+  "browser": {
+    "tests": 4,
+    "fail": 0,
+    "skipped": 0,
+    "named": 4
+  },
+  "required_assertion_names": [
+    "ghost preference parses only hidden and keeps the server snapshot suppressed",
+    "same-tab preference subscribers run synchronously, persist reloads and share one removable listener",
+    "cross-tab preference changes and clear synchronize; unrelated keys and session storage are ignored",
+    "blocked getters, absent storage and failed writes keep a usable in-memory choice",
+    "opt-out synchronously clears visuals and rejects already queued socket/frame/timer callbacks",
+    "suppression cancels retry and handshake deadline even when a scheduler delivers cancelled callbacks"
+  ],
+  "lint": {
+    "errors": 0,
+    "existing_warnings": 10
+  },
+  "production_build": {
+    "compiled": true,
+    "static_pages": 206
+  },
+  "negative_control": "The same ink-pixel assertion throws when the fixture suppresses actual context stroke/fill calls.",
+  "completeness": "Final TAP logs retained in full, zero skips; lint/build logs retained in full. Hosted workflow/deploy history not inspected in this stop-at-push SWE role; external delivery is inconclusive.",
+  "rebase_retry": 2,
+  "reverified_base": "f08f670eb8bd5c699463062c4d00f08c4d486cfa"
+}

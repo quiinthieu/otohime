@@ -1,0 +1,33 @@
+Starting embedded Postgres on 127.0.0.1:49555
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/92991a43-e9f7-40c4-952d-c4703a43c68f-fd8ceb07d13c4e5a185ca21226cde622/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:49581
+TAP version 13
+# {"viewport":{"width":1366,"height":768},"baseline":{"height":36,"gap":4,"left":203,"right":304.8125,"rootFont":16,"sceneTop":42,"sceneWidth":487.8125,"sceneHeight":290.796875,"footerHeight":1016.703125},"enlarged":{"height":43.1875,"gap":4,"left":203,"right":345.609375,"rootFont":16,"sceneTop":42,"sceneWidth":487.8125,"sceneHeight":290.796875,"footerHeight":1016.703125},"oldLayout":{"height":43.1875,"gap":-3.796875,"left":202,"right":344.609375,"rootFont":16,"sceneTop":42,"sceneWidth":487.8125,"sceneHeight":290.796875,"footerHeight":1016.703125},"scaled":{"height":36,"gap":9,"left":63,"right":170.40625,"rootFont":32,"sceneTop":82,"sceneWidth":610.828125,"sceneHeight":364.140625,"footerHeight":1632.421875},"browser":"156.0.8078.48"}
+# Subtest: footer Bottle clears the scene with enlarged text at 1366
+ok 1 - footer Bottle clears the scene with enlarged text at 1366
+  ---
+  duration_ms: 3909.446708
+  ...
+# {"viewport":{"width":390,"height":844},"baseline":{"height":36,"gap":4,"left":20,"right":121.8125,"rootFont":16,"sceneTop":42,"sceneWidth":350,"sceneHeight":208.640625,"footerHeight":1456.96875},"enlarged":{"height":43.1875,"gap":4,"left":20,"right":162.609375,"rootFont":16,"sceneTop":42,"sceneWidth":350,"sceneHeight":208.640625,"footerHeight":1456.96875},"oldLayout":{"height":43.1875,"gap":-3.796875,"left":19,"right":161.609375,"rootFont":16,"sceneTop":42,"sceneWidth":350,"sceneHeight":208.640625,"footerHeight":1456.96875},"scaled":{"height":36,"gap":9,"left":39,"right":146.40625,"rootFont":32,"sceneTop":82,"sceneWidth":310,"sceneHeight":184.796875,"footerHeight":2379.625},"browser":"156.0.8078.48"}
+# Subtest: footer Bottle clears the scene with enlarged text at 390
+ok 2 - footer Bottle clears the scene with enlarged text at 390
+  ---
+  duration_ms: 1314.832667
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6013.981291

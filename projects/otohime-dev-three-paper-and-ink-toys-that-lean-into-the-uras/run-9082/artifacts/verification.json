@@ -1,0 +1,82 @@
+{
+  "run_id": "run-9082",
+  "task_id": "t-1588",
+  "plan_id": "pm-269",
+  "items": [
+    {
+      "name": "repository unit suite",
+      "cmd": "npm test",
+      "tests": 2363,
+      "log": "unit-integrated.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass"
+    },
+    {
+      "name": "lint and type contracts",
+      "cmd": "npm run lint && npm run typecheck",
+      "warnings": 10,
+      "log": [
+        "lint-integrated.log",
+        "types-integrated.log"
+      ],
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass"
+    },
+    {
+      "name": "Bottle production-browser flow",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/bottle-ui.test.ts",
+      "tests": 11,
+      "log": "bottle-integrated.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass"
+    },
+    {
+      "name": "CI-mode isolated footer walk and Chromium probe",
+      "cmd": "node scripts/verify-bottle-footer.mjs",
+      "walk": 65,
+      "probe": 170,
+      "build": "uWjGRA5trKG7Ki9KQ9MHV",
+      "sha": "cfd9714ec9e6813e21085284443ceb46a96b5889",
+      "log": "footer-integrated.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass"
+    },
+    {
+      "name": "full serial E2E",
+      "cmd": "npm run test:e2e",
+      "tests": 176,
+      "pass": 175,
+      "skip": 1,
+      "skip_reason": "existing APPEARANCE_EVIDENCE optional check",
+      "build": "iE6hGDbA2BFa-IR__944o",
+      "scope": "before cfd9714 integration; identical runtime/application bytes and e2e sources",
+      "log": "full-e2e.log",
+      "cwd": ".",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass"
+    }
+  ],
+  "kame": {
+    "suite_pass": 8,
+    "focused_repetitions": 10,
+    "negative_control": "blur after resumed keydown",
+    "negative_control_exit": 1,
+    "negative_control_assertion": "swim !== pet"
+  },
+  "risk": "one unexplained React #418 hydration error on initial repetition 3; final 10/10 repetition and full suite preserve pageerror guards and pass",
+  "integration_deployed": "unproven",
+  "product_delivered": "unproven",
+  "local_execution": "demonstrated",
+  "ci": "owned by plan-manager after push; no pipeline watch",
+  "bottle_build": "28sV4sz7v3ZwyNpDGXygj",
+  "runtime_fingerprint": "abb50f0ea4dc4c5132f31a6415ca83dfe1f636e0e17cf50410ba285081406776"
+}

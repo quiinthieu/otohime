@@ -1,0 +1,174 @@
+{
+  "source_sha": "baec1f88e602e9ad50ebecb9827a476f939495af",
+  "files": [
+    {
+      "path": "package.json",
+      "sha256": "cc0c85cfdc4261781ddeea43ceaad9c743f6269e1f8a0fbbf5ecc849a96a501d",
+      "delivery_matches": true,
+      "prior_sha256": "cc0c85cfdc4261781ddeea43ceaad9c743f6269e1f8a0fbbf5ecc849a96a501d",
+      "same_as_prior": true
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "delivery_matches": true,
+      "prior_sha256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "same_as_prior": true
+    },
+    {
+      "path": "next.config.ts",
+      "sha256": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+      "delivery_matches": true,
+      "prior_sha256": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+      "same_as_prior": true
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "31902b54fba14db30d5a63026588796ddd27599ac76e6660e2c0b3d3ec69ba2d",
+      "delivery_matches": true,
+      "prior_sha256": "31902b54fba14db30d5a63026588796ddd27599ac76e6660e2c0b3d3ec69ba2d",
+      "same_as_prior": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+      "delivery_matches": true,
+      "prior_sha256": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+      "same_as_prior": true
+    },
+    {
+      "path": ".env.example",
+      "sha256": "908ab6e2d9a8446cf5aa869b11cb80ab59d66d3b693eea7bdc238b3c50c6e6be",
+      "delivery_matches": true,
+      "prior_sha256": "908ab6e2d9a8446cf5aa869b11cb80ab59d66d3b693eea7bdc238b3c50c6e6be",
+      "same_as_prior": true
+    },
+    {
+      "path": "content/now-playing.ts",
+      "sha256": "a0593164ef11e808ad3b8a7885038628ae1fa6233f7bd35034421a78e732f4b2",
+      "delivery_matches": true,
+      "prior_sha256": "a0593164ef11e808ad3b8a7885038628ae1fa6233f7bd35034421a78e732f4b2",
+      "same_as_prior": true
+    },
+    {
+      "path": "content/site.ts",
+      "sha256": "536ae680c226384efbdeb3cecbdfbf2a4ce74ab128e101312a8dd2e16b695b12",
+      "delivery_matches": true,
+      "prior_sha256": "536ae680c226384efbdeb3cecbdfbf2a4ce74ab128e101312a8dd2e16b695b12",
+      "same_as_prior": true
+    },
+    {
+      "path": "lib/now-playing.ts",
+      "sha256": "c4e6fe8a973d40e56466dcbe8f5ae63fb369661cefeb4b19039b74b5b7f23b4f",
+      "delivery_matches": true,
+      "prior_sha256": "c4e6fe8a973d40e56466dcbe8f5ae63fb369661cefeb4b19039b74b5b7f23b4f",
+      "same_as_prior": true
+    },
+    {
+      "path": "lib/now-playing-data.ts",
+      "sha256": "6d5fff0492f4f71b850b8f8ee020f691d8a29514174ff63d5117479db421d372",
+      "delivery_matches": true,
+      "prior_sha256": "6d5fff0492f4f71b850b8f8ee020f691d8a29514174ff63d5117479db421d372",
+      "same_as_prior": true
+    },
+    {
+      "path": "components/cassette.tsx",
+      "sha256": "0cc3b418681feb5d4dce5db112d667ad1f2c5faffa5be5d8a8b8925c7216d5d4",
+      "delivery_matches": true,
+      "prior_sha256": "0cc3b418681feb5d4dce5db112d667ad1f2c5faffa5be5d8a8b8925c7216d5d4",
+      "same_as_prior": true
+    },
+    {
+      "path": "app/api/now-playing/route.ts",
+      "sha256": "e2e58d2903692a885bf8950da4f72aef6046cbe7339172537d2c238ae88303ce",
+      "delivery_matches": true,
+      "prior_sha256": "e2e58d2903692a885bf8950da4f72aef6046cbe7339172537d2c238ae88303ce",
+      "same_as_prior": true
+    },
+    {
+      "path": "app/(site)/(app)/music/page.tsx",
+      "sha256": "a56b0e6a39b382a0424dca306a6e0a93aa47f84b817a9f2294c75bfae93cf5c9",
+      "delivery_matches": true,
+      "prior_sha256": "a56b0e6a39b382a0424dca306a6e0a93aa47f84b817a9f2294c75bfae93cf5c9",
+      "same_as_prior": true
+    },
+    {
+      "path": "app/(site)/globals.css",
+      "sha256": "b08a5d803ab8b0c235eb9f1e68139cc54afc672573e0467059a2efd10927c6c5",
+      "delivery_matches": true,
+      "prior_sha256": "b08a5d803ab8b0c235eb9f1e68139cc54afc672573e0467059a2efd10927c6c5",
+      "same_as_prior": true
+    },
+    {
+      "path": "lib/fixtures/listenbrainz.json",
+      "sha256": "f2785a4800e33a8bb51603adc17ffa8784d72f56971a6c9df7aeb5f4a2d2034b",
+      "delivery_matches": true,
+      "prior_sha256": "f2785a4800e33a8bb51603adc17ffa8784d72f56971a6c9df7aeb5f4a2d2034b",
+      "same_as_prior": true
+    },
+    {
+      "path": "scripts/walk-now-playing.sh",
+      "sha256": "bd416fbb60809f2130effd4422a5948fa7a449223df0862a15186f49675d4431",
+      "delivery_matches": true,
+      "prior_sha256": "bd416fbb60809f2130effd4422a5948fa7a449223df0862a15186f49675d4431",
+      "same_as_prior": true
+    },
+    {
+      "path": "scripts/probe-cassette.sh",
+      "sha256": "958736b6fd3bfb37a5dfa56a63343ce6013e60838b4dcc6d17917f48b556ce6e",
+      "delivery_matches": true,
+      "prior_sha256": "958736b6fd3bfb37a5dfa56a63343ce6013e60838b4dcc6d17917f48b556ce6e",
+      "same_as_prior": true
+    },
+    {
+      "path": "scripts/probe-cassette.mjs",
+      "sha256": "522c2a4baeeffdbae292a3b8e7573c7ea9398492b062d9917d1910fd079a1530",
+      "delivery_matches": true,
+      "prior_sha256": "522c2a4baeeffdbae292a3b8e7573c7ea9398492b062d9917d1910fd079a1530",
+      "same_as_prior": true
+    },
+    {
+      "path": "scripts/probe-motion.sh",
+      "sha256": "cda5ca4e95d260f99bc16ad55ef0a8931812b788b53d24906708e760754a4082",
+      "delivery_matches": true,
+      "prior_sha256": "cda5ca4e95d260f99bc16ad55ef0a8931812b788b53d24906708e760754a4082",
+      "same_as_prior": true
+    },
+    {
+      "path": "scripts/probe-motion.mjs",
+      "sha256": "1a7dc03f6cc65688417fa88229670a1e3f5bd11cabb984fcbf82508758aa0f19",
+      "delivery_matches": true,
+      "prior_sha256": "f4338f410d35be646cae10e288673bf27a1fc285cd5640c3220e4d684ef662cd",
+      "same_as_prior": false
+    },
+    {
+      "path": "scripts/probe-checks.mjs",
+      "sha256": "69b30726c9b85939bffde8abfad7ab3cf723301c5e24ade4fee4e9df5a951b71",
+      "delivery_matches": true,
+      "prior_sha256": null,
+      "same_as_prior": false
+    },
+    {
+      "path": "scripts/e2e.mjs",
+      "sha256": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+      "delivery_matches": true,
+      "prior_sha256": "c34edb6bcaa017a9d552f3762b40ff76bbd2f0956d50ef22422834651d350f96",
+      "same_as_prior": true
+    }
+  ],
+  "build_id": "6hno9Fq12KoykAMWjA99w",
+  "route_sha256": "26ffe1c3a588c8d80f019e86ca3aa202088d41a921beac4cbba096d3a0793130",
+  "assets": [
+    {
+      "area": ".next/server",
+      "count": 899,
+      "manifest_sha256": "155fc5e9e19a3f675916f0d07bf7498da972079ae1b9e50e9901ba27b0483e59"
+    },
+    {
+      "area": ".next/static",
+      "count": 96,
+      "manifest_sha256": "ab52b2ed0cbba739338d8dd43aa41ec991da404f9378549b3764f59efff6484d"
+    }
+  ],
+  "note": "Instrumented HTTP build uses a synthetic public build-SHA label; source file hashes identify this executable. No external model is used by the cassette."
+}

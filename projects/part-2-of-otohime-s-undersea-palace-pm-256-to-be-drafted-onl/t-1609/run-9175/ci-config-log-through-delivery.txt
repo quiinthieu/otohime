@@ -1,0 +1,31 @@
+commit f08f670eb8bd5c699463062c4d00f08c4d486cfa
+Author:     Otohime <quiinthieu@gmail.com>
+AuthorDate: Tue Oct 27 13:19:58 2026 +0700
+Commit:     Otohime <quiinthieu@gmail.com>
+CommitDate: Tue Oct 27 13:22:56 2026 +0700
+
+    pm-269/t-1648: Scope production inspection and certify Bottle gates
+
+commit d6221b79b9c796d7c85c975bd122c7bed6d351e1
+Author:     Otohime <quiinthieu@gmail.com>
+AuthorDate: Tue Oct 27 12:20:17 2026 +0700
+Commit:     Otohime <quiinthieu@gmail.com>
+CommitDate: Tue Oct 27 12:20:17 2026 +0700
+
+    pm-269/t-1647: Preserve CI probe failures and verify rendered headings
+
+commit f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc
+Author:     Otohime <quiinthieu@gmail.com>
+AuthorDate: Tue Oct 27 11:07:11 2026 +0700
+Commit:     Otohime <quiinthieu@gmail.com>
+CommitDate: Tue Oct 27 11:08:51 2026 +0700
+
+    pm-259/t-1624: Expose browser gate crash diagnostics
+
+commit 7735e74f801c5fab18abf1f944fec5b464ee11d1
+Author:     Otohime <quiinthieu@gmail.com>
+AuthorDate: Tue Oct 27 11:07:05 2026 +0700
+Commit:     Otohime <quiinthieu@gmail.com>
+CommitDate: Tue Oct 27 11:07:05 2026 +0700
+
+    pm-259/t-1626: Fail closed on deployment diagnostics and identity

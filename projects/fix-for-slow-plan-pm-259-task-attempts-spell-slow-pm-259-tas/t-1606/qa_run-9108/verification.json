@@ -1,0 +1,153 @@
+{
+  "at": "2026-10-27T00:45:26.199568+00:00",
+  "delivery_sha": "c6d09f0067cb3f3ea77a75b723edc72918013c24",
+  "tested_head": "51f57816b949aeac95677fad249938bb826ee53e",
+  "source_fingerprint": "9671b952549b1c6bc2cd4e54775a8855ecb375c14b6f0e7619ba3402732c4c68",
+  "verification": [
+    {
+      "name": "trace helper unit test",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/e2e-gesture-trace.test.ts",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "counts": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 77.730541,
+        "log": "trace.log",
+        "log_sha256": "5b57a62fd8962b407e94768b30f30881bf89c5c3e175602bd5c4951fa81e30c3"
+      }
+    },
+    {
+      "name": "lint and types",
+      "cmd": "npm run lint && npm run typecheck",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "logs": [
+        "lint.log",
+        "types.log",
+        "lint-final.log"
+      ]
+    },
+    {
+      "name": "unit tests",
+      "cmd": "npm test",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "counts": {
+        "tests": 2374,
+        "pass": 2374,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 19374.03865,
+        "log": "unit.log",
+        "log_sha256": "981b37ba4e8357aced26adf23b596ca9ac1507516d05699d040b36d93e0e3036"
+      }
+    },
+    {
+      "name": "e2e x3",
+      "cmd": "for i in 1 2 3; do bash scripts/e2e-local.sh || exit 1; done",
+      "expect": "exit0",
+      "exit_code": 0,
+      "status": "pass",
+      "repeats": [
+        {
+          "tests": 180,
+          "pass": 179,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1,
+          "todo": 0,
+          "duration_ms": 433001.070942,
+          "log": "e2e-1.log",
+          "log_sha256": "1a5c8ccda2e2aae0c0c6d98dac7d2d8cda3e66d02ab40b766cef2aa4179e72f6"
+        },
+        {
+          "tests": 180,
+          "pass": 179,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1,
+          "todo": 0,
+          "duration_ms": 390080.593611,
+          "log": "e2e-2.log",
+          "log_sha256": "48075a2210428bf34abb09148c862ed10dfb2f98c1c9fbc35796df75e5ad643e"
+        },
+        {
+          "tests": 180,
+          "pass": 179,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1,
+          "todo": 0,
+          "duration_ms": 388818.214052,
+          "log": "e2e-3.log",
+          "log_sha256": "8dbda8e5a0e275e480bb9ebaaf4f8ff80aa425ef3474b8fa20f5fa3e261849b3"
+        }
+      ]
+    }
+  ],
+  "builds": [
+    {
+      "id": "xmMJs4hGIVtW_Wy5oQKkg",
+      "sha256": "5d9e7370b3e6dcea7b484cab3e8cdd2923e6c0f1d36c4e55ed15aca1c46ed511"
+    },
+    {
+      "id": "rm2p67z0foXoYIiufa_EE",
+      "sha256": "608e80b83dfb06352f3a9b97ce782849fa26b9655d3c5fff1a561f85965f587e"
+    },
+    {
+      "id": "hifAaZJXCYfuy9o0cYR1i",
+      "sha256": "04b907869116ca5952fd30e18143c414aa2f7b129f40bc2ae7a3ae66abfeac14"
+    }
+  ],
+  "footer_local": {
+    "pass": 171,
+    "fail": 0,
+    "log": "footer-local.log"
+  },
+  "negative_controls": [
+    {
+      "name": "desk-trace",
+      "exit_code": 1,
+      "expected_failure": "music is dragging after the first move past 6px",
+      "source": "e2e/desk.test.ts",
+      "only_mutation": {
+        "old": "await swipe(tablet, \"music\", 120, 0, { drags: false });",
+        "new": "await swipe(tablet, \"music\", 120, 0, { drags: true });"
+      },
+      "base_url": "https://otohime.dev",
+      "runtime": "real locked Chrome/Playwright; deliberate test mutation"
+    },
+    {
+      "name": "clock-host-delay",
+      "exit_code": 1,
+      "expected_failure": "Missing expected rejection",
+      "source": "e2e/kame.test.ts",
+      "only_mutation": {
+        "old": "page.waitForFunction((started) => performance.now() - started >= 50, started, { timeout: 2_000 })",
+        "new": "page.waitForTimeout(50)"
+      },
+      "base_url": "https://otohime.dev",
+      "runtime": "real locked Chrome/Playwright; deliberate test mutation"
+    }
+  ],
+  "child_control": {
+    "real": true,
+    "producer": "actual Node children, callback-flushed",
+    "copied_test_sha256": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+    "mutated_cap": 2000000,
+    "negative_exit": 1,
+    "negative_assertion": "output over the bound is cut to the bound: 1200000 != 1000000",
+    "original_cap": 1000000,
+    "positive_exit": 0
+  }
+}

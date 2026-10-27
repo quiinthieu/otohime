@@ -1,0 +1,40 @@
+ // embedded-postgres package, no docker), the migrations, a production build and `next start`, on free ports.
+ // The server, the database and its files are removed on exit, however it ends.
+-//   SKIP_BUILD  1 reuses the existing .next build
++// Fresh builds discard .next first: a lease's stale Turbopack font import map can break an otherwise unchanged build.
++//   SKIP_BUILD  1 reuses the existing .next build and leaves its output/cache intact
+ // The test files run one at a time: several count animation frames (the desk's leaves, the Ink Press's and Ryugu-jo's
+ // WebGL loops), and files run side by side starve each other's browsers of them (the leaves turned through 6 poses
+ // and the sea drew 7 to 10 frames with eleven files at once), so a correct page fails its frame floor. A later
+@@ -141,6 +142,7 @@
+   };
+
+   if (process.env.SKIP_BUILD !== "1") {
++    rmSync(path.join(ROOT, ".next"), { recursive: true, force: true });
+     console.log("Building");
+     if ((await run("npm", ["run", "build"], env)) !== 0) return 1;
+   }
+diff --git a/scripts/verify-bottle-contracts.mjs b/scripts/verify-bottle-contracts.mjs
+index e5b6facadd98c8b8b56b6d3c32336e4457b2a54c..c6a3c4b0e21f703a6b4831457a783dbe92338fa2
+--- a/scripts/verify-bottle-contracts.mjs
++++ b/scripts/verify-bottle-contracts.mjs
+@@ -44,6 +44,7 @@
+   { id: "layout", cmd: `node ${flags} --test lib/bottle-footer-layout.test.ts lib/bottles.test.ts`, required: layoutNames },
+   { ...sharedGate("unit"), required: [
+     ...sharedGate("unit").required,
++    "isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures",
+     ...layoutNames,
+     ...["layout", "unit", "browser", "footer"].map((id) => `Bottle ${id} receipt requires every named passing test and nonzero unskipped TAP`),
+     "Bottle repository receipt requires layout, picker and every verifier regression",
+
+tokens used
+167,571
+Fixed stale Next build output blocking Bottle verification.
+
+Pushed `main`: `0ca7e9a63661cab411f24a8e0640623eb9cdce39`.
+
+All required local gates passed after rebase, including 2,501 repository tests and both browser gates. Summary submitted and `commits.txt` saved.
+
+Hosted CI and deployed QA remain unverified, owned by plan-manager/QA.
+---
+Command exited with code: 0

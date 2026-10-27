@@ -1,0 +1,34 @@
+{
+  "delivery": "ebbb06d09e6030f6a56b323247e879efdb76fcb6",
+  "files": {
+    "app/(ryugu)/ryugu/page.tsx": "595fa85e3bf3f4ea6763201039a1509a13c6d7a77e4b9f2045c8b340da7bfb15",
+    "app/(site)/(home)/page.tsx": "81c1cd396a3aae88bdf9efcd174a2289643667bfd5ed59564f37748de19aa98b",
+    "app/api/ghosts/route.ts": "f9309594cd32caaa094e25bba1adb1e7e5869127429924116d4c2cd18504026d",
+    "ghosts/canvas.tsx": "48e1abd0b4e60b146fa07ffb3ff781335e40a6641ad13bea59031e0ad9c00781",
+    "ghosts/client.ts": "18b19bb094c91fd776a41ed7999e42343f85f08750495a250a524862238cd804",
+    "ghosts/config.ts": "5abc5d9c392c7677fba3f9c93eddbe8cfa1f3a51fcd443f7a47992707343b09c",
+    "ghosts/loader.tsx": "44039606e25ffff9427baba1fba79cc88c34d3862552d0f38c93aba4a74aae0d",
+    "ghosts/protocol.ts": "d51891a13a41c804e67903408e0db555e94ae3435a6cca6229cb33e928bc9278",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "cc0c85cfdc4261781ddeea43ceaad9c743f6269e1f8a0fbbf5ecc849a96a501d",
+    "tsconfig.json": "31902b54fba14db30d5a63026588796ddd27599ac76e6660e2c0b3d3ec69ba2d"
+  },
+  "fingerprint": "93c27bf76da4d48eb0838a2fbc80884c2c595c6fc98c846225de4174f0657950",
+  "method": "sha256 over sorted filename,NUL,file bytes,NUL",
+  "node": "v22.23.3",
+  "buildId": "yOIaHIx7bJjmqEMhtbxiW",
+  "buildAssets": {
+    ".next/build-manifest.json": "a0cd920a6eb9090d44ae0cd9ffc008b1c2e87dcb33e43b71790a2b41e1938e82",
+    ".next/server/app-paths-manifest.json": "a766496cb41139e08ad6d975a9c0993469ef5e62f07998118797b14eb18394bc",
+    ".next/server/app/api/ghosts/route.js": "d3281d5583339e07125c01fe4b2c72508b24a3d7e26e67e1172dd0f400ee78db",
+    ".next/static/chunks/2_8qfwpjskf4u.js": "3714bdcab397e52cd263037f13ce0f8bbaeb15960b406ac4742acf986fbfcd6f"
+  },
+  "runtimePackages": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "playwright-core": "1.64.0"
+  },
+  "runtimeConfig": "Configured browser probe uses the endpoint in browser-results.json; disabled probe uses empty GHOSTS_ENDPOINT. Both use the same production build, with public local auth fixture only. Build metadata SHA is dev; git source fingerprint identifies ebbb06d."
+}

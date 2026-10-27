@@ -1,0 +1,113 @@
+{
+  "total": 7089,
+  "limit": 10,
+  "offset": 0,
+  "tasks": [
+    {
+      "id": "c24f9b8a-c27f-4850-bdc4-899bf1022587",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:41:22Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "plan_id": "pm-platform",
+        "run_id": "can-462"
+      }
+    },
+    {
+      "id": "065b41a0-5f64-477b-9186-f1ab91f9eada",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:41:17Z",
+      "params": {
+        "plan_id": "pm-platform",
+        "run_id": "harvest-23d89296a2882687"
+      }
+    },
+    {
+      "id": "ee99b6fc-ddd2-4844-b883-e7741dc9d03d",
+      "projectId": "linego",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:40:05Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    },
+    {
+      "id": "1214aca8-bacc-455b-a632-01417935989d",
+      "projectId": "linego",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:40:05Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    },
+    {
+      "id": "695b10ef-0cd1-4900-840d-09e9d761baa6",
+      "projectId": "maintenance",
+      "taskType": "maintenance_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:39:29Z",
+      "params": {}
+    },
+    {
+      "id": "90b5551f-8342-40f7-b204-0c620c185d83",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:38:48Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "git_sha": "a958913",
+        "plan_id": "pm-257",
+        "run_id": "run-9126"
+      }
+    },
+    {
+      "id": "7a7bb60d-905c-4c1a-857f-17302a794223",
+      "projectId": "linego",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:35:06Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    },
+    {
+      "id": "05e9eb92-9e2e-4e46-8fbb-0e81acc78540",
+      "projectId": "linego",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:35:06Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    },
+    {
+      "id": "11e7de86-e55c-4193-8acd-ae0deada4581",
+      "projectId": "linego",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:30:06Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    },
+    {
+      "id": "ee9ff1fb-32f4-4cd0-9596-bcdf0604c171",
+      "projectId": "linego",
+      "taskType": "build_task",
+      "status": "COMPLETED",
+      "createdAt": "2026-10-27T02:30:06Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {}
+    }
+  ]
+}

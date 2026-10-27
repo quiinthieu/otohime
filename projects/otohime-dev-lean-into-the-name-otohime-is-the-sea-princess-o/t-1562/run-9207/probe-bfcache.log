@@ -1,0 +1,20 @@
+1 button on: playing
+2 back to the palace: /ryugu pageshow persisted=false (fresh load: inconclusive for bfcache)
+3 restored status: waiting, contexts made on return: 0
+4 a key press plays again: playing /ryugu created, /ryugu state:running
+5 the restored button switches it off: stored off
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Chrome did not restore the page from the bfcache
+    at file:///Users/avietidol/Library/Application%20Support/build-worker/leases/d9c16d3e-c004-4b9b-8bde-05daa23d50a5-e1f403e313c5a0d69947fcb3078bef96/work/otohime/projects/otohime-dev-lean-into-the-name-otohime-is-the-sea-princess-o/t-1562/run-9207/probe-bfcache.mjs:61:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}
+
+Node.js v22.12.0
+exit=1

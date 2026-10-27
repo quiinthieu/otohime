@@ -1,0 +1,154 @@
+{
+  "observed_at": "2026-10-27T07:36:43.043348+00:00",
+  "meta_sha": "4c64080b37d734c9473201cf00ca86e7d3c1100d",
+  "discovered_count": 24,
+  "scan_limit": 40,
+  "complete_for_discovered": true,
+  "assets": [
+    {
+      "url": "https://otohime.dev/_next/static/chunks/00ukbhwb761h6.js",
+      "status": 200,
+      "bytes": 6307,
+      "sha256": "89e25da089e3fbe187f81f6c52bbd5e53de7d3dd2ff8c58488d4fdd091b25814"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0571t6nqzk93o.js",
+      "status": 200,
+      "bytes": 15300,
+      "sha256": "5eab23c77649a1380c36ee071d6129bf6178e54a023737c1b98b841937f232dd"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0720thclvk_mw.js",
+      "status": 200,
+      "bytes": 8664,
+      "sha256": "508ce67b29f0f169fb354c8162fd0e9ac0006e24fccabf77bca75c5aa4854bc8"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0cz1d0mv5g_q7.js",
+      "status": 200,
+      "bytes": 112594,
+      "sha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/0om590q-tq0l9.js",
+      "status": 200,
+      "bytes": 13492,
+      "sha256": "469b414134e038936d5dea6660fb6b6c2e2ef033d685c1ad30b07803323c7ba3"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/1icj9jl_jb0ar.js",
+      "status": 200,
+      "bytes": 36933,
+      "sha256": "e364901992cb944eea9532eac43b7588eef61301f286006ed9876a087d7a83ec"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/1jjnj_8hqrg8d.js",
+      "status": 200,
+      "bytes": 37712,
+      "sha256": "8aff3b989749f1e6dd129640839bf786b2b36a78783e9b4a6c41e423b74a46f9"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/1s37vwjm584j-.js",
+      "status": 200,
+      "bytes": 229627,
+      "sha256": "8fad0bc9f7b40a5b079b47f4e04c98c392e486bebed240b2517b1ca243b240fe"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/1yd26d3z1_c10.js",
+      "status": 200,
+      "bytes": 415,
+      "sha256": "d8c61c483b75736d8c426b140f2c1a494079464291f9ef3607c5724de4563431"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2co8361l50-8i.css",
+      "status": 200,
+      "bytes": 59208,
+      "sha256": "4c10ff2d1925a599ee2f06c13ecf4ed80897bdfc7b1cd48266abfab7dd048452"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2hoi73vy1wqpo.js",
+      "status": 200,
+      "bytes": 27819,
+      "sha256": "a070e193cc6aa2af93f87b93c668ae7fa6039f396007a82104ba7b228d7850ac"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2k5el_cftfe_f.js",
+      "status": 200,
+      "bytes": 13918,
+      "sha256": "fc51dbcf932d0ececaff88454b7128d3a52467dc5011491beede70c5ab2051d4"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2kymltn7pgfpi.css",
+      "status": 200,
+      "bytes": 4962,
+      "sha256": "77257eff4ce03111f16490f2502d328bc7132539b434324e739b716c71d4da92"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2pkq2dk9wd7ir.js",
+      "status": 200,
+      "bytes": 502824,
+      "sha256": "06377fdb9589610f3de81ce38a87a019f42e9efa80ddacab7548f2b75e6e7fd2"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2v0_rgegl8o8b.css",
+      "status": 200,
+      "bytes": 873,
+      "sha256": "968c1565fa5def3270998a8c1f9c0ebbf54697d3b29b8754a602c3f059b0fdbd"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/2y_wjjnipg5nm.js",
+      "status": 200,
+      "bytes": 31177,
+      "sha256": "9ecd5659c3ba5b7b0ac3a02250a2a43b2ae3cf9b70bdfc3b7904dad5aa006ea5"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/30pqe4rv77bcv.css",
+      "status": 200,
+      "bytes": 3214,
+      "sha256": "c6a77cca8569ff581792b95c4e63ad512f3ff06428434e6254ef56c190cdb6cd"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/31_6w8v5d7luy.css",
+      "status": 200,
+      "bytes": 1407,
+      "sha256": "c602b374a4ab0170b9f20d3ad48b13fc51a7631515f2b2dbc2da9c3ac2f07b02"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3_ovxg0a_m274.js",
+      "status": 200,
+      "bytes": 14089,
+      "sha256": "93b42979da6c9bd05e5787916ac272f34a59879b2971543891328937f63362e1"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3dz7s82h34ptz.js",
+      "status": 200,
+      "bytes": 131399,
+      "sha256": "e49b20ed5f11e1601164f2dbc2a3f55c096eb41cdb233ffa42406751b08d3daa"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3n3_22x291uq1.js",
+      "status": 200,
+      "bytes": 31155,
+      "sha256": "aec824a693edf491c210fbbb840388dfab00f155cad556a9f275b2626d76d818"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/3y2jzd1z59cqx.css",
+      "status": 200,
+      "bytes": 1874,
+      "sha256": "143ef0514c726cf6c858cbc234c6d127eff42c3d26be7d47e10e0a7c77c64c8b"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/450n3zod0ec4j.js",
+      "status": 200,
+      "bytes": 33152,
+      "sha256": "601e0672a30707326aca3052b59e032933fed77f7041b9da36d4b88dde025bd7"
+    },
+    {
+      "url": "https://otohime.dev/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+      "status": 200,
+      "bytes": 11255,
+      "sha256": "b5f9b5199b99ab6c141f4540f0b7d0fe803c4ecf6956849ecb6e59d3d439272e"
+    }
+  ],
+  "boundary": "only JS/CSS referenced by initial home HTML; lazy route assets and vendor camera models are not covered"
+}

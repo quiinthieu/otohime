@@ -1,0 +1,27 @@
+{
+  "algorithm": "sorted path + NUL + bytes + NUL, SHA256",
+  "sha256": "3d11a6efcacbf1254ef0f0b27b44e1d5db3d9ef82c87c54e2a4163202e67e3f5",
+  "files": {
+    ".github/workflows/ci.yml": "0887b2665934bf51631692f4022734c8acb108ea3d535de0b1bbfaf6be32afe7",
+    "components/peep-box/active.tsx": "2bcee3062564e51e87ea2ca3f365d90a3bbc31b3a53a307d990bf4b988dd8b5e",
+    "components/peep-box/camera.ts": "d2a8eea0e71aeac20fd4613ba3a3ade127c9506ecaf812f4a0333ca0f3f2bbcb",
+    "components/peep-box/head-worker.js": "9672259c6d2200c70497517c441d721ec0ea28a2204748c8b3b9054982f89735",
+    "components/peep-box/loader.tsx": "d4917ca7acdff500c25dd6ffb6773f66295e7d484d33af5e855b97b57d660f08",
+    "components/peep-box/peep-box.css": "c011f19dbf96d651802a83d45a63821b15352b12b8482244ed610043a8df31d0",
+    "components/peep-box/scene.tsx": "0cced0aa544647bfedf08183caf02c09c5cd5c93c69a901305ecc2fb09040869",
+    "content/peep-box-assets.json": "394a48c908ab02b5034413604fc4e2a6fa623fb1dc500de009a3692078a64fb6",
+    "content/peep-box-test-assets.json": "a3a6bb98eaef071b6c5f756e76db3b2291a735f3767716f33f985fc08ce585a5",
+    "e2e/kame.test.ts": "cd15c66923a4f93c22f53044b96f5338322b04fccb58b9ef58868b40bc0c7e19",
+    "lib/head-tracker.ts": "46d7c1b679a0b78827558c8bd96ff0d342c7a98aca2aa2bf74ab1fdd9e629a99",
+    "lib/peep-box.ts": "4e6663734b5a3b2097e49d6f287c36c3ba61133c7eea3ab2764eb3c7749062d7",
+    "next.config.ts": "e2ab6eeb96755f02796a76a876f4d617db0d9d4b9cf8124156cd7e08814ab83e",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "cc0c85cfdc4261781ddeea43ceaad9c743f6269e1f8a0fbbf5ecc849a96a501d",
+    "scripts/ci-workflow.test.mjs": "f4e67e580c6842e6d28d390d0d62fe753fa7b25a8f5e244162baa6004c7ff242",
+    "scripts/vendor-peep-box.mjs": "0dd1538f319dab0456ee0d0b85d006b1447b837102c5ab0e8a771a412e0a2075",
+    "scripts/verify-peep-box-camera.mjs": "d7cbfa3274857ef591cfa29a3caa68b62300a9ea3332dc638ff66b03f54f605b"
+  },
+  "unchangedCameraInputCount": 15,
+  "priorFingerprint": "8b18d0ce3a7c09684064a239c2f229ceed571b2075962b82f0248516dae2d6f5",
+  "node": "v22.23.3"
+}

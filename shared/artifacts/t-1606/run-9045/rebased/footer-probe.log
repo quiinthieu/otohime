@@ -1,0 +1,176 @@
+# browser: runner Google Chrome 155.0.8059.86  with the repo's playwright-core; nothing installed
+# browser: 155.0.8059.86 via playwright-core, channel chrome
+# base_url: http://localhost:4083
+ok - route /: HTTP 200
+ok - route /: build-sha matches (dev)
+ok - route /: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last
+ok - route /: 6 canonical CONSOLE_MENU links and 4 site.lines links match source
+ok - route /work: HTTP 200
+ok - route /work: build-sha matches (dev)
+ok - route /work: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last
+ok - route /work: 6 canonical CONSOLE_MENU links and 4 site.lines links match source
+ok - route /play: HTTP 200
+ok - route /play: build-sha matches (dev)
+ok - route /play: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last
+ok - route /play: 6 canonical CONSOLE_MENU links and 4 site.lines links match source
+ok - route /notes: HTTP 200
+ok - route /notes: build-sha matches (dev)
+ok - route /notes: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last
+ok - route /notes: 6 canonical CONSOLE_MENU links and 4 site.lines links match source
+ok - route /music: HTTP 200
+ok - route /music: build-sha matches (dev)
+ok - route /music: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last
+ok - route /music: 6 canonical CONSOLE_MENU links and 4 site.lines links match source
+ok - route /projects: HTTP 200
+ok - route /projects: build-sha matches (dev)
+ok - route /projects: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last
+ok - route /projects: 6 canonical CONSOLE_MENU links and 4 site.lines links match source
+ok - route /sketches: HTTP 200
+ok - route /sketches: build-sha matches (dev)
+ok - route /sketches: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last
+ok - route /sketches: 6 canonical CONSOLE_MENU links and 4 site.lines links match source
+ok - isolated /sign-in: HTTP 200
+ok - isolated /sign-in: zero footer or save-point nodes in DOM
+ok - isolated /forgot-password: HTTP 200
+ok - isolated /forgot-password: zero footer or save-point nodes in DOM
+ok - isolated /does-not-exist: HTTP 404
+ok - isolated /does-not-exist: zero footer or save-point nodes in DOM
+ok - project /shore: HTTP 200
+ok - project /shore: build-sha matches
+ok - project /shore: isolated from site EndFooter
+ok - project /capsule: HTTP 200
+ok - project /capsule: build-sha matches
+ok - project /capsule: isolated from site EndFooter
+ok - project /orrery: HTTP 200
+ok - project /orrery: build-sha matches
+ok - project /orrery: isolated from site EndFooter
+ok - project /elements: HTTP 200
+ok - project /elements: build-sha matches
+ok - project /elements: isolated from site EndFooter
+ok - project /vinyl: HTTP 200
+ok - project /vinyl: build-sha matches
+ok - project /vinyl: isolated from site EndFooter
+ok - project /rotor: HTTP 200
+ok - project /rotor: build-sha matches
+ok - project /rotor: isolated from site EndFooter
+ok - project /planisphere: HTTP 200
+ok - project /planisphere: build-sha matches
+ok - project /planisphere: isolated from site EndFooter
+ok - project /barometer: HTTP 200
+ok - project /barometer: build-sha matches
+ok - project /barometer: isolated from site EndFooter
+ok - project /articles: HTTP 200
+ok - project /articles: build-sha matches
+ok - project /articles: isolated from site EndFooter
+ok - project /structures: HTTP 200
+ok - project /structures: build-sha matches
+ok - project /structures: isolated from site EndFooter
+ok - project /design-system: HTTP 200
+ok - project /design-system: build-sha matches
+ok - project /design-system: isolated from site EndFooter
+ok - 1366x768 desktop /: no horizontal overflow and footer sits below main
+ok - 1366x768 desktop /: stage/copy grid, link columns, and text bounds are unclipped
+ok - 1366x768 desktop /: customization disclosure state matches viewport
+ok - 1366x768 desktop /work: no horizontal overflow and footer sits below main
+ok - 1366x768 desktop /work: stage/copy grid, link columns, and text bounds are unclipped
+ok - 1366x768 desktop /work: customization disclosure state matches viewport
+ok - 1366x768 desktop /music: no horizontal overflow and footer sits below main
+ok - 1366x768 desktop /music: stage/copy grid, link columns, and text bounds are unclipped
+ok - 1366x768 desktop /music: customization disclosure state matches viewport
+ok - 1366x768 desktop /music: television and its >=200x200 clear area stay unobscured above footer
+ok - 1366x768 desktop /projects: no horizontal overflow and footer sits below main
+ok - 1366x768 desktop /projects: stage/copy grid, link columns, and text bounds are unclipped
+ok - 1366x768 desktop /projects: customization disclosure state matches viewport
+ok - 768x1024 tablet /: no horizontal overflow and footer sits below main
+ok - 768x1024 tablet /: stage/copy grid, link columns, and text bounds are unclipped
+ok - 768x1024 tablet /: customization disclosure state matches viewport
+ok - 768x1024 tablet /work: no horizontal overflow and footer sits below main
+ok - 768x1024 tablet /work: stage/copy grid, link columns, and text bounds are unclipped
+ok - 768x1024 tablet /work: customization disclosure state matches viewport
+ok - 768x1024 tablet /music: no horizontal overflow and footer sits below main
+ok - 768x1024 tablet /music: stage/copy grid, link columns, and text bounds are unclipped
+ok - 768x1024 tablet /music: customization disclosure state matches viewport
+ok - 768x1024 tablet /music: television and its >=200x200 clear area stay unobscured above footer
+ok - 768x1024 tablet /projects: no horizontal overflow and footer sits below main
+ok - 768x1024 tablet /projects: stage/copy grid, link columns, and text bounds are unclipped
+ok - 768x1024 tablet /projects: customization disclosure state matches viewport
+ok - 390x844 touch mobile /: no horizontal overflow and footer sits below main
+ok - 390x844 touch mobile /: stage/copy grid, link columns, and text bounds are unclipped
+ok - 390x844 touch mobile /: customization disclosure state matches viewport
+ok - 390x844 touch mobile /work: no horizontal overflow and footer sits below main
+ok - 390x844 touch mobile /work: stage/copy grid, link columns, and text bounds are unclipped
+ok - 390x844 touch mobile /work: customization disclosure state matches viewport
+ok - 390x844 touch mobile /music: no horizontal overflow and footer sits below main
+ok - 390x844 touch mobile /music: stage/copy grid, link columns, and text bounds are unclipped
+ok - 390x844 touch mobile /music: customization disclosure state matches viewport
+ok - 390x844 touch mobile /music: television and its >=200x200 clear area stay unobscured above footer
+ok - 390x844 touch mobile /projects: no horizontal overflow and footer sits below main
+ok - 390x844 touch mobile /projects: stage/copy grid, link columns, and text bounds are unclipped
+ok - 390x844 touch mobile /projects: customization disclosure state matches viewport
+ok - 1366x768 desktop layout stability: footer starts offscreen before entry on /projects
+ok - 1366x768 desktop layout stability: reserved footer/stage/canvas/readout/badge geometry shifts <= 1 px across entry, reveal, poke, unlock and persisted restore
+ok - 390x844 touch mobile layout stability: footer starts offscreen before entry on /projects
+ok - 390x844 touch mobile layout stability: reserved footer/stage/canvas/readout/badge geometry shifts <= 1 px across entry, reveal, poke, unlock and persisted restore
+ok - 1366x768 desktop LCD bounds: all 13 displayed states fit inside the 64-unit LCD screen in SVG and client coords
+ok - 1366x768 desktop LCD states: 10th poke shows STOP/POKING, 11th resumes cycle, and unlock shows REACHED/THE END with full HTML readout
+ok - 768x1024 tablet LCD bounds: all 13 displayed states fit inside the 64-unit LCD screen in SVG and client coords
+ok - 768x1024 tablet LCD states: 10th poke shows STOP/POKING, 11th resumes cycle, and unlock shows REACHED/THE END with full HTML readout
+ok - 390x844 touch mobile LCD bounds: all 13 displayed states fit inside the 64-unit LCD screen in SVG and client coords
+ok - 390x844 touch mobile LCD states: 10th poke shows STOP/POKING, 11th resumes cycle, and unlock shows REACHED/THE END with full HTML readout
+ok - theme light: WCAG contrast passes for heading/links (13.89:1), muted copy (4.88:1), LCD (11.29:1) and stars (13.89:1)
+ok - theme dark: WCAG contrast passes for heading/links (13.59:1), muted copy (6.42:1), LCD (11.29:1) and stars (13.59:1)
+ok - customization swatch yellow: updates stage --fig (#f4b829) and console fill (rgb(244, 184, 41)) without mutating main machine
+ok - customization swatch coral: updates stage --fig (#ef6a4c) and console fill (rgb(239, 106, 76)) without mutating main machine
+ok - customization swatch mint: updates stage --fig (#93d3b0) and console fill (rgb(147, 211, 176)) without mutating main machine
+ok - customization swatch blue: updates stage --fig (#76a0e2) and console fill (rgb(118, 160, 226)) without mutating main machine
+ok - customization swatch pink: updates stage --fig (#f3a6bb) and console fill (rgb(243, 166, 187)) without mutating main machine
+ok - customization wobble: default displacement scale is 3.5 on both Inked SVG filters
+ok - customization wobble: setting range to 0 updates both feDisplacementMap scales
+ok - customization wobble: setting range to 6.4 updates both feDisplacementMap scales
+ok - 390x844 mobile disclosure: Enter on 'Customize scene' summary opens the panel and exposes wobble/swatches
+ok - entrance & offscreen pause: before scrolling to footer on /projects, data-seen and data-active are unset and ambient loops are paused
+ok - entrance: scrolling footer into view sets data-seen=true, data-active=true, runs entrance once, and starts ambient loops
+ok - efficiency: ambient animated layers, eyes and LCD lines have no SVG/CSS filter ancestor
+ok - efficiency: zero rAF callbacks and zero JS interval ticks run while the visible footer is idle
+ok - offscreen pause: scrolling back to top keeps data-seen=true, removes data-active, and pauses ambient loops
+ok - entrance: scrolling back into view resumes data-active without replaying entrance animations
+ok - document-hidden pause: hiding the document pauses ambient loops and resets pupils to (0, 0)
+ok - document-hidden pause: partial Konami progress was cleared on hide and remaining keys do not unlock
+ok - reduced motion (initial): scene is still, data-active is unset, eyes stay at (0, 0), and all CSS animations are <= 1 ms or finished
+ok - reduced motion (initial): poking advances LCD immediately and settles press without delay
+ok - reduced motion (mid-press): press starts busy with aria-pressed=true and offset desktop eyes
+ok - reduced motion (mid-press): toggling prefers-reduced-motion settles active press and resets eyes immediately
+ok - desktop eyes: follow pointer within |x| <= 2.2 and |y| <= 1.8, schedule at most 1 pending rAF, and reset on leave
+ok - rAF negative control: a scroll during pointer work overlaps Kame's edge frame with the eyes' and the count sees 2
+ok - mascot desktop activations: click, Enter and Space each advance the console cue and settle
+ok - 390x844 touch mobile: tap activates mascot, eyes stay at (0, 0), and clouds/packets are suppressed below 40rem
+ok - Konami exclusion: typing sequence while footer is offscreen does not unlock
+ok - Konami exclusion: typing sequence in input, textarea, select or contenteditable descendant does not unlock
+ok - Konami exclusion: modifier shortcuts and repeated keydown events do not unlock
+ok - Konami exclusion: wrong key sequence resets progress and does not unlock
+ok - Konami achievement: unlocks 'Reached the end', updates LCD/readout/badge, stores end:achievement=1, preserves key defaults and stays on /projects
+ok - badge negative control: a badge held at opacity 0 fails the bounded visibility wait, then settles once released
+ok - Konami persistence: reloading restores the unlocked badge and LCD state without hydration error
+ok - blocked localStorage: Konami unlocks ephemerally without throwing a page or console error
+ok - navigation / -> /work: completes with exactly 1 visible main#main and 1 visible footer.end
+ok - navigation /work -> /projects: completes with exactly 1 visible main#main and 1 visible footer.end
+ok - navigation /projects -> /work: completes with exactly 1 visible main#main and 1 visible footer.end
+ok - navigation /work -> /: completes with exactly 1 visible main#main and 1 visible footer.end
+ok - keyboard Tab progression: visits mascot, wobble, swatch group, 7 pages, the zine link, 4 contact lines, Kame controls, Back to top and the waterline in order with visible focus rings and no trap
+ok - Back to top: scrolls to page start (scrollY <= 4) and focuses the visible main#main landmark
+ok - no-JS: renders complete still scene, heading, 6 page links, 4 contact links, credits, year and #main top anchor
+ok - no-JS: clicking footer Work link navigates to /work
+ok - no-JS: Back to top anchor jumps to #main near top of page
+ok - local 390x844 reduced-motion 403 exit: isolated plain-user sign-up succeeds
+ok - local 390x844 reduced-motion 403 exit: repeated full-load /admin/roles -> /projects -> full-load /admin/roles -> /dashboard preserves access denial, noindex, 1 visible footer, normal navigation, zero abort digests and zero page/console errors
+ok - negative control: verifyCanonicalLinks rejects a corrupted canonical footer href (/broken-play !== /play)
+ok - negative control: after reload, the same verifyCanonicalLinks assertion passes
+ok - network negative control: the classifier keeps the player API and verified player frame apart from main-frame, lookalike, path/query, unverified-frame and ambiguous detached-frame requests
+ok - network negative control: the television's own embed frame request is attributed to the television, and the assertion still passes
+ok - network negative control: main-frame ad, path/query and look-alike host requests and a footer-side embed frame make the same network assertion fail
+ok - errors: zero hydration errors across all contexts
+ok - errors: zero console errors or page errors across all contexts
+# network: 54 external requests attributed to /music's existing television
+ok - network: zero unexpected external network requests from footer pages
+ok - local server: server.log contains no runtime errors
+probe: 171 ok, 0 failed

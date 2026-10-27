@@ -3,7 +3,9 @@
 // its negative control) and the stacked desk on a phone, a narrow window and a touch tablet. Drives Chrome
 // through playwright-core: CHROME_PATH if set, else the installed Google Chrome, else Playwright's own Chromium.
 // What is real: the built page, React, CSS, the media queries, requestAnimationFrame, the browser's transition
-// and animation events, and touches sent through the DevTools protocol. Nothing is faked; sound stays off.
+// and animation events, and touches sent through the DevTools protocol. The full-motion notebook control alone
+// installs a browser clock and drives its last phase, so a 900ms navigation fallback cannot outrun its frame-count
+// assertion on a busy host. Other pages, including every swipe control, use real clocks. Sound stays off.
 //   BASE_URL  the server (default http://localhost:4000)
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync } from "node:fs";
@@ -137,9 +139,9 @@ after(async () => {
   if (shortTmp) rmSync(shortTmp, { recursive: true, force: true });
 });
 
-type Open = { viewport?: { width: number; height: number }; touch?: boolean; reduced?: boolean; js?: boolean };
+type Open = { viewport?: { width: number; height: number }; touch?: boolean; reduced?: boolean; js?: boolean; frameClock?: boolean };
 
-async function open({ viewport = DESKTOP, touch = false, reduced = false, js = true }: Open = {}): Promise<Page> {
+async function open({ viewport = DESKTOP, touch = false, reduced = false, js = true, frameClock = false }: Open = {}): Promise<Page> {
   const context = await browser.newContext({
     viewport,
     isMobile: touch,
@@ -149,6 +151,7 @@ async function open({ viewport = DESKTOP, touch = false, reduced = false, js = t
   });
   contexts.push(context);
   const page = await context.newPage();
+  if (frameClock) await page.clock.install();
   // The desk's own errors (a hydration mismatch among them), not those of the pages its links lead to.
   const onDeskPage = () => new URL(page.url()).pathname === "/desk";
   page.on("pageerror", (e) => onDeskPage() && errors.push(`${page.url()}: ${e.message}`));
@@ -518,7 +521,7 @@ test("a long press opens the radial menu without following the link; it rotates,
 
 // One walk over the desk, run with motion and without: hover the chip, drag and drop, hold for the menu, nudge,
 // tidy, then open the notebook. What each run saw, for the two tests below to compare.
-async function walk(page: Page) {
+async function walk(page: Page, { driveNotebook = false } = {}) {
   const fresh = defaultLayout();
   await page.getByRole("button", { name: "Tidy up", exact: true }).hover();
   await page.waitForTimeout(300);
@@ -550,9 +553,16 @@ async function walk(page: Page) {
   const tidied = await stored(page);
   const tidyNow = await Promise.all(DESK_ITEMS.map((e) => transformOf(page, e.id)));
 
+  if (driveNotebook) {
+    await settled(page, tidied);
+    // Pause only after the bodies settle. runFor below delivers all notebook RAF/timer callbacks instead of
+    // racing a host's frame budget against the application's deliberate 900ms navigation fallback.
+    await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 1000);
+  }
   await page.evaluate(() => (window.__desk.leaves = {}));
   const clicked = Date.now();
   await link(page, "notes").click();
+  if (driveNotebook) await page.clock.runFor(900);
   await page.waitForURL(`${BASE}/notes`, { timeout: 10_000 });
   const tookMs = Date.now() - clicked;
   return { menuAnim, fresh, dx, dy, held, dropped, afterDrop, nudged, tidied, tidyNow, tookMs, probe: await probe(page) };
@@ -583,12 +593,13 @@ test("under reduced motion the desk snaps: no spring, no lean, no transition or 
 });
 
 test("with motion the same walk springs, leans, fades the menu in and turns the leaves (reduced motion's negative control)", { timeout: TIMEOUT }, async () => {
-  const page = await open();
-  const w = await walk(page);
+  const page = await open({ frameClock: true });
+  const w = await walk(page, { driveNotebook: true });
   assert.ok(w.afterDrop.length >= 3, `a drop settles over frames (${w.afterDrop.length} transforms)`);
   assert.ok(w.tidyNow.some((t) => t !== itemTransform(0, 0, 0)), `Tidy up springs, it does not jump (${w.tidyNow.join(" | ")})`);
   const turning = Object.values(w.probe.leaves).flat();
-  assert.ok(turning.length > 6, `the leaves turn through many poses (${turning.length})`);
+  console.log(`# notebook controlled clock: ${turning.length} observed poses`);
+  assert.ok(turning.length > 6, `the leaves turn through many poses (${turning.length}, controlled clock)\n${turning.slice(-40).join("\n")}`);
   assert.equal(w.menuAnim, "desk-menu-in 1", "the menu has its fade-in");
   assert.ok(w.probe.animations.some((a) => a.endsWith("desk-menu-in")), `the menu fades in (${w.probe.animations.join(", ")})`);
   assert.ok(w.probe.transitions.length > 0, "the chip's hover transitions");

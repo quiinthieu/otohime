@@ -1,0 +1,101 @@
+[Final 100 lines; full output parsed for every not-ok line. Full log hash/count in local-checks.json.]
+  ...
+# Subtest: the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out
+ok 2293 - the index is capped at MAX_ENTRIES while total counts the whole history; merges are left out
+  ---
+  duration_ms: 104.336024
+  type: 'test'
+  ...
+# Subtest: without git, outside a repository, or in an empty one, the committed fallback is used as it is
+ok 2294 - without git, outside a repository, or in an empty one, the committed fallback is used as it is
+  ---
+  duration_ms: 73.572989
+  type: 'test'
+  ...
+# Subtest: a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+ok 2295 - a shallow clone splices the commits since the fallback's head, matching a full clone byte for byte
+  ---
+  duration_ms: 98.16271
+  type: 'test'
+  ...
+# Subtest: a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+ok 2296 - a shallow clone that no longer holds the fallback's head ships the fallback unchanged, never a cut-off history
+  ---
+  duration_ms: 108.03994
+  type: 'test'
+  ...
+# Subtest: a git log that cannot be parsed falls back instead of failing the build
+ok 2297 - a git log that cannot be parsed falls back instead of failing the build
+  ---
+  duration_ms: 33.055473
+  type: 'test'
+  ...
+# Subtest: --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+ok 2298 - --check passes a fresh index and catches tampering, non-canonical text, rewritten history and staleness
+  ---
+  duration_ms: 216.719064
+  type: 'test'
+  ...
+# Subtest: the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+ok 2299 - the command line writes the index, leaves a fallback alone, and --check exits 1 on a stale file
+  ---
+  duration_ms: 517.282892
+  type: 'test'
+  ...
+# Subtest: the committed content/history.json is a well-formed, bounded, canonical index
+ok 2300 - the committed content/history.json is a well-formed, bounded, canonical index
+  ---
+  duration_ms: 2.055468
+  type: 'test'
+  ...
+# Subtest: package.json builds the index before next build and exposes history:index and history:check
+ok 2301 - package.json builds the index before next build and exposes history:index and history:check
+  ---
+  duration_ms: 0.262081
+  type: 'test'
+  ...
+# Subtest: Chrome through the repo's playwright-core when PW_PREFIX is unset
+ok 2302 - Chrome through the repo's playwright-core when PW_PREFIX is unset
+  ---
+  duration_ms: 2.151684
+  type: 'test'
+  ...
+# Subtest: PW_PREFIX's playwright when it is set, and Chrome is not tried
+ok 2303 - PW_PREFIX's playwright when it is set, and Chrome is not tried
+  ---
+  duration_ms: 1.515953
+  type: 'test'
+  ...
+# Subtest: a clear error when Chrome is absent and PW_PREFIX is unset
+ok 2304 - a clear error when Chrome is absent and PW_PREFIX is unset
+  ---
+  duration_ms: 0.922893
+  type: 'test'
+  ...
+# Subtest: a clear error when playwright-core itself is missing
+ok 2305 - a clear error when playwright-core itself is missing
+  ---
+  duration_ms: 0.339692
+  type: 'test'
+  ...
+# Subtest: a clear error when PW_PREFIX is set but its playwright is not there
+ok 2306 - a clear error when PW_PREFIX is set but its playwright is not there
+  ---
+  duration_ms: 0.318326
+  type: 'test'
+  ...
+# Subtest: the default loader resolves the repo's locked playwright-core
+ok 2307 - the default loader resolves the repo's locked playwright-core
+  ---
+  duration_ms: 2.591126
+  type: 'test'
+  ...
+1..2307
+# tests 2321
+# suites 2
+# pass 2321
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9135.430129

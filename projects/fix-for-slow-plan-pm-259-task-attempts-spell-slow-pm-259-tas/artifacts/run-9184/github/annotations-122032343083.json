@@ -1,0 +1,20 @@
+{
+  "observed_at": "2026-10-27T07:28:40.527484+00:00",
+  "url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/122032343083/annotations?per_page=100&page=1",
+  "http_status": 200,
+  "link": null,
+  "data": [
+    {
+      "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/e120461717f7e69c17d88f7512e776206d8fe664/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "start_line": 2,
+      "start_column": 46,
+      "end_line": 2,
+      "end_column": 46,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "'resolve' is defined but never used",
+      "raw_details": ""
+    }
+  ]
+}

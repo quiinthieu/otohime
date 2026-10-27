@@ -65,3 +65,8 @@ test("role hierarchy", () => {
     );
   }
 });
+
+test('Bottle moderation belongs only to owner and admin', () => {
+  for (const role of ['owner','admin','user,admin']) assert.equal(can(role,{bottle:['moderate']}),true);
+  for (const role of ['user',null,undefined,'','constructor','__proto__','moderator']) assert.equal(can(role,{bottle:['moderate']}),false);
+});

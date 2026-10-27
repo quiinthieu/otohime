@@ -1,0 +1,308 @@
+{
+  "qa_run": {
+    "id": "run-9184",
+    "plan_id": "pm-270",
+    "task_id": "t-1671",
+    "role": "quality_engineer",
+    "kind": "role",
+    "template_id": "qa-agent",
+    "tm_task_id": "e8f3cf31-fdae-45a9-b5f3-d76537a7e9f5",
+    "repo_id": "otohime",
+    "account_id": "codex-main",
+    "worker_id": "avietidol-z490",
+    "runner": "fleet",
+    "agent_profile": "codex-sol-6-1-high",
+    "attempt": 2,
+    "status": "running",
+    "deadline_at": "2026-10-27T11:25:35.105418Z",
+    "started_at": "2026-10-27T07:25:35.105418Z",
+    "finished_at": "0001-01-01T00:00:00Z",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "not_before": "2026-10-27T07:24:12.237299Z",
+    "status_checked_at": "0001-01-01T00:00:00Z",
+    "callback_apply_failures": 0
+  },
+  "swe_run": {
+    "id": "run-9176",
+    "plan_id": "pm-270",
+    "task_id": "t-1671",
+    "role": "software_engineer",
+    "kind": "role",
+    "template_id": "coding-agent",
+    "tm_task_id": "a38c1408-d136-4b29-bb22-c48ebb431cb4",
+    "repo_id": "otohime",
+    "account_id": "codex-main",
+    "worker_id": "avietidol-z490",
+    "runner": "fleet",
+    "git_sha": "4c64080",
+    "agent_profile": "codex-sol-6-1-high",
+    "attempt": 1,
+    "status": "succeeded",
+    "deadline_at": "2026-10-27T14:29:20.218146Z",
+    "started_at": "2026-10-27T06:29:20.218146Z",
+    "finished_at": "2026-10-27T07:11:05.02496Z",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "diffstat": "4c64080 pm-270/t-1671: Certify desk fixtures and register main-lane tests\n\n package.json                                       |   2 +-\n .../artifacts/run-9176/verification.json           | 110 ++++++++++\n .../summary_t-1671_run-9176.md                     |  15 ++\n scripts/main-lane-closure.test.mjs                 | 234 +++++++++++++++++++++\n 4 files changed, 360 insertions(+), 1 deletion(-)\n",
+    "not_before": "0001-01-01T00:00:00Z",
+    "status_checked_at": "2026-10-27T07:07:07.264573Z",
+    "callback_apply_failures": 0
+  },
+  "verify_run": {
+    "id": "run-9181",
+    "plan_id": "pm-270",
+    "task_id": "t-1671",
+    "role": "verify",
+    "kind": "verify",
+    "template_id": "verify-runner",
+    "tm_task_id": "0bb689a3-795c-4c5b-b4b0-5f1afa769149",
+    "repo_id": "otohime",
+    "worker_id": "avietidol-z490",
+    "runner": "fleet",
+    "git_sha": "4c64080",
+    "attempt": 1,
+    "status": "succeeded",
+    "deadline_at": "2026-10-27T08:29:05.02496Z",
+    "started_at": "2026-10-27T07:11:05.02496Z",
+    "finished_at": "2026-10-27T07:21:12.430112Z",
+    "not_before": "0001-01-01T00:00:00Z",
+    "status_checked_at": "0001-01-01T00:00:00Z",
+    "callback_apply_failures": 0
+  },
+  "green_gate": {
+    "id": "ver-3650",
+    "plan_id": "pm-270",
+    "task_id": "t-1671",
+    "run_id": "run-9181",
+    "gate": "green",
+    "git_sha": "4c64080",
+    "status": "pass",
+    "items": [
+      {
+        "name": "origin/main delivery state and main lane closure unit contracts",
+        "cmd": "node -e 'const {execFileSync}=require(\"node:child_process\"),fs=require(\"node:fs\");if(!fs.existsSync(\"scripts/main-lane-closure.test.mjs\"))throw new Error(\"missing working-tree scripts/main-lane-closure.test.mjs\");const ref=process.env.MAIN_DELIVERY_REF||\"origin/main\";const pkg=JSON.parse(execFileSync(\"git\",[\"show\",`${ref}:package.json`],{encoding:\"utf8\"}));for(const s of [\"scripts/ci-probe-annotate.test.mjs\",\"scripts/probe-end-stream.test.mjs\",\"scripts/main-lane-closure.test.mjs\"])if(!String(pkg.scripts?.test||\"\").includes(s))throw new Error(`${ref}:package.json missing ${s}`);execFileSync(\"git\",[\"cat-file\",\"-e\",`${ref}:scripts/main-lane-closure.test.mjs`]);execFileSync(\"git\",[\"merge-base\",\"--is-ancestor\",\"HEAD\",ref]);' && node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/main-lane-closure.test.mjs scripts/e2e-gesture-trace.test.ts",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 1617
+      },
+      {
+        "name": "full CI unit suite",
+        "cmd": "CI=true npm test",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 17190
+      },
+      {
+        "name": "lint, typecheck, and gate closure",
+        "cmd": "npm run lint && npm run typecheck && node scripts/check-gate-closure.mjs",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 33386
+      },
+      {
+        "name": "CI-mode isolated footer walk and Chromium probe",
+        "cmd": "node scripts/verify-bottle-footer.mjs",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 89991
+      },
+      {
+        "name": "serial production E2E x3",
+        "cmd": "bash scripts/e2e-local.sh",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 414296
+      }
+    ],
+    "created_at": "2026-10-27T07:21:12.430112Z"
+  },
+  "callbacks": [
+    {
+      "task_id": "0bb689a3-795c-4c5b-b4b0-5f1afa769149",
+      "status": "COMPLETED",
+      "completedAt": "2026-10-27T07:21:11Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "commits.txt",
+          "sha256": "2de5e2dff80d7615d1c3373c8713276ec7cdfe824d66e7848d45823fb53439d6",
+          "size": 32
+        },
+        {
+          "content_type": "application/json",
+          "name": "verification.json",
+          "sha256": "9b3b85b39f1746f50d43a0d9841dcbf95af414adb0970b6ce43d5e6f849c9e17",
+          "size": 23610
+        }
+      ]
+    },
+    {
+      "task_id": "a38c1408-d136-4b29-bb22-c48ebb431cb4",
+      "status": "COMPLETED",
+      "completedAt": "2026-10-27T07:11:03Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "author.txt",
+          "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+          "size": 44
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "commits.txt",
+          "sha256": "8473035a7a5d3a78fca0851199298016e801627c398d4f0daec10c1e4e9f1bf6",
+          "size": 271
+        },
+        {
+          "content_type": "application/json",
+          "name": "verification.json",
+          "sha256": "f66809eb193efcdc90de55c6085d8056a1c7e0d9f3e77c65afca56b63b8c77ca",
+          "size": 20755
+        }
+      ]
+    },
+    {
+      "task_id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+      "status": "FAILED",
+      "completedAt": "2026-10-27T07:23:10Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "commits.txt",
+          "sha256": "2de5e2dff80d7615d1c3373c8713276ec7cdfe824d66e7848d45823fb53439d6",
+          "size": 32
+        },
+        {
+          "content_type": "application/json",
+          "name": "failure.json",
+          "sha256": "445bf969064621ca04e9a7371c742b2cb275b57111ae5034cf368f00982059c9",
+          "size": 2303
+        }
+      ]
+    }
+  ],
+  "task_manager_history": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 3,
+      "total": 94,
+      "complete": false,
+      "tasks": [
+        {
+          "id": "0b458dbc-bcb4-46b3-b1f0-b91fbfe601da",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callbackState": "delivered"
+        },
+        {
+          "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+          "status": "FAILED",
+          "repoId": "otohime",
+          "error": "agent_failed: exit 3 class=infra marker=mcp_probe_failed: plan-manager timeout",
+          "callbackState": "delivered"
+        },
+        {
+          "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+          "status": "FAILED",
+          "repoId": "otohime",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 2a35aac9e2e3 is not on origin/main",
+          "callbackState": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 3,
+      "limit": 3,
+      "total": 94,
+      "complete": false,
+      "tasks": [
+        {
+          "id": "aaf41670-24d4-4664-998d-744e4d6d29bd",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callbackState": "delivered"
+        },
+        {
+          "id": "2d01ad98-1d8b-496f-850e-9e1e0f999588",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "error": "agent_failed: exit 1 class=push_failed marker=batch_publish_failed: integration publication receipt invalid",
+          "callbackState": "delivered"
+        },
+        {
+          "id": "f6b915a4-3572-46d6-9fd1-e9386e1295c3",
+          "status": "FAILED",
+          "repoId": "mono-v2",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "callbackState": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 3,
+      "total": 1427,
+      "complete": false,
+      "tasks": [
+        {
+          "id": "db3f2495-a01d-4c45-824b-4fc64e655974",
+          "status": "COMPLETED",
+          "repoId": "mono-v2"
+        },
+        {
+          "id": "b97a55fc-4e3c-4da8-8e1a-18cc8882eef3",
+          "status": "COMPLETED",
+          "repoId": "mono-v2",
+          "callbackState": "delivered"
+        },
+        {
+          "id": "0bb689a3-795c-4c5b-b4b0-5f1afa769149",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "callbackState": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 3,
+      "limit": 3,
+      "total": 1427,
+      "complete": false,
+      "tasks": [
+        {
+          "id": "04e5260a-9667-4445-9a1f-a73ffbfd3c48",
+          "status": "COMPLETED",
+          "repoId": "otohime"
+        },
+        {
+          "id": "7456d7fb-3771-4fab-ba84-a87873900f85",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "callbackState": "delivered"
+        },
+        {
+          "id": "9597468c-25d3-4162-83a8-2d4b1dae6184",
+          "status": "COMPLETED",
+          "repoId": "otohime",
+          "callbackState": "delivered"
+        }
+      ]
+    }
+  ],
+  "task_manager_project_filter": {
+    "project_id": "otohime",
+    "returned": "empty JSON array; no numeric total; not evidence of zero history"
+  },
+  "boundary": "Board and task-manager read-only persisted receipts; QA run callback cannot settle before exit."
+}

@@ -1,0 +1,13 @@
+# browser: 156.0.8078.48 via playwright-core, channel chrome
+identity {"browser":"156.0.8078.48","node":"v22.23.3","build":"yOIaHIx7bJjmqEMhtbxiW","endpoint":"ws://127.0.0.1:62627/ghosts"}
+real-runtime-route {"configured":200,"unset":404,"noStore":true,"sameBuildDifferentRuntime":true}
+room / {"trailPixels":1682,"localRipplePixels":92,"remoteRipplePixels":5326,"tipPixelsAfterFade":90,"idlePaintStable":true,"crossRoomPixels":0,"reducedMotionCloses":true,"usableControls":true,"moves":4}
+room /ryugu {"trailPixels":2062,"localRipplePixels":92,"remoteRipplePixels":4812,"tipPixelsAfterFade":90,"idlePaintStable":true,"crossRoomPixels":0,"reducedMotionCloses":true,"usableControls":true,"moves":6}
+negative-control-no-paint {"actualPaintOpsSuppressed":true,"arcs":2,"pixels":0,"visibleInkAssertionRejected":true}
+quiet / {"initialReduced":"off/zero sockets/zero pixels","unset":"off/zero sockets/zero pixels"}
+quiet /ryugu {"initialReduced":"off/zero sockets/zero pixels","unset":"off/zero sockets/zero pixels"}
+full {"attempts":1,"state":"gone","pixels":0}
+retryable-refusal {"attempts":3,"state":"gone","pixels":0}
+connection-lost-after-paint {"attempts":3,"state":"gone","pixels":0}
+cleanup {"realOffline":true,"realOnlineResume":true,"syntheticHidden":true}
+page-errors {"errors":[]}

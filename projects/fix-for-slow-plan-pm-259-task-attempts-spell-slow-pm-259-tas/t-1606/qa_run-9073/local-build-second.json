@@ -1,0 +1,27 @@
+{
+  ".next/BUILD_ID": {
+    "sha256": "46eeca067a356c0c5119781e1714a920e0a526dd83a7e43623406d39d8c3f5a5",
+    "bytes": 21
+  },
+  ".next/build-manifest.json": {
+    "sha256": "7ea26e399dda095abb235039c91689500ab687c21e81140b1e1e97adf70fd196",
+    "bytes": 14054
+  },
+  ".next/app-path-routes-manifest.json": {
+    "sha256": "8bc496b9855258f66deeaee764c4de99ccbcf0e53b5de4a982c6e267452d8720",
+    "bytes": 3276
+  },
+  "content/history.json": {
+    "sha256": "5c94cfa9ac0c9dcf444b24ef5c5534eea30a35dcc6f78a653eb44d0fc9506971",
+    "bytes": 42624
+  },
+  ".next/server/app/desk.meta": {
+    "sha256": "73e1a1ecf9853bd20d4aa1d8dadeeae1d2145314e114e2b797aa64c20c941bdd",
+    "bytes": 5013
+  },
+  ".next/server/app/desk.html": {
+    "sha256": "a90bbb73129ce08683a8ae7c9bd79cea31d5849240afc7d97055214aea9ee830",
+    "bytes": 49935
+  },
+  "build_id": "eluyM77BVwH4czzWK4yC3"
+}

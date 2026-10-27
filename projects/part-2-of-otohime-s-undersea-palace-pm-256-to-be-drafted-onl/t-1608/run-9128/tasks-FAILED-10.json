@@ -1,0 +1,127 @@
+{
+  "total": 1149,
+  "limit": 10,
+  "offset": 10,
+  "tasks": [
+    {
+      "id": "48d0a22b-6d08-4b7d-8796-bacdaa090b3c",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "FAILED",
+      "error": "E_ANIMATE_MAP",
+      "createdAt": "2026-10-27T00:57:30Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "0b2ffb20-c314-5e64-ab01-c058cc5cef67"
+      }
+    },
+    {
+      "id": "bc894a90-0610-4bf0-ba66-b08ddb65049c",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "FAILED",
+      "error": "E_ANIMATE_MAP",
+      "createdAt": "2026-10-27T00:55:28Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "2a8126f5-4c8a-5cbd-b84e-3e929b78808f"
+      }
+    },
+    {
+      "id": "395a6b11-7cce-4e40-ba52-807fc549944b",
+      "projectId": "colab",
+      "taskType": "colab_session",
+      "status": "FAILED",
+      "error": "task exited with code 1",
+      "createdAt": "2026-10-27T00:35:10Z",
+      "params": {}
+    },
+    {
+      "id": "71e8e810-0954-45d4-a2e6-117a56874af7",
+      "projectId": "colab",
+      "taskType": "colab_session",
+      "status": "FAILED",
+      "error": "task exited with code 1",
+      "createdAt": "2026-10-27T00:32:10Z",
+      "params": {}
+    },
+    {
+      "id": "4c91b23d-c87e-404a-beb5-d252794fb587",
+      "projectId": "colab",
+      "taskType": "colab_session",
+      "status": "FAILED",
+      "error": "task exited with code 1",
+      "createdAt": "2026-10-27T00:26:10Z",
+      "params": {}
+    },
+    {
+      "id": "7e3c8ba6-7fb6-4af7-95f0-998bb05d4e9f",
+      "projectId": "plan-manager",
+      "taskType": "coding_task",
+      "status": "FAILED",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 90b623bced6e is not on origin/main",
+      "createdAt": "2026-10-27T00:25:01Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "commit_attribution": "none",
+        "plan_id": "pm-272",
+        "run_id": "run-9109"
+      }
+    },
+    {
+      "id": "048d59f7-e4ee-409f-8fb7-048fca2cc6ea",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "FAILED",
+      "error": "E_ANIMATE_MAP",
+      "createdAt": "2026-10-27T00:20:38Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "0772a433-fed3-5299-ba99-054e6b20e3c7"
+      }
+    },
+    {
+      "id": "4c20e3f0-899c-4849-b528-d3534f067600",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "FAILED",
+      "error": "E_ANIMATE_MAP",
+      "createdAt": "2026-10-27T00:18:34Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "b955dace-0af9-53aa-a488-bf799b911a57"
+      }
+    },
+    {
+      "id": "099b4019-bbdf-4b54-9033-ded8ea2deed2",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "FAILED",
+      "error": "E_ANIMATE_MAP",
+      "createdAt": "2026-10-27T00:17:38Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "a7cbb7ba-113e-500f-8e24-1c2a518dee00"
+      }
+    },
+    {
+      "id": "dbd11b30-c057-42ab-ae29-35ec993e970f",
+      "projectId": "gameplay-studio",
+      "taskType": "generation_task",
+      "status": "FAILED",
+      "error": "E_ANIMATE_MAP",
+      "createdAt": "2026-10-27T00:16:42Z",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "params": {
+        "run_id": "237912e7-d6b3-5ed2-99f4-0ee95e12dc9f"
+      }
+    }
+  ]
+}

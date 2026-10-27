@@ -1,0 +1,38 @@
+[
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/17bca22d109414873c566d676f63696907c2f2d4/.github",
+    "start_line": 929,
+    "start_column": null,
+    "end_line": 929,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "",
+    "message": "Process completed with exit code 1.",
+    "raw_details": ""
+  },
+  {
+    "path": "e2e/ink-radio.test.ts",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/17bca22d109414873c566d676f63696907c2f2d4/e2e/ink-radio.test.ts",
+    "start_line": 39,
+    "start_column": null,
+    "end_line": 39,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "E2E failed: /music serves the radio's slot under its heading, with the snapshot's credit",
+    "message": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /<section aria-labelledby=\"ink-radio\"[^>]*>\\s*<h2 id=\"ink-radio\"[^>]*>Ink Radio/. Input:\n\n`<!DOCTYPE html><html lang=\"en\" class=\"h-full antialiased\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/2kymltn7pgfpi.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/0m4f_4b_8-sov.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/30pqe4rv77bcv.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/31_6w8v5d7luy.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/3y2jzd1z59cqx.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/2vg9178xebqwz.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/chunks/16wr9l826lhc6.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/0om590q-tq0l9.js\"/><script src=\"/_next/static/chunks/2y_wjjnipg5nm.js\" async=\"\"></script><script src=\"/_next/static/chunks/1s37vwjm584j-.js\" async=\"\"></script><script src=\"/_next/static/chunks/3dz7s82h34ptz.js\" async=\"\"></script><script src=\"/_next/static/chunks/2hoi73vy1wqpo.js\" async=\"\"></script><script src=\"/_next/static/chunks/turbopack-2c3mg3r-05n1w.js\" async=\"\"></script><script src=\"/_next/static/chunks/3_ovxg0a_m274.js\" async=\"\"></script><script src=\"/_next/static/chunks/2zaom-gq5p918.js\" async=\"\"></script><script src=\"/_next/static/chunks/1ucjpr6xais41.js\" async=\"\"></script><script src=\"/_next/static/chunks/0571t6nqzk93o.js\" async=\"\"></script><script src=\"/_next/static/chunks/3ynqz-fhc410u.js\" async=\"\"></script><script src=\"/_next/static/chunks/2p84ae7nhnlp2.js\" async=\"\"></script><script src=\"/_next/static/chunks/3h4mu9rqkwmvz.js\" async=\"\"></script><script src=\"/_next/static/chunks/3rk-q0a4e9l67.js\" async=\"\"></script><script src=\"/_next/static/chunks/20iozwpwi5-vw.js\" async=\"\"></script><script src=\"/_next/static/chunks/2k5el_cftfe_f.js\" async=\"\"></script><meta name=\"theme-color\" content=\"#f2efe7\" media=\"(prefers-color-scheme: light)\"/><meta name=\"theme-color\" content=\"#1c1915\" media=\"(prefers-color-scheme: dark)\"/><meta name=\"color-scheme\" content=\"light dark\"/><title>Music \u00b7 Otohime</title><meta name=\"description\" content=\"Otohime. Data engineer. Plays games.\"/><meta name=\"build-sha\" content=\"17bca22d109414873c566d676f63696907c2f2d4\"/><meta property=\"og:title\" content=\"Music \u00b7 Otohime\"/><meta property=\"og:description\" content=\"Otohime. Data engineer. Plays games.\"/><meta property=\"og:image\" content=\"https://otohime.dev/music/opengraph-image-rp137v?eaa6e37a76abf7be\"/><meta property=\"og:image:type\" content=\"image/png\"/><meta property=\"og:image:width\" content=\"1200\"/><meta property=\"og:image:height\" content=\"630\"/><meta property=\"og:image:alt\" content=\"Music, stamped on paper by otohime.dev\"/><meta name=\"\n\u2026 (7607 more characters)",
+    "raw_details": ""
+  },
+  {
+    "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/17bca22d109414873c566d676f63696907c2f2d4/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+    "start_line": 2,
+    "start_column": 46,
+    "end_line": 2,
+    "end_column": 46,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "'resolve' is defined but never used",
+    "raw_details": ""
+  }
+]

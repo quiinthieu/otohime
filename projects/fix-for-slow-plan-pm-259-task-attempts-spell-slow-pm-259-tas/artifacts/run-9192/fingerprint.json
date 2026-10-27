@@ -1,0 +1,40 @@
+{
+  "tested_origin_main_base": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+  "source_sha256": "8a895779bf68bcac91b3144a65dd40268cfec70120a546fd2bd484c95487f848",
+  "excluded": [
+    "projects/**",
+    "changelogs/**",
+    "**.md",
+    "content/history.json (generated build history)"
+  ],
+  "source_file_count": 1029,
+  "relevant_files": {
+    "package.json": "70541c935676e2797d8648d8e9e90447e0cf7552b560e12a26ba197df328029e",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    ".github/workflows/ci.yml": "42d136bbbff8e40f4654974c0c69e653afa8f955a7012bcc1939345483523b36",
+    "scripts/deployment-status.mjs": "ebae690a6277f8530ce7f2660dcd311cd1ff8d3ad87d4f06c817294ac0b8ff52",
+    "scripts/vercel-deploy.sh": "973ede2b7ada96d1c3dbb57ff26021ea1e93d0fb314e55d106629d366020d85f",
+    "scripts/vercel-deploy.test.sh": "d1676ac0686ff1f00f5bd59a6f2f68bf0952f6ef6d046a8acbcb0075f96dd97f",
+    "scripts/verify-deploy.sh": "7cd0751ea5ff2482921fc73b8da8f18e2a1cb512cdefa56b498803e8644d9d0a",
+    "scripts/verify-bottle-contracts.mjs": "88f7403a8e4f2878e2413d09abda061a167dcacdb5a59c3fe3e3f9d0136f43be",
+    "scripts/verify-main-lane.mjs": "576f841f9565f2cad94a2b3df9ffffb8bf9add4707855b0d58b68d1d8cce190b",
+    "lib/deployment-status.test.ts": "5f63299fd677720d550450c915e388c21350c1bc4d3c27450b83bb41e805f169",
+    "lib/main-lane-verification.test.ts": "50c120eef233823e198eec2ce8f4c689b612987ba86965ad0495685513bff32e",
+    "lib/bottle-verification.test.ts": "24805fc7ee1e17a518ac51f0803e1153b54ec0f78bbe0ddc5867ae678cdbe5b1",
+    "scripts/main-lane-closure.test.mjs": "cd3c4fb4b530d8ef5958cd791f73c7086f4f1b5d3b1fc8468e0c297627aa80b1",
+    "scripts/ci-probe-annotate.test.mjs": "af7229def539181765b92646ce5bc3848fbc18076d30556a04d033b7ba35c0ca",
+    "scripts/probe-end-stream.test.mjs": "9af89024a1767cf74d1baf9634164d96f4ff912fcc4a8a2c734c9e4aaec2c817",
+    "scripts/probe-motion-signed-in.sh": "76972ccd8cafd12a42b55232fc7f3f9fb15704937a07cc275d4731e7541ca884",
+    "scripts/probe-end.mjs": "4bb429112c69b2670a7c90288ae2515a60d6c2b8555cba6a2f90e597f7ba9b22",
+    "scripts/e2e-gesture-trace.ts": "d413a76b130257e496473a32e8d9f1238399a23099c4446bffabcef42010ffa5",
+    "scripts/e2e-gesture-trace.test.ts": "c7e0f4d10b63482538f8ece310917e0eae2be91f592d95ff8ea25fc71bb8b42b",
+    "e2e/desk.test.ts": "e8976169609e16157b0bc14951ca63d288138b03fea5347caf1377d5ca45e5c4",
+    "e2e/kame.test.ts": "1770d7cdb691b722ffe3e09554d4c7e2e3b316dce8490c434f105860ddc2ce5f",
+    "e2e/ledger.test.ts": "99363dab11aa76ddd67484744007d877edcebdfd3cfbad11c589a2368e25adab",
+    "lib/gate-closure.test.ts": "c4ad166e091272657491081510da5aadf81d3f9ba86c11061c559f70335d5eb1",
+    "scripts/e2e.mjs": "5144b88ea2938181307b1eb735bb5467879c37f8d87c1236a5e8b061a4c966f9",
+    "scripts/e2e-local.sh": "263cbd935fb5620ea5da39a0ea72ee7ca9447de527354f00386429cd349468f4",
+    "scripts/verify-bottle-footer.mjs": "5af7548531fc7d21fdac3561c9396dd385c8525c4123497e94f627d51c7f7a6d"
+  },
+  "full_manifest_artifact": "fingerprint-full.json in run shared artifacts"
+}
