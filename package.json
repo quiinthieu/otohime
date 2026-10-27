@@ -37,6 +37,7 @@
     "history:check": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts --check",
     "yearly-log:index": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/yearly-log.ts",
     "yearly-log:check": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/yearly-log.ts --check",
+    "hanafuda:verify": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-hanafuda-engine.mjs",
     "peep-box:vendor": "node scripts/vendor-peep-box.mjs",
     "peep-box:verify": "node scripts/verify-peep-box-camera.mjs"
   },
