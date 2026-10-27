@@ -139,7 +139,14 @@ verify() {
     body="$(curl -sS --max-time 10 -H 'Cache-Control: no-cache' -w '\n%{http_code}' "$base/api/health?verify=$(date +%s)" 2>&1)"
     code="${body##*$'\n'}"
     body="${body%$'\n'*}"
-    got="$(printf '%s' "$body" | grep -oE '"sha"[[:space:]]*:[[:space:]]*"[^"]*"' | head -n 1 | sed -E 's/.*"([^"]*)"$/\1/')"
+    # A nested SHA, malformed JSON or an unhealthy response is not executable identity.
+    got="$(printf '%s' "$body" | node -e '
+      let body = "";
+      process.stdin.on("data", chunk => body += chunk);
+      process.stdin.on("end", () => {
+        try { const h = JSON.parse(body); if (h.ok === true && typeof h.sha === "string") console.log(h.sha); }
+        catch { /* Invalid health cannot establish identity. */ }
+      });')"
     if [ "$code" = "200" ] && serves "$want" "$got"; then
       echo "ok - /api/health sha $got serves $want ($HOW, try $tries)"
       break
@@ -183,6 +190,7 @@ const server = http.createServer((req, res) => {
   if (!req.url.startsWith("/api/health")) { res.writeHead(404); return res.end(); }
   count++;
   if (sha === "500") { res.writeHead(500, { "content-type": "text/plain" }); return res.end("boom"); }
+  if (sha.startsWith("body:")) { res.writeHead(200, { "content-type": "application/json" }); return res.end(sha.slice(5)); }
   const now = old && count <= Number(n) ? old : sha;
   res.writeHead(200, { "content-type": "application/json" });
   res.end(JSON.stringify({ ok: true, sha: now }));
@@ -328,6 +336,13 @@ self_test() {
   expect "a served sha off another branch exits nonzero and skips e2e, even when the diff is report-only" nonzero skipped \
     BASE_URL="$base" EXPECT_SHA="$C2" VERIFY_E2E_CMD='touch "$MARK"'
 
+  for body in "{\"ok\":false,\"sha\":\"$C3\"}" "{\"ok\":true,\"old\":{\"sha\":\"$C3\"}}" "invalid {\"ok\":true,\"sha\":\"$C3\"}"; do
+    serve "body:$body"
+    base="http://127.0.0.1:$port"
+    expect "negative control: invalid health identity $body skips e2e" nonzero skipped \
+      BASE_URL="$base" EXPECT_SHA="$C3" VERIFY_E2E_CMD='touch "$MARK"'
+  done
+
   serve 500
   base="http://127.0.0.1:$port"
   expect "HTTP 500 from health exits nonzero" nonzero skipped \
@@ -342,7 +357,7 @@ self_test() {
   expect "a missing BASE_URL is refused with exit 2" 2 skipped BASE_URL= EXPECT_SHA="$A"
 
   echo "self-test: $pass ok, $fail failed"
-  [ "$fail" -eq 0 ]
+  [ "$pass" -gt 0 ] && [ "$fail" -eq 0 ]
 }
 
 if [ "${1:-}" = "--self-test" ]; then

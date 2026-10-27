@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Production deploy for the CI `production` job: upload the prebuilt output, inspect the deployment,
-# then prove https://otohime.dev serves this commit. Public health decides even if inspect fails.
+# then prove https://otohime.dev serves this commit. Inspect and health must both pass.
 # Each wait is bounded so a hang
 # fails with a public ::error annotation instead of silently running into the job timeout
 # (run 40311256064: the old blocking `vercel deploy` hung 850 s and the health check never ran).
@@ -65,6 +65,8 @@ trap 'rm -rf "$work"' EXIT
 # Strip CLI colouring before parsing or publishing diagnostics. A generic "Error:" in a request
 # failure is not a deployment's status. Only the labelled field may name deployment state.
 plain() { sed -E $'s/\033\\[[0-9;]*[[:alpha:]]//g' "$1"; }
+# Public annotations have a fixed output budget; keep the actionable tail of vendor diagnostics.
+diagnostic_tail() { plain "$1" | tail -c 4000; }
 deployment_state() {
   plain "$1" | sed -nE 's/^[[:space:]]*status[[:space:]]+[^[:alnum:]]*(Ready|Building|Queued|Initializing|Error|Canceled|Cancelled)[[:space:]]*$/\1/p' | head -n 1
 }
@@ -84,7 +86,7 @@ upload || status=$?
 url=$(deploy_url "$upload_log")
 if [ "$status" -ne 0 ] && [ -z "$url" ]; then
   if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
-    fail "upload timed out after ${UPLOAD_TIMEOUT}s with no deployment URL (not retried)"
+    fail "upload timed out after ${UPLOAD_TIMEOUT}s with no deployment URL (not retried, exit $status): $(diagnostic_tail "$upload_log")"
   fi
   log "upload exited $status with no deployment URL; retrying once"
   : >"$upload_log"
@@ -92,30 +94,31 @@ if [ "$status" -ne 0 ] && [ -z "$url" ]; then
   upload || status=$?
   url=$(deploy_url "$upload_log")
 fi
-[ -n "$url" ] || fail "upload exited $status with no deployment URL"
+[ -n "$url" ] || fail "upload exited $status with no deployment URL: $(diagnostic_tail "$upload_log")"
 [ "$status" -eq 0 ] || log "upload exited $status but printed $url; waiting on it, not retrying"
 echo "deployment: $url"
 
 log "ready: vercel inspect --wait (bound ${READY_TIMEOUT}s)"
 status=0
-inspect_failure=""
 bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
 cat "$wait_log" >&2
-if [ "$status" -ne 0 ]; then
+state=$(deployment_state "$wait_log")
+case "$state" in Error|Canceled|Cancelled) terminal=1 ;; *) terminal=0 ;; esac
+if [ "$status" -ne 0 ] || [ "$terminal" -eq 1 ]; then
   log "inspect --wait exited $status; reading the deployment state once more"
   state_status=0
   bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" >"$state_log" 2>&1 || state_status=$?
   cat "$state_log" >&2
-  state=$(deployment_state "$state_log")
-  diagnostic=$(printf '\ninspect --wait output (exit %s):\n%s\nstate re-read output (exit %s):\n%s' \
-    "$status" "$(plain "$wait_log")" "$state_status" "$(plain "$state_log")")
+  # A failed re-read cannot erase the terminal state reported by the waiting command.
+  state=${state:-$(deployment_state "$state_log")}
+  diagnostic=$(printf '\ninspect --wait output (exit %s, last 4000 bytes):\n%s\nstate re-read output (exit %s, last 4000 bytes):\n%s' \
+    "$status" "$(diagnostic_tail "$wait_log")" "$state_status" "$(diagnostic_tail "$state_log")")
   if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
     inspect_failure="${state:-unknown} after ${READY_TIMEOUT}s $url$diagnostic"
   else
     inspect_failure="${state:-unknown} (inspect exited $status) $url$diagnostic"
   fi
-  log "$inspect_failure"
-  log "inspect could not confirm readiness; checking the public commit before deciding"
+  fail "$inspect_failure"
 fi
 
 expect="\"sha\":\"$GITHUB_SHA\""
@@ -124,7 +127,15 @@ for attempt in $(seq 1 "$HEALTH_ATTEMPTS"); do
   log "health: $HEALTH_URL attempt $attempt/$HEALTH_ATTEMPTS, expecting $expect"
   body=$(curl -fsS --max-time 20 --retry "$HEALTH_RETRIES" --retry-all-errors --retry-delay "$HEALTH_RETRY_DELAY" "$HEALTH_URL") || body=""
   echo "$body"
-  case "$body" in *"$expect"*) log "health: serving $GITHUB_SHA"; exit 0 ;; esac
+  if printf '%s' "$body" | node -e '
+    let body = "";
+    process.stdin.on("data", chunk => body += chunk);
+    process.stdin.on("end", () => {
+      try { const h = JSON.parse(body); process.exit(h.ok === true && h.sha === process.argv[1] ? 0 : 1); }
+      catch { process.exit(1); }
+    });' "$GITHUB_SHA"; then
+    log "health: serving $GITHUB_SHA"; exit 0
+  fi
   [ "$attempt" -lt "$HEALTH_ATTEMPTS" ] && sleep "$HEALTH_POLL_DELAY"
 done
-fail "health check at $HEALTH_URL does not report $GITHUB_SHA (last body: ${body:-none}) $url${inspect_failure:+$'\n'}$inspect_failure"
+fail "health check at $HEALTH_URL does not report $GITHUB_SHA (last body, first 1000 bytes: $(printf '%s' "${body:-none}" | head -c 1000)) $url"

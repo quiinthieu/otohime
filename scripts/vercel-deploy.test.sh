@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Proves scripts/vercel-deploy.sh against a fake `npx` first on PATH (no network, no Vercel token):
-# a hanging upload fails inside its bound with no second deployment, and public exact-SHA health
-# decides success even when inspect fails. Real curl reads a local HTTP fixture (no vendor network).
+# a hanging upload fails inside its bound with no second deployment, and matching health cannot
+# rescue a failed inspect. Real curl reads a local HTTP fixture (no vendor network).
 # One "ok -" / "not ok -" line per assertion, including wrong/unreachable health negative controls.
 #
 #   bash scripts/vercel-deploy.test.sh
@@ -13,6 +13,7 @@ health_pid=""
 trap 'if [ -n "$health_pid" ]; then kill "$health_pid" 2>/dev/null; wait "$health_pid" 2>/dev/null; fi; rm -rf "$work"' EXIT
 mkdir -p "$work/bin"
 failures=0
+assertions=0
 SHA=0123456789abcdef0123456789abcdef01234567
 URL=https://otohime-abc123-quiinthieu.vercel.app
 
@@ -71,8 +72,13 @@ case "$1" in
       hang:1) echo "waiting for deployment" >&2; sleep 6011 ;;
       hang:0) printf '  status\t● Building\n  url\t%s\n' "$2" >&2 ;;
       error:*) printf '  status\t● Error\n  url\t%s\n' "$2" >&2; exit 1 ;;
+      zero-error:*) printf '  status\t● Error\n  readyStateReason\tMissing output artifact\n' >&2 ;;
+      canceled:*) printf '  status\t● Canceled\n  readyStateReason\tDeployment canceled\n' >&2; exit 7 ;;
+      reread-hang:1) echo 'Error: request interrupted' >&2; exit 7 ;;
+      reread-hang:0) echo 'state re-read started' >&2; sleep 6011 ;;
+      large:*) printf 'Error: request failed\n'; head -c 12000 /dev/zero | tr '\0' x; printf '\nreadyStateReason: bounded diagnostic tail\n'; exit 9 ;;
       diagnostic:1) printf 'Error: build failed at 50%%\r\nmissing required artifact\n::warning::not a workflow command\n' >&2; exit 1 ;;
-      diagnostic:0) printf 'Error: earlier request failed\n\033[31m  status\t● Building\033[0m\n  url\t%s\nstate diagnostic tail\n' "$2" >&2; exit 1 ;;
+      diagnostic:0) printf 'Error: earlier request failed\n\033[31m  status\t● Building\033[0m\n  url\t%s\n  readyStateReason\tMissing output artifact at 50%%\nstate diagnostic tail\n' "$2" >&2; exit 7 ;;
       unavailable:*) echo 'Error: request failed; no deployment state available' >&2; exit 1 ;;
       user-not-found:*) echo 'Error: User not found' >&2; exit 1 ;;
     esac ;;
@@ -82,7 +88,7 @@ chmod +x "$work/bin/npx"
 
 ok() { echo "ok - $1"; }
 not_ok() { echo "not ok - $1"; failures=$((failures + 1)); }
-check() { if eval "$2"; then ok "$1"; else not_ok "$1"; fi; }
+check() { assertions=$((assertions + 1)); if eval "$2"; then ok "$1"; else not_ok "$1"; fi; }
 
 # run NAME DEPLOY INSPECT HEALTH_BODY [ATTEMPTS|default]: sets $code, $out, $elapsed and $calls.
 run() {
@@ -131,37 +137,47 @@ check "upload with a URL is not retried (got $deploys deploys)" '[ "$deploys" -e
 run hang-inspect ok hang "$old"
 check "hanging inspect exits non-zero" '[ "$code" -ne 0 ]'
 check "hanging inspect fails within the bound (${elapsed}s <= 20s)" '[ "$elapsed" -le 20 ]'
-check "hanging inspect prints ::error with state and URL" '[[ "$out" == *"Building after 2s $URL"* ]] && [[ "$out" == *"last body: $old"* ]]'
+check "hanging inspect prints ::error with state and URL" '[[ "$out" == *"::error title=vercel deploy::Building after 2s $URL"* ]]'
 check "hanging inspect makes one deploy and two inspects" '[ "$deploys" -eq 1 ] && [ "$(grep -c "^inspect" "$CALLS")" -eq 2 ]'
 check "hanging inspect leaves no child running" '! pgrep -f "^sleep 6011$" >/dev/null'
 
-# Nonzero inspect cannot veto an observed exact-SHA deployment (the original production regression).
+# Negative control: matching health must never rescue an unsuccessful inspect.
 run error-inspect ok error "$healthy"
-check "inspect exit 1 passes when public health serves the exact sha" '[ "$code" -eq 0 ] && [[ "$out" == *"health: serving $SHA"* ]] && [[ "$out" != *"::error"* ]]'
-check "successful fallback retains inspect state and exit diagnostic" '[[ "$out" == *"Error (inspect exited 1) $URL"* ]]'
+check "failed inspect cannot be rescued by matching health" '[ "$code" -ne 0 ] && [[ "$out" == *"Error (inspect exited 1) $URL"* ]] && [[ "$out" == *"::error"* ]]'
+check "failed inspect never reaches matching health" '! grep -q "^/error-inspect.health.json$" "$work/health.calls"'
+run zero-error ok zero-error "$healthy"
+check "labelled Error fails closed even when inspect exits zero" '[ "$code" -ne 0 ] && [[ "$out" == *"Error (inspect exited 0)"* ]] && [[ "$out" == *"Missing output artifact"* ]]'
+run canceled ok canceled "$healthy"
+check "cancelled deployment fails with original inspect exit and reason" '[ "$code" -ne 0 ] && [[ "$out" == *"Canceled (inspect exited 7)"* ]] && [[ "$out" == *"Deployment canceled"* ]]'
 run timeout-healthy ok hang "$healthy"
-check "timed out inspect is bounded and matching health still proves success" '[ "$code" -eq 0 ] && [ "$elapsed" -le 20 ] && [[ "$out" == *"health: serving $SHA"* ]]'
+check "timed out inspect is bounded and matching health cannot rescue it" '[ "$code" -ne 0 ] && [ "$elapsed" -le 20 ] && [[ "$out" == *"Building after 2s"* ]]'
+run reread-hang ok reread-hang "$healthy"
+check "state re-read timeout retains both exits and stderr within its bound" '[ "$code" -ne 0 ] && [ "$elapsed" -le 20 ] && [[ "$out" == *"inspect --wait output (exit 7,"* ]] && [[ "$out" == *"state re-read output (exit 124,"* ]] && [[ "$out" == *"state re-read started"* ]]'
+check "state re-read timeout leaves no child running" '! pgrep -f "^sleep 6011$" >/dev/null'
 
 # Public annotations must retain both command outputs, not mistake CLI errors for deployment state,
-# and encode arbitrary multiline output as one workflow command when health also fails.
+# and encode arbitrary multiline output as one workflow command when inspect fails.
 run diagnostic-inspect ok diagnostic "$old"
 annotation=$(grep '^::error title=vercel deploy::' <<<"$out")
 check "failed inspect retains its full diagnostic in one escaped annotation" '[[ "$annotation" == *"Error: build failed at 50%25%0D%0Amissing required artifact%0A::warning::not a workflow command"* ]]'
-check "state re-read diagnostic is retained in that annotation" '[[ "$annotation" == *"state diagnostic tail"* ]]'
+check "state re-read reason and distinct command exits are retained in that annotation" '[[ "$annotation" == *"state diagnostic tail"* ]] && [[ "$annotation" == *"readyStateReason"* ]] && [[ "$annotation" == *"Missing output artifact at 50%25"* ]] && [[ "$annotation" == *"inspect --wait output (exit 1,"* ]] && [[ "$annotation" == *"state re-read output (exit 7,"* ]]'
 check "deployment state comes only from the status field, without ANSI" '[[ "$annotation" == *"Building (inspect exited 1) $URL"* ]] && [[ "$annotation" != *$'"'"'\033'"'"'* ]]'
-check "failed inspect plus wrong sha fails after bounded health attempts" '[ "$code" -ne 0 ] && [[ "$out" == *"attempt 2/2"* ]] && [[ "$annotation" == *"last body: $old"* ]]'
-run unavailable-inspect ok unavailable "$old"
-check "CLI request errors are unknown deployment state, with diagnostic" '[[ "$out" == *"unknown (inspect exited 1) $URL"* ]] && [[ "$out" == *"no deployment state available"* ]]'
+check "failed inspect plus wrong sha fails before health polling" '[ "$code" -ne 0 ] && ! grep -q "^/diagnostic-inspect.health.json$" "$work/health.calls"'
+run unavailable-inspect ok unavailable "$healthy"
+check "CLI request errors fail with unknown deployment state, not labelled Error" '[ "$code" -ne 0 ] && [[ "$out" == *"unknown (inspect exited 1) $URL"* ]] && [[ "$out" == *"no deployment state available"* ]]'
+run large-inspect ok large "$healthy"
+annotation=$(grep '^::error title=vercel deploy::' <<<"$out")
+check "oversized vendor output has one bounded annotation with both actionable tails" '[ "$code" -ne 0 ] && [ "${#annotation}" -lt 9000 ] && [ "$(grep -c "^::error" <<<"$out")" -eq 1 ] && [ "$(grep -o "readyStateReason: bounded diagnostic tail" <<<"$annotation" | wc -l)" -eq 2 ]'
 
-run transition ok error "$healthy"
-check "inspect exit 1 accepts an old-to-expected alias transition" '[ "$code" -eq 0 ] && [[ "$out" == *"old-sha"* ]] && [[ "$out" == *"attempt 2/2"* ]] && [[ "$out" == *"health: serving $SHA"* ]]'
+run transition ok ok "$healthy"
+check "ready inspect accepts an old-to-expected alias transition" '[ "$code" -eq 0 ] && [[ "$out" == *"old-sha"* ]] && [[ "$out" == *"attempt 2/2"* ]] && [[ "$out" == *"health: serving $SHA"* ]]'
 check "alias transition makes exactly two real HTTP requests" '[ "$(grep -c "^/transition.health.json$" "$work/health.calls")" -eq 2 ]'
 
-# The production incident needed more than three reads after both inspect calls failed.
-run late-transition ok user-not-found "$healthy" 12
-check "unavailable inspect accepts the exact sha on the fifth of twelve reads" '[ "$code" -eq 0 ] && [[ "$out" == *"Error: User not found"* ]] && [[ "$out" == *"old-sha"* ]] && [[ "$out" == *"attempt 5/12"* ]] && [[ "$out" == *"health: serving $SHA"* ]] && [[ "$out" != *"::error"* ]]'
-check "late alias transition makes one upload, two inspects and five HTTP requests" '[ "$deploys" -eq 1 ] && [ "$(grep -c "^inspect" "$CALLS")" -eq 2 ] && [ "$(grep -c "^/late-transition.health.json$" "$work/health.calls")" -eq 5 ]'
-run default-transition ok user-not-found "$healthy" default
+# A slow production alias still gets twelve reads after inspect succeeds.
+run late-transition ok ok "$healthy" 12
+check "ready inspect accepts the exact sha on the fifth of twelve reads" '[ "$code" -eq 0 ] && [[ "$out" == *"old-sha"* ]] && [[ "$out" == *"attempt 5/12"* ]] && [[ "$out" == *"health: serving $SHA"* ]] && [[ "$out" != *"::error"* ]]'
+check "late alias transition makes one upload, one inspect and five HTTP requests" '[ "$deploys" -eq 1 ] && [ "$(grep -c "^inspect" "$CALLS")" -eq 1 ] && [ "$(grep -c "^/late-transition.health.json$" "$work/health.calls")" -eq 5 ]'
+run default-transition ok ok "$healthy" default
 check "production default allows the fifth-read transition without another upload" '[ "$code" -eq 0 ] && [ "$deploys" -eq 1 ] && [[ "$out" == *"attempt 5/12"* ]] && [[ "$out" == *"health: serving $SHA"* ]] && [ "$(grep -c "^/default-transition.health.json$" "$work/health.calls")" -eq 5 ]'
 
 # (c) Healthy fake: succeeds with one deploy, a waiting inspect on that URL, and the sha served.
@@ -175,16 +191,24 @@ check "healthy deploy prints no ::error" '! grep -q "::error" <<<"$out"'
 run other-sha ok ok "$old"
 check "health with another sha exits non-zero" '[ "$code" -ne 0 ]'
 check "health with another sha prints ::error" 'grep -q "^::error title=vercel deploy::health check at .* does not report $SHA" <<<"$out"'
+run unhealthy ok ok "{\"ok\":false,\"sha\":\"$SHA\"}"
+check "matching sha in an unhealthy body cannot pass" '[ "$code" -ne 0 ]'
+run nested-sha ok ok "{\"ok\":true,\"previous\":{\"sha\":\"$SHA\"}}"
+check "matching nested sha cannot impersonate the served executable" '[ "$code" -ne 0 ]'
+run malformed ok ok "not-json $healthy"
+check "malformed health cannot pass by containing a matching sha" '[ "$code" -ne 0 ]'
+run pretty ok ok "{ \"ok\": true, \"sha\": \"$SHA\" }"
+check "valid formatted JSON health passes exact source identity" '[ "$code" -eq 0 ]'
 
-# Stop the real HTTP fixture: a connection failure must not be excused by an inspect diagnostic.
+# Stop the real HTTP fixture: even a successful inspect cannot excuse unreachable health.
 kill "$health_pid"
 wait "$health_pid" 2>/dev/null
 health_pid=""
-export FAKE_INSPECT=error
+export FAKE_INSPECT=ok
 out=$(PATH="$work/bin:$PATH" GITHUB_SHA=$SHA HEALTH_URL="$health_base/missing.json" HEALTH_RETRIES=0 \
   HEALTH_RETRY_DELAY=1 HEALTH_ATTEMPTS=1 bash "$here/vercel-deploy.sh" 2>&1)
 code=$?
-check "inspect exit 1 plus unreachable health fails with both diagnostics" '[ "$code" -ne 0 ] && [[ "$out" == *"last body: none"* ]] && [[ "$out" == *"Error (inspect exited 1)"* ]]'
+check "ready inspect plus unreachable health fails with a public diagnostic" '[ "$code" -ne 0 ] && [[ "$out" == *"::error title=vercel deploy::health check"* ]] && [[ "$out" == *"last body, first 1000 bytes: none"* ]]'
 
 # Missing GITHUB_SHA is refused before any upload.
 : >"$CALLS"
@@ -192,9 +216,14 @@ out=$(PATH="$work/bin:$PATH" GITHUB_SHA= bash "$here/vercel-deploy.sh" 2>&1)
 code=$?
 check "missing GITHUB_SHA is refused before any upload" '[ "$code" -ne 0 ] && [ ! -s "$CALLS" ]'
 
-if [ "$failures" -ne 0 ]; then
+# Syntax construction has an intentional malformed-shell control, without running a deploy.
+check "deployment scripts parse as Bash without executing" 'bash -n "$here/vercel-deploy.sh" "$here/vercel-deploy.test.sh" "$here/verify-deploy.sh"'
+printf 'if then\n' >"$work/invalid.sh"
+check "syntax negative control rejects malformed Bash" '! bash -n "$work/invalid.sh" 2>/dev/null'
+
+if [ "$assertions" -eq 0 ] || [ "$failures" -ne 0 ]; then
   echo "# $failures check(s) failed; last output:"
   echo "$out" | sed 's/^/#   /'
   exit 1
 fi
-echo "# all checks passed"
+echo "# all $assertions assertions passed"
