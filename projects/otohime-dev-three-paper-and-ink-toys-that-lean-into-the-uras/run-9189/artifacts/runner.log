@@ -1,0 +1,154 @@
+TAP version 13
+# Subtest: Bottle repository receipt requires layout, picker and every verifier regression
+ok 1 - Bottle repository receipt requires layout, picker and every verifier regression
+  ---
+  duration_ms: 2.742416
+  type: 'test'
+  ...
+# Subtest: Bottle layout receipt requires every named passing test and nonzero unskipped TAP
+ok 2 - Bottle layout receipt requires every named passing test and nonzero unskipped TAP
+  ---
+  duration_ms: 1.2085
+  type: 'test'
+  ...
+# Subtest: Bottle unit receipt requires every named passing test and nonzero unskipped TAP
+ok 3 - Bottle unit receipt requires every named passing test and nonzero unskipped TAP
+  ---
+  duration_ms: 1.886167
+  type: 'test'
+  ...
+# Subtest: Bottle browser receipt requires every named passing test and nonzero unskipped TAP
+ok 4 - Bottle browser receipt requires every named passing test and nonzero unskipped TAP
+  ---
+  duration_ms: 2.081208
+  type: 'test'
+  ...
+# Subtest: Bottle footer receipt requires every named passing test and nonzero unskipped TAP
+ok 5 - Bottle footer receipt requires every named passing test and nonzero unskipped TAP
+  ---
+  duration_ms: 1.348083
+  type: 'test'
+  ...
+# Subtest: Bottle footer receipt rejects summary counts without the individual walk and probe assertions
+ok 6 - Bottle footer receipt rejects summary counts without the individual walk and probe assertions
+  ---
+  duration_ms: 0.899042
+  type: 'test'
+  ...
+# Subtest: Bottle static receipt requires actual lint and typecheck output and makes only a static claim
+ok 7 - Bottle static receipt requires actual lint and typecheck output and makes only a static claim
+  ---
+  duration_ms: 0.397375
+  type: 'test'
+  ...
+# Subtest: Bottle closure receipt rejects renamed or empty controls and a fake uncertified runner
+ok 8 - Bottle closure receipt rejects renamed or empty controls and a fake uncertified runner
+  ---
+  duration_ms: 7.843084
+  type: 'test'
+  ...
+# Subtest: Bottle deployment receipt requires scoped Ready and fail-closed controls beyond an assertion count
+ok 9 - Bottle deployment receipt requires scoped Ready and fail-closed controls beyond an assertion count
+  ---
+  duration_ms: 2.348167
+  type: 'test'
+  ...
+# Subtest: Bottle deployment receipt reconciles unique assertion lines with its summary
+ok 10 - Bottle deployment receipt reconciles unique assertion lines with its summary
+  ---
+  duration_ms: 0.56025
+  type: 'test'
+  ...
+# Subtest: Bottle verifier import preserves shared gates and single-gate CLI rejects silent exit0
+ok 11 - Bottle verifier import preserves shared gates and single-gate CLI rejects silent exit0
+  ---
+  duration_ms: 244.274291
+  type: 'test'
+  ...
+# Subtest: isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures
+ok 12 - isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures
+  ---
+  duration_ms: 1181.581666
+  type: 'test'
+  ...
+# Subtest: scripts/e2e.mjs runs the e2e files one at a time; an explicit --test-concurrency=2 overlaps them (negative control)
+ok 13 - scripts/e2e.mjs runs the e2e files one at a time; an explicit --test-concurrency=2 overlaps them (negative control)
+  ---
+  duration_ms: 1843.996875
+  type: 'test'
+  ...
+# Subtest: under GitHub Actions scripts/e2e.mjs annotates each failed test with its file, line and assertion; outside it, nothing
+ok 14 - under GitHub Actions scripts/e2e.mjs annotates each failed test with its file, line and assertion; outside it, nothing
+  ---
+  duration_ms: 223.622834
+  type: 'test'
+  ...
+# Subtest: CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails
+ok 15 - CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails
+  ---
+  duration_ms: 145.99675
+  type: 'test'
+  ...
+# Subtest: scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files
+ok 16 - scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files
+  ---
+  duration_ms: 1490.641042
+  type: 'test'
+  ...
+# Subtest: a fake runner's healthy run serializes the whole v1 result, passes its local logic, and still certifies nothing
+ok 17 - a fake runner's healthy run serializes the whole v1 result, passes its local logic, and still certifies nothing
+  ---
+  duration_ms: 89.996084
+  type: 'test'
+  ...
+# Subtest: a nonzero exit fails the closure even when every TAP line says ok
+ok 18 - a nonzero exit fails the closure even when every TAP line says ok
+  ---
+  duration_ms: 65.980167
+  type: 'test'
+  ...
+# Subtest: a timeout, a signal and a spawn error each fail the closure and are kept in the result
+ok 19 - a timeout, a signal and a spawn error each fail the closure and are kept in the result
+  ---
+  duration_ms: 179.670292
+  type: 'test'
+  ...
+# Subtest: empty, malformed, skipped or missing results fail; a failing required regression is named
+ok 20 - empty, malformed, skipped or missing results fail; a failing required regression is named
+  ---
+  duration_ms: 526.012458
+  type: 'test'
+  ...
+# Subtest: fingerprint failures fail: a missing file, a checkout that is no git repo, and a file changed during the run
+ok 21 - fingerprint failures fail: a missing file, a checkout that is no git repo, and a file changed during the run
+  ---
+  duration_ms: 38.918625
+  type: 'test'
+  ...
+# Subtest: the real child runner keeps exits, bounds its tails, and kills a timed-out child's whole process group
+ok 22 - the real child runner keeps exits, bounds its tails, and kills a timed-out child's whole process group
+  ---
+  duration_ms: 1557.700959
+  type: 'test'
+  ...
+# Subtest: the real CLI on this checkout runs the real regressions and prints one passing, fingerprinted v1 result
+ok 23 - the real CLI on this checkout runs the real regressions and prints one passing, fingerprinted v1 result
+  ---
+  duration_ms: 5189.157292
+  type: 'test'
+  ...
+# Subtest: an isolated copy without serial enforcement in scripts/e2e.mjs fails the closure on the serial regression; restored, it passes
+ok 24 - an isolated copy without serial enforcement in scripts/e2e.mjs fails the closure on the serial regression; restored, it passes
+  ---
+  duration_ms: 13461.946958
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 21193.038084

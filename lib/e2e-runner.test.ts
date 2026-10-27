@@ -13,6 +13,75 @@ import { test } from "node:test";
 // --test-concurrency=2 after it is the negative control: there the spans do overlap.
 const ROOT = resolve(import.meta.dirname, "..");
 
+test("isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures", { timeout: 30_000 }, async () => {
+  const dir = mkdtempSync(join(tmpdir(), "e2e-build-"));
+  try {
+    mkdirSync(join(dir, "scripts"));
+    copyFileSync(join(ROOT, "scripts/e2e.mjs"), join(dir, "scripts/e2e.mjs"));
+    // Real runner/processes/filesystem; fake database and npm stop at build/start.
+    // Full production gates separately exercise the locked Next and Postgres.
+    const adapterDir = join(dir, "node_modules/embedded-postgres");
+    mkdirSync(adapterDir, { recursive: true });
+    writeFileSync(join(adapterDir, "package.json"), JSON.stringify({ type: "module", main: "index.js" }));
+    writeFileSync(join(adapterDir, "index.js"), `export default class {
+      async initialise() {} async start() {} async createDatabase() {} async stop() {}
+    }`);
+    const bin = join(dir, "bin");
+    mkdirSync(bin);
+    writeFileSync(join(bin, "npm"), `#!/bin/sh
+if [ "$2" = db:migrate ]; then exit 0; fi
+if [ "$2" = build ]; then
+  echo build >> calls
+  if [ -e .next ]; then echo stale-output; else echo clean-build; fi
+  exit 17
+fi
+echo start >> calls
+echo deliberate-start-failure
+exit 19
+`, { mode: 0o755 });
+    const env: NodeJS.ProcessEnv = { ...process.env, PATH: bin + ":" + process.env.PATH };
+    for (const key of ["NODE_TEST_CONTEXT", "BASE_URL", "SKIP_BUILD", "GITHUB_ACTIONS"]) delete env[key];
+    const seed = () => {
+      mkdirSync(join(dir, ".next/cache"), { recursive: true });
+      writeFileSync(join(dir, ".next/cache/font-map"), "stale-font");
+      writeFileSync(join(dir, ".next/BUILD_ID"), "stale-build");
+      writeFileSync(join(dir, "keep.txt"), "source");
+      writeFileSync(join(dir, "calls"), "");
+    };
+    const run = (extra: Partial<NodeJS.ProcessEnv>) => new Promise<{ code: number | null; output: string }>((done) => {
+      execFile(process.execPath, [join(dir, "scripts/e2e.mjs")], { cwd: dir, env: { ...env, ...extra }, timeout: 15_000 },
+        (error, stdout, stderr) => done({ code: error ? Number(error.code) : 0, output: stdout + stderr }));
+    });
+    seed();
+    const build = await run({});
+    assert.equal(build.code, 1, build.output);
+    assert.match(build.output, /clean-build/);
+    assert.doesNotMatch(build.output, /stale-output/);
+    assert.equal(readFileSync(join(dir, "calls"), "utf8"), "build\n", "a failed build is neither retried nor served");
+    assert.equal(readFileSync(join(dir, "keep.txt"), "utf8"), "source");
+
+    seed();
+    const reuse = await run({ SKIP_BUILD: "1" });
+    assert.equal(reuse.code, 1, reuse.output);
+    assert.match(reuse.output, /deliberate-start-failure/);
+    assert.equal(readFileSync(join(dir, "calls"), "utf8"), "start\n");
+    assert.equal(readFileSync(join(dir, ".next/cache/font-map"), "utf8"), "stale-font");
+    assert.equal(readFileSync(join(dir, ".next/BUILD_ID"), "utf8"), "stale-build");
+
+    // The identical stale-output fixture fails the clean-build assertion when
+    // cleanup is removed from the actual runner, rather than testing a copy of it.
+    seed();
+    const source = readFileSync(join(dir, "scripts/e2e.mjs"), "utf8");
+    const withoutCleanup = source.replace(/^\s*rmSync\(path\.join\(ROOT, "\.next"\), \{ recursive: true, force: true \}\);\n/m, "\n");
+    assert.notEqual(withoutCleanup, source, "negative control must remove the production cleanup");
+    writeFileSync(join(dir, "scripts/e2e.mjs"), withoutCleanup);
+    const stale = await run({});
+    assert.equal(stale.code, 1, stale.output);
+    assert.match(stale.output, /stale-output/);
+    assert.throws(() => assert.match(stale.output, /clean-build/));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 type Span = { name: string; start: number; end: number };
 
 // The suite's own environment: BASE_URL set, and not this test's runner context, under which a nested node --test

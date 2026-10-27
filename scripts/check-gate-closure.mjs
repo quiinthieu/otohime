@@ -34,6 +34,7 @@ export const CONTROLS = [
       { id: "actions_vs_local_reporter", name: "under GitHub Actions scripts/e2e.mjs annotates each failed test with its file, line and assertion; outside it, nothing" },
       { id: "ci_status_preservation", name: "CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails" },
       { id: "embedded_postgres_lifecycle", name: "scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files" },
+      { id: "fresh_production_build", name: "isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures" },
     ],
   },
   {

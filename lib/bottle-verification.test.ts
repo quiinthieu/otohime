@@ -7,6 +7,7 @@ import { join } from "node:path";
 import { GATES } from "../scripts/ci-probe-verification.mjs";
 import { test } from "node:test";
 import { BOTTLE_GATES, assertBottleEvidence } from "../scripts/verify-bottle-contracts.mjs";
+import { CONTROLS } from "../scripts/check-gate-closure.mjs";
 
 type ClosureReceipt = {
   runner: string; certified: boolean;
@@ -73,7 +74,14 @@ test("Bottle static receipt requires actual lint and typecheck output and makes 
 });
 
 test("Bottle closure receipt rejects renamed or empty controls and a fake uncertified runner", () => {
-  const output = log("closure");
+  // The archived closure predates the cache regression and cannot certify it.
+  assert.throws(() => assertBottleEvidence("closure", log("closure")));
+  const fixture = JSON.parse(log("closure"));
+  const command = fixture.commands.find((command: { id: string }) => command.id === "e2e-runner");
+  command.required = CONTROLS.find((control: { id: string }) => control.id === "e2e-runner")!.required
+    .map((control: { id: string; name: string }) => ({ ...control, status: "pass" }));
+  command.stdout_tail = tapFixture(command.required.map((control: { name: string }) => control.name));
+  const output = JSON.stringify(fixture); // Synthetic parser fixture; the CLI still requires fresh execution.
   const evidence = assertBottleEvidence("closure", output);
   assert.ok("required" in evidence && evidence.required.length > 0);
   for (const mutate of [

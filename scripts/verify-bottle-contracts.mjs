@@ -44,6 +44,7 @@ export const BOTTLE_GATES = [
   { id: "layout", cmd: `node ${flags} --test lib/bottle-footer-layout.test.ts lib/bottles.test.ts`, required: layoutNames },
   { ...sharedGate("unit"), required: [
     ...sharedGate("unit").required,
+    "isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures",
     ...layoutNames,
     ...["layout", "unit", "browser", "footer"].map((id) => `Bottle ${id} receipt requires every named passing test and nonzero unskipped TAP`),
     "Bottle repository receipt requires layout, picker and every verifier regression",
