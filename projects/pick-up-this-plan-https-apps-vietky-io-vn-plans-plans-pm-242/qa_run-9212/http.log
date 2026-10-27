@@ -1,0 +1,436 @@
+ok - music: build-sha
+ok - music: 200
+ok - music: one shelf
+ok - music: shelf in the first HTML, outside any boundary
+ok - music: shelf markup
+ok - music: one cassette, quiet
+ok - music: one cartridge, quiet
+ok - music: reels still
+ok - music: the quiet tape's words
+ok - music: the playlist link
+ok - music: static game line (Hades II, one more run)
+ok - music: Spotify credit
+ok - music: Steam credit
+ok - music: providers off
+ok - music: says it was not read live
+ok - music: no read stamp
+ok - music: television still there
+ok - music: listings still there
+ok - music: Ink Radio still there
+ok - music: no owner tools for a visitor
+ok - control: a shelf after streamed content is caught
+ok - control: a cassette that is not quiet is caught
+ok - api: 200
+ok - api, nothing configured: both providers off
+ok - build: the fakes saw no request while the build ran
+ok - build: no sentinel in the client output
+ok - build: the API is not prerendered, and /music's shell is empty
+ok - build: no prerendered reading on disk
+ok - fixture: starting the server asked no provider
+ok - first read: 200
+ok - first read: track and game, as fixture, never live
+ok - first read: links rebuilt clean
+ok - first read: only the display fields
+ok - first read: one token, one track, one Steam request
+ok - first read: the fakes got the right credentials
+ok - music: 200
+ok - music: prints the API's reading (same read time and labels)
+ok - music: no new request (one cached reader for both)
+ok - music: the reading is in the first HTML
+ok - music: a playing tape's reels may turn
+ok - music: a visible read stamp
+ok - cached: a changed answer is not read inside the minute
+ok - cached: no new request
+ok - 61 s on the cache clock: the new answer
+ok - 61 s on: one fresh read of each
+ok - 61 s on: a later read time
+ok - 61 s on: the page agrees, without asking again
+ok - 61 s on: no new request for the page
+ok - query strings: the same cached reading
+ok - query strings on /music: the same reading
+ok - query strings: no new request
+ok - POST /api/now-playing: 405
+ok - no purge endpoint: 404
+ok - 204 nothing playing: 200
+ok - 204 nothing playing: r.spotify === "spotify-fixture" && r.track === null && r.steam === "steam-fixture" && r.game.title === "Fixture Game"
+ok - 204 nothing playing: requests 1/1/1, no retries
+ok - 204 nothing playing: only the display fields
+ok - 204 nothing playing: /music 200 and agrees
+ok - 204: the tape shows the quiet face
+ok - paused: 200
+ok - paused: r.track.playing === false && r.track.title === "Fixture Track One"
+ok - paused: requests 1/1/1, no retries
+ok - paused: only the display fields
+ok - paused: /music 200 and agrees
+ok - paused: the reels are still
+ok - track 401: 200
+ok - track 401: r.spotify === "spotify-quiet" && r.track === null && r.steam === "steam-fixture" && r.game.title === "Fixture Game"
+ok - track 401: requests 1/1/1, no retries
+ok - track 401: only the display fields
+ok - track 401: /music 200 and agrees
+ok - track 429: 200
+ok - track 429: r.spotify === "spotify-quiet" && r.track === null && r.game !== null
+ok - track 429: requests 1/1/1, no retries
+ok - track 429: only the display fields
+ok - track 429: /music 200 and agrees
+ok - track malformed: 200
+ok - track malformed: r.spotify === "spotify-quiet" && r.track === null && r.game !== null
+ok - track malformed: requests 1/1/1, no retries
+ok - track malformed: only the display fields
+ok - track malformed: /music 200 and agrees
+ok - private session: 200
+ok - private session: r.spotify === "spotify-quiet" && r.track === null && r.game !== null
+ok - private session: requests 1/1/1, no retries
+ok - private session: only the display fields
+ok - private session: /music 200 and agrees
+ok - token 401: 200
+ok - token 401: r.spotify === "spotify-quiet" && r.track === null && r.game !== null
+ok - token 401: requests 1/0/1, no retries
+ok - token 401: only the display fields
+ok - token 401: /music 200 and agrees
+ok - token malformed: 200
+ok - token malformed: r.spotify === "spotify-quiet" && r.game !== null
+ok - token malformed: requests 1/0/1, no retries
+ok - token malformed: only the display fields
+ok - token malformed: /music 200 and agrees
+ok - Steam private: 200
+ok - Steam private: r.steam === "steam-quiet" && r.game === null && r.spotify === "spotify-fixture" && r.track.title === "Fixture Track One"
+ok - Steam private: requests 1/1/1, no retries
+ok - Steam private: only the display fields
+ok - Steam private: /music 200 and agrees
+ok - Steam private: the cartridge shows the quiet face
+ok - Steam idle: 200
+ok - Steam idle: r.steam === "steam-fixture" && r.game === null && r.track !== null
+ok - Steam idle: requests 1/1/1, no retries
+ok - Steam idle: only the display fields
+ok - Steam idle: /music 200 and agrees
+ok - Steam malformed: 200
+ok - Steam malformed: r.steam === "steam-quiet" && r.game === null && r.track !== null
+ok - Steam malformed: requests 1/1/1, no retries
+ok - Steam malformed: only the display fields
+ok - Steam malformed: /music 200 and agrees
+ok - Steam 500: 200
+ok - Steam 500: r.steam === "steam-quiet" && r.game === null && r.track !== null
+ok - Steam 500: requests 1/1/1, no retries
+ok - Steam 500: only the display fields
+ok - Steam 500: /music 200 and agrees
+ok - both broken: 200
+ok - both broken: r.spotify === "spotify-quiet" && r.steam === "steam-quiet" && r.track === null && r.game === null
+ok - both broken: requests 1/0/1, no retries
+ok - both broken: only the display fields
+ok - both broken: /music 200 and agrees
+ok - both broken: the whole quiet face, with the static game line
+ok - long labels: 200
+ok - long labels: [...r.track.title].length === 64 && r.track.title.endsWith("…") && [...r.track.artists].length === 64 && [...r.game.title].length === 48
+ok - long labels: requests 1/1/1, no retries
+ok - long labels: only the display fields
+ok - long labels: /music 200 and agrees
+ok - fixed again: 200
+ok - fixed again: r.spotify === "spotify-fixture" && r.steam === "steam-fixture" && r.track !== null && r.game !== null
+ok - fixed again: requests 1/1/1, no retries
+ok - fixed again: only the display fields
+ok - fixed again: /music 200 and agrees
+ok - slow Spotify: 200 in 3.5 to 6.5 s (the 4 s abort fired)
+ok - slow Spotify: quiet, Steam unharmed
+ok - slow Spotify: the request reached the fake
+ok - slow everything: 200 in 3.5 to 6.5 s, not 8 (the budgets run side by side)
+ok - slow everything: both quiet
+ok - control: a sentinel in a file is caught
+ok - control: a page with another reading is caught
+ok - scripts: fetched every chunk /music references
+ok - no sentinel in any HTTP response
+ok - no sentinel in the client chunks
+ok - no sentinel in the server log
+ok - no provider host in the HTML or chunks
+ok - the fakes never saw a wrong credential
+ok - dead Spotify: 200 in under 3 s
+ok - dead Spotify: quiet, Steam unharmed
+ok - dead Spotify: only Steam's fake was asked
+ok - dead Spotify: /music 200, quiet tape
+ok - no credentials: both off
+ok - no credentials: no request at all
+ok - nocredmusic: 200
+ok - nocredmusic: one shelf
+ok - nocredmusic: shelf in the first HTML, outside any boundary
+ok - nocredmusic: shelf markup
+ok - nocredmusic: one cassette, quiet
+ok - nocredmusic: one cartridge, quiet
+ok - nocredmusic: reels still
+ok - nocredmusic: the quiet tape's words
+ok - nocredmusic: the playlist link
+ok - nocredmusic: static game line (Hades II, one more run)
+ok - nocredmusic: Spotify credit
+ok - nocredmusic: Steam credit
+ok - Brainz current: HTTP 200
+ok - Brainz current: reading
+ok - Brainz current: sanitized shape
+ok - Brainz current: exactly two public requests, no retries
+ok - Brainz current: Spotify unused, Steam read
+ok - Brainz current: shared cached page/API reading
+ok - Brainz current: page uses cache, no new public requests
+ok - Brainz current: spinning
+ok - Brainz current: fixture credit
+ok - Brainz current: public profile
+ok - Brainz last: HTTP 200
+ok - Brainz last: reading
+ok - Brainz last: sanitized shape
+ok - Brainz last: exactly two public requests, no retries
+ok - Brainz last: Spotify unused, Steam read
+ok - Brainz last: shared cached page/API reading
+ok - Brainz last: page uses cache, no new public requests
+ok - Brainz last: full UTC date and time
+ok - Brainz last: stationary
+ok - Brainz old last: HTTP 200
+ok - Brainz old last: reading
+ok - Brainz old last: sanitized shape
+ok - Brainz old last: exactly two public requests, no retries
+ok - Brainz old last: Spotify unused, Steam read
+ok - Brainz old last: shared cached page/API reading
+ok - Brainz old last: page uses cache, no new public requests
+ok - Brainz old: dated honestly
+ok - Brainz empty: HTTP 200
+ok - Brainz empty: reading
+ok - Brainz empty: sanitized shape
+ok - Brainz empty: exactly two public requests, no retries
+ok - Brainz empty: Spotify unused, Steam read
+ok - Brainz empty: shared cached page/API reading
+ok - Brainz empty: page uses cache, no new public requests
+ok - Brainz 404: HTTP 200
+ok - Brainz 404: reading
+ok - Brainz 404: sanitized shape
+ok - Brainz 404: exactly two public requests, no retries
+ok - Brainz 404: Spotify unused, Steam read
+ok - Brainz 404: shared cached page/API reading
+ok - Brainz 404: page uses cache, no new public requests
+ok - Brainz rate limit: HTTP 200
+ok - Brainz rate limit: reading
+ok - Brainz rate limit: sanitized shape
+ok - Brainz rate limit: exactly two public requests, no retries
+ok - Brainz rate limit: Spotify unused, Steam read
+ok - Brainz rate limit: shared cached page/API reading
+ok - Brainz rate limit: page uses cache, no new public requests
+ok - Brainz challenge: HTTP 200
+ok - Brainz challenge: reading
+ok - Brainz challenge: sanitized shape
+ok - Brainz challenge: exactly two public requests, no retries
+ok - Brainz challenge: Spotify unused, Steam read
+ok - Brainz challenge: shared cached page/API reading
+ok - Brainz challenge: page uses cache, no new public requests
+ok - Brainz malformed JSON: HTTP 200
+ok - Brainz malformed JSON: reading
+ok - Brainz malformed JSON: sanitized shape
+ok - Brainz malformed JSON: exactly two public requests, no retries
+ok - Brainz malformed JSON: Spotify unused, Steam read
+ok - Brainz malformed JSON: shared cached page/API reading
+ok - Brainz malformed JSON: page uses cache, no new public requests
+ok - Brainz error envelope: HTTP 200
+ok - Brainz error envelope: reading
+ok - Brainz error envelope: sanitized shape
+ok - Brainz error envelope: exactly two public requests, no retries
+ok - Brainz error envelope: Spotify unused, Steam read
+ok - Brainz error envelope: shared cached page/API reading
+ok - Brainz error envelope: page uses cache, no new public requests
+ok - Brainz redirects: HTTP 200
+ok - Brainz redirects: reading
+ok - Brainz redirects: sanitized shape
+ok - Brainz redirects: exactly two public requests, no retries
+ok - Brainz redirects: Spotify unused, Steam read
+ok - Brainz redirects: shared cached page/API reading
+ok - Brainz redirects: page uses cache, no new public requests
+ok - Brainz one endpoint failure: HTTP 200
+ok - Brainz one endpoint failure: reading
+ok - Brainz one endpoint failure: sanitized shape
+ok - Brainz one endpoint failure: exactly two public requests, no retries
+ok - Brainz one endpoint failure: Spotify unused, Steam read
+ok - Brainz one endpoint failure: shared cached page/API reading
+ok - Brainz one endpoint failure: page uses cache, no new public requests
+ok - Brainz current wins broken last: HTTP 200
+ok - Brainz current wins broken last: reading
+ok - Brainz current wins broken last: sanitized shape
+ok - Brainz current wins broken last: exactly two public requests, no retries
+ok - Brainz current wins broken last: Spotify unused, Steam read
+ok - Brainz current wins broken last: shared cached page/API reading
+ok - Brainz current wins broken last: page uses cache, no new public requests
+ok - Brainz unsafe URL: HTTP 200
+ok - Brainz unsafe URL: reading
+ok - Brainz unsafe URL: sanitized shape
+ok - Brainz unsafe URL: exactly two public requests, no retries
+ok - Brainz unsafe URL: Spotify unused, Steam read
+ok - Brainz unsafe URL: shared cached page/API reading
+ok - Brainz unsafe URL: page uses cache, no new public requests
+ok - Brainz unsafe URL: profile fallback
+ok - Brainz unsafe URL: evil absent
+ok - Brainz timeout: HTTP 200
+ok - Brainz timeout: reading
+ok - Brainz timeout: sanitized shape
+ok - Brainz timeout: exactly two public requests, no retries
+ok - Brainz timeout: Spotify unused, Steam read
+ok - Brainz timeout: shared cached page/API reading
+ok - Brainz timeout: page uses cache, no new public requests
+ok - Brainz timeout: one four-second budget
+ok - Brainz: headers and username checked by fake
+ok - Brainz: no secret in HTTP responses
+ok - Brainz: fetched every referenced client chunk
+ok - Brainz: no secret in client chunks or log
+ok - Brainz: mismatched selected source is caught
+ok - invalid identity: off, no account selected
+ok - invalid identity: no provider requests
+ok - invalid identity: no public endpoint requests
+ok - Lanyard game: HTTP 200
+ok - Lanyard game: Lanyard reading
+ok - Lanyard game: sanitized shape
+ok - Lanyard game: Spotify and Steam unasked
+ok - Lanyard game: one public request, no retry
+ok - Lanyard game: shared cached API/page game and source
+ok - Lanyard game: page uses cache
+ok - Lanyard game: official Lanyard credit link
+ok - Lanyard game: credited Lanyard
+ok - Lanyard game: no invented store or Discord profile link
+ok - Lanyard empty: HTTP 200
+ok - Lanyard empty: Lanyard reading
+ok - Lanyard empty: sanitized shape
+ok - Lanyard empty: Spotify and Steam unasked
+ok - Lanyard empty: one public request, no retry
+ok - Lanyard empty: shared cached API/page game and source
+ok - Lanyard empty: page uses cache
+ok - Lanyard empty: official Lanyard credit link
+ok - Lanyard empty: credited Lanyard
+ok - Lanyard empty: no invented store or Discord profile link
+ok - Lanyard empty: static Now-list fallback
+ok - Lanyard spotify: HTTP 200
+ok - Lanyard spotify: Lanyard reading
+ok - Lanyard spotify: sanitized shape
+ok - Lanyard spotify: Spotify and Steam unasked
+ok - Lanyard spotify: one public request, no retry
+ok - Lanyard spotify: shared cached API/page game and source
+ok - Lanyard spotify: page uses cache
+ok - Lanyard spotify: official Lanyard credit link
+ok - Lanyard spotify: credited Lanyard
+ok - Lanyard spotify: no invented store or Discord profile link
+ok - Lanyard spotify: static Now-list fallback
+ok - Lanyard invalidActivities: HTTP 200
+ok - Lanyard invalidActivities: Lanyard reading
+ok - Lanyard invalidActivities: sanitized shape
+ok - Lanyard invalidActivities: Spotify and Steam unasked
+ok - Lanyard invalidActivities: one public request, no retry
+ok - Lanyard invalidActivities: shared cached API/page game and source
+ok - Lanyard invalidActivities: page uses cache
+ok - Lanyard invalidActivities: official Lanyard credit link
+ok - Lanyard invalidActivities: credited Lanyard
+ok - Lanyard invalidActivities: no invented store or Discord profile link
+ok - Lanyard invalidActivities: static Now-list fallback
+ok - Lanyard long: HTTP 200
+ok - Lanyard long: Lanyard reading
+ok - Lanyard long: sanitized shape
+ok - Lanyard long: Spotify and Steam unasked
+ok - Lanyard long: one public request, no retry
+ok - Lanyard long: shared cached API/page game and source
+ok - Lanyard long: page uses cache
+ok - Lanyard long: official Lanyard credit link
+ok - Lanyard long: credited Lanyard
+ok - Lanyard long: no invented store or Discord profile link
+ok - Lanyard unknown: HTTP 200
+ok - Lanyard unknown: Lanyard reading
+ok - Lanyard unknown: sanitized shape
+ok - Lanyard unknown: Spotify and Steam unasked
+ok - Lanyard unknown: one public request, no retry
+ok - Lanyard unknown: shared cached API/page game and source
+ok - Lanyard unknown: page uses cache
+ok - Lanyard unknown: official Lanyard credit link
+ok - Lanyard unknown: credited Lanyard
+ok - Lanyard unknown: no invented store or Discord profile link
+ok - Lanyard malformed: HTTP 200
+ok - Lanyard malformed: Lanyard reading
+ok - Lanyard malformed: sanitized shape
+ok - Lanyard malformed: Spotify and Steam unasked
+ok - Lanyard malformed: one public request, no retry
+ok - Lanyard malformed: shared cached API/page game and source
+ok - Lanyard malformed: page uses cache
+ok - Lanyard malformed: official Lanyard credit link
+ok - Lanyard malformed: credited Lanyard
+ok - Lanyard malformed: no invented store or Discord profile link
+ok - Lanyard bad-json: HTTP 200
+ok - Lanyard bad-json: Lanyard reading
+ok - Lanyard bad-json: sanitized shape
+ok - Lanyard bad-json: Spotify and Steam unasked
+ok - Lanyard bad-json: one public request, no retry
+ok - Lanyard bad-json: shared cached API/page game and source
+ok - Lanyard bad-json: page uses cache
+ok - Lanyard bad-json: official Lanyard credit link
+ok - Lanyard bad-json: credited Lanyard
+ok - Lanyard bad-json: no invented store or Discord profile link
+ok - Lanyard html: HTTP 200
+ok - Lanyard html: Lanyard reading
+ok - Lanyard html: sanitized shape
+ok - Lanyard html: Spotify and Steam unasked
+ok - Lanyard html: one public request, no retry
+ok - Lanyard html: shared cached API/page game and source
+ok - Lanyard html: page uses cache
+ok - Lanyard html: official Lanyard credit link
+ok - Lanyard html: credited Lanyard
+ok - Lanyard html: no invented store or Discord profile link
+ok - Lanyard 429: HTTP 200
+ok - Lanyard 429: Lanyard reading
+ok - Lanyard 429: sanitized shape
+ok - Lanyard 429: Spotify and Steam unasked
+ok - Lanyard 429: one public request, no retry
+ok - Lanyard 429: shared cached API/page game and source
+ok - Lanyard 429: page uses cache
+ok - Lanyard 429: official Lanyard credit link
+ok - Lanyard 429: credited Lanyard
+ok - Lanyard 429: no invented store or Discord profile link
+ok - Lanyard 500: HTTP 200
+ok - Lanyard 500: Lanyard reading
+ok - Lanyard 500: sanitized shape
+ok - Lanyard 500: Spotify and Steam unasked
+ok - Lanyard 500: one public request, no retry
+ok - Lanyard 500: shared cached API/page game and source
+ok - Lanyard 500: page uses cache
+ok - Lanyard 500: official Lanyard credit link
+ok - Lanyard 500: credited Lanyard
+ok - Lanyard 500: no invented store or Discord profile link
+ok - Lanyard redirect: HTTP 200
+ok - Lanyard redirect: Lanyard reading
+ok - Lanyard redirect: sanitized shape
+ok - Lanyard redirect: Spotify and Steam unasked
+ok - Lanyard redirect: one public request, no retry
+ok - Lanyard redirect: shared cached API/page game and source
+ok - Lanyard redirect: page uses cache
+ok - Lanyard redirect: official Lanyard credit link
+ok - Lanyard redirect: credited Lanyard
+ok - Lanyard redirect: no invented store or Discord profile link
+ok - Lanyard slow: HTTP 200
+ok - Lanyard slow: Lanyard reading
+ok - Lanyard slow: sanitized shape
+ok - Lanyard slow: Spotify and Steam unasked
+ok - Lanyard slow: one public request, no retry
+ok - Lanyard slow: shared cached API/page game and source
+ok - Lanyard slow: page uses cache
+ok - Lanyard slow: official Lanyard credit link
+ok - Lanyard slow: credited Lanyard
+ok - Lanyard slow: no invented store or Discord profile link
+ok - Lanyard timeout: four-second abort
+ok - Lanyard survives music failure: HTTP 200
+ok - Lanyard survives music failure: Lanyard reading
+ok - Lanyard survives music failure: sanitized shape
+ok - Lanyard survives music failure: Spotify and Steam unasked
+ok - Lanyard survives music failure: one public request, no retry
+ok - Lanyard survives music failure: shared cached API/page game and source
+ok - Lanyard survives music failure: page uses cache
+ok - Lanyard survives music failure: official Lanyard credit link
+ok - Lanyard survives music failure: credited Lanyard
+ok - Lanyard survives music failure: no invented store or Discord profile link
+ok - Lanyard: wrong game provider alone is caught
+ok - Lanyard: headers and identity checked by fake
+ok - Lanyard: no secrets or Discord identifiers in HTTP responses
+ok - Lanyard: all referenced chunks fetched
+ok - Lanyard: no sentinel in chunks or logs
+ok - Lanyard missing/invalid identity: off
+ok - Lanyard missing/invalid identity: no request
+ok - Lanyard missing/invalid identity: off
+ok - Lanyard missing/invalid identity: no request
+ok - Lanyard missing/invalid identity: off
+ok - Lanyard missing/invalid identity: no request
+ok - Lanyard missing/invalid identity: off
+ok - Lanyard missing/invalid identity: no request
+walk: 435 ok, 0 failed

@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "sha": [
+    "103f0c5511d4590e66a8a83b1a35acfe870e7ca3"
+  ],
+  "body_sha256": "e7cdaa8eb5e00697e9667024dd955e4c802b4291d9d3a0fed61ddd6e6c5fd14d",
+  "shelf": [
+    "<section aria-labelledby=\"now-playing\" class=\"now-playing mt-12\" data-now-playing=\"\" data-spotify=\"spotify-off\" data-steam=\"steam-off\" data-music-source=\"none\" data-music-state=\"off\" data-play-source=\"none\" data-play-state=\"off\""
+  ],
+  "lanyard_credit": false
+}

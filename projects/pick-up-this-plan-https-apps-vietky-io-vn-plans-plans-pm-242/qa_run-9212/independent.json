@@ -1,0 +1,577 @@
+{
+  "browser": "156.0.8078.48",
+  "scenarios": [
+    {
+      "scenario": "game",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "fixture",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": {
+          "title": "QA A B",
+          "url": null
+        },
+        "readAt": "2026-10-27T10:32:33.403Z"
+      },
+      "elapsedMs": 17,
+      "requests": [
+        {
+          "scenario": "game",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "game",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "game",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": "injected invented Steam link rejected; restored DOM passes"
+    },
+    {
+      "scenario": "empty",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "fixture",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:33.919Z"
+      },
+      "elapsedMs": 16,
+      "requests": [
+        {
+          "scenario": "empty",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "empty",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "empty",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "spotify-only",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "fixture",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:34.392Z"
+      },
+      "elapsedMs": 16,
+      "requests": [
+        {
+          "scenario": "spotify-only",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "spotify-only",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "spotify-only",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "unknown",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "quiet",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:34.868Z"
+      },
+      "elapsedMs": 15,
+      "requests": [
+        {
+          "scenario": "unknown",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "unknown",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "unknown",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "malformed",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "quiet",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:35.368Z"
+      },
+      "elapsedMs": 16,
+      "requests": [
+        {
+          "scenario": "malformed",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "malformed",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "malformed",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "html",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "quiet",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:35.843Z"
+      },
+      "elapsedMs": 16,
+      "requests": [
+        {
+          "scenario": "html",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "html",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "html",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "429",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "quiet",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:36.311Z"
+      },
+      "elapsedMs": 15,
+      "requests": [
+        {
+          "scenario": "429",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "429",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "429",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "redirect",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "quiet",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:36.781Z"
+      },
+      "elapsedMs": 15,
+      "requests": [
+        {
+          "scenario": "redirect",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "redirect",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "redirect",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "timeout",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "lanyard",
+          "state": "quiet",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:41.249Z"
+      },
+      "elapsedMs": 4023,
+      "requests": [
+        {
+          "scenario": "timeout",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "timeout",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "timeout",
+          "path": "/v1/users/234567890123456789",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "off",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": null,
+          "state": "off",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:41.768Z"
+      },
+      "elapsedMs": 15,
+      "requests": [
+        {
+          "scenario": "off",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "off",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "invalid",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": null,
+          "state": "off",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-off",
+        "game": null,
+        "readAt": "2026-10-27T10:32:42.244Z"
+      },
+      "elapsedMs": 15,
+      "requests": [
+        {
+          "scenario": "invalid",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "invalid",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    },
+    {
+      "scenario": "steam",
+      "api": {
+        "music": {
+          "source": "listenbrainz",
+          "state": "fixture",
+          "profileUrl": "https://listenbrainz.org/user/Independent%20QA/"
+        },
+        "play": {
+          "source": "steam",
+          "state": "fixture",
+          "profileUrl": null
+        },
+        "spotify": "spotify-off",
+        "track": {
+          "title": "Independent music stays",
+          "artists": "QA artist",
+          "url": null,
+          "playing": true,
+          "listenedAt": null
+        },
+        "steam": "steam-fixture",
+        "game": {
+          "title": "Independent Steam",
+          "url": "https://store.steampowered.com/app/570/"
+        },
+        "readAt": "2026-10-27T10:32:42.713Z"
+      },
+      "elapsedMs": 16,
+      "requests": [
+        {
+          "scenario": "steam",
+          "path": "/1/user/Independent%20QA/playing-now",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "steam",
+          "path": "/1/user/Independent%20QA/listens?count=1",
+          "agent": "otohime.dev/1.0 (+https://otohime.dev)",
+          "accept": "application/json"
+        },
+        {
+          "scenario": "steam",
+          "path": "/ISteamUser/GetPlayerSummaries/v0002/?key=QaSyntheticSteamKey12345678&steamids=76561197960435530",
+          "agent": "node",
+          "accept": "application/json"
+        }
+      ],
+      "control": null
+    }
+  ],
+  "real": "Next production server/cache, fetch/abort, Chrome, migrated embedded PostgreSQL",
+  "fake": "only upstream HTTP responses"
+}

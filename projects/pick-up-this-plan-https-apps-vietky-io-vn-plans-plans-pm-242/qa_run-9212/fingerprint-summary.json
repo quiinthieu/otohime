@@ -1,0 +1,18 @@
+{
+  "method": "SHA256 newline-joined sorted path + NUL + file SHA256 entries",
+  "identities": {
+    "ea79432": "0fb8a28118724f9b45011029e6eb191d8afd5ff7e15d61086dc4d83d92321c9e",
+    "79f7813": "ab6791b66376c321d94581b2ad1fc0476313fa22d5b462266201c0d2e7d6098c",
+    "103f0c5": "01a230d093c3449cf366ac25eaa78154c5e2141c1ba167dca019e7b3b95176b1",
+    "HEAD": "01a230d093c3449cf366ac25eaa78154c5e2141c1ba167dca019e7b3b95176b1",
+    "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba": "01a230d093c3449cf366ac25eaa78154c5e2141c1ba167dca019e7b3b95176b1",
+    "working_tree": "01a230d093c3449cf366ac25eaa78154c5e2141c1ba167dca019e7b3b95176b1"
+  },
+  "file_count": 18,
+  "delivery_to_current_differences": [
+    "package.json",
+    "scripts/e2e.mjs",
+    "app/(site)/globals.css"
+  ],
+  "delivered_provider_set_match": true
+}

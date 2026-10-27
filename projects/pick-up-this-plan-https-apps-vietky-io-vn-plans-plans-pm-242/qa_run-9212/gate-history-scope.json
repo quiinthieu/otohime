@@ -1,0 +1,10 @@
+{
+  "source": "plan_manager_get_verification(task_id=t-1566,gate=green)",
+  "count": 2,
+  "complete_for_response": true,
+  "verification_ids": [
+    "ver-3627",
+    "ver-3625"
+  ],
+  "history_scope": "task green verifications only; project/task-manager and CI samples remain incomplete"
+}

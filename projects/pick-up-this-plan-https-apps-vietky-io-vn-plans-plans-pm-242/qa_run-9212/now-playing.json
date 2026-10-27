@@ -1,0 +1,20 @@
+{
+  "status": 200,
+  "body": {
+    "music": {
+      "source": null,
+      "state": "off",
+      "profileUrl": null
+    },
+    "play": {
+      "source": null,
+      "state": "off",
+      "profileUrl": null
+    },
+    "spotify": "spotify-off",
+    "track": null,
+    "steam": "steam-off",
+    "game": null,
+    "readAt": "2026-10-27T10:21:08.108Z"
+  }
+}

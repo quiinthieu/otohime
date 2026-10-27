@@ -1,0 +1,8 @@
+{
+  "method": "known expected bytes hash matches uploaded author.txt digest; artifact download denied403",
+  "expected_bytes": "Otohime quiinthieu@gmail.com\ntrailers: none\n",
+  "size": 44,
+  "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+  "delivery_author": "Otohime <quiinthieu@gmail.com>",
+  "coauthor_trailers": ""
+}

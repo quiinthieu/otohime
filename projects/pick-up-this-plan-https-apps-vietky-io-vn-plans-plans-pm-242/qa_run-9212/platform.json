@@ -1,0 +1,301 @@
+{
+  "history": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 2,
+      "total": 83,
+      "tasks": [
+        {
+          "id": "b5578323-3ff2-44e5-b635-ac5559353702",
+          "status": "FAILED",
+          "run": "run-9186",
+          "repo": "mono-v2",
+          "title": "integrate bat-2",
+          "callback": "delivered"
+        },
+        {
+          "id": "0b458dbc-bcb4-46b3-b1f0-b91fbfe601da",
+          "status": "FAILED",
+          "run": "run-9185",
+          "repo": "mono-v2",
+          "title": "integrate bat-2",
+          "callback": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 2,
+      "limit": 2,
+      "total": 83,
+      "tasks": [
+        {
+          "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+          "status": "FAILED",
+          "run": "run-9183",
+          "repo": "otohime",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "callback": "delivered"
+        },
+        {
+          "id": "d8f818df-6d22-4a71-9ce8-6f409d3231dc",
+          "status": "FAILED",
+          "run": "run-9161",
+          "repo": "otohime",
+          "title": "Certify desk swipe preconditions and shared gate fixtures",
+          "callback": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 2,
+      "total": 1230,
+      "tasks": [
+        {
+          "id": "863c8865-9281-47a3-9e24-40c5158efce6",
+          "status": "COMPLETED",
+          "run": "run-9210",
+          "repo": "otohime",
+          "title": "Add opt-in palace sound",
+          "callback": "delivered"
+        },
+        {
+          "id": "75af9096-5131-4d41-99b3-4110943476ef",
+          "status": "COMPLETED",
+          "run": "run-9208",
+          "repo": "otohime",
+          "title": "Add the Pocket print-run switch and commands",
+          "callback": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 2,
+      "limit": 2,
+      "total": 1230,
+      "tasks": [
+        {
+          "id": "d9c16d3e-c004-4b9b-8bde-05daa23d50a5",
+          "status": "COMPLETED",
+          "run": "run-9207",
+          "repo": "otohime",
+          "title": "Add opt-in palace sound",
+          "callback": "delivered"
+        },
+        {
+          "id": "f75357ae-9dd3-40f1-8593-f7849280c0a2",
+          "status": "COMPLETED",
+          "run": "run-9206",
+          "repo": "otohime",
+          "title": "Open Tamatebako",
+          "callback": "delivered"
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 2,
+      "total": 3,
+      "tasks": [
+        {
+          "id": "49c9ed1e-77df-417c-9cb5-74b8597c06d6",
+          "status": "RUNNING",
+          "run": "run-9212",
+          "repo": "otohime",
+          "title": "Read optional games from Lanyard"
+        },
+        {
+          "id": "24f2cfad-3e6f-4529-a9c1-ba7fb997e1dd",
+          "status": "RUNNING",
+          "run": "run-9211",
+          "repo": "otohime",
+          "title": "Add opt-in palace sound"
+        }
+      ]
+    },
+    {
+      "status": "PENDING",
+      "offset": 0,
+      "limit": 2,
+      "total": 0,
+      "tasks": []
+    }
+  ],
+  "states": [
+    {
+      "id": "ee6feacc-0dd3-4a86-b7be-f134ceab81e4",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "run": "run-9130",
+      "worker": "avietidol-z490",
+      "result": {
+        "exit_code": 0,
+        "artifacts": [
+          {
+            "content_type": "application/json",
+            "name": "verification.json",
+            "sha256": "dd5ab5a20e17fdbe43ebfaadc807fe5add0c3e8be3ca0c6744986d40af683fb0",
+            "size": 36031
+          }
+        ]
+      }
+    },
+    {
+      "id": "91af979a-ac93-4c4e-bac9-72cd3ebebad0",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "run": "run-9129",
+      "worker": "avietidol-z490",
+      "result": {
+        "exit_code": 0,
+        "artifacts": [
+          {
+            "content_type": "application/octet-stream",
+            "name": "author.txt",
+            "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+            "size": 44
+          },
+          {
+            "content_type": "application/json",
+            "name": "t-1566/run-9129/fingerprint.json",
+            "sha256": "ba240d9c1ed173104112081cc0e19b909035aa81dcc1b57ea062de1b2280de95",
+            "size": 6036
+          }
+        ]
+      }
+    },
+    {
+      "id": "d92b882c-fe79-496a-9f99-33fd2cbb6390",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "run": "run-9125",
+      "worker": "billie-mac",
+      "result": {
+        "exit_code": 0,
+        "artifacts": [
+          {
+            "content_type": "application/json",
+            "name": "verification.json",
+            "sha256": "86c7d0bd39ce21e12ecb28191dd2997aa318347008c9478ad3b0f1082a9fcdba",
+            "size": 36506
+          }
+        ]
+      }
+    },
+    {
+      "id": "4478a567-0cd0-4f88-85a0-33d72bf89365",
+      "status": "FAILED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "run": "run-9183",
+      "worker": "avietidol-z490",
+      "result": {
+        "exit_code": 3,
+        "artifacts": []
+      }
+    }
+  ],
+  "gate": {
+    "id": "ver-3627",
+    "plan_id": "pm-272",
+    "task_id": "t-1566",
+    "run_id": "run-9130",
+    "gate": "green",
+    "git_sha": "79f7813",
+    "status": "pass",
+    "items": [
+      {
+        "name": "Project tests",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 16676
+      },
+      {
+        "name": "Lint",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 16549
+      },
+      {
+        "name": "Typecheck",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 12342
+      },
+      {
+        "name": "Build",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 22373
+      },
+      {
+        "name": "Search content index",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 264
+      },
+      {
+        "name": "Provider HTTP contract",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 64527
+      },
+      {
+        "name": "Cassette browser matrix",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 43616
+      },
+      {
+        "name": "Reduced motion",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 113054
+      },
+      {
+        "name": "Application end to end",
+        "status": "pass",
+        "exit": 0,
+        "duration_ms": 385987
+      }
+    ],
+    "created_at": "2026-10-27T03:15:15.623756Z"
+  },
+  "profile": {
+    "id": "run-9212",
+    "agent_profile": "codex-sol-6-1-high",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "account_id": "codex-main",
+    "worker_id": "avietidol-mac-mini",
+    "attempt": 1
+  },
+  "ingestion": {
+    "id": "run-9130",
+    "plan_id": "pm-272",
+    "task_id": "t-1566",
+    "role": "verify",
+    "kind": "verify",
+    "template_id": "verify-runner",
+    "tm_task_id": "ee6feacc-0dd3-4a86-b7be-f134ceab81e4",
+    "repo_id": "otohime",
+    "worker_id": "avietidol-z490",
+    "runner": "fleet",
+    "git_sha": "79f7813",
+    "attempt": 2,
+    "status": "succeeded",
+    "deadline_at": "2026-10-27T04:38:17.885943Z",
+    "started_at": "2026-10-27T03:03:17.885943Z",
+    "finished_at": "2026-10-27T03:15:15.623756Z",
+    "not_before": "0001-01-01T00:00:00Z",
+    "status_checked_at": "0001-01-01T00:00:00Z",
+    "callback_apply_failures": 0
+  }
+}

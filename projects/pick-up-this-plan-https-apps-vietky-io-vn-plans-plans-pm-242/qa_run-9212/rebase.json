@@ -1,0 +1,33 @@
+{
+  "initial_qa_commit": "aa27f398154f4244902b0dcb50e54b27dda6727e",
+  "push_exit": 1,
+  "rebase_exit": 0,
+  "integrated_parent": "86dfe92dfad635695e01e103baebb85e02416415",
+  "retested_rebased_commit": "da050e923a1fa9829b42bcf15ecbcb1af4fe1ea3",
+  "non_evidence_changes": [
+    "package.json",
+    "scripts/e2e-build.test.mjs"
+  ],
+  "checks": [
+    {
+      "cmd": "TMPDIR=/tmp npm test",
+      "exit": 0,
+      "pass": 2510,
+      "fail": 0,
+      "seconds": 20.582
+    },
+    {
+      "cmd": "npm run lint",
+      "exit": 0,
+      "errors": 0,
+      "warnings": 10
+    }
+  ],
+  "runtime_evidence_at": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+  "new_test_boundaries": "scripts/e2e-build.test.mjs uses fake npm/Postgres/application; existing real E2E execution remains separately recorded",
+  "incoming_hashes": {
+    "package.json": "9ae87352c2312569ee159fa30a07f901a1ad62d53bc62bd9ddd927a8b110a692",
+    "scripts/e2e-build.test.mjs": "15ccc4fe835ca172a0b48ad88753134444c3266d89760cd1c39548d611a4a270",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+  }
+}

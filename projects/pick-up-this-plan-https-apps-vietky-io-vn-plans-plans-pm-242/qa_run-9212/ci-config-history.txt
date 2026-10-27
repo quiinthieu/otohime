@@ -1,0 +1,7 @@
+741f59c4b01e369a46bd4c8ee5a63116b32db17c pm-270/t-1671: Authenticate deployment readiness and assert gate evidence
+ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50 pm-269/t-1648: Verify deployment readiness through scoped API
+c24320b07314dea9f590ba08c9142039951419d8 pm-269/t-1648: Require explicit Ready state before production health
+f08f670eb8bd5c699463062c4d00f08c4d486cfa pm-269/t-1648: Scope production inspection and certify Bottle gates
+d6221b79b9c796d7c85c975bd122c7bed6d351e1 pm-269/t-1647: Preserve CI probe failures and verify rendered headings
+f83c73f8d59d75aafe72c93cdea6f7ff924dc0dc pm-259/t-1624: Expose browser gate crash diagnostics
+7735e74f801c5fab18abf1f944fec5b464ee11d1 pm-259/t-1626: Fail closed on deployment diagnostics and identity

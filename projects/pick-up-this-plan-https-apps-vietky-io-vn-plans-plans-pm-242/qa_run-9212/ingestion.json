@@ -1,0 +1,28 @@
+{
+  "swe": {
+    "id": "run-9129",
+    "status": "succeeded",
+    "sha": "79f7813",
+    "tm_task_id": "91af979a-ac93-4c4e-bac9-72cd3ebebad0",
+    "callback_apply_failures": 0,
+    "profile": "codex-sol-6-1-high",
+    "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "worker": "avietidol-z490",
+    "attempt": 5
+  },
+  "reports": [
+    {
+      "id": "rep-5382",
+      "kind": "summary",
+      "sha": "79f7813e939d92610a86540c71783c02973d737e",
+      "path": "projects/pick-up-this-plan-https-apps-vietky-io-vn-plans-plans-pm-242/t-1566-run-9129.md"
+    }
+  ],
+  "verifier": {
+    "id": "run-9130",
+    "status": "succeeded",
+    "sha": "79f7813",
+    "tm_task_id": "ee6feacc-0dd3-4a86-b7be-f134ceab81e4",
+    "callback_apply_failures": 0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "totalCount": 487,
+  "totalPages": 20,
+  "pages": [
+    1,
+    2
+  ],
+  "page_size": 25,
+  "sample": 50,
+  "complete": false,
+  "conclusions": {
+    "WORKFLOW_RUN_STATUS_IN_PROGRESS": 1,
+    "WORKFLOW_RUN_CONCLUSION_SUCCESS": 18,
+    "WORKFLOW_RUN_CONCLUSION_FAILURE": 31
+  },
+  "api_access": "403 rate limit; public workflow JSON used"
+}

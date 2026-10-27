@@ -1,0 +1,70 @@
+  ...
+# Subtest: PW_PREFIX's playwright when it is set, and Chrome is not tried
+ok 2483 - PW_PREFIX's playwright when it is set, and Chrome is not tried
+  ---
+  duration_ms: 0.244417
+  type: 'test'
+  ...
+# Subtest: a clear error when Chrome is absent and PW_PREFIX is unset
+ok 2484 - a clear error when Chrome is absent and PW_PREFIX is unset
+  ---
+  duration_ms: 0.348708
+  type: 'test'
+  ...
+# Subtest: a clear error when playwright-core itself is missing
+ok 2485 - a clear error when playwright-core itself is missing
+  ---
+  duration_ms: 0.090291
+  type: 'test'
+  ...
+# Subtest: a clear error when PW_PREFIX is set but its playwright is not there
+ok 2486 - a clear error when PW_PREFIX is set but its playwright is not there
+  ---
+  duration_ms: 0.07525
+  type: 'test'
+  ...
+# Subtest: the default loader resolves the repo's locked playwright-core
+ok 2487 - the default loader resolves the repo's locked playwright-core
+  ---
+  duration_ms: 1.555542
+  type: 'test'
+  ...
+# Subtest: probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+ok 2488 - probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+  ---
+  duration_ms: 2962.00125
+  type: 'test'
+  ...
+# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs
+ok 2489 - probe bounds: measured after the one-shot ink lands, from the visible glyphs
+  ---
+  duration_ms: 1580.278042
+  type: 'test'
+  ...
+# Subtest: Footer 403 exit calls the heading observer after navigation before reading main h1
+ok 2490 - Footer 403 exit calls the heading observer after navigation before reading main h1
+  ---
+  duration_ms: 375.747042
+  type: 'test'
+  ...
+# Subtest: streamed /dashboard heading arriving after 1.5s resolves the real observer
+ok 2491 - streamed /dashboard heading arriving after 1.5s resolves the real observer
+  ---
+  duration_ms: 1760.663042
+  type: 'test'
+  ...
+# Subtest: missing, empty and hidden main headings fail at the 10s bound (negative control)
+ok 2492 - missing, empty and hidden main headings fail at the 10s bound (negative control)
+  ---
+  duration_ms: 10163.883542
+  type: 'test'
+  ...
+1..2492
+# tests 2510
+# suites 2
+# pass 2510
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20582.419292

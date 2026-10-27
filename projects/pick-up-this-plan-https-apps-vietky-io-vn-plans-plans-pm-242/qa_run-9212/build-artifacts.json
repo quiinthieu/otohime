@@ -1,0 +1,32 @@
+{
+  "build_id": "Z020wGxhix_zc45CSzn9V",
+  "checkout": "b4e142ad37c76abdc496c14afb4ac18b2b5c03ba",
+  "route_files": [
+    {
+      "path": ".next/BUILD_ID",
+      "bytes": 21,
+      "sha256": "8ee8a004ad536b4c4cc43daba8883d0b5df191c5323cedddf48509efdc9bed8f"
+    },
+    {
+      "path": ".next/server/app/api/now-playing/route.js",
+      "bytes": 1052,
+      "sha256": "26ffe1c3a588c8d80f019e86ca3aa202088d41a921beac4cbba096d3a0793130"
+    },
+    {
+      "path": ".next/server/app/(site)/(app)/music/page.js",
+      "bytes": 3279,
+      "sha256": "70fb85c2f5aaf96225bdfce456d81ff1847d4d6dab86f73611abe0052ac20f65"
+    },
+    {
+      "path": ".next/server/app/api/now-playing/route.js.nft.json",
+      "bytes": 20543,
+      "sha256": "c9e91cf2074a26e53ff37b6d9ac0092b7849e562d20924df87b32bee01f50222"
+    }
+  ],
+  "models": "No model/artifact download required by Lanyard HTTP adapter; dependency/browser/DB binaries in preflight.json",
+  "server_chunks": {
+    "count": 878,
+    "method": "SHA256 of newline-joined sorted relative path + NUL + file SHA256 entries",
+    "aggregate_sha256": "a0af3403ff9f4eccd5a69d29b6e6c6dee8ab5e06e777599856db79884bdda19f"
+  }
+}

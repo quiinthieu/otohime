@@ -1,0 +1,13 @@
+◇ injected env (0) from .env
+independent game: pass (17ms)
+independent empty: pass (16ms)
+independent spotify-only: pass (16ms)
+independent unknown: pass (15ms)
+independent malformed: pass (16ms)
+independent html: pass (16ms)
+independent 429: pass (15ms)
+independent redirect: pass (15ms)
+independent timeout: pass (4023ms)
+independent off: pass (15ms)
+independent invalid: pass (15ms)
+independent steam: pass (16ms)

@@ -1,0 +1,26 @@
+[
+  {
+    "task": "91af979a-ac93-4c4e-bac9-72cd3ebebad0",
+    "name": "author.txt",
+    "status": 403,
+    "body": "{\"error\":\"insufficient privileges\"}"
+  },
+  {
+    "task": "d92b882c-fe79-496a-9f99-33fd2cbb6390",
+    "name": "verification.json",
+    "status": 403,
+    "body": "{\"error\":\"insufficient privileges\"}"
+  },
+  {
+    "task": "ee6feacc-0dd3-4a86-b7be-f134ceab81e4",
+    "name": "verification.json",
+    "status": 403,
+    "body": "{\"error\":\"insufficient privileges\"}"
+  },
+  {
+    "task": "91af979a-ac93-4c4e-bac9-72cd3ebebad0",
+    "name": "t-1566/run-9129/fingerprint.json",
+    "status": 403,
+    "body": "{\"error\":\"insufficient privileges\"}"
+  }
+]

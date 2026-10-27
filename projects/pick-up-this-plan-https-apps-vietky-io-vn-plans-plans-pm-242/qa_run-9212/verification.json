@@ -1,0 +1,56 @@
+[
+  {
+    "name": "unit",
+    "cmd": "npm test",
+    "exit": 0,
+    "seconds": 19.09
+  },
+  {
+    "name": "lint",
+    "cmd": "npm run lint",
+    "exit": 0,
+    "seconds": 7.69
+  },
+  {
+    "name": "types",
+    "cmd": "npm run typecheck",
+    "exit": 0,
+    "seconds": 4.83
+  },
+  {
+    "name": "build",
+    "cmd": "npm run build",
+    "exit": 0,
+    "seconds": 11.15
+  },
+  {
+    "name": "ask",
+    "cmd": "npm run ask:check",
+    "exit": 0,
+    "seconds": 0.26
+  },
+  {
+    "name": "http",
+    "cmd": "SKIP_BUILD=1 PORT=46211 FAKE_PORT=46221 bash scripts/walk-now-playing.sh",
+    "exit": 0,
+    "seconds": 69.3
+  },
+  {
+    "name": "cassette",
+    "cmd": "SKIP_BUILD=1 PORT=46212 FAKE_PORT=46231 bash scripts/probe-cassette.sh",
+    "exit": 0,
+    "seconds": 42.56
+  },
+  {
+    "name": "motion",
+    "cmd": "SKIP_BUILD=1 PORT=46213 bash scripts/probe-motion.sh",
+    "exit": 0,
+    "seconds": 138.6
+  },
+  {
+    "name": "e2e",
+    "cmd": "SKIP_BUILD=1 npm run test:e2e",
+    "exit": 0,
+    "seconds": 404.17
+  }
+]

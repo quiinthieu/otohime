@@ -1,0 +1,4 @@
+79f7813e939d92610a86540c71783c02973d737e
+Otohime <quiinthieu@gmail.com>
+pm-272/t-1566: Fix cassette provider probes on Bash 3.2
+

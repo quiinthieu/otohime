@@ -1,0 +1,44 @@
+{
+  "node": "v22.23.3",
+  "platform": "darwin",
+  "arch": "arm64",
+  "versions": {
+    "next": "16.4.2",
+    "pg": "8.23.1",
+    "embedded-postgres": "17.10.0-beta.17",
+    "playwright-core": "1.64.0"
+  },
+  "next": "function",
+  "pool": "BoundPool",
+  "embedded": "EmbeddedPostgres",
+  "chrome": "156.0.8078.48",
+  "hashes": [
+    {
+      "path": "/Users/avietidol/Library/Application Support/build-worker/toolchain/node/bin/node",
+      "exists": true,
+      "sha256": "68f4d07ca49e0500cc135c7e0a445093e228e42e126ac22306d045f0a8c2636b"
+    },
+    {
+      "path": "package-lock.json",
+      "exists": true,
+      "sha256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+    },
+    {
+      "path": "node_modules/@embedded-postgres/darwin-arm64/native/bin/postgres",
+      "exists": true,
+      "sha256": "8776e8dfcc8fd7eaaf02db978d00f225a1905b6cbe9ecdd3cf5e86cf3a00e33f"
+    },
+    {
+      "path": "node_modules/@embedded-postgres/darwin-arm64/native/bin/initdb",
+      "exists": true,
+      "sha256": "8aad5fa27591903ab45a9251c3b26dd3465a7daec1fc2c03cedc3ca267b35ab3"
+    },
+    {
+      "path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "exists": true,
+      "sha256": "00ba2d076d622800fe24e1323e1963a77ed115fe7b20105e3d40ffca422805e3"
+    }
+  ],
+  "bash": "GNU bash, version 3.2.57(1)-release (arm64-apple-darwin26)",
+  "npm": "10.9.9"
+}

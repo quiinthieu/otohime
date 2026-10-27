@@ -1,0 +1,115 @@
+commit 741f59c4b01e369a46bd4c8ee5a63116b32db17c
+Author: Otohime <quiinthieu@gmail.com>
+Date:   Tue Oct 27 15:43:14 2026 +0700
+
+    pm-270/t-1671: Authenticate deployment readiness and assert gate evidence
+
+diff --git a/scripts/vercel-deploy.sh b/scripts/vercel-deploy.sh
+index 3362a4d..15fb9ea 100755
+--- a/scripts/vercel-deploy.sh
++++ b/scripts/vercel-deploy.sh
+@@ -1,19 +1,16 @@
+ #!/usr/bin/env bash
+ # Production deploy for the CI `production` job: upload the prebuilt output, inspect the deployment,
+-# then prove https://otohime.dev serves this commit. Readiness and health must both pass.
+-# Only repeated CLI User-not-found failures may use a team/project-bound API Ready read instead.
++# then prove https://otohime.dev serves this commit. Authenticated READY and health must both pass.
+ # Each wait is bounded so a hang
+ # fails with a public ::error annotation instead of silently running into the job timeout
+ # (run 40311256064: the old blocking `vercel deploy` hung 850 s and the health check never ran).
+ #
+ #   bash scripts/vercel-deploy.sh            # in CI, after `vercel pull` and `vercel build --prod`
+ #
+-# Env: GITHUB_SHA and VERCEL_ORG_ID (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
+-# diagnostic re-read), HEALTH_URL (https://otohime.dev/api/health), HEALTH_RETRIES (10) and
++# Env: GITHUB_SHA, VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID (required), UPLOAD_TIMEOUT (300 s), READY_TIMEOUT (420 s), INSPECT_TIMEOUT (60 s, the
++# per-request bound), HEALTH_URL (https://otohime.dev/api/health), HEALTH_RETRIES (10) and
+ # HEALTH_RETRY_DELAY (6 s; curl reads 0 as exponential backoff, so tests use 1),
+ # HEALTH_ATTEMPTS (12 reads of the body, HEALTH_POLL_DELAY 10 s apart, for an alias that lags ready).
+-# The identity-error API fallback also requires the existing VERCEL_TOKEN and VERCEL_PROJECT_ID;
+-# its single request is bounded at 10 s and 1 MiB, without logging credentials or API response bodies.
+ #
+ # The upload is retried once only when it failed fast with no deployment URL. A timed-out upload is
+ # not retried (it may already have created a deployment, and a retry doubles the bound), and nothing
+@@ -22,6 +19,8 @@ set -euo pipefail
+ 
+ : "${GITHUB_SHA:?GITHUB_SHA is required}"
+ : "${VERCEL_ORG_ID:?VERCEL_ORG_ID is required}"
++: "${VERCEL_PROJECT_ID:?VERCEL_PROJECT_ID is required}"
++: "${VERCEL_TOKEN:?VERCEL_TOKEN is required}"
+ UPLOAD_TIMEOUT=${UPLOAD_TIMEOUT:-300}
+ READY_TIMEOUT=${READY_TIMEOUT:-420}
+ INSPECT_TIMEOUT=${INSPECT_TIMEOUT:-60}
+@@ -63,22 +62,12 @@ deploy_url() { grep -Eo 'https://[A-Za-z0-9.-]+\.vercel\.app' "$1" | tail -n 1 |
+ work=$(mktemp -d)
+ upload_log=$work/upload.log
+ wait_log=$work/wait.log
+-state_log=$work/state.log
+-api_log=$work/api.log
+ trap 'rm -rf "$work"' EXIT
+ 
+-# Strip CLI colouring before parsing or publishing diagnostics. A generic "Error:" in a request
+-# failure is not a deployment's status. Only the labelled field may name deployment state.
++# Strip CLI colouring before publishing bounded upload diagnostics. Readiness uses JSON.
+ plain() { sed -E $'s/\033\\[[0-9;]*[[:alpha:]]//g' "$1"; }
+ # Public annotations have a fixed output budget; keep the actionable tail of vendor diagnostics.
+ diagnostic_tail() { plain "$1" | tail -c 4000; }
+-deployment_state() {
+-  plain "$1" | sed -nE 's/^[[:space:]]*status[[:space:]]+[^[:alnum:]]*(Ready|Building|Queued|Initializing|Error|Canceled|Cancelled)[[:space:]]*$/\1/p' | head -n 1
+-}
+-identity_lookup_failed() {
+-  plain "$1" | grep -E '(^|[[:space:]])Error: (Not able to load user because of unexpected error: )?User not found[.]?[[:space:]]*$' >/dev/null
+-}
+-
+ upload() {
+   log "upload: vercel deploy --prebuilt --prod --no-wait (bound ${UPLOAD_TIMEOUT}s)"
+   local status=0
+@@ -106,43 +95,13 @@ fi
+ [ "$status" -eq 0 ] || log "upload exited $status but printed $url; waiting on it, not retrying"
+ echo "deployment: $url"
+ 
+-# Standalone inspect cannot infer the linked project's team context like deploy can.
+-log "ready: vercel inspect --wait with configured team scope (bound ${READY_TIMEOUT}s)"
++# Authenticate directly against the deployment resource. The CLI's /v2/user bootstrap
++# can fail for an otherwise valid CI principal. Receipts expose only deployment identity/state.
++log "ready: team-scoped deployment API (bound ${READY_TIMEOUT}s)"
+ status=0
+-bounded "$READY_TIMEOUT" npx vercel@64 inspect "$url" --scope "$VERCEL_ORG_ID" --wait --timeout 6m --logs >"$wait_log" 2>&1 || status=$?
++bounded "$((READY_TIMEOUT + 2))" node "$(dirname "$0")/deployment-status.mjs" "$url" >"$wait_log" 2>&1 || status=$?
+ cat "$wait_log" >&2
+-state=$(deployment_state "$wait_log")
+-# Exit zero alone cannot certify a deployment. Fail closed if the CLI emits no
+-# recognized state or still reports a nonterminal state, even if alias health matches.
+-if [ "$status" -ne 0 ] || [ "$state" != Ready ]; then
+-  log "inspect --wait exited $status with state ${state:-unknown}; reading the deployment state once more"
+-  state_status=0
+-  bounded "$INSPECT_TIMEOUT" npx vercel@64 inspect "$url" --scope "$VERCEL_ORG_ID" >"$state_log" 2>&1 || state_status=$?
+-  cat "$state_log" >&2
+-  # A failed re-read cannot erase the terminal state reported by the waiting command.
+-  state=${state:-$(deployment_state "$state_log")}
+-  diagnostic=$(printf '\ninspect --wait output (exit %s, last 4000 bytes):\n%s\nstate re-read output (exit %s, last 4000 bytes):\n%s' \
+-    "$status" "$(diagnostic_tail "$wait_log")" "$state_status" "$(diagnostic_tail "$state_log")")
+-  if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
+-    inspect_failure="${state:-unknown} after ${READY_TIMEOUT}s $url$diagnostic"
+-  else
+-    inspect_failure="${state:-unknown} (inspect exited $status) $url$diagnostic"
+-  fi
+-  # A team-scoped token can deploy while the CLI's global /user lookup fails.
+-  # Do not rescue timeouts, builds, terminal errors or a failed wait with a Ready re-read.
+-  # This independent read must authenticate the same token/team and bind the exact upload/project.
+-  if [ "$status" -eq 1 ] && [ "$state_status" -eq 1 ] && [ -z "$state" ] \
+-    && identity_lookup_failed "$wait_log" && identity_lookup_failed "$state_log"; then
+-    log "scoped CLI identity lookup failed; verifying uploaded deployment through the team API"
+-    if bounded "$INSPECT_TIMEOUT" node "$(dirname "$0")/vercel-deployment-state.mjs" "$url" >"$api_log" 2>&1; then
+-      cat "$api_log" >&2
+-    else
+-      fail "$inspect_failure; API readiness failed: $(diagnostic_tail "$api_log")"
+-    fi
+-  else
+-    fail "$inspect_failure"
+-  fi
+-fi
++[ "$status" -eq 0 ] || fail "deployment readiness failed (exit $status) $url: $(diagnostic_tail "$wait_log")"
+ 
+ expect="\"sha\":\"$GITHUB_SHA\""
+ body=""

@@ -1,0 +1,30 @@
+{
+  "qa_evidence_only": true,
+  "report_scope": "pm-272/t-1566 optional Lanyard integration",
+  "personalized_live_output": "not observed; configured identity empty; advisory activation remains with pm-272 acceptance",
+  "theme_history": {
+    "id": "G9121-2",
+    "owner": "t-1610 SWE/QA",
+    "current_task_status": "ready",
+    "failure_condition": "rapid overlapping theme activation emits unhandled skipped-transition AbortError",
+    "scope": "historical observation retained; not recertified by this provider QA"
+  },
+  "unread": {
+    "artifact_downloads": "403 insufficient privileges; metadata read and author digest comparison recorded separately",
+    "hosted_logs": "production job pages require sign-in to view logs; function runtime logs unavailable; live browser console/page logs and local server logs read",
+    "history": "bounded samples only; unread/truncated history inconclusive"
+  },
+  "deferred_completion": {
+    "run": "run-9212",
+    "task_manager_id": "49c9ed1e-77df-417c-9cb5-74b8597c06d6",
+    "owner": "task-manager/plan-manager",
+    "failure_condition": "completion callback lacks pushed QA SHA/report or lease remains running after completion"
+  },
+  "new_retained_defect": {
+    "id": "pm-271/run-9214/D1",
+    "owner": "pm-271 product owner",
+    "evidence": "projects/otohime-dev-lean-into-the-name-otohime-is-the-sea-princess-o/acceptance_run-9214/acceptance_report_0.md",
+    "failure_condition": "newest deployed Tamatebako leaf over20 commits behind served SHA, or total differs from git rev-list count",
+    "scope": "separate from optional-provider integration; observed failure is not waived"
+  }
+}

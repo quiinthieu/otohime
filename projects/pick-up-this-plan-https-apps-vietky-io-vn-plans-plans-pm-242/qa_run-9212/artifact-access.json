@@ -1,0 +1,17 @@
+[
+  {
+    "url": "https://apps.vietky.io.vn/api/task-manager/api/v1/tasks/91af979a-ac93-4c4e-bac9-72cd3ebebad0/artifacts/author.txt",
+    "status": 401,
+    "body": "{\"error\":\"authorization token is required\"}"
+  },
+  {
+    "url": "https://apps.vietky.io.vn/task-manager/api/v1/tasks/91af979a-ac93-4c4e-bac9-72cd3ebebad0/artifacts/author.txt",
+    "status": 404,
+    "body": "Not found"
+  },
+  {
+    "url": "https://apps.vietky.io.vn/api/task-manager/v1/tasks/91af979a-ac93-4c4e-bac9-72cd3ebebad0/artifacts/author.txt",
+    "status": 401,
+    "body": "{\"error\":\"authorization token is required\"}"
+  }
+]
