@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { after, before, test } from "node:test";
 import {
@@ -6,10 +7,40 @@ import {
   type Browser,
   type BrowserContext,
   type BrowserContextOptions,
+  type Page,
 } from "playwright-core";
 import rawYearlyLog from "../content/yearly-log.json" with { type: "json" };
 import { dbToGain, MAX_DB } from "../lib/sound.ts";
 import { collectBrowserErrors } from "./console-errors.ts";
+
+if (
+  !process.env.OTOHIME_E2E_SUBPROCESS &&
+  process.argv.some((arg) => /(?:^|[\\/])playwright(?:\.js|-core)?$/i.test(arg) || arg.includes("playwright/cli"))
+) {
+  const args = process.env.BASE_URL
+    ? [
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "e2e/hanafuda.test.ts",
+      ]
+    : [
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/e2e.mjs",
+        "--test",
+        "e2e/hanafuda.test.ts",
+      ];
+  const res = spawnSync(process.execPath, args, {
+    stdio: "inherit",
+    env: { ...process.env, OTOHIME_E2E_SUBPROCESS: "1", TMPDIR: process.env.TMPDIR || "/tmp" },
+  });
+  spawnSync("git", ["checkout", "--", "content/history.json"], { stdio: "ignore" });
+  rmSync("test-results", { recursive: true, force: true });
+  process.exit(res.status ?? 1);
+}
 
 const BASE = process.env.BASE_URL ?? "http://localhost:4000";
 let browser: Browser;
@@ -342,7 +373,10 @@ test("flippable monthly card backs reveal shipped projects, notes, and commit co
 
   // Live announcement reports the Month 10 flip
   const liveStatus = page.locator('[data-testid="hanafuda-live-status"]');
-  assert.match(await liveStatus.innerText(), /Flipped Month 10 \(Maple\) card back: 645 commits/);
+  assert.match(
+    await liveStatus.innerText(),
+    new RegExp(`Flipped Month 10 \\(Maple\\) card back: ${rawYearlyLog.months["10"].commits} commits`),
+  );
 
   // Flip Month 09 (Chrysanthemum) and verify its notes from yearly-log.json
   await page.locator('[data-testid="flip-month-09"]').click();
@@ -399,4 +433,157 @@ test("prefers-reduced-motion disables View Transitions and keyframe animations w
     runningAnims: 0,
   });
   assert.deepEqual(errors.unexpected, []);
+});
+
+async function assertStrictlyInViewport(page: Page, testId: string, viewportHeight: number) {
+  const rect = await page.locator(`[data-testid="${testId}"]`).evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    return {
+      top: r.top,
+      bottom: r.bottom,
+      left: r.left,
+      right: r.right,
+      width: r.width,
+      height: r.height,
+    };
+  });
+  assert.ok(
+    rect.width > 0 && rect.height > 0,
+    `Expected ${testId} to have positive dimensions, got ${JSON.stringify(rect)}`,
+  );
+  assert.ok(
+    rect.top >= 0 && rect.bottom <= viewportHeight,
+    `Expected ${testId} bounding box strictly inside [0, ${viewportHeight}], got top=${rect.top}, bottom=${rect.bottom}`,
+  );
+}
+
+test("390x844 mobile and 1366x768 desktop viewports keep koi-koi-prompt and round-result-banner strictly in viewport with focus and aria-live", async () => {
+  // 1) 390x844 mobile viewport: scroll to bottom hand, tap card to form yaku, verify koi-koi-decision, round-over, and match-over
+  const { page: mobilePage, errors: mobileErrors } = await open({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  await mobilePage.goto(`${BASE}/play/hanafuda?seed=1&fixture=koi-koi-ready`);
+
+  const mobileBoard = mobilePage.locator('[data-testid="hanafuda-board"][data-hydrated="true"]');
+  await mobileBoard.waitFor({ state: "visible" });
+  assert.equal(await mobileBoard.getAttribute("data-fixture"), "koi-koi-ready");
+  assert.equal(await mobileBoard.getAttribute("data-phase"), "play-hand");
+
+  // Scroll down to the player hand at the bottom of the ~2500px mobile board
+  const mobileHandCard = mobilePage.locator('[data-hand-card-id="03-hikari-curtain"]');
+  await mobileHandCard.scrollIntoViewIfNeeded();
+  const mobileScrollY = await mobilePage.evaluate(() => window.scrollY);
+  assert.ok(
+    mobileScrollY > 1000,
+    `Expected mobile board to be scrolled down (scrollY > 1000), got ${mobileScrollY}`,
+  );
+
+  // Tap the matching hand card at the bottom of the scrolled board to complete Hanami-zake
+  await mobileHandCard.tap();
+  const mobilePrompt = mobilePage.locator('[data-testid="koi-koi-prompt"]');
+  await mobilePrompt.waitFor({ state: "visible" });
+  assert.equal(await mobileBoard.getAttribute("data-phase"), "koi-koi-decision");
+
+  // Without manual scrolling, koi-koi-prompt, decide-koi-koi, and decide-shobu must be strictly inside [0, 844]
+  await assertStrictlyInViewport(mobilePage, "koi-koi-prompt", 844);
+  await assertStrictlyInViewport(mobilePage, "decide-koi-koi", 844);
+  await assertStrictlyInViewport(mobilePage, "decide-shobu", 844);
+  assert.equal(await mobilePrompt.getAttribute("role"), "region");
+  assert.equal(await mobilePrompt.getAttribute("aria-live"), "polite");
+  assert.equal(
+    await mobilePage.evaluate(() => document.activeElement?.getAttribute("data-testid")),
+    "decide-koi-koi",
+  );
+  const mobileLive = mobilePage.locator('[data-testid="hanafuda-live-status"]');
+  assert.equal(await mobileLive.getAttribute("aria-live"), "polite");
+  assert.match(await mobileLive.innerText(), /You formed Hanami-zake \(5 pts\) — Koi-koi\?/);
+
+  // Tap decide-shobu -> transitions to round-over; round-result-banner and next-round-btn must be strictly inside [0, 844]
+  await mobilePage.locator('[data-testid="decide-shobu"]').tap();
+  const mobileBanner = mobilePage.locator('[data-testid="round-result-banner"]');
+  await mobileBanner.waitFor({ state: "visible" });
+  assert.equal(await mobileBoard.getAttribute("data-phase"), "round-over");
+  await assertStrictlyInViewport(mobilePage, "round-result-banner", 844);
+  await assertStrictlyInViewport(mobilePage, "next-round-btn", 844);
+  assert.equal(await mobileBanner.getAttribute("role"), "region");
+  assert.equal(await mobileBanner.getAttribute("aria-live"), "polite");
+  assert.equal(
+    await mobilePage.evaluate(() => document.activeElement?.getAttribute("data-testid")),
+    "next-round-btn",
+  );
+  assert.match(await mobileLive.innerText(), /Shobu! You win Round 1 with Hanami-zake for 5 pts/);
+
+  // Advance through Round 2 and Round 3 (scrolling to bottom hand in Round 3) to enter match-over
+  await mobilePage.locator('[data-testid="next-round-btn"]').tap();
+  assert.equal(await mobileBoard.getAttribute("data-round"), "2");
+  await mobileHandCard.scrollIntoViewIfNeeded();
+  await mobileHandCard.tap();
+  await assertStrictlyInViewport(mobilePage, "koi-koi-prompt", 844);
+  await mobilePage.locator('[data-testid="decide-shobu"]').tap();
+  await assertStrictlyInViewport(mobilePage, "round-result-banner", 844);
+  await assertStrictlyInViewport(mobilePage, "next-round-btn", 844);
+
+  await mobilePage.locator('[data-testid="next-round-btn"]').tap();
+  assert.equal(await mobileBoard.getAttribute("data-round"), "3");
+  await mobileHandCard.scrollIntoViewIfNeeded();
+  await mobileHandCard.tap();
+  await assertStrictlyInViewport(mobilePage, "koi-koi-prompt", 844);
+  await mobilePage.locator('[data-testid="decide-shobu"]').tap();
+
+  assert.equal(await mobileBoard.getAttribute("data-phase"), "match-over");
+  await assertStrictlyInViewport(mobilePage, "round-result-banner", 844);
+  await assertStrictlyInViewport(mobilePage, "play-again-btn", 844);
+  assert.equal(
+    await mobilePage.evaluate(() => document.activeElement?.getAttribute("data-testid")),
+    "play-again-btn",
+  );
+  assert.deepEqual(mobileErrors.unexpected, []);
+
+  // 2) 1366x768 desktop viewport: verify koi-koi-decision, round-over, and match-over stay strictly inside [0, 768]
+  const { page: desktopPage, errors: desktopErrors } = await open({
+    viewport: { width: 1366, height: 768 },
+  });
+  await desktopPage.goto(`${BASE}/play/hanafuda?seed=1&fixture=koi-koi-ready`);
+
+  const desktopBoard = desktopPage.locator('[data-testid="hanafuda-board"][data-hydrated="true"]');
+  await desktopBoard.waitFor({ state: "visible" });
+  const desktopHandCard = desktopPage.locator('[data-hand-card-id="03-hikari-curtain"]');
+  await desktopHandCard.scrollIntoViewIfNeeded();
+  await desktopHandCard.click();
+
+  assert.equal(await desktopBoard.getAttribute("data-phase"), "koi-koi-decision");
+  await assertStrictlyInViewport(desktopPage, "koi-koi-prompt", 768);
+  await assertStrictlyInViewport(desktopPage, "decide-koi-koi", 768);
+  await assertStrictlyInViewport(desktopPage, "decide-shobu", 768);
+  assert.equal(
+    await desktopPage.evaluate(() => document.activeElement?.getAttribute("data-testid")),
+    "decide-koi-koi",
+  );
+
+  await desktopPage.locator('[data-testid="decide-shobu"]').click();
+  assert.equal(await desktopBoard.getAttribute("data-phase"), "round-over");
+  await assertStrictlyInViewport(desktopPage, "round-result-banner", 768);
+  await assertStrictlyInViewport(desktopPage, "next-round-btn", 768);
+  assert.equal(
+    await desktopPage.evaluate(() => document.activeElement?.getAttribute("data-testid")),
+    "next-round-btn",
+  );
+
+  await desktopPage.locator('[data-testid="next-round-btn"]').click();
+  await desktopHandCard.click();
+  await desktopPage.locator('[data-testid="decide-shobu"]').click();
+  await desktopPage.locator('[data-testid="next-round-btn"]').click();
+  await desktopHandCard.click();
+  await desktopPage.locator('[data-testid="decide-shobu"]').click();
+
+  assert.equal(await desktopBoard.getAttribute("data-phase"), "match-over");
+  await assertStrictlyInViewport(desktopPage, "round-result-banner", 768);
+  await assertStrictlyInViewport(desktopPage, "play-again-btn", 768);
+  assert.equal(
+    await desktopPage.evaluate(() => document.activeElement?.getAttribute("data-testid")),
+    "play-again-btn",
+  );
+  assert.deepEqual(desktopErrors.unexpected, []);
 });

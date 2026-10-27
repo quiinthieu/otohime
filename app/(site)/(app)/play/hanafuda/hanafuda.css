@@ -1,8 +1,15 @@
 /* Hanafuda Koi-Koi Board & Monthly Shipped Log Backs (app/(site)/(app)/play/hanafuda/hanafuda.css) */
 
+.rise:has(.hanafuda-root) {
+  animation: none !important;
+  translate: none !important;
+  transform: none !important;
+}
+
 .hanafuda-root {
   margin-top: 1.5rem;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
   min-width: 0;
 }
@@ -73,7 +80,10 @@
 
 /* Red Hanko Stamp & Brush-Stroke 'Koi-koi?' Prompt */
 .hanafuda-koikoi-modal {
-  position: relative;
+  position: sticky;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 40;
   padding: 1.15rem 1.25rem;
   border: 2px solid #b52b1d;
   border-radius: 8px;
@@ -189,6 +199,10 @@
 }
 
 .hanafuda-round-banner {
+  position: sticky;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 40;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -205,6 +219,44 @@
   display: flex;
   align-items: center;
   gap: 0.85rem;
+}
+
+@media (max-width: 52rem) {
+  .hanafuda-koikoi-modal,
+  .hanafuda-round-banner {
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    top: auto;
+    bottom: 0.75rem;
+    z-index: 60;
+    max-height: calc(100vh - 1.5rem);
+    overflow-y: auto;
+    margin: 0;
+  }
+
+  .hanafuda-koikoi-modal {
+    padding: 0.85rem 0.95rem;
+    box-shadow: 0 -4px 20px rgba(24, 24, 27, 0.22), 3px 4px 0 var(--ink);
+  }
+
+  .hanafuda-round-banner {
+    padding: 0.8rem 0.95rem;
+    box-shadow: 0 -4px 20px rgba(24, 24, 27, 0.22), 3px 4px 0 var(--shade);
+  }
+
+  .hanafuda-koikoi-art {
+    gap: 0.75rem;
+  }
+
+  .hanafuda-hanko-stamp {
+    width: 64px;
+    height: 64px;
+  }
+
+  .hanafuda-brush-heading {
+    font-size: 1.2rem;
+  }
 }
 
 /* Washi Tatami Table Zones */

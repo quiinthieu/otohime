@@ -2,7 +2,8 @@
 
 import {
   advanceToNextRound,
-   canCardMatchField,
+  canCardMatchField,
+  createCustomRoundState,
   createMatch,
   decideKoiKoi,
   getMatchingFieldCards,
@@ -82,12 +83,93 @@ export type HanafudaBoardProps = {
   initialSeed?: number;
 };
 
+type HanafudaFixtureMode = "koi-koi-ready" | "match-over-ready" | null;
+
+const KOI_KOI_READY_HAND_IDS: readonly CardId[] = [
+  "03-hikari-curtain",
+  "08-hikari-moon",
+  "05-tanzaku-plain",
+  "05-tane-bridge",
+  "06-kasu-1",
+  "06-kasu-2",
+  "07-kasu-1",
+  "07-kasu-2",
+];
+
+const KOI_KOI_READY_FIELD_IDS: readonly CardId[] = [
+  "03-tanzaku-akatan",
+  "09-kasu-2",
+  "08-tane-geese",
+  "01-tanzaku-akatan",
+  "02-tanzaku-akatan",
+  "04-tane-cuckoo",
+  "10-tane-deer",
+  "11-tane-swallow",
+];
+
+const KOI_KOI_READY_TOP_STOCK_IDS: readonly CardId[] = [
+  "09-tane-sake-cup",
+  "12-kasu-1",
+  "12-kasu-2",
+  "12-kasu-3",
+];
+
+function createKoiKoiReadyState(
+  options: {
+    seed?: number;
+    round?: number;
+    totalRounds?: number;
+    scores?: { human: number; cpu: number };
+    roundHistory?: HanafudaState["roundHistory"];
+  } = {},
+): HanafudaState {
+  const used = new Set<string>([
+    ...KOI_KOI_READY_HAND_IDS,
+    ...KOI_KOI_READY_FIELD_IDS,
+    ...KOI_KOI_READY_TOP_STOCK_IDS,
+  ]);
+  const remaining = HANAFUDA_DECK.map((c) => c.id).filter(
+    (id) => !used.has(id),
+  );
+  const nonMonth8 = remaining.filter((id) => !id.startsWith("08-"));
+  const month8Rest = remaining.filter((id) => id.startsWith("08-"));
+  const cpuIds = nonMonth8.slice(0, 8);
+  const stockIds: CardId[] = [
+    ...KOI_KOI_READY_TOP_STOCK_IDS,
+    ...nonMonth8.slice(8),
+    ...month8Rest,
+  ];
+
+  return createCustomRoundState({
+    seed: options.seed ?? 1,
+    round: options.round ?? 1,
+    totalRounds: options.totalRounds ?? 3,
+    dealer: "human",
+    activePlayer: "human",
+    hands: {
+      human: KOI_KOI_READY_HAND_IDS,
+      cpu: cpuIds,
+    },
+    field: KOI_KOI_READY_FIELD_IDS,
+    stock: stockIds,
+    scores: options.scores ?? { human: 0, cpu: 0 },
+    roundHistory: options.roundHistory ?? [],
+  });
+}
+
 function parseSeedParam(params: URLSearchParams): number | null {
   const raw = params.get("seed");
   if (!raw) return null;
   const n = Number(raw);
   if (!Number.isFinite(n) || n < 0) return null;
   return Math.trunc(n) >>> 0;
+}
+
+function parseFixtureParam(params: URLSearchParams): HanafudaFixtureMode {
+  const raw = params.get("fixture")?.trim().toLowerCase();
+  if (raw === "koi-koi-ready") return "koi-koi-ready";
+  if (raw === "match-over-ready") return "match-over-ready";
+  return null;
 }
 
 function parseFlipParam(params: URLSearchParams): MonthKey | null {
@@ -133,6 +215,7 @@ export function HanafudaBoard({
   const [state, setState] = useState<HanafudaState>(() =>
     createMatch({ seed: initialSeed }),
   );
+  const [fixtureMode, setFixtureMode] = useState<HanafudaFixtureMode>(null);
   const [seedInput, setSeedInput] = useState<string>(() => String(initialSeed));
   const [selectedHandCardId, setSelectedHandCardId] = useState<CardId | null>(null);
   const [boardBacksFlipped, setBoardBacksFlipped] = useState<boolean>(false);
@@ -173,8 +256,27 @@ export function HanafudaBoard({
     const syncFromUrl = () => {
       const params = new URLSearchParams(window.location.search);
       const urlSeed = parseSeedParam(params);
+      const urlFixture = parseFixtureParam(params);
       const urlFlip = parseFlipParam(params);
-      if (urlSeed !== null) {
+      if (urlFixture !== null) {
+        const effectiveSeed = urlSeed ?? 1;
+        setFixtureMode(urlFixture);
+        setSeedInput(String(effectiveSeed));
+        setState(
+          createKoiKoiReadyState({
+            seed: effectiveSeed,
+            round: urlFixture === "match-over-ready" ? 3 : 1,
+            totalRounds: 3,
+            scores:
+              urlFixture === "match-over-ready"
+                ? { human: 10, cpu: 0 }
+                : { human: 0, cpu: 0 },
+          }),
+        );
+        setSelectedHandCardId("03-hikari-curtain");
+        setLiveOverride(null);
+      } else if (urlSeed !== null) {
+        setFixtureMode(null);
         setSeedInput(String(urlSeed));
         setState(createMatch({ seed: urlSeed }));
         setSelectedHandCardId(null);
@@ -189,6 +291,49 @@ export function HanafudaBoard({
     window.addEventListener("popstate", syncFromUrl);
     return () => window.removeEventListener("popstate", syncFromUrl);
   }, []);
+
+  useIsomorphicLayoutEffect(() => {
+    const root = boardRef.current;
+    if (!root) return;
+
+    let bannerSelector: string | null = null;
+    let primaryBtnSelector: string | null = null;
+
+    if (state.phase === "koi-koi-decision") {
+      bannerSelector = '[data-testid="koi-koi-prompt"]';
+      primaryBtnSelector = '[data-testid="decide-koi-koi"]';
+    } else if (state.phase === "round-over") {
+      bannerSelector = '[data-testid="round-result-banner"]';
+      primaryBtnSelector = '[data-testid="next-round-btn"]';
+    } else if (state.phase === "match-over") {
+      bannerSelector = '[data-testid="round-result-banner"]';
+      primaryBtnSelector = '[data-testid="play-again-btn"]';
+    }
+
+    if (!bannerSelector || !primaryBtnSelector) return;
+
+    const ensureVisibleAndFocused = () => {
+      const bannerEl = root.querySelector<HTMLElement>(bannerSelector);
+      const primaryBtn =
+        root.querySelector<HTMLButtonElement>(primaryBtnSelector);
+      if (bannerEl && typeof window !== "undefined") {
+        const style = window.getComputedStyle(bannerEl);
+        if (style.position !== "fixed") {
+          const rect = bannerEl.getBoundingClientRect();
+          const vh = window.innerHeight;
+          if (rect.top < 0 || rect.bottom > vh) {
+            const delta =
+              rect.top < 0 ? rect.top - 12 : rect.bottom - vh + 12;
+            window.scrollBy({ top: delta, left: 0, behavior: "instant" });
+          }
+        }
+      }
+      primaryBtn?.focus({ preventScroll: true });
+    };
+
+    ensureVisibleAndFocused();
+    queueMicrotask(ensureVisibleAndFocused);
+  }, [state.phase, state.round, state.turnCount]);
 
   function runWithViewTransition(
     _kind: "hanafuda-deal" | "hanafuda-capture" | "hanafuda-flip",
@@ -209,10 +354,26 @@ export function HanafudaBoard({
     }
   }
 
-  function startNewMatch(nextSeed: number) {
+  function startNewMatch(nextSeed: number, preserveFixture = false) {
     const normalized = (Math.trunc(nextSeed) >>> 0) || HANAMI_ZAKE_SEED;
     play("shuffle");
     setSeedInput(String(normalized));
+    if (preserveFixture && fixtureMode !== null) {
+      runWithViewTransition("hanafuda-deal", () => {
+        const fresh = createKoiKoiReadyState({
+          seed: normalized,
+          round: 1,
+          totalRounds: state.totalRounds,
+        });
+        setState(fresh);
+        setSelectedHandCardId("03-hikari-curtain");
+        setLiveOverride(
+          `Dealt new match (seed ${normalized}) — ${fresh.announcement}`,
+        );
+      });
+      return;
+    }
+    setFixtureMode(null);
     runWithViewTransition("hanafuda-deal", () => {
       const fresh = createMatch({ seed: normalized });
       setState(fresh);
@@ -224,6 +385,7 @@ export function HanafudaBoard({
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
       url.searchParams.set("seed", String(normalized));
+      url.searchParams.delete("fixture");
       window.history.replaceState(window.history.state, "", url);
     }
   }
@@ -317,6 +479,22 @@ export function HanafudaBoard({
   function handleNextRound() {
     if (state.phase !== "round-over") return;
     play("shuffle");
+    if (fixtureMode !== null && state.round < state.totalRounds) {
+      const nextRound = state.round + 1;
+      const nextState = createKoiKoiReadyState({
+        seed: state.seed,
+        round: nextRound,
+        totalRounds: state.totalRounds,
+        scores: state.scores,
+        roundHistory: state.roundHistory,
+      });
+      runWithViewTransition("hanafuda-deal", () => {
+        setState(nextState);
+        setSelectedHandCardId("03-hikari-curtain");
+        setLiveOverride(null);
+      });
+      return;
+    }
     const afterAdvance = advanceToNextRound(state);
     const nextState = advanceIfCpuTurn(afterAdvance);
     runWithViewTransition("hanafuda-deal", () => {
@@ -330,8 +508,11 @@ export function HanafudaBoard({
     if (state.phase !== "play-hand" || state.activePlayer !== "human") return;
     const matches = getMatchingFieldCards(state, card);
 
-    if (selectedHandCardId === card.id) {
-      // Second tap/click on the selected hand card plays it immediately
+    if (
+      selectedHandCardId === card.id ||
+      (fixtureMode !== null && matches.length === 1)
+    ) {
+      // Second tap/click on the selected hand card (or single tap in koi-koi-ready fixture) plays it immediately
       executePlayHandCard(card.id, matches.length === 1 ? matches[0].id : null);
       return;
     }
@@ -687,6 +868,7 @@ export function HanafudaBoard({
       data-active-player={state.activePlayer}
       data-seed={state.seed}
       data-round={state.round}
+      data-fixture={fixtureMode ?? undefined}
       data-hydrated={hydrated ? "true" : "false"}
       data-reduced-motion={reducedMotion ? "true" : "false"}
       data-view-transitions={transitionCount}
@@ -805,6 +987,8 @@ export function HanafudaBoard({
       {/* Red Hanko Stamp + Brush-stroke 'Koi-koi?' vs 'Shobu' Decision Prompt */}
       {state.phase === "koi-koi-decision" && state.pendingDecision ? (
         <section
+          role="region"
+          aria-live="polite"
           className="hanafuda-koikoi-modal"
           data-testid="koi-koi-prompt"
           aria-labelledby="koi-koi-prompt-heading"
@@ -933,6 +1117,8 @@ export function HanafudaBoard({
       {/* Round-over / Match-over banner with hanko stamp when a yaku won */}
       {state.phase === "round-over" || state.phase === "match-over" ? (
         <section
+          role="region"
+          aria-live="polite"
           className="hanafuda-round-banner"
           data-testid="round-result-banner"
           aria-label="Round result"
@@ -974,7 +1160,7 @@ export function HanafudaBoard({
                 type="button"
                 className="btn btn-primary"
                 data-testid="play-again-btn"
-                onClick={() => startNewMatch(state.seed)}
+                onClick={() => startNewMatch(state.seed, true)}
               >
                 Play match again
               </button>
