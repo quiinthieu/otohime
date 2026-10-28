@@ -1,0 +1,73 @@
+{
+  "physics_and_shared_lifecycle": {
+    "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/crumple.test.ts lib/tactile.test.ts lib/kame-fetch.test.ts",
+    "exit": 0,
+    "tests": 20,
+    "pass": 20,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "log_sha256": "f147d1993bb21663d791816403c4ae3265a23497da0323cc8fa5150cb1f3907c"
+  },
+  "repository": {
+    "command": "npm test",
+    "exit": 0,
+    "tests": 2640,
+    "pass": 2640,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "log_sha256": "44f728d24d414926a71e732f419628dbae25f9a3952d8057ca0546ee4dc651b7"
+  },
+  "production_browser": {
+    "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts e2e/tactile-recovery.test.ts e2e/kame.test.ts e2e/tactile-tear.test.ts",
+    "exit": 0,
+    "tests": 39,
+    "pass": 39,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "log_sha256": "2143709d18e1f5af56eae7be3051e5336d2056515e22ca335d1bc116cc0cf002",
+    "chromium": "156.0.8078.48"
+  },
+  "static": {
+    "command": "npm run lint && npm run typecheck",
+    "exit": 0,
+    "errors": 0,
+    "existing_lint_warnings": 10,
+    "next_typegen": "pass",
+    "typescript": "pass"
+  },
+  "boundaries": {
+    "real": "Unchanged npm lock install, Node22.23.3, Next16.4.2 production build/start, embedded Postgres17 migration, locked Playwright1.64.0 launching real Chromium, Canvas2D, native mouse and CDP touch.",
+    "fake": "Existing unrelated Ghosts external-service fixture; injected browser/pure clock drives simulation and interruption conditions; pageshow interruption fixture is synthetic, not an actual bfcache proof.",
+    "negative_controls": [
+      "Measured native rim strike must miss versus an opening hit.",
+      "Forced-energy physics settles by 5000ms.",
+      "Blocked renderer import, null Canvas, thrown paint and context loss recover source.",
+      "Missing accessible name and missing focus restoration fail their assertions."
+    ],
+    "visual": "Inspected local production screenshot after basket hit: visible ink basket/ball/Iron with footer navigation and shell intact; screenshot is ephemeral, no binary committed."
+  },
+  "delivery": {
+    "integration_deployed": "not observed",
+    "waiting_for_capacity": false,
+    "execution_demonstrated": "local production browser and pure/shared tests pass",
+    "product_delivered": "unproven until platform CI and independent deployed QA pass",
+    "ci_observed_for_delivery": false,
+    "deployed_system_checked": false
+  },
+  "deferred": [
+    {
+      "id": "pm-274/t-1585 exact delivery CI",
+      "owner": "plan-manager green gate",
+      "failure_condition": "Required CI red/skipped or delivery absent from main."
+    },
+    {
+      "id": "pm-274/t-1585 deployed QA and acceptance",
+      "owner": "plan-manager quality engineer and acceptance",
+      "failure_condition": "Stale served identity, absent feature ancestry, basket/recovery/content/input regression or relevant negative control fails."
+    }
+  ],
+  "history": "See ci-history.json: FAILED20/155, COMPLETED20/555, in_progress4/4, queued0/0. Raw historical failure403; historical completeness inconclusive. No asynchronous compute queue/model/callback ingestion applies."
+}

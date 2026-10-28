@@ -1,0 +1,6 @@
+Rescued implementation: f7f55edfe4d10062cdb25704aa95d83f03b4ef83 pm-274/t-1585: feat: toss paper into a basket and iron it flat
+Original previous-run implementation: c5664a80c16433b7da86da4e5e822f72922b5f8d
+Delivery evidence commit: enclosing commit; resolve with git log -1 --format="%H %s" -- projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9370/artifacts/commits.txt
+Commit branch: pm-274-t-1585-delivery
+Delivery target: main via fast-forward, then git push origin HEAD
+The plan-manager summary report records the immutable pushed delivery SHA.

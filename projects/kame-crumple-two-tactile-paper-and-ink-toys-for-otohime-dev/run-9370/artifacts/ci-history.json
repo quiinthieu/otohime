@@ -1,0 +1,473 @@
+{
+  "read_before_delivery_push": true,
+  "pages": [
+    {
+      "status": "failure",
+      "page": 1,
+      "http": "200",
+      "total": 155,
+      "read": 10,
+      "runs": [
+        {
+          "id": 40646398062,
+          "sha": "770acf8661dc5c46affb3ac2c2a30c8413b46f81",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40646398062"
+        },
+        {
+          "id": 40645771046,
+          "sha": "b76a19dbdd16228b9a23621c6fd3df0a3b40b387",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40645771046"
+        },
+        {
+          "id": 40645049226,
+          "sha": "a6297cb2631d0173dcc442f9617878b6d5a76825",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40645049226"
+        },
+        {
+          "id": 40635091133,
+          "sha": "68dd79dba309c7713122e08b02ebb4e6844de749",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40635091133"
+        },
+        {
+          "id": 40633395018,
+          "sha": "f50d7aa017c946540199262177a531f652a9980a",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40633395018"
+        },
+        {
+          "id": 40626170762,
+          "sha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40626170762"
+        },
+        {
+          "id": 40554703084,
+          "sha": "72e3657983fd5862e8037ea4b5afc840c342d6af",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40554703084"
+        },
+        {
+          "id": 40552915182,
+          "sha": "7ad719fc89d0075bd4d480a33d68ccbce20310f3",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40552915182"
+        },
+        {
+          "id": 40548308774,
+          "sha": "a62c6356893c4080714795d11599469b55f9aa2e",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40548308774"
+        },
+        {
+          "id": 40531718309,
+          "sha": "9815ddd75d6196abe8f2a1792a5705a2be01a933",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40531718309"
+        }
+      ]
+    },
+    {
+      "status": "failure",
+      "page": 2,
+      "http": "200",
+      "total": 155,
+      "read": 10,
+      "runs": [
+        {
+          "id": 40521253844,
+          "sha": "c1c885cf419b845f076f36e9438fd16ff234216f",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40521253844"
+        },
+        {
+          "id": 40490942824,
+          "sha": "531c0ba6bd530477590cc41ed4d8e9f1a5adf94f",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40490942824"
+        },
+        {
+          "id": 40489507548,
+          "sha": "e1075273c18cc44138aead2bcd15167ce67f822a",
+          "branch": "fix/deploy-release",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40489507548"
+        },
+        {
+          "id": 40488773079,
+          "sha": "221af4b8b9cc98a38b7c646997ffb590daf82acb",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40488773079"
+        },
+        {
+          "id": 40474532913,
+          "sha": "ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40474532913"
+        },
+        {
+          "id": 40471181031,
+          "sha": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40471181031"
+        },
+        {
+          "id": 40468812796,
+          "sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40468812796"
+        },
+        {
+          "id": 40467472536,
+          "sha": "c24320b07314dea9f590ba08c9142039951419d8",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40467472536"
+        },
+        {
+          "id": 40465299263,
+          "sha": "4c64080b37d734c9473201cf00ca86e7d3c1100d",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40465299263"
+        },
+        {
+          "id": 40464199853,
+          "sha": "f3512e8635b22e38fee3e2f3db20b37c3b57b227",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40464199853"
+        }
+      ]
+    },
+    {
+      "status": "completed",
+      "page": 1,
+      "http": "200",
+      "total": 555,
+      "read": 10,
+      "runs": [
+        {
+          "id": 40656021737,
+          "sha": "4a1c8487fe46c254a92dad2b7f2699b5410023f9",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "skipped",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40656021737"
+        },
+        {
+          "id": 40654725044,
+          "sha": "78eea4543c6fbd8835ca8b6800bb7032dd682653",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40654725044"
+        },
+        {
+          "id": 40654534066,
+          "sha": "810710843e61deea4820f59408d1dabc28f3c9cd",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40654534066"
+        },
+        {
+          "id": 40654413448,
+          "sha": "a5784543d2182c4ebc3adfbbc068d020d12aa031",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40654413448"
+        },
+        {
+          "id": 40654289427,
+          "sha": "94f8dd4d36127b340b4bf35ad98a9371162b9735",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40654289427"
+        },
+        {
+          "id": 40654026601,
+          "sha": "ba098b8b908b5a3f1c826bb0f193cbb8d51e4e70",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40654026601"
+        },
+        {
+          "id": 40653759734,
+          "sha": "657f0474b5fc9ee4030054f43069f43045086f82",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40653759734"
+        },
+        {
+          "id": 40652934340,
+          "sha": "b5fa42372d98c8d3712d8b46cd6b6008727552ae",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40652934340"
+        },
+        {
+          "id": 40651936749,
+          "sha": "f4b3de8ee23f336e04adaed24097d324326eb106",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40651936749"
+        },
+        {
+          "id": 40651605621,
+          "sha": "63c36af21bdeba1394a225451ce255896eb6990e",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40651605621"
+        }
+      ]
+    },
+    {
+      "status": "completed",
+      "page": 2,
+      "http": "200",
+      "total": 555,
+      "read": 10,
+      "runs": [
+        {
+          "id": 40649996558,
+          "sha": "c532e4edbc259902b41c457bda0a77557d03b291",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40649996558"
+        },
+        {
+          "id": 40648854250,
+          "sha": "5cd648d3d043e3be54163d5f8e9970737b69c44e",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40648854250"
+        },
+        {
+          "id": 40646398062,
+          "sha": "770acf8661dc5c46affb3ac2c2a30c8413b46f81",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40646398062"
+        },
+        {
+          "id": 40645771046,
+          "sha": "b76a19dbdd16228b9a23621c6fd3df0a3b40b387",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40645771046"
+        },
+        {
+          "id": 40645049226,
+          "sha": "a6297cb2631d0173dcc442f9617878b6d5a76825",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40645049226"
+        },
+        {
+          "id": 40641088253,
+          "sha": "d323b8777a9c34428967314bb9f7f6a87a861fff",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40641088253"
+        },
+        {
+          "id": 40640198126,
+          "sha": "3684cb5e2aa7a2ae517637c74a6d387aa693a9f9",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40640198126"
+        },
+        {
+          "id": 40635091133,
+          "sha": "68dd79dba309c7713122e08b02ebb4e6844de749",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40635091133"
+        },
+        {
+          "id": 40633395018,
+          "sha": "f50d7aa017c946540199262177a531f652a9980a",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40633395018"
+        },
+        {
+          "id": 40631993207,
+          "sha": "22a88f0c7b4d3160c425c2e7877f7d0c05894077",
+          "branch": "main",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40631993207"
+        }
+      ]
+    },
+    {
+      "status": "in_progress",
+      "page": 1,
+      "http": "200",
+      "total": 4,
+      "read": 4,
+      "runs": [
+        {
+          "id": 40657712570,
+          "sha": "7d2a49923ebaa4b709e954442729bb0c5617b8f9",
+          "branch": "main",
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40657712570"
+        },
+        {
+          "id": 40656473025,
+          "sha": "7ba2e804a9f9ecc9d490c4cbbae1eb27a6a3c75e",
+          "branch": "main",
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40656473025"
+        },
+        {
+          "id": 40656021869,
+          "sha": "4a1c8487fe46c254a92dad2b7f2699b5410023f9",
+          "branch": "main",
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40656021869"
+        },
+        {
+          "id": 40654613970,
+          "sha": "09dc8866d960bf4af2f6020f143f25c778f65773",
+          "branch": "main",
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/quiinthieu/otohime/actions/runs/40654613970"
+        }
+      ]
+    },
+    {
+      "status": "queued",
+      "page": 1,
+      "http": "200",
+      "total": 0,
+      "read": 0,
+      "runs": []
+    }
+  ],
+  "completeness": "FAILED and COMPLETED partial (two pages each); current status pages exhaustive at read; categories overlap; raw failed log unavailable, historical cause incompletely observed. No exact delivery CI observed.",
+  "failure_detail": {
+    "run_id": 40646398062,
+    "job_id": 122676106582,
+    "failed_step": "E2E against next start",
+    "raw_log_http": 403,
+    "raw_log_message": "Must have admin rights to Repository.",
+    "public_annotation": "e2e/crumple.test.ts:80:14 accessible-link assertion 0 !== 1",
+    "current_regression": "Current crumple test measures accessible name/destination and focus with explicit negative controls; historical failing fingerprint differs in application, tests and CI configuration."
+  },
+  "fingerprint_comparison": {
+    "770acf8661dc5c46affb3ac2c2a30c8413b46f81": {
+      "lib/crumple.ts": "aff766ad1fd2e4f55b6a08b6f0f1d29749b2d163a67da7377d0d02aa758b1d25",
+      "lib/crumple.test.ts": "dff2150b836f1e26997c8e038c996a3f6a9e62d0f0c82f5b52ca501202812b3b",
+      "lib/tactile.ts": "9095e6c94d44dd49a960e75d95025d17724db492f695a7474c170cee83191f48",
+      "lib/tactile.test.ts": "8314bc790c0d784195277f549122588f904d1dc2849347419d673bb88bf9ddde",
+      "components/tactile/ball-flight.ts": null,
+      "components/tactile/crumple.ts": "1f92f46eeddd071b3be33269023c4d1d2cd7be8bd3de9a16094343558bd3ef37",
+      "components/tactile/crumple-renderer.ts": "f576afe8342f65baf2af0181bad621a767dfd587cd655469b57e3175b3a7b843",
+      "components/tactile/paper-layer.tsx": "76344d0d5a5435bc32d28317519c738eefc73429b7b24aef185cf1f326c48006",
+      "components/tactile/fetch.ts": "76adf7f7f446528b142e935c3b2e5c53ef0f715cb1eb64823c262426a196eb89",
+      "components/end-footer.tsx": "659055c72339b886cd0da35c9bc9899b010bdcc4ef23fdcda574d387c5d7dcda",
+      "app/(site)/tactile.css": "cbd6d06ff357d25c8ed4b1511396dc5213c8ff99c2bce3185e3dc5782e667471",
+      "e2e/tactile-recovery.test.ts": null,
+      "e2e/crumple.test.ts": "4b32cf847c762f35160b0057eb29221e80de6b8d682af318cf378d965279ee31",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      ".github/workflows/ci.yml": "77d926ea02e66c8a24f57c017c453f5839d4d107f37680599503253f7b3f6bf5"
+    },
+    "c5664a80c16433b7da86da4e5e822f72922b5f8d": {
+      "lib/crumple.ts": "c2157c679c38df313dba4c57c9eb47a64c76a0285dcc239a2b2393badd2c8967",
+      "lib/crumple.test.ts": "ff5f62985b8be573974383fdac69f57db2bb68b9a02ee0ac7ca8333505fcab5d",
+      "lib/tactile.ts": "9095e6c94d44dd49a960e75d95025d17724db492f695a7474c170cee83191f48",
+      "lib/tactile.test.ts": "13990425c792be0a0fee50ac1f21b1908ae712b250585d880254443bcfbee740",
+      "components/tactile/ball-flight.ts": "21df959dbd6e0db4ef6309e657a95af95e42fece15087c42fdbee40e2241d824",
+      "components/tactile/crumple.ts": "7eb8073206e605f696975dc4aad42cf84459ea707135756cdb70d0e635e2049f",
+      "components/tactile/crumple-renderer.ts": "b8ce019bd4969197cfa553b3c57e4064577654a9c2df417c63774e732a1b703a",
+      "components/tactile/paper-layer.tsx": "b799d675af2097952d834216f70d4cd9662c08260cc92912dc3ef8921e303eb3",
+      "components/tactile/fetch.ts": "99e3ba863696dfc887d1267a96a0871cf158d7addd9a1cccbdec0f97f225a874",
+      "components/end-footer.tsx": "3eb5c192655d4456155046a1e2810b35463e90b56455c97994e0eb808d7fad18",
+      "app/(site)/tactile.css": "9617ac4fe453730f252f8143dbf888a602c70b413be780d65b669a5675ddef56",
+      "e2e/tactile-recovery.test.ts": "5fdd065bfd663a75c83b2d3c7585f62c46e8d748ad96b222ed9b8a107a628eb7",
+      "e2e/crumple.test.ts": "03202295aea76b5088e58325e8c570b2bc474ce2ead69037b1eac821163df214",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      ".github/workflows/ci.yml": "37cdc7fc1dfd5bee6075b0619b0caaca9a9e0e9d603476affce480d95f350987"
+    },
+    "HEAD": {
+      "lib/crumple.ts": "c2157c679c38df313dba4c57c9eb47a64c76a0285dcc239a2b2393badd2c8967",
+      "lib/crumple.test.ts": "ff5f62985b8be573974383fdac69f57db2bb68b9a02ee0ac7ca8333505fcab5d",
+      "lib/tactile.ts": "9095e6c94d44dd49a960e75d95025d17724db492f695a7474c170cee83191f48",
+      "lib/tactile.test.ts": "13990425c792be0a0fee50ac1f21b1908ae712b250585d880254443bcfbee740",
+      "components/tactile/ball-flight.ts": "21df959dbd6e0db4ef6309e657a95af95e42fece15087c42fdbee40e2241d824",
+      "components/tactile/crumple.ts": "7eb8073206e605f696975dc4aad42cf84459ea707135756cdb70d0e635e2049f",
+      "components/tactile/crumple-renderer.ts": "b8ce019bd4969197cfa553b3c57e4064577654a9c2df417c63774e732a1b703a",
+      "components/tactile/paper-layer.tsx": "b799d675af2097952d834216f70d4cd9662c08260cc92912dc3ef8921e303eb3",
+      "components/tactile/fetch.ts": "99e3ba863696dfc887d1267a96a0871cf158d7addd9a1cccbdec0f97f225a874",
+      "components/end-footer.tsx": "3eb5c192655d4456155046a1e2810b35463e90b56455c97994e0eb808d7fad18",
+      "app/(site)/tactile.css": "9617ac4fe453730f252f8143dbf888a602c70b413be780d65b669a5675ddef56",
+      "e2e/tactile-recovery.test.ts": "5fdd065bfd663a75c83b2d3c7585f62c46e8d748ad96b222ed9b8a107a628eb7",
+      "e2e/crumple.test.ts": "03202295aea76b5088e58325e8c570b2bc474ce2ead69037b1eac821163df214",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      ".github/workflows/ci.yml": "db87d96b2306c84529ff62de6110c05af2a7b41829b06b5cf10ca1b7aa945051"
+    }
+  }
+}
