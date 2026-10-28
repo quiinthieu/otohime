@@ -1,7 +1,7 @@
 import { createFold, foldMesh } from '@/lib/crumple';
 
 /** Basket work can retain this paint surface; dispose always releases its bitmap. */
-export function createCrumpleRenderer(root: HTMLElement, seed: number, reduced: boolean, onFailure: () => void) {
+export function createCrumpleRenderer(root: HTMLElement, seed: number, reduced: boolean, onFailure: () => void, onBall: (canvas: HTMLCanvasElement) => void) {
   const canvas = document.createElement('canvas');
   canvas.className = 'paper-fold-canvas'; canvas.setAttribute('aria-hidden', 'true');
   const context = canvas.getContext('2d');
@@ -37,6 +37,7 @@ export function createCrumpleRenderer(root: HTMLElement, seed: number, reduced: 
       context.globalAlpha = 1;
       root.parentElement!.dataset.crumpleState = fold.state;
       if (fold.state === 'folding') frame = requestAnimationFrame(paint);
+      else onBall(canvas);
     } catch { onFailure(); }
   };
   const dispose = () => { disposed = true; cancelAnimationFrame(frame); canvas.removeEventListener('contextlost', onFailure); canvas.remove(); canvas.width = canvas.height = 0; fold.cancel(); };

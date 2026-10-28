@@ -58,3 +58,15 @@
   .cartridge-slot:hover .cartridge[data-paper-active] > :is(.cartridge-shell, .cartridge-label) { translate: 0 -6px; }
 }
 .cartridge[data-paper-active]:has(.paper-tools:focus-within, .paper-tools:hover) > :is(.cartridge-shell, .cartridge-label) { translate: 0 0; }
+/* Reserved server slot: enhancement never shifts the footer waterline or shell. */
+.paper-basket-slot { position: relative; height: 156px; display: flex; align-items: center; justify-content: flex-end; gap: 16px; color: var(--ink); }
+.paper-basket { width: 148px; height: 100px; flex: none; }
+.paper-iron { position: absolute; right: 168px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
+.paper-ball-grip { position: absolute; left: calc(50% - 22px); top: calc(50% - 22px); width: 44px; height: 44px; padding: 0; border: 0; background: transparent; pointer-events: auto; touch-action: none; cursor: grab; z-index: 24; color: var(--ink); }
+.paper-ball-grip img { width: 44px; height: 44px; pointer-events: none; }
+.paper-ball-grip:focus-visible, .paper-iron:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.paper-ball-grip:active { cursor: grabbing; }
+.paper-toss[hidden] { display: none; }
+.paper-iron-sweep { position: fixed; inset: 0; pointer-events: none; z-index: 25; background: linear-gradient(100deg,transparent 40%,color-mix(in srgb,var(--ink) 8%,transparent) 50%,transparent 60%); animation: paper-iron 420ms ease-out both; }
+@keyframes paper-iron { from { translate: -100% 0; } to { translate: 100% 0; } }
+@media (prefers-reduced-motion: reduce) { .paper-iron-sweep { display: none; } }

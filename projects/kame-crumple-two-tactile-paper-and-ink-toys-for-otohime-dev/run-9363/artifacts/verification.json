@@ -1,0 +1,67 @@
+{
+  "physics_and_shared_lifecycle": {
+    "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/crumple.test.ts lib/tactile.test.ts lib/kame-fetch.test.ts",
+    "exit": 0,
+    "tests": 20,
+    "pass": 20,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "repository": {
+    "command": "npm test",
+    "exit": 0,
+    "tests": 2630,
+    "pass": 2630,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "static": {
+    "command": "npm run lint && npm run typecheck",
+    "exit": 0,
+    "eslint_errors": 0,
+    "existing_eslint_warnings": 10,
+    "next_route_type_generation": "passed",
+    "typescript": "passed"
+  },
+  "production_browser": {
+    "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts e2e/tactile-recovery.test.ts e2e/kame.test.ts e2e/tactile-tear.test.ts",
+    "exit": 0,
+    "tests": 39,
+    "pass": 39,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "chromium": "156.0.8078.48",
+    "construction": "Real embedded PostgreSQL17 migrations, production Next16.4.2 build/start, locked Playwright1.64.0, real Canvas2D, native mouse and CDP touch. Existing Ghosts network fake serves unrelated external fixture content. Browser fake time drives physics elapsed time; CSS sweep uses its actual animationend."
+  },
+  "positive_assertions": [
+    "Downward opening crossing enters basket; same seeded simulation over rim collides and misses.",
+    "High velocity, finite/clamped delta, smaller viewport, natural rest, forced-energy 5000ms cutoff.",
+    "Real pointer basket hit versus rim-miss negative control; no rAF at rest.",
+    "Native touch captured flick; keyboard ordinary/offscreen/reduced placement without scrolling.",
+    "Per-card reset preserves another card and fetch; Iron cancels fold/fetch/flight, tears and proxies.",
+    "Original accessible links, source boxes, Kame name/streak/dismissal and shell controls survive recovery.",
+    "Escape, hidden, modal, motion, source removal, route and page lifecycle release resources; repeated pageshow has one mount.",
+    "Retained Canvas failure/import failure, eight slots/DPR2, projects/notes native controls and footer navigation."
+  ],
+  "ci_observed": false,
+  "deployment_observed": false,
+  "history": {
+    "async_executable_jobs": "not applicable: browser feature has no remote runtime queue or callbacks",
+    "ci_failed_completed_current": "not inspected: task explicitly ends at push; no history completeness or CI success claimed"
+  },
+  "deferred": [
+    {
+      "id": "t-1585 delivery CI",
+      "owner": "plan-manager green gate",
+      "failure_condition": "Any failing required checks or absent delivery integration"
+    },
+    {
+      "id": "t-1585 independent deployed QA",
+      "owner": "plan-manager quality engineer / acceptance",
+      "failure_condition": "Served executable lacks delivery ancestry or basket/recovery/content regression"
+    }
+  ]
+}

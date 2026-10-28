@@ -1,0 +1,4 @@
+Delivery: the enclosing commit, resolved with git log -1 --format="%H %s" -- projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9363/artifacts/commits.txt
+Subject: pm-274/t-1585: feat: toss paper into a basket and iron it flat
+Branch: pm-274-t-1585-basket
+The summary report's git_sha records the immutable pushed delivery commit.
