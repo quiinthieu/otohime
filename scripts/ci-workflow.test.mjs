@@ -1,4 +1,4 @@
-// Guards the main lane in .github/workflows/ci.yml: report-only pushes stay out of the queue,
+// Guards the main lane in .github/workflows/ci.yml: project deliveries enter the queue,
 // pull requests keep running on every change, and the jobs that ship run on a pinned runner.
 // Dependency-free (no npm ci needed): reads the YAML by indentation, which is all this file uses.
 import assert from "node:assert/strict";
@@ -49,30 +49,39 @@ const scalar = (path) => block(path)?.value.replace(/\s+#.*$/, "").replace(/^["'
 // GitHub's filter glob: `**` crosses directories, `*` does not.
 const globRe = (glob) =>
   new RegExp(`^${glob.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*\/?|\*/g, (m) => (m === "*" ? "[^/]*" : ".*"))}$`);
-// A push runs unless every changed file matches an ignore pattern.
-const pushRuns = (ignore, files) => files.some((f) => !ignore.some((g) => globRe(g).test(f)));
+// GitHub's ordered inclusion patterns: a later positive match re-includes a path.
+const pushRuns = (paths, files) => files.some((f) => paths.reduce((included, pattern) => {
+  const negative = pattern.startsWith("!");
+  return globRe(negative ? pattern.slice(1) : pattern).test(f) ? !negative : included;
+}, false));
 
-test("push to main ignores report-only paths", () => {
+test("push to main includes project deliveries while filtering unrelated Markdown", () => {
   assert.deepEqual(list(["on", "push", "branches"]), ["main"]);
-  const ignore = list(["on", "push", "paths-ignore"]);
-  assert.ok(ignore, "on.push.paths-ignore is missing");
-  assert.ok(ignore.includes("projects/**"), `paths-ignore lacks projects/**: ${ignore}`);
-  assert.ok(ignore.includes("**.md"), `paths-ignore lacks **.md: ${ignore}`);
-  assert.equal(block(["on", "push", "paths"]), null, "push must not also set paths (GitHub rejects paths with paths-ignore)");
+  assert.deepEqual(list(["on", "push", "paths"]), ["**", "!**.md", "projects/**"]);
+  assert.equal(block(["on", "push", "paths-ignore"]), null, "GitHub rejects paths with paths-ignore");
 });
 
-test("report-only pushes skip, code pushes still run", () => {
-  const ignore = list(["on", "push", "paths-ignore"]);
-  // Negative controls: a report commit and a README edit create no run.
-  assert.equal(pushRuns(ignore, ["projects/fix-x/qa_run-1.md", "projects/fix-x/artifacts/run.log"]), false);
-  assert.equal(pushRuns(ignore, ["README.md", "agent/skills/neon/references/x.md"]), false);
-  // Code, generated content and the workflow itself still run, alone or beside a report.
-  assert.equal(pushRuns(ignore, ["app/page.tsx"]), true);
-  assert.equal(pushRuns(ignore, ["projects/fix-x/plan.md", "lib/motion.ts"]), true);
-  assert.equal(pushRuns(ignore, ["content/history.json"]), true);
-  assert.equal(pushRuns(ignore, [".github/workflows/ci.yml"]), true);
-  // The ignore must not reach app routes that merely contain "projects".
-  assert.equal(pushRuns(ignore, ["app/(site)/(app)/projects/page.tsx"]), true);
+test("project-only deliveries trigger full CI and historical report filters fail the same fixture", () => {
+  const paths = list(["on", "push", "paths"]);
+  const deliveries = [
+    ["projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9320-summary.md"],
+    ["projects/fix-x/architecture.md", "projects/fix-x/qa_run-1.md"],
+    ["projects/fix-x/artifacts/run.log"],
+    ["README.md", "projects/fix-x/run-1-summary.md"],
+  ];
+  const assertDeliveries = (matches) => {
+    for (const files of deliveries) assert.equal(files.some(matches), true, files.join(", "));
+  };
+  assertDeliveries((f) => pushRuns(paths, [f]));
+  // Both the old paths-ignore and an incorrectly ordered exception suppress reports.
+  assert.throws(() => assertDeliveries((f) => !["projects/**", "**.md"].some((g) => globRe(g).test(f))));
+  assert.throws(() => assertDeliveries((f) => pushRuns(["**", "projects/**", "!**.md"], [f])));
+  assert.throws(() => assertDeliveries((f) => pushRuns(paths.filter((p) => p !== "projects/**"), [f])));
+  assert.equal(pushRuns(paths, ["README.md", "docs/development.md"]), false);
+  for (const file of ["app/page.tsx", "lib/motion.ts", "content/history.json", ".github/workflows/ci.yml", "app/(site)/(app)/projects/page.tsx"]) {
+    assert.equal(pushRuns(paths, [file]), true, file);
+    assert.equal(pushRuns(paths, ["README.md", file]), true, file);
+  }
 });
 
 test("pull_request has no path filter", () => {
@@ -134,11 +143,11 @@ test("production proves the deployed sha, terminal and press after the deploy", 
   assert.match(steps("checks"), /bash scripts\/verify-deploy\.sh --self-test/, "checks must run the verify-deploy self-test");
 });
 
-test("verify-deploy treats exactly the push paths-ignore as report-only", () => {
-  // A report-only lead passes verify-deploy because CI never deploys it; the two lists must not drift apart.
+test("verify-deploy only exempts filtered Markdown and requires project delivery ancestry", () => {
   const script = readFileSync(new URL("./verify-deploy.sh", import.meta.url), "utf8");
-  assert.deepEqual(list(["on", "push", "paths-ignore"]), ["projects/**", "**.md"]);
-  assert.match(script, /^\s*"" \| projects\/\* \| \*\.md\) ;;$/m, "verify-deploy.sh must ignore projects/* and *.md only");
+  assert.deepEqual(list(["on", "push", "paths"]), ["**", "!**.md", "projects/**"]);
+  assert.match(script, /^\s*projects\/\*\) return 1 ;;\n\s*"" \| \*\.md\) ;;$/m,
+    "project paths must require deployment before the generic Markdown exemption");
 });
 
 test("checks uses measured 30m job, 17m E2E step and 900s E2E command budgets", () => {
