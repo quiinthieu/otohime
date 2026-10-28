@@ -1,5 +1,11 @@
 # pm-269/t-1648 · run-9353 · Crumple accessibility gate repair
 
+Latest local result: integrated UI E2E **255/255**, isolated crumple/basket
+**19/19**, and all six exact Bottle contracts plus the deployment fixture pass.
+The final repository suite passes **2,652/2,652** with zero skips. The original
+Notes accessibility fix and the newly exposed footer SVG verifier defects are
+repaired; hosted CI/production and independent deployed QA remain unproven.
+
 Follow [run-9332's fix plan](fix_plan_t-1648_run-9332.md), preserving the historical
 [QA fail verdict](qa_report_t-1648_run-9332.md). Both prior documents are copied
 verbatim from owner-authored `d7d4c53ec7b2246f30c0a0d444c5d89ed9effcb8` so their
@@ -59,7 +65,7 @@ Fake Vercel CLI/vendor API responses prove orchestration, not hosted authorizati
 No live suggestion, external Visit, pipeline watch or deployed-system check occurs.
 
 Persisted profile: `codex-sol-6-1-high`, model `gpt-6.1-sol`, effort `high`,
-fleet worker `billie-mac`, account `codex-main`. Global coding-task history reads
+fleet worker `billie-mac`, account `codex-main`. At initial inspection, bounded global coding-task history reads
 FAILED offsets 0/3, limit 3 (6/126), COMPLETED offsets 0/3 (6/1327), and RUNNING
 offset 0 (3/4); later offset 3 returns 2/5 with a duplicate, so current pagination
 is also incomplete. Raw QA run-9332 tail confirms its successful branch-only
@@ -115,10 +121,85 @@ are under `shared/artifacts/run-9353/final/`; full E2E uses build
 
 Main then advanced to `fb17af7`, including basket implementation `f7f55ed`.
 That changes the footer, crumple lifecycle and browser coverage, so this passing
-pre-basket receipt cannot establish the combined runtime. Preserve the landed
-feature and revalidate its integration before pushing. A second documentation
-commit records these completed observations before rebase; amendments and
-force-pushes remain excluded.
+pre-basket receipt cannot establish the combined runtime. The landed feature
+was preserved and its integration was revalidated below. A second documentation
+commit recorded the completed pre-basket observations before rebase; amendments
+and force-pushes remain excluded.
+
+## Final integrated verification
+
+After integrating `fb17af7`, a fresh production build `h3E7QbeyzFBHnDB7tTRIf`
+passes crumple/basket isolation **19/19** and complete `npm run test:e2e`
+**255/255**, no skips, 770.1 seconds. Its runtime fingerprint is
+`856ca7f02ada75aad7eff1c18a50f2a92eadd6578858b2a5d1f2f7be51d5ab7d`;
+receipts are in `shared/artifacts/run-9353/basket-integration/`. Ink Lab measures
+20.7ms without changing the 100ms limit. The earlier single failed sample is
+retained, with no deterministic timing cause or performance repair claimed.
+
+The six Bottle gates exposed a separate integration defect: seven SSR routes
+counted the new semantic basket as a fourth decorative SVG. Fixing the walk
+then exposed the identical assumption in eight Chromium route checks and the
+no-JS check. The repair retains exactly three hidden scene layers, requires one
+named accessible basket, and retains one hidden final waterline wave. The
+actual shell block's VM regression fails against the old checker and passes
+after repair. The shared browser helper runs in real Chrome with JS on/off;
+the same checker rejects missing/duplicate baskets, missing/extra layers,
+unhidden decoration, wrong/hidden basket semantics, missing/duplicate/nonfinal
+waterlines and a missing footer. All geometry assertions and thresholds remain
+unchanged. Both new named regressions are mandatory in Bottle unit receipts
+and the **ten-control** closure; the DOM helper is fingerprinted.
+
+The archived closure still fails validation. Its labelled synthetic parser
+fixture now supplies current control groups and rejects a coherent passing
+receipt omitting only the new SVG regression. An initial mutation incorrectly
+selected a command by index; selecting `end` by ID fixes that test. Failed
+walk/probe, unit and parser attempts remain under `delivery/`; synthetic HTML
+and TAP demonstrate verifier behavior, while the final real HTTP walk, Chrome
+probe and locked-import/binary closure establish execution.
+
+Report-only main advances through `00e48d6` changed no runtime source. Main then
+added `c1d4726`'s standalone sky module and unit tests; direct source inspection
+finds no existing Notes runtime import. Its unit tests are included in the fresh
+repository run. The existing UI/crumple/e2e/lock bytes match the 255-test proof;
+only verifier/test files and the unused sky module differ. Per-file hashes
+record this boundary instead of substituting an unrelated SHA's evidence.
+
+Final tested source fingerprint:
+`cea0b46806fd77108188b774b333a5498c39b37938ab0510bccf1fde3c612adc`, on
+`d0711b1fef128c19546cc9eda4ed1725d9c91eb9`, base
+`c1d4726e7a4c049ebeb971911f984fbbc0e355d6`. This final documentation update
+changes no fingerprinted executable file. All seven commands and their
+positive/evidence-negative controls pass in `shared/artifacts/run-9353/publication/`:
+
+| Final contract | Result |
+| --- | --- |
+| Bottle layout/picker | 12/12 |
+| Repository `npm test` | 2,652/2,652; zero skips |
+| Lint and types | Exit 0; zero errors, 10 existing warnings |
+| Actual locked-import/Postgres-binary closure | Certified; all ten controls |
+| Bottle production browser | 14/14 |
+| CI-mode footer walk/Chromium probe | 65/176; zero failures |
+| Deployment fixture | 63/63 |
+
+Final Bottle build `faYLBZofubcAijGMc76WA`; footer build
+`DJXU31YWrE16IBjSSXIwa`; Chrome 156.0.8078.48. All three viewports retain
+44px targets, 4px normal scene gap, minimum border clearance 2.40625px,
+default target growth 44→45.796875px at settled 200% root size, and both
+historical CSS negative controls. All Footer/Pocket interaction, storage,
+pending-suggestion, reduced-motion, no-JS, alignment, TV-gap and stability
+contracts pass. Bootstrap is 1,634 gzip bytes, panel/CSS 4,966, CLS 0;
+JS/CSS hashes remain `e4b166ce41b6aa0e4172bf530d9dd20593d3a6f0fffa02a896fe9b48567ea167`
+and `f16c4d552e8f62e4858d07bc747b97b16b181f80512f6f220fc3ceb01a362be2`.
+
+Four focused task-prefixed commits preserve the original fail report and fix
+plan, add the crumple regression, record completed verification before a
+concurrent runtime change, repair both structural verifiers, and record these
+final receipts. The branch is `pm-269-t-1648-run-9353`; the delivery is its
+final report commit, recorded in both run-specific and root shared-artifact
+`commits.txt`. Publish that tested descendant to the task branch and main with
+ordinary forward-only pushes. Commits are created on the task branch.
+Generated history, binaries, secrets, stashes, amendments and force-pushes
+are excluded.
 
 Local execution is demonstrated. Hosted integration and product delivery remain
 unproven; no capacity or operator wait is used. Plan-manager/CI owns t-1648's
