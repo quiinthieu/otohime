@@ -25,13 +25,13 @@ export async function touchDrag(page: Page, x: number, y: number, dx: number, dy
 }
 
 /** Observe real production renderer bytes rather than inferring loading from UI. */
-export function paperImports(page: Page) {
+export function paperImports(page: Page, marker = 'paper-tools') {
   const urls: string[]=[];
   const responses: Promise<void>[]=[];
   page.on('response',response=>{
     if(response.request().resourceType()==='script') responses.push((async()=>{
       const body=await response.text();
-      if(body.includes('paper-tools')) urls.push(response.url());
+      if(body.includes(marker)) urls.push(response.url());
     })());
   });
   return async()=>{await Promise.all(responses);return [...urls];};

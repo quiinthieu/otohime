@@ -1,0 +1,366 @@
+{
+  "failed-1": {
+    "total_count": 152,
+    "page_count": 10,
+    "runs": [
+      {
+        "id": 40635091133,
+        "head_sha": "68dd79dba309c7713122e08b02ebb4e6844de749",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40635091133"
+      },
+      {
+        "id": 40633395018,
+        "head_sha": "f50d7aa017c946540199262177a531f652a9980a",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40633395018"
+      },
+      {
+        "id": 40626170762,
+        "head_sha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40626170762"
+      },
+      {
+        "id": 40554703084,
+        "head_sha": "72e3657983fd5862e8037ea4b5afc840c342d6af",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40554703084"
+      },
+      {
+        "id": 40552915182,
+        "head_sha": "7ad719fc89d0075bd4d480a33d68ccbce20310f3",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40552915182"
+      },
+      {
+        "id": 40548308774,
+        "head_sha": "a62c6356893c4080714795d11599469b55f9aa2e",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40548308774"
+      },
+      {
+        "id": 40531718309,
+        "head_sha": "9815ddd75d6196abe8f2a1792a5705a2be01a933",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40531718309"
+      },
+      {
+        "id": 40521253844,
+        "head_sha": "c1c885cf419b845f076f36e9438fd16ff234216f",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40521253844"
+      },
+      {
+        "id": 40490942824,
+        "head_sha": "531c0ba6bd530477590cc41ed4d8e9f1a5adf94f",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40490942824"
+      },
+      {
+        "id": 40489507548,
+        "head_sha": "e1075273c18cc44138aead2bcd15167ce67f822a",
+        "head_branch": "fix/deploy-release",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40489507548"
+      }
+    ]
+  },
+  "failed-2": {
+    "total_count": 152,
+    "page_count": 10,
+    "runs": [
+      {
+        "id": 40488773079,
+        "head_sha": "221af4b8b9cc98a38b7c646997ffb590daf82acb",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40488773079"
+      },
+      {
+        "id": 40474532913,
+        "head_sha": "ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40474532913"
+      },
+      {
+        "id": 40471181031,
+        "head_sha": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40471181031"
+      },
+      {
+        "id": 40468812796,
+        "head_sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40468812796"
+      },
+      {
+        "id": 40467472536,
+        "head_sha": "c24320b07314dea9f590ba08c9142039951419d8",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40467472536"
+      },
+      {
+        "id": 40465299263,
+        "head_sha": "4c64080b37d734c9473201cf00ca86e7d3c1100d",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40465299263"
+      },
+      {
+        "id": 40464199853,
+        "head_sha": "f3512e8635b22e38fee3e2f3db20b37c3b57b227",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40464199853"
+      },
+      {
+        "id": 40461166952,
+        "head_sha": "cce131daf5c5648830ffe50a7d756e8adc490d73",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40461166952"
+      },
+      {
+        "id": 40460769638,
+        "head_sha": "f08f670eb8bd5c699463062c4d00f08c4d486cfa",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40460769638"
+      },
+      {
+        "id": 40456936288,
+        "head_sha": "e120461717f7e69c17d88f7512e776206d8fe664",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40456936288"
+      }
+    ]
+  },
+  "completed-1": {
+    "total_count": 538,
+    "page_count": 10,
+    "runs": [
+      {
+        "id": 40635091133,
+        "head_sha": "68dd79dba309c7713122e08b02ebb4e6844de749",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40635091133"
+      },
+      {
+        "id": 40633395018,
+        "head_sha": "f50d7aa017c946540199262177a531f652a9980a",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40633395018"
+      },
+      {
+        "id": 40631993207,
+        "head_sha": "22a88f0c7b4d3160c425c2e7877f7d0c05894077",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40631993207"
+      },
+      {
+        "id": 40628728959,
+        "head_sha": "995279a572db68e48ace27cd2aaa04b9d6611e72",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40628728959"
+      },
+      {
+        "id": 40626633944,
+        "head_sha": "2f405343eeee2a625884a6e999591efebed9270c",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40626633944"
+      },
+      {
+        "id": 40626170762,
+        "head_sha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40626170762"
+      },
+      {
+        "id": 40625571209,
+        "head_sha": "308b36202ef8774294596ac9d689016fd64d8d5b",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40625571209"
+      },
+      {
+        "id": 40619191293,
+        "head_sha": "f2e1adfe1d04969255429a617bd4c8e6fceecf40",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40619191293"
+      },
+      {
+        "id": 40619191440,
+        "head_sha": "f2e1adfe1d04969255429a617bd4c8e6fceecf40",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40619191440"
+      },
+      {
+        "id": 40567397034,
+        "head_sha": "139f7054e040558b7bb9078f6d4e73e245dc5fd1",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40567397034"
+      }
+    ]
+  },
+  "completed-2": {
+    "total_count": 538,
+    "page_count": 10,
+    "runs": [
+      {
+        "id": 40564127414,
+        "head_sha": "9cc593e9d0c99e9f7f06ae293edfbaba8bbabbff",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40564127414"
+      },
+      {
+        "id": 40562704334,
+        "head_sha": "400034a28715aa43bc1346f1ba917371df1a909e",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40562704334"
+      },
+      {
+        "id": 40555071055,
+        "head_sha": "68bde4aca8b7aa99fb92c374cc2e7e413be12778",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40555071055"
+      },
+      {
+        "id": 40554703084,
+        "head_sha": "72e3657983fd5862e8037ea4b5afc840c342d6af",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40554703084"
+      },
+      {
+        "id": 40552915182,
+        "head_sha": "7ad719fc89d0075bd4d480a33d68ccbce20310f3",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40552915182"
+      },
+      {
+        "id": 40548308774,
+        "head_sha": "a62c6356893c4080714795d11599469b55f9aa2e",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40548308774"
+      },
+      {
+        "id": 40539710809,
+        "head_sha": "36ba86a99f78ce93a8972c8e1f4d003242325469",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40539710809"
+      },
+      {
+        "id": 40534556213,
+        "head_sha": "db788b1cd8a73670c906eb828401582709910017",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40534556213"
+      },
+      {
+        "id": 40531718309,
+        "head_sha": "9815ddd75d6196abe8f2a1792a5705a2be01a933",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40531718309"
+      },
+      {
+        "id": 40529749649,
+        "head_sha": "8b0c491af0bc134065c6928ea3e72b28cbaaa268",
+        "head_branch": "main",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40529749649"
+      }
+    ]
+  },
+  "current": {
+    "total_count": 0,
+    "page_count": 0,
+    "runs": []
+  },
+  "queued": {
+    "total_count": 0,
+    "page_count": 0,
+    "runs": []
+  },
+  "completeness": "inconclusive: two bounded pages (20/152 failed; 20/538 completed); filters overlap; older pages unread. Current in_progress 0/0 and queued 0/0 before delivery. No delivery CI observation.",
+  "raw_failure": {
+    "run_id": 40635091133,
+    "job_id": 122640103971,
+    "http_status": 403,
+    "reason": "Must have admin rights to Repository.",
+    "public_annotation": "Footer Chromium probe: network: zero unexpected external network requests from footer pages: /music [frame unverified] -> YouTube embed; probe: 175 ok, 1 failed. Build rOOgeVfqpJhi49SG-UBCR; Node 22.23.3; Chrome 155.0.8059.39.",
+    "sha": "68dd79dba309c7713122e08b02ebb4e6844de749",
+    "correlation": "Unrelated prior executable; not proof of this new fold implementation. Full raw runner tail unread; bounded public annotation read. No async product callback/ingestion exists for this browser feature."
+  }
+}
