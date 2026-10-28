@@ -261,11 +261,15 @@ export async function handlePost(request: Request, deps: AskDeps): Promise<Respo
   const text = message.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("");
   const parsed = parseAnswer(text);
   if (!parsed) return json(offline(index, question));
+  const sources = mapSources(parsed.cited, hrefMap(passages));
+  // Never print a substantive model answer without a page the visitor can check.
+  const noMatch = parsed.lines.length === 1 && parsed.lines[0] === "NO MATCH.";
+  if (!noMatch && sources.length === 0) return json(offline(index, question));
   const result: AskAnswer = {
     mode: "llm",
     intent: "search",
     lines: parsed.lines,
-    sources: mapSources(parsed.cited, hrefMap(passages)),
+    sources,
   };
   return json(result);
 }
