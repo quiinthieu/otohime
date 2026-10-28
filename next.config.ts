@@ -27,6 +27,12 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        source: "/play/booth",
+        headers: [
+          { key: "Permissions-Policy", value: "camera=(self), microphone=()" },
+        ],
+      },
+      {
         source: "/vendor/peep-box/:version/head-worker.js",
         headers: [
           {
