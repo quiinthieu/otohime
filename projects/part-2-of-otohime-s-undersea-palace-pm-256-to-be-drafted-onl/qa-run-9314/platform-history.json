@@ -1,0 +1,593 @@
+{
+  "history": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 3,
+      "total": 111,
+      "tasks": [
+        {
+          "id": "cfbd55a5-04da-4514-b594-d3421ceee9e5",
+          "status": "FAILED",
+          "plan": "pm-274",
+          "run": "run-9308",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3ff1c47c577e is not on origin/main",
+          "createdAt": "2026-10-28T05:33:04Z",
+          "completedAt": "2026-10-28T05:49:26Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "otohime"
+        },
+        {
+          "id": "edb12e60-dbba-494c-8483-f1de9d165dc9",
+          "status": "FAILED",
+          "plan": "pm-257",
+          "run": "run-9304",
+          "error": "agent_failed: exit 143 class=unknown marker=none",
+          "createdAt": "2026-10-28T05:18:17Z",
+          "completedAt": "2026-10-28T05:23:55Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "otohime"
+        },
+        {
+          "id": "58d9985a-4dda-4216-aa7b-b7e85aea7c48",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "can-485",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "createdAt": "2026-10-28T03:48:57Z",
+          "completedAt": "2026-10-28T04:19:17Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "mono-v2"
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 3,
+      "limit": 3,
+      "total": 111,
+      "tasks": [
+        {
+          "id": "ba060ab0-7380-40cf-a3aa-81f8f7fb05d7",
+          "status": "FAILED",
+          "plan": "pm-platform",
+          "run": "can-484",
+          "error": "queue_ttl_exceeded: no worker claimed this task within 30m0s; fleet=idle all_busy=1 held=0 offline=4 idle=3 workers=8",
+          "createdAt": "2026-10-28T03:48:57Z",
+          "completedAt": "2026-10-28T04:19:18Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "mono-v2"
+        },
+        {
+          "id": "9368bacf-11ac-496f-9fd3-37c699230e57",
+          "status": "FAILED",
+          "plan": "pm-269",
+          "run": "run-9284",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD e0fbe51a33c2 is not on origin/main",
+          "createdAt": "2026-10-28T02:40:18Z",
+          "completedAt": "2026-10-28T02:46:29Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "otohime"
+        },
+        {
+          "id": "06e59416-c2fb-4814-bd7b-d6f7fcff0571",
+          "status": "FAILED",
+          "plan": "pm-257",
+          "run": "run-9276",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0a6755b77bb8 is not on origin/main",
+          "createdAt": "2026-10-28T00:37:24Z",
+          "completedAt": "2026-10-28T01:28:19Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "otohime"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 3,
+      "total": 1328,
+      "tasks": [
+        {
+          "id": "38de207a-a51b-4a5a-8b76-7678abcd3a80",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-28T06:01:46Z",
+          "completedAt": "2026-10-28T06:02:23Z",
+          "repo": "otohime"
+        },
+        {
+          "id": "22bacefe-bab8-42b9-ab48-90d36eeee2ff",
+          "status": "COMPLETED",
+          "plan": "pm-274",
+          "run": "run-9311",
+          "createdAt": "2026-10-28T05:59:32Z",
+          "completedAt": "2026-10-28T06:03:43Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "otohime"
+        },
+        {
+          "id": "2ba525e7-7876-4626-9412-db7faf67e0e4",
+          "status": "COMPLETED",
+          "plan": "pm-274",
+          "run": "run-9309",
+          "createdAt": "2026-10-28T05:51:43Z",
+          "completedAt": "2026-10-28T05:59:28Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "otohime"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 3,
+      "limit": 3,
+      "total": 1328,
+      "tasks": [
+        {
+          "id": "e291c3a3-509e-49ca-9cff-8f133608790f",
+          "status": "COMPLETED",
+          "plan": "pm-257",
+          "run": "run-9310",
+          "createdAt": "2026-10-28T05:50:29Z",
+          "completedAt": "2026-10-28T06:02:28Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "otohime"
+        },
+        {
+          "id": "07a0b732-9390-4c4d-9322-a1850163a7e4",
+          "status": "COMPLETED",
+          "createdAt": "2026-10-28T05:34:47Z",
+          "completedAt": "2026-10-28T05:35:57Z",
+          "repo": "mono-v2"
+        },
+        {
+          "id": "a8422a32-0a65-4837-854f-474394e6734a",
+          "status": "COMPLETED",
+          "plan": "pm-274",
+          "run": "run-9307",
+          "createdAt": "2026-10-28T05:30:16Z",
+          "completedAt": "2026-10-28T05:33:01Z",
+          "callbackState": "delivered",
+          "callbackAttempts": 1,
+          "repo": "otohime"
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 3,
+      "total": 4,
+      "tasks": [
+        {
+          "id": "ce787a77-9af4-45c5-af5f-a3fd14466814",
+          "status": "RUNNING",
+          "plan": "pm-274",
+          "run": "run-9315",
+          "createdAt": "2026-10-28T06:05:13Z",
+          "repo": "otohime"
+        },
+        {
+          "id": "dbf26ede-edac-4cf6-9957-88949f50844a",
+          "status": "RUNNING",
+          "plan": "pm-257",
+          "run": "run-9314",
+          "createdAt": "2026-10-28T06:03:45Z",
+          "repo": "otohime"
+        },
+        {
+          "id": "58c0088e-e0ca-40d0-a4ed-1b3f7605ce70",
+          "status": "RUNNING",
+          "plan": "pm-273",
+          "run": "run-9313",
+          "createdAt": "2026-10-28T06:02:18Z",
+          "repo": "otohime"
+        }
+      ]
+    },
+    {
+      "status": "PENDING",
+      "offset": 0,
+      "limit": 3,
+      "total": null,
+      "tasks": []
+    }
+  ],
+  "planRuns": [
+    {
+      "id": "run-8936",
+      "role": "research",
+      "status": "succeeded",
+      "tm_task_id": "6ce92a41-fb2e-4e9a-aaef-10ec0ba9514c"
+    },
+    {
+      "id": "run-8946",
+      "role": "product_owner",
+      "status": "succeeded",
+      "git_sha": "eb13f52",
+      "tm_task_id": "eaef1c9d-bc00-4a69-87cc-90519791dc22"
+    },
+    {
+      "id": "run-8976",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "4647c20",
+      "tm_task_id": "97f80709-45b8-4fb3-9eec-172d2f7f0dda",
+      "task_id": "t-1607"
+    },
+    {
+      "id": "run-9004",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "4647c20",
+      "tm_task_id": "fcc6dbf7-cc08-4955-8f48-78a8b2c79950",
+      "task_id": "t-1607"
+    },
+    {
+      "id": "run-9008",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "276ce78",
+      "tm_task_id": "5571b04a-2bbe-418f-a23f-abc4d67b1f54",
+      "task_id": "t-1607"
+    },
+    {
+      "id": "run-9111",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "5139d4f",
+      "tm_task_id": "73c928b5-e2c3-4f51-9eeb-157aa766f5d5",
+      "task_id": "t-1607"
+    },
+    {
+      "id": "run-9112",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "5139d4f",
+      "tm_task_id": "3a7e7256-d678-4160-a980-718110659f8e",
+      "task_id": "t-1607"
+    },
+    {
+      "id": "run-9113",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "6abdc3b",
+      "tm_task_id": "2c52f04d-1b40-4be8-ba48-2ae97c0415ea",
+      "task_id": "t-1607"
+    },
+    {
+      "id": "run-9116",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "ebbb06d",
+      "tm_task_id": "e63ac27e-ea91-4016-b607-01eb3d41ba9d",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9119",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "ebbb06d",
+      "tm_task_id": "905c7af9-72c5-43f4-ba3f-8ea14a8853d2",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9121",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "f24e85f",
+      "tm_task_id": "d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9124",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "a958913",
+      "tm_task_id": "6c1ca935-6a57-469d-b1ff-8d83a123c092",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9126",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "a958913",
+      "tm_task_id": "90b5551f-8342-40f7-b204-0c620c185d83",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9128",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "6bea14d",
+      "tm_task_id": "f88e41f9-a566-419d-bed6-997ee03f6751",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9154",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "a6723c1",
+      "tm_task_id": "f064cbe7-9854-40d2-a678-422912b1ec60",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9160",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "a6723c1",
+      "tm_task_id": "9fbc1895-9d48-4859-8ff1-3a3d22674959",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9162",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "5c2ecc5",
+      "tm_task_id": "d4cfdda7-14e2-44f1-b2b2-34520ebf619a",
+      "task_id": "t-1608"
+    },
+    {
+      "id": "run-9167",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "tm_task_id": "14150a34-fc1e-4af3-809d-54e932ad0d72",
+      "task_id": "t-1609"
+    },
+    {
+      "id": "run-9169",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "cce131d",
+      "tm_task_id": "35f1dcbe-41b8-4128-8d7e-280b9d0b20ac",
+      "task_id": "t-1609"
+    },
+    {
+      "id": "run-9174",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "cce131d",
+      "tm_task_id": "2edb2244-8f91-4fc7-9b7a-dadea4e71144",
+      "task_id": "t-1609"
+    },
+    {
+      "id": "run-9175",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "b3b1af9",
+      "tm_task_id": "c9f6cb4d-762c-4deb-8a8e-d0a658af2765",
+      "task_id": "t-1609"
+    },
+    {
+      "id": "run-9276",
+      "role": "software_engineer",
+      "status": "failed",
+      "tm_task_id": "06e59416-c2fb-4814-bd7b-d6f7fcff0571",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9277",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "f2e1adf",
+      "tm_task_id": "42b21310-f0d8-4acc-ae83-a8ddd82730dd",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9280",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "f2e1adf",
+      "tm_task_id": "0eb5d871-8b7a-4284-9d37-19acd9185794",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9283",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "308b362",
+      "tm_task_id": "d12ebf94-0430-4319-998f-974e8abad5f0",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9288",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "308b362",
+      "tm_task_id": "66996231-fdae-45a9-8636-c532bafc1417",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9292",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "de6807f",
+      "tm_task_id": "2543df22-3a7e-472a-9dbd-8f47427a0276",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9296",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "22a88f0",
+      "tm_task_id": "7277a09d-c94f-4c58-84cd-a2be48e92532",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9297",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "22a88f0",
+      "tm_task_id": "9bd4b1b8-8574-482f-b365-9fc0d15fc9e9",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9298",
+      "role": "quality_engineer",
+      "status": "succeeded",
+      "git_sha": "c328060",
+      "tm_task_id": "1fced89c-55b3-4c9f-a6a4-5d37d8650eb2",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9304",
+      "role": "software_engineer",
+      "status": "failed",
+      "tm_task_id": "edb12e60-dbba-494c-8483-f1de9d165dc9",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9305",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "git_sha": "3684cb5",
+      "tm_task_id": "b33c4b07-f872-4728-ac76-9c8c4a7fa46f",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9310",
+      "role": "verify",
+      "status": "succeeded",
+      "git_sha": "3684cb5",
+      "tm_task_id": "e291c3a3-509e-49ca-9cff-8f133608790f",
+      "task_id": "t-1610"
+    },
+    {
+      "id": "run-9314",
+      "role": "quality_engineer",
+      "status": "running",
+      "tm_task_id": "dbf26ede-edac-4cf6-9957-88949f50844a",
+      "task_id": "t-1610"
+    }
+  ],
+  "profiles": {
+    "run-9304": {
+      "id": "run-9304",
+      "role": "software_engineer",
+      "tm_task_id": "edb12e60-dbba-494c-8483-f1de9d165dc9",
+      "worker_id": "avietidol-mac-mini",
+      "runner": "fleet",
+      "agent_profile": "claude-opus-high",
+      "status": "failed",
+      "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "callback_apply_failures": 0
+    },
+    "run-9305": {
+      "id": "run-9305",
+      "role": "software_engineer",
+      "tm_task_id": "b33c4b07-f872-4728-ac76-9c8c4a7fa46f",
+      "worker_id": "avietidol-z490",
+      "runner": "fleet",
+      "git_sha": "3684cb5",
+      "agent_profile": "claude-opus-high",
+      "status": "succeeded",
+      "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "callback_apply_failures": 0
+    },
+    "run-9310": {
+      "id": "run-9310",
+      "role": "verify",
+      "tm_task_id": "e291c3a3-509e-49ca-9cff-8f133608790f",
+      "worker_id": "avietidol-z490",
+      "runner": "fleet",
+      "git_sha": "3684cb5",
+      "status": "succeeded",
+      "callback_apply_failures": 0
+    },
+    "run-9314": {
+      "id": "run-9314",
+      "role": "quality_engineer",
+      "tm_task_id": "dbf26ede-edac-4cf6-9957-88949f50844a",
+      "worker_id": "avietidol-mac-mini",
+      "runner": "fleet",
+      "agent_profile": "codex-sol-6-1-high",
+      "status": "running",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    }
+  },
+  "greenGate": {
+    "id": "ver-3701",
+    "plan_id": "pm-257",
+    "task_id": "t-1610",
+    "run_id": "run-9310",
+    "gate": "green",
+    "git_sha": "3684cb5",
+    "status": "pass",
+    "items": [
+      {
+        "name": "Workflow fixtures",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/ghosts-workflow.test.mjs scripts/ci-workflow.test.mjs",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 8083,
+        "stdout_tail": "author gate precedes production migrations and main checks\n  ---\n  duration_ms: 0.595217\n  type: 'test'\n  ...\n# Subtest: checks, preview and production check out full git ancestry (fetch-depth: 0) and gate builds with strict history checks\nok 46 - checks, preview and production check out full git ancestry (fetch-depth: 0) and gate builds with strict history checks\n  ---\n  duration_ms: 0.65637\n  type: 'test'\n  ...\n# Subtest: production strict history build step blocks build/upload on shallow or mismatched history and catches post-build tampering\nok 47 - production strict history build step blocks build/upload on shallow or mismatched history and catches post-build tampering\n  ---\n  duration_ms: 1524.278217\n  type: 'test'\n  ...\n# Subtest: ghost fake starts before Next, survives every later browser/footer probe and is always cleaned\nok 48 - ghost fake starts before Next, survives every later browser/footer probe and is always cleaned\n  ---\n  duration_ms: 0.457208\n  type: 'test'\n  ...\n# Subtest: actual CI fake startup/readiness/late-probe/cleanup commands keep the transport available until teardown\nok 49 - actual CI fake startup/readiness/late-probe/cleanup commands keep the transport available until teardown\n  ---\n  duration_ms: 1038.459184\n  type: 'test'\n  ...\n# Subtest: application SHA and Next BUILD_ID are published independently from the Worker executable\nok 50 - application SHA and Next BUILD_ID are published independently from the Worker executable\n  ---\n  duration_ms: 19.915943\n  type: 'test'\n  ...\n# Subtest: production read-only Terminal/Press probe runs without fake configuration and preserves browser failures\nok 51 - production read-only Terminal/Press probe runs without fake configuration and preserves browser failures\n  ---\n  duration_ms: 600.347021\n  type: 'test'\n  ...\n# Subtest: documented Docker E2E entrypoint owns explicit fake configuration until its server stops\nok 52 - documented Docker E2E entrypoint owns explicit fake configuration until its server stops\n  ---\n  duration_ms: 1048.537075\n  type: 'test'\n  ...\n# Subtest: dispatch and main pushes use one dark, serialized, least-privilege job; fork PRs have no trigger/token\nok 53 - dispatch and main pushes use one dark, serialized, least-privilege job; fork PRs have no trigger/token\n  ---\n  duration_ms: 1.031954\n  type: 'test'\n  ...\n# Subtest: shared protocol/policy/room, Worker source/lock/config, scripts and workflow trigger deployment\nok 54 - shared protocol/policy/room, Worker source/lock/config, scripts and workflow trigger deployment\n  ---\n  duration_ms: 0.288984\n  type: 'test'\n  ...\n# Subtest: disabled/unset configurations execute nothing and need no secrets\nok 55 - disabled/unset configurations execute nothing and need no secrets\n  ---\n  duration_ms: 17.127172\n  type: 'test'\n  ...\n# Subtest: enabled with missing secrets fails by name without deploying\nok 56 - enabled with missing secrets fails by name without deploying\n  ---\n  duration_ms: 107.621897\n  type: 'test'\n  ...\n# Subtest: real workflow commands verify before deploy; dispatch and push publish the same exact public manifest\nok 57 - real workflow commands verify before deploy; dispatch and push publish the same exact public manifest\n  ---\n  duration_ms: 251.006995\n  type: 'test'\n  ...\n# Subtest: failed verification or absent version output cannot publish a successful build\nok 58 - failed verification or absent version output cannot publish a successful build\n  ---\n  duration_ms: 188.98821\n  type: 'test'\n  ...\n# Subtest: read-only identity probe uses independent app build metadata and rejects stale Worker/app identities\nok 59 - read-only identity probe uses independent app build metadata and rejects stale Worker/app identities\n  ---\n  duration_ms: 173.863343\n  type: 'test'\n  ...\n# Subtest: invalid build identity prevents deployment before any external mutation\nok 60 - invalid build identity prevents deployment before any external mutation\n  ---\n  duration_ms: 0.622893\n  type: 'test'\n  ...\n1..60\n# tests 60\n# suites 0\n# pass 60\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8018.89129\n"
+      },
+      {
+        "name": "Project tests",
+        "cmd": "npm test",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 37301,
+        "stdout_tail": "e default loader resolves the repo's locked playwright-core\n  ---\n  duration_ms: 1.487083\n  type: 'test'\n  ...\n# Subtest: probe title: the plain Riso source inside h2\\#end-title, never the decorative plates\nok 2578 - probe title: the plain Riso source inside h2\\#end-title, never the decorative plates\n  ---\n  duration_ms: 1038.081845\n  type: 'test'\n  ...\n# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs\nok 2579 - probe bounds: measured after the one-shot ink lands, from the visible glyphs\n  ---\n  duration_ms: 1197.487256\n  type: 'test'\n  ...\n# Subtest: Footer 403 exit calls the heading observer after navigation before reading main h1\nok 2580 - Footer 403 exit calls the heading observer after navigation before reading main h1\n  ---\n  duration_ms: 85.558829\n  type: 'test'\n  ...\n# Subtest: streamed /dashboard heading arriving after 1.5s resolves the real observer\nok 2581 - streamed /dashboard heading arriving after 1.5s resolves the real observer\n  ---\n  duration_ms: 1644.636439\n  type: 'test'\n  ...\n# Subtest: missing, empty and hidden main headings fail at the 10s bound (negative control)\nok 2582 - missing, empty and hidden main headings fail at the 10s bound (negative control)\n  ---\n  duration_ms: 10114.29976\n  type: 'test'\n  ...\n# Subtest: parseLog and parseSiteSource extract commits, notes, and project fields and reject garbled git records\nok 2583 - parseLog and parseSiteSource extract commits, notes, and project fields and reject garbled git records\n  ---\n  duration_ms: 2.919711\n  type: 'test'\n  ...\n# Subtest: a full clone aggregates git commits, site.ts projects/notes, and ledger.json across all 12 months\nok 2584 - a full clone aggregates git commits, site.ts projects/notes, and ledger.json across all 12 months\n  ---\n  duration_ms: 36.629317\n  type: 'test'\n  ...\n# Subtest: highlights are capped at MAX_HIGHLIGHTS_PER_MONTH while commits counts all non-merge commits in the month\nok 2585 - highlights are capped at MAX_HIGHLIGHTS_PER_MONTH while commits counts all non-merge commits in the month\n  ---\n  duration_ms: 57.652901\n  type: 'test'\n  ...\n# Subtest: without git, outside a repository, or in an empty one, the committed fallback is preserved untouched\nok 2586 - without git, outside a repository, or in an empty one, the committed fallback is preserved untouched\n  ---\n  duration_ms: 47.167172\n  type: 'test'\n  ...\n# Subtest: a shallow clone splices commits since fallback.head, matching a full clone byte for byte\nok 2587 - a shallow clone splices commits since fallback.head, matching a full clone byte for byte\n  ---\n  duration_ms: 70.304328\n  type: 'test'\n  ...\n# Subtest: a shallow clone that no longer holds fallback.head preserves the fallback unchanged\nok 2588 - a shallow clone that no longer holds fallback.head preserves the fallback unchanged\n  ---\n  duration_ms: 62.188258\n  type: 'test'\n  ...\n# Subtest: a garbled git log falls back cleanly instead of failing the build\nok 2589 - a garbled git log falls back cleanly instead of failing the build\n  ---\n  duration_ms: 25.511976\n  type: 'test'\n  ...\n# Subtest: --check passes fresh and shallow fallbacks, tolerates later site.ts edits within MAX_LAG, and catches tampering or staleness\nok 2590 - --check passes fresh and shallow fallbacks, tolerates later site.ts edits within MAX_LAG, and catches tampering or staleness\n  ---\n  duration_ms: 180.046628\n  type: 'test'\n  ...\n# Subtest: CLI writes the yearly log, preserves gitless fallback, and enforces --strict checks\nok 2591 - CLI writes the yearly log, preserves gitless fallback, and enforces --strict checks\n  ---\n  duration_ms: 913.069931\n  type: 'test'\n  ...\n# Subtest: committed content/yearly-log.json is valid, canonical, in sync with content/site.ts, and package.json wires yearly-log scripts\nok 2592 - committed content/yearly-log.json is valid, canonical, in sync with content/site.ts, and package.json wires yearly-log scripts\n  ---\n  duration_ms: 1.29914\n  type: 'test'\n  ...\n1..2592\n# tests 2610\n# suites 2\n# pass 2610\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 37190.946856\n"
+      },
+      {
+        "name": "Lint",
+        "cmd": "npm run lint",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 19255,
+        "stdout_tail": "\n> otohime@0.1.0 lint\n> eslint\n\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(articles)/_components/masthead.tsx\n  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(barometer)/barometer/page.tsx\n  44:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(capsule)/capsule/page.tsx\n  26:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(elements)/elements/page.tsx\n  22:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(orrery)/_components/chrome.tsx\n  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(planisphere)/planisphere/page.tsx\n  59:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(rotor)/rotor/page.tsx\n  37:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(shore)/shore/page.tsx\n  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/app/(vinyl)/vinyl/page.tsx\n  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')\n\n/data/build-worker/leases/e291c3a3-509e-49ca-9cff-8f133608790f-a4db5e0775a777f676b3a35f3fad7387/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs\n  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars\n\n✖ 10 problems (0 errors, 10 warnings)\n  0 errors and 9 warnings potentially fixable with the `--fix` option.\n\n"
+      },
+      {
+        "name": "Production build",
+        "cmd": "npm run build",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 24529,
+        "stdout_tail": "fad7387/work/otohime/content/history.json\n\n> otohime@0.1.0 build\n> next build\n\n▲ Next.js 16.4.2 (Turbopack)\n✓ Running next.config.ts took 25ms\nAttention: Next.js now collects completely anonymous telemetry regarding usage.\nThis information is used to shape Next.js' roadmap and prioritize features.\nYou can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:\nhttps://nextjs.org/telemetry\n\n- Cache Components enabled\n- Partial Prefetching enabled\n- Experiments (use with caution):\n  ✓ authInterrupts\n  ✓ globalNotFound\n\n  Creating an optimized production build ...\n✓ Compiled successfully in 5.0s\n  Running TypeScript ...\n  Finished TypeScript in 14.2s ...\n  Collecting page data using 19 workers ...\n  Generating static pages using 19 workers (0/211) ...\n  Generating static pages using 19 workers (52/211) \n  Generating static pages using 19 workers (105/211) \n  Generating static pages using 19 workers (158/211) \n✓ Generating static pages using 19 workers (211/211) in 2.2s\n  Finalizing page optimization ...\n\nRoute (app)                             Revalidate  Expire\n┌ ◐ /                                           1d      1w\n├ ○ /_not-found\n├ ◐ /account                                    1d      1w\n├ ◐ /admin                                      1d      1w\n├ ◐ /admin/bottles                              1d      1w\n├ ◐ /admin/roles                                1d      1w\n├ ◐ /admin/users                                1d      1w\n├   /admin/users/[id]                           1d      1w\n│ └ ◐ /admin/users/[id]                         1d      1w\n├ ƒ /api/admin/bottles\n├ ƒ /api/admin/bottles/[id]\n├ ƒ /api/ask\n├ ƒ /api/auth/[...all]\n├ ƒ /api/bottles\n├ ƒ /api/bottles/suggestions\n├ ƒ /api/ghosts\n├ ƒ /api/guestbook\n├ ƒ /api/health\n├ ƒ /api/now-playing\n├ ○ /articles\n├   /articles/[slug]\n│ ├ ◐ /articles/[slug]\n│ ├ ○ /articles/why-the-sky-is-blue\n│ ├ ○ /articles/why-we-need-a-leap-day\n│ └ ◐ [+4 more paths]\n├ ƒ /barometer\n├ ○ /capsule\n├ ◐ /dashboard                                  1d      1w\n├ ○ /design-system\n├ ◐ /desk                                       1d      1w\n├ ○ /desk/opengraph-image-blg90x\n├ ○ /elements\n├   /elements/[symbol]\n│ ├ ◐ /elements/[symbol]\n│ ├ ○ /elements/h\n│ ├ ○ /elements/he\n│ └ ◐ [+116 more paths]\n├ ○ /forgot-password\n├ ○ /icon.svg\n├ ◐ /lab                                        1d      1w\n├ ◐ /ledger                                     1d      1w\n├ ○ /ledger/opengraph-image-1olq6y\n├ ◐ /making-of                                  1d      1w\n├ ƒ /music                                      1d      1w\n├ ○ /music/opengraph-image-rp137v\n├ ◐ /notes                                      1d      1w\n├ ○ /notes/opengraph-image-rplwnn\n├ ○ /og\n├ ○ /orrery\n├   /orrery/[body]\n│ ├ ◐ /orrery/[body]\n│ ├ ○ /orrery/sun\n│ ├ ○ /orrery/mercury\n│ └ ◐ [+12 more paths]\n├ ƒ /planisphere\n├ ◐ /play                                       1d      1w\n├ ◐ /play/booth                                 1d      1w\n├ ◐ /play/hanafuda                              1d      1w\n├ ○ /play/opengraph-image-blpn7k\n├ ◐ /play/pachinko                              1d      1w\n├ ◐ /postcard                                   1d      1w\n├ ƒ /postcard/image\n├ ○ /postcard/opengraph-image-1x4cxz\n├ ◐ /postcard/view                              1d      1w\n├ ◐ /projects                                   1d      1w\n├ ○ /projects/opengraph-image-1ndqzi\n├ ○ /reset-password\n├ ƒ /rotor\n├ ○ /ryugu\n├ ○ /shore\n├ ○ /sign-in\n├ ◐ /sketches                                   1d      1w\n├ ƒ /sketches/download/[filename]\n├ ○ /sketches/opengraph-image-t812bo\n├ ○ /structures\n├   /structures/[slug]\n│ ├ ◐ /structures/[slug]\n│ ├ ○ /structures/array\n│ ├ ○ /structures/linked-list\n│ └ ◐ [+6 more paths]\n├ ○ /vinyl\n├ ◐ /work                                       1d      1w\n├ ○ /work/opengraph-image-blv499\n└ ◐ /zine\n\n\nƒ Proxy (Middleware)\n\n○  (Static)             prerendered as static content\n◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content\nƒ  (Dynamic)            server-rendered on demand\n\n",
+        "stderr_tail": "iables or pass `secret` in your auth config.]\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-28T05:52:24.829Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n2026-10-28T05:52:24.831Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-28T05:52:24.873Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-28T05:52:24.880Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-28T05:52:24.898Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n2026-10-28T05:52:24.901Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-28T05:52:24.909Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-28T05:52:25.936Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n"
+      },
+      {
+        "name": "Two-browser ghost proof",
+        "cmd": "TMPDIR=/tmp npm run test:ghosts",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 66132,
+        "stdout_tail": "ore paths]\n├ ○ /forgot-password\n├ ○ /icon.svg\n├ ◐ /lab                                        1d      1w\n├ ◐ /ledger                                     1d      1w\n├ ○ /ledger/opengraph-image-1olq6y\n├ ◐ /making-of                                  1d      1w\n├ ƒ /music                                      1d      1w\n├ ○ /music/opengraph-image-rp137v\n├ ◐ /notes                                      1d      1w\n├ ○ /notes/opengraph-image-rplwnn\n├ ○ /og\n├ ○ /orrery\n├   /orrery/[body]\n│ ├ ◐ /orrery/[body]\n│ ├ ○ /orrery/sun\n│ ├ ○ /orrery/mercury\n│ └ ◐ [+12 more paths]\n├ ƒ /planisphere\n├ ◐ /play                                       1d      1w\n├ ◐ /play/booth                                 1d      1w\n├ ◐ /play/hanafuda                              1d      1w\n├ ○ /play/opengraph-image-blpn7k\n├ ◐ /play/pachinko                              1d      1w\n├ ◐ /postcard                                   1d      1w\n├ ƒ /postcard/image\n├ ○ /postcard/opengraph-image-1x4cxz\n├ ◐ /postcard/view                              1d      1w\n├ ◐ /projects                                   1d      1w\n├ ○ /projects/opengraph-image-1ndqzi\n├ ○ /reset-password\n├ ƒ /rotor\n├ ○ /ryugu\n├ ○ /shore\n├ ○ /sign-in\n├ ◐ /sketches                                   1d      1w\n├ ƒ /sketches/download/[filename]\n├ ○ /sketches/opengraph-image-t812bo\n├ ○ /structures\n├   /structures/[slug]\n│ ├ ◐ /structures/[slug]\n│ ├ ○ /structures/array\n│ ├ ○ /structures/linked-list\n│ └ ◐ [+6 more paths]\n├ ○ /vinyl\n├ ◐ /work                                       1d      1w\n├ ○ /work/opengraph-image-blv499\n└ ◐ /zine\n\n\nƒ Proxy (Middleware)\n\n○  (Static)             prerendered as static content\n◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content\nƒ  (Dynamic)            server-rendered on demand\n\nStarting the server on http://localhost:40491\nTAP version 13\n# Ghost proof: Chrome 156.0.8078.47, real Next/canvas, fake fan-out; hosted execution unproven\n# Subtest: two independent browsers on Home then Ryugu exchange anonymous cursors, trails and ripples at <=10Hz\nok 1 - two independent browsers on Home then Ryugu exchange anonymous cursors, trails and ripples at <=10Hz\n  ---\n  duration_ms: 9331.671355\n  type: 'test'\n  ...\n# Subtest: room separation, peer departure clearing and lone local ripple decay have actual pixel evidence\nok 2 - room separation, peer departure clearing and lone local ripple decay have actual pixel evidence\n  ---\n  duration_ms: 3295.633915\n  type: 'test'\n  ...\n# Subtest: initial/change reduced motion, hide/reload and same-context storage propagation stop upgrades and painting\nok 3 - initial/change reduced motion, hide/reload and same-context storage propagation stop upgrades and painting\n  ---\n  duration_ms: 5005.395521\n  type: 'test'\n  ...\n# Subtest: hidden and offline cleanup close membership, clear ink and resume without resetting session budget\nok 4 - hidden and offline cleanup close membership, clear ink and resume without resetting session budget\n  ---\n  duration_ms: 3662.109789\n  type: 'test'\n  ...\n# Subtest: refuse terminates with bounded retries and cannot be revived by lifecycle toggles\nok 5 - refuse terminates with bounded retries and cannot be revived by lifecycle toggles\n  ---\n  duration_ms: 5096.102458\n  type: 'test'\n  ...\n# Subtest: full terminates with bounded retries and cannot be revived by lifecycle toggles\nok 6 - full terminates with bounded retries and cannot be revived by lifecycle toggles\n  ---\n  duration_ms: 1082.364672\n  type: 'test'\n  ...\n# Subtest: flap terminates with bounded retries and cannot be revived by lifecycle toggles\nok 7 - flap terminates with bounded retries and cannot be revived by lifecycle toggles\n  ---\n  duration_ms: 4899.475627\n  type: 'test'\n  ...\n# Subtest: unset config 404/off is quiet and disabled real painting fails the same visual assertion\nok 8 - unset config 404/off is quiet and disabled real painting fails the same visual assertion\n  ---\n  duration_ms: 2083.693462\n  type: 'test'\n  ...\n1..8\n# tests 8\n# suites 0\n# pass 8\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 34844.352762\n",
+        "stderr_tail": "◇ injected env (0) from .env\n"
+      },
+      {
+        "name": "Existing browser regression suite",
+        "cmd": "TMPDIR=/tmp npm run test:e2e",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 530389,
+        "stdout_tail": "tridge or machine styling\nok 218 - the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling\n  ---\n  duration_ms: 1129.156022\n  type: 'test'\n  ...\n# Subtest: with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer\nok 219 - with WebGL and motion welcome, the sea is live: the water draws, the fish swim and flee the pointer\n  ---\n  duration_ms: 1923.224125\n  type: 'test'\n  ...\n# Subtest: while the page is hidden the loop stops, and it comes back when the page is seen again\nok 220 - while the page is hidden the loop stops, and it comes back when the page is seen again\n  ---\n  duration_ms: 2024.508442\n  type: 'test'\n  ...\n# Subtest: without WebGL the sea is static: the served caustic and fish, and no frame runs\nok 221 - without WebGL the sea is static: the served caustic and fish, and no frame runs\n  ---\n  duration_ms: 2064.192113\n  type: 'test'\n  ...\n# Subtest: under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate\nok 222 - under reduced motion the sea is still, asks for no WebGL at all, and the way down does not animate\n  ---\n  duration_ms: 1544.165513\n  type: 'test'\n  ...\n# Subtest: the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages\nok 223 - the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages\n  ---\n  duration_ms: 3309.563639\n  type: 'test'\n  ...\n# Subtest: the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog\nok 224 - the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog\n  ---\n  duration_ms: 1699.54864\n  type: 'test'\n  ...\n# Subtest: under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back\nok 225 - under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back\n  ---\n  duration_ms: 1703.206888\n  type: 'test'\n  ...\n# Subtest: server and no-JS baseline: all cards remain readable links without toy controls\nok 226 - server and no-JS baseline: all cards remain readable links without toy controls\n  ---\n  duration_ms: 819.60956\n  type: 'test'\n  ...\n# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup\nok 227 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup\n  ---\n  duration_ms: 3164.193169\n  type: 'test'\n  ...\n# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics\nok 228 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics\n  ---\n  duration_ms: 1673.860755\n  type: 'test'\n  ...\n# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable\nok 229 - blocked storage and live reduced motion keep instant keyboard operations usable\n  ---\n  duration_ms: 1212.133979\n  type: 'test'\n  ...\n# Subtest: Save-Data loads paper only after explicit enabling\nok 230 - Save-Data loads paper only after explicit enabling\n  ---\n  duration_ms: 1205.152911\n  type: 'test'\n  ...\n# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded\nok 231 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded\n  ---\n  duration_ms: 3198.832958\n  type: 'test'\n  ...\n# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload\nok 232 - renderer import waits for window load and the idle callback; server markup has no toy preload\n  ---\n  duration_ms: 1155.117916\n  type: 'test'\n  ...\n# Subtest: existing desktop desk and stamp gestures keep their own controls\nok 233 - existing desktop desk and stamp gestures keep their own controls\n  ---\n  duration_ms: 1731.199439\n  type: 'test'\n  ...\n1..233\n# tests 235\n# suites 0\n# pass 235\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 499234.538113\n",
+        "stderr_tail": "◇ injected env (0) from .env\n"
+      }
+    ],
+    "created_at": "2026-10-28T06:02:29.858509Z"
+  }
+}

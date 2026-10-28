@@ -1,0 +1,55 @@
+  ---
+  duration_ms: 0.727291
+  type: 'test'
+  ...
+# Subtest: shared protocol/policy/room, Worker source/lock/config, scripts and workflow trigger deployment
+ok 54 - shared protocol/policy/room, Worker source/lock/config, scripts and workflow trigger deployment
+  ---
+  duration_ms: 0.211125
+  type: 'test'
+  ...
+# Subtest: disabled/unset configurations execute nothing and need no secrets
+ok 55 - disabled/unset configurations execute nothing and need no secrets
+  ---
+  duration_ms: 53.622666
+  type: 'test'
+  ...
+# Subtest: enabled with missing secrets fails by name without deploying
+ok 56 - enabled with missing secrets fails by name without deploying
+  ---
+  duration_ms: 171.000333
+  type: 'test'
+  ...
+# Subtest: real workflow commands verify before deploy; dispatch and push publish the same exact public manifest
+ok 57 - real workflow commands verify before deploy; dispatch and push publish the same exact public manifest
+  ---
+  duration_ms: 414.275
+  type: 'test'
+  ...
+# Subtest: failed verification or absent version output cannot publish a successful build
+ok 58 - failed verification or absent version output cannot publish a successful build
+  ---
+  duration_ms: 296.489417
+  type: 'test'
+  ...
+# Subtest: read-only identity probe uses independent app build metadata and rejects stale Worker/app identities
+ok 59 - read-only identity probe uses independent app build metadata and rejects stale Worker/app identities
+  ---
+  duration_ms: 185.175125
+  type: 'test'
+  ...
+# Subtest: invalid build identity prevents deployment before any external mutation
+ok 60 - invalid build identity prevents deployment before any external mutation
+  ---
+  duration_ms: 0.923041
+  type: 'test'
+  ...
+1..60
+# tests 60
+# suites 0
+# pass 60
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11209.770458

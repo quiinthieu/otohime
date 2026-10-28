@@ -1,0 +1,14 @@
+{
+  "run": 40640198126,
+  "url": "https://github.com/quiinthieu/otohime/actions/runs/40640198126",
+  "sha": "3684cb5e2aa7a2ae517637c74a6d387aa693a9f9",
+  "conclusion": "success",
+  "source": "public workflow page independently retrieved; API rate-limited",
+  "publicText": "Triggered via push October 28, 2026 05:49 quiinthieu pushed 3684cb5 main Status Success Total duration 27m 5s Artifacts 1 ci.yml on: push checks 22m 53s checks preview 0s preview cleanup cleanup production 4m 7s production Oh hello! Nice to see you. Made with \u2764\ufe0f by humans.txt Fit to window Zoom out Zoom in Annotations 1 warning checks: projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs#L2 'resolve' is defined but never used Show more Show less Artifacts Produced during runtime Name Size Digest app-build-3684cb5e2aa7a2ae517637c74a6d387aa693a9f9-40640198126 235 Bytes sha256:8074954522b05c5a586ff8fb7fea28f6a25385225ceb7654a05975491d5d4ff5 html { scroll-behavior: smooth } You can\u2019t perform that action at this time. ",
+  "pageSHA256": "b90d70fa67675059c166a1c4f0a6e9d782fceb66e1d3a8698a5ff3b0bd0296e6",
+  "checksDuration": "22m53s",
+  "productionDuration": "4m7s",
+  "totalDuration": "27m5s",
+  "artifactDownloaded": false,
+  "jobDetailGap": "lazy job fragments return 406 or 404; no exact production job id claimed"
+}

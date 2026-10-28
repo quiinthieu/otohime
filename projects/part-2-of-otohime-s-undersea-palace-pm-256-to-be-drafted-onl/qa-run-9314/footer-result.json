@@ -1,0 +1,53 @@
+{
+  "kind": "independent-footer",
+  "normal": {
+    "root": 16,
+    "padding": 60,
+    "border": 2,
+    "scene": 62,
+    "sceneHeight": 305.21875,
+    "footerHeight": 1444.25,
+    "font": 13
+  },
+  "scaled": {
+    "root": 32,
+    "padding": 120,
+    "border": 2,
+    "scene": 122,
+    "sceneHeight": 381.53125,
+    "footerHeight": 2484.984375,
+    "font": 26
+  },
+  "comparisons": [
+    {
+      "root": 32,
+      "padding": 120,
+      "border": 2,
+      "scene": 122,
+      "sceneHeight": 381.53125,
+      "footerHeight": 2484.984375,
+      "font": 24
+    },
+    {
+      "root": 32,
+      "padding": 120,
+      "border": 2,
+      "scene": 122,
+      "sceneHeight": 381.53125,
+      "footerHeight": 2484.984375,
+      "font": 32
+    }
+  ],
+  "wrong": {
+    "root": 32,
+    "padding": 80,
+    "border": 2,
+    "scene": 82,
+    "sceneHeight": 381.53125,
+    "footerHeight": 2444.984375,
+    "font": 32
+  },
+  "negativeControlRejected": true,
+  "buildId": "VESpu-sDiy0ykYurW4tZD",
+  "chrome": "156.0.8078.48"
+}

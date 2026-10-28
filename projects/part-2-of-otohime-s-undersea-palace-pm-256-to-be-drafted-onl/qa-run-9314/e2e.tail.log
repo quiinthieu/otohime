@@ -1,0 +1,55 @@
+  ---
+  duration_ms: 1797.612708
+  type: 'test'
+  ...
+# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+ok 234 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+  ---
+  duration_ms: 3230.133709
+  type: 'test'
+  ...
+# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+ok 235 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+  ---
+  duration_ms: 4033.140709
+  type: 'test'
+  ...
+# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable
+ok 236 - blocked storage and live reduced motion keep instant keyboard operations usable
+  ---
+  duration_ms: 1406.214708
+  type: 'test'
+  ...
+# Subtest: Save-Data loads paper only after explicit enabling
+ok 237 - Save-Data loads paper only after explicit enabling
+  ---
+  duration_ms: 1179.350417
+  type: 'test'
+  ...
+# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+ok 238 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+  ---
+  duration_ms: 6762.204292
+  type: 'test'
+  ...
+# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload
+ok 239 - renderer import waits for window load and the idle callback; server markup has no toy preload
+  ---
+  duration_ms: 1086.276791
+  type: 'test'
+  ...
+# Subtest: existing desktop desk and stamp gestures keep their own controls
+ok 240 - existing desktop desk and stamp gestures keep their own controls
+  ---
+  duration_ms: 2872.311208
+  type: 'test'
+  ...
+1..240
+# tests 242
+# suites 0
+# pass 242
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 587536.320125

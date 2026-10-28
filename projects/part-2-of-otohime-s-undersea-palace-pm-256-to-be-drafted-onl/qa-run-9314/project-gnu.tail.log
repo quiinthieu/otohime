@@ -1,0 +1,55 @@
+  ---
+  duration_ms: 647.557583
+  type: 'test'
+  ...
+# Subtest: without git, outside a repository, or in an empty one, the committed fallback is preserved untouched
+ok 2589 - without git, outside a repository, or in an empty one, the committed fallback is preserved untouched
+  ---
+  duration_ms: 664.7155
+  type: 'test'
+  ...
+# Subtest: a shallow clone splices commits since fallback.head, matching a full clone byte for byte
+ok 2590 - a shallow clone splices commits since fallback.head, matching a full clone byte for byte
+  ---
+  duration_ms: 650.007625
+  type: 'test'
+  ...
+# Subtest: a shallow clone that no longer holds fallback.head preserves the fallback unchanged
+ok 2591 - a shallow clone that no longer holds fallback.head preserves the fallback unchanged
+  ---
+  duration_ms: 559.073333
+  type: 'test'
+  ...
+# Subtest: a garbled git log falls back cleanly instead of failing the build
+ok 2592 - a garbled git log falls back cleanly instead of failing the build
+  ---
+  duration_ms: 260.496667
+  type: 'test'
+  ...
+# Subtest: --check passes fresh and shallow fallbacks, tolerates later site.ts edits within MAX_LAG, and catches tampering or staleness
+ok 2593 - --check passes fresh and shallow fallbacks, tolerates later site.ts edits within MAX_LAG, and catches tampering or staleness
+  ---
+  duration_ms: 2520.739542
+  type: 'test'
+  ...
+# Subtest: CLI writes the yearly log, preserves gitless fallback, and enforces --strict checks
+ok 2594 - CLI writes the yearly log, preserves gitless fallback, and enforces --strict checks
+  ---
+  duration_ms: 3440.57675
+  type: 'test'
+  ...
+# Subtest: committed content/yearly-log.json is valid, canonical, in sync with content/site.ts, and package.json wires yearly-log scripts
+ok 2595 - committed content/yearly-log.json is valid, canonical, in sync with content/site.ts, and package.json wires yearly-log scripts
+  ---
+  duration_ms: 1.915584
+  type: 'test'
+  ...
+1..2595
+# tests 2613
+# suites 2
+# pass 2613
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 43792.027583

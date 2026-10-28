@@ -1,0 +1,11 @@
+{
+  "run": 40635091133,
+  "job": 122640103971,
+  "sha": "68dd79dba309c7713122e08b02ebb4e6844de749",
+  "publicAnnotation": [
+    "Gate: Footer Chromium probe; exit 1\nCommit: 68dd79dba309c7713122e08b02ebb4e6844de749\nBuild: rOOgeVfqpJhi49SG-UBCR\nNode: v22.23.3\nChrome: Google Chrome 155.0.8059.39\nCommand, last 80 lines (bounded):\nement=1, preserves key defaults and stays on /projects\nok - badge negative control: a badge held at opacity 0 fails the bounded visibility wait, then settles once released\nok - Konami persistence: reloading restores the unlocked badge and LCD state without hydration error\nok - blocked localStorage: Konami unlocks ephemerally without throwing a page or console error\nok - navigation / -> /work: completes with exactly 1 visible main#main and 1 visible footer.end\nok - navigation /work -> /projects: completes with exactly 1 visible main#main and 1 visible footer.end\nok - navigation /projects -> /work: completes with exactly 1 visible main#main and 1 visible footer.end\nok - navigation /work -> /: completes with exactly 1 visible main#main and 1 visible footer.end\nok - keyboard Tab progression: visits mascot, wobble, swatch group, 7 pages, the zine link, 4 contact lines, Kame controls, Back to top and the waterline in order with visible focus rings and no trap\nok - Back to top: scrolls to page start (scrollY <= 4) and focuses the visible main#main landmark\nok - no-JS: renders complete still scene, heading, 6 page links, 4 contact links, credits, year and #main top anchor\nok - no-JS: clicking footer Work link navigates to /work\nok - no-JS: Back to top anchor jumps to #main near top of page\nok - local 390x844 reduced-motion 403 exit: isolated plain-user sign-up succeeds\nok - local 390x844 reduced-motion 403 exit: repeated full-load /admin/roles -> /projects -> full-load /admin/roles -> /dashboard preserves access denial, noindex, 1 visible footer, normal navigation, zero abort digest"
+  ],
+  "rawLogHTTP": 403,
+  "rawLogBody": "{\"message\":\"Must have admin rights to Repository.\",\"documentation_url\":\"https://docs.github.com/rest/actions/workflow-jobs#download-job-logs-for-a-workflow-run\",\"status\":\"403\"}",
+  "readBound": "public annotation; full raw logs inaccessible"
+}

@@ -1,0 +1,258 @@
+# Subtest: CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails
+not ok 1715 - CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails
+  ---
+  duration_ms: 49.086417
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/lib/e2e-runner.test.ts:194:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    127 !== 17
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 17
+  actual: 127
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/lib/e2e-runner.test.ts:226:14)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files
+ok 1716 - scripts/e2e.mjs --serve-db holds a migrated throwaway Postgres until SIGTERM, then stops it and removes its files
+  ---
+  duration_ms: 1462.995125
+  type: 'test'
+  ...
+# Subtest: idle state starts at SAVE POINT with the console resting
+ok 1717 - idle state starts at SAVE POINT with the console resting
+  ---
+  duration_ms: 0.685667
+
+# Subtest: the real CLI on this checkout runs the real regressions and prints one passing, fingerprinted v1 result
+not ok 1736 - the real CLI on this checkout runs the real regressions and prints one passing, fingerprinted v1 result
+  ---
+  duration_ms: 5128.8125
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/lib/gate-closure.test.ts:248:1'
+  failureType: 'testCodeFailure'
+  error: |-
+
+    ["e2e-runner: exit 1","e2e-runner: 1 failed","e2e-runner: 4/5 passed","e2e-runner: ci_status_preservation: fail"]
+
+    1 !== 0
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/lib/gate-closure.test.ts:251:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: an isolated copy without serial enforcement in scripts/e2e.mjs fails the closure on the serial regression; restored, it passes
+not ok 1737 - an isolated copy without serial enforcement in scripts/e2e.mjs fails the closure on the serial regression; restored, it passes
+  ---
+  duration_ms: 8306.819584
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/lib/gate-closure.test.ts:275:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+
+      assert.ok(e2e.required.filter((r) => r.id !== "serial_vs_parallel").every((r) => r.status === "pass"))
+
+
+# Subtest: an isolated copy without serial enforcement in scripts/e2e.mjs fails the closure on the serial regression; restored, it passes
+not ok 1737 - an isolated copy without serial enforcement in scripts/e2e.mjs fails the closure on the serial regression; restored, it passes
+  ---
+  duration_ms: 8306.819584
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/lib/gate-closure.test.ts:275:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+
+      assert.ok(e2e.required.filter((r) => r.id !== "serial_vs_parallel").every((r) => r.status === "pass"))
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/lib/gate-closure.test.ts:313:14)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: HTTP rejects invalid boundaries before store
+ok 1738 - HTTP rejects invalid boundaries before store
+  ---
+  duration_ms: 11.675375
+  type: 'test'
+  ...
+# Subtest: configuration, quota, read and invalid cursor have stable statuses
+ok 1739 - configuration, quota, read and invalid cursor have stable statuses
+  ---
+  duration_ms: 0.928041
+  type: 'test'
+  ...
+# Subtest: canonical bounded vectors and normalized optional text
+
+# Subtest: E2E against next start: real workflow captures combined command failure and identity, preserving exit 43
+not ok 2479 - E2E against next start: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 49.41475
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/scripts/ci-workflow.test.mjs:357:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    127 !== 43
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 43
+  actual: 127
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/scripts/ci-workflow.test.mjs:359:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 2480 - E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 43.45725
+  type: 'test'
+  ...
+# Subtest: E2E against next start: successful workflow emits no failure annotation or summary
+not ok 2481 - E2E against next start: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 43.822125
+
+# Subtest: E2E against next start: successful workflow emits no failure annotation or summary
+not ok 2481 - E2E against next start: successful workflow emits no failure annotation or summary
+  ---
+  duration_ms: 43.822125
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/scripts/ci-workflow.test.mjs:382:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    127 !== 0
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 127
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/scripts/ci-workflow.test.mjs:384:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43
+ok 2482 - Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43
+  ---
+  duration_ms: 96.950042
+  type: 'test'
+  ...
+# Subtest: Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+ok 2483 - Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22
+  ---
+  duration_ms: 42.7445
+
+# Subtest: E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation
+not ok 2491 - E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation
+  ---
+  duration_ms: 51.833916
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/scripts/ci-workflow.test.mjs:393:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    127 !== 124
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 124
+  actual: 127
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/scripts/ci-workflow.test.mjs:398:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: wiring negative control: removing the EXIT fallback makes a startup crash opaque
+ok 2492 - wiring negative control: removing the EXIT fallback makes a startup crash opaque
+  ---
+  duration_ms: 14.049542
+  type: 'test'
+  ...
+# Subtest: reporter failure cannot replace the original workflow command exit
+not ok 2493 - reporter failure cannot replace the original workflow command exit
+  ---
+  duration_ms: 73.424083
+
+# Subtest: reporter failure cannot replace the original workflow command exit
+not ok 2493 - reporter failure cannot replace the original workflow command exit
+  ---
+  duration_ms: 73.424083
+  type: 'test'
+  location: '/Users/avietidol/Library/Application Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/scripts/ci-workflow.test.mjs:419:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    127 !== 43
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 43
+  actual: 127
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/scripts/ci-workflow.test.mjs:421:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: browser fallbacks keep the existing gate order, probe budgets and assertion reporter
+ok 2494 - browser fallbacks keep the existing gate order, probe budgets and assertion reporter
+  ---
+  duration_ms: 0.372542
+  type: 'test'
+  ...
+# Subtest: the author gate precedes production migrations and main checks
+ok 2495 - the author gate precedes production migrations and main checks
+  ---
+  duration_ms: 0.226459

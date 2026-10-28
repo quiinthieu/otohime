@@ -1,0 +1,20 @@
+node:internal/errors:983
+  const err = new Error(message);
+              ^
+
+Error: Command failed: git merge-base --is-ancestor 3684cb5e2aa7a2ae517637c74a6d387aa693a9f9 22a88f0c7b4d3160c425c2e7877f7d0c05894077
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:916:11)
+    at execFileSync (node:child_process:952:15)
+    at file:///Users/avietidol/Library/Application%20Support/build-worker/leases/dbf26ede-edac-4cf6-9957-88949f50844a-37d4536c84af8ce76192f4a49b3a60df/work/otohime/projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/qa-run-9314/deployed.mjs:10:1
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  status: 1,
+  signal: null,
+  output: [ null, Buffer(0) [Uint8Array] [], Buffer(0) [Uint8Array] [] ],
+  pid: 42536,
+  stdout: Buffer(0) [Uint8Array] [],
+  stderr: Buffer(0) [Uint8Array] []
+}
+
+Node.js v22.23.3

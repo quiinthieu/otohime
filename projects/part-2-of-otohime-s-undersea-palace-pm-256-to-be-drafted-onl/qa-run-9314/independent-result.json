@@ -1,0 +1,19 @@
+{
+  "kind": "independent-qa",
+  "chrome": "156.0.8078.48",
+  "worker": {
+    "service": "otohime-ghosts",
+    "fingerprint": "aa87b9e3b4328f59801de5028120046f3c244f4f55e7e26d661b16d02b6a7115",
+    "workerVersionId": "1e756d83-826d-400a-9b38-60159d0cee65"
+  },
+  "effectiveOrigin": "http://localhost:51100",
+  "effectiveConfigurationFingerprint": "848af3ddbef51f591f2d50057ee18fdce34519a5ca22003fea281c8b478f0105",
+  "positivePixels": 44,
+  "homePixels": 43,
+  "negativePixels": 0,
+  "dropped": 2,
+  "deniedOrigin": 403,
+  "roomSeparation": true,
+  "leaveClears": true,
+  "boundary": "local workerd; injected app config and local Origin binding; no fake fan-out or canvas instrumentation; negative control drops real server frames"
+}

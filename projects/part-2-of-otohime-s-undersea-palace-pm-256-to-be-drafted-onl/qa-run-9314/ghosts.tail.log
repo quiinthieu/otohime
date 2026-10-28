@@ -1,0 +1,55 @@
+  ---
+  duration_ms: 9815.0235
+  type: 'test'
+  ...
+# Subtest: room separation, peer departure clearing and lone local ripple decay have actual pixel evidence
+ok 2 - room separation, peer departure clearing and lone local ripple decay have actual pixel evidence
+  ---
+  duration_ms: 3606.082959
+  type: 'test'
+  ...
+# Subtest: initial/change reduced motion, hide/reload and same-context storage propagation stop upgrades and painting
+ok 3 - initial/change reduced motion, hide/reload and same-context storage propagation stop upgrades and painting
+  ---
+  duration_ms: 6423.839125
+  type: 'test'
+  ...
+# Subtest: hidden and offline cleanup close membership, clear ink and resume without resetting session budget
+ok 4 - hidden and offline cleanup close membership, clear ink and resume without resetting session budget
+  ---
+  duration_ms: 4087.591417
+  type: 'test'
+  ...
+# Subtest: refuse terminates with bounded retries and cannot be revived by lifecycle toggles
+ok 5 - refuse terminates with bounded retries and cannot be revived by lifecycle toggles
+  ---
+  duration_ms: 5045.912417
+  type: 'test'
+  ...
+# Subtest: full terminates with bounded retries and cannot be revived by lifecycle toggles
+ok 6 - full terminates with bounded retries and cannot be revived by lifecycle toggles
+  ---
+  duration_ms: 1340.44725
+  type: 'test'
+  ...
+# Subtest: flap terminates with bounded retries and cannot be revived by lifecycle toggles
+ok 7 - flap terminates with bounded retries and cannot be revived by lifecycle toggles
+  ---
+  duration_ms: 5444.422916
+  type: 'test'
+  ...
+# Subtest: unset config 404/off is quiet and disabled real painting fails the same visual assertion
+ok 8 - unset config 404/off is quiet and disabled real painting fails the same visual assertion
+  ---
+  duration_ms: 2663.456917
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 38915.049375

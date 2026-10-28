@@ -1,0 +1,37 @@
+{
+  "shaFiles": {
+    "22a88f0": {
+      "scripts/probe-end.mjs": "3c6a63d7f105f51133b8a9c1e7ca5b463ca5a622c1f8d236d42b0f7e0e2b16a1",
+      "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+      "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+      ".github/workflows/ci.yml": "8ba21883783aa3d3b7c0c83d67ef086ff1c4e41586d7de8e926caf88f54e8135",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "e2e/bottle-ui.test.ts": "7688c4035f52b3842dcbf92267b024beda635ab2238601a3a759867603be303b"
+    },
+    "68dd79d": {
+      "scripts/probe-end.mjs": "3c6a63d7f105f51133b8a9c1e7ca5b463ca5a622c1f8d236d42b0f7e0e2b16a1",
+      "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+      "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+      ".github/workflows/ci.yml": "8ba21883783aa3d3b7c0c83d67ef086ff1c4e41586d7de8e926caf88f54e8135",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "e2e/bottle-ui.test.ts": "7688c4035f52b3842dcbf92267b024beda635ab2238601a3a759867603be303b"
+    },
+    "3684cb5": {
+      "scripts/probe-end.mjs": "3c6a63d7f105f51133b8a9c1e7ca5b463ca5a622c1f8d236d42b0f7e0e2b16a1",
+      "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+      "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+      ".github/workflows/ci.yml": "9bef1806e5bd4ed5ebee2469dfb3f537835426a2b34ba90e5b92ac7b0f3f0d0f",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "e2e/bottle-ui.test.ts": "be5ef380fdbbfa20e2bd7632d7dc898fee18bc5ccf0d3108c6b2fc42ed1ae388"
+    },
+    "d323b87": {
+      "scripts/probe-end.mjs": "3c6a63d7f105f51133b8a9c1e7ca5b463ca5a622c1f8d236d42b0f7e0e2b16a1",
+      "scripts/probe-end.sh": "e9dbb2589e968a06ea01bd771d1675000b2fb41dd671783b33ec07ec10793fba",
+      "scripts/probe-browser.mjs": "ac78c17511c7e77776d3d11ec5a6fa63b38e838bd39beb87a2a15a0a1c62c8c3",
+      ".github/workflows/ci.yml": "9bef1806e5bd4ed5ebee2469dfb3f537835426a2b34ba90e5b92ac7b0f3f0d0f",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "e2e/bottle-ui.test.ts": "be5ef380fdbbfa20e2bd7632d7dc898fee18bc5ccf0d3108c6b2fc42ed1ae388"
+    }
+  },
+  "ciLog": "3684cb5 pm-257/t-1610: fix(e2e): await the Bottle footer band and bound E2E at 900s\n"
+}

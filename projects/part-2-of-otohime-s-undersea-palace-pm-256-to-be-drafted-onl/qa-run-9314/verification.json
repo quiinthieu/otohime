@@ -1,0 +1,262 @@
+{
+  "commands": [
+    {
+      "name": "workflow",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/ghosts-workflow.test.mjs scripts/ci-workflow.test.mjs",
+      "exit": 1,
+      "seconds": 8.87
+    },
+    {
+      "name": "project",
+      "cmd": "npm test",
+      "exit": 1,
+      "seconds": 38.22
+    },
+    {
+      "name": "lint",
+      "cmd": "npm run lint",
+      "exit": 0,
+      "seconds": 9.04
+    },
+    {
+      "name": "build",
+      "cmd": "npm run build",
+      "exit": 0,
+      "seconds": 13.26
+    },
+    {
+      "name": "ghosts",
+      "cmd": "TMPDIR=/tmp npm run test:ghosts",
+      "exit": 0,
+      "seconds": 57.88
+    },
+    {
+      "name": "e2e",
+      "cmd": "TMPDIR=/tmp npm run test:e2e",
+      "exit": 0,
+      "seconds": 629.14
+    }
+  ],
+  "effectiveWorkflow": {
+    "exit": 0,
+    "tests": 60,
+    "toolchain": "real GNU timeout 9.7 added to PATH"
+  },
+  "effectiveProject": {
+    "exit": 0,
+    "tests": 2613
+  },
+  "independent": {
+    "exit": 0,
+    "tests": 3,
+    "footerAssertions": 176,
+    "cmd": "SKIP_BUILD=1 TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/qa-run-9314/*.test.mjs'"
+  },
+  "deployed": {
+    "exit": 0,
+    "cmd": "TMPDIR=/tmp node projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/qa-run-9314/deployed.mjs"
+  },
+  "logs": [
+    {
+      "name": "workflow",
+      "sha256": "183e2137b7dc1a6899591df5e363a8343bb39c1200b748f43f509baa0d3f001f",
+      "bytes": 18781,
+      "counts": {
+        "tests": [
+          "60"
+        ],
+        "pass": [
+          "56"
+        ],
+        "fail": [
+          "4"
+        ]
+      }
+    },
+    {
+      "name": "project",
+      "sha256": "399540ce7d79f5814257f4aae962db3dfdfd3d5855dc26fbad1aa0da42a18bbd",
+      "bytes": 540903,
+      "counts": {
+        "tests": [
+          "2613"
+        ],
+        "pass": [
+          "2606"
+        ],
+        "fail": [
+          "7"
+        ]
+      }
+    },
+    {
+      "name": "workflow-gnu",
+      "sha256": "cc73bc9962b069d23cf003e95178ae8fac50609104214cc02edd5620b590cff8",
+      "bytes": 14715,
+      "counts": {
+        "tests": [
+          "60"
+        ],
+        "pass": [
+          "60"
+        ],
+        "fail": [
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "project-gnu",
+      "sha256": "6db206308248d5110084994d55f66571c817daa7acbe5ed09e12dd8657db08a5",
+      "bytes": 533949,
+      "counts": {
+        "tests": [
+          "2613"
+        ],
+        "pass": [
+          "2613"
+        ],
+        "fail": [
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "lint",
+      "sha256": "468005ec95ad5b966122e507066377228dc25080100a5a278fe525ba15d06cc9",
+      "bytes": 3181,
+      "counts": {
+        "tests": [],
+        "pass": [],
+        "fail": []
+      }
+    },
+    {
+      "name": "build",
+      "sha256": "263152a681b7a4b16d1d70ae6e4fd8874cd63adbfe21b7e08edc6a29fb9fa9d0",
+      "bytes": 12908,
+      "counts": {
+        "tests": [],
+        "pass": [],
+        "fail": []
+      }
+    },
+    {
+      "name": "ghosts",
+      "sha256": "83cadffdddc4a234e64d69b477d5bc2bad29d11734c7c8a856bbb7af700f80d8",
+      "bytes": 7687,
+      "counts": {
+        "tests": [
+          "8"
+        ],
+        "pass": [
+          "8"
+        ],
+        "fail": [
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "e2e",
+      "sha256": "c60bc8113d8b7540e464733e6bdbee833649587a59fbb6911b5920be23857698",
+      "bytes": 82277,
+      "counts": {
+        "tests": [
+          "242"
+        ],
+        "pass": [
+          "242"
+        ],
+        "fail": [
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "worker-typecheck",
+      "sha256": "09c7269c33779698d260100c549c83ea1dc274a192c6e6fbc12c3f4542abdc7c",
+      "bytes": 46,
+      "counts": {
+        "tests": [],
+        "pass": [],
+        "fail": []
+      }
+    },
+    {
+      "name": "worker-test",
+      "sha256": "bbf22620160dd0cc9573fd6665f15d784ff2b6c271fd0d72307fb3629e72e073",
+      "bytes": 4895,
+      "counts": {
+        "tests": [
+          "18"
+        ],
+        "pass": [
+          "18"
+        ],
+        "fail": [
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "worker-bundle",
+      "sha256": "566e926052371c76f5be26a9e2a358233948656218881936c55dde4bc8ee0e4a",
+      "bytes": 821,
+      "counts": {
+        "tests": [],
+        "pass": [],
+        "fail": []
+      }
+    },
+    {
+      "name": "independent",
+      "sha256": "a7e95c91eaf6f04056f784f80bed0ab940a1d977f41cd8f730d67452c5532262",
+      "bytes": 18212,
+      "counts": {
+        "tests": [
+          "3"
+        ],
+        "pass": [
+          "3"
+        ],
+        "fail": [
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "deployed-initial",
+      "sha256": "6627da6080f68ce9fd80259da95b282fefe280142aae9972c3bf96d8ff23c24b",
+      "bytes": 972,
+      "counts": {
+        "tests": [],
+        "pass": [],
+        "fail": []
+      }
+    },
+    {
+      "name": "deployed",
+      "sha256": "1e137f540a2c696f5b2e5cfe90d0720a84cddf6c890672cd0b016271d7c1ae44",
+      "bytes": 728,
+      "counts": {
+        "tests": [],
+        "pass": [],
+        "fail": []
+      }
+    }
+  ],
+  "qaVerifierHashes": {
+    "independent.test.mjs": "b7380582144b9fd130565f6375eb0a6d5004049657b9cbe8b61804d5632bc3c9",
+    "deployed.mjs": "378527a7e4d29ea5965271bfe439b87ded7bdb6aa698adf45d2784e014ed9b7b",
+    "footer-ci.test.mjs": "578c738964114f0c528b31c24e648b0f6163d4e18befe5011c143f5148e05a86",
+    "footer-independent.test.mjs": "697a85a7dce337d3feece4f06d82da067066ab748eb4e97959ad4428282bbe21"
+  },
+  "screenshotSHA256": "c1ecac14e91574afc364b671b93cf1f92e4d81f0d531f3780213b8f7f41f576e",
+  "finalLint": {
+    "exit": 0,
+    "warnings": 10,
+    "errors": 0,
+    "sha256": "468005ec95ad5b966122e507066377228dc25080100a5a278fe525ba15d06cc9"
+  }
+}

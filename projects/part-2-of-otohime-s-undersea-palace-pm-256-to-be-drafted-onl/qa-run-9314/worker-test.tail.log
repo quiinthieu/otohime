@@ -1,0 +1,55 @@
+      type: 'test'
+      ...
+    1..14
+ok 1 - actual Worker (wrangler.jsonc) in workerd
+  ---
+  duration_ms: 1515.400583
+  type: 'suite'
+  ...
+# Subtest: GhostRoom reconstruction on live state (test/wrangler.reentry.jsonc)
+    # Subtest: strikes, the bucket and fan-out survive a rebuilt GhostRoom
+    ok 1 - strikes, the bucket and fan-out survive a rebuilt GhostRoom
+      ---
+      duration_ms: 423.147458
+      type: 'test'
+      ...
+    # Subtest: the cap holds across a rebuild and nothing is ever stored
+    ok 2 - the cap holds across a rebuild and nothing is ever stored
+      ---
+      duration_ms: 161.910166
+      type: 'test'
+      ...
+    1..2
+ok 2 - GhostRoom reconstruction on live state (test/wrangler.reentry.jsonc)
+  ---
+  duration_ms: 724.532334
+  type: 'suite'
+  ...
+# Subtest: privacy boundary in source and configuration
+    # Subtest: Worker observability and logpush are off
+    ok 1 - Worker observability and logpush are off
+      ---
+      duration_ms: 0.095542
+      type: 'test'
+      ...
+    # Subtest: Worker code uses no storage, SQL, alarms, logs, cookies, IP or UA
+    ok 2 - Worker code uses no storage, SQL, alarms, logs, cookies, IP or UA
+      ---
+      duration_ms: 0.525833
+      type: 'test'
+      ...
+    1..2
+ok 3 - privacy boundary in source and configuration
+  ---
+  duration_ms: 0.6635
+  type: 'suite'
+  ...
+1..3
+# tests 18
+# suites 3
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2730.752792
