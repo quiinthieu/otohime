@@ -1,0 +1,31 @@
+[
+  {
+    "kind": "booth-independent-negative",
+    "blockedEventWaitRejected": true,
+    "immediate": "webgl2",
+    "committed": "canvas2d",
+    "opaque": 43200,
+    "mean": 472.57381944444444,
+    "chrome": "156.0.8078.47",
+    "boundary": "real app, Chrome and sample renderer; native event suppressed once for negative control, then injected normally; no canvas replacement"
+  },
+  {
+    "kind": "independent-qa",
+    "chrome": "156.0.8078.47",
+    "worker": {
+      "service": "otohime-ghosts",
+      "fingerprint": "aa87b9e3b4328f59801de5028120046f3c244f4f55e7e26d661b16d02b6a7115",
+      "workerVersionId": "a710c7d6-8be5-42db-bf30-d405f4aec356"
+    },
+    "effectiveOrigin": "http://localhost:46047",
+    "effectiveConfigurationFingerprint": "4e05da2a729de744e2fde61200967d5af175a65e2561aab313f7e3ff5371bf26",
+    "positivePixels": 44,
+    "homePixels": 43,
+    "negativePixels": 0,
+    "dropped": 2,
+    "deniedOrigin": 403,
+    "roomSeparation": true,
+    "leaveClears": true,
+    "boundary": "local workerd; injected app config and local Origin binding; no fake fan-out or canvas instrumentation; negative control drops real server frames"
+  }
+]

@@ -1,0 +1,347 @@
+{
+  "exit": 0,
+  "events": [
+    {
+      "kind": "bottle-diagnostic-identity",
+      "sourceSha256": "7688c4035f52b3842dcbf92267b024beda635ab2238601a3a759867603be303b",
+      "cpuThrottle": 6,
+      "boundary": "same production application and verifier; CPU pressure and assertion diagnostics injected; actual CI runner/Chrome version not reproduced"
+    },
+    {
+      "kind": "bottle-geometry",
+      "a": {
+        "height": 44,
+        "gap": 4,
+        "topClearance": 12,
+        "left": 32,
+        "right": 172.296875,
+        "font": 24,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      },
+      "b": {
+        "height": 44,
+        "gap": 4,
+        "topClearance": 12,
+        "left": 32,
+        "right": 132.5625,
+        "font": 13,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      }
+    },
+    {
+      "kind": "bottle-geometry",
+      "a": {
+        "height": 53.59375,
+        "gap": 4,
+        "topClearance": 2.40625,
+        "left": 32,
+        "right": 201.1875,
+        "font": 32,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      },
+      "b": {
+        "height": 44,
+        "gap": 4,
+        "topClearance": 12,
+        "left": 32,
+        "right": 132.5625,
+        "font": 13,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      }
+    },
+    {
+      "kind": "bottle-geometry",
+      "a": {
+        "height": 53.59375,
+        "gap": 4,
+        "topClearance": 2.40625,
+        "left": 32,
+        "right": 201.1875,
+        "font": 32,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      },
+      "b": {
+        "height": 44,
+        "gap": 4,
+        "topClearance": 12,
+        "left": 32,
+        "right": 132.5625,
+        "font": 13,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      }
+    },
+    {
+      "kind": "bottle-geometry",
+      "a": {
+        "height": 53.59375,
+        "gap": 5,
+        "topClearance": 1.40625,
+        "left": 31,
+        "right": 200.1875,
+        "font": 32,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      },
+      "b": {
+        "height": 44,
+        "gap": 4,
+        "topClearance": 12,
+        "left": 32,
+        "right": 132.5625,
+        "font": 13,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      }
+    },
+    {
+      "kind": "bottle-geometry",
+      "a": {
+        "height": 44,
+        "gap": 8,
+        "topClearance": 68,
+        "left": 64,
+        "right": 209.890625,
+        "font": 24,
+        "rootFont": 32,
+        "sideBySide": false,
+        "alignment": 830.765625,
+        "sceneTop": 122,
+        "sceneWidth": 640,
+        "sceneHeight": 381.53125,
+        "footerHeight": 2484.984375
+      },
+      "b": {
+        "height": 45.796875,
+        "gap": 8,
+        "topClearance": 66.203125,
+        "left": 64,
+        "right": 217.109375,
+        "font": 26,
+        "rootFont": 32,
+        "sideBySide": false,
+        "alignment": 830.765625,
+        "sceneTop": 122,
+        "sceneWidth": 640,
+        "sceneHeight": 381.53125,
+        "footerHeight": 2484.984375
+      }
+    },
+    {
+      "kind": "bottle-geometry",
+      "a": {
+        "height": 53.59375,
+        "gap": 8,
+        "topClearance": 58.40625,
+        "left": 64,
+        "right": 238.78125,
+        "font": 32,
+        "rootFont": 32,
+        "sideBySide": false,
+        "alignment": 830.765625,
+        "sceneTop": 122,
+        "sceneWidth": 640,
+        "sceneHeight": 381.53125,
+        "footerHeight": 2484.984375
+      },
+      "b": {
+        "height": 45.796875,
+        "gap": 8,
+        "topClearance": 66.203125,
+        "left": 64,
+        "right": 217.109375,
+        "font": 26,
+        "rootFont": 32,
+        "sideBySide": false,
+        "alignment": 830.765625,
+        "sceneTop": 122,
+        "sceneWidth": 640,
+        "sceneHeight": 381.53125,
+        "footerHeight": 2484.984375
+      }
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "baseline": {
+        "height": 44,
+        "gap": 4,
+        "topClearance": 12,
+        "left": 32,
+        "right": 132.5625,
+        "font": 13,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      },
+      "sizes": [
+        {
+          "height": 44,
+          "gap": 4,
+          "topClearance": 12,
+          "left": 32,
+          "right": 172.296875,
+          "font": 24,
+          "rootFont": 16,
+          "sideBySide": false,
+          "alignment": 495.265625,
+          "sceneTop": 62,
+          "sceneWidth": 512,
+          "sceneHeight": 305.21875,
+          "footerHeight": 1444.25
+        },
+        {
+          "height": 53.59375,
+          "gap": 4,
+          "topClearance": 2.40625,
+          "left": 32,
+          "right": 201.1875,
+          "font": 32,
+          "rootFont": 16,
+          "sideBySide": false,
+          "alignment": 495.265625,
+          "sceneTop": 62,
+          "sceneWidth": 512,
+          "sceneHeight": 305.21875,
+          "footerHeight": 1444.25
+        }
+      ],
+      "oldOffset": {
+        "height": 44,
+        "gap": -4.609375,
+        "topClearance": 20.609375,
+        "left": 31,
+        "right": 171.296875,
+        "font": 24,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 62,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1444.25
+      },
+      "oldPadding": {
+        "height": 44,
+        "gap": 5,
+        "topClearance": -9,
+        "left": 31,
+        "right": 171.296875,
+        "font": 24,
+        "rootFont": 16,
+        "sideBySide": false,
+        "alignment": 495.265625,
+        "sceneTop": 42,
+        "sceneWidth": 512,
+        "sceneHeight": 305.21875,
+        "footerHeight": 1424.25
+      },
+      "scaled": {
+        "height": 45.796875,
+        "gap": 8,
+        "topClearance": 66.203125,
+        "left": 64,
+        "right": 217.109375,
+        "font": 26,
+        "rootFont": 32,
+        "sideBySide": false,
+        "alignment": 830.765625,
+        "sceneTop": 122,
+        "sceneWidth": 640,
+        "sceneHeight": 381.53125,
+        "footerHeight": 2484.984375
+      },
+      "scaledSizes": [
+        {
+          "height": 44,
+          "gap": 8,
+          "topClearance": 68,
+          "left": 64,
+          "right": 209.890625,
+          "font": 24,
+          "rootFont": 32,
+          "sideBySide": false,
+          "alignment": 830.765625,
+          "sceneTop": 122,
+          "sceneWidth": 640,
+          "sceneHeight": 381.53125,
+          "footerHeight": 2484.984375
+        },
+        {
+          "height": 53.59375,
+          "gap": 8,
+          "topClearance": 58.40625,
+          "left": 64,
+          "right": 238.78125,
+          "font": 32,
+          "rootFont": 32,
+          "sideBySide": false,
+          "alignment": 830.765625,
+          "sceneTop": 122,
+          "sceneWidth": 640,
+          "sceneHeight": 381.53125,
+          "footerHeight": 2484.984375
+        }
+      ],
+      "browser": "156.0.8078.47"
+    }
+  ],
+  "originalSourceSha256": "7688c4035f52b3842dcbf92267b024beda635ab2238601a3a759867603be303b",
+  "logSha256": "08d12ae6ea82ac520bbd278e779d80ab0888119cf7915a6d6bebca3551f4f812",
+  "qaDriverFirstAttempt": {
+    "exit": 1,
+    "cause": "QA dynamic-loader used CommonJS resolution for an ESM named import; corrected to import.meta.resolve; no product assertion ran"
+  },
+  "boundary": "CI=true plus explicit CPU throttle=6 on local Chrome 156, production Next; remote Chrome/runner not reproduced; local pass does not discharge repeated remote assertion"
+}

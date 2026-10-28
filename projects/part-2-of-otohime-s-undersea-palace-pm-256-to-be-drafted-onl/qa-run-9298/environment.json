@@ -1,0 +1,20 @@
+{
+  "node": "v22.23.3",
+  "platform": "linux",
+  "arch": "x64",
+  "next": "16.4.2",
+  "react": "19.3.0",
+  "playwright": "1.64.0",
+  "wrangler": "4.152.0",
+  "chrome": "Google Chrome 156.0.8078.47",
+  "realImports": {
+    "sdk": true,
+    "wranglerEntry": "/data/build-worker/leases/1fced89c-55b3-4c9f-a6a4-5d37d8650eb2-81f75e41949d113b92d4b40b7ec7f6ee/work/otohime/ghosts/worker/node_modules/wrangler/wrangler-dist/cli.js",
+    "playwrightEntry": "/data/build-worker/leases/1fced89c-55b3-4c9f-a6a4-5d37d8650eb2-81f75e41949d113b92d4b40b7ec7f6ee/work/otohime/node_modules/playwright-core/index.js"
+  },
+  "constructorEvidence": "Worker/DO constructions will run in test:local and independent.test.mjs; CPU model/capture adapter constructions in full browser suite",
+  "binaryHashes": {
+    "ghosts/worker/node_modules/@cloudflare/workerd-linux-64/bin/workerd": "d7ce7f7de38dba233a2924b777b51c65a407e524154d9b66fa8d2bc0a1ff5dcf",
+    "ghosts/worker/node_modules/workerd/bin/workerd": "d7ce7f7de38dba233a2924b777b51c65a407e524154d9b66fa8d2bc0a1ff5dcf"
+  }
+}

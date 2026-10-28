@@ -1,0 +1,31 @@
+{
+  "sameJob": "checks",
+  "failedRun": 40626170762,
+  "failedSha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+  "greenDeliveryRun": 40631993207,
+  "greenDeliverySha": "22a88f0c7b4d3160c425c2e7877f7d0c05894077",
+  "ciConfigurationLog": "",
+  "interpretation": "No workflow changes in this comparison. Single inspected prior Bottle assertion is retained; no complete remote-log audit or retrospective repair claim. Current exact delivery and local integration suites pass.",
+  "currentIntegrationFailure": {
+    "run": 40633395018,
+    "sha": "f50d7aa017c946540199262177a531f652a9980a",
+    "job": 122634743271,
+    "lastGreenSameJob": 122630267659,
+    "lastGreenRun": 40631993207,
+    "lastGreenSha": "22a88f0c7b4d3160c425c2e7877f7d0c05894077",
+    "greenRunner": "GitHub Actions 1000000968",
+    "failedRunner": "GitHub Actions 1000000969",
+    "greenLabels": [
+      "ubuntu-24.04"
+    ],
+    "failedLabels": [
+      "ubuntu-24.04"
+    ],
+    "configurationLog": "",
+    "ciE2eGreenSeconds": 701,
+    "ciE2eFailedSeconds": 729,
+    "remoteLogs": "403; public annotations read; no complete raw tail available",
+    "cause": "code",
+    "interpretation": "Repeated Bottle sceneTop failure at 200% root/768 width remains open despite local passes; timed-out CI provides no complete 235-case result. No evidence justifies environment or authority."
+  }
+}

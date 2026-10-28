@@ -1,0 +1,9 @@
+{
+  "health": {
+    "ok": true,
+    "sha": "995279a572db68e48ace27cd2aaa04b9d6611e72"
+  },
+  "observedAt": "2026-10-28T04:41:27.266470+00:00",
+  "delivery": "22a88f0c7b4d3160c425c2e7877f7d0c05894077",
+  "deliveryAncestryExit": 1
+}

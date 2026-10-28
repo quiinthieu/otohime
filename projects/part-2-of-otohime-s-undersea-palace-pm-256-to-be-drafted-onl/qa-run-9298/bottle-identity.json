@@ -1,0 +1,15 @@
+{
+  "files": {
+    "e2e/bottle-ui.test.ts": "7688c4035f52b3842dcbf92267b024beda635ab2238601a3a759867603be303b",
+    "components/bottle/button.css": "4b1cd7355f0989a71686eb97fcf53f82fc8b878d4d53ee6f89c208e217d7fc0d",
+    "components/end-footer.tsx": "659055c72339b886cd0da35c9bc9899b010bdcc4ef23fdcda574d387c5d7dcda",
+    "components/end-stage.tsx": "c423208e47eebea1fdf0821ad9b7bf32df0cc9edc0f3024c9e78b72e82537255",
+    "app/(site)/globals.css": "df2accbef90094bcabb881656e8d7d8b0a6fc287bb3ba91f77229e7370b86b16",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    ".github/workflows/ci.yml": "8ba21883783aa3d3b7c0c83d67ef086ff1c4e41586d7de8e926caf88f54e8135"
+  },
+  "historyDiffs": {
+    "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6": [],
+    "22a88f0c7b4d3160c425c2e7877f7d0c05894077": []
+  }
+}

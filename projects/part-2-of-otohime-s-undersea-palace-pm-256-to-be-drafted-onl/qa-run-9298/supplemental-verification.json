@@ -1,0 +1,56 @@
+[
+  {
+    "label": "worker-typecheck",
+    "command": "npm run typecheck",
+    "cwd": "ghosts/worker",
+    "exit": 0,
+    "seconds": 0.7,
+    "logSha256": "09c7269c33779698d260100c549c83ea1dc274a192c6e6fbc12c3f4542abdc7c",
+    "tail": "\n> typecheck\n> tsc --noEmit -p tsconfig.json\n\n"
+  },
+  {
+    "label": "worker-runtime",
+    "command": "npm run test:local",
+    "cwd": "ghosts/worker",
+    "exit": 0,
+    "seconds": 4.81,
+    "logSha256": "a52a5b32cdabf9ada556b6186b937037a1c966edc159b2723497f1bdc41811e0",
+    "tail": "\n> test:local\n> node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 'test/*.test.mjs'\n\nTAP version 13\n# \u001b[33m\u25b2 \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mProxy environment variables detected. We'll use your proxy for fetch requests.\u001b[0m\n# Subtest: actual Worker (wrangler.jsonc) in workerd\n    # Subtest: two clients in one room exchange anonymous move and click events\n    ok 1 - two clients in one room exchange anonymous move and click events\n      ---\n      duration_ms: 380.257171\n      type: 'test'\n      ...\n    # Subtest: a leaving member is announced with bye and the new count\n    ok 2 - a leaving member is announced with bye and the new count\n      ---\n      duration_ms: 17.150896\n      type: 'test'\n      ...\n    # Subtest: the two rooms cannot communicate\n    ok 3 - the two rooms cannot communicate\n      ---\n      duration_ms: 355.259913\n      type: 'test'\n      ...\n    # Subtest: bad upgrades are refused with the shared statuses\n    ok 4 - bad upgrades are refused with the shared statuses\n      ---\n      duration_ms: 85.655533\n      type: 'test'\n      ...\n    # Subtest: binary, oversize and malformed frames are dropped and the fifth closes 1008\n    ok 5 - binary, oversize and malformed frames are dropped and the fifth closes 1008\n      ---\n      duration_ms: 30.458625\n      type: 'test'\n      ...\n    # Subtest: RSV1 without a negotiated extension closes 1002 without fan-out\n    ok 6 - RSV1 without a negotiated extension closes 1002 without fan-out\n      ---\n      duration_ms: 30.039036\n      type: 'test'\n      ...\n    # Subtest: RSV2 without a negotiated extension closes 1002 without fan-out\n    ok 7 - RSV2 without a negotiated extension closes 1002 without fan-out\n      ---\n      duration_ms: 31.760889\n      type: 'test'\n      ...\n    # Subtest: RSV3 without a negotiated extension closes 1002 without fan-out\n    ok 8 - RSV3 without a negotiated extension closes 1002 without fan-out\n      ---\n      duration_ms: 44.509286\n      type: 'test'\n      ...\n    # Subtest: a burst is cut at the 15-token bucket without fan-out of the excess\n    ok 9 - a burst is cut at the 15-token bucket without fan-out of the excess\n      ---\n      duration_ms: 339.700159\n      type: 'test'\n      ...\n    # Subtest: the room holds 24; the next socket hears full and is closed 1013\n    ok 10 - the room holds 24; the next socket hears full and is closed 1013\n      ---\n      duration_ms: 294.238418\n      type: 'test'\n      ...\n    # Subtest: GET /version is public build metadata only\n    ok 11 - GET /version is public build metadata only\n      ---\n      duration_ms: 21.049371\n      type: 'test'\n      ...\n    # Subtest: /version refuses writes and serves the code+lock+config fingerprint\n    ok 12 - /version refuses writes and serves the code+lock+config fingerprint\n      ---\n      duration_ms: 11.9865\n      type: 'test'\n      ...\n    # Subtest: fake readiness/log/mode/reset controls are absent from the real Worker\n    ok 13 - fake readiness/log/mode/reset controls are absent from the real Worker\n      ---\n      duration_ms: 46.101995\n      type: 'test'\n      ...\n    # Subtest: an allowed upgrade with cookies and a UA still works; nothing but the upgrade reaches the room\n    ok 14 - an allowed upgrade with cookies and a UA still works; nothing but the upgrade reaches the room\n      ---\n      duration_ms: 5.143174\n      type: 'test'\n      ...\n    1..14\nok 1 - actual Worker (wrangler.jsonc) in workerd\n  ---\n  duration_ms: 2426.508657\n  type: 'suite'\n  ...\n# Subtest: GhostRoom reconstruction on live state (test/wrangler.reentry.jsonc)\n    # Subtest: strikes, the bucket and fan-out survive a rebuilt GhostRoom\n    ok 1 - strikes, the bucket and fan-out survive a rebuilt GhostRoom\n      ---\n      duration_ms: 603.922901\n      type: 'test'\n      ...\n    # Subtest: the cap holds across a rebuild and nothing is ever stored\n    ok 2 - the cap holds across a rebuild and nothing is ever stored\n      ---\n      duration_ms: 443.99952\n      type: 'test'\n      ...\n    1..2\nok 2 - GhostRoom reconstruction on live state (test/wrangler.reentry.jsonc)\n  ---\n  duration_ms: 1420.861876\n  type: 'suite'\n  ...\n# Subtest: privacy boundary in source and configuration\n    # Subtest: Worker observability and logpush are off\n    ok 1 - Worker observability and logpush are off\n      ---\n      duration_ms: 0.163905\n      type: 'test'\n      ...\n    # Subtest: Worker code uses no storage, SQL, alarms, logs, cookies, IP or UA\n    ok 2 - Worker code uses no storage, SQL, alarms, logs, cookies, IP or UA\n      ---\n      duration_ms: 0.420701\n      type: 'test'\n      ...\n    1..2\nok 3 - privacy boundary in source and configuration\n  ---\n  duration_ms: 0.654334\n  type: 'suite'\n  ...\n1..3\n# tests 18\n# suites 3\n# pass 18\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 4713.245373\n"
+  },
+  {
+    "label": "worker-bundle",
+    "command": "npm run bundle:check",
+    "cwd": "ghosts/worker",
+    "exit": 0,
+    "seconds": 1.62,
+    "logSha256": "566e926052371c76f5be26a9e2a358233948656218881936c55dde4bc8ee0e4a",
+    "tail": "\n> bundle:check\n> node scripts/bundle-check.mjs\n\n\n \u26c5\ufe0f wrangler 4.152.0\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nTotal Upload: 12.12 KiB / gzip: 3.84 KiB\nYour Worker has access to the following bindings:\nBinding                                          Resource                     \nenv.GHOST_ROOMS (GhostRoom)                      Durable Object               \nenv.WORKER_VERSION                               Worker Version Metadata      \nenv.ALLOWED_ORIGINS (\"https://otohime.dev\")      Environment Variable         \n\n--dry-run: exiting now.\n\u001b[33m\u25b2 \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mProxy environment variables detected. We'll use your proxy for fetch requests.\u001b[0m\n\n\nbundle:check PASS index.js 12413 bytes, fingerprint aa87b9e3b4328f59801de5028120046f3c244f4f55e7e26d661b16d02b6a7115\n"
+  },
+  {
+    "label": "manifest-fixture",
+    "command": "node scripts/probe-ghosts.mjs --fixture",
+    "cwd": ".",
+    "exit": 0,
+    "seconds": 0.03,
+    "logSha256": "400d7ed66cc7cab800ef57bfde22973db6ea3bc33071bd7530c3b596e7862c5d",
+    "tail": "PASS fixture identity contract; no hosted execution or deployment\n"
+  },
+  {
+    "label": "independent",
+    "command": "TMPDIR=/tmp SKIP_BUILD=1 node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/qa-run-9298/booth-negative.test.mjs projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/qa-run-9298/independent.test.mjs",
+    "cwd": ".",
+    "exit": 0,
+    "seconds": 16.28,
+    "logSha256": "2fd0ad106e32aaf564b13a23a68525d95ee7c26c706d493a87cd766c3ea3b01e",
+    "tail": "Starting embedded Postgres on 127.0.0.1:39649\nApplying migrations\n\n> otohime@0.1.0 db:migrate\n> drizzle-kit migrate\n\nNo config path provided, using default 'drizzle.config.ts'\nReading config file '/data/build-worker/leases/1fced89c-55b3-4c9f-a6a4-5d37d8650eb2-81f75e41949d113b92d4b40b7ec7f6ee/work/otohime/drizzle.config.ts'\n\u25c7 injected env (0) from .env\nUsing 'pg' driver for database querying\n[\u28f7] applying migrations...\u001b[2K\u001b[1G[\u2713] migrations applied successfully!Starting the server on http://localhost:46047\nTAP version 13\n# {\"kind\":\"booth-independent-negative\",\"blockedEventWaitRejected\":true,\"immediate\":\"webgl2\",\"committed\":\"canvas2d\",\"opaque\":43200,\"mean\":472.57381944444444,\"chrome\":\"156.0.8078.47\",\"boundary\":\"real app, Chrome and sample renderer; native event suppressed once for negative control, then injected normally; no canvas replacement\"}\n# Subtest: exact fallback wait detects a suppressed context-loss event, then actual fallback paints\nok 1 - exact fallback wait detects a suppressed context-loss event, then actual fallback paints\n  ---\n  duration_ms: 1348.14414\n  type: 'test'\n  ...\n# \u001b[33m\u25b2 \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mProxy environment variables detected. We'll use your proxy for fetch requests.\u001b[0m\n# {\"kind\":\"independent-qa\",\"chrome\":\"156.0.8078.47\",\"worker\":{\"service\":\"otohime-ghosts\",\"fingerprint\":\"aa87b9e3b4328f59801de5028120046f3c244f4f55e7e26d661b16d02b6a7115\",\"workerVersionId\":\"a710c7d6-8be5-42db-bf30-d405f4aec356\"},\"effectiveOrigin\":\"http://localhost:46047\",\"effectiveConfigurationFingerprint\":\"4e05da2a729de744e2fde61200967d5af175a65e2561aab313f7e3ff5371bf26\",\"positivePixels\":44,\"homePixels\":43,\"negativePixels\":0,\"dropped\":2,\"deniedOrigin\":403,\"roomSeparation\":true,\"leaveClears\":true,\"boundary\":\"local workerd; injected app config and local Origin binding; no fake fan-out or canvas instrumentation; negative control drops real server frames\"}\n# Subtest: independent real Worker browser fan-out and blocked-delivery negative control\nok 2 - independent real Worker browser fan-out and blocked-delivery negative control\n  ---\n  duration_ms: 6598.780161\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9143.580438\n"
+  },
+  {
+    "label": "production",
+    "command": "TMPDIR=/tmp node projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/qa-run-9298/deployed.mjs",
+    "cwd": ".",
+    "exit": 0,
+    "seconds": 13.87,
+    "logSha256": "7eda73a0b9cbf694d117b23a0b391e2edd4d8648b7ceb1247efafb7ba31c4ffd",
+    "tail": "{\n  \"observedAt\": \"2026-10-28T05:01:35.172Z\",\n  \"deliverySha\": \"22a88f0c7b4d3160c425c2e7877f7d0c05894077\",\n  \"deployedSha\": \"22a88f0c7b4d3160c425c2e7877f7d0c05894077\",\n  \"nextBuildId\": \"Y1L0-PoKtW0d4enGxB2PL\",\n  \"buildIdSource\": \"independent served RSC payload\",\n  \"chrome\": \"156.0.8078.47\",\n  \"rows\": [\n    {\n      \"room\": \"/\",\n      \"status\": 200,\n      \"state\": \"off\",\n      \"hideReload\": true,\n      \"reenabledStillDark\": true\n    },\n    {\n      \"room\": \"/ryugu\",\n      \"status\": 200,\n      \"state\": \"off\",\n      \"hideReload\": true,\n      \"reenabledStillDark\": true\n    }\n  ],\n  \"errors\": [],\n  \"sockets\": [],\n  \"boundary\": \"read-only real production; no config override/fake; hosted active fan-out deliberately unproven\"\n}\n"
+  }
+]

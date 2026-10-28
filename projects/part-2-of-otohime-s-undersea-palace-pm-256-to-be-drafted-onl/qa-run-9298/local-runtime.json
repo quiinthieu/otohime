@@ -1,0 +1,13 @@
+[
+  {
+    "pid": "350102",
+    "publicEnvironment": {
+      "PORT": "45469",
+      "GHOSTS_ENDPOINT": "ws://127.0.0.1:36821/ghosts",
+      "GHOSTS_FAKE_BASE": "http://127.0.0.1:36821",
+      "NODE_ENV": "production"
+    },
+    "publicConfigurationFingerprint": "1fd4c17ea1db378a0430d8b7805e9ba624ad66a69ecf2f9572d76d3d7b0c8cb2",
+    "nextBuildId": "MkyXxx44TJbShixURvAq3"
+  }
+]

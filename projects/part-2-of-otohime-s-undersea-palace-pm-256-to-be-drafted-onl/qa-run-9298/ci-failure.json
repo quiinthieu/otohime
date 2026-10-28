@@ -1,0 +1,461 @@
+{
+  "failedRun": 40626170762,
+  "jobs": {
+    "total_count": 4,
+    "jobs": [
+      {
+        "id": 122611492742,
+        "run_id": 40626170762,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40626170762",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOVNL7kc8AAAAcjDbnhg",
+        "head_sha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+        "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/122611492742",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40626170762/job/122611492742",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-10-28T03:21:00Z",
+        "started_at": "2026-10-28T03:21:02Z",
+        "completed_at": "2026-10-28T03:38:22Z",
+        "name": "checks",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-28T03:21:03Z",
+            "completed_at": "2026-10-28T03:21:04Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-28T03:21:04Z",
+            "completed_at": "2026-10-28T03:21:11Z"
+          },
+          {
+            "name": "Run actions/checkout@v7",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-28T03:21:11Z",
+            "completed_at": "2026-10-28T03:21:13Z"
+          },
+          {
+            "name": "Check guestbook delivery author",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-28T03:21:13Z",
+            "completed_at": "2026-10-28T03:21:13Z"
+          },
+          {
+            "name": "Check Vercel deployment author",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-28T03:21:13Z",
+            "completed_at": "2026-10-28T03:21:13Z"
+          },
+          {
+            "name": "Run actions/cache@v6",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-28T03:21:13Z",
+            "completed_at": "2026-10-28T03:21:17Z"
+          },
+          {
+            "name": "Run actions/setup-node@v7",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-28T03:21:17Z",
+            "completed_at": "2026-10-28T03:21:22Z"
+          },
+          {
+            "name": "Run npm ci",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-28T03:21:22Z",
+            "completed_at": "2026-10-28T03:21:41Z"
+          },
+          {
+            "name": "Run npm run lint",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-28T03:21:41Z",
+            "completed_at": "2026-10-28T03:22:10Z"
+          },
+          {
+            "name": "Run npm run typecheck",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-28T03:22:10Z",
+            "completed_at": "2026-10-28T03:22:30Z"
+          },
+          {
+            "name": "npm test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-28T03:22:30Z",
+            "completed_at": "2026-10-28T03:23:40Z"
+          },
+          {
+            "name": "Annotate failed unit tests",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 12,
+            "started_at": "2026-10-28T03:23:40Z",
+            "completed_at": "2026-10-28T03:23:40Z"
+          },
+          {
+            "name": "Run bash scripts/vercel-deploy.test.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-28T03:23:40Z",
+            "completed_at": "2026-10-28T03:23:52Z"
+          },
+          {
+            "name": "Run bash scripts/verify-deploy.sh --self-test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-28T03:23:52Z",
+            "completed_at": "2026-10-28T03:24:28Z"
+          },
+          {
+            "name": "Run bash scripts/probe-history.sh --self-test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-10-28T03:24:28Z",
+            "completed_at": "2026-10-28T03:24:51Z"
+          },
+          {
+            "name": "Run npm run ask:check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16,
+            "started_at": "2026-10-28T03:24:51Z",
+            "completed_at": "2026-10-28T03:24:51Z"
+          },
+          {
+            "name": "Migrations match db/schema.ts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17,
+            "started_at": "2026-10-28T03:24:51Z",
+            "completed_at": "2026-10-28T03:24:53Z"
+          },
+          {
+            "name": "Run npm run history:index -- --strict --rev=\"$GITHUB_SHA\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18,
+            "started_at": "2026-10-28T03:24:53Z",
+            "completed_at": "2026-10-28T03:24:53Z"
+          },
+          {
+            "name": "Run npm run history:check -- --strict --rev=\"$GITHUB_SHA\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-28T03:24:53Z",
+            "completed_at": "2026-10-28T03:24:54Z"
+          },
+          {
+            "name": "Run npm run build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-28T03:24:54Z",
+            "completed_at": "2026-10-28T03:25:25Z"
+          },
+          {
+            "name": "Run npm run history:check -- --strict --rev=\"$GITHUB_SHA\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-28T03:25:25Z",
+            "completed_at": "2026-10-28T03:25:25Z"
+          },
+          {
+            "name": "Real CPU camera and privacy verifier",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-28T03:25:25Z",
+            "completed_at": "2026-10-28T03:27:06Z"
+          },
+          {
+            "name": "Run npm run db:migrate",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-28T03:27:06Z",
+            "completed_at": "2026-10-28T03:27:06Z"
+          },
+          {
+            "name": "Publish application build identity",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24,
+            "started_at": "2026-10-28T03:27:06Z",
+            "completed_at": "2026-10-28T03:27:06Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v6",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25,
+            "started_at": "2026-10-28T03:27:06Z",
+            "completed_at": "2026-10-28T03:27:08Z"
+          },
+          {
+            "name": "Start local ghost fake",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-28T03:27:08Z",
+            "completed_at": "2026-10-28T03:27:09Z"
+          },
+          {
+            "name": "E2E against next start",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 27,
+            "started_at": "2026-10-28T03:27:09Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Motion probe, signed in",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 28,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Footer walk",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 29,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Footer Chromium probe",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 30,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Stop local ghost fake",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v7",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 59,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Post Run actions/cache@v6",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 60,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v7",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 61,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 62,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 63,
+            "started_at": "2026-10-28T03:38:18Z",
+            "completed_at": "2026-10-28T03:38:18Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/122611492742",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000000962,
+        "runner_name": "GitHub Actions 1000000962",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 122611494046,
+        "run_id": 40626170762,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40626170762",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOVNL7kc8AAAAcjDbsng",
+        "head_sha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+        "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/122611494046",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40626170762/job/122611494046",
+        "status": "completed",
+        "conclusion": "skipped",
+        "created_at": "2026-10-28T03:21:00Z",
+        "started_at": "2026-10-28T03:21:00Z",
+        "completed_at": "2026-10-28T03:20:59Z",
+        "name": "preview",
+        "steps": [],
+        "check_run_url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/122611494046",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": null,
+        "runner_name": null,
+        "runner_group_id": null,
+        "runner_group_name": null
+      },
+      {
+        "id": 122611494415,
+        "run_id": 40626170762,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40626170762",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOVNL7kc8AAAAcjDbuDw",
+        "head_sha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+        "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/122611494415",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40626170762/job/122611494415",
+        "status": "completed",
+        "conclusion": "skipped",
+        "created_at": "2026-10-28T03:21:00Z",
+        "started_at": "2026-10-28T03:21:00Z",
+        "completed_at": "2026-10-28T03:20:59Z",
+        "name": "cleanup",
+        "steps": [],
+        "check_run_url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/122611494415",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": null,
+        "runner_name": null,
+        "runner_group_id": null,
+        "runner_group_name": null
+      },
+      {
+        "id": 122616912958,
+        "run_id": 40626170762,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/quiinthieu/otohime/actions/runs/40626170762",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOVNL7kc8AAAAcjImcPg",
+        "head_sha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+        "url": "https://api.github.com/repos/quiinthieu/otohime/actions/jobs/122616912958",
+        "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40626170762/job/122616912958",
+        "status": "completed",
+        "conclusion": "skipped",
+        "created_at": "2026-10-28T03:38:22Z",
+        "started_at": "2026-10-28T03:38:22Z",
+        "completed_at": "2026-10-28T03:38:22Z",
+        "name": "production",
+        "steps": [],
+        "check_run_url": "https://api.github.com/repos/quiinthieu/otohime/check-runs/122616912958",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": null,
+        "runner_name": null,
+        "runner_group_id": null,
+        "runner_group_name": null
+      }
+    ]
+  },
+  "logFetch": {
+    "error": "HTTP Error 403: Forbidden"
+  },
+  "annotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/5fd54a7a6799fff5e924260a5e47ba8e9685a3d6/.github",
+      "start_line": 1532,
+      "start_column": null,
+      "end_line": 1532,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "",
+      "message": "Process completed with exit code 1.",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/5fd54a7a6799fff5e924260a5e47ba8e9685a3d6/.github",
+      "start_line": 1429,
+      "start_column": null,
+      "end_line": 1429,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "E2E against next start",
+      "message": "Gate: E2E against next start; exit 1\nCommit: 5fd54a7a6799fff5e924260a5e47ba8e9685a3d6\nBuild: L6LZoFdhNMMNDCG26C0iF\nNode: v22.23.3\nChrome: Google Chrome 155.0.8059.39\nCommand, last 80 lines (bounded):\nr no WebGL at all, and the way down does not animate\n  ---\n  duration_ms: 2293.157714\n  type: 'test'\n  ...\n# Subtest: the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages\nok 212 - the Tamatebako opens from the keyboard with a puff of smoke, and its scrubber walks back through real commits as the paper ages\n  ---\n  duration_ms: 3641.664064\n  type: 'test'\n  ...\n# Subtest: the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog\nok 213 - the Tamatebako works by touch: a tap opens it and a tap on the scrubber jumps through the changelog\n  ---\n  duration_ms: 1897.138857\n  type: 'test'\n  ...\n# Subtest: under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back\nok 214 - under reduced motion the Tamatebako opens at once, without smoke or a swinging lid; motion welcome brings the smoke back\n  ---\n  duration_ms: 2875.940543\n  type: 'test'\n  ...\n# Subtest: server and no-JS baseline: all cards remain readable links without toy controls\nok 215 - server and no-JS baseline: all cards remain readable links without toy controls\n  ---\n  duration_ms: 1294.496382\n  type: 'test'\n  ...\n# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup\nok 216 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup\n  ---\n  duration_ms: 4343.009026\n  type: 'test'\n  ...\n# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics\nok 217 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics\n  ---\n  duration_ms: 1947.975687\n  type: 'test'\n  ...\n# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable\nok 218 - blocked storage and live reduced motion keep instant keyboard operations usable\n  ---\n  duration_ms: 1555.09003\n  type: 'test'\n  ...\n# Subtest: Save-Data loads paper only after explicit enabling\nok 219 - Save-Data loads paper only after explicit enabling\n  ---\n  duration_ms: 1675.350425\n  type: 'test'\n  ...\n# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded\nok 220 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded\n  ---\n  duration_ms: 3660.641898\n  type: 'test'\n  ...\n# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload\nok 221 - renderer import waits for window load and the idle callback; server markup has no toy preload\n  ---\n  duration_ms: 1590.780237\n  type: 'test'\n  ...\n# Subtest: existing desktop desk and stamp gestures keep their own controls\nok 222 - existing desktop desk and stamp gestures keep their own controls\n  ---\n  duration_ms: 1652.634511\n  type: 'test'\n  ...\n1..222\n# tests 224\n# suites 0\n# pass 223\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 667122.342048\nnext start, last 80 lines (bounded):\n\n> otohime@0.1.0 start\n> next start\n\n\u25b2 Next.js 16.4.2\n- Local:         http://localhost:3000\n- Network:       http://10.1.0.213:3000\n\u2713 Ready in 147ms\n\u2713 Running next.config.ts took 45ms\n[email] to=plain-rmvrkcdsetxm@e2e.test subject=Reset your Otohime password\nSomeone asked to reset the password for plain-rmvrkcdsetxm@e2e.test.\n\nChoose a new one here (the link works for an hour):\n[redacted synthetic reset URL]\n\nIf it wasn't you, ignore this email; nothing changes.",
+      "raw_details": ""
+    },
+    {
+      "path": "e2e/bottle-ui.test.ts",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/5fd54a7a6799fff5e924260a5e47ba8e9685a3d6/e2e/bottle-ui.test.ts",
+      "start_line": 147,
+      "start_column": null,
+      "end_line": 147,
+      "end_column": null,
+      "annotation_level": "failure",
+      "title": "E2E failed: footer Bottle contains enlarged text and growing 200% root text at 768",
+      "message": "AssertionError [ERR_ASSERTION]: sceneTop: Bottle state preserves reserved footer geometry\n    at stable (file:///home/runner/work/otohime/otohime/e2e/bottle-ui.test.ts:185:14)\n    at TestContext.<anonymous> (file:///home/runner/work/otohime/otohime/e2e/bottle-ui.test.ts:238:5)\n    at async Test.run (node:internal/test_runner/test:1054:7)\n    at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)",
+      "raw_details": ""
+    },
+    {
+      "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "blob_href": "https://github.com/quiinthieu/otohime/blob/5fd54a7a6799fff5e924260a5e47ba8e9685a3d6/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+      "start_line": 2,
+      "start_column": 46,
+      "end_line": 2,
+      "end_column": 46,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "'resolve' is defined but never used",
+      "raw_details": ""
+    }
+  ],
+  "publicRawAnnotations": [
+    "                          <div>AssertionError [ERR_ASSERTION]: sceneTop: Bottle state preserves reserved footer geometry"
+  ]
+}

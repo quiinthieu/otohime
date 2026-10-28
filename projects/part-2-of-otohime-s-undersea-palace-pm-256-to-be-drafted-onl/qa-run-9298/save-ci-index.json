@@ -1,0 +1,47 @@
+{
+  "source": "https://github.com/quiinthieu/otohime/actions/workflows/ci.yml",
+  "scope": "first three displayed workflow rows, after API rate-limit rejection; no polling",
+  "runs": [
+    {
+      "id": "40635091133",
+      "state": {
+        "status": "WORKFLOW_RUN_STATUS_IN_PROGRESS"
+      },
+      "source": "/quiinthieu/otohime/commit/68dd79dba309c7713122e08b02ebb4e6844de749",
+      "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40635091133",
+      "createdAt": {
+        "timestamp": "2026-10-28T04:56:15Z",
+        "isToday": true,
+        "isCurrentYear": true
+      }
+    },
+    {
+      "id": "40633395018",
+      "state": {
+        "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+        "conclusion": "WORKFLOW_RUN_CONCLUSION_FAILURE"
+      },
+      "source": "/quiinthieu/otohime/commit/f50d7aa017c946540199262177a531f652a9980a",
+      "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40633395018",
+      "createdAt": {
+        "timestamp": "2026-10-28T04:37:48Z",
+        "isToday": true,
+        "isCurrentYear": true
+      }
+    },
+    {
+      "id": "40631993207",
+      "state": {
+        "status": "WORKFLOW_RUN_STATUS_COMPLETED",
+        "conclusion": "WORKFLOW_RUN_CONCLUSION_SUCCESS"
+      },
+      "source": "/quiinthieu/otohime/commit/22a88f0c7b4d3160c425c2e7877f7d0c05894077",
+      "runUrl": "https://github.com/quiinthieu/otohime/actions/runs/40631993207",
+      "createdAt": {
+        "timestamp": "2026-10-28T04:22:51Z",
+        "isToday": true,
+        "isCurrentYear": true
+      }
+    }
+  ]
+}
