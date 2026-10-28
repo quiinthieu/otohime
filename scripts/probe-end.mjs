@@ -7,7 +7,7 @@ import { site } from "../content/site.ts";
 import { away, KONAMI, TENTH_POKE } from "../lib/end.ts";
 import { CONSOLE_MENU, PUBLIC_PAGES } from "../lib/pages.ts";
 import { launchBrowser } from "./probe-browser.mjs";
-import { endTitleBounds, endTitleText, inPage, settleEndTitle, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
+import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
 
 const rootRequire = createRequire(import.meta.url);
 const pg = rootRequire("pg");
@@ -602,14 +602,8 @@ try {
             const sig = footer.querySelector("[data-end-signature]")?.textContent?.trim() ?? "";
             const copy = footer.querySelector("[data-end-copyright]")?.textContent?.replace(/\s+/g, " ").trim() ?? "";
             const topHref = footer.querySelector("a[data-end-top]")?.getAttribute("href") ?? "";
-            // The scene's three layers, then the waterline's one wave under everything (the way down to Ryugu-jo).
-            const svgs = [...footer.querySelectorAll("svg")];
-            const sceneSvgs = svgs.filter((s) => !s.closest("[data-end-waterline]"));
             const waterline = footer.lastElementChild?.matches("[data-end-waterline]") ? footer.lastElementChild : null;
-            const waveCount = waterline?.querySelectorAll("svg").length ?? 0;
             const ryuguHref = waterline?.querySelector("a[data-end-ryugu]")?.getAttribute("href") ?? "";
-            const svgsHidden =
-              sceneSvgs.length === 3 && waveCount === 1 && svgs.every((s) => s.getAttribute("aria-hidden") === "true");
             return {
               sha,
               ok:
@@ -624,8 +618,7 @@ try {
                 sig === wantCopy.signature &&
                 copy === `© ${wantYear} Otohime` &&
                 topHref === "#main" &&
-                ryuguHref === "/ryugu" &&
-                svgsHidden,
+                ryuguHref === "/ryugu",
               detail: JSON.stringify({
                 domAfter,
                 belowMain,
@@ -637,8 +630,6 @@ try {
                 copy,
                 topHref,
                 ryuguHref,
-                sceneSvgCount: sceneSvgs.length,
-                waveCount,
               }),
             };
           },
@@ -647,12 +638,13 @@ try {
 
         // The heading's accessible plain source (not RisoText's aria-hidden plates), from the same visible footer.
         const title = await page.evaluate(inPage(endTitleText, VISIBLE_FOOTER));
+        const svgStructure = await page.evaluate(inPage(endSvgStructure, VISIBLE_FOOTER));
 
         check(`route ${route}: build-sha matches (${meta.sha || "none"})`, matchesExpectedSha(meta.sha), meta.sha);
         check(
           `route ${route}: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last`,
-          meta.ok && title === site.end.title,
-          `${meta.detail} title=${JSON.stringify(title)}`,
+          meta.ok && svgStructure.ok && title === site.end.title,
+          `${meta.detail} svg=${JSON.stringify(svgStructure)} title=${JSON.stringify(title)}`,
         );
 
         const links = await verifyCanonicalLinks(page);
@@ -1980,11 +1972,10 @@ try {
         await page.goto(`${BASE_URL}/`, { waitUntil: "load" });
         const noJsCheck = await verifyCanonicalLinks(page);
         const noJsTitle = await page.evaluate(inPage(endTitleText, `document.querySelector("footer.end")`));
+        const noJsSvg = await page.evaluate(inPage(endSvgStructure, `document.querySelector("footer.end")`));
         const noJsDom = await page.evaluate(() => {
           const footer = document.querySelector("footer.end");
-          const svgs = [...footer.querySelectorAll("svg")].filter((s) => !s.closest("[data-end-waterline]"));
           return {
-            svgCount: svgs.length,
             lcd: `${footer.querySelector('[data-lcd-line="0"]')?.textContent}/${footer.querySelector('[data-lcd-line="1"]')?.textContent}`,
             topHref: footer.querySelector("a[data-end-top]")?.getAttribute("href"),
             runningFooterAnims: document
@@ -1996,11 +1987,11 @@ try {
           "no-JS: renders complete still scene, heading, 6 page links, 4 contact links, credits, year and #main top anchor",
           noJsCheck.ok &&
             noJsTitle === site.end.title &&
-            noJsDom.svgCount === 3 &&
+            noJsSvg.ok &&
             noJsDom.lcd === "SAVE/POINT" &&
             noJsDom.topHref === "#main" &&
             noJsDom.runningFooterAnims === 0,
-          JSON.stringify({ noJsCheck, noJsDom, noJsTitle }),
+          JSON.stringify({ noJsCheck, noJsDom, noJsTitle, noJsSvg }),
         );
 
         // Follow footer Work link without JS

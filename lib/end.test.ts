@@ -245,6 +245,71 @@ test("Footer walk reads the exact plain heading source, ignoring nested Riso pla
   assert.throws(() => verify(riso(title).replace('class="riso-source "', 'class="riso-source-imitation"')), { code: "ERR_ASSERTION" });
 });
 
+test("Footer walk separates decorative layers from the named basket and rejects missing or extra SVGs", () => {
+  const walk = readFileSync(resolve(import.meta.dirname, "../scripts/walk-end.sh"), "utf8");
+  const start = walk.indexOf("const svgs =");
+  const stop = walk.indexOf('assert.match(footerHtml, /<button', start);
+  assert.ok(start >= 0 && stop > start, "execute the actual shell SVG verifier block");
+  const check = walk.slice(start, stop);
+  const layer = (name: string) => `<svg data-layer="${name}" aria-hidden="true"></svg>`;
+  const layers = ["ground", "console", "sky"].map(layer).join("");
+  const basket = '<svg data-paper-basket="" role="img" aria-label="Wastepaper basket"></svg>';
+  const wave = '<svg aria-hidden="true"></svg>';
+  const verify = (sceneHtml = layers + basket, waterHtml = wave) => runInNewContext(check, { assert, sceneHtml, waterHtml });
+  verify();
+  assert.throws(() => verify(layers), { code: "ERR_ASSERTION" }, "basket is required");
+  assert.throws(() => verify(layers + basket + basket), { code: "ERR_ASSERTION" }, "duplicate basket cannot replace a layer");
+  assert.throws(() => verify(layer("ground") + layer("sky") + basket), { code: "ERR_ASSERTION" }, "console layer is required");
+  assert.throws(() => verify(layers + basket + layer("unrelated")), { code: "ERR_ASSERTION" }, "unrelated extra SVG still fails");
+  assert.throws(() => verify((layers + basket).replace('aria-hidden="true"', 'aria-hidden="false"')), { code: "ERR_ASSERTION" });
+  assert.throws(() => verify(layers + basket.replace('role="img"', 'role="presentation"')), { code: "ERR_ASSERTION" });
+  assert.throws(() => verify(layers + basket.replace('Wastepaper basket', 'Unnamed')), { code: "ERR_ASSERTION" });
+  assert.throws(() => verify(layers + basket.replace('role="img"', 'aria-hidden="true" role="img"')), { code: "ERR_ASSERTION" });
+  assert.throws(() => verify(layers + basket, ""), { code: "ERR_ASSERTION" }, "waterline wave remains required");
+  assert.throws(() => verify(layers + basket, wave + wave), { code: "ERR_ASSERTION" }, "extra wave still fails");
+});
+
+test("Footer probe separates decorative SVGs from the named basket on real browser DOM", async () => {
+  const { launchBrowser } = await import("../scripts/probe-browser.mjs");
+  const { endSvgStructure, inPage } = await import("../scripts/probe-end-dom.mjs");
+  const probe = readFileSync(resolve(import.meta.dirname, "../scripts/probe-end.mjs"), "utf8");
+  assert.equal((probe.match(/inPage\(endSvgStructure,/g) ?? []).length, 2, "route and no-JS paths both use the tested helper");
+  assert.match(probe, /meta\.ok && svgStructure\.ok/);
+  assert.match(probe, /noJsSvg\.ok &&/);
+  const layers = '<svg aria-hidden="true"></svg>'.repeat(3);
+  const basket = '<svg data-paper-basket="" role="img" aria-label="Wastepaper basket"></svg>';
+  const water = '<div data-end-waterline=""><svg aria-hidden="true"></svg></div>';
+  const html = (scene = layers + basket, waterline = water) => `<footer class="end">${scene}${waterline}</footer>`;
+  const browser = await launchBrowser({ log: () => {} });
+  try {
+    for (const javaScriptEnabled of [true, false]) {
+      const context = await browser.newContext({ javaScriptEnabled });
+      try {
+        const page = await context.newPage();
+        const verify = async (markup: string) => {
+          await page.setContent(markup);
+          return page.evaluate(inPage(endSvgStructure, 'document.querySelector("footer.end")'));
+        };
+        assert.equal((await verify(html())).ok, true);
+        assert.equal(await page.getByRole("img", { name: "Wastepaper basket", exact: true }).count(), 1);
+        for (const bad of [
+          html(layers), html(layers + basket + basket),
+          html('<svg aria-hidden="true"></svg>'.repeat(2) + basket),
+          html(layers + basket + '<svg aria-hidden="true"></svg>'),
+          html((layers + basket).replace('aria-hidden="true"', 'aria-hidden="false"')),
+          html(layers + basket.replace('role="img"', 'role="presentation"')),
+          html(layers + basket.replace('Wastepaper basket', 'Unnamed')),
+          html(layers + `<div hidden>${basket}</div>`),
+          html(layers + basket, ""), html(layers + basket, water + water),
+          html(layers + basket, water + "<p>After the waterline</p>"),
+          "<main>No footer</main>",
+        ]) assert.equal((await verify(bad)).ok, false, `negative control, JavaScript=${javaScriptEnabled}: ${bad}`);
+        assert.equal((await verify(html())).ok, true, "same helper recovers after mutations");
+      } finally { await context.close(); }
+    }
+  } finally { await browser.close(); }
+});
+
 test("Footer network ownership rechecks a blank iframe when its player src arrives and rejects a footer twin", async () => {
   const source = readFileSync(resolve(import.meta.dirname, "../scripts/probe-end.mjs"), "utf8");
   const start = source.indexOf("  const playerFrames =");

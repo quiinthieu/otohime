@@ -46,6 +46,8 @@ export const BOTTLE_GATES = [
     ...sharedGate("unit").required,
     "isolated E2E builds discard stale Next output, preserve explicit reuse and propagate build failures",
     "deployment API configuration refuses credential egress before making a request",
+    "Footer walk separates decorative layers from the named basket and rejects missing or extra SVGs",
+    "Footer probe separates decorative SVGs from the named basket on real browser DOM",
     ...layoutNames,
     ...["layout", "unit", "browser", "footer"].map((id) => `Bottle ${id} receipt requires every named passing test and nonzero unskipped TAP`),
     "Bottle repository receipt requires layout, picker and every verifier regression",

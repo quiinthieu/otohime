@@ -42,6 +42,8 @@ export const CONTROLS = [
     file: "lib/end.test.ts",
     required: [
       { id: "footer_heading_source", name: "Footer walk reads the exact plain heading source, ignoring nested Riso plates" },
+      { id: "footer_svg_structure", name: "Footer walk separates decorative layers from the named basket and rejects missing or extra SVGs" },
+      { id: "footer_svg_probe", name: "Footer probe separates decorative SVGs from the named basket on real browser DOM" },
       { id: "footer_walk_probe_wiring", name: "walk-end.sh, probe-end.sh and CI checks wire the footer verification suite and handle unset, empty and long TMPDIR" },
     ],
   },
@@ -63,6 +65,7 @@ export const FINGERPRINT_PATHS = [
   "scripts/walk-end.sh",
   "scripts/probe-end.sh",
   "scripts/probe-end.mjs",
+  "scripts/probe-end-dom.mjs",
   "lib/end.ts",
   "lib/urashima.ts",
   "lib/pages.ts",

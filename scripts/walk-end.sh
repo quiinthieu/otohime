@@ -285,10 +285,16 @@ assert.equal([...waterHtml.matchAll(/<a\b/g)].length, 1, "the waterline holds on
 assert.match(sceneHtml, /\bdata-end-top=""/, "Back to top must come before the waterline");
 assert.doesNotMatch(waterHtml, /\bdata-end-(page|line|top|stage)=/, "nothing of the footer sits below the waterline");
 const svgs = [...sceneHtml.matchAll(/<svg\b[^>]*>/g)];
-assert.equal(svgs.length, 3, `expected 3 SVG layers (ground Inked, console Inked, sky), found ${svgs.length}`);
+const baskets = svgs.filter((m) => /\bdata-paper-basket=""/.test(m[0]));
+assert.equal(baskets.length, 1, "expected exactly one paper basket SVG");
+assert.match(baskets[0][0], /\brole="img"/, "the basket keeps its image role");
+assert.match(baskets[0][0], /\baria-label="Wastepaper basket"/, "the basket keeps its accessible name");
+assert.doesNotMatch(baskets[0][0], /\baria-hidden="true"/, "the named basket must stay accessible");
+const layers = svgs.filter((m) => !/\bdata-paper-basket=""/.test(m[0]));
+assert.equal(layers.length, 3, `expected 3 decorative SVG layers (ground Inked, console Inked, sky), found ${layers.length}`);
 const waves = [...waterHtml.matchAll(/<svg\b[^>]*>/g)];
 assert.equal(waves.length, 1, `expected 1 waterline wave, found ${waves.length}`);
-assert.ok([...svgs, ...waves].every((m) => m[0].includes("aria-hidden=\"true\"")), "every decorative SVG must be aria-hidden");
+assert.ok([...layers, ...waves].every((m) => m[0].includes("aria-hidden=\"true\"")), "every decorative SVG must be aria-hidden");
 assert.match(footerHtml, /<button\b[^>]*\btype="button"[^>]*\bdata-end-mascot=""[^>]*\baria-label="Poke the save-point console"/);
 assert.match(footerHtml, /<p\b[^>]*\bdata-end-readout=""[^>]*\baria-live="polite"[^>]*>/);
 assert.ok(decode(footerHtml).includes(site.end.idle.readout), "missing idle readout copy");

@@ -11,7 +11,7 @@ import { CONTROLS } from "../scripts/check-gate-closure.mjs";
 
 type ClosureReceipt = {
   runner: string; certified: boolean;
-  commands: { required: { name: string }[]; stdout_tail: string }[];
+  commands: { id: string; required: { name: string }[]; stdout_tail: string }[];
 };
 
 const prior = new URL("../projects/otohime-dev-three-paper-and-ink-toys-that-lean-into-the-uras/run-9171/artifacts/", import.meta.url);
@@ -74,13 +74,14 @@ test("Bottle static receipt requires actual lint and typecheck output and makes 
 });
 
 test("Bottle closure receipt rejects renamed or empty controls and a fake uncertified runner", () => {
-  // The archived closure predates the cache regression and cannot certify it.
+  // The archived closure predates cache and basket regressions and cannot certify them.
   assert.throws(() => assertBottleEvidence("closure", log("closure")));
   const fixture = JSON.parse(log("closure"));
-  const command = fixture.commands.find((command: { id: string }) => command.id === "e2e-runner");
-  command.required = CONTROLS.find((control: { id: string }) => control.id === "e2e-runner")!.required
-    .map((control: { id: string; name: string }) => ({ ...control, status: "pass" }));
-  command.stdout_tail = tapFixture(command.required.map((control: { name: string }) => control.name));
+  for (const control of CONTROLS) {
+    const command = fixture.commands.find((command: { id: string }) => command.id === control.id);
+    command.required = control.required.map((required: { id: string; name: string }) => ({ ...required, status: "pass" }));
+    command.stdout_tail = tapFixture(command.required.map((required: { name: string }) => required.name));
+  }
   const output = JSON.stringify(fixture); // Synthetic parser fixture; the CLI still requires fresh execution.
   const evidence = assertBottleEvidence("closure", output);
   assert.ok("required" in evidence && evidence.required.length > 0);
@@ -90,6 +91,11 @@ test("Bottle closure receipt rejects renamed or empty controls and a fake uncert
     (result: ClosureReceipt) => { result.commands[1].required = []; },
     (result: ClosureReceipt) => { result.commands[1].required[0].name = "unrelated control"; },
     (result: ClosureReceipt) => { result.commands[1].stdout_tail = ""; },
+    (result: ClosureReceipt) => {
+      const command = result.commands.find(command => command.id === "end")!;
+      command.required = command.required.filter(control => control.name !== "Footer walk separates decorative layers from the named basket and rejects missing or extra SVGs");
+      command.stdout_tail = tapFixture(command.required.map(control => control.name));
+    },
   ]) {
     const result = JSON.parse(output);
     mutate(result);

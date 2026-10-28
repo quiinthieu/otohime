@@ -2,6 +2,25 @@
 // scripts/probe-end-dom.test.mjs. Each function is serialized into the page with inPage(), so it must not close
 // over anything in this module.
 
+// The named basket is semantic content; the three scene layers and waterline wave are decoration.
+export function endSvgStructure(footer) {
+  if (!footer) return { ok: false, reason: "missing footer" };
+  const svgs = [...footer.querySelectorAll("svg")];
+  const layers = svgs.filter((svg) => !svg.closest("[data-end-waterline]") && !svg.matches("[data-paper-basket]"));
+  const baskets = svgs.filter((svg) => !svg.closest("[data-end-waterline]") && svg.matches("[data-paper-basket]"));
+  const waterline = footer.lastElementChild?.matches("[data-end-waterline]") ? footer.lastElementChild : null;
+  const waves = waterline ? [...waterline.querySelectorAll("svg")] : [];
+  const basketNamed = baskets.length === 1 && baskets[0].getAttribute("role") === "img" &&
+    baskets[0].getAttribute("aria-label") === "Wastepaper basket" && !baskets[0].closest('[aria-hidden="true"], [hidden], [inert]');
+  const decorativeHidden = [...layers, ...waves].every((svg) => svg.getAttribute("aria-hidden") === "true");
+  const waterlineLast = Boolean(waterline) && footer.querySelectorAll("[data-end-waterline]").length === 1;
+  return {
+    ok: layers.length === 3 && baskets.length === 1 && waves.length === 1 && basketNamed && decorativeHidden && waterlineLast,
+    sceneSvgCount: layers.length, basketCount: baskets.length, waveCount: waves.length,
+    basketNamed, decorativeHidden, waterlineLast,
+  };
+}
+
 // The footer heading's accessible plain text. RisoText (components/riso-heading.tsx) renders one uninterrupted
 // .riso-source span and then aria-hidden character plates, so the whole heading's textContent repeats the title.
 // Read the source inside h2#end-title only; a plain heading without RisoText keeps its own text. Null when the
