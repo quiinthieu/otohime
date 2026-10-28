@@ -7,7 +7,7 @@ import { createServer } from "node:net";
 import { test } from "node:test";
 
 test("the production ghost route reads configured and malformed endpoints at runtime", { timeout: 30000 }, async () => {
-  for (const endpoint of ["wss://ghosts.example/ghosts", "wss://ghosts.example/ghosts?token=forbidden"]) {
+  for (const endpoint of ["wss://ghosts.example/ghosts", "wss://ghosts.example/ghosts?token=forbidden", ""]) {
     const reservation = createServer().listen(0, "127.0.0.1");
     await once(reservation, "listening");
     const address = reservation.address();
@@ -32,7 +32,7 @@ test("the production ghost route reads configured and malformed endpoints at run
       });
       const response = await fetch(`${base}/api/ghosts`);
       assert.equal(response.headers.get("cache-control"), "no-store");
-      if (endpoint.includes("?")) {
+      if (!endpoint || endpoint.includes("?")) {
         assert.equal(response.status, 404); assert.equal(await response.text(), "");
       } else {
         assert.equal(response.status, 200);
@@ -43,7 +43,7 @@ test("the production ghost route reads configured and malformed endpoints at run
       const probe = await fetch(`${base}/api/ghosts?probe=1`);
       assert.equal(probe.status, 200);
       assert.equal(probe.headers.get("cache-control"), "no-store");
-      assert.deepEqual(await probe.json(), endpoint.includes("?") ? null : { endpoint, rooms: ["/", "/ryugu"] });
+      assert.deepEqual(await probe.json(), !endpoint || endpoint.includes("?") ? null : { endpoint, rooms: ["/", "/ryugu"] });
     } finally {
       server.kill("SIGTERM");
       await exited;

@@ -168,7 +168,7 @@ The change takes effect on the next request.
   BASE_URL=http://localhost:4010 DATABASE_URL=postgresql://otohime:otohime@localhost:5433/otohime npm run test:e2e
   ```
 
-- `bash scripts/e2e-local.sh` is the one-command e2e. It needs docker: it starts a throwaway Postgres on a free port, applies the migrations, builds (skip with `SKIP_BUILD=1`), serves on `APP_PORT` (default 4027), runs `npm run test:e2e`, then removes the container and the server.
+- `bash scripts/e2e-local.sh` is the Docker e2e entrypoint: it starts a throwaway Postgres on a free port, applies the migrations, configures a local ghost fake, builds (skip with `SKIP_BUILD=1`), serves on `APP_PORT` (default 4027), runs `npm run test:e2e`, then removes the server, fake and container. `npm run test:e2e` also works on its own with embedded Postgres and an owned fake/server.
 
 CI runs the unit and e2e tests on every PR.
 
@@ -478,3 +478,17 @@ Rules that keep this safe:
 ### Ink guestbook storage
 
 The moderated vector API is at `GET/POST /api/guestbook`. Apply `npm run db:migrate` before serving it. It uses the existing `DATABASE_URL` and `BETTER_AUTH_SECRET`; missing database configuration disables reads and writes with 503, while a missing secret disables writes with 503. No additional provider is required. New drawings remain pending until a separate owner moderation flow approves them. Payload limits, error codes, pagination, and the trusted ingress IP assumption are in [the guestbook contract](projects/otohime-dev-ink-guestbook-wall-origami-fortune-teller-1-ink/guestbook-contract.md).
+
+## Ink ghosts deployment
+
+Ghost cursors on Home and `/ryugu` remain dark with `GHOSTS_ENDPOINT` unset. Run
+`TMPDIR=/tmp npm run test:ghosts` for credential-free real Chrome pixel proof with a local fake;
+`TMPDIR=/tmp npm run test:e2e` runs the full browser suite with the same transport lifecycle.
+An externally owned `BASE_URL` requires explicit `GHOSTS_FAKE_BASE` and `GHOSTS_ENDPOINT`;
+the harness never changes that server's configuration.
+
+The [Worker runbook](ghosts/README.md#deployment-and-operator-handoff) describes least-privilege setup,
+the disabled-by-default `.github/workflows/ghosts.yml`, public version/fingerprint artifacts,
+read-only live proof and rollback. `GHOSTS_DEPLOY_ENABLED=true` enables Worker deployment only;
+setting the dedicated `wss://…/ghosts` endpoint in Vercel enables the application separately.
+Unset `GHOSTS_ENDPOINT` and redeploy the configuration to roll back. Local/fake proof does not establish hosted fan-out.

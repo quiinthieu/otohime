@@ -312,7 +312,7 @@ export async function startGhostsFake(options = {}) {
       res.end(JSON.stringify(body));
     };
     if (url.pathname === VERSION_PATH && req.method === "GET") {
-      return json(200, { service: "otohime-ghosts-fake", fingerprint: "fake" });
+      return json(200, { service: "otohime-ghosts-fake", fingerprint: "fake", workerVersionId: null });
     }
     if (url.pathname === GHOSTS_PATH) {
       // A plain request at the upgrade path: same answer as the Worker.
@@ -755,7 +755,8 @@ export const CONTRACT_CASES = [
       assert.equal(res.status, 200);
       assert.match(res.headers.get("cache-control") ?? "", /no-store/);
       const body = await res.json();
-      assert.deepEqual(Object.keys(body).sort(), ["fingerprint", "service"]);
+      assert.deepEqual(Object.keys(body).sort(), ["fingerprint", "service", "workerVersionId"]);
+      assert.ok(body.workerVersionId === null || /^[0-9a-f-]{36}$/.test(body.workerVersionId));
       assert.match(body.fingerprint, target.fingerprint ?? /^([0-9a-f]{64}|fake|unbuilt)$/);
       const text = JSON.stringify(body).toLowerCase();
       for (const word of ["token", "secret", "key", "account", "origin", "cookie", "ip", "member", "room"]) {

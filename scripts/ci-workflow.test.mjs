@@ -548,3 +548,126 @@ test("production strict history build step blocks build/upload on shallow or mis
     rmSync(work, { recursive: true, force: true });
   }
 });
+
+test("ghost fake starts before Next, survives every later browser/footer probe and is always cleaned", () => {
+  const checks = steps("checks");
+  assert.equal(scalar(["jobs", "checks", "env", "GHOSTS_ENDPOINT"]), "ws://127.0.0.1:8788/ghosts");
+  assert.equal(scalar(["jobs", "checks", "env", "GHOSTS_FAKE_BASE"]), "http://127.0.0.1:8788");
+  const start = checks.indexOf("- name: Start local ghost fake"), stop = checks.indexOf("- name: Stop local ghost fake");
+  assert.ok(start > 0);
+  for (const [name] of browserGates) assert.ok(start < checks.indexOf(`- name: ${name}`) && checks.indexOf(`- name: ${name}`) < stop, name);
+  assert.match(checks.slice(start, checks.indexOf("- name: E2E against next start")), /ghosts-fake\.mjs --port 8788 --origins "\$BASE_URL"/);
+  assert.match(checks.slice(stop), /if: always\(\)/);
+  assert.match(checks.slice(stop), /kill "\$\(cat "\$RUNNER_TEMP\/ghosts-fake.pid"\)"/);
+  assert.doesNotMatch(gateBody("E2E against next start"), /kill.*ghosts-fake|trap.*ghosts-fake/, "E2E must leave the fake alive for later probes");
+});
+
+test("actual CI fake startup/readiness/late-probe/cleanup commands keep the transport available until teardown", () => {
+  const work = mkdtempSync(join(tmpdir(), "ghost-ci-lifecycle-"));
+  try {
+    const start = gateBody("Start local ghost fake"), stop = gateBody("Stop local ghost fake");
+    const script = `
+      trap 'if [ -f "$RUNNER_TEMP/ghosts-fake.pid" ]; then kill "$(cat "$RUNNER_TEMP/ghosts-fake.pid")" 2>/dev/null || true; fi' EXIT
+      ${start}
+      # Stand in for each later browser/footer step with an independent HTTP readiness read.
+      for probe in e2e motion footer-walk footer-chromium; do
+        curl -fsS "$GHOSTS_FAKE_BASE/__ready" >/dev/null
+        kill -0 "$(cat "$RUNNER_TEMP/ghosts-fake.pid")"
+      done
+      ${stop}
+      wait "$(cat "$RUNNER_TEMP/ghosts-fake.pid")"
+      if kill -0 "$(cat "$RUNNER_TEMP/ghosts-fake.pid")" 2>/dev/null; then exit 93; fi
+    `;
+    const result = spawnSync("bash", ["-eo", "pipefail", "-c", script], { encoding: "utf8", timeout: 10000,
+      env: { ...process.env, RUNNER_TEMP: work, BASE_URL: "http://localhost:3000", GHOSTS_FAKE_BASE: "http://127.0.0.1:8788" } });
+    assert.ifError(result.error); assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.match(readFileSync(join(work, "ghosts-fake.log"), "utf8"), /ghosts-fake ready/);
+  } finally { rmSync(work, { recursive: true, force: true }); }
+});
+
+test("application SHA and Next BUILD_ID are published independently from the Worker executable", () => {
+  const checks = steps("checks");
+  assert.ok(checks.indexOf("- name: Publish application build identity") > checks.indexOf("- name: Real CPU camera and privacy verifier"), "camera verifier rebuilds .next: publish the build that next start actually serves");
+  assert.ok(checks.indexOf("- name: Publish application build identity") < checks.indexOf("- name: E2E against next start"));
+  const identity = gateBody("Publish application build identity");
+  assert.match(identity, /appSha: process.env.GITHUB_SHA/); assert.match(identity, /nextBuildId: fs.readFileSync\(".next\/BUILD_ID"/);
+  const work = mkdtempSync(join(tmpdir(), "app-identity-"));
+  try {
+    mkdirSync(join(work, ".next")); writeFileSync(join(work, ".next/BUILD_ID"), "fixture-next-build\n");
+    const r = spawnSync("bash", ["-eo", "pipefail", "-c", identity], { cwd: work, env: { ...process.env, RUNNER_TEMP: work, GITHUB_SHA: "a".repeat(40) }, encoding: "utf8" });
+    assert.equal(r.status, 0, r.stderr);
+    assert.deepEqual(JSON.parse(readFileSync(join(work, "app-build.json"), "utf8")), { appSha: "a".repeat(40), nextBuildId: "fixture-next-build" });
+  } finally { rmSync(work, { recursive: true, force: true }); }
+});
+
+test("production read-only Terminal/Press probe runs without fake configuration and preserves browser failures", () => {
+  const script = readFileSync(new URL("./verify-deploy.sh", import.meta.url), "utf8");
+  const invocation = script.split('  echo "# running the Pocket Terminal and Ink Poster Press e2e against $base"\n')[1]
+    ?.split('  if [ "$status" -ne 0 ]; then')[0];
+  assert.ok(invocation, "execute the actual default verifier browser invocation");
+  const work = mkdtempSync(join(tmpdir(), "readonly-browser-"));
+  try {
+    mkdirSync(join(work, "scripts")); mkdirSync(join(work, "e2e"));
+    for (const file of ["e2e.mjs", "e2e-annotate.mjs"]) copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
+    for (const name of ["pocket-terminal", "ink-press"]) writeFileSync(join(work, `e2e/${name}.test.ts`), `
+      import assert from 'node:assert/strict';
+      import { test } from 'node:test';
+      test('${name} read-only fixture', () => {
+        assert.equal(process.env.BASE_URL, 'https://fixture.invalid');
+        assert.equal(process.env.GHOSTS_FAKE_BASE, undefined);
+        assert.equal(process.env.GHOSTS_ENDPOINT, undefined);
+        assert.ok(process.env.FAIL_CASE !== '${name}', 'intentional browser assertion');
+      });
+    `);
+    for (const ci of ["false", "true"]) for (const fail of ["", "ink-press"]) {
+      const env = { ...process.env, NODE_BINARY: process.execPath, GITHUB_ACTIONS: ci, FAIL_CASE: fail,
+        GITHUB_STEP_SUMMARY: join(work, "summary.md") };
+      for (const key of ["GHOSTS_FAKE_BASE", "GHOSTS_ENDPOINT", "VERIFY_E2E_CMD", "NODE_TEST_CONTEXT"]) delete env[key];
+      const result = spawnSync("bash", ["-uc", `
+        NODE_TS=("$NODE_BINARY" --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON)
+        base=https://fixture.invalid
+        run() { ${invocation}\n return "$status"; }
+        run
+      `], { cwd: work, env, encoding: "utf8", timeout: 10000 });
+      assert.ifError(result.error);
+      assert.equal(result.status, fail ? 1 : 0, result.stdout + result.stderr);
+      assert.match(result.stdout, /pocket-terminal read-only fixture/);
+      assert.match(result.stdout, /ink-press read-only fixture/);
+      assert.doesNotMatch(result.stdout + result.stderr, /requires explicit GHOSTS_FAKE_BASE/);
+      if (ci === "true" && fail) assert.match(result.stdout, /::error/);
+    }
+  } finally { rmSync(work, { recursive: true, force: true }); }
+});
+
+test("documented Docker E2E entrypoint owns explicit fake configuration until its server stops", () => {
+  const script = readFileSync(new URL("./e2e-local.sh", import.meta.url), "utf8");
+  const fn = name => {
+    const source = script.match(new RegExp(`^${name}\\(\\) \\{[\\s\\S]*?^\\}`, "m"))?.[0];
+    assert.ok(source, `${name} lifecycle function`); return source;
+  };
+  const start = fn("start_ghost_fake");
+  assert.ok(script.indexOf('\nstart_ghost_fake || exit 1') < script.indexOf('\necho "Starting the server'));
+  assert.ok(script.indexOf('kill -TERM -- "-$SERVER_PID"') < script.indexOf('kill "$FAKE_PID"'));
+  const work = mkdtempSync(join(tmpdir(), "docker-ghost-lifecycle-"));
+  try {
+    const result = spawnSync("bash", ["-euc", `
+      SERVER_PID=""; STARTED_DB=0; FAKE_PID=""; FAKE_LOG=""
+      BETTER_AUTH_URL=http://localhost:4027
+      ${fn("free_port")}
+      ${fn("cleanup")}
+      ${start}
+      trap cleanup EXIT
+      start_ghost_fake
+      test "$GHOSTS_ENDPOINT" = "ws://127.0.0.1:$GHOSTS_FAKE_PORT/ghosts"
+      test "$GHOSTS_FAKE_BASE" = "http://127.0.0.1:$GHOSTS_FAKE_PORT"
+      curl -fsS "$GHOSTS_FAKE_BASE/__ready"
+      kill -0 "$FAKE_PID"
+      cleanup
+      wait "$FAKE_PID"
+      if kill -0 "$FAKE_PID" 2>/dev/null; then exit 93; fi
+      test ! -f "$FAKE_LOG"
+    `], { encoding: "utf8", timeout: 10000, env: { ...process.env, TMPDIR: work } });
+    assert.ifError(result.error); assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.match(result.stdout, /"ready":true/);
+  } finally { rmSync(work, { recursive: true, force: true }); }
+});

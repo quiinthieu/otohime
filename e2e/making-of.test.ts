@@ -302,9 +302,11 @@ test("vertical scrolling scrubs horizontal translation and parallax layers, keyb
   assert.match(mid.listTransform, /^matrix\(1,\s*0,\s*0,\s*1,\s*-\d+/);
 
   // Scroll to 100% of the sticky stage
-  await page.evaluate((y) => window.scrollTo(0, y), Math.round(initial.stageTop + scrollable + 50));
+  // Active scene content can reflow the controls and shift the stage: use its current measured position.
+  await page.evaluate((y) => window.scrollTo(0, y), Math.round(mid.stageTop + mid.stageHeight - mid.viewportHeight + 50));
+  // Wait for the exact final state asserted below, rather than accepting an intermediate 0.999.
   await page.waitForFunction(
-    () => Number(document.querySelector('[data-testid="emaki-root"]')?.getAttribute("data-progress")) >= 0.99,
+    () => Number(document.querySelector('[data-testid="emaki-root"]')?.getAttribute("data-progress")) === 1,
   );
   const end = await readScrollState();
 

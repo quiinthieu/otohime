@@ -13,8 +13,8 @@
 #    commit never deploys). Ancestry is read from this checkout (VERIFY_REPO overrides it), fetching an unknown
 #    served sha from origin once. A stale served sha with code still undeployed, a non-200 answer or nothing
 #    listening exits 1 and names what it last saw.
-# 2. Runs e2e/pocket-terminal.test.ts and e2e/ink-press.test.ts against BASE_URL (scripts/e2e.mjs runs the suite
-#    as it is when BASE_URL is set). Both are read-only: no form posts, no sign-in. They need Google Chrome or
+# 2. Runs e2e/pocket-terminal.test.ts and e2e/ink-press.test.ts directly against BASE_URL, without the full
+#    suite's fake ghost transport. Both are read-only: no form posts, no sign-in. They need Google Chrome or
 #    CHROME_PATH, like npm run test:e2e. A bare checkout is fine: when playwright-core or sharp does not import,
 #    it runs npm ci once (VERIFY_INSTALL_CMD), and when no browser launches it installs Playwright's Chromium once.
 # Exit 0 only when both hold; 1 on a failed check; 2 on bad arguments.
@@ -171,7 +171,11 @@ verify() {
   if [ -n "${VERIFY_E2E_CMD:-}" ]; then
     BASE_URL="$base" bash -c "$VERIFY_E2E_CMD" || status=$?
   else
-    BASE_URL="$base" "${NODE_TS[@]}" scripts/e2e.mjs --test e2e/pocket-terminal.test.ts e2e/ink-press.test.ts || status=$?
+    local reporters=()
+    if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
+      reporters=(--test-reporter=tap --test-reporter-destination=stdout --test-reporter=./scripts/e2e-annotate.mjs --test-reporter-destination=stdout)
+    fi
+    BASE_URL="$base" "${NODE_TS[@]}" --test-concurrency=1 ${reporters[@]+"${reporters[@]}"} --test e2e/pocket-terminal.test.ts e2e/ink-press.test.ts || status=$?
   fi
   if [ "$status" -ne 0 ]; then
     echo "not ok - terminal/press e2e failed against $base (exit $status)"

@@ -16,6 +16,8 @@ fi
 APP_PORT="${APP_PORT:-4027}"
 NAME="otohime-e2e-$$"
 SERVER_PID=""
+FAKE_PID=""
+FAKE_LOG=""
 STARTED_DB=0
 
 cleanup() {
@@ -29,6 +31,10 @@ cleanup() {
     done
     kill -KILL -- "-$SERVER_PID" 2>/dev/null
   fi
+  if [ -n "$FAKE_PID" ]; then
+    kill "$FAKE_PID" 2>/dev/null || true
+    rm -f "$FAKE_LOG"
+  fi
   if [ "$STARTED_DB" = 1 ]; then
     docker rm -f "$NAME" >/dev/null 2>&1
   fi
@@ -40,6 +46,18 @@ trap 'exit 143' TERM
 # A free port: ask the kernel for one, then give it to docker.
 free_port() {
   node -e 'const s=require("net").createServer().listen(0,"127.0.0.1",()=>{console.log(s.address().port);s.close()})'
+}
+
+# This entrypoint owns Next, so configure its local fake before building/starting it.
+start_ghost_fake() {
+  GHOSTS_FAKE_PORT="$(free_port)"
+  export GHOSTS_ENDPOINT="ws://127.0.0.1:$GHOSTS_FAKE_PORT/ghosts"
+  export GHOSTS_FAKE_BASE="http://127.0.0.1:$GHOSTS_FAKE_PORT"
+  FAKE_LOG="${TMPDIR:-/tmp}/otohime-ghosts-$$.log"
+  node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
+    scripts/ghosts-fake.mjs --port "$GHOSTS_FAKE_PORT" --origins "$BETTER_AUTH_URL" >"$FAKE_LOG" 2>&1 &
+  FAKE_PID=$!
+  curl -fsS --retry 15 --retry-connrefused --retry-delay 1 "$GHOSTS_FAKE_BASE/__ready"
 }
 
 if [ -n "$(lsof -tiTCP:"$APP_PORT" -sTCP:LISTEN 2>/dev/null)" ]; then
@@ -78,6 +96,7 @@ done
 export DATABASE_URL="postgresql://otohime:otohime@127.0.0.1:$DB_PORT/otohime"
 export BETTER_AUTH_URL="http://localhost:$APP_PORT"
 export BETTER_AUTH_SECRET="${BETTER_AUTH_SECRET:-ci-placeholder-not-a-real-secret-0123456789abcdef}"
+start_ghost_fake || exit 1
 
 echo "Applying migrations"
 npm run db:migrate || exit 1

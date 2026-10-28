@@ -12,6 +12,7 @@ export { GhostRoom } from "./room-do.ts";
 export interface Env {
   GHOST_ROOMS: DurableObjectNamespace;
   ALLOWED_ORIGINS: string;
+  WORKER_VERSION?: { id: string };
 }
 
 export default {
@@ -21,7 +22,7 @@ export default {
       if (request.method !== "GET" && request.method !== "HEAD") {
         return new Response(null, { status: 405, headers: { allow: "GET, HEAD" } });
       }
-      return versionResponse();
+      return versionResponse(env.WORKER_VERSION?.id ?? null);
     }
     if (url.pathname !== GHOSTS_PATH) return new Response(null, { status: 404 });
     const admission = admitUpgrade(
