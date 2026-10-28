@@ -1,0 +1,62 @@
+{
+  "delivery_sha": "4a1c8487fe46c254a92dad2b7f2699b5410023f9",
+  "qa_base_sha": "c1d4726e7a4c049ebeb971911f984fbbc0e355d6",
+  "deployed_sha": "7d2a49923ebaa4b709e954442729bb0c5617b8f9",
+  "ancestry_exit": 0,
+  "node": "v22.23.3",
+  "hashes": {
+    "scripts/lib/ghosts-activation.mjs": "930ca3cbd400545f7c8fa95478c352dc08ba561309de23de5eb6c34852cf6409",
+    "scripts/probe-ghosts-activation.mjs": "e384993a2d72a39de6e50997efc6c3dc583fce0a83f465c40349a7a5c8938841",
+    "scripts/ghosts-activation.test.mjs": "2914c8505e0baa85954fc1b667d030bcbb66600bc0e9d479ac9ffa4de030ee87",
+    "package.json": "8f9738c8f9cf680970dc8c12c614f3f7a43796e4eac43ecd6f674e4ee9adaacd",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "ghosts/worker/package-lock.json": "b49cf8d37759e18044b6e137747cd9f2a059c0c19515006f9a2db4e12f9e7bd7",
+    "ghosts/worker/wrangler.jsonc": "72986fca62833fc14891e1c97a2517e94082666f7377a69b7e34f7348456c80d"
+  },
+  "green_gate": "ver-3721",
+  "checks": [
+    {
+      "name": "activation fixtures",
+      "exit": 0,
+      "pass": 9
+    },
+    {
+      "name": "fixture CLI",
+      "exit": 0,
+      "classifications": 5
+    },
+    {
+      "name": "npm test at delivery",
+      "exit": 0,
+      "pass": 2636,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "name": "npm run lint at delivery",
+      "exit": 0,
+      "errors": 0,
+      "warnings": 10
+    },
+    {
+      "name": "npm run build at delivery",
+      "exit": 0,
+      "local_build_id": "MEy3k4LkLojqmBd1qbFWh",
+      "boundary": "Local build only, not serving BUILD_ID"
+    },
+    {
+      "name": "npm test at QA base",
+      "exit": 0,
+      "pass": 2650,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "name": "npm run lint at QA base including QA probes",
+      "exit": 0,
+      "errors": 0,
+      "warnings": 10
+    }
+  ],
+  "setup_correction": "Initial shared node_modules symlink passed tests but Turbopack rejected outside-root resolution. Removed QA-created symlink, npm ci within exact delivery worktree, build passed. Build-generated history restored from HEAD; no application changes."
+}
