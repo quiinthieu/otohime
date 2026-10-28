@@ -156,8 +156,10 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024
     const footerEl = document.querySelector("footer.end")!;
     const footer = footerEl.getBoundingClientRect();
     // Both the solid top border and ::before dashed hairline precede the band.
-    const footerContentTop = footer.top + parseFloat(getComputedStyle(footerEl).borderTopWidth)
-      + parseFloat(getComputedStyle(footerEl, "::before").borderTopWidth);
+    const footerBorder = parseFloat(getComputedStyle(footerEl).borderTopWidth);
+    const hairline = parseFloat(getComputedStyle(footerEl, "::before").borderTopWidth);
+    const footerContentTop = footer.top + footerBorder + hairline;
+    const inner = getComputedStyle(document.querySelector(".end-inner")!);
     const grid = document.querySelector(".end-grid")!;
     const stage = document.querySelector(".end-stage")!.getBoundingClientRect();
     const copy = document.querySelector(".end-copy")!.getBoundingClientRect();
@@ -165,8 +167,11 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024
       left: bottle.left, right: bottle.right, font: parseFloat(getComputedStyle(el).fontSize),
       rootFont: parseFloat(getComputedStyle(document.documentElement).fontSize),
       sideBySide: getComputedStyle(grid).gridTemplateColumns.split(" ").length > 1, alignment: Math.abs(stage.top - copy.top),
-      sceneTop: scene.top - footer.top, sceneWidth: scene.width, sceneHeight: scene.height, footerHeight: footer.height };
+      sceneTop: scene.top - footer.top, sceneWidth: scene.width, sceneHeight: scene.height, footerHeight: footer.height,
+      innerPaddingTop: parseFloat(inner.paddingTop), innerPaddingBottom: parseFloat(inner.paddingBottom), footerBorder, hairline };
   });
+  const buildId = (() => { try { return readFileSync(".next/BUILD_ID", "utf8").trim(); } catch { return "unavailable"; } })();
+  const evidence = (extra: object) => JSON.stringify({ viewport, buildId, ...extra });
   const assertClear = (g: Awaited<ReturnType<typeof geometry>>) => {
     assert.ok(g.gap >= 0, `scene pointer area: ${JSON.stringify(g)}`);
     assert.ok(g.topClearance >= 0, `footer top-border containment: ${JSON.stringify(g)}`);
@@ -182,10 +187,30 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024
   };
   const stable = (a: Awaited<ReturnType<typeof geometry>>, b: typeof a) => {
     for (const key of ["sceneTop", "sceneWidth", "sceneHeight", "footerHeight"] as const) {
-      assert.ok(Math.abs(a[key] - b[key]) <= 1, `${key}: Bottle state preserves reserved footer geometry`);
+      assert.ok(Math.abs(a[key] - b[key]) <= 1, `${key}: Bottle state preserves reserved footer geometry ${evidence({ key, observed: a, reference: b })}`);
     }
   };
-  const baseline = await geometry();
+  // Under reduced motion the site-wide reset leaves every element on `transition: all 0.01ms`, so a root
+  // font change reaches rem padding/layout a frame or more after the root value itself has settled.
+  // The reserved band is 3.75rem plus both real borders. Observe it explicitly before any reference
+  // or enlarged-label comparison; negative controls skip this so their wrong band still fails assertClear.
+  const band = async (root: number, font?: number) => {
+    const expected = { rootFont: root, font, innerPaddingTop: 3.75 * root };
+    const ready = await p.waitForFunction(({ root }) => {
+      const footerEl = document.querySelector("footer.end")!;
+      const padding = parseFloat(getComputedStyle(document.querySelector(".end-inner")!).paddingTop);
+      const top = document.querySelector(".end-canvas")!.getBoundingClientRect().top - footerEl.getBoundingClientRect().top;
+      const borders = parseFloat(getComputedStyle(footerEl).borderTopWidth) + parseFloat(getComputedStyle(footerEl, "::before").borderTopWidth);
+      return Math.abs(padding - 3.75 * root) <= 0.01 && Math.abs(top - (borders + padding)) <= 1;
+    }, { root }, { timeout: 3000 }).then(() => true, () => false);
+    const g = await geometry();
+    assert.ok(ready, `footer band never reached 3.75rem plus borders: ${evidence({ expected, observed: g })}`);
+    return g;
+  };
+  // Negative controls wait only for their own injected value to apply, never for the correct band.
+  const applied = (selector: string, property: string, px: number) => p.waitForFunction(({ selector, property, px }) =>
+    Math.abs(parseFloat(getComputedStyle(document.querySelector(selector)!).getPropertyValue(property)) - px) <= 0.01, { selector, property, px });
+  const baseline = await band(await p.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize)));
   assertClear(baseline);
   for (const entry of ["footer", "pocket"]) {
     assert.ok((await p.locator(`[data-bottle-entry="${entry}"]`).boundingBox())!.height >= 44, `${entry} is a 44px target`);
@@ -194,7 +219,7 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024
   for (const font of [24, 32]) {
     await button.evaluate((el, font) => { el.style.fontSize = `${font}px`; }, font);
     await settle(baseline.rootFont, font);
-    const enlarged = await geometry();
+    const enlarged = await band(baseline.rootFont, font);
     assertClear(enlarged);
     stable(enlarged, baseline);
     sizes.push(enlarged);
@@ -212,11 +237,13 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024
   // Reject BOTH historical defects through exactly the same boundary helper.
   await button.evaluate((el) => { el.style.fontSize = "24px"; el.style.insetBlockStart = "-2.4rem"; el.style.insetBlockEnd = "auto"; el.style.marginBlockEnd = "0"; });
   await settle(baseline.rootFont, 24);
+  await applied('[data-bottle-entry="footer"]', "inset-block-start", -2.4 * baseline.rootFont);
   const oldOffset = await geometry();
   assert.throws(() => assertClear(oldOffset), /scene pointer area/, "-2.4rem negative control");
   await button.evaluate((el) => { el.removeAttribute("style"); el.style.fontSize = "24px"; });
   await p.locator(".end-inner").evaluate((el) => { (el as HTMLElement).style.paddingBlockStart = "2.5rem"; });
   await settle(baseline.rootFont, 24);
+  await applied(".end-inner", "padding-top", 2.5 * baseline.rootFont);
   const oldPadding = await geometry();
   assert.ok(oldPadding.gap >= 0, "old padding clears scene while failing top containment");
   assert.throws(() => assertClear(oldPadding), /footer top-border containment/, "2.5rem negative control");
@@ -224,7 +251,7 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024
   await button.evaluate((el) => { el.removeAttribute("style"); });
   await p.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
   await settle(baseline.rootFont * 2, baseline.font * 2);
-  const scaled = await geometry();
+  const scaled = await band(baseline.rootFont * 2, baseline.font * 2);
   assert.equal(scaled.rootFont, baseline.rootFont * 2, "settled root text scaling actually applied");
   assert.equal(scaled.font, baseline.font * 2, "the label itself doubles with the root");
   assert.ok(scaled.height > baseline.height, "200% root scaling grows actual button height");
@@ -233,7 +260,7 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024
   for (const font of [24, 32]) {
     await button.evaluate((el, font) => { el.style.fontSize = `${font}px`; }, font);
     await settle(baseline.rootFont * 2, font);
-    const enlarged = await geometry();
+    const enlarged = await band(baseline.rootFont * 2, font);
     assertClear(enlarged);
     stable(enlarged, scaled);
     scaledSizes.push(enlarged);
