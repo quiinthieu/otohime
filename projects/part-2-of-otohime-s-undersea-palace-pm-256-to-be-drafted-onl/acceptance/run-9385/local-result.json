@@ -1,0 +1,468 @@
+[
+  {
+    "start": "Actual Worker in local workerd, ALLOWED_ORIGINS=app origin",
+    "action": "Raw upgrades: allowed, denied, lookalike, missing Origin, unknown room",
+    "observed": {
+      "allowed": 101,
+      "denied": 403,
+      "lookalike": 403,
+      "none": 403,
+      "badRoom": 404
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "Two visitors on Home, one on /ryugu (3 Chrome processes)",
+    "action": "Load pages and let the idle loader connect",
+    "observed": {
+      "A": {
+        "state": "on",
+        "others": 1,
+        "ripples": 0,
+        "label": "1 here",
+        "sockets": 1
+      },
+      "B": {
+        "state": "on",
+        "others": 1,
+        "ripples": 0,
+        "label": "1 here",
+        "sockets": 1
+      },
+      "C": {
+        "state": "on",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 1
+      }
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "A and B connected on Home",
+    "action": "A moves the mouse across the page",
+    "observed": {
+      "peerTipPixels": 97,
+      "peerTrailPixels": 0,
+      "otherRoomPixels": 0
+    },
+    "ok": false
+  },
+  {
+    "viewport": "desktop",
+    "start": "Peer trail painted on B",
+    "action": "A stops; wait 1.5 s",
+    "observed": {
+      "tipPixels": 41,
+      "trailPixelsBefore": 0,
+      "trailPixelsAfter": 0
+    },
+    "ok": false
+  },
+  {
+    "viewport": "desktop",
+    "start": "A and B connected",
+    "action": "A clicks an empty spot",
+    "observed": {
+      "elementUnderPointer": "section",
+      "localRipplePixels": 70,
+      "peerRipplePixels": 112,
+      "rippleCounterA": [
+        0,
+        1
+      ],
+      "rippleCounterB": [
+        0,
+        3
+      ],
+      "otherRoomRipples": 0
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "Ripple painted",
+    "action": "Wait 1.5 s",
+    "observed": {
+      "peerRipplePixelsLater": 41,
+      "before": 112
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "B on Home with ghosts on",
+    "action": "B presses Pocket 'Ghosts on' chip",
+    "observed": {
+      "chipBefore": {
+        "self": true,
+        "pressed": "true",
+        "text": "Ghosts on",
+        "focusable": true
+      },
+      "chipAfter": {
+        "pressed": "false",
+        "text": "Ghosts off"
+      },
+      "layer": {
+        "state": "off",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 1
+      },
+      "BcanvasPixels": 0,
+      "AseesZeroOthers": true
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "B hid ghosts",
+    "action": "Reload Home, then open /ryugu",
+    "observed": {
+      "homeAfterReload": {
+        "state": "absent",
+        "sockets": 0
+      },
+      "ryugu": {
+        "state": "absent",
+        "sockets": 0
+      },
+      "stored": "hidden"
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "B: /ryugu tab and Home tab, ghosts hidden",
+    "action": "Toggle Ghosts on, then off, from the Home tab",
+    "observed": {
+      "palaceTurnedOn": true,
+      "homeTurnedOn": true,
+      "palaceTurnedOff": true,
+      "palaceLayer": {
+        "state": "off",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 1
+      }
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "B visible to A",
+    "action": "B moves, then closes the tab",
+    "observed": {
+      "tipBefore": 74,
+      "tipAfter": 0,
+      "othersCleared": true,
+      "label": ""
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "Two visitors on /ryugu, one on Home",
+    "action": "Palace visitor moves",
+    "observed": {
+      "palacePair": true,
+      "palacePeerPixels": 100,
+      "homePixels": 0
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "Visitor with prefers-reduced-motion: reduce",
+    "action": "Open Home and wait 3 s",
+    "observed": {
+      "layer": {
+        "state": "off",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 0
+      },
+      "othersSeenByA": 0
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "A connected",
+    "action": "Browser goes offline, then online",
+    "observed": {
+      "stoppedOffline": true,
+      "reconnected": true,
+      "layer": {
+        "state": "on",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 2
+      }
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "Negative control: viewer with stroke/fill disabled",
+    "action": "A clicks",
+    "observed": {
+      "counter": [
+        0,
+        4
+      ],
+      "ripplePixels": 0,
+      "pixelAssertionRejects": true
+    },
+    "ok": true
+  },
+  {
+    "viewport": "desktop",
+    "start": "All contexts",
+    "action": "Collect page and console errors",
+    "observed": {
+      "A": [],
+      "B": [],
+      "C": [],
+      "E": [],
+      "R": [],
+      "N": []
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "Two visitors on Home, one on /ryugu (3 Chrome processes)",
+    "action": "Load pages and let the idle loader connect",
+    "observed": {
+      "A": {
+        "state": "on",
+        "others": 1,
+        "ripples": 0,
+        "label": "1 here",
+        "sockets": 1
+      },
+      "B": {
+        "state": "on",
+        "others": 1,
+        "ripples": 0,
+        "label": "1 here",
+        "sockets": 1
+      },
+      "C": {
+        "state": "on",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 1
+      }
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "A and B connected on Home",
+    "action": "A moves the mouse across the page",
+    "observed": {
+      "peerTipPixels": 111,
+      "peerTrailPixels": 12,
+      "otherRoomPixels": 0
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "Peer trail painted on B",
+    "action": "A stops; wait 1.5 s",
+    "observed": {
+      "tipPixels": 40,
+      "trailPixelsBefore": 12,
+      "trailPixelsAfter": 0
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "A and B connected",
+    "action": "A clicks an empty spot",
+    "observed": {
+      "elementUnderPointer": "svg",
+      "localRipplePixels": 66,
+      "peerRipplePixels": 92,
+      "rippleCounterA": [
+        0,
+        3
+      ],
+      "rippleCounterB": [
+        0,
+        1
+      ],
+      "otherRoomRipples": 0
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "Ripple painted",
+    "action": "Wait 1.5 s",
+    "observed": {
+      "peerRipplePixelsLater": 41,
+      "before": 92
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "B on Home with ghosts on",
+    "action": "B presses Pocket 'Ghosts on' chip",
+    "observed": {
+      "chipBefore": {
+        "self": true,
+        "pressed": "true",
+        "text": "Ghosts on",
+        "focusable": true
+      },
+      "chipAfter": {
+        "pressed": "false",
+        "text": "Ghosts off"
+      },
+      "layer": {
+        "state": "off",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 1
+      },
+      "BcanvasPixels": 0,
+      "AseesZeroOthers": true
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "B hid ghosts",
+    "action": "Reload Home, then open /ryugu",
+    "observed": {
+      "homeAfterReload": {
+        "state": "absent",
+        "sockets": 0
+      },
+      "ryugu": {
+        "state": "absent",
+        "sockets": 0
+      },
+      "stored": "hidden"
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "B: /ryugu tab and Home tab, ghosts hidden",
+    "action": "Toggle Ghosts on, then off, from the Home tab",
+    "observed": {
+      "palaceTurnedOn": true,
+      "homeTurnedOn": true,
+      "palaceTurnedOff": true,
+      "palaceLayer": {
+        "state": "off",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 1
+      }
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "B visible to A",
+    "action": "B moves, then closes the tab",
+    "observed": {
+      "tipBefore": 78,
+      "tipAfter": 0,
+      "othersCleared": true,
+      "label": ""
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "Two visitors on /ryugu, one on Home",
+    "action": "Palace visitor moves",
+    "observed": {
+      "palacePair": true,
+      "palacePeerPixels": 51,
+      "homePixels": 0
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "Visitor with prefers-reduced-motion: reduce",
+    "action": "Open Home and wait 3 s",
+    "observed": {
+      "layer": {
+        "state": "off",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 0
+      },
+      "othersSeenByA": 0
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "A connected",
+    "action": "Browser goes offline, then online",
+    "observed": {
+      "stoppedOffline": true,
+      "reconnected": true,
+      "layer": {
+        "state": "on",
+        "others": 0,
+        "ripples": 0,
+        "label": "",
+        "sockets": 2
+      }
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "Negative control: viewer with stroke/fill disabled",
+    "action": "A clicks",
+    "observed": {
+      "counter": [
+        0,
+        5
+      ],
+      "ripplePixels": 0,
+      "pixelAssertionRejects": true
+    },
+    "ok": true
+  },
+  {
+    "viewport": "phone",
+    "start": "All contexts",
+    "action": "Collect page and console errors",
+    "observed": {
+      "A": [],
+      "B": [],
+      "C": [],
+      "E": [],
+      "R": [],
+      "N": []
+    },
+    "ok": true
+  }
+]

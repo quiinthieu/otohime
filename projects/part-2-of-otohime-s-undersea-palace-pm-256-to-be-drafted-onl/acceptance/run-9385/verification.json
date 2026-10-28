@@ -1,0 +1,13 @@
+{
+  "node": "22.23.4 (official darwin-arm64 tarball, SHA256 verified)",
+  "tree": "6ab6d94 (ghost-relevant files identical to deployed 4992aec)",
+  "commands": [
+    {"cmd": "TMPDIR=/tmp npm test", "exit": 0, "tests": 2654, "pass": 2654, "fail": 0, "skipped": 0},
+    {"cmd": "cd ghosts/worker && npm run test:local", "exit": 0, "tests": 18, "pass": 18, "fail": 0},
+    {"cmd": "npm run build", "exit": 0, "build_id": "B_xTb1OM7AL-3basZhFY8"},
+    {"cmd": "npm run lint", "exit": 0},
+    {"cmd": "node walk-local.mjs", "rows": 29, "pass": 27, "fail": 2, "note": "2 desktop trail rows: probe timing assumption, superseded by trail-probe.mjs"},
+    {"cmd": "node trail-probe.mjs", "result": "trail painted then faded at both viewports"},
+    {"cmd": "node walk-prod.mjs", "rows": 14, "pass": 13, "fail": 1, "note": "health re-read changed 7d2a499 -> 4992aec mid-walk (redeploy); pages served 4992aec throughout"}
+  ]
+}

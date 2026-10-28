@@ -1,0 +1,30 @@
+PASS [-] Raw upgrades: allowed, denied, lookalike, missing Origin, unknown room -> {"allowed":101,"denied":403,"lookalike":403,"none":403,"badRoom":404}
+PASS [desktop] Load pages and let the idle loader connect -> {"A":{"state":"on","others":1,"ripples":0,"label":"1 here","sockets":1},"B":{"state":"on","others":1,"ripples":0,"label":"1 here","sockets":1},"C":{"state":"on","others":0,"ripples":0,"label":"","sockets":1}}
+FAIL [desktop] A moves the mouse across the page -> {"peerTipPixels":97,"peerTrailPixels":0,"otherRoomPixels":0}
+FAIL [desktop] A stops; wait 1.5 s -> {"tipPixels":41,"trailPixelsBefore":0,"trailPixelsAfter":0}
+PASS [desktop] A clicks an empty spot -> {"elementUnderPointer":"section","localRipplePixels":70,"peerRipplePixels":112,"rippleCounterA":[0,1],"rippleCounterB":[0,3],"otherRoomRipples":0}
+PASS [desktop] Wait 1.5 s -> {"peerRipplePixelsLater":41,"before":112}
+PASS [desktop] B presses Pocket 'Ghosts on' chip -> {"chipBefore":{"self":true,"pressed":"true","text":"Ghosts on","focusable":true},"chipAfter":{"pressed":"false","text":"Ghosts off"},"layer":{"state":"off","others":0,"ripples":0,"label":"","sockets":1},"BcanvasPixels":0,"AseesZeroOthers":true}
+PASS [desktop] Reload Home, then open /ryugu -> {"homeAfterReload":{"state":"absent","sockets":0},"ryugu":{"state":"absent","sockets":0},"stored":"hidden"}
+PASS [desktop] Toggle Ghosts on, then off, from the Home tab -> {"palaceTurnedOn":true,"homeTurnedOn":true,"palaceTurnedOff":true,"palaceLayer":{"state":"off","others":0,"ripples":0,"label":"","sockets":1}}
+PASS [desktop] B moves, then closes the tab -> {"tipBefore":74,"tipAfter":0,"othersCleared":true,"label":""}
+PASS [desktop] Palace visitor moves -> {"palacePair":true,"palacePeerPixels":100,"homePixels":0}
+PASS [desktop] Open Home and wait 3 s -> {"layer":{"state":"off","others":0,"ripples":0,"label":"","sockets":0},"othersSeenByA":0}
+PASS [desktop] Browser goes offline, then online -> {"stoppedOffline":true,"reconnected":true,"layer":{"state":"on","others":0,"ripples":0,"label":"","sockets":2}}
+PASS [desktop] A clicks -> {"counter":[0,4],"ripplePixels":0,"pixelAssertionRejects":true}
+PASS [desktop] Collect page and console errors -> {"A":[],"B":[],"C":[],"E":[],"R":[],"N":[]}
+PASS [phone] Load pages and let the idle loader connect -> {"A":{"state":"on","others":1,"ripples":0,"label":"1 here","sockets":1},"B":{"state":"on","others":1,"ripples":0,"label":"1 here","sockets":1},"C":{"state":"on","others":0,"ripples":0,"label":"","sockets":1}}
+PASS [phone] A moves the mouse across the page -> {"peerTipPixels":111,"peerTrailPixels":12,"otherRoomPixels":0}
+PASS [phone] A stops; wait 1.5 s -> {"tipPixels":40,"trailPixelsBefore":12,"trailPixelsAfter":0}
+PASS [phone] A clicks an empty spot -> {"elementUnderPointer":"svg","localRipplePixels":66,"peerRipplePixels":92,"rippleCounterA":[0,3],"rippleCounterB":[0,1],"otherRoomRipples":0}
+PASS [phone] Wait 1.5 s -> {"peerRipplePixelsLater":41,"before":92}
+PASS [phone] B presses Pocket 'Ghosts on' chip -> {"chipBefore":{"self":true,"pressed":"true","text":"Ghosts on","focusable":true},"chipAfter":{"pressed":"false","text":"Ghosts off"},"layer":{"state":"off","others":0,"ripples":0,"label":"","sockets":1},"BcanvasPixels":0,"AseesZeroOthers":true}
+PASS [phone] Reload Home, then open /ryugu -> {"homeAfterReload":{"state":"absent","sockets":0},"ryugu":{"state":"absent","sockets":0},"stored":"hidden"}
+PASS [phone] Toggle Ghosts on, then off, from the Home tab -> {"palaceTurnedOn":true,"homeTurnedOn":true,"palaceTurnedOff":true,"palaceLayer":{"state":"off","others":0,"ripples":0,"label":"","sockets":1}}
+PASS [phone] B moves, then closes the tab -> {"tipBefore":78,"tipAfter":0,"othersCleared":true,"label":""}
+PASS [phone] Palace visitor moves -> {"palacePair":true,"palacePeerPixels":51,"homePixels":0}
+PASS [phone] Open Home and wait 3 s -> {"layer":{"state":"off","others":0,"ripples":0,"label":"","sockets":0},"othersSeenByA":0}
+PASS [phone] Browser goes offline, then online -> {"stoppedOffline":true,"reconnected":true,"layer":{"state":"on","others":0,"ripples":0,"label":"","sockets":2}}
+PASS [phone] A clicks -> {"counter":[0,5],"ripplePixels":0,"pixelAssertionRejects":true}
+PASS [phone] Collect page and console errors -> {"A":[],"B":[],"C":[],"E":[],"R":[],"N":[]}
+27/29 pass

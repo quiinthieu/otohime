@@ -1,0 +1,21 @@
+{
+  "read_at": "2026-10-28 (run-9385)",
+  "source": "public github.com Actions HTML (REST API rate-limited: 60/60 used)",
+  "ghosts.yml": {
+    "failure": "0 of 0 (exhausted)",
+    "success": "0 of 0",
+    "skipped": "2 of 2: 40656021737, 40619191293",
+    "in_progress": "0",
+    "queued": "0",
+    "completeness": "complete for this workflow"
+  },
+  "ci.yml": {
+    "failure": "25 of 159 read (page 1); older pages unread",
+    "success": "25 of 286 read (page 1); older pages unread",
+    "in_progress": "3 total, ids on page: 40668740377 (6ab6d94), 40668245716 (53867bf)",
+    "queued": "0",
+    "deployed_sha_run": "40666892164 at 4992aec: 5 jobs completed successfully, 2 skipped",
+    "latest_failure_read": "40664399593 at c1d4726: Footer walk 'expected 3 SVG layers ... found 4' (pm-274/t-1585 scope, not pm-257)",
+    "completeness": "partial; unread pages inconclusive; raw job logs need admin (not read)"
+  }
+}

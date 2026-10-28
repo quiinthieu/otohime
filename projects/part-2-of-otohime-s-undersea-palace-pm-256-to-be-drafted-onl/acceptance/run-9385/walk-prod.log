@@ -1,0 +1,15 @@
+PASS [-] GET /api/health, /api/ghosts, /api/ghosts?probe=1 -> {"health":{"ok":true,"sha":"7d2a49923ebaa4b709e954442729bb0c5617b8f9"},"ghosts":[404,"no-store",0],"probe":[200,"no-store","null"]}
+PASS [desktop] Open Home -> {"status":200,"layer":{"state":"off","others":0,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false},"configRequests":["/api/ghosts?probe=1"]}
+PASS [desktop] Press Pocket Ghosts chip, reload -> {"before":{"pressed":"true","text":"Ghosts on"},"after":{"pressed":"false","text":"Ghosts off"},"reloaded":{"state":"absent","others":null,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false,"chip":"Ghosts off","stored":"hidden"}}
+PASS [desktop] Open /ryugu -> {"status":200,"layer":{"state":"absent","others":null,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false},"configRequests":[]}
+PASS [desktop] Open /ryugu -> {"layer":{"state":"off","others":0,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false},"configRequests":["/api/ghosts?probe=1"]}
+PASS [desktop] Open Home then /ryugu -> {"layer":{"state":"off","others":0,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false},"configRequests":0,"pageErrors":[]}
+PASS [desktop] Collect page and console errors -> []
+PASS [phone] Open Home -> {"status":200,"layer":{"state":"off","others":0,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false},"configRequests":["/api/ghosts?probe=1"]}
+PASS [phone] Press Pocket Ghosts chip, reload -> {"before":{"pressed":"true","text":"Ghosts on"},"after":{"pressed":"false","text":"Ghosts off"},"reloaded":{"state":"absent","others":null,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false,"chip":"Ghosts off","stored":"hidden"}}
+PASS [phone] Open /ryugu -> {"status":200,"layer":{"state":"absent","others":null,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false},"configRequests":[]}
+PASS [phone] Open /ryugu -> {"layer":{"state":"off","others":0,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false},"configRequests":["/api/ghosts?probe=1"]}
+PASS [phone] Open Home then /ryugu -> {"layer":{"state":"off","others":0,"sockets":0,"metaSha":"4992aec82c18135f37279f973527789bed92c9c8","overflowX":false},"configRequests":0,"pageErrors":[]}
+PASS [phone] Collect page and console errors -> []
+FAIL [-] Re-read /api/health -> {"ok":true,"sha":"4992aec82c18135f37279f973527789bed92c9c8"}
+13/14 pass

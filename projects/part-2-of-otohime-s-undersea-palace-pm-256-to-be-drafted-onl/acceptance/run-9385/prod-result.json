@@ -1,0 +1,241 @@
+{
+  "at": "2026-10-28T10:09:56.875Z",
+  "rows": [
+    {
+      "start": "Public production",
+      "action": "GET /api/health, /api/ghosts, /api/ghosts?probe=1",
+      "observed": {
+        "health": {
+          "ok": true,
+          "sha": "7d2a49923ebaa4b709e954442729bb0c5617b8f9"
+        },
+        "ghosts": [
+          404,
+          "no-store",
+          0
+        ],
+        "probe": [
+          200,
+          "no-store",
+          "null"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "viewport": "desktop",
+      "start": "Fresh visitor, motion allowed",
+      "action": "Open Home",
+      "observed": {
+        "status": 200,
+        "layer": {
+          "state": "off",
+          "others": 0,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false
+        },
+        "configRequests": [
+          "/api/ghosts?probe=1"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "viewport": "desktop",
+      "start": "Home, Ghosts on",
+      "action": "Press Pocket Ghosts chip, reload",
+      "observed": {
+        "before": {
+          "pressed": "true",
+          "text": "Ghosts on"
+        },
+        "after": {
+          "pressed": "false",
+          "text": "Ghosts off"
+        },
+        "reloaded": {
+          "state": "absent",
+          "others": null,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false,
+          "chip": "Ghosts off",
+          "stored": "hidden"
+        }
+      },
+      "ok": true
+    },
+    {
+      "viewport": "desktop",
+      "start": "Ghosts hidden",
+      "action": "Open /ryugu",
+      "observed": {
+        "status": 200,
+        "layer": {
+          "state": "absent",
+          "others": null,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false
+        },
+        "configRequests": []
+      },
+      "ok": true
+    },
+    {
+      "viewport": "desktop",
+      "start": "Ghosts re-enabled on Home",
+      "action": "Open /ryugu",
+      "observed": {
+        "layer": {
+          "state": "off",
+          "others": 0,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false
+        },
+        "configRequests": [
+          "/api/ghosts?probe=1"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "viewport": "desktop",
+      "start": "prefers-reduced-motion: reduce",
+      "action": "Open Home then /ryugu",
+      "observed": {
+        "layer": {
+          "state": "off",
+          "others": 0,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false
+        },
+        "configRequests": 0,
+        "pageErrors": []
+      },
+      "ok": true
+    },
+    {
+      "viewport": "desktop",
+      "start": "Whole walk",
+      "action": "Collect page and console errors",
+      "observed": [],
+      "ok": true
+    },
+    {
+      "viewport": "phone",
+      "start": "Fresh visitor, motion allowed",
+      "action": "Open Home",
+      "observed": {
+        "status": 200,
+        "layer": {
+          "state": "off",
+          "others": 0,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false
+        },
+        "configRequests": [
+          "/api/ghosts?probe=1"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "viewport": "phone",
+      "start": "Home, Ghosts on",
+      "action": "Press Pocket Ghosts chip, reload",
+      "observed": {
+        "before": {
+          "pressed": "true",
+          "text": "Ghosts on"
+        },
+        "after": {
+          "pressed": "false",
+          "text": "Ghosts off"
+        },
+        "reloaded": {
+          "state": "absent",
+          "others": null,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false,
+          "chip": "Ghosts off",
+          "stored": "hidden"
+        }
+      },
+      "ok": true
+    },
+    {
+      "viewport": "phone",
+      "start": "Ghosts hidden",
+      "action": "Open /ryugu",
+      "observed": {
+        "status": 200,
+        "layer": {
+          "state": "absent",
+          "others": null,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false
+        },
+        "configRequests": []
+      },
+      "ok": true
+    },
+    {
+      "viewport": "phone",
+      "start": "Ghosts re-enabled on Home",
+      "action": "Open /ryugu",
+      "observed": {
+        "layer": {
+          "state": "off",
+          "others": 0,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false
+        },
+        "configRequests": [
+          "/api/ghosts?probe=1"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "viewport": "phone",
+      "start": "prefers-reduced-motion: reduce",
+      "action": "Open Home then /ryugu",
+      "observed": {
+        "layer": {
+          "state": "off",
+          "others": 0,
+          "sockets": 0,
+          "metaSha": "4992aec82c18135f37279f973527789bed92c9c8",
+          "overflowX": false
+        },
+        "configRequests": 0,
+        "pageErrors": []
+      },
+      "ok": true
+    },
+    {
+      "viewport": "phone",
+      "start": "Whole walk",
+      "action": "Collect page and console errors",
+      "observed": [],
+      "ok": true
+    },
+    {
+      "start": "End of walk",
+      "action": "Re-read /api/health",
+      "observed": {
+        "ok": true,
+        "sha": "4992aec82c18135f37279f973527789bed92c9c8"
+      },
+      "ok": false
+    }
+  ]
+}

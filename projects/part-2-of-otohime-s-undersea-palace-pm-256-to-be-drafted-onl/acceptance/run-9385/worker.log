@@ -1,0 +1,58 @@
+
+ ⛅️ wrangler 4.152.0
+────────────────────
+Your Worker has access to the following bindings:
+Binding                               Resource                     Mode
+env.GHOST_ROOMS (GhostRoom)           Durable Object               local
+env.WORKER_VERSION                    Worker Version Metadata      local
+env.ALLOWED_ORIGINS ("(hidden)")      Environment Variable         local
+
+⎔ Starting local server...
+Wrangler detected this dev session is running in an AI agent.
+The Local Explorer API is available at http://127.0.0.1:8797/cdn-cgi/local/explorer/api
+Useful routes:
+  GET http://127.0.0.1:8797/cdn-cgi/local/explorer/api/local/workers - local Workers and bindings
+  POST http://127.0.0.1:8797/cdn-cgi/local/explorer/api/local/scheduled?worker=<name> - invoke a Worker's scheduled handler; cron is required (see the OpenAPI schema for the full request)
+  GET http://127.0.0.1:8797/cdn-cgi/local/explorer/api/storage/kv/namespaces - KV namespaces
+  GET http://127.0.0.1:8797/cdn-cgi/local/explorer/api/d1/database - D1 databases
+  GET http://127.0.0.1:8797/cdn-cgi/local/explorer/api/r2/buckets - R2 buckets
+  GET http://127.0.0.1:8797/cdn-cgi/local/explorer/api/workers/durable_objects/namespaces - Durable Object namespaces
+  GET http://127.0.0.1:8797/cdn-cgi/local/explorer/api/workflows - Workflows
+  POST http://127.0.0.1:8797/cdn-cgi/local/explorer/api/local/observability/query - run a read-only SQL query (SELECT/WITH only) over captured request traces and console logs. Tables: spans, logs (read attributes via json(attributes)). Example:
+    curl -X POST http://127.0.0.1:8797/cdn-cgi/local/explorer/api/local/observability/query -H 'Content-Type: application/json' -d '{"sql":"SELECT service, name, outcome, duration_ms FROM spans WHERE parent_id IS NULL LIMIT 20"}'
+  POST http://127.0.0.1:8797/cdn-cgi/local/explorer/api/local/observability/clear - clear all captured traces and logs
+If the routes above don't cover what you need, fetch the full OpenAPI schema (large - use only as a last resort):
+  GET http://127.0.0.1:8797/cdn-cgi/local/explorer/api - OpenAPI schema
+[wrangler:info] Ready on http://127.0.0.1:8797
+[wrangler:info] GET /version 200 OK (19ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (6ms)
+[wrangler:info] GET /ghosts 403 Forbidden (7ms)
+[wrangler:info] GET /ghosts 403 Forbidden (1ms)
+[wrangler:info] GET /ghosts 403 Forbidden (1ms)
+[wrangler:info] GET /ghosts 404 Not Found (1ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (6ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (6ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (3ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (7ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (7ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (4ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (5ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (5ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (4ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (2ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (2ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (4ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (2ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (4ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (10ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (4ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (2ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (6ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (2ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (3ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (5ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (2ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (3ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (3ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (4ms)
+[wrangler:info] GET /ghosts 101 Switching Protocols (3ms)
