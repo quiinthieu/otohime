@@ -1,0 +1,29 @@
+[
+  {
+    "id": "run-9286",
+    "task_id": "t-1683",
+    "status": "succeeded",
+    "git_sha": "5fd54a7",
+    "tm_task_id": "90defa41-d811-4618-8655-03522c0b5f19",
+    "profile": "agy-argon-high",
+    "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions"
+  },
+  {
+    "id": "run-9287",
+    "task_id": "t-1685",
+    "status": "succeeded",
+    "git_sha": "2f40534",
+    "tm_task_id": "83614667-93c1-4c85-839c-4a2822424652",
+    "profile": "agy-argon-high",
+    "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions"
+  },
+  {
+    "id": "run-9290",
+    "task_id": "t-1684",
+    "status": "succeeded",
+    "git_sha": "995279a",
+    "tm_task_id": "ef6af4ef-aebb-4723-88b0-dc1759b7a99e",
+    "profile": "agy-argon-high",
+    "profile_flags": "--model gemini-4-argon-high --dangerously-skip-permissions"
+  }
+]

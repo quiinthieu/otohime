@@ -1,0 +1,11 @@
+{
+  "id": "run-9294",
+  "task_id": "t-1684",
+  "status": "succeeded",
+  "agent_profile": "agy-argon-medium",
+  "profile_flags": "--model gemini-4-argon-medium --dangerously-skip-permissions",
+  "tm_task_id": "56bc8d7b-4584-47d2-8c24-f66fc9d122f8",
+  "git_sha": "b5bbad5",
+  "report_commit": "b5bbad531bd8cff412b1a5c27b389bc3043280cc",
+  "note": "Focused Booth pass and report-only commit do not remove the independent full-suite race."
+}

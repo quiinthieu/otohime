@@ -1,0 +1,557 @@
+{
+  "pages": [
+    {
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 3,
+      "total": 107,
+      "tasks": [
+        {
+          "id": "9368bacf-11ac-496f-9fd3-37c699230e57",
+          "status": "FAILED",
+          "plan_id": "pm-269",
+          "run_id": "run-9284",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD e0fbe51a33c2 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "06e59416-c2fb-4814-bd7b-d6f7fcff0571",
+          "status": "FAILED",
+          "plan_id": "pm-257",
+          "run_id": "run-9276",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 0a6755b77bb8 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "07fae291-16bf-4f67-b26d-6fe9294a12cb",
+          "status": "FAILED",
+          "plan_id": "pm-268",
+          "run_id": "run-9270",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD ae11bbb92370 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "FAILED",
+      "offset": 3,
+      "limit": 3,
+      "total": 107,
+      "tasks": [
+        {
+          "id": "68ee9bfe-958f-48ae-a510-6fb170b0803e",
+          "status": "FAILED",
+          "plan_id": "pm-268",
+          "run_id": "run-9265",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f23bffac4702 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "101871c8-d22b-41e8-897c-d08da02fcce1",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD faafc4c622e8 is not on origin/main"
+        },
+        {
+          "id": "f3bb923d-85e8-45ce-8506-a2acb59cad3b",
+          "status": "FAILED",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 43ec9e377050 is not on origin/main"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 3,
+      "total": 1320,
+      "tasks": [
+        {
+          "id": "afdbe3b2-f748-4d20-b350-70484218a69f",
+          "status": "COMPLETED",
+          "plan_id": "pm-294",
+          "run_id": "run-9291",
+          "git_sha": "2f40534",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "99cc3062-dbde-42d4-8eed-60a4746c1217",
+          "status": "COMPLETED",
+          "plan_id": "pm-294",
+          "run_id": "run-9289",
+          "git_sha": "5fd54a7",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "8ef851f5-68f1-4eb9-afee-a571754f5502",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "status": "COMPLETED",
+      "offset": 3,
+      "limit": 3,
+      "total": 1320,
+      "tasks": [
+        {
+          "id": "66996231-fdae-45a9-8636-c532bafc1417",
+          "status": "COMPLETED",
+          "plan_id": "pm-257",
+          "run_id": "run-9288",
+          "git_sha": "308b362",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "83614667-93c1-4c85-839c-4a2822424652",
+          "status": "COMPLETED",
+          "plan_id": "pm-294",
+          "run_id": "run-9287",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "90defa41-d811-4618-8655-03522c0b5f19",
+          "status": "COMPLETED",
+          "plan_id": "pm-294",
+          "run_id": "run-9286",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 5,
+      "total": 2,
+      "tasks": [
+        {
+          "id": "2543df22-3a7e-472a-9dbd-8f47427a0276",
+          "status": "RUNNING",
+          "plan_id": "pm-257",
+          "run_id": "run-9292"
+        },
+        {
+          "id": "ef6af4ef-aebb-4723-88b0-dc1759b7a99e",
+          "status": "RUNNING",
+          "plan_id": "pm-294",
+          "run_id": "run-9290"
+        }
+      ]
+    }
+  ],
+  "completeness": "Global bounded pages are partial; unread history is inconclusive.",
+  "plan_runs": [
+    {
+      "id": "run-8936",
+      "role": "research",
+      "tm_task_id": "6ce92a41-fb2e-4e9a-aaef-10ec0ba9514c",
+      "status": "succeeded",
+      "profile": "claude-fable-high",
+      "profile_flags": "--allowedTools all --model claude-fable-5-1 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8946",
+      "role": "product_owner",
+      "tm_task_id": "eaef1c9d-bc00-4a69-87cc-90519791dc22",
+      "status": "succeeded",
+      "git_sha": "eb13f52",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-8976",
+      "task_id": "t-1607",
+      "role": "software_engineer",
+      "tm_task_id": "97f80709-45b8-4fb3-9eec-172d2f7f0dda",
+      "status": "succeeded",
+      "git_sha": "4647c20",
+      "profile": "claude-opus-high",
+      "profile_flags": "--allowedTools all --model claude-opus-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort high",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9004",
+      "task_id": "t-1607",
+      "role": "verify",
+      "tm_task_id": "fcc6dbf7-cc08-4955-8f48-78a8b2c79950",
+      "status": "succeeded",
+      "git_sha": "4647c20",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9008",
+      "task_id": "t-1607",
+      "role": "quality_engineer",
+      "tm_task_id": "5571b04a-2bbe-418f-a23f-abc4d67b1f54",
+      "status": "succeeded",
+      "git_sha": "276ce78",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9111",
+      "task_id": "t-1607",
+      "role": "software_engineer",
+      "tm_task_id": "73c928b5-e2c3-4f51-9eeb-157aa766f5d5",
+      "status": "succeeded",
+      "git_sha": "5139d4f",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9112",
+      "task_id": "t-1607",
+      "role": "verify",
+      "tm_task_id": "3a7e7256-d678-4160-a980-718110659f8e",
+      "status": "succeeded",
+      "git_sha": "5139d4f",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9113",
+      "task_id": "t-1607",
+      "role": "quality_engineer",
+      "tm_task_id": "2c52f04d-1b40-4be8-ba48-2ae97c0415ea",
+      "status": "succeeded",
+      "git_sha": "6abdc3b",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9116",
+      "task_id": "t-1608",
+      "role": "software_engineer",
+      "tm_task_id": "e63ac27e-ea91-4016-b607-01eb3d41ba9d",
+      "status": "succeeded",
+      "git_sha": "ebbb06d",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9119",
+      "task_id": "t-1608",
+      "role": "verify",
+      "tm_task_id": "905c7af9-72c5-43f4-ba3f-8ea14a8853d2",
+      "status": "succeeded",
+      "git_sha": "ebbb06d",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9121",
+      "task_id": "t-1608",
+      "role": "quality_engineer",
+      "tm_task_id": "d9d9d3ff-84cd-4942-9ee3-76b0d51b1bf4",
+      "status": "succeeded",
+      "git_sha": "f24e85f",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9124",
+      "task_id": "t-1608",
+      "role": "software_engineer",
+      "tm_task_id": "6c1ca935-6a57-469d-b1ff-8d83a123c092",
+      "status": "succeeded",
+      "git_sha": "a958913",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9126",
+      "task_id": "t-1608",
+      "role": "verify",
+      "tm_task_id": "90b5551f-8342-40f7-b204-0c620c185d83",
+      "status": "succeeded",
+      "git_sha": "a958913",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9128",
+      "task_id": "t-1608",
+      "role": "quality_engineer",
+      "tm_task_id": "f88e41f9-a566-419d-bed6-997ee03f6751",
+      "status": "succeeded",
+      "git_sha": "6bea14d",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9154",
+      "task_id": "t-1608",
+      "role": "software_engineer",
+      "tm_task_id": "f064cbe7-9854-40d2-a678-422912b1ec60",
+      "status": "succeeded",
+      "git_sha": "a6723c1",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9160",
+      "task_id": "t-1608",
+      "role": "verify",
+      "tm_task_id": "9fbc1895-9d48-4859-8ff1-3a3d22674959",
+      "status": "succeeded",
+      "git_sha": "a6723c1",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9162",
+      "task_id": "t-1608",
+      "role": "quality_engineer",
+      "tm_task_id": "d4cfdda7-14e2-44f1-b2b2-34520ebf619a",
+      "status": "succeeded",
+      "git_sha": "5c2ecc5",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9167",
+      "task_id": "t-1609",
+      "role": "software_engineer",
+      "tm_task_id": "14150a34-fc1e-4af3-809d-54e932ad0d72",
+      "status": "succeeded",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9169",
+      "task_id": "t-1609",
+      "role": "software_engineer",
+      "tm_task_id": "35f1dcbe-41b8-4128-8d7e-280b9d0b20ac",
+      "status": "succeeded",
+      "git_sha": "cce131d",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9174",
+      "task_id": "t-1609",
+      "role": "verify",
+      "tm_task_id": "2edb2244-8f91-4fc7-9b7a-dadea4e71144",
+      "status": "succeeded",
+      "git_sha": "cce131d",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9175",
+      "task_id": "t-1609",
+      "role": "quality_engineer",
+      "tm_task_id": "c9f6cb4d-762c-4deb-8a8e-d0a658af2765",
+      "status": "succeeded",
+      "git_sha": "b3b1af9",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9276",
+      "task_id": "t-1610",
+      "role": "software_engineer",
+      "tm_task_id": "06e59416-c2fb-4814-bd7b-d6f7fcff0571",
+      "status": "failed",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9277",
+      "task_id": "t-1610",
+      "role": "software_engineer",
+      "tm_task_id": "42b21310-f0d8-4acc-ae83-a8ddd82730dd",
+      "status": "succeeded",
+      "git_sha": "f2e1adf",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9280",
+      "task_id": "t-1610",
+      "role": "verify",
+      "tm_task_id": "0eb5d871-8b7a-4284-9d37-19acd9185794",
+      "status": "succeeded",
+      "git_sha": "f2e1adf",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9283",
+      "task_id": "t-1610",
+      "role": "software_engineer",
+      "tm_task_id": "d12ebf94-0430-4319-998f-974e8abad5f0",
+      "status": "succeeded",
+      "git_sha": "308b362",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9288",
+      "task_id": "t-1610",
+      "role": "verify",
+      "tm_task_id": "66996231-fdae-45a9-8636-c532bafc1417",
+      "status": "succeeded",
+      "git_sha": "308b362",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9292",
+      "task_id": "t-1610",
+      "role": "quality_engineer",
+      "tm_task_id": "2543df22-3a7e-472a-9dbd-8f47427a0276",
+      "status": "running",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    }
+  ],
+  "prior_gate": {
+    "task_id": "0eb5d871-8b7a-4284-9d37-19acd9185794",
+    "status": "COMPLETED",
+    "callback_state": "delivered",
+    "callback_attempts": 1,
+    "runner_log": [
+      "progress phase=clone",
+      "=== task-manager coding job starting ===",
+      "  Agent    : shell",
+      "  Command  : true",
+      "  Prompt   : 0 characters from AGENT_PROMPT_FILE",
+      "  Workspace: /Users/viet.ky/Library/Application Support/build-worker/leases/0eb5d871-8b7a-4284-9d37-19acd9185794-d4c6cce64081a905a67f4aed10292856/work/otohime",
+      "  Repo URL : git@github.com:quiinthieu/otohime.git",
+      "  Repo     : REPO_ID=otohime GIT_MAIN_BRANCH=main PLANS_DIR=projects",
+      "  Account  : ACCOUNT_ID=<none>",
+      "  HOME     : /Users/viet.ky/Library/Application Support/build-worker/leases/0eb5d871-8b7a-4284-9d37-19acd9185794-d4c6cce64081a905a67f4aed10292856/home",
+      "  User     : uid=502(viet.ky) gid=20(staff) groups=20(staff),103(access_bpf),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),701(com.apple.sharepoint.group.1),702(com.apple.sharepoint.group.2),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),101(com.apple.access_screensharing-disabled),399(com.apple.access_ssh),400(com.apple.access_remote_ae)",
+      "  Branch   : main",
+      "  Sidecar  : enabled (shared=/Users/viet.ky/Library/Application Support/build-worker/leases/0eb5d871-8b7a-4284-9d37-19acd9185794-d4c6cce64081a905a67f4aed10292856/shared)",
+      "=========================================",
+      "  github.com host key refreshed",
+      "  gitlab.com host key refreshed",
+      "  bitbucket.org host key refreshed",
+      "Cloning git@github.com:quiinthieu/otohime.git (branch: main) into /Users/viet.ky/Library/Application Support/build-worker/leases/0eb5d871-8b7a-4284-9d37-19acd9185794-d4c6cce64081a905a67f4aed10292856/work/otohime...",
+      "  reference clone from /Users/viet.ky/Library/Application Support/build-worker/repo/otohime (fleet mirror)",
+      "Cloning into '/Users/viet.ky/Library/Application Support/build-worker/leases/0eb5d871-8b7a-4284-9d37-19acd9185794-d4c6cce64081a905a67f4aed10292856/work/otohime'...",
+      "  Cloned branch: main",
+      "  Cloned commit: f2e1adfe1d04969255429a617bd4c8e6fceecf40",
+      "Checking out sha f2e1adf",
+      "Note: switching to 'f2e1adf'.",
+      "",
+      "You are in 'detached HEAD' state. You can look around, make experimental",
+      "changes and commit them, and you can discard any commits you make in this",
+      "state without impacting any branches by switching back to a branch.",
+      "",
+      "If you want to create a new branch to retain commits you create, you may",
+      "do so (now or later) by using -c with the switch command. Example:",
+      "",
+      "  git switch -c <new-branch-name>",
+      "",
+      "Or undo this operation with:",
+      "",
+      "  git switch -",
+      "",
+      "Turn off this advice by setting config variable advice.detachedHead to false",
+      "",
+      "HEAD is now at f2e1adf pm-257/t-1610: test(ghosts): prove browsers and prepare dark deployment",
+      "push guard: skipped (otohime has no scripts/git-push-safe.sh)",
+      "",
+      "progress phase=verify",
+      "=== verify-runner (agent=shell) ===",
+      "npm warmup /Users/viet.ky/Library/Application Support/build-worker/leases/0eb5d871-8b7a-4284-9d37-19acd9185794-d4c6cce64081a905a67f4aed10292856/work/otohime ci",
+      "npm warmup exit 0",
+      "verify: start item=Workflow fixtures timeout_s=300",
+      "verify: item=Workflow fixtures status=pass exit=0 duration_ms=15892",
+      "verify: start item=Project tests timeout_s=300",
+      "verify: running 60s/300s, last:   ...",
+      "verify: item=Project tests status=fail exit=1 duration_ms=88075",
+      "verify: start item=Lint timeout_s=300",
+      "verify: item=Lint status=pass exit=0 duration_ms=27568",
+      "verify: start item=Production build timeout_s=900",
+      "verify: item=Production build status=pass exit=0 duration_ms=38909",
+      "verify: start item=Two-browser ghost proof timeout_s=900",
+      "verify: running 60s/900s, last:   ...",
+      "verify: item=Two-browser ghost proof status=pass exit=0 duration_ms=84635",
+      "verify: start item=Existing browser regression suite timeout_s=900",
+      "verify: running 60s/900s, last:   ...",
+      "verify: running 120s/900s, last:   ...",
+      "verify: running 180s/900s, last: # Ghost proof: Chrome 156.0.8078.49, real Next/canvas, fake fan-out; hosted execution unproven",
+      "verify: running 240s/900s, last:   ...",
+      "verify: running 300s/900s, last:   ...",
+      "verify: running 360s/900s, last:   ...",
+      "verify: running 420s/900s, last:   ...",
+      "verify: running 480s/900s, last:   ...",
+      "verify: running 540s/900s, last:       ...",
+      "verify: running 600s/900s, last:   ...",
+      "verify: running 660s/900s, last:   ...",
+      "verify: running 720s/900s, last: # lifecycle control: pagehide",
+      "verify: running 781s/900s, last:   ...",
+      "verify: running 841s/900s, last:   ...",
+      "verify: running 900s/900s, last:   ...",
+      "verify: item=Existing browser regression suite status=timeout exit=124 duration_ms=910145"
+    ]
+  },
+  "current_gate": {
+    "id": "ver-3693",
+    "sha": "308b362",
+    "status": "pass",
+    "task_id": "66996231-fdae-45a9-8636-c532bafc1417",
+    "callback_state": "delivered",
+    "callback_attempts": 1,
+    "items": [
+      {
+        "name": "Workflow fixtures",
+        "status": "pass",
+        "exit_code": 0,
+        "duration_ms": 12962
+      },
+      {
+        "name": "Project tests",
+        "status": "pass",
+        "exit_code": 0,
+        "duration_ms": 52438
+      },
+      {
+        "name": "Lint",
+        "status": "pass",
+        "exit_code": 0,
+        "duration_ms": 13719
+      },
+      {
+        "name": "Production build",
+        "status": "pass",
+        "exit_code": 0,
+        "duration_ms": 19937
+      },
+      {
+        "name": "Two-browser ghost proof",
+        "status": "pass",
+        "exit_code": 0,
+        "duration_ms": 61402
+      },
+      {
+        "name": "Existing browser regression suite",
+        "status": "pass",
+        "exit_code": 0,
+        "duration_ms": 590670
+      }
+    ]
+  }
+}

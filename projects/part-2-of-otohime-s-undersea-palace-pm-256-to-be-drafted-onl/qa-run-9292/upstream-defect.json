@@ -1,0 +1,11 @@
+{
+  "sourceSha": "995279a572db68e48ace27cd2aaa04b9d6611e72",
+  "sourceTask": "pm-294/t-1684",
+  "sourceRun": "run-9290",
+  "file": "e2e/booth.test.ts",
+  "line": 577,
+  "rawFailure": "not ok 3 - film-stock switching ('sumi-e', 'riso', 'newsprint') updates live viewfinder and strip pixels distinctly and handles webglcontextlost\n  ---\n  duration_ms: 656.638\n  type: 'test'\n  location: '/Users/avietidol/Library/Application Support/build-worker/leases/2543df22-3a7e-472a-9dbd-8f47427a0276-2ffdb3f57dfac27dced703fb984ef96a/work/otohime/e2e/booth.test.ts:501:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    + actual - expected\n    \n    + 'webgl2'\n    - 'canvas2d'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 'canvas2d'\n  actual: 'webgl2'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///Users/avietidol/Library/Application%20Support/build-worker/leases/2543df22-3a7e-472a-9dbd-8f47427a0276-2ffdb3f57dfac27dced703fb984ef96a/work/otohime/e2e/booth.test.ts:577:10)\n    async Test.run (node:internal/test_runner/test:1054:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n",
+  "scope": "New upstream browser file absent from t-1610 delivery 308b362; integration gate remains red.",
+  "workflowDiffFrom308b362": "",
+  "upstreamCiAtInspection": 40628728959
+}

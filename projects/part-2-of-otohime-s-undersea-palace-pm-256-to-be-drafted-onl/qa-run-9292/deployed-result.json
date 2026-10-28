@@ -1,0 +1,26 @@
+{
+  "deliverySha": "308b36202ef8774294596ac9d689016fd64d8d5b",
+  "deployedSha": "308b36202ef8774294596ac9d689016fd64d8d5b",
+  "nextBuildId": "r4lyw4G6B5AC1vpoNmEv8",
+  "buildIdSource": "independent served RSC payload",
+  "chrome": "156.0.8078.48",
+  "rows": [
+    {
+      "room": "/",
+      "status": 200,
+      "state": "off",
+      "hideReload": true,
+      "reenabledStillDark": true
+    },
+    {
+      "room": "/ryugu",
+      "status": 200,
+      "state": "off",
+      "hideReload": true,
+      "reenabledStillDark": true
+    }
+  ],
+  "errors": [],
+  "sockets": [],
+  "boundary": "read-only real production; no config override/fake; hosted active fan-out deliberately unproven"
+}

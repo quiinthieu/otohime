@@ -1,0 +1,24 @@
+{
+  "attempts": [
+    {
+      "log": "e2e.log",
+      "phase": "pre-browser build",
+      "exit_code": 1,
+      "errors": [
+        "Error: Module not found: Can't resolve '@vercel/turbopack-next/internal/font/google/font'"
+      ],
+      "build_error": "Turbopack build failed with 8 errors"
+    },
+    {
+      "log": "e2e-retry.log",
+      "phase": "pre-browser build",
+      "exit_code": 1,
+      "errors": [
+        "Error: Module not found: Can't resolve '@vercel/turbopack-next/internal/font/google/font'"
+      ],
+      "build_error": "Turbopack build failed with 8 errors"
+    }
+  ],
+  "recovery": "npm ci using unchanged root lock, then exact TMPDIR=/tmp npm run test:e2e; no application source edits",
+  "mechanism": "Not established; observed recovery does not reconstruct the failing installation state."
+}

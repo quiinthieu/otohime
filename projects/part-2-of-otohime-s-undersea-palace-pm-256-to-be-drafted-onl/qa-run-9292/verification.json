@@ -1,0 +1,143 @@
+{
+  "deliverySha": "308b36202ef8774294596ac9d689016fd64d8d5b",
+  "localSha": "2f405343eeee2a625884a6e999591efebed9270c",
+  "checks": [
+    {
+      "name": "workflow",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/ghosts-workflow.test.mjs scripts/ci-workflow.test.mjs",
+      "exit_code": 0,
+      "seconds": 7.02
+    },
+    {
+      "name": "lint",
+      "cmd": "npm run lint",
+      "exit_code": 0,
+      "seconds": 8.33
+    },
+    {
+      "name": "build",
+      "cmd": "npm run build",
+      "exit_code": 0,
+      "seconds": 12.1
+    },
+    {
+      "name": "ghosts",
+      "cmd": "TMPDIR=/tmp npm run test:ghosts",
+      "exit_code": 0,
+      "seconds": 50.54
+    },
+    {
+      "name": "e2e",
+      "cmd": "TMPDIR=/tmp npm run test:e2e",
+      "exit_code": 1,
+      "seconds": 5.64
+    }
+  ],
+  "final": [
+    {
+      "name": "project-final",
+      "command": "npm test",
+      "exit_code": 0,
+      "counts": {
+        "tests": 2609,
+        "pass": 2609,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "d0fac52fc8278d36a724ff328993a25721a7153b9557755ffced077b47192bca",
+      "tapDurationMs": 34978.143666
+    },
+    {
+      "name": "e2e-reinstalled",
+      "command": "TMPDIR=/tmp npm run test:e2e",
+      "exit_code": 0,
+      "counts": {
+        "tests": 224,
+        "pass": 224,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "0f72695af6ca2cf71f63e16ef144db80175ce29f0c4e65488391df790bbd3270",
+      "tapDurationMs": 494277.177958
+    },
+    {
+      "name": "ghosts",
+      "command": "TMPDIR=/tmp npm run test:ghosts",
+      "exit_code": 0,
+      "counts": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "9b347d3b72ffb3621fbfb8e0b972a757654aa7b743965877f72dbb647c3b27de",
+      "tapDurationMs": 37005.95575
+    },
+    {
+      "name": "workflow",
+      "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/ghosts-workflow.test.mjs scripts/ci-workflow.test.mjs",
+      "exit_code": 0,
+      "counts": {
+        "tests": 59,
+        "pass": 59,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "3ed41cfd344b6d524cad57dfefc8cc1e519facb707f08178196666ad9a876fb0",
+      "tapDurationMs": 6987.250708
+    },
+    {
+      "name": "worker-local",
+      "command": "cd ghosts/worker && npm run test:local",
+      "exit_code": 0,
+      "counts": {
+        "tests": 18,
+        "pass": 18,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "155fcf16e970c1d2304df9579e3dd02de07e9e9aaaff16a4e99a698f60a16eb3",
+      "tapDurationMs": 2594.930875
+    },
+    {
+      "name": "independent-final",
+      "command": "SKIP_BUILD=1 TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/qa-run-9292/independent.test.mjs",
+      "exit_code": 0,
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "c11d60d6d02256561133ab967beed767f991fb2fd02c2ac62210a080fc0b82ed",
+      "tapDurationMs": 5340.677291
+    }
+  ],
+  "deployed": {
+    "command": "TMPDIR=/tmp node projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/qa-run-9292/deployed.mjs",
+    "exit_code": 0,
+    "priorQaDriverErrors": [
+      {
+        "reason": "incorrectly searched for Home Pocket on palace",
+        "sourceLine": 38
+      },
+      {
+        "reason": "sampled connecting before async config settled; now explicitly awaits off within 10s",
+        "sourceLine": 51
+      }
+    ],
+    "applicationChanged": false
+  },
+  "workerBuild": {
+    "install": "locked npm ci exit 0",
+    "typecheck": "exit 0",
+    "bundle": "real wrangler dry-run exit 0",
+    "fingerprint": "aa87b9e3b4328f59801de5028120046f3c244f4f55e7e26d661b16d02b6a7115"
+  }
+}

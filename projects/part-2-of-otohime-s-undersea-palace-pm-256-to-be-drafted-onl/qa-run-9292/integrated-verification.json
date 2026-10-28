@@ -1,0 +1,139 @@
+{
+  "localSha": "995279a572db68e48ace27cd2aaa04b9d6611e72",
+  "declaredCommands": [
+    {
+      "name": "workflow",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/ghosts-workflow.test.mjs scripts/ci-workflow.test.mjs",
+      "exit_code": 0,
+      "seconds": 7.37
+    },
+    {
+      "name": "lint",
+      "cmd": "npm run lint",
+      "exit_code": 0,
+      "seconds": 7.88
+    },
+    {
+      "name": "build",
+      "cmd": "npm run build",
+      "exit_code": 0,
+      "seconds": 10.2
+    },
+    {
+      "name": "ghosts",
+      "cmd": "TMPDIR=/tmp npm run test:ghosts",
+      "exit_code": 0,
+      "seconds": 48.68
+    },
+    {
+      "name": "e2e",
+      "cmd": "TMPDIR=/tmp npm run test:e2e",
+      "exit_code": 1,
+      "seconds": 542.93
+    }
+  ],
+  "project": {
+    "name": "project-integrated",
+    "counts": {
+      "tests": 2609,
+      "pass": 2609,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "logSha256": "b1931cf5200124cf2bbe539ef44eb854853bcc7de61e1d6a6ed9e2db7bdc721d",
+    "exit_code": 0
+  },
+  "additional": [
+    {
+      "name": "e2e",
+      "counts": {
+        "tests": 230,
+        "pass": 229,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "92ad12eaf866e2ec91b1ed01b4ad571d6add0f1c696edffb8d1e076be8356bf7",
+      "exit_code": 1
+    },
+    {
+      "name": "booth-control",
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "b35ff9cd54043f84080ec4923aeabcdb8ad5aea65092bf4d007081b6154e34fb",
+      "exit_code": 0
+    },
+    {
+      "name": "booth-original-control",
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "c02cb2023046023f7fc0b7abb3578bd0e8e79a4e110d1488dab2771353f41a91",
+      "exit_code": 0
+    }
+  ],
+  "boothDiagnostic": {
+    "kind": "upstream-booth-control",
+    "before": "webgl2",
+    "immediate": "webgl2",
+    "committed": "canvas2d",
+    "opaque": 43200,
+    "chrome": "156.0.8078.48",
+    "boundary": "actual Chrome/application/renderer; native context-loss event injected; sample portrait; no camera mock"
+  },
+  "originalTopLevelCoverage": {
+    "original": 222,
+    "passedAgain": 222,
+    "missing": []
+  },
+  "upstreamCiAtInspection": {
+    "id": 40628728959,
+    "head_sha": "995279a572db68e48ace27cd2aaa04b9d6611e72",
+    "status": "in_progress",
+    "conclusion": null,
+    "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40628728959"
+  },
+  "upstreamJobs": [
+    {
+      "id": 122619827846,
+      "name": "checks",
+      "status": "in_progress",
+      "conclusion": null,
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_name": "GitHub Actions 1000000966"
+    },
+    {
+      "id": 122619828821,
+      "name": "cleanup",
+      "status": "completed",
+      "conclusion": "skipped",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_name": null
+    },
+    {
+      "id": 122619828908,
+      "name": "preview",
+      "status": "completed",
+      "conclusion": "skipped",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_name": null
+    }
+  ],
+  "limitation": "The project unit rerun overlapped a middle section of the expanded browser run. The Booth failure occurred at its start, before that overlap. First 224-case browser pass and both independent runtime controls ran without concurrent local verification."
+}
