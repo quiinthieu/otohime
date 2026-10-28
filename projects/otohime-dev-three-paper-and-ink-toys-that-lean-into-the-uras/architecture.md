@@ -1,5 +1,11 @@
 # Ryugu Paper Toys architecture
 
+## Deployed QA handoff · pm-269/t-1648 · run-9281
+
+The operator reports that production health has advanced to `103f0c5511d4590e66a8a83b1a35acfe870e7ca3` since QA run-9201 sampled ancestor `741f59c`. This is supplied evidence, not a fresh SWE production observation. Follow [fix_plan_t-1648_run-9201.md](fix_plan_t-1648_run-9201.md): preserve the working Bottle implementation and direct team-scoped API readiness. A served SHA alone does not establish a green production job. The local revalidation and independent deployed follow-up are recorded in [run-9281-summary.md](run-9281-summary.md).
+
+Plan-manager owns the complete green gate and production result for workflow `40478220840` (or its served descendant); QA owns a fresh independent Footer/Pocket walkthrough at the served SHA, including enlarged text, lazy/CLS budgets and a live API access negative control. The SWE run stops at its tested push without waiting on CI or querying production. No credential or application change is justified by the stale QA snapshot.
+
 ## Hosted CLI identity transcript · pm-269/t-1648 · run-9198
 
 Production readiness stays on `741f59c`'s direct team-scoped `GET /v13/deployments/{hostname}` (`scripts/deployment-status.mjs`). The ee51ea9 CLI text matcher is not reintroduced. The deploy fixture's fake CLI now answers every non-deploy command with the exact hosted Vercel CLI 64.7.0 line `Error: Not able to load user because of unexpected error: User not found. (404)` (jobs `122084239061`, `122096077381`), and exits 1. A mutated copy of `vercel-deploy.sh` with a scoped `vercel inspect --wait` step reproduces that failure and never reaches health; the real script reaches API READY and exact-SHA health without calling inspect. The Bottle deployment receipt requires both controls. This fixture proves orchestration only; hosted API authorization is proven only by a green production job.
