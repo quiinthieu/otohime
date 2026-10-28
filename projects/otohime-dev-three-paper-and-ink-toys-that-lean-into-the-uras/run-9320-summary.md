@@ -28,7 +28,7 @@ undeployed report (exit 1), while restoring the old project exemption accepts it
 ## Fresh verification
 
 The six exact Bottle commands and the deployment fixture run through
-`node scripts/verify-bottle-contracts.mjs ../../shared/artifacts/run-9320`,
+`node scripts/verify-bottle-contracts.mjs ../../shared/artifacts/run-9320/retry-1`,
 which validates named positive evidence and rejects silent, missing, skipped
 or otherwise incomplete receipts. All seven commands and their receipt negative
 controls pass:
@@ -36,7 +36,7 @@ controls pass:
 | Contract | Result |
 | --- | --- |
 | Bottle layout and picker tests | 12/12 |
-| Repository `npm test` | 2,613/2,613, no skips |
+| Repository `npm test` | 2,617/2,617, no skips |
 | Lint and typecheck | Exit 0; zero errors, 10 existing warnings |
 | Gate closure | Certified; actual locked imports and Postgres binaries |
 | Production Bottle browser | 14/14 |
@@ -53,18 +53,18 @@ gesture-only loading, safe deliberate Visit, Escape focus return, legacy Tab
 order, bounded shared history, blocked storage, real pending-only Postgres
 suggestions, offline/429 resilience, reduced motion and no-JS baseline pass.
 Bootstrap is 1,634 gzip bytes; lazy panel/CSS is 4,966 bytes; CLS is 0.
-Bottle build: `ilQakK0wIv7SeyRniIYOX`; footer build: `R9ftyaT7QKmwPeVYEvV02`;
+Bottle build: `pN-JVGG7yPq8S-PFFnr7p`; footer build: `Ahf9ltWjvwaftBezN-5GN`;
 Chrome: 156.0.8078.47. The lazy JS/CSS SHA256 values remain
 `e4b166ce41b6aa0e4172bf530d9dd20593d3a6f0fffa02a896fe9b48567ea167`
 and `f16c4d552e8f62e4858d07bc747b97b16b181f80512f6f220fc3ceb01a362be2`.
 
 The tested base is freshly fetched main
-`8af6a178a484c2a747e481469e0abed3cb37dd89`, a descendant of `ee40277`.
+`a6297cb2631d0173dcc442f9617878b6d5a76825`, a descendant of `ee40277`.
 Current executable fingerprint (relevant source, lock and configuration) is
-`4d5a61a260ca32c108d9013b50696a7e1b4bd185884436632b8532199c14bcc1`.
+`6048c0543f45cf69f165cd32978567b4a75442a344920c8ef528477a131d8691`.
 Per-file hashes, complete local logs, gate receipts, the history sample and
 `commits.txt` are in the lease's shared artifacts directory
-(`shared/artifacts/run-9320/`). Generated build output, generated content history,
+(`shared/artifacts/run-9320/`; final receipts under `retry-1/`). Generated build output, generated content history,
 binaries and dependency changes are excluded from this commit. These are fresh
 receipts for the current fingerprint; previous SHA receipts are not reused.
 
@@ -110,3 +110,25 @@ Visit/focus/history/pending-suggestion resilience, and the live unauthenticated
 admin-API 401 negative control. Any identity mismatch or contract regression
 fails. The historical path-filter defect is not declared recovered in hosted
 execution until that complete green gate and deployed QA pass.
+
+## Publication retry
+
+The initial tested commit `15c0f3f` pushed successfully to
+`pm-269-t-1648-run-9320`, but main advanced and rejected the forward-only main
+push. `git pull --rebase origin main` preserved incoming Notes delivery
+`43b3f78`/`a6297cb` without conflicts. The rebased implementation is
+`53109d374b910d219c826fdbb5c03548bf9588b8`; every task command, workflow fixture
+and ancestry self-test was rerun, with all results passing as shown above.
+The final fingerprint additionally includes the current Notes source and site
+content; no dependency or lock change was needed. Final local builds embed
+`53109d3`; this subsequent documentation update changes no fingerprinted
+executable path. The initial receipts remain separate and are not substituted
+for these post-rebase results.
+
+The retry publishes `pm-269-t-1648-run-9320-r1` and advances main without
+force-pushing the original branch. A second focused task-prefixed documentation
+commit records these changed identities/results because repository rules
+prohibit amending without a request. Delivery SHAs are saved in both
+`shared/artifacts/run-9320/commits.txt` and `shared/artifacts/commits.txt`.
+Hosted checks and served delivery ancestry remain assigned to plan-manager/QA
+as above; the run stops at its tested push.
