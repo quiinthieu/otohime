@@ -1,1 +1,2 @@
 pm-273/t-1615: Build deterministic fortunes from current content
+pm-273/t-1615: Snapshot fortune targets for deterministic sessions
