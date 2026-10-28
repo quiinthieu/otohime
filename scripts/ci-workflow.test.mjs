@@ -456,6 +456,61 @@ test("the author gate precedes production migrations and main checks", () => {
   assert.match(steps("checks"), /if: github.event_name == 'push' \|\| \(github.event_name == 'workflow_dispatch' && github.ref == 'refs\/heads\/main'\)[\s\S]*?node scripts\/check-deploy-author\.mjs/);
 });
 
+test("guestbook author guard rejects a wrong-author schema or migration-only push and passes the owner", () => {
+  const guard = gateBody("Check guestbook delivery author");
+  const work = mkdtempSync(join(tmpdir(), "guestbook-author-ci-"));
+  const owner = { name: "Otohime", email: "quiinthieu@gmail.com" };
+  const stranger = { name: "Otohime", email: "otohime@users.noreply.github.com" };
+  const gitEnv = { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1" };
+  const git = (args, who = owner) => spawnSync("git", args, {
+    cwd: work, encoding: "utf8",
+    env: { ...gitEnv, GIT_AUTHOR_NAME: who.name, GIT_AUTHOR_EMAIL: who.email, GIT_COMMITTER_NAME: who.name, GIT_COMMITTER_EMAIL: who.email },
+  }).stdout.trim();
+  const commit = (file, who) => {
+    mkdirSync(join(work, file, ".."), { recursive: true });
+    writeFileSync(join(work, file), `${file} ${Math.random()}\n`);
+    git(["add", file], who);
+    git(["commit", "-qm", `pm-273/t-1612: ${file}`], who);
+    return git(["rev-parse", "HEAD"]);
+  };
+  const run = (before, head, body = guard) => spawnSync("bash", ["-eo", "pipefail", "-c", body], {
+    cwd: work, encoding: "utf8", env: { ...gitEnv, PUSH_BEFORE: before, GITHUB_SHA: head },
+  });
+  try {
+    git(["init", "-q", "--initial-branch=main"]);
+    let before = commit("README.md", owner);
+    const push = (...files) => {
+      const start = before;
+      for (const [file, who] of files) before = commit(file, who);
+      return [start, before];
+    };
+
+    for (const file of ["db/migrations/0006_wrong_author.sql", "db/migrations/meta/_journal.json", "db/schema.ts"]) {
+      const [from, to] = push([file, stranger]);
+      const res = run(from, to);
+      assert.equal(res.status, 1, `${file}: ${res.stderr}`);
+      assert.match(res.stderr, new RegExp(`Guestbook delivery ${to} has an undeployable author: Otohime <otohime@users\\.noreply\\.github\\.com>`));
+    }
+    // A correct code commit followed by a wrong-author migration is still caught across the whole push range.
+    const [mixedFrom, mixedTo] = push(["lib/guestbook-store.ts", owner], ["db/migrations/0007_late.sql", stranger]);
+    assert.equal(run(mixedFrom, mixedTo).status, 1);
+
+    const [ownFrom, ownTo] = push(["db/migrations/0008_owner.sql", owner], ["db/schema.ts", owner]);
+    assert.equal(run(ownFrom, ownTo).status, 0);
+    const [otherFrom, otherTo] = push(["docs/unrelated.md", stranger], ["db/seed-notes.txt", stranger]);
+    assert.equal(run(otherFrom, otherTo).status, 0, "paths outside the guarded set are not author-gated here");
+
+    // Negative control: the previous predicate, without schema and migrations, let the migration-only push through.
+    const [legacyFrom, legacyTo] = push(["db/migrations/0009_legacy.sql", stranger]);
+    const legacy = guard.replace("|db/schema\\.ts$|db/migrations/", "");
+    assert.notEqual(legacy, guard);
+    assert.equal(run(legacyFrom, legacyTo, legacy).status, 0);
+    assert.equal(run(legacyFrom, legacyTo).status, 1);
+  } finally {
+    rmSync(work, { recursive: true, force: true });
+  }
+});
+
 test("checks, preview and production check out full git ancestry (fetch-depth: 0) and gate builds with strict history checks", () => {
   for (const job of ["checks", "preview", "production"]) {
     const s = steps(job);
