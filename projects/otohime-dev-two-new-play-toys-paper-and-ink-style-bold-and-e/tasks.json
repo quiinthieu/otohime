@@ -1,0 +1,155 @@
+[
+  {
+    "sequence": 1,
+    "title": "Ink Purikura film-stock shaders, strip composer, and camera controller",
+    "role": "software_engineer",
+    "acceptance_criteria": "Pure TypeScript film-stock processors (sumi-e, riso, newsprint) with WebGL2 shader sources and deterministic Canvas 2D ImageData kernels, seeded torn-paper strip composer with date hanko stamp and vector stroke/sticker model, bundled sample paper portrait generator, opt-in camera lifecycle controller, and shutter-clack cue in lib/sound.ts pass all unit tests.",
+    "depends_on": [],
+    "problem": "Ink Purikura Photobooth (/play/booth) needs a zero-dependency film-stock shader and deterministic Canvas 2D fallback for sumi-e ink wash, riso two-colour halftone, and newsprint dot screen, a seeded torn-paper strip and vector purikura doodle/sticker model, a bundled sample paper portrait when no camera is available, an opt-in camera lifecycle controller, and a WebAudio shutter-clack cue.",
+    "action_items": [
+      "Extend lib/sound.ts and lib/sound.test.ts with a shutter-clack cue (short noise-burst plus mechanical click capped at <= -18 dB, silent when the site sound toggle is muted).",
+      "Implement lib/booth/film-stock.ts exporting the three film-stock definitions ('sumi-e', 'riso', 'newsprint'), raw WebGL2 vertex/fragment shader sources, a WebGL2 quad renderer with webglcontextlost fallback, and a deterministic Canvas 2D ImageData kernel for each film stock (sumi-e luminance threshold bands + paper grain, riso two-colour rotated halftone screens with multiply blend and slight misregistration, newsprint 45-degree dot screen on newsprint tint).",
+      "Implement lib/booth/sample-portrait.ts and lib/booth/camera.ts providing a deterministic procedural paper portrait generator (used when camera is absent, denied, or insecure) and an opt-in getUserMedia({ video: { facingMode: 'user', width: { ideal: 960 } }, audio: false }) controller that starts only on user action and stops all tracks after the 4th capture, on close, on visibility hidden, or on unmount.",
+      "Implement lib/booth/strip.ts for assembling 4 captured frames onto a ~600x1800 vertical torn-paper strip (seeded random polyline edge mask, slight frame tilt, red circular date hanko stamp formatted YYYY.MM.DD, and 'otohime.dev' footer) plus a vector purikura decoration model (ink pen strokes with configurable widths/colours, eraser, undo, clear, and draggable/scalable/rotatable doodle stickers).",
+      "Add unit tests in lib/booth/booth.test.ts and standalone verifier scripts/verify-booth-engine.mjs covering distinct non-blank pixel outputs across sumi-e/riso/newsprint, seeded torn-paper mask determinism, 4-frame strip layout, vector stroke/sticker undo/clear invariants, camera track cleanup on 4th shot and abort, and record execution evidence in projects/otohime-dev-two-new-play-toys-paper-and-ink-style-bold-and-e/task-1-evidence.md."
+    ],
+    "interfaces": "lib/booth/film-stock.ts; lib/booth/strip.ts; lib/booth/camera.ts; lib/booth/sample-portrait.ts; lib/booth/booth.test.ts; lib/sound.ts; lib/sound.test.ts; scripts/verify-booth-engine.mjs; projects/otohime-dev-two-new-play-toys-paper-and-ink-style-bold-and-e/task-1-evidence.md",
+    "non_goals": [
+      "Next.js route files under app/",
+      "external image uploads or network requests",
+      "Three.js dependency for the 2D quad shader"
+    ],
+    "verification": [
+      {
+        "name": "booth engine and sound unit tests",
+        "cwd": ".",
+        "cmd": "(test -d node_modules || npm ci) && node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/booth/booth.test.ts lib/sound.test.ts && node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-booth-engine.mjs",
+        "expect": "exit0",
+        "timeout_s": 600
+      },
+      {
+        "name": "repository unit suite and types",
+        "cwd": ".",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ],
+    "qa": "skip"
+  },
+  {
+    "sequence": 2,
+    "title": "Ink Purikura Photobooth route, purikura doodle layer, and print/PNG export",
+    "role": "software_engineer",
+    "acceptance_criteria": "/play/booth renders the Ink Purikura Photobooth where visitors opt into their webcam or use the sample paper portrait fallback, select sumi-e, riso, or newsprint film stock, run a 3-2-1 countdown with shutter clack and reduced-motion-safe ink flash to capture 4 frames into a torn-paper strip with a date hanko stamp and otohime.dev footer, doodle with the purikura ink pen and stickers, download a valid PNG, and print a ~5x15cm strip with zero network image uploads.",
+    "depends_on": [
+      "1"
+    ],
+    "problem": "Visitors have no interactive /play/booth route to take or simulate 4-frame ink photobooth strips, switch film stocks live, decorate with purikura pen strokes and stickers, or export/print the finished torn-paper strip.",
+    "action_items": [
+      "Read installed Next 16 docs in node_modules/next/dist/docs/ before writing route code; update next.config.ts so Permissions-Policy allows camera=(self), microphone=() on /play/booth (while preserving /play for existing peep-box tests).",
+      "Build app/(site)/(app)/play/booth/page.tsx, app/(site)/(app)/play/booth/booth.css, and app/(site)/(app)/play/booth/_components/booth-studio.tsx wrapped in ViewTransition, displaying the privacy notice ('Your camera stays in this tab. Nothing is uploaded.'), opt-in 'Open camera' button, and explicit 'Use sample portrait' fallback button (also triggered automatically when camera permission is denied or unavailable).",
+      "Wire live film-stock switching ('sumi-e', 'riso', 'newsprint'), the 3-2-1 countdown with aria-live='polite' status updates, WebAudio shutter clack via lib/sound-client.ts, and CSS ink-flash overlay that suppresses flash animation under prefers-reduced-motion: reduce while keeping the numeric countdown and static click indicator.",
+      "Render the assembled 600x1800 torn-paper 4-frame strip with the red date hanko stamp and 'otohime.dev' footer, interactive pointer/keyboard purikura ink pen (widths, sumi/vermilion/indigo/gold colours, eraser, undo, clear) and draggable/scalable/rotatable doodle stickers, PNG download ('otohime-booth-YYYYMMDD.png' via canvas.toBlob), and a 'Print strip' button backed by an @media print stylesheet sizing the strip to ~5x15cm and hiding UI chrome.",
+      "Suppress .rise transform on .rise:has(.booth-root) so fixed/sticky controls stay strictly inside both 1366x768 desktop and 390x844 mobile viewports; add Chromium E2E tests in e2e/booth.test.ts covering fake-camera 4-frame capture, denied-camera sample portrait fallback, film-stock switching, pen/sticker decoration + undo, PNG magic-byte download verification, zero image-upload network requests, prefers-reduced-motion suppression, and 390x844 mobile layout; record evidence in projects/otohime-dev-two-new-play-toys-paper-and-ink-style-bold-and-e/task-2-evidence.md."
+    ],
+    "interfaces": "next.config.ts; app/(site)/(app)/play/booth/page.tsx; app/(site)/(app)/play/booth/booth.css; app/(site)/(app)/play/booth/_components/booth-studio.tsx; e2e/booth.test.ts; projects/otohime-dev-two-new-play-toys-paper-and-ink-style-bold-and-e/task-2-evidence.md",
+    "non_goals": [
+      "server-side image processing or cloud storage",
+      "modifying /play/pachinko"
+    ],
+    "verification": [
+      {
+        "name": "booth browser e2e",
+        "cwd": ".",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/booth.test.ts' && git checkout -- content/history.json",
+        "expect": "exit0",
+        "timeout_s": 1200
+      },
+      {
+        "name": "repository unit suite and types",
+        "cwd": ".",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ],
+    "qa": "required"
+  },
+  {
+    "sequence": 3,
+    "title": "Pipeline Pachinko deterministic Verlet engine and stage rules",
+    "role": "software_engineer",
+    "acceptance_criteria": "Pure 2D Verlet simulation in lib/pachinko/sim.ts deterministically steps ink-ball records at 1/120 s through ingest pegs, a dedupe gate that bounces duplicate keys with a 'DUP' stamp, a two-ball join funnel with lone-ball late-arrival timeout release, a 6-bucket partition splitter (p0..p5), and a dead-letter queue (DLQ) gutter, computing rolling 5 s records/sec, late-arrival %, DLQ count, and triggering the on-call pager state on 3 consecutive DLQ hits.",
+    "depends_on": [],
+    "problem": "Pipeline Pachinko (/play/pachinko) needs a lightweight, deterministic 2D physics and data-pipeline stage engine with zero external physics dependencies so collision math, stage transitions, throughput metrics, and the 3-streak DLQ pager Easter egg can be unit-tested deterministically.",
+    "action_items": [
+      "Implement lib/pachinko/sim.ts with a seeded PRNG (mulberry32), fixed 1/120 s Verlet integration with substeps, velocity clamping, spatial-hash ball-ball collisions (capped at <= 150 active balls), circle-vs-peg and circle-vs-segment restitution, plunger launch velocity mapping, and horizontal tilt/nudge acceleration.",
+      "Model the five pipeline stages from top to bottom in lib/pachinko/sim.ts: (1) ingest peg lattice, (2) dedupe filter gate that detects duplicate record keys within a recent window, bounces them upward, and stamps the ball 'DUP', (3) join funnel that holds the first arriving ball until a second arrives to emit one merged larger ball (with a deterministic timeout that releases a lone waiting ball as a late arrival so the funnel never stalls), (4) partition splitter routing balls into 6 buckets (p0..p5) by key hash, and (5) dead-letter queue (DLQ) side gutter.",
+      "Compute live readouts in lib/pachinko/sim.ts: bucket counts (p0..p5), rolling 5-second throughput (records/sec), late-arrival percentage (records exceeding transit threshold or released via join timeout), total DLQ count, and consecutive DLQ streak counter that sets pagerActive = true when dlqStreak reaches 3 (and resets streak on dismissal or non-DLQ bucket landing), plus deterministic helpers/fixtures for backfill floods and DLQ streak testing.",
+      "Write unit tests in lib/pachinko/pachinko.test.ts and standalone verifier scripts/verify-pachinko-sim.mjs proving seeded determinism (identical bucket counts and trajectories for identical seeds), dedupe 'DUP' bounce behavior, two-ball join merge and lone-ball timeout release, 6-bucket partition distribution, consecutive DLQ streak of 3 triggering pagerActive (while 2 consecutive DLQ hits followed by a normal bucket reset the streak without triggering), and record evidence in projects/otohime-dev-two-new-play-toys-paper-and-ink-style-bold-and-e/task-3-evidence.md."
+    ],
+    "interfaces": "lib/pachinko/sim.ts; lib/pachinko/pachinko.test.ts; scripts/verify-pachinko-sim.mjs; projects/otohime-dev-two-new-play-toys-paper-and-ink-style-bold-and-e/task-3-evidence.md",
+    "non_goals": [
+      "Matter.js or other third-party physics packages",
+      "DOM canvas rendering or React components"
+    ],
+    "verification": [
+      {
+        "name": "pachinko sim unit tests",
+        "cwd": ".",
+        "cmd": "(test -d node_modules || npm ci) && node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/pachinko/pachinko.test.ts && node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-pachinko-sim.mjs",
+        "expect": "exit0",
+        "timeout_s": 600
+      },
+      {
+        "name": "repository unit suite and types",
+        "cwd": ".",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ],
+    "qa": "skip"
+  },
+  {
+    "sequence": 4,
+    "title": "Pipeline Pachinko route, Play page discovery teasers, and E2E verification",
+    "role": "software_engineer",
+    "acceptance_criteria": "/play/pachinko renders the interactive ink-and-paper Pipeline Pachinko machine with pointer/keyboard plunger launch, Backfill flood button, rate-limited WebAudio peg clicks, mobile tilt-to-nudge and keyboard nudge controls, live 6-bucket bar chart and throttled aria-live readout (records/sec, late-arrival %, DLQ count), and a viewport-pinned focus-managed paper 'on-call pager' Easter egg on 3 consecutive DLQ hits, with both /play/booth and /play/pachinko linked from /play.",
+    "depends_on": [
+      "2",
+      "3"
+    ],
+    "problem": "Visitors cannot play Pipeline Pachinko at /play/pachinko or discover /play/booth and /play/pachinko from the main /play index page.",
+    "action_items": [
+      "Read installed Next 16 docs in node_modules/next/dist/docs/ before writing route code; build app/(site)/(app)/play/pachinko/page.tsx, app/(site)/(app)/play/pachinko/pachinko.css, and app/(site)/(app)/play/pachinko/_components/pachinko-machine.tsx rendering the ink-and-washi Canvas 2D pachinko board (plunger lane, ingest pegs, dedupe gate with 'DUP' stamps, join funnel, partition splitter into p0..p5, DLQ gutter, and live bucket bar chart).",
+      "Wire controls and audio on /play/pachinko: pointer drag-and-release plunger (with touch-action: none on the plunger/canvas), Space/Enter and visible 'Launch record' button, 'Backfill' flood button (spawning a staggered flood of 60 balls default, or a reduced 12-ball batch under prefers-reduced-motion: reduce), DeviceOrientationEvent tilt-to-nudge behind an explicit permission button plus ArrowLeft/ArrowRight and on-screen nudge buttons, and rate-limited (<= 20/s, <= -18 dB) WebAudio peg-hit click sounds gated by the site sound toggle.",
+      "Render the live throughput readout (records/sec, late-arrival %, DLQ count) with a throttled (~1 s) aria-live='polite' summary, and implement the 3-in-a-row DLQ Easter egg: a paper 'on-call pager' gag dialog/card (data-testid='pachinko-pager', role='dialog', focus moved to its Acknowledge/Dismiss button via focus({ preventScroll: true })) pinned strictly inside both 1366x768 desktop and 390x844 mobile viewports (suppressing .rise transform on .rise:has(.pachinko-root)), plus deterministic URL/query or button support (?seed=... and ?fixture=dlq-streak or deterministic DLQ test trigger) alongside natural 3-DLQ streak triggering.",
+      "Update app/(site)/(app)/play/page.tsx to add paper-and-ink teaser sections and navigation links for both Ink Purikura Photobooth (/play/booth, data-testid='play-booth-link') and Pipeline Pachinko (/play/pachinko, data-testid='play-pachinko-link') alongside Hanafuda.",
+      "Add Chromium E2E tests in e2e/pachinko.test.ts verifying /play discovery links to /play/booth and /play/pachinko, plunger launch and Backfill increasing bucket counts and readouts, keyboard nudge and sound-off-by-default negative control, prefers-reduced-motion behavior, and the 3-consecutive-DLQ on-call pager Easter egg appearing strictly inside the 390x844 mobile and 1366x768 desktop viewports with focus management; record evidence in projects/otohime-dev-two-new-play-toys-paper-and-ink-style-bold-and-e/task-4-evidence.md."
+    ],
+    "interfaces": "app/(site)/(app)/play/pachinko/page.tsx; app/(site)/(app)/play/pachinko/pachinko.css; app/(site)/(app)/play/pachinko/_components/pachinko-machine.tsx; app/(site)/(app)/play/page.tsx; e2e/pachinko.test.ts; projects/otohime-dev-two-new-play-toys-paper-and-ink-style-bold-and-e/task-4-evidence.md",
+    "non_goals": [
+      "Matter.js dependency",
+      "persistent server-side leaderboard"
+    ],
+    "verification": [
+      {
+        "name": "pachinko and booth browser e2e",
+        "cwd": ".",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/pachinko.test.ts' && git checkout -- content/history.json",
+        "expect": "exit0",
+        "timeout_s": 1200
+      },
+      {
+        "name": "repository unit suite and types",
+        "cwd": ".",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint",
+        "expect": "exit0",
+        "timeout_s": 900
+      }
+    ],
+    "qa": "required"
+  }
+]

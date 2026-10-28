@@ -1,0 +1,8 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-294",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "Both Ink Purikura Photobooth (/play/booth) and Pipeline Pachinko (/play/pachinko) are purely client-side and repository-owned Next.js App Router features using browser WebGL2/Canvas 2D, WebAudio, opt-in getUserMedia with a bundled sample portrait fallback, and deterministic TypeScript simulation/unit/Playwright E2E tests. No external APIs, secrets, database migrations, or operator-owned infrastructure are required.",
+  "prerequisites": []
+}
