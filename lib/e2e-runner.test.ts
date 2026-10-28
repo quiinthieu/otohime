@@ -207,6 +207,9 @@ test("CI's E2E step keeps the suite's status and adds the server's log tail to t
         process.stderr.write('suite stderr\\n', () => { process.exitCode = Number(process.env.CI_FIXTURE_STATUS); });
       });
     `);
+    // The suite runs under `timeout`, which execs a binary: stand in for npm on PATH as well.
+    mkdirSync(join(dir, "bin"));
+    writeFileSync(join(dir, "bin/npm"), "#!/bin/sh\nexec node fixture.mjs\n", { mode: 0o755 });
     const summaryPath = join(dir, "summary.md");
     for (const status of [17, 0]) {
       writeFileSync(summaryPath, "");
@@ -218,7 +221,7 @@ test("CI's E2E step keeps the suite's status and adds the server's log tail to t
         }
         curl() { wait || true; }
         ${body}
-      `], { cwd: dir, env: { ...process.env, RUNNER_TEMP: dir, GITHUB_STEP_SUMMARY: summaryPath,
+      `], { cwd: dir, env: { ...process.env, PATH: `${join(dir, "bin")}:${process.env.PATH}`, RUNNER_TEMP: dir, GITHUB_STEP_SUMMARY: summaryPath,
         GITHUB_SHA: "ci-status-fixture", CI_FIXTURE_STATUS: String(status) }, encoding: "utf8", timeout: 10000 });
       assert.equal(result.status, status, result.stderr);
       assert.equal(readFileSync(join(dir, "e2e.log"), "utf8"), "suite stdout\nsuite stderr\n");

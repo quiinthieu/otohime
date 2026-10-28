@@ -141,10 +141,17 @@ test("verify-deploy treats exactly the push paths-ignore as report-only", () => 
   assert.match(script, /^\s*"" \| projects\/\* \| \*\.md\) ;;$/m, "verify-deploy.sh must ignore projects/* and *.md only");
 });
 
-test("checks uses measured 25m job and 12m E2E budgets", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "25");
+test("checks uses measured 30m job, 17m E2E step and 900s E2E command budgets", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "30");
   assert.match(workflow, /40420670837: 1039s total \(E2E 501s, camera 79s,\n\s*# signed-in motion 171s, footer probe 71s\)/);
-  assert.match(steps("checks"), /- name: E2E against next start\n\s*timeout-minutes: 12/);
+  assert.match(workflow, /122630267659 then used\n\s*# 22m26s with E2E 701s/);
+  const checks = steps("checks");
+  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 17\n/);
+  const e2e = gateBody("E2E against next start");
+  assert.match(e2e, /^set -o pipefail$/m);
+  assert.match(e2e, /^trap .*browser-gate-diagnostics\.mjs "E2E against next start".* EXIT$/m);
+  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 900s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
+  assert.equal(e2e.match(/npm run test:e2e/g).length, 1, "the browser suite runs once, only under the inner bound");
 });
 
 test("all four non-TAP probe steps annotate the captured pipefail status", () => {
@@ -259,6 +266,10 @@ function runGate(name, log, scenario, mutate = (s) => s, { status = 43, serverLo
     writeFileSync(join(work, "fixture.mjs"), `
       import { appendFileSync } from 'node:fs';
       appendFileSync('probe-called', 'called\\n');
+      if (process.env.FIXTURE_HANG === '1') {
+        console.log('ok 1 - completed fixture case\\n# Subtest: hanging fixture case');
+        setTimeout(() => {}, 60000);
+      } else
       process.stdout.write('workflow child stdout\\n', () => {
         if (process.env.FIXTURE_ASSERTION === '1') {
           console.log('not ok - fixture assertion: 50%, failed\\r\\nprobe: 0 ok, 1 failed');
@@ -277,6 +288,12 @@ function runGate(name, log, scenario, mutate = (s) => s, { status = 43, serverLo
     writeFileSync(join(work, log), "stale-command-diagnostic\n");
     const summary = join(work, "summary.md");
     writeFileSync(summary, "");
+    // `timeout` execs a binary, so the bounded E2E command needs an npm on PATH, not a shell function.
+    mkdirSync(join(work, "bin"));
+    writeFileSync(join(work, "bin/npm"), `#!/bin/sh
+if [ "$1" = run ] && [ "$2" = test:e2e ]; then exec node fixture.mjs; fi
+echo 'unexpected npm command' >&2; exit 99
+`, { mode: 0o755 });
     const stubs = `
       npm() {
         if [ "$1" = start ]; then echo 'fixture server startup failure' >&2; return 31; fi
@@ -294,7 +311,7 @@ function runGate(name, log, scenario, mutate = (s) => s, { status = 43, serverLo
     `;
     const result = spawnSync("bash", ["-eo", "pipefail", "-c", `${stubs}\n${mutate(gateBody(name))}`], {
       cwd: work, encoding: "utf8", timeout: 10000,
-      env: { ...process.env, RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "workflow-fixture-sha", BASE_URL: "http://fixture.invalid",
+      env: { ...process.env, PATH: `${join(work, "bin")}:${process.env.PATH}`, FIXTURE_HANG: scenario === "hang" ? "1" : "0", RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "workflow-fixture-sha", BASE_URL: "http://fixture.invalid",
         FIXTURE_STATUS: scenario === "success" ? "0" : String(status), FIXTURE_STARTUP: scenario === "startup" ? "fail" : "ok", FIXTURE_ASSERTION: scenario === "assertion" ? "1" : "0" },
     });
     let calls = "";
@@ -372,6 +389,24 @@ for (const [name, log] of browserGates) {
     assert.equal(result.report, "");
   });
 }
+
+test("E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation", () => {
+  // Same workflow shell; only the 900s contract and 10s grace shrink so the fixture does not wait.
+  const started = Date.now();
+  const result = runGate("E2E against next start", "e2e.log", "hang",
+    (body) => body.replace("--kill-after=10s 900s npm", "--kill-after=1s 1s npm"));
+  assert.equal(result.status, 124, result.stderr);
+  assert.ok(Date.now() - started < 8000, "the hung child was terminated by the inner bound");
+  assert.equal(result.calls, "called\n");
+  assert.match(result.captured, /hanging fixture case/);
+  const commands = result.stdout.split("\n").filter((line) => line.startsWith("::error "));
+  assert.equal(commands.length, 1);
+  assert.match(commands[0], /Gate: E2E against next start; exit 124/);
+  assert.match(commands[0], /hanging fixture case/);
+  assert.ok(commands[0].length < 12000, `bounded annotation: ${commands[0].length}`);
+  assert.match(result.report, /exit 124/);
+  assert.match(result.report, /workflow-fixture-build/);
+});
 
 test("wiring negative control: removing the EXIT fallback makes a startup crash opaque", () => {
   const result = runGate(...browserGates[0], "startup", (body) => body.replace(/^.*trap .* EXIT$/m, ":"));
