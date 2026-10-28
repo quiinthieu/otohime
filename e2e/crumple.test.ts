@@ -76,6 +76,15 @@ async function intact(card: Locator) {
   assert.equal(await card.getAttribute('data-crumple-paint'), null);
   assert.ok(await card.evaluate(el => [...el.children].filter(c => !c.hasAttribute('data-paper-controls')).every(c => getComputedStyle(c).opacity !== '0')));
 }
+async function linkSnapshot(link: Locator) {
+  // The existing project peek opens on focus, adding aria-expanded. Compare
+  // name/destination/content independently of that legitimate disclosure state.
+  return (await link.ariaSnapshot()).replace(' [expanded]:', ':');
+}
+async function accessibleLink(link: Locator, snapshot: string, focused = false) {
+  assert.deepEqual(await linkSnapshot(link), snapshot, 'link keeps its accessible name and destination');
+  if (focused) assert.equal(await link.evaluate(el => document.activeElement === el), true, 'source link receives restored focus');
+}
 
 for (const width of [1280, 720]) for (const route of ['/projects', '/notes']) {
   test(`fresh native controls reach real Canvas at ${width}px on ${route}`, async t => {
@@ -150,13 +159,34 @@ test('keyboard folds real ink on both routes, retains accessible source/geometry
     await card.getByRole('button', { name: 'Reset', exact: true }).evaluate((b: HTMLButtonElement) => b.focus());
     await intact(card); assert.equal(await card.getAttribute('data-paper-state'), 'intact');
     if (await card.locator('a').count()) {
+      // Keep the same DOM locator throughout; Riso decorative innerText is
+      // deliberately unrelated to the link's accessible name.
+      const link = card.locator('a[href]').first();
+      const originalLink = await linkSnapshot(link);
+      assert.match(originalLink, /- link "[^"\n]*\S[^"\n]*"/, 'original link has a nonempty accessible name');
       await crumple.focus(); await page.keyboard.press('Enter'); await ball(card);
-      const link = card.locator('a').first();
-      // Riso's aria-hidden decorative copy is included in innerText. The
-      // uninterrupted semantic source supplies the accessible name instead.
-      const name = await link.evaluate(el => (el.querySelector('.riso-source') ?? el).textContent!.trim());
+      await accessibleLink(link, originalLink);
       await link.evaluate((a: HTMLAnchorElement) => a.focus()); await intact(card);
-      assert.equal(await card.getByRole('link', { name, exact: true }).count(), 1);
+      await accessibleLink(link, originalLink, true);
+      if (route === '/notes') {
+        await t.test('negative control: a missing accessible name fails the link assertion', async () => {
+          await link.evaluate(el => el.setAttribute('aria-hidden', 'true'));
+          try {
+            await assert.rejects(() => accessibleLink(link, originalLink, true), /link keeps its accessible name/);
+          } finally {
+            await link.evaluate(el => el.removeAttribute('aria-hidden'));
+          }
+        });
+        await t.test('negative control: missing focus restoration fails the link assertion', async () => {
+          await link.evaluate((a: HTMLAnchorElement) => a.blur());
+          try {
+            await assert.rejects(() => accessibleLink(link, originalLink, true), /source link receives restored focus/);
+          } finally {
+            await link.evaluate((a: HTMLAnchorElement) => a.focus());
+          }
+        });
+        await accessibleLink(link, originalLink, true);
+      }
     }
     await crumple.focus(); await page.keyboard.press('Enter'); await ball(card);
     await clickCard(card, 'Read card'); await intact(card);

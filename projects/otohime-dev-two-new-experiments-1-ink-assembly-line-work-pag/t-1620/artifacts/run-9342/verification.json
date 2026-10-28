@@ -1,0 +1,114 @@
+{
+  "run": "run-9342",
+  "local_history_complete": true,
+  "attempts": [
+    {
+      "attempt": "targeted",
+      "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts",
+      "tests": 11,
+      "pass": 10,
+      "fail": 1,
+      "skipped": 0,
+      "duration_ms": 106798.409958
+    },
+    {
+      "attempt": "targeted-final",
+      "command": "SKIP_BUILD=1 node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "skipped": 0,
+      "duration_ms": 112653.645625
+    },
+    {
+      "attempt": "full-e2e",
+      "command": "SKIP_BUILD=1 npm run test:e2e",
+      "tests": 249,
+      "pass": 248,
+      "fail": 1,
+      "skipped": 0,
+      "duration_ms": 643215.45075
+    },
+    {
+      "attempt": "ink-lab-reproduction",
+      "command": "SKIP_BUILD=1 node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test --test-name-pattern='withheld animation frames' e2e/ink-lab.test.ts",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0,
+      "duration_ms": 1028.095667
+    },
+    {
+      "attempt": "full-e2e-final",
+      "command": "SKIP_BUILD=1 npm run test:e2e",
+      "tests": 249,
+      "pass": 249,
+      "fail": 0,
+      "skipped": 0,
+      "duration_ms": 638788.145834
+    },
+    {
+      "attempt": "notes",
+      "command": "SKIP_BUILD=1 node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test projects/otohime-dev-two-new-experiments-1-ink-assembly-line-work-pag/t-1620/artifacts/verify-notes.mjs",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0,
+      "duration_ms": 15472.7765
+    },
+    {
+      "attempt": "unit",
+      "command": "PATH=/tmp/pm-279-t-1620-tools/coreutils-9.7/src:$PATH npm test",
+      "tests": 2627,
+      "pass": 2627,
+      "fail": 0,
+      "skipped": 0,
+      "duration_ms": 39845.08325
+    }
+  ],
+  "static_checks": [
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "assertion": "route types generated; no TypeScript diagnostics"
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "errors": 0,
+      "existing_warnings": 10
+    }
+  ],
+  "positive_assertions": [
+    "original link has a nonempty accessible name",
+    "same link snapshot retains role/name/destination/content before folding, while folded and after restoration; only Peek disclosure state excluded",
+    "source link is document.activeElement after synchronous restoration",
+    "exact original notes copy, stable unique slugs, editorial tags and exact lookup",
+    "three-profile production probe: all linked notes/direct URLs, back links, metadata, tags and original copy"
+  ],
+  "negative_controls": [
+    "aria-hidden link makes the shared snapshot assertion reject",
+    "blurred link makes the shared activeElement assertion reject",
+    "unknown and near-match slug unit lookup rejects",
+    "missing-note and constructor have no article and noindex in real production probe"
+  ],
+  "execution_state": {
+    "local_execution_demonstrated": true,
+    "integration_deployed": "unproven",
+    "product_delivered": "pending independent deployed QA"
+  },
+  "real_fake_boundary": "Real Next production build/server, Chrome, Postgres and Canvas; standard Ghosts fake and existing unit fixture stubs prove integration only.",
+  "ci_history_completeness": "not independently inspected under stop-at-push contract",
+  "deferred_checks": [
+    {
+      "id": "pm-279/t-1620:green-gate",
+      "owner": "plan-manager",
+      "failure_condition": "required CI checks fail at pushed delivery"
+    },
+    {
+      "id": "pm-279/t-1620:deployed-qa",
+      "owner": "quality engineer via plan-manager",
+      "failure_condition": "deployed SHA lacks delivery/fix or public notes behavior violates acceptance"
+    }
+  ]
+}

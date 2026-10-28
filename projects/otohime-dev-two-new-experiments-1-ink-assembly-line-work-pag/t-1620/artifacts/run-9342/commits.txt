@@ -1,0 +1,4 @@
+a6297cb2631d0173dcc442f9617878b6d5a76825 retained notes implementation on main
+b5fa42372d98c8d3712d8b46cd6b6008727552ae final inherited main parent
+HEAD pm-279/t-1620: fix: assert crumple link accessibility across folds
+HEAD means the single delivery commit containing this manifest; its full SHA and push receipts are persisted in the run-9342 plan-manager summary.
