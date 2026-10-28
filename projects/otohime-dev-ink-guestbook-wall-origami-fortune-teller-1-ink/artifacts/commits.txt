@@ -1,0 +1,1 @@
+pm-273/t-1615: Build deterministic fortunes from current content
