@@ -88,6 +88,48 @@ test("public shell/nav/terminal and every control tune only the proof sheet, wit
   } finally { await context.close(); }
 });
 
+test("withheld animation frames still commit one latest real SVG preview within the input bound", async () => {
+  const { context, page, errors } = await open();
+  try {
+    await ready(page, `?${encodeLab(labDefaults())}`);
+    await canonical(page);
+    const result = await page.evaluate(async () => {
+      const preview = document.querySelector<HTMLElement>(".lab-preview")!;
+      const before = Number(preview.dataset.filterUpdates);
+      const slider = document.querySelector<HTMLInputElement>("#lab-displacement")!;
+      const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!;
+      const raf = requestAnimationFrame, cancel = cancelAnimationFrame;
+      let id = 0;
+      // Freeze the frame-delivery port only. Timers, React and SVG rendering stay real.
+      window.requestAnimationFrame = () => ++id;
+      window.cancelAnimationFrame = () => {};
+      const start = performance.now();
+      try {
+        const committed = new Promise<number>((resolve, reject) => {
+          const timer = setTimeout(() => { observer.disconnect(); reject(new Error("withheld frame blocked the preview")); }, 2000);
+          const observer = new MutationObserver(() => {
+            if (preview.dataset.query?.includes("d=5&")) {
+              clearTimeout(timer); observer.disconnect(); resolve(performance.now() - start);
+            }
+          });
+          observer.observe(preview, { attributes: true });
+        });
+        for (const value of ["1", "2", "3", "4", "5"]) {
+          setter.call(slider, value); slider.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+        const latencyMs = await committed;
+        return { latencyMs, updates: Number(preview.dataset.filterUpdates) - before,
+          scale: preview.querySelector('feDisplacementMap[in2="warp"]')?.getAttribute("scale"), query: location.search };
+      } finally { window.requestAnimationFrame = raf; window.cancelAnimationFrame = cancel; }
+    });
+    assert.ok(result.latencyMs <= 100, JSON.stringify(result));
+    assert.equal(result.updates, 1);
+    assert.equal(result.scale, "5");
+    assert.match(result.query, /[?&]d=5&/);
+    assert.deepEqual(errors, []);
+  } finally { await context.close(); }
+});
+
 test("Share recreates the preview in a clean context; hostile/oversized links sanitize without applying", async () => {
   const { context, page, errors } = await open();
   try {

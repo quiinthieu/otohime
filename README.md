@@ -170,7 +170,8 @@ The change takes effect on the next request.
 
 - `bash scripts/e2e-local.sh` is the Docker e2e entrypoint: it starts a throwaway Postgres on a free port, applies the migrations, configures a local ghost fake, builds (skip with `SKIP_BUILD=1`), serves on `APP_PORT` (default 4027), runs `npm run test:e2e`, then removes the server, fake and container. `npm run test:e2e` also works on its own with embedded Postgres and an owned fake/server.
 
-CI runs the unit and e2e tests on every PR.
+CI runs the unit and e2e tests on every PR. Unit tests run at most four files concurrently
+to bound competing browser fixtures on small runners; the browser suite runs its files serially.
 
 Walk Shore and the site with `bash scripts/walk-shore.sh` (builds, serves on :4019, one `ok`/`not ok` line per check), or against production with `BASE_URL=https://otohime.dev bash scripts/walk-shore.sh`.
 

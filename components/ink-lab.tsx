@@ -7,6 +7,7 @@ import { appearancePlan, appearanceStore, applyPlan } from "@/lib/appearance-cli
 import { decodeLab, encodeLab, LAB_RANGES, labDefaults, normalizeLab, type InkLabSettings, type LabSnapshot } from "@/lib/ink-lab";
 import { HANDS } from "@/lib/ink-modes";
 import { PRINT_RUN_IDS, PRINT_RUNS } from "@/lib/print-runs";
+import { createPreviewCommit } from "@/lib/preview-commit";
 import { InkLabPreview } from "./ink-lab-preview";
 
 const NUMBERS = [
@@ -25,7 +26,12 @@ export function InkLab() {
   const manual = useRef<HTMLInputElement>(null);
   const current = useRef(snapshot);
   const lastQuery = useRef<string | null>(null);
-  const frame = useRef(0);
+  const [commits] = useState(() => createPreviewCommit({
+    frame: callback => requestAnimationFrame(callback),
+    cancelFrame: id => cancelAnimationFrame(id),
+    later: (callback, ms) => window.setTimeout(callback, ms),
+    cancelLater: id => clearTimeout(id),
+  }));
   const [ready, setReady] = useState(false);
 
   const replace = (value: LabSnapshot, clean = false) => {
@@ -43,22 +49,21 @@ export function InkLab() {
     const nextQuery = query ? encodeLab(decoded.snapshot) : "";
     lastQuery.current = nextQuery;
     const pending = requestAnimationFrame(() => {
-      cancelAnimationFrame(frame.current); frame.current = 0;
+      commits.cancel();
       current.current = decoded.snapshot; setSnapshot(decoded.snapshot); setDraft(decoded.snapshot); setStatus(decoded.message); setManualUrl("");
       if (raw !== nextQuery || window.location.hash) window.history.replaceState(window.history.state, "", `/lab${nextQuery ? `?${nextQuery}` : ""}`);
       setReady(true);
     });
     return () => cancelAnimationFrame(pending);
-  }, [params, query]);
-  useEffect(() => () => cancelAnimationFrame(frame.current), []);
+  }, [params, query, commits]);
+  useEffect(() => () => commits.cancel(), [commits]);
   useEffect(() => { if (manualUrl) { manual.current?.focus(); manual.current?.select(); } }, [manualUrl]);
 
   const edit = (next: LabSnapshot) => {
     current.current = normalizeLab(next);
     setDraft(current.current);
     setManualUrl("");
-    if (!frame.current) frame.current = requestAnimationFrame(() => {
-      frame.current = 0;
+    commits.schedule(() => {
       // rAF state updates otherwise use React's deferred priority and can miss
       // this paint. Commit the bounded proof before publishing its URL.
       flushSync(() => {
@@ -70,7 +75,7 @@ export function InkLab() {
   };
   const setting = (patch: Partial<InkLabSettings>) => edit({ ...current.current, settings: { ...current.current.settings, ...patch } });
   const flush = () => {
-    cancelAnimationFrame(frame.current); frame.current = 0;
+    commits.cancel();
     const value = normalizeLab(current.current);
     current.current = value; setSnapshot(value); setDraft(value); replace(value);
     return value;
@@ -96,7 +101,7 @@ export function InkLab() {
       : "Applied on the current page only. Storage is blocked; routes and reload may lose it. Allow session storage, then Apply again.");
   };
   const reset = () => {
-    cancelAnimationFrame(frame.current); frame.current = 0;
+    commits.cancel();
     const result = appearanceStore().resetHouse();
     applyPlan(document.documentElement, appearancePlan(result.snapshot));
     current.current = labDefaults(); setSnapshot(current.current); setDraft(current.current); replace(current.current, true); setManualUrl("");

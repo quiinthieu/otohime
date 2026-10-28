@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { after, before, test } from "node:test";
+import { after, afterEach, before, test } from "node:test";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import {
@@ -15,7 +15,7 @@ const manifest = JSON.parse(
 );
 const workerURL = `/vendor/peep-box/${manifest.version}/head-worker.js`;
 let browser: Browser;
-const contexts: BrowserContext[] = [];
+let context: BrowserContext | undefined;
 before(async () => {
   browser = await chromium.launch({
     ...(process.env.CHROME_PATH
@@ -24,10 +24,12 @@ before(async () => {
     env: { ...process.env, TMPDIR: "/tmp" },
   });
 });
-after(async () => {
-  for (const c of contexts) await c.close();
-  await browser?.close();
+afterEach(async () => {
+  await context?.close();
+  context = undefined;
+  assert.equal(browser.contexts().length, 0, "camera case released its browser context");
 });
+after(async () => { await browser?.close(); });
 const box = (p: Page) => p.locator("[data-peep]");
 async function activate(p: Page) {
   await p.goto(`${BASE}/play`);
@@ -41,10 +43,13 @@ async function activate(p: Page) {
   );
 }
 async function open(mode: "denied" | "pending" | "fake" | "real" = "fake") {
+  // Each loop iteration owns one camera/page. Retaining earlier contexts can
+  // starve later video.play()/worker initialization on a busy browser runner.
+  await context?.close();
   const c = await browser.newContext({
     viewport: { width: 1366, height: 768 },
   });
-  contexts.push(c);
+  context = c;
   await c.addInitScript(
     ({ mode }) => {
       const w = window as unknown as {
@@ -80,6 +85,13 @@ async function open(mode: "denied" | "pending" | "fake" | "real" = "fake") {
         canvas.height = 240;
         canvas.getContext("2d")!.fillRect(0, 0, 320, 240);
         const stream = canvas.captureStream(15);
+        // A real camera keeps producing frames. One paint before captureStream
+        // leaves video.play() dependent on delivery of a single initial frame.
+        const timer = setInterval(() => canvas.getContext("2d")!.fillRect(0, 0, 320, 240), 70);
+        for (const track of stream.getTracks()) {
+          const stop = track.stop.bind(track);
+          track.stop = () => { clearInterval(timer); stop(); };
+        }
         w.tracks.push(...stream.getTracks());
         return stream;
       };
@@ -160,6 +172,36 @@ async function stopped(p: Page) {
     return w.tracks.every((t) => t.readyState === "ended");
   });
 }
+test("synthetic camera delivers continuing decoded frames and stops its tracks", { timeout: 10000 }, async () => {
+  const previous = await open();
+  const { p } = await open();
+  assert.equal(previous.p.isClosed(), true, "the next fixture releases the previous page");
+  assert.equal(browser.contexts().length, 1, "loop iterations cannot accumulate contexts");
+  await p.goto(BASE + "/play");
+  const frames = await p.evaluate(async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    const video = document.createElement("video");
+    video.muted = true;
+    video.srcObject = stream;
+    try {
+      await video.play();
+      return await new Promise<number>((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error("synthetic camera stopped delivering frames")), 2000);
+        let frames = 0;
+        const next = () => {
+          if (++frames >= 3) { clearTimeout(timer); resolve(frames); }
+          else video.requestVideoFrameCallback(next);
+        };
+        video.requestVideoFrameCallback(next);
+      });
+    } finally {
+      stream.getTracks().forEach(track => track.stop());
+      video.pause(); video.srcObject = null;
+    }
+  });
+  assert.equal(frames, 3);
+  await stopped(p);
+});
 test(
   "camera opt-in absence, denial and late permission cancellation (fake media/worker)",
   { timeout: 60000 },
