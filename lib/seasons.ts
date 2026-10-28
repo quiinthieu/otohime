@@ -11,8 +11,8 @@ export type Hemisphere = "north" | "south";
 // Whole areas south of the equator.
 export const SOUTHERN_PREFIXES = ["Australia/", "America/Argentina/", "Antarctica/"] as const;
 
-// Single zones south of the equator, legacy aliases included. Zones near the
-// equator are left north: they have no season worth tinting the paper for.
+// Single zones south of the equator, legacy aliases included. Hemisphere
+// follows the representative latitude in the IANA zone.tab table.
 export const SOUTHERN_ZONES: readonly string[] = [
   "Pacific/Auckland",
   "Pacific/Chatham",
@@ -64,6 +64,53 @@ export const SOUTHERN_ZONES: readonly string[] = [
   "Indian/Mauritius",
   "Indian/Reunion",
   "Indian/Kerguelen",
+  "Africa/Luanda",
+  "Pacific/Pago_Pago",
+  "Africa/Bujumbura",
+  "America/Noronha",
+  "America/Belem",
+  "America/Fortaleza",
+  "America/Araguaina",
+  "America/Santarem",
+  "America/Porto_Velho",
+  "America/Manaus",
+  "America/Eirunepe",
+  "America/Rio_Branco",
+  "Indian/Cocos",
+  "Africa/Kinshasa",
+  "Africa/Brazzaville",
+  "America/Coyhaique",
+  "Indian/Christmas",
+  "America/Guayaquil",
+  "Pacific/Galapagos",
+  "Asia/Jakarta",
+  "Asia/Pontianak",
+  "Asia/Makassar",
+  "Asia/Jayapura",
+  "Indian/Chagos",
+  "Africa/Nairobi",
+  "Pacific/Kanton",
+  "Indian/Comoro",
+  "Pacific/Nauru",
+  "Pacific/Niue",
+  "Pacific/Marquesas",
+  "Pacific/Gambier",
+  "Pacific/Port_Moresby",
+  "Pacific/Bougainville",
+  "Pacific/Pitcairn",
+  "Africa/Kigali",
+  "Pacific/Guadalcanal",
+  "Indian/Mahe",
+  "Atlantic/St_Helena",
+  "Pacific/Fakaofo",
+  "Asia/Dili",
+  "Pacific/Funafuti",
+  "Africa/Dar_es_Salaam",
+  "Pacific/Wallis",
+  "Indian/Mayotte",
+  "Brazil/West",
+  "Brazil/DeNoronha",
+  "US/Samoa",
 ];
 
 // Northern season by month, 0 = January.
