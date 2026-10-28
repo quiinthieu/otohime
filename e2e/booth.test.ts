@@ -574,6 +574,11 @@ test("film-stock switching ('sumi-e', 'riso', 'newsprint') updates live viewfind
     const evt = new Event("webglcontextlost", { cancelable: true });
     el.dispatchEvent(evt);
   });
+  // Native event dispatch can return before React commits the fallback state.
+  await page.waitForFunction(() =>
+    document.querySelector('[data-testid="booth-studio"]')
+      ?.getAttribute("data-renderer-backend") === "canvas2d",
+  );
   assert.equal(await studio.getAttribute("data-renderer-backend"), "canvas2d");
 
   await page.locator('[data-testid="stock-sumi-e"]').click();
