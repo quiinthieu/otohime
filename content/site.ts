@@ -18,6 +18,7 @@ export type Project = {
   demoFixture?: boolean;
 };
 export type Game = { title: string; note: string; colour: Swatch };
+export type Note = { slug: string; date: string; title: string; body: string; tags: string[] };
 // A way to reach me, as a line on the home page's switchboard. code is the
 // line's label on the board.
 export type Line = { label: string; handle: string; href: string; code: string; colour: Swatch };
@@ -117,21 +118,27 @@ export const site = {
   // TODO(otohime)
   notes: [
     {
+      slug: "backfills-are-a-feature",
+      tags: ["data-engineering", "backfills", "idempotency"],
       date: "2026-10-12",
       title: "Backfills are a feature",
       body: "Two years of events, replayed in an afternoon, because the jobs were idempotent from day one.",
     },
     {
+      slug: "on-twos",
+      tags: ["animation", "hand-drawn"],
       date: "2026-09-28",
       title: "On twos",
       body: "The figures here animate at twelve frames a second, like hand-drawn film. Smoother looked worse.",
     },
     {
+      slug: "the-contract-caught-it",
+      tags: ["data-engineering", "data-contracts"],
       date: "2026-09-03",
       title: "The contract caught it",
       body: "A data contract stopped a breaking change before anyone opened a dashboard. First time. Worth it.",
     },
-  ],
+  ] satisfies Note[],
   // TODO(otohime)
   work: "I build the pipes between where data lands and where people use it: batch jobs, streams, and the odd 3 a.m. backfill.",
   // The Work page's source-to-dashboard figure (components/pipeline.tsx, lib/pipeline.ts): made-up packets,
