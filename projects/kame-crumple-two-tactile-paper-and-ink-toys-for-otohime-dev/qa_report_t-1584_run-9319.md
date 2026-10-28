@@ -1,0 +1,24 @@
+# QA report · pm-274/t-1584 · run-9319
+
+**Verdict: fail; cause: code.** Delivery `d323b8777a9c34428967314bb9f7f6a87a861fff` is integrated and deployed, but the first project card's Crumple button cannot receive a fresh pointer click. At 1280×860 its center resolves to the site's **Elements** link, not the button. [Independent probe](qa_probe_run-9319.test.ts) reproduced this in local production Chrome and on `https://otohime.dev/projects` without first focusing the button. The prior QA `rep-5519` found the same defect; no application source changed since that report.
+
+## Executable and delivery identity
+
+- Live `/api/health` returned `d323b8777a9c34428967314bb9f7f6a87a861fff`. `git merge-base --is-ancestor` confirmed delivery is an ancestor of the served SHA (identical). GitHub CI run `40641088253` for that SHA completed **success**. Board green gate `ver-3702` passed all four contract checks at the delivery SHA. Integration deployed is proven; required product delivery fails the pointer path.
+- The delivered author of feature commit `689c2369ded07e655475fec386c5d83a35851740` and delivery commit `d323b87` is `Otohime <quiinthieu@gmail.com>`; neither has a `Co-Authored-By` trailer. No `author.txt` is present in this delivery's evidence.
+- Local production build `ZUiuK5yR9bOuX6RXYYJnW` used Node 22.23.3, locked Next 16.4.2 and Playwright 1.64.0, native Chrome and real migrated embedded Postgres. Real dynamic renderer import, Canvas context construction and paint succeeded; no fake renderer supported the positive result. The unrelated Ghosts endpoint is a test fixture. The renderer chunk `3l1vvh8c26uky.js` is SHA256 `b5d40ce3305936b63c06ffe6be61d2c9f559d50b327f521ee1ed30fa6feaf880`, matching delivery evidence. Relevant fingerprints: `app/(site)/tactile.css` `cbd6d06f`, renderer source `f576afe8`, `package-lock.json` `9d0bded9`, `next.config.ts` `321b9924`, CI configuration `9bef1806` (SHA256 prefixes). No model or external artifact is used by the Canvas executable.
+- Delivery run `run-9309` recorded profile `codex-sol-6-1-high`, model `gpt-6.1-sol`, effort high. This QA run `run-9319` records `--model gpt-6-sol` and medium effort in its run profile; these are run identities, not inferred defaults.
+
+## Checks and independent control
+
+- Focused fold/gesture/tear/fetch: 19/19. `npm test`: 2613/2613 after a genuine GNU coreutils 9.7 `timeout` was built outside the repository for this macOS host; the initial unmodified run had seven shell-fixture failures because `timeout` was absent. Lint: zero errors, ten warnings. Typecheck: pass. Production Next browser crumple/fetch/tear: 27/27 with real keyboard, mouse, touch and Canvas.
+- The separate QA probe checks the native hit target before focus, then keyboard fold, 3616 nontransparent Canvas pixels, unchanged card box and href, and link-focus restoration. Its negative control replaces only the fold Canvas context with `null`; `/notes` then announces unavailable, retains readable source, and has no proxy Canvas. The probe passed locally and against the served site. Its passing assertion records the **presence of the pointer defect**.
+- No app source was edited for QA. The test fixture's null context is deliberately fake; positive paint and live hit testing used real Chrome and the deployed executable.
+
+## History and limits
+
+- Public CI workflow index pages 1–2 expose 50/539 runs. At the initial bounded scan they contained 24 FAILED, 25 COMPLETED successes and one in-progress delivery run; the latter later completed success, yielding 24 failures and 26 successes in these same 50. Older 489 runs and filtered global FAILED/COMPLETED totals are unread, so historical completeness is inconclusive. Current workflow page showed no queued delivery replacement. No separate async generation job, callback or persisted ingestion applies to this browser feature.
+- The public annotation for failed run `40635091133`, job `122640103971`, SHA `68dd79d...`, exposes a bounded Footer Chromium failure and runner tail. Raw job logs returned HTTP 403. That run has a different executable fingerprint and is not evidence that this fold delivery failed CI. The present defect was reproduced on the exact delivered/served executable.
+- No capacity wait is used to excuse the defect. After a code correction, the software engineer owns a new main commit and green CI run (new ids unassigned; failure if red, skipped or absent). Independent QA owns a new served SHA ancestry and fresh first-pointer hit test on `/projects` and `/notes` (failure if an overlay still intercepts, Canvas is empty or content/geometry/focus regresses). Until those checks pass, product delivery remains failed.
+
+The requested chief-of-staff extraction and `docs/claude/software-development.md` are absent in this checkout; the local `plan.md` is an older pm-259 revision. The current board contract and standing `AGENTS.md` governed this verification.
