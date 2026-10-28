@@ -57,7 +57,7 @@ function shuffled(targets: readonly FortuneTarget[], seed: string): FortuneTarge
 
 export function createFortuneState(seed: string | number, targets: readonly FortuneTarget[]): FortuneState {
   const key = String(seed);
-  return { phase: "choose-colour", seed: key, pool: shuffled(targets.filter(safeTarget), key), axis: 0, colour: null, firstNumber: null, finalNumber: null, count: 0, remaining: 0, target: null };
+  return { phase: "choose-colour", seed: key, pool: shuffled(targets.filter(safeTarget).map((target) => ({ ...target })), key), axis: 0, colour: null, firstNumber: null, finalNumber: null, count: 0, remaining: 0, target: null };
 }
 
 export function visibleNumbers(state: FortuneState): readonly number[] {

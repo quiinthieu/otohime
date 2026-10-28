@@ -69,3 +69,19 @@ test("seed changes shuffle order without mutating the supplied pool", () => {
   assert.ok(orders.size > 1);
   assert.deepEqual(pool.map((item) => item.id), before);
 });
+
+test("a session snapshots target values before content changes", () => {
+  const supplied: FortuneTarget[] = [{ id: "original", label: "Original", href: "/notes#original", kind: "note" }];
+  let state = createFortuneState("fixed", supplied);
+  supplied[0].id = "changed";
+  supplied[0].label = "Changed";
+  supplied[0].href = "https://unsafe.example";
+  state = reduce(state, { type: "choose-colour", colour: "blue" });
+  state = reduce(state, { type: "finish-counting" });
+  state = reduce(state, { type: "choose-first-number", number: visibleNumbers(state)[0] });
+  state = reduce(state, { type: "finish-counting" });
+  state = reduce(state, { type: "choose-final-number", number: visibleNumbers(state)[0] });
+  assert.deepEqual(reduce(state, { type: "reveal" }).target, {
+    id: "original", label: "Original", href: "/notes#original", kind: "note",
+  });
+});
