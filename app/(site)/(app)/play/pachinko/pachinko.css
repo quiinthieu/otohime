@@ -1,5 +1,8 @@
 /*
  * Pipeline Pachinko — Ink & Washi Data-Engineering Machine
+ * Uses only site-wide custom properties defined on :root in app/(site)/globals.css
+ * (--paper, --paper-2, --field, --ink, --muted, --line, --hairline, --danger,
+ * --yellow, --coral, --shade, --on-swatch).
  * Disable transform/translate on the outer .rise wrapper when .pachinko-root is mounted
  * so sticky status bars and the fixed on-call pager stay pinned to the viewport.
  */
@@ -15,37 +18,36 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
-  border: 1.5px solid var(--fg);
-  border-radius: 6px;
-  background-color: var(--bg);
-  background-image:
-    radial-gradient(circle at 16% 14%, color-mix(in oklab, var(--accent) 5%, transparent), transparent 44%),
-    radial-gradient(circle at 84% 82%, color-mix(in oklab, var(--fg) 4%, transparent), transparent 48%),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      transparent 23px,
-      color-mix(in oklab, var(--fg) 4%, transparent) 23px,
-      color-mix(in oklab, var(--fg) 4%, transparent) 24px
-    );
-  box-shadow: 3px 3px 0 color-mix(in oklab, var(--fg) 18%, transparent);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 23px,
+    var(--hairline) 23px,
+    var(--hairline) 24px
+  );
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--shade);
 }
 
-/* Sticky top status & quick telemetry bar */
+/* Sticky top status & quick telemetry bar — offset below the 4rem sticky .masthead */
 .pachinko-status-bar {
   position: sticky;
-  top: 0.5rem;
-  z-index: 20;
+  top: 4.5rem;
+  z-index: 15;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 0.85rem;
-  padding: 0.55rem 0.85rem;
-  border: 1.5px solid var(--fg);
-  border-radius: 4px;
-  background: color-mix(in oklab, var(--bg) 95%, var(--fg) 5%);
-  box-shadow: 2px 2px 0 color-mix(in oklab, var(--fg) 16%, transparent);
+  padding: 0.6rem 0.9rem;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background-color: var(--paper-2);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--shade);
 }
 
 .pachinko-status-group {
@@ -60,18 +62,21 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.15rem 0.5rem;
-  border: 1px solid var(--fg);
-  border-radius: 3px;
-  background: var(--bg);
-  font-family: var(--font-mono), ui-monospace, monospace;
+  padding: 0.18rem 0.55rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background-color: var(--field);
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.74rem;
-  font-weight: 600;
+  font-weight: 700;
+  box-shadow: 1px 1px 0 var(--ink);
 }
 
 .pachinko-badge-accent {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--danger);
+  background-color: var(--paper);
+  color: var(--danger);
 }
 
 /* Two-column workbench: board on left, telemetry & controls on right */
@@ -93,10 +98,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  padding: 0.9rem;
-  border: 1.5px solid var(--fg);
-  border-radius: 4px;
-  background: color-mix(in oklab, var(--bg) 97%, var(--fg) 3%);
+  padding: 0.95rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background-color: var(--paper-2);
+  color: var(--ink);
+  box-shadow: 3px 4px 0 var(--shade);
 }
 
 .pachinko-panel-header {
@@ -106,7 +113,7 @@
   justify-content: space-between;
   gap: 0.4rem;
   padding-bottom: 0.45rem;
-  border-bottom: 1px dashed var(--line);
+  border-bottom: 1.5px dashed var(--line);
 }
 
 .pachinko-panel-title {
@@ -114,6 +121,7 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  color: var(--ink);
 }
 
 /* Board frame + interactive plunger rail */
@@ -137,11 +145,11 @@
   aspect-ratio: 600 / 860;
   max-height: 74vh;
   margin-inline: auto;
-  border: 2px solid var(--fg);
-  border-radius: 4px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
   overflow: hidden;
-  background: #f5efe2;
-  box-shadow: inset 0 0 0 1px rgba(24, 21, 18, 0.14);
+  background-color: #f5efe2;
+  box-shadow: 2px 2px 0 var(--ink);
 }
 
 .pachinko-canvas {
@@ -161,9 +169,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.45rem 0.25rem;
-  border: 1.5px solid var(--fg);
-  border-radius: 4px;
-  background: color-mix(in oklab, var(--bg) 92%, var(--fg) 8%);
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background-color: var(--paper);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--shade);
   touch-action: none;
   user-select: none;
 }
@@ -171,7 +181,7 @@
 .pachinko-plunger-label {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -185,15 +195,17 @@
   width: 1.5rem;
   min-height: 9rem;
   margin-block: 0.4rem;
-  border: 1.5px solid var(--fg);
+  border: 1.5px solid var(--ink);
   border-radius: 999px;
-  background: repeating-linear-gradient(
+  background-color: var(--field);
+  background-image: repeating-linear-gradient(
     180deg,
-    color-mix(in oklab, var(--bg) 96%, var(--fg) 4%) 0px,
-    color-mix(in oklab, var(--bg) 96%, var(--fg) 4%) 7px,
-    color-mix(in oklab, var(--fg) 14%, transparent) 7px,
-    color-mix(in oklab, var(--fg) 14%, transparent) 8px
+    transparent 0px,
+    transparent 7px,
+    var(--line) 7px,
+    var(--line) 8px
   );
+  box-shadow: inset 0 1px 0 var(--line);
   cursor: ns-resize;
   touch-action: none;
   user-select: none;
@@ -205,24 +217,25 @@
   width: 1.9rem;
   height: 1.9rem;
   margin-left: -0.95rem;
-  border: 2px solid var(--fg);
+  border: 2px solid var(--ink);
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--bg);
+  background-color: var(--danger);
+  color: var(--paper);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.65rem;
   font-weight: 700;
-  box-shadow: 1px 2px 0 var(--fg);
+  box-shadow: 1px 2px 0 var(--ink);
   pointer-events: none;
 }
 
 .pachinko-plunger-pct {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.68rem;
   font-weight: 700;
+  color: var(--ink);
 }
 
 /* Controls & buttons */
@@ -239,23 +252,26 @@
   justify-content: center;
   gap: 0.35rem;
   padding: 0.42rem 0.75rem;
-  border: 1.5px solid var(--fg);
-  border-radius: 3px;
-  background: var(--bg);
-  color: var(--fg);
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.78rem;
   font-weight: 600;
   line-height: 1.2;
+  box-shadow: 2px 2px 0 var(--ink);
   cursor: pointer;
   transition: background-color 120ms ease, color 120ms ease;
 }
 
 .pachinko-btn:hover:not(:disabled) {
-  background: color-mix(in oklab, var(--fg) 10%, var(--bg));
+  background-color: var(--yellow);
+  color: var(--on-swatch);
 }
 
 .pachinko-btn:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--danger);
   outline-offset: 2px;
 }
 
@@ -265,23 +281,34 @@
 }
 
 .pachinko-btn-primary {
-  background: var(--fg);
-  color: var(--bg);
-  box-shadow: 2px 2px 0 var(--accent);
+  border-color: var(--ink);
+  background-color: var(--ink);
+  color: var(--paper);
+  box-shadow: 2px 2px 0 var(--danger);
 }
 
 .pachinko-btn-primary:hover:not(:disabled) {
-  background: color-mix(in oklab, var(--fg) 86%, var(--accent));
+  background-color: var(--danger);
+  color: var(--paper);
 }
 
 .pachinko-btn-accent {
-  border-color: var(--accent);
-  background: color-mix(in oklab, var(--accent) 13%, var(--bg));
+  border-color: var(--ink);
+  background-color: var(--coral);
+  color: var(--on-swatch);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.pachinko-btn-accent:hover:not(:disabled) {
+  background-color: var(--yellow);
+  color: var(--on-swatch);
 }
 
 .pachinko-btn-active {
-  background: var(--fg);
-  color: var(--bg);
+  border-color: var(--ink);
+  background-color: var(--ink);
+  color: var(--paper);
+  box-shadow: 2px 2px 0 var(--shade);
 }
 
 /* Readout metric cards */
@@ -296,14 +323,17 @@
   flex-direction: column;
   gap: 0.15rem;
   padding: 0.55rem 0.6rem;
-  border: 1.5px solid var(--fg);
-  border-radius: 3px;
-  background: var(--bg);
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background-color: var(--paper);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--line);
 }
 
 .pachinko-metric-card-alert {
-  border-color: var(--accent);
-  background: color-mix(in oklab, var(--accent) 8%, var(--bg));
+  border-color: var(--danger);
+  background-color: var(--field);
+  box-shadow: 2px 2px 0 var(--danger);
 }
 
 .pachinko-metric-label {
@@ -315,14 +345,15 @@
 }
 
 .pachinko-metric-value {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 1.15rem;
   font-weight: 700;
   line-height: 1.15;
+  color: var(--ink);
 }
 
 .pachinko-metric-sub {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.68rem;
   color: var(--muted);
 }
@@ -333,9 +364,11 @@
   flex-direction: column;
   gap: 0.55rem;
   padding: 0.7rem;
-  border: 1.5px solid var(--fg);
-  border-radius: 3px;
-  background: var(--bg);
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background-color: var(--paper);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--line);
 }
 
 .pachinko-bar-chart {
@@ -345,7 +378,7 @@
   align-items: end;
   height: 7.5rem;
   padding-top: 0.5rem;
-  border-bottom: 1.5px solid var(--fg);
+  border-bottom: 1.5px solid var(--ink);
 }
 
 .pachinko-bar-col {
@@ -358,9 +391,10 @@
 }
 
 .pachinko-bar-count {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.72rem;
   font-weight: 700;
+  color: var(--ink);
 }
 
 .pachinko-bar-well {
@@ -370,30 +404,32 @@
   flex: 1;
   display: flex;
   align-items: flex-end;
-  border: 1px solid color-mix(in oklab, var(--fg) 40%, transparent);
+  border: 1px solid var(--ink);
   border-bottom: none;
-  background: color-mix(in oklab, var(--fg) 5%, var(--bg));
+  background-color: var(--paper-2);
   overflow: hidden;
 }
 
 .pachinko-bar-fill {
   width: 100%;
   min-height: 2px;
-  background: repeating-linear-gradient(
+  background-color: var(--ink);
+  background-image: repeating-linear-gradient(
     -45deg,
-    var(--fg) 0px,
-    var(--fg) 4px,
-    color-mix(in oklab, var(--fg) 72%, var(--bg)) 4px,
-    color-mix(in oklab, var(--fg) 72%, var(--bg)) 7px
+    var(--ink) 0px,
+    var(--ink) 4px,
+    var(--shade) 4px,
+    var(--shade) 7px
   );
   transition: height 140ms ease-out;
 }
 
 .pachinko-bar-label {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.72rem;
   font-weight: 700;
   padding-top: 0.2rem;
+  color: var(--ink);
 }
 
 /* Stage legend & seed input */
@@ -414,8 +450,9 @@
   gap: 0.5rem;
   padding: 0.3rem 0.5rem;
   border: 1px solid var(--line);
-  border-radius: 3px;
-  background: var(--bg);
+  border-radius: 4px;
+  background-color: var(--field);
+  color: var(--ink);
 }
 
 .pachinko-seed-row {
@@ -429,11 +466,11 @@
 .pachinko-seed-input {
   width: 7.5rem;
   padding: 0.3rem 0.5rem;
-  border: 1.5px solid var(--fg);
-  border-radius: 3px;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-mono), ui-monospace, monospace;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background-color: var(--field);
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.76rem;
 }
 
@@ -455,13 +492,11 @@
   z-index: 60;
   box-sizing: border-box;
   padding: 0.9rem 1rem;
-  border: 2.5px solid var(--fg);
-  border-radius: 4px;
-  background: var(--bg);
-  color: var(--fg);
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.25),
-    4px 4px 0 var(--accent);
+  border: 2.5px solid var(--ink);
+  border-radius: 6px;
+  background-color: var(--paper);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--danger);
 }
 
 .pachinko-pager-header {
@@ -470,7 +505,7 @@
   justify-content: space-between;
   gap: 0.5rem;
   padding-bottom: 0.45rem;
-  border-bottom: 1.5px dashed var(--fg);
+  border-bottom: 1.5px dashed var(--ink);
 }
 
 .pachinko-pager-stamp {
@@ -478,10 +513,11 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.15rem 0.5rem;
-  border: 1.5px solid var(--accent);
-  border-radius: 2px;
-  color: var(--accent);
-  font-family: var(--font-mono), ui-monospace, monospace;
+  border: 1.5px solid var(--danger);
+  border-radius: 3px;
+  background-color: var(--paper-2);
+  color: var(--danger);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -492,6 +528,7 @@
   margin: 0.5rem 0 0.25rem;
   font-size: 0.96rem;
   font-weight: 700;
+  color: var(--ink);
 }
 
 .pachinko-pager-body {

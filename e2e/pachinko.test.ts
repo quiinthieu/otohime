@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { after, before, test } from "node:test";
 import {
   chromium,
@@ -262,15 +262,25 @@ test("plunger pointer drag, keyboard launch, duplicate DUP bounce, and Backfill 
   assert.equal(await backfillBtn.getAttribute("data-batch-size"), "60");
   await backfillBtn.click();
 
-  // Wait until at least 24 records settle across the 6 partition buckets
+  // Wait until the entire 60-record Backfill drains back to IN-FLIGHT: 0 with completed >= 30
   await page.waitForFunction(
     () => {
-      const el = document.querySelector('[data-testid="pachinko-partition-total"]');
-      return el && Number.parseInt(el.textContent || "0", 10) >= 24;
+      const activeBadge = document.querySelector('[data-testid="pachinko-active-badge"]');
+      const settledEl = document.querySelector('[data-testid="pachinko-readout-settled"]');
+      const partEl = document.querySelector('[data-testid="pachinko-partition-total"]');
+      const settled = Number.parseInt(settledEl?.textContent || "0", 10);
+      const partitioned = Number.parseInt(partEl?.textContent || "0", 10);
+      return (
+        activeBadge?.textContent?.trim() === "IN-FLIGHT: 0" &&
+        settled >= 30 &&
+        partitioned >= 24
+      );
     },
     undefined,
-    { timeout: 10_000 },
+    { timeout: 12_000 },
   );
+
+  assert.equal(await page.getByTestId("pachinko-active-badge").textContent(), "IN-FLIGHT: 0");
 
   // Verify all 6 bucket columns (p0..p5) exist and multiple buckets received records
   const bucketStats = await page.evaluate(() => {
@@ -459,11 +469,225 @@ test("prefers-reduced-motion reduces backfill batch size to 12 and does not auto
 
   await backfillBtn.click();
   await page.waitForFunction(() => {
+    const activeBadge = document.querySelector('[data-testid="pachinko-active-badge"]');
     const el = document.querySelector('[data-testid="pachinko-readout-settled"]');
-    return el && Number.parseInt(el.textContent || "0", 10) >= 6;
+    return (
+      activeBadge?.textContent?.trim() === "IN-FLIGHT: 0" &&
+      Boolean(el && Number.parseInt(el.textContent || "0", 10) >= 6)
+    );
   });
 
   assert.deepEqual(errors.unexpected, []);
+});
+
+test("site paper-and-ink CSS tokens, opaque surfaces/borders, sticky status-bar clearance below .masthead, and 60-record Backfill drain to IN-FLIGHT: 0 at 1366x768 and 390x844", async () => {
+  const cssSource = readFileSync("app/(site)/(app)/play/pachinko/pachinko.css", "utf8");
+  const cssWithoutComments = cssSource.replace(/\/\*[\s\S]*?\*\//g, "");
+  const referencedVars = [
+    ...new Set([...cssWithoutComments.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)\b/g)].map((m) => m[1]!)),
+  ];
+  assert.ok(referencedVars.length >= 6, `expected CSS custom properties in pachinko.css, got ${referencedVars.length}`);
+  for (const forbidden of ["--fg", "--bg", "--accent"]) {
+    assert.equal(
+      referencedVars.includes(forbidden),
+      false,
+      `pachinko.css must not reference undefined token ${forbidden}`,
+    );
+  }
+
+  for (const viewport of [
+    { width: 1366, height: 768 },
+    { width: 390, height: 844 },
+  ]) {
+    const { page, errors } = await open({
+      viewport,
+      ...(viewport.width === 390 ? { isMobile: true, hasTouch: true } : {}),
+    });
+    await page.goto(`${BASE}/play/pachinko?seed=1346454344`);
+    await page
+      .locator('[data-testid="pachinko-root"][data-hydrated="true"]')
+      .waitFor({ state: "visible" });
+
+    // (a) Verify every var(--*) token in pachinko.css resolves non-empty on document.documentElement
+    const tokenAudit = await page.evaluate((vars) => {
+      const rootStyle = getComputedStyle(document.documentElement);
+      const resolved: Record<string, string> = {};
+      for (const v of vars) {
+        resolved[v] = rootStyle.getPropertyValue(v).trim();
+      }
+      const undefinedControl = rootStyle.getPropertyValue("--fg").trim();
+      return { resolved, undefinedControl };
+    }, referencedVars);
+
+    assert.equal(tokenAudit.undefinedControl, "", "negative control: undefined --fg must resolve empty on :root");
+    for (const [token, value] of Object.entries(tokenAudit.resolved)) {
+      assert.ok(
+        value.length > 0,
+        `expected ${token} to resolve non-empty on document.documentElement at ${viewport.width}x${viewport.height}, got "${value}"`,
+      );
+    }
+
+    // Open pager first so .pachinko-pager can be audited alongside machine surfaces, then dismiss it
+    await page.getByTestId("pachinko-dlq-streak-btn").click();
+    await page.getByTestId("pachinko-pager").waitFor({ state: "visible" });
+
+    // (b) Verify borderTopWidth >= 1 and opaque backgroundColor on all required surfaces
+    const surfaceSelectors = [
+      ".pachinko-root",
+      ".pachinko-status-bar",
+      ".pachinko-stage-panel",
+      ".pachinko-telemetry-panel",
+      ".pachinko-plunger-rail",
+      ".pachinko-plunger-track",
+      ".pachinko-plunger-knob",
+      ".pachinko-btn",
+      ".pachinko-pager",
+    ];
+
+    const surfaceAudit = await page.evaluate((selectors) => {
+      const isOpaqueColor = (bg: string): boolean => {
+        if (!bg || bg === "transparent" || bg === "rgba(0, 0, 0, 0)") return false;
+        const rgbaMatch = /^rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*([0-9.]+)\s*\)$/.exec(bg);
+        if (rgbaMatch) {
+          return Number.parseFloat(rgbaMatch[1]!) >= 0.99;
+        }
+        return bg.startsWith("rgb(");
+      };
+
+      const results = selectors.map((sel) => {
+        const els = [...document.querySelectorAll<HTMLElement>(sel)];
+        const checks = els.map((el) => {
+          const cs = getComputedStyle(el);
+          const borderTopWidth = Number.parseFloat(cs.borderTopWidth);
+          const borderTopStyle = cs.borderTopStyle;
+          const backgroundColor = cs.backgroundColor;
+          return {
+            borderTopWidth,
+            borderTopStyle,
+            backgroundColor,
+            borderOk: borderTopWidth >= 1 && borderTopStyle !== "none",
+            bgOk: isOpaqueColor(backgroundColor),
+          };
+        });
+        return {
+          selector: sel,
+          count: els.length,
+          allBordersOk: checks.length > 0 && checks.every((c) => c.borderOk),
+          allBgsOk: checks.length > 0 && checks.every((c) => c.bgOk),
+          sample: checks[0] ?? null,
+        };
+      });
+
+      // Negative control: verify the same predicate rejects a transparent/borderless element
+      const probe = document.createElement("div");
+      probe.style.background = "transparent";
+      probe.style.border = "0px none";
+      document.body.appendChild(probe);
+      const probeCs = getComputedStyle(probe);
+      const negativeControlRejected =
+        !(Number.parseFloat(probeCs.borderTopWidth) >= 1 && probeCs.borderTopStyle !== "none") &&
+        !isOpaqueColor(probeCs.backgroundColor);
+      probe.remove();
+
+      return { results, negativeControlRejected };
+    }, surfaceSelectors);
+
+    assert.equal(surfaceAudit.negativeControlRejected, true, "negative control must reject transparent borderless surface");
+    for (const item of surfaceAudit.results) {
+      assert.ok(item.count > 0, `expected ${item.selector} to exist at ${viewport.width}x${viewport.height}`);
+      assert.equal(
+        item.allBordersOk,
+        true,
+        `expected borderTopWidth >= 1 on ${item.selector} at ${viewport.width}x${viewport.height}, got ${JSON.stringify(item.sample)}`,
+      );
+      assert.equal(
+        item.allBgsOk,
+        true,
+        `expected opaque backgroundColor on ${item.selector} at ${viewport.width}x${viewport.height}, got ${JSON.stringify(item.sample)}`,
+      );
+    }
+
+    // Dismiss pager and reset board before scroll + 60-record Backfill drain check
+    await page.getByTestId("pachinko-pager-dismiss").click();
+    await page.getByTestId("pachinko-reset-btn").click();
+    assert.equal(await page.getByTestId("pachinko-active-badge").textContent(), "IN-FLIGHT: 0");
+
+    // (c) Scroll down the page and verify .pachinko-status-bar stays below .masthead with an opaque background
+    await page.evaluate(() => window.scrollTo(0, 360));
+    await page.waitForTimeout(80);
+
+    const stickyScrollCheck = await page.evaluate(() => {
+      const masthead = document.querySelector(".masthead")!;
+      const statusBar = document.querySelector(".pachinko-status-bar")!;
+      const mRect = masthead.getBoundingClientRect();
+      const sRect = statusBar.getBoundingClientRect();
+      const sStyle = getComputedStyle(statusBar);
+      return {
+        scrollY: window.scrollY,
+        mastheadBottom: mRect.bottom,
+        statusBarTop: sRect.top,
+        backgroundColor: sStyle.backgroundColor,
+        borderTopWidth: Number.parseFloat(sStyle.borderTopWidth),
+        zIndex: Number.parseInt(sStyle.zIndex || "0", 10),
+        mastheadZIndex: Number.parseInt(getComputedStyle(masthead).zIndex || "0", 10),
+      };
+    });
+
+    assert.ok(stickyScrollCheck.scrollY > 100, `expected scrollY > 100 at ${viewport.width}x${viewport.height}, got ${stickyScrollCheck.scrollY}`);
+    assert.ok(
+      stickyScrollCheck.statusBarTop >= stickyScrollCheck.mastheadBottom - 1,
+      `expected .pachinko-status-bar top (${stickyScrollCheck.statusBarTop}) >= .masthead bottom (${stickyScrollCheck.mastheadBottom}) at ${viewport.width}x${viewport.height}`,
+    );
+    assert.ok(
+      stickyScrollCheck.backgroundColor.startsWith("rgb(") &&
+        stickyScrollCheck.backgroundColor !== "rgba(0, 0, 0, 0)",
+      `expected opaque .pachinko-status-bar background on scroll, got ${stickyScrollCheck.backgroundColor}`,
+    );
+    assert.ok(stickyScrollCheck.borderTopWidth >= 1);
+    assert.ok(stickyScrollCheck.zIndex < stickyScrollCheck.mastheadZIndex);
+
+    await page.evaluate(() => window.scrollTo(0, 0));
+
+    // (d) Click Backfill (60 records) and verify it drains completely back to IN-FLIGHT: 0 with completed >= 30
+    const backfillBtn = page.getByTestId("pachinko-backfill-btn");
+    assert.equal(await backfillBtn.getAttribute("data-batch-size"), "60");
+    await backfillBtn.click();
+
+    await page.waitForFunction(
+      () => {
+        const activeBadge = document.querySelector('[data-testid="pachinko-active-badge"]');
+        const settledEl = document.querySelector('[data-testid="pachinko-readout-settled"]');
+        const settled = Number.parseInt(settledEl?.textContent || "0", 10);
+        return activeBadge?.textContent?.trim() === "IN-FLIGHT: 0" && settled >= 30;
+      },
+      undefined,
+      { timeout: 12_000 },
+    );
+
+    const drainSummary = await page.evaluate(() => {
+      const activeText = document.querySelector('[data-testid="pachinko-active-badge"]')?.textContent?.trim() ?? "";
+      const settledText = document.querySelector('[data-testid="pachinko-readout-settled"]')?.textContent ?? "0";
+      const joinedText = document.querySelector('[data-testid="pachinko-readout-joined"]')?.textContent ?? "0";
+      return {
+        activeText,
+        completed: Number.parseInt(settledText, 10),
+        joined: Number.parseInt(joinedText, 10),
+      };
+    });
+
+    assert.equal(drainSummary.activeText, "IN-FLIGHT: 0");
+    assert.ok(
+      drainSummary.completed >= 30,
+      `expected completed >= 30 after 60-record Backfill at ${viewport.width}x${viewport.height}, got ${drainSummary.completed}`,
+    );
+    assert.equal(
+      drainSummary.completed + drainSummary.joined,
+      60,
+      `expected totalCompleted (${drainSummary.completed}) + joinMergeCount (${drainSummary.joined}) === 60`,
+    );
+
+    assert.deepEqual(errors.unexpected, []);
+  }
 });
 
 test("on-call pager Easter egg: 2-DLQ negative control, 3-consecutive-DLQ trigger, focus management, and viewport containment on 1366x768 desktop and 390x844 mobile", async () => {

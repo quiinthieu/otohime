@@ -179,11 +179,42 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 768, height: 1024
     if (g.sideBySide) assert.ok(g.alignment < 40, "stage and copy remain aligned");
   };
   const settle = async (root: number, font: number) => {
-    await p.waitForFunction(({ root, font }) =>
-      parseFloat(getComputedStyle(document.documentElement).fontSize) === root
-      && parseFloat(getComputedStyle(document.querySelector('[data-bottle-entry="footer"]')!).fontSize) === font,
-    { root, font });
-    await p.evaluate(() => new Promise<void>((done) => requestAnimationFrame(() => requestAnimationFrame(() => done()))));
+    await p.waitForFunction(({ root, font }) => {
+      const rootReady = Math.abs(parseFloat(getComputedStyle(document.documentElement).fontSize) - root) <= 0.01;
+      const btn = document.querySelector('[data-bottle-entry="footer"]') as HTMLElement | null;
+      const fontReady = Boolean(btn) && Math.abs(parseFloat(getComputedStyle(btn!).fontSize) - font) <= 0.01;
+      const innerEl = document.querySelector(".end-inner") as HTMLElement | null;
+      if (!innerEl) return false;
+      const inlinePadding = innerEl.style.paddingBlockStart || innerEl.style.paddingTop;
+      const paddingBlockStart = parseFloat(getComputedStyle(innerEl).paddingBlockStart);
+      const paddingReady = inlinePadding ? true : Math.abs(paddingBlockStart - 3.75 * root) <= 0.05;
+      return rootReady && fontReady && paddingReady;
+    }, { root, font });
+    await p.evaluate(() => new Promise<void>((done) => {
+      const sample = () => {
+        const footerEl = document.querySelector("footer.end")!;
+        const footer = footerEl.getBoundingClientRect();
+        const scene = document.querySelector(".end-canvas")!.getBoundingClientRect();
+        return { sceneTop: scene.top - footer.top, footerHeight: footer.height };
+      };
+      let prev = sample();
+      let stableTicks = 0;
+      const tick = () => {
+        const curr = sample();
+        if (Math.abs(curr.sceneTop - prev.sceneTop) <= 0.01 && Math.abs(curr.footerHeight - prev.footerHeight) <= 0.01) {
+          stableTicks += 1;
+          if (stableTicks >= 2) {
+            done();
+            return;
+          }
+        } else {
+          stableTicks = 0;
+        }
+        prev = curr;
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }));
   };
   const stable = (a: Awaited<ReturnType<typeof geometry>>, b: typeof a) => {
     for (const key of ["sceneTop", "sceneWidth", "sceneHeight", "footerHeight"] as const) {

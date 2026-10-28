@@ -101,7 +101,7 @@ const noUnexpectedExternal = (list) => ({ pass: list.length === 0, detail: list.
 function isPlayerIframe(iframe) {
   let src;
   try {
-    src = new URL(iframe.getAttribute("src") ?? "", location.href);
+    src = new URL(iframe.getAttribute("src") || iframe.src || "", location.href);
   } catch {
     return false;
   }
@@ -110,15 +110,88 @@ function isPlayerIframe(iframe) {
     src.protocol === "https:" &&
     src.hostname === "www.youtube.com" &&
     src.pathname.startsWith("/embed/") &&
-    Boolean(iframe.closest("main#main")) &&
-    !iframe.closest("footer")
+    (Boolean(iframe.closest("main#main")) || Boolean(iframe.__endInMain)) &&
+    !iframe.closest("footer") &&
+    !iframe.__endInFooter
   );
 }
 
 // Report insertion and src changes: the player may attach a blank iframe before assigning its embed URL.
-// Retain ownership for a frame destroyed on leaving /music before Playwright can read its element.
+// Retain ownership for a frame destroyed on leaving /music or during Suspense swap before Playwright can read its element.
 function recordIframes(player) {
-  const report = (iframe) => window.__endProbeIframe?.({ src: iframe.src, player: player(iframe) });
+  const tagHost = (node, host) => {
+    if (!node || node.nodeType !== 1) return;
+    const ctx = host && host.nodeType === 1 ? host : node;
+    const inFooter = Boolean(ctx.closest?.("footer") || node.closest?.("footer"));
+    const inMain = Boolean(ctx.closest?.("main#main") || node.closest?.("main#main"));
+    const apply = (el) => {
+      if (inFooter) el.__endInFooter = true;
+      else if (inMain) el.__endInMain = true;
+    };
+    if (node.tagName === "IFRAME") apply(node);
+    else node.querySelectorAll?.("iframe").forEach(apply);
+  };
+  const report = (iframe, host) => {
+    if (!iframe || iframe.tagName !== "IFRAME") return;
+    tagHost(iframe, host);
+    const rawAttr = iframe.getAttribute("src") ?? "";
+    let resolved = iframe.src || "";
+    if (!resolved && rawAttr) {
+      try {
+        resolved = new URL(rawAttr, location.href).href;
+      } catch {}
+    }
+    const isPlayer = player(iframe);
+    window.__endProbeIframe?.({ src: resolved, player: isPlayer });
+    if (rawAttr && rawAttr !== resolved) {
+      try {
+        const abs = new URL(rawAttr, location.href).href;
+        if (abs !== resolved) window.__endProbeIframe?.({ src: abs, player: isPlayer });
+      } catch {}
+    }
+  };
+  const origSetAttribute = Element.prototype.setAttribute;
+  Element.prototype.setAttribute = function (name, value) {
+    origSetAttribute.call(this, name, value);
+    if (this.tagName === "IFRAME" && String(name).toLowerCase() === "src") report(this);
+  };
+  const srcDesc = Object.getOwnPropertyDescriptor(HTMLIFrameElement.prototype, "src");
+  if (srcDesc?.set) {
+    Object.defineProperty(HTMLIFrameElement.prototype, "src", {
+      ...srcDesc,
+      set(value) {
+        srcDesc.set.call(this, value);
+        report(this);
+      },
+    });
+  }
+  const origReplaceWith = Element.prototype.replaceWith;
+  if (typeof origReplaceWith === "function") {
+    Element.prototype.replaceWith = function (...nodes) {
+      const parent = this.parentElement;
+      for (const n of nodes) tagHost(n, parent);
+      const res = origReplaceWith.apply(this, nodes);
+      for (const n of nodes) {
+        if (n?.nodeType === 1) {
+          if (n.tagName === "IFRAME") report(n, parent);
+          else n.querySelectorAll?.("iframe").forEach((f) => report(f, parent));
+        }
+      }
+      return res;
+    };
+  }
+  const origReplaceChild = Node.prototype.replaceChild;
+  if (typeof origReplaceChild === "function") {
+    Node.prototype.replaceChild = function (newChild, oldChild) {
+      tagHost(newChild, this);
+      const res = origReplaceChild.call(this, newChild, oldChild);
+      if (newChild?.nodeType === 1) {
+        if (newChild.tagName === "IFRAME") report(newChild, this);
+        else newChild.querySelectorAll?.("iframe").forEach((f) => report(f, this));
+      }
+      return res;
+    };
+  }
   new MutationObserver((mutations) => {
     for (const m of mutations) {
       if (m.type === "attributes") {
@@ -127,24 +200,32 @@ function recordIframes(player) {
       }
       for (const node of m.addedNodes) {
         if (node.nodeType !== 1) continue;
-        if (node.tagName === "IFRAME") report(node);
-        else node.querySelectorAll("iframe").forEach(report);
+        if (node.tagName === "IFRAME") report(node, m.target);
+        else node.querySelectorAll("iframe").forEach((f) => report(f, m.target));
       }
     }
   }).observe(document, { childList: true, subtree: true, attributes: true, attributeFilter: ["src"] });
 }
 
-// Reads the live element; if the frame has already detached, falls back to the insertion record for the URL it
-// navigated to, which must be unambiguous: every iframe inserted with that src was the player's.
+// Reads the live element; if the iframe is already disconnected from the document or the frame/element handle
+// throws during Suspense swap or route teardown, falls back to the insertion record for the URL it navigated to,
+// which must be unambiguous: every iframe inserted with that src was the player's.
 async function verifyPlayerFrame(frame, recorded) {
   try {
     const el = await frame.frameElement();
-    return await el.evaluate(isPlayerIframe);
+    const connected = await el.evaluate((iframe) => iframe.isConnected !== false);
+    if (connected) {
+      const live = await el.evaluate(isPlayerIframe);
+      if (live) return true;
+      const stillConnected = await el.evaluate((iframe) => iframe.isConnected !== false);
+      if (stillConnected) return false;
+    }
   } catch {
-    if (!frame.isDetached()) return false;
-    const same = recorded(frame);
-    return same.length > 0 && same.every((r) => r.player);
+    // Frame or element handle detached/destroyed during Suspense swap or route teardown;
+    // fall back to the unambiguous insertion records captured in the document.
   }
+  const same = recorded(frame);
+  return same.length > 0 && same.every((r) => r.player);
 }
 
 const notFoundLoad = (e) =>
@@ -2128,7 +2209,8 @@ try {
       ["ads from an unverified frame", { url: "https://googleads.g.doubleclick.net/pagead/id", pagePath: "/music", playerFrame: false }, "unexpected"],
     ];
     const wrong = cases.filter(([, input, want]) => classifyExternal(input) !== want).map(([name]) => name);
-    // A frame whose element can no longer be read is the player's only by an unambiguous insertion record.
+    // A frame whose element can no longer be read (or was disconnected during Suspense swap / teardown)
+    // is the player's only by an unambiguous insertion record.
     const EMBED = "https://www.youtube.com/embed/?probe=1";
     const gone = (detached) => ({
       frameElement: async () => {
@@ -2137,12 +2219,29 @@ try {
       isDetached: () => detached,
       url: () => EMBED,
     });
+    const disconnected = () => ({
+      frameElement: async () => ({
+        evaluate: async (fn) =>
+          fn({
+            isConnected: false,
+            tagName: "IFRAME",
+            getAttribute: (name) => (name === "src" ? EMBED : null),
+            src: EMBED,
+            closest: () => null,
+          }),
+      }),
+      isDetached: () => false,
+      url: () => EMBED,
+    });
     const frames = [
       ["detached player frame with its record", gone(true), [{ src: EMBED, player: true }], true],
+      ["teardown frame throwing before isDetached flips with unambiguous player record", gone(false), [{ src: EMBED, player: true }], true],
+      ["disconnected iframe (!isConnected) after Suspense swap with unambiguous player record", disconnected(), [{ src: EMBED, player: true }], true],
+      ["disconnected iframe (!isConnected) whose src was also inserted outside the player", disconnected(), [{ src: EMBED, player: true }, { src: EMBED, player: false }], false],
       ["detached frame whose src was also inserted outside the player", gone(true), [{ src: EMBED, player: true }, { src: EMBED, player: false }], false],
       ["detached frame with no record", gone(true), [], false],
+      ["teardown frame throwing before isDetached flips with no record", gone(false), [], false],
       ["detached frame recorded outside the player", gone(true), [{ src: EMBED, player: false }], false],
-      ["attached frame whose element cannot be read", gone(false), [{ src: EMBED, player: true }], false],
     ];
     for (const [name, frame, records, want] of frames) {
       if ((await verifyPlayerFrame(frame, () => records)) !== want) wrong.push(name);

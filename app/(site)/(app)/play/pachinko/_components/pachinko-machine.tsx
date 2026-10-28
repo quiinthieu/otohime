@@ -52,8 +52,8 @@ import {
 
 type TiltStatus = "idle" | "active" | "denied" | "unsupported";
 
-const STEPS_PER_FRAME_NORMAL = 6;
-const STEPS_PER_FRAME_REDUCED = 14;
+const STEPS_PER_FRAME_NORMAL = 8;
+const STEPS_PER_FRAME_REDUCED = 16;
 const ARIA_THROTTLE_MS = 1000;
 
 const INITIAL_READOUT: PachinkoReadout = getReadout(createPachinkoSim({ seed: DEFAULT_SEED }));
@@ -240,16 +240,18 @@ function drawBoard(
   ctx.lineWidth = 1.5;
   ctx.strokeRect(PLAYFIELD_LEFT_X + 18, DEDUPE_GATE_Y - 6, PLAYFIELD_RIGHT_X - PLAYFIELD_LEFT_X - 36, 12);
 
-  // 6. Stage 3 Stream Join Funnel walls
+  // 6. Stage 3 Stream Join Funnel walls (sourced directly from sim.board.segments)
   ctx.strokeStyle = "#1a1714";
   ctx.lineWidth = 2.5;
   ctx.beginPath();
-  ctx.moveTo(FUNNEL_CENTER_X - 150, FUNNEL_TOP_Y);
-  ctx.lineTo(FUNNEL_CENTER_X - 24, FUNNEL_HOLD_Y);
-  ctx.lineTo(FUNNEL_CENTER_X - 24, FUNNEL_EXIT_Y);
-  ctx.moveTo(FUNNEL_CENTER_X + 150, FUNNEL_TOP_Y);
-  ctx.lineTo(FUNNEL_CENTER_X + 24, FUNNEL_HOLD_Y);
-  ctx.lineTo(FUNNEL_CENTER_X + 24, FUNNEL_EXIT_Y);
+  for (const seg of sim.board.segments) {
+    if (seg.id !== "funnel-left" && seg.id !== "funnel-right" && seg.kind !== "funnel") {
+      continue;
+    }
+    ctx.moveTo(seg.x1, seg.y1);
+    ctx.lineTo(seg.x2, seg.y2);
+    ctx.lineTo(seg.x2, FUNNEL_EXIT_Y);
+  }
   ctx.stroke();
 
   // Join funnel hold chamber badge
@@ -599,11 +601,15 @@ export function PachinkoMachine() {
   // Main requestAnimationFrame simulation loop
   useEffect(() => {
     let rafId = 0;
+    let lastTs = performance.now();
 
-    const tick = () => {
+    const tick = (now: number) => {
+      const deltaMs = Math.max(8, Math.min(100, now - lastTs));
+      lastTs = now;
       const sim = ensureSim();
       if (sim.balls.length > 0 || sim.scheduledSpawns.length > 0) {
-        const steps = reducedMotion ? STEPS_PER_FRAME_REDUCED : STEPS_PER_FRAME_NORMAL;
+        const baseSteps = reducedMotion ? STEPS_PER_FRAME_REDUCED : STEPS_PER_FRAME_NORMAL;
+        const steps = Math.max(baseSteps, Math.min(24, Math.round((deltaMs / 16.67) * baseSteps)));
         stepPachinko(sim, steps);
         playRateLimitedPegClicks(sim);
 

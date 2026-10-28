@@ -159,6 +159,7 @@ test("checks uses measured 30m job, 17m E2E step and 900s E2E command budgets", 
   const e2e = gateBody("E2E against next start");
   assert.match(e2e, /^set -o pipefail$/m);
   assert.match(e2e, /^trap .*browser-gate-diagnostics\.mjs "E2E against next start".* EXIT$/m);
+  assert.match(e2e, /^command -v timeout >\/dev\/null 2>&1 \|\| timeout\(\)/m);
   assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 900s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
   assert.equal(e2e.match(/npm run test:e2e/g).length, 1, "the browser suite runs once, only under the inner bound");
 });
