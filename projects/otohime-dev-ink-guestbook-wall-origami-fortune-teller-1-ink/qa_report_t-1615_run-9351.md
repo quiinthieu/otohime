@@ -1,0 +1,17 @@
+# QA: t-1615 deterministic fortunes
+
+Run: `run-9351` · delivery: `63c36af21bdeba1394a225451ce255896eb6990e` · green gate: `ver-3716` (pass). The delivery is an ancestor of `origin/main`. Both delivery commits (`c1411e7`, `63c36af`) have author `Otohime <quiinthieu@gmail.com>` and no `Co-Authored-By` trailer. No `author.txt` was supplied for this task. The software engineer used recorded profile `codex-sol-medium`, model `gpt-6-sol`, effort `medium` (`run-9349`); this QA run uses the same recorded profile/model/effort.
+
+## Independent checks
+
+- Node `v22.23.3`, locked `npm ci`: focused fortune tests 9/9; `npm test` 2627/2627; `npm run lint` and `npm run typecheck` exit 0. Lint reports 10 warnings outside this task's files.
+- A separate direct import of the real `content/site.ts`, Gazette `ARTICLES`, `lib/fortune-targets.ts`, and `lib/fortune.ts` built a 36-target pool: 11 projects, 3 notes, 12 sketches, 4 songs (including one injected owner song), and 6 articles. It completed a seeded reveal to a safe local sketch target. Negative controls rejected an early reveal, selection during colour counting, external project URL, malformed song video, and path-traversal article slug.
+- The current site pages `/projects`, `/notes`, and `/music` answer. Their shared fortune fragment IDs are not rendered yet; rendering belongs to task 5. No fortune UI or server adapter exists in this task, so a visitor fortune path and owner-song database read are deferred.
+
+## Execution and deployment boundary
+
+The pure helpers executed in the real locked Node environment. No changed browser executable, job processor, adapter, model asset, durable runtime job, callback, or ingestion record exists for this task. Runtime FAILED/COMPLETED/pending history counts are therefore 0/0/0; callback state is not applicable. This is helper execution, not product delivery.
+
+At QA start, production `/api/health` returned `5cd648d3d043e3be54163d5f8e9970737b69c44e`, an ancestor of the delivery. It subsequently returned `c532e4edbc259902b41c457bda0a77557d03b291`; final deployment ancestry is recorded in the board report. Public GitHub Actions history was scanned in two bounded pages of 20 runs each out of 547 total: page 1 had 17 completed (6 failed) and 3 in progress; page 2 had 20 completed (8 failed). This is a 40/547 partial scan, not complete history. The delivery run `40651605621` had checks in progress at first inspection; the last green production run `40648854250` deployed `5cd648d`. An unrelated older failure `40646398062` names `E2E against next start`; its raw job log endpoint returned HTTP 403, so its underlying failure is unread and no cause is inferred from it. The task's own green gate is independently persisted as `ver-3716`.
+
+Deferred: `t-1615-deploy` (owner: GitHub Actions production workflow; failure condition: no deployed SHA descended from `63c36af`), and `t-1615-anchors` (owner: task 5; failure condition: a generated fragment lacks a rendered destination). No defect in the delivered helper code was observed.
