@@ -9,8 +9,8 @@
 #    (default 300, capped at 590 so the bound stays under 10 minutes), every VERIFY_INTERVAL seconds (default 10).
 #    The served sha serves EXPECT_SHA when it is EXPECT_SHA, when it descends from it (main keeps one pending CI
 #    run, so a newer push can replace this commit's run and deploy it as part of a later commit), or when
-#    EXPECT_SHA is ahead of it only by report-only paths (projects/**, *.md: ci.yml's push paths-ignore, so that
-#    commit never deploys). Ancestry is read from this checkout (VERIFY_REPO overrides it), fetching an unknown
+#    EXPECT_SHA is ahead of it only by unrelated Markdown (*.md outside projects/**: ci.yml filters these
+#    pushes, but project deliveries must deploy). Ancestry is read from this checkout (VERIFY_REPO overrides it), fetching an unknown
 #    served sha from origin once. A stale served sha with code still undeployed, a non-200 answer or nothing
 #    listening exits 1 and names what it last saw.
 # 2. Runs e2e/pocket-terminal.test.ts and e2e/ink-press.test.ts directly against BASE_URL, without the full
@@ -48,7 +48,8 @@ serves() {
   files="$(git_repo diff --name-only "$got" "$want")" || return 1
   while IFS= read -r f; do
     case "$f" in
-      "" | projects/* | *.md) ;;
+      projects/*) return 1 ;;
+      "" | *.md) ;;
       *) return 1 ;;
     esac
   done <<<"$files"
@@ -211,10 +212,10 @@ self_test() {
   local work="$WORK"
   local A=1111111111111111111111111111111111111111 B=2222222222222222222222222222222222222222
 
-  # Fixture history (no origin, so nothing is fetched): C1 code; C2 = C1 + a report and a README (report-only
-  # ahead); C3 = C2 + code; SIDE branches off C1 with only a report, so only ancestry refuses it.
+  # Fixture history (no origin, so nothing is fetched): C1 code; DOC = C1 + unrelated Markdown;
+  # C2 = DOC + project report; C3 = C2 + code; SIDE branches off C1 with only a report.
   # Every case reads ancestry from it via VERIFY_REPO.
-  local C1 C2 C3 SIDE
+  local C1 DOC C2 C3 SIDE
   repo() { git -C "$work/repo" -c user.name=self-test -c user.email=self-test@localhost -c commit.gpgsign=false "$@"; }
   commit() { mkdir -p "$work/repo/$(dirname "$1")" && echo "$2" >"$work/repo/$1" && repo add -A && repo commit -qm "$2" && repo rev-parse HEAD; }
   git init -q "$work/repo"
@@ -222,8 +223,8 @@ self_test() {
   repo checkout -qb side
   SIDE="$(commit projects/side/notes.md side)"
   repo checkout -q -
-  commit projects/p/summary.md report >/dev/null
-  C2="$(commit README.md readme)"
+  DOC="$(commit README.md readme)"
+  C2="$(commit projects/p/summary.md report)"
   C3="$(commit lib/app.ts two)"
 
   serve() {
@@ -319,11 +320,15 @@ self_test() {
   base="http://127.0.0.1:$port"
   expect "a served sha that descends from EXPECT_SHA passes (a newer push deployed it)" 0 ran \
     BASE_URL="$base" EXPECT_SHA="$C1" EXPECT_BASE="$base" VERIFY_E2E_CMD="$reached"
+  expect "a served descendant includes the project report delivery" 0 ran \
+    BASE_URL="$base" EXPECT_SHA="$C2" EXPECT_BASE="$base" VERIFY_E2E_CMD="$reached"
 
   serve "$C1"
   base="http://127.0.0.1:$port"
-  expect "EXPECT_SHA ahead of the served sha only by projects/** and *.md passes (report commits never deploy)" 0 ran \
-    BASE_URL="$base" EXPECT_SHA="$C2" EXPECT_BASE="$base" VERIFY_E2E_CMD="$reached"
+  expect "EXPECT_SHA ahead only by filtered Markdown passes" 0 ran \
+    BASE_URL="$base" EXPECT_SHA="$DOC" EXPECT_BASE="$base" VERIFY_E2E_CMD="$reached"
+  expect "negative control: undeployed project report exits nonzero and skips e2e" nonzero skipped \
+    BASE_URL="$base" EXPECT_SHA="$C2" VERIFY_E2E_CMD='touch "$MARK"'
   expect "negative control: EXPECT_SHA ahead of the served sha by code exits nonzero and skips e2e (stale deploy)" \
     nonzero skipped BASE_URL="$base" EXPECT_SHA="$C3" VERIFY_E2E_CMD='touch "$MARK"'
   if grep -qF "last got sha '$C1'" "$work/out"; then

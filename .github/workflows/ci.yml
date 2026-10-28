@@ -7,11 +7,12 @@ on:
     types: [opened, synchronize, reopened, closed]
   push:
     branches: [main]
-    # Report-only pushes (plan reports, *.md) never enter the main queue. A push
-    # that also touches code still runs, because every changed file must match.
-    paths-ignore:
+    # Task reports are deliveries: run their full checks and production gates.
+    # Ordered patterns keep unrelated Markdown filtered, then re-include projects.
+    paths:
+      - "**"
+      - "!**.md"
       - "projects/**"
-      - "**.md"
 
 # Concurrency belongs to jobs: a shared main workflow group can replace a
 # pending run before checks even start, including with cancel-in-progress:false.

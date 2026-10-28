@@ -1,5 +1,11 @@
 # Ryugu Paper Toys architecture
 
+## Project delivery CI trigger · pm-269/t-1648 · run-9320
+
+Following [fix plan run-9285](fix_plan_t-1648_run-9285.md), main pushes use ordered `paths: ["**", "!**.md", "projects/**"]`: project-only task deliveries enter the complete checks and production workflow; unrelated Markdown stays filtered. Job concurrency, main serialization, author verification and all production gates remain intact. `scripts/ci-workflow.test.mjs` exercises project summaries alone, multiple reports, artifacts and mixed changes; its identical delivery assertion rejects the historical ignore filter, a missing project exception and the exception in the wrong order.
+
+`scripts/verify-deploy.sh` requires served ancestry for every `projects/**` delivery, including Markdown. Its older-build exemption now covers only unrelated Markdown, matching the workflow filter. The real-shell self-test uses temporary Git history and local HTTP health with an E2E marker: an undeployed project report must fail before E2E, while a served descendant containing it passes. The local fixtures establish trigger policy and verifier behavior, not hosted workflow execution. [Run-9320's summary](run-9320-summary.md) records fresh gates and the plan-manager/QA handoff; the SWE run stops at tested push.
+
 ## Deployed QA handoff · pm-269/t-1648 · run-9281
 
 The operator reports that production health has advanced to `103f0c5511d4590e66a8a83b1a35acfe870e7ca3` since QA run-9201 sampled ancestor `741f59c`. This is supplied evidence, not a fresh SWE production observation. Follow [fix_plan_t-1648_run-9201.md](fix_plan_t-1648_run-9201.md): preserve the working Bottle implementation and direct team-scoped API readiness. A served SHA alone does not establish a green production job. The local revalidation and independent deployed follow-up are recorded in [run-9281-summary.md](run-9281-summary.md).
