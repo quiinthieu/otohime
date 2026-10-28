@@ -11,6 +11,7 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
   let flight: FetchFlight | null = null;
   let source: HTMLElement | null = null, message: HTMLElement | null = null, proxy: HTMLElement | null = null;
   let leg = '';
+  let captureSource: HTMLElement | null = null;
   let releaseCapture = () => {};
   const viewport = () => ({ x: innerWidth, y: innerHeight });
   const paint = () => {
@@ -21,7 +22,7 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
   };
   const finish = (returned = false) => {
     cancelAnimationFrame(frame); frame = 0;
-    releaseCapture(); releaseCapture = () => {};
+    releaseCapture(); captureSource = null; releaseCapture = () => {};
     const controlled = !!leg; leg = '';
     if (source) source.dataset.fetchState = returned ? 'returned' : 'cancelled';
     if (message) message.textContent = returned ? 'Kame brought the paper back.' : 'Paper is back. Fetch cancelled or Kame could not reach it.';
@@ -127,7 +128,7 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
       if (!gesture.start({ pointer: e.pointerId, x: e.clientX, y: e.clientY, intent: explicit ? 'grip' : 'body', touch: e.pointerType === 'touch' })) return;
       const sample = { x: e.clientX, y: e.clientY, time: performance.now() };
       origin = { pointer: e.pointerId, target: explicit ? grip : el, a: sample, b: sample, dragging: false };
-      releaseCapture = cancel;
+      releaseCapture = cancel; captureSource = el;
       if (crumple) holdTimer = setTimeout(() => {
         if (!origin || gesture.tick() !== 'crumple') return;
         heldPointer = origin.pointer;
@@ -172,5 +173,5 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
     el.addEventListener('contextmenu', () => { if (origin) { cancel(); finish(); } }, { signal });
     el.addEventListener('focusin', e => { if (e.target instanceof Node && !root.contains(e.target) && source === el) finish(); }, { signal });
   };
-  return { attach, cancel: () => finish(), dispose: () => { finish(); unsubscribe(); } };
+  return { attach, cancel: (el?: HTMLElement) => { if (!el || source === el || captureSource === el) finish(); }, dispose: () => { finish(); unsubscribe(); } };
 }

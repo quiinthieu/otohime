@@ -1,0 +1,42 @@
+{
+  "run": "run-9363",
+  "task": "t-1585",
+  "base": "78eea4543c6fbd8835ca8b6800bb7032dd682653",
+  "profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "profile_source": "plan_manager_list_runs pm-274, run-9363 profile_flags",
+  "node": "v22.23.3",
+  "next": "16.4.2",
+  "playwright_core": "1.64.0",
+  "build_id": "KBC0zTf9c5rt5zN6G0JGQ",
+  "sha256": {
+    "lib/crumple.ts": "c2157c679c38df313dba4c57c9eb47a64c76a0285dcc239a2b2393badd2c8967",
+    "lib/tactile.ts": "9095e6c94d44dd49a960e75d95025d17724db492f695a7474c170cee83191f48",
+    "lib/kame-fetch.ts": "5708121abe0aba0b284dbaa97dec8e72812e872b7517bd8e3c489165c688f293",
+    "components/tactile/ball-flight.ts": "21df959dbd6e0db4ef6309e657a95af95e42fece15087c42fdbee40e2241d824",
+    "components/tactile/crumple.ts": "7eb8073206e605f696975dc4aad42cf84459ea707135756cdb70d0e635e2049f",
+    "components/tactile/crumple-renderer.ts": "b8ce019bd4969197cfa553b3c57e4064577654a9c2df417c63774e732a1b703a",
+    "components/tactile/paper-layer.tsx": "b799d675af2097952d834216f70d4cd9662c08260cc92912dc3ef8921e303eb3",
+    "components/tactile/fetch.ts": "99e3ba863696dfc887d1267a96a0871cf158d7addd9a1cccbdec0f97f225a874",
+    "components/tactile/reset.ts": "d6f0772431eb825fd6818fce64c5b8b77d7c4e8b63e2e00af5c2af944c7a5518",
+    "components/end-footer.tsx": "3eb5c192655d4456155046a1e2810b35463e90b56455c97994e0eb808d7fad18",
+    "app/(site)/tactile.css": "9617ac4fe453730f252f8143dbf888a602c70b413be780d65b669a5675ddef56",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+    ".github/workflows/ci.yml": "37cdc7fc1dfd5bee6075b0619b0caaca9a9e0e9d603476affce480d95f350987"
+  },
+  "task_chunks_sha256": {
+    ".next/static/chunks/3_ljav2csuskl.js": "f58eea14b1ed575beecfcae1d1a6d7184bd5abc8b0ab4f40257c1e3944603fb7",
+    ".next/static/chunks/1wf2dehsnavt8.js": "98b8b78a42bfd373f75b2609962a30375410404b29b7f022d55b690735270e0d"
+  },
+  "verifiers_sha256": {
+    "lib/crumple.test.ts": "ff5f62985b8be573974383fdac69f57db2bb68b9a02ee0ac7ca8333505fcab5d",
+    "lib/tactile.test.ts": "13990425c792be0a0fee50ac1f21b1908ae712b250585d880254443bcfbee740",
+    "e2e/tactile-recovery.test.ts": "5fdd065bfd663a75c83b2d3c7585f62c46e8d748ad96b222ed9b8a107a628eb7",
+    "e2e/crumple.test.ts": "03202295aea76b5088e58325e8c570b2bc474ce2ead69037b1eac821163df214",
+    "e2e/tactile-helpers.ts": "59ae96c4e0c12fc7ad7345314b833a177565b2698ec8957e431b10dfc7542773",
+    "scripts/e2e.mjs": "55fc7db6dea62723c1575b9238fb3460c5ac5b84e9b7133d45fc88b17bc741f3"
+  },
+  "chromium": "156.0.8078.48"
+}

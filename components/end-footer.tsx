@@ -88,6 +88,14 @@ export function EndFooter() {
           </div>
         </div>
 
+        <div className="paper-basket-slot" data-paper-basket-slot="">
+          <svg data-paper-basket="" className="paper-basket" viewBox="0 0 148 100" role="img" aria-label="Wastepaper basket">
+            <g fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round">
+              <path d="M14 14Q74 7 134 14L117 92Q74 98 31 92Z" />
+              <path d="M14 14Q74 23 134 14M26 32L124 50M29 52L120 70M32 73L116 89M38 19L47 93M61 20L65 95M86 20L83 95M109 18L101 94" />
+            </g>
+          </svg>
+        </div>
         <PaperHost id="kame-shell" />
 
         <div className="end-bar">

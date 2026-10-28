@@ -48,3 +48,48 @@ test('invalid seed, elapsed and clocks fail closed; backwards clocks never rever
   now = Infinity; assert.throws(() => fold.tick(), RangeError);
   assert.equal(fold.state, 'intact');
 });
+
+import { launchBall, stepBall, placeInBasket, BALL_LIMIT_MS, type BallWorld } from './crumple.ts';
+const world: BallWorld = { width: 800, height: 600, basket: { left: 300, right: 420, top: 400, bottom: 480 } };
+function simulate(x: number, vx = 0) {
+  let b = launchBall({ x, y: 250 }, { x: vx, y: 0 }, world);
+  for (let i = 0; i < 700 && b.state === 'flying'; i++) b = stepBall(b, 10, world);
+  return b;
+}
+test('fixed-step basket opening catches a real falling circle; a rim strike misses (negative control)', () => {
+  assert.equal(simulate(360).state, 'basket');
+  const miss = simulate(300);
+  assert.ok(miss.rimHits > 0); assert.equal(miss.state, 'rest');
+  assert.notEqual(miss.state, simulate(360).state);
+  assert.deepEqual(simulate(300), simulate(300));
+});
+test('high velocity, resize, invalid delta and active five-second bound stay finite and sleep', () => {
+  assert.equal(BALL_LIMIT_MS, 5000);
+  let b = launchBall({ x: -1e9, y: 1e9 }, { x: 1e12, y: -1e12 }, world);
+  assert.ok(Math.abs(b.vx) <= 1200 && Math.abs(b.vy) <= 1200);
+  assert.deepEqual(stepBall(b, NaN, world), b);
+  assert.deepEqual(stepBall(b, -1, world), b);
+  const small = { ...world, width: 180, height: 160 };
+  for (let i = 0; i < 501 && b.state === 'flying'; i++) {
+    b = stepBall(b, 10, small);
+    assert.ok([b.x, b.y, b.vx, b.vy].every(Number.isFinite));
+    assert.ok(b.x >= b.radius && b.x <= small.width - b.radius);
+    assert.ok(b.y >= b.radius && b.y <= small.height - b.radius);
+  }
+  assert.notEqual(b.state, 'flying'); assert.ok(b.activeMs <= 5000);
+  assert.deepEqual(stepBall(b, 100, small), b);
+  assert.throws(() => launchBall({ x: NaN, y: 0 }, { x: 0, y: 0 }, world), RangeError);
+  assert.throws(() => stepBall(b, 10, { ...world, width: NaN }), RangeError);
+  const placed = placeInBasket(world); assert.equal(placed.state, 'basket'); assert.equal(placed.x, 360);
+});
+test('clamped finite delta and fixed substeps cannot tunnel through the opening or run forever', () => {
+  const a = launchBall({ x: 360, y: 200 }, { x: 0, y: 1200 }, world);
+  assert.equal(stepBall(a, Infinity, world).activeMs, 0);
+  let b = a;
+  for (let i = 0; i < 25 && b.state === 'flying'; i++) b = stepBall(b, 1e9, world);
+  assert.equal(b.state, 'basket'); assert.ok(b.activeMs <= 5000);
+  let c = launchBall({ x: 70, y: 80 }, { x: 1100, y: -1100 }, world);
+  // Force energy each step to demonstrate the deadline independent of natural rest.
+  for (let i = 0; i < 20; i++) c = stepBall({ ...c, state: 'flying', vx: 1100, vy: -1100 }, 250, world);
+  assert.equal(c.activeMs, 5000); assert.equal(c.state, 'rest'); assert.equal(c.vx, 0);
+});

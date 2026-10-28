@@ -1,18 +1,22 @@
+import type { GesturePort } from '@/lib/tactile';
+import { createBallFlight } from './ball-flight';
 import { MAX_BALLS } from '@/lib/crumple';
 import type { createCrumpleRenderer } from './crumple-renderer';
 
 /** Route-local slots include pending imports, preventing concurrent over-allocation. */
-export function createPaperCrumple(signal: AbortSignal, motion: MediaQueryList) {
+export function createPaperCrumple(signal: AbortSignal, motion: MediaQueryList, gesture: GesturePort) {
   const slots = new Set<() => void>();
   const attach = (el: HTMLElement, root: HTMLElement, actions: HTMLElement, seed: number, clearPaper: () => void) => {
     const button = (text: string, className: string) => {
       const b = document.createElement('button'); b.type = 'button'; b.textContent = text; b.className = className; actions.insertBefore(b, actions.querySelector('.paper-margin')); return b;
     };
     const crumple = button('Crumple', 'paper-crumple'), read = button('Read card', 'paper-read');
+    const toss = button('Toss to basket', 'paper-toss'); toss.hidden = true;
     const live = root.querySelector<HTMLElement>('[data-paper-message]')!;
     let renderer: ReturnType<typeof createCrumpleRenderer> | undefined, generation = 0;
+    let flight: ReturnType<typeof createBallFlight> | undefined;
     const restore = () => {
-      generation++; renderer?.dispose(); renderer = undefined; slots.delete(restore);
+      generation++; flight?.dispose(); flight = undefined; toss.hidden = true; renderer?.dispose(); renderer = undefined; slots.delete(restore);
       delete el.dataset.crumpleState; delete el.dataset.crumplePaint;
     };
     const start = async () => {
@@ -25,12 +29,15 @@ export function createPaperCrumple(signal: AbortSignal, motion: MediaQueryList) 
       try {
         const { createCrumpleRenderer } = await import('./crumple-renderer');
         if (signal.aborted || generation !== token || !el.isConnected) return;
-        renderer = createCrumpleRenderer(root, seed, motion.matches, failure);
+        renderer = createCrumpleRenderer(root, seed, motion.matches, failure, canvas => {
+          flight = createBallFlight(el, root, canvas, gesture, motion, signal, restore, live); toss.hidden = false;
+        });
         if (generation !== token) { renderer.dispose(); renderer = undefined; return; }
         el.dataset.crumplePaint = 'true';
         live.textContent = 'Paper crumpled. Read card or Reset restores it.';
       } catch { if (generation === token) failure(); }
     };
+    toss.addEventListener('click', () => flight?.toss(), { signal });
     crumple.addEventListener('click', () => { void start(); }, { signal });
     for (const type of ['focus', 'click'] as const) read.addEventListener(type, () => { restore(); clearPaper(); }, { signal });
     el.addEventListener('focusin', e => { if (e.target instanceof Node && !root.contains(e.target)) { restore(); clearPaper(); } }, { signal });

@@ -54,7 +54,7 @@ export default function PaperLayer({ route }: { route: string }) {
       };
       const motion = matchMedia('(prefers-reduced-motion: reduce)');
       const fetch = createPaperFetch(gesture, signal, motion);
-      const crumple = createPaperCrumple(signal, motion);
+      const crumple = createPaperCrumple(signal, motion, gesture);
 
       for (const surface of registry) {
         const el = nodes.find(n => n.dataset.paperId === surface.id)!;
@@ -95,7 +95,7 @@ export default function PaperLayer({ route }: { route: string }) {
         };
         const release=() => {
           const pointer=origin?.pointer; origin=null;
-          gesture.cancel();
+          if(pointer!==undefined) gesture.cancel();
           if(pointer!==undefined && handle.hasPointerCapture(pointer)) handle.releasePointerCapture(pointer);
         };
         const apply=(action: 'peel'|'reset'|'cancel', persist=true) => {
@@ -107,10 +107,10 @@ export default function PaperLayer({ route }: { route: string }) {
           if(persist) session.set(surface.id,state==='peeled');
         };
         paint(amount,amount ? 'peeled':'intact');
-        if (!surface.fetchOnly) fold = crumple.attach(el, root, actions, session.seed(surface.id), () => { fetch.cancel(); apply('reset'); });
+        if (!surface.fetchOnly) fold = crumple.attach(el, root, actions, session.seed(surface.id), () => { fetch.cancel(el); apply('reset'); });
         resets.push(()=>apply('cancel'));
-        peel.addEventListener('click',()=>{fetch.cancel();apply('peel');},{signal});
-        for (const type of ['focus','click'] as const) reset.addEventListener(type,()=>{fetch.cancel();apply('reset');},{signal});
+        peel.addEventListener('click',()=>{fetch.cancel(el);apply('peel');},{signal});
+        for (const type of ['focus','click'] as const) reset.addEventListener(type,()=>{fetch.cancel(el);apply('reset');},{signal});
         handle.addEventListener('click',e=>{
           if(suppressClick && e.detail>0) {e.preventDefault();suppressClick=false;return;}
           apply('peel');
@@ -144,14 +144,20 @@ export default function PaperLayer({ route }: { route: string }) {
         cleanups.push(()=>{fold.restore();release();root.remove();delete el.dataset.paperActive;delete el.dataset.paperState;delete el.dataset.paperActions;delete el.dataset.fetchState;});
       }
       const cancel=()=>{cancelActive();fetch.cancel();crumple.cancel();};
-      const reset=()=>{cancel();for(const clear of resets) clear();};
+      const reset=()=>{cancel();for(const clear of resets) clear();document.querySelector('.paper-iron-sweep')?.remove();};
+      const iron=document.createElement('button'); iron.type='button'; iron.className='paper-iron'; iron.textContent='Iron flat';
+      const basketSlot=document.querySelector('[data-paper-basket-slot]'); basketSlot?.append(iron);
+      const ironFlat=()=>{reset(); if(motion.matches) return; document.querySelector('.paper-iron-sweep')?.remove();
+        const sweep=document.createElement('div'); sweep.className='paper-iron-sweep'; sweep.setAttribute('aria-hidden','true'); document.body.append(sweep);
+        sweep.addEventListener('animationend',()=>sweep.remove(),{once:true,signal}); };
+      iron.addEventListener('click',ironFlat,{signal});
       restoreAll=reset;
       const unbindReset=bindPaperReset(reset);
       document.addEventListener('keydown',e=>{if(e.key==='Escape') reset();},{signal});
       window.addEventListener('blur',cancel,{signal});
       window.addEventListener('resize',cancel,{signal});
       document.addEventListener('visibilitychange',()=>{if(document.hidden) cancel();},{signal});
-      motion.addEventListener('change',cancel,{signal});
+      motion.addEventListener('change',reset,{signal});
       const observer=new MutationObserver(()=>{
         // Daruma can replace its cards without changing the route. A newly committed
         // host is safe to enhance; its server attributes alone never grant readiness.
@@ -163,11 +169,11 @@ export default function PaperLayer({ route }: { route: string }) {
           cancel();
           for(let i=nodes.length-1;i>=0;i--) if(!nodes[i].isConnected) nodes.splice(i,1);
         }
-        if(document.querySelector('[aria-modal="true"],dialog[open]')) cancel();
+        if(document.querySelector('[aria-modal="true"],dialog[open]')) reset();
         avoidPeek();
       });
       observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["open","aria-modal","data-side","data-paper-hydrated"]});
-      teardown=()=>{events.abort();observer.disconnect();fetch.dispose();crumple.cancel();unbindReset();sticker.remove();for(const clean of cleanups) clean();gesture.cancel();teardown=()=>{};};
+      teardown=()=>{events.abort();observer.disconnect();fetch.dispose();crumple.cancel();iron.remove();document.querySelector('.paper-iron-sweep')?.remove();unbindReset();sticker.remove();for(const clean of cleanups) clean();gesture.cancel();teardown=()=>{};};
     };
     // Navigation API catches client hops, full-root links, history and location changes;
     // reload preserves this route's session. The fallback covers ordinary link departures.

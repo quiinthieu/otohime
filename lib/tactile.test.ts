@@ -73,7 +73,14 @@ test("route session survives reload, clears only on departure, and bounds persis
   for(let i=0;i<200;i++) s.set(`note:${i}`,true);
   const reloaded=createRouteSession("/notes",options);
   assert.ok(Array.from({length:200},(_,i)=>reloaded.peeled(`note:${i}`)).filter(Boolean).length<=128);
+  const companion = JSON.stringify({ name: 'Tama', streak: 4, dismissed: true });
+  storage.setItem('kame:v1', companion);
+  s.set('note:keep', true); s.set('note:clear', true); s.set('note:clear', false);
+  assert.equal(s.peeled('note:keep'), true, 'per-card reset preserves another card');
+  assert.equal(s.peeled('note:clear'), false);
   s.depart(); assert.equal(createRouteSession("/notes",options).peeled("note:a"),false);
+  assert.equal(createRouteSession('/notes', options).peeled('note:keep'), false);
+  assert.equal(storage.getItem('kame:v1'), companion, 'paper recovery cannot erase identity, streak or dismissal');
 });
 test("throwing or malformed storage falls back to working memory", () => {
   for(const raw of ["bad", "{}", '{"version":1,"ids":[null]}', "x".repeat(20000)]) {
