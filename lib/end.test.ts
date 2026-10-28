@@ -324,7 +324,8 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
   const shortTmp = mkdtempSync("/tmp/end-tmp-");
 
   try {
-    const baseEnv: NodeJS.ProcessEnv = { ...process.env, NODE_ENV: "test" };
+    // Force the runner condition locally so this regression is exercised even when the test host has no CI flag.
+    const baseEnv: NodeJS.ProcessEnv = { ...process.env, NODE_ENV: "test", CI: "true" };
     delete baseEnv.TMPDIR;
     delete baseEnv.BASE_URL;
     delete baseEnv.PORT;
@@ -374,10 +375,9 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
           PATH: `${binDir}:${process.env.PATH ?? "/usr/bin:/bin"}`,
         };
         delete ciEnv.PORT;
-        // The installer branch is the one under test: with CI set and google-chrome on PATH (the ubuntu-24.04 runner)
-        // probe-end.sh skips npm and launches the real probe, which the 10s bound kills (exit 130). TMPDIR is
-        // resolved before that branch, so unsetting CI loses nothing; the runner branch has its own case below.
-        delete ciEnv.CI;
+        // This fixture exercises the installer even when its parent is a CI runner with Chrome installed.
+        // The actual CI Chrome branch has its own case below.
+        ciEnv.CI = "";
         const res = await runScript(probePath, ciEnv);
         assert.equal(res.code, 1, `probe-end.sh BASE_URL (${c.label}) should stop at stubbed npm`);
         assert.doesNotMatch(res.stderr, /unbound variable/, `probe-end.sh BASE_URL (${c.label}) stderr: ${res.stderr}`);
