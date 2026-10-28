@@ -2,3 +2,4 @@
 bae061a34612e465d208e08af17b1f014614a49d pm-273/t-1612: Prove footer probe branches under inherited CI (run-9312)
 bffb744e63a4edfb8098b7c432a011e63097442d pm-273/t-1612: Record CI fixture delivery commit (run-9312)
 e08d0be7b9e0fcb392c68e60a3d896ddbf60cbe2 pm-273/t-1612: Prove footer probe branches under inherited CI (run-9334 inherited fix; all five local gates passed)
+ce79b0e50c1ff4e093890f9155ce7b7c04c3fb6a pm-273/t-1612: Prove footer probe branches under inherited CI (run-9348 verified main delivery)
