@@ -1,0 +1,17 @@
+{
+  "history_completeness": "inconclusive: FAILED pages 1-2 read 10/153; COMPLETED page 1 read 5/540; page2 and current API rate-limited HTTP403. Filters overlap; older pages unread.",
+  "failed_run": 40645049226,
+  "failed_sha": "a6297cb2631d0173dcc442f9617878b6d5a76825",
+  "public_status": "failure",
+  "raw_logs": "HTTP403 rate limit exceeded; raw runner tail unavailable",
+  "public_annotation": "e2e/crumple.test.ts:80:14, keyboard folds real ink on both routes: AssertionError Expected values to be strictly equal: 0 !== 1",
+  "correlation": "e2e/crumple.test.ts and RisoText source unchanged since failed SHA before this task; source innerText includes decorative aria-hidden plates, accessible name uses only riso-source. New CSS/test fingerprint differs.",
+  "current_public_index": {
+    "in_progress": "CI #542 at 770acf8 and CI #541 at b76a19d reported In progress (bounded public index).",
+    "queued": "Page read but no explicit trustworthy queued count parsed; inconclusive.",
+    "completed": "Page read; API page 1 supplies the bounded completed metadata."
+  },
+  "build": "jTmRgArGOAnQzoi1PSjmI",
+  "node": "v22.23.3",
+  "chrome": "Google Chrome 155.0.8059.39"
+}

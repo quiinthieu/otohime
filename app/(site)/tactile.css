@@ -1,7 +1,6 @@
 /* These selectors activate only after the idle-loaded adapter opts a surface in. */
-[data-paper-active] { position: relative; z-index: 0; }
-[data-paper-active]:hover, [data-paper-active]:focus-within { z-index: 3; }
-.paper-tools { position: absolute; inset: 0; pointer-events: none; color: var(--ink); }
+[data-paper-active] { position: relative; }
+.paper-tools { position: absolute; inset: 0; pointer-events: none; color: var(--ink); z-index: 21; }
 .paper-corner { position: absolute; top: 0; right: 0; width: 24px; height: 24px; overflow: hidden; clip-path: polygon(0 0,100% 0,100% 100%); }
 .paper-underlayer, .paper-flap { position: absolute; inset: 0; background: var(--paper); }
 .paper-underlayer { background: var(--paper-2); text-align: right; font-size: 16px; }
@@ -10,12 +9,14 @@
 .paper-handle::after { content: ''; position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-top: 1.5px dashed var(--ink); border-right: 1.5px dashed var(--ink); }
 .paper-handle:active { cursor: grabbing; }
 .paper-actions { position: absolute; top: 100%; right: 0; display: flex; gap: 4px; pointer-events: none; opacity: 0; z-index: 3; }
+@media (hover: hover) {
+  [data-paper-active]:not([data-paper-fetch-only]) > .paper-tools > .paper-actions { pointer-events: auto; }
+}
 [data-paper-active]:hover .paper-actions, [data-paper-active]:focus-within .paper-actions, [data-paper-state="peeled"] .paper-actions { opacity: 1; pointer-events: auto; }
 .paper-actions button, .paper-enable { min-height: 44px; padding: 4px 8px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: inherit; font-size: 12px; cursor: pointer; }
 .paper-tools button:focus-visible, .paper-enable:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .paper-margin { position: absolute; top: calc(100% + 44px); right: 0; max-width: 100%; width: 240px; margin: 0; padding: 10px; border: 1px dashed var(--ink); background: var(--paper); color: var(--ink); font-size: 13px; line-height: 1.4; pointer-events: auto; z-index: 3; }
 .paper-margin[hidden] { display: none; }
-[data-paper-state="peeled"], [data-paper-state="peeling"] { z-index: 2; }
 .paper-enable { position: fixed; bottom: 12px; right: 12px; z-index: 10; }
 @media (prefers-reduced-motion: reduce) { .paper-flap { transition: none !important; animation: none !important; } }
 /* The cartridge's ordinary link can still lift; toy controls keep their source fixed. */
@@ -43,8 +44,17 @@
 .paper-fold-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 [data-crumple-state] > .paper-tools > .paper-actions { opacity: 1; pointer-events: auto; }
 [data-crumple-state] > .paper-tools > .paper-corner { opacity: 0; }
-/* Each shelf slot creates a stacking context during its entrance. Wrapped actions
-   must rise with that slot to stay reachable over the following row of cards. */
-.cartridge-slot:has([data-crumple-state]) { position: relative; z-index: 3; }
-.cartridge-slot:has([data-paper-active]:hover) { position: relative; z-index: 4; }
-.cartridge-slot:has([data-paper-active]:focus-within) { position: relative; z-index: 5; }
+/* Retaining the entrance's final stacking context traps an earlier card's tools
+   under later links and the masthead. Only the tools belong above that content. */
+.rise:has([data-paper-active]) { animation-fill-mode: backwards; }
+.cartridge[data-paper-active] { isolation: auto; translate: none !important; }
+.cartridge[data-paper-active] > .cartridge-shell { z-index: 0; }
+.cartridge[data-paper-active] > .cartridge-label { z-index: 1; }
+/* Lift the same visible paper, without making its tools part of the transform.
+   The host continues to reserve exactly its original layout box. */
+.cartridge[data-paper-active] > :is(.cartridge-shell, .cartridge-label) { translate: 0 0; }
+.cartridge[data-paper-active]:focus-within > :is(.cartridge-shell, .cartridge-label) { translate: 0 -6px; }
+@media (hover: hover) {
+  .cartridge-slot:hover .cartridge[data-paper-active] > :is(.cartridge-shell, .cartridge-label) { translate: 0 -6px; }
+}
+.cartridge[data-paper-active]:has(.paper-tools:focus-within, .paper-tools:hover) > :is(.cartridge-shell, .cartridge-label) { translate: 0 0; }

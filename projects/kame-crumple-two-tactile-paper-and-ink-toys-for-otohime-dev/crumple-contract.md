@@ -47,7 +47,13 @@ visual children outside `.paper-tools` receive paint-only opacity while represen
 by Canvas. No content is removed, hidden, made inert or assigned `aria-hidden`.
 Existing decorative accessibility attributes are preserved. Controls are siblings
 of the canvas outside the source box and remain visible/focusable in ball state.
-Shelf stacking contexts rise with active paper so wrapped actions receive clicks.
+Project/note action shelves have native pointer hit targets at rest; the initial
+pointer entry reveals them with the existing hover/focus policy. Untouched touch
+cards keep their shelf concealed. The tools have their own stacking layer above
+neighbouring titles and the sticky masthead. Enhanced hosts do not
+retain an entrance, isolation or translate stacking context; the cartridge shell
+and label keep their visual lift separately. Controls stay outside the source,
+with no change to its reserved layout box or any content link's pointer handling.
 
 Read card focus/click, Reset focus/click and focus entering any original descendant
 synchronously remove the proxy and restore visible paper. Per-card Reset clears
@@ -86,6 +92,15 @@ native selection/scroll/context menus and lifecycle cleanup. Deliberately blocke
 renderer imports, null contexts, thrown paint and context loss are failure controls;
 those injected failures are not claimed as real provider outages. Existing fetch and
 peel browser suites remain part of the required verification.
+
+The native-pointer regression covers every opted-in project and note card at
+1280×860 and 720×860. Before each action it moves away and blurs the previous
+control, verifies the exact centre hit target at rest and after native mouse
+movement, then uses mouse input without pre-focus, hover preparation or DOM click.
+Crumple must paint real nonempty Canvas pixels; Read card and Reset must restore
+the same accessible source and document geometry. Uncovered links receive real
+native clicks too. The unchanged stylesheet fails all four route/width cases;
+run-9328 retains that red evidence and the corrected production results.
 
 Run-specific results and executable hashes live in `run-9308/artifacts/`. Local
 production execution is demonstrated separately from CI/deployed product delivery.

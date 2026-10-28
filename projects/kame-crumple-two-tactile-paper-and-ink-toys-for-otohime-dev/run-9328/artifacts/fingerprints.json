@@ -1,0 +1,41 @@
+{
+  "base": "770acf8661dc5c46affb3ac2c2a30c8413b46f81",
+  "profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "runner": "fleet",
+  "worker": "avietidol-z490",
+  "node": "v22.23.3",
+  "chrome": "Google Chrome 156.0.8078.47",
+  "platform": "linux/x64",
+  "next": "16.4.2",
+  "playwright": "1.64.0",
+  "embedded-postgres": "17.10.0-beta.17",
+  "build_id": "6Js9DSk7HgMdsLf-ZW2ty",
+  "source_sha256": {
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "e835fc4f086b91bf51b14a04acc3dca5e11742f4c433ffbb53b13b32184719f5",
+    "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+    "app/(site)/tactile.css": "5946241b9390653e4f930c621fc9369b1cd20416ab658fb3b63f839066bd6657",
+    "app/(site)/globals.css": "df2accbef90094bcabb881656e8d7d8b0a6fc287bb3ba91f77229e7370b86b16",
+    "e2e/crumple.test.ts": "742bfec7815c2376220a0f6c393c89e29be84b888526bddb35ac0666b5b438b5",
+    "e2e/tactile-helpers.ts": "59ae96c4e0c12fc7ad7345314b833a177565b2698ec8957e431b10dfc7542773",
+    "lib/crumple.ts": "aff766ad1fd2e4f55b6a08b6f0f1d29749b2d163a67da7377d0d02aa758b1d25",
+    "lib/tactile.ts": "9095e6c94d44dd49a960e75d95025d17724db492f695a7474c170cee83191f48",
+    "lib/tear.ts": "e9dcf27c5a2728ad7d5e9b7fc4bad08b4dec2bdf6cee7046d0942bd74a83c650",
+    "lib/kame-fetch.ts": "5708121abe0aba0b284dbaa97dec8e72812e872b7517bd8e3c489165c688f293",
+    "components/tactile/crumple-renderer.ts": "f576afe8342f65baf2af0181bad621a767dfd587cd655469b57e3175b3a7b843",
+    "components/tactile/crumple.ts": "1f92f46eeddd071b3be33269023c4d1d2cd7be8bd3de9a16094343558bd3ef37",
+    "components/tactile/fetch.ts": "76adf7f7f446528b142e935c3b2e5c53ef0f715cb1eb64823c262426a196eb89",
+    "components/tactile/loader.tsx": "84978d2076d5b213cd51604883ea258a6d30acca865f811be30c39bc245dd52d",
+    "components/tactile/paper-layer.tsx": "76344d0d5a5435bc32d28317519c738eefc73429b7b24aef185cf1f326c48006",
+    "components/tactile/reset.ts": "d6f0772431eb825fd6818fce64c5b8b77d7c4e8b63e2e00af5c2af944c7a5518"
+  },
+  "paper_chunks_sha256": {
+    ".next/static/chunks/3dqczty24jjos.css": "03903a64b24d0aa5442d7aac8b9626bd1798d6faa5cfa65d510f862ca3e57fe4",
+    ".next/static/chunks/3l1vvh8c26uky.js": "b5d40ce3305936b63c06ffe6be61d2c9f559d50b327f521ee1ed30fa6feaf880"
+  },
+  "dependency_setup": "npm ci, unchanged lock; actual imports, migrated embedded Postgres, production Next server, native Chrome/Canvas constructed by scripts/e2e.mjs; no new bitmap/model assets",
+  "real_fake_boundary": "Positive folding uses real renderer and Canvas pixels. Deliberate module/context failures and delayed imports are injected negative controls; unrelated Ghosts service is a fixture.",
+  "executable_fingerprint": "95122408d690625dabd5cdc3d2dbb25935eea61321fb4a12f05e2d5c6d9a4b8f"
+}

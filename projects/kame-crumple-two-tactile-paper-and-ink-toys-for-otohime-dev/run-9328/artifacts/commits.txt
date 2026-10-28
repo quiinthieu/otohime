@@ -1,0 +1,5 @@
+Delivery: the enclosing commit; resolve with git log -1 --format="%H %s" -- projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9328/artifacts/commits.txt
+Subject: pm-274/t-1584: fix: expose paper controls to first pointer clicks
+Base: 770acf8661dc5c46affb3ac2c2a30c8413b46f81
+Target refs: origin/main and origin/pm-274-t-1584-run-9328
+The summary MCP report supplies the exact immutable delivery SHA after push.

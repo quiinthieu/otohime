@@ -45,10 +45,86 @@ async function clickCard(card: Locator, name: string) {
   const button = card.getByRole('button', { name, exact: true });
   await button.focus(); await button.click();
 }
+// No focus(), hover(), locator click auto-wait or DOM click can prepare this path.
+async function pointerClick(button: Locator) {
+  const page = button.page();
+  await page.mouse.move(0, page.viewportSize()!.height - 1);
+  await page.evaluate(() => { if (document.activeElement instanceof HTMLElement) document.activeElement.blur(); });
+  await button.scrollIntoViewIfNeeded();
+  const hit = () => button.evaluate(el => {
+    const r = el.getBoundingClientRect(), x = r.x + r.width / 2, y = r.y + r.height / 2;
+    const top = document.elementFromPoint(x, y);
+    return { self: top === el, target: top?.outerHTML.slice(0, 200), x, y };
+  });
+  assert.equal(await button.evaluate(el => document.activeElement === el), false, 'control has no prior focus');
+  let centre = await hit();
+  assert.equal(centre.self, true, `resting control centre must be reachable: ${JSON.stringify(centre)}`);
+  await page.mouse.move(centre.x, centre.y);
+  centre = await hit();
+  assert.equal(centre.self, true, `native pointer centre must be the control: ${JSON.stringify(centre)}`);
+  assert.equal(await button.evaluate(el => getComputedStyle(el.closest('.paper-actions')!).opacity), '1', 'initial pointer entry exposes the shelf');
+  await page.mouse.click(centre.x, centre.y);
+}
+async function documentSource(card: Locator) {
+  const snapshot = await source(card);
+  const scroll = await card.page().evaluate(() => ({ x: scrollX, y: scrollY }));
+  snapshot.rect.x += scroll.x; snapshot.rect.y += scroll.y;
+  return snapshot;
+}
 async function intact(card: Locator) {
   assert.equal(await card.locator('canvas').count(), 0);
   assert.equal(await card.getAttribute('data-crumple-paint'), null);
   assert.ok(await card.evaluate(el => [...el.children].filter(c => !c.hasAttribute('data-paper-controls')).every(c => getComputedStyle(c).opacity !== '0')));
+}
+
+for (const width of [1280, 720]) for (const route of ['/projects', '/notes']) {
+  test(`fresh native controls reach real Canvas at ${width}px on ${route}`, async t => {
+    const page = await open(t, route, { viewport: { width, height: 860 } });
+    const count = await cards(page).count();
+    for (let i = 0; i < count; i++) {
+      const card = cards(page).nth(i);
+      t.diagnostic(`native controls: ${await card.getAttribute('data-paper-id')}`);
+      if (i === 0) {
+        // A sticky masthead must not recapture an exposed action on scroll.
+        await card.getByRole('button', { name: 'Crumple', exact: true }).evaluate(el => {
+          const r = el.getBoundingClientRect();
+          scrollTo(0, scrollY + r.y + r.height / 2 - 32);
+        });
+      }
+      const original = await documentSource(card);
+      await pointerClick(card.getByRole('button', { name: 'Crumple', exact: true }));
+      await ball(card);
+      assert.deepEqual(await documentSource(card), original);
+      await pointerClick(card.getByRole('button', { name: 'Read card', exact: true }));
+      await intact(card);
+      await pointerClick(card.getByRole('button', { name: 'Crumple', exact: true }));
+      await ball(card);
+      await pointerClick(card.getByRole('button', { name: 'Reset', exact: true }));
+      await intact(card);
+      assert.deepEqual(await documentSource(card), original);
+      const link = card.locator('a').first();
+      // A previous row's controls may cover part of a title. Its native link
+      // must still receive a real click everywhere sampled outside those tools.
+      await link.scrollIntoViewIfNeeded();
+      const point = await link.evaluate(el => {
+        const r = el.closest('[data-paper-id]')!.getBoundingClientRect();
+        for (let y = Math.max(70, r.y + 8); y < Math.min(innerHeight, r.bottom) - 8; y += 8) {
+          for (let x = r.x + 8; x < r.right - 8; x += 8) {
+            const hit = document.elementFromPoint(x, y);
+            if (hit === el || el.contains(hit)) return { x, y };
+          }
+        }
+        return null;
+      });
+      assert.ok(point, 'source link keeps an uncovered native hit target');
+      await link.evaluate(el => el.addEventListener('click', e => {
+        e.preventDefault(); el.setAttribute('data-native-link-click', 'true');
+      }, { once: true }));
+      await page.mouse.click(point.x, point.y);
+      assert.equal(await link.getAttribute('data-native-link-click'), 'true');
+      await link.evaluate(el => el.removeAttribute('data-native-link-click'));
+    }
+  });
 }
 
 test('keyboard folds real ink on both routes, retains accessible source/geometry, and Read, focus and Reset restore synchronously', async t => {
@@ -75,7 +151,10 @@ test('keyboard folds real ink on both routes, retains accessible source/geometry
     await intact(card); assert.equal(await card.getAttribute('data-paper-state'), 'intact');
     if (await card.locator('a').count()) {
       await crumple.focus(); await page.keyboard.press('Enter'); await ball(card);
-      const link = card.locator('a').first(); const name = await link.innerText();
+      const link = card.locator('a').first();
+      // Riso's aria-hidden decorative copy is included in innerText. The
+      // uninterrupted semantic source supplies the accessible name instead.
+      const name = await link.evaluate(el => (el.querySelector('.riso-source') ?? el).textContent!.trim());
       await link.evaluate((a: HTMLAnchorElement) => a.focus()); await intact(card);
       assert.equal(await card.getByRole('link', { name, exact: true }).count(), 1);
     }

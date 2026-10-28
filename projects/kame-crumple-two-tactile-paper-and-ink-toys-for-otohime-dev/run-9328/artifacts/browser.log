@@ -1,0 +1,381 @@
+Starting embedded Postgres on 127.0.0.1:34635
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/tmp/pm-274-t-1584-run-9328/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Building
+
+> otohime@0.1.0 prebuild
+> node scripts/vendor-peep-box.mjs && (node scripts/ledger-fetch.mjs || true; node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/history-index.ts)
+
+Peep-box vision-0.10.32-face-1: vendored
+ledger: kept content/ledger.json (no GITHUB_TOKEN)
+history:index: git (full history): 200 of 704 commits in /tmp/pm-274-t-1584-run-9328/content/history.json, unchanged
+
+> otohime@0.1.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 31ms
+- Cache Components enabled
+- Partial Prefetching enabled
+- Experiments (use with caution):
+  ✓ authInterrupts
+  ✓ globalNotFound
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.1s
+  Running TypeScript ...
+  Finished TypeScript in 15.3s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/215) ...
+  Generating static pages using 19 workers (53/215)
+  Generating static pages using 19 workers (107/215)
+  Generating static pages using 19 workers (161/215)
+✓ Generating static pages using 19 workers (215/215) in 2.3s
+  Finalizing page optimization ...
+
+Route (app)                             Revalidate  Expire
+┌ ◐ /                                           1d      1w
+├ ○ /_not-found
+├ ◐ /account                                    1d      1w
+├ ◐ /admin                                      1d      1w
+├ ◐ /admin/bottles                              1d      1w
+├ ◐ /admin/roles                                1d      1w
+├ ◐ /admin/users                                1d      1w
+├   /admin/users/[id]                           1d      1w
+│ └ ◐ /admin/users/[id]                         1d      1w
+├ ƒ /api/admin/bottles
+├ ƒ /api/admin/bottles/[id]
+├ ƒ /api/ask
+├ ƒ /api/auth/[...all]
+├ ƒ /api/bottles
+├ ƒ /api/bottles/suggestions
+├ ƒ /api/ghosts
+├ ƒ /api/guestbook
+├ ƒ /api/health
+├ ƒ /api/now-playing
+├ ○ /articles
+├   /articles/[slug]
+│ ├ ◐ /articles/[slug]
+│ ├ ○ /articles/why-the-sky-is-blue
+│ ├ ○ /articles/why-we-need-a-leap-day
+│ └ ◐ [+4 more paths]
+├ ƒ /barometer
+├ ○ /capsule
+├ ◐ /dashboard                                  1d      1w
+├ ○ /design-system
+├ ◐ /desk                                       1d      1w
+├ ○ /desk/opengraph-image-blg90x
+├ ○ /elements
+├   /elements/[symbol]
+│ ├ ◐ /elements/[symbol]
+│ ├ ○ /elements/h
+│ ├ ○ /elements/he
+│ └ ◐ [+116 more paths]
+├ ○ /forgot-password
+├ ○ /icon.svg
+├ ◐ /lab                                        1d      1w
+├ ◐ /ledger                                     1d      1w
+├ ○ /ledger/opengraph-image-1olq6y
+├ ◐ /making-of                                  1d      1w
+├ ƒ /music                                      1d      1w
+├ ○ /music/opengraph-image-rp137v
+├ ◐ /notes                                      1d      1w
+├   /notes/[slug]                               1d      1w
+│ ├ ◐ /notes/[slug]                             1d      1w
+│ ├ ◐ /notes/backfills-are-a-feature            1d      1w
+│ ├ ◐ /notes/on-twos                            1d      1w
+│ └ ◐ /notes/the-contract-caught-it             1d      1w
+├ ○ /notes/opengraph-image-rplwnn
+├ ○ /og
+├ ○ /orrery
+├   /orrery/[body]
+│ ├ ◐ /orrery/[body]
+│ ├ ○ /orrery/sun
+│ ├ ○ /orrery/mercury
+│ └ ◐ [+12 more paths]
+├ ƒ /planisphere
+├ ◐ /play                                       1d      1w
+├ ◐ /play/booth                                 1d      1w
+├ ◐ /play/hanafuda                              1d      1w
+├ ○ /play/opengraph-image-blpn7k
+├ ◐ /play/pachinko                              1d      1w
+├ ◐ /postcard                                   1d      1w
+├ ƒ /postcard/image
+├ ○ /postcard/opengraph-image-1x4cxz
+├ ◐ /postcard/view                              1d      1w
+├ ◐ /projects                                   1d      1w
+├ ○ /projects/opengraph-image-1ndqzi
+├ ○ /reset-password
+├ ƒ /rotor
+├ ○ /ryugu
+├ ○ /shore
+├ ○ /sign-in
+├ ◐ /sketches                                   1d      1w
+├ ƒ /sketches/download/[filename]
+├ ○ /sketches/opengraph-image-t812bo
+├ ○ /structures
+├   /structures/[slug]
+│ ├ ◐ /structures/[slug]
+│ ├ ○ /structures/array
+│ ├ ○ /structures/linked-list
+│ └ ◐ [+6 more paths]
+├ ○ /vinyl
+├ ◐ /work                                       1d      1w
+├ ○ /work/opengraph-image-blv499
+└ ◐ /zine
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+Starting the server on http://localhost:44849
+TAP version 13
+# Subtest: fresh native controls reach real Canvas at 1280px on /projects
+ok 1 - fresh native controls reach real Canvas at 1280px on /projects
+  ---
+  duration_ms: 15644.980647
+  type: 'test'
+  ...
+# native controls: project:%2Fshore
+# native controls: project:%2Fcapsule
+# native controls: project:%2Forrery
+# native controls: project:%2Felements
+# native controls: project:%2Fvinyl
+# native controls: project:%2Frotor
+# native controls: project:%2Fplanisphere
+# native controls: project:%2Fbarometer
+# native controls: project:%2Farticles
+# native controls: project:%2Fstructures
+# native controls: project:%2Fdesign-system
+# Subtest: fresh native controls reach real Canvas at 1280px on /notes
+ok 2 - fresh native controls reach real Canvas at 1280px on /notes
+  ---
+  duration_ms: 5127.788557
+  type: 'test'
+  ...
+# native controls: note:2026-10-12
+# native controls: note:2026-09-28
+# native controls: note:2026-09-03
+# Subtest: fresh native controls reach real Canvas at 720px on /projects
+ok 3 - fresh native controls reach real Canvas at 720px on /projects
+  ---
+  duration_ms: 15418.934798
+  type: 'test'
+  ...
+# native controls: project:%2Fshore
+# native controls: project:%2Fcapsule
+# native controls: project:%2Forrery
+# native controls: project:%2Felements
+# native controls: project:%2Fvinyl
+# native controls: project:%2Frotor
+# native controls: project:%2Fplanisphere
+# native controls: project:%2Fbarometer
+# native controls: project:%2Farticles
+# native controls: project:%2Fstructures
+# native controls: project:%2Fdesign-system
+# Subtest: fresh native controls reach real Canvas at 720px on /notes
+ok 4 - fresh native controls reach real Canvas at 720px on /notes
+  ---
+  duration_ms: 4698.931331
+  type: 'test'
+  ...
+# native controls: note:2026-10-12
+# native controls: note:2026-09-28
+# native controls: note:2026-09-03
+# Subtest: keyboard folds real ink on both routes, retains accessible source/geometry, and Read, focus and Reset restore synchronously
+ok 5 - keyboard folds real ink on both routes, retains accessible source/geometry, and Read, focus and Reset restore synchronously
+  ---
+  duration_ms: 7641.389517
+  type: 'test'
+  ...
+# Subtest: stationary real mouse and touch grips fold at the shared hold; touch body scrolling and corner peeling never crumple
+ok 6 - stationary real mouse and touch grips fold at the shared hold; touch body scrolling and corner peeling never crumple
+  ---
+  duration_ms: 7133.94624
+  type: 'test'
+  ...
+# Subtest: renderer chunk loads only on first action; blocked import is a negative control with readable source and working recovery
+ok 7 - renderer chunk loads only on first action; blocked import is a negative control with readable source and working recovery
+  ---
+  duration_ms: 4357.915578
+  type: 'test'
+  ...
+# Subtest: null Canvas, thrown paint and context loss restore immediately; real renderer works again after recovery
+ok 8 - null Canvas, thrown paint and context loss restore immediately; real renderer works again after recovery
+  ---
+  duration_ms: 3306.561803
+  type: 'test'
+  ...
+# Subtest: reduced motion is instant static paint; eight slots cap balls and ninth source remains readable
+ok 9 - reduced motion is instant static paint; eight slots cap balls and ninth source remains readable
+  ---
+  duration_ms: 1279.224021
+  type: 'test'
+  ...
+# Subtest: fold cancellation handles Escape, blur, hide, resize, modal, motion, removal and route departure without a late proxy
+ok 10 - fold cancellation handles Escape, blur, hide, resize, modal, motion, removal and route departure without a late proxy
+  ---
+  duration_ms: 8955.447118
+  type: 'test'
+  ...
+# fold cancellation: escape
+# fold cancellation: blur
+# fold cancellation: hide
+# fold cancellation: resize
+# fold cancellation: modal
+# fold cancellation: motion
+# fold cancellation: remove
+# fold cancellation: route
+# Subtest: pointer cancellation and native text/context menus retain readable content and permit the next action
+ok 11 - pointer cancellation and native text/context menus retain readable content and permit the next action
+  ---
+  duration_ms: 2880.199832
+  type: 'test'
+  ...
+# Subtest: fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+ok 12 - fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+  ---
+  duration_ms: 1234.69983
+  type: 'test'
+  ...
+# Subtest: keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+ok 13 - keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+  ---
+  duration_ms: 3750.163629
+  type: 'test'
+  ...
+# Subtest: mouse grip toss, exact click suppression, text selection and native link navigation
+ok 14 - mouse grip toss, exact click suppression, text selection and native link navigation
+  ---
+  duration_ms: 2349.174665
+  type: 'test'
+  ...
+# Subtest: continuous mouse path across the title and its open Peek reaches a visible Fetch back
+ok 15 - continuous mouse path across the title and its open Peek reaches a visible Fetch back
+  ---
+  duration_ms: 2305.818241
+  type: 'test'
+  ...
+# Subtest: real mobile CDP grip fetch and card-body scrolling negative control
+ok 16 - real mobile CDP grip fetch and card-body scrolling negative control
+  ---
+  duration_ms: 2129.970479
+  type: 'test'
+  ...
+# Subtest: chips and sticker perform real fetch while links and source dimensions stay intact
+ok 17 - chips and sticker perform real fetch while links and source dimensions stay intact
+  ---
+  duration_ms: 2427.714406
+  type: 'test'
+  ...
+# Subtest: Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+ok 18 - Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+  ---
+  duration_ms: 1357.230571
+  type: 'test'
+  ...
+# cancel path: escape
+# cancel path: blur
+# cancel path: hidden
+# cancel path: resize
+# cancel path: modal
+# cancel path: motion
+# cancel path: dismiss
+# cancel path: remove
+# Subtest: pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+ok 19 - pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+  ---
+  duration_ms: 1315.765952
+  type: 'test'
+  ...
+# Subtest: unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+ok 20 - unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+  ---
+  duration_ms: 3900.520561
+  type: 'test'
+  ...
+# Subtest: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+ok 21 - Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+  ---
+  duration_ms: 1716.211889
+  type: 'test'
+  ...
+# Subtest: native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+ok 22 - native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+  ---
+  duration_ms: 1468.614811
+  type: 'test'
+  ...
+# Subtest: peeled mobile cards keep all fetch actions clear of the real margin note
+ok 23 - peeled mobile cards keep all fetch actions clear of the real margin note
+  ---
+  duration_ms: 1410.535309
+  type: 'test'
+  ...
+# Subtest: server and no-JS baseline: all cards remain readable links without toy controls
+ok 24 - server and no-JS baseline: all cards remain readable links without toy controls
+  ---
+  duration_ms: 1290.569177
+  type: 'test'
+  ...
+# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+ok 25 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+  ---
+  duration_ms: 3687.112001
+  type: 'test'
+  ...
+# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+ok 26 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+  ---
+  duration_ms: 1665.960559
+  type: 'test'
+  ...
+# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable
+ok 27 - blocked storage and live reduced motion keep instant keyboard operations usable
+  ---
+  duration_ms: 1292.111481
+  type: 'test'
+  ...
+# Subtest: Save-Data loads paper only after explicit enabling
+ok 28 - Save-Data loads paper only after explicit enabling
+  ---
+  duration_ms: 1179.909341
+  type: 'test'
+  ...
+# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+ok 29 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+  ---
+  duration_ms: 3429.083237
+  type: 'test'
+  ...
+# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload
+ok 30 - renderer import waits for window load and the idle callback; server markup has no toy preload
+  ---
+  duration_ms: 1145.026299
+  type: 'test'
+  ...
+# Subtest: existing desktop desk and stamp gestures keep their own controls
+ok 31 - existing desktop desk and stamp gestures keep their own controls
+  ---
+  duration_ms: 1684.264365
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 118402.129369

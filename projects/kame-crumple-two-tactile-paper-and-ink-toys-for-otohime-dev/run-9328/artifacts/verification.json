@@ -1,0 +1,78 @@
+{
+  "run_id": "run-9328",
+  "task_id": "t-1584",
+  "checks": [
+    {
+      "name": "fold geometry and gesture boundaries",
+      "cwd": ".",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/crumple.test.ts lib/tactile.test.ts lib/tear.test.ts lib/kame-fetch.test.ts",
+      "exit_code": 0,
+      "tests": 19,
+      "pass": 19,
+      "fail": 0,
+      "skipped": 0,
+      "evidence": "foundation.log"
+    },
+    {
+      "name": "repository suite",
+      "cwd": ".",
+      "cmd": "npm test",
+      "exit_code": 0,
+      "tests": 2618,
+      "pass": 2618,
+      "fail": 0,
+      "skipped": 0,
+      "evidence": "repository-summary.log"
+    },
+    {
+      "name": "production crumple and fetch coexistence",
+      "cwd": ".",
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts e2e/kame-fetch.test.ts e2e/tactile-tear.test.ts",
+      "exit_code": 0,
+      "tests": 31,
+      "pass": 31,
+      "fail": 0,
+      "skipped": 0,
+      "evidence": "browser.log"
+    },
+    {
+      "name": "lint and type contracts",
+      "cwd": ".",
+      "cmd": "npm run lint && npm run typecheck",
+      "exit_code": 0,
+      "eslint_errors": 0,
+      "existing_warnings": 10,
+      "tsc_exit_code": 0,
+      "evidence": [
+        "lint.log",
+        "typecheck.log"
+      ]
+    }
+  ],
+  "initial_negative_control": {
+    "evidence": "pointer-red.log",
+    "unchanged_css": "4/4 native pointer regressions fail before fix"
+  },
+  "native_pointer_matrix": {
+    "routes": [
+      "/projects",
+      "/notes"
+    ],
+    "viewports": [
+      {
+        "width": 1280,
+        "height": 860
+      },
+      {
+        "width": 720,
+        "height": 860
+      }
+    ],
+    "project_cards_per_width": 11,
+    "note_cards_per_width": 3,
+    "real_canvas_ball_checks": 56,
+    "native_control_clicks": 112,
+    "native_link_clicks": 28,
+    "first_control_over_masthead_cases": 4
+  }
+}

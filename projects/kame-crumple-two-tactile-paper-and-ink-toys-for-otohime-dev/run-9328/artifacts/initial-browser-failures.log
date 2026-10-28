@@ -1,0 +1,46 @@
+Intermediate validation failures, fixed before the final successful browser.log.
+
+# Subtest: keyboard folds real ink on both routes, retains accessible source/geometry, and Read, focus and Reset restore synchronously
+not ok 5 - keyboard folds real ink on both routes, retains accessible source/geometry, and Read, focus and Reset restore synchronously
+  ---
+  duration_ms: 6790.286149
+  type: 'test'
+  location: '/tmp/pm-274-t-1584-run-9328/e2e/crumple.test.ts:122:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/pm-274-t-1584-run-9328/e2e/crumple.test.ts:148:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+not ok 29 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+  ---
+  duration_ms: 2946.546314
+  type: 'test'
+  location: '/tmp/pm-274-t-1584-run-9328/e2e/tactile-tear.test.ts:108:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    intact touch cards keep the neighboring note clear
+
+    '1' !== '0'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '0'
+  actual: '1'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///tmp/pm-274-t-1584-run-9328/e2e/tactile-tear.test.ts:124:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
