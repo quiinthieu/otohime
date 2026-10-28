@@ -19,7 +19,8 @@ export type CueName =
   | "stamp"
   | "rustle"
   | "press"
-  | "shuffle";
+  | "shuffle"
+  | "shutter";
 
 // Nothing plays louder than this, whatever a cue asks for.
 export const MAX_DB = -18;
@@ -70,6 +71,17 @@ export const CUES: Record<CueName, Cue> = {
       note(980, 0.13, 0.003, 0.035),
     ],
   },
+  // a photobooth shutter clack: a short high noise-burst of curtain ticks followed by a low mechanical click
+  shutter: {
+    db: -20,
+    notes: [
+      note(1840, 0, 0.001, 0.012),
+      note(1520, 0.006, 0.001, 0.014),
+      note(1960, 0.012, 0.001, 0.012),
+      note(240, 0.024, 0.002, 0.035),
+      note(135, 0.045, 0.002, 0.055),
+    ],
+  },
 };
 
 export const dbToGain = (db: number) => 10 ** (db / 20);
@@ -101,3 +113,35 @@ export const PURR: Cue = { db: -34, wave: "triangle", notes: [
 
 // Wooden clappers: a quiet pair of short, low triangle taps.
 export const CLAPPER: Cue = { db: -30, wave: "triangle", notes: [note(180, 0, 0.002, 0.025), note(120, 0.04, 0.002, 0.03)] };
+
+// Photobooth shutter clack alias and deterministic noise-burst + mechanical click waveform generator (<= MAX_DB).
+export const SHUTTER: Cue = CUES.shutter;
+export const SHUTTER_SEED = 0x5477e2;
+
+export function shutterClackSamples(seed = SHUTTER_SEED, sampleRate = 8000): Float32Array {
+  const duration = 0.09;
+  const length = Math.max(1, Math.round(duration * sampleRate));
+  const out = new Float32Array(length);
+  const peak = cueGain(CUES.shutter);
+  let state = seed >>> 0;
+  const rand = () => {
+    state = (state + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(state ^ (state >>> 15), state | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return (((t ^ (t >>> 14)) >>> 0) / 4294967296) * 2 - 1;
+  };
+  for (let i = 0; i < length; i++) {
+    const t = i / sampleRate;
+    // Curtain noise burst in [0, 0.022s]
+    const burstEnv = t < 0.022 ? Math.sin((t / 0.022) * Math.PI) : 0;
+    const burst = rand() * burstEnv * 0.65;
+    // Mechanical click latch at t >= 0.024s (240 Hz -> 135 Hz chirp)
+    const clickT = t - 0.024;
+    const clickEnv = clickT >= 0 && clickT < 0.055 ? Math.exp(-clickT * 75) : 0;
+    const clickHz = 240 - Math.min(1, Math.max(0, clickT / 0.055)) * 105;
+    const click = Math.sin(2 * Math.PI * clickHz * Math.max(0, clickT)) * clickEnv * 0.85;
+    const raw = Math.max(-1, Math.min(1, burst + click));
+    out[i] = raw * peak;
+  }
+  return out;
+}

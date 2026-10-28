@@ -14,15 +14,18 @@ import {
   SOUND_KEY,
   storeSound,
   PURR,
+  SHUTTER,
+  SHUTTER_SEED,
+  shutterClackSamples,
   type Cue,
   type CueName,
 } from "./sound.ts";
 import { play, setSound, startPurr, stopPurr } from "./sound-client.ts";
 
-const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle", "press", "shuffle"];
+const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle", "press", "shuffle", "shutter"];
 const OLD = NAMES.filter((name) => name !== "press");
 
-test("the ten cues the console and the ink toys need are all there", () => {
+test("the eleven cues the console and the ink toys need are all there", () => {
   assert.deepEqual(Object.keys(CUES).sort(), [...NAMES].sort());
 });
 
@@ -95,11 +98,20 @@ test("a stamp is a low falling thud and a rustle is quiet high ticks", () => {
   assert.ok(new Set(gaps).size > 1, `rustle ticks are unevenly spaced: ${gaps}`);
   assert.ok(cueGain(rustle) < cueGain(stamp), "a rustle sits under a stamp");
 
-  const { shuffle } = CUES;
+  const { shuffle, shutter } = CUES;
   assert.ok(shuffle.db <= MAX_DB, `shuffle asks for ${shuffle.db} dB`);
   assert.ok(shuffle.notes.length >= 5, "a shuffle is a quick cascade of paper ticks");
   assert.ok(cueLength(shuffle) <= 0.25, "shuffle finishes crisply");
   assert.ok(cueGain(shuffle) < cueGain(stamp), "a shuffle sits under a stamp");
+
+  assert.equal(SHUTTER, shutter);
+  assert.ok(shutter.db <= MAX_DB, `shutter asks for ${shutter.db} dB`);
+  assert.ok(cueGain(shutter) <= dbToGain(MAX_DB) + 1e-12, "shutter capped at <= -18 dB");
+  assert.ok(cueLength(shutter) <= 0.15, "shutter clack is crisp and short");
+  const burstNotes = shutter.notes.slice(0, 3);
+  const clickNotes = shutter.notes.slice(3);
+  assert.ok(burstNotes.every((n) => n.hz >= 1400 && n.decay <= 0.02), "shutter begins with a short high noise-burst");
+  assert.ok(clickNotes.length === 2 && clickNotes[0].hz > clickNotes[1].hz && clickNotes[0].hz <= 300, "shutter ends with a falling mechanical click");
 });
 
 test("a press is a soft falling thunk, quieter than every other cue", () => {
@@ -193,6 +205,7 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
   play("rustle");
   play("press");
   play("shuffle");
+  play("shutter");
   assert.equal(FakeAudioContext.made, 0);
   assert.deepEqual(heard(), []);
 
@@ -216,6 +229,12 @@ test("play() sounds stamp and rustle only while the toggle is on, never above MA
   assert.deepEqual(shuffle.map((v) => v.hz), CUES.shuffle.notes.map((n) => n.hz));
   assert.equal(peakOf(shuffle), dbToGain(CUES.shuffle.db));
   assert.ok(peakOf(shuffle) <= dbToGain(MAX_DB));
+
+  play("shutter");
+  const shutter = heard();
+  assert.deepEqual(shutter.map((v) => v.hz), CUES.shutter.notes.map((n) => n.hz));
+  assert.equal(peakOf(shutter), dbToGain(CUES.shutter.db));
+  assert.ok(peakOf(shutter) <= dbToGain(MAX_DB));
 
   // A press plays its own wave, quietly; every old cue is still square.
   play("press");
@@ -342,4 +361,18 @@ test("the wooden clapper is bounded and quieter than console cues", async () => 
   const { CLAPPER, cueLength } = await import("./sound.ts");
   assert.equal(CLAPPER.notes.length,2); assert.equal(CLAPPER.wave,"triangle");
   assert.ok(CLAPPER.db <= -30); assert.ok(cueLength(CLAPPER) < .1);
+});
+
+test("shutterClackSamples synthesizes a deterministic noise-burst plus mechanical click capped at <= -18 dB", () => {
+  const a = shutterClackSamples(SHUTTER_SEED, 8000);
+  const b = shutterClackSamples(SHUTTER_SEED, 8000);
+  const c = shutterClackSamples(SHUTTER_SEED + 1, 8000);
+  assert.deepEqual(a, b, "deterministic for identical seed");
+  assert.notDeepEqual(a, c, "varies with seed");
+  const maxAmp = Math.max(...a.map(Math.abs));
+  assert.ok(maxAmp > 0 && maxAmp <= dbToGain(MAX_DB) + 1e-6, `peak ${maxAmp} <= -18 dB`);
+  const burstEnergy = a.slice(0, Math.floor(0.022 * 8000)).reduce((acc, v) => acc + Math.abs(v), 0);
+  const clickEnergy = a.slice(Math.floor(0.024 * 8000), Math.floor(0.075 * 8000)).reduce((acc, v) => acc + Math.abs(v), 0);
+  assert.ok(burstEnergy > 0, "contains initial noise-burst energy");
+  assert.ok(clickEnergy > 0, "contains mechanical click energy");
 });
