@@ -1,0 +1,188 @@
+TAP version 13
+# Subtest: keyboard folds real ink on both routes, retains accessible source/geometry, and Read, focus and Reset restore synchronously
+ok 1 - keyboard folds real ink on both routes, retains accessible source/geometry, and Read, focus and Reset restore synchronously
+  ---
+  duration_ms: 8801.402041
+  type: 'test'
+  ...
+# Subtest: stationary real mouse and touch grips fold at the shared hold; touch body scrolling and corner peeling never crumple
+ok 2 - stationary real mouse and touch grips fold at the shared hold; touch body scrolling and corner peeling never crumple
+  ---
+  duration_ms: 11364.092166
+  type: 'test'
+  ...
+# Subtest: renderer chunk loads only on first action; blocked import is a negative control with readable source and working recovery
+ok 3 - renderer chunk loads only on first action; blocked import is a negative control with readable source and working recovery
+  ---
+  duration_ms: 4826.474625
+  type: 'test'
+  ...
+# Subtest: null Canvas, thrown paint and context loss restore immediately; real renderer works again after recovery
+ok 4 - null Canvas, thrown paint and context loss restore immediately; real renderer works again after recovery
+  ---
+  duration_ms: 4304.645208
+  type: 'test'
+  ...
+# Subtest: reduced motion is instant static paint; eight slots cap balls and ninth source remains readable
+ok 5 - reduced motion is instant static paint; eight slots cap balls and ninth source remains readable
+  ---
+  duration_ms: 1213.05325
+  type: 'test'
+  ...
+# Subtest: fold cancellation handles Escape, blur, hide, resize, modal, motion, removal and route departure without a late proxy
+ok 6 - fold cancellation handles Escape, blur, hide, resize, modal, motion, removal and route departure without a late proxy
+  ---
+  duration_ms: 10579.073208
+  type: 'test'
+  ...
+# fold cancellation: escape
+# fold cancellation: blur
+# fold cancellation: hide
+# fold cancellation: resize
+# fold cancellation: modal
+# fold cancellation: motion
+# fold cancellation: remove
+# fold cancellation: route
+# Subtest: pointer cancellation and native text/context menus retain readable content and permit the next action
+ok 7 - pointer cancellation and native text/context menus retain readable content and permit the next action
+  ---
+  duration_ms: 4486.258042
+  type: 'test'
+  ...
+# Subtest: fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+ok 8 - fetch controls register cards, noninteractive Lines wrappers and one lazy sticker
+  ---
+  duration_ms: 1238.974834
+  type: 'test'
+  ...
+# Subtest: keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+ok 9 - keyboard fetch measures arrival and return without moving source text, hrefs or geometry on both routes
+  ---
+  duration_ms: 4212.789792
+  type: 'test'
+  ...
+# Subtest: mouse grip toss, exact click suppression, text selection and native link navigation
+ok 10 - mouse grip toss, exact click suppression, text selection and native link navigation
+  ---
+  duration_ms: 3672.947542
+  type: 'test'
+  ...
+# Subtest: continuous mouse path across the title and its open Peek reaches a visible Fetch back
+ok 11 - continuous mouse path across the title and its open Peek reaches a visible Fetch back
+  ---
+  duration_ms: 3322.64125
+  type: 'test'
+  ...
+# Subtest: real mobile CDP grip fetch and card-body scrolling negative control
+ok 12 - real mobile CDP grip fetch and card-body scrolling negative control
+  ---
+  duration_ms: 4199.5555
+  type: 'test'
+  ...
+# Subtest: chips and sticker perform real fetch while links and source dimensions stay intact
+ok 13 - chips and sticker perform real fetch while links and source dimensions stay intact
+  ---
+  duration_ms: 3009.943209
+  type: 'test'
+  ...
+# Subtest: Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+ok 14 - Escape, blur, hidden page, resize, modal, motion, dismissal and removed sources cancel immediately
+  ---
+  duration_ms: 1306.951708
+  type: 'test'
+  ...
+# cancel path: escape
+# cancel path: blur
+# cancel path: hidden
+# cancel path: resize
+# cancel path: modal
+# cancel path: motion
+# cancel path: dismiss
+# cancel path: remove
+# Subtest: pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+ok 15 - pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly
+  ---
+  duration_ms: 1677.370959
+  type: 'test'
+  ...
+# Subtest: unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+ok 16 - unreachable real turtle is a negative control: timeout cancels instead of claiming returned
+  ---
+  duration_ms: 10010.114458
+  type: 'test'
+  ...
+# Subtest: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+ok 17 - Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion
+  ---
+  duration_ms: 2662.719334
+  type: 'test'
+  ...
+# Subtest: native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+ok 18 - native prose selection, wrong-pointer cancellation, route departure and pagehide keep sources recoverable
+  ---
+  duration_ms: 2235.685958
+  type: 'test'
+  ...
+# Subtest: peeled mobile cards keep all fetch actions clear of the real margin note
+ok 19 - peeled mobile cards keep all fetch actions clear of the real margin note
+  ---
+  duration_ms: 1362.603625
+  type: 'test'
+  ...
+# Subtest: server and no-JS baseline: all cards remain readable links without toy controls
+ok 20 - server and no-JS baseline: all cards remain readable links without toy controls
+  ---
+  duration_ms: 1752.6755
+  type: 'test'
+  ...
+# Subtest: keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+ok 21 - keyboard peel/reset, real margin, stable geometry, session reload and route cleanup
+  ---
+  duration_ms: 3243.59175
+  type: 'test'
+  ...
+# Subtest: mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+ok 22 - mouse peel, pointercancel, lost capture, Escape, blur and pagehide restore cosmetics
+  ---
+  duration_ms: 2935.935208
+  type: 'test'
+  ...
+# Subtest: blocked storage and live reduced motion keep instant keyboard operations usable
+ok 23 - blocked storage and live reduced motion keep instant keyboard operations usable
+  ---
+  duration_ms: 1383.319875
+  type: 'test'
+  ...
+# Subtest: Save-Data loads paper only after explicit enabling
+ok 24 - Save-Data loads paper only after explicit enabling
+  ---
+  duration_ms: 1381.17175
+  type: 'test'
+  ...
+# Subtest: real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+ok 25 - real touch outside the handle scrolls; deliberate corner touch peels; desk/stamps stay excluded
+  ---
+  duration_ms: 6666.500417
+  type: 'test'
+  ...
+# Subtest: renderer import waits for window load and the idle callback; server markup has no toy preload
+ok 26 - renderer import waits for window load and the idle callback; server markup has no toy preload
+  ---
+  duration_ms: 1042.51625
+  type: 'test'
+  ...
+# Subtest: existing desktop desk and stamp gestures keep their own controls
+ok 27 - existing desktop desk and stamp gestures keep their own controls
+  ---
+  duration_ms: 2888.825666
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 106556.014916

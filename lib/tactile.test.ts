@@ -46,6 +46,22 @@ test("hold boundaries, scroll precedence and cancellation prohibit double comple
   now+=700; assert.equal(g.tick(),"idle");
   start(true,"grip"); assert.equal(g.move(1,7,0),"fetch"); g.cancel();
   assert.equal(g.start({pointer:1,x:0,y:0,intent:"body",blocked:true}),false);
+  // Stationary holds respect one owner and exact radial thresholds at the deadline.
+  let elapsed=0;
+  const held=createGesture({clock:()=>elapsed});
+  for(const intent of ['body','grip'] as const) {
+    elapsed=0; assert.ok(held.start({pointer:4,x:10,y:10,intent,touch:true}));
+    assert.equal(held.end(8),'idle'); assert.equal(held.pointer,4);
+    assert.equal(held.move(8,100,100),'hold');
+    assert.equal(held.move(4,10,10),'hold'); elapsed=599; assert.equal(held.tick(),'hold');
+    elapsed=600; assert.equal(held.tick(),'crumple'); assert.equal(held.end(4),'crumple');
+    assert.equal(held.end(4),'idle'); assert.equal(held.tick(),'idle');
+    held.start({pointer:4,x:0,y:0,intent,touch:true}); held.cancel(); elapsed+=600;
+    assert.equal(held.tick(),'idle');
+  }
+  elapsed=0;held.start({pointer:4,x:0,y:0,intent:'body',touch:true});
+  assert.equal(held.move(4,4.8,6.4),'hold'); assert.equal(held.move(4,4.81,6.4),'idle');
+  elapsed=600; assert.equal(held.tick(),'idle');
 });
 test("route session survives reload, clears only on departure, and bounds persisted ids", () => {
   const storage=memory(), options={clock:()=>123,storage,seed:42};

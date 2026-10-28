@@ -6,6 +6,7 @@ import { actionsSide, createGesture, createRouteSession, discoverSurfaces, type 
 import { deckle, tearState } from "@/lib/tear";
 import { createPaperFetch } from "./fetch";
 import { bindPaperReset } from "./reset";
+import { createPaperCrumple } from "./crumple";
 
 // Explicit roots, never a document-wide card/body gesture listener. Future toys use
 // the same port but must opt in their own grips. Existing controls keep their input.
@@ -53,6 +54,7 @@ export default function PaperLayer({ route }: { route: string }) {
       };
       const motion = matchMedia('(prefers-reduced-motion: reduce)');
       const fetch = createPaperFetch(gesture, signal, motion);
+      const crumple = createPaperCrumple(signal, motion);
 
       for (const surface of registry) {
         const el = nodes.find(n => n.dataset.paperId === surface.id)!;
@@ -75,7 +77,8 @@ export default function PaperLayer({ route }: { route: string }) {
         if (!surface.fetchOnly) { actions.append(peel,reset); root.append(corner,margin,handle); }
         else actions.append(reset);
         root.append(actions); el.append(root);
-        fetch.attach(el, root, actions);
+        let fold = { start: () => {}, restore: () => {} };
+        fetch.attach(el, root, actions, surface.fetchOnly ? undefined : () => fold.start(), () => fold.restore());
         if (!surface.fetchOnly) actions.append(margin);
         el.dataset.paperActive='true';
         bars.push([el,actions]);
@@ -96,15 +99,18 @@ export default function PaperLayer({ route }: { route: string }) {
           if(pointer!==undefined && handle.hasPointerCapture(pointer)) handle.releasePointerCapture(pointer);
         };
         const apply=(action: 'peel'|'reset'|'cancel', persist=true) => {
+          fold.restore();
+          delete el.dataset.fetchState;
           release();
           const state=tearState(amount ? 'peeled':'intact',action);
           paint(state==='peeled'?1:0,state);
           if(persist) session.set(surface.id,state==='peeled');
         };
         paint(amount,amount ? 'peeled':'intact');
+        if (!surface.fetchOnly) fold = crumple.attach(el, root, actions, session.seed(surface.id), () => { fetch.cancel(); apply('reset'); });
         resets.push(()=>apply('cancel'));
         peel.addEventListener('click',()=>{fetch.cancel();apply('peel');},{signal});
-        reset.addEventListener('click',()=>{fetch.cancel();apply('reset');},{signal});
+        for (const type of ['focus','click'] as const) reset.addEventListener(type,()=>{fetch.cancel();apply('reset');},{signal});
         handle.addEventListener('click',e=>{
           if(suppressClick && e.detail>0) {e.preventDefault();suppressClick=false;return;}
           apply('peel');
@@ -135,9 +141,9 @@ export default function PaperLayer({ route }: { route: string }) {
         for(const type of ['pointercancel','lostpointercapture'] as const) handle.addEventListener(type,e=>{if(origin?.pointer===e.pointerId) cancelActive();},{signal});
         // Focusing original content restores its paper without removing or moving it.
         el.addEventListener('focusin',e=>{if(e.target instanceof Node && !root.contains(e.target)) apply('reset');},{signal});
-        cleanups.push(()=>{release();root.remove();delete el.dataset.paperActive;delete el.dataset.paperState;delete el.dataset.paperActions;delete el.dataset.fetchState;});
+        cleanups.push(()=>{fold.restore();release();root.remove();delete el.dataset.paperActive;delete el.dataset.paperState;delete el.dataset.paperActions;delete el.dataset.fetchState;});
       }
-      const cancel=()=>{cancelActive();fetch.cancel();};
+      const cancel=()=>{cancelActive();fetch.cancel();crumple.cancel();};
       const reset=()=>{cancel();for(const clear of resets) clear();};
       restoreAll=reset;
       const unbindReset=bindPaperReset(reset);
@@ -161,7 +167,7 @@ export default function PaperLayer({ route }: { route: string }) {
         avoidPeek();
       });
       observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["open","aria-modal","data-side","data-paper-hydrated"]});
-      teardown=()=>{events.abort();observer.disconnect();fetch.dispose();unbindReset();sticker.remove();for(const clean of cleanups) clean();gesture.cancel();teardown=()=>{};};
+      teardown=()=>{events.abort();observer.disconnect();fetch.dispose();crumple.cancel();unbindReset();sticker.remove();for(const clean of cleanups) clean();gesture.cancel();teardown=()=>{};};
     };
     // Navigation API catches client hops, full-root links, history and location changes;
     // reload preserves this route's session. The fallback covers ordinary link departures.

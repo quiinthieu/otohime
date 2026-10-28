@@ -1,0 +1,50 @@
+{
+  "base_sha": "2cc83e69630cbc2c7faa4072cf7ae5e993b2612b",
+  "branch": "pm-274-t-1584-crumple",
+  "build_id": "10POThptT-ILqm5o3aY9C",
+  "node": "v22.23.3",
+  "npm": "10.9.9",
+  "next": "16.4.2",
+  "react": "19.3.0",
+  "playwright_core": "1.64.0",
+  "chrome": "156.0.8078.48 (installed native channel: chrome)",
+  "postgres": "embedded-postgres 17.10.0-beta.17; real temporary instance and migrations via scripts/e2e.mjs",
+  "profile": "codex-sol-6-1-high",
+  "model": "gpt-6.1-sol",
+  "effort": "high",
+  "runner": "fleet",
+  "worker": "avietidol-mac-mini",
+  "run_id": "run-9308",
+  "source_sha256": {
+    "lib/crumple.ts": "aff766ad1fd2e4f55b6a08b6f0f1d29749b2d163a67da7377d0d02aa758b1d25",
+    "lib/crumple.test.ts": "dff2150b836f1e26997c8e038c996a3f6a9e62d0f0c82f5b52ca501202812b3b",
+    "lib/tactile.ts": "9095e6c94d44dd49a960e75d95025d17724db492f695a7474c170cee83191f48",
+    "lib/tactile.test.ts": "8314bc790c0d784195277f549122588f904d1dc2849347419d673bb88bf9ddde",
+    "components/tactile/crumple.ts": "1f92f46eeddd071b3be33269023c4d1d2cd7be8bd3de9a16094343558bd3ef37",
+    "components/tactile/crumple-renderer.ts": "f576afe8342f65baf2af0181bad621a767dfd587cd655469b57e3175b3a7b843",
+    "components/tactile/fetch.ts": "76adf7f7f446528b142e935c3b2e5c53ef0f715cb1eb64823c262426a196eb89",
+    "components/tactile/paper-layer.tsx": "76344d0d5a5435bc32d28317519c738eefc73429b7b24aef185cf1f326c48006",
+    "components/tactile/loader.tsx": "84978d2076d5b213cd51604883ea258a6d30acca865f811be30c39bc245dd52d",
+    "app/(site)/tactile.css": "cbd6d06ff357d25c8ed4b1511396dc5213c8ff99c2bce3185e3dc5782e667471",
+    "e2e/crumple.test.ts": "4b32cf847c762f35160b0057eb29221e80de6b8d682af318cf378d965279ee31",
+    "e2e/tactile-helpers.ts": "59ae96c4e0c12fc7ad7345314b833a177565b2698ec8957e431b10dfc7542773",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "b0cee979017a19dd8e61656ca7583abd0c576aa3be9f69757898cb4db800f90a",
+    "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+    ".github/workflows/ci.yml": "8ba21883783aa3d3b7c0c83d67ef086ff1c4e41586d7de8e926caf88f54e8135"
+  },
+  "renderer_chunks": [
+    {
+      "path": ".next/static/chunks/3l1vvh8c26uky.js",
+      "sha256": "b5d40ce3305936b63c06ffe6be61d2c9f559d50b327f521ee1ed30fa6feaf880",
+      "bytes": 1706,
+      "gzip_bytes": 959
+    }
+  ],
+  "visual_inspection": {
+    "screenshot": "/tmp/crumple-fold.png (temporary, excluded from Git: no binaries)",
+    "paper": "#f2e9de",
+    "ink": "#2b1a12",
+    "observed": "Ink-creased compact paper ball, readable adjacent notes, visible outside controls; native Canvas pixels additionally asserted by E2E."
+  }
+}

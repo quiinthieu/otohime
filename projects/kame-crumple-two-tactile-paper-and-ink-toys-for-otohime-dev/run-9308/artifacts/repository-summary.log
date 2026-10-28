@@ -1,0 +1,15 @@
+# Subtest: seeded paper triangles and creases are deterministic, finite and bounded throughout the fold
+ok 1669 - seeded paper triangles and creases are deterministic, finite and bounded throughout the fold
+# Subtest: injected elapsed clock completes at 400ms, cancellation is terminal until explicit restart, reset is immediate
+ok 1670 - injected elapsed clock completes at 400ms, cancellation is terminal until explicit restart, reset is immediate
+# Subtest: invalid seed, elapsed and clocks fail closed; backwards clocks never reverse geometry
+ok 1671 - invalid seed, elapsed and clocks fail closed; backwards clocks never reverse geometry
+1..2594
+# tests 2612
+# suites 2
+# pass 2612
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 36248.15775

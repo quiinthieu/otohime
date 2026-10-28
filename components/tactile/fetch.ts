@@ -80,7 +80,7 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
     live.textContent = 'Kame is fetching the paper.'; previous = performance.now(); paint();
     frame = requestAnimationFrame(draw);
   };
-  const attach = (el: HTMLElement, root: HTMLElement, actions: HTMLElement) => {
+  const attach = (el: HTMLElement, root: HTMLElement, actions: HTMLElement, crumple?: () => void, restore = () => {}) => {
     const button = (text: string, className: string) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = text; b.className = className; return b; };
     const grip = button('↗', 'paper-grip'); grip.setAttribute('aria-label', 'Drag paper'); grip.title = 'Drag to toss paper for Kame';
     const back = button('Fetch back', 'paper-fetch');
@@ -89,8 +89,11 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
     root.append(grip, live); actions.append(back);
     let origin: { pointer: number; target: HTMLElement; a: Sample; b: Sample; dragging: boolean } | null = null;
     let clickToken: DragClickToken | null = null;
+    let holdTimer: ReturnType<typeof setTimeout> | undefined;
+    let heldPointer: number | null = null;
     const targetKey = (target: EventTarget | null) => target === grip ? 'grip' : 'body';
     const release = () => {
+      clearTimeout(holdTimer);
       const old = origin; origin = null; gesture.cancel();
       if (old?.target.hasPointerCapture(old.pointer)) old.target.releasePointerCapture(old.pointer);
     };
@@ -100,6 +103,7 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
     };
     const fetchBack = () => {
       if (gesture.pointer !== null) { live.textContent = 'Finish the current paper gesture first.'; return; }
+      restore();
       const rect = el.getBoundingClientRect();
       start(el, live, { x: rect.x + rect.width / 2 + 90, y: rect.y + rect.height / 2 - 70 });
     };
@@ -112,21 +116,32 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
     }, { signal, capture: true });
     el.addEventListener('pointerdown', e => {
       clickToken = null;
+      heldPointer = null;
       const explicit = e.target === grip;
       // Blank container paint only. Descendant prose, links, selection and all touch bodies keep native input.
-      if (!explicit && (e.target !== el || e.pointerType === 'touch' || [...el.childNodes].some(n => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) || getSelection()?.toString())) return;
+      if (!explicit && (e.target !== el || (!crumple && e.pointerType === 'touch') || [...el.childNodes].some(n => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) || getSelection()?.toString())) return;
       if (e.button !== 0 || !e.isPrimary || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || modal()) return;
       if (gesture.pointer !== null) return;
       finish();
+      restore();
       if (!gesture.start({ pointer: e.pointerId, x: e.clientX, y: e.clientY, intent: explicit ? 'grip' : 'body', touch: e.pointerType === 'touch' })) return;
       const sample = { x: e.clientX, y: e.clientY, time: performance.now() };
       origin = { pointer: e.pointerId, target: explicit ? grip : el, a: sample, b: sample, dragging: false };
       releaseCapture = cancel;
+      if (crumple) holdTimer = setTimeout(() => {
+        if (!origin || gesture.tick() !== 'crumple') return;
+        heldPointer = origin.pointer;
+        clickToken = { pointer: origin.pointer, at: performance.now(), target: targetKey(origin.target) };
+        release(); releaseCapture = () => {}; crumple();
+      }, 600);
       if (explicit) { grip.focus({ preventScroll: true }); grip.setPointerCapture(e.pointerId); e.preventDefault(); }
     }, { signal });
     el.addEventListener('pointermove', e => {
       if (origin?.pointer !== e.pointerId) return;
-      if (gesture.move(e.pointerId, e.clientX, e.clientY) !== 'fetch') return;
+      const state = gesture.move(e.pointerId, e.clientX, e.clientY);
+      if (state === 'idle') { cancel(); return; }
+      if (state !== 'fetch') return;
+      clearTimeout(holdTimer);
       if (motion.matches) { cancel(); live.textContent = 'Paper is back. Kame is resting.'; return; }
       if (!origin.dragging) {
         origin.dragging = true;
@@ -139,6 +154,10 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
       e.preventDefault();
     }, { signal });
     el.addEventListener('pointerup', e => {
+      if (heldPointer === e.pointerId) {
+        clickToken = { pointer: e.pointerId, at: performance.now(), target: targetKey(e.target) };
+        heldPointer = null; return;
+      }
       if (origin?.pointer !== e.pointerId) return;
       const old = origin;
       gesture.end(e.pointerId); release(); releaseCapture = () => {};
@@ -149,6 +168,8 @@ export function createPaperFetch(gesture: GesturePort, signal: AbortSignal, moti
       start(el, live, { x: e.clientX, y: e.clientY }, velocity);
     }, { signal });
     for (const type of ['pointercancel', 'lostpointercapture'] as const) el.addEventListener(type, e => { if (origin?.pointer === e.pointerId) { cancel(); finish(); } }, { signal });
+    el.addEventListener('pointercancel', e => { if (heldPointer === e.pointerId) { heldPointer = null; restore(); finish(); } }, { signal });
+    el.addEventListener('contextmenu', () => { if (origin) { cancel(); finish(); } }, { signal });
     el.addEventListener('focusin', e => { if (e.target instanceof Node && !root.contains(e.target) && source === el) finish(); }, { signal });
   };
   return { attach, cancel: () => finish(), dispose: () => { finish(); unsubscribe(); } };
