@@ -85,6 +85,24 @@ async function accessibleLink(link: Locator, snapshot: string, focused = false) 
   assert.deepEqual(await linkSnapshot(link), snapshot, 'link keeps its accessible name and destination');
   if (focused) assert.equal(await link.evaluate(el => document.activeElement === el), true, 'source link receives restored focus');
 }
+async function sourceLinkSnapshot(card: Locator, link: Locator) {
+  assert.equal(await link.and(card.getByRole('link')).count(), 1, 'source link remains in the accessibility tree');
+  const snapshot = await link.ariaSnapshot();
+  assert.match(snapshot, /^- link .+/m, 'source link has an accessible name');
+  return snapshot;
+}
+async function restoredLink(card: Locator, link: Locator, original: string) {
+  await intact(card);
+  assert.equal(await sourceLinkSnapshot(card, link), original, 'source link accessible snapshot survives restore');
+}
+async function focusLink(link: Locator) {
+  await link.evaluate((a: HTMLAnchorElement) => a.focus());
+  // Project links also open a keyboard Peek after its index arrives. Compare
+  // the same focused state on both sides rather than racing aria-expanded.
+  if (await link.getAttribute('data-peek')) {
+    await link.page().waitForFunction(el => el?.getAttribute('aria-expanded') === 'true', await link.elementHandle());
+  }
+}
 
 for (const width of [1280, 720]) for (const route of ['/projects', '/notes']) {
   test(`fresh native controls reach real Canvas at ${width}px on ${route}`, async t => {
@@ -164,10 +182,13 @@ test('keyboard folds real ink on both routes, retains accessible source/geometry
       const link = card.locator('a[href]').first();
       const originalLink = await linkSnapshot(link);
       assert.match(originalLink, /- link "[^"\n]*\S[^"\n]*"/, 'original link has a nonempty accessible name');
+      await focusLink(link);
+      const focusedLink = await sourceLinkSnapshot(card, link);
       await crumple.focus(); await page.keyboard.press('Enter'); await ball(card);
       await accessibleLink(link, originalLink);
-      await link.evaluate((a: HTMLAnchorElement) => a.focus()); await intact(card);
+      await focusLink(link); await intact(card);
       await accessibleLink(link, originalLink, true);
+      await restoredLink(card, link, focusedLink);
       if (route === '/notes') {
         await t.test('negative control: a missing accessible name fails the link assertion', async () => {
           await link.evaluate(el => el.setAttribute('aria-hidden', 'true'));
@@ -194,6 +215,33 @@ test('keyboard folds real ink on both routes, retains accessible source/geometry
     await crumple.click(); await ball(card); assert.equal(await card.getAttribute('data-paper-state'), 'intact', 'fold clears the shared peel lifecycle');
     await clickCard(card, 'Reset'); await intact(card);
   }
+});
+
+test('Notes RisoText link restores its accessible snapshot; hidden-link and changed-name controls fail the same helper', async t => {
+  const page = await open(t, '/notes');
+  const card = cards(page).first(), link = card.locator('h2 a').first();
+  assert.equal(await link.locator('.riso-source').count(), 1, 'real Notes title uses RisoText');
+  assert.equal(await link.locator('.riso-visual[aria-hidden="true"]').count(), 1, 'decorative ink is excluded from the accessible name');
+  await focusLink(link);
+  const original = await sourceLinkSnapshot(card, link);
+  // The historical oracle confuses decorative visual text with the AT name.
+  assert.equal(await card.getByRole('link', { name: await link.innerText(), exact: true }).count(), 0, 'historical innerText matcher rejects the intact Riso link');
+  await clickCard(card, 'Crumple'); await ball(card);
+  await focusLink(link);
+  await restoredLink(card, link, original);
+
+  await clickCard(card, 'Crumple'); await ball(card);
+  await link.evaluate(el => el.setAttribute('hidden', ''));
+  await clickCard(card, 'Read card');
+  await assert.rejects(() => restoredLink(card, link, original), /source link remains in the accessibility tree/);
+  await link.evaluate(el => el.removeAttribute('hidden'));
+  await restoredLink(card, link, original);
+
+  await link.evaluate(el => el.setAttribute('aria-label', 'Changed source name'));
+  await assert.rejects(() => restoredLink(card, link, original), /source link accessible snapshot survives restore/);
+  await link.evaluate(el => el.removeAttribute('aria-label'));
+  await restoredLink(card, link, original);
+  t.diagnostic(`Notes link accessibility before/after restore: ${original}`);
 });
 
 test('stationary real mouse and touch grips fold at the shared hold; touch body scrolling and corner peeling never crumple', async t => {
