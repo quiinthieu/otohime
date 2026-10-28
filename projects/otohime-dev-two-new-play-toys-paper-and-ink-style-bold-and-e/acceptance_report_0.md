@@ -7,10 +7,6 @@ cycle: 0
 cited_sha: 68dd79dba309c7713122e08b02ebb4e6844de749
 ---
 
-# Acceptance: Ink Booth & Pipeline Pachinko (pm-294), cycle 0
-
-**Verdict: fail.** The Ink Purikura Photobooth is live on otohime.dev and does what the idea asked, at both viewports. Pipeline Pachinko does not. It is not deployed: `/play/pachinko` returns 404 and production CI for both pachinko commits is red. Built locally from the same code, it has two defects a visitor sees. Its stylesheet depends on CSS variables this site never defines, so the machine, the plunger, the buttons and the "paper on-call pager" render as unboxed text over the board. And every Backfill jams 7–10 records on the join funnel forever.
-
 | Starting state | Action | Observable result | Evidence |
 | --- | --- | --- | --- |
 | otohime.dev, 2026-10-28 05:10 UTC | `GET /api/health`, `GET /play`, `/play/booth`, `/play/pachinko` | `{"ok":true,"sha":"22a88f0c7b4d…"}`; `/play` 200, `/play/booth` 200 with `permissions-policy: camera=(self), microphone=()`, **`/play/pachinko` 404**. Still the same at 05:23 UTC | curl |
@@ -39,6 +35,10 @@ cited_sha: 68dd79dba309c7713122e08b02ebb4e6844de749
 | local | root cause check | `getComputedStyle(documentElement)`: `--fg=""`, `--bg=""`, `--accent=""` (site tokens are `--ink #2b1a12`, `--paper #f2e9de`). `pachinko.css` uses `var(--fg)` 41×, `var(--bg)` 22×, `var(--accent)` 14×. Those declarations are invalid at computed-value time and drop out. booth.css uses `--ink`/`--paper` and renders correctly | grep + computed style |
 | local `next start` log | read after the walk | clean: start banner only, 0 errors | local-server.log, server2.log |
 | local, reduced motion | load `/play/pachinko`, Backfill | batch 12; 0 AudioContexts with sound at its default Off (negative control) | local/results.json |
+
+# Acceptance: Ink Booth & Pipeline Pachinko (pm-294), cycle 0
+
+**Verdict: fail.** The Ink Purikura Photobooth is live on otohime.dev and does what the idea asked, at both viewports. Pipeline Pachinko does not. It is not deployed: `/play/pachinko` returns 404 and production CI for both pachinko commits is red. Built locally from the same code, it has two defects a visitor sees. Its stylesheet depends on CSS variables this site never defines, so the machine, the plunger, the buttons and the "paper on-call pager" render as unboxed text over the board. And every Backfill jams 7–10 records on the join funnel forever.
 
 ## Identities
 
