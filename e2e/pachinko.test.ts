@@ -324,7 +324,7 @@ test("sound is muted by default (0 AudioContexts) and rate-limited (<= 20/s, <= 
   const { page, errors } = await open({ tiltPermission: "granted" });
   await page.goto(`${BASE}/play/pachinko?seed=99`);
 
-  const root = page.getByTestId("pachinko-root");
+  const root = page.locator('[data-testid="pachinko-root"][data-hydrated="true"]');
   await root.waitFor({ state: "visible" });
   assert.equal(await root.getAttribute("data-sound-on"), "false");
 
@@ -421,6 +421,10 @@ test("sound is muted by default (0 AudioContexts) and rate-limited (<= 20/s, <= 
   // Mobile DeviceOrientationEvent tilt-to-nudge permission flow
   const tiltBtn = page.getByTestId("pachinko-tilt-btn");
   await tiltBtn.click();
+  await page.waitForFunction(() => {
+    const el = document.querySelector('[data-testid="pachinko-root"]');
+    return el?.getAttribute("data-tilt-status") === "active";
+  });
   assert.equal(await root.getAttribute("data-tilt-status"), "active");
 
   await page.evaluate(() => {
@@ -431,7 +435,7 @@ test("sound is muted by default (0 AudioContexts) and rate-limited (<= 20/s, <= 
 
   await page.waitForFunction(() => {
     const btn = document.querySelector('[data-testid="pachinko-tilt-btn"]');
-    return btn?.textContent?.includes("24°");
+    return btn?.textContent?.includes("24°") && btn?.getAttribute("data-tilt-gamma") === "24";
   });
 
   assert.deepEqual(errors.unexpected, []);
@@ -466,7 +470,9 @@ test("on-call pager Easter egg: 2-DLQ negative control, 3-consecutive-DLQ trigge
   // 1. Desktop (1366x768): verify 2-DLQ + normal record + 1-DLQ negative control, then 3-streak trigger
   const { page, errors } = await open({ viewport: { width: 1366, height: 768 } });
   await page.goto(`${BASE}/play/pachinko?seed=1346454344`);
-  await page.getByTestId("pachinko-root").waitFor({ state: "visible" });
+  await page
+    .locator('[data-testid="pachinko-root"][data-hydrated="true"]')
+    .waitFor({ state: "visible" });
 
   const dlqBtn = page.getByTestId("pachinko-launch-dlq-btn");
   const dlqReadout = page.getByTestId("pachinko-readout-dlq");

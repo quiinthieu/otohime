@@ -41,7 +41,14 @@ import {
   triggerDlqStreakFixture,
 } from "@/lib/pachinko/sim";
 import { getServerSound, getSound, play, setSound, subscribeSound } from "@/lib/sound-client";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 type TiltStatus = "idle" | "active" | "denied" | "unsupported";
 
@@ -384,10 +391,6 @@ export function PachinkoMachine() {
   const pegClickLimiterRef = useRef(createPegClickLimiter(MAX_PEG_CLICKS_PER_SECOND));
 
   const soundOn = useSyncExternalStore(subscribeSound, getSound, getServerSound);
-  const soundOnRef = useRef(soundOn);
-  useEffect(() => {
-    soundOnRef.current = soundOn;
-  }, [soundOn]);
 
   const reducedMotion = useSyncExternalStore(
     subscribeReducedMotion,
@@ -413,6 +416,7 @@ export function PachinkoMachine() {
   const lastAriaUpdateRef = useRef<number>(0);
   const ariaTimerRef = useRef<number | null>(null);
 
+  const tiltActiveRef = useRef<boolean>(false);
   const [tiltStatus, setTiltStatus] = useState<TiltStatus>("idle");
   const [tiltGamma, setTiltGamma] = useState<number>(0);
   const [nudgeCount, setNudgeCount] = useState<number>(0);
@@ -421,13 +425,31 @@ export function PachinkoMachine() {
 
   const ensureSim = useCallback((): PachinkoSimState => {
     if (simRef.current === null) {
-      simRef.current = createPachinkoSim({ seed: DEFAULT_SEED });
+      let initialSeed = DEFAULT_SEED;
+      let fixtureParam: string | null = null;
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const seedParam = params.get("seed");
+        fixtureParam = params.get("fixture");
+        if (seedParam !== null) {
+          const parsed = Number.parseInt(seedParam, 10);
+          if (Number.isFinite(parsed)) {
+            initialSeed = parsed >>> 0;
+          }
+        }
+      }
+      const sim = createPachinkoSim({ seed: initialSeed });
+      if (fixtureParam === "dlq-streak") {
+        triggerDlqStreakFixture(sim, 3);
+        stepPachinko(sim, 260);
+      }
+      simRef.current = sim;
     }
     return simRef.current;
   }, []);
 
   const playRateLimitedPegClicks = useCallback((sim: PachinkoSimState) => {
-    if (!soundOnRef.current || sim.events.length === 0) return;
+    if (!getSound() || sim.events.length === 0) return;
     const nowSec = performance.now() / 1000;
     for (const ev of sim.events) {
       if (ev.type === "peg-hit" && pegClickLimiterRef.current(nowSec)) {
@@ -497,34 +519,11 @@ export function PachinkoMachine() {
     [ensureSim, renderCanvas, syncAriaLiveThrottled],
   );
 
-  // Initialize from URL query parameters (?seed=... & ?fixture=dlq-streak)
+  // Initialize UI state from URL query parameters (?seed=... & ?fixture=dlq-streak)
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const seedParam = params.get("seed");
-    const fixtureParam = params.get("fixture");
-
-    let initialSeed = DEFAULT_SEED;
-    let hasCustomSeed = false;
-    if (seedParam !== null) {
-      const parsed = Number.parseInt(seedParam, 10);
-      if (Number.isFinite(parsed)) {
-        initialSeed = parsed >>> 0;
-        hasCustomSeed = true;
-      }
-    }
-
-    const sim = createPachinkoSim({ seed: initialSeed });
-    simRef.current = sim;
-
-    if (fixtureParam === "dlq-streak") {
-      triggerDlqStreakFixture(sim, 3);
-      stepPachinko(sim, 260);
-    }
-
+    const sim = ensureSim();
     const initId = window.requestAnimationFrame(() => {
-      if (hasCustomSeed) {
-        setSeedInput(String(initialSeed));
-      }
+      setSeedInput(String(sim.config.seed));
       syncUiFromSim(true);
     });
 
@@ -534,10 +533,10 @@ export function PachinkoMachine() {
         window.clearTimeout(ariaTimerRef.current);
       }
     };
-  }, [syncUiFromSim]);
+  }, [ensureSim, syncUiFromSim]);
 
   // Configure HiDPI canvas backing store (devicePixelRatio clamped to 2)
-  useEffect(() => {
+  useLayoutEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -551,8 +550,9 @@ export function PachinkoMachine() {
   }, [renderCanvas]);
 
   // Move focus to the pager Acknowledge/Dismiss button when pagerActive opens
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (readout.pagerActive) {
+      dismissBtnRef.current?.focus({ preventScroll: true });
       const id = window.requestAnimationFrame(() => {
         dismissBtnRef.current?.focus({ preventScroll: true });
       });
@@ -561,7 +561,7 @@ export function PachinkoMachine() {
   }, [readout.pagerActive]);
 
   // Close pager on Escape key and support ArrowLeft / ArrowRight keyboard nudges
-  useEffect(() => {
+  useLayoutEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
       const tagName = target?.tagName;
@@ -624,22 +624,23 @@ export function PachinkoMachine() {
     return () => window.cancelAnimationFrame(rafId);
   }, [ensureSim, playRateLimitedPegClicks, reducedMotion, renderCanvas, syncAriaLiveThrottled]);
 
-  // DeviceOrientationEvent listener when tilt is active
-  useEffect(() => {
-    if (tiltStatus !== "active") return;
-
+  // Attach DeviceOrientationEvent listener synchronously in commit phase so synthetic
+  // or hardware orientation events fired immediately after tilt activation are never missed.
+  useLayoutEffect(() => {
     const onOrientation = (e: DeviceOrientationEvent) => {
+      if (!tiltActiveRef.current) return;
+      if (typeof e.gamma !== "number" || !Number.isFinite(e.gamma)) return;
       const sim = ensureSim();
-      const gamma = typeof e.gamma === "number" ? e.gamma : 0;
-      setTiltGamma(Math.round(gamma));
-      setTiltFromGamma(sim, gamma);
+      const rounded = Math.round(e.gamma);
+      setTiltGamma(rounded);
+      setTiltFromGamma(sim, e.gamma);
     };
 
     window.addEventListener("deviceorientation", onOrientation, { passive: true });
     return () => {
       window.removeEventListener("deviceorientation", onOrientation);
     };
-  }, [ensureSim, tiltStatus]);
+  }, [ensureSim]);
 
   const handleLaunchRecord = useCallback(
     (powerAmount = 0.78) => {
@@ -712,7 +713,8 @@ export function PachinkoMachine() {
 
   const handleToggleTilt = useCallback(async () => {
     const sim = ensureSim();
-    if (tiltStatus === "active") {
+    if (tiltActiveRef.current || tiltStatus === "active") {
+      tiltActiveRef.current = false;
       setTiltStatus("idle");
       setTiltGamma(0);
       setTiltAcceleration(sim, 0);
@@ -720,6 +722,7 @@ export function PachinkoMachine() {
     }
 
     if (typeof window === "undefined" || !("DeviceOrientationEvent" in window)) {
+      tiltActiveRef.current = false;
       setTiltStatus("unsupported");
       return;
     }
@@ -732,15 +735,18 @@ export function PachinkoMachine() {
       try {
         const res = await DevOrient.requestPermission();
         if (res !== "granted") {
+          tiltActiveRef.current = false;
           setTiltStatus("denied");
           return;
         }
       } catch {
+        tiltActiveRef.current = false;
         setTiltStatus("denied");
         return;
       }
     }
 
+    tiltActiveRef.current = true;
     setTiltStatus("active");
   }, [ensureSim, tiltStatus]);
 
@@ -868,6 +874,7 @@ export function PachinkoMachine() {
             aria-pressed={tiltStatus === "active"}
             onClick={handleToggleTilt}
             data-testid="pachinko-tilt-btn"
+            data-tilt-gamma={tiltGamma}
           >
             {tiltStatus === "active"
               ? `Tilt active (${tiltGamma}°)`
