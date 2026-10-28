@@ -55,3 +55,28 @@ test('real back navigation retains one paper mount', async () => {
     await context.close();
   } finally { await bfcacheBrowser.close(); }
 });
+
+test('mobile footer basket has ink styling and separate interactive controls', async () => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  try {
+    const page = await context.newPage();
+    await ready(page, '/notes');
+    await page.locator('[data-paper-basket]').scrollIntoViewIfNeeded();
+    const layout = await page.evaluate(() => {
+      const root = getComputedStyle(document.documentElement);
+      const box = (selector: string) => document.querySelector(selector)!.getBoundingClientRect().toJSON();
+      return {
+        ink: root.getPropertyValue('--ink').trim(), paper: root.getPropertyValue('--paper').trim(),
+        basket: box('[data-paper-basket]'), iron: box('.paper-iron'), shell: box('#kame-shell'),
+      };
+    });
+    assert.ok(layout.ink && layout.paper);
+    assert.ok(layout.basket.width >= 140 && layout.basket.height >= 90);
+    const overlap = (a: typeof layout.basket, b: typeof layout.basket) =>
+      Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) *
+      Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+    assert.equal(overlap(layout.basket, layout.iron), 0);
+    assert.equal(overlap(layout.basket, layout.shell), 0);
+    assert.equal(overlap(layout.iron, layout.shell), 0);
+  } finally { await context.close(); }
+});
