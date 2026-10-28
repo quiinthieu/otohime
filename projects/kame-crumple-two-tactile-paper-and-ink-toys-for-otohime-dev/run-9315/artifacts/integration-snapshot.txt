@@ -1,0 +1,6 @@
+Delivery: d323b8777a9c34428967314bb9f7f6a87a861fff; feature: 689c2369ded07e655475fec386c5d83a35851740
+GitHub Actions run 40641088253, checks job 122659156611: in_progress at last public read; run page says In progress.
+/api/health: 22a88f0c7b4d3160c425c2e7877f7d0c05894077, then 3684cb5e2aa7a2ae517637c74a6d387aa693a9f9; neither contains delivery.
+Live native Chrome /projects at 3684cb5: 16 paper hosts, 0 Crumple controls.
+FAILED pages 1-2: 10/152; COMPLETED pages 1-2: 10/538; in_progress 2/2; queued 0/0. Older pages unread; filters overlap.
+Raw checks job logs: HTTP 403, Must have admin rights to Repository. Public old run 40635091133/job 122640103971: Footer Chromium, 175 ok/1 failed, unverified YouTube frame, unrelated SHA 68dd79db.

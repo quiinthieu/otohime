@@ -1,0 +1,27 @@
+Starting embedded Postgres on 127.0.0.1:63125
+Applying migrations
+
+> otohime@0.1.0 db:migrate
+> drizzle-kit migrate
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/Users/avietidol/Library/Application Support/build-worker/leases/ce787a77-9af4-45c5-af5f-a3fd14466814-4c9f80d577e025d3c32644c0c031e1ef/work/otohime/drizzle.config.ts'
+◇ injected env (0) from .env
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!Starting the server on http://localhost:63128
+TAP version 13
+# Subtest: independent paper action and failed Canvas control
+ok 1 - independent paper action and failed Canvas control
+  ---
+  duration_ms: 6300.246584
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6547.984208
