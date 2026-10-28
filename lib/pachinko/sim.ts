@@ -449,12 +449,12 @@ export function createPachinkoBoard(): PachinkoBoard {
     });
   }
 
-  // 3. Join funnel guide pegs (y = 372..415)
+  // 3. Join funnel guide pegs (strictly above the funnel throat with >= 36px clearance from funnel walls)
   const joinPegCoords: readonly [number, number][] = [
-    [190, 382],
-    [422, 382],
-    [238, 412],
-    [374, 412],
+    [242, 356],
+    [370, 356],
+    [280, 380],
+    [332, 380],
   ];
   for (let i = 0; i < joinPegCoords.length; i++) {
     const [x, y] = joinPegCoords[i]!;
@@ -578,17 +578,17 @@ export function createPachinkoBoard(): PachinkoBoard {
     // Join funnel slanted guide walls converging toward FUNNEL_CENTER_X (306)
     {
       id: "funnel-left",
-      x1: 92,
+      x1: FUNNEL_CENTER_X - 150,
       y1: FUNNEL_TOP_Y,
-      x2: FUNNEL_CENTER_X - 44,
+      x2: FUNNEL_CENTER_X - 24,
       y2: FUNNEL_HOLD_Y,
       kind: "funnel",
     },
     {
       id: "funnel-right",
-      x1: 520,
+      x1: FUNNEL_CENTER_X + 150,
       y1: FUNNEL_TOP_Y,
-      x2: FUNNEL_CENTER_X + 44,
+      x2: FUNNEL_CENTER_X + 24,
       y2: FUNNEL_HOLD_Y,
       kind: "funnel",
     },
@@ -1013,7 +1013,7 @@ function computeStageGuidanceAccel(
     if (ball.y < 95) {
       return { ax: -520, ay: g * 0.35 };
     }
-    return { ax: 0, ay: g * 0.38 };
+    return { ax: 0, ay: -g * 0.25 };
   }
 
   // DLQ side gutter: stay centered in [DLQ_GUTTER_LEFT_X, DLQ_GUTTER_RIGHT_X]
@@ -1028,10 +1028,17 @@ function computeStageGuidanceAccel(
     return { ax: dx * 9.5 - 180, ay: g };
   }
 
-  // Stage 3 Join funnel: guide toward FUNNEL_CENTER_X
-  if (ball.y >= FUNNEL_TOP_Y - 15 && ball.y < FUNNEL_EXIT_Y && !ball.joinProcessed) {
+  // Stage 3 Join funnel: guide along the funnel slope toward FUNNEL_CENTER_X (306) and mouth (y = 438)
+  if (ball.y >= DEDUPE_GATE_Y + 8 && ball.y < FUNNEL_EXIT_Y && !ball.joinProcessed) {
     const dx = FUNNEL_CENTER_X - ball.x;
-    return { ax: state.tiltAccel * 0.4 + dx * 8.5, ay: g * 0.92 };
+    const dy = Math.max(16, FUNNEL_HOLD_Y - ball.y);
+    const len = Math.hypot(dx, dy);
+    const slopeAx = len > 1e-6 ? (dx / len) * g * 0.72 : 0;
+    const slopeAy = len > 1e-6 ? Math.max(g * 0.88, (dy / len) * g * 1.15) : g;
+    return {
+      ax: state.tiltAccel * 0.35 + dx * 6.5 + slopeAx,
+      ay: slopeAy,
+    };
   }
 
   // Stage 4 Partition splitter: guide toward hashed partition bucket centerX
@@ -1065,7 +1072,7 @@ function resolveSpatialHashBallCollisions(
 
   for (let i = 0; i < balls.length; i++) {
     const b = balls[i]!;
-    if (b.heldInJoin) continue;
+    if (b.heldInJoin || b.stage === "launch") continue;
     const cx = Math.floor(b.x / cellSize);
     const cy = Math.floor(b.y / cellSize);
     const key = cellKey(cx, cy);
@@ -1082,7 +1089,7 @@ function resolveSpatialHashBallCollisions(
 
   for (let i = 0; i < balls.length; i++) {
     const a = balls[i]!;
-    if (a.heldInJoin) continue;
+    if (a.heldInJoin || a.stage === "launch") continue;
     const cx = Math.floor(a.x / cellSize);
     const cy = Math.floor(a.y / cellSize);
 
@@ -1261,6 +1268,29 @@ function resolveBallSegmentCollisions(
       if (distSq >= ball.radius * ball.radius) continue;
 
       const dist = Math.sqrt(distSq);
+      if (seg.kind === "funnel") {
+        const abLen = Math.sqrt(abLenSq);
+        const tx = abx / abLen;
+        const ty = aby / abLen;
+        // Inward normal pointing into the upper funnel interior toward FUNNEL_CENTER_X
+        const nxIn = abx > 0 ? ty : -ty;
+        const nyIn = abx > 0 ? -tx : tx;
+        const overlap = ball.radius - dist + 0.2;
+        const shiftX = nxIn * overlap;
+        const shiftY = nyIn * overlap;
+        ball.x += shiftX;
+        ball.y += shiftY;
+        ball.prevX += shiftX;
+        ball.prevY += shiftY;
+
+        const vt = Math.max(145, ball.vx * tx + ball.vy * ty);
+        const vn = Math.max(0, -(ball.vx * nxIn + ball.vy * nyIn) * 0.16);
+        const nextVx = tx * vt + nxIn * vn;
+        const nextVy = ty * vt + nyIn * vn;
+        setBallVelocity(ball, nextVx, nextVy, subDt, maxSpeed);
+        continue;
+      }
+
       const nx = dist > 1e-6 ? dx / dist : -aby / Math.sqrt(abLenSq);
       const ny = dist > 1e-6 ? dy / dist : abx / Math.sqrt(abLenSq);
       const overlap = ball.radius - dist + 0.1;
@@ -1297,6 +1327,18 @@ function resolveBallSegmentCollisions(
         if (ball.vx > 0) {
           setBallVelocity(ball, -ball.vx * restitution, ball.vy, subDt, maxSpeed);
         }
+      }
+      if (ball.y > 225) {
+        const shiftY = 225 - ball.y;
+        ball.y += shiftY;
+        ball.prevY += shiftY;
+        setBallVelocity(
+          ball,
+          ball.vx,
+          -Math.max(580, Math.abs(ball.vy)),
+          subDt,
+          maxSpeed,
+        );
       }
     } else if (ball.stage === "dlq") {
       const minX = DLQ_GUTTER_LEFT_X + ball.radius;
@@ -1401,24 +1443,80 @@ function processStageTransitions(
     if (ball.stage === "launch" && ball.x < PLUNGER_LANE_LEFT_X - ball.radius) {
       ball.stage = "ingest";
       ball.enteredBoardAt = state.simTime;
+    } else if (ball.stage === "launch" && state.simTime - ball.spawnedAt > 0.65) {
+      ball.stage = "ingest";
+      ball.enteredBoardAt = state.simTime;
+      ball.x = PLAYFIELD_RIGHT_X - 24 - nextStateRandom(state) * 36;
+      ball.y = INGEST_TOP_Y - 10;
+      setBallVelocity(
+        ball,
+        -130 - nextStateRandom(state) * 70,
+        120,
+        subDt,
+        maxSpeed,
+      );
     }
 
     if (ball.stage === "launch") {
       continue;
     }
 
-    // Anti-stall safeguard for slow-moving playfield balls
+    const boardAge = state.simTime - (ball.enteredBoardAt ?? ball.spawnedAt);
+
+    // Join-stage slope guidance & anti-stall: guide slow balls along the funnel slope toward (FUNNEL_CENTER_X, FUNNEL_HOLD_Y)
     if (
-      state.simTime - ball.spawnedAt > 2.4 &&
-      Math.hypot(ball.vx, ball.vy) < 42
+      !ball.joinProcessed &&
+      !ball.routeToDlq &&
+      ball.y >= FUNNEL_TOP_Y - 18 &&
+      ball.y <= FUNNEL_EXIT_Y &&
+      (Math.hypot(ball.vx, ball.vy) < 75 || ball.vy < 35)
     ) {
+      const dx = FUNNEL_CENTER_X - ball.x;
+      const dy = Math.max(14, FUNNEL_HOLD_Y - ball.y);
+      const len = Math.hypot(dx, dy);
+      const speed = Math.max(160, Math.hypot(ball.vx, ball.vy));
       setBallVelocity(
         ball,
-        ball.vx + (nextStateRandom(state) - 0.5) * 70,
-        Math.max(ball.vy, 130),
+        (dx / len) * speed,
+        (dy / len) * speed,
         subDt,
         maxSpeed,
       );
+    } else if (
+      boardAge > 1.8 &&
+      Math.hypot(ball.vx, ball.vy) < 52
+    ) {
+      // General anti-stall safeguard for slow-moving playfield balls
+      setBallVelocity(
+        ball,
+        ball.vx + (nextStateRandom(state) - 0.5) * 70,
+        Math.max(ball.vy, 145),
+        subDt,
+        maxSpeed,
+      );
+    }
+
+    // Deterministic stage-progression guarantees so no ball can remain trapped in ingest/dedupe/join/partition
+    if (!ball.dedupeChecked && !ball.routeToDlq && boardAge > 2.8) {
+      ball.y = Math.max(ball.y, DEDUPE_GATE_Y - ball.radius - DEFAULT_PEG_RADIUS);
+      setBallVelocity(ball, ball.vx, Math.max(ball.vy, 190), subDt, maxSpeed);
+    }
+    if (
+      ball.dedupeChecked &&
+      !ball.joinProcessed &&
+      !ball.routeToDlq &&
+      ball.stage !== "dlq" &&
+      (ball.y > FUNNEL_HOLD_Y + 6 || boardAge > 4.2)
+    ) {
+      ball.x = FUNNEL_CENTER_X;
+      ball.y = FUNNEL_HOLD_Y;
+    }
+    if (
+      ball.joinProcessed &&
+      ball.stage !== "dlq" &&
+      boardAge > 6.5
+    ) {
+      ball.y = BUCKET_TOP_Y;
     }
 
     // 5. DLQ intake shunt (around y = 265..335) for balls routed to DLQ

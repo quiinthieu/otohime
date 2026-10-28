@@ -11,12 +11,14 @@ import {
   DEDUPE_GATE_Y,
   DEFAULT_BACKFILL_COUNT,
   DEFAULT_BALL_RADIUS,
+  DEFAULT_SEED,
   dismissPager,
   DLQ_GUTTER_CENTER_X,
   FIXED_DT,
   formatAriaLiveSummary,
   FUNNEL_CENTER_X,
   FUNNEL_HOLD_Y,
+  FUNNEL_TOP_Y,
   getReadout,
   hashKeyToPartition,
   hashRecordKey,
@@ -422,11 +424,119 @@ test("partition splitter routes keys across all 6 buckets (p0..p5) and backfill 
   assert.ok(readout.dedupeBounceCount >= 1, "Backfill with duplicate keys must trigger dedupe 'DUP' bounces");
   assert.ok(readout.joinMergeCount >= 1, "Backfill flood must trigger two-ball join merges");
 
-  // Also verify reduced-motion backfill schedules 12 balls
+  // Verify reduced-motion backfill schedules 12 balls
   const rmSim = createPachinkoSim({ seed: 607 });
   const rmCount = scheduleBackfill(rmSim, { reducedMotion: true });
   assert.equal(rmCount, REDUCED_MOTION_BACKFILL_COUNT);
   assert.equal(rmCount, 12);
+});
+
+test("join funnel geometry maintains >= 36px peg clearance and every 60-record Backfill drains to 0 activeBalls within <= 1800 steps across all 6 seeds and consecutive runs", () => {
+  const board = createPachinkoBoard();
+  const funnelLeft = board.segments.find((s) => s.id === "funnel-left");
+  const funnelRight = board.segments.find((s) => s.id === "funnel-right");
+  assert.ok(funnelLeft && funnelRight, "Expected funnel-left and funnel-right segments");
+
+  assert.deepEqual(
+    { x1: funnelLeft.x1, y1: funnelLeft.y1, x2: funnelLeft.x2, y2: funnelLeft.y2 },
+    { x1: 156, y1: FUNNEL_TOP_Y, x2: 282, y2: FUNNEL_HOLD_Y },
+    "funnel-left must match visual funnel coordinates (156, 355) -> (282, 438)",
+  );
+  assert.deepEqual(
+    { x1: funnelRight.x1, y1: funnelRight.y1, x2: funnelRight.x2, y2: funnelRight.y2 },
+    { x1: 456, y1: FUNNEL_TOP_Y, x2: 330, y2: FUNNEL_HOLD_Y },
+    "funnel-right must match visual funnel coordinates (456, 355) -> (330, 438)",
+  );
+
+  const pointToSegmentDist = (
+    px: number,
+    py: number,
+    seg: { x1: number; y1: number; x2: number; y2: number },
+  ): number => {
+    const abx = seg.x2 - seg.x1;
+    const aby = seg.y2 - seg.y1;
+    const t = Math.max(
+      0,
+      Math.min(1, ((px - seg.x1) * abx + (py - seg.y1) * aby) / (abx * abx + aby * aby)),
+    );
+    return Math.hypot(px - (seg.x1 + t * abx), py - (seg.y1 + t * aby));
+  };
+
+  const joinPegs = board.pegs.filter((p) => p.stage === "join");
+  assert.equal(joinPegs.length, 4);
+  for (const peg of joinPegs) {
+    for (const seg of [funnelLeft, funnelRight]) {
+      const centerDist = pointToSegmentDist(peg.x, peg.y, seg);
+      const surfaceClearance = centerDist - peg.radius;
+      assert.ok(
+        surfaceClearance >= 36,
+        `Expected join peg ${peg.id} to have >= 36px clearance from ${seg.id}, got surface=${surfaceClearance.toFixed(2)}px (center=${centerDist.toFixed(2)}px)`,
+      );
+    }
+  }
+
+  const requiredSeeds = [DEFAULT_SEED, 777, 424242, 20261028, 99, 42] as const;
+  for (const seed of requiredSeeds) {
+    const sim = createPachinkoSim({ seed });
+
+    // First 60-record backfill
+    const count1 = scheduleBackfill(sim, { count: DEFAULT_BACKFILL_COUNT });
+    assert.equal(count1, 60);
+    let steps1 = 0;
+    while ((sim.balls.length > 0 || sim.scheduledSpawns.length > 0) && steps1 < 1800) {
+      stepPachinko(sim, 1);
+      steps1 += 1;
+      assert.ok(sim.balls.length <= MAX_ACTIVE_BALLS);
+    }
+
+    const r1 = getReadout(sim);
+    assert.equal(
+      r1.activeBalls,
+      0,
+      `Seed ${seed} backfill #1 must drain to activeBalls === 0 within <= 1800 steps (took ${steps1})`,
+    );
+    assert.equal(
+      sim.scheduledSpawns.length,
+      0,
+      `Seed ${seed} backfill #1 must have 0 scheduledSpawns remaining`,
+    );
+    assert.ok(steps1 <= 1800, `Seed ${seed} backfill #1 drained in ${steps1} <= 1800 steps`);
+    assert.ok(r1.totalCompleted > 0, `Seed ${seed} must complete > 0 records`);
+    assert.ok(r1.joinMergeCount > 0, `Seed ${seed} must perform > 0 join merges`);
+    assert.ok(r1.dedupeBounceCount > 0, `Seed ${seed} must perform > 0 dedupe bounces`);
+    assert.equal(
+      r1.totalCompleted + r1.joinMergeCount,
+      60,
+      `Seed ${seed} backfill #1 must conserve all 60 records across completed + merged`,
+    );
+
+    // Second back-to-back 60-record backfill on the same state
+    const count2 = scheduleBackfill(sim, { count: DEFAULT_BACKFILL_COUNT });
+    assert.equal(count2, 60);
+    let steps2 = 0;
+    while ((sim.balls.length > 0 || sim.scheduledSpawns.length > 0) && steps2 < 1800) {
+      stepPachinko(sim, 1);
+      steps2 += 1;
+      assert.ok(sim.balls.length <= MAX_ACTIVE_BALLS);
+    }
+
+    const r2 = getReadout(sim);
+    assert.equal(
+      r2.activeBalls,
+      0,
+      `Seed ${seed} consecutive backfill #2 must drain to activeBalls === 0 within <= 1800 steps (took ${steps2})`,
+    );
+    assert.equal(sim.scheduledSpawns.length, 0);
+    assert.ok(steps2 <= 1800);
+    assert.ok(r2.totalCompleted > r1.totalCompleted);
+    assert.ok(r2.joinMergeCount > r1.joinMergeCount);
+    assert.ok(r2.dedupeBounceCount > r1.dedupeBounceCount);
+    assert.equal(
+      r2.totalCompleted + r2.joinMergeCount,
+      120,
+      `Seed ${seed} back-to-back backfills must conserve all 120 records`,
+    );
+  }
 });
 
 test("consecutive DLQ streak of 3 triggers pagerActive while 2 consecutive DLQ hits followed by a normal bucket reset the streak without triggering", () => {

@@ -4,13 +4,17 @@
 import assert from "node:assert/strict";
 import {
   BUCKET_TOP_Y,
+  createPachinkoBoard,
   createPachinkoSim,
   DEDUPE_GATE_Y,
+  DEFAULT_BACKFILL_COUNT,
   DEFAULT_BALL_RADIUS,
+  DEFAULT_SEED,
   dismissPager,
   FIXED_DT,
   FUNNEL_CENTER_X,
   FUNNEL_HOLD_Y,
+  FUNNEL_TOP_Y,
   getReadout,
   JOINED_BALL_RADIUS,
   keyForPartitionBucket,
@@ -197,6 +201,64 @@ for (let seed = 1; seed <= 10; seed++) {
   assert.equal(dlqSim.dlqStreak, 0);
 }
 
+// 6. Verify funnel wall geometry, >= 36px join peg clearance, and complete Backfill drain
+//    to activeBalls === 0 within <= 1800 steps across all 6 seeds and consecutive backfills
+{
+  const board = createPachinkoBoard();
+  const funnelLeft = board.segments.find((s) => s.id === "funnel-left");
+  const funnelRight = board.segments.find((s) => s.id === "funnel-right");
+  assert.ok(funnelLeft && funnelRight);
+  assert.deepEqual(
+    { x1: funnelLeft.x1, y1: funnelLeft.y1, x2: funnelLeft.x2, y2: funnelLeft.y2 },
+    { x1: 156, y1: FUNNEL_TOP_Y, x2: 282, y2: FUNNEL_HOLD_Y },
+  );
+  assert.deepEqual(
+    { x1: funnelRight.x1, y1: funnelRight.y1, x2: funnelRight.x2, y2: funnelRight.y2 },
+    { x1: 456, y1: FUNNEL_TOP_Y, x2: 330, y2: FUNNEL_HOLD_Y },
+  );
+
+  for (const peg of board.pegs.filter((p) => p.stage === "join")) {
+    for (const seg of [funnelLeft, funnelRight]) {
+      const abx = seg.x2 - seg.x1;
+      const aby = seg.y2 - seg.y1;
+      const t = Math.max(
+        0,
+        Math.min(1, ((peg.x - seg.x1) * abx + (peg.y - seg.y1) * aby) / (abx * abx + aby * aby)),
+      );
+      const centerDist = Math.hypot(peg.x - (seg.x1 + t * abx), peg.y - (seg.y1 + t * aby));
+      assert.ok(
+        centerDist - peg.radius >= 36,
+        `Join peg ${peg.id} clearance from ${seg.id} must be >= 36px, got ${(centerDist - peg.radius).toFixed(2)}px`,
+      );
+    }
+  }
+
+  for (const seed of [DEFAULT_SEED, 777, 424242, 20261028, 99, 42]) {
+    const sim = createPachinkoSim({ seed });
+    for (let run = 1; run <= 2; run++) {
+      scheduleBackfill(sim, { count: DEFAULT_BACKFILL_COUNT });
+      let steps = 0;
+      while ((sim.balls.length > 0 || sim.scheduledSpawns.length > 0) && steps < 1800) {
+        stepPachinko(sim, 1);
+        steps += 1;
+        assert.ok(sim.balls.length <= MAX_ACTIVE_BALLS);
+      }
+      const readout = getReadout(sim);
+      assert.equal(
+        readout.activeBalls,
+        0,
+        `Seed ${seed} backfill #${run} must drain to activeBalls === 0 within <= 1800 steps`,
+      );
+      assert.equal(sim.scheduledSpawns.length, 0);
+      assert.ok(steps <= 1800);
+      assert.ok(readout.totalCompleted > 0);
+      assert.ok(readout.joinMergeCount > 0);
+      assert.ok(readout.dedupeBounceCount > 0);
+      assert.equal(readout.totalCompleted + readout.joinMergeCount, 60 * run);
+    }
+  }
+}
+
 console.log(
-  "ok - Pipeline Pachinko Verlet engine, 5 pipeline stages, 6-bucket partition distribution, and 3-DLQ pager verified.",
+  "ok - Pipeline Pachinko Verlet engine, 5 pipeline stages, 6-bucket partition distribution, 6-seed Backfill drain, and 3-DLQ pager verified.",
 );

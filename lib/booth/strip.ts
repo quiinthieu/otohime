@@ -551,6 +551,23 @@ const GLYPHS_5X7: Readonly<Record<string, readonly number[]>> = {
   " ": [0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000],
 };
 
+function measureBitmapTextWidth(
+  text: string,
+  scale: number,
+  compactDot = false,
+): number {
+  if (text.length === 0) return 0;
+  const s = Math.max(1, Math.round(scale));
+  let total = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const glyphW = compactDot && ch === "." ? 2 * s : 5 * s;
+    const gap = i < text.length - 1 ? 1 * s : 0;
+    total += glyphW + gap;
+  }
+  return total;
+}
+
 function drawBitmapText(
   data: Uint8ClampedArray,
   width: number,
@@ -560,16 +577,28 @@ function drawBitmapText(
   startY: number,
   scale: number,
   rgb: readonly [number, number, number],
+  options?: {
+    readonly compactDot?: boolean;
+    readonly clipCircle?: {
+      readonly cx: number;
+      readonly cy: number;
+      readonly maxRadius: number;
+    };
+  },
 ): void {
   const s = Math.max(1, Math.round(scale));
   let cursorX = Math.round(startX);
   const baseY = Math.round(startY);
+  const compactDot = options?.compactDot ?? false;
+  const clip = options?.clipCircle;
 
   for (const ch of text) {
+    const isCompactDot = compactDot && ch === ".";
     const rows = GLYPHS_5X7[ch] ?? GLYPHS_5X7[ch.toLowerCase()] ?? GLYPHS_5X7[" "];
+    const colCount = isCompactDot ? 2 : 5;
     for (let ry = 0; ry < 7; ry++) {
-      const rowBits = rows[ry];
-      for (let rx = 0; rx < 5; rx++) {
+      const rowBits = isCompactDot ? (ry >= 5 ? 0b11000 : 0) : rows[ry];
+      for (let rx = 0; rx < colCount; rx++) {
         if ((rowBits & (1 << (4 - rx))) !== 0) {
           for (let dy = 0; dy < s; dy++) {
             const py = baseY + ry * s + dy;
@@ -577,6 +606,12 @@ function drawBitmapText(
             for (let dx = 0; dx < s; dx++) {
               const px = cursorX + rx * s + dx;
               if (px < 0 || px >= width) continue;
+              if (
+                clip &&
+                Math.hypot(px - clip.cx, py - clip.cy) > clip.maxRadius
+              ) {
+                continue;
+              }
               const idx = (py * width + px) * 4;
               if (data[idx + 3] === 0) continue;
               data[idx] = rgb[0];
@@ -587,7 +622,7 @@ function drawBitmapText(
         }
       }
     }
-    cursorX += 6 * s;
+    cursorX += (colCount + 1) * s;
   }
 }
 
@@ -825,12 +860,13 @@ export function composeStripBuffer(
       const dx = px - hanko.cx;
       const dy = py - hanko.cy;
       const d = Math.hypot(dx, dy);
-      const outerRing = d >= hR * 0.86 && d <= hR;
-      const innerRing = d >= hR * 0.74 && d <= hR * 0.79;
+      const outerRing = d >= hR * 0.85 && d <= hR;
+      const innerRing = d >= hR * 0.70 && d <= hR * 0.74;
       const bars =
-        d < hR * 0.74 &&
-        (Math.abs(dy + hR * 0.24) <= Math.max(1, hR * 0.035) ||
-          Math.abs(dy - hR * 0.24) <= Math.max(1, hR * 0.035));
+        d <= hR * 0.66 &&
+        Math.abs(dx) <= hR * 0.48 &&
+        (Math.abs(dy + hR * 0.38) <= Math.max(1, hR * 0.028) ||
+          Math.abs(dy - hR * 0.38) <= Math.max(1, hR * 0.028));
       // Subtle ink distress grain so it reads like a real hand-pressed vermilion seal
       const sealGrain = ((px * 19 + py * 31) & 7) !== 0;
       if ((outerRing || innerRing || bars) && sealGrain) {
@@ -842,18 +878,43 @@ export function composeStripBuffer(
     }
   }
 
-  // Render YYYY.MM.DD text inside the hanko circle
-  const dateScale = Math.max(1, Math.round(scaleFactor * 1.5));
-  const datePixelWidth = hanko.dateText.length * 6 * dateScale;
+  // Render YYYY.MM.DD text stacked inside the inner hanko circle (d <= hR * 0.72)
+  const dotIdx = hanko.dateText.indexOf(".");
+  const yearLine =
+    dotIdx > 0 ? hanko.dateText.slice(0, dotIdx) : hanko.dateText.slice(0, 4);
+  const monthDayLine =
+    dotIdx > 0 ? hanko.dateText.slice(dotIdx + 1) : hanko.dateText.slice(4);
+  const dateScale = hR * 0.66 >= 31 ? 2 : 1;
+  const maxInnerDateRadius = hR * 0.72;
+  const clipCircle = {
+    cx: hanko.cx,
+    cy: hanko.cy,
+    maxRadius: maxInnerDateRadius,
+  };
+  const yearWidth = measureBitmapTextWidth(yearLine, dateScale, true);
+  const monthDayWidth = measureBitmapTextWidth(monthDayLine, dateScale, true);
+
   drawBitmapText(
     out,
     width,
     height,
-    hanko.dateText,
-    hanko.cx - datePixelWidth * 0.5,
-    hanko.cy - 3.5 * dateScale,
+    yearLine,
+    hanko.cx - yearWidth * 0.5,
+    hanko.cy - 8 * dateScale,
     dateScale,
     hanko.rgb,
+    { compactDot: true, clipCircle },
+  );
+  drawBitmapText(
+    out,
+    width,
+    height,
+    monthDayLine,
+    hanko.cx - monthDayWidth * 0.5,
+    hanko.cy + 1 * dateScale,
+    dateScale,
+    hanko.rgb,
+    { compactDot: true, clipCircle },
   );
 
   // 4. Draw 'otohime.dev' footer text in sumi ink

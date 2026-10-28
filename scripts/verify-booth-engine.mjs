@@ -188,6 +188,49 @@ assert.equal(fullStrip.height, 1800);
 assert.equal(fullStrip.data[3], 0, "Corner outside torn-paper polygon is transparent");
 assert.equal(fullStrip.data[(900 * 600 + 300) * 4 + 3], 255, "Interior of strip is opaque");
 
+// Verify hanko date text stays strictly inside inner stamp ring (d <= hanko.radius * 0.72)
+{
+  const { hanko } = layout;
+  let topRowCount = 0;
+  let bottomRowCount = 0;
+  let maxDateDist = 0;
+  let gapSpillCount = 0;
+  let outsideSpillCount = 0;
+
+  for (let py = hanko.cy - hanko.radius - 24; py <= hanko.cy + hanko.radius + 24; py++) {
+    for (let px = hanko.cx - hanko.radius - 40; px <= hanko.cx + hanko.radius + 40; px++) {
+      const idx = (py * fullStrip.width + px) * 4;
+      const isHankoRed =
+        fullStrip.data[idx] === hanko.rgb[0] &&
+        fullStrip.data[idx + 1] === hanko.rgb[1] &&
+        fullStrip.data[idx + 2] === hanko.rgb[2];
+      if (!isHankoRed) continue;
+      const dy = py - hanko.cy;
+      const d = Math.hypot(px - hanko.cx, dy);
+      if (d < hanko.radius * 0.70 && Math.abs(dy) <= 16) {
+        maxDateDist = Math.max(maxDateDist, d);
+        if (dy < 0) topRowCount += 1;
+        if (dy > 0) bottomRowCount += 1;
+      }
+      if (d > hanko.radius * 0.74 && d < hanko.radius * 0.84) {
+        gapSpillCount += 1;
+      }
+      if (d > hanko.radius) {
+        outsideSpillCount += 1;
+      }
+    }
+  }
+
+  assert.ok(topRowCount > 0, "Hanko YYYY row must render inside inner ring");
+  assert.ok(bottomRowCount > 0, "Hanko MM.DD row must render inside inner ring");
+  assert.ok(
+    maxDateDist <= hanko.radius * 0.72,
+    `Hanko date glyphs must stay within d <= ${hanko.radius * 0.72}, got ${maxDateDist.toFixed(2)}`,
+  );
+  assert.equal(gapSpillCount, 0, "Zero hanko pixels in ring gap (0.74 < d/R < 0.84)");
+  assert.equal(outsideSpillCount, 0, "Zero hanko pixels outside hanko radius (d > R)");
+}
+
 // 5. Verify camera track cleanup on 4th shot and abort
 assert.equal(BOOTH_PRIVACY_COPY, "Your camera stays in this tab. Nothing is uploaded.");
 let stoppedCount = 0;

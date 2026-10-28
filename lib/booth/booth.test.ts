@@ -592,4 +592,67 @@ test("vector purikura decoration model preserves stroke/sticker undo and clear i
     meanAbsDiff(baseStrip, decoratedStrip) > 0.25,
     "decorations visibly render onto the composed strip",
   );
+
+  // Verify strict hanko date inner-ring containment (d <= hanko.radius * 0.72) at full 600x1800 resolution
+  const fullLayout = computeStripLayout({
+    width: STRIP_WIDTH,
+    height: STRIP_HEIGHT,
+    seed: DEFAULT_STRIP_SEED,
+    date: "2026-10-28",
+    stock: "sumi-e",
+  });
+  const fullStrip = composeStripBuffer(sampleFrames, {
+    width: STRIP_WIDTH,
+    height: STRIP_HEIGHT,
+    seed: DEFAULT_STRIP_SEED,
+    date: "2026-10-28",
+    stock: "sumi-e",
+  });
+  const { hanko } = fullLayout;
+  let topDateRowPixels = 0;
+  let bottomDateRowPixels = 0;
+  let maxDatePixelDist = 0;
+  let ringGapPixels = 0;
+  let outsideStampPixels = 0;
+
+  for (let py = hanko.cy - hanko.radius - 24; py <= hanko.cy + hanko.radius + 24; py++) {
+    for (let px = hanko.cx - hanko.radius - 40; px <= hanko.cx + hanko.radius + 40; px++) {
+      const idx = (py * fullStrip.width + px) * 4;
+      const isHankoRed =
+        fullStrip.data[idx] === hanko.rgb[0] &&
+        fullStrip.data[idx + 1] === hanko.rgb[1] &&
+        fullStrip.data[idx + 2] === hanko.rgb[2];
+      if (!isHankoRed) continue;
+      const dy = py - hanko.cy;
+      const d = Math.hypot(px - hanko.cx, dy);
+      if (d < hanko.radius * 0.70 && Math.abs(dy) <= 16) {
+        maxDatePixelDist = Math.max(maxDatePixelDist, d);
+        if (dy < 0) topDateRowPixels += 1;
+        if (dy > 0) bottomDateRowPixels += 1;
+      }
+      if (d > hanko.radius * 0.74 && d < hanko.radius * 0.84) {
+        ringGapPixels += 1;
+      }
+      if (d > hanko.radius) {
+        outsideStampPixels += 1;
+      }
+    }
+  }
+
+  assert.ok(topDateRowPixels > 0, "YYYY top date row must render inside hanko inner ring");
+  assert.ok(bottomDateRowPixels > 0, "MM.DD bottom date row must render inside hanko inner ring");
+  assert.ok(
+    maxDatePixelDist <= hanko.radius * 0.72,
+    `Hanko date pixels must stay strictly within d <= ${hanko.radius * 0.72}, got max d=${maxDatePixelDist.toFixed(2)}`,
+  );
+  assert.equal(
+    ringGapPixels,
+    0,
+    "Zero hanko pixels may spill into the ring gap (hanko.radius * 0.74 < d < hanko.radius * 0.84)",
+  );
+  assert.equal(
+    outsideStampPixels,
+    0,
+    "Zero hanko pixels may spill outside the hanko stamp radius (d > hanko.radius)",
+  );
 });
