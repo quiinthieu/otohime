@@ -4,6 +4,7 @@ import { stableSurfaceId } from "@/lib/tactile";
 import { FigTitle, Figure } from "@/components/figures";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ViewTransition } from "react";
 
 export const metadata: Metadata = { title: "Notes" };
@@ -17,12 +18,12 @@ export default function NotesPage() {
         </FigTitle>
         <div className="mt-8 grid items-start gap-10 md:grid-cols-[minmax(0,1fr)_16rem]">
           <ol>
-            {site.notes.map(({ date, title, body }) => (
-              <PaperHost as="li" key={date} className="border-t border-line py-5" data-paper-id={stableSurfaceId("note", date)} data-tossable="true" data-paper-margin="A thought kept in the margin, for another tide.">
+            {site.notes.map(({ slug, date, title, body }) => (
+              <PaperHost as="li" key={slug} className="border-t border-line py-5" data-paper-id={stableSurfaceId("note", date)} data-tossable="true" data-paper-margin="A thought kept in the margin, for another tide.">
                 <time dateTime={date} className="caption">
                   {date}
                 </time>
-                <h2 className="mt-1"><RisoText>{title}</RisoText></h2>
+                <h2 className="mt-1"><Link href={`/notes/${slug}`} className="underline decoration-line underline-offset-4 hover:decoration-ink"><RisoText>{title}</RisoText></Link></h2>
                 <p className="mt-1 max-w-prose text-muted">{body}</p>
               </PaperHost>
             ))}
