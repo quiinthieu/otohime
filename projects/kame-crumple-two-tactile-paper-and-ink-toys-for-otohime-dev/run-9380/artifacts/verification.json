@@ -1,0 +1,83 @@
+{
+  "task": "pm-274/t-1585",
+  "run": "run-9380",
+  "checks": [
+    {
+      "name": "physics",
+      "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/crumple.test.ts lib/tactile.test.ts lib/kame-fetch.test.ts",
+      "exit": 0,
+      "passed": 20,
+      "failed": 0
+    },
+    {
+      "name": "repository",
+      "command": "npm test",
+      "exit": 0,
+      "passed": 2652,
+      "failed": 0
+    },
+    {
+      "name": "static",
+      "command": "npm run lint && npm run typecheck",
+      "exit": 0,
+      "eslint_errors": 0,
+      "existing_warnings": 10,
+      "types": "Next typegen and TypeScript passed"
+    },
+    {
+      "name": "browser",
+      "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/crumple.test.ts e2e/tactile-recovery.test.ts e2e/kame.test.ts e2e/tactile-tear.test.ts",
+      "exit": 0,
+      "passed": 39,
+      "failed": 0
+    },
+    {
+      "name": "walk",
+      "command": "env -u BASE_URL -u DATABASE_URL -u EXPECT_SHA CI=true GITHUB_SHA=$(git rev-parse HEAD) bash scripts/walk-end.sh",
+      "exit": 0,
+      "passed": 67,
+      "failed": 0
+    },
+    {
+      "name": "probe",
+      "command": "env -u BASE_URL -u DATABASE_URL -u EXPECT_SHA CI=true GITHUB_SHA=$(git rev-parse HEAD) bash scripts/probe-end.sh",
+      "exit": 0,
+      "passed": 177,
+      "failed": 0
+    }
+  ],
+  "inventory_regressions": {
+    "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/end.test.ts scripts/probe-end-dom.test.mjs",
+    "pass": 17,
+    "fail": 0,
+    "red_control": "Prior shell verifier rejects valid basket as four versus three. New browser helper absent before repair; 13 pass and 2 fail. After repair all17 pass."
+  },
+  "negative_controls": [
+    "Missing, unlabelled, hidden, wrong-role or duplicated basket",
+    "Missing, exposed or substituted original scene layer; arbitrary extra SVG",
+    "Missing, duplicated, exposed, wrong-class/viewBox/path waterline wave",
+    "Real Chromium fixtures with page JavaScript on and off; actual shell verifier block",
+    "Retained real rim miss versus opening hit, forced 5000ms rest, renderer failure and per-card recovery controls",
+    "Real full probe corrupt canonical href and external-network attribution controls"
+  ],
+  "construction": "Node22.23.3 real imports matched lock for Next16.4.2 React19.3.0 Playwright1.64.0 pg8.23.1 embedded-postgres17.10.0-beta.17 drizzle-orm0.45.4; migrated embedded PostgreSQL17, real production builds/start, Canvas2D, native mouse/CDP touch, Chrome156.0.8078.48. Mac google-chrome command adapter executes the actual application bundle; no browser installer or fake runtime.",
+  "fake_boundaries": "Markup mutation fixtures and browser/pure clock injection; retained unrelated Ghosts external-service fixture. Synthetic interruption/page lifecycle events do not prove real bfcache. No fake physics, app renderer, database or browser.",
+  "exact_sha_footer_repeat": "Both footer commands will be rerun after this enclosing commit before push; immutable SHA and observed results are bound by the board summary.",
+  "ci_observed_for_repair": false,
+  "deployment_observed": false,
+  "product_delivered": false,
+  "deferred": [
+    {
+      "id": "pm-274/t-1585 exact repaired main CI",
+      "owner": "plan-manager green gate",
+      "failure_condition": "Any red, cancelled, skipped or absent required checks/production; prior known deterministic defect is not waived."
+    },
+    {
+      "id": "pm-274/t-1585 served ancestry and independent live QA",
+      "owner": "plan-manager quality engineer / acceptance",
+      "failure_condition": "/api/health lacks repaired SHA or verified descendant; independent live basket/recovery or negative control fails."
+    }
+  ],
+  "capacity_deferral": "None. No asynchronous executable/model/queue/callback-ingestion interface applies to this browser feature.",
+  "integration_boundary": "Initial results above predate main race to4992aec. Initial immutable443534a also passed walk67/probe177. Retain main endSvgStructure and named gate controls; strengthen identities. All six commands rerun on final immutable integrated SHA; final counts/status in board summary."
+}

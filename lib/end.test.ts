@@ -251,10 +251,10 @@ test("Footer walk separates decorative layers from the named basket and rejects 
   const stop = walk.indexOf('assert.match(footerHtml, /<button', start);
   assert.ok(start >= 0 && stop > start, "execute the actual shell SVG verifier block");
   const check = walk.slice(start, stop);
-  const layer = (name: string) => `<svg data-layer="${name}" aria-hidden="true"></svg>`;
+  const layer = (name: string) => name === "sky" ? '<svg class="figure end-svg end-sky" aria-hidden="true"></svg>' : `<div class="end-${name}-wrap"><svg class="figure end-svg end-ink" data-layer="${name}" aria-hidden="true"></svg></div>`;
   const layers = ["ground", "console", "sky"].map(layer).join("");
   const basket = '<svg data-paper-basket="" role="img" aria-label="Wastepaper basket"></svg>';
-  const wave = '<svg aria-hidden="true"></svg>';
+  const wave = '<svg class="end-wave" viewBox="0 0 1000 16" preserveAspectRatio="none" aria-hidden="true"><path d="M0 8Q25 0 50 8T100 8T150 8T200 8T250 8T300 8T350 8T400 8T450 8T500 8T550 8T600 8T650 8T700 8T750 8T800 8T850 8T900 8T950 8T1000 8V16H0Z" /></svg>';
   const verify = (sceneHtml = layers + basket, waterHtml = wave) => runInNewContext(check, { assert, sceneHtml, waterHtml });
   verify();
   assert.throws(() => verify(layers), { code: "ERR_ASSERTION" }, "basket is required");
@@ -276,9 +276,9 @@ test("Footer probe separates decorative SVGs from the named basket on real brows
   assert.equal((probe.match(/inPage\(endSvgStructure,/g) ?? []).length, 2, "route and no-JS paths both use the tested helper");
   assert.match(probe, /meta\.ok && svgStructure\.ok/);
   assert.match(probe, /noJsSvg\.ok &&/);
-  const layers = '<svg aria-hidden="true"></svg>'.repeat(3);
+  const layers = '<div class="end-ground-wrap"><svg class="figure end-svg end-ink" aria-hidden="true"></svg></div><div class="end-console-wrap"><svg class="figure end-svg end-ink" aria-hidden="true"></svg></div><svg class="figure end-svg end-sky" aria-hidden="true"></svg>';
   const basket = '<svg data-paper-basket="" role="img" aria-label="Wastepaper basket"></svg>';
-  const water = '<div data-end-waterline=""><svg aria-hidden="true"></svg></div>';
+  const water = '<div data-end-waterline=""><svg class="end-wave" viewBox="0 0 1000 16" preserveAspectRatio="none" aria-hidden="true"><path d="M0 8Q25 0 50 8T100 8T150 8T200 8T250 8T300 8T350 8T400 8T450 8T500 8T550 8T600 8T650 8T700 8T750 8T800 8T850 8T900 8T950 8T1000 8V16H0Z" /></svg></div>';
   const html = (scene = layers + basket, waterline = water) => `<footer class="end">${scene}${waterline}</footer>`;
   const browser = await launchBrowser({ log: () => {} });
   try {
@@ -482,5 +482,30 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
   } finally {
     rmSync(shortTmp, { recursive: true, force: true });
     await new Promise<void>((resolveClose) => srv.close(() => resolveClose()));
+  }
+});
+
+
+test("Footer walk inventories the accessible basket separately and rejects missing, duplicate or exposed SVG layers", () => {
+  const walk = readFileSync(resolve(import.meta.dirname, "../scripts/walk-end.sh"), "utf8");
+  const start = walk.indexOf("const svgs =");
+  const end = walk.indexOf("assert.match(footerHtml, /<button", start);
+  assert.ok(start >= 0 && end > start, "execute the shell inventory itself");
+  const inventory = walk.slice(start, end);
+  const ink = '<svg class="figure end-svg end-ink" aria-hidden="true"></svg>';
+  const sky = '<svg class="figure end-svg end-sky" aria-hidden="true"></svg>';
+  const basket = '<svg data-paper-basket="" class="paper-basket" role="img" aria-label="Wastepaper basket"></svg>';
+  const scene = `<div class="end-ground-wrap">${ink}</div><div class="end-console-wrap">${ink}</div>${sky}${basket}`;
+  const water = '<svg class="end-wave" viewBox="0 0 1000 16" preserveAspectRatio="none" aria-hidden="true"><path d="M0 8Q25 0 50 8T100 8T150 8T200 8T250 8T300 8T350 8T400 8T450 8T500 8T550 8T600 8T650 8T700 8T750 8T800 8T850 8T900 8T950 8T1000 8V16H0Z" /></svg>';
+  const verify = (sceneHtml = scene, waterHtml = water) => runInNewContext(inventory, { assert, sceneHtml, waterHtml });
+  verify(); // Server HTML is the no-JS baseline, with the basket still accessible.
+  for (const invalid of [
+    scene.replace(basket, ''), scene.replace('aria-label="Wastepaper basket"', ''), scene + basket,
+    scene.replace('role="img"', 'role="presentation"'), scene.replace('class="paper-basket"', 'class="paper-basket" aria-hidden="true"'),
+    scene.replace(ink, ''), scene.replace('aria-hidden="true"', ''), scene.replace(sky, ink),
+    scene.replace('end-ground-wrap', 'unrelated'), scene + '<svg aria-hidden="true"></svg>',
+  ]) assert.throws(() => verify(invalid), { code: "ERR_ASSERTION" });
+  for (const invalid of ['', water + water, water.replace('aria-hidden="true"', ''), water.replace('end-wave', 'wrong-wave'), water.replace('1000 16', '1000 20'), water.replace('M0 8Q25', 'M0 9Q25')]) {
+    assert.throws(() => verify(scene, invalid), { code: "ERR_ASSERTION" });
   }
 });

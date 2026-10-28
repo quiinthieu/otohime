@@ -642,7 +642,7 @@ try {
 
         check(`route ${route}: build-sha matches (${meta.sha || "none"})`, matchesExpectedSha(meta.sha), meta.sha);
         check(
-          `route ${route}: one semantic footer.end below main#main with landmarks, copy, year, 3 aria-hidden scene SVGs and the waterline last`,
+          `route ${route}: one semantic footer.end below main#main with landmarks, copy, year, 1 accessible basket, 3 aria-hidden scene SVGs and the waterline last`,
           meta.ok && svgStructure.ok && title === site.end.title,
           `${meta.detail} svg=${JSON.stringify(svgStructure)} title=${JSON.stringify(title)}`,
         );

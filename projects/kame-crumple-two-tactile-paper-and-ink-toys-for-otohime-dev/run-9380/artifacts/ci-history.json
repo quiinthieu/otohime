@@ -1,0 +1,320 @@
+{
+  "read_before_delivery_push": true,
+  "pages": [
+    {
+      "query_file": "ci-completed-1.json",
+      "total": 562,
+      "read": 10,
+      "runs": [
+        {
+          "id": 40662170532,
+          "head_sha": "00e48d6c1f272601fbb66523afcee7f91c1caf0b",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40660939463,
+          "head_sha": "cc71504c69b3365a32ab81f1111054eb022448e3",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40658669258,
+          "head_sha": "fb17af777a5b43f748542c4bba4643b321de4957",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40657712570,
+          "head_sha": "7d2a49923ebaa4b709e954442729bb0c5617b8f9",
+          "conclusion": "success"
+        },
+        {
+          "id": 40656473025,
+          "head_sha": "7ba2e804a9f9ecc9d490c4cbbae1eb27a6a3c75e",
+          "conclusion": "success"
+        },
+        {
+          "id": 40656021737,
+          "head_sha": "4a1c8487fe46c254a92dad2b7f2699b5410023f9",
+          "conclusion": "skipped"
+        },
+        {
+          "id": 40656021869,
+          "head_sha": "4a1c8487fe46c254a92dad2b7f2699b5410023f9",
+          "conclusion": "success"
+        },
+        {
+          "id": 40654725044,
+          "head_sha": "78eea4543c6fbd8835ca8b6800bb7032dd682653",
+          "conclusion": "success"
+        },
+        {
+          "id": 40654613970,
+          "head_sha": "09dc8866d960bf4af2f6020f143f25c778f65773",
+          "conclusion": "success"
+        },
+        {
+          "id": 40654534066,
+          "head_sha": "810710843e61deea4820f59408d1dabc28f3c9cd",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "query_file": "ci-completed-2.json",
+      "total": 562,
+      "read": 10,
+      "runs": [
+        {
+          "id": 40654413448,
+          "head_sha": "a5784543d2182c4ebc3adfbbc068d020d12aa031",
+          "conclusion": "cancelled"
+        },
+        {
+          "id": 40654289427,
+          "head_sha": "94f8dd4d36127b340b4bf35ad98a9371162b9735",
+          "conclusion": "cancelled"
+        },
+        {
+          "id": 40654026601,
+          "head_sha": "ba098b8b908b5a3f1c826bb0f193cbb8d51e4e70",
+          "conclusion": "success"
+        },
+        {
+          "id": 40653759734,
+          "head_sha": "657f0474b5fc9ee4030054f43069f43045086f82",
+          "conclusion": "success"
+        },
+        {
+          "id": 40652934340,
+          "head_sha": "b5fa42372d98c8d3712d8b46cd6b6008727552ae",
+          "conclusion": "success"
+        },
+        {
+          "id": 40651936749,
+          "head_sha": "f4b3de8ee23f336e04adaed24097d324326eb106",
+          "conclusion": "success"
+        },
+        {
+          "id": 40651605621,
+          "head_sha": "63c36af21bdeba1394a225451ce255896eb6990e",
+          "conclusion": "success"
+        },
+        {
+          "id": 40649996558,
+          "head_sha": "c532e4edbc259902b41c457bda0a77557d03b291",
+          "conclusion": "success"
+        },
+        {
+          "id": 40648854250,
+          "head_sha": "5cd648d3d043e3be54163d5f8e9970737b69c44e",
+          "conclusion": "success"
+        },
+        {
+          "id": 40646398062,
+          "head_sha": "770acf8661dc5c46affb3ac2c2a30c8413b46f81",
+          "conclusion": "failure"
+        }
+      ]
+    },
+    {
+      "query_file": "ci-failure-1.json",
+      "total": 158,
+      "read": 10,
+      "runs": [
+        {
+          "id": 40662170532,
+          "head_sha": "00e48d6c1f272601fbb66523afcee7f91c1caf0b",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40660939463,
+          "head_sha": "cc71504c69b3365a32ab81f1111054eb022448e3",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40658669258,
+          "head_sha": "fb17af777a5b43f748542c4bba4643b321de4957",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40646398062,
+          "head_sha": "770acf8661dc5c46affb3ac2c2a30c8413b46f81",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40645771046,
+          "head_sha": "b76a19dbdd16228b9a23621c6fd3df0a3b40b387",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40645049226,
+          "head_sha": "a6297cb2631d0173dcc442f9617878b6d5a76825",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40635091133,
+          "head_sha": "68dd79dba309c7713122e08b02ebb4e6844de749",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40633395018,
+          "head_sha": "f50d7aa017c946540199262177a531f652a9980a",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40626170762,
+          "head_sha": "5fd54a7a6799fff5e924260a5e47ba8e9685a3d6",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40554703084,
+          "head_sha": "72e3657983fd5862e8037ea4b5afc840c342d6af",
+          "conclusion": "failure"
+        }
+      ]
+    },
+    {
+      "query_file": "ci-failure-2.json",
+      "total": 158,
+      "read": 10,
+      "runs": [
+        {
+          "id": 40552915182,
+          "head_sha": "7ad719fc89d0075bd4d480a33d68ccbce20310f3",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40548308774,
+          "head_sha": "a62c6356893c4080714795d11599469b55f9aa2e",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40531718309,
+          "head_sha": "9815ddd75d6196abe8f2a1792a5705a2be01a933",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40521253844,
+          "head_sha": "c1c885cf419b845f076f36e9438fd16ff234216f",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40490942824,
+          "head_sha": "531c0ba6bd530477590cc41ed4d8e9f1a5adf94f",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40489507548,
+          "head_sha": "e1075273c18cc44138aead2bcd15167ce67f822a",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40488773079,
+          "head_sha": "221af4b8b9cc98a38b7c646997ffb590daf82acb",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40474532913,
+          "head_sha": "ee51ea9d92d3e55596ecd3b96850b0c9a2a01e50",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40471181031,
+          "head_sha": "0ca7e9a63661cab411f24a8e0640623eb9cdce39",
+          "conclusion": "failure"
+        },
+        {
+          "id": 40468812796,
+          "head_sha": "7432e70ebea0cb70cba1a12278b837a0c3e1473e",
+          "conclusion": "failure"
+        }
+      ]
+    },
+    {
+      "query_file": "ci-in_progress-1.json",
+      "total": 1,
+      "read": 1,
+      "runs": [
+        {
+          "id": 40664399593,
+          "head_sha": "c1d4726e7a4c049ebeb971911f984fbbc0e355d6",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "query_file": "ci-queued-1.json",
+      "total": 0,
+      "read": 0,
+      "runs": []
+    }
+  ],
+  "completeness": "FAILED 20/158 and COMPLETED 20/562 over two pages each; current in_progress 1/1 and queued 0/0. Filters overlap; older pages unread. History completeness inconclusive. Not a post-push CI observation.",
+  "jobs": {
+    "failing-jobs.json": [
+      {
+        "id": 122715901437,
+        "name": "checks",
+        "status": "completed",
+        "conclusion": "failure",
+        "failed_steps": [
+          "Footer walk"
+        ]
+      },
+      {
+        "id": 122715903567,
+        "name": "cleanup",
+        "status": "completed",
+        "conclusion": "skipped",
+        "failed_steps": []
+      },
+      {
+        "id": 122715903724,
+        "name": "preview",
+        "status": "completed",
+        "conclusion": "skipped",
+        "failed_steps": []
+      },
+      {
+        "id": 122724127798,
+        "name": "production",
+        "status": "completed",
+        "conclusion": "skipped",
+        "failed_steps": []
+      }
+    ],
+    "latest-failing-jobs.json": [
+      {
+        "id": 122727615066,
+        "name": "checks",
+        "status": "completed",
+        "conclusion": "failure",
+        "failed_steps": [
+          "Footer walk"
+        ]
+      },
+      {
+        "id": 122727617483,
+        "name": "preview",
+        "status": "completed",
+        "conclusion": "skipped",
+        "failed_steps": []
+      },
+      {
+        "id": 122727617633,
+        "name": "cleanup",
+        "status": "completed",
+        "conclusion": "skipped",
+        "failed_steps": []
+      },
+      {
+        "id": 122735510338,
+        "name": "production",
+        "status": "completed",
+        "conclusion": "skipped",
+        "failed_steps": []
+      }
+    ]
+  },
+  "raw_logs": "Known failure job122715901437 and later failure job122727615066 both HTTP403. Public run annotation readable but bounded/truncated; full raw runner history remains unread.",
+  "public_failure_annotation": "Gate: Footer walk; exit 1\nCommit: fb17af777a5b43f748542c4bba4643b321de4957\nBuild: 2DCCE8J6lwoR3XkXYomeR\nNode: v22.23.3\nChrome: Google Chrome 155.0.8059.39\nCommand, last 80 lines (bounded):\ne/[eval1]:90:8     at ModuleJob.run (node:internal/modules/esm/module_job:\nok - /music returns 200\nok - /music build-sha\nnot ok - /music has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: expected 3 SVG layers (ground Inked, console Inked, sky), found 4  4 !== 3      at file:///home/runner/work/otohime/otohime/[eval1]:90:8     at ModuleJob.run (node:internal/modules/esm/module_job:\nok - /projects returns 200\nok - /projects build-sha\nnot ok - /projects has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: expected 3 SVG layers (ground Inked, console Inked, sky), found 4  4 !== 3      at file:///home/runner/work/otohime/otohime/[eval1]:90:8     at ModuleJob.run (node:internal/modules/esm/module_job:\nok - /sketches returns 200\nok - /sketches build-sha\nnot ok - /sketches has one semantic .end footer after main with canonical links, scene, knobs and UTC year: node:internal/modules/run_main:123     triggerUncaughtException(     ^  AssertionError [ERR_ASSERTION]: expected 3 SVG layers (ground Inked, console Inked, sky), found 4  4 !== 3      at file:///home/runner/work/otohime/otohime/[eval1]:90:8     at ModuleJob.run (node:internal/modules/esm/module_job:\nok - /sign-in returns 200\nok - /sign-in build-sha\nok - /sign-in has no <footer>\nok - /sign-in has no site footer stage\nok - /forgot-password returns 200\nok - /forgot-password has no <footer>\nok - /forgot-password has no site footer stage\nok - /does-not-exist returns 404\nok - /does-not-exist shows the lost sheet 404\nok - /does-not-exist has no <footer>\nok - /does-not-exist has no site footer stage\nok - /shore returns 200\nok - /shore build-sha\nok - /shore stays isolated from the site footer\nok - /capsule returns 200\nok - /capsule build-sha\nok - /capsule stays isolated from the site footer\nok - /orrery returns 200\nok - /orrery build-sha\nok - /orrery stays isolated from the site footer\nok - /elements returns 200\nok - /elements build-sha\nok - /elements stays isolated from the site footer\nok - /vinyl returns 200\nok - /vinyl build-sha\nok - /vinyl stays isolated from the site footer\nok - /rotor returns 200\nok - /rotor build-sha\nok - /rotor stays isolated from the site footer\nok - /planisphere returns 200\nok - /planisphere build-sha\nok - /planisphere stays isolated from the site footer\nok - /barometer returns 200\nok - /barometer build-sha\nok - /barometer stays isolated from the site footer\nok - /articles returns 200\nok - /articles build-sha\nok - /articles stays isolated from the site footer\nok - /structures returns 200\nok - /structures build-sha\nok - /structures stays isolated from the site footer\nok - /design-system returns 200\nok - /design-system build-sha\nok - /design-system stays isolated from the site footer\nwalk: 58 ok, 7 failed\nnext start, last 80 lines (bounded):\n\n> otohime@0.1.0 start\n> next start\n\n\u25b2 Next.js 16.4.2\n- Local:         http://localhost:3000\n- Network:       http://10.1.1.130:3000\n\u2713 Ready in 110ms\n\u2713 Running next.config.ts took 36ms\n[email] to=plain-rmvrvsuyyuxm@e2e.test subject=Reset your Otohime password\nSomeone asked to reset the password for plain-rmvrvsuyyuxm@e2e.test.\n\nChoose a new one here (the link works for an hour):\nhttp://localhost:3000/api/auth/reset-password/24JUdkLJglzmHhaRpIaS8RnV?callbackURL=%2Freset-password\n\nIf it wasn't you, ignore this email; nothing changes."
+}

@@ -1,0 +1,28 @@
+# pm-274/t-1585 · run-9380
+
+Repair the footer verifier defect while retaining basket flight and Iron flat from fb17af777a5b43f748542c4bba4643b321de4957. One task-prefixed commit is authored on `pm-274-t-1585-footer-repair`, then fast-forwarded to main for `git push origin HEAD`. The board summary binds the pushed immutable SHA; artifacts/commits.txt resolves the enclosing commit.
+
+The HTTP walk now inventories one accessible `Wastepaper basket` image separately from the three original aria-hidden ground/console/sky SVG layers and the original hidden waterline wave. The browser probe shares that inventory between hydrated routes and its no-JS path, with diagnostic counts and category results. No application behavior, dependencies, lock or CI topology changed. recovery-contract.md documents the boundary.
+
+Tests were added before the repair: the shell fixture reproduced four-versus-three; the new shared browser reader did not yet exist. After repair all 17 focused checks pass. Mutation negatives reject missing, unlabelled, hidden, wrong-role or duplicate baskets; missing/exposed/substituted decoration and arbitrary SVGs; missing/duplicate/exposed/changed waves. Real Chrome fixtures cover JavaScript enabled and disabled.
+
+Initial verification: all six required commands passed on the recorded executable fingerprint before the main-race integration:
+
+- Physics/shared lifecycle: 20/20.
+- Repository suite: 2652/2652, no failed/skipped/cancelled tests.
+- Lint/typecheck: zero errors, ten existing warnings; Next typegen and TypeScript pass.
+- Production basket/recovery/companion/peel browser suite: 39/39, no failed/skipped/cancelled tests.
+- Real isolated CI-equivalent Footer walk: 67 checks, zero failures.
+- Real isolated CI-equivalent Chromium footer probe: 177 checks, zero failures, including no-JS navigation, full keyboard progression, geometry/waterline, shell and canonical-href/network negative controls.
+
+The immutable-commit footer commands are repeated after commit before push; the submitted board summary records those exact-SHA results. The unchanged feature checks retain actual hit/rim-miss, touch, keyboard/offscreen/reduced motion, isolated Reset/global Iron, flight/fold/fetch interruptions, focus/paint/geometry, content and Kame name/streak/dismissal recovery.
+
+Real imports match the unchanged lock: Node22.23.3, Next16.4.2, React19.3.0, Playwright1.64.0, pg8.23.1, embedded-postgres17.10.0-beta.17 and drizzle-orm0.45.4. Production builds/start, migrated embedded PostgreSQL17, real Canvas2D, native mouse/CDP touch and Chrome156.0.8078.48 execute successfully. A temporary `google-chrome` shell adapter invokes the real Mac application bundle; it is not a fake browser. Fixture boundaries are markup mutations, injected clocks/interruption events and the retained unrelated Ghosts external-service fixture. Synthetic pageshow is not real bfcache evidence. fingerprints.json identifies source/lock/config/tests and local builds; no binary or generated app output is committed.
+
+Actual run profile/model/effort: codex-sol-6-1-high / gpt-6.1-sol / high, from run-9380 profile_flags. Claim, implementation/delivery decisions, scope adjustment and a lesson are recorded. The requested extraction, software-development and run-9373/9374 fix-plan files are absent here, and checked-in plan.md still describes pm-259. The claimed pm-274/t-1585 contract and supplied independent repair summaries govern this narrow repair; installed Next Playwright guidance and AGENTS.md were read. No human prerequisite or wait was needed.
+
+Pre-push history: FAILED20/158 and COMPLETED20/562 over two pages each, current in_progress1/1 and queued0/0. Categories overlap; older pages unread, completeness inconclusive. Original run40658669258/job122715901437 and later run40662170532/job122727615066 fail Footer walk, production skipped. Both raw log requests return403; the original public bounded annotation proves expected3/found4, walk58ok/7failed, but is itself truncated. Relevant feature/footer/config/lock files in the base match failed fb17af7: a later SHA had not repaired the deterministic defect. ci-history.json preserves bounded evidence; it does not claim full historical runner coverage.
+
+Execution is demonstrated locally. Integration deployment, repaired main CI and product delivery remain unobserved at engineering handoff. This run stops after successful main push, without pipeline watching or deployed-system checks. Platform green gate owns exact repaired main checks and production; red/skipped/absent checks fail it. Independent QA/acceptance owns served `/api/health` ancestry, live basket/recovery and a relevant negative control; stale SHA or behavior/content/input/geometry regression fails it. No capacity deferral, remote model/artifact job, asynchronous runtime queue or callback ingestion applies. The pre-existing unrelated content/history.json change is preserved and excluded from the commit.
+
+Main advanced to 4992aec during exact-SHA verification (443534a walk67/probe177 both passed). The clean linked worktree integrates the explicitly authorized rebase without touching the root checkout's dirty history. Main independently added basic basket semantics in d0711b1, endSvgStructure and two gate-closure controls. Conflict resolution preserves that reader API, all named tests and unrelated accessibility regressions, strengthens original-layer/wave identity, and adapts the retained positive fixtures to actual markup. No duplicate reader remains. The six gates are rerun after completing the rebase on the immutable final commit; the board summary binds its SHA and final counts. Initial fingerprints/history remain identified as pre-integration evidence.

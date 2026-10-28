@@ -23,3 +23,8 @@ Local execution proves the checkout, not deployment. Engineering stops after pus
 ## Delivery recovery
 
 Run-9370 preserves the rescued implementation and revalidates every required gate: 20 physics/shared-lifecycle tests, 2640 repository tests, 39 production-browser tests, lint and typecheck. The prior branch push succeeded but the runner rejected delivery because its commit was absent from main. Task commits are prepared on a task branch, then main is fast-forwarded for delivery. See [run-9370/summary.md](run-9370/summary.md) for the exact execution boundaries, incomplete historical CI evidence and deferred platform obligations. This changes delivery evidence only; recovery ownership remains as described above.
+
+
+## Footer inventory repair
+
+Run-9380 retains the basket and recovery implementation from fb17af7. The HTTP walk inventories the semantic `svg[data-paper-basket]` separately: exactly one `role="img"` with the label `Wastepaper basket`, three original aria-hidden ground/console/sky scene layers and one original aria-hidden waterline wave. Hydrated and no-JS Chromium paths share `endSvgStructure` from the existing probe DOM helper. Missing, unlabelled, hidden or duplicate baskets, missing/exposed/replaced decorative layers, extra SVGs and changed/missing/duplicate waves fail regression fixtures. This repairs verification without changing application behavior or CI topology. Local gates prove the executable; exact main CI, served ancestry and independent live basket/negative-control acceptance remain platform obligations after engineering pushes.

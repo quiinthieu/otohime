@@ -1,23 +1,34 @@
-// Page-side expressions for scripts/probe-end.mjs's footer heading checks, shared with their Chrome regression in
+// Page-side expressions for scripts/probe-end.mjs's footer heading and SVG checks, shared with their Chrome regression in
 // scripts/probe-end-dom.test.mjs. Each function is serialized into the page with inPage(), so it must not close
 // over anything in this module.
 
-// The named basket is semantic content; the three scene layers and waterline wave are decoration.
+// Shared by hydrated and no-JS probes. This serialized function must have no module closure.
 export function endSvgStructure(footer) {
   if (!footer) return { ok: false, reason: "missing footer" };
-  const svgs = [...footer.querySelectorAll("svg")];
-  const layers = svgs.filter((svg) => !svg.closest("[data-end-waterline]") && !svg.matches("[data-paper-basket]"));
-  const baskets = svgs.filter((svg) => !svg.closest("[data-end-waterline]") && svg.matches("[data-paper-basket]"));
-  const waterline = footer.lastElementChild?.matches("[data-end-waterline]") ? footer.lastElementChild : null;
-  const waves = waterline ? [...waterline.querySelectorAll("svg")] : [];
-  const basketNamed = baskets.length === 1 && baskets[0].getAttribute("role") === "img" &&
-    baskets[0].getAttribute("aria-label") === "Wastepaper basket" && !baskets[0].closest('[aria-hidden="true"], [hidden], [inert]');
-  const decorativeHidden = [...layers, ...waves].every((svg) => svg.getAttribute("aria-hidden") === "true");
+  const svgs = [...(footer?.querySelectorAll("svg") ?? [])];
+  const baskets = svgs.filter((s) => s.hasAttribute("data-paper-basket"));
+  const scene = svgs.filter((s) => !s.hasAttribute("data-paper-basket") && !s.closest("[data-end-waterline]"));
+  const waterline = footer?.lastElementChild?.matches("[data-end-waterline]") ? footer.lastElementChild : null;
+  const waves = [...(waterline?.querySelectorAll("svg") ?? [])];
   const waterlineLast = Boolean(waterline) && footer.querySelectorAll("[data-end-waterline]").length === 1;
+  const basket = baskets[0];
+  const basketNamed = baskets.length === 1 && basket.getAttribute("role") === "img" &&
+    basket.getAttribute("aria-label") === "Wastepaper basket" &&
+    !basket.closest('[aria-hidden="true"], [hidden], [inert]') && !basket.closest("[data-end-waterline]");
+  const ground = footer?.querySelectorAll(".end-ground-wrap svg.end-svg.end-ink") ?? [];
+  const console = footer?.querySelectorAll(".end-console-wrap svg.end-svg.end-ink") ?? [];
+  const sky = scene.filter((s) => s.matches("svg.end-svg.end-sky"));
+  const originalLayers = scene.length === 3 && ground.length === 1 && console.length === 1 && sky.length === 1 &&
+    new Set([ground[0], console[0], sky[0]]).size === 3 && [ground[0], console[0], sky[0]].every((s) => scene.includes(s));
+  const wave = waves[0];
+  const waveOk = waves.length === 1 && wave.matches("svg.end-wave") && wave.getAttribute("viewBox") === "0 0 1000 16" &&
+    wave.getAttribute("preserveAspectRatio") === "none" && wave.querySelector("path")?.getAttribute("d") ===
+      "M0 8Q25 0 50 8T100 8T150 8T200 8T250 8T300 8T350 8T400 8T450 8T500 8T550 8T600 8T650 8T700 8T750 8T800 8T850 8T900 8T950 8T1000 8V16H0Z";
+  const decorativeHidden = [...scene, ...waves].every((s) => s.getAttribute("aria-hidden") === "true");
   return {
-    ok: layers.length === 3 && baskets.length === 1 && waves.length === 1 && basketNamed && decorativeHidden && waterlineLast,
-    sceneSvgCount: layers.length, basketCount: baskets.length, waveCount: waves.length,
-    basketNamed, decorativeHidden, waterlineLast,
+    ok: Boolean(basketNamed && originalLayers && waveOk && decorativeHidden && waterlineLast && svgs.length === 5),
+    basketCount: baskets.length, basketNamed, sceneSvgCount: scene.length, originalLayers,
+    waveCount: waves.length, waveOk, decorativeHidden, waterlineLast,
   };
 }
 

@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { after, before, test } from "node:test";
 import { site } from "../content/site.ts";
-import { endTitleBounds, endTitleText, inPage, settleEndTitle, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
+import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
 import { launchBrowser } from "./probe-browser.mjs";
 
 const css = readFileSync(resolve(import.meta.dirname, "../components/riso-heading.css"), "utf8");
@@ -127,4 +127,36 @@ test("probe bounds: measured after the one-shot ink lands, from the visible glyp
   assert.equal(risoSpill.textInside, false, JSON.stringify(risoSpill));
   const missing = await inChrome(footer(`<h2 id="other">${esc(TITLE)}</h2>`), (page) => page.evaluate(inPage(endTitleBounds, VISIBLE_FOOTER, 1366)));
   assert.deepEqual(missing, { ok: false, reason: "missing h2#end-title" });
+});
+
+
+test("probe SVG inventory: one accessible basket, three original hidden layers and the exact wave, with no-JS negatives", async () => {
+  const ink = '<svg class="figure end-svg end-ink" aria-hidden="true"></svg>';
+  const sky = '<svg class="figure end-svg end-sky" aria-hidden="true"></svg>';
+  const basket = '<svg data-paper-basket="" class="paper-basket" role="img" aria-label="Wastepaper basket"></svg>';
+  const wave = '<svg class="end-wave" viewBox="0 0 1000 16" preserveAspectRatio="none" aria-hidden="true"><path d="M0 8Q25 0 50 8T100 8T150 8T200 8T250 8T300 8T350 8T400 8T450 8T500 8T550 8T600 8T650 8T700 8T750 8T800 8T850 8T900 8T950 8T1000 8V16H0Z" /></svg>';
+  const html = `<footer class="end"><div class="end-ground-wrap">${ink}</div><div class="end-console-wrap">${ink}</div>${sky}<div data-paper-basket-slot>${basket}</div><div data-end-waterline>${wave}</div></footer>`;
+  for (const javaScriptEnabled of [true, false]) {
+    const context = await browser.newContext({ javaScriptEnabled });
+    try {
+      const page = await context.newPage();
+      const read = () => page.evaluate(inPage(endSvgStructure, 'document.querySelector("footer.end")'));
+      await page.setContent(html);
+      assert.equal((await read()).ok, true);
+      const invalid = [
+        html.replace(basket, ''), html.replace('aria-label="Wastepaper basket"', ''), html.replace(basket, basket + basket),
+        html.replace('role="img"', 'role="presentation"'), html.replace('class="paper-basket"', 'class="paper-basket" aria-hidden="true"'),
+        html.replace(ink, ''), html.replace('aria-hidden="true"', ''), html.replace(sky, ink),
+        html.replace('end-ground-wrap', 'unrelated'), html.replace(sky, sky + '<svg aria-hidden="true"></svg>'),
+        html.replace(wave, ''), html.replace(wave, wave + wave), html.replace('end-wave', 'wrong-wave'),
+        html.replace('1000 16', '1000 20'), html.replace('M0 8Q25', 'M0 9Q25'),
+        html.replace(wave, wave.replace('aria-hidden="true"', '')),
+      ];
+      for (const broken of invalid) {
+        await page.setContent(broken);
+        const result = await read();
+        assert.equal(result.ok, false, JSON.stringify({ javaScriptEnabled, result, broken }));
+      }
+    } finally { await context.close(); }
+  }
 });

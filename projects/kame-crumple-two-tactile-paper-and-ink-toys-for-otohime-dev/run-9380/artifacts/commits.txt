@@ -1,0 +1,8 @@
+Task: pm-274/t-1585, run-9380
+Subject: pm-274/t-1585: fix: separate accessible basket from footer decoration
+Authored branch: pm-274-t-1585-footer-repair
+Delivery target: origin/main by fast-forward, git push origin HEAD
+Retained delivery ancestor: fb17af777a5b43f748542c4bba4643b321de4957
+Delivery: enclosing commit; resolve with git log -1 --format="%H %s" -- projects/kame-crumple-two-tactile-paper-and-ink-toys-for-otohime-dev/run-9380/artifacts/commits.txt
+The board summary records the immutable pushed delivery SHA and exact-SHA local footer results.
+Initial authored commit: 443534a2056e4e21f02b88b6d896be672adc6212 (rebased on concurrent main4992aec; final SHA in board summary)
