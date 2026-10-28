@@ -149,6 +149,7 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const [printed, setPrinted] = useState<(Printed & { n: number }) | null>(null);
+  const [pending, setPending] = useState(false);
   const tier = useRef<Promise<boolean> | null>(null);
   const latest = useRef(0);
 
@@ -172,6 +173,7 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
     if (!query) return;
     // Only the latest question prints; an earlier one still waiting on the model is dropped.
     const asked = ++latest.current;
+    setPending(true);
     let reply = (await tier.current) ? await askModel(query) : null;
     if (!reply) {
       try {
@@ -181,6 +183,7 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
       }
     }
     if (asked !== latest.current) return;
+    setPending(false);
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     setPrinted((p) => ({ query, reply, reduced, n: (p?.n ?? 0) + 1 }));
   }
@@ -230,8 +233,9 @@ export default function AskConsole({ open, index, onClose }: { open: boolean; in
           placeholder="shore, now, contact…"
         />
       </form>
-      <div className="ask-out">
-        {printed && <Receipt key={printed.n} query={printed.query} reply={printed.reply} reduced={printed.reduced} />}
+      <div className="ask-out" aria-busy={pending}>
+        {pending && <p role="status" className="text-muted">Consulting the ink…</p>}
+        {!pending && printed && <Receipt key={printed.n} query={printed.query} reply={printed.reply} reduced={printed.reduced} />}
       </div>
     </dialog>
   );

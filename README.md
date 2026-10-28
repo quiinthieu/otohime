@@ -440,17 +440,31 @@ Vinyl (`/vinyl`, `app/(vinyl)/`) plays a crate of records on a turntable, with t
 
 ## Ask the console: the model tier
 
-The Ask chip answers offline from `public/ask-index.json` (`lib/ask.ts`). `/api/ask` adds an optional tier on top that answers with Claude. It is off unless both env vars are set:
+The Ask chip answers offline from `public/ask-index.json` (`lib/ask.ts`). `/api/ask` adds an optional tier using Gemini or Claude. It is off unless `ASK_LLM=1` and the selected provider has a key:
 
 | Env var | Effect |
 | --- | --- |
 | `ASK_LLM` | `1` turns the tier on. Anything else, or unset, keeps it off. |
-| `ANTHROPIC_API_KEY` | Server-only. Never commit it, and never give it a `NEXT_PUBLIC_` name. |
+| `ASK_PROVIDER` | `gemini` or `anthropic` (default, for existing installations). Unknown values keep the tier off. |
+| `ASK_MODEL` | Optional model ID. Defaults to `gemini-3.5-flash-lite` for Gemini or `claude-haiku-5-5` for Anthropic. |
+| `GEMINI_API_KEY` | Required for Gemini. Server-only; keep in `.env.local` locally and Vercel environment variables in production. |
+| `ANTHROPIC_API_KEY` | Required for Anthropic. Server-only. Never commit either key or use a `NEXT_PUBLIC_` name. |
 
-- **Off** (the default): `GET` and `POST /api/ask` are 404. `bash scripts/probe-ask-llm.sh` builds, starts with both vars unset and checks this.
-- **On:** `GET /api/ask` is `{"enabled":true,"limits":{"hour":10,"day":150}}`. `POST /api/ask` takes `{"question":"..."}`, at most 1 KB, only from the `BETTER_AUTH_URL` origin (403 otherwise). It returns `{mode, lines, sources}`. The model (`claude-opus-5-5`, effort `low`, structured JSON, 8 s timeout, one retry) sees only the top 6 BM25 passages. It may cite only their ids, and `sources` holds only those passages' pages.
-- **Budget:** each IP gets 10 model answers per UTC hour, and the whole site gets 150 per UTC day. These are counted in the `ask_usage` table, keyed by an HMAC of the IP, never the address itself. Past either limit the reply is 429 with the offline answer under an `(OFFLINE)` line. An SDK error, a refusal, a reply that does not parse, or an unreachable database also gives the offline answer (200, `(OFFLINE)`). A question nothing on the site matches never reaches the model. At most 150 short calls a day costs roughly $6/day in the worst case and far less in practice.
-- `lib/ask-llm.test.ts` covers this with a fake client and an in-memory store.
+For Gemini, add the following to `.env.local` and restart the dev server:
+
+```dotenv
+ASK_LLM=1
+ASK_PROVIDER=gemini
+ASK_MODEL=gemini-3.5-flash-lite
+GEMINI_API_KEY=your-key
+```
+
+A working `DATABASE_URL`, migrated `ask_usage` table, `BETTER_AUTH_SECRET`, and a `BETTER_AUTH_URL` matching the browser origin are needed for model answers. A database failure keeps the oracle offline.
+
+- **Off** (the default): `GET` and `POST /api/ask` are 404. `bash scripts/probe-ask-llm.sh` builds, starts with the tier unset and checks this.
+- **On:** `GET /api/ask` is `{"enabled":true,"limits":{"hour":10,"day":150}}`. `POST /api/ask` takes `{"question":"..."}`, at most 1 KB, only from the `BETTER_AUTH_URL` origin (403 otherwise). It returns `{mode, lines, sources}`. The selected model (structured JSON, 8 s timeout with one retry for Anthropic; 35 s timeout without retries for Gemini; 40 s client timeout) sees only the top 6 BM25 passages. It may cite only their ids, and `sources` holds only those passages' pages. A substantive answer without a valid citation falls back offline. Gemini uses the [Google REST API](https://ai.google.dev/api/generate-content), without search or other external grounding tools.
+- **Budget:** each IP gets 10 model answers per UTC hour, and the whole site gets 150 per UTC day. These are counted in the `ask_usage` table, keyed by an HMAC of the IP, never the address itself. Past either limit the reply is 429 with the offline answer under an `(OFFLINE)` line. An SDK error, a refusal, a reply that does not parse, or an unreachable database also gives the offline answer (200, `(OFFLINE)`). A question nothing on the site matches never reaches the model. Token costs depend on the selected model and answer length; the limits bound requests, not currency spend.
+- `lib/ask-llm.test.ts` and `lib/ask-gemini.test.ts` cover both providers, scoped prompts, citations, budgets and fallback with fake clients and in-memory stores.
 
 ## Deploying
 
@@ -463,7 +477,7 @@ The jobs need these repo settings:
 
 - **Variables:** `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `NEON_PROJECT_ID`.
 - **Secrets:** `VERCEL_TOKEN`, `NEON_API_KEY`, and `DATABASE_URL_UNPOOLED` (production's direct, unpooled URL, used for migrations).
-- **Vercel Production env:** `DATABASE_URL` (pooled), `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. Optional: `ASK_LLM=1` and `ANTHROPIC_API_KEY` turn on Ask's model tier (see above), and the `SPOTIFY_*` and `STEAM_*` variables turn on Music's Now playing (see Now playing).
+- **Vercel Production env:** `DATABASE_URL` (pooled), `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. Optional: `ASK_LLM=1`, `ASK_PROVIDER` and the selected provider's key turn on Ask's model tier (see above), and the `SPOTIFY_*` and `STEAM_*` variables turn on Music's Now playing (see Now playing).
 - **Vercel Preview env:** only `BETTER_AUTH_SECRET`. CI passes each preview its own Neon branch URL.
 
 Rules that keep this safe:

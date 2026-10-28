@@ -112,8 +112,8 @@ test("askModel: null (the offline canned answer) on a failed POST, a bad status 
   }
 });
 
-test("askModel: a POST with no answer gives up after the timeout, 10 s by default", async () => {
-  assert.equal(ASK_TIMEOUT_MS, 10_000);
+test("askModel: a POST with no answer gives up after the timeout, 40 s by default", async () => {
+  assert.equal(ASK_TIMEOUT_MS, 40_000);
   const hang = fakeFetch("hang");
   const started = performance.now();
   assert.equal(await askModel("work", hang.fetcher, 50), null);

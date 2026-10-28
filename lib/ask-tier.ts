@@ -8,7 +8,7 @@
 import type { Reply, Source } from "./ask.ts";
 
 export const ASK_API = "/api/ask";
-export const ASK_TIMEOUT_MS = 10_000;
+export const ASK_TIMEOUT_MS = 40_000;
 
 type Fetch = (input: string, init?: RequestInit) => Promise<Response>;
 
