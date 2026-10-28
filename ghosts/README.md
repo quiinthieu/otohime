@@ -1,7 +1,8 @@
 # Ink ghosts
 
 Anonymous, short-lived cursors from other visitors on Home (`/`) and Ryugu-jo (`/ryugu`). This folder holds the
-transport, persistent Pocket switch and dynamically loaded client canvas. Deploy automation follows in pm-257 tasks 4 to 5.
+transport, persistent Pocket switch and dynamically loaded client canvas. Deploy automation and the activation evidence
+interface are delivered; production configuration and independent live acceptance remain pending.
 
 The folder is neutral and top-level on purpose. The palace may not import from `components/`, `lib/` or other route
 groups, so both roots can share `ghosts/`.
@@ -258,6 +259,94 @@ further Worker deploys as a separate action. Unsetting the app endpoint does not
 existing mounted pages can retain their connection until reload. For an immediate server-side stop, deploy an empty
 `ALLOWED_ORIGINS` configuration and close existing sessions via a reviewed Worker rollback/disable operation.
 No credential or deployment prerequisite is reached by local verification.
+
+## Activation evidence interface (t-1611)
+
+The current [production handoff](../projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/activation.md)
+records esc-444's outcome: signed-in setup cannot be done now. Do not repeat credential requests or poll readiness.
+The Worker version id, Durable Object deployment identity, serving app SHA and Next BUILD_ID are **unavailable**;
+live fan-out is **UNPROVEN**. Fixtures establish only this task's integration scope. Product delivery still requires
+independent real-browser QA and acceptance after operator setup.
+
+`scripts/lib/ghosts-activation.mjs` exports the pure `classifyActivation(evidence)` interface. It reads injected
+HTTP/workflow metadata only, never environment variables, files, credentials or deployment APIs. Its states are:
+
+| State | Meaning |
+| --- | --- |
+| `disabled` | Explicit operator off metadata or `/api/ghosts?probe=1` returned 200 with JSON null. A deploy switch alone does not mean the serving feature is off. |
+| `missing-configuration` | Required observations/artifacts are inaccessible, missing, pending or incomplete. Direct 404 is inconclusive, not proof of an explicit off decision. |
+| `failed-deployment` | Selected workflow failed, or reviewed history contains a failure for the relevant executable. This takes precedence over pending replacements and off metadata. |
+| `identity-mismatch` | Worker version, manifest/source/run, code/lock/config hashes, app identity, endpoint or rooms disagree. |
+| `ready-for-live-QA` | All public identities and reviewed history agree. Live fan-out remains unproven. |
+
+Every result includes stable `reasons`, sanitized public `identities`, history counts/completeness,
+`liveExecution: "UNPROVEN"` and `productDelivered: false`. Worker version identifies the serving Worker; it does
+not invent a separate Durable Object deployment id. `durableObjectDeployment` remains null in this interface.
+`nextBuildId` comes only from the independently obtained app-build artifact correlated to serving health SHA;
+the health endpoint does not independently expose the serving BUILD_ID. QA must also verify the artifact's
+deployment provenance. It is never derived from a SHA.
+
+Verification uses the credential-free default. It imports the actual classifier, fingerprint calculator and
+HTTP adapter under the root lock; all HTTP responses/workflow metadata in fixture tests are synthetic:
+
+```sh
+node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/ghosts-activation.test.mjs
+node scripts/probe-ghosts-activation.mjs --fixture
+node scripts/probe-ghosts-activation.mjs  # same fixtures, zero network
+```
+
+After setup, **QA/acceptance only** can run the new read-only adapter:
+
+```sh
+node scripts/probe-ghosts-activation.mjs --live --evidence /path/to/public-activation.json
+```
+
+There is no deploy mode. Invalid flags fail. Live mode makes three bounded, credential-free GETs only:
+`<appOrigin>/api/ghosts?probe=1`, `<workerOrigin>/version`, `<appOrigin>/api/health`; it rejects redirects and
+non-HTTPS, credential-bearing or non-origin targets, and never upgrades a socket or sends visitor frames.
+No cookies, auth headers or credential environment values are used. Non-ready live results exit 1.
+Malformed/oversized JSON and network errors become missing observations without publishing raw response bodies.
+
+Prepare the public input from independently inspected deployment artifacts and history (never secret values):
+
+```js
+{
+  appOrigin: "https://otohime.dev",
+  workerOrigin: "https://<dedicated-worker>.workers.dev",
+  manifest: /* exact ghosts-build.json from the Worker workflow */,
+  appBuild: /* exact app-build.json from the serving app's deployment */,
+  workflow: {
+    runId: "<Worker workflow run id>", headSha: "<Worker source SHA>",
+    workflowPath: ".github/workflows/ghosts.yml", ref: "refs/heads/main",
+    status: "completed", conclusion: "success"
+  },
+  history: {
+    complete: false, pagesRead: 1, hasMore: true,
+    records: [/* {runId, headSha, fingerprint, status, conclusion,
+                 failureTailRead, failureTailTruncated} */]
+  }
+}
+```
+
+Save valid JSON, replacing the illustrative comments/placeholders with real public metadata. The CLI injects
+`expectedWorker` from the checkout's real Worker fingerprint; run it from the intended Worker source tree.
+For direct classifier calls, inject that `{fingerprint, files}` plus `http: {config, version, health}` observations,
+each `{status, body}`. `configuration.disabled: true` records an explicit off decision; optional
+`configuration.deployEnabled` is context only and cannot prove the serving feature is off.
+
+`history.complete` is an attestation by the independent reader: inspect bounded paginated FAILED, COMPLETED
+and current attempts, exhaust the available pages in the declared bound, and read raw failure/runner tails.
+Mark false if pagination remains, any record/fingerprint/tail is unread or truncated, or access is denied.
+The classifier requires a matching successful record and reviewed tails for failures; it counts failed,
+completed and current records separately (failed is a subset of completed). Failed attempts matching the
+fingerprint or selected Worker source remain defects beside pending/successful replacements. Do not change
+the history window or relabel a failure to obtain ready status; diagnose and resolve the underlying evidence.
+An unrelated newer green SHA is insufficient. A failed config read also cannot be treated as disabled.
+
+After identity readiness, QA must independently drive two real browsers on Home and `/ryugu`, sample peer
+ink/decay and ripples, prove room isolation, leaving, Pocket persistence and reduced motion, and require a
+denied-Origin upgrade to fail. Rerunning the fixture is not independent live proof. Keep no real visitor frames.
+Rollback remains the endpoint/configuration redeployment and reviewed Worker shutdown steps above.
 
 ## Two-browser proof boundary
 
