@@ -1,0 +1,14 @@
+ok 2636 - committed content/yearly-log.json is valid, canonical, in sync with content/site.ts, and package.json wires yearly-log scripts
+  ---
+  duration_ms: 1.342254
+  type: 'test'
+  ...
+1..2636
+# tests 2654
+# suites 2
+# pass 2654
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 38179.228251

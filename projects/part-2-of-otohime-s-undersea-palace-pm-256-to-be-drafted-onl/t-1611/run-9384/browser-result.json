@@ -1,0 +1,33 @@
+{
+  "browser": "156.0.8078.47",
+  "health": {
+    "ok": true,
+    "sha": "7d2a49923ebaa4b709e954442729bb0c5617b8f9"
+  },
+  "observations": [
+    {
+      "path": "/",
+      "status": 200,
+      "config": null,
+      "fallback": "off",
+      "pocket": "hidden"
+    },
+    {
+      "path": "/ryugu",
+      "status": 200,
+      "pocket": "hidden"
+    },
+    {
+      "path": "/",
+      "pocket": "restored-on"
+    },
+    {
+      "path": "/ryugu",
+      "reducedMotion": "off",
+      "configReads": 0
+    }
+  ],
+  "pageErrors": [],
+  "webSockets": 0,
+  "boundary": "Real hosted Chrome fallback and browser-local preference only; no fan-out, Worker identity or product delivery established"
+}

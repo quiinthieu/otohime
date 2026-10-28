@@ -1,0 +1,88 @@
+[
+  {
+    "file": "run-40656021737.html",
+    "statusExcerpt": "Status Skipped Total duration 1s Artifacts \u2013 ghosts.yml on: push deploy deploy Oh hello! Nice to see you. Made with \u2764\ufe0f by humans.txt Fit to window Zoom out Zoom in You ca",
+    "commits": [
+      "4a1c8487fe46c254a92dad2b7f2699b5410023f9"
+    ],
+    "jobs": [
+      "122707176758"
+    ]
+  },
+  {
+    "file": "run-40657712570.html",
+    "statusExcerpt": "Status Success Total duration 27m 47s Artifacts 1 ci.yml on: push checks 24m 29s checks preview preview cleanup cleanup production 3m 12s production Oh hello! Nice to see",
+    "commits": [
+      "7d2a49923ebaa4b709e954442729bb0c5617b8f9"
+    ],
+    "jobs": [
+      "122712704594",
+      "122712706536",
+      "122712706081",
+      "122722587330"
+    ]
+  },
+  {
+    "file": "run-40662170532.html",
+    "statusExcerpt": "Status Failure Total duration 18m 9s Artifacts 1 ci.yml on: push checks 18m 5s checks preview 0s preview cleanup 0s cleanup production production Oh hello! Nice to see yo",
+    "commits": [
+      "00e48d6c1f272601fbb66523afcee7f91c1caf0b"
+    ],
+    "jobs": [
+      "122727615066",
+      "122727617483",
+      "122727617633",
+      "122735510338"
+    ]
+  },
+  {
+    "file": "run-40664399593.html",
+    "statusExcerpt": "Status Failure Total duration 20m 37s Artifacts 1 ci.yml on: push checks 20m 33s checks preview 0s preview cleanup 0s cleanup production 0s production Oh hello! Nice to s",
+    "commits": [
+      "c1d4726e7a4c049ebeb971911f984fbbc0e355d6"
+    ],
+    "jobs": [
+      "122735129696",
+      "122735131802",
+      "122735131009",
+      "122744229004"
+    ]
+  },
+  {
+    "file": "run-40666479119.html",
+    "statusExcerpt": "Status In progress Total duration \u2013 Artifacts 1 ci.yml on: push checks checks preview preview cleanup cleanup production production Oh hello! Nice to see you. Made with \u2764",
+    "commits": [
+      "eedd36ae9417f917d465e1b9963d2c63fe804a94"
+    ],
+    "jobs": [
+      "122742154917",
+      "122742220854",
+      "122742156981"
+    ]
+  },
+  {
+    "file": "run-40666892164.html",
+    "statusExcerpt": "Status In progress Total duration \u2013 Artifacts 1 ci.yml on: push checks checks preview 0s preview cleanup 0s cleanup production production Oh hello! Nice to see you. Made ",
+    "commits": [
+      "4992aec82c18135f37279f973527789bed92c9c8"
+    ],
+    "jobs": [
+      "122743527801",
+      "122743530105",
+      "122743529807"
+    ]
+  },
+  {
+    "file": "delivery-ci.html",
+    "statusExcerpt": "Status Success Total duration 24m 36s Artifacts 1 ci.yml on: push checks 20m 28s checks preview preview cleanup cleanup production 4m 3s production Oh hello! Nice to see ",
+    "commits": [
+      "4a1c8487fe46c254a92dad2b7f2699b5410023f9"
+    ],
+    "jobs": [
+      "122707137459",
+      "122707138760",
+      "122707139676",
+      "122715313603"
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+  37:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/cb4d3444-e8eb-47d8-8ff7-09a286d9c964-2e65916aea42b6792d700d13e44efa08/work/otohime/app/(shore)/shore/page.tsx
+  29:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/cb4d3444-e8eb-47d8-8ff7-09a286d9c964-2e65916aea42b6792d700d13e44efa08/work/otohime/app/(vinyl)/vinyl/page.tsx
+  25:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/cb4d3444-e8eb-47d8-8ff7-09a286d9c964-2e65916aea42b6792d700d13e44efa08/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs
+  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (0 errors, 10 warnings)
+  0 errors and 9 warnings potentially fixable with the `--fix` option.

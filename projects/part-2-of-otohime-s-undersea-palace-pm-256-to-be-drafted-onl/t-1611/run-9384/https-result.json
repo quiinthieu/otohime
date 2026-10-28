@@ -1,0 +1,79 @@
+{
+  "boundary": "Real shipped imports, HTTPS, default fetch and parser; synthetic metadata, no Cloudflare/DO/browser proof",
+  "fingerprint": "aa87b9e3b4328f59801de5028120046f3c244f4f55e7e26d661b16d02b6a7115",
+  "checks": [
+    {
+      "name": "real TLS/default fetch positive control",
+      "state": "ready-for-live-QA",
+      "history": {
+        "complete": true,
+        "pagesRead": 1,
+        "failed": 0,
+        "completed": 1,
+        "current": 0,
+        "recordsRead": 1
+      }
+    },
+    {
+      "name": "wrong serving Worker version",
+      "state": "identity-mismatch",
+      "history": {
+        "complete": true,
+        "pagesRead": 1,
+        "failed": 0,
+        "completed": 1,
+        "current": 0,
+        "recordsRead": 1
+      }
+    },
+    {
+      "name": "two same-executable failures survive a pending newer SHA",
+      "state": "failed-deployment",
+      "history": {
+        "complete": true,
+        "pagesRead": 1,
+        "failed": 2,
+        "completed": 3,
+        "current": 0,
+        "recordsRead": 3
+      }
+    },
+    {
+      "name": "unread unrelated failure tail stays inconclusive",
+      "state": "missing-configuration",
+      "history": {
+        "complete": false,
+        "pagesRead": 1,
+        "failed": 1,
+        "completed": 2,
+        "current": 0,
+        "recordsRead": 2
+      }
+    },
+    {
+      "name": "redirect is refused",
+      "state": "missing-configuration",
+      "history": {
+        "complete": true,
+        "pagesRead": 1,
+        "failed": 0,
+        "completed": 1,
+        "current": 0,
+        "recordsRead": 1
+      }
+    },
+    {
+      "name": "oversized wire response is refused",
+      "state": "missing-configuration",
+      "history": {
+        "complete": true,
+        "pagesRead": 1,
+        "failed": 0,
+        "completed": 1,
+        "current": 0,
+        "recordsRead": 1
+      }
+    }
+  ],
+  "requests": 18
+}

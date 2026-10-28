@@ -1,0 +1,202 @@
+{
+  "observedAt": "2026-10-28T09:58:50.075149+00:00",
+  "mode": "Public HTML after unauthenticated API HTTP 403 rate-limit; 25 rows/page, two pages each FAILED/COMPLETED, one each queued/in_progress. status: query was ignored; only corrected is: filters are counted.",
+  "records": [
+    {
+      "name": "ghosts-failure-1",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ghosts.yml?query=is%3Afailure&page=1",
+      "status": 200,
+      "ids": [],
+      "text": "Workflow runs for Ink ghosts Worker 0 workflow run results Auto-refresh: 30s Event Status Branch Actor More items No results matched your search. You could search all workflow runs or try different filters. "
+    },
+    {
+      "name": "ghosts-failure-2",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ghosts.yml?query=is%3Afailure&page=2",
+      "status": 200,
+      "ids": [],
+      "text": "Workflow runs for Ink ghosts Worker 0 workflow run results Auto-refresh: 30s Auto-refresh is only available on the first page Event Status Branch Actor More items No results matched your search. You could search all workflow runs or try different filters. "
+    },
+    {
+      "name": "ghosts-completed-1",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ghosts.yml?query=is%3Acompleted&page=1",
+      "status": 200,
+      "ids": [
+        "40656021737",
+        "40619191293"
+      ],
+      "text": "Workflow runs for Ink ghosts Worker 2 workflow run results Auto-refresh: 30s Event Status Branch Actor More items pm-257/t-1611: feat: prepare production activation evidence handoff skipped: Ink ghosts Worker #2: Commit 4a1c848 pushed by quiinthieu main Oct 28, 2026 1s More actions for workflow run 2 pm-257/t-1610: test(ghosts): prove browsers and prepare dark deployment skipped: Ink ghosts Worker #1: Commit f2e1adf pushed by quiinthieu main Oct 28, 2026 1s More actions for workflow run 1 "
+    },
+    {
+      "name": "ghosts-completed-2",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ghosts.yml?query=is%3Acompleted&page=2",
+      "status": 200,
+      "ids": [],
+      "text": "Workflow runs for Ink ghosts Worker 2 workflow run results Auto-refresh: 30s Auto-refresh is only available on the first page Event Status Branch Actor More items No results matched your search. You could search all workflow runs or try different filters. "
+    },
+    {
+      "name": "ci-failure-1",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ci.yml?query=is%3Afailure&page=1",
+      "status": 200,
+      "ids": [
+        "40664399593",
+        "40662170532",
+        "40660939463",
+        "40658669258",
+        "40646398062",
+        "40645771046",
+        "40645049226",
+        "40635091133",
+        "40633395018",
+        "40626170762",
+        "40554703084",
+        "40552915182",
+        "40548308774",
+        "40531718309",
+        "40521253844",
+        "40490942824",
+        "40489507548",
+        "40488773079",
+        "40474532913",
+        "40471181031",
+        "40468812796",
+        "40467472536",
+        "40465299263",
+        "40464199853",
+        "40461166952"
+      ],
+      "text": "Workflow runs for CI 159 workflow run results Auto-refresh: 30s Event Status Branch Actor More items pm-279/t-1621: feat: build deterministic sky geometry failed: CI #561: Commit c1d4726 pushed by quiinthieu main Oct 28, 2026 20m 37s More actions for workflow run 561 pm-279/t-1620: docs: record deployed notes QA pass failed: CI #560: Commit 00e48d6 pushed by quiinthieu main Oct 28, 2026 18m 9s More actions for workflow run 560 pm-273/run-9371: Replan guestbook provenance reconciliation and remai\u2026 failed: CI #559: Commit cc71504 pushed by quiinthieu main Oct 28, 2026 23m 2s More actions for workflow run 559 pm-274/t-1585: docs: record verified basket delivery recovery failed: CI #558: Commit fb17af7 pushed by quiinthieu main Oct 28, 2026 20m 12s More actions for workflow run 558 pm-294/t-1687: fix(play): drain Pachinko Backfill and fit Booth hanko\u2026 failed: CI #542: Commit 770acf8 pushed by quiinthieu main Oct 28, 2026 19m 10s More actions for workflow run 542 pm-269/t-1648: docs: record post-rebase verification failed: CI #541: Commit b76a19d pushed by quiinthieu main Oct 28, 2026 19m 7s More actions for workflow run 541 pm-279/t-1620: docs: verify rescued notes for main delivery failed: CI #540: Commit a6297cb pushed by quiinthieu main Oct 28, 2026 19m 7s More actions for workflow run 540 pm-294/t-1686: fix(pachinko): eliminate passive effect race in tilt l\u2026 failed: CI #537: Commit 68dd79d pushed by quiinthieu main Oct 28, 2026 22m 23s More actions for workflow run 537 pm-294/t-1686: feat(pachinko): add Pipeline Pachinko route, Play page\u2026 failed: CI #536: Commit f50d7aa pushed by quiinthieu main Oct 28, 2026 18m 37s More actions for workflow run 536 pm-294/t-1683: feat(booth): add film-stock shaders, strip composer, c\u2026 failed: CI #532: Commit 5fd54a7 pushed by quiinthieu main Oct 28, 2026 17m 24s More actions for workflow run 532 pm-268/t-1678: verify paper hydration subscriber settlement failed: CI #525: Commit 72e3657 pushed by quiinthieu main Oct 27, 2026 16m 20s More actions for workflow run 525 pm-293/t-1682: restore truthful live project statuses and add opt-in \u2026 failed: CI #524: Commit 7ad719f pushed by quiinthieu main Oct 27, 2026 16m 47s More actions for workflow run 524 pm-268/t-1678: integrate the verified hydration delivery failed: CI #523: Commit a62c635 pushed by quiinthieu main Oct 27, 2026 4m 12s More actions for workflow run 523 pm-268/t-1601: Reverify Riso browser contract against fix plan run-9220 failed: CI #520: Commit 9815ddd pushed by quiinthieu main Oct 27, 2026 16m 3s More actions for workflow run 520 pm-293/t-1673: Build shared yearly shipped digest failed: CI #517: Commit c1c885c pushed by quiinthieu main Oct 27, 2026 22m 3s More actions for workflow run 517 pm-268/t-1601: Compile gate fixtures on supported Node 22 failed: CI #512: Commit 531c0ba pushed by quiinthieu main Oct 27, 2026 19m 4s More actions for workflow run 512 fix(ci): standardize deployment authors failed: CI #510: Pull request #9 synchronize by quiinthieu fix/deploy-release Oct 27, 2026 2m 43s More actions for workflow run 510 pm-268/t-1601: Guard clean Riso browser verification builds failed: CI #509: Commit 221af4b pushed by quiinthieu main Oct 27, 2026 2m 51s More actions for workflow run 509 pm-269/t-1648: Verify deployment readiness through scoped API failed: CI #504: Commit ee51ea9 pushed by quiinthieu main Oct 27, 2026 18m 38s More actions for workflow run 504 pm-269/t-1648: Rebuild Bottle gates without stale Next output failed: CI #503: Commit 0ca7e9a pushed by quiinthieu main Oct 27, 2026 17m 55s More actions for workflow run 503 pm-269/t-1648: Require complete Bottle repository and deployment evid\u2026 failed: CI #502: Commit 7432e70 pushed by quiinthieu main Oct 27, 2026 20m 12s More actions for workflow run 502 pm-269/t-1648: Require explicit Ready state before production health failed: CI #501: Commit c24320b pushed by quiinthieu main Oct 27, 2026 19m 53s More actions for workflow run 501 pm-270/t-1671: Certify desk fixtures and register main-lane tests failed: CI #500: Commit 4c64080 pushed by quiinthieu main Oct 27, 2026 19m 55s More actions for workflow run 500 pm-269/t-1648: Require complete named Bottle gate evidence failed: CI #499: Commit f3512e8 pushed by quiinthieu main Oct 27, 2026 16m 57s More actions for workflow run 499 pm-257/t-1609: Persist Pocket ghost controls failed: CI #498: Commit cce131d pushed by quiinthieu main Oct 27, 2026 20m 13s More actions for workflow run 498 Previous 1 2 3 4 5 6 7 Next "
+    },
+    {
+      "name": "ci-failure-2",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ci.yml?query=is%3Afailure&page=2",
+      "status": 200,
+      "ids": [
+        "40460769638",
+        "40456936288",
+        "40454757987",
+        "40450347470",
+        "40448208637",
+        "40448034730",
+        "40439524623",
+        "40433812567",
+        "40423130342",
+        "40409123749",
+        "40405893755",
+        "40395335524",
+        "40388684010",
+        "40387187938",
+        "40380026935",
+        "40378894466",
+        "40365293940",
+        "40352230491",
+        "40349872187",
+        "40348188828",
+        "40346324813",
+        "40345114517",
+        "40343322274",
+        "40340641001",
+        "40340021768"
+      ],
+      "text": "Workflow runs for CI 159 workflow run results Auto-refresh: 30s Auto-refresh is only available on the first page Event Status Branch Actor More items pm-269/t-1648: Scope production inspection and certify Bottle gates failed: CI #497: Commit f08f670 pushed by quiinthieu main Oct 27, 2026 10m 55s More actions for workflow run 497 pm-269/t-1648: Contain Bottle within the footer header band failed: CI #496: Commit e120461 pushed by quiinthieu main Oct 27, 2026 19m 13s More actions for workflow run 496 pm-269/t-1647: Preserve CI probe failures and verify rendered headings failed: CI #495: Commit d6221b7 pushed by quiinthieu main Oct 27, 2026 18m 54s More actions for workflow run 495 pm-255/t-1632: Accept only the tier-off GET /api/ask 404 in the seaso\u2026 failed: CI #494: Commit cabb78b pushed by quiinthieu main Oct 27, 2026 19m 37s More actions for workflow run 494 pm-259/t-1624: Expose browser gate crash diagnostics failed: CI #493: Commit f83c73f pushed by quiinthieu main Oct 27, 2026 17m 18s More actions for workflow run 493 pm-259/t-1626: Fail closed on deployment diagnostics and identity failed: CI #492: Commit 7735e74 pushed by quiinthieu main Oct 27, 2026 20m 54s More actions for workflow run 492 pm-257/t-1608: Reconcile disabled ghost configuration with console ch\u2026 failed: CI #489: Commit a958913 pushed by quiinthieu main Oct 27, 2026 19m 31s More actions for workflow run 489 pm-257/t-1608: Render idle-loaded visitor ink and bounded lifecycle failed: CI #487: Commit ebbb06d pushed by quiinthieu main Oct 27, 2026 13m 17s More actions for workflow run 487 pm-270/t-1606: Flush gate-closure child output and settle ledger phon\u2026 failed: CI #484: Commit c6d09f0 pushed by quiinthieu main Oct 26, 2026 17m 16s More actions for workflow run 484 pm-269/t-1588: Await the Dashboard's own page fade after its skeleton failed: CI #480: Commit 556a3ec pushed by quiinthieu main Oct 26, 2026 16m 54s More actions for workflow run 480 pm-270/t-1606: Observe browser time in the Kame clock fixture failed: CI #479: Commit 9d3f746 pushed by quiinthieu main Oct 26, 2026 20m 29s More actions for workflow run 479 pm-269/t-1591: Stabilize clock checks and expose Footer failures failed: CI #476: Commit e21f832 pushed by quiinthieu main Oct 26, 2026 13m 9s More actions for workflow run 476 pm-269/t-1588: Prove live Bottle animation cancellation failed: CI #475: Commit 45c8d92 pushed by quiinthieu main Oct 26, 2026 10m 23s More actions for workflow run 475 pm-269/t-1591: Track opt-in heads entirely on device failed: CI #474: Commit 3912d2b pushed by quiinthieu main Oct 26, 2026 16m 48s More actions for workflow run 474 pm-269/t-1588: Wash up Bottles from footer and Pocket failed: CI #472: Commit 5abaebc pushed by quiinthieu main Oct 26, 2026 12m 28s More actions for workflow run 472 pm-270/t-1606: Drive notebook frames and verify footer title sources failed: CI #471: Commit 52ec090 pushed by quiinthieu main Oct 26, 2026 9m 34s More actions for workflow run 471 pm-269/t-1587: Include Bottle HTTP and Postgres integration coverage failed: CI #467: Commit 70fe593 pushed by quiinthieu main Oct 26, 2026 16m 56s More actions for workflow run 467 pm-264/t-1590: Verify the plain Riso footer heading failed: CI #464: Commit ab34874 pushed by quiinthieu main Oct 26, 2026 13m 19s More actions for workflow run 464 pm-270/t-1605: Anchor the leftover-child check and bound the deploy s\u2026 failed: CI #463: Commit e03cf1c pushed by quiinthieu main Oct 26, 2026 11m 40s More actions for workflow run 463 fix(ci): standardize deployment authors failed: CI #462: Pull request #9 opened by quiinthieu fix/deploy-release Oct 26, 2026 12m 37s More actions for workflow run 462 pm-264/t-1590: Preserve main checks and serialize production failed: CI #461: Commit 74522bc pushed by quiinthieu main Oct 26, 2026 12m 8s More actions for workflow run 461 pm-259/t-1583: Repair red unit gates and publish failed CI assertions failed: CI #460: Commit 17bca22 pushed by quiinthieu main Oct 26, 2026 8m 3s More actions for workflow run 460 pm-268/t-1600: Verify served SHA after inspect failures failed: CI #459: Commit 5ad4906 pushed by quiinthieu main Oct 26, 2026 2m 2s More actions for workflow run 459 pm-257/t-1607: Build bounded ghost rooms and Worker adapter failed: CI #458: Commit ae6573a pushed by quiinthieu main Oct 26, 2026 2m 3s More actions for workflow run 458 pm-268/t-1601: Print accessible Riso heading plates failed: CI #457: Commit c121b20 pushed by quiinthieu main Oct 26, 2026 2m 7s More actions for workflow run 457 Previous 1 2 3 4 5 6 7 Next "
+    },
+    {
+      "name": "ci-completed-1",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ci.yml?query=is%3Acompleted&page=1",
+      "status": 200,
+      "ids": [
+        "40664399593",
+        "40662170532",
+        "40660939463",
+        "40658669258",
+        "40657712570",
+        "40656473025",
+        "40656021869",
+        "40654725044",
+        "40654613970",
+        "40654534066",
+        "40654413448",
+        "40654289427",
+        "40654026601",
+        "40653759734",
+        "40652934340",
+        "40651936749",
+        "40651605621",
+        "40649996558",
+        "40648854250",
+        "40646398062",
+        "40645771046",
+        "40645049226",
+        "40641088253",
+        "40640198126",
+        "40635091133"
+      ],
+      "text": "Workflow runs for CI 561 workflow run results Auto-refresh: 30s Event Status Branch Actor More items pm-279/t-1621: feat: build deterministic sky geometry failed: CI #561: Commit c1d4726 pushed by quiinthieu main Oct 28, 2026 20m 37s More actions for workflow run 561 pm-279/t-1620: docs: record deployed notes QA pass failed: CI #560: Commit 00e48d6 pushed by quiinthieu main Oct 28, 2026 18m 9s More actions for workflow run 560 pm-273/run-9371: Replan guestbook provenance reconciliation and remai\u2026 failed: CI #559: Commit cc71504 pushed by quiinthieu main Oct 28, 2026 23m 2s More actions for workflow run 559 pm-274/t-1585: docs: record verified basket delivery recovery failed: CI #558: Commit fb17af7 pushed by quiinthieu main Oct 28, 2026 20m 12s More actions for workflow run 558 pm-273/t-1612: Record provenance QA failure and fix plan completed successfully: CI #557: Commit 7d2a499 pushed by quiinthieu main Oct 28, 2026 27m 47s More actions for workflow run 557 pm-273/t-1612: Record schema author guard delivery completed successfully: CI #556: Commit 7ba2e80 pushed by quiinthieu main Oct 28, 2026 27m 29s More actions for workflow run 556 pm-257/t-1611: feat: prepare production activation evidence handoff completed successfully: CI #555: Commit 4a1c848 pushed by quiinthieu main Oct 28, 2026 24m 36s More actions for workflow run 555 pm-294/run-9357: note mid-run redeploy re-smoke in acceptance report completed successfully: CI #554: Commit 78eea45 pushed by quiinthieu main Oct 28, 2026 25m 47s More actions for workflow run 554 pm-294/run-9357: record passing acceptance for Ink Booth and Pipeline\u2026 completed successfully: CI #553: Commit 09dc886 pushed by quiinthieu main Oct 28, 2026 30m 11s More actions for workflow run 553 pm-273/t-1612: Record green delivery CI in QA report completed successfully: CI #552: Commit 8107108 pushed by quiinthieu main Oct 28, 2026 23m 47s More actions for workflow run 552 pm-273/t-1612: Record deployed delivery in QA evidence cancelled: CI #551: Commit a578454 pushed by quiinthieu main Oct 28, 2026 20m 20s More actions for workflow run 551 pm-273/t-1612: Record QA failure and provenance fix plan cancelled: CI #550: Commit 94f8dd4 pushed by quiinthieu main Oct 28, 2026 21m 35s More actions for workflow run 550 pm-273/t-1615: Record independent fortune QA evidence completed successfully: CI #549: Commit ba098b8 pushed by quiinthieu main Oct 28, 2026 25m 0s More actions for workflow run 549 pm-279/t-1620: fix: assert crumple link accessibility across folds completed successfully: CI #548: Commit 657f047 pushed by quiinthieu main Oct 28, 2026 23m 16s More actions for workflow run 548 pm-294/t-1688: docs(qa): record QA pass report for Pipeline Pachinko \u2026 completed successfully: CI #547: Commit b5fa423 pushed by quiinthieu main Oct 28, 2026 24m 48s More actions for workflow run 547 pm-273/t-1612: Record rebased fixture delivery completed successfully: CI #546: Commit f4b3de8 pushed by quiinthieu main Oct 28, 2026 21m 49s More actions for workflow run 546 pm-273/t-1615: Snapshot fortune targets for deterministic sessions completed successfully: CI #545: Commit 63c36af pushed by quiinthieu main Oct 28, 2026 29m 25s More actions for workflow run 545 pm-294/t-1688: fix(play): style Pipeline Pachinko with site tokens an\u2026 completed successfully: CI #544: Commit c532e4e pushed by quiinthieu main Oct 28, 2026 23m 38s More actions for workflow run 544 pm-274/t-1584: fix: expose paper controls to first pointer clicks completed successfully: CI #543: Commit 5cd648d pushed by quiinthieu main Oct 28, 2026 28m 38s More actions for workflow run 543 pm-294/t-1687: fix(play): drain Pachinko Backfill and fit Booth hanko\u2026 failed: CI #542: Commit 770acf8 pushed by quiinthieu main Oct 28, 2026 19m 10s More actions for workflow run 542 pm-269/t-1648: docs: record post-rebase verification failed: CI #541: Commit b76a19d pushed by quiinthieu main Oct 28, 2026 19m 7s More actions for workflow run 541 pm-279/t-1620: docs: verify rescued notes for main delivery failed: CI #540: Commit a6297cb pushed by quiinthieu main Oct 28, 2026 19m 7s More actions for workflow run 540 pm-274/t-1584: docs: verify rescued Canvas folds for main delivery completed successfully: CI #539: Commit d323b87 pushed by quiinthieu main Oct 28, 2026 27m 16s More actions for workflow run 539 pm-257/t-1610: fix(e2e): await the Bottle footer band and bound E2E a\u2026 completed successfully: CI #538: Commit 3684cb5 pushed by quiinthieu main Oct 28, 2026 27m 5s More actions for workflow run 538 pm-294/t-1686: fix(pachinko): eliminate passive effect race in tilt l\u2026 failed: CI #537: Commit 68dd79d pushed by quiinthieu main Oct 28, 2026 22m 23s More actions for workflow run 537 Previous 1 2 3 4 5 6 7 \u2026 23 Next "
+    },
+    {
+      "name": "ci-completed-2",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ci.yml?query=is%3Acompleted&page=2",
+      "status": 200,
+      "ids": [
+        "40633395018",
+        "40631993207",
+        "40628728959",
+        "40626633944",
+        "40626170762",
+        "40625571209",
+        "40619191440",
+        "40567397034",
+        "40564127414",
+        "40562704334",
+        "40555071055",
+        "40554703084",
+        "40552915182",
+        "40548308774",
+        "40539710809",
+        "40534556213",
+        "40531718309",
+        "40529749649",
+        "40524847925",
+        "40521253844",
+        "40507321301",
+        "40499670850",
+        "40493667173",
+        "40493667124",
+        "40490942824"
+      ],
+      "text": "Workflow runs for CI 561 workflow run results Auto-refresh: 30s Auto-refresh is only available on the first page Event Status Branch Actor More items pm-294/t-1686: feat(pachinko): add Pipeline Pachinko route, Play page\u2026 failed: CI #536: Commit f50d7aa pushed by quiinthieu main Oct 28, 2026 18m 37s More actions for workflow run 536 pm-257/t-1610: test: await Booth fallback renderer completed successfully: CI #535: Commit 22a88f0 pushed by quiinthieu main Oct 28, 2026 26m 27s More actions for workflow run 535 pm-294/t-1684: feat(booth): add Ink Purikura Photobooth route, doodle\u2026 completed successfully: CI #534: Commit 995279a pushed by quiinthieu main Oct 28, 2026 25m 41s More actions for workflow run 534 pm-294/t-1685: implement deterministic Pipeline Pachinko Verlet engin\u2026 completed successfully: CI #533: Commit 2f40534 pushed by quiinthieu main Oct 28, 2026 23m 31s More actions for workflow run 533 pm-294/t-1683: feat(booth): add film-stock shaders, strip composer, c\u2026 failed: CI #532: Commit 5fd54a7 pushed by quiinthieu main Oct 28, 2026 17m 24s More actions for workflow run 532 pm-257/t-1610: fix: keep browser proof responsive and isolated completed successfully: CI #531: Commit 308b362 pushed by quiinthieu main Oct 28, 2026 22m 10s More actions for workflow run 531 pm-257/t-1610: test(ghosts): prove browsers and prepare dark deployment completed successfully: CI #530: Commit f2e1adf pushed by quiinthieu main Oct 28, 2026 25m 18s More actions for workflow run 530 pm-268/t-1679: docs(lab): record verified rescue delivery completed successfully: CI #529: Commit 139f705 pushed by quiinthieu main Oct 27, 2026 25m 22s More actions for workflow run 529 pm-268/t-1679: feat(lab): open the public Ink Lab proof sheet completed successfully: CI #528: Commit 9cc593e pushed by quiinthieu main Oct 27, 2026 21m 41s More actions for workflow run 528 pm-293/t-1680: source Making-of Emaki models from run history and fil\u2026 completed successfully: CI #527: Commit 400034a pushed by quiinthieu main Oct 27, 2026 21m 0s More actions for workflow run 527 pm-293/t-1681: pin Hanafuda Koi-Koi and round prompts in mobile viewport completed successfully: CI #526: Commit 68bde4a pushed by quiinthieu main Oct 27, 2026 21m 20s More actions for workflow run 526 pm-268/t-1678: verify paper hydration subscriber settlement failed: CI #525: Commit 72e3657 pushed by quiinthieu main Oct 27, 2026 16m 20s More actions for workflow run 525 pm-293/t-1682: restore truthful live project statuses and add opt-in \u2026 failed: CI #524: Commit 7ad719f pushed by quiinthieu main Oct 27, 2026 16m 47s More actions for workflow run 524 pm-268/t-1678: integrate the verified hydration delivery failed: CI #523: Commit a62c635 pushed by quiinthieu main Oct 27, 2026 4m 12s More actions for workflow run 523 pm-293/t-1675: implement Making-of Emaki handscroll and plan index completed successfully: CI #522: Commit 36ba86a pushed by quiinthieu main Oct 27, 2026 24m 9s More actions for workflow run 522 pm-293/t-1677: add playable Hanafuda Koi-Koi board and monthly log backs completed successfully: CI #521: Commit db788b1 pushed by quiinthieu main Oct 27, 2026 22m 0s More actions for workflow run 521 pm-268/t-1601: Reverify Riso browser contract against fix plan run-9220 failed: CI #520: Commit 9815ddd pushed by quiinthieu main Oct 27, 2026 16m 3s More actions for workflow run 520 pm-293/t-1674: Implement Daruma project board and Kuyo shelf completed successfully: CI #519: Commit 8b0c491 pushed by quiinthieu main Oct 27, 2026 20m 20s More actions for workflow run 519 pm-293/t-1676: Implement Hanafuda Koi-Koi engine and yaku completed successfully: CI #518: Commit 5fd1284 pushed by quiinthieu main Oct 27, 2026 20m 50s More actions for workflow run 518 pm-293/t-1673: Build shared yearly shipped digest failed: CI #517: Commit c1c885c pushed by quiinthieu main Oct 27, 2026 22m 3s More actions for workflow run 517 feat(ryugu): ship current build history with strict production gate completed successfully: CI #516: Commit 9b4a2cc pushed by quiinthieu main Oct 27, 2026 21m 57s More actions for workflow run 516 pm-259/t-1625: Repair footer frame attribution and deliver browser proof completed successfully: CI #515: Commit 739ca99 pushed by quiinthieu main Oct 27, 2026 19m 43s More actions for workflow run 515 fix(ci): standardize deployment authors completed successfully: CI #514: Pull request #9 closed by quiinthieu fix/deploy-release Oct 27, 2026 6s More actions for workflow run 514 fix(ci): standardize deployment authors completed successfully: CI #513: Commit 85de500 pushed by quiinthieu main Oct 27, 2026 22m 15s More actions for workflow run 513 pm-268/t-1601: Compile gate fixtures on supported Node 22 failed: CI #512: Commit 531c0ba pushed by quiinthieu main Oct 27, 2026 19m 4s More actions for workflow run 512 Previous 1 2 3 4 5 6 7 \u2026 23 Next "
+    },
+    {
+      "name": "ghosts-queued-1",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ghosts.yml?query=is%3Aqueued&page=1",
+      "status": 200,
+      "ids": [],
+      "text": "Workflow runs for Ink ghosts Worker 0 workflow run results Auto-refresh: 30s Event Status Branch Actor More items No results matched your search. You could search all workflow runs or try different filters. "
+    },
+    {
+      "name": "ghosts-in_progress-1",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ghosts.yml?query=is%3Ain_progress&page=1",
+      "status": 200,
+      "ids": [],
+      "text": "Workflow runs for Ink ghosts Worker 0 workflow run results Auto-refresh: 30s Event Status Branch Actor More items No results matched your search. You could search all workflow runs or try different filters. "
+    },
+    {
+      "name": "ci-queued-1",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ci.yml?query=is%3Aqueued&page=1",
+      "status": 200,
+      "ids": [],
+      "text": "Workflow runs for CI 0 workflow run results Auto-refresh: 30s Event Status Branch Actor More items No results matched your search. You could search all workflow runs or try different filters. "
+    },
+    {
+      "name": "ci-in_progress-1",
+      "url": "https://github.com/quiinthieu/otohime/actions/workflows/ci.yml?query=is%3Ain_progress&page=1",
+      "status": 200,
+      "ids": [
+        "40666892164",
+        "40666479119"
+      ],
+      "text": "Workflow runs for CI 2 workflow run results Auto-refresh: 30s Event Status Branch Actor More items pm-279/t-1621: Record sky geometry QA evidence currently running: CI #563: Commit 4992aec pushed by quiinthieu main Oct 28, 2026 In progress More actions for workflow run 563 pm-269/t-1648: docs: record final integrated Bottle verification currently running: CI #562: Commit eedd36a pushed by quiinthieu main Oct 28, 2026 In progress More actions for workflow run 562 "
+    }
+  ],
+  "completeness": "Worker listing exhausted. App historical lists incomplete; full raw logs inaccessible. No hosted Worker artifact manifest/DO version observed.",
+  "observationWindow": "Public pages sampled earlier during run-9384; statuses can change after sampling."
+}

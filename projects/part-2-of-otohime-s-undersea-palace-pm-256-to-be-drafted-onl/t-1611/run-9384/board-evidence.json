@@ -1,0 +1,141 @@
+{
+  "observedAt": "2026-10-28T09:57:26.620Z",
+  "deliverySha": "4a1c8487fe46c254a92dad2b7f2699b5410023f9",
+  "qaRun": {
+    "id": "run-9384",
+    "profile": "codex-sol-6-1-high",
+    "flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+  },
+  "greenGate": {
+    "id": "ver-3721",
+    "plan_id": "pm-257",
+    "task_id": "t-1611",
+    "run_id": "run-9366",
+    "gate": "green",
+    "git_sha": "4a1c848",
+    "status": "pass",
+    "items": [
+      {
+        "name": "Activation evidence fixtures",
+        "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/ghosts-activation.test.mjs",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 238
+      },
+      {
+        "name": "Activation CLI fixture",
+        "cmd": "node scripts/probe-ghosts-activation.mjs --fixture",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 38
+      },
+      {
+        "name": "Project tests",
+        "cmd": "npm test",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 41177
+      },
+      {
+        "name": "Lint",
+        "cmd": "npm run lint",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 14983
+      },
+      {
+        "name": "Production build",
+        "cmd": "npm run build",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 13887
+      }
+    ],
+    "created_at": "2026-10-28T08:22:56.471734Z"
+  },
+  "greenTaskManager": {
+    "id": "538fbad9-1478-4086-895d-b9d206ad701e",
+    "status": "COMPLETED",
+    "gitSha": "4a1c848",
+    "resultAgent": "shell",
+    "verificationArtifact": {
+      "content_type": "application/json",
+      "name": "verification.json",
+      "sha256": "e9a2b6acca198d870b8ac61217701914cbdd4cddbee97d76a8b6e58673851f83",
+      "size": 21255
+    }
+  },
+  "greenRun": {
+    "id": "run-9366",
+    "status": "succeeded",
+    "callbackApplyFailures": 0
+  },
+  "boardHistory": {
+    "scope": "pm-257, single unpaginated list_runs response; no older-history completeness guarantee",
+    "count": 39,
+    "counts": {
+      "succeeded": 34,
+      "failed": 4,
+      "running": 1
+    },
+    "taskRuns": [
+      {
+        "id": "run-9337",
+        "kind": "role",
+        "status": "failed",
+        "tm_task_id": "89b36ae3-88c5-4892-919e-b3f0d699da27",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 55c1e3f2cac7 is not on origin/main",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9360",
+        "kind": "role",
+        "status": "succeeded",
+        "tm_task_id": "f28df068-2929-4791-bf1e-45941ecf1af0",
+        "git_sha": "4a1c848",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9366",
+        "kind": "verify",
+        "status": "succeeded",
+        "tm_task_id": "538fbad9-1478-4086-895d-b9d206ad701e",
+        "git_sha": "4a1c848",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9382",
+        "kind": "role",
+        "status": "failed",
+        "tm_task_id": "6b491f24-4a0f-4c3b-ab85-cbb1fce057a3",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD a3a151ff3f99 is not on origin/main",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9384",
+        "kind": "role",
+        "status": "running",
+        "tm_task_id": "cb4d3444-e8eb-47d8-8ff7-09a286d9c964",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      }
+    ]
+  }
+}
