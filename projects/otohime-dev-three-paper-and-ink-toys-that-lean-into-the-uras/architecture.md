@@ -4,6 +4,8 @@
 
 Following [run-9332's fix plan](fix_plan_t-1648_run-9332.md), the crumple browser gate captures the real link accessibility snapshot before folding and compares it after source restoration, retaining an explicit role-link presence check. Both snapshots use the same focused state, including the Projects link's asynchronously opened keyboard Peek. This preserves the full accessible name, URL and attributes without confusing RisoText's decorative `innerText` with its semantic name.
 
+Concurrent repair `657f047` also verifies folded-link identity independently of Peek disclosure state and injects hidden-name and focus-loss failures. Those helpers and both negative-control subtests are retained; the focused before/after comparison adds a separate full-snapshot contract. The combined isolated suite passes 14 tests.
+
 The real Notes RisoText regression proves the historical `innerText` oracle rejects an intact accessible link. Its restored-link helper passes a real fold/focus restore, rejects a link hidden after folding and a changed accessible name, then passes after each mutation is removed. The historical [failing QA report](qa_report_t-1648_run-9332.md) and fix plan are preserved verbatim from `d7d4c53`; they remain historical fail evidence. [Run-9353's summary](run-9353-summary.md) records fresh local verification and the hosted/deployed QA handoff. Bottle application code, geometry, lazy boundaries and deployment checks are preserved.
 
 ## Project delivery CI trigger · pm-269/t-1648 · run-9320

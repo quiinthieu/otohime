@@ -71,7 +71,7 @@ run-9352 verifies an unrelated executable and cannot prove Bottle recovery.
 Earlier raw bodies, unread pages and callback transport internals are inconclusive.
 
 Logs, named gate receipts, build/chunk/binary identities, per-file hashes, history
-observations and `commits.txt` are exported under `shared/artifacts/run-9353/`.
+observations and `commits.txt` are saved under `shared/artifacts/run-9353/`.
 Generated history/build output, binaries, secrets and lock changes are excluded
 from this commit. The two platform guide paths in the task are absent from this
 standalone repository, as its plan already documents; root AGENTS.md is followed.
@@ -80,10 +80,45 @@ standalone repository, as its plan already documents; root AGENTS.md is followed
 
 The branch began at freshly fetched `f4b3de8`, then fast-forwarded an unrelated
 QA document at `b5fa423` without executable changes. A later fetch found main
-`94f8dd4`, including concurrent crumple repair `657f047`. Integrate that repair
-without dropping its folded-source and focus-loss controls, then re-run isolated
-and full E2E plus all Bottle gates before publishing. First-pass receipts above
-are not substituted for the combined executable's verification.
+`94f8dd4`, including concurrent crumple repair `657f047`. The first tested commit
+`d9c4b56` rebased onto `78eea45` as `14db2e3`, preserving the incoming folded-source
+and focus-loss controls. The combined isolated suite passed 14/14. A second full
+run passed 249/250, failing only unchanged Ink Lab's 100ms bound at 124.6ms
+(one update, SVG ready before paint). Its separate withheld-frame test passed.
+Unmodified isolated Ink Lab then passed 11/11 at 41.1ms. The timing cause remains
+unattributed; no application or timing-bound change is claimed as a repair.
+
+Main subsequently added Ghost activation tooling and a schema/migration author
+guard (`4a1c848`, `88ac8b2`, `7ba2e80`). A clean rebase preserved those changes
+as implementation `6f67f75983a949997276be819de749f77b260982` on base
+`7ba2e804a9f9ecc9d490c4cbbae1eb27a6a3c75e`. App, component, library, crumple-test,
+E2E-runner and lock bytes are unchanged from `14db2e3`; the broader executable
+fingerprint changes with the incoming CI/package/activation files. The latest
+isolated crumple suite again passes 14/14. All first, failed and subsequent
+receipts remain separate; earlier results are not substituted for final checks.
+
+## Revalidation on `6f67f75`, before the incoming basket feature
+
+The exact combined fingerprint is
+`52dcb029c5773b9fcc172adf1f36ee81bfe880b39e99f28388aba583bafce70c`.
+Fresh isolated crumple passes 14/14, and full E2E passes 250/250 with no skips
+in 725.1 seconds. Ink Lab measures 2.9ms with its unchanged 100ms bound;
+the earlier failed sample remains in `revalidated/full-e2e.log`. Its cause is
+unproven, and no permanent performance repair is claimed.
+
+All six exact Bottle gates and the deployment fixture pass again, including
+their evidence negative controls: layout/picker 12, repository 2,637, lint/types
+zero errors/10 existing warnings, certified real closure, browser 14,
+footer walk 65/probe 176, deployment 63. Fresh build IDs and complete receipts
+are under `shared/artifacts/run-9353/final/`; full E2E uses build
+`XYsQMGrIb-OJ9P2YJBn-o` and the Bottle gate uses `n9Ei1M8bQHGX6Kd2lzzzX`.
+
+Main then advanced to `fb17af7`, including basket implementation `f7f55ed`.
+That changes the footer, crumple lifecycle and browser coverage, so this passing
+pre-basket receipt cannot establish the combined runtime. Preserve the landed
+feature and revalidate its integration before pushing. A second documentation
+commit records these completed observations before rebase; amendments and
+force-pushes remain excluded.
 
 Local execution is demonstrated. Hosted integration and product delivery remain
 unproven; no capacity or operator wait is used. Plan-manager/CI owns t-1648's
