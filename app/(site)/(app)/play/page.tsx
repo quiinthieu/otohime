@@ -41,6 +41,34 @@ export default function PlayPage() {
             </Link>
           </p>
         </section>
+        <section className="mt-12" aria-labelledby="booth-heading">
+          <h2 id="booth-heading" className="caption">
+            <RisoText>Ink Purikura Photobooth</RisoText>
+          </h2>
+          <p className="mt-2 mb-4 text-muted">
+            Step into a paper photo-booth or load the sample portrait, pull four frames in sumi-e ink wash, two-colour
+            risograph halftone, or newsprint dot screen, then stamp and doodle your vertical washi strip.
+          </p>
+          <p>
+            <Link href="/play/booth" className="btn" data-testid="play-booth-link">
+              Open Ink Purikura Photobooth →
+            </Link>
+          </p>
+        </section>
+        <section className="mt-12" aria-labelledby="pachinko-heading">
+          <h2 id="pachinko-heading" className="caption">
+            <RisoText>Pipeline Pachinko</RisoText>
+          </h2>
+          <p className="mt-2 mb-4 text-muted">
+            Pull the spring plunger or dump a backfill flood to bounce ink-ball records through an ingest peg field,
+            dedupe filter gate, join funnel, six-way partition splitter, and dead-letter queue gutter.
+          </p>
+          <p>
+            <Link href="/play/pachinko" className="btn" data-testid="play-pachinko-link">
+              Play Pipeline Pachinko →
+            </Link>
+          </p>
+        </section>
         <section className="mt-12" aria-labelledby="pond-heading">
           <h2 id="pond-heading" className="caption"><RisoText>Suminagashi pond</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Float ink on still water, then comb and blow it into rings.</p>
