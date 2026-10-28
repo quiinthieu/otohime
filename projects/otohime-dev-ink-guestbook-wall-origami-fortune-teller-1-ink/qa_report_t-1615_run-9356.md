@@ -1,0 +1,17 @@
+# QA report: t-1615 deterministic fortunes
+
+Run `run-9356`; verdict **pending deployment evidence**. Delivery `63c36af21bdeba1394a225451ce255896eb6990e` is on `origin/main` and has green gate `ver-3716` for all three contract commands. Both delivery commits (`c1411e7`, `63c36af`) are authored by Otohime <quiinthieu@gmail.com>, without a Co-Authored-By trailer. No `author.txt` was supplied. Delivery run `run-9349` and this QA run used recorded profile `codex-sol-medium`, model `gpt-6-sol`, effort `medium`.
+
+## Independent execution
+
+- In the lockfile install on Node `v22.23.3`, focused tests passed 9/9, `npm test` passed 2627/2627, and lint plus typecheck exited 0. The first full-suite attempt failed three infrastructure setup tests because this lease lacked `libpq.so.5` and ICU 60; unpacking Ubuntu packages to `/tmp` and setting `LD_LIBRARY_PATH` made the unmodified full suite pass. Lint had ten warnings in unrelated files.
+- A separate direct import of the real site, Gazette article data, and fortune modules built 36 safe targets: 11 projects, 3 notes, 12 sketches, 4 songs including an injected owner song, and 6 articles. A seeded sequence revealed `/articles/why-we-need-a-leap-day`. Negative controls rejected an early reveal, a first-number choice while counting, an external project URL, and a path-traversal article slug. All generated target URLs were local.
+- The live destination pages `/projects`, `/notes`, `/sketches`, `/music`, and the revealed article returned HTTP 200. The shared fragment IDs are not rendered yet; task 5 owns those anchors and the visitor-facing fortune UI. No browser executable, server adapter, persistent job, callback, or ingestion record changed in this task. The real pure helper executed; product delivery is not demonstrated.
+
+## Deployment and history boundary
+
+At final check, production `/api/health` served `c532e4edbc259902b41c457bda0a77557d03b291`. `git merge-base --is-ancestor 63c36af c532e4e` exited 1; that live commit lacks `lib/fortune.ts`. Public GitHub Actions workflow `40651605621` for delivery SHA `63c36af` remained **in progress**. Its green gate is `ver-3716`, but its production deployment is not proven. No failing delivery job was observed.
+
+The bounded public workflow-index scan covered 25 visible runs of 547: 13 completed successful, 9 completed failed, 3 in progress. It is incomplete. Older failed run `40646398062` was visible, but raw GitHub job logs were unavailable (HTTP 403 / unauthenticated API rate limit), so its cause is inconclusive and it is not attributed to this executable. The task has no asynchronous runtime jobs: relevant FAILED 0, COMPLETED 0, pending 0; callback and ingestion state are not applicable. The executable fingerprint at delivery is `lib/fortune.ts` blob `c8f9cd3`, `lib/fortune-targets.ts` `69ecf26`, `package-lock.json` `239b3c9`, CI config `6431efd`, site content `16dcc9b`, and Gazette articles `ceef0fb`. Older unrelated CI failures are not evidence against that fingerprint.
+
+Deferred checks: `40651605621` (owner: GitHub Actions production workflow; failure condition: it completes without a successful production deploy that serves a SHA descended from `63c36af`); `t-1615-anchors` (owner: task 5; failure condition: any generated fragment lacks its rendered destination). No delivered helper defect was observed. Pending CI is neither a pass nor a demonstrated failure; this run does not spend a fix cycle.
