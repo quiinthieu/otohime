@@ -11,9 +11,9 @@ export function buildFingerprint(): string {
   return typeof __GHOSTS_FINGERPRINT__ === "string" ? __GHOSTS_FINGERPRINT__ : "unbuilt";
 }
 
-export function versionResponse(): Response {
+export function versionResponse(workerVersionId: string | null = null): Response {
   return Response.json(
-    { service: SERVICE, fingerprint: buildFingerprint() },
+    { service: SERVICE, fingerprint: buildFingerprint(), workerVersionId },
     { headers: { "cache-control": "no-store", "x-content-type-options": "nosniff" } },
   );
 }

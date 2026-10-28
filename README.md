@@ -478,3 +478,17 @@ Rules that keep this safe:
 ### Ink guestbook storage
 
 The moderated vector API is at `GET/POST /api/guestbook`. Apply `npm run db:migrate` before serving it. It uses the existing `DATABASE_URL` and `BETTER_AUTH_SECRET`; missing database configuration disables reads and writes with 503, while a missing secret disables writes with 503. No additional provider is required. New drawings remain pending until a separate owner moderation flow approves them. Payload limits, error codes, pagination, and the trusted ingress IP assumption are in [the guestbook contract](projects/otohime-dev-ink-guestbook-wall-origami-fortune-teller-1-ink/guestbook-contract.md).
+
+## Ink ghosts deployment
+
+Ghost cursors on Home and `/ryugu` remain dark with `GHOSTS_ENDPOINT` unset. Run
+`TMPDIR=/tmp npm run test:ghosts` for credential-free real Chrome pixel proof with a local fake;
+`TMPDIR=/tmp npm run test:e2e` runs the full browser suite with the same transport lifecycle.
+An externally owned `BASE_URL` requires explicit `GHOSTS_FAKE_BASE` and `GHOSTS_ENDPOINT`;
+the harness never changes that server's configuration.
+
+The [Worker runbook](ghosts/README.md#deployment-and-operator-handoff) describes least-privilege setup,
+the disabled-by-default `.github/workflows/ghosts.yml`, public version/fingerprint artifacts,
+read-only live proof and rollback. `GHOSTS_DEPLOY_ENABLED=true` enables Worker deployment only;
+setting the dedicated `wss://…/ghosts` endpoint in Vercel enables the application separately.
+Unset `GHOSTS_ENDPOINT` and redeploy the configuration to roll back. Local/fake proof does not establish hosted fan-out.

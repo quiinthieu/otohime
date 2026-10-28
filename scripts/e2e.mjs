@@ -43,7 +43,13 @@ const run = (cmd, args, env = process.env) =>
     child.on("exit", (code, signal) => resolve(code ?? (signal ? 1 : 0)));
   });
 
-if (process.env.BASE_URL && !SERVE_DB) process.exit(await run(process.execPath, SUITE));
+if (process.env.BASE_URL && !SERVE_DB) {
+  if (!process.env.GHOSTS_FAKE_BASE || !process.env.GHOSTS_ENDPOINT) {
+    console.error("Externally owned BASE_URL requires explicit GHOSTS_FAKE_BASE and GHOSTS_ENDPOINT; configure its Next server yourself.");
+    process.exit(1);
+  }
+  process.exit(await run(process.execPath, SUITE));
+}
 
 // A free port: ask the kernel for one, then hand it on.
 const freePort = () =>
@@ -59,6 +65,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 let server = null;
 let db = null;
+let fake = null;
 const work = SERVE_DB ? path.resolve(SERVE_DB) : mkdtempSync(path.join(tmpdir(), "otohime-e2e-"));
 if (SERVE_DB) mkdirSync(work, { recursive: true });
 const log = path.join(work, "server.log");
@@ -76,6 +83,7 @@ function cleanup() {
         process.kill(-server.pid, "SIGKILL");
       } catch {}
     }
+    if (fake) await fake.close();
     // Bounded: a Ctrl-C reaches Postgres too, and stop() then waits for an exit that has already happened.
     if (db) await Promise.race([db.stop().catch(() => {}), sleep(10_000)]);
     rmSync(work, { recursive: true, force: true });
@@ -134,8 +142,12 @@ async function main() {
 
   const appPort = await freePort();
   const base = `http://localhost:${appPort}`;
+  const { startGhostsFake } = await import("./ghosts-fake.mjs");
+  fake = await startGhostsFake({ origins: base });
   const env = {
     ...process.env,
+    GHOSTS_ENDPOINT: fake.url,
+    GHOSTS_FAKE_BASE: fake.base,
     DATABASE_URL: databaseUrl,
     BETTER_AUTH_URL: base,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || "ci-placeholder-not-a-real-secret-0123456789abcdef",

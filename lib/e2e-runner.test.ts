@@ -18,6 +18,11 @@ test("isolated E2E builds discard stale Next output, preserve explicit reuse and
   try {
     mkdirSync(join(dir, "scripts"));
     copyFileSync(join(ROOT, "scripts/e2e.mjs"), join(dir, "scripts/e2e.mjs"));
+    writeFileSync(join(dir, "scripts/ghosts-fake.mjs"), `
+      export async function startGhostsFake() {
+        return { url: 'ws://127.0.0.1:8788/ghosts', base: 'http://127.0.0.1:8788', async close() {} };
+      }
+    `);
     // Real runner/processes/filesystem; fake database and npm stop at build/start.
     // Full production gates separately exercise the locked Next and Postgres.
     const adapterDir = join(dir, "node_modules/embedded-postgres");
@@ -86,7 +91,8 @@ type Span = { name: string; start: number; end: number };
 
 // The suite's own environment: BASE_URL set, and not this test's runner context, under which a nested node --test
 // reports to this runner instead of running its files.
-const suiteEnv: NodeJS.ProcessEnv = { ...process.env, BASE_URL: "http://127.0.0.1:9" };
+const suiteEnv: NodeJS.ProcessEnv = { ...process.env, BASE_URL: "http://127.0.0.1:9",
+  GHOSTS_FAKE_BASE: "http://127.0.0.1:8788", GHOSTS_ENDPOINT: "ws://127.0.0.1:8788/ghosts" };
 delete suiteEnv.NODE_TEST_CONTEXT;
 
 async function spans(extra: string[]): Promise<Span[]> {

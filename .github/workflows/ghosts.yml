@@ -1,0 +1,60 @@
+name: Ink ghosts Worker
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "ghosts/**"
+      - "scripts/probe-ghosts.mjs"
+      - "scripts/ghosts-workflow.test.mjs"
+      - ".github/workflows/ghosts.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main' && vars.GHOSTS_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    concurrency:
+      group: otohime-ghosts-deploy
+      cancel-in-progress: false
+    defaults:
+      run:
+        shell: bash
+        working-directory: ghosts/worker
+    env:
+      WRANGLER_SEND_METRICS: "false"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: ghosts/worker/package.json
+          cache: npm
+          cache-dependency-path: ghosts/worker/package-lock.json
+      - name: Locked Worker verification
+        run: |
+          npm ci
+          npm run typecheck
+          npm run test:local
+          npm run bundle:check
+      - name: Deploy and write public build identity
+        env:
+          GHOSTS_DEPLOY_ENABLED: ${{ vars.GHOSTS_DEPLOY_ENABLED }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node ../../scripts/probe-ghosts.mjs --deploy --output "$RUNNER_TEMP/ghosts-build.json"
+      - name: Publish public build identity
+        uses: actions/upload-artifact@v6
+        with:
+          name: ghosts-build-${{ github.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/ghosts-build.json
+          if-no-files-found: error
+      - name: Summarize public build identity
+        run: |
+          echo '### Ink ghosts Worker build (separate from application SHA / Next BUILD_ID)' >>"$GITHUB_STEP_SUMMARY"
+          echo '```json' >>"$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/ghosts-build.json" >>"$GITHUB_STEP_SUMMARY"
+          echo '```' >>"$GITHUB_STEP_SUMMARY"

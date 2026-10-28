@@ -69,6 +69,9 @@ test("disabled ghost config reconciles only its real resource error; unrelated e
   // Reduced motion prevents the idle canvas from making another config request.
   const { context, page, errors } = await open({ reducedMotion: "reduce" });
   try {
+    // The shared browser server is now configured for the ghost fake. This case explicitly
+    // supplies disabled configuration; the compiled unset route is tested in ghosts-config.test.ts.
+    await page.route(`${BASE}/api/ghosts`, route => route.fulfill({ status: 404, body: "", headers: { "cache-control": "no-store" } }));
     const [response, , body] = await Promise.all([
       page.waitForResponse(`${BASE}/api/ghosts`),
       page.waitForEvent("console", { predicate: msg => msg.type() === "error" && msg.location().url === `${BASE}/api/ghosts` }),

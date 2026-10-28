@@ -61,8 +61,17 @@ describe("actual Worker (wrangler.jsonc) in workerd", () => {
     const post = await fetch(`${running.base}/version`, { method: "POST" });
     assert.equal(post.status, 405);
     const body = await (await fetch(`${running.base}/version`)).json();
-    assert.deepEqual(body, { service: "otohime-ghosts", fingerprint: BUILD });
+    assert.match(body.workerVersionId, /^[0-9a-f-]{36}$/);
+    assert.deepEqual(body, { service: "otohime-ghosts", fingerprint: BUILD, workerVersionId: body.workerVersionId });
     assert.match(BUILD, /^[0-9a-f]{64}$/);
+  });
+
+  test("fake readiness/log/mode/reset controls are absent from the real Worker", async () => {
+    for (const path of ["/__ready", "/__log", "/__mode?m=full", "/__reset"]) {
+      for (const method of ["GET", "POST"]) {
+        assert.equal((await fetch(running.base + path, { method })).status, 404, `${method} ${path}`);
+      }
+    }
   });
 
   test("an allowed upgrade with cookies and a UA still works; nothing but the upgrade reaches the room", async () => {

@@ -60,6 +60,8 @@ jobs:
       DATABASE_URL: postgresql://otohime:otohime@localhost:5432/otohime
       BETTER_AUTH_URL: http://localhost:3000
       BASE_URL: http://localhost:3000
+      GHOSTS_ENDPOINT: ws://127.0.0.1:8788/ghosts
+      GHOSTS_FAKE_BASE: http://127.0.0.1:8788
     steps:
       - uses: actions/checkout@v7
         with:
@@ -140,6 +142,19 @@ jobs:
           node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true
           exit "$status"
       - run: npm run db:migrate
+      - name: Publish application build identity
+        run: |
+          node -e 'const fs = require("node:fs"); fs.writeFileSync(process.env.RUNNER_TEMP + "/app-build.json", JSON.stringify({appSha: process.env.GITHUB_SHA, nextBuildId: fs.readFileSync(".next/BUILD_ID", "utf8").trim()}) + "\n")'
+      - uses: actions/upload-artifact@v6
+        with:
+          name: app-build-${{ github.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/app-build.json
+          if-no-files-found: error
+      - name: Start local ghost fake
+        run: |
+          node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/ghosts-fake.mjs --port 8788 --origins "$BASE_URL" >"$RUNNER_TEMP/ghosts-fake.log" 2>&1 &
+          echo "$!" >"$RUNNER_TEMP/ghosts-fake.pid"
+          curl -fsS --retry 15 --retry-connrefused --retry-delay 1 "$GHOSTS_FAKE_BASE/__ready"
       # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
       - name: E2E against next start
         timeout-minutes: 12
@@ -195,6 +210,13 @@ jobs:
           EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-probe.log" || status=$?
           node scripts/ci-probe-annotate.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true
           exit "$status"
+
+      - name: Stop local ghost fake
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/ghosts-fake.pid" ]; then
+            kill "$(cat "$RUNNER_TEMP/ghosts-fake.pid")" 2>/dev/null || true
+          fi
 
   preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository

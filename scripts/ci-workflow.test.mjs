@@ -548,3 +548,54 @@ test("production strict history build step blocks build/upload on shallow or mis
     rmSync(work, { recursive: true, force: true });
   }
 });
+
+test("ghost fake starts before Next, survives every later browser/footer probe and is always cleaned", () => {
+  const checks = steps("checks");
+  assert.equal(scalar(["jobs", "checks", "env", "GHOSTS_ENDPOINT"]), "ws://127.0.0.1:8788/ghosts");
+  assert.equal(scalar(["jobs", "checks", "env", "GHOSTS_FAKE_BASE"]), "http://127.0.0.1:8788");
+  const start = checks.indexOf("- name: Start local ghost fake"), stop = checks.indexOf("- name: Stop local ghost fake");
+  assert.ok(start > 0);
+  for (const [name] of browserGates) assert.ok(start < checks.indexOf(`- name: ${name}`) && checks.indexOf(`- name: ${name}`) < stop, name);
+  assert.match(checks.slice(start, checks.indexOf("- name: E2E against next start")), /ghosts-fake\.mjs --port 8788 --origins "\$BASE_URL"/);
+  assert.match(checks.slice(stop), /if: always\(\)/);
+  assert.match(checks.slice(stop), /kill "\$\(cat "\$RUNNER_TEMP\/ghosts-fake.pid"\)"/);
+  assert.doesNotMatch(gateBody("E2E against next start"), /kill.*ghosts-fake|trap.*ghosts-fake/, "E2E must leave the fake alive for later probes");
+});
+
+test("actual CI fake startup/readiness/late-probe/cleanup commands keep the transport available until teardown", () => {
+  const work = mkdtempSync(join(tmpdir(), "ghost-ci-lifecycle-"));
+  try {
+    const start = gateBody("Start local ghost fake"), stop = gateBody("Stop local ghost fake");
+    const script = `
+      trap 'if [ -f "$RUNNER_TEMP/ghosts-fake.pid" ]; then kill "$(cat "$RUNNER_TEMP/ghosts-fake.pid")" 2>/dev/null || true; fi' EXIT
+      ${start}
+      # Stand in for each later browser/footer step with an independent HTTP readiness read.
+      for probe in e2e motion footer-walk footer-chromium; do
+        curl -fsS "$GHOSTS_FAKE_BASE/__ready" >/dev/null
+        kill -0 "$(cat "$RUNNER_TEMP/ghosts-fake.pid")"
+      done
+      ${stop}
+      wait "$(cat "$RUNNER_TEMP/ghosts-fake.pid")"
+      if kill -0 "$(cat "$RUNNER_TEMP/ghosts-fake.pid")" 2>/dev/null; then exit 93; fi
+    `;
+    const result = spawnSync("bash", ["-eo", "pipefail", "-c", script], { encoding: "utf8", timeout: 10000,
+      env: { ...process.env, RUNNER_TEMP: work, BASE_URL: "http://localhost:3000", GHOSTS_FAKE_BASE: "http://127.0.0.1:8788" } });
+    assert.ifError(result.error); assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.match(readFileSync(join(work, "ghosts-fake.log"), "utf8"), /ghosts-fake ready/);
+  } finally { rmSync(work, { recursive: true, force: true }); }
+});
+
+test("application SHA and Next BUILD_ID are published independently from the Worker executable", () => {
+  const checks = steps("checks");
+  assert.ok(checks.indexOf("- name: Publish application build identity") > checks.indexOf("- name: Real CPU camera and privacy verifier"), "camera verifier rebuilds .next: publish the build that next start actually serves");
+  assert.ok(checks.indexOf("- name: Publish application build identity") < checks.indexOf("- name: E2E against next start"));
+  const identity = gateBody("Publish application build identity");
+  assert.match(identity, /appSha: process.env.GITHUB_SHA/); assert.match(identity, /nextBuildId: fs.readFileSync\(".next\/BUILD_ID"/);
+  const work = mkdtempSync(join(tmpdir(), "app-identity-"));
+  try {
+    mkdirSync(join(work, ".next")); writeFileSync(join(work, ".next/BUILD_ID"), "fixture-next-build\n");
+    const r = spawnSync("bash", ["-eo", "pipefail", "-c", identity], { cwd: work, env: { ...process.env, RUNNER_TEMP: work, GITHUB_SHA: "a".repeat(40) }, encoding: "utf8" });
+    assert.equal(r.status, 0, r.stderr);
+    assert.deepEqual(JSON.parse(readFileSync(join(work, "app-build.json"), "utf8")), { appSha: "a".repeat(40), nextBuildId: "fixture-next-build" });
+  } finally { rmSync(work, { recursive: true, force: true }); }
+});
