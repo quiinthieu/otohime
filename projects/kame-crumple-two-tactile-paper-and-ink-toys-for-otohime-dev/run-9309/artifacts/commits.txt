@@ -1,0 +1,4 @@
+689c2369ded07e655475fec386c5d83a35851740 pm-274/t-1584: feat: fold paper into reversible Canvas balls
+HEAD pm-274/t-1584: docs: verify rescued Canvas folds for main delivery
+
+HEAD means the enclosing evidence commit; the summary report git_sha records the immutable delivery SHA. Existing rescued commit retained without amend or rebase.
