@@ -1,1 +1,2 @@
 658f6fc9fe5b1211413fd30ea8331ee77df00fb1 pm-273/t-1612: Guard guestbook delivery provenance (run-8988 replacement delivery)
+bae061a34612e465d208e08af17b1f014614a49d pm-273/t-1612: Prove footer probe branches under inherited CI (run-9312)
