@@ -136,6 +136,12 @@ test("PR checks and previews cancel stale jobs in separate PR-specific groups", 
   assert.equal(scalar(["jobs", "preview", "concurrency", "group"]), "ci-preview-${{ github.event.pull_request.number }}");
   assert.equal(scalar(["jobs", "preview", "concurrency", "cancel-in-progress"]), "true");
   assert.notEqual(scalar(["jobs", "checks", "concurrency", "group"]), scalar(["jobs", "preview", "concurrency", "group"]));
+  const preview = steps("preview");
+  assert.match(preview, /--meta prNumber="\$\{\{ github\.event\.pull_request\.number \}\}"/);
+  assert.match(preview, /- name: Prune superseded preview deployments for this PR/);
+  const cleanup = steps("cleanup");
+  assert.match(cleanup, /- name: Delete Vercel preview deployments \(no-op if absent\)/);
+  assert.match(cleanup, /meta-prNumber=\$PR/);
 });
 
 test("only production deploys serialize after successful checks, without cancelling the running deploy", () => {
