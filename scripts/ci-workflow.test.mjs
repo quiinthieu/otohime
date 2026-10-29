@@ -170,16 +170,16 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks budgets the full browser suite with a 35m job, 22m step and 1200s bound", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "35");
-  assert.match(workflow, /40820018472 exhausted 960s at the peep-box cases/);
+test("checks budgets the full browser suite with a 45m job, 27m step and 1500s bound", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "45");
+  assert.match(workflow, /40832278717 reached 283 passing cases at 1200s/);
   const checks = steps("checks");
-  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 22\n/);
+  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 27\n/);
   const e2e = gateBody("E2E against next start");
   assert.match(e2e, /^set -o pipefail$/m);
   assert.match(e2e, /^trap .*browser-gate-diagnostics\.mjs "E2E against next start".* EXIT$/m);
   assert.match(e2e, /^command -v timeout >\/dev\/null 2>&1 \|\| timeout\(\)/m);
-  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1200s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
+  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1500s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
   assert.equal(e2e.match(/npm run test:e2e/g).length, 1, "the browser suite runs once, only under the inner bound");
 });
 
@@ -462,10 +462,10 @@ for (const [name, log] of browserGates) {
 }
 
 test("E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation", () => {
-  // Same workflow shell; only the 1200s contract and 10s grace shrink so the fixture does not wait.
+  // Same workflow shell; only the 1500s contract and 10s grace shrink so the fixture does not wait.
   const started = Date.now();
   const result = runGate("E2E against next start", "e2e.log", "hang",
-    (body) => body.replace("--kill-after=10s 1200s npm", "--kill-after=1s 1s npm"));
+    (body) => body.replace("--kill-after=10s 1500s npm", "--kill-after=1s 1s npm"));
   assert.equal(result.status, 124, result.stderr);
   assert.ok(Date.now() - started < 8000, "the hung child was terminated by the inner bound");
   assert.equal(result.calls, "called\n");
