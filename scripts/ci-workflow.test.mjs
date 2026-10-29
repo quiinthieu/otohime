@@ -572,6 +572,13 @@ test("guestbook author guard rejects a wrong-author schema or migration-only pus
 
     const [ownFrom, ownTo] = push(["db/migrations/0008_owner.sql", owner], ["db/schema.ts", owner]);
     assert.equal(run(ownFrom, ownTo).status, 0);
+    // GitHub squash merges use the owner's existing profile display name.
+    const profileOwner = { name: "Ōtohime", email: owner.email };
+    const [squashFrom, squashTo] = push(["db/migrations/0010_squash.sql", profileOwner], ["db/schema.ts", profileOwner]);
+    const squash = run(squashFrom, squashTo);
+    assert.equal(squash.status, 0, squash.stderr);
+    const [spoofFrom, spoofTo] = push(["db/schema.ts", { ...profileOwner, email: stranger.email }]);
+    assert.equal(run(spoofFrom, spoofTo).status, 1, "the display name never substitutes for the owner email");
     const [profileFrom, profileTo] = push(["lib/guestbook-profile.ts", { name: "Ōtohime", email: owner.email }]);
     assert.equal(run(profileFrom, profileTo).status, 0, "GitHub squash merges use the owner's profile spelling");
     const [otherFrom, otherTo] = push(["docs/unrelated.md", stranger], ["db/seed-notes.txt", stranger]);

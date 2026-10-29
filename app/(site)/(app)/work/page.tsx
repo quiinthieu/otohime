@@ -1,4 +1,9 @@
 import { RisoText } from "@/components/riso-heading";
+import { InkSeismograph } from "@/components/ink-seismograph";
+import { PaperHost } from "@/components/paper-host";
+import archive from "@/content/seismo.json";
+import { parseInkEvents } from "@/lib/seismograph";
+import "@/app/(site)/seismograph.css";
 import { DeparturesBoard } from "@/components/departures-board";
 import { buildWorkDepartures } from "@/lib/departures";
 import { AssemblyLine } from "@/components/assembly-line";
@@ -31,11 +36,17 @@ export default function WorkPage() {
           <Link href="/making-of" className="link">
             Making-of Emaki handscroll
           </Link>
+          <Link href="/kintsugi" className="link">The golden seams</Link>
         </p>
         <AssemblyLine />
         <DeparturesBoard kind="work" rows={buildWorkDepartures()} />
-        <div className="mt-14"><Pipeline /></div>
-        <div className="mt-14"><Conveyor /></div>
+        <PaperHost data-paper-id="work:seismograph"><InkSeismograph archive={{ generated:archive.generated, events:parseInkEvents(archive.events) }} /></PaperHost>
+        <PaperHost className="mt-8" data-paper-id="work:pipeline">
+          <Pipeline />
+        </PaperHost>
+        <div className="mt-14">
+          <Conveyor />
+        </div>
         <div className="mt-14 grid items-start gap-12 lg:grid-cols-2">
           <section aria-labelledby="stack">
             <h2 id="stack" className="caption"><RisoText>Stack</RisoText></h2>
