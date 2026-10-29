@@ -3,6 +3,7 @@ import { SignOutButton, StopImpersonatingButton } from "@/components/nav-links";
 import { SeasonDial } from "@/components/season-dial";
 import { SoundToggle } from "@/components/sound-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { site } from "@/content/site";
 import { getSession } from "@/lib/dal";
 import Link from "next/link";
@@ -26,6 +27,7 @@ export function Masthead() {
           <Suspense fallback={null}>
             <Account />
           </Suspense>
+          <PlotterToggle />
           <SoundToggle label={site.sound.label} />
           <SeasonDial />
           <ThemeToggle />

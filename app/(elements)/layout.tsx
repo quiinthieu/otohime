@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { PAPER } from "./_lib/categories.ts";
 import "./elements.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Elements is its own root layout: its own <html>, <body> and stylesheet. It must
@@ -41,7 +42,7 @@ export default function ElementsLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
         <AppearanceBoot root="elements" />
       </head>
-      <body>{children}<AppearanceRuntime /></body>
+      <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>
     </html>
   );
 }

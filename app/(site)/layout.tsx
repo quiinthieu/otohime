@@ -15,6 +15,7 @@ import "./globals.css";
 import "./seasons.css";
 import "./letterpress.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
 import { StickerHunt } from "@/components/sticker-hunt";
 import { KintsugiMotion } from "@/components/kintsugi-card";
@@ -83,7 +84,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Overlays follow route content and wait for each paper host's React commit. */}
         <Suspense fallback={null}><KameLoader /></Suspense>
         <Suspense fallback={null}><TactileLoader /></Suspense>
-        <AppearanceRuntime />
+        <PlotterToggle fallback /><AppearanceRuntime />
       </body>
     </html>
   );
