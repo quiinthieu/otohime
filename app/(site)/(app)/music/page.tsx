@@ -6,6 +6,7 @@ import { InkRadioLoader } from "@/components/ink-radio-loader";
 import { RemoveChannelButton } from "@/components/remove-channel-button";
 import { Television } from "@/components/television";
 import { site, type Song } from "@/content/site";
+import { songTargetId } from "@/lib/fortune-targets";
 import { getSession } from "@/lib/dal";
 import { readNowPlaying } from "@/lib/now-playing";
 import { sanitize } from "@/lib/now-playing-data";
@@ -64,7 +65,7 @@ function Channels({ songs }: { songs: Song[] }) {
       <h2 className="caption mt-12"><RisoText>Listings</RisoText></h2>
       <ol className="mt-3 grid gap-x-10 sm:grid-cols-2">
         {songs.map((song, i) => (
-          <li key={`${i}-${song.video}`} className="flex items-start gap-3 border-t border-line py-3">
+          <li id={songTargetId(song.video)} key={`${i}-${song.video}`} className="flex items-start gap-3 border-t border-line py-3">
             <span
               aria-hidden="true"
               className="mt-1 size-3 flex-none rounded-full border border-on-swatch"
