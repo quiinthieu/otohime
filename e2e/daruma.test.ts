@@ -94,6 +94,11 @@ test("default /projects shows all 11 live projects as two-eyed upright Daruma do
 
   assert.equal(await cartridgesBtn.getAttribute("aria-pressed"), "true");
   assert.equal(await darumaBtn.getAttribute("aria-pressed"), "false");
+  assert.match(
+    await cartridgesBtn.evaluate((el) => getComputedStyle(el).backgroundImage),
+    /data:image\/svg\+xml/,
+    "the selected Cartridges key keeps its letterpress grain",
+  );
   assert.equal(await page.locator("ul.cartridges > li").count(), site.projectList.length);
   assert.equal(await page.locator('[data-testid="daruma-board"]').count(), 0);
 
@@ -115,6 +120,11 @@ test("default /projects shows all 11 live projects as two-eyed upright Daruma do
   await board.waitFor({ state: "visible" });
   assert.equal(await darumaBtn.getAttribute("aria-pressed"), "true");
   assert.equal(await cartridgesBtn.getAttribute("aria-pressed"), "false");
+  assert.match(
+    await darumaBtn.evaluate((el) => getComputedStyle(el).backgroundImage),
+    /data:image\/svg\+xml/,
+    "the selected Daruma key keeps its letterpress grain",
+  );
   assert.equal(await board.getAttribute("data-fixture-active"), "false");
   assert.equal(await board.getAttribute("data-kuyo-active"), "false");
   assert.equal(await page.locator("ul.cartridges").count(), 0);
@@ -172,6 +182,11 @@ test("default /projects shows all 11 live projects as two-eyed upright Daruma do
   const kuyoToggle = page.locator('[data-kuyo-toggle="true"]');
   await kuyoToggle.click();
   assert.equal(await board.getAttribute("data-kuyo-active"), "true");
+  assert.match(
+    await kuyoToggle.evaluate((el) => getComputedStyle(el).backgroundImage),
+    /data:image\/svg\+xml/,
+    "the selected Kuyo key keeps its letterpress grain",
+  );
   assert.equal(
     await liveStatus.innerText(),
     "Daruma Kuyo ink-fire ceremony lit: no abandoned Daruma dolls to retire.",
