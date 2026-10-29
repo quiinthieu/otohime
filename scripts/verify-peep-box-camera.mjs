@@ -13,7 +13,7 @@ if (
   throw new Error("sdk_import");
 const env = { ...process.env, TMPDIR: "/tmp" };
 delete env.BASE_URL;
-delete env.SKIP_BUILD;
+// CI passes SKIP_BUILD=1 only after its production build succeeds.
 const child = spawn(
   process.execPath,
   [

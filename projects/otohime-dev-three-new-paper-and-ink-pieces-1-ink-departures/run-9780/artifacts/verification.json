@@ -1,0 +1,399 @@
+{
+  "plan_id": "pm-301",
+  "task_id": "t-1788",
+  "run_id": "run-9780",
+  "base_sha": "3cf6d6dd8f1d8b46687b81767263c8c6d91f96ad",
+  "branch": "pm-301-t-1788-camera-build-reuse",
+  "runtime": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "high",
+    "evidence": "Actual parent Codex CLI --model and model_reasoning_effort arguments; no distinct named profile supplied",
+    "worker": "avietidol-z490",
+    "node": "v22.23.3",
+    "npm": "10.9.9",
+    "next": "16.4.2",
+    "playwright_core": "1.64.0",
+    "chrome": "156.0.8078.47"
+  },
+  "checks": {
+    "departures-e2e": {
+      "exit_code": 0,
+      "tap": {
+        "tests": 17,
+        "pass": 17,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 50244.233087
+      },
+      "log_sha256": "5ebae8d82446f800a5bae322b8d050c275e56818e74b6f05a9bb5d1b9fdd1a8b",
+      "log_bytes": 10148,
+      "assertions": [
+        "ok 1 - /work at 1280px serves the full semantic final timetable without JavaScript",
+        "ok 2 - /projects at 1280px serves the full semantic final timetable without JavaScript",
+        "ok 3 - /work at 390px serves the full semantic final timetable without JavaScript",
+        "ok 4 - /projects at 390px serves the full semantic final timetable without JavaScript",
+        "ok 5 - /work click, Enter and board fallback change real drums in at most 12 steps and settle",
+        "ok 6 - /projects click, Enter and board fallback change real drums in at most 12 steps and settle",
+        "ok 7 - native scroll timeline turns drums; delayed hanko ink works on light and dark paper",
+        "ok 8 - muted negative control, shared opt-in and board-wide 60ms real clack throttle",
+        "ok 9 - /work reduced motion has zero steps, animations or sound even after opt-in",
+        "ok 10 - /projects reduced motion has zero steps, animations or sound even after opt-in",
+        "ok 11 - /play discovers Senko at 1280px; real canvas, touch layout and OG card",
+        "ok 12 - /play discovers Senko at 390px; real canvas, touch layout and OG card",
+        "ok 13 - pointer hold lights; natural elapsed time visits all four flowers and release extinguishes",
+        "ok 14 - pointer shake and Jolt hand drop the bead; latch and keyboard permit steady exploration",
+        "ok 15 - hidden and blur inputs stop actual canvas draws; cancellation and route cleanup stop the loop",
+        "ok 16 - audio stays silent by default; opt-in crackle uses one real shared context and stops when muted",
+        "ok 17 - reduced motion stays playable with a still stem, fewer sparks and a deliberate drop control"
+      ]
+    },
+    "npm-test": {
+      "exit_code": 0,
+      "tap": {
+        "tests": 2798,
+        "pass": 2798,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 56805.840042
+      },
+      "log_sha256": "3904ff87a896ffa8ffcc07712303ecc15f5c74e77f51954f9961d3ad4182caf1",
+      "log_bytes": 578491,
+      "assertions": [
+        "ok 2095 - every site page hands over with a <ViewTransition> of its own",
+        "ok 2105 - EndFooter sits inside the group ViewTransition after main on (home) and after the grid on (app), and nowhere else",
+        "ok 2637 - camera CI reuses only a successful production build and preserves camera failure",
+        "ok 2681 - camera wrapper preserves a prebuilt artifact, isolated server and nonzero camera assertions",
+        "ok 2682 - camera build-reuse negative control detects the old flag deletion"
+      ]
+    },
+    "camera": {
+      "exit_code": 0,
+      "tap": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 29410.692828
+      },
+      "log_sha256": "350dc7b2d0df8b42395699f383b379f920bd80adb97be38f4f352d213bac0938",
+      "log_bytes": 6244,
+      "assertions": [
+        "ok 1 - synthetic camera delivers continuing decoded frames and stops its tracks",
+        "ok 2 - camera opt-in absence, denial and late permission cancellation (fake media/worker)",
+        "ok 3 - every lifecycle exit stops tracks and worker and never automatically resumes (fake inference)",
+        "ok 4 - real production CPU worker: licensed pixels yield landmarks, translated pose, no-face recovery, no upload",
+        "ok 5 - real worker/model failures preserve usable pointer mode (network corruption and worker error controls)",
+        "ok 6 - Off while the real model download is pending cancels the worker and late response",
+        "ok 7 - missing camera and initial reduced motion retain a static/pointer view without assets"
+      ]
+    },
+    "regressions": {
+      "exit_code": 0,
+      "tap": {
+        "tests": 62,
+        "pass": 62,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 28208.641219
+      },
+      "log_sha256": "a7fad27baddd9e39c60536dd2fb8b8b8675bc02ca076fea1a340dd1f7e5f8138",
+      "log_bytes": 15253,
+      "assertions": [
+        "ok 1 - deployment checks the Git author rather than the committer or uploader",
+        "ok 2 - owner setup stays local and detects environment overrides",
+        "ok 3 - Vercel Git cannot bypass the checked full-history deployment",
+        "ok 4 - every build refreshes the public ledger with the read-only Actions token",
+        "ok 5 - push to main includes project deliveries while filtering unrelated Markdown",
+        "ok 6 - project-only deliveries trigger full CI and historical report filters fail the same fixture",
+        "ok 7 - pull_request has no path filter",
+        "ok 8 - manual recovery runs the same checks and production gates as a main push",
+        "ok 9 - checks and production run on ubuntu-24.04",
+        "ok 10 - each main push and manual recovery keeps its checks outside a shared workflow queue",
+        "ok 11 - PR checks and previews cancel stale jobs in separate PR-specific groups",
+        "ok 12 - only production deploys serialize after successful checks, without cancelling the running deploy",
+        "ok 13 - production proves the deployed sha, terminal and press after the deploy",
+        "ok 14 - verify-deploy only exempts filtered Markdown and requires project delivery ancestry",
+        "ok 15 - checks budgets the full browser suite with a 35m job, 22m step and 1200s bound",
+        "ok 16 - all four non-TAP probe steps annotate the captured pipefail status",
+        "ok 17 - signed-in motion normalizes unset, empty and long TMPDIR before mktemp",
+        "ok 18 - Footer CI step preserves probe failure and surfaces assertions with a bounded server tail",
+        "ok 19 - camera CI reuses only a successful production build and preserves camera failure",
+        "ok 20 - Real CPU camera and privacy verifier: actual workflow preserves exit 7, escaped assertions, counts and missing server logs",
+        "ok 21 - Real CPU camera and privacy verifier: a broken assertion reporter preserves the original exit 7",
+        "ok 22 - Real CPU camera and privacy verifier: actual workflow exit 0 emits no annotation or summary",
+        "ok 23 - Motion probe, signed in: actual workflow preserves exit 7, escaped assertions, counts and missing server logs",
+        "ok 24 - Motion probe, signed in: a broken assertion reporter preserves the original exit 7",
+        "ok 25 - Motion probe, signed in: actual workflow exit 0 emits no annotation or summary",
+        "ok 26 - Footer walk: actual workflow preserves exit 7, escaped assertions, counts and missing server logs",
+        "ok 27 - Footer walk: a broken assertion reporter preserves the original exit 7",
+        "ok 28 - Footer walk: actual workflow exit 0 emits no annotation or summary",
+        "ok 29 - Footer Chromium probe: actual workflow preserves exit 7, escaped assertions, counts and missing server logs",
+        "ok 30 - Footer Chromium probe: a broken assertion reporter preserves the original exit 7",
+        "ok 31 - Footer Chromium probe: actual workflow exit 0 emits no annotation or summary",
+        "ok 32 - E2E against next start: real workflow captures combined command failure and identity, preserving exit 43",
+        "ok 33 - E2E against next start: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22",
+        "ok 34 - E2E against next start: successful workflow emits no failure annotation or summary",
+        "ok 35 - Motion probe, signed in: real workflow captures combined command failure and identity, preserving exit 43",
+        "ok 36 - Motion probe, signed in: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22",
+        "ok 37 - Motion probe, signed in: successful workflow emits no failure annotation or summary",
+        "ok 38 - Footer walk: real workflow captures combined command failure and identity, preserving exit 43",
+        "ok 39 - Footer walk: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22",
+        "ok 40 - Footer walk: successful workflow emits no failure annotation or summary",
+        "ok 41 - Footer Chromium probe: real workflow captures combined command failure and identity, preserving exit 43",
+        "ok 42 - Footer Chromium probe: startup negative control annotates readiness and server failure before any probe, preserving curl exit 22",
+        "ok 43 - Footer Chromium probe: successful workflow emits no failure annotation or summary",
+        "ok 44 - E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation",
+        "ok 45 - wiring negative control: removing the EXIT fallback makes a startup crash opaque",
+        "ok 46 - reporter failure cannot replace the original workflow command exit",
+        "ok 47 - browser fallbacks keep the existing gate order, probe budgets and assertion reporter",
+        "ok 48 - the author gate precedes production migrations and main checks",
+        "ok 49 - guestbook author guard rejects a wrong-author schema or migration-only push and passes the owner",
+        "ok 50 - checks, preview and production check out full git ancestry (fetch-depth: 0) and gate builds with strict history checks",
+        "ok 51 - production strict history build step blocks build/upload on shallow or mismatched history and catches post-build tampering",
+        "ok 52 - ghost fake starts before Next, survives every later browser/footer probe and is always cleaned",
+        "ok 53 - actual CI fake startup/readiness/late-probe/cleanup commands keep the transport available until teardown",
+        "ok 54 - application SHA and Next BUILD_ID are published independently from the Worker executable",
+        "ok 55 - production read-only feature probes run without fake configuration and preserve browser failures",
+        "ok 56 - documented Docker E2E entrypoint owns explicit fake configuration until its server stops",
+        "ok 57 - fresh e2e builds discard stale Next font output before compiling",
+        "ok 58 - stale-font negative control fails before server or suite when cleanup is removed",
+        "ok 59 - SKIP_BUILD preserves the existing Next build and still executes the suite",
+        "ok 60 - camera wrapper preserves a prebuilt artifact, isolated server and nonzero camera assertions",
+        "ok 61 - camera build-reuse negative control detects the old flag deletion",
+        "ok 62 - external BASE_URL requires explicit fake configuration without silently rewriting it"
+      ]
+    },
+    "typecheck": {
+      "exit_code": 0,
+      "log_sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326"
+    },
+    "lint": {
+      "exit_code": 0,
+      "log_sha256": "53cc540068570725910d5c4611e7bc36dd8e00f8833f704646c6508f34d74cc8",
+      "errors": 0,
+      "preexisting_warnings": 13
+    },
+    "closure": {
+      "exit_code": 0,
+      "log_sha256": "db4d3670a127c1f623c2f192933ad4583d20211f56b7b37d8d7dc0ab6c77afe3"
+    }
+  },
+  "camera": {
+    "delegates": [
+      "CPU",
+      "GPU"
+    ],
+    "real": "locked CPU SDK/model/Wasm/production worker",
+    "fake": "media lifecycle only",
+    "browser": "156.0.8078.47",
+    "build": "5Wv6ofhBw1JpP1Shv9538",
+    "fixture": {
+      "file": "astronaut.png",
+      "url": "https://raw.githubusercontent.com/scikit-image/scikit-image/c1af2bf80d2c8845bbbf06222f87e8b58a8e5c1e/skimage/data/astronaut.png",
+      "sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+      "size": 791555,
+      "license": "Public domain (NASA)",
+      "terms": "NASA photograph of Eileen Collins. No known copyright restrictions; released into the public domain. No endorsement implied. Verification only; never deployed.",
+      "licenseEvidence": "https://scikit-image.org/docs/0.19.x/api/skimage.data.html#skimage.data.astronaut"
+    },
+    "workerSHA256": "abded2a89252b128933ca06c8a4c9501e128029aaf9df049f231bc7428b5337a",
+    "lockSHA256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "assets": {
+      "version": "vision-0.10.32-face-1",
+      "package": "@mediapipe/tasks-vision",
+      "packageVersion": "0.10.32",
+      "modelVersion": "float16/1",
+      "assets": [
+        {
+          "file": "vision_bundle.cjs",
+          "packagePath": "vision_bundle.cjs",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/vision_bundle.cjs",
+          "sha256": "43c65a77825c5d5af7456d4781a64cd15cb3e53f479ff1f923c12b5adecf2b44",
+          "size": 137315,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "wasm/vision_wasm_internal.js",
+          "packagePath": "wasm/vision_wasm_internal.js",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_internal.js",
+          "sha256": "6f6b86509cf9e163ea1cfec7edc8cf53732699c04781e4c21c557c1ba402310e",
+          "size": 204816,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "wasm/vision_wasm_internal.wasm",
+          "packagePath": "wasm/vision_wasm_internal.wasm",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_internal.wasm",
+          "sha256": "cb3ec20026a9aecc2a81a93c25630ceb5389297ddb7a5f0bd61dd09cde606b9b",
+          "size": 11453626,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "wasm/vision_wasm_nosimd_internal.js",
+          "packagePath": "wasm/vision_wasm_nosimd_internal.js",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_nosimd_internal.js",
+          "sha256": "9f8fc960e363f0fb2f42f7937b97ae9cf9a5630490f71031fa90caa9bb121938",
+          "size": 204669,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "wasm/vision_wasm_nosimd_internal.wasm",
+          "packagePath": "wasm/vision_wasm_nosimd_internal.wasm",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_nosimd_internal.wasm",
+          "sha256": "924274fcd5ac8985f6570a8573e7971b7bd2d580ba1b8f3beb0ba8f95db6347c",
+          "size": 10647962,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "face_landmarker.task",
+          "url": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+          "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+          "size": 3758596,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        }
+      ]
+    },
+    "results": {
+      "ready": {
+        "generation": 7,
+        "type": "ready",
+        "delegate": "CPU",
+        "sdk": "0.10.32",
+        "model": "float16/1"
+      },
+      "output": [
+        {
+          "generation": 7,
+          "type": "pose",
+          "pose": {
+            "x": 92.87982881069183,
+            "y": -44.59767937660217,
+            "z": 542.1338409821002
+          },
+          "count": 478
+        },
+        {
+          "generation": 7,
+          "type": "pose",
+          "pose": {
+            "x": 61.549705266952515,
+            "y": -44.5847749710083,
+            "z": 543.1952056731706
+          },
+          "count": 478
+        },
+        {
+          "generation": 7,
+          "type": "pose",
+          "pose": null,
+          "count": 0
+        },
+        {
+          "generation": 7,
+          "type": "pose",
+          "pose": {
+            "x": 92.87982881069183,
+            "y": -44.59767937660217,
+            "z": 542.1338409821002
+          },
+          "count": 478
+        }
+      ]
+    }
+  },
+  "camera_rebuilt": false,
+  "input_hashes": {
+    ".github/workflows/ci.yml": "7425649f118d73c6fc617bc0d5013947b3a390a8a797a1adb53ec281900fcc66",
+    "app/(site)/(app)/projects/page.tsx": "da7af6830804a460596eefd65f73dc2c2216feef0d276e4e5b33d6958f555c5e",
+    "app/(site)/(app)/work/page.tsx": "479a8f7eecaa552d1fc68648d2d3ae4dbc308b530cb6d994cf723789b8fd90c0",
+    "components/departures-board.css": "bd5e446ce4672ed430e770c5345812cbf96e7e71ca253b8fa9a7c49a941e073f",
+    "components/departures-board.tsx": "5c210aae41c8d376512cfdf8f399f5c5bfaa24888bcf75c96351154cf8818fe1",
+    "components/peep-box/head-worker.js": "9672259c6d2200c70497517c441d721ec0ea28a2204748c8b3b9054982f89735",
+    "content/peep-box-assets.json": "394a48c908ab02b5034413604fc4e2a6fa623fb1dc500de009a3692078a64fb6",
+    "e2e/departures.test.ts": "1b557d5a091badfe4c8a0f1eb868be2df3f8aa5775acdad2ee3ba1ddc5d6f98b",
+    "e2e/peep-box-camera.test.ts": "ad5018c4d90d99e0988a0858f8dd23a1908f6485d8ad9b23f8e55fcad13bd71d",
+    "e2e/peep-box-face-fixture.ts": "25ba46899216893ced94f1b80e5019d305c92a01b453e732138eb0a72d53aa9b",
+    "e2e/senko.test.ts": "88e7993e88cf79b5f6c9cf60bf81ce359b398aa9b788e490ed9cf793a5f95d58",
+    "lib/departures.ts": "b277b7f6b0f028df091316a3f601125c16f96acf448b1e69b0f8630535345dc0",
+    "lib/sound-client.ts": "0549f917adf366d3ee97570f58768658935c55f6265b1f9fddc2ca77de270ec2",
+    "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "scripts/ci-workflow.test.mjs": "e452e1ddc92db121e1b19acb995083379162271d89abef14d019c18969c6d9c4",
+    "scripts/e2e-build.test.mjs": "f2659014491603c0ad11bc00ee174b96a11f204faa75cf79be75d78472399b12",
+    "scripts/e2e.mjs": "55fc7db6dea62723c1575b9238fb3460c5ac5b84e9b7133d45fc88b17bc741f3",
+    "scripts/vendor-peep-box.mjs": "0dd1538f319dab0456ee0d0b85d006b1447b837102c5ab0e8a771a412e0a2075",
+    "scripts/verify-peep-box-camera.mjs": "7561a3ed3d355b42b52bf9cfbad755ebc5aa1934ed6cb1617f550a5ebe01da57"
+  },
+  "executable_input_sha256": "9078c749b170470dab9482d7624c2c5e4fd39754b9fb57ca59a4c94f71af908c",
+  "closure": {
+    "certified": true,
+    "preflight_ok": true,
+    "local_controls": "pass",
+    "failures": [],
+    "commands": [
+      {
+        "id": "preflight",
+        "executed": true,
+        "exit_code": 0,
+        "tap": null,
+        "ok": true
+      },
+      {
+        "id": "e2e-runner",
+        "executed": true,
+        "exit_code": 0,
+        "tap": {
+          "tests": 5,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "ok": true
+      },
+      {
+        "id": "end",
+        "executed": true,
+        "exit_code": 0,
+        "tap": {
+          "tests": 16,
+          "pass": 16,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "ok": true
+      },
+      {
+        "id": "urashima",
+        "executed": true,
+        "exit_code": 0,
+        "tap": {
+          "tests": 10,
+          "pass": 10,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "ok": true
+      }
+    ]
+  }
+}

@@ -158,7 +158,7 @@ test('Escape, blur, hidden page, resize, modal, motion, dismissal and removed so
 test('pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly',async(t)=>{
   const page=await open(t);const card=page.locator('[data-paper-id]').first();const grip=card.getByRole('button',{name:'Drag paper',exact:true});
   for(const reason of ['pointercancel','lostpointercapture']) {
-    await grip.focus();
+    await grip.scrollIntoViewIfNeeded();
     const r=(await grip.boundingBox())!;await page.mouse.move(r.x+22,r.y+22);await page.mouse.down();await page.mouse.move(r.x-40,r.y+30);
     await page.locator('[data-fetch-proxy]').waitFor();
     await grip.evaluate((el,type)=>el.dispatchEvent(new PointerEvent(type,{pointerId:1,bubbles:true})),reason);await page.mouse.up();

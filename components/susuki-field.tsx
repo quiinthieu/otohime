@@ -150,7 +150,7 @@ function createRenderer(gl: WebGL2RenderingContext, canvas: HTMLCanvasElement) {
   };
 }
 
-type Connection = EventTarget & { saveData?: boolean };
+type Connection = Partial<Pick<EventTarget, "addEventListener" | "removeEventListener">> & { saveData?: boolean };
 const CALM: PointerSpring = { x: -2, y: -2, vx: 0, vy: 0 };
 
 export default function SusukiField() {

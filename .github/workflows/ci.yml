@@ -144,7 +144,7 @@ jobs:
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true; exit "$status"' EXIT
           status=0
-          node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
+          SKIP_BUILD=1 node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
           node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true
           exit "$status"
       - run: npm run db:migrate
