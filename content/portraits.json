@@ -1,1 +1,492 @@
-[]
+[
+  {
+    "conceptId": "01-quiet-reader",
+    "filename": "01_Quiet_Reader.png",
+    "derivativeFilename": "13-reader.jpg",
+    "title": "Reader",
+    "caption": "Page forty, and the kettle can wait.",
+    "attemptId": "01-quiet-reader-attempt-2",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "8c3a2c85c7cf32cceb9c2b05e02b5c84eebd87c6d133d8bb488458cc1491aefc",
+    "promptSha256": "36a776423e1269e963f0581e7d3ee5edcbe1c0fe047096b50167c72fbe009022",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Accepted attempt 2. Seated frontal three-quarter, book low in the lap, loosely tied hair, no headscarf, teal coat and ochre scarf, plausible hands. Attempt 1 rejected: it copied the reference profile and headscarf."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_c7ad7863-636d-4559-bee3-28dff4ebb3bc",
+      "filename": "01_Quiet_Reader.png",
+      "publicUrl": "https://files-cdn.x.ai/BPMkEAVeSFOJ9-hxLlfihA/file_c7ad7863-636d-4559-bee3-28dff4ebb3bc.png",
+      "mimeType": "image/png",
+      "bytes": 9592687,
+      "sha256": "2a04e391df601a79b15acc91fa0e1f33aaa1c84fcc29a3505ea77bb8cc9f56fd",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_52af8771-5f30-4920-9ca6-e289b0180329",
+      "filename": "13-reader.jpg",
+      "publicUrl": "https://files-cdn.x.ai/C3y0dH2PRr29JPlc39Id8w/file_52af8771-5f30-4920-9ca6-e289b0180329.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 474866,
+      "sha256": "eabfa52a8195db2d449424bd50cf5d9be74800bf7ed50aca8d0c12591e6cfa64",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "02-flower-girl",
+    "filename": "02_Flower_Girl.png",
+    "derivativeFilename": "14-flowers.jpg",
+    "title": "Wildflowers",
+    "caption": "Picked on the way, for no one in particular.",
+    "attemptId": "02-flower-girl-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "0a18a84fc126fd5e22f0935f35734c16b27f4a69c5b596a482e4cf6112d854a7",
+    "promptSha256": "4e3d2f0a87e66fc71d122bb6aab5970df48261eeb4594fedcc8966fa1e7a03ea",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Messy low bun, cream blouse, burgundy skirt, wildflower bouquet. Hands occluded around the stems. Distinct from the reader."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_d4efbfb9-139d-4800-9995-da9f0b93c7b1",
+      "filename": "02_Flower_Girl.png",
+      "publicUrl": "https://files-cdn.x.ai/kcZc1vwVQpW-uXv7GmoMDA/file_d4efbfb9-139d-4800-9995-da9f0b93c7b1.png",
+      "mimeType": "image/png",
+      "bytes": 7616208,
+      "sha256": "22cc8ccc26096b3bf8c0c67364d76e5e4bd7bc2916951c4a7ffaae9e1a7ab5a4",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_6fd3e351-a3c4-419e-ac0f-9faab30a1ace",
+      "filename": "14-flowers.jpg",
+      "publicUrl": "https://files-cdn.x.ai/1FaV0J-fR52u6S6lPm0vcA/file_6fd3e351-a3c4-419e-ac0f-9faab30a1ace.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 351397,
+      "sha256": "7b8d2838f9c0d9d32710f9439ce50b77f269c516fd259e6d8702b9796c4b7e4d",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "03-rainy-afternoon",
+    "filename": "03_Rainy_Afternoon.png",
+    "derivativeFilename": "15-rain.jpg",
+    "title": "Rain",
+    "caption": "A clear umbrella keeps the sky in view.",
+    "attemptId": "03-rainy-afternoon-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "770f477104fa586bc4c07d61984c9f43b824441a5b5753254018be623bcc50d1",
+    "promptSha256": "5b669e0510187db15271f734a084bde23eeb5bc9c054af3ddd3077bc479c2010",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Profile under a clear umbrella, moss-green coat, mustard scarf, shoulder-length black hair. Hands out of frame. Rain suggested with sparse ink."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_b63dd1f8-df13-46ae-bc24-71c5e8981fc3",
+      "filename": "03_Rainy_Afternoon.png",
+      "publicUrl": "https://files-cdn.x.ai/XZSayuuyQfOLB0sCsYBshA/file_b63dd1f8-df13-46ae-bc24-71c5e8981fc3.png",
+      "mimeType": "image/png",
+      "bytes": 8094311,
+      "sha256": "d154997e9198a9120c5d41ccb65377d398d90e66b8df6d47de43505ed3d02d0b",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_0f1f57df-9116-4fc8-ad2e-58f88646142b",
+      "filename": "15-rain.jpg",
+      "publicUrl": "https://files-cdn.x.ai/c7fzqxLCQhu2WhSvDs-I4Q/file_0f1f57df-9116-4fc8-ad2e-58f88646142b.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 402705,
+      "sha256": "50e6aed0c8113047a5cbfa708bb0cd19a77c320020dc27756a9a4bc0e3b31e34",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "04-cafe-dreamer",
+    "filename": "04_Cafe_Dreamer.png",
+    "derivativeFilename": "16-cafe.jpg",
+    "title": "Café",
+    "caption": "The cup went cold while she was elsewhere.",
+    "attemptId": "04-cafe-dreamer-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "fd19c90a08a0cb99639828dbbd00fb01e5f8d849331368a827bc6d5912c02c9a",
+    "promptSha256": "3fe8fc01cf12bcddf1b1d6ae55bfe40d045ccf251b9b74b057dd5c11355197f4",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Short bob, navy cardigan, ivory blouse, chin on one hand, cup on the table. The supporting hand reads clearly."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_b3106c58-1636-448d-8a94-0f66d95283fe",
+      "filename": "04_Cafe_Dreamer.png",
+      "publicUrl": "https://files-cdn.x.ai/-jMwoijFRG2Pj1ZSmznuQQ/file_b3106c58-1636-448d-8a94-0f66d95283fe.png",
+      "mimeType": "image/png",
+      "bytes": 9160857,
+      "sha256": "17852fccecb852f765357d33cbf298f9768a367282eb507fb0563b17db8e1b35",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_6dc6a4ec-5224-4a64-8c8d-5a1315ed2390",
+      "filename": "16-cafe.jpg",
+      "publicUrl": "https://files-cdn.x.ai/2HJAzTFmTS2TRpkNvrcWZg/file_6dc6a4ec-5224-4a64-8c8d-5a1315ed2390.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 362965,
+      "sha256": "fddb6ecaf28d0f028ce26ac8d9a5b0a0b0a94320e4885de2f22dac64e924f752",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "05-autumn-wanderer",
+    "filename": "05_Autumn_Wanderer.png",
+    "derivativeFilename": "17-leaves.jpg",
+    "title": "Leaves",
+    "caption": "The wind had the last word.",
+    "attemptId": "05-autumn-wanderer-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "a5ca93600854e273054f5ec60519ce1b21ba8963624909a7deaa096d6d1e7978",
+    "promptSha256": "6e912de3d50226487440ec53ed63c217810db19620531633cce1bdd99e7a7f5f",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Walking turn, long hair in the wind, rust coat, charcoal skirt, a few leaves. Hands in pockets."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_7aaedf02-e597-413c-b5cb-c81f7630732b",
+      "filename": "05_Autumn_Wanderer.png",
+      "publicUrl": "https://files-cdn.x.ai/1GQidUMvQXCv2ERLaDOxQA/file_7aaedf02-e597-413c-b5cb-c81f7630732b.png",
+      "mimeType": "image/png",
+      "bytes": 7696116,
+      "sha256": "7cb4cfd0a540e52abc385ac823c820990c926f7a48b9b80d4de3de52b3ca907e",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_591b73b6-3748-4fed-9451-073ceb2ad8e8",
+      "filename": "17-leaves.jpg",
+      "publicUrl": "https://files-cdn.x.ai/nAGe2pTSTGexNt2Tm2raRw/file_591b73b6-3748-4fed-9451-073ceb2ad8e8.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 302230,
+      "sha256": "5483d660dbba2e7df9f1b646caf43ffcaec892baa3a2bba06e0972722fdff956",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "06-violinist",
+    "filename": "06_Violinist.png",
+    "derivativeFilename": "18-violin.jpg",
+    "title": "Violin",
+    "caption": "Eyes closed, the hard bar coming up.",
+    "attemptId": "06-violinist-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "72fa495027763d624d5547385a7c2b473280cd3d3b3b7c71412ee0274c9984ce",
+    "promptSha256": "ffe6849d028a5849eef1ec2edd75248eb33b71c5c4efd07a5ce512323be53c09",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Eyes closed, relaxed updo, midnight-blue dress, violin and bow. Both hands are readable."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_70a85b91-64fb-4773-bea0-03f3c6ae3980",
+      "filename": "06_Violinist.png",
+      "publicUrl": "https://files-cdn.x.ai/huMRYtvsTz-pNsCrceT2JQ/file_70a85b91-64fb-4773-bea0-03f3c6ae3980.png",
+      "mimeType": "image/png",
+      "bytes": 9371880,
+      "sha256": "af6ed92e1f20f0944db7267faa4ab5bf89396663ebabd1167b52d5ced6d2edeb",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_89da4521-ebf5-428e-a330-40f182c3e5be",
+      "filename": "18-violin.jpg",
+      "publicUrl": "https://files-cdn.x.ai/daa7p1qvRZSPOANGONYi8A/file_89da4521-ebf5-428e-a330-40f182c3e5be.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 441383,
+      "sha256": "f9e91f3cd602b1282a2f3d8c8eaf2ecfe197b4ab1bf92b6a1283b59952ec4ed1",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "07-morning-by-the-window",
+    "filename": "07_Morning_by_the_Window.png",
+    "derivativeFilename": "19-window.jpg",
+    "title": "Window",
+    "caption": "Tea, and a street that is not awake yet.",
+    "attemptId": "07-morning-by-the-window-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "49c5c843b6bdfc070fecde888e305ed197db1a60472af372ecef9abb80e6b011",
+    "promptSha256": "6c414c1d15c75f461defcf7b76016513dcc08772431d721887d5fda2d3a0c576",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Loose braid, lavender sweater, gray trousers, tea held at a window. Both hands on the cup."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_736c67a0-610c-489f-8ef4-b693499f500e",
+      "filename": "07_Morning_by_the_Window.png",
+      "publicUrl": "https://files-cdn.x.ai/pOPlmBJ6TT2u99ZFStzjlQ/file_736c67a0-610c-489f-8ef4-b693499f500e.png",
+      "mimeType": "image/png",
+      "bytes": 9480980,
+      "sha256": "4dcb41cbdc640d02a9d50533ff5b55319c0f73e066924f5fc2614223b6b4eb9f",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_617ff57c-ecba-4627-9246-2239bb5a894e",
+      "filename": "19-window.jpg",
+      "publicUrl": "https://files-cdn.x.ai/w3mL1NhDQB-f3H-mvK7J1g/file_617ff57c-ecba-4627-9246-2239bb5a894e.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 396611,
+      "sha256": "f9e93842b56d8911712f195ff7bd1a6ca63d340e597c90f8f1c68dc93bd5fc76",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "08-painter",
+    "filename": "08_Painter.png",
+    "derivativeFilename": "20-painter.jpg",
+    "title": "Painter",
+    "caption": "Cobalt on the sleeve, as usual.",
+    "attemptId": "08-painter-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "6494fcfbbad83d03629c5a9fce9790f778ead7a28c5778ccd80e6cbeaa6aaeb8",
+    "promptSha256": "c367a9e54abc1c9821d925e3270d67dae8cefec70522849af7cde7594a499435",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Messy tied hair, white shirt, cobalt jacket, brush and small palette. Both hands readable."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_2a420ac5-395d-45c6-8631-6015fccbee7d",
+      "filename": "08_Painter.png",
+      "publicUrl": "https://files-cdn.x.ai/xFibZOWGTMe0lzRhjzBrzA/file_2a420ac5-395d-45c6-8631-6015fccbee7d.png",
+      "mimeType": "image/png",
+      "bytes": 9147142,
+      "sha256": "491e736a719791647322053dabb8a541701e9a39024eba83374c0780105eae7a",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_3a66b965-d974-4209-bc66-e3a3717b3348",
+      "filename": "20-painter.jpg",
+      "publicUrl": "https://files-cdn.x.ai/cWR0Y4KbQziDlh8eeFBG3Q/file_3a66b965-d974-4209-bc66-e3a3717b3348.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 427325,
+      "sha256": "3e9a833e409c3bf9e2fd6906ce9f3cd4dd5bbd54f31c42b82910e5e77887ffd8",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "09-spring-breeze",
+    "filename": "09_Spring_Breeze.png",
+    "derivativeFilename": "21-breeze.jpg",
+    "title": "Breeze",
+    "caption": "Hair across her face, one stem held still.",
+    "attemptId": "09-spring-breeze-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "1dffe0dd5c84018880fab50a90f2d938aa6192c322ffb96a5e0fda68c118de75",
+    "promptSha256": "ef0b970a41abce5aa5def39f8fe8bdc5d3b64bc9de21803a20a26295e30a819d",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "Frontal, hair across the face, sage dress, blush shawl, one flower. The holding hand is readable."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_dd4c3bfa-4d72-4810-87a5-90c024e9ba1d",
+      "filename": "09_Spring_Breeze.png",
+      "publicUrl": "https://files-cdn.x.ai/QhhWU4BaTtm6x7vKyGGg1w/file_dd4c3bfa-4d72-4810-87a5-90c024e9ba1d.png",
+      "mimeType": "image/png",
+      "bytes": 7932755,
+      "sha256": "14ae165abde5fbfb86c02545e5bae699ebe32e2443e93184f122c260883dbfd2",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_528e92b2-e77c-4e71-8f6a-ed2a5cee0836",
+      "filename": "21-breeze.jpg",
+      "publicUrl": "https://files-cdn.x.ai/CUGpCW34R9GMvQ1QVrvAAw/file_528e92b2-e77c-4e71-8f6a-ed2a5cee0836.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 409395,
+      "sha256": "95847cf565ae87f3ee7daa6f855a8de59d2b8c656441389b86f023267cf6acb0",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  },
+  {
+    "conceptId": "10-letter-writer",
+    "filename": "10_Letter_Writer.png",
+    "derivativeFilename": "22-letter.jpg",
+    "title": "Letter",
+    "caption": "Three lines in, and already a second sheet.",
+    "attemptId": "10-letter-writer-attempt-1",
+    "model": "grok-imagine-image-2.0",
+    "nativeWidth": 1776,
+    "nativeHeight": 2368,
+    "candidateSha256": "f6ed9e31f0dcebbb6dbae680b3e2c61bc72b609adc56ae5a75b4b09e8115e1b7",
+    "promptSha256": "c83c0069ea9ebd6546b3c89685d1d73ad85470112596d7ac6565c882a4cb44a8",
+    "promptPackSha256": "195f898d267d1d8f9ba8e1e2db6f607bc5b1f5325fce2fff51302591874f4a9f",
+    "settingsSha256": "bb5fb7889a4203288fb8d822d6a307970438905a8a4f4873ae62cbff0585b49c",
+    "referenceSha256": "none",
+    "review": {
+      "disposition": "accepted",
+      "reviewer": "grok-visual-review",
+      "reviewedAt": "2026-10-29T07:40:00.000Z",
+      "notes": "High three-quarter, pinned hair, brown cardigan, blue skirt, pen on one sheet and a second sheet beside it. Writing marks are illegible. The writing hand is readable."
+    },
+    "provenance": {
+      "provider": "xai",
+      "fileExpiresAt": null,
+      "publicUrlExpiresAt": null
+    },
+    "master": {
+      "fileId": "file_8b7dd437-35d9-46cb-9a48-eafb78389717",
+      "filename": "10_Letter_Writer.png",
+      "publicUrl": "https://files-cdn.x.ai/U4-AAisOQQ2qFHaG-ko-xQ/file_8b7dd437-35d9-46cb-9a48-eafb78389717.png",
+      "mimeType": "image/png",
+      "bytes": 9225289,
+      "sha256": "9448f9a55644d00c9c599d697e6aa69cbafa7cf3498cccad49f06eb2c7058e57",
+      "expiresAt": null,
+      "width": 1776,
+      "height": 2368
+    },
+    "derivative": {
+      "fileId": "file_f30d16a4-f08d-466b-af14-0e2f2e39bed8",
+      "filename": "22-letter.jpg",
+      "publicUrl": "https://files-cdn.x.ai/hPiyfqUdQSevVaVj2dnOKA/file_f30d16a4-f08d-466b-af14-0e2f2e39bed8.jpg",
+      "mimeType": "image/jpeg",
+      "bytes": 391938,
+      "sha256": "4924f2f2f14bd6d8de760e7562ce5b53451c4de92618122215926897c2cdacee",
+      "expiresAt": null,
+      "width": 1152,
+      "height": 1536
+    }
+  }
+]

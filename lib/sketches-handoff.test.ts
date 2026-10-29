@@ -730,12 +730,14 @@ test("export and check never resolve credentials or call network and existing de
     assert.equal(buildHandoffKit(promptPack).promptFiles.length, 10);
     assert.ok(renderConceptPromptMarkdown(promptPack.concepts[0], promptPack).includes(promptPack.concepts[0].fullPrompt));
 
-    // Negative control: production content/portraits.json remains [] and requirePeople still fails
+    // The shipped manifest is the ten reviewed portraits. An empty manifest still fails the delivery gate.
     const rawPortraits = JSON.parse(readFileSync(resolve(ROOT, "content/portraits.json"), "utf8"));
-    assert.deepEqual(rawPortraits, []);
     const deliveryCheck = validatePortraitManifest(rawPortraits, { requirePeople: true, promptPack });
-    assert.equal(deliveryCheck.valid, false);
-    assert.ok(deliveryCheck.errors.some((e) => /manifest contains 0 records/i.test(e)));
+    assert.equal(deliveryCheck.valid, true, deliveryCheck.errors.join("\n"));
+    assert.equal(deliveryCheck.records.length, 10);
+    const emptyCheck = validatePortraitManifest([], { requirePeople: true, promptPack });
+    assert.equal(emptyCheck.valid, false);
+    assert.ok(emptyCheck.errors.some((e) => /manifest contains 0 records/i.test(e)));
 
     // Verify content/site.ts and lib/sketches.ts do not import sketches-handoff
     const siteSource = readFileSync(resolve(ROOT, "content/site.ts"), "utf8");
