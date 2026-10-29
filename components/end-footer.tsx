@@ -2,6 +2,7 @@ import { PaperHost } from "@/components/paper-host";
 import { BottleButton } from "@/components/bottle/button";
 import { RisoText } from "@/components/riso-heading";
 import { EndStage, EndTop } from "@/components/end-stage";
+import { SusukiFieldLoader } from "@/components/susuki-field-loader";
 import { swatches } from "@/components/figures";
 import { site } from "@/content/site";
 import { away } from "@/lib/end";
@@ -110,6 +111,10 @@ export function EndFooter() {
           </p>
           <EndTop />
         </div>
+      </div>
+
+      <div className="end-susuki" aria-hidden="true">
+        <SusukiFieldLoader />
       </div>
 
       {/* Below the waterline, past everything else: the way down to Ryugu-jo. A plain <a>: the palace is its own root
