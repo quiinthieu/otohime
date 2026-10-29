@@ -1,6 +1,6 @@
 # t-1768 — Three.js Ink Shelf
 
-Current authorization continuation: [run-9768 handoff](run-9768/summary.md). Fresh local checks pass (16 shelf tests, 2,792 repository tests, typecheck, lint and build), and a temporary cutoff mutation is rejected. **t-1768 remains unaccepted** under esc-475: QA must read and independently verify the protected delivery `author.txt`; neither prior executable/deployed checks nor this documentation delivery waive that requirement.
+Current publication recovery: [run-9771 handoff](run-9771/summary.md). Fresh local checks pass (16 shelf tests, 2,794 repository tests, typecheck, lint and build), the executable fingerprint is unchanged, and a temporary cutoff mutation is rejected. The prior branch-only handoff failed the runner's `push_not_on_main` check; this documentation recovery preserves it and publishes with `[skip ci]`. **t-1768 remains unaccepted** under esc-475: QA must read and independently verify the protected delivery `author.txt`; neither prior executable/deployed checks nor this documentation delivery waive that requirement. [Previous handoff](run-9768/summary.md) remains historical evidence.
 
 ## Delivery recovery — run-9747
 
