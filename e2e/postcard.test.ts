@@ -85,7 +85,7 @@ test("standalone sketches and nested pages stamp their own titles instead of inh
   const pages = [
     "/sign-in", "/forgot-password", "/reset-password", "/shore", "/capsule", "/vinyl", "/rotor",
     "/ryugu", "/zine", "/barometer", "/planisphere", "/design-system", "/orrery", "/orrery/sun",
-    "/elements", "/elements/h", "/articles", "/structures", "/lab", "/making-of",
+    "/elements", "/elements/h", "/articles", "/structures", "/lab", "/making-of", "/shelf",
     "/play/hanafuda", "/play/booth", "/play/pachinko",
   ];
   for (const index of ["/articles", "/structures", "/notes"]) {

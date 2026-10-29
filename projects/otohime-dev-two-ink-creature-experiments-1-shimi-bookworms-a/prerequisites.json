@@ -1,0 +1,8 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-300",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "Both experiments — Ink Blot Test (/play/inkblot with seeded/daily Rorschach ink-bleed mirror, deterministic offline pseudo-reading, and expand-only Drizzle migration on repository-owned Postgres) and Shimi Bookworms (shimi/ overlay-only generative ink silverfish with TreeWalker DOM reading, order-1 Markov diet, and shared Web Audio pentatonic chirps) — use only repository-owned code, existing installed packages (drizzle-orm, pg, embedded-postgres, playwright-core, next), and existing CI/CD pipelines. No new third-party APIs, secrets, or operator-owned infrastructure are required.",
+  "prerequisites": []
+}

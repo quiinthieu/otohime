@@ -339,12 +339,12 @@ export function checkHistory(
     return { ok: false, message: `names head ${committed.head}, which is not in HEAD's history; run npm run history:index` };
   }
 
-  // A merge snapshot contains leaves from both parents. Its newest non-merge leaf may belong to just
-  // one branch, so rebuilding at that leaf loses the other parent's entries. First recognize the exact
-  // current snapshot (including its total); older fallbacks still go through the leaf and lag checks below.
+  // A merge can join diverged branches: its newest non-merge leaf cannot see
+  // the other branch's entries. Verify a freshly built index against the whole
+  // build revision before checking historical fallbacks at their own leaf.
   const rebuiltAtHead = indexAt(git, head);
   if (rebuiltAtHead && serializeHistory(rebuiltAtHead) === text) {
-    return { ok: true, message: `matches git at HEAD ${head.slice(0, SHA_LENGTH)}` };
+    return { ok: true, message: "matches git at HEAD" };
   }
 
   const rebuiltAtLeaf = indexAt(git, committed.head);

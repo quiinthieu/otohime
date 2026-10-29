@@ -272,33 +272,36 @@ test("the index is capped at MAX_ENTRIES while total counts all reachable commit
   assert.equal(checkHistory(git, repo, serializeHistory(afterMerge), { strict: true }).ok, true);
 });
 
-test("a PR merge indexes both divergent branches even though the newest leaf contains only one", () => {
+test("a PR merge indexes both diverged branches and verifies the complete build revision", () => {
   const repo = fixtureRepo(SAMPLE);
-  sh(repo, "checkout", "--quiet", "-b", "feature");
-  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "feature delivery");
+  sh(repo, "checkout", "--quiet", "-b", "side");
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "side work");
   sh(repo, "checkout", "--quiet", "main");
-  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "concurrent main delivery");
-  sh(repo, "merge", "--quiet", "--no-ff", "-m", "PR merge", "feature");
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "concurrent main work");
   const git = gitRunner(repo);
+  const beforeMerge = serializeHistory(indexAt(git)!);
+  sh(repo, "merge", "--quiet", "--no-ff", "-m", "PR merge", "side");
   const index = indexAt(git)!;
-  const text = serializeHistory(index);
-  assert.ok(index.entries.some((entry) => entry.subject === "feature delivery"));
-  assert.ok(index.entries.some((entry) => entry.subject === "concurrent main delivery"));
-  assert.notDeepEqual(index.entries, indexAt(git, index.head!)!.entries, "the merge snapshot cannot be rebuilt from just its newest leaf");
+  assert.ok(index.entries.some((e) => e.subject === "side work"));
+  assert.ok(index.entries.some((e) => e.subject === "concurrent main work"));
+  assert.notDeepEqual(index.entries, indexAt(git, index.head!)!.entries);
   for (const strict of [false, true]) {
-    const result = checkHistory(git, repo, text, { strict });
-    assert.equal(result.ok, true, result.message);
-    const altered = { ...index, entries: index.entries.map((entry, i) => i === 1 ? { ...entry, subject: "altered" } : entry) };
-    assert.equal(checkHistory(git, repo, serializeHistory(altered), { strict }).ok, false);
+    const check = checkHistory(git, repo, serializeHistory(index), { strict });
+    assert.equal(check.ok, true, check.message);
+    assert.equal(checkHistory(git, repo, serializeHistory({ ...index, total: index.total + 1 }), { strict }).ok, false);
+    const tampered = structuredClone(index);
+    tampered.entries[1].subject = "invented change";
+    assert.equal(checkHistory(git, repo, serializeHistory(tampered), { strict }).ok, false);
     const incomplete = { ...index, entries: index.entries.filter((_, i) => i !== 1) };
     assert.equal(checkHistory(git, repo, serializeHistory(incomplete), { strict }).ok, false);
   }
+  assert.equal(checkHistory(git, repo, beforeMerge, { strict: true }).ok, false, "an index missing a branch still fails");
   const file = join(TMP, `merge-${repos++}.json`);
   const rev = sh(repo, "rev-parse", "HEAD").trim();
-  const generated = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${rev}`);
-  assert.equal(generated.status, 0, generated.stdout + generated.stderr);
-  assert.equal(readFileSync(file, "utf8"), text);
-  assert.equal(runScript(`--repo=${repo}`, `--file=${file}`, "--check", "--strict", `--rev=${rev}`).status, 0);
+  const result = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${rev}`);
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(readFileSync(file, "utf8"), serializeHistory(index));
+  assert.equal(runScript(`--repo=${repo}`, `--file=${file}`, "--strict", "--check", `--rev=${rev}`).status, 0);
 });
 
 test("without git, outside a repository, or in an empty one, the committed fallback is used as it is", () => {

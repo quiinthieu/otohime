@@ -64,8 +64,11 @@ import {
   pastThreshold,
   PIN_PAIRS,
   pinHomes,
+  parsePins,
   PINS,
+  PINS_KEY,
   rebase,
+  serializePins,
   STACKED,
   turn,
   type PinSpots,
@@ -78,6 +81,8 @@ import { DeskArt, PinCard } from "./desk-art";
 
 const SERVER_LAYOUT = defaultLayout();
 let layout: DeskLayout = SERVER_LAYOUT;
+const SERVER_PINS = pinHomes();
+let pinSpots: PinSpots = SERVER_PINS;
 let loaded = false;
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((listener) => listener());
@@ -90,10 +95,19 @@ function readStored(): DeskLayout {
   }
 }
 
+function readStoredPins(): PinSpots {
+  try {
+    return parsePins(localStorage.getItem(PINS_KEY));
+  } catch {
+    return pinHomes();
+  }
+}
+
 // Another tab moved something, or cleared storage.
 function onStorage(event: StorageEvent) {
-  if (event.key !== DESK_KEY && event.key !== null) return;
-  layout = parseDesk(event.key === null ? null : event.newValue);
+  if (event.key !== DESK_KEY && event.key !== PINS_KEY && event.key !== null) return;
+  if (event.key === DESK_KEY || event.key === null) layout = parseDesk(event.newValue);
+  if (event.key === PINS_KEY || event.key === null) pinSpots = parsePins(event.newValue);
   emit();
 }
 
@@ -101,6 +115,7 @@ function subscribe(listener: () => void) {
   if (!loaded) {
     loaded = true;
     layout = readStored();
+    pinSpots = readStoredPins();
   }
   if (listeners.size === 0) addEventListener("storage", onStorage);
   listeners.add(listener);
@@ -112,6 +127,8 @@ function subscribe(listener: () => void) {
 const getLayout = () => layout;
 // The server and the first client render lay out the default desk; the stored one follows hydration.
 const getServerLayout = () => SERVER_LAYOUT;
+const getPins = () => pinSpots;
+const getServerPins = () => SERVER_PINS;
 
 function saveLayout(next: DeskLayout) {
   layout = next;
@@ -119,6 +136,16 @@ function saveLayout(next: DeskLayout) {
     localStorage.setItem(DESK_KEY, serializeDesk(next));
   } catch {
     // storage blocked: the desk keeps this visit
+  }
+  emit();
+}
+
+function savePins(next: PinSpots) {
+  pinSpots = next;
+  try {
+    localStorage.setItem(PINS_KEY, serializePins(next));
+  } catch {
+    // Storage blocked: keep the positions for this visit.
   }
   emit();
 }
@@ -179,7 +206,7 @@ const round = (v: number) => Math.round(v * 100) / 100 || 0;
 
 export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) {
   const desk = useSyncExternalStore(subscribe, getLayout, getServerLayout);
-  const [pins, setPins] = useState<PinSpots>(pinHomes);
+  const pins = useSyncExternalStore(subscribe, getPins, getServerPins);
 
   const deskRef = useRef<HTMLDivElement>(null);
   const corkRef = useRef<HTMLDivElement>(null);
@@ -590,7 +617,7 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
     m.y = { x: now.y, v: m.y.v };
     m.tx = 0;
     m.ty = 0;
-    if (key.startsWith("pin:")) setPins((spots) => ({ ...spots, [id]: to }));
+    if (key.startsWith("pin:")) savePins({ ...pinsRef.current, [id]: to });
     else saveLayout(moveTo(layout, id, to.x, to.y));
     kick();
   }
@@ -629,7 +656,7 @@ export function InkDesk({ labels }: { labels: { tidy: string; cork: string } }) 
       }
     }
     saveLayout(next);
-    setPins(homes);
+    savePins(homes);
     kick();
     setSaid(deskSay("", { type: "tidied" }));
   }

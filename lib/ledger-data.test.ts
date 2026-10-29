@@ -155,12 +155,12 @@ function fakeGithub(override?: (call: Call) => Response | undefined) {
         repository: { isPrivate },
         contributions: { nodes: [{ occurredAt: `${from}T00:00:00Z`, commitCount: n }] },
       });
-      return Response.json({ data: { viewer: { contributionsCollection: { commitContributionsByRepository: [repo(false, 2), repo(true, 50)] } } } });
+      return Response.json({ data: { user: { contributionsCollection: { commitContributionsByRepository: [repo(false, 2), repo(true, 50)] } } } });
     }
     const rel = (name: string | null, publishedAt: string, isDraft = false) => ({ name, tagName: "v0", publishedAt, isDraft });
     return Response.json({
       data: {
-        viewer: {
+        user: {
           repositories: {
             nodes: [
               { name: "otohime", isPrivate: false, releases: { nodes: [rel("v1.0", "2026-10-12T15:00:00Z"), rel(null, "2026-10-13T00:00:00Z"), rel("draft", "2026-10-14T00:00:00Z", true), rel("old", "2024-01-01T00:00:00Z")] } },
@@ -187,10 +187,13 @@ test("run writes public commits, public release names and note days from a fake 
   for (const call of gh.calls) {
     assert.equal(call.url, "https://api.github.com/graphql");
     assert.equal(call.auth, "bearer t0ken");
+    assert.match(call.query, /user\(login: \$owner\)/, "activity belongs to the site owner, not the token holder");
+    assert.doesNotMatch(call.query, /\bviewer\b/);
+    assert.equal(call.variables.owner, "quiinthieu");
   }
   assert.deepEqual(
     gh.calls.filter((c) => c.query.includes("contributionsCollection")).map((c) => c.variables),
-    parts.map((p) => ({ from: `${p.from}T00:00:00Z`, to: `${p.to}T23:59:59Z` })),
+    parts.map((p) => ({ owner: "quiinthieu", from: `${p.from}T00:00:00Z`, to: `${p.to}T23:59:59Z` })),
   );
 
   const text = await ledgerAt(dir);
@@ -224,9 +227,10 @@ test("run keeps the file byte for byte on every kind of failure", async () => {
     ["HTTP 502 on releases", (c) => (c.query.includes("repositories") ? new Response("", { status: 502 }) : undefined)],
     ["GraphQL errors", () => Response.json({ data: null, errors: [{ message: "rate limited" }] })],
     ["not JSON", () => new Response("<html>")],
-    ["no viewer", () => Response.json({ data: {} })],
-    ["late slice malformed", (c) => (c.query.includes("contributionsCollection") && c.variables.from.startsWith("2026-07") ? Response.json({ data: { viewer: { contributionsCollection: {} } } }) : undefined)],
-    ["no repositories", (c) => (c.query.includes("repositories") ? Response.json({ data: { viewer: {} } }) : undefined)],
+    ["no owner", () => Response.json({ data: {} })],
+    ["token holder only", () => Response.json({ data: { viewer: { contributionsCollection: { commitContributionsByRepository: [] } } } })],
+    ["late slice malformed", (c) => (c.query.includes("contributionsCollection") && c.variables.from.startsWith("2026-07") ? Response.json({ data: { user: { contributionsCollection: {} } } }) : undefined)],
+    ["no repositories", (c) => (c.query.includes("repositories") ? Response.json({ data: { user: {} } }) : undefined)],
   ];
   for (const [name, override] of failures) {
     const dir = await root();

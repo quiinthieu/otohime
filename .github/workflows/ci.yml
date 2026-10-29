@@ -133,6 +133,10 @@ jobs:
           test -z "$(git status --porcelain db/migrations)"
       - run: npm run history:index -- --strict --rev="$GITHUB_SHA"
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
+      - name: Refresh public stamp ledger
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/ledger-fetch.mjs
       - run: npm run build
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - name: Real CPU camera and privacy verifier
@@ -274,6 +278,10 @@ jobs:
       - run: npx vercel@64 pull --yes --environment=preview
       - run: npm run history:index -- --strict --rev="$GITHUB_SHA"
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
+      - name: Refresh public stamp ledger
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/ledger-fetch.mjs
       - run: npx vercel@64 build
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run db:migrate # DATABASE_URL = direct URL of the PR branch
@@ -332,6 +340,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx vercel@64 pull --yes --environment=production
+      - name: Refresh public stamp ledger
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/ledger-fetch.mjs
       # Build before migrating: a failed build never leaves prod migrated ahead of its code.
       - name: Build production bundle with strict changelog history
         run: |

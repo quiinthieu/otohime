@@ -77,8 +77,31 @@ export const PINS: readonly Pin[] = PINNED.flatMap((p) => {
 export const PIN_PAIRS: readonly [string, string][] = relatedPairs(PINS);
 
 export type PinSpots = Record<string, Point>;
+export const PINS_KEY = "desk:pins:v1";
 
 // Every pin at its tidy spot.
 export function pinHomes(pins: readonly Pin[] = PINS): PinSpots {
   return Object.fromEntries(pins.map((p) => [p.id, { x: p.x, y: p.y }]));
+}
+
+// Store only known pin positions. Old, blocked or corrupt storage is a tidy cork.
+export function parsePins(raw: string | null): PinSpots {
+  const spots = pinHomes();
+  try {
+    const data = JSON.parse(raw ?? "null");
+    if (!data || data.v !== PINS_KEY || !data.pins || typeof data.pins !== "object") return spots;
+    for (const id of Object.keys(spots)) {
+      const point = data.pins[id];
+      if (point && typeof point.x === "number" && Number.isFinite(point.x) && typeof point.y === "number" && Number.isFinite(point.y)) {
+        spots[id] = { x: unit(point.x), y: unit(point.y) };
+      }
+    }
+  } catch {
+    // A malformed value leaves the defaults intact.
+  }
+  return spots;
+}
+
+export function serializePins(pins: PinSpots): string {
+  return JSON.stringify({ v: PINS_KEY, pins });
 }
