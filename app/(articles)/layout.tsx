@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Old_Standard_TT, Playfair_Display, UnifrakturMaguntia } from "next/font/google";
 import "./articles.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // The Gazette is its own root layout: its own <html>, <body> and stylesheet. It must
@@ -64,7 +65,7 @@ export default function ArticlesLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
         <AppearanceBoot root="articles" />
       </head>
-      <body>{children}<AppearanceRuntime /></body>
+      <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>
     </html>
   );
 }

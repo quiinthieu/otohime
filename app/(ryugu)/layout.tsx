@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./ryugu.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Ryugu-jo is its own root layout: its own <html>, <body> and stylesheet, so none of the site's globals.css,
@@ -31,7 +32,7 @@ export default function RyuguLayout({ children }: LayoutProps<"/">) {
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <AppearanceBoot root="ryugu" />
       </head>
-      <body>{children}<AppearanceRuntime /></body>
+      <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>
     </html>
   );
 }

@@ -1,0 +1,13 @@
+.plotter-toggle > button { display: inline-flex; align-items: center; gap: .35rem; }
+.plotter-fallback { position: fixed; bottom: 1rem; right: 1rem; z-index: 70; }
+.plotter-fallback > button { display: inline-flex; align-items: center; gap: .35rem; padding: .55rem .75rem; border: 1px solid var(--ink, #231e16); color: var(--ink, #231e16); background: var(--paper, #f2efe7); font: 13px Georgia, serif; cursor: pointer; }
+body:has(.masthead) .plotter-fallback { display: none; }
+.plotter-overlay { position: absolute; top: 0; left: 0; z-index: 75; pointer-events: none; background: color-mix(in srgb, var(--paper, #f2efe7) 94%, transparent); max-width: none; }
+.plotter-controls { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); width: min(40rem, calc(100vw - 2rem)); z-index: 110; border: 1px solid var(--ink, #231e16); padding: 1rem; background: var(--paper, #f2efe7); color: var(--ink, #231e16); box-shadow: 4px 4px 0 #231e1633; font: 14px/1.5 Georgia, serif; }
+.plotter-note { font-size: 12px; opacity: .75; margin: .3rem 0 .7rem; }
+.plotter-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.plotter-actions button, .plotter-actions select { border: 1px solid currentColor; padding: .35rem .6rem; background: transparent; font: inherit; color: inherit; cursor: pointer; }
+.plotter-actions button:disabled { opacity: .5; cursor: default; }
+.plotter-actions :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (max-width: 520px) { .plotter-label { display: none; } .masthead > div { gap: .35rem; } .plotter-toggle > button { padding: .35rem; } }
+@media print { [data-plotter-ui] { display: none !important; } }

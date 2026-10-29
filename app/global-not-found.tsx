@@ -6,6 +6,7 @@ import "./(site)/globals.css";
 import "./(site)/seasons.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
+import { PlotterToggle } from "@/components/plotter-toggle";
 
 // An address no route matches. The site and the projects are separate root layouts, so Next renders this whole
 // document instead of a layout (experimental.globalNotFound). A notFound() from a catch-all page cannot do it:
@@ -35,6 +36,7 @@ export default function GlobalNotFound() {
       </head>
       <body className="min-h-full">
         <NotFound />
+        <PlotterToggle fallback />
         <AppearanceRuntime />
       </body>
     </html>
