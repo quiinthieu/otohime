@@ -37,6 +37,11 @@ export default function PlayPage() {
           <p className="mt-2 mb-4 text-muted">Hold a tiny ink sparkler steady as peony, pine needles, willow and falling chrysanthemum bloom across the paper. A quiet summer ritual, with optional crackle.</p>
           <p><Link href="/play/senko" className="btn" data-testid="play-senko-link">Light a Senko Hanabi →</Link></p>
         </section>
+        <section className="mt-12" aria-labelledby="ennichi-heading">
+          <h2 id="ennichi-heading" className="caption"><RisoText>Ennichi Night</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">A shrine festival printed in four slightly mismatched inks. Look through the stalls for seven small keepsakes and take the stamp when the night is complete.</p>
+          <p><Link href="/play/ennichi" className="btn" data-testid="play-ennichi-link">Enter Ennichi Night →</Link></p>
+        </section>
         <section className="mt-12" aria-labelledby="hanafuda-heading">
           <h2 id="hanafuda-heading" className="caption">
             <RisoText>Hanafuda Koi-Koi</RisoText>

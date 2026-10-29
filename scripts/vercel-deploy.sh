@@ -72,7 +72,7 @@ upload() {
   log "upload: vercel deploy --prebuilt --prod --no-wait (bound ${UPLOAD_TIMEOUT}s)"
   local status=0
   # Captured whole (URL on stdout, progress and errors on stderr), then echoed to the job log.
-  bounded "$UPLOAD_TIMEOUT" npx vercel@64 deploy --prebuilt --prod --archive=tgz --no-wait \
+  bounded "$UPLOAD_TIMEOUT" npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel deploy --prebuilt --prod --archive=tgz --no-wait \
     >"$upload_log" 2>&1 || status=$?
   cat "$upload_log" >&2
   return "$status"
