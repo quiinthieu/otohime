@@ -171,3 +171,29 @@ export const bottleUsage = pgTable("bottle_usage", {
   count: integer("count").notNull(),
   updatedAt: timestamp("updated_at", {withTimezone:true,precision:6}).defaultNow().notNull(),
 }, table => [check("bottle_usage_count_check",sql`${table.count} between 0 and 5`)]);
+
+// Observations remain private until explicitly approved by the owner.
+export const inkblotAnswer = pgTable("inkblot_answer", {
+  id: text("id").primaryKey(),
+  blotKey: text("blot_key").notNull(),
+  name: text("name").notNull().default(""),
+  note: text("note").notNull(),
+  status: text("status").notNull().default("pending"),
+  tilt: integer("tilt").notNull(),
+  hand: integer("hand").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, precision: 6 }).defaultNow().notNull(),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true, precision: 6 }),
+  reviewedBy: text("reviewed_by").references(() => user.id, { onDelete: "set null" }),
+}, (table) => [
+  index("inkblot_public_idx").on(table.blotKey, table.status, table.createdAt.desc(), table.id.desc()),
+  check("inkblot_status_check", sql`${table.status} in ('pending', 'approved', 'rejected')`),
+  check("inkblot_tilt_check", sql`${table.tilt} between -4 and 4`),
+  check("inkblot_hand_check", sql`${table.hand} between 0 and 2`),
+  check("inkblot_text_check", sql`char_length(${table.name}) <= 24 and char_length(${table.note}) between 1 and 80`),
+]);
+
+export const inkblotUsage = pgTable("inkblot_usage", {
+  bucket: text("bucket").primaryKey(),
+  count: integer("count").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 }).defaultNow().notNull(),
+}, (table) => [check("inkblot_usage_count_check", sql`${table.count} >= 0`)]);
