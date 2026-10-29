@@ -133,11 +133,19 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     assert.equal(pending.rows[0].status, "pending");
     const before = Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n);
     await page.locator("#inkblot-note").fill("https://spam.example");
+    const rejectedLink = page.waitForResponse(res => new URL(res.url()).pathname === "/api/inkblot/answers" && res.request().method() === "POST");
     await page.getByTestId("inkblot-submit-btn").click();
+    const linkResponse = await rejectedLink;
+    assert.equal(linkResponse.status(), 400);
+    errors.expectResourceError({ url: linkResponse.url(), status: 400, method: "POST", resourceType: "fetch" });
     await page.waitForFunction(() => (document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? "").length > 8);
     assert.match(await page.getByTestId("inkblot-status").innerText(), /link|Links|ward/i);
     await page.locator("#inkblot-note").fill("this is shit");
+    const rejectedProfanity = page.waitForResponse(res => new URL(res.url()).pathname === "/api/inkblot/answers" && res.request().method() === "POST");
     await page.getByTestId("inkblot-submit-btn").click();
+    const profanityResponse = await rejectedProfanity;
+    assert.equal(profanityResponse.status(), 400);
+    errors.expectResourceError({ url: profanityResponse.url(), status: 400, method: "POST", resourceType: "fetch" });
     await page.waitForFunction(() => /kinder/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
     assert.equal(Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n), before + 0);
   } finally {

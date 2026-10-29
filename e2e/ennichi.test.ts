@@ -53,6 +53,11 @@ for (const width of [1280, 390]) test(`/play discovers Ennichi Night at ${width}
   await page.waitForURL("**/play/ennichi");
   await ready(page);
   await page.waitForFunction(() => /Ennichi Night/.test(document.title));
+  await page.evaluate(async () => {
+    await Promise.all(document.getAnimations().filter(animation =>
+      animation.effect?.getComputedTiming().iterations !== Infinity,
+    ).map(animation => animation.finished.catch(() => {})));
+  });
   assert.match(await page.title(), /Ennichi Night/);
   const svg = page.getByTestId("ennichi-svg");
   for (const plate of PLATES) assert.equal(await svg.locator(`[data-plate="${plate}"]`).count(), 1, plate);
@@ -63,7 +68,7 @@ for (const width of [1280, 390]) test(`/play discovers Ennichi Night at ${width}
   assert.ok(hit.width >= 44 && hit.height >= 44, `${hit.width}x${hit.height}`);
   for (const button of await page.locator(".ennichi-tools button").all()) {
     const box = (await button.boundingBox())!;
-    assert.ok(box.height >= 44 && box.width >= 44);
+    assert.ok(box.height >= 44 && box.width >= 44, `${await button.innerText()}: ${box.width}x${box.height}`);
   }
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
   const og = await page.locator('meta[property="og:image"]').getAttribute("content");
