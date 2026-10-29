@@ -53,6 +53,7 @@ for ((i=0; i<50; i++)); do [ -s "$work/port" ] && break; sleep 0.1; done
 base="http://127.0.0.1:$(cat "$work/port")"
 cat >"$work/bin/npx" <<'FAKE'
 #!/usr/bin/env bash
+while [ "$#" -gt 0 ] && [ "$1" != vercel ] && [ "$1" != vercel@64 ]; do shift; done
 shift
 echo "$*" >>"$CALLS"
 # Hosted CLI 64.7.0 transcript (jobs 122084239061, 122096077381): every non-deploy command fails its user bootstrap.
