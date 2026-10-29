@@ -36,7 +36,7 @@ async function open(options: BrowserContextOptions = {}, route = "/play/inkblot"
   page.on("console", (msg) => { if (msg.type() === "error") errors.console({ text: msg.text(), ...msg.location(), args: msg.args().length }); });
   page.on("response", (res) => errors.response({ url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() }));
   await page.goto(`${BASE}${route}`);
-  await page.getByTestId("inkblot-sheet").waitFor();
+  if (route.startsWith("/play/inkblot")) await page.getByTestId("inkblot-sheet").waitFor();
   return { page, context, errors };
 }
 
@@ -120,12 +120,14 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a folded moth/);
     await page.locator("#inkblot-note").fill("a lantern in the crease");
     await page.locator("#inkblot-name").fill("Ink");
+    const posted = page.waitForResponse((res) => res.url().includes("/api/inkblot/answers") && res.request().method() === "POST");
     await page.getByTestId("inkblot-submit-btn").click();
+    assert.equal((await posted).status(), 201);
     await page.getByTestId("inkblot-reading").waitFor();
     const reading = await page.getByTestId("inkblot-reading").innerText();
     assert.match(reading, /lantern/i);
     assert.ok(reading.includes(INKBLOT_DISCLAIMER));
-    assert.match(await page.getByTestId("inkblot-gallery").innerText(), /Pinned · awaiting the doctor's initials/);
+    await page.getByText("Pinned · awaiting the doctor's initials").waitFor();
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a lantern in the crease/);
     const pending = await pool.query("select status, note from inkblot_answer where note='a lantern in the crease' order by created_at desc limit 1");
     assert.equal(pending.rows[0].status, "pending");
