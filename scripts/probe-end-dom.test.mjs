@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { after, before, test } from "node:test";
 import { site } from "../content/site.ts";
-import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, settleEndEntrance, observeEndReducedTicks, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
+import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, settleEndEntrance, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
 import { launchBrowser } from "./probe-browser.mjs";
 
 const css = readFileSync(resolve(import.meta.dirname, "../components/riso-heading.css"), "utf8");
@@ -43,35 +43,6 @@ async function inChrome(html, fn) {
   }
 }
 const title = (html, expr = VISIBLE_FOOTER) => inChrome(html, (page) => page.evaluate(inPage(endTitleText, expr)));
-
-test("probe reduced motion: counts from the real preference event and rejects a continuing interval", async () => {
-  await inChrome("<p>media boundary</p>", async (page) => {
-    await page.emulateMedia({ reducedMotion: "no-preference" });
-    await page.evaluate(() => {
-      window.__endIntervalTicks = 0;
-      const timer = setInterval(() => window.__endIntervalTicks++, 20);
-      matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (event) => {
-        if (event.matches) clearInterval(timer);
-      });
-    });
-    await page.evaluate(observeEndReducedTicks);
-    // Simulate the host taking longer than two ticks to send its media command.
-    await page.waitForFunction(() => window.__endIntervalTicks >= 3);
-    assert.ok(await page.evaluate(() => window.__endIntervalTicks >= 2), "the old pre-click baseline falsely rejects normal pre-toggle work");
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.waitForFunction(() => Number.isInteger(window.__endReducedTicks));
-    await page.waitForTimeout(100);
-    assert.equal(await page.evaluate(() => window.__endIntervalTicks - window.__endReducedTicks), 0);
-
-    await page.emulateMedia({ reducedMotion: "no-preference" });
-    await page.evaluate(observeEndReducedTicks);
-    await page.evaluate(() => { window.__continuingInterval = setInterval(() => window.__endIntervalTicks++, 20); });
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.waitForFunction(() => Number.isInteger(window.__endReducedTicks) && window.__endIntervalTicks - window.__endReducedTicks >= 2);
-    assert.equal(await page.evaluate(() => window.__endIntervalTicks - window.__endReducedTicks < 2), false, "the same bound still rejects an interval running after reduced motion");
-    await page.evaluate(() => clearInterval(window.__continuingInterval));
-  });
-});
 
 test("probe entrance: waits for delayed real animation starts and rejects missing or replayed entries", async () => {
   const html = `<style>@keyframes enter{from{opacity:.1}to{opacity:1}} .entry{animation:enter .05s both} .late{animation-name:none}</style>

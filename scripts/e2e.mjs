@@ -16,7 +16,7 @@
 // prints DATABASE_URL=... once it is ready, and on SIGTERM or SIGINT stops it and removes <dir>. scripts/walk-end.sh
 // and scripts/probe-end.sh use it when no database answers and Docker is not there.
 import { spawn } from "node:child_process";
-import { mkdirSync, mkdtempSync, openSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, globSync, mkdirSync, mkdtempSync, openSync, readFileSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -33,8 +33,78 @@ const ANNOTATE =
         "--test-reporter-destination=stdout",
       ]
     : [];
-const SUITE = [...process.execArgv, "--test-concurrency=1", ...ANNOTATE, ...ARGS];
+const SERIAL = ["--test-concurrency=1", ...ANNOTATE];
+const SUITE = [...process.execArgv, ...SERIAL, ...ARGS];
+// These files talk HTTP only. CI runs them together; the frame-timed Chrome files stay one at a time.
+const HTTP_E2E = [
+  "e2e/ghosts-config.test.ts",
+  "e2e/guestbook-api.test.ts",
+  "e2e/ink-radio.test.ts",
+  "e2e/inkblot-api.test.ts",
+  "e2e/kintsugi-store.test.ts",
+  "e2e/music.test.ts",
+  "e2e/peeks.test.ts",
+  "e2e/postcard.test.ts",
+  "e2e/rbac.test.ts",
+];
+const HTTP_SET = new Set(HTTP_E2E);
 const SERVE_DB = process.argv[2] === "--serve-db" ? process.argv[3] : "";
+
+function isHttpE2e(file) {
+  const rel = path.relative(ROOT, path.resolve(ROOT, file)).replaceAll("\\", "/");
+  return HTTP_SET.has(rel);
+}
+
+const VALUE_FLAGS = new Set([
+  "--test-concurrency",
+  "--test-global-setup",
+  "--test-name-pattern",
+  "--test-reporter",
+  "--test-reporter-destination",
+  "--test-shard",
+  "--test-skip-pattern",
+  "--test-timeout",
+]);
+
+function splitHttpArgs(args) {
+  let sawTest = false;
+  const flags = [];
+  const patterns = [];
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === "--test") {
+      sawTest = true;
+    } else if (VALUE_FLAGS.has(arg) && i + 1 < args.length) {
+      flags.push(arg, args[++i]);
+    } else if (arg.startsWith("-")) {
+      flags.push(arg);
+    } else {
+      patterns.push(arg);
+    }
+  }
+  if (!sawTest || patterns.length === 0) return null;
+  const files = [];
+  const seen = new Set();
+  for (const pattern of patterns) {
+    const expanded = existsSync(path.resolve(ROOT, pattern))
+      ? [pattern]
+      : globSync(pattern, { cwd: ROOT })
+          .map((entry) => entry.replaceAll("\\", "/"))
+          .sort();
+    if (expanded.length === 0) expanded.push(pattern);
+    for (const file of expanded) {
+      if (!seen.has(file)) {
+        seen.add(file);
+        files.push(file);
+      }
+    }
+  }
+  return {
+    flags,
+    http: files.filter(isHttpE2e),
+    browser: files.filter((file) => !isHttpE2e(file)),
+  };
+}
 
 const run = (cmd, args, env = process.env) =>
   new Promise((resolve) => {
@@ -47,6 +117,34 @@ if (process.env.BASE_URL && !SERVE_DB) {
   if (!process.env.GHOSTS_FAKE_BASE || !process.env.GHOSTS_ENDPOINT) {
     console.error("Externally owned BASE_URL requires explicit GHOSTS_FAKE_BASE and GHOSTS_ENDPOINT; configure its Next server yourself.");
     process.exit(1);
+  }
+  if (process.env.E2E_SPLIT_HTTP === "1") {
+    const split = splitHttpArgs(ARGS);
+    if (split) {
+      if (split.http.length > 0) {
+        const httpStatus = await run(process.execPath, [
+          ...process.execArgv,
+          `--test-concurrency=${split.http.length}`,
+          ...ANNOTATE,
+          ...split.flags,
+          "--test",
+          ...split.http,
+        ]);
+        if (httpStatus !== 0) process.exit(httpStatus);
+      }
+      if (split.browser.length > 0) {
+        process.exit(
+          await run(process.execPath, [
+            ...process.execArgv,
+            ...SERIAL,
+            ...split.flags,
+            "--test",
+            ...split.browser,
+          ]),
+        );
+      }
+      process.exit(0);
+    }
   }
   process.exit(await run(process.execPath, SUITE));
 }

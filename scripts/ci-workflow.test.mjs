@@ -288,7 +288,8 @@ test("camera CI reuses only a successful production build and preserves camera f
   assert.ok(build >= 0 && camera > build, "production build precedes camera");
   // Both steps retain Actions' default success() gate and fail-closed behavior.
   const cameraStep = checks.slice(camera, checks.indexOf("      - ", camera + 1));
-  assert.doesNotMatch(cameraStep, /\n\s*(if|continue-on-error):/);
+  assert.doesNotMatch(cameraStep, /\n\s*continue-on-error:|\n\s*if:.*(?:always|failure|cancelled)\(/);
+  assert.match(cameraStep, /\n\s*if: steps\.browser\.outputs\.browser == 'true'\n/);
   assert.doesNotMatch(checks.slice(build, camera), /continue-on-error:|if:.*always\(/);
   const buildCommand = checks.slice(build).split("\n")[0].replace("- run: ", "");
   for (const [buildStatus, cameraStatus] of [[0, 0], [0, 7], [17, 0]]) {

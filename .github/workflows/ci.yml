@@ -104,6 +104,9 @@ jobs:
         with:
           node-version-file: package.json
           cache: npm
+      - name: Decide whether browser coverage is required
+        id: browser
+        run: node scripts/ci-browser-gate.mjs
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
@@ -141,6 +144,7 @@ jobs:
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - name: Real CPU camera and privacy verifier
         timeout-minutes: 5
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true; exit "$status"' EXIT
@@ -158,6 +162,7 @@ jobs:
           path: ${{ runner.temp }}/app-build.json
           if-no-files-found: error
       - name: Start local ghost fake
+        if: steps.browser.outputs.browser == 'true'
         run: |
           node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/ghosts-fake.mjs --port 8788 --origins "$BASE_URL" >"$RUNNER_TEMP/ghosts-fake.log" 2>&1 &
           echo "$!" >"$RUNNER_TEMP/ghosts-fake.pid"
@@ -165,6 +170,9 @@ jobs:
       # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
       - name: E2E against next start
         timeout-minutes: 32
+        if: steps.browser.outputs.browser == 'true'
+        env:
+          E2E_SPLIT_HTTP: "1"
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "E2E against next start" "$status" "$RUNNER_TEMP/e2e.log" || true; exit "$status"' EXIT
@@ -178,6 +186,7 @@ jobs:
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
       - name: Motion probe, signed in
         timeout-minutes: 8
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log" || true; exit "$status"' EXIT
@@ -193,6 +202,7 @@ jobs:
           exit "$status"
       - name: Footer walk
         timeout-minutes: 8
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log" || true; exit "$status"' EXIT
@@ -207,6 +217,7 @@ jobs:
           exit "$status"
       - name: Footer Chromium probe
         timeout-minutes: 8
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true; exit "$status"' EXIT
@@ -315,10 +326,14 @@ jobs:
       group: otohime-production-main
       cancel-in-progress: false
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
     # Setup + pull + build + migrate take about 2 minutes (run 40311256064: pull 13 s, build 31 s, migrate 3 s);
+    # production-ship-decision bounds its descendant check wait at 8 minutes (SHIP_WAIT_SECONDS=480),
     # the deploy script bounds the upload at 5 and readiness at 7, and the terminal/press e2e after it takes
     # about 2 (107 s against otohime.dev), so this is only a backstop.
-    timeout-minutes: 18
+    timeout-minutes: 26
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
@@ -339,33 +354,46 @@ jobs:
         with:
           node-version-file: package.json
           cache: npm
+      - name: Decide whether this commit ships to production
+        id: ship
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/production-ship-decision.mjs
       - run: npm ci
+        if: steps.ship.outputs.ship == 'true'
       - run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel pull --yes --environment=production
+        if: steps.ship.outputs.ship == 'true'
       - name: Refresh public stamp ledger
+        if: steps.ship.outputs.ship == 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/ledger-fetch.mjs
       # Build before migrating: a failed build never leaves prod migrated ahead of its code.
       - name: Build production bundle with strict changelog history
+        if: steps.ship.outputs.ship == 'true'
         run: |
           npm run history:index -- --strict --rev="$GITHUB_SHA"
           npm run history:check -- --strict --rev="$GITHUB_SHA"
           npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod
           npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run db:migrate
+        if: steps.ship.outputs.ship == 'true'
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL_UNPOOLED }}
       # Upload with --no-wait (5 min bound), wait for ready (7 min bound), then require /api/health to
       # report this commit; a hang ends in a public ::error with the deployment state instead of a timeout.
       - name: Deploy and verify the served sha
-        # Upload 5 + ready 7 is the deploy's own budget; the job's 18 also covers the verify step below.
+        if: steps.ship.outputs.ship == 'true'
+        # Upload 5 + ready 7 is the deploy's own budget; the job's 26 also covers ship wait and verify below.
         timeout-minutes: 12
         run: bash scripts/vercel-deploy.sh
       # The live site must serve this commit and pass the terminal, press and postcard HTTP/browser flows.
       # These tests run read-only against https://otohime.dev with the runner's Google Chrome.
       - name: Verify the deployed sha, terminal, press and postcards
+        if: steps.ship.outputs.ship == 'true'
         run: EXPECT_SHA="$GITHUB_SHA" bash scripts/verify-deploy.sh https://otohime.dev
       - name: Verify deployed palace changelog history
+        if: steps.ship.outputs.ship == 'true'
         run: EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-history.sh https://otohime.dev
 
   cleanup:
