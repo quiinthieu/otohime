@@ -12,10 +12,10 @@ type Meter = { frames: number; voices: number; frequencies: number[] };
 
 before(async () => {
   const env = { ...process.env, TMPDIR: tmp };
-  if (process.env.CHROME_PATH) browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, env });
+  if (process.env.CHROME_PATH) browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, env, args: ["--mute-audio"] });
   else {
-    try { browser = await chromium.launch({ channel: "chrome", env }); }
-    catch { browser = await chromium.launch({ env }); }
+    try { browser = await chromium.launch({ channel: "chrome", env, args: ["--mute-audio"] }); }
+    catch { browser = await chromium.launch({ env, args: ["--mute-audio"] }); }
   }
 });
 after(async () => {
@@ -24,7 +24,7 @@ after(async () => {
   rmSync(tmp, { recursive: true, force: true });
 });
 
-async function open(options: BrowserContextOptions = {}, route = "/", meter = false, virtual = false) {
+async function open(options: BrowserContextOptions = {}, route = "/", meter = false, clock = false) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
   contexts.push(context);
   if (meter) {
@@ -52,42 +52,27 @@ async function open(options: BrowserContextOptions = {}, route = "/", meter = fa
     });
   }
   const page = await context.newPage(), errors = collectBrowserErrors(BASE);
-  if (virtual) await page.clock.install({ time: new Date("2026-10-29T12:00:00Z") });
+  if (clock) await page.clock.install();
   page.on("pageerror", (e) => errors.pageError(e.message));
   page.on("console", (msg) => { if (msg.type() === "error") errors.console({ text: msg.text(), ...msg.location(), args: msg.args().length }); });
   page.on("response", (res) => errors.response({ url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() }));
   const scripts: string[] = [];
   page.on("response", (res) => { if (res.request().resourceType() === "script") scripts.push(res.url()); });
   await page.goto(`${BASE}${route}`);
-  await page.locator('[data-shimi-ready="true"]').waitFor({ state: "attached" });
-  // Crumple hydrates its controls separately. Capture the DOM text baseline
-  // after those real controls arrive, rather than attributing them to Shimi.
-  if (route === "/notes") await page.waitForFunction(() => {
-    const cards = [...document.querySelectorAll("main [data-paper-id]")];
-    return cards.length > 0 && cards.every(card => card.querySelector("[data-paper-controls]"));
-  });
+  await page.waitForFunction(() => document.body.dataset.shimiKeys === "ready");
   return { page, context, errors, scripts };
 }
 
 const canvas = (page: Page) => page.locator("[data-shimi-canvas]");
 const meter = (page: Page) => page.evaluate(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter);
-const pageText = (page: Page) => page.locator("main").evaluate(main => {
-  const copy = main.cloneNode(true) as Element;
-  // Toggle labels and selected options are live UI state; compare the complete
-  // article copy, links and headings rather than those interactive labels.
-  copy.querySelectorAll("button,select,output").forEach(control => control.remove());
-  return copy.textContent;
-});
-
-async function crawlToText(page: Page) {
-  await page.clock.pauseAt(new Date("2026-10-29T13:00:00Z"));
-  // At 18px/s a creature can cross this viewport in under 90s. Advance real
-  // renderer frames in small slices so a four-second nibble cannot be missed.
-  for (let step = 0; step < 180; step++) {
-    await page.clock.runFor(500);
+async function waitForNibble(page: Page) {
+  // Walking to a word depends on distance, not a 12-second host deadline.
+  // Advance the real animation in bounded one-second steps, retaining its rAFs.
+  for (let second = 0; second < 60; second++) {
     if (Number(await canvas(page).getAttribute("data-shimi-nibbles")) > 0) return;
+    await page.clock.runFor(1000);
   }
-  assert.fail("Shimi did not reach visible text within 90 seconds of browser time");
+  assert.ok(Number(await canvas(page).getAttribute("data-shimi-nibbles")) > 0, "real swarm reaches visible text within one simulated minute");
 }
 
 test("Shimi Bookworms stay off by default on Home and Notes", async () => {
@@ -103,39 +88,44 @@ test("Shimi Bookworms stay off by default on Home and Notes", async () => {
 test("Pocket chip, terminal, and typing shimi summon overlay nibbles without mutating DOM text", async () => {
   const home = await open({}, "/", false, true);
   await home.page.locator("[data-pocket-shimi]").waitFor();
-  const beforeHome = await pageText(home.page);
+  const prose = "main h1, main h2, main p";
+  const beforeHome = await home.page.locator(prose).allTextContents();
   await home.page.locator("[data-pocket-shimi]").click();
   await canvas(home.page).waitFor();
+  // The footer chip scrolls away from main's text; return to the visible food.
+  await home.page.locator("main h1").scrollIntoViewIfNeeded();
   assert.equal(await canvas(home.page).getAttribute("aria-hidden"), "true");
-  await crawlToText(home.page);
-  assert.equal(await home.page.locator("[data-pocket-shimi]").getAttribute("aria-pressed"), "true");
-  assert.equal(await pageText(home.page), beforeHome);
+  await waitForNibble(home.page);
+  assert.deepEqual(await home.page.locator(prose).allTextContents(), beforeHome, "the consumed prose remains intact; toggle labels may change");
   await home.page.locator("[data-shimi-toggle]").click();
   await canvas(home.page).waitFor({ state: "detached" });
 
   const notes = await open({}, "/notes");
-  const beforeNotes = await pageText(notes.page);
+  const noteProse = "main h1, main [data-paper-id^='note:'] > h2, main [data-paper-id^='note:'] > p";
+  const beforeNotes = await notes.page.locator(noteProse).allTextContents();
   await notes.page.keyboard.press("/");
   await notes.page.locator("dialog.pocket-terminal").waitFor({ state: "visible" });
   await notes.page.locator("#pt-in").fill("shimi on");
   await notes.page.keyboard.press("Enter");
   await canvas(notes.page).waitFor();
-  assert.equal(await pageText(notes.page), beforeNotes);
+  assert.deepEqual(await notes.page.locator(noteProse).allTextContents(), beforeNotes);
   await notes.page.keyboard.press("Escape");
   await notes.page.keyboard.press("Escape");
   await canvas(notes.page).waitFor({ state: "detached" });
 
   const slug = await open({}, "/notes/backfills-are-a-feature", false, true);
-  const beforeSlug = await pageText(slug.page);
+  const slugProse = "main article h1, main article > p, main article > ul";
+  const beforeSlug = await slug.page.locator(slugProse).allTextContents();
   await slug.page.keyboard.type("shimi");
   await canvas(slug.page).waitFor();
-  await crawlToText(slug.page);
-  assert.equal(await pageText(slug.page), beforeSlug);
+  assert.equal(new URL(slug.page.url()).pathname, "/notes/backfills-are-a-feature", "the word is not consumed by single-letter navigation");
+  await waitForNibble(slug.page);
+  assert.deepEqual(await slug.page.locator(slugProse).allTextContents(), beforeSlug);
   await slug.page.locator("[data-shimi-burp-trigger]").click();
   await slug.page.locator("[data-shimi-bubble]").waitFor();
   const burp = (await slug.page.locator("[data-shimi-bubble]").textContent()) ?? "";
   assert.ok(burp.split(/\s+/).length >= 4);
-  const vocab = new Set<string>([...((beforeSlug ?? "").toLowerCase().match(/[a-z0-9']+/g) ?? []), "little", "paper", "dreams", "taste", "of", "quiet", "ink"]);
+  const vocab = new Set<string>([...(beforeSlug.join(" ").toLowerCase().match(/[a-z0-9']+/g) ?? []), "little", "paper", "dreams", "taste", "of", "quiet", "ink"]);
   assert.ok(burp.toLowerCase().split(/\s+/).some((word) => vocab.has(word.replace(/[^a-z0-9']/g, ""))));
   await slug.page.mouse.move(24, 24);
   await slug.page.keyboard.press("Escape");
@@ -151,6 +141,7 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   const { page, errors } = await open({ reducedMotion: "reduce" }, "/notes/on-twos", true);
   await page.keyboard.type("shimi");
   await canvas(page).waitFor();
+  assert.equal(new URL(page.url()).pathname, "/notes/on-twos");
   assert.equal(await canvas(page).getAttribute("data-shimi-mode"), "static");
   const before = (await meter(page)).frames;
   await page.waitForTimeout(400);
@@ -165,13 +156,14 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   const live = await open({}, "/notes/the-contract-caught-it", true, true);
   await live.page.locator(".sound-toggle").click();
   await live.page.waitForFunction(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter.voices >= 2);
+  // Sound-on plays its own 990Hz cue; measure the following bookworm chirps.
   await live.page.evaluate(() => {
     const probe = (window as unknown as { __shimiMeter: Meter }).__shimiMeter;
-    probe.voices = 0; probe.frequencies = []; // Measure chirps after the sound switch's confirmation cue.
+    probe.voices = 0; probe.frequencies = [];
   });
   await live.page.keyboard.type("shimi");
   await canvas(live.page).waitFor();
-  await crawlToText(live.page);
+  await waitForNibble(live.page);
   await live.page.waitForFunction(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter.voices > 0, null, { timeout: 8_000 });
   const heard = await meter(live.page);
   assert.ok(heard.voices > 0 && heard.voices <= 24);

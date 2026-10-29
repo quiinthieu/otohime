@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { shimiKeyStep } from "./pref.ts";
 import { getShimiEnabled, setShimiEnabled, useShimiEnabled } from "./pref-client.ts";
 
@@ -10,7 +10,6 @@ const ShimiCanvas = dynamic(() => import("./canvas"), { ssr: false });
 export function ShimiLoader() {
   const enabled = useShimiEnabled();
   const [ready, setReady] = useState(false);
-  const signal = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     let progress = 0;
@@ -30,9 +29,11 @@ export function ShimiLoader() {
       progress = next;
     };
     addEventListener("keydown", onKey, true);
-    const marker = signal.current;
-    marker?.setAttribute("data-shimi-ready", "true");
-    return () => { removeEventListener("keydown", onKey, true); marker?.setAttribute("data-shimi-ready", "false"); };
+    document.body.dataset.shimiKeys = "ready";
+    return () => {
+      removeEventListener("keydown", onKey, true);
+      delete document.body.dataset.shimiKeys;
+    };
   }, []);
 
   useEffect(() => {
@@ -46,5 +47,5 @@ export function ShimiLoader() {
     return () => window.clearTimeout(id);
   }, [enabled, ready]);
 
-  return <><span ref={signal} hidden aria-hidden="true" data-shimi-ready="false" />{ready && enabled ? <ShimiCanvas /> : null}</>;
+  return ready && enabled ? <ShimiCanvas /> : null;
 }

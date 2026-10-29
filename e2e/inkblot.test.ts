@@ -28,28 +28,29 @@ after(async () => {
   rmSync(tmp, { recursive: true, force: true });
 });
 
-async function open(options: BrowserContextOptions = {}, route = "/play/inkblot", allowValidation = false) {
+async function open(options: BrowserContextOptions = {}, route = "/play/inkblot", rejectInvalidAnswers = false) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
   contexts.push(context);
   const page = await context.newPage(), errors = collectBrowserErrors(BASE);
-  const validation = { responses: 0, consoles: 0 };
-  const endpoint = new URL("/api/inkblot/answers", BASE).href;
+  const answerEndpoint = new URL("/api/inkblot/answers", BASE).href;
+  const rejectedAnswers: string[] = [], rejectionConsole: string[] = [];
   page.on("pageerror", (e) => errors.pageError(e.message));
   page.on("console", (msg) => {
     if (msg.type() !== "error") return;
-    const value = { text: msg.text(), ...msg.location(), args: msg.args().length };
-    if (allowValidation && value.url === endpoint && value.args === 0 && value.lineNumber === 0 && value.columnNumber === 0 &&
-      /^Failed to load resource: the server responded with a status of 400 \((?:Bad Request)?\)$/.test(value.text)) validation.consoles++;
-    else errors.console(value);
+    const location = msg.location();
+    if (rejectInvalidAnswers && location.url === answerEndpoint && location.lineNumber === 0 && location.columnNumber === 0 && msg.args().length === 0 &&
+      /^Failed to load resource: the server responded with a status of 400 \((?:Bad Request)?\)$/.test(msg.text())) rejectionConsole.push(msg.text());
+    else errors.console({ text: msg.text(), ...location, args: msg.args().length });
   });
   page.on("response", (res) => {
-    const value = { url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() };
-    if (allowValidation && value.url === endpoint && value.status === 400 && value.method === "POST" && value.resourceType === "fetch") validation.responses++;
-    errors.response(value);
+    if (rejectInvalidAnswers && res.url() === answerEndpoint && res.status() === 400 && res.request().method() === "POST" && res.request().resourceType() === "fetch") {
+      rejectedAnswers.push(res.request().postDataJSON()?.note ?? "");
+    }
   });
+  page.on("response", (res) => errors.response({ url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() }));
   await page.goto(`${BASE}${route}`);
   if (new URL(route, BASE).pathname === "/play/inkblot") await page.getByTestId("inkblot-sheet").waitFor();
-  return { page, context, errors, validation };
+  return { page, context, errors, rejectedAnswers, rejectionConsole };
 }
 
 async function lobes(page: Page) {
@@ -120,7 +121,7 @@ test("pointer and keyboard drips fold into a symmetric blot; reduced motion skip
 });
 
 test("an observation shows a toy reading and pins a note; URLs and profanity are rejected", async () => {
-  const { page, errors, validation } = await open({}, "/play/inkblot?b=otohime7", true);
+  const { page, errors, rejectedAnswers, rejectionConsole } = await open({}, "/play/inkblot?b=otohime7", true);
   const approved = randomUUID();
   await pool.query(
     "insert into inkblot_answer(id,blot_key,name,note,status,tilt,hand) values($1,'otohime7','Ward clerk','a folded moth','approved',-2,1)",
@@ -140,22 +141,22 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     const reading = await page.getByTestId("inkblot-reading").innerText();
     assert.match(reading, /lantern/i);
     assert.ok(reading.includes(INKBLOT_DISCLAIMER));
-    await page.waitForFunction(() => document.querySelector('[data-testid="inkblot-gallery"]')?.textContent?.includes("Pinned · awaiting the doctor's initials"));
-    assert.match((await page.getByTestId("inkblot-gallery").textContent()) ?? "", /Pinned · awaiting the doctor's initials/);
+    await page.getByTestId("inkblot-gallery").getByText("Pinned · awaiting the doctor's initials", { exact: true }).waitFor();
+    assert.match(await page.getByTestId("inkblot-gallery").textContent() ?? "", /Pinned · awaiting the doctor's initials/);
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a lantern in the crease/);
     const pending = await pool.query("select status, note from inkblot_answer where note='a lantern in the crease' order by created_at desc limit 1");
     assert.equal(pending.rows[0].status, "pending");
     const before = Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n);
     await page.locator("#inkblot-note").fill("https://spam.example");
     await page.getByTestId("inkblot-submit-btn").click();
-    await page.waitForFunction(() => /link|ward/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
+    await page.waitForFunction(() => /link/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
     assert.match(await page.getByTestId("inkblot-status").innerText(), /link|Links|ward/i);
     await page.locator("#inkblot-note").fill("this is shit");
     await page.getByTestId("inkblot-submit-btn").click();
     await page.waitForFunction(() => /kinder/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
+    assert.deepEqual(rejectedAnswers, ["https://spam.example", "this is shit"]);
+    assert.equal(rejectionConsole.length, rejectedAnswers.length, "each intentional 400 is paired with its real POST response");
     assert.equal(Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n), before + 0);
-    assert.equal(validation.responses, 2, "both negative forms reach the real validation endpoint and return HTTP 400");
-    assert.ok(validation.consoles <= validation.responses, "each exempted browser resource error has matching URL, status and POST response evidence");
   } finally {
     await pool.query("delete from inkblot_answer where id=$1 or note in ('a lantern in the crease','https://spam.example','this is shit')", [approved]);
   }

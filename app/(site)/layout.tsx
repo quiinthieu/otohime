@@ -6,6 +6,7 @@ import { PressSound } from "@/components/press-sound";
 import { SeasonLayer } from "@/components/season-layer";
 import { UrashimaKeys } from "@/components/urashima-keys";
 import { KameLoader } from "@/components/kame/loader";
+import { ShimiLoader } from "@/shimi/loader";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
 import { pondPrintScript } from "@/lib/pond-print";
@@ -15,6 +16,7 @@ import "./seasons.css";
 import "./letterpress.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
+import { KintsugiMotion } from "@/components/kintsugi-card";
 
 export const metadata: Metadata = {
   // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
@@ -66,12 +68,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SeasonLayer />
         {/* The letterpress keys' press cue (components/press-sound.tsx): one document listener for every page. */}
         <PressSound />
+        <KintsugiMotion />
         {/* "/" or Cmd/Ctrl-K opens the Pocket Terminal (components/pocket-terminal.tsx, its own chunk). Ahead of the
            pages, so its capture-phase key listener is added before the handheld's and can stop keys while open. */}
         <PocketTerminalLoader />
         {/* Typing "urashima" goes down to Ryugu-jo (components/urashima-keys.tsx). Also ahead of the pages: its capture
            listener takes the word's a's before the Pocket console can open a page with them. */}
         <UrashimaKeys />
+        {/* Recognize the word before the handheld consumes its single-letter keys. */}
+        <ShimiLoader />
         {children}
         {/* Overlays follow route content and wait for each paper host's React commit. */}
         <Suspense fallback={null}><KameLoader /></Suspense>

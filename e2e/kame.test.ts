@@ -359,7 +359,12 @@ test("an early load and 46s clock jump cannot mutate the still-unhydrated projec
   t.after(() => assert.deepEqual(errors, [], "no browser exceptions, including hydration errors"));
   let release!: () => void;
   const released = new Promise<void>(resolve => { release = resolve; });
-  t.after(async () => { release(); await context.close(); });
+  t.after(async () => {
+    release();
+    // Drain real chunk requests before disposing their request context.
+    await page.unrouteAll({ behavior: "wait" });
+    await context.close();
+  });
   let held = 0;
   await page.route("**/_next/static/chunks/*.js", async route => {
     const response = await route.fetch();

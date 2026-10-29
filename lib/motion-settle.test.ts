@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { launchBrowser } from "../scripts/probe-browser.mjs";
-import { streamedLandingSettled } from "../scripts/probe-motion-dom.mjs";
+import { landingSettled as streamedLandingSettled } from "../scripts/probe-motion-state.mjs";
 
 test("landing waits for finite timed entries and streamed reveals, while scroll progress remains interactive", async () => {
   const browser = await launchBrowser({ log: () => {} });
