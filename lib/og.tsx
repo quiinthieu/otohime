@@ -171,7 +171,7 @@ export function postcardCard({ postcard, sketch, image }: { postcard: Postcard; 
             display: "flex",
             flex: 1,
             // Leave room for the widest letters and emoji, including notes without spaces.
-            fontSize: postcard.note.length > 60 ? 24 : 36,
+            fontSize: postcard.note.length > 50 ? 22 : 36,
             lineHeight: 1.35,
             wordBreak: "break-word",
             marginTop: 8,

@@ -90,7 +90,7 @@ for (const width of [1280, 390]) {
         if (margin[i] < 150 && margin[i + 1] < 150 && margin[i + 2] < 150) escapedInk++;
       }
       assert.equal(escapedInk, 0, "the note stays inside the exported postcard");
-      for (const note of ["W".repeat(90), "🌊".repeat(60)]) {
+      for (const note of ["W".repeat(50), "W".repeat(90), "🌊".repeat(60), "🌊".repeat(NOTE_MAX), "海".repeat(NOTE_MAX)]) {
         const { view: boundedView } = await stamp(page, note);
         const image = new URL(boundedView, BASE);
         image.pathname = "/postcard/image";
