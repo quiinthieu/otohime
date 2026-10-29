@@ -128,6 +128,7 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
   try {
     await page.reload();
     await page.getByTestId("inkblot-gallery").waitFor();
+    await page.getByTestId("inkblot-gallery").getByText("a folded moth", { exact: true }).waitFor();
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a folded moth/);
     await page.locator("#inkblot-note").fill("a lantern in the crease");
     await page.locator("#inkblot-name").fill("Ink");
