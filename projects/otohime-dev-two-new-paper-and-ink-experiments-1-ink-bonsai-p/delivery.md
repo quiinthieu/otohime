@@ -48,3 +48,12 @@ timeline. A real-browser regression reproduces the old failure and retains
 negative controls for running/paused clock animations, unresolved Suspense,
 React transitions and unfinished page hops. All 78 affected CI/motion guard
 tests pass locally; the four formerly failing Work/Projects cases also pass.
+
+After integrating concurrent main releases, run 40838054209 reached Senko after
+286 browser tests and was killed at the existing 1,200-second suite limit. It
+also recorded an intermittent Pachinko drain timeout. That file retained prior
+tests' pages and continuous canvas loops until file teardown; it now closes its
+contexts after each test. All six Pachinko browser cases pass locally with the
+original 12-second drain bounds. The expanded serial suite has a 1,500-second
+bound, a 27-minute step and 40-minute job; the workflow regression checks those
+bounds and retains failure-status propagation and process cleanup.

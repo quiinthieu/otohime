@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
-import { after, before, test } from "node:test";
+import { after, afterEach, before, test } from "node:test";
 import {
   chromium,
   type Browser,
@@ -75,6 +75,12 @@ after(async () => {
   for (const c of contexts) await c.close();
   await browser?.close();
   rmSync(tmp, { recursive: true, force: true });
+});
+
+// Each machine owns a continuous canvas/physics loop. Dispose completed tests'
+// pages before the next test so old machines cannot starve its drain clock.
+afterEach(async () => {
+  for (const context of contexts.splice(0)) await context.close();
 });
 
 interface OpenPachinkoOptions extends BrowserContextOptions {
