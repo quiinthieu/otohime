@@ -14,6 +14,7 @@
 // the next page in, read once a frame from getAnimations(); under reduced motion each completes and nothing runs.
 import pg from "pg";
 import { launchBrowser } from "./probe-browser.mjs";
+import { streamedLandingSettled } from "./probe-motion-dom.mjs";
 
 const BASE_URL = process.env.BASE_URL;
 const RUN = process.env.PROBE_RUN;
@@ -132,14 +133,7 @@ async function open(browser, { viewport, reduced, cookies = [] }) {
 async function settle(page) {
   const settled = await page
     .waitForFunction(
-      () =>
-        window.__probe?.done === true &&
-        !document.querySelector('template[id^="B:"]') &&
-        !document.__reactViewTransition &&
-        document
-          .getAnimations()
-          .filter((a) => a.effect?.getComputedTiming().endTime !== Infinity)
-          .every((a) => a.playState === "finished" || a.playState === "idle"),
+      streamedLandingSettled,
       null,
       { timeout: 10_000 },
     )
