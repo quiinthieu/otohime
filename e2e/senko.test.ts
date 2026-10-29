@@ -69,6 +69,8 @@ for (const width of [1280, 390]) test(`/play discovers Senko at ${width}px; real
   const link = page.getByTestId("play-senko-link");
   assert.equal(await link.getAttribute("href"), "/play/senko");
   await link.click(); await page.waitForURL("**/play/senko"); await ready(page);
+  // Next can paint the island before its navigation updates the document head.
+  await page.waitForFunction(() => /Senko Hanabi/.test(document.title));
   assert.match(await page.title(), /Senko Hanabi/);
   assert.equal(await page.getByTestId("senko-sound-toggle").getAttribute("aria-pressed"), "false");
   assert.equal(await page.getByTestId("senko-status").getAttribute("aria-live"), "polite");

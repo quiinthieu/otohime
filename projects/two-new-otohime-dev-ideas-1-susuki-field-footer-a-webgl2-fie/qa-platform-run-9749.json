@@ -1,0 +1,266 @@
+{
+  "gate": {
+    "id": "ver-3876",
+    "plan_id": "pm-299",
+    "task_id": "t-1766",
+    "run_id": "run-9739",
+    "gate": "green",
+    "git_sha": "ec7e171",
+    "status": "pass",
+    "items": [
+      {
+        "name": "susuki-and-footer-e2e",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/susuki.test.ts' 'e2e/bottle-ui.test.ts' && git checkout -- content/history.json",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 51882
+      },
+      {
+        "name": "footer-walk-and-unit",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint && TMPDIR=/tmp node scripts/check-gate-closure.mjs",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 78473
+      }
+    ],
+    "created_at": "2026-10-29T04:29:37.703615Z"
+  },
+  "plan_run_count": 23,
+  "task_runs": [
+    {
+      "run_id": "run-9680",
+      "task_manager_id": "fbb7f72b-ce67-4d63-84e5-e655041a6288",
+      "status": "succeeded",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0,
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "raw_line_count": 29,
+      "truncation": null,
+      "terminal_evidence": [
+        "RESULT: red_gate_already_green \u2014 every verification item passes before any change; agent CLI not started"
+      ]
+    },
+    {
+      "run_id": "run-9686",
+      "task_manager_id": "004a2771-a897-49b1-bd66-ac55b71ff32d",
+      "status": "failed",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0,
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "raw_line_count": 1060,
+      "truncation": "[truncated 2942 earlier log lines; use StreamTaskLogs for the full log]",
+      "terminal_evidence": [
+        "Command exited with code: 0",
+        "push_not_on_main: HEAD 3726e97953168205b9df128ddb57bc8fdf39682d is not on origin/main (1 commit(s) since 2cc4b041a506d36bcf264c10b6f46fdcebacfb71); cutting task-rescue/004a2771-a897-49b1-bd66-ac55b71ff32d"
+      ]
+    },
+    {
+      "run_id": "run-9696",
+      "task_manager_id": "2a5f2cec-80b1-4b1e-88ee-a2c01c5191f9",
+      "status": "failed",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0,
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "raw_line_count": 940,
+      "truncation": "[truncated 3062 earlier log lines; use StreamTaskLogs for the full log]",
+      "terminal_evidence": [
+        "Command exited with code: 0",
+        "push_not_on_main: HEAD f3635e573b485683a75d65542af567dfdaa05d8b is not on origin/main (6 commit(s) since 573b70e9de539096f3f9e296fe075307b3fe288f); cutting task-rescue/2a5f2cec-80b1-4b1e-88ee-a2c01c5191f9"
+      ]
+    },
+    {
+      "run_id": "run-9726",
+      "task_manager_id": "e3050401-3675-4cbe-a2de-88c807a38c56",
+      "status": "succeeded",
+      "sha": "ec7e171",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0,
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "raw_line_count": 1009,
+      "truncation": "[truncated 2993 earlier log lines; use StreamTaskLogs for the full log]",
+      "terminal_evidence": [
+        "Command exited with code: 0"
+      ]
+    },
+    {
+      "run_id": "run-9739",
+      "task_manager_id": "e3c4e495-167a-4567-94ac-b4e7eb407873",
+      "status": "succeeded",
+      "sha": "ec7e171",
+      "callback_apply_failures": 0,
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "raw_line_count": 45,
+      "truncation": null,
+      "terminal_evidence": [
+        "HEAD is now at ec7e171 pm-299/t-1766: fix: Synchronize footer browser interactions",
+        "progress phase=verify"
+      ]
+    },
+    {
+      "run_id": "run-9742",
+      "task_manager_id": "7eaf54fa-0f85-45a6-b7fb-26510862d554",
+      "status": "failed",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0,
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "raw_line_count": 780,
+      "truncation": "[truncated 3222 earlier log lines; use StreamTaskLogs for the full log]",
+      "terminal_evidence": [
+        "Command exited with code: 0",
+        "push_not_on_main: HEAD bcd013a8d0c7f80c097e6e646a90d54ae621850b is not on origin/main (1 commit(s) since 1e382390cfd1db4a589c2b3cc92f4016bfc8cec1); cutting task-rescue/7eaf54fa-0f85-45a6-b7fb-26510862d554"
+      ]
+    },
+    {
+      "run_id": "run-9749",
+      "task_manager_id": "c13923dc-6700-485b-8697-9ddc3db6e761",
+      "status": "running",
+      "profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0,
+      "raw_line_count": 0,
+      "truncation": null,
+      "terminal_evidence": []
+    }
+  ],
+  "history_scan": [
+    {
+      "status": "FAILED",
+      "total": 142,
+      "pages": [
+        {
+          "offset": 0,
+          "count": 20
+        },
+        {
+          "offset": 20,
+          "count": 20
+        }
+      ],
+      "limit": 20
+    },
+    {
+      "status": "COMPLETED",
+      "total": 995,
+      "pages": [
+        {
+          "offset": 0,
+          "count": 20
+        },
+        {
+          "offset": 20,
+          "count": 20
+        }
+      ],
+      "limit": 20
+    },
+    {
+      "status": "PENDING",
+      "total": 0,
+      "pages": [
+        {
+          "offset": 0,
+          "count": 0
+        }
+      ],
+      "limit": 20
+    },
+    {
+      "status": "RUNNING",
+      "total": 5,
+      "pages": [
+        {
+          "offset": 0,
+          "count": 5
+        }
+      ],
+      "limit": 20
+    }
+  ],
+  "author_artifact": {
+    "task_id": "e3050401-3675-4cbe-a2de-88c807a38c56",
+    "name": "author.txt",
+    "size": 44,
+    "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+    "canonical_expected_bytes": "Otohime quiinthieu@gmail.com\ntrailers: none\n",
+    "digest_matches": true,
+    "direct_download": "403 insufficient privileges; raw downloaded bytes not claimed",
+    "collector_source": {
+      "repo": "mono-v2",
+      "sha": "f1c5b0f22df35ea818a9a8d4f095f6d1d117bc04",
+      "path": "servers/task-manager/scripts/run-agent.sh",
+      "line": 533
+    }
+  },
+  "native_ci": {
+    "failed": [
+      {
+        "run": 40817421327,
+        "job": 123261664083,
+        "sha": "ec7e171e1ae5fc68e0a68e133ded9ea145c611a6",
+        "exit_code": 124,
+        "assertions": [
+          "e2e/kame.test.ts:186: Enable Kame companion timeout",
+          "e2e/kame-fetch.test.ts:184: Enable paper corners timeout",
+          "e2e/peep-box.test.ts:647: #press-heading timeout"
+        ],
+        "tail_limit_lines": 80
+      },
+      {
+        "run": 40817663407,
+        "job": 123262439242,
+        "sha": "1e382390cfd1db4a589c2b3cc92f4016bfc8cec1",
+        "exit_code": 124,
+        "assertions": [
+          "e2e/peep-box.test.ts:647: #press-heading timeout"
+        ],
+        "tail_limit_lines": 80
+      }
+    ],
+    "last_preceding_green": {
+      "run": 40816776255,
+      "sha": "903e6b1d5a181892565576831cbcf505ac26a3fd",
+      "checks_job": 123259575831,
+      "production_job": 123267598842,
+      "status": "success"
+    },
+    "intervening_ci_configuration_git_log": [],
+    "scan": {
+      "unfiltered_ui_ids_read": 25,
+      "success_ui_ids_read": 10,
+      "api_pagination": "403 rate limit; incomplete"
+    }
+  },
+  "fingerprints": [
+    {
+      "ref": "ec7e171",
+      "sha": "ec7e171e1ae5fc68e0a68e133ded9ea145c611a6",
+      "fingerprint": "d469a1021086e1fe1d017447f2188fb56374d7767cfaf54e4429d321ab7a5737",
+      "files": "98304f5ec47ceeec2a2162aa1e170281e663622008e296be6ab5894931868b48  components/susuki-field.tsx\n42895c317484e21e67effc038156e2b3544c52387efa19f50c66e2455fd100a5  components/susuki-field-loader.tsx\n3357b9f2c9f43f306933df6ee715fb0994f7ace0fb2e79e3e15f862b2d24aff9  components/end-footer.tsx\n82ca02211317b13e29240b5243f521d85d9f6159a3b0dfe855582e0f10ca1d36  lib/susuki.ts\nb5f7552ff8cbbec5fe35fa9447383c441b861544b8530dcbbe433749250877f1  lib/ink-particles.ts\nc6a7a691c0ff19fdcc47a98b652cfca26d13bb6cb278ff336719dec8e54aef23  lib/seasons.ts\n5040fab6d88fbf54b1f48783eb99ba5f1127bca3f8a77f7caab6fe06d46c9c05  app/(site)/globals.css\n30e4d3141a60cc1edc78619ddd974bb80008349e9ba940cf917b5ea2bd2ee154  scripts/probe-end.mjs\n3817602240e172b574ebf2f210190867c62bfbaf0713d2ffc194267d7371a2cd  e2e/susuki.test.ts\n9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b  package-lock.json\n321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d  next.config.ts\n"
+    },
+    {
+      "ref": "HEAD",
+      "sha": "ce7f635652de107a44d2ee5e27f7377596d662cd",
+      "fingerprint": "d469a1021086e1fe1d017447f2188fb56374d7767cfaf54e4429d321ab7a5737",
+      "files": "98304f5ec47ceeec2a2162aa1e170281e663622008e296be6ab5894931868b48  components/susuki-field.tsx\n42895c317484e21e67effc038156e2b3544c52387efa19f50c66e2455fd100a5  components/susuki-field-loader.tsx\n3357b9f2c9f43f306933df6ee715fb0994f7ace0fb2e79e3e15f862b2d24aff9  components/end-footer.tsx\n82ca02211317b13e29240b5243f521d85d9f6159a3b0dfe855582e0f10ca1d36  lib/susuki.ts\nb5f7552ff8cbbec5fe35fa9447383c441b861544b8530dcbbe433749250877f1  lib/ink-particles.ts\nc6a7a691c0ff19fdcc47a98b652cfca26d13bb6cb278ff336719dec8e54aef23  lib/seasons.ts\n5040fab6d88fbf54b1f48783eb99ba5f1127bca3f8a77f7caab6fe06d46c9c05  app/(site)/globals.css\n30e4d3141a60cc1edc78619ddd974bb80008349e9ba940cf917b5ea2bd2ee154  scripts/probe-end.mjs\n3817602240e172b574ebf2f210190867c62bfbaf0713d2ffc194267d7371a2cd  e2e/susuki.test.ts\n9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b  package-lock.json\n321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d  next.config.ts\n"
+    }
+  ],
+  "final_local_build_id": "q1w_VsKLpzw3TqhRv7ZA2",
+  "field_artifact_sha256": "5ca02dfa389bb4c1055229019d254b2dc447eff5ad2dd7e5735319091ec1ff16",
+  "evidence_compiled_at": "2026-10-29T05:03:25.621495+00:00",
+  "history_snapshot": "bounded snapshot during this run, not a terminal platform-wide census"
+}

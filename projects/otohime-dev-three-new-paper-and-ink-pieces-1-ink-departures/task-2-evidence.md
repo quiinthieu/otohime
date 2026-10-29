@@ -71,3 +71,40 @@ All four local E2E attempts are accounted for: 4/7, 6/7, 7/7, 7/7. Raw failure t
 Repository rules and installed Next guides were read. The named extraction/software-development documents are absent. The unrelated pre-existing `content/history.json` edit was backed up before the build and restored byte-for-byte, rather than discarded by the contract's generic checkout cleanup. It is excluded from this commit. Owner identity check passes. Decisions and lessons are recorded in plan-manager.
 
 Execution is demonstrated locally. Source integration is handed off by pushing this commit to the task branch and main. No capacity/operator deferral or known remaining local defect. CI, green gate, deployed independent QA and production product delivery are unproven here and owned by plan-manager for `pm-301/t-1786`; any failing job or deployed acceptance failure returns the task. This run stops after the push and summary without pipeline watching.
+
+
+## Title readiness repair — run-9754 (2026-10-29)
+
+Fix plan: `fix_plan_run-9741.md`, reports `rep-5817` / `rep-5818`. The existing sparkler is already implemented. This repair adds an observable `document.title` predicate before the existing `/Senko Hanabi/` assertion in both 1280px and 390px navigation tests. URL and canvas readiness can precede the document head update. No sleep, assertion removal, application change, CI change or dependency change is needed.
+
+Branch: `pm-301-t-1786-title-race-run-9754`, created from freshly fetched main `f54f160a9e40284090f0332c2f5dca55d147ecfd`. Delivery is the enclosing commit; see [commits.txt](run-9754/artifacts/commits.txt) and the immutable SHA in the submitted summary. The repository was initially clean. Generated `content/history.json` is restored by the contract command and excluded from delivery.
+
+Actual run record: profile `codex-sol-6-1-high`, model `gpt-6.1-sol`, effort `high`, runner `fleet`, worker `avietidol-z490`, task-manager id `8f916deb-fa59-476f-8bb9-5ee2b9359698`. Environment: Linux x86_64, Node `v22.23.3`, npm `10.9.9`. Fresh `npm ci` installed the existing lock. Next `16.4.2`, React `19.3.0`, Playwright Core `1.64.0`. Lock SHA-256 remains `9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b`.
+
+The [current fingerprint](run-9754/artifacts/executable-fingerprint.json) covers the original 14 paths plus `scripts/e2e.mjs` and `package.json`; combined SHA-256 `eec472456fc7e8c993091f58d623d7a670a4265a6fbcec0631fadb8ea80ed2a2` (SHA-256 of sorted compact JSON file-hash map). Of the original 14 files, only `e2e/senko.test.ts` differs from the original delivery manifest; all application, model, sound, configuration and lock bytes match. Production-build IDs: `yt5rmH4m-MtNZYHbb65ug` (first successful build) and `Tg7MGSO1ONEkNkLPvUk5g` (repeat).
+
+### Verification and boundaries
+
+Required commands ran from the repository root, with `TMPDIR=/tmp`:
+
+```sh
+(test -d node_modules || npm ci) && TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/senko.test.ts' && git checkout -- content/history.json
+TMPDIR=/tmp npm test
+npm run typecheck
+npm run lint
+TMPDIR=/tmp node scripts/check-gate-closure.mjs
+```
+
+All three local E2E attempts are accounted for: attempt 1 exited 1 before browser execution because the fresh Next build reported eight Caveat font import-map errors (`next/font/google queries have exactly one entry`); the raw error output was inspected. No application/configuration/lock change was made for that failure. Attempts 2 and 3 each rebuilt from scratch and passed all 7 tests, with zero failures/cancellations/skips, exit 0. Durations: 50,998.484772ms and 39419.862681ms. Both desktop/mobile title predicates passed on each successful attempt. This bounded repetition supports the readiness repair; it does not assert that every possible scheduling race is impossible.
+
+Repository tests: 2,792 passed, zero failed/cancelled/skipped, exit 0. Typecheck: exit 0. Lint: exit 0, 13 existing warnings, zero errors. Gate closure: exit 0, `certified=true`, `preflight.ok=true`, `local_controls=pass`, no failures; fingerprint `505721db5c609c5fc7e17a9268c5eb8400e7ab30e2e06596e39b5b58da065ad0`. Locked imports of Playwright, pg, embedded-postgres and linux-x64 binary package passed; actual Postgres/initdb/pg_ctl binaries ran. Each successful E2E attempt constructed/migrated real Postgres, built and served Next, then exercised real Chrome Canvas/Web Audio and the Satori PNG route. No external sparkler asset/model is required.
+
+Negative controls remain intact: pointer shake/Jolt drop the bead and stop the loop; muted active sessions produce zero audio contexts/voices; remuting stops future voices; hidden/blur events stop actual draws and elapsed progression; calm mode suppresses accidental shaking while deliberate Jolt still drops. Selected tests control elapsed time and inject lifecycle inputs; audio instrumentation wraps real constructors, and unrelated Ghosts backend remains the runner's fake. These are SWE local integration checks, not independent deployed QA.
+
+### History and handoff
+
+Bounded task-manager history snapshot: FAILED offsets 0 and 10, 10 rows each of 162 total (142 unread); COMPLETED offsets 0 and 10, 10 each of 1,127 total (1,107 unread); RUNNING 5/5 and PENDING 2/2. Global history is incomplete. Available raw tails for `8a0ce780-20f1-44a3-83f1-9dcaa57ab43a` and `f06bc62d-4150-4c31-9f65-b224c1ad968d` were read. The former ends with the main-publication guard failure for `75e318e`; its callback is delivered and persisted `run-9736.status=failed`, `callback_apply_failures=0`. The latter ends with successful agent execution/publication, yet its delivered callback persists `run-9741.status=succeeded` alongside failing QA reports `rep-5813`, `rep-5815`, `rep-5817`; callback application failures are zero. Completed agent execution does not imply successful QA. The earlier raw empty-title assertion lies outside the available tail, so its details are attributed to the committed QA report. Unread historical output remains inconclusive. No durable Senko runtime queue or ingestion callback applies to this browser feature.
+
+The absent extraction/software-development documents were checked; `AGENTS.md` and installed Next testing/navigation guides were read. No codebase knowledge graph tool was available. Decisions and lessons are recorded in plan-manager. Owner identity check passes.
+
+Source publication to branch and main is authorized. Local execution is demonstrated; current CI, integration deployment and production product delivery are unobserved. No capacity/operator prerequisite is pending. Deferred checks `pm-301/t-1786/CI-green-gate` and `pm-301/t-1786/deployed-QA` belong to plan-manager/repository CI: fail on any required check failure, loss of delivery ancestry, non-200/missing discovery link, title failure, or desktop/audio/lifecycle/negative-control interaction failure. The SWE stop-at-push contract overrides the fix plan's live QA request; no pipeline watching or deployed-system probe is performed in this run.

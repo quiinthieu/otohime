@@ -96,7 +96,7 @@ test("blocked storage and live reduced motion keep instant keyboard operations u
 test("Save-Data loads paper only after explicit enabling",async()=>{
   const context=await browser.newContext();
   try {
-    await context.addInitScript(()=>Object.defineProperty(navigator,'connection',{value:{saveData:true}}));
+    await context.addInitScript(()=>Object.defineProperty(navigator,'connection',{value:Object.assign(new EventTarget(),{saveData:true})}));
     const page=await context.newPage(); const imports=paperImports(page);
     await page.goto(`${BASE}/projects`);
     await page.getByRole('button',{name:'Enable paper corners'}).waitFor();

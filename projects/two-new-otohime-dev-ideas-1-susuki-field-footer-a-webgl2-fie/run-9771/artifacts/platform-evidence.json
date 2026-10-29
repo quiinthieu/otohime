@@ -1,0 +1,268 @@
+{
+  "run": "run-9771",
+  "task": "t-1768",
+  "observed_at": "2026-10-29T05:40:08.710Z",
+  "scope": "Bounded plan-manager native job history; not an exhaustive remote runtime audit. No executable changed or runtime job submitted.",
+  "history": [
+    {
+      "status": "FAILED",
+      "pages": [
+        {
+          "offset": 0,
+          "limit": 20,
+          "returned": 20,
+          "total": 165,
+          "relevant": [
+            {
+              "id": "2ed62246-e998-48f1-9817-4df5bfd7a59a",
+              "status": "FAILED",
+              "run_id": "run-9768",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 233a5331f0ae is not on origin/main",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "272cf1b8-fa52-481a-97f7-7835c0612476",
+              "status": "FAILED",
+              "run_id": "run-9759",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD ed7ae6f5668b is not on origin/main",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "7eaf54fa-0f85-45a6-b7fb-26510862d554",
+              "status": "FAILED",
+              "run_id": "run-9742",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD bcd013a8d0c7 is not on origin/main",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "586af897-2a4e-42d4-a32e-1def4b153755",
+              "status": "FAILED",
+              "run_id": "run-9732",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3709f2e4f907 is not on origin/main",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "2a5f2cec-80b1-4b1e-88ee-a2c01c5191f9",
+              "status": "FAILED",
+              "run_id": "run-9696",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f3635e573b48 is not on origin/main",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "f9c89481-dfdb-4ce2-81f2-c95f688644c5",
+              "status": "FAILED",
+              "run_id": "run-9683",
+              "error": "agent_failed: exit 1 class=push_failed marker=- [iss-162 · other · ×63] task-manager coding_task failures: agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on orig",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "004a2771-a897-49b1-bd66-ac55b71ff32d",
+              "status": "FAILED",
+              "run_id": "run-9686",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3726e9795316 is not on origin/main",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "81d64689-85f0-4cb9-8317-67c4a5a76001",
+              "status": "FAILED",
+              "run_id": "run-9682",
+              "error": "agent_failed: exit 1 class=push_failed marker=- [iss-162 · other · ×63] task-manager coding_task failures: agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on orig",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+              "status": "FAILED",
+              "run_id": "run-9661",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 59d6abe76a56 is not on origin/main",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "cd4797bf-945e-4e7a-b6c2-3b9c984310ef",
+              "status": "FAILED",
+              "run_id": "run-9660",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD d606b9966966 is not on origin/main",
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            }
+          ]
+        },
+        {
+          "offset": 20,
+          "limit": 20,
+          "returned": 20,
+          "total": 165,
+          "relevant": []
+        }
+      ],
+      "complete": false
+    },
+    {
+      "status": "COMPLETED",
+      "pages": [
+        {
+          "offset": 0,
+          "limit": 20,
+          "returned": 20,
+          "total": 1145,
+          "relevant": [
+            {
+              "id": "028d1a0c-a1e3-4370-8631-c9c4e3c67694",
+              "status": "COMPLETED",
+              "run_id": "run-9767",
+              "error": null,
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "e738ae30-9a1f-40e0-b89d-2ae652fa225a",
+              "status": "COMPLETED",
+              "run_id": "run-9756",
+              "error": null,
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "c13923dc-6700-485b-8697-9ddc3db6e761",
+              "status": "COMPLETED",
+              "run_id": "run-9749",
+              "error": null,
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            }
+          ]
+        },
+        {
+          "offset": 20,
+          "limit": 20,
+          "returned": 20,
+          "total": 1145,
+          "relevant": [
+            {
+              "id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+              "status": "COMPLETED",
+              "run_id": "run-9747",
+              "error": null,
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            },
+            {
+              "id": "e3c4e495-167a-4567-94ac-b4e7eb407873",
+              "status": "COMPLETED",
+              "run_id": "run-9739",
+              "error": null,
+              "callback_state": "delivered",
+              "callback_attempts": 1
+            }
+          ]
+        }
+      ],
+      "complete": false
+    }
+  ],
+  "current": {
+    "returned": 5,
+    "total": 5,
+    "complete": true,
+    "relevant": [
+      {
+        "id": "da3e879c-99f6-4319-b51a-c80c3a02d1d4",
+        "status": "RUNNING",
+        "run_id": "run-9771",
+        "error": null
+      },
+      {
+        "id": "25ff8c21-4e3c-4595-b0bc-c913791be4b1",
+        "status": "RUNNING",
+        "run_id": "run-9762",
+        "error": null
+      }
+    ]
+  },
+  "software_engineer_runs": [
+    {
+      "id": "run-9728",
+      "status": "succeeded",
+      "task_id": "a634b12e-e83a-471e-8efe-770570645205",
+      "error": null
+    },
+    {
+      "id": "run-9732",
+      "status": "failed",
+      "task_id": "586af897-2a4e-42d4-a32e-1def4b153755",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3709f2e4f907 is not on origin/main"
+    },
+    {
+      "id": "run-9747",
+      "status": "succeeded",
+      "task_id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+      "error": null
+    },
+    {
+      "id": "run-9767",
+      "status": "succeeded",
+      "task_id": "028d1a0c-a1e3-4370-8631-c9c4e3c67694",
+      "error": null
+    },
+    {
+      "id": "run-9768",
+      "status": "failed",
+      "task_id": "2ed62246-e998-48f1-9817-4df5bfd7a59a",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 233a5331f0ae is not on origin/main"
+    },
+    {
+      "id": "run-9771",
+      "status": "running",
+      "task_id": "da3e879c-99f6-4319-b51a-c80c3a02d1d4",
+      "error": null
+    }
+  ],
+  "previous": {
+    "id": "2ed62246-e998-48f1-9817-4df5bfd7a59a",
+    "status": "FAILED",
+    "run_id": "run-9768",
+    "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 233a5331f0ae is not on origin/main",
+    "callback_state": "delivered",
+    "callback_attempts": 1
+  },
+  "delivery": {
+    "id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+    "status": "COMPLETED",
+    "run_id": "run-9747",
+    "error": null,
+    "callback_state": "delivered",
+    "callback_attempts": 1
+  },
+  "previous_plan": {
+    "id": "run-9768",
+    "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 233a5331f0ae is not on origin/main",
+    "callback_apply_failures": 0
+  },
+  "raw_logs": {
+    "failed": {
+      "returned_lines": 1070,
+      "read": "last 35 lines; includes branch success, push_not_on_main and rescue. Earlier agent output is bounded/truncated; no full history claim."
+    },
+    "completed": {
+      "returned_lines": 645,
+      "read": "last 18 lines; branch and main published f54f160, command exit 0. Earlier output is bounded/truncated."
+    }
+  },
+  "author_artifact": {
+    "status": "unproven",
+    "operator_action": "esc-475",
+    "task_id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+    "artifact": "author.txt",
+    "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+    "bytes": 44,
+    "read_or_reconstructed": false
+  }
+}

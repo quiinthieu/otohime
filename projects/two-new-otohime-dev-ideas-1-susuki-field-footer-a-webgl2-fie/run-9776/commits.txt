@@ -1,0 +1,8 @@
+Task: pm-299/t-1768
+Run: run-9776
+Branch: pm-299-t-1768-qa-run-9776
+Local verification base: ad09e3c520ba978bffd7b486c99cbe4222e898e8
+Publication base: 3cf6d6dd8f1d8b46687b81767263c8c6d91f96ad
+Delivery/deployed SHA verified: 017810c694e4e9ea256fc543b3ec213695875cc6
+QA commit: enclosing commit; resolve with git log -1 --format="%H %s" -- projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9776/commits.txt
+The post-push board report binds the immutable QA commit. Verdict remains fail, cause=authority, pending protected author.txt.

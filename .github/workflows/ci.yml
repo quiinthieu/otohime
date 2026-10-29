@@ -39,14 +39,12 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
     runs-on: ubuntu-24.04
-    # Green run 40800499636 used 857s for 252 E2E cases. With postcard coverage,
-    # run 40804149539 passed 253 cases before 900s, leaving three existing gesture
-    # cases unfinished. Run 40820343835 reached newer Senko/Susuki coverage at
-    # the 960s cutoff. Budget the expanded suite: 1200s command, 22m step for
-    # readiness, TERM and diagnostics; 40m keeps the remaining probes inside their
-    # own caps. A timeout (124) stays red.
+    # Run 40820018472 exhausted 960s at the peep-box cases, before the palace
+    # and remaining browser coverage. Allow 1200s for the full serial suite,
+    # 22m for readiness/TERM/diagnostics, and 35m for all probes.
+    # Individual assertions retain their timeouts; exit 124 still fails the job.
     # Motion's paced auth requests explain its 171s; no runtime browser installers in CI.
-    timeout-minutes: 40
+    timeout-minutes: 35
     services:
       postgres:
         image: postgres:17-alpine

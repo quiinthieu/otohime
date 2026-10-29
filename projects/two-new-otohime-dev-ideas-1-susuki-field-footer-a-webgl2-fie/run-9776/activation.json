@@ -1,0 +1,279 @@
+{
+  "startedAt": "2026-10-29T05:56:10.325Z",
+  "base": "https://otohime.dev",
+  "healthBefore": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "sha": "017810c694e4e9ea256fc543b3ec213695875cc6"
+    }
+  },
+  "cases": [
+    {
+      "mode": "desktop-click",
+      "sha": "017810c694e4e9ea256fc543b3ec213695875cc6",
+      "http": 200,
+      "links": 14,
+      "render": {
+        "min": 43,
+        "max": 242,
+        "cyan": 0,
+        "error": 0,
+        "width": 958,
+        "height": 574,
+        "frames": "2",
+        "hash": "71bb40f13ee32f3e64054a36beae35b2bfe2c9a18a81e9972271313473940ffd"
+      },
+      "pipeline": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "programs": [
+          {
+            "linked": true,
+            "log": "",
+            "uniforms": {},
+            "sobel": false,
+            "hatching": true,
+            "grazing": false
+          },
+          {
+            "linked": true,
+            "log": "",
+            "uniforms": {},
+            "sobel": false,
+            "hatching": false,
+            "grazing": false
+          },
+          {
+            "linked": true,
+            "log": "",
+            "uniforms": {
+              "uKd": 1,
+              "uKn": 1,
+              "uNdvCutoff": 0.20000000298023224,
+              "uDebug": 0,
+              "uDepthThreshold": 0.017999999225139618
+            },
+            "sobel": true,
+            "hatching": false,
+            "grazing": true
+          }
+        ],
+        "targets": 3,
+        "draws": 70,
+        "debug": "0",
+        "uniforms": "{\"uKd\":1,\"uKn\":1,\"uNdvCutoff\":0.2,\"uDebug\":0,\"uDepthThreshold\":0.018,\"uNormalThreshold\":0.3}",
+        "dpr": 1
+      },
+      "idleFrameDelta": 0,
+      "focusPixels": {
+        "min": 43,
+        "max": 242,
+        "cyan": 0,
+        "error": 0,
+        "width": 958,
+        "height": 574,
+        "frames": "32",
+        "hash": "3e7f37b94857e7b8bbd146ea75279615d7598680e0f2f8e57889a7692381a08d"
+      },
+      "hover": "project-barometer",
+      "hoverPixels": {
+        "min": 43,
+        "max": 242,
+        "cyan": 0,
+        "error": 0,
+        "width": 958,
+        "height": 574,
+        "frames": "96",
+        "hash": "c7314d13826b9433d730adfe8f34ea5ea8e9edb81ae30c10ef82991900058be2"
+      },
+      "destination": "/barometer",
+      "bundles": [
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/3rqd4qnakn6f7.js",
+          "sha256": "469b414134e038936d5dea6660fb6b6c2e2ef033d685c1ad30b07803323c7ba3",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/3u1x9loku33-c.js",
+          "sha256": "01659025f276aa823fa4c23f774120f331567d701fe68b09d062161ab6e0d103",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+          "sha256": "b5f9b5199b99ab6c141f4540f0b7d0fe803c4ecf6956849ecb6e59d3d439272e",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/0-3-6uienh__7.js",
+          "sha256": "475136d2b76a16e1343f521f4fcc2d527793016cbde74e294bab1941f896bd8e",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/44xcerwlley0q.js",
+          "sha256": "a070e193cc6aa2af93f87b93c668ae7fa6039f396007a82104ba7b228d7850ac",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/35uvnv2naea4n.js",
+          "sha256": "e49b20ed5f11e1601164f2dbc2a3f55c096eb41cdb233ffa42406751b08d3daa",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/2z9-i_tblmcm1.js",
+          "sha256": "d876d7fe2956be061aae8b516c87db5c2767bea967fd66a024796700df59130b",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/2631xugkn0b07.js",
+          "sha256": "3ce0071c2a7db19391d9b3f6f9b007d7378f1aca7e545074e4d128e14f5f17bf",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/030-8enz_41xg.js",
+          "sha256": "8aff3b989749f1e6dd129640839bf786b2b36a78783e9b4a6c41e423b74a46f9",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/0fwilqbp91bx1.js",
+          "sha256": "cb64b76be3b5b1306d307dcedbda3c5ce3bbbb2c698073614a21ddd834f71afb",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/15k51wanb2wrx.js",
+          "sha256": "93b42979da6c9bd05e5787916ac272f34a59879b2971543891328937f63362e1",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/09c7l2zkdqzu2.js",
+          "sha256": "f4395415f9e753a8718b769cea2460251824b659402375a9ffd289eded3e25fd",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/0we5jk7btcmvq.js",
+          "sha256": "44502d9cd5cf4352245bbfc096df02f0aeb27575e9094284b0ae08180f798fd5",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/0s-i4851c4vn7.js",
+          "sha256": "f83fa44ad13160a029b03b4a878fc80208e87a74ff57479cbbe111c4f4cf3f8f",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/3e614h0zu7ia7.js",
+          "sha256": "ba45c3644ca9bee42fc11991c585e5f61165b59e131ee6e33dc7ae1aa4ef100c",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/2l0h6m0dg_fhp.js",
+          "sha256": "4c7232640c828c4cc3a44e8df5881faba367677604e846f117a8c0e131bd02e5",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/2zr5mfrqf7hji.js",
+          "sha256": "2588c8efe481169bfbda9f77c54a3aba1a49bdf85424ba4954822d5f27dee267",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/3onrwr-vuz1mb.js",
+          "sha256": "5ca02dfa389bb4c1055229019d254b2dc447eff5ad2dd7e5735319091ec1ff16",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/1h7i7w2bcvkpg.js",
+          "sha256": "fbe13d630efdeec60591182f437eb9453713d90920f335852d17da99f0e8798a",
+          "shelf": true,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/1qj2e5cq36glh.js",
+          "sha256": "471cafcd1fb215c2b8129102cd7ac6c3c734822f9a01b7d22003eb30f204d783",
+          "shelf": false,
+          "three": true
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/193agn29zkig0.js",
+          "sha256": "940cab0586e69adcd004ec812f35740bdb0609b06f7a79ad47ff8a093448c2ed",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/310oyyivn5slt.js",
+          "sha256": "ba3b608b15ffe89fac6d72f334aeb5a8db3d41ca5bdb202b895d0b175106740a",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/1a17eorpv8yh9.js",
+          "sha256": "a65e21b230fd9ca3cf5240d4a298c1f28f328b1e36737be3af4df79cdcb56e19",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/2qafoo7xc2fg9.js",
+          "sha256": "177708e10133e0d51e2d10f8671df7c7a5cb01d16ce32030c31c8590b6c62528",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/0ta3mmx917yh6.js",
+          "sha256": "1942161ed5290c6976ca394684f4f423e243698d793e2785135221ac5106ee51",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/3ccjmuuknmn9-.js",
+          "sha256": "00c6f1a3d21e9b27535a4f54ec911e17c8608a00c805f6a65a2b667d5fa00f91",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/3ltdy7qkmzds2.js",
+          "sha256": "e2a87ce6d3462c4e200fd2ae4edfe209e2d4a0b238c44b64e0c205a06498ccca",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/05ikpvfbu4i6a.js",
+          "sha256": "ea92ddac6921084fa2b7f06d5b33dedd3fa660092e2afab22880a64f7f26215f",
+          "shelf": false,
+          "three": false
+        },
+        {
+          "url": "https://otohime.dev/_next/static/immutable/chunks/1hdj_6_h_wucy.js",
+          "sha256": "836c2534a0022c682582bee05baa205fc41dcbbae83645d4f049bcfe72c70943",
+          "shelf": false,
+          "three": false
+        }
+      ],
+      "errors": [],
+      "status": "pass"
+    }
+  ],
+  "browser": "156.0.8078.47",
+  "healthAfter": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "sha": "017810c694e4e9ea256fc543b3ec213695875cc6"
+    }
+  },
+  "status": "pass"
+}

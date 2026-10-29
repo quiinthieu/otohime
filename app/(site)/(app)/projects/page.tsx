@@ -1,4 +1,6 @@
 import { TheatreLoader } from "@/components/kamishibai/loader";
+import { DeparturesBoard } from "@/components/departures-board";
+import { buildProjectDepartures } from "@/lib/departures";
 import { ProjectStories } from "@/components/kamishibai/stories";
 import { RisoText } from "@/components/riso-heading";
 import { Cartridge } from "@/components/cartridge";
@@ -23,6 +25,7 @@ export default function ProjectsPage() {
           Projects
         </FigTitle>
         <p className="mt-2 text-muted">{site.projects}</p>
+        <DeparturesBoard kind="projects" rows={buildProjectDepartures()} />
         {site.projectList.length === 0 ? (
           <div className="mt-8">
             <Notice n="—" title="Nothing on the bench yet" figure="parcel" heading="h2">

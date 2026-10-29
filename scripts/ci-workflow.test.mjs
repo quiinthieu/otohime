@@ -13,6 +13,13 @@ import "./check-deploy-author.test.mjs";
 import "./setup-owner-git.test.mjs";
 
 const workflow = readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
+
+test("Vercel Git cannot bypass the checked full-history deployment", () => {
+  const config = JSON.parse(readFileSync(new URL("../vercel.json", import.meta.url), "utf8"));
+  assert.equal(config.git?.deploymentEnabled, false,
+    "automatic Git builds can replace CI's current palace history with the committed fallback");
+});
+
 const lines = workflow.split("\n");
 const indent = (line) => line.length - line.trimStart().length;
 const significant = (line) => line.trim() !== "" && !line.trim().startsWith("#");
@@ -163,10 +170,9 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks budgets added postcard coverage with a 40m job, 22m step and 1200s E2E bound", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "40");
-  assert.match(workflow, /40800499636 used 857s for 252 E2E cases/);
-  assert.match(workflow, /40804149539 passed 253 cases before 900s/);
+test("checks budgets the full browser suite with a 35m job, 22m step and 1200s bound", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "35");
+  assert.match(workflow, /40820018472 exhausted 960s at the peep-box cases/);
   const checks = steps("checks");
   assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 22\n/);
   const e2e = gateBody("E2E against next start");

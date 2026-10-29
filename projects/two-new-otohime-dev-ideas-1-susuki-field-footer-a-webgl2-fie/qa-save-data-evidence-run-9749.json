@@ -1,0 +1,25 @@
+{
+  "base": "https://otohime.dev",
+  "health": {
+    "ok": true,
+    "sha": "ce7f635652de107a44d2ee5e27f7377596d662cd"
+  },
+  "browser": "156.0.8078.73",
+  "cases": [
+    {
+      "eventTarget": false,
+      "errors": [
+        "TypeError: s?.addEventListener is not a function\n    at https://otohime.dev/_next/static/immutable/chunks/3onrwr-vuz1mb.js:56:7729\n    at iE (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:113756)\n    at e (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:139987)\n    at e (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:139974)\n    at uk (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:140258)\n    at uw (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138526)\n    at uk (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138909)\n    at uw (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138526)\n    at uk (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138844)\n    at uw (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138526)",
+        "TypeError: s?.addEventListener is not a function\n    at https://otohime.dev/_next/static/immutable/chunks/3onrwr-vuz1mb.js:56:7729\n    at iE (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:113756)\n    at e (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:139987)\n    at e (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:139974)\n    at uk (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:140258)\n    at uw (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138526)\n    at uk (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138909)\n    at uw (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138526)\n    at uk (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138844)\n    at uw (https://otohime.dev/_next/static/immutable/chunks/2klxnkm8_xd33.js:1:138526)"
+      ],
+      "footerCount": 0,
+      "outcome": "delivery defect reproduced"
+    },
+    {
+      "eventTarget": true,
+      "errors": [],
+      "footerCount": 1,
+      "outcome": "control passes"
+    }
+  ]
+}

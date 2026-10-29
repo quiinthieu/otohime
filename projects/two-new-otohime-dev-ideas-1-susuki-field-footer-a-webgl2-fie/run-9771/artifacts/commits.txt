@@ -1,0 +1,10 @@
+Task: pm-299/t-1768
+Run: run-9771
+Branch: pm-299-t-1768-author-recovery-run-9771
+Fetched main: de21b2f064d73255970443844e3b1c0075e1f611
+Recovered handoff retained: b55f39e5e3c81ac26b0d8167d14814fb883c90f0
+Shelf executable delivery retained: f54f160a9e40284090f0332c2f5dca55d147ecfd
+Subject: pm-299/t-1768: docs: Repair publication without waiving artifact QA [skip ci]
+Delivery: enclosing commit; resolve with:
+git log -1 --format="%H %s" -- projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9771/artifacts/commits.txt
+The post-push plan-manager summary binds the immutable pushed SHA. Product acceptance remains unproven under esc-475.
