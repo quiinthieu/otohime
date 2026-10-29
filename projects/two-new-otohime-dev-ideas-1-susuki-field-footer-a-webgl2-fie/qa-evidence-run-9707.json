@@ -1,0 +1,879 @@
+{
+  "run": {
+    "id": "run-9707",
+    "plan_id": "pm-299",
+    "task_id": "t-1767",
+    "role": "quality_engineer",
+    "kind": "role",
+    "template_id": "qa-agent",
+    "tm_task_id": "2d275340-2bde-4682-bbbe-b2cec33c37c5",
+    "repo_id": "otohime",
+    "account_id": "codex-main",
+    "worker_id": "avietidol-mac-mini",
+    "runner": "fleet",
+    "agent_profile": "codex-sol-6-1-high",
+    "attempt": 1,
+    "status": "running",
+    "deadline_at": "2026-10-29T07:33:26.294466Z",
+    "started_at": "2026-10-29T03:33:26.294466Z",
+    "finished_at": "0001-01-01T00:00:00Z",
+    "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+    "not_before": "0001-01-01T00:00:00Z",
+    "status_checked_at": "0001-01-01T00:00:00Z",
+    "callback_apply_failures": 0
+  },
+  "greenGate": {
+    "id": "ver-3859",
+    "plan_id": "pm-299",
+    "task_id": "t-1767",
+    "run_id": "run-9705",
+    "gate": "green",
+    "git_sha": "6420027",
+    "status": "pass",
+    "items": [
+      {
+        "name": "shelf-unit",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/shelf.test.ts",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 149,
+        "stdout_tail": "TAP version 13\n# Subtest: all current linked projects and notes become books with correct routes and newest-left order\nok 1 - all current linked projects and notes become books with correct routes and newest-left order\n  ---\n  duration_ms: 0.977375\n  type: 'test'\n  ...\n# Subtest: packing fits tilted book extents within 3\u20134 planks with no overlap, including maximum thickness\nok 2 - packing fits tilted book extents within 3\u20134 planks with no overlap, including maximum thickness\n  ---\n  duration_ms: 1.178166\n  type: 'test'\n  ...\n# Subtest: dimensions and tilt are deterministic, input-order independent, content-sensitive and immutable\nok 3 - dimensions and tilt are deterministic, input-order independent, content-sensitive and immutable\n  ---\n  duration_ms: 0.363583\n  type: 'test'\n  ...\n# Subtest: caps at 40, respects smaller caps, omits unlinked projects and deduplicates identities across input\nok 4 - caps at 40, respects smaller caps, omits unlinked projects and deduplicates identities across input\n  ---\n  duration_ms: 0.549709\n  type: 'test'\n  ...\n# Subtest: orthographic projection maps all corners to CSS pixels with inverted Y and optional viewport offset\nok 5 - orthographic projection maps all corners to CSS pixels with inverted Y and optional viewport offset\n  ---\n  duration_ms: 0.838208\n  type: 'test'\n  ...\n# Subtest: perspective projection uses the nearest corners and clips near-plane crossings before division\nok 6 - perspective projection uses the nearest corners and clips near-plane crossings before division\n  ---\n  duration_ms: 0.409125\n  type: 'test'\n  ...\n# Subtest: a rotated MVP includes extremal corners beyond the box diagonal endpoints\nok 7 - a rotated MVP includes extremal corners beyond the box diagonal endpoints\n  ---\n  duration_ms: 0.352125\n  type: 'test'\n  ...\n# Subtest: clamps partial books, handles enclosing frusta and rejects offscreen, behind-camera and far-clipped books\nok 8 - clamps partial books, handles enclosing frusta and rejects offscreen, behind-camera and far-clipped books\n  ---\n  duration_ms: 1.048792\n  type: 'test'\n  ...\n# Subtest: invalid viewport, matrix and bounds return a finite invisible box\nok 9 - invalid viewport, matrix and bounds return a finite invisible box\n  ---\n  duration_ms: 0.380625\n  type: 'test'\n  ...\n1..9\n# tests 9\n# suites 0\n# pass 9\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 73.508458\n"
+      },
+      {
+        "name": "repo-checks-and-build",
+        "cmd": "(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint && npm run build",
+        "cwd": ".",
+        "expect": "exit0",
+        "exit_code": 0,
+        "status": "pass",
+        "duration_ms": 65918,
+        "stdout_tail": "t like to participate in this anonymous program, by visiting the following URL:\nhttps://nextjs.org/telemetry\n\n- Cache Components enabled\n- Partial Prefetching enabled\n- Experiments (use with caution):\n  \u2713 authInterrupts\n  \u2713 globalNotFound\n\n  Creating an optimized production build ...\n\u2713 Compiled successfully in 3.1s\n  Running TypeScript ...\n  Finished TypeScript in 6.1s ...\n  Collecting page data using 11 workers ...\n  Generating static pages using 11 workers (0/216) ...\n  Generating static pages using 11 workers (54/216) \n  Generating static pages using 11 workers (108/216) \n  Generating static pages using 11 workers (162/216) \n\u2713 Generating static pages using 11 workers (216/216) in 1399ms\n  Finalizing page optimization ...\n\nRoute (app)                             Revalidate  Expire\n\u250c \u25d0 /                                           1d      1w\n\u251c \u25cb /_not-found\n\u251c \u25d0 /account                                    1d      1w\n\u251c \u25d0 /admin                                      1d      1w\n\u251c \u25d0 /admin/bottles                              1d      1w\n\u251c \u25d0 /admin/roles                                1d      1w\n\u251c \u25d0 /admin/users                                1d      1w\n\u251c   /admin/users/[id]                           1d      1w\n\u2502 \u2514 \u25d0 /admin/users/[id]                         1d      1w\n\u251c \u0192 /api/admin/bottles\n\u251c \u0192 /api/admin/bottles/[id]\n\u251c \u0192 /api/ask\n\u251c \u0192 /api/auth/[...all]\n\u251c \u0192 /api/bottles\n\u251c \u0192 /api/bottles/suggestions\n\u251c \u0192 /api/ghosts\n\u251c \u0192 /api/guestbook\n\u251c \u0192 /api/health\n\u251c \u0192 /api/now-playing\n\u251c \u25cb /articles\n\u251c   /articles/[slug]\n\u2502 \u251c \u25d0 /articles/[slug]\n\u2502 \u251c \u25cb /articles/why-the-sky-is-blue\n\u2502 \u251c \u25cb /articles/why-we-need-a-leap-day\n\u2502 \u2514 \u25d0 [+4 more paths]\n\u251c \u0192 /barometer\n\u251c \u25cb /capsule\n\u251c \u25d0 /dashboard                                  1d      1w\n\u251c \u25cb /design-system\n\u251c \u25d0 /desk                                       1d      1w\n\u251c \u25cb /desk/opengraph-image-blg90x\n\u251c \u25cb /elements\n\u251c   /elements/[symbol]\n\u2502 \u251c \u25d0 /elements/[symbol]\n\u2502 \u251c \u25cb /elements/h\n\u2502 \u251c \u25cb /elements/he\n\u2502 \u2514 \u25d0 [+116 more paths]\n\u251c \u25cb /forgot-password\n\u251c \u25cb /icon.svg\n\u251c \u25d0 /lab                                        1d      1w\n\u251c \u25d0 /ledger                                     1d      1w\n\u251c \u25cb /ledger/opengraph-image-1olq6y\n\u251c \u25d0 /making-of                                  1d      1w\n\u251c \u0192 /music                                      1d      1w\n\u251c \u25cb /music/opengraph-image-rp137v\n\u251c \u25d0 /notes                                      1d      1w\n\u251c   /notes/[slug]                               1d      1w\n\u2502 \u251c \u25d0 /notes/[slug]                             1d      1w\n\u2502 \u251c \u25d0 /notes/backfills-are-a-feature            1d      1w\n\u2502 \u251c \u25d0 /notes/on-twos                            1d      1w\n\u2502 \u2514 \u25d0 /notes/the-contract-caught-it             1d      1w\n\u251c \u25cb /notes/opengraph-image-rplwnn\n\u251c \u0192 /og\n\u251c \u25cb /orrery\n\u251c   /orrery/[body]\n\u2502 \u251c \u25d0 /orrery/[body]\n\u2502 \u251c \u25cb /orrery/sun\n\u2502 \u251c \u25cb /orrery/mercury\n\u2502 \u2514 \u25d0 [+12 more paths]\n\u251c \u0192 /planisphere\n\u251c \u25d0 /play                                       1d      1w\n\u251c \u25d0 /play/booth                                 1d      1w\n\u251c \u25d0 /play/hanafuda                              1d      1w\n\u251c \u25cb /play/opengraph-image-blpn7k\n\u251c \u25d0 /play/pachinko                              1d      1w\n\u251c \u25d0 /postcard                                   1d      1w\n\u251c \u0192 /postcard/image\n\u251c \u25cb /postcard/opengraph-image-1x4cxz\n\u251c \u25d0 /postcard/view                              1d      1w\n\u251c \u25d0 /projects                                   1d      1w\n\u251c \u25cb /projects/opengraph-image-1ndqzi\n\u251c \u25cb /reset-password\n\u251c \u0192 /rotor\n\u251c \u25cb /ryugu\n\u251c \u25d0 /shelf                                      1d      1w\n\u251c \u25cb /shore\n\u251c \u25cb /sign-in\n\u251c \u25d0 /sketches                                   1d      1w\n\u251c \u0192 /sketches/download/[filename]\n\u251c \u25cb /sketches/opengraph-image-t812bo\n\u251c \u25cb /structures\n\u251c   /structures/[slug]\n\u2502 \u251c \u25d0 /structures/[slug]\n\u2502 \u251c \u25cb /structures/array\n\u2502 \u251c \u25cb /structures/linked-list\n\u2502 \u2514 \u25d0 [+6 more paths]\n\u251c \u25cb /vinyl\n\u251c \u25d0 /work                                       1d      1w\n\u251c \u25cb /work/opengraph-image-blv499\n\u2514 \u25d0 /zine\n\n\n\u0192 Proxy (Middleware)\n\n\u25cb  (Static)             prerendered as static content\n\u25d0  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content\n\u0192  (Dynamic)            server-rendered on demand\n\n",
+        "stderr_tail": "tion or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-29T03:32:42.245Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-29T03:32:42.247Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-29T03:32:42.266Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n2026-10-29T03:32:42.271Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-29T03:32:42.285Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-29T03:32:42.286Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-29T03:32:42.292Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n2026-10-29T03:32:42.891Z WARN [Better Auth]: [better-auth] Base URL is not set. Set the baseURL option or BETTER_AUTH_URL env, or use a dynamic baseURL with allowedHosts for multi-host setups. Without it the origin is derived from the incoming request, and callbacks and redirects may not work correctly.\n[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]\n"
+      }
+    ],
+    "created_at": "2026-10-29T03:32:50.810825Z"
+  },
+  "history": {
+    "failed": [
+      {
+        "id": "run-9660",
+        "task_id": "t-1765",
+        "tm_task_id": "cd4797bf-945e-4e7a-b6c2-3b9c984310ef",
+        "status": "failed",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9661",
+        "task_id": "t-1767",
+        "tm_task_id": "ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+        "status": "failed",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9682",
+        "task_id": "t-1767",
+        "tm_task_id": "81d64689-85f0-4cb9-8317-67c4a5a76001",
+        "status": "failed",
+        "agent_profile": "codex-sol-medium",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c 'model_reasoning_effort=\"medium\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9686",
+        "task_id": "t-1766",
+        "tm_task_id": "004a2771-a897-49b1-bd66-ac55b71ff32d",
+        "status": "failed",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9683",
+        "task_id": "t-1767",
+        "tm_task_id": "f9c89481-dfdb-4ce2-81f2-c95f688644c5",
+        "status": "failed",
+        "agent_profile": "codex-sol-medium",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6-sol -c 'model_reasoning_effort=\"medium\"'",
+        "callback_apply_failures": 0
+      }
+    ],
+    "succeeded": [
+      {
+        "id": "run-9652",
+        "tm_task_id": "c9104bf0-8746-4ec1-80a1-5bbf4234ecd4",
+        "status": "succeeded",
+        "agent_profile": "claude-sonnet-medium",
+        "profile_flags": "--allowedTools all --model claude-sonnet-5-5 --dangerously-skip-permissions --output-format stream-json --verbose --effort medium",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9654",
+        "tm_task_id": "a6583c3c-76a2-48e7-bb7a-ab2ce75356d0",
+        "status": "succeeded",
+        "agent_profile": "agy-argon-medium",
+        "profile_flags": "--model gemini-4-argon-medium --dangerously-skip-permissions",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9664",
+        "task_id": "t-1765",
+        "tm_task_id": "748a2557-eb9a-48ba-8d95-a429cb04e616",
+        "status": "succeeded",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9669",
+        "task_id": "t-1767",
+        "tm_task_id": "375a2034-282e-4716-9b4e-fec42d470461",
+        "status": "succeeded",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9672",
+        "task_id": "t-1765",
+        "tm_task_id": "266d5672-6d6f-41fa-bed9-ba4ff64b4921",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9674",
+        "task_id": "t-1767",
+        "tm_task_id": "d420110c-d623-41a8-aff7-d6e1cfc901eb",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9680",
+        "task_id": "t-1766",
+        "tm_task_id": "fbb7f72b-ce67-4d63-84e5-e655041a6288",
+        "status": "succeeded",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9695",
+        "task_id": "t-1767",
+        "tm_task_id": "7bf0ed46-af53-403e-8409-2f8950a4eafd",
+        "status": "succeeded",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9705",
+        "task_id": "t-1767",
+        "tm_task_id": "a6a8ad77-6886-4c4b-bab4-3a3a7d98a5f8",
+        "status": "succeeded",
+        "callback_apply_failures": 0
+      }
+    ],
+    "running": [
+      {
+        "id": "run-9696",
+        "task_id": "t-1766",
+        "tm_task_id": "2a5f2cec-80b1-4b1e-88ee-a2c01c5191f9",
+        "status": "running",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      },
+      {
+        "id": "run-9707",
+        "task_id": "t-1767",
+        "tm_task_id": "2d275340-2bde-4682-bbbe-b2cec33c37c5",
+        "status": "running",
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+        "callback_apply_failures": 0
+      }
+    ],
+    "FAILED0": {
+      "total": 155,
+      "limit": 10,
+      "offset": 0,
+      "tasks": [
+        {
+          "id": "0568f625-8e05-4027-9ea8-3085fae923de",
+          "status": "FAILED",
+          "run_id": "run-9693"
+        },
+        {
+          "id": "638059cc-7c1a-4c83-86d4-6707e39225a2",
+          "status": "FAILED",
+          "run_id": "run-9687"
+        },
+        {
+          "id": "f9c89481-dfdb-4ce2-81f2-c95f688644c5",
+          "status": "FAILED",
+          "run_id": "run-9683"
+        },
+        {
+          "id": "004a2771-a897-49b1-bd66-ac55b71ff32d",
+          "status": "FAILED",
+          "run_id": "run-9686"
+        },
+        {
+          "id": "81d64689-85f0-4cb9-8317-67c4a5a76001",
+          "status": "FAILED",
+          "run_id": "run-9682"
+        },
+        {
+          "id": "89e0f724-9886-4319-8128-3bb847aed0fe",
+          "status": "FAILED",
+          "run_id": "run-9671"
+        },
+        {
+          "id": "68497134-1df6-4822-b4dc-0c9bdb87ec4b",
+          "status": "FAILED",
+          "run_id": "run-9670"
+        },
+        {
+          "id": "ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+          "status": "FAILED",
+          "run_id": "run-9661"
+        },
+        {
+          "id": "cd4797bf-945e-4e7a-b6c2-3b9c984310ef",
+          "status": "FAILED",
+          "run_id": "run-9660"
+        },
+        {
+          "id": "c10538fa-7457-4f59-b45a-976fe9544411",
+          "status": "FAILED",
+          "run_id": "run-9627"
+        }
+      ]
+    },
+    "FAILED10": {
+      "total": 155,
+      "limit": 10,
+      "offset": 10,
+      "tasks": [
+        {
+          "id": "e1e1ea40-b4a0-4226-82e6-d3d8c2d878ac",
+          "status": "FAILED",
+          "run_id": "run-9603"
+        },
+        {
+          "id": "e59be97d-8ec6-40a8-93ca-57846add0ce1",
+          "status": "FAILED",
+          "run_id": "can-516"
+        },
+        {
+          "id": "c4333d19-1411-4067-9008-f941915c659a",
+          "status": "FAILED",
+          "run_id": "can-515"
+        },
+        {
+          "id": "2599173b-83b9-4ffe-8e21-8b4d4054584c",
+          "status": "FAILED",
+          "run_id": "run-9534"
+        },
+        {
+          "id": "6b491f24-4a0f-4c3b-ab85-cbb1fce057a3",
+          "status": "FAILED",
+          "run_id": "run-9382"
+        },
+        {
+          "id": "574cb26f-acd3-44d0-9c46-7ec22209f80e",
+          "status": "FAILED",
+          "run_id": "run-9379"
+        },
+        {
+          "id": "4baee212-52ab-4b6e-8012-0da585745863",
+          "status": "FAILED",
+          "run_id": "run-9375"
+        },
+        {
+          "id": "73931c6f-dd47-4490-8e04-7cd3873474eb",
+          "status": "FAILED",
+          "run_id": "run-9374"
+        },
+        {
+          "id": "a2bc610e-2b10-45a3-8d6e-7608b5e675ce",
+          "status": "FAILED",
+          "run_id": "run-9373"
+        },
+        {
+          "id": "8930337e-f1cd-40e3-ab54-4e8ec521cb38",
+          "status": "FAILED",
+          "run_id": "run-9363"
+        }
+      ]
+    },
+    "COMPLETED0": {
+      "total": 1193,
+      "limit": 10,
+      "offset": 0,
+      "tasks": [
+        {
+          "id": "3e90eda9-cfbf-4787-adb6-0bc831a3b640",
+          "status": "COMPLETED",
+          "run_id": "run-9706"
+        },
+        {
+          "id": "a6a8ad77-6886-4c4b-bab4-3a3a7d98a5f8",
+          "status": "COMPLETED",
+          "run_id": "run-9705"
+        },
+        {
+          "id": "d4510032-ed32-40d2-ba30-6dc35b707cdb",
+          "status": "COMPLETED",
+          "run_id": "run-9704"
+        },
+        {
+          "id": "2401c323-4a08-4acd-9985-7cb8d0eb26c0",
+          "status": "COMPLETED",
+          "run_id": "run-9703"
+        },
+        {
+          "id": "0bdfc3c6-a0ff-4637-8372-377a70ceb4fe",
+          "status": "COMPLETED",
+          "run_id": "run-9700"
+        },
+        {
+          "id": "f1b390a2-d3fa-4262-94fd-6191dabc0b18",
+          "status": "COMPLETED",
+          "run_id": "run-9701"
+        },
+        {
+          "id": "1b664fe5-250b-44e9-b2ec-7a0082ccf0e1",
+          "status": "COMPLETED",
+          "run_id": "run-9699"
+        },
+        {
+          "id": "68381864-c220-49f5-bd7d-25c4b5828d95",
+          "status": "COMPLETED",
+          "run_id": "run-9698"
+        },
+        {
+          "id": "7ca63ec3-520f-421c-954d-89901ea4abb7",
+          "status": "COMPLETED",
+          "run_id": "run-9697"
+        },
+        {
+          "id": "7bf0ed46-af53-403e-8409-2f8950a4eafd",
+          "status": "COMPLETED",
+          "run_id": "run-9695"
+        }
+      ]
+    },
+    "COMPLETED10": {
+      "total": 1193,
+      "limit": 10,
+      "offset": 10,
+      "tasks": [
+        {
+          "id": "70180220-fb1c-493f-ae7f-114ae9b97030",
+          "status": "COMPLETED",
+          "run_id": "run-9694"
+        },
+        {
+          "id": "15f7f2f8-77d3-4fa9-8e44-91e45e2fa651",
+          "status": "COMPLETED",
+          "run_id": "run-9692"
+        },
+        {
+          "id": "76bb0981-788a-4a18-9382-90c2c4c93ef4",
+          "status": "COMPLETED",
+          "run_id": "run-9691"
+        },
+        {
+          "id": "dca8b213-4c3b-4355-9e58-8136e3a91550",
+          "status": "COMPLETED",
+          "run_id": "run-9690"
+        },
+        {
+          "id": "f06a1125-4eac-43ef-9ebc-89cd1eabd005",
+          "status": "COMPLETED",
+          "run_id": "run-9689"
+        },
+        {
+          "id": "eb29cd88-b972-427e-adba-b7c645136b42",
+          "status": "COMPLETED",
+          "run_id": "run-9688"
+        },
+        {
+          "id": "de1caf34-5083-4641-bb5f-4f2719e95570",
+          "status": "COMPLETED",
+          "run_id": "run-9684"
+        },
+        {
+          "id": "c99e47c4-caa6-412a-b4f6-065f1b091ba5",
+          "status": "COMPLETED",
+          "run_id": "run-9685"
+        },
+        {
+          "id": "3a9650e7-e897-4fe6-8caf-7c6b769f1ee2",
+          "status": "COMPLETED",
+          "run_id": "run-9681"
+        },
+        {
+          "id": "fbb7f72b-ce67-4d63-84e5-e655041a6288",
+          "status": "COMPLETED",
+          "run_id": "run-9680"
+        }
+      ]
+    },
+    "allRuns": [
+      {
+        "id": "run-9652",
+        "status": "succeeded"
+      },
+      {
+        "id": "run-9654",
+        "status": "succeeded"
+      },
+      {
+        "id": "run-9660",
+        "status": "failed",
+        "task_id": "t-1765"
+      },
+      {
+        "id": "run-9661",
+        "status": "failed",
+        "task_id": "t-1767"
+      },
+      {
+        "id": "run-9664",
+        "status": "succeeded",
+        "task_id": "t-1765"
+      },
+      {
+        "id": "run-9669",
+        "status": "succeeded",
+        "task_id": "t-1767"
+      },
+      {
+        "id": "run-9672",
+        "status": "succeeded",
+        "task_id": "t-1765"
+      },
+      {
+        "id": "run-9674",
+        "status": "succeeded",
+        "task_id": "t-1767"
+      },
+      {
+        "id": "run-9680",
+        "status": "succeeded",
+        "task_id": "t-1766"
+      },
+      {
+        "id": "run-9682",
+        "status": "failed",
+        "task_id": "t-1767"
+      },
+      {
+        "id": "run-9686",
+        "status": "failed",
+        "task_id": "t-1766"
+      },
+      {
+        "id": "run-9683",
+        "status": "failed",
+        "task_id": "t-1767"
+      },
+      {
+        "id": "run-9695",
+        "status": "succeeded",
+        "task_id": "t-1767"
+      },
+      {
+        "id": "run-9696",
+        "status": "failed",
+        "task_id": "t-1766"
+      },
+      {
+        "id": "run-9705",
+        "status": "succeeded",
+        "task_id": "t-1767"
+      },
+      {
+        "id": "run-9707",
+        "status": "running",
+        "task_id": "t-1767"
+      }
+    ]
+  },
+  "callbacks": [
+    {
+      "id": "81d64689-85f0-4cb9-8317-67c4a5a76001",
+      "status": "FAILED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackUrl": "http://plan-manager.staging.svc.cluster.local.:8148/internal/v1/task-callback",
+      "workerId": "avietidol-mac-mini",
+      "artifacts": []
+    },
+    {
+      "id": "f9c89481-dfdb-4ce2-81f2-c95f688644c5",
+      "status": "FAILED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackUrl": "http://plan-manager.staging.svc.cluster.local.:8148/internal/v1/task-callback",
+      "workerId": "avietidol-z490",
+      "artifacts": []
+    },
+    {
+      "id": "7bf0ed46-af53-403e-8409-2f8950a4eafd",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "callbackUrl": "http://plan-manager.staging.svc.cluster.local.:8148/internal/v1/task-callback",
+      "workerId": "billie-mac",
+      "artifacts": [
+        {
+          "content_type": "application/octet-stream",
+          "name": "author.txt",
+          "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+          "size": 44
+        },
+        {
+          "content_type": "application/octet-stream",
+          "name": "run-9695/author.txt",
+          "sha256": "148d9f5e11ef920dfe74cfe6ec30d262ede16d9c399411cf1703363ff444cd22",
+          "size": 89
+        }
+      ]
+    }
+  ],
+  "tails": [
+    {
+      "id": "81d64689-85f0-4cb9-8317-67c4a5a76001",
+      "tail": [
+        "",
+        "Lessons from earlier runs:",
+        "- [plan] A successful task branch push does not satisfy this runner's publication check.",
+        "- [plan] A successful feature-branch push did not satisfy this legacy workflow's main-branch delivery check.",
+        "- [plan] A successful production build and HTTP 200 do not alone prove the shelf remains usable after hydration.",
+        "- [plan] Two referenced standing-rule files are not present in this repository checkout.",
+        "- [plan] Use tolerance for exponential-filter assertions even at subnormal frame durations.",
+        "- [repo:otohime] Include a recognized top-level path (e.g. scripts/ or projects/<plan>/task-N-evidence.md) in SWE task interfaces when touching Next.js app/(site)/ route groups, and use schema='platform.plan-prerequisites.v1' in prerequisites.",
+        "- [global] plan-manager ci-gates (tests/run_gates.py) fails 'empty package expansion' when the cwd is reached through a symlink, e.g. a fleet lease's /home/.../build-worker -> /data/build-worker",
+        "- [global] A red root pipeline's surviving service child can deploy long after a newer green pipeline and silently roll that service back (last writer wins). Compare the live image tag with the newest successful deploy job, not only the pin env.",
+        "- [global] Moving a page to TanStack Query with a production retry of 1 silently absorbs a one-shot injected fault, so the \"failed next page keeps what is loaded\" e2e went red. Also, /media/ e2e/signed-out.spec.ts called page.getByLabelText, which does not exist in Playwright, so that spec could never pass; it was outside every named gate.",
+        "- [global] Blender's FBX importer silently drops location keys on child bones it auto-connects, and a required media-generator test was a wall-clock time bomb that broke the 3d-animation gate on main at 2026-10-29T00:00Z",
+        "- [global] A decider answer that approves a replan does not perform the replan: no task is inserted, and the blocked task is relaunched with the same contract",
+        "- [global] A test another plan adds to gameplay-studio internal/api without a batch manifest entry turns every later studio gate red",
+        "- [global] A native check's raw output is kept only as artifact_digest = sha256(json(raw)), but for go test it can often be recovered: re-run at the immutable SHA, then search the single 'ok <pkg> <t>s' timing line.",
+        "- [global] scripts/gameplay/require-js-tests.mjs exited 0 without running anything whenever the checkout path held a space, e.g. a macOS fleet lease under 'Application Support'. Its guard compared import.meta.url, which encodes a space as %20, with a raw `file://${argv[1]}`. Every REQUIRE_JS make gate (vitest and Playwright) was therefore a silent no-op there. Fixed in 4827bc713. If a gate prints no test output and no 'require-js-tests: ok' line, it did not run.",
+        "- [global] A pkgver release cut before git-push-safe rebases keeps a source_sha that is not on main. pkgver check still passes because it compares the tree hash, and the tree matched.",
+        "- [global] A batched replan leaves the superseded revision's live batch (bat-3, 'verifying') holding its repo delivery lock. The next revision's integration permit is then refused delivery_lock_contended, with no AI run and no escalation.",
+        "",
+        "ERROR: Selected model is at capacity. Please try a different model.",
+        "ERROR: Selected model is at capacity. Please try a different model.",
+        "---",
+        "Command exited with code: 1",
+        "rescue: workspace has no local work beyond origin/main \u2014 nothing to preserve"
+      ],
+      "fullLogComplete": false
+    },
+    {
+      "id": "f9c89481-dfdb-4ce2-81f2-c95f688644c5",
+      "tail": [
+        "- [global] A pkgver release cut before git-push-safe rebases keeps a source_sha that is not on main. pkgver check still passes because it compares the tree hash, and the tree matched.",
+        "- [global] A batched replan leaves the superseded revision's live batch (bat-3, 'verifying') holding its repo delivery lock. The next revision's integration permit is then refused delivery_lock_contended, with no AI run and no escalation.",
+        "",
+        "The previous run run-9682 failed (class=push_failed phase=agent). Read why before you start, and fix the cause instead of repeating it.",
+        "End of its log (redacted):",
+        "```text",
+        "production retry of 1 silently absorbs a one-shot injected fault, so the \"failed next page keeps what is loaded\" e2e went red. Also, /media/ e2e/signed-out.spec.ts called page.getByLabelText, which does not exist in Playwright, so that spec could never pass; it was outside every named gate.",
+        "- [global] Blender's FBX importer silently drops location keys on child bones it auto-connects, and a required media-generator test was a wall-clock time bomb that broke the 3d-animation gate on main at 2026-10-29T00:00Z",
+        "- [global] A decider answer that approves a replan does not perform the replan: no task is inserted, and the blocked task is relaunched with the same contract",
+        "- [global] A test another plan adds to gameplay-studio internal/api without a batch manifest entry turns every later studio gate red",
+        "- [global] A native check's raw output is kept only as artifact_digest = sha256(json(raw)), but for go test it can often be recovered: re-run at the immutable SHA, then search the single 'ok <pkg> <t>s' timing line.",
+        "- [global] scripts/gameplay/require-js-tests.mjs exited 0 without running anything whenever the checkout path held a space, e.g. a macOS fleet lease under 'Application Support'. Its guard compared import.meta.url, which encodes a space as %20, with a raw `file://${argv[1]}`. Every REQUIRE_JS make gate (vitest and Playwright) was therefore a silent no-op there. Fixed in 4827bc713. If a gate prints no test output and no 'require-js-tests: ok' line, it did not run.",
+        "- [global] A pkgver release cut before git-push-safe rebases keeps a source_sha that is not on main. pkgver check still passes because it compares the tree hash, and the tree matched.",
+        "- [global] A batched replan leaves the superseded revision's live batch (bat-3, 'verifying') holding its repo delivery lock. The next revision's integration permit is then refused delivery_lock_contended, with no AI run and no escalation.",
+        "",
+        "ERROR: Selected model is at capacity. Please try a different model.",
+        "ERROR: Selected model is at capacity. Please try a different model.",
+        "```",
+        "",
+        "ERROR: Selected model is at capacity. Please try a different model.",
+        "ERROR: Selected model is at capacity. Please try a different model.",
+        "---",
+        "Command exited with code: 1",
+        "rescue: workspace has no local work beyond origin/main \u2014 nothing to preserve"
+      ],
+      "fullLogComplete": false
+    },
+    {
+      "id": "7bf0ed46-af53-403e-8409-2f8950a4eafd",
+      "tail": [
+        "+Raw local logs, browser driver/output, seven-file fingerprint manifest and bounded history evidence are worker artifacts under `shared/artifacts/run-9695/`. Publication writes the actual delivery SHA/subject to `shared/artifacts/commits.txt` and `shared/artifacts/run-9695/commits.txt`, pushes `origin HEAD`, then normally fast-forwards `origin HEAD:main` for this runner's integration requirement. Any main conflict requires the authorized rebase plus both contract gates again; no force push. Actual outcomes and SHA are bound by the summary report.",
+        "+",
+        "+Integration deployed: **unproven**. Waiting for capacity in this run: **no**. Local execution demonstrated: **yes**. Task 3 implementation remains delivered; deployed acceptance is **pending required plan-manager CI/QA for t-1767 at the summary's pushed SHA**, owned by plan-manager, failing on a failed delivery gate or deployed shelf acceptance check. No known shelf defect is deferred. This software_engineer run does not supply a QA verdict, change QA profiles, watch CI, or inspect the deployed system. Three.js and book-to-page wiring remain Tasks 4\u20135.",
+        "+",
+        "+### Publication retry 1 \u2014 final tested integration base",
+        "+",
+        "+The initial branch push saved `6eee8af1bbd5e10d24a299aa079722ddf56452ca`; `HEAD:main` was rejected because main advanced. The authorized `git pull --rebase origin main` succeeded onto **`9b903b2`**, preserving incoming owner changes. Those include social metadata on `/shelf`; its final page SHA-256 is **`4dc1663fafad1fbbe7480aeff9798ed8a90c0aaaa7d3b4e5a470e3674150bf29`**. The other six executable/lock/config fingerprints above remain identical. No task application code was changed.",
+        "+",
+        "+To keep one final delivery commit without amending or rewriting the pushed branch, carried this evidence onto fresh branch **`pm-299-t-1767-verify-run-9695-retry-1`** from the same fetched main. The first pushed branch and local rebased commit remain preserved. Reran both complete contract gates on this integration source with Node 22.23.3: **shelf-unit 9/9; npm test 2,736/2,736, zero skips; typecheck, lint and production build all exit zero**. Lint has 13 unrelated warnings after the incoming main changes (the two additional warnings are in `e2e/crumple.test.ts`), zero errors.",
+        "+",
+        "+Final production build **`SoHuBaUOFLC4H60fqrOyH`** passed the entire real Chrome probe again: raw HTTP contains all 14 links; desktop/mobile filters, Tab focus, unique transition names, unchanged 576px geometry and no overflow/console/page errors; JavaScript-disabled real navigation and reduced-motion/Save-Data/unavailable-WebGL negative controls all pass. Browser/runtime versions and fixture boundaries remain as above. The server was stopped and only generated history output was restored from its prebuild copy.",
+        "+",
+        "+Final retry logs, browser output and fingerprint manifest are in `shared/artifacts/run-9695/retry-1/`. Final publication SHA/author are written to the commit manifests and `author.txt` before pushing. The summary binds the actual final push outcomes. Prior gate ver-3847 is evidence for bfce6a2 only; CI and deployed QA for the final SHA remain plan-manager-owned and unobserved by this run.",
+        "",
+        "tokens used",
+        "150,496",
+        "Verified the existing Ink Shelf implementation and pushed fresh evidence to the task branch and main.",
+        "",
+        "- Branch: `pm-299-t-1767-verify-run-9695-retry-1`",
+        "- Commit: `6420027666a19d7b4b5428c631329fd3b8aff3d4`",
+        "- Passed: 2,736 tests, nine shelf tests, typecheck, lint, build, and desktop/mobile browser checks.",
+        "- Prior green gate `ver-3847` passed. New CI/deployed QA remains pending; summary submitted.",
+        "---",
+        "Command exited with code: 0"
+      ],
+      "fullLogComplete": false
+    },
+    {
+      "id": "ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+      "tail": [
+        "- Plan-manager summary submitted. CI result not observed, per the stop-after-push contract.",
+        "tokens used",
+        "138,007",
+        "Implemented the deterministic shelf model and accessible `/shelf` route with a flat fallback.",
+        "",
+        "- Passed 2,670 tests, typecheck, lint, build, and desktop/mobile browser checks.",
+        "- Pushed branch: `pm-299-t-1767-ink-shelf`",
+        "- Commit: `59d6abe76a56060777b5ba6a7ad65f14d0473958`",
+        "- Plan-manager summary submitted. CI result not observed, per the stop-after-push contract.",
+        "---",
+        "Command exited with code: 0",
+        "push_not_on_main: HEAD 59d6abe76a56060777b5ba6a7ad65f14d0473958 is not on origin/main (1 commit(s) since 95887d3eef1947d487726f17b276b5b72c398462); cutting task-rescue/ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+        "progress phase=rescue",
+        "=== rescue: preserving workspace of failed task (exit code 1, phase agent, budget 60s) ===",
+        "[pm-299-t-1767-ink-shelf 6bb4259] WIP rescue: task ef3b114f-7fa7-42a4-ac55-21ba8936521d failed with exit code 1",
+        " 1 file changed, 202 insertions(+), 202 deletions(-)",
+        "remote:",
+        "remote: Create a pull request for 'task-rescue/ef3b114f-7fa7-42a4-ac55-21ba8936521d' on GitHub by visiting:",
+        "remote:      https://github.com/quiinthieu/otohime/pull/new/task-rescue/ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+        "remote:",
+        "To github.com:quiinthieu/otohime.git",
+        " * [new branch]      HEAD -> task-rescue/ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+        "rescue: pushed working state to branch task-rescue/ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+        "=== rescue: done ==="
+      ],
+      "fullLogComplete": false
+    }
+  ],
+  "current": {
+    "total": 6,
+    "tasks": [
+      {
+        "id": "47b3360f-d092-4812-92a9-2c974077fd41",
+        "status": "RUNNING",
+        "run_id": "run-9710"
+      },
+      {
+        "id": "3fc978e4-0021-4e74-9d4e-f509bd247b2f",
+        "status": "RUNNING",
+        "run_id": "harvest-82b09a4dc34e3922"
+      },
+      {
+        "id": "349d1eff-92a2-4a71-9f05-d22d7779753e",
+        "status": "RUNNING",
+        "run_id": "run-9709"
+      },
+      {
+        "id": "8a15e6b9-f8f7-477f-8411-45d7839f1b17",
+        "status": "RUNNING",
+        "run_id": "run-9708"
+      },
+      {
+        "id": "2d275340-2bde-4682-bbbe-b2cec33c37c5",
+        "status": "RUNNING",
+        "run_id": "run-9707"
+      },
+      {
+        "id": "7399cce1-03e3-4b81-bf86-d455246e00ec",
+        "status": "RUNNING",
+        "run_id": "run-9676"
+      }
+    ]
+  },
+  "finalQA": {
+    "verdict": "pass",
+    "citedSHA": "6420027666a19d7b4b5428c631329fd3b8aff3d4",
+    "healthBefore": {
+      "ok": true,
+      "sha": "6420027666a19d7b4b5428c631329fd3b8aff3d4"
+    },
+    "healthAfter": {
+      "ok": true,
+      "sha": "6420027666a19d7b4b5428c631329fd3b8aff3d4"
+    },
+    "ancestryCommand": "git merge-base --is-ancestor 6420027666a19d7b4b5428c631329fd3b8aff3d4 6420027666a19d7b4b5428c631329fd3b8aff3d4",
+    "ancestryExit": 0,
+    "nativeCI": {
+      "run": 40812311883,
+      "checksJob": 123245269110,
+      "productionJob": 123253006082,
+      "checks": "success",
+      "production": "success",
+      "source": "public workflow and job HTML"
+    },
+    "immutableChecks": {
+      "shelf": 9,
+      "tests": 2736,
+      "typecheck": 0,
+      "lint": 0,
+      "build": 0
+    },
+    "integratedChecks": {
+      "base": "0449479",
+      "shelf": 9,
+      "tests": 2749,
+      "typecheck": 0,
+      "lint": 0,
+      "build": 0
+    },
+    "runtimeFingerprints": {
+      "bfce6a2": {
+        "lib/shelf.ts": "b36c205a76068dbf8e6c61ead0fd7214dca1abd7eabf22ec710c4cd90673c4a0",
+        "lib/shelf.test.ts": "f29616f565a98e623af6bb0efe58c2ecc07a2c7264aead9d3ed982a2ef171563",
+        "components/ink-shelf.tsx": "c78ed12dda1286bcc76193f2644a41efb5bda252f8933a180534c08b0cb95967",
+        "app/(site)/(app)/shelf/page.tsx": "6cf13aafeefc1ec708a7064a466a336d93a6a42f6d88a4e8b3bc7850b9ab3d13",
+        "app/(site)/(app)/shelf/shelf.css": "8d3acd55155458b62db23e83e98bf11d374c6819c38af0a8d650ad76c83b85a3",
+        "content/site.ts": "7e924841a468d850cb8bbdf8d62a74f8b586759d4c65042e371c88bb511b3464",
+        "lib/pages.ts": "6ace6b9c38943f5d69d356c0e0dbb800edcfc3cd5987ffb174295a143ca4c0ca",
+        "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+        "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+        ".github/workflows/ci.yml": "db87d96b2306c84529ff62de6110c05af2a7b41829b06b5cf10ca1b7aa945051"
+      },
+      "573b70e": {
+        "lib/shelf.ts": "b36c205a76068dbf8e6c61ead0fd7214dca1abd7eabf22ec710c4cd90673c4a0",
+        "lib/shelf.test.ts": "f29616f565a98e623af6bb0efe58c2ecc07a2c7264aead9d3ed982a2ef171563",
+        "components/ink-shelf.tsx": "c78ed12dda1286bcc76193f2644a41efb5bda252f8933a180534c08b0cb95967",
+        "app/(site)/(app)/shelf/page.tsx": "6cf13aafeefc1ec708a7064a466a336d93a6a42f6d88a4e8b3bc7850b9ab3d13",
+        "app/(site)/(app)/shelf/shelf.css": "8d3acd55155458b62db23e83e98bf11d374c6819c38af0a8d650ad76c83b85a3",
+        "content/site.ts": "7e924841a468d850cb8bbdf8d62a74f8b586759d4c65042e371c88bb511b3464",
+        "lib/pages.ts": "6ace6b9c38943f5d69d356c0e0dbb800edcfc3cd5987ffb174295a143ca4c0ca",
+        "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+        "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+        ".github/workflows/ci.yml": "b44a8e5652822765eca2a580c733245d9b3d4d201e14de1abe6899f5e9e9740f"
+      },
+      "6420027": {
+        "lib/shelf.ts": "b36c205a76068dbf8e6c61ead0fd7214dca1abd7eabf22ec710c4cd90673c4a0",
+        "lib/shelf.test.ts": "f29616f565a98e623af6bb0efe58c2ecc07a2c7264aead9d3ed982a2ef171563",
+        "components/ink-shelf.tsx": "c78ed12dda1286bcc76193f2644a41efb5bda252f8933a180534c08b0cb95967",
+        "app/(site)/(app)/shelf/page.tsx": "4dc1663fafad1fbbe7480aeff9798ed8a90c0aaaa7d3b4e5a470e3674150bf29",
+        "app/(site)/(app)/shelf/shelf.css": "8d3acd55155458b62db23e83e98bf11d374c6819c38af0a8d650ad76c83b85a3",
+        "content/site.ts": "7e924841a468d850cb8bbdf8d62a74f8b586759d4c65042e371c88bb511b3464",
+        "lib/pages.ts": "6ace6b9c38943f5d69d356c0e0dbb800edcfc3cd5987ffb174295a143ca4c0ca",
+        "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+        "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+        ".github/workflows/ci.yml": "944d94fd8dcae37cd3cb713d2af55b90d0e9e50d608b87d86e8bd87d2e09e53a"
+      },
+      "444953b": {
+        "lib/shelf.ts": "b36c205a76068dbf8e6c61ead0fd7214dca1abd7eabf22ec710c4cd90673c4a0",
+        "lib/shelf.test.ts": "f29616f565a98e623af6bb0efe58c2ecc07a2c7264aead9d3ed982a2ef171563",
+        "components/ink-shelf.tsx": "c78ed12dda1286bcc76193f2644a41efb5bda252f8933a180534c08b0cb95967",
+        "app/(site)/(app)/shelf/page.tsx": "4dc1663fafad1fbbe7480aeff9798ed8a90c0aaaa7d3b4e5a470e3674150bf29",
+        "app/(site)/(app)/shelf/shelf.css": "8d3acd55155458b62db23e83e98bf11d374c6819c38af0a8d650ad76c83b85a3",
+        "content/site.ts": "7e924841a468d850cb8bbdf8d62a74f8b586759d4c65042e371c88bb511b3464",
+        "lib/pages.ts": "6ace6b9c38943f5d69d356c0e0dbb800edcfc3cd5987ffb174295a143ca4c0ca",
+        "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+        "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+        ".github/workflows/ci.yml": "944d94fd8dcae37cd3cb713d2af55b90d0e9e50d608b87d86e8bd87d2e09e53a"
+      }
+    },
+    "finalProbe": [
+      {
+        "oracle": "real Three.js camera/Matrix4/Vector3",
+        "projections": 80,
+        "behindCameraNegative": "pass",
+        "catalog": [
+          "/articles",
+          "/barometer",
+          "/capsule",
+          "/design-system",
+          "/elements",
+          "/notes/backfills-are-a-feature",
+          "/notes/on-twos",
+          "/notes/the-contract-caught-it",
+          "/orrery",
+          "/planisphere",
+          "/rotor",
+          "/shore",
+          "/structures",
+          "/vinyl"
+        ]
+      },
+      {
+        "ssrBytes": 156447,
+        "ssrSha256": "a744881e0332f893c543cbf89dbcb130431886bf16be97ef65ce9a0de85c24fd",
+        "shelfClientArtifacts": [
+          {
+            "url": "https://otohime.dev/_next/static/chunks/36ay6ond8xv5m.js",
+            "bytes": 2695,
+            "sha256": "92438ad2c0d956878f54a435a21ec68d342468665a4a8de268e8201c8de02422"
+          }
+        ]
+      },
+      {
+        "base": "https://otohime.dev",
+        "chrome": "156.0.8078.73"
+      },
+      {
+        "realWebGLRasterCases": 7,
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M6, Unspecified Version)",
+        "clippedProjection": "pass",
+        "nearFarBehindNegative": "pass"
+      },
+      {
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "links": 14,
+        "geometry": {
+          "x": 313,
+          "y": 232.28125,
+          "width": 960,
+          "height": 576
+        },
+        "filters": "pass",
+        "keyboard": "project-articles",
+        "errors": []
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "links": 14,
+        "geometry": {
+          "x": 20,
+          "y": 329.390625,
+          "width": 350,
+          "height": 576
+        },
+        "filters": "pass",
+        "keyboard": "project-articles",
+        "errors": []
+      },
+      {
+        "capabilityFixtures": "Save-Data + unavailable WebGL",
+        "reducedMotion": "real browser media emulation",
+        "negativeControl": "flat links, filter and navigation pass"
+      }
+    ],
+    "defects": [],
+    "requiredDeferredChecks": []
+  }
+}
