@@ -2,7 +2,7 @@
 // axe-core into PW_PREFIX and passes BASE_URL.
 //
 // For A4 and Letter: the sheet has eight [data-page] cells, the document holds exactly one @page rule (the paper's
-// size, margin 0) and one stylesheet of its own (no Tailwind, none of the site's), five dashed folds, one solid cut
+// size, margin 0) and only its own CSS plus the shared appearance layer (no Tailwind or site globals), five dashed folds, one solid cut
 // with its scissors, and an eager sketch that has loaded. Under print media the controls are gone, the sheet sits at
 // 0,0 at its true size, no page's words overflow or leave its 6 mm safe area, and page 8's rule measures 100 mm end
 // to end. page.pdf({ preferCSSPageSize: true }) is read back as bytes: exactly one page, MediaBox 595x842 (A4) or
@@ -94,10 +94,18 @@ function sheetFacts(page) {
     };
     const sheets = [...document.styleSheets];
     let tailwind = false;
+    const styles = [];
     for (const s of sheets) {
       walk(s.cssRules);
       const text = [...s.cssRules].map((r) => r.cssText).join("\n");
       if (/--tw-|tailwindcss/.test(text)) tailwind = true;
+      if (s.ownerNode instanceof HTMLLinkElement && s.ownerNode.rel === "stylesheet") {
+        styles.push({
+          zine: text.includes(".zine"),
+          appearance: text.includes("--ap-plate-1"),
+          siteGlobals: /\.(?:btn|nav-item|masthead-bar|appnav)(?:\b|[.:#])/.test(text),
+        });
+      }
     }
     const fold = [...document.querySelectorAll('.sheet [data-guide="fold"]')];
     const cut = [...document.querySelectorAll('.sheet [data-guide="cut"]')];
@@ -107,6 +115,7 @@ function sheetFacts(page) {
       cells: [...document.querySelectorAll("[data-page]")].map((e) => e.getAttribute("data-page")),
       pageRules,
       links: [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => new URL(l.href).pathname),
+      styles,
       tailwind,
       siteChrome: document.querySelectorAll("footer.end, .masthead-bar, [aria-label='Main']").length,
       folds: fold.length,
@@ -198,7 +207,12 @@ async function paperChecks(browser, paper) {
     f.pageRules.length === 1 && f.pageRules[0].size === want.size && /^0(px)?$/.test(f.pageRules[0].margin),
     JSON.stringify(f.pageRules),
   );
-  check(`${paper}: only its own stylesheet (one <link>, no Tailwind, no site chrome)`, f.links.length === 1 && !f.tailwind && f.siteChrome === 0, JSON.stringify(f));
+  check(
+    `${paper}: only zine and appearance CSS (no Tailwind or site chrome)`,
+    f.styles.length > 0 && f.styles.some((s) => s.zine) &&
+      f.styles.every((s) => (s.zine || s.appearance) && !s.siteGlobals) && !f.tailwind && f.siteChrome === 0,
+    JSON.stringify(f),
+  );
   check(`${paper}: five dashed folds, one solid cut, one scissors mark`, f.folds === 5 && f.foldsDashed && f.cuts === 1 && f.cutSolid && f.scissors === 1, JSON.stringify({ folds: f.folds, dashed: f.foldsDashed, cuts: f.cuts, solid: f.cutSolid, scissors: f.scissors }));
   check(
     `${paper}: page 7's sketch is an eager <img> that has loaded`,

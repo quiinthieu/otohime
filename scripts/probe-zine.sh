@@ -5,8 +5,8 @@
 #   SKIP_BUILD=1 PORT=4166 bash scripts/probe-zine.sh           # reuse an existing .next build
 #   BASE_URL=https://otohime.dev bash scripts/probe-zine.sh     # probe a deployed URL, no build or start
 #
-# For A4 and Letter: eight [data-page] cells, exactly one @page rule (the paper, margin 0), only the zine's own
-# stylesheet, five dashed folds, one solid cut with its scissors, an eager sketch; under print media the controls are
+# For A4 and Letter: eight [data-page] cells, exactly one @page rule (the paper, margin 0), only the zine's CSS and
+# shared appearance CSS, five dashed folds, one solid cut with its scissors, an eager sketch; under print media the controls are
 # hidden, the sheet sits at 0,0 at its true size, nothing overflows or leaves the 6 mm safe area, and page 8's rule is
 # 100 mm. page.pdf({ preferCSSPageSize: true }) is exactly one page with MediaBox 595x842 (A4) or 612x792 (Letter).
 # Bad query values fall back with 200, the Print button waits then calls window.print(), the page works with
