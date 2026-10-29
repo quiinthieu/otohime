@@ -3,9 +3,9 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { Component, useCallback, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import { Component, startTransition, useCallback, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { FigTitle } from "@/components/figures";
-import { SHELF_ROW_GAP, SHELF_WIDTH, shelfBookExtent, shelfRowCount, type ShelfBook } from "@/lib/shelf";
+import { SHELF_ROW_GAP, SHELF_WIDTH, shelfBookExtent, shelfRowCount, type BookScreenRect, type ShelfBook } from "@/lib/shelf";
 
 const filters = [["all", "All"], ["project", "Projects"], ["note", "Notes"]] as const;
 const Shelf3D = dynamic(() => import("@/components/ink-shelf-3d"), { ssr: false });
@@ -38,7 +38,45 @@ export function InkShelf({ books }: { books: readonly ShelfBook[] }) {
   const [ready, setReady] = useState(false);
   const onFail = useCallback(() => setFailed(true), []);
   const onReady = useCallback(() => setReady(true), []);
-  const onActivate = useCallback((book: ShelfBook) => router.push(book.href), [router]);
+  const measureRef = useRef<((id: string) => BookScreenRect | null) | null>(null);
+  const proxyRef = useRef<HTMLDivElement>(null);
+  const openBook = useCallback((book: ShelfBook, rect?: BookScreenRect | null) => {
+    const go = () => startTransition(() => router.push(book.href));
+    // A full load does not call the JS API. Reduced motion must not start one,
+    // including the transition React starts for a client navigation.
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { window.location.assign(book.href); return; }
+    const link = document.querySelector<HTMLElement>(`a.shelf-book[data-book-id="${CSS.escape(book.id)}"]`);
+    const proxy = proxyRef.current;
+    const projected = rect?.visible ? rect : measureRef.current?.(book.id);
+    const clear = () => {
+      if (!proxy) return;
+      proxy.style.display = "none";
+      proxy.style.viewTransitionName = "none";
+      delete proxy.dataset.vtActive;
+    };
+    if (projected?.visible && proxy) {
+      proxy.style.display = "block";
+      proxy.style.left = `${projected.left}px`;
+      proxy.style.top = `${projected.top}px`;
+      proxy.style.width = `${projected.width}px`;
+      proxy.style.height = `${projected.height}px`;
+      proxy.style.viewTransitionName = book.viewTransitionName;
+      proxy.dataset.vtActive = "true";
+      if (link) { link.style.viewTransitionName = "none"; delete link.dataset.vtActive; }
+    } else if (link) {
+      link.style.viewTransitionName = book.viewTransitionName;
+      link.dataset.vtActive = "true";
+      clear();
+    }
+    if (typeof document.startViewTransition !== "function") { go(); return; }
+    // Notes stay in this document: React's page <ViewTransition> starts the
+    // one transition, and the proxy is already in place for its snapshot.
+    // A project is another root layout, so the hop is a full load. Start the
+    // transition here or the navigation API never calls this method.
+    if (book.kind === "note") { go(); return; }
+    const pending = document.startViewTransition(() => { go(); });
+    pending.finished.finally(() => { if (location.pathname === "/shelf") clear(); });
+  }, [router]);
   const enhanced = capable && !failed && ready;
   const [filter, setFilter] = useState<"all" | ShelfBook["kind"]>("all");
   const [focusedBook, setFocusedBook] = useState<string | null>(null);
@@ -74,6 +112,11 @@ export function InkShelf({ books }: { books: readonly ShelfBook[] }) {
                 aria-label={`${book.title} — ${book.kind}${book.date ? `, ${book.date}` : ""}`}
                 title={`${book.title} · ${book.subtitle}`}
                 style={{ viewTransitionName: book.viewTransitionName, borderTopColor: `var(--${book.swatch})` } as CSSProperties}
+                onClick={(event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+                  event.preventDefault();
+                  openBook(book, measureRef.current?.(book.id) ?? null);
+                }}
                 onFocus={() => setFocusedBook(book.id)} onBlur={() => setFocusedBook(null)}>
                 <span className="shelf-spine-title">{book.title}</span>
                 <span className="shelf-spine-kind" aria-hidden="true">{book.kind === "project" ? "P" : "N"}</span>
@@ -84,11 +127,12 @@ export function InkShelf({ books }: { books: readonly ShelfBook[] }) {
         {capable && !failed && books.length > 0 && (
           <EnhancementBoundary onFail={onFail}>
             <div aria-hidden="true" style={{ position: "absolute", inset: 0, opacity: enhanced ? 1 : 0, pointerEvents: enhanced ? "auto" : "none" }}>
-              <Shelf3D books={books} filter={filter} focusedBook={focusedBook} onReady={onReady} onFail={onFail} onActivate={onActivate} />
+              <Shelf3D books={books} filter={filter} focusedBook={focusedBook} measureRef={measureRef} onReady={onReady} onFail={onFail} onActivate={openBook} />
             </div>
           </EnhancementBoundary>
         )}
         {books.length === 0 && <p className="shelf-empty">A little space for the next story.</p>}
+        <div ref={proxyRef} data-testid="shelf-transition-proxy" aria-hidden="true" className="shelf-transition-proxy" />
       </div>
       <p className="shelf-colophon">Paper spines, ink lines. P = project · N = note.</p>
     </section>
