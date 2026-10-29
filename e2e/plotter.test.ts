@@ -8,7 +8,8 @@ test("plotter samples real SVG transforms and separate subpaths, draws and expor
   try {
     await page.waitForFunction(() => "otohimeAppearance" in window);
     await page.evaluate(() => {
-      document.querySelectorAll("main svg").forEach(s => s.setAttribute("data-plotter-ignore", ""));
+      // Ignore stable scene containers, including SVGs they hydrate after this setup.
+      document.querySelectorAll("main > *").forEach(s => s.setAttribute("data-plotter-ignore", ""));
       const fixture = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       fixture.setAttribute("width", "120"); fixture.setAttribute("height", "120");
       fixture.setAttribute("data-plotter-fixture", "");
