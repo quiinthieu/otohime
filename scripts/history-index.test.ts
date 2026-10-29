@@ -272,6 +272,35 @@ test("the index is capped at MAX_ENTRIES while total counts all reachable commit
   assert.equal(checkHistory(git, repo, serializeHistory(afterMerge), { strict: true }).ok, true);
 });
 
+test("a PR merge indexes both divergent branches even though the newest leaf contains only one", () => {
+  const repo = fixtureRepo(SAMPLE);
+  sh(repo, "checkout", "--quiet", "-b", "feature");
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "feature delivery");
+  sh(repo, "checkout", "--quiet", "main");
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "concurrent main delivery");
+  sh(repo, "merge", "--quiet", "--no-ff", "-m", "PR merge", "feature");
+  const git = gitRunner(repo);
+  const index = indexAt(git)!;
+  const text = serializeHistory(index);
+  assert.ok(index.entries.some((entry) => entry.subject === "feature delivery"));
+  assert.ok(index.entries.some((entry) => entry.subject === "concurrent main delivery"));
+  assert.notDeepEqual(index.entries, indexAt(git, index.head!)!.entries, "the merge snapshot cannot be rebuilt from just its newest leaf");
+  for (const strict of [false, true]) {
+    const result = checkHistory(git, repo, text, { strict });
+    assert.equal(result.ok, true, result.message);
+    const altered = { ...index, entries: index.entries.map((entry, i) => i === 1 ? { ...entry, subject: "altered" } : entry) };
+    assert.equal(checkHistory(git, repo, serializeHistory(altered), { strict }).ok, false);
+    const incomplete = { ...index, entries: index.entries.filter((_, i) => i !== 1) };
+    assert.equal(checkHistory(git, repo, serializeHistory(incomplete), { strict }).ok, false);
+  }
+  const file = join(TMP, `merge-${repos++}.json`);
+  const rev = sh(repo, "rev-parse", "HEAD").trim();
+  const generated = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${rev}`);
+  assert.equal(generated.status, 0, generated.stdout + generated.stderr);
+  assert.equal(readFileSync(file, "utf8"), text);
+  assert.equal(runScript(`--repo=${repo}`, `--file=${file}`, "--check", "--strict", `--rev=${rev}`).status, 0);
+});
+
 test("without git, outside a repository, or in an empty one, the committed fallback is used as it is", () => {
   const repo = fixtureRepo(SAMPLE);
   const fallback = indexAt(gitRunner(repo))!;

@@ -339,6 +339,14 @@ export function checkHistory(
     return { ok: false, message: `names head ${committed.head}, which is not in HEAD's history; run npm run history:index` };
   }
 
+  // A merge snapshot contains leaves from both parents. Its newest non-merge leaf may belong to just
+  // one branch, so rebuilding at that leaf loses the other parent's entries. First recognize the exact
+  // current snapshot (including its total); older fallbacks still go through the leaf and lag checks below.
+  const rebuiltAtHead = indexAt(git, head);
+  if (rebuiltAtHead && serializeHistory(rebuiltAtHead) === text) {
+    return { ok: true, message: `matches git at HEAD ${head.slice(0, SHA_LENGTH)}` };
+  }
+
   const rebuiltAtLeaf = indexAt(git, committed.head);
   if (!rebuiltAtLeaf || serializeHistory({ ...rebuiltAtLeaf, total: committed.total }) !== text) {
     return { ok: false, message: `does not match git at its own head ${committed.head.slice(0, SHA_LENGTH)}; run npm run history:index` };
