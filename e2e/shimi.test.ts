@@ -108,6 +108,7 @@ test("Shimi Bookworms stay off by default on Home and Notes", async () => {
 test("Pocket chip, terminal, and typing shimi summon overlay nibbles without mutating DOM text", async () => {
   const home = await open({}, "/");
   await home.page.locator("[data-pocket-shimi]").waitFor();
+  await home.page.locator('[data-pocket-ghosts][aria-pressed="true"]').waitFor();
   const beforeHome = await mainText(home.page);
   await home.page.locator("[data-pocket-shimi]").click();
   await canvas(home.page).waitFor();
@@ -159,6 +160,7 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   await keyboardReady(page);
   await page.keyboard.type("shimi");
   await canvas(page).waitFor();
+  await page.locator('[data-shimi-canvas][data-shimi-mode="static"]').waitFor();
   assert.equal(await canvas(page).getAttribute("data-shimi-mode"), "static");
   const before = (await meter(page)).frames;
   await page.waitForTimeout(400);
