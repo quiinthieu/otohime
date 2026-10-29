@@ -43,6 +43,15 @@ test("Work trace scrubs by drag and keyboard, selects failure, exports a standal
   const context = await browser.newContext({ viewport:{width:1366,height:900}, acceptDownloads:true, reducedMotion:"reduce" });
   const page = await context.newPage();
   page.setDefaultNavigationTimeout(120_000);
+  const response = await page.request.get(`${base}/api/seismograph`);
+  assert.equal(response.status(),200);
+  const activity = await response.json();
+  assert.ok(Array.isArray(activity.events) && activity.events.length>0);
+  assert.ok(typeof activity.source==="string" && activity.source.length>0);
+  // Exercise the live transport above; keep keyboard/drag bounds and failed
+  // records stable while testing the UI, independently of fresh public activity.
+  const archive = JSON.parse(readFileSync("content/seismo.json","utf8"));
+  await page.route("**/api/seismograph",route => route.fulfill({json:{events:archive.events,source:`Saved trace · ${archive.generated}`}}));
   await page.goto(`${base}/work`,{waitUntil:"domcontentloaded"});
   await page.getByRole("heading",{name:"Ink Seismograph",exact:true}).waitFor();
   const chart = page.locator(".seismograph");
@@ -51,14 +60,18 @@ test("Work trace scrubs by drag and keyboard, selects failure, exports a standal
   const before = await chart.getAttribute("data-end");
   const slider = page.getByRole("slider",{name:"Scrub ink history"});
   await slider.focus(); await slider.press("ArrowLeft");
+  await page.waitForFunction(previous => document.querySelector(".seismograph")?.getAttribute("data-end")!==previous,before);
   assert.notEqual(await chart.getAttribute("data-end"),before);
   const svg = page.locator(".seismo-chart"); const b = await svg.boundingBox(); assert.ok(b);
   const prior = await chart.getAttribute("data-end");
   await page.mouse.move(b.x+b.width*.5,b.y+30); await page.mouse.down(); await page.mouse.move(b.x+b.width*.65,b.y+30,{steps:5}); await page.mouse.up();
+  await page.waitForFunction(previous => document.querySelector(".seismograph")?.getAttribute("data-end")!==previous,prior);
   assert.notEqual(await chart.getAttribute("data-end"),prior);
   await page.getByRole("button",{name:"Latest",exact:true}).click();
+  await page.waitForFunction(latest => document.querySelector(".seismograph")?.getAttribute("data-end")===latest,before);
   const failure = page.locator('[data-spike] [class="seismo-blot"]').first();
   await failure.locator("..").focus(); await page.keyboard.press("Enter");
+  await page.waitForFunction(() => document.querySelector(".seismo-detail")?.textContent?.includes("Red ink"));
   assert.ok((await page.locator(".seismo-detail").innerText()).includes("Red ink"));
   const download = page.waitForEvent("download"); await page.getByRole("button",{name:"Tear off SVG"}).click();
   const file = await download; const path = await file.path(); assert.ok(path);
