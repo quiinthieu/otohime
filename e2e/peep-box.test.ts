@@ -73,7 +73,7 @@ async function open(
       if (saveData)
         Object.defineProperty(navigator, "connection", {
           configurable: true,
-          value: { saveData: true },
+          value: Object.assign(new EventTarget(), { saveData: true }),
         });
       if (navigator.mediaDevices)
         navigator.mediaDevices.getUserMedia = async () => {
