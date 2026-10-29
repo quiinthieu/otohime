@@ -2,7 +2,7 @@
 // pull requests keep running on every change, and the jobs that ship run on a pinned runner.
 // Dependency-free (no npm ci needed): reads the YAML by indentation, which is all this file uses.
 import assert from "node:assert/strict";
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -59,7 +59,7 @@ test("every build refreshes the public ledger with the read-only Actions token",
     assert.ok(found, job);
     const source = lines.slice(found.start, found.end).join("\n");
     const refresh = source.indexOf("- name: Refresh public stamp ledger");
-    const build = source.indexOf(job === "checks" ? "npm run build" : "npx vercel@64 build");
+    const build = source.indexOf(job === "checks" ? "npm run build" : "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build");
     assert.ok(refresh >= 0 && build > refresh, `${job} refreshes before building`);
     assert.match(source.slice(refresh, build), /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
     assert.match(source.slice(refresh, build), /run: node scripts\/ledger-fetch\.mjs/);
@@ -170,9 +170,9 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks budgets the full browser suite with a 45m job, 32m step and 1800s bound", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "45");
-  assert.match(workflow, /40825297324 exhausted 1200s after only 273 browser cases/);
+test("checks budgets the full browser suite with a 50m job, 32m step and 1800s bound", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "50");
+  assert.match(workflow, /40820018472 exhausted 960s at the peep-box cases/);
   const checks = steps("checks");
   assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 32\n/);
   const e2e = gateBody("E2E against next start");
@@ -280,6 +280,48 @@ function gateBody(name) {
   }
   return body.join("\n");
 }
+
+test("camera CI reuses only a successful production build and preserves camera failure", () => {
+  const checks = steps("checks");
+  const camera = checks.indexOf("- name: Real CPU camera and privacy verifier");
+  const build = checks.indexOf("- run: npm run build\n");
+  assert.ok(build >= 0 && camera > build, "production build precedes camera");
+  // Both steps retain Actions' default success() gate and fail-closed behavior.
+  const cameraStep = checks.slice(camera, checks.indexOf("      - ", camera + 1));
+  assert.doesNotMatch(cameraStep, /\n\s*(if|continue-on-error):/);
+  assert.doesNotMatch(checks.slice(build, camera), /continue-on-error:|if:.*always\(/);
+  const buildCommand = checks.slice(build).split("\n")[0].replace("- run: ", "");
+  for (const [buildStatus, cameraStatus] of [[0, 0], [0, 7], [17, 0]]) {
+    const work = mkdtempSync(join(tmpdir(), "camera-build-ci-"));
+    try {
+      mkdirSync(join(work, "scripts"));
+      for (const file of ["browser-gate-diagnostics.mjs", "ci-probe-annotate.mjs", "e2e-annotate.mjs"])
+        copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
+      writeFileSync(join(work, "scripts/verify-peep-box-camera.mjs"), `
+        import assert from 'node:assert/strict';
+        import { readFileSync, writeFileSync } from 'node:fs';
+        assert.equal(process.env.SKIP_BUILD, '1');
+        assert.equal(readFileSync('.next/BUILD_ID', 'utf8'), 'successful fixture build');
+        writeFileSync('camera-called', 'yes');
+        process.exit(${cameraStatus});
+      `);
+      // Execute YAML's real commands with a fake compiler/camera, real shell and reporters.
+      const result = spawnSync("bash", ["-euc", `
+        npm() {
+          test "$*" = 'run build'
+          if [ ${buildStatus} -ne 0 ]; then return ${buildStatus}; fi
+          mkdir .next
+          printf 'successful fixture build' > .next/BUILD_ID
+        }
+        ${buildCommand}
+        ${gateBody("Real CPU camera and privacy verifier")}
+      `], { cwd: work, env: { ...process.env, RUNNER_TEMP: work }, encoding: "utf8", timeout: 10000 });
+      assert.ifError(result.error);
+      assert.equal(result.status, buildStatus || cameraStatus, result.stdout + result.stderr);
+      assert.equal(existsSync(join(work, "camera-called")), buildStatus === 0, "a failed build never invokes camera");
+    } finally { rmSync(work, { recursive: true, force: true }); }
+  }
+});
 
 // Execute the actual YAML shell, not a copy of its implementation. Only external
 // server/readiness/probe behavior is replaced; Node, streams, tee and reporters are real.
@@ -530,6 +572,8 @@ test("guestbook author guard rejects a wrong-author schema or migration-only pus
 
     const [ownFrom, ownTo] = push(["db/migrations/0008_owner.sql", owner], ["db/schema.ts", owner]);
     assert.equal(run(ownFrom, ownTo).status, 0);
+    const [profileFrom, profileTo] = push(["lib/guestbook-profile.ts", { name: "Ōtohime", email: owner.email }]);
+    assert.equal(run(profileFrom, profileTo).status, 0, "GitHub squash merges use the owner's profile spelling");
     const [otherFrom, otherTo] = push(["docs/unrelated.md", stranger], ["db/seed-notes.txt", stranger]);
     assert.equal(run(otherFrom, otherTo).status, 0, "paths outside the guarded set are not author-gated here");
 
@@ -554,7 +598,7 @@ test("checks, preview and production check out full git ancestry (fetch-depth: 0
     );
     const gen = s.indexOf('npm run history:index -- --strict --rev="$GITHUB_SHA"');
     const preCheck = s.indexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
-    const build = s.indexOf(job === "checks" ? "npm run build" : job === "preview" ? "npx vercel@64 build" : "npx vercel@64 build --prod");
+    const build = s.indexOf(job === "checks" ? "npm run build" : job === "preview" ? "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build" : "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod");
     const postCheck = s.lastIndexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
     assert.ok(gen !== -1, `${job} must run strict history:index`);
     assert.ok(preCheck > gen && preCheck < build, `${job} must run strict history:check before build`);
@@ -650,7 +694,7 @@ test("production strict history build step blocks build/upload on shallow or mis
       return { ...res, built, uploaded };
     }
 
-    // 1. Shallow clone negative control: fails before npx vercel@64 build --prod or upload runs.
+    // 1. Shallow clone negative control: fails before npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod or upload runs.
     const shallow = join(work, "shallow");
     spawnSync("git", ["clone", "-q", "--depth=1", `file://${origin}`, shallow], { env: gitEnv });
     setupCheckout(shallow);
@@ -659,7 +703,7 @@ test("production strict history build step blocks build/upload on shallow or mis
     assert.equal(shallowRes.built, false, "shallow clone must not reach vercel build");
     assert.equal(shallowRes.uploaded, false, "shallow clone must not reach upload");
 
-    // 2. Full clone with wrong GITHUB_SHA negative control: fails before npx vercel@64 build --prod or upload runs.
+    // 2. Full clone with wrong GITHUB_SHA negative control: fails before npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod or upload runs.
     setupCheckout(origin);
     const wrongShaRes = runProdBuildStep(origin, oldSha);
     assert.notEqual(wrongShaRes.status, 0);
@@ -720,7 +764,7 @@ test("actual CI fake startup/readiness/late-probe/cleanup commands keep the tran
 
 test("application SHA and Next BUILD_ID are published independently from the Worker executable", () => {
   const checks = steps("checks");
-  assert.ok(checks.indexOf("- name: Publish application build identity") > checks.indexOf("- name: Real CPU camera and privacy verifier"), "camera verifier rebuilds .next: publish the build that next start actually serves");
+  assert.ok(checks.indexOf("- name: Publish application build identity") > checks.indexOf("- name: Real CPU camera and privacy verifier"), "publish the same prebuilt artifact after camera verification");
   assert.ok(checks.indexOf("- name: Publish application build identity") < checks.indexOf("- name: E2E against next start"));
   const identity = gateBody("Publish application build identity");
   assert.match(identity, /appSha: process.env.GITHUB_SHA/); assert.match(identity, /nextBuildId: fs.readFileSync\(".next\/BUILD_ID"/);

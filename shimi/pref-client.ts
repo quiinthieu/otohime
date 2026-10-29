@@ -3,10 +3,12 @@
 import { useSyncExternalStore } from "react";
 import { shimiPreferenceStore, type ShimiPreferenceStore } from "./pref.ts";
 
-// A safe, off-by-default fallback. The browser integration supplies one shared
-// store created with its storage/event ports; importing this hook touches no DOM.
-const fallbackStore = shimiPreferenceStore(() => null, () => ({
-  addEventListener() {}, removeEventListener() {},
-}));
-export const useShimiEnabled = (store: ShimiPreferenceStore = fallbackStore) =>
-  useSyncExternalStore(store.subscribe, store.get, store.getServer);
+const store = shimiPreferenceStore(
+  () => { try { return window.localStorage; } catch { return null; } },
+  () => { try { return window; } catch { return { addEventListener() {}, removeEventListener() {} }; } },
+);
+export const getShimiEnabled = store.get;
+export const setShimiEnabled = store.set;
+export const subscribeShimiEnabled = store.subscribe;
+export const useShimiEnabled = (injected: ShimiPreferenceStore = store) =>
+  useSyncExternalStore(injected.subscribe, injected.get, injected.getServer);

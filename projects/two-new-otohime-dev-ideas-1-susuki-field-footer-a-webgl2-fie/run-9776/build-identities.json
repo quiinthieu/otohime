@@ -1,0 +1,19 @@
+{
+  "deliveryAndObservedDeployment": "017810c694e4e9ea256fc543b3ec213695875cc6",
+  "localBase": "ad09e3c520ba978bffd7b486c99cbe4222e898e8",
+  "localBuildId": "xI72c6VFAlSpLHCF35FYd",
+  "configurationHashes": {
+    "017810c694e4e9ea256fc543b3ec213695875cc6": {
+      ".github/workflows/ci.yml": "944d94fd8dcae37cd3cb713d2af55b90d0e9e50d608b87d86e8bd87d2e09e53a",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d"
+    },
+    "ad09e3c520ba978bffd7b486c99cbe4222e898e8": {
+      ".github/workflows/ci.yml": "46057bbd266cdcaa24e651bef727fc05d0ab770873f2611af228d9ed94b2f484",
+      "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+      "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d"
+    }
+  },
+  "ancestryChecks": "git merge-base --is-ancestor 017810c 017810c exit0; f54f160 ancestor of 017810c exit0",
+  "gitAuthors": "017810c694e4e9ea256fc543b3ec213695875cc6\nOtohime <quiinthieu@gmail.com>\npm-299/t-1768: docs: Repair publication without waiving artifact QA [skip ci]\n\nf54f160a9e40284090f0332c2f5dca55d147ecfd\nOtohime <quiinthieu@gmail.com>\npm-299/t-1768: docs: Record second verified publication retry\n\ne6d0e64c7db356822b0a0522ce18423bb4920510\nOtohime <quiinthieu@gmail.com>\npm-299/t-1768: feat: Render the Ink Shelf with sumi-e shaders\n\n"
+}

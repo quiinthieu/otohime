@@ -25,6 +25,7 @@ import { getPalaceSound, getServerPalaceSound, setPalaceSound, subscribePalaceSo
 import { play } from "@/lib/sound-client";
 import { PALACE_HREF } from "@/lib/urashima";
 import { setGhostsHidden, useGhostsHidden } from "@/ghosts/pref-client";
+import { setShimiEnabled, useShimiEnabled } from "@/shimi/pref-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent, useReducer, useRef, useState, useSyncExternalStore } from "react";
@@ -81,6 +82,7 @@ export function Handheld() {
   // The palace's sea sound, switched here and heard only down in Ryugu-jo (lib/palace-sound.ts).
   const seaSound = useSyncExternalStore(subscribePalaceSound, getPalaceSound, getServerPalaceSound);
   const ghostsHidden = useGhostsHidden();
+  const shimiEnabled = useShimiEnabled();
   const lcdRef = useRef<SVGRectElement>(null);
   const [onscreen, setOnscreen] = useState(true);
   // The page A is opening: its label shows over the LCD until the navigation takes it (or LABEL_MS passes).
@@ -527,6 +529,9 @@ export function Handheld() {
               </Chip>
               <Chip aria-pressed={!ghostsHidden} data-pocket-ghosts="" onClick={() => setGhostsHidden(!ghostsHidden)}>
                 Ghosts {ghostsHidden ? "off" : "on"}
+              </Chip>
+              <Chip aria-pressed={shimiEnabled} data-pocket-shimi="" onClick={() => setShimiEnabled(!shimiEnabled)}>
+                Shimi {shimiEnabled ? "on" : "off"}
               </Chip>
             </>
           )}

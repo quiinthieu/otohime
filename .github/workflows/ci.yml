@@ -39,12 +39,12 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
     runs-on: ubuntu-24.04
-    # Run 40825297324 exhausted 1200s after only 273 browser cases, before the
-    # tactile coverage. Allow 1800s for the full serial suite, 32m for
-    # readiness/TERM/diagnostics, and 45m for all probes.
+    # Run 40820018472 exhausted 960s at the peep-box cases, before the palace
+    # and remaining browser coverage. Run 40837465689 exhausted 1200s without assertion failures. Allow 1800s for the serial suite,
+    # 32m for readiness/TERM/diagnostics, and 50m for all probes.
     # Individual assertions retain their timeouts; exit 124 still fails the job.
     # Motion's paced auth requests explain its 171s; no runtime browser installers in CI.
-    timeout-minutes: 45
+    timeout-minutes: 50
     services:
       postgres:
         image: postgres:17-alpine
@@ -82,7 +82,7 @@ jobs:
           for commit in $commits; do
             if git diff-tree --no-commit-id --name-only -r "$commit" | grep -Eq '^(app/api/guestbook/|lib/guestbook[^/]*|e2e/guestbook-api\.test\.ts$|db/schema\.ts$|db/migrations/)'; then
               author="$(git show -s --format='%an <%ae>' "$commit")"
-              if [ "$author" != 'Otohime <quiinthieu@gmail.com>' ]; then
+              if [ "$author" != 'Otohime <quiinthieu@gmail.com>' ] && [ "$author" != 'Ōtohime <quiinthieu@gmail.com>' ]; then
                 echo "Guestbook delivery $commit has an undeployable author: $author" >&2
                 exit 1
               fi
@@ -144,7 +144,7 @@ jobs:
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true; exit "$status"' EXIT
           status=0
-          node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
+          SKIP_BUILD=1 node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
           node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true
           exit "$status"
       - run: npm run db:migrate
@@ -275,26 +275,26 @@ jobs:
           # Child branches inherit production's role password: mask it before anything can print it.
           echo "::add-mask::$(node -p 'new URL(process.argv[1]).password' "$direct")"
           { echo "DATABASE_URL=$direct"; echo "DATABASE_URL_POOLED=$pooled"; } >> "$GITHUB_ENV"
-      - run: npx vercel@64 pull --yes --environment=preview
+      - run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel pull --yes --environment=preview
       - run: npm run history:index -- --strict --rev="$GITHUB_SHA"
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - name: Refresh public stamp ledger
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/ledger-fetch.mjs
-      - run: npx vercel@64 build
+      - run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run db:migrate # DATABASE_URL = direct URL of the PR branch
       - name: Deploy
         id: deploy
         run: |
           # Assign first: a failed deploy inside echo "$(…)" would not fail the step.
-          url=$(npx vercel@64 deploy --prebuilt --archive=tgz --env DATABASE_URL="$DATABASE_URL_POOLED")
+          url=$(npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel deploy --prebuilt --archive=tgz --env DATABASE_URL="$DATABASE_URL_POOLED")
           echo "url=$url" >> "$GITHUB_OUTPUT"
       - name: Smoke test (vercel curl adds the protection bypass)
         env:
           URL: ${{ steps.deploy.outputs.url }}
-        run: npx vercel@64 curl "$URL/api/health" --yes -- --fail --silent --show-error
+        run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel curl "$URL/api/health" --yes -- --fail --silent --show-error
       - name: Comment preview URL
         env:
           GH_TOKEN: ${{ github.token }}
@@ -339,7 +339,7 @@ jobs:
           node-version-file: package.json
           cache: npm
       - run: npm ci
-      - run: npx vercel@64 pull --yes --environment=production
+      - run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel pull --yes --environment=production
       - name: Refresh public stamp ledger
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -349,7 +349,7 @@ jobs:
         run: |
           npm run history:index -- --strict --rev="$GITHUB_SHA"
           npm run history:check -- --strict --rev="$GITHUB_SHA"
-          npx vercel@64 build --prod
+          npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod
           npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run db:migrate
         env:

@@ -13,7 +13,7 @@ geometry. The chart supports mouse/touch pan, arrow keys, recentering,
 hover/focus titles and note navigation through the site's view transitions.
 Dragging a star does not open it. The ordinary Notes list remains available.
 
-Validation: 2,798 unit and regression assertions, lint, type checking and a
+Validation: 2,808 unit and regression assertions, lint, type checking and a
 production build passed locally. Five browser tests cover forward/reverse
 scroll, word receipts, constellation membership, hover/focus, drag suppression,
 actual touch panning, all note destinations, view transitions, live reduced
