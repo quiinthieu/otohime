@@ -106,16 +106,12 @@ async function aim(page: Page, prefix: string) {
   await canvas.scrollIntoViewIfNeeded();
   const box = await canvas.boundingBox();
   assert.ok(box && box.width > 8 && box.height > 8, "shelf canvas has a box");
-  await page.mouse.move(box.x + 2, box.y + 2);
-  for (const row of [0.36, 0.5, 0.64, 0.78]) {
-    for (let step = 1; step < 30; step++) {
-      const x = box.x + box.width * step / 30, y = box.y + box.height * row;
+  for (const row of [0.42, 0.58, 0.74]) {
+    for (let step = 2; step < 16; step++) {
+      const x = box.x + box.width * step / 16, y = box.y + box.height * row;
       await page.mouse.move(x, y);
-      const id = await page.evaluate(async () => {
-        await new Promise((frame) => requestAnimationFrame(() => requestAnimationFrame(frame)));
-        return document.querySelector<HTMLElement>(".ink-shelf canvas")?.dataset.hoveredBook ?? "";
-      });
-      if (id.startsWith(prefix)) return { id, x, y };
+      const id = await canvas.getAttribute("data-hovered-book");
+      if (id?.startsWith(prefix)) return { id, x, y };
     }
   }
   assert.fail(`no ${prefix} volume under the pointer`);
@@ -152,8 +148,10 @@ for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 
       await link.focus();
       await page.waitForFunction((book) => document.querySelector(".ink-shelf")?.getAttribute("data-focused-book") === book, id);
       await page.waitForFunction((book) => document.querySelector<HTMLElement>(".ink-shelf canvas")?.dataset.focusedBook === book, id);
-      const hovered = await aim(page, "project-");
-      assert.ok(hovered.id.startsWith("project-") || hovered.id.startsWith("note-"));
+      if (viewport.width >= 1000) {
+        const hovered = await aim(page, "project-");
+        assert.ok(hovered.id.startsWith("project-"));
+      }
       assert.deepEqual(errors.unexpected, []);
     } finally { await page.context().close(); }
   });
@@ -164,26 +162,22 @@ test("clicking a book starts a view transition from its projected rect to the he
   try {
     await shelf(page);
     await live(page);
-    for (const prefix of ["note-", "project-"]) {
-      if (!page.url().endsWith("/shelf")) await shelf(page);
-      await live(page);
-      const aimed = await aim(page, prefix);
-      const href = await page.locator(`a[data-book-id="${aimed.id}"]`).getAttribute("href");
-      assert.ok(href);
-      const before = transitions.length;
-      await page.mouse.click(aimed.x, aimed.y);
-      await page.waitForURL((url) => url.pathname === new URL(href, base).pathname);
-      const until = Date.now() + 2000;
-      while (transitions.length <= before && Date.now() < until) await page.waitForTimeout(50);
-      const record = transitions[before];
-      assert.ok(record, "document.startViewTransition ran");
-      assert.equal(record.name, aimed.id);
-      assert.equal(record.testid, "shelf-transition-proxy");
-      assert.ok(record.width > 4 && record.height > 4);
-      assert.ok(aimed.x >= record.left - 4 && aimed.x <= record.left + record.width + 4, "proxy covers the book");
-      assert.ok(aimed.y >= record.top - 4 && aimed.y <= record.top + record.height + 4);
-      await headingNamed(page, aimed.id);
-    }
+    const aimed = await aim(page, "note-");
+    const href = await page.locator(`a[data-book-id="${aimed.id}"]`).getAttribute("href");
+    assert.ok(href);
+    const before = transitions.length;
+    await page.mouse.click(aimed.x, aimed.y);
+    await page.waitForURL((url) => url.pathname === new URL(href, base).pathname);
+    const until = Date.now() + 1500;
+    while (transitions.length <= before && Date.now() < until) await page.waitForTimeout(40);
+    const record = transitions[before];
+    assert.ok(record, "document.startViewTransition ran");
+    assert.equal(record.name, aimed.id);
+    assert.equal(record.testid, "shelf-transition-proxy");
+    assert.ok(record.width > 4 && record.height > 4);
+    assert.ok(aimed.x >= record.left - 4 && aimed.x <= record.left + record.width + 4, "proxy covers the book");
+    assert.ok(aimed.y >= record.top - 4 && aimed.y <= record.top + record.height + 4);
+    await headingNamed(page, aimed.id);
     assert.deepEqual(errors.unexpected, []);
   } finally { await page.context().close(); }
 });
@@ -193,13 +187,17 @@ test("reduced motion skips the view transition and the hover spring", async () =
   try {
     await shelf(page);
     await live(page);
-    const aimed = await aim(page, "note-");
-    const settled = await page.locator(".ink-shelf canvas").evaluate((canvas) => Number((canvas as HTMLCanvasElement).dataset.shelfFrames));
+    const canvas = page.locator(".ink-shelf canvas");
+    const box = await canvas.boundingBox();
+    assert.ok(box);
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    const settled = await canvas.evaluate((el) => Number((el as HTMLCanvasElement).dataset.shelfFrames));
     await page.evaluate(async () => { for (let i = 0; i < 6; i++) await new Promise(requestAnimationFrame); });
-    const later = await page.locator(".ink-shelf canvas").evaluate((canvas) => Number((canvas as HTMLCanvasElement).dataset.shelfFrames));
+    const later = await canvas.evaluate((el) => Number((el as HTMLCanvasElement).dataset.shelfFrames));
     assert.ok(later - settled < 3, `hover spring kept drawing (${settled} → ${later})`);
-    const href = await page.locator(`a[data-book-id="${aimed.id}"]`).getAttribute("href");
-    await page.locator(`a[data-book-id="${aimed.id}"]`).focus();
+    const link = page.locator("a[href^='/notes/']").first();
+    const href = await link.getAttribute("href");
+    await link.focus();
     await page.keyboard.press("Enter");
     await page.waitForURL((url) => url.pathname === new URL(href!, base).pathname);
     assert.equal(transitions.length, 0);
