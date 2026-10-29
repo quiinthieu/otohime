@@ -152,7 +152,7 @@ test("help lists every command", () => {
   const reply = run("help", STATE);
   assert.equal(reply.lines, HELP);
   assert.deepEqual(run("?", STATE).lines, HELP);
-  for (const cmd of ["help", "go", "theme", "sound", "season", "stamps", "adventure", "clear", "exit"]) {
+  for (const cmd of ["help", "go", "theme", "sound", "season", "stamps", "shimi", "adventure", "clear", "exit"]) {
     assert.ok(HELP.some((l) => l.startsWith(cmd)), cmd);
   }
 });
@@ -185,6 +185,15 @@ test("season pins a season or auto; bare, it reports the choice", () => {
   assert.equal(parseSeasonChoice("summer"), "summer");
   assert.equal(parseSeasonChoice(null), "auto");
   assert.equal(parseSeasonChoice("fall"), "auto");
+});
+
+test("shimi flips the paper silverfish, or sets them on or off", () => {
+  assert.deepEqual(run("shimi", STATE), { lines: ["shimi: on"], effect: { kind: "shimi", on: true } });
+  assert.deepEqual(run("shimi", { ...STATE, shimi: true }).effect, { kind: "shimi", on: false });
+  assert.deepEqual(run("shimi off", { ...STATE, shimi: true }).effect, { kind: "shimi", on: false });
+  assert.deepEqual(run("shimi on", STATE).effect, { kind: "shimi", on: true });
+  assert.deepEqual(run("bookworms toggle", STATE).effect, { kind: "shimi", on: true });
+  assert.equal(run("shimi loud", STATE).effect, undefined);
 });
 
 test("stamps lists what is won, or says there are none", () => {

@@ -15,6 +15,7 @@ import { begin, loadProgress, moves, saveProgress, step, UNSAVED, type Adventure
 import { PrintRunSwitch, printRunKey, selectPrintRun } from "@/components/print-run-switch";
 import { appearanceStore } from "@/lib/appearance-client";
 import { getSound, setSound, subscribeSound, play } from "@/lib/sound-client";
+import { getShimiEnabled, setShimiEnabled } from "@/shimi/pref-client";
 import { resolveSeason, SEASON_ATTR, SEASON_KEY, visitorZone } from "@/lib/seasons";
 import {
   moveActive,
@@ -78,7 +79,7 @@ function readState(): TerminalState {
   const off = subscribeSound(() => {});
   const sound = getSound();
   off();
-  return { theme, sound, season: parseSeasonChoice(stored(SEASON_KEY)), stamps: parseStamps(stored(STAMPS_KEY)), appearance: appearanceStore().getSnapshot() };
+  return { theme, sound, season: parseSeasonChoice(stored(SEASON_KEY)), stamps: parseStamps(stored(STAMPS_KEY)), appearance: appearanceStore().getSnapshot(), shimi: getShimiEnabled() };
 }
 
 // The theme toggle (components/theme-toggle.tsx) watches data-theme, so it follows.
@@ -159,6 +160,9 @@ export default function PocketTerminal({ open, onClose, bind }: TerminalProps) {
         break;
       case "season":
         setSeason(effect.season);
+        break;
+      case "shimi":
+        setShimiEnabled(effect.on);
         break;
       case "clear":
         setLog([]);
