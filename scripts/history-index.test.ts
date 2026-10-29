@@ -272,6 +272,30 @@ test("the index is capped at MAX_ENTRIES while total counts all reachable commit
   assert.equal(checkHistory(git, repo, serializeHistory(afterMerge), { strict: true }).ok, true);
 });
 
+test("strict history accepts both sides of a divergent PR merge", () => {
+  const repo = fixtureRepo(SAMPLE);
+  sh(repo, "checkout", "--quiet", "-b", "side");
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "side leaf");
+  sh(repo, "checkout", "--quiet", "main");
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "main leaf");
+  sh(repo, "merge", "--quiet", "--no-ff", "-m", "Merge side", "side");
+
+  const git = gitRunner(repo);
+  const index = indexAt(git)!;
+  assert.equal(index.total, 7);
+  assert.equal(index.entries.length, 6);
+  assert.equal(indexAt(git, index.head!)!.entries.length, 5);
+  assert.equal(checkHistory(git, repo, serializeHistory(index), { strict: true }).ok, true);
+  const otherLeaf = index.entries[0].subject === "side leaf" ? "main leaf" : "side leaf";
+  const incomplete = { ...index, entries: index.entries.filter((entry) => entry.subject !== otherLeaf) };
+  assert.equal(checkHistory(git, repo, serializeHistory(incomplete), { strict: true }).ok, false);
+
+  const file = join(TMP, `merged-${repos++}.json`);
+  const head = sh(repo, "rev-parse", "HEAD").trim();
+  const result = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${head}`);
+  assert.equal(result.status, 0, result.stderr);
+});
+
 test("without git, outside a repository, or in an empty one, the committed fallback is used as it is", () => {
   const repo = fixtureRepo(SAMPLE);
   const fallback = indexAt(gitRunner(repo))!;

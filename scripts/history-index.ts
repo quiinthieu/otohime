@@ -339,6 +339,13 @@ export function checkHistory(
     return { ok: false, message: `names head ${committed.head}, which is not in HEAD's history; run npm run history:index` };
   }
 
+  // A PR merge can contain newer leaves on both parents. The index at HEAD is
+  // complete even though neither individual leaf contains the other branch.
+  const rebuiltAtHead = indexAt(git, head);
+  if (rebuiltAtHead && serializeHistory(rebuiltAtHead) === text) {
+    return { ok: true, message: "matches git at HEAD" };
+  }
+
   const rebuiltAtLeaf = indexAt(git, committed.head);
   if (!rebuiltAtLeaf || serializeHistory({ ...rebuiltAtLeaf, total: committed.total }) !== text) {
     return { ok: false, message: `does not match git at its own head ${committed.head.slice(0, SHA_LENGTH)}; run npm run history:index` };
