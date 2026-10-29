@@ -139,14 +139,14 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     const reading = await page.getByTestId("inkblot-reading").innerText();
     assert.match(reading, /lantern/i);
     assert.ok(reading.includes(INKBLOT_DISCLAIMER));
-    await page.getByText("Pinned · awaiting the doctor's initials").waitFor();
+    await page.getByTestId("inkblot-gallery").getByText("Pinned · awaiting the doctor's initials", { exact: true }).waitFor();
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a lantern in the crease/);
     const pending = await pool.query("select status, note from inkblot_answer where note='a lantern in the crease' order by created_at desc limit 1");
     assert.equal(pending.rows[0].status, "pending");
     const before = Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n);
     await page.locator("#inkblot-note").fill("https://spam.example");
     await rejectNote();
-    await page.waitForFunction(() => (document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? "").length > 8);
+    await page.waitForFunction(() => /link/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
     assert.match(await page.getByTestId("inkblot-status").innerText(), /link|Links|ward/i);
     await page.locator("#inkblot-note").fill("this is shit");
     await rejectNote();

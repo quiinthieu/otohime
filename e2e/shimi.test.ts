@@ -58,7 +58,7 @@ async function open(options: BrowserContextOptions = {}, route = "/", meter = fa
   const scripts: string[] = [];
   page.on("response", (res) => { if (res.request().resourceType() === "script") scripts.push(res.url()); });
   await page.goto(`${BASE}${route}`);
-  await page.waitForFunction(() => document.documentElement.dataset.shimiReady === "true");
+  await page.waitForFunction(() => document.body.dataset.shimiKeys === "ready");
   return { page, context, errors, scripts };
 }
 
@@ -109,6 +109,7 @@ test("Pocket chip, terminal, and typing shimi summon overlay nibbles without mut
   const beforeSlug = await prose(slug.page);
   await slug.page.keyboard.type("shimi");
   await canvas(slug.page).waitFor();
+  assert.equal(new URL(slug.page.url()).pathname, "/notes/backfills-are-a-feature", "the word is not consumed by single-letter navigation");
   await slug.page.waitForFunction(() => Number(document.querySelector("[data-shimi-canvas]")?.getAttribute("data-shimi-nibbles")) > 0, null, { timeout: 12_000 });
   assert.equal(await prose(slug.page), beforeSlug);
   await slug.page.locator("[data-shimi-burp-trigger]").click();
@@ -131,6 +132,7 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   const { page, errors } = await open({ reducedMotion: "reduce" }, "/notes/on-twos", true);
   await page.keyboard.type("shimi");
   await canvas(page).waitFor();
+  assert.equal(new URL(page.url()).pathname, "/notes/on-twos");
   assert.equal(await canvas(page).getAttribute("data-shimi-mode"), "static");
   const before = (await meter(page)).frames;
   await page.waitForTimeout(400);

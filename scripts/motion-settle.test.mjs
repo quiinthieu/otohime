@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { launchBrowser } from "./probe-browser.mjs";
-import { landingSettled } from "./motion-settle.mjs";
+import { landingSettled } from "./probe-motion-state.mjs";
 
 test("motion landing waits for clock animations and reveals while allowing real scroll timelines", async () => {
   const browser = await launchBrowser();
