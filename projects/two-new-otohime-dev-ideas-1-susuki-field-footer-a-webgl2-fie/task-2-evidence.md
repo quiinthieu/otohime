@@ -1,5 +1,99 @@
 # t-1766 — Susuki footer delivery evidence
 
+## Publication retry and browser synchronization regressions — run-9726
+
+The runner supplied recovered HEAD `8cf342d023452b7fd76cc7e90e8536163363907e`
+on local `main`, with implementation `f288c44c6bb0f9c7921bd2c5fb8757a409726ade`
+already rebased above `377dfe09193ff6d0aa3ab4fd02d339749485a19e`.
+After fetching, this run created `pm-299-t-1766-run-9726` at that HEAD without
+another initial rebase. Both task commits and all unrelated upstream work are
+preserved. No source, tests, or plans were dropped. Only the generated
+`content/history.json` was restored using the contract's explicit command;
+its pre-build contents were backed up in worker artifacts.
+
+Fresh browser execution found a real test synchronization defect: the test's
+`uScrollBoost > .01` predicate could observe the boost from `scrollIntoView`
+before the subsequent requested scroll event arrived. The event trace shows
+initial scroll at y=2711, pointer input, a fox trigger, then the requested
+scroll at y=2621 while the fox was trotting. The product correctly cancelled
+the fox, leaving `uFox=-1` and phase `done`. The initial suite failed 20/21;
+a focused diagnostic run reproduced the same failure. The regression now
+awaits the native event for its requested scroll before checking the uniform
+and triggering the fox. No cancellation behavior or assertion was weakened.
+Temporary diagnostic instrumentation was removed after saving its trace.
+
+The initial full footer probe passed 176/177 checks. Its blocked-storage
+Konami fixture positioned the whole tall footer, then typed without focusing
+or revealing the console. EndStage subscribes to keys only while its own
+stage intersects. The fixture now focuses the mascot, centers the actual
+stage, observes `data-active=true`, and uses the existing bounded badge
+settling helper. Storage remains blocked and the real keyboard, unlock,
+LCD and zero-error assertions remain intact. This is a browser setup repair;
+product source is unchanged. The initial failure is retained in `probe.log`.
+
+| Local verification | Result / worker artifact |
+| --- | --- |
+| Fresh production build, real migrated embedded Postgres and Susuki/Bottle E2E | Initial build passed; initial suite 20/21 (`e2e.log`), focused diagnostic 0/1 (`fox-debug.log`), final suite **21/21**, 0 failed/skipped (`e2e-fixed.log`, reuses that production build) |
+| `TMPDIR=/tmp npm test` | **2,784 pass**, 0 failed/skipped before and after both fixture repairs (`unit.log`, `unit-fixed.log`) |
+| `npm run typecheck` | Pass before and after both repairs (`typecheck-final.log`) |
+| `npm run lint` | Pass before and after both repairs; 0 errors, 13 unrelated warnings (`lint-final.log`) |
+| `TMPDIR=/tmp node scripts/check-gate-closure.mjs` | Certified before and after repairs; `local_controls=pass`, `failures=[]`; external evidence inconclusive (`closure-final.log`) |
+| `SKIP_BUILD=1 TMPDIR=/tmp bash scripts/walk-end.sh` | **67 ok**, 0 failed (`walk.log`) |
+| `CI=1 SKIP_BUILD=1 TMPDIR=/tmp bash scripts/probe-end.sh` | Initial 176/177 (`probe.log`); final **177 ok**, 0 failed, zero page/console/hydration errors (`probe-fixed.log`) |
+
+Worker artifacts are under `shared/artifacts/run-9726/`. Fresh production build
+ID: `yimUpH2uMA8XN9ox7WckF`. Node `v22.23.3`, npm `10.9.9`, Next `16.4.2`,
+React `19.3.0`, Playwright Core `1.64.0`, embedded-postgres `17.10.0-beta.17`,
+and E2E Chrome `156.0.8078.73` were actually used. The footer probe uses
+Playwright `1.64.0` Chromium `156.0.8078.4`. Installed versions were
+checked against the unchanged lock; the contract permits the supplied
+`node_modules`. The installed Next server/client and lazy-loading guides were
+read. This fleet run uses profile `codex-sol-6-1-high`, model `gpt-6.1-sol`,
+reasoning effort `high`, as recorded by plan-manager.
+
+The unchanged production field chunk `.next/static/chunks/12qgltjgzy1gg.js`
+has SHA-256 `5ca02dfa389bb4c1055229019d254b2dc447eff5ad2dd7e5735319091ec1ff16`.
+The ordered code/lock/config/test fingerprint defined below is now
+`d469a1021086e1fe1d017447f2188fb56374d7767cfaf54e4429d321ab7a5737` because
+of the two browser fixture repairs. Its predecessor was
+`e8391b38fb8be6554832b0c4b09a13b5faae00b13e4ba943c0b9521d436f5fa0`;
+production source, shaders and baked fox atlas are unchanged. Both hash lists
+are in worker artifacts, correlating execution across recovered commit IDs.
+
+Final browser observations: live ink **214,242 pixels**; reduced motion and
+Save-Data **214,176 pixels**, one draw and **zero Susuki rAF callbacks**;
+Canvas2D fallback **75,838 pixels**, zero GL draws and zero rAF callbacks.
+The real GL uniforms prove pointer/scroll response, four seasonal tints and
+the same-draw fox instance; native touch, context loss/restoration, clickable
+controls, five SVGs, last-child waterline and **0 px** geometry shift pass.
+The negative control clears the actual framebuffer and observes exactly zero
+ink pixels before rendering resumes. Shader imports/compilation/linking,
+adapter construction, local atlas creation and the production server are real.
+Save-Data/no-WebGL capability and document-visibility fixtures are explicit;
+the existing Ghosts/Bottle network fixtures do not prove third-party services.
+
+History inspection: unfiltered SWE list has **10 rows: 4 failed, 4 succeeded,
+2 running**. The API exposes no pagination cursor. For this task, `run-9680`
+has a complete 29-line no-agent `red_gate_already_green` capture; `run-9686`
+and `run-9696` have truncated raw logs, so full historical completeness is
+**inconclusive**. Their actual task-manager tails show successful branch
+pushes followed by `push_not_on_main`; the latter also shows the rejected
+main pushes. Both persisted task-manager callbacks are `delivered`, one
+attempt each; persisted plan-manager statuses are `failed` with matching
+markers and `callback_apply_failures=0`. This follows callback outcomes
+through persisted ingestion but does not inspect internal callback payloads.
+`history-summary.json` in worker artifacts records IDs, counts and boundaries.
+
+Local execution is demonstrated. Publication is bound to the pushed SHA in
+the summary and `run-9726/artifacts/commits.txt`; deployment and independent
+product acceptance remain unproven. No capacity/operator prerequisite is
+pending. Deferred checks `t-1766/CI-green-gate` and `t-1766/deployed-QA` belong
+to plan-manager and its quality engineer; failure is any failed job or deployed
+acceptance assertion on the delivery. Pipeline/deployment IDs are unobserved
+under the stop-at-push contract. No pipeline is watched or deployed system
+checked. The missing chief-of-staff and software-development documents remain
+absent; available standing rules and the explicit task contract apply.
+
 ## Publication recovery — run-9696
 
 The recovered implementation commit is

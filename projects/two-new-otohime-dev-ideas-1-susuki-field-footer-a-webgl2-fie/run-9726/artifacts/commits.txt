@@ -1,0 +1,11 @@
+Plan: pm-299
+Task: t-1766
+Run: run-9726
+Branch: pm-299-t-1766-run-9726
+Integration base: 377dfe09193ff6d0aa3ab4fd02d339749485a19e
+Retained implementation: f288c44c6bb0f9c7921bd2c5fb8757a409726ade pm-299/t-1766: feat: Add interactive Susuki footer field
+Retained recovery: 8cf342d023452b7fd76cc7e90e8536163363907e pm-299/t-1766: docs: record verified Susuki delivery recovery
+Delivery: enclosing commit; the post-push summary contains its immutable SHA.
+Resolve: git log -1 --format=%H -- projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9726/artifacts/commits.txt
+The worker shared/artifacts/commits.txt records exact delivery SHAs after commit.
+No product changes dropped. Generated content/history.json restored per contract.

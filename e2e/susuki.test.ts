@@ -98,7 +98,12 @@ test("Susuki renders real instanced ink, pointer/scroll uniforms and an input-ca
     await p.mouse.move(box.x + box.width * .65, box.y + box.height * .65, { steps: 3 });
     await p.waitForFunction(() => Number(document.querySelector<HTMLElement>("[data-susuki-field]")?.dataset.gust) > .01);
     assert.ok(await p.evaluate(() => (window.__susukiProof.uniforms.uPointerVel as number[]).some(v => Math.abs(v) > .01)), "CPU gust reaches actual shader uniform");
-    await p.evaluate(() => scrollBy({ top: -90, behavior: "instant" }));
+    // The initial scrollIntoView also raises the boost. Observe this scroll's
+    // actual input event before triggering a fox that any later input cancels.
+    await p.evaluate(() => new Promise<void>(resolve => {
+      window.addEventListener("scroll", () => resolve(), { once: true });
+      scrollBy({ top: -90, behavior: "instant" });
+    }));
     await p.waitForFunction(() => Number(window.__susukiProof.uniforms.uScrollBoost) > .01);
     assert.ok(Number(await canvas.getAttribute("data-scroll-boost")) > .01);
     // Scroll is itself input; start only after it has settled, no idle delay.
