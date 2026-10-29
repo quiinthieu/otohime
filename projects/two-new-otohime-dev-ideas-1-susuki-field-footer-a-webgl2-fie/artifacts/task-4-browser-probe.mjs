@@ -25,7 +25,7 @@ async function pageFor(options = {}, unavailable = false, saveData = false) {
   let collecting = true;
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
-    if (message.type() === "error" && /Ink Shelf|THREE|WebGL|shader/i.test(message.text())) errors.push(message.text());
+    if (message.type() === "error" && /Ink Shelf|THREE|WebGL|shader|(?:Type|Reference|Syntax|Range)Error/i.test(message.text())) errors.push(message.text());
   });
   page.on("response", (response) => {
     if (collecting && /\.js(?:\?|$)/.test(response.url())) pending.push(response.text().then((body) => {
@@ -33,7 +33,13 @@ async function pageFor(options = {}, unavailable = false, saveData = false) {
     }, (error) => unread.push({ url: response.url(), error: error.message })));
   });
   await page.addInitScript(({ unavailable, saveData }) => {
-    if (saveData) Object.defineProperty(navigator, "connection", { value: { saveData: true } });
+    if (saveData) {
+      // Shared islands subscribe to NetworkInformation changes. Keep its event
+      // API intact while overriding only the preference under test.
+      const connection = navigator.connection ?? new EventTarget();
+      Object.defineProperty(connection, "saveData", { value: true });
+      if (!navigator.connection) Object.defineProperty(navigator, "connection", { value: connection });
+    }
     const original = HTMLCanvasElement.prototype.getContext;
     window.__shelfProof = { shaderSources: [], compileErrors: [], draws: 0 };
     HTMLCanvasElement.prototype.getContext = function (type, ...args) {

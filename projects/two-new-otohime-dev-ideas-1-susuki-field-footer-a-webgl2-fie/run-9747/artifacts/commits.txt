@@ -1,0 +1,9 @@
+Task: pm-299/t-1768, run-9747
+Branch: pm-299-t-1768-delivery-recovery
+Fetched main base: e30c2577a4250ee16c5cb122ef436070c61c4e77
+Recovered implementation: 52e866de1e806215cdd482dcc5aa3920d4d565b1
+Prior unintegrated delivery: 3709f2e4f907c43b1b94022a3276e4414039095a
+Recovery delivery: enclosing commit; resolve with:
+git log -1 --format="%H %s" -- projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9747/artifacts/commits.txt
+The post-push plan-manager summary binds the immutable delivery SHA.
+Publication: task branch plus fast-forward origin/main; no force push.
