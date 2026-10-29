@@ -1,0 +1,85 @@
+{
+  "task_history": {
+    "FAILED": {
+      "pages": 2,
+      "offsets": [
+        0,
+        10
+      ],
+      "read": 20,
+      "total": 1429,
+      "complete": false
+    },
+    "COMPLETED": {
+      "pages": 2,
+      "offsets": [
+        0,
+        10
+      ],
+      "read": 20,
+      "total": 4504,
+      "complete": false
+    },
+    "PENDING": {
+      "pages": 1,
+      "offsets": [
+        0
+      ],
+      "read": 0,
+      "total": 0,
+      "complete": true
+    },
+    "RUNNING": {
+      "pages": 1,
+      "offsets": [
+        0
+      ],
+      "read": 5,
+      "total": 5,
+      "complete": true
+    }
+  },
+  "related": [
+    {
+      "run": "run-9765",
+      "task_id": "66a8e5d1-8a97-44b1-a62c-7af3532f75f3",
+      "status": "COMPLETED",
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "delivery": "de21b2f064d73255970443844e3b1c0075e1f611"
+    },
+    {
+      "run": "run-9769",
+      "task_id": "cb8db753-d485-4d4b-abcd-b257a99eacae",
+      "status": "COMPLETED",
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "persisted_gate": "ver-3883",
+      "gate_status": "pass",
+      "raw_log_returned_lines": 46
+    },
+    {
+      "run": "run-9772",
+      "task_id": "b96936f3-0550-45ac-85ef-0c1edae496f3",
+      "status": "FAILED",
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "raw_log_returned_lines": 673,
+      "earlier_lines_truncated": 3329,
+      "raw_failure": "push_not_on_main: HEAD 79048861aeb5 is not on origin/main"
+    },
+    {
+      "run": "run-9774",
+      "task_id": "5153eecf-c021-4b1c-8829-1688eb9fd47f",
+      "status": "COMPLETED",
+      "callback_state": "delivered",
+      "callback_attempts": 1,
+      "raw_log_returned_lines": 665,
+      "earlier_lines_truncated": 1544,
+      "persisted_qa": "rep-5838",
+      "qa_verdict": "fail",
+      "persisted_fix_plan": "rep-5839"
+    }
+  ],
+  "boundaries": "Task-manager metadata and returned raw tails inspected; persisted plan task contains matching ver-3883 and rep-5838. Callback payload and ingestion internals not inspected. Global FAILED/COMPLETED history and truncated raw captures remain incomplete/inconclusive. No GitHub Actions pipeline or deployed system checked in this SWE run."
+}
