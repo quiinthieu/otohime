@@ -87,6 +87,7 @@ test('mouse grip toss, exact click suppression, text selection and native link n
 test('continuous mouse path across the title and its open Peek reaches a visible Fetch back',async(t)=>{
   const page=await open(t);const card=page.locator('[data-paper-id^="project:"]').first();
   const back=card.getByRole('button',{name:'Fetch back',exact:true});const link=card.locator('a.project-title');
+  await card.scrollIntoViewIfNeeded();
   const before=(await card.boundingBox())!;const href=await link.getAttribute('href');
   // Dwell on the stretched title link until its real Peek fan opens under the pointer.
   const start={x:before.x+before.width/2,y:before.y+before.height/2};
@@ -157,6 +158,7 @@ test('Escape, blur, hidden page, resize, modal, motion, dismissal and removed so
 test('pointer cancellation and capture loss release the shared owner; reduced motion and rejection restore instantly',async(t)=>{
   const page=await open(t);const card=page.locator('[data-paper-id]').first();const grip=card.getByRole('button',{name:'Drag paper',exact:true});
   for(const reason of ['pointercancel','lostpointercapture']) {
+    await grip.focus();
     const r=(await grip.boundingBox())!;await page.mouse.move(r.x+22,r.y+22);await page.mouse.down();await page.mouse.move(r.x-40,r.y+30);
     await page.locator('[data-fetch-proxy]').waitFor();
     await grip.evaluate((el,type)=>el.dispatchEvent(new PointerEvent(type,{pointerId:1,bubbles:true})),reason);await page.mouse.up();
