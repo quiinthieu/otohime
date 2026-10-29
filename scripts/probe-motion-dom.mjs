@@ -6,6 +6,6 @@ export function streamedLandingSettled() {
     document.getAnimations()
       // Scroll/view timelines report CSS percentages rather than milliseconds.
       // They describe the current scroll position, not an unfinished page entry.
-      .filter(a => Number.isFinite(a.effect?.getComputedTiming().endTime))
+      .filter(a => a.timeline === document.timeline && Number.isFinite(a.effect?.getComputedTiming().endTime))
       .every(a => a.playState === "finished" || a.playState === "idle");
 }

@@ -129,7 +129,9 @@ async function open(browser, { viewport, reduced, cookies = [] }) {
 }
 
 // The landing has settled: the hop's transition has finished, every Suspense boundary has revealed, no transition
-// of React's is in flight and every finite animation is done. Then a beat, so a late rejection still surfaces.
+// of React's is in flight and every finite document-timeline animation is done. Scroll-driven animations
+// advance with the viewport rather than elapsed time, so waiting cannot finish them.
+// Then a beat, so a late rejection still surfaces.
 async function settle(page) {
   const settled = await page
     .waitForFunction(

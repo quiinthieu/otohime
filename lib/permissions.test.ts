@@ -70,3 +70,9 @@ test('Bottle moderation belongs only to owner and admin', () => {
   for (const role of ['owner','admin','user,admin']) assert.equal(can(role,{bottle:['moderate']}),true);
   for (const role of ['user',null,undefined,'','constructor','__proto__','moderator']) assert.equal(can(role,{bottle:['moderate']}),false);
 });
+
+test("Guestbook moderation belongs only to the owner", () => {
+  assert.equal(can("owner", { guestbook: ["moderate"] }), true);
+  for (const role of ["admin", "user", "", null, undefined])
+    assert.equal(can(role, { guestbook: ["moderate"] }), false);
+});
