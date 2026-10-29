@@ -109,6 +109,17 @@ test("pointer and keyboard drips fold into a symmetric blot; reduced motion skip
 
 test("an observation shows a toy reading and pins a note; URLs and profanity are rejected", async () => {
   const { page, errors } = await open({}, "/play/inkblot?b=otohime7");
+  const expectedValidationErrors: string[] = [];
+  const rejectNote = async () => {
+    const endpoint = new URL("/api/inkblot/answers", BASE).href;
+    const response = page.waitForResponse(res => res.url() === endpoint && res.request().method() === "POST");
+    const resourceError = page.waitForEvent("console", { predicate: msg => msg.type() === "error" && msg.location().url === endpoint && msg.args().length === 0 && /Failed to load resource:.*status of 400\b/.test(msg.text()) });
+    await page.getByTestId("inkblot-submit-btn").click();
+    const rejected = await response;
+    assert.equal(rejected.status(), 400);
+    assert.equal(rejected.request().resourceType(), "fetch");
+    expectedValidationErrors.push((await resourceError).text());
+  };
   const approved = randomUUID();
   await pool.query(
     "insert into inkblot_answer(id,blot_key,name,note,status,tilt,hand) values($1,'otohime7','Ward clerk','a folded moth','approved',-2,1)",
@@ -133,15 +144,15 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     assert.equal(pending.rows[0].status, "pending");
     const before = Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n);
     await page.locator("#inkblot-note").fill("https://spam.example");
-    await page.getByTestId("inkblot-submit-btn").click();
+    await rejectNote();
     await page.waitForFunction(() => (document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? "").length > 8);
     assert.match(await page.getByTestId("inkblot-status").innerText(), /link|Links|ward/i);
     await page.locator("#inkblot-note").fill("this is shit");
-    await page.getByTestId("inkblot-submit-btn").click();
+    await rejectNote();
     await page.waitForFunction(() => /kinder/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
     assert.equal(Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n), before + 0);
   } finally {
     await pool.query("delete from inkblot_answer where id=$1 or note in ('a lantern in the crease','https://spam.example','this is shit')", [approved]);
   }
-  assert.deepEqual(errors.unexpected, []);
+  assert.deepEqual(errors.unexpected, expectedValidationErrors);
 });
