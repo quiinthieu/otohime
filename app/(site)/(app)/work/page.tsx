@@ -1,6 +1,7 @@
 import { RisoText } from "@/components/riso-heading";
 import { DeparturesBoard } from "@/components/departures-board";
 import { buildWorkDepartures } from "@/lib/departures";
+import { AssemblyLine } from "@/components/assembly-line";
 import { Conveyor } from "@/components/conveyor";
 import { FigTitle } from "@/components/figures";
 import { Pipeline } from "@/components/pipeline";
@@ -31,13 +32,10 @@ export default function WorkPage() {
             Making-of Emaki handscroll
           </Link>
         </p>
+        <AssemblyLine />
         <DeparturesBoard kind="work" rows={buildWorkDepartures()} />
-        <div className="mt-8">
-          <Pipeline />
-        </div>
-        <div className="mt-14">
-          <Conveyor />
-        </div>
+        <div className="mt-14"><Pipeline /></div>
+        <div className="mt-14"><Conveyor /></div>
         <div className="mt-14 grid items-start gap-12 lg:grid-cols-2">
           <section aria-labelledby="stack">
             <h2 id="stack" className="caption"><RisoText>Stack</RisoText></h2>
