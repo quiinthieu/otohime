@@ -28,10 +28,12 @@ after(async () => {
   rmSync(tmp, { recursive: true, force: true });
 });
 
-async function open(options: BrowserContextOptions = {}, route = "/play/inkblot") {
+async function open(options: BrowserContextOptions = {}, route = "/play/inkblot", rejectsNotes = false) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
   contexts.push(context);
-  const page = await context.newPage(), errors = collectBrowserErrors(BASE);
+  const page = await context.newPage(), errors = collectBrowserErrors(BASE, rejectsNotes ? [
+    { url: new URL("/api/inkblot/answers", BASE).href, method: "POST", status: 400, resourceType: "fetch" },
+  ] : []);
   page.on("pageerror", (e) => errors.pageError(e.message));
   page.on("console", (msg) => { if (msg.type() === "error") errors.console({ text: msg.text(), ...msg.location(), args: msg.args().length }); });
   page.on("response", (res) => errors.response({ url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() }));
@@ -108,7 +110,7 @@ test("pointer and keyboard drips fold into a symmetric blot; reduced motion skip
 });
 
 test("an observation shows a toy reading and pins a note; URLs and profanity are rejected", async () => {
-  const { page, errors } = await open({}, "/play/inkblot?b=otohime7");
+  const { page, errors } = await open({}, "/play/inkblot?b=otohime7", true);
   const approved = randomUUID();
   await pool.query(
     "insert into inkblot_answer(id,blot_key,name,note,status,tilt,hand) values($1,'otohime7','Ward clerk','a folded moth','approved',-2,1)",
@@ -133,11 +135,15 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     assert.equal(pending.rows[0].status, "pending");
     const before = Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n);
     await page.locator("#inkblot-note").fill("https://spam.example");
+    const rejectedLink = page.waitForResponse((res) => res.url() === `${BASE}/api/inkblot/answers` && res.request().method() === "POST");
     await page.getByTestId("inkblot-submit-btn").click();
+    assert.equal((await rejectedLink).status(), 400);
     await page.waitForFunction(() => (document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? "").length > 8);
     assert.match(await page.getByTestId("inkblot-status").innerText(), /link|Links|ward/i);
     await page.locator("#inkblot-note").fill("this is shit");
+    const rejectedWords = page.waitForResponse((res) => res.url() === `${BASE}/api/inkblot/answers` && res.request().method() === "POST");
     await page.getByTestId("inkblot-submit-btn").click();
+    assert.equal((await rejectedWords).status(), 400);
     await page.waitForFunction(() => /kinder/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
     assert.equal(Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n), before + 0);
   } finally {
