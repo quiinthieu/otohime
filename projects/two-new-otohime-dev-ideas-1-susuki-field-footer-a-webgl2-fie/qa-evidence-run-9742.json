@@ -1,0 +1,116 @@
+{
+  "base": "http://localhost:4085",
+  "health": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "sha": "dev"
+    }
+  },
+  "browser": "156.0.8078.73",
+  "cases": [
+    {
+      "route": "/",
+      "status": "pass",
+      "ink": 165273,
+      "changedBytes": 266879,
+      "pointer": [
+        0.5299850702285767,
+        0.7799836993217468
+      ],
+      "tints": [
+        "0.2549019753932953,0.2980392277240753,0.24313725531101227",
+        "0.1921568661928177,0.2823529541492462,0.23137255012989044",
+        "0.3333333432674408,0.24705882370471954,0.18431372940540314",
+        "0.21568627655506134,0.2549019753932953,0.3019607961177826"
+      ],
+      "negativeClear": "zero pixels",
+      "actualNavigation": "/work",
+      "frameSha256": "e0e85a61764172eab52b006b8fab6547d1fa89ca40ac3d1ab9cd58bc37777c2f",
+      "errors": []
+    },
+    {
+      "route": "/projects",
+      "status": "pass",
+      "ink": 165272,
+      "changedBytes": 245730,
+      "pointer": [
+        0.5299820303916931,
+        0.7799803018569946
+      ],
+      "tints": [
+        "0.2549019753932953,0.2980392277240753,0.24313725531101227",
+        "0.1921568661928177,0.2823529541492462,0.23137255012989044",
+        "0.3333333432674408,0.24705882370471954,0.18431372940540314",
+        "0.21568627655506134,0.2549019753932953,0.3019607961177826"
+      ],
+      "negativeClear": "zero pixels",
+      "actualNavigation": "/work",
+      "frameSha256": "fc062304e4c281c699380758aba797813308216f73fcb481b256dd828a78a022",
+      "errors": []
+    }
+  ],
+  "local_build_sha": "dev; exact checked-out source was 1e382390cfd1db4a589c2b3cc92f4016bfc8cec1",
+  "build_id": "R3_NOQqGfWvq2mAr0SzHq",
+  "fingerprint": "d469a1021086e1fe1d017447f2188fb56374d7767cfaf54e4429d321ab7a5737",
+  "source_hashes": [
+    "98304f5ec47ceeec2a2162aa1e170281e663622008e296be6ab5894931868b48  components/susuki-field.tsx",
+    "42895c317484e21e67effc038156e2b3544c52387efa19f50c66e2455fd100a5  components/susuki-field-loader.tsx",
+    "3357b9f2c9f43f306933df6ee715fb0994f7ace0fb2e79e3e15f862b2d24aff9  components/end-footer.tsx",
+    "82ca02211317b13e29240b5243f521d85d9f6159a3b0dfe855582e0f10ca1d36  lib/susuki.ts",
+    "b5f7552ff8cbbec5fe35fa9447383c441b861544b8530dcbbe433749250877f1  lib/ink-particles.ts",
+    "c6a7a691c0ff19fdcc47a98b652cfca26d13bb6cb278ff336719dec8e54aef23  lib/seasons.ts",
+    "5040fab6d88fbf54b1f48783eb99ba5f1127bca3f8a77f7caab6fe06d46c9c05  app/(site)/globals.css",
+    "30e4d3141a60cc1edc78619ddd974bb80008349e9ba940cf917b5ea2bd2ee154  scripts/probe-end.mjs",
+    "3817602240e172b574ebf2f210190867c62bfbaf0713d2ffc194267d7371a2cd  e2e/susuki.test.ts",
+    "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b  package-lock.json",
+    "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d  next.config.ts"
+  ],
+  "log_hashes": {
+    "pm299-9742-independent-server.log": "90dd40784cf03cbc6914d837da9efe08fc1043329cfc2cc62fc1aac72c61ec98",
+    "pm299-9742-e2e.log": "36deb0b0a53872367a38e7dabf589f1a3aba8fdd8b8519593a1c23ccc2e10a32",
+    "pm299-9742-independent-live-initial.log": "0f3654a0fa2df48ab0b57cf36bb885f7e81664822797bfea0bbd670bb7f0b71e",
+    "pm299-9742-unit.log": "33e0ced8d12b472e6b03cdf4f9204e09f94466769d03945d549271fa16702241",
+    "pm299-9742-npm-ci.log": "bdd0442205a107093716d23b0bd2686ee0d46d294d9c6aafa52b5284dbb0c59b",
+    "pm299-9742-independent-local.log": "bf15e7afe52fc4898cb362c35211392f731afd649026d372adcb8b5f2d4cfad1",
+    "pm299-9742-independent-db.log": "fb2a2e79a817e6aff4906ed295f3342f49a97958f281eeba21c987b0145f6fd5",
+    "pm299-9742-taskmanager-tail.log": "c2f9fdacf3dee1e5d53dc09c99914db9ec351e1d8d6842b49ca79691f22b70f6",
+    "pm299-9742-probe.log": "3a17e016974957fe424fc700b3062acecbe73b708c62fcd6982c3c1cecd7b49e",
+    "pm299-9742-walk.log": "15549286ea89ad6ae678a101b522f366b27fe4dfb5244db0f59436ad77921072",
+    "pm299-9742-lint.log": "de485c4372c7493a69b0c2330b0532f98653b87d8ef56ce5a771092e2066fab6",
+    "pm299-9742-portforward.log": "01b3713562d3b3148754bdc2988bd469792e7406f3ca5cbe1e184e564cced8cb",
+    "pm299-9742-closure.log": "bb14c6087400b9cdd9eca951a2297003fc308926938d9b55dc961b436e46db0e",
+    "pm299-9742-typecheck.log": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326"
+  },
+  "delivery_sha": "ec7e171e1ae5fc68e0a68e133ded9ea145c611a6",
+  "live_final": {
+    "ok": true,
+    "sha": "377dfe09193ff6d0aa3ab4fd02d339749485a19e"
+  },
+  "ci": {
+    "delivery_run": 40817421327,
+    "checks_job": 123261664083,
+    "status": "in_progress at snapshot",
+    "last_green_run": 40815103116,
+    "last_green_checks": 123254210190,
+    "last_green_production": 123260603754,
+    "config_log_between": "empty",
+    "older_failure_run": 40812600516,
+    "older_failure_checks": 123246190922,
+    "older_failure": "tactile-tear async hook, 266 pass / 267 tests, different executable"
+  },
+  "git_delivery_authors": [
+    "1962971832962760439b4578acd9dc5a7786b518",
+    "Otohime <quiinthieu@gmail.com>",
+    "pm-299/t-1766: feat: Add interactive Susuki footer field",
+    "",
+    "766603bc58f057b64be3268d2c9a9d32739c7887",
+    "Otohime <quiinthieu@gmail.com>",
+    "pm-299/t-1766: docs: record verified Susuki delivery recovery",
+    "",
+    "ec7e171e1ae5fc68e0a68e133ded9ea145c611a6",
+    "Otohime <quiinthieu@gmail.com>",
+    "pm-299/t-1766: fix: Synchronize footer browser interactions",
+    ""
+  ]
+}
