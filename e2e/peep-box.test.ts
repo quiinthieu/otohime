@@ -722,6 +722,29 @@ test("touch pans scroll normally, Save-Data stays opt-in and original toys remai
   );
 });
 
+test("enlarged text grows the peep tools instead of clipping them", async () => {
+  const { p } = await open({ viewport: { width: 390, height: 844 } });
+  await box(p).scrollIntoViewIfNeeded();
+  await activate(p);
+  const tools = box(p).locator(".peep-tools");
+  await tools.evaluate((el) => {
+    el.style.fontSize = "24px";
+    for (const node of el.querySelectorAll("button, p, span"))
+      (node as HTMLElement).style.fontSize = "24px";
+  });
+  const grown = await tools.evaluate((el) => ({
+    client: el.clientHeight,
+    scroll: el.scrollHeight,
+  }));
+  assert.ok(grown.client >= 460, JSON.stringify(grown));
+  assert.ok(grown.scroll <= grown.client, JSON.stringify(grown));
+  const clipped = await tools.evaluate((el) => {
+    el.style.height = "460px";
+    return el.scrollHeight > el.clientHeight;
+  });
+  assert.equal(clipped, true);
+});
+
 test("no-JS and reduced motion keep the server paper scene with no pose loop", async () => {
   const nojs = await open({ javaScriptEnabled: false });
   assert.equal(await box(nojs.p).locator("svg[role=img]").count(), 1);
