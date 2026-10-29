@@ -14,3 +14,10 @@ Authorized rebase base: eb67eebbcbc19373d4c6b56e350737312d5efedc
 Rebased implementation: 8328232d64b519ff72bcac1c789e0d726e59ee66
 Rebased preflight correction: 59978f2c81e7b2dd475dffd8a761fa7dc06759e8
 Delivery is the enclosing final receipt commit, resolved by the command above.
+
+Publication retry 2:
+Retry 1 atomic push rejected: main advanced; neither ref was published.
+Authorized rebase base: 463f3c8bf32efd3e96cfa0a95fc9f53f351685be
+Rebased implementation: e6d0e64c7db356822b0a0522ce18423bb4920510
+Both required gates pass again; see retry2-verification.txt.
+Delivery remains the enclosing final receipt commit.
