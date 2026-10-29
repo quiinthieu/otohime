@@ -81,6 +81,17 @@ test("phone touch pans the chart; taps open each original note", async () => {
   const { page, context, errors } = await open("/notes/sky", { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const viewport = page.getByRole("region", { name: "Pannable celestial chart" });
   await page.waitForFunction(() => { const el = document.querySelector('[aria-label="Pannable celestial chart"]'); return el && Object.keys(el).some(key => key.startsWith("__reactProps$")); });
+  await page.evaluate(() => {
+    const events: unknown[] = [];
+    Object.assign(window, { skyPointerEvents: events });
+    for (const type of ["pointerdown", "pointerup", "pointercancel", "lostpointercapture", "click"]) {
+      document.addEventListener(type, event => queueMicrotask(() => {
+        const pointer = event as PointerEvent;
+        events.push({ type, primary: pointer.isPrimary, button: pointer.button, pointer: pointer.pointerId,
+          prevented: event.defaultPrevented, star: (event.target as Element)?.closest?.("[data-sky-star]")?.getAttribute("data-sky-star") });
+      }), true);
+    }
+  });
   await viewport.scrollIntoViewIfNeeded();
   const rect = (await viewport.boundingBox())!;
   const session = await context.newCDPSession(page);
@@ -97,7 +108,14 @@ test("phone touch pans the chart; taps open each original note", async () => {
   assert.equal(new URL(page.url()).pathname, "/notes/sky");
   for (const note of site.notes) {
     const star = page.locator(`[data-sky-star="${note.slug}"]`);
-    await star.scrollIntoViewIfNeeded(); await star.tap(); await page.waitForURL(`**/notes/${note.slug}`);
+    await star.scrollIntoViewIfNeeded(); await star.tap();
+    try { await page.waitForURL(`**/notes/${note.slug}`); }
+    catch (error) {
+      const state = await page.evaluate(() => ({ url: location.href,
+        events: (window as unknown as { skyPointerEvents: unknown[] }).skyPointerEvents,
+        scroll: document.querySelector('[aria-label="Pannable celestial chart"]')?.scrollLeft }));
+      throw new Error(`Phone star ${note.slug}: ${JSON.stringify(state)}`, { cause: error });
+    }
     assert.equal(await page.getByRole("heading", { name: note.title, exact: true }).count(), 1);
     await page.getByRole("link", { name: "Star chart" }).tap(); await page.waitForURL("**/notes/sky");
   }
