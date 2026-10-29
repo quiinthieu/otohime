@@ -1,0 +1,21 @@
+export {
+  STRATA_FLOOR,
+  STRATA_SWATCHES,
+  STRATA_YEARS,
+  WEEKS_PER_YEAR,
+  buildPaperRustleCue,
+  buildStrataData,
+  buildStrataLayers,
+  computeStrataParallax,
+  emptyStrataYear,
+  findNearestStrataWeek,
+  isoWeekBounds,
+  isoWeekOf,
+  parseStrataData,
+  resolveStrataYearSelection,
+  scaleWeekHeight,
+  serializeStrata,
+  shouldTriggerRustle,
+  stepStrataWeekIndex,
+} from "@/lib/strata";
+export type { StrataData, StrataLayer, StrataMetric, StrataWeek, StrataYearArchive } from "@/lib/strata";

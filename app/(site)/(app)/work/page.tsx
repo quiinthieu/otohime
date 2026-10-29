@@ -9,6 +9,7 @@ import { buildWorkDepartures } from "@/lib/departures";
 import { AssemblyLine } from "@/components/assembly-line";
 import { Conveyor } from "@/components/conveyor";
 import { FigTitle } from "@/components/figures";
+import MouldVeinsLoader from "@/components/mould-veins-loader";
 import { Pipeline } from "@/components/pipeline";
 import { ServerRack } from "@/components/server-rack";
 import { site } from "@/content/site";
@@ -38,7 +39,22 @@ export default function WorkPage() {
           <Link href="/making-of" className="link">
             Making-of Emaki handscroll
           </Link>
+          <span aria-hidden="true" className="text-muted">
+            ·
+          </span>
           <Link href="/kintsugi" className="link">The golden seams</Link>
+          <span aria-hidden="true" className="text-muted">
+            ·
+          </span>
+          <Link href="/strata" className="link">
+            Paper Strata
+          </Link>
+          <span aria-hidden="true" className="text-muted">
+            ·
+          </span>
+          <Link href="/play/mould" className="link">
+            Ink Slime Mould
+          </Link>
         </p>
         <AssemblyLine />
         <DeparturesBoard kind="work" rows={buildWorkDepartures()} />
@@ -46,6 +62,7 @@ export default function WorkPage() {
         <PaperHost className="mt-8" data-paper-id="work:pipeline">
           <Pipeline />
         </PaperHost>
+        <MouldVeinsLoader variant="work" />
         <div className="mt-14">
           <Conveyor />
         </div>

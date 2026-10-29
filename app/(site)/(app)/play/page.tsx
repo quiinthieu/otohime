@@ -17,6 +17,23 @@ import "@/components/peep-box/peep-box.css";
 
 export const metadata: Metadata = { title: "Play" };
 
+const TOYS = [
+  {
+    href: "/play/mould",
+    title: "Ink Slime Mould",
+    note: "Drop food on warm paper and watch sumi veins find the projects and the pipes.",
+    label: "Grow an Ink Slime Mould →",
+    testId: "play-mould-link",
+  },
+  {
+    href: "/strata",
+    title: "Paper Strata",
+    note: "A year of commits and notes, cut into stacked sheets of coloured paper.",
+    label: "Open Paper Strata →",
+    testId: "play-strata-link",
+  },
+] as const;
+
 export default function PlayPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
@@ -89,6 +106,13 @@ export default function PlayPage() {
             </Link>
           </p>
         </section>
+        {TOYS.map((toy) => (
+          <section key={toy.href} className="mt-12" aria-labelledby={toy.testId}>
+            <h2 id={toy.testId} className="caption"><RisoText>{toy.title}</RisoText></h2>
+            <p className="mt-2 mb-4 text-muted">{toy.note}</p>
+            <p><Link href={toy.href} className="btn" data-testid={toy.testId}>{toy.label}</Link></p>
+          </section>
+        ))}
         <section className="mt-12" aria-labelledby="pond-heading">
           <h2 id="pond-heading" className="caption"><RisoText>Suminagashi pond</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Float ink on still water, then comb and blow it into rings.</p>
