@@ -16,7 +16,7 @@ test("timeline turns with keys and scroll; tabs and detail wheel work", { timeou
     await page.keyboard.press("End");
     await page.getByRole("button", { name: "Pull the archive tab" }).click();
     await page.getByRole("link", { name: "Shore", exact: true }).waitFor();
-    const wheel = page.getByLabel("Detail wheel"); await wheel.focus(); await page.keyboard.press("End");
+    const wheel = page.getByRole("slider", { name: "Detail wheel" }); await wheel.focus(); await page.keyboard.press("End");
     assert.match(await page.locator(".book-wheel p:visible").innerText(), /adoption year is unrecorded/);
     await shot(page, "timeline-desktop");
     assert.deepEqual(errors.unexpected, []);
@@ -29,7 +29,7 @@ test("timeline stays flat without JS and under reduced motion, and fits a phone"
     try {
       assert.equal(await page.locator(".book-spreads > li:visible").count(), 9);
       assert.ok(await noOverflow(page));
-      assert.match(await page.locator(".book-spreads").innerText(), /No dated career details/);
+      assert.match(await page.locator(".book-spreads").innerText(), /fictional placeholders/);
       if (options.reduced) await shot(page, "timeline-phone-reduced");
       assert.deepEqual(errors.unexpected, []);
     } finally { await context.close(); }

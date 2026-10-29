@@ -27,8 +27,9 @@ The script raises Node's HTTP header size so mini-app cookies on `localhost` do 
 
 The paper experiments live at `/timeline` (2018–2026 pop-up archive) and
 `/ledger/sql` (Ink Ledger SQL desk); `/ledger` keeps the Stamp Ledger. Work links
-to both experiments. The timeline labels unrecorded career years explicitly;
-`lib/timeline.ts` builds its recorded entries from the public site content.
+to both experiments. Edit the invented career draft in `content/career.ts`;
+every chapter labels the fictional roles, employers, places and projects as
+placeholders. `lib/timeline.ts` adds real public projects from the site content.
 
 Pen plotter is available in the masthead, or at the bottom right of standalone
 projects. It samples inline SVG strokes, reduces pen travel within ink layers,
