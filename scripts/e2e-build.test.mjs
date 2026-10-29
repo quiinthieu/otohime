@@ -8,9 +8,10 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 
 const runner = readFileSync(new URL("./e2e.mjs", import.meta.url), "utf8");
+const cameraWrapper = readFileSync(new URL("./verify-peep-box-camera.mjs", import.meta.url), "utf8");
 const cleanup = '    rmSync(path.join(ROOT, ".next"), { recursive: true, force: true });';
 
-function fixture({ skipBuild = false, source = runner } = {}) {
+function fixture({ skipBuild = false, source = runner, camera = false, suiteFails = false, wrapper = cameraWrapper } = {}) {
   const work = mkdtempSync(join(tmpdir(), "e2e-build-"));
   const write = (file, body, options) => {
     const target = join(work, file);
@@ -19,6 +20,21 @@ function fixture({ skipBuild = false, source = runner } = {}) {
   };
   try {
     write("scripts/e2e.mjs", source);
+    if (camera) {
+      write("scripts/verify-peep-box-camera.mjs", wrapper);
+      // Explicit SDK/asset stand-ins: the real locked model runs in peep-box:verify.
+      write("scripts/vendor-peep-box.mjs", `
+        import { appendFileSync } from 'node:fs';
+        export async function vendor({ check = false } = {}) {
+          appendFileSync('preflight.txt', check ? 'check\\n' : 'vendor\\n');
+        }
+      `);
+      write("node_modules/@mediapipe/tasks-vision/package.json", JSON.stringify({ type: "module", exports: "./index.js" }));
+      write("node_modules/@mediapipe/tasks-vision/index.js", `
+        export const FaceLandmarker = { createFromOptions() {} };
+        export const FilesetResolver = { forVisionTasks() {} };
+      `);
+    }
     write("scripts/ghosts-fake.mjs", `
       export async function startGhostsFake() {
         return { url: 'ws://127.0.0.1:8788/ghosts', base: 'http://127.0.0.1:8788',
@@ -51,19 +67,22 @@ function fixture({ skipBuild = false, source = runner } = {}) {
       require('node:http').createServer((req, res) => res.end('healthy fixture'))
         .listen(Number(process.env.PORT));
     `, { mode: 0o755 });
-    write("suite.mjs", `
+    write(camera ? "e2e/peep-box-camera.test.ts" : "suite.mjs", `
       import assert from 'node:assert/strict';
       import { writeFileSync } from 'node:fs';
       assert.ok(process.env.BASE_URL);
       assert.equal(process.env.GHOSTS_ENDPOINT, 'ws://127.0.0.1:8788/ghosts');
       assert.equal(process.env.GHOSTS_FAKE_BASE, 'http://127.0.0.1:8788');
       writeFileSync('suite-ran', process.env.BASE_URL);
+      ${suiteFails ? "assert.fail('intentional camera assertion');" : ""}
     `);
     // Do not inherit a real remote server, build reuse or CI reporter from the parent.
     const env = { ...process.env, PATH: `${join(work, "bin")}:${dirname(process.execPath)}:${process.env.PATH}`, TMPDIR: work };
     for (const key of ["BASE_URL", "SKIP_BUILD", "GITHUB_ACTIONS", "NODE_OPTIONS", "NODE_TEST_CONTEXT"]) delete env[key];
     if (skipBuild) env.SKIP_BUILD = "1";
-    const result = spawnSync(process.execPath, ["scripts/e2e.mjs", "--test", "suite.mjs"], {
+    // The wrapper must discard an external URL, even when reusing a local build.
+    if (camera) env.BASE_URL = "https://example.invalid";
+    const result = spawnSync(process.execPath, camera ? ["scripts/verify-peep-box-camera.mjs"] : ["scripts/e2e.mjs", "--test", "suite.mjs"], {
       cwd: work, env, encoding: "utf8", timeout: 15_000,
     });
     assert.ifError(result.error);
@@ -73,6 +92,7 @@ function fixture({ skipBuild = false, source = runner } = {}) {
       build: readFileSync(join(work, ".next/BUILD_ID"), "utf8"),
       fakeClosed: existsSync(join(work, "fake-closed")),
       suite: existsSync(join(work, "suite-ran")) ? readFileSync(join(work, "suite-ran"), "utf8") : null,
+      preflight: camera ? readFileSync(join(work, "preflight.txt"), "utf8") : null,
     };
   } finally { rmSync(work, { recursive: true, force: true }); }
 }
@@ -104,6 +124,28 @@ test("SKIP_BUILD preserves the existing Next build and still executes the suite"
   assert.deepEqual(result.calls, ["run db:migrate", "start"]);
   assert.equal(result.build, "previous build");
   assert.match(result.suite, /^http:\/\/localhost:\d+$/);
+});
+
+test("camera wrapper preserves a prebuilt artifact, isolated server and nonzero camera assertions", () => {
+  for (const suiteFails of [false, true]) {
+    const result = fixture({ camera: true, skipBuild: true, suiteFails });
+    assert.equal(result.status, suiteFails ? 1 : 0, result.stdout + result.stderr);
+    assert.deepEqual(result.calls, ["run db:migrate", "start"]);
+    assert.equal(result.build, "previous build");
+    assert.equal(result.preflight, "vendor\ncheck\n");
+    assert.equal(result.fakeClosed, true);
+    assert.match(result.suite, /^http:\/\/localhost:\d+$/);
+    if (suiteFails) assert.match(result.stdout + result.stderr, /intentional camera assertion/);
+  }
+});
+
+test("camera build-reuse negative control detects the old flag deletion", () => {
+  // A mutation reinstating the bug must rebuild instead of preserving CI's artifact.
+  const broken = fixture({ camera: true, skipBuild: true,
+    wrapper: cameraWrapper.replace("delete env.BASE_URL;", "delete env.BASE_URL;\ndelete env.SKIP_BUILD;") });
+  assert.equal(broken.status, 0, broken.stdout + broken.stderr);
+  assert.deepEqual(broken.calls, ["run db:migrate", "run build", "start"]);
+  assert.equal(broken.build, "fresh build");
 });
 
 test("external BASE_URL requires explicit fake configuration without silently rewriting it", () => {
