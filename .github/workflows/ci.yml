@@ -171,6 +171,8 @@ jobs:
       - name: E2E against next start
         timeout-minutes: 32
         if: steps.browser.outputs.browser == 'true'
+        env:
+          E2E_SPLIT_HTTP: "1"
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "E2E against next start" "$status" "$RUNNER_TEMP/e2e.log" || true; exit "$status"' EXIT

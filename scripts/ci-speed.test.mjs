@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -146,5 +146,116 @@ test("CI checks job wires ci-browser-gate to every Chrome step while keeping bui
     const next = checks.indexOf("\n      - ", start + 1);
     const step = checks.slice(start, next < 0 ? undefined : next);
     assert.doesNotMatch(step, /steps\.browser\.outputs\.browser/, unconditional);
+  }
+});
+
+test("the HTTP e2e list is exactly the files that do not import Playwright directly or via e2e helpers", () => {
+  const source = readFileSync(new URL("./e2e.mjs", import.meta.url), "utf8");
+  const block = source.slice(source.indexOf("const HTTP_E2E = ["), source.indexOf("];", source.indexOf("const HTTP_E2E = [")));
+  const listed = [...block.matchAll(/"(e2e\/[^"]+)"/g)].map((match) => match[1]);
+  const e2eDir = fileURLToPath(new URL("../e2e/", import.meta.url));
+  const memo = new Map();
+  const usesPlaywright = (relFile, stack = new Set()) => {
+    if (memo.has(relFile)) return memo.get(relFile);
+    if (stack.has(relFile)) return false;
+    stack.add(relFile);
+    const text = readFileSync(join(e2eDir, "..", relFile), "utf8");
+    if (/from\s+["']playwright/.test(text)) {
+      memo.set(relFile, true);
+      return true;
+    }
+    for (const [, spec] of text.matchAll(/from\s+["'](\.[^"']+)["']/g)) {
+      const target = join("e2e", spec).replaceAll("\\", "/");
+      if (readdirSync(e2eDir).includes(target.slice("e2e/".length)) && usesPlaywright(target, stack)) {
+        memo.set(relFile, true);
+        return true;
+      }
+    }
+    memo.set(relFile, false);
+    return false;
+  };
+  const files = readdirSync(e2eDir)
+    .filter((file) => file.endsWith(".test.ts"))
+    .map((file) => `e2e/${file}`);
+  const http = files.filter((file) => !usesPlaywright(file));
+  assert.deepEqual(listed.toSorted(), http.toSorted());
+  assert.match(source, /E2E_SPLIT_HTTP === "1"/);
+  assert.match(source, /"--test-concurrency=1", /);
+
+  const workflow = readFileSync(WORKFLOW_PATH, "utf8");
+  const checks = workflow.slice(workflow.indexOf("  checks:\n"), workflow.indexOf("\n  preview:\n"));
+  const start = checks.indexOf("- name: E2E against next start\n");
+  const step = checks.slice(start, checks.indexOf("\n      - ", start + 1));
+  assert.match(step, /\n        env:\n          E2E_SPLIT_HTTP: "1"\n/);
+});
+
+test("E2E_SPLIT_HTTP=1 runs HTTP files concurrently, browser files serially, and executes each file once", () => {
+  const work = mkdtempSync(join(tmpdir(), "e2e-split-http-"));
+  try {
+    mkdirSync(join(work, "scripts"));
+    mkdirSync(join(work, "e2e"));
+    copyFileSync(new URL("./e2e.mjs", import.meta.url), join(work, "scripts/e2e.mjs"));
+    copyFileSync(new URL("./e2e-annotate.mjs", import.meta.url), join(work, "scripts/e2e-annotate.mjs"));
+    const logPath = join(work, "spans.jsonl");
+    const suiteBody = (name, kind, failEnv = "") => `
+      import assert from "node:assert/strict";
+      import { appendFileSync } from "node:fs";
+      import { test } from "node:test";
+      test(${JSON.stringify(name)}, async () => {
+        const start = Date.now();
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        appendFileSync(${JSON.stringify(logPath)}, JSON.stringify({ name: ${JSON.stringify(name)}, kind: ${JSON.stringify(kind)}, start, end: Date.now() }) + "\\n");
+        ${failEnv ? `assert.notEqual(process.env.${failEnv}, "1", "http failure stops suite");` : ""}
+      });
+    `;
+    writeFileSync(join(work, "e2e/postcard.test.ts"), suiteBody("postcard", "http", "FAIL_HTTP"));
+    writeFileSync(join(work, "e2e/peeks.test.ts"), suiteBody("peeks", "http"));
+    writeFileSync(join(work, "e2e/desk.test.ts"), suiteBody("desk", "browser"));
+    writeFileSync(join(work, "e2e/ryugu.test.ts"), suiteBody("ryugu", "browser"));
+
+    const baseEnv = {
+      ...process.env,
+      BASE_URL: "http://127.0.0.1:9",
+      GHOSTS_FAKE_BASE: "http://127.0.0.1:8788",
+      GHOSTS_ENDPOINT: "ws://127.0.0.1:8788/ghosts",
+      E2E_SPLIT_HTTP: "1",
+    };
+    delete baseEnv.NODE_TEST_CONTEXT;
+
+    writeFileSync(logPath, "");
+    const ok = spawnSync(
+      process.execPath,
+      ["--experimental-strip-types", "--disable-warning=ExperimentalWarning", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/e2e.mjs", "--test", "e2e/**/*.test.ts"],
+      { cwd: work, env: baseEnv, encoding: "utf8", timeout: 15_000 },
+    );
+    assert.equal(ok.status, 0, ok.stdout + ok.stderr);
+    const records = readFileSync(logPath, "utf8")
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line));
+    // Every file runs once (never re-run in the browser phase).
+    assert.deepEqual(records.map((r) => r.name).toSorted(), ["desk", "peeks", "postcard", "ryugu"]);
+    const httpSpans = records.filter((r) => r.kind === "http").sort((a, b) => a.start - b.start);
+    const browserSpans = records.filter((r) => r.kind === "browser").sort((a, b) => a.start - b.start);
+    assert.ok(httpSpans[1].start < httpSpans[0].end, `HTTP files should overlap: ${JSON.stringify(httpSpans)}`);
+    assert.ok(browserSpans[0].start >= Math.max(httpSpans[0].end, httpSpans[1].end), "browser phase starts after HTTP phase");
+    assert.ok(browserSpans[1].start >= browserSpans[0].end, `browser files must stay serial: ${JSON.stringify(browserSpans)}`);
+
+    // Failure in HTTP phase exits nonzero immediately without running the browser phase.
+    writeFileSync(logPath, "");
+    const failed = spawnSync(
+      process.execPath,
+      ["--experimental-strip-types", "--disable-warning=ExperimentalWarning", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/e2e.mjs", "--test", "e2e/**/*.test.ts"],
+      { cwd: work, env: { ...baseEnv, FAIL_HTTP: "1" }, encoding: "utf8", timeout: 15_000 },
+    );
+    assert.notEqual(failed.status, 0);
+    const failedRecords = readFileSync(logPath, "utf8")
+      .trim()
+      .split("\n")
+      .filter(Boolean)
+      .map((line) => JSON.parse(line));
+    assert.ok(failedRecords.every((r) => r.kind === "http"), "browser files do not run after HTTP failure");
+  } finally {
+    rmSync(work, { recursive: true, force: true });
   }
 });
