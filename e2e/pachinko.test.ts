@@ -708,12 +708,14 @@ test("on-call pager Easter egg: 2-DLQ negative control, 3-consecutive-DLQ trigge
   assert.equal(await dlqReadout.getAttribute("data-streak"), "2");
   assert.equal(await page.getByTestId("pachinko-pager").count(), 0);
 
-  // Launch 2 normal records so they pair in the join funnel and settle into p0..p5, resetting streak to 0
+  // Drain both normal records before injecting the next DLQ. A late normal
+  // settlement otherwise resets the streak between the DLQ click and assertion.
   await page.getByTestId("pachinko-launch-btn").click();
   await page.getByTestId("pachinko-launch-btn").click();
   await page.waitForFunction(() => {
     const el = document.querySelector('[data-testid="pachinko-partition-total"]');
-    return el && Number.parseInt(el.textContent || "0", 10) >= 1;
+    const active = document.querySelector('[data-testid="pachinko-active-badge"]');
+    return el && Number.parseInt(el.textContent || "0", 10) >= 1 && active?.textContent?.trim() === "IN-FLIGHT: 0";
   });
   assert.equal(await dlqReadout.getAttribute("data-streak"), "0");
 
