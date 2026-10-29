@@ -86,9 +86,14 @@ test("phone touch pans the chart; taps open each original note", async () => {
   const session = await context.newCDPSession(page);
   const x = rect.x + rect.width * .8, y = rect.y + rect.height / 2;
   await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
-  for (let i = 1; i <= 8; i++) await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: x - i * 20, y }] });
+  for (let i = 1; i <= 8; i++) {
+    await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: x - i * 20, y }] });
+    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  }
   await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await session.detach();
   await page.waitForFunction(() => document.querySelector('[aria-label="Pannable celestial chart"]')!.scrollLeft > 100);
+  await page.waitForFunction(() => document.querySelector('[aria-label="Pannable celestial chart"]')!.getAttribute("data-dragging") === "false");
   assert.equal(new URL(page.url()).pathname, "/notes/sky");
   for (const note of site.notes) {
     const star = page.locator(`[data-sky-star="${note.slug}"]`);

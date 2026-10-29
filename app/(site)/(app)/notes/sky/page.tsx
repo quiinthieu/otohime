@@ -9,6 +9,10 @@ import { PaperSky } from "./paper-sky";
 export const metadata: Metadata = {
   title: "Paper Star Chart",
   description: "Notes drawn as ink stars. Follow a constellation of shared ideas.",
+  openGraph: {
+    images: [{ url: "/og?title=Paper+Star+Chart&path=%2Fnotes%2Fsky", width: 1200, height: 630, alt: "Paper Star Chart, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function SkyPage() {
