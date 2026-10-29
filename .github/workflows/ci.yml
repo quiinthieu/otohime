@@ -104,6 +104,9 @@ jobs:
         with:
           node-version-file: package.json
           cache: npm
+      - name: Decide whether browser coverage is required
+        id: browser
+        run: node scripts/ci-browser-gate.mjs
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
@@ -141,6 +144,7 @@ jobs:
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - name: Real CPU camera and privacy verifier
         timeout-minutes: 5
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true; exit "$status"' EXIT
@@ -158,6 +162,7 @@ jobs:
           path: ${{ runner.temp }}/app-build.json
           if-no-files-found: error
       - name: Start local ghost fake
+        if: steps.browser.outputs.browser == 'true'
         run: |
           node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/ghosts-fake.mjs --port 8788 --origins "$BASE_URL" >"$RUNNER_TEMP/ghosts-fake.log" 2>&1 &
           echo "$!" >"$RUNNER_TEMP/ghosts-fake.pid"
@@ -165,6 +170,7 @@ jobs:
       # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
       - name: E2E against next start
         timeout-minutes: 32
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "E2E against next start" "$status" "$RUNNER_TEMP/e2e.log" || true; exit "$status"' EXIT
@@ -178,6 +184,7 @@ jobs:
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
       - name: Motion probe, signed in
         timeout-minutes: 8
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log" || true; exit "$status"' EXIT
@@ -193,6 +200,7 @@ jobs:
           exit "$status"
       - name: Footer walk
         timeout-minutes: 8
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log" || true; exit "$status"' EXIT
@@ -207,6 +215,7 @@ jobs:
           exit "$status"
       - name: Footer Chromium probe
         timeout-minutes: 8
+        if: steps.browser.outputs.browser == 'true'
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true; exit "$status"' EXIT
