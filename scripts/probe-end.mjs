@@ -247,6 +247,7 @@ function installLoopCounters() {
   window.__endPendingRafs = 0;
   window.__endMaxPendingRafs = 0;
   window.__endIntervalTicks = 0;
+  window.__endIntervalRegistrations = 0;
   const origRaf = window.requestAnimationFrame.bind(window);
   const origCancelRaf = window.cancelAnimationFrame.bind(window);
   const pending = new Set();
@@ -278,6 +279,7 @@ function installLoopCounters() {
   };
   const origSetInterval = window.setInterval.bind(window);
   window.setInterval = (fn, ms, ...args) => {
+    window.__endIntervalRegistrations++;
     if (typeof fn !== "function") return origSetInterval(fn, ms, ...args);
     return origSetInterval(
       (...a) => {
@@ -1367,6 +1369,7 @@ try {
       // Live toggle of prefers-reduced-motion mid-press
       const { context: liveCtx, page: livePage } = await open(browser, { viewport: DESKTOP, reduced: false });
       try {
+        await livePage.clock.install({ time: new Date("2026-10-29T12:00:00Z") });
         await livePage.goto(`${BASE_URL}/`, { waitUntil: "load" });
         await hydrated(livePage);
         await livePage.locator("footer.end").filter({ visible: true }).first().scrollIntoViewIfNeeded();
@@ -1379,9 +1382,13 @@ try {
         await livePage.mouse.move(stageBox.x + 25, stageBox.y + 25);
         await livePage.waitForTimeout(60);
 
-        // Click mascot to start the 2-tick press, verify busy/pressed and offset eyes, then emulate reducedMotion: reduce mid-press
-        const ticksBefore = await livePage.evaluate(() => window.__endIntervalTicks);
+        // Hold browser time so protocol latency cannot finish the two-tick press.
+        await livePage.clock.pauseAt(new Date("2026-10-29T13:00:00Z"));
+        // Wrap the installed test clock, so actual interval callbacks are counted.
+        await livePage.evaluate(installLoopCounters);
         await livePage.locator("footer.end [data-end-mascot]").click();
+        await livePage.waitForFunction(() => window.__endIntervalRegistrations > 0, null, { timeout: 2000 });
+        await livePage.clock.runFor(100); // one 12fps tick, with the second still pending
         const midPress = await livePage.evaluate(() => {
           const stage = document.querySelector("footer.end [data-end-stage]");
           const btn = stage.querySelector("[data-end-mascot]");
@@ -1390,14 +1397,15 @@ try {
             busy: stage.dataset.busy ?? null,
             pressed: btn.getAttribute("aria-pressed"),
             pupils: pupils.style.transform,
+            ticks: window.__endIntervalTicks,
           };
         });
         check(
           "reduced motion (mid-press): press starts busy with aria-pressed=true and offset desktop eyes",
-          midPress.busy === "true" && midPress.pressed === "true" && midPress.pupils !== "translate(0px, 0px)",
+          midPress.busy === "true" && midPress.pressed === "true" && midPress.pupils !== "translate(0px, 0px)" && midPress.ticks > 0,
           JSON.stringify(midPress),
         );
-
+        const ticksBefore = await livePage.evaluate(() => window.__endIntervalTicks);
         await livePage.emulateMedia({ reducedMotion: "reduce" });
         await livePage
           .waitForFunction(
@@ -1417,6 +1425,8 @@ try {
             { timeout: 500 },
           )
           .catch(() => {});
+        // A remaining press interval would fire during this controlled window.
+        await livePage.clock.runFor(500);
         const afterToggle = await livePage.evaluate((beforeTicks) => {
           const stage = document.querySelector("footer.end [data-end-stage]");
           const btn = stage.querySelector("[data-end-mascot]");
@@ -1435,7 +1445,7 @@ try {
             afterToggle.busy === null &&
             afterToggle.pressed === "false" &&
             afterToggle.pupils === "translate(0px, 0px)" &&
-            afterToggle.ticksDelta < 2,
+            afterToggle.ticksDelta === 0,
           JSON.stringify(afterToggle),
         );
       } finally {
