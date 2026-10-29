@@ -1,0 +1,8 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-302",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "Every deliverable in this plan (the build-time weekly activity index scripts/strata-index.ts + content/strata.json, the pure cut-paper terrain and paper-rustle model in lib/strata.ts, the /strata and /play/strata interactive cut-paper terrain routes, the build-time project/pipeline graph index scripts/mould-graph.ts + content/mould-graph.json, the deterministic Physarum slime-mould core in lib/mould.ts, the /play/mould WebGL2 sumi-ink Physarum toy, the embedded Work/Projects Physarum vein component in components/mould-veins.tsx, and unit + Playwright E2E test suites) is entirely self-contained in this repository and runs from local git history, committed content JSON, WebGL2/Canvas2D/SVG APIs, and the Web Audio API without any external credentials, third-party APIs, secrets, or special execution runners.",
+  "prerequisites": []
+}
