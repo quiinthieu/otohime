@@ -13,6 +13,13 @@ import "./check-deploy-author.test.mjs";
 import "./setup-owner-git.test.mjs";
 
 const workflow = readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
+
+test("Vercel Git cannot bypass the checked full-history deployment", () => {
+  const config = JSON.parse(readFileSync(new URL("../vercel.json", import.meta.url), "utf8"));
+  assert.equal(config.git?.deploymentEnabled, false,
+    "automatic Git builds can replace CI's current palace history with the committed fallback");
+});
+
 const lines = workflow.split("\n");
 const indent = (line) => line.length - line.trimStart().length;
 const significant = (line) => line.trim() !== "" && !line.trim().startsWith("#");
@@ -163,17 +170,16 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks budgets added postcard coverage with a 30m job, 18m step and 960s E2E bound", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "30");
-  assert.match(workflow, /40800499636 used 857s for 252 E2E cases/);
-  assert.match(workflow, /40804149539 passed 253 cases before 900s/);
+test("checks budgets the full browser suite with a 35m job, 22m step and 1200s bound", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "35");
+  assert.match(workflow, /40820018472 exhausted 960s at the peep-box cases/);
   const checks = steps("checks");
-  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 18\n/);
+  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 22\n/);
   const e2e = gateBody("E2E against next start");
   assert.match(e2e, /^set -o pipefail$/m);
   assert.match(e2e, /^trap .*browser-gate-diagnostics\.mjs "E2E against next start".* EXIT$/m);
   assert.match(e2e, /^command -v timeout >\/dev\/null 2>&1 \|\| timeout\(\)/m);
-  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 960s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
+  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1200s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
   assert.equal(e2e.match(/npm run test:e2e/g).length, 1, "the browser suite runs once, only under the inner bound");
 });
 
@@ -414,10 +420,10 @@ for (const [name, log] of browserGates) {
 }
 
 test("E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation", () => {
-  // Same workflow shell; only the 960s contract and 10s grace shrink so the fixture does not wait.
+  // Same workflow shell; only the 1200s contract and 10s grace shrink so the fixture does not wait.
   const started = Date.now();
   const result = runGate("E2E against next start", "e2e.log", "hang",
-    (body) => body.replace("--kill-after=10s 960s npm", "--kill-after=1s 1s npm"));
+    (body) => body.replace("--kill-after=10s 1200s npm", "--kill-after=1s 1s npm"));
   assert.equal(result.status, 124, result.stderr);
   assert.ok(Date.now() - started < 8000, "the hung child was terminated by the inner bound");
   assert.equal(result.calls, "called\n");

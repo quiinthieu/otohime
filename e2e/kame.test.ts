@@ -180,7 +180,7 @@ test("keyboard hold threshold, focus loss, live reduced motion and Pocket pause"
 
 test("blocked storage remains usable and Save-Data imports only on explicit enable", async (t) => {
   const { page } = await open(t, {}, () => {
-    Object.defineProperty(navigator, "connection", { value: { saveData: true } });
+    Object.defineProperty(navigator, "connection", { value: Object.assign(new EventTarget(), { saveData: true }) });
     Object.defineProperty(window, "localStorage", { get() { throw new DOMException("blocked", "SecurityError"); } });
   });
   const enable = page.getByRole("button", { name: "Enable Kame companion" }); await enable.waitFor();

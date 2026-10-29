@@ -179,7 +179,7 @@ test('unreachable real turtle is a negative control: timeout cancels instead of 
 
 test('Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion',async(t)=>{
   const context=await browser.newContext({viewport:{width:1280,height:860}});t.after(()=>context.close());
-  await context.addInitScript(()=>{Object.defineProperty(navigator,'connection',{value:{saveData:true}});});
+  await context.addInitScript(()=>{Object.defineProperty(navigator,'connection',{value:Object.assign(new EventTarget(),{saveData:true})});});
   const page=await context.newPage();await page.goto(`${BASE}/notes`);
   await page.getByRole('button',{name:'Enable paper corners',exact:true}).waitFor();
   assert.equal(await page.locator('[data-paper-controls],[data-kame],.paper-sticker').count(),0);
