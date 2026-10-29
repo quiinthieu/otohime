@@ -1,0 +1,10 @@
+Plan: pm-300
+Task: t-1773
+Run: run-9671
+Branch: pm-300-t-1773-shimi-core
+Base: 2cc4b041a506d36bcf264c10b6f46fdcebacfb71 (freshly fetched origin/main)
+Subject: pm-300/t-1773: feat: add deterministic Shimi Bookworms core
+Delivery commit: enclosing commit (one task commit).
+Resolve immutable SHA: git log -1 --format=%H -- projects/otohime-dev-two-ink-creature-experiments-1-shimi-bookworms-a/run-9671/artifacts/commits.txt
+The post-push plan-manager summary records that exact delivery SHA as git_sha.
+Push target: git push origin HEAD (task branch only).
