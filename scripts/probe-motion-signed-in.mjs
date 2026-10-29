@@ -14,7 +14,7 @@
 // the next page in, read once a frame from getAnimations(); under reduced motion each completes and nothing runs.
 import pg from "pg";
 import { launchBrowser } from "./probe-browser.mjs";
-import { motionLandingSettled } from "./motion-settle.mjs";
+import { landingSettled } from "./probe-motion-state.mjs";
 
 const BASE_URL = process.env.BASE_URL;
 const RUN = process.env.PROBE_RUN;
@@ -129,12 +129,12 @@ async function open(browser, { viewport, reduced, cookies = [] }) {
 }
 
 // The landing has settled: the hop's transition has finished, every Suspense boundary has revealed, no transition
-// of React's is in flight and every finite document-timeline animation is done.
-// Scroll-driven effects remain tied to scrolling. Then a beat for late errors.
+// of React's is in flight and every finite clock animation is done. Scroll-driven
+// departures drums can remain at their current progress. Then a beat for late rejections.
 async function settle(page) {
   const settled = await page
     .waitForFunction(
-      motionLandingSettled,
+      landingSettled,
       null,
       { timeout: 10_000 },
     )

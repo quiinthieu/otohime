@@ -50,6 +50,13 @@
       "when": 1793243483101,
       "tag": "0006_funny_spencer_smythe",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793254667257,
+      "tag": "0007_kintsugi",
+      "breakpoints": true
     }
   ]
 }

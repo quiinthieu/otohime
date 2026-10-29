@@ -1,0 +1,26 @@
+{
+  "generated": "2026-10-29T06:19:19.103431+00:00",
+  "source": "Public GitHub Actions job API; duration is actual execution time, row counts are not reported",
+  "events": [
+    {
+      "id": "job:123286837086",
+      "at": "2026-10-29T06:13:16Z",
+      "kind": "pipeline",
+      "label": "checks",
+      "url": "https://github.com/quiinthieu/otohime/actions/runs/40825297324/job/123286837086",
+      "failed": true,
+      "durationMs": 1618000.0,
+      "rows": 0
+    },
+    {
+      "id": "job:123270399902",
+      "at": "2026-10-29T04:52:37Z",
+      "kind": "pipeline",
+      "label": "deploy",
+      "url": "https://github.com/quiinthieu/otohime/actions/runs/40820127604/job/123270399902",
+      "failed": false,
+      "durationMs": 32000.0,
+      "rows": 0
+    }
+  ]
+}

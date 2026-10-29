@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, type HTMLAttributes } from "react";
 import { paperHydration } from "@/lib/paper-hydration";
+import { KintsugiCard } from "./kintsugi-card";
 
 /** Keep the server element and children intact; acknowledge only its React commit. */
 export function PaperHost({ as = "div", children, ...props }: HTMLAttributes<HTMLElement> & { as?: "div" | "li" }) {
@@ -15,5 +16,7 @@ export function PaperHost({ as = "div", children, ...props }: HTMLAttributes<HTM
     return () => { unmark(); delete host.dataset.paperHydrated; };
   }, []);
   const Host = as;
-  return <Host {...props} ref={attach} data-paper-host="">{children}</Host>;
+  const id = (props as Record<string, unknown>)["data-paper-id"];
+  const mendable = typeof id === "string" && /^(project|note|work|demo):/.test(id);
+  return <Host {...props} ref={attach} data-paper-host="" data-kintsugi-card={mendable ? "" : undefined}>{children}{mendable && <KintsugiCard id={id} />}</Host>;
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { afterPaperHydration } from "@/lib/paper-hydration";
-import { ShimiLoader } from "@/shimi/loader";
 import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import { useEffect, useState, type ComponentType } from "react";
@@ -39,7 +38,6 @@ export function KameLoader() {
 
   return (
     <>
-      <ShimiLoader />
       {eligible ? (Companion ? <Companion key={path} /> : deferred && slot ? createPortal(<button className="kame-button" type="button" onClick={() => setEnabled(true)}>Enable Kame companion</button>, slot) : null) : null}
     </>
   );

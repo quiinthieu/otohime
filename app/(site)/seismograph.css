@@ -1,0 +1,32 @@
+.seismograph { margin-top:32px; border:1px solid var(--line); background:var(--paper); box-shadow:4px 5px 0 color-mix(in srgb,var(--ink) 9%,transparent); }
+.seismo-header { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:22px 24px 10px; }
+.seismo-header h2 { font-size:clamp(22px,3vw,32px); font-weight:600; letter-spacing:-.03em; }
+.seismo-badge { font:10px monospace; text-transform:uppercase; letter-spacing:.08em; color:#8a682d; white-space:nowrap; }
+.seismo-intro { padding:0 24px 20px; max-width:55rem; font-size:13px; }
+.seismo-roll { overflow:hidden; position:relative; border-block:1px solid var(--line); background:color-mix(in srgb,var(--paper) 95%,#b38f4e); }
+.seismo-ruler { display:flex; justify-content:space-between; font:10px monospace; color:var(--muted); padding:12px 14px; border-bottom:1px solid var(--line); background:repeating-linear-gradient(90deg,transparent 0 19px,var(--line) 19px 20px) bottom/100% 5px no-repeat; }
+.seismo-chart { width:100%; min-height:160px; display:block; cursor:grab; touch-action:pan-y; }
+.seismo-chart:active { cursor:grabbing; }
+.seismo-grid { fill:none; stroke:var(--line); stroke-width:.6; opacity:.6; }
+.seismo-trace { fill:none; stroke:var(--ink); stroke-width:1.5; stroke-linecap:round; }
+.seismo-point { fill:var(--ink); }
+.seismo-blot { fill:#ad4635; opacity:.85; }
+.seismo-chart [data-spike] { cursor:pointer; outline:none; }
+.seismo-chart [data-spike]:focus-visible circle:last-child { stroke:#b18c41; stroke-width:3; }
+.seismo-needle { fill:var(--ink); stroke:var(--ink); stroke-width:1.5; }
+.seismo-perforation { height:12px; border-top:1px dashed #ab8f60; background:radial-gradient(circle at 8px 8px,var(--paper) 3px,transparent 4px) 0 0/16px 12px; }
+.seismo-controls { display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:18px 24px 0; font:11px monospace; }
+.seismo-controls button { padding:7px 9px; border:1px solid var(--line); background:var(--paper); }
+.seismo-controls button:focus-visible,.seismo-controls input:focus-visible { outline:2px solid #b18c41; outline-offset:3px; }
+.seismo-controls button:disabled { opacity:.5; }
+.seismo-scrub { flex:1 1 220px; display:flex; align-items:center; gap:12px; }
+.seismo-scrub input { width:100%; accent-color:#a47b2e; }
+.seismograph>.caption { margin-inline:24px; font-size:10px; }
+.seismo-detail { padding:16px 24px; min-height:90px; font-size:12px; }
+.seismo-detail strong { font-size:14px; }
+.seismo-events { border-top:1px solid var(--line); padding:14px 24px; font-size:11px; }
+.seismo-events summary { cursor:pointer; }
+.seismo-events ol { margin-top:12px; max-height:240px; overflow:auto; line-height:2; }
+.seismo-events time { font-family:monospace; }
+@media(max-width:500px) { .seismo-header,.seismo-intro,.seismo-detail,.seismo-events { padding-inline:14px; } .seismo-controls { padding-inline:14px; } .seismo-badge { font-size:8px; } .seismo-ruler { font-size:8px; } }
+@media print { body * { visibility:hidden; } .seismograph,.seismograph * { visibility:visible; } .seismograph { position:absolute; inset:0 auto auto 0; width:100%; box-shadow:none; color:#29251f; background:#f2efe7; } .seismo-controls,.seismo-events,.seismo-badge,.kintsugi-layer { display:none; } }

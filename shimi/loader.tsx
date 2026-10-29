@@ -29,7 +29,11 @@ export function ShimiLoader() {
       progress = next;
     };
     addEventListener("keydown", onKey, true);
-    return () => removeEventListener("keydown", onKey, true);
+    document.body.dataset.shimiKeys = "ready";
+    return () => {
+      removeEventListener("keydown", onKey, true);
+      delete document.body.dataset.shimiKeys;
+    };
   }, []);
 
   useEffect(() => {
