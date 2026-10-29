@@ -106,6 +106,18 @@ test("phone touch pans the chart; taps open each original note", async () => {
   await page.waitForFunction(() => document.querySelector('[aria-label="Pannable celestial chart"]')!.scrollLeft > 100);
   await page.waitForFunction(() => document.querySelector('[aria-label="Pannable celestial chart"]')!.getAttribute("data-dragging") === "false");
   assert.equal(new URL(page.url()).pathname, "/notes/sky");
+  const draggedStar = page.locator('[data-sky-star="backfills-are-a-feature"]');
+  await draggedStar.scrollIntoViewIfNeeded();
+  const origin = (await draggedStar.boundingBox())!;
+  const stroke = await context.newCDPSession(page);
+  const point = { x: origin.x + origin.width / 2, y: origin.y + origin.height / 2 };
+  await stroke.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [point] });
+  await stroke.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: point.x + 80, y: point.y }] });
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  await stroke.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  await stroke.detach();
+  assert.equal(new URL(page.url()).pathname, "/notes/sky", "a touch drag starting on a star cannot open its note");
   // Playwright's tap dispatches touchStart and touchEnd in parallel. Send a
   // physical press/release across rendered frames, including after a pan.
   async function tap(link: Locator) {

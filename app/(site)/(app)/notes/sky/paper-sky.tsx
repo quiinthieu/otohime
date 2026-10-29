@@ -7,7 +7,7 @@ import "./sky.css";
 
 export function PaperSky({ chart }: { chart: SkyChart }) {
   const viewport = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ id: number; x: number; y: number; left: number; top: number; moved: boolean } | null>(null);
+  const drag = useRef<{ id: number; x: number; y: number; left: number; top: number; moved: boolean; started: number } | null>(null);
   const suppressClick = useRef(false);
   const stars = new Map(chart.stars.map(star => [star.slug, star]));
   function recenter() {
@@ -17,7 +17,7 @@ export function PaperSky({ chart }: { chart: SkyChart }) {
   function start(event: PointerEvent<HTMLDivElement>) {
     if (!event.isPrimary || event.button !== 0) return;
     suppressClick.current = false;
-    drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY, left: event.currentTarget.scrollLeft, top: event.currentTarget.scrollTop, moved: false };
+    drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY, left: event.currentTarget.scrollLeft, top: event.currentTarget.scrollTop, moved: false, started: performance.now() };
   }
   function move(event: PointerEvent<HTMLDivElement>) {
     const held = drag.current;
@@ -70,7 +70,17 @@ export function PaperSky({ chart }: { chart: SkyChart }) {
             {chart.constellations.map(group => { const members = group.slugs.map(slug => stars.get(slug)!); return <text key={group.tag} x={members.reduce((sum, star) => sum + star.x, 0) / members.length} y={members.reduce((sum, star) => sum + star.y, 0) / members.length - 28} textAnchor="middle">{group.name}</text>; })}
           </svg>
           {chart.stars.map(star => (
-            <Link key={star.slug} href={`/notes/${star.slug}`} className="sky-star" style={{ left: star.x, top: star.y }} aria-label={star.title} data-sky-star={star.slug} draggable={false}>
+            <Link key={star.slug} href={`/notes/${star.slug}`} className="sky-star" style={{ left: star.x, top: star.y }} aria-label={star.title} data-sky-star={star.slug} draggable={false}
+              onPointerUp={event => {
+                const held = drag.current;
+                if (event.pointerType !== "touch" || held?.id !== event.pointerId || held.moved
+                  || performance.now() - held.started > 500 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+                // Resolve taps alongside panning. Some touch engines omit the
+                // compatibility click after capture; any later click is consumed.
+                event.preventDefault();
+                event.currentTarget.click();
+                suppressClick.current = true;
+              }}>
               <svg width="48" height="48" viewBox="-24 -24 48 48" aria-hidden="true" style={{ opacity: star.brightness }}>
                 <path d={`M0 ${-star.radius}L${star.radius * .28} -3L${star.radius} 1L3 4L0 ${star.radius}L-3 3L${-star.radius} -1L-3 -4Z`} fill="currentColor" />
                 <path d={`M-18 -15l4 3m29 28l3 2M16 -16l-3 3`} fill="none" stroke="currentColor" />
