@@ -3,6 +3,7 @@ import { DeparturesBoard } from "@/components/departures-board";
 import { buildWorkDepartures } from "@/lib/departures";
 import { Conveyor } from "@/components/conveyor";
 import { FigTitle } from "@/components/figures";
+import MouldVeinsLoader from "@/components/mould-veins-loader";
 import { Pipeline } from "@/components/pipeline";
 import { ServerRack } from "@/components/server-rack";
 import { site } from "@/content/site";
@@ -30,11 +31,24 @@ export default function WorkPage() {
           <Link href="/making-of" className="link">
             Making-of Emaki handscroll
           </Link>
+          <span aria-hidden="true" className="text-muted">
+            ·
+          </span>
+          <Link href="/strata" className="link">
+            Paper Strata
+          </Link>
+          <span aria-hidden="true" className="text-muted">
+            ·
+          </span>
+          <Link href="/play/mould" className="link">
+            Ink Slime Mould
+          </Link>
         </p>
         <DeparturesBoard kind="work" rows={buildWorkDepartures()} />
         <div className="mt-8">
           <Pipeline />
         </div>
+        <MouldVeinsLoader variant="work" />
         <div className="mt-14">
           <Conveyor />
         </div>

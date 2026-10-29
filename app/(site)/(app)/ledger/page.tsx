@@ -55,7 +55,10 @@ export default async function LedgerPage() {
         <div className="mt-8">
           <StampCalendar ledger={ledger} end={end} />
         </div>
-        <p className="mt-8">
+        <p className="mt-8 flex flex-wrap gap-x-4 gap-y-1">
+          <Link href="/strata" className="link">
+            Paper Strata
+          </Link>
           <Link href="/work" className="link">
             Back to Work
           </Link>

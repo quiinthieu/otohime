@@ -1,3 +1,4 @@
+import MouldVeinsLoader from "@/components/mould-veins-loader";
 import { TheatreLoader } from "@/components/kamishibai/loader";
 import { DeparturesBoard } from "@/components/departures-board";
 import { buildProjectDepartures } from "@/lib/departures";
@@ -62,6 +63,11 @@ export default function ProjectsPage() {
             </ul>
           </DarumaBoard>
         )}
+        <p className="mt-10 flex flex-wrap gap-x-4 gap-y-1">
+          <Link href="/play/mould" className="link">Ink Slime Mould</Link>
+          <Link href="/strata" className="link">Paper Strata</Link>
+        </p>
+        <MouldVeinsLoader variant="projects" />
         <TheatreLoader><ProjectStories /></TheatreLoader>
         <GazetteDesks />
       </div>

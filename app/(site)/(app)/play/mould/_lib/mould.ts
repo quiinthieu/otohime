@@ -1,0 +1,27 @@
+export {
+  MOULD_PRESETS,
+  PIPELINE_THROUGHPUT,
+  WEIGHT_BASIS,
+  boostMouldNode,
+  buildMouldGraph,
+  computeVeinWeight,
+  createMouldWorld,
+  dropMouldFood,
+  parseMouldGraph,
+  repelMouldAt,
+  resetMouldWorld,
+  sampleSumiInkRgba,
+  serializeMouldGraph,
+  settleMouldWorld,
+  stepMouldWorld,
+  trailChecksum,
+} from "@/lib/mould";
+export type {
+  MouldEdge,
+  MouldGraphData,
+  MouldNode,
+  MouldPresetId,
+  MouldWeightMode,
+  MouldWorld,
+  MouldWorldConfig,
+} from "@/lib/mould";

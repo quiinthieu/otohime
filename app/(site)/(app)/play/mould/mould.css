@@ -1,0 +1,35 @@
+.mould-toy { margin-top: 1.5rem; }
+.mould-controls { display: flex; flex-wrap: wrap; gap: 0.55rem 0.8rem; align-items: center; }
+.mould-controls [role="group"] { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.mould-controls button { min-height: 44px; }
+.mould-controls button[aria-pressed="true"] { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+.mould-dish {
+  position: relative;
+  margin-top: 0.8rem;
+  background: #f6f1e6;
+  border: 1px solid var(--line);
+  border-radius: 46% 46% 40% 40% / 14% 14% 12% 12%;
+  box-shadow: inset 0 0 0 12px rgb(243 236 220 / 0.85);
+  overflow: hidden;
+}
+.mould-canvas { display: block; width: 100%; height: clamp(320px, 54vw, 460px); touch-action: none; cursor: crosshair; }
+.mould-pins { position: absolute; inset: 0; pointer-events: none; }
+.mould-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0.15rem 0.4rem;
+  border: 1px solid rgb(23 22 20 / 0.45);
+  border-radius: 999px;
+  background: rgb(246 241 230 / 0.82);
+  color: #171614;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+.mould-note { margin-top: 0.7rem; color: var(--muted); max-width: 66ch; }
+.mould-loading { min-height: 360px; display: grid; place-items: center; }
+@media (prefers-reduced-motion: reduce) {
+  .mould-toy, .mould-toy *, .mould-toy *::before, .mould-toy *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
