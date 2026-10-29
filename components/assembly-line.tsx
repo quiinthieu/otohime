@@ -11,7 +11,7 @@ function Gear({ x, y, angle }: { x: number; y: number; angle: number }) {
 
 function Factory({ progress, word, vertical = false, still = false }: { progress: number; word: string; vertical?: boolean; still?: boolean }) {
   const active = Math.round(progress);
-  return <svg className={vertical ? "assembly-vertical" : "assembly-horizontal"} viewBox={vertical ? "0 0 140 910" : "0 0 1000 330"} aria-hidden="true">
+  return <svg className={vertical ? "assembly-vertical" : "assembly-horizontal"} viewBox={vertical ? "0 0 140 950" : "0 0 1000 330"} aria-hidden="true">
     {!vertical && <><text x="20" y="28" className="assembly-small">FIG. 02 / INK ASSEMBLY LINE</text><text x="980" y="28" textAnchor="end" className="assembly-small">RAW → READY</text></>}
     <g stroke="var(--ink)" strokeWidth="2" strokeLinejoin="round">
       {vertical ? <path d="M70 45V855" strokeWidth="32" stroke="var(--paper-2)" /> : <><path d="M35 231H965" strokeWidth="34" stroke="var(--paper-2)" /><rect x="24" y="213" width="952" height="36" rx="18" fill="none" /></>}

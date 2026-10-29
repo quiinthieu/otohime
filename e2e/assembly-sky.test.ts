@@ -139,6 +139,11 @@ test("reduced motion shows a static factory and settles word crates immediately,
   const { page, errors } = await open("/work", { viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
   await page.waitForFunction(() => document.querySelector('[data-testid="assembly-line"]')?.getAttribute("data-motion") === "reduced");
   assert.equal(await page.getByTestId("assembly-crate-mobile").isVisible(), false);
+  const labelsFit = await page.locator(".assembly-static .assembly-vertical").evaluate((svg: SVGSVGElement) => [...svg.querySelectorAll("text")].every(label => {
+    const box = label.getBoundingClientRect(), bounds = svg.getBoundingClientRect();
+    return box.left >= bounds.left - .5 && box.top >= bounds.top - .5 && box.right <= bounds.right + .5 && box.bottom <= bounds.bottom + .5;
+  }));
+  assert.equal(labelsFit, true, "all five mobile station labels fit inside the static diagram");
   for (const station of await page.locator("[data-assembly-station]").all()) assert.equal(await station.isVisible(), true);
   await page.getByLabel("Drop your own crate", { exact: false }).fill("paper");
   await page.getByRole("button", { name: "Run my crate" }).click();
