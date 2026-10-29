@@ -24,9 +24,12 @@ test("/sketches is the seventh public page", () => {
 });
 
 test("the sketches collection is in site", () => {
-  assert.equal(site.sketches.length, 12);
-  assert.equal(typeof site.sketchesIntro, "string");
-  assert.ok(site.sketchesIntro.length > 0);
+  assert.equal(site.sketches.length, 22);
+  assert.equal(site.sketches.filter((sketch) => sketch.kind === "person").length, 10);
+  assert.equal(
+    site.sketchesIntro,
+    "Twenty-two studies from one sketchbook. Places first, then the things that sit still, and the people.",
+  );
 });
 
 test("every console menu line fits inside the LCD", () => {
