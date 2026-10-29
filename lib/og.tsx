@@ -162,7 +162,7 @@ export function postcardCard({ postcard, sketch, image }: { postcard: Postcard; 
         />
       </div>
       <div style={{ display: "flex", width: 2, margin: "40px 0", background: LINE }} />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "28px 36px 40px", color: INK }}>
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", padding: "28px 36px 40px", color: INK }}>
         <div style={{ display: "flex", justifyContent: "flex-end", marginRight: -12 }}>
           <Postmark date={postmarkDate(postcard.ts)} top="OTOHIME" bottom={sketch.title.toUpperCase()} />
         </div>
@@ -170,8 +170,10 @@ export function postcardCard({ postcard, sketch, image }: { postcard: Postcard; 
           style={{
             display: "flex",
             flex: 1,
-            fontSize: postcard.note.length > 90 ? 30 : 36,
+            // Leave room for the widest letters and emoji, including notes without spaces.
+            fontSize: postcard.note.length > 50 ? 22 : 36,
             lineHeight: 1.35,
+            wordBreak: "break-word",
             marginTop: 8,
             color: postcard.note ? INK : MUTED,
           }}

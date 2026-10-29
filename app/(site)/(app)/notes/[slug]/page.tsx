@@ -12,7 +12,14 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/notes/[slug]">): Promise<Metadata> {
   const note = noteBySlug((await params).slug);
-  return note ? { title: note.title, description: note.body } : {};
+  return note ? {
+    title: note.title,
+    description: note.body,
+    openGraph: {
+      images: [{ url: `/og?${new URLSearchParams({ title: note.title, path: `/notes/${note.slug}` })}`, width: 1200, height: 630, alt: `${note.title}, stamped on paper by otohime.dev` }],
+    },
+    twitter: { card: "summary_large_image" },
+  } : {};
 }
 
 export default async function NotePage({ params }: PageProps<"/notes/[slug]">) {

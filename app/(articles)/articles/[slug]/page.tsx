@@ -18,7 +18,14 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/articles/[slug]">): Promise<Metadata> {
   const article = bySlug((await params).slug);
-  return article ? { title: article.headline, description: article.deck } : {};
+  return article ? {
+    title: article.headline,
+    description: article.deck,
+    openGraph: {
+      images: [{ url: `/og?${new URLSearchParams({ title: article.headline, path: `/articles/${article.slug}` })}`, width: 1200, height: 630, alt: `${article.headline}, stamped on paper by otohime.dev` }],
+    },
+    twitter: { card: "summary_large_image" },
+  } : {};
 }
 
 export default async function ArticlePage({ params }: PageProps<"/articles/[slug]">) {

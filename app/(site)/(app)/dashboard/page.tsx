@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { FigTitle, Figure } from "@/components/figures";
 import { requireUser } from "@/lib/dal";
 import { can, type Permissions } from "@/lib/permissions";
@@ -19,6 +20,14 @@ const rooms: { href: string; title: string; blurb: string; needs?: Permissions }
     needs: { user: ["list"] },
   },
 ];
+
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Dashboard&path=%2Fdashboard", width: 1200, height: 630, alt: "Dashboard, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: "Dashboard",
+};
 
 export default async function DashboardPage() {
   const { user } = await requireUser("/dashboard");

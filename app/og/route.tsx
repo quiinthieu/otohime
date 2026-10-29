@@ -1,9 +1,14 @@
 import { stamp } from "@/lib/og";
+import type { NextRequest } from "next/server";
 
-// The postmarked card every page shares, whatever its root layout: each root layout (and global-not-found)
-// names /og as its Open Graph image against its own metadataBase. It sits outside the route groups, so the
-// projects that may not import the site's code still get it. A segment's own opengraph-image file (the site's
-// rooms, /postcard) stamps its own title instead.
-export function GET() {
-  return stamp("Otohime", "Data engineer. Plays games.");
+// A common image endpoint keeps the independent sketch projects isolated: their metadata passes just
+// the title and path. /og without a query remains the home/unknown-page card. Bound untrusted text
+// before Satori lays it out; neither parameter is a URL to fetch or a file to read.
+export function GET(request: NextRequest) {
+  const title = request.nextUrl.searchParams.get("title")?.trim();
+  const path = request.nextUrl.searchParams.get("path")?.trim();
+  return stamp(
+    title && title.length <= 160 ? title : "Otohime",
+    path && path.startsWith("/") && path.length <= 200 ? path : "Data engineer. Plays games.",
+  );
 }

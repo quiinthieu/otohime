@@ -6,6 +6,10 @@ import { buildShelfBooks } from "@/lib/shelf";
 import "./shelf.css";
 
 export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Ink+Shelf&path=%2Fshelf", width: 1200, height: 630, alt: "Ink Shelf, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
   title: "Ink Shelf",
   description: "Projects and little notes, bound in paper and kept on an ink-drawn shelf.",
 };

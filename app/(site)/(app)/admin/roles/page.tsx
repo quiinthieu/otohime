@@ -5,7 +5,13 @@ import { can, roles, statements, type Permissions, type RoleName } from "@/lib/p
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
 
-export const metadata: Metadata = { title: "Roles" };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Roles&path=%2Fadmin%2Froles", width: 1200, height: 630, alt: "Roles, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: "Roles",
+};
 
 const names = Object.keys(roles) as RoleName[];
 

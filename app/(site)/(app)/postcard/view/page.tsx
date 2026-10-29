@@ -62,12 +62,12 @@ async function Postcard({ searchParams }: Pick<PageProps<"/postcard/view">, "sea
       <h1 id="postcard-title"><RisoText>{`A postcard: ${sketch.title}`}</RisoText></h1>
       <div className="mt-6 grid gap-6 border border-ink bg-field p-4 sm:grid-cols-[3fr_2fr] sm:p-6">
         <Image src={sketch.src} alt={`The ${sketch.title} sketch`} width={1248} height={832} className="h-auto w-full border border-line" />
-        <div className="flex flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-4">
           <p className="caption self-end rounded-full border-2 border-danger px-3 py-1 text-danger">
             <time dateTime={new Date(postcard.ts).toISOString()}>{postmarkDate(postcard.ts)}</time>
           </p>
           {/* A text child: React escapes the note, so it is never markup. */}
-          <p className="text-lg whitespace-pre-wrap">{postcard.note || <span className="text-muted">No words needed.</span>}</p>
+          <p className="text-lg whitespace-pre-wrap wrap-anywhere">{postcard.note || <span className="text-muted">No words needed.</span>}</p>
           <p className="mt-auto border-t border-line pt-2 text-muted">From the sketchbook at otohime.dev</p>
         </div>
       </div>

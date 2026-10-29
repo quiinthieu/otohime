@@ -8,6 +8,10 @@ import { validBottleCursor, type BottlePage } from "@/lib/bottles-service";
 import type { BottleStatus } from "@/lib/bottles";
 import { ReviewControls } from "./review-controls";
 export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Bottles&path=%2Fadmin%2Fbottles", width: 1200, height: 630, alt: "Bottles, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
   title: "Bottles",
   robots: { index: false, follow: false },
 };

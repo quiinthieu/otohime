@@ -22,7 +22,14 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/structures/[slug]">): Promise<Metadata> {
   const page = pageFor((await params).slug);
-  return page ? { title: page.title, description: page.deck } : {};
+  return page ? {
+    title: page.title,
+    description: page.deck,
+    openGraph: {
+      images: [{ url: `/og?${new URLSearchParams({ title: page.title, path: `/structures/${page.slug}` })}`, width: 1200, height: 630, alt: `${page.title}, stamped on paper by otohime.dev` }],
+    },
+    twitter: { card: "summary_large_image" },
+  } : {};
 }
 
 const PARTS = Object.keys(PART_TITLES) as (keyof Parts)[];

@@ -12,7 +12,13 @@ import { localToUtc } from "../_lib/time.ts";
 import { parseQuery, placeName, toQuery } from "../_lib/wheel.ts";
 
 // absolute: the layout's template would otherwise make this "Planisphere · Planisphere".
-export const metadata: Metadata = { title: { absolute: "Planisphere" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Planisphere&path=%2Fplanisphere", width: 1200, height: 630, alt: "Planisphere, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Planisphere" },
+};
 
 // The whole page depends on the query, and it must work with JavaScript off.
 // Inside a streamed boundary it would arrive into a hidden <div> that only a script

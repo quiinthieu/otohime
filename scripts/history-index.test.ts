@@ -284,6 +284,7 @@ test("a PR merge indexes both diverged branches and verifies the complete build 
   const index = indexAt(git)!;
   assert.ok(index.entries.some((e) => e.subject === "side work"));
   assert.ok(index.entries.some((e) => e.subject === "concurrent main work"));
+  assert.notDeepEqual(index.entries, indexAt(git, index.head!)!.entries);
   for (const strict of [false, true]) {
     const check = checkHistory(git, repo, serializeHistory(index), { strict });
     assert.equal(check.ok, true, check.message);
@@ -291,12 +292,15 @@ test("a PR merge indexes both diverged branches and verifies the complete build 
     const tampered = structuredClone(index);
     tampered.entries[1].subject = "invented change";
     assert.equal(checkHistory(git, repo, serializeHistory(tampered), { strict }).ok, false);
+    const incomplete = { ...index, entries: index.entries.filter((_, i) => i !== 1) };
+    assert.equal(checkHistory(git, repo, serializeHistory(incomplete), { strict }).ok, false);
   }
   assert.equal(checkHistory(git, repo, beforeMerge, { strict: true }).ok, false, "an index missing a branch still fails");
   const file = join(TMP, `merge-${repos++}.json`);
   const rev = sh(repo, "rev-parse", "HEAD").trim();
   const result = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${rev}`);
   assert.equal(result.status, 0, result.stderr);
+  assert.equal(readFileSync(file, "utf8"), serializeHistory(index));
   assert.equal(runScript(`--repo=${repo}`, `--file=${file}`, "--strict", "--check", `--rev=${rev}`).status, 0);
 });
 

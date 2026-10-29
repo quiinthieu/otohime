@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prove a deployment serves the expected commit and still has the Pocket Terminal and the Ink Poster Press.
+# Prove a deployment serves the expected commit, terminal, press and postcard mailroom.
 #
 #   bash scripts/verify-deploy.sh https://otohime.dev "$(git rev-parse HEAD)"
 #   BASE_URL=https://otohime.dev EXPECT_SHA=<40-hex sha> bash scripts/verify-deploy.sh
@@ -13,8 +13,8 @@
 #    pushes, but project deliveries must deploy). Ancestry is read from this checkout (VERIFY_REPO overrides it), fetching an unknown
 #    served sha from origin once. A stale served sha with code still undeployed, a non-200 answer or nothing
 #    listening exits 1 and names what it last saw.
-# 2. Runs e2e/pocket-terminal.test.ts and e2e/ink-press.test.ts directly against BASE_URL, without the full
-#    suite's fake ghost transport. Both are read-only: no form posts, no sign-in. They need Google Chrome or
+# 2. Runs the terminal, press and postcard HTTP/browser tests directly against BASE_URL, without the full
+#    suite's fake ghost transport. They are read-only: no form posts, no sign-in. They need Google Chrome or
 #    CHROME_PATH, like npm run test:e2e. A bare checkout is fine: when playwright-core or sharp does not import,
 #    it runs npm ci once (VERIFY_INSTALL_CMD), and when no browser launches it installs Playwright's Chromium once.
 # Exit 0 only when both hold; 1 on a failed check; 2 on bad arguments.
@@ -167,7 +167,7 @@ verify() {
 
   preflight || return 1
 
-  echo "# running the Pocket Terminal and Ink Poster Press e2e against $base"
+  echo "# running the Pocket Terminal, Ink Poster Press and Postcard Mailroom e2e against $base"
   local status=0
   if [ -n "${VERIFY_E2E_CMD:-}" ]; then
     BASE_URL="$base" bash -c "$VERIFY_E2E_CMD" || status=$?
@@ -176,13 +176,13 @@ verify() {
     if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
       reporters=(--test-reporter=tap --test-reporter-destination=stdout --test-reporter=./scripts/e2e-annotate.mjs --test-reporter-destination=stdout)
     fi
-    BASE_URL="$base" "${NODE_TS[@]}" --test-concurrency=1 ${reporters[@]+"${reporters[@]}"} --test e2e/pocket-terminal.test.ts e2e/ink-press.test.ts || status=$?
+    BASE_URL="$base" "${NODE_TS[@]}" --test-concurrency=1 ${reporters[@]+"${reporters[@]}"} --test e2e/pocket-terminal.test.ts e2e/ink-press.test.ts e2e/postcard.test.ts e2e/postcard-browser.test.ts || status=$?
   fi
   if [ "$status" -ne 0 ]; then
-    echo "not ok - terminal/press e2e failed against $base (exit $status)"
+    echo "not ok - terminal/press/postcard e2e failed against $base (exit $status)"
     return 1
   fi
-  echo "ok - $base serves $want with the Pocket Terminal and the Ink Poster Press"
+  echo "ok - $base serves $want with the Pocket Terminal, Ink Poster Press and Postcard Mailroom"
 }
 
 # A local /api/health that answers `<old sha>` for its first <n> requests, then `<sha>`; or HTTP 500 with "500".

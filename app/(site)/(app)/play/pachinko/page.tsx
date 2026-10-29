@@ -6,6 +6,10 @@ import { PachinkoMachine } from "./_components/pachinko-machine";
 import "./pachinko.css";
 
 export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Pipeline+Pachinko&path=%2Fplay%2Fpachinko", width: 1200, height: 630, alt: "Pipeline Pachinko, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
   title: "Pipeline Pachinko",
   description:
     "Launch ink-ball records with a spring plunger or backfill flood through a 5-stage data-engineering pachinko machine: ingest peg field, dedupe gate, join funnel, six-way partition splitter, and dead-letter queue gutter.",

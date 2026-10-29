@@ -7,7 +7,13 @@ import { inkCircle, inkPath } from "../_lib/ink.ts";
 import { ROW_VIEW, edgeArc, edgeArea, planetRow, starRow, type Disc, type Edge, type Row } from "../_lib/rows.ts";
 
 // absolute: the layout's template would otherwise make this "Orrery · Orrery".
-export const metadata: Metadata = { title: { absolute: "Orrery" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Orrery&path=%2Forrery", width: 1200, height: 630, alt: "Orrery, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Orrery" },
+};
 
 // The index: two size rows, each at one true scale of its own (rows.ts). Every
 // disc is a rough outline with a solid wash (never hachure, which would weigh

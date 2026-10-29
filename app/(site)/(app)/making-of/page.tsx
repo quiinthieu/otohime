@@ -8,6 +8,10 @@ import { EmakiScroll } from "./_components/emaki-scroll";
 import "./making-of.css";
 
 export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Making-of+Emaki&path=%2Fmaking-of", width: 1200, height: 630, alt: "Making-of Emaki, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
   title: "Making-of Emaki",
   description:
     "A horizontal ink-and-washi handscroll (emaki) tracing how AI agent roles collaborate across plans to build otohime.dev.",

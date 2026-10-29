@@ -5,6 +5,10 @@ import { RisoHeading } from "@/components/riso-heading";
 import "@/components/ink-lab.css";
 
 export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Ink+Lab&path=%2Flab", width: 1200, height: 630, alt: "Ink Lab, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
   title: "Ink Lab",
   description: "A public proof sheet for Otohime. Mix ink, paper and print plates; share a recipe or try it for this tab session.",
 };

@@ -163,17 +163,17 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks uses measured 30m job, 17m E2E step and 900s E2E command budgets", () => {
+test("checks budgets added postcard coverage with a 30m job, 18m step and 960s E2E bound", () => {
   assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "30");
-  assert.match(workflow, /40420670837: 1039s total \(E2E 501s, camera 79s,\n\s*# signed-in motion 171s, footer probe 71s\)/);
-  assert.match(workflow, /122630267659 then used\n\s*# 22m26s with E2E 701s/);
+  assert.match(workflow, /40800499636 used 857s for 252 E2E cases/);
+  assert.match(workflow, /40804149539 passed 253 cases before 900s/);
   const checks = steps("checks");
-  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 17\n/);
+  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 18\n/);
   const e2e = gateBody("E2E against next start");
   assert.match(e2e, /^set -o pipefail$/m);
   assert.match(e2e, /^trap .*browser-gate-diagnostics\.mjs "E2E against next start".* EXIT$/m);
   assert.match(e2e, /^command -v timeout >\/dev\/null 2>&1 \|\| timeout\(\)/m);
-  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 900s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
+  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 960s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
   assert.equal(e2e.match(/npm run test:e2e/g).length, 1, "the browser suite runs once, only under the inner bound");
 });
 
@@ -414,10 +414,10 @@ for (const [name, log] of browserGates) {
 }
 
 test("E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation", () => {
-  // Same workflow shell; only the 900s contract and 10s grace shrink so the fixture does not wait.
+  // Same workflow shell; only the 960s contract and 10s grace shrink so the fixture does not wait.
   const started = Date.now();
   const result = runGate("E2E against next start", "e2e.log", "hang",
-    (body) => body.replace("--kill-after=10s 900s npm", "--kill-after=1s 1s npm"));
+    (body) => body.replace("--kill-after=10s 960s npm", "--kill-after=1s 1s npm"));
   assert.equal(result.status, 124, result.stderr);
   assert.ok(Date.now() - started < 8000, "the hung child was terminated by the inner bound");
   assert.equal(result.calls, "called\n");
@@ -713,16 +713,17 @@ test("application SHA and Next BUILD_ID are published independently from the Wor
   } finally { rmSync(work, { recursive: true, force: true }); }
 });
 
-test("production read-only Terminal/Press probe runs without fake configuration and preserves browser failures", () => {
+test("production read-only feature probes run without fake configuration and preserve browser failures", () => {
   const script = readFileSync(new URL("./verify-deploy.sh", import.meta.url), "utf8");
-  const invocation = script.split('  echo "# running the Pocket Terminal and Ink Poster Press e2e against $base"\n')[1]
+  const invocation = script.split('  echo "# running the Pocket Terminal, Ink Poster Press and Postcard Mailroom e2e against $base"\n')[1]
     ?.split('  if [ "$status" -ne 0 ]; then')[0];
   assert.ok(invocation, "execute the actual default verifier browser invocation");
   const work = mkdtempSync(join(tmpdir(), "readonly-browser-"));
   try {
     mkdirSync(join(work, "scripts")); mkdirSync(join(work, "e2e"));
     for (const file of ["e2e.mjs", "e2e-annotate.mjs"]) copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
-    for (const name of ["pocket-terminal", "ink-press"]) writeFileSync(join(work, `e2e/${name}.test.ts`), `
+    const features = ["pocket-terminal", "ink-press", "postcard", "postcard-browser"];
+    for (const name of features) writeFileSync(join(work, `e2e/${name}.test.ts`), `
       import assert from 'node:assert/strict';
       import { test } from 'node:test';
       test('${name} read-only fixture', () => {
@@ -732,7 +733,7 @@ test("production read-only Terminal/Press probe runs without fake configuration 
         assert.ok(process.env.FAIL_CASE !== '${name}', 'intentional browser assertion');
       });
     `);
-    for (const ci of ["false", "true"]) for (const fail of ["", "ink-press"]) {
+    for (const ci of ["false", "true"]) for (const fail of ["", ...features]) {
       const env = { ...process.env, NODE_BINARY: process.execPath, GITHUB_ACTIONS: ci, FAIL_CASE: fail,
         GITHUB_STEP_SUMMARY: join(work, "summary.md") };
       for (const key of ["GHOSTS_FAKE_BASE", "GHOSTS_ENDPOINT", "VERIFY_E2E_CMD", "NODE_TEST_CONTEXT"]) delete env[key];
@@ -744,8 +745,7 @@ test("production read-only Terminal/Press probe runs without fake configuration 
       `], { cwd: work, env, encoding: "utf8", timeout: 10000 });
       assert.ifError(result.error);
       assert.equal(result.status, fail ? 1 : 0, result.stdout + result.stderr);
-      assert.match(result.stdout, /pocket-terminal read-only fixture/);
-      assert.match(result.stdout, /ink-press read-only fixture/);
+      for (const name of features) assert.ok(result.stdout.includes(`${name} read-only fixture`), name);
       assert.doesNotMatch(result.stdout + result.stderr, /requires explicit GHOSTS_FAKE_BASE/);
       if (ci === "true" && fail) assert.match(result.stdout, /::error/);
     }

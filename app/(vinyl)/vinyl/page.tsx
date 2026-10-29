@@ -4,7 +4,13 @@ import raw from "../_lib/records.json";
 import { parseRecords, watchUrl } from "../_lib/records.ts";
 
 // absolute: the layout's template would otherwise make this "Vinyl · Vinyl".
-export const metadata: Metadata = { title: { absolute: "Vinyl" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Vinyl&path=%2Fvinyl", width: 1200, height: 630, alt: "Vinyl, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Vinyl" },
+};
 
 // Checked once, when the module loads: a broken records.json fails the build.
 const RECORDS = parseRecords(raw);
