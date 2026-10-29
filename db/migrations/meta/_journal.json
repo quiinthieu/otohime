@@ -43,6 +43,13 @@
       "when": 1793033411655,
       "tag": "0005_magenta_william_stryker",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793243483101,
+      "tag": "0006_funny_spencer_smythe",
+      "breakpoints": true
     }
   ]
 }
