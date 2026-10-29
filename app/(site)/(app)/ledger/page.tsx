@@ -47,6 +47,7 @@ export default async function LedgerPage() {
           A year of work pressed by hand: one stamp a day, darker for a busier one, a rosette for a release and a NEW
           for a post. Hover, focus or tap a day for its receipt.
         </p>
+        <p className="mt-4"><Link href="/ledger/sql" className="link">Open the Ink Ledger SQL desk →</Link></p>
         <p className="mt-2">
           {count(t.commits, "commit", "commits")} · {count(t.notes, "note", "notes")} ·{" "}
           {count(t.sketches, "sketch", "sketches")} · {count(t.releases, "release", "releases")} on{" "}

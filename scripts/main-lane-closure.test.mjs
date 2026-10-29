@@ -179,7 +179,15 @@ test("ledger's actual sampler waits for visible two-frame geometry and still rej
   try {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await page.setContent('<style>body{margin:0}.ledger-scroll{width:100%;overflow:auto;display:none}.ledger-sheet{width:100%;min-width:46rem;height:20px}</style><div class="ledger-scroll"><svg class="ledger-sheet"></svg></div>');
-    await page.evaluate(() => setTimeout(() => { document.querySelector(".ledger-scroll").style.display = "block"; }, 150));
+    await page.evaluate(() => {
+      const scroller = document.querySelector(".ledger-scroll");
+      const measure = scroller.getBoundingClientRect.bind(scroller);
+      scroller.getBoundingClientRect = () => {
+        const rect = measure();
+        if (!rect.width) requestAnimationFrame(() => { scroller.style.display = "block"; });
+        return rect;
+      };
+    });
     const shown = await settledLayout(page);
     assert.ok(shown.frames >= 2);
     assert.ok(shown.samples.some((sample) => !sample.visible));

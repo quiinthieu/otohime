@@ -36,7 +36,9 @@ export function KameLoader() {
     });
   }, [eligible, enabled, path]);
 
-  if (!eligible) return null;
-  if (Companion) return <Companion key={path} />;
-  return deferred && slot ? createPortal(<button className="kame-button" type="button" onClick={() => setEnabled(true)}>Enable Kame companion</button>, slot) : null;
+  return (
+    <>
+      {eligible ? (Companion ? <Companion key={path} /> : deferred && slot ? createPortal(<button className="kame-button" type="button" onClick={() => setEnabled(true)}>Enable Kame companion</button>, slot) : null) : null}
+    </>
+  );
 }

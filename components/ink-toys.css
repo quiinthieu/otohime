@@ -1,0 +1,66 @@
+.ink-toy { --toy-ink: #443c32; --toy-red: #a54f3e; margin-top: 1.5rem; }
+.toy-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; justify-content: space-between; margin: 1.25rem 0; }
+.toy-note { font-size: .87rem; line-height: 1.7; opacity: .8; margin: .75rem 0; max-width: 70ch; }
+.toy-kicker { font: .7rem monospace; letter-spacing: .18em; text-transform: uppercase; color: var(--toy-red); }
+.toy-subtitle { font: 1.8rem/1.3 Georgia, serif; margin: 1rem 0; }
+.gasha-layout { display: grid; grid-template-columns: minmax(230px, 340px) 1fr; gap: 2rem; align-items: center; margin: 2rem 0; }
+.gasha-machine { position: relative; width: 100%; max-width: 340px; margin: auto; color: #443c32; }
+.machine-drawing { width: 100%; filter: drop-shadow(3px 6px 0 #443c3220); }
+.paper-coin { position: absolute; left: 28%; top: 47%; padding: .4rem; background: #faf0cc; border: 1px dashed #65543c; transform: rotate(-5deg); font: .8rem monospace; cursor: pointer; }
+.paper-coin:disabled { opacity: .6; cursor: default; }
+.gasha-crank { position: absolute; left: 37%; top: 63%; width: 26%; aspect-ratio: 1; border: 3px double #504337; border-radius: 50%; background: #b9c4b6; cursor: grab; touch-action: none; user-select: none; }
+.gasha-crank:disabled { cursor: default; opacity: .65; }
+.gasha-crank span { display: block; font-size: 2.5rem; line-height: 1; transform-origin: center; }
+.gasha-crank small { display: block; font: .6rem monospace; }
+.gasha-crank:focus-visible, .album-sticker:focus-visible { outline: 3px solid #637c9a; outline-offset: 4px; }
+.gasha-reveal { min-height: 230px; display: grid; place-items: center; text-align: center; padding: 1rem; border-block: 1px dashed #8e7c5c70; }
+.sticker-display { width: 125px; transform: rotate(-7deg); position: relative; }
+.ink-sticker-art { display: block; width: 100%; height: auto; filter: drop-shadow(2px 3px 0 #33281820); }
+.secret-sticker { position: relative; background: linear-gradient(130deg, #edadd4, #a4cce8, #d7e5ad, #e6c676, #c7b0e4); }
+.secret-sticker .ink-sticker-art { mix-blend-mode: multiply; }
+.holo-foil { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: multiply; }
+.rolling-capsule { position: absolute; top: 79%; left: 43%; font-size: 3rem; color: #e6d7aa; animation: capsule-roll .85s ease-out both; }
+@keyframes capsule-roll { 0% { transform: translateY(-60px) rotate(0); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(20px, 70px) rotate(320deg); } }
+.capsule-open { display: grid; justify-items: center; font-size: 5rem; color: var(--toy-red); cursor: pointer; }
+.capsule-open span { font: .85rem monospace; }
+.kuji-board { margin: 2rem 0; padding: 1.25rem; border: 1px solid #8e7c5c70; border-radius: 2px 8px 3px 5px; }
+.kuji-board table { width: 100%; margin: 1rem 0; text-align: left; font-size: .9rem; border-collapse: collapse; }
+.kuji-board caption { text-align: left; caption-side: bottom; }
+.kuji-board td, .kuji-board th { padding: .7rem .4rem; border-bottom: 1px dashed #8e7c5c50; }
+.kuji-board tbody th { text-transform: capitalize; font-weight: normal; }
+.kuji-board details { margin-top: 1rem; font-size: .85rem; }
+.kuji-board summary { cursor: pointer; }
+.stock-list { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem 1rem; margin-top: 1rem; }
+.stock-list li { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.album-page { position: relative; width: 100%; aspect-ratio: 4/3; background: repeating-linear-gradient(#faf5e7 0 3%, #ded4bb 3% 3.12%); border: 12px solid #eee5cf; color: #51443d; margin: 1.5rem 0; isolation: isolate; box-shadow: 3px 5px 0 #51443d22; }
+.album-title, .album-footer { position: absolute; left: 4%; background: #faf5e7; padding: .2rem .4rem; font: clamp(.5rem, 2vw, 1rem) monospace; }
+.album-title { top: 3%; } .album-footer { bottom: 2%; font-size: clamp(.5rem, 1.4vw, .75rem); }
+.album-sticker { position: absolute; width: 10.83%; cursor: grab; touch-action: none; user-select: none; }
+.album-sticker.selected { outline: 1px dashed #a54f3e; outline-offset: 3px; z-index: 1; }
+.sticker-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.sticker-shelf button { width: 90px; margin: auto; display: block; cursor: pointer; }
+.sticker-shelf button:disabled { opacity: .45; cursor: default; }
+.sticker-shelf p { text-align: center; font-size: .8rem; margin-top: .5rem; }
+.shodo-workspace { display: grid; grid-template-columns: 1fr 190px; gap: 1.5rem; align-items: start; }
+.shodo-paper { position: relative; background: #f6eed8; color: #443c32; aspect-ratio: 1; border: 10px solid #e4d8bc; box-shadow: 3px 5px 0 #51443d22; }
+.shodo-paper canvas, .shodo-paper svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.shodo-paper canvas { touch-action: none; cursor: crosshair; }
+.shodo-paper .kanji-ghost { pointer-events: none; }
+.shodo-tools { display: grid; gap: .9rem; font-size: .85rem; }
+.shodo-tools label { display: grid; gap: .4rem; }
+.shodo-tools input[type=text] { min-width: 0; width: 100%; border: 1px solid #8e7c5c; padding: .5rem; background: transparent; }
+.shodo-tools meter { width: 100%; height: 1.5rem; accent-color: #443c32; }
+.shodo-score { border-block: 1px dashed #8e7c5c70; padding: 1rem 0; margin: 1.5rem 0; }
+.seal-preview { width: 64px; height: 64px; color: #ac352f; margin: .5rem 0; }
+.brush-heading { position: relative; display: inline-block; }
+.brush-heading-ink { position: absolute; bottom: -.3em; left: 0; width: 100%; height: .4em; color: #a54f3e; opacity: .35; overflow: visible; }
+.brush-heading-ink path { stroke-dasharray: 110; stroke-dashoffset: 0; animation: brush-write 1.6s ease-out both; }
+.brush-heading canvas.brush-heading-ink { height: .45em; animation: brush-reveal 1.6s ease-out both; }
+@keyframes brush-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+@keyframes brush-write { from { stroke-dashoffset: 110; } to { stroke-dashoffset: 0; } }
+.enso-loading { display: flex; align-items: center; gap: 1rem; padding: 2rem 0; }
+.enso-loading svg { width: 56px; height: 56px; }
+.enso-loading path { stroke-dasharray: 300; animation: enso-write 2s ease-out both; }
+@keyframes enso-write { from { stroke-dashoffset: 300; } to { stroke-dashoffset: 0; } }
+@media (max-width: 640px) { .gasha-layout { grid-template-columns: 1fr; gap: 1rem; } .gasha-machine { max-width: 290px; } .shodo-workspace { grid-template-columns: 1fr; } .shodo-tools { grid-template-columns: 1fr 1fr; } .stock-list { grid-template-columns: 1fr; } .kuji-board { padding: .75rem; } }
+@media (prefers-reduced-motion: reduce) { .rolling-capsule, .brush-heading-ink path, .brush-heading canvas.brush-heading-ink, .enso-loading path { animation: none; } .holo-foil { display: none; } }

@@ -7,6 +7,7 @@ import { PondStatic } from "@/components/pond-static";
 import { PeepBoxLoader } from "@/components/peep-box/loader";
 import { PeepBoxScene } from "@/components/peep-box/scene";
 import { StampHeading } from "@/components/stamp-heading";
+import { BrushHeading } from "@/components/brush-heading";
 import { site } from "@/content/site";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -41,6 +42,10 @@ export default function PlayPage() {
           Play
         </StampHeading>
         <p className="mt-2 text-muted">{site.play}</p>
+        <section className="mt-8 grid gap-6 sm:grid-cols-2" aria-label="Little ink keepsakes">
+          <div className="border-y border-line py-5"><h2 className="caption"><BrushHeading>Ink Gashapon &amp; Sticker Book</BrushHeading></h2><p className="my-3 text-muted">Earn paper coins as you explore, crank out tiny ink companions, and arrange a book of keepsakes.</p><Link href="/play/gashapon" className="btn">Turn the capsule machine →</Link></div>
+          <div className="border-y border-line py-5"><h2 className="caption"><BrushHeading>Shodo Practice Desk</BrushHeading></h2><p className="my-3 text-muted">Dip a bristle brush, trace today’s kanji on washi, and sign a sheet with your own red seal.</p><Link href="/play/shodo" className="btn">Sit at the Shodo desk →</Link></div>
+        </section>
         <div className="mt-8">
           <ClawMachine games={site.games} />
         </div>
@@ -53,6 +58,11 @@ export default function PlayPage() {
           <h2 id="ennichi-heading" className="caption"><RisoText>Ennichi Night</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">A shrine festival printed in four slightly mismatched inks. Look through the stalls for seven small keepsakes and take the stamp when the night is complete.</p>
           <p><Link href="/play/ennichi" className="btn" data-testid="play-ennichi-link">Enter Ennichi Night →</Link></p>
+        </section>
+        <section className="mt-12" aria-labelledby="inkblot-heading">
+          <h2 id="inkblot-heading" className="caption"><RisoText>Ink Blot Test</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">Drip sumi on half a sheet, fold it into a symmetric blot, and write what you see. A paper-and-ink toy, not a diagnosis.</p>
+          <p><Link href="/play/inkblot" className="btn" data-testid="play-inkblot-link">Open Ink Blot Test →</Link></p>
         </section>
         <section className="mt-12" aria-labelledby="hanafuda-heading">
           <h2 id="hanafuda-heading" className="caption">

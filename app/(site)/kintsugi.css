@@ -1,0 +1,21 @@
+[data-kintsugi-card] { position:relative; }
+.kintsugi-layer { position:absolute; inset:0; pointer-events:none; z-index:2; }
+.kintsugi-seams,.kintsugi-shards { position:absolute; width:100%; height:100%; inset:0; overflow:hidden; pointer-events:none; border-radius:inherit; }
+.kintsugi-seams { opacity:.85; }
+.kintsugi-shards { fill:var(--paper,#f2efe7); opacity:.45; }
+.kintsugi-shards path { animation:shard-drift .45s ease-out both; }
+.kintsugi-mend { pointer-events:auto; position:absolute; right:7px; top:7px; width:26px; height:26px; color:#936b23; background:var(--paper,#f2efe7); border:1px solid #b28c4b; border-radius:50%; font-size:12px; opacity:0; transition:opacity .2s; }
+[data-kintsugi-card]:hover .kintsugi-mend,[data-kintsugi-card]:focus-within .kintsugi-mend,.kintsugi-mend:focus-visible { opacity:1; }
+.kintsugi-mend:focus-visible { outline:2px solid currentColor; outline-offset:3px; }
+[data-phase=break] .kintsugi-new path { stroke:var(--ink,#28231e); stroke-width:1.3; animation:seam-draw .45s both; }
+[data-phase=mend] .kintsugi-new path { animation:seam-draw 1.3s both; }
+[data-kintsugi-phase=break] { animation:paper-fracture .55s ease-in-out; }
+.kintsugi-gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:24px; margin:32px 0; }
+.kintsugi-gallery article,.kintsugi-demo { position:relative; min-height:160px; padding:28px; border:1px solid var(--line); background:var(--paper); }
+.kintsugi-gallery article>div { position:relative; z-index:3; }
+@keyframes seam-draw { from { stroke-dasharray:1; stroke-dashoffset:1; opacity:.3; } to { stroke-dasharray:1; stroke-dashoffset:0; opacity:1; } }
+@keyframes paper-fracture { 35% { transform:translate(2px,-2px) rotate(.3deg); } 70% { transform:translate(-2px,1px); } }
+@keyframes shard-drift { from { transform:translate(0,0); opacity:0; } to { opacity:1; } }
+@media (hover:none) { .kintsugi-mend { opacity:.8; } }
+@media (prefers-reduced-motion:reduce) { [data-kintsugi-phase] { animation:none; } [data-phase=mend] .kintsugi-new path { animation:gold-fade .5s; } .kintsugi-shards { display:none; } }
+@keyframes gold-fade { from { opacity:0; } to { opacity:1; } }

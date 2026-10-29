@@ -1,6 +1,12 @@
 import { RisoText } from "@/components/riso-heading";
+import { InkSeismograph } from "@/components/ink-seismograph";
+import { PaperHost } from "@/components/paper-host";
+import archive from "@/content/seismo.json";
+import { parseInkEvents } from "@/lib/seismograph";
+import "@/app/(site)/seismograph.css";
 import { DeparturesBoard } from "@/components/departures-board";
 import { buildWorkDepartures } from "@/lib/departures";
+import { AssemblyLine } from "@/components/assembly-line";
 import { Conveyor } from "@/components/conveyor";
 import { FigTitle } from "@/components/figures";
 import MouldVeinsLoader from "@/components/mould-veins-loader";
@@ -25,12 +31,18 @@ export default function WorkPage() {
           <Link href="/ledger" className="link">
             The year in ink stamps
           </Link>
+          <Link href="/timeline" className="link">Pop-up Book Timeline</Link>
+          <Link href="/ledger/sql" className="link">Ink Ledger SQL desk</Link>
           <span aria-hidden="true" className="text-muted">
             ·
           </span>
           <Link href="/making-of" className="link">
             Making-of Emaki handscroll
           </Link>
+          <span aria-hidden="true" className="text-muted">
+            ·
+          </span>
+          <Link href="/kintsugi" className="link">The golden seams</Link>
           <span aria-hidden="true" className="text-muted">
             ·
           </span>
@@ -44,10 +56,12 @@ export default function WorkPage() {
             Ink Slime Mould
           </Link>
         </p>
+        <AssemblyLine />
         <DeparturesBoard kind="work" rows={buildWorkDepartures()} />
-        <div className="mt-8">
+        <PaperHost data-paper-id="work:seismograph"><InkSeismograph archive={{ generated:archive.generated, events:parseInkEvents(archive.events) }} /></PaperHost>
+        <PaperHost className="mt-8" data-paper-id="work:pipeline">
           <Pipeline />
-        </div>
+        </PaperHost>
         <MouldVeinsLoader variant="work" />
         <div className="mt-14">
           <Conveyor />

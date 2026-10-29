@@ -1,0 +1,28 @@
+.sql-desk { margin-top: 2rem; padding: clamp(1rem, 3vw, 2rem); border: 1px solid var(--ink); background: var(--field); box-shadow: 5px 6px 0 var(--paper-2), 6px 7px 0 var(--line); }
+.sql-topline { display: flex; justify-content: space-between; font: 10px monospace; letter-spacing: .15em; border-bottom: 3px double var(--ink); padding-bottom: .75rem; }
+.sql-intro { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin: 1.5rem 0; }
+.sql-intro h2 { font: italic clamp(24px, 4vw, 38px) Georgia, serif; }
+.sql-stamp { transform: rotate(-9deg); border: 3px double #b9563d; padding: .4rem .6rem; color: #b9563d; font: bold 10px/1.6 monospace; text-align: center; flex-shrink: 0; }
+.sql-schema { display: flex; flex-wrap: wrap; align-items: start; gap: .4rem 1rem; font-size: 12px; }
+.sql-schema details { max-width: 100%; } .sql-schema summary { cursor: pointer; font-family: monospace; } .sql-schema code { display: block; max-width: 250px; overflow-wrap: anywhere; padding: .4rem; }
+.sql-schema summary span { opacity: .6; }
+.sql-provenance { font-size: 11px; line-height: 1.7; margin: 1rem 0; color: var(--muted); }
+.sql-provenance a { text-decoration: underline; }
+.sql-saved { display: flex; gap: .4rem; flex-wrap: wrap; margin: 1.3rem 0; }
+.sql-saved button { border: 1px dashed var(--ink); padding: .4rem .6rem; font-size: 12px; }
+.sql-saved button:hover { background: var(--paper-2); }
+.sql-desk form > label { display: block; font: italic 18px Georgia, serif; margin: .5rem 0; }
+.sql-desk textarea { display: block; width: 100%; min-width: 0; border: 0; border-left: 2px solid #b9563d88; border-bottom: 1px solid var(--ink); padding: .5rem 1rem; font: 13px/28px monospace; background: repeating-linear-gradient(transparent 0, transparent 27px, var(--line) 27px, var(--line) 28px); color: var(--ink); resize: vertical; border-radius: 0; }
+.sql-commandline { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1rem 0; }
+.sql-status { font: 11px/1.6 monospace; margin: 1rem 0; }
+.sql-error { color: #b9563d; border-left: 3px solid currentColor; padding: .5rem 1rem; margin-bottom: 1rem; overflow-wrap: anywhere; }
+.sql-results { overflow-x: auto; max-width: 100%; border-block: 3px double var(--ink); }
+.sql-results table { border-collapse: collapse; width: 100%; font-size: 12px; }
+.sql-results caption { text-align: left; font: italic 15px Georgia, serif; padding: .8rem 0; }
+.sql-results th, .sql-results td { padding: .6rem .75rem; text-align: left; border: 1px solid var(--line); max-width: 280px; overflow-wrap: anywhere; min-width: 4rem; }
+.sql-results th { font-family: monospace; font-weight: normal; }
+.sql-results tbody th { color: #b9563d; min-width: 2rem; }
+.sql-chart { max-width: 520px; margin-top: 1.5rem; } .sql-chart svg { width: 100%; } .sql-chart text { font: 11px monospace; }
+.sql-chart figcaption { font: italic 15px Georgia, serif; margin-bottom: .5rem; }
+.sql-desk footer { margin-top: 1.5rem; padding-top: .8rem; border-top: 1px solid var(--line); font: 10px/1.7 monospace; opacity: .7; }
+.sql-empty { padding: 1rem; font-style: italic; }

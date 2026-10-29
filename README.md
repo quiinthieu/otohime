@@ -25,6 +25,26 @@ The script raises Node's HTTP header size so mini-app cookies on `localhost` do 
 
 ## Layout
 
+The paper experiments live at `/timeline` (2018–2026 pop-up archive) and
+`/ledger/sql` (Ink Ledger SQL desk); `/ledger` keeps the Stamp Ledger. Work links
+to both experiments. Edit the invented career draft in `content/career.ts`;
+every chapter labels the fictional roles, employers, places and projects as
+placeholders. `lib/timeline.ts` adds real public projects from the site content.
+
+Pen plotter is available in the masthead, or at the bottom right of standalone
+projects. It samples inline SVG strokes, reduces pen travel within ink layers,
+and exports A4/A5 SVGs in millimetres. Photos, raster sketches and HTML/SVG type
+are excluded. The page remains intact underneath the temporary overlay.
+
+DuckDB loads only after **Open DuckDB**. `prebuild` copies the pinned package's
+workers/WASM into ignored `public/vendor/duckdb/` and generates
+`public/ledger-sql.json` from explicit public fields. No database records enter
+that export: `music_plays` is an empty typed table until a public listening export
+exists; `songs` contains the curated songs. External access and extension loading
+are disabled; the worker is released after six seconds on a timed-out query.
+Saved receipts remain readable without WASM or JavaScript. Run browser coverage
+with `node --experimental-strip-types scripts/e2e.mjs --test e2e/plotter.test.ts e2e/timeline.test.ts e2e/sql-desk.test.ts`.
+
 ```
 app/                 holds only api/, icon.svg and global-not-found.tsx (the 404 for an unknown address, drawn
                      with the site's parcel page); every page lives in a route group
@@ -493,6 +513,37 @@ Rules that keep this safe:
 ### Ink guestbook storage
 
 The moderated vector API is at `GET/POST /api/guestbook`. Apply `npm run db:migrate` before serving it. It uses the existing `DATABASE_URL` and `BETTER_AUTH_SECRET`; missing database configuration disables reads and writes with 503, while a missing secret disables writes with 503. No additional provider is required. New drawings remain pending until a separate owner moderation flow approves them. Payload limits, error codes, pagination, and the trusted ingress IP assumption are in [the guestbook contract](projects/otohime-dev-ink-guestbook-wall-origami-fortune-teller-1-ink/guestbook-contract.md).
+
+## Golden seams and ink traces
+
+`/kintsugi` collects shared repairs from the project, note, and Work cards. Four
+nearby clicks within 850 ms reveal a fracture; the small 金 button also supports
+keyboard and touch. Shake requires an explicit permission gesture in the gallery
+and stays disabled with reduced motion. Sound uses the existing sound switch.
+Reduced motion fades gold in without breaking or moving the paper.
+
+Migration `0007_kintsugi` adds the shared Postgres store behind
+`GET/POST /api/kintsugi`. It uses the existing `DATABASE_URL` and
+`BETTER_AUTH_SECRET`, admits only `lib/kintsugi-cards.ts` IDs, and retains twelve
+seams per card. Atomic limits allow six repairs per visitor per hour, two per
+card per visitor per hour, and 1,000 globally per UTC day. Visitor buckets contain
+HMACs of the ingress IP, never raw IPs. The store caps cards at 128 and usage at
+4,096 rows, sweeping expired buckets. An offline or limited write still keeps
+the repair on the visitor's device.
+
+The Work page's Ink Seismograph prerenders `content/seismo.json`. Its public
+GitHub commits and PR marks refresh every five minutes; `content/seismo-pipelines.json`
+is a checked-in export of actual public CI job execution times and outcomes,
+with source links. No row counts are invented for jobs that do not report them.
+Run `npm run seismo:refresh` to refresh the saved public activity (optionally set
+`GITHUB_TOKEN` for API quota). Failed refreshes preserve the last valid archive.
+Drag the roll or use its keyboard slider, select a spike, then download a standalone
+SVG or print the current six-hour strip. The trace pauses offscreen, in hidden
+tabs, and with reduced motion; the SVG and event log work without JavaScript.
+
+`e2e/paper-experiments.test.ts` exercises the browser flows. Its shared-seam write
+runs only against localhost unless `ALLOW_PAPER_MEND=1` explicitly enables it.
+`e2e/kintsugi-store.test.ts` verifies real transactions only on a local database.
 
 ## Ink ghosts deployment
 

@@ -61,19 +61,19 @@ test("the scan finds Capsule's files", () => {
   assert.ok(capsuleFiles.some((f) => f.endsWith(join("(capsule)", "capsule.css"))));
 });
 
-// The one exception: the root layout mounts the shared print-run boundary (components/appearance-boot.tsx in <head>,
-// components/appearance-runtime.tsx in <body>), these two specifiers exactly and in layout.tsx alone. The checker
+// Root-only exceptions: the appearance boundary and the site-wide plotter control.
+// These exact shared entrypoints are allowed in layout.tsx alone. The checker
 // itself still flags them, and every other file and specifier, so _lib/ and the components stay as isolated as before.
-const APPEARANCE = new Set(["@/components/appearance-boot", "@/components/appearance-runtime"]);
+const APPEARANCE = new Set(["@/components/appearance-boot", "@/components/appearance-runtime", "@/components/plotter-toggle"]);
 const ROOT_LAYOUT = join(ROOT, "app/(capsule)/layout.tsx");
 const rootAppearance = (file: string, spec: string) => file === ROOT_LAYOUT && APPEARANCE.has(spec);
 
-test("the root layout mounts the shared appearance boundary and nothing else of the site", () => {
+test("the root layout mounts only the shared appearance and plotter boundaries", () => {
   const layout = readFileSync(ROOT_LAYOUT, "utf8");
   const shared = specifiers(ROOT_LAYOUT).filter((spec) => reachesOutside(ROOT_LAYOUT, spec) !== null);
   assert.deepEqual(shared.sort(), [...APPEARANCE].sort());
   assert.match(layout, /<AppearanceBoot root="capsule" \/>\s*<\/head>/);
-  assert.match(layout, /<AppearanceRuntime \/><\/body>/);
+  assert.match(layout, /<PlotterToggle fallback \/><AppearanceRuntime \/><\/body>/);
   assert.ok(rootAppearance(ROOT_LAYOUT, "@/components/appearance-boot") && rootAppearance(ROOT_LAYOUT, "@/components/appearance-runtime"));
   assert.ok(!rootAppearance(join(ROOT, "app/(capsule)/_lib/x.ts"), "@/components/appearance-boot"), "only the layout");
   assert.ok(!rootAppearance(join(ROOT, "app/(capsule)/_components/x.tsx"), "@/components/appearance-runtime"), "only the layout");

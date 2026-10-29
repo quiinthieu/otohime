@@ -170,16 +170,16 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks budgets the full browser suite with a 35m job, 22m step and 1200s bound", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "35");
+test("checks budgets the full browser suite with a 50m job, 32m step and 1800s bound", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "50");
   assert.match(workflow, /40820018472 exhausted 960s at the peep-box cases/);
   const checks = steps("checks");
-  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 22\n/);
+  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 32\n/);
   const e2e = gateBody("E2E against next start");
   assert.match(e2e, /^set -o pipefail$/m);
   assert.match(e2e, /^trap .*browser-gate-diagnostics\.mjs "E2E against next start".* EXIT$/m);
   assert.match(e2e, /^command -v timeout >\/dev\/null 2>&1 \|\| timeout\(\)/m);
-  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1200s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
+  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1800s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
   assert.equal(e2e.match(/npm run test:e2e/g).length, 1, "the browser suite runs once, only under the inner bound");
 });
 
@@ -288,7 +288,8 @@ test("camera CI reuses only a successful production build and preserves camera f
   assert.ok(build >= 0 && camera > build, "production build precedes camera");
   // Both steps retain Actions' default success() gate and fail-closed behavior.
   const cameraStep = checks.slice(camera, checks.indexOf("      - ", camera + 1));
-  assert.doesNotMatch(cameraStep, /\n\s*(if|continue-on-error):/);
+  assert.doesNotMatch(cameraStep, /\n\s*continue-on-error:|\n\s*if:.*(?:always|failure|cancelled)\(/);
+  assert.match(cameraStep, /\n\s*if: steps\.browser\.outputs\.browser == 'true'\n/);
   assert.doesNotMatch(checks.slice(build, camera), /continue-on-error:|if:.*always\(/);
   const buildCommand = checks.slice(build).split("\n")[0].replace("- run: ", "");
   for (const [buildStatus, cameraStatus] of [[0, 0], [0, 7], [17, 0]]) {
@@ -327,9 +328,16 @@ test("camera CI reuses only a successful production build and preserves camera f
 // server/readiness/probe behavior is replaced; Node, streams, tee and reporters are real.
 function runGate(name, log, scenario, mutate = (s) => s, { status = 43, serverLog = true } = {}) {
   const work = mkdtempSync(join(tmpdir(), "browser-gate-ci-"));
+  const childEnv = { ...process.env };
+  delete childEnv.NODE_TEST_CONTEXT;
   try {
     mkdirSync(join(work, "scripts"));
     mkdirSync(join(work, ".next"));
+    mkdirSync(join(work, "e2e"));
+    writeFileSync(join(work, "e2e/assembly-sky.test.ts"), `
+      import { test } from 'node:test';
+      test('phone touch', () => { if (process.env.FIXTURE_FOCUSED_FAIL === '1') throw new Error('focused phone failure'); });
+    `);
     writeFileSync(join(work, ".next/BUILD_ID"), "workflow-fixture-build\n");
     for (const file of ["browser-gate-diagnostics.mjs", "ci-probe-annotate.mjs", "e2e-annotate.mjs"]) {
       copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
@@ -382,8 +390,8 @@ echo 'unexpected npm command' >&2; exit 99
     `;
     const result = spawnSync("bash", ["-eo", "pipefail", "-c", `${stubs}\n${mutate(gateBody(name))}`], {
       cwd: work, encoding: "utf8", timeout: 10000,
-      env: { ...process.env, PATH: `${join(work, "bin")}:${process.env.PATH}`, FIXTURE_HANG: scenario === "hang" ? "1" : "0", RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "workflow-fixture-sha", BASE_URL: "http://fixture.invalid",
-        FIXTURE_STATUS: scenario === "success" ? "0" : String(status), FIXTURE_STARTUP: scenario === "startup" ? "fail" : "ok", FIXTURE_ASSERTION: scenario === "assertion" ? "1" : "0" },
+      env: { ...childEnv, PATH: `${join(work, "bin")}:${process.env.PATH}`, FIXTURE_HANG: scenario === "hang" ? "1" : "0", RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "workflow-fixture-sha", BASE_URL: "http://fixture.invalid",
+        FIXTURE_STATUS: scenario === "success" ? "0" : String(status), FIXTURE_STARTUP: scenario === "startup" ? "fail" : "ok", FIXTURE_ASSERTION: scenario === "assertion" ? "1" : "0", FIXTURE_FOCUSED_FAIL: scenario === "focused" ? "1" : "0" },
     });
     let calls = "";
     try { calls = readFileSync(join(work, "probe-called"), "utf8"); } catch {}
@@ -392,6 +400,13 @@ echo 'unexpected npm command' >&2; exit 99
 }
 
 const nonTapGates = [["Real CPU camera and privacy verifier", "camera-probe.log"], ...browserGates.slice(1)];
+test("phone touch failure stops before the long suite and retains gate diagnostics", () => {
+  const result = runGate("E2E against next start", "e2e.log", "focused");
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.equal(result.calls, "", "the full browser suite never starts after a focused failure");
+  assert.match(result.captured, /focused phone failure/);
+  assert.match(result.report, /Gate: E2E against next start; exit 1/);
+});
 for (const [name, log] of nonTapGates) {
   test(`${name}: actual workflow preserves exit 7, escaped assertions, counts and missing server logs`, () => {
     for (const serverLog of [true, false]) {
@@ -462,10 +477,10 @@ for (const [name, log] of browserGates) {
 }
 
 test("E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation", () => {
-  // Same workflow shell; only the 1200s contract and 10s grace shrink so the fixture does not wait.
+  // Same workflow shell; only the 1800s contract and 10s grace shrink so the fixture does not wait.
   const started = Date.now();
   const result = runGate("E2E against next start", "e2e.log", "hang",
-    (body) => body.replace("--kill-after=10s 1200s npm", "--kill-after=1s 1s npm"));
+    (body) => body.replace("--kill-after=10s 1800s npm", "--kill-after=1s 1s npm"));
   assert.equal(result.status, 124, result.stderr);
   assert.ok(Date.now() - started < 8000, "the hung child was terminated by the inner bound");
   assert.equal(result.calls, "called\n");
@@ -558,6 +573,13 @@ test("guestbook author guard rejects a wrong-author schema or migration-only pus
 
     const [ownFrom, ownTo] = push(["db/migrations/0008_owner.sql", owner], ["db/schema.ts", owner]);
     assert.equal(run(ownFrom, ownTo).status, 0);
+    // GitHub squash merges use the owner's existing profile display name.
+    const profileOwner = { name: "Ōtohime", email: owner.email };
+    const [squashFrom, squashTo] = push(["db/migrations/0010_squash.sql", profileOwner], ["db/schema.ts", profileOwner]);
+    const squash = run(squashFrom, squashTo);
+    assert.equal(squash.status, 0, squash.stderr);
+    const [spoofFrom, spoofTo] = push(["db/schema.ts", { ...profileOwner, email: stranger.email }]);
+    assert.equal(run(spoofFrom, spoofTo).status, 1, "the display name never substitutes for the owner email");
     const [profileFrom, profileTo] = push(["lib/guestbook-profile.ts", { name: "Ōtohime", email: owner.email }]);
     assert.equal(run(profileFrom, profileTo).status, 0, "GitHub squash merges use the owner's profile spelling");
     const [otherFrom, otherTo] = push(["docs/unrelated.md", stranger], ["db/seed-notes.txt", stranger]);

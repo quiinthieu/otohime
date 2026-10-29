@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Caveat, Patrick_Hand } from "next/font/google";
 import "./planisphere.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Planisphere is its own root layout: its own <html>, <body> and stylesheet. It must
@@ -57,7 +58,7 @@ export default function PlanisphereLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
         <AppearanceBoot root="planisphere" />
       </head>
-      <body>{children}<AppearanceRuntime /></body>
+      <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>
     </html>
   );
 }
