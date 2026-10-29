@@ -22,7 +22,8 @@ export async function GET(request: NextRequest) {
 // this site for Satori to fetch. src comes from the allow-list, never from the request.
 async function sketchImage(src: string, origin: string): Promise<string> {
   try {
-    const bytes = await readFile(join(process.cwd(), "public", src));
+    const filename = src.replace(/^\/sketches\//, "");
+    const bytes = await readFile(join(process.cwd(), "public", "sketches", filename));
     return `data:image/jpeg;base64,${bytes.toString("base64")}`;
   } catch {
     return new URL(src, origin).toString();

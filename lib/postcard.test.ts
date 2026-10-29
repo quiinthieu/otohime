@@ -190,6 +190,13 @@ test("the view is noindex with its own card; the image route only draws decoded,
   assert.match(route, /decodePostcard\(request\.nextUrl\.searchParams\.get\("c"\)\)/);
   assert.match(route, /status: 404/);
   assert.match(route, /sketchById\(postcard\.sketch\)/);
+  assert.match(route, /join\(process\.cwd\(\), "public", "sketches", filename\)/);
+  assert.doesNotMatch(route, /join\(process\.cwd\(\), "public", src\)/);
+  const nextConfig = read("next.config.ts");
+  assert.match(nextConfig, /outputFileTracingExcludes:/);
+  assert.match(nextConfig, /\.\/public\/vendor\/\*\*\/\*/);
+  assert.match(nextConfig, /\.\/node_modules\/sharp\/\*\*\/\*/);
+  assert.match(nextConfig, /\.\/node_modules\/@img\/\*\*\/\*/);
 });
 
 test("the desk shares with download and navigator.share, falling back to copying the link", () => {

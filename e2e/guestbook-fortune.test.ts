@@ -104,7 +104,7 @@ test("every fortune content kind has a live destination, including reduced motio
     assert.ok(target, kind);
     const response = await page.goto(new URL(target.href, base).toString());
     assert.equal(response?.status(), 200, target.href);
-    if (target.href.includes("#")) await page.locator(`[id="${target.href.split("#")[1]}"]`).waitFor();
+    if (target.href.includes("#")) await page.locator(`[id="${target.href.split("#")[1]}"]`).first().waitFor();
   }
   await page.goto(`${base}/fortune`);
   await page.getByRole("button", { name: "blue" }).click();
