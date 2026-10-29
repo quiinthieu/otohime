@@ -22,10 +22,10 @@ import {
 } from "./sound.ts";
 import { play, setSound, startPurr, stopPurr } from "./sound-client.ts";
 
-const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle", "press", "shuffle", "shutter"];
-const OLD = NAMES.filter((name) => name !== "press");
+const NAMES: CueName[] = ["move", "open", "back", "chime", "eat", "burst", "stamp", "rustle", "press", "shuffle", "shutter", "fold"];
+const OLD = NAMES.filter((name) => name !== "press" && name !== "fold");
 
-test("the eleven cues the console and the ink toys need are all there", () => {
+test("the twelve cues the console and the ink toys need are all there", () => {
   assert.deepEqual(Object.keys(CUES).sort(), [...NAMES].sort());
 });
 

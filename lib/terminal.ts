@@ -31,6 +31,8 @@ export const PLACES: readonly Place[] = [
   ...PUBLIC_PAGES.map((p) => ({ name: p.href === "/lab" ? "lab" : p.label.toLowerCase(), href: p.href, label: p.label })),
   { name: "ask", href: "/", label: "Ask the console" },
   { name: "postcard", href: "/postcard", label: "Postcard" },
+  { name: "guestbook", href: "/guestbook", label: "Ink Guestbook" },
+  { name: "fortune", href: "/fortune", label: "Origami Fortune Teller" },
 ];
 
 export function describePrintRun(snapshot: AppearanceSnapshot): string {

@@ -20,7 +20,8 @@ export type CueName =
   | "rustle"
   | "press"
   | "shuffle"
-  | "shutter";
+  | "shutter"
+  | "fold";
 
 // Nothing plays louder than this, whatever a cue asks for.
 export const MAX_DB = -18;
@@ -82,6 +83,7 @@ export const CUES: Record<CueName, Cue> = {
       note(135, 0.045, 0.002, 0.055),
     ],
   },
+  fold: { db: -28, wave: "triangle", notes: [note(620, 0, 0.002, 0.035), note(420, 0.035, 0.002, 0.05)] },
 };
 
 export const dbToGain = (db: number) => 10 ** (db / 20);
