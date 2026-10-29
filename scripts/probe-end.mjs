@@ -7,7 +7,7 @@ import { site } from "../content/site.ts";
 import { away, KONAMI, TENTH_POKE } from "../lib/end.ts";
 import { CONSOLE_MENU, PUBLIC_PAGES } from "../lib/pages.ts";
 import { launchBrowser } from "./probe-browser.mjs";
-import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
+import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, settleEndEntrance, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
 
 const rootRequire = createRequire(import.meta.url);
 const pg = rootRequire("pg");
@@ -1162,21 +1162,7 @@ try {
 
       // Scroll footer into view
       await page.locator("footer.end").filter({ visible: true }).first().scrollIntoViewIfNeeded();
-      await page.waitForTimeout(950);
-
-      const inViewState = await page.evaluate(() => {
-        const footer = document.querySelector("footer.end");
-        const stage = footer.querySelector("[data-end-stage]");
-        const playStates = [".end-cloud", ".end-star", ".end-lamp", ".end-packet"].map(
-          (sel) => getComputedStyle(footer.querySelector(sel)).animationPlayState,
-        );
-        return {
-          seen: footer.dataset.seen ?? null,
-          active: stage.dataset.active ?? null,
-          playStates,
-          starts: window.__endEntranceStarts,
-        };
-      });
+      const inViewState = await page.evaluate(inPage(settleEndEntrance, VISIBLE_FOOTER, 5000));
       check(
         "entrance: scrolling footer into view sets data-seen=true, data-active=true, runs entrance once, and starts ambient loops",
         inViewState.seen === "true" &&

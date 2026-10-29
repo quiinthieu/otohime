@@ -29,10 +29,10 @@ export function ShimiLoader() {
       progress = next;
     };
     addEventListener("keydown", onKey, true);
-    document.documentElement.dataset.shimiReady = "true";
+    document.body.dataset.shimiKeys = "ready";
     return () => {
       removeEventListener("keydown", onKey, true);
-      delete document.documentElement.dataset.shimiReady;
+      delete document.body.dataset.shimiKeys;
     };
   }, []);
 

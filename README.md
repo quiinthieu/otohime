@@ -514,6 +514,37 @@ Rules that keep this safe:
 
 The moderated vector API is at `GET/POST /api/guestbook`. Apply `npm run db:migrate` before serving it. It uses the existing `DATABASE_URL` and `BETTER_AUTH_SECRET`; missing database configuration disables reads and writes with 503, while a missing secret disables writes with 503. No additional provider is required. New drawings remain pending until a separate owner moderation flow approves them. Payload limits, error codes, pagination, and the trusted ingress IP assumption are in [the guestbook contract](projects/otohime-dev-ink-guestbook-wall-origami-fortune-teller-1-ink/guestbook-contract.md).
 
+## Golden seams and ink traces
+
+`/kintsugi` collects shared repairs from the project, note, and Work cards. Four
+nearby clicks within 850 ms reveal a fracture; the small 金 button also supports
+keyboard and touch. Shake requires an explicit permission gesture in the gallery
+and stays disabled with reduced motion. Sound uses the existing sound switch.
+Reduced motion fades gold in without breaking or moving the paper.
+
+Migration `0007_kintsugi` adds the shared Postgres store behind
+`GET/POST /api/kintsugi`. It uses the existing `DATABASE_URL` and
+`BETTER_AUTH_SECRET`, admits only `lib/kintsugi-cards.ts` IDs, and retains twelve
+seams per card. Atomic limits allow six repairs per visitor per hour, two per
+card per visitor per hour, and 1,000 globally per UTC day. Visitor buckets contain
+HMACs of the ingress IP, never raw IPs. The store caps cards at 128 and usage at
+4,096 rows, sweeping expired buckets. An offline or limited write still keeps
+the repair on the visitor's device.
+
+The Work page's Ink Seismograph prerenders `content/seismo.json`. Its public
+GitHub commits and PR marks refresh every five minutes; `content/seismo-pipelines.json`
+is a checked-in export of actual public CI job execution times and outcomes,
+with source links. No row counts are invented for jobs that do not report them.
+Run `npm run seismo:refresh` to refresh the saved public activity (optionally set
+`GITHUB_TOKEN` for API quota). Failed refreshes preserve the last valid archive.
+Drag the roll or use its keyboard slider, select a spike, then download a standalone
+SVG or print the current six-hour strip. The trace pauses offscreen, in hidden
+tabs, and with reduced motion; the SVG and event log work without JavaScript.
+
+`e2e/paper-experiments.test.ts` exercises the browser flows. Its shared-seam write
+runs only against localhost unless `ALLOW_PAPER_MEND=1` explicitly enables it.
+`e2e/kintsugi-store.test.ts` verifies real transactions only on a local database.
+
 ## Ink ghosts deployment
 
 Ghost cursors on Home and `/ryugu` remain dark with `GHOSTS_ENDPOINT` unset. Run
