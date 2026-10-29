@@ -134,8 +134,10 @@ test("native scroll timeline turns drums; delayed hanko ink works on light and d
   const drums = page.locator(".departures-drums").first();
   assert.equal(await page.evaluate(() => CSS.supports("animation-timeline", "view()")), true, "test browser must exercise native scroll support");
   assert.equal(await drums.evaluate(node => getComputedStyle(node).getPropertyValue("animation-timeline")), "--departures");
+  const boardTop = await page.getByTestId("departures-board").evaluate(node => node.getBoundingClientRect().top + scrollY);
+  const viewportHeight = page.viewportSize()!.height;
   const transforms = [];
-  for (const offset of [0, 200, 400]) {
+  for (const offset of [boardTop - viewportHeight, boardTop - viewportHeight / 2, boardTop]) {
     await page.evaluate(offset => scrollTo(0, offset), offset);
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     transforms.push(await drums.evaluate(node => getComputedStyle(node).transform));

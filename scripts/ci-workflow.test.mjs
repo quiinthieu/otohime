@@ -327,9 +327,16 @@ test("camera CI reuses only a successful production build and preserves camera f
 // server/readiness/probe behavior is replaced; Node, streams, tee and reporters are real.
 function runGate(name, log, scenario, mutate = (s) => s, { status = 43, serverLog = true } = {}) {
   const work = mkdtempSync(join(tmpdir(), "browser-gate-ci-"));
+  const childEnv = { ...process.env };
+  delete childEnv.NODE_TEST_CONTEXT;
   try {
     mkdirSync(join(work, "scripts"));
     mkdirSync(join(work, ".next"));
+    mkdirSync(join(work, "e2e"));
+    writeFileSync(join(work, "e2e/assembly-sky.test.ts"), `
+      import { test } from 'node:test';
+      test('phone touch', () => { if (process.env.FIXTURE_FOCUSED_FAIL === '1') throw new Error('focused phone failure'); });
+    `);
     writeFileSync(join(work, ".next/BUILD_ID"), "workflow-fixture-build\n");
     for (const file of ["browser-gate-diagnostics.mjs", "ci-probe-annotate.mjs", "e2e-annotate.mjs"]) {
       copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
@@ -382,8 +389,8 @@ echo 'unexpected npm command' >&2; exit 99
     `;
     const result = spawnSync("bash", ["-eo", "pipefail", "-c", `${stubs}\n${mutate(gateBody(name))}`], {
       cwd: work, encoding: "utf8", timeout: 10000,
-      env: { ...process.env, PATH: `${join(work, "bin")}:${process.env.PATH}`, FIXTURE_HANG: scenario === "hang" ? "1" : "0", RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "workflow-fixture-sha", BASE_URL: "http://fixture.invalid",
-        FIXTURE_STATUS: scenario === "success" ? "0" : String(status), FIXTURE_STARTUP: scenario === "startup" ? "fail" : "ok", FIXTURE_ASSERTION: scenario === "assertion" ? "1" : "0" },
+      env: { ...childEnv, PATH: `${join(work, "bin")}:${process.env.PATH}`, FIXTURE_HANG: scenario === "hang" ? "1" : "0", RUNNER_TEMP: work, GITHUB_STEP_SUMMARY: summary, GITHUB_SHA: "workflow-fixture-sha", BASE_URL: "http://fixture.invalid",
+        FIXTURE_STATUS: scenario === "success" ? "0" : String(status), FIXTURE_STARTUP: scenario === "startup" ? "fail" : "ok", FIXTURE_ASSERTION: scenario === "assertion" ? "1" : "0", FIXTURE_FOCUSED_FAIL: scenario === "focused" ? "1" : "0" },
     });
     let calls = "";
     try { calls = readFileSync(join(work, "probe-called"), "utf8"); } catch {}
@@ -392,6 +399,13 @@ echo 'unexpected npm command' >&2; exit 99
 }
 
 const nonTapGates = [["Real CPU camera and privacy verifier", "camera-probe.log"], ...browserGates.slice(1)];
+test("phone touch failure stops before the long suite and retains gate diagnostics", () => {
+  const result = runGate("E2E against next start", "e2e.log", "focused");
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.equal(result.calls, "", "the full browser suite never starts after a focused failure");
+  assert.match(result.captured, /focused phone failure/);
+  assert.match(result.report, /Gate: E2E against next start; exit 1/);
+});
 for (const [name, log] of nonTapGates) {
   test(`${name}: actual workflow preserves exit 7, escaped assertions, counts and missing server logs`, () => {
     for (const serverLog of [true, false]) {

@@ -6,6 +6,7 @@ import { parseInkEvents } from "@/lib/seismograph";
 import "@/app/(site)/seismograph.css";
 import { DeparturesBoard } from "@/components/departures-board";
 import { buildWorkDepartures } from "@/lib/departures";
+import { AssemblyLine } from "@/components/assembly-line";
 import { Conveyor } from "@/components/conveyor";
 import { FigTitle } from "@/components/figures";
 import { Pipeline } from "@/components/pipeline";
@@ -37,6 +38,7 @@ export default function WorkPage() {
           </Link>
           <Link href="/kintsugi" className="link">The golden seams</Link>
         </p>
+        <AssemblyLine />
         <DeparturesBoard kind="work" rows={buildWorkDepartures()} />
         <PaperHost data-paper-id="work:seismograph"><InkSeismograph archive={{ generated:archive.generated, events:parseInkEvents(archive.events) }} /></PaperHost>
         <PaperHost className="mt-8" data-paper-id="work:pipeline">

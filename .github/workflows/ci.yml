@@ -172,6 +172,7 @@ jobs:
           npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
           curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
           command -v timeout >/dev/null 2>&1 || timeout() { node -e 'const {spawn}=require("node:child_process");const a=process.argv.slice(1);while(a[0]?.startsWith("-"))a.shift();const ms=parseFloat(a.shift())*1000;const c=spawn(a[0],a.slice(1),{stdio:"inherit",detached:true});let timedOut=false;const t=setTimeout(()=>{timedOut=true;try{process.kill(-c.pid,"SIGTERM")}catch{};setTimeout(()=>{try{process.kill(-c.pid,"SIGKILL")}catch{}},1000)},ms);c.on("exit",(code)=>{clearTimeout(t);process.exit(timedOut?124:code??1)})' -- "$@"; }
+          node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-name-pattern="phone touch" e2e/assembly-sky.test.ts 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
           timeout --signal=TERM --kill-after=10s 1800s npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
       # Signs in through the form against the same server and database, so a page error on the hop into a
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
