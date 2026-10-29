@@ -1,0 +1,10 @@
+Plan: pm-301
+Task: t-1785
+Run: run-9711
+Branch: pm-301/t-1785-senko-core
+Base: 444953b99578374d5204dc9b5e71d93fd87ef07d
+Subject: pm-301/t-1785: feat: implement deterministic Senko Hanabi core
+Delivery: enclosing commit; immutable git_sha is in the submitted summary.
+Resolve: git log -1 --format=%H -- projects/otohime-dev-three-new-paper-and-ink-pieces-1-ink-departures/run-9711/artifacts/commits.txt
+Push: git push origin HEAD:main, then git push origin HEAD (normal fast-forward only).
+Exact delivery SHA and push output are also written to /shared/artifacts/commits.txt.
