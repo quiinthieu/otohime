@@ -27,6 +27,11 @@ const TAIL_CHARS = 4_000;
 // Each control is a real test file and the regressions in it that must have run and passed, by their exact names.
 export const CONTROLS = [
   {
+    id: "ink-experiments",
+    file: "lib/ink-experiments-gate.test.ts",
+    required: [{ id: "ink_privacy_interaction_fallback_share", name: "ink experiment privacy interaction fallback and share gates are named and wired" }],
+  },
+  {
     id: "e2e-runner",
     file: "lib/e2e-runner.test.ts",
     required: [
@@ -57,6 +62,8 @@ export const CONTROLS = [
 // The files whose bytes these results are about: the controls, what they exercise, the workflow and the lock.
 // A directory is hashed as its sorted files.
 export const FINGERPRINT_PATHS = [
+  "scripts/ink-experiments-gate.mjs",
+  "e2e/ink-experiments.test.ts",
   "scripts/check-gate-closure.mjs",
   "lib/gate-closure.test.ts",
   ...CONTROLS.map((c) => c.file),

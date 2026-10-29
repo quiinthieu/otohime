@@ -71,14 +71,15 @@ before(async () => {
   }
 });
 
-afterEach(async () => {
-  // Idle machines still render; old cases must not compete with later ones.
-  for (const context of contexts.splice(0)) await context.close();
-});
-
 after(async () => {
   await browser?.close();
   rmSync(tmp, { recursive: true, force: true });
+});
+
+// Each machine owns a continuous canvas/physics loop. Dispose completed tests'
+// pages before the next test so old machines cannot starve its drain clock.
+afterEach(async () => {
+  for (const context of contexts.splice(0)) await context.close();
 });
 
 interface OpenPachinkoOptions extends BrowserContextOptions {

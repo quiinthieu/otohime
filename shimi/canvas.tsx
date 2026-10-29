@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { buildShimiChirpCue, createShimiChirpLimiter } from "./audio.ts";
 import {
   createShimiSwarm,
+  placeShimiSwarm,
   restoreAllShimiNibbles,
   restoreShimiNibblesNear,
   stepShimiSwarm,
@@ -162,8 +163,14 @@ export default function ShimiCanvas() {
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
+    let placed = false;
     const scan = () => {
       targetsRef.current = collectTargets();
+      if (!placed) {
+        const next = placeShimiSwarm(swarmRef.current, targetsRef.current, { width, height });
+        placed = next !== swarmRef.current;
+        swarmRef.current = next;
+      }
       dietRef.current = ingestWords(dietRef.current, targetsRef.current.map((target) => target.text));
     };
     const draw = () => {

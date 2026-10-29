@@ -28,29 +28,16 @@ after(async () => {
   rmSync(tmp, { recursive: true, force: true });
 });
 
-async function open(options: BrowserContextOptions = {}, route = "/play/inkblot", rejectInvalidAnswers = false) {
+async function open(options: BrowserContextOptions = {}, route = "/play/inkblot") {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
   contexts.push(context);
   const page = await context.newPage(), errors = collectBrowserErrors(BASE);
-  const answerEndpoint = new URL("/api/inkblot/answers", BASE).href;
-  const rejectedAnswers: string[] = [], rejectionConsole: string[] = [];
   page.on("pageerror", (e) => errors.pageError(e.message));
-  page.on("console", (msg) => {
-    if (msg.type() !== "error") return;
-    const location = msg.location();
-    if (rejectInvalidAnswers && location.url === answerEndpoint && location.lineNumber === 0 && location.columnNumber === 0 && msg.args().length === 0 &&
-      /^Failed to load resource: the server responded with a status of 400 \((?:Bad Request)?\)$/.test(msg.text())) rejectionConsole.push(msg.text());
-    else errors.console({ text: msg.text(), ...location, args: msg.args().length });
-  });
-  page.on("response", (res) => {
-    if (rejectInvalidAnswers && res.url() === answerEndpoint && res.status() === 400 && res.request().method() === "POST" && res.request().resourceType() === "fetch") {
-      rejectedAnswers.push(res.request().postDataJSON()?.note ?? "");
-    }
-  });
+  page.on("console", (msg) => { if (msg.type() === "error") errors.console({ text: msg.text(), ...msg.location(), args: msg.args().length }); });
   page.on("response", (res) => errors.response({ url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() }));
   await page.goto(`${BASE}${route}`);
-  if (new URL(route, BASE).pathname === "/play/inkblot") await page.getByTestId("inkblot-sheet").waitFor();
-  return { page, context, errors, rejectedAnswers, rejectionConsole };
+  if (route.startsWith("/play/inkblot")) await page.getByTestId("inkblot-sheet").waitFor();
+  return { page, context, errors };
 }
 
 async function lobes(page: Page) {
@@ -121,7 +108,18 @@ test("pointer and keyboard drips fold into a symmetric blot; reduced motion skip
 });
 
 test("an observation shows a toy reading and pins a note; URLs and profanity are rejected", async () => {
-  const { page, errors, rejectedAnswers, rejectionConsole } = await open({}, "/play/inkblot?b=otohime7", true);
+  const { page, errors } = await open({}, "/play/inkblot?b=otohime7");
+  const expectedValidationErrors: string[] = [];
+  const rejectNote = async () => {
+    const endpoint = new URL("/api/inkblot/answers", BASE).href;
+    const response = page.waitForResponse(res => res.url() === endpoint && res.request().method() === "POST");
+    const resourceError = page.waitForEvent("console", { predicate: msg => msg.type() === "error" && msg.location().url === endpoint && msg.args().length === 0 && /Failed to load resource:.*status of 400\b/.test(msg.text()) });
+    await page.getByTestId("inkblot-submit-btn").click();
+    const rejected = await response;
+    assert.equal(rejected.status(), 400);
+    assert.equal(rejected.request().resourceType(), "fetch");
+    expectedValidationErrors.push((await resourceError).text());
+  };
   const approved = randomUUID();
   await pool.query(
     "insert into inkblot_answer(id,blot_key,name,note,status,tilt,hand) values($1,'otohime7','Ward clerk','a folded moth','approved',-2,1)",
@@ -130,6 +128,7 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
   try {
     await page.reload();
     await page.getByTestId("inkblot-gallery").waitFor();
+    await page.getByTestId("inkblot-gallery").getByText("a folded moth", { exact: true }).waitFor();
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a folded moth/);
     await page.locator("#inkblot-note").fill("a lantern in the crease");
     await page.locator("#inkblot-name").fill("Ink");
@@ -141,23 +140,20 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     assert.match(reading, /lantern/i);
     assert.ok(reading.includes(INKBLOT_DISCLAIMER));
     await page.getByTestId("inkblot-gallery").getByText("Pinned · awaiting the doctor's initials", { exact: true }).waitFor();
-    assert.match(await page.getByTestId("inkblot-gallery").textContent() ?? "", /Pinned · awaiting the doctor's initials/);
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a lantern in the crease/);
     const pending = await pool.query("select status, note from inkblot_answer where note='a lantern in the crease' order by created_at desc limit 1");
     assert.equal(pending.rows[0].status, "pending");
     const before = Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n);
     await page.locator("#inkblot-note").fill("https://spam.example");
-    await page.getByTestId("inkblot-submit-btn").click();
+    await rejectNote();
     await page.waitForFunction(() => /link/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
     assert.match(await page.getByTestId("inkblot-status").innerText(), /link|Links|ward/i);
     await page.locator("#inkblot-note").fill("this is shit");
-    await page.getByTestId("inkblot-submit-btn").click();
+    await rejectNote();
     await page.waitForFunction(() => /kinder/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
-    assert.deepEqual(rejectedAnswers, ["https://spam.example", "this is shit"]);
-    assert.equal(rejectionConsole.length, rejectedAnswers.length, "each intentional 400 is paired with its real POST response");
     assert.equal(Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n), before + 0);
   } finally {
     await pool.query("delete from inkblot_answer where id=$1 or note in ('a lantern in the crease','https://spam.example','this is shit')", [approved]);
   }
-  assert.deepEqual(errors.unexpected, []);
+  assert.deepEqual(errors.unexpected, expectedValidationErrors);
 });

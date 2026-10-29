@@ -1,0 +1,16 @@
+MediaPipe Hand Landmarker redistribution record (2026-10-29)
+
+MediaPipe Tasks Vision 0.10.32 SDK and Wasm runtime: Copyright The
+MediaPipe Authors, Apache-2.0. Unmodified bytes from the pinned npm package.
+https://github.com/google-ai-edge/mediapipe
+
+Hand Landmarker float16/1 bundles the palm detector and hand landmark model.
+Copyright Google. Apache License Version 2.0.
+Model source and model cards:
+https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task
+https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker#models
+https://storage.googleapis.com/mediapipe-assets/Model%20Card%20Hand%20Tracking%20(Lite_Full)%20with%20Fairness%20Oct%202021.pdf
+
+SHA256 and sizes are pinned in content/hand-landmarker-assets.json.
+The full Apache license is distributed alongside the vendored assets.
+The local worker is original otohime code. No endorsement is implied.

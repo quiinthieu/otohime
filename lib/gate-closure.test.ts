@@ -72,7 +72,7 @@ test("a fake runner's healthy run serializes the whole v1 result, passes its loc
   assert.match(json.fingerprint.files["package-lock.json"], /^[0-9a-f]{64}$/);
   assert.match(json.fingerprint.files[".github/workflows/ci.yml"], /^[0-9a-f]{64}$/);
   assert.match(json.fingerprint.combined, /^[0-9a-f]{64}$/);
-  assert.deepEqual(json.commands.map((c: { id: string }) => c.id), ["preflight", "e2e-runner", "end", "urashima"]);
+  assert.deepEqual(json.commands.map((c: { id: string }) => c.id), ["preflight", "ink-experiments", "e2e-runner", "end", "urashima"]);
 
   // The children are the current checkout's files, under Node's strip-types test runner, bounded, with no test context.
   for (const control of CONTROLS) {
@@ -83,7 +83,7 @@ test("a fake runner's healthy run serializes the whole v1 result, passes its loc
     assert.ok(spec.timeoutMs > 0 && spec.timeoutMs <= 180_000);
     assert.equal("NODE_TEST_CONTEXT" in spec.env, false);
   }
-  assert.deepEqual(CONTROLS.map((c: { file: string }) => c.file), ["lib/e2e-runner.test.ts", "lib/end.test.ts", "lib/urashima.test.ts"]);
+  assert.deepEqual(CONTROLS.map((c: { file: string }) => c.file), ["lib/ink-experiments-gate.test.ts", "lib/e2e-runner.test.ts", "lib/end.test.ts", "lib/urashima.test.ts"]);
 });
 
 test("a nonzero exit fails the closure even when every TAP line says ok", async () => {

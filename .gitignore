@@ -44,5 +44,6 @@ next-env.d.ts
 # Generated, checksum-pinned camera runtime and verification-only portrait
 /public/vendor/peep-box/
 /.cache/peep-box/
+/public/vendor/hand-landmarker/
 /public/vendor/duckdb/
 /public/ledger-sql.json
