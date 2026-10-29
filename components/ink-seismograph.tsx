@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { eventX, magnitude, parseInkEvents, stripSvg, tracePath, visibleEvents, WINDOW_MS, type InkArchive } from "@/lib/seismograph";
+import { eventX, inkTimeRange, magnitude, parseInkEvents, stripSvg, tracePath, visibleEvents, WINDOW_MS, type InkArchive } from "@/lib/seismograph";
 
 const stamp = (n: number) => new Date(n).toISOString().slice(0, 16).replace("T", " ") + " UTC";
 export function InkSeismograph({ archive }: { archive: InkArchive }) {
   const [events, setEvents] = useState(() => parseInkEvents(archive.events));
-  const latest = Math.max(...events.map(e => Date.parse(e.at)), Date.parse(archive.generated));
-  const earliest = Math.min(...events.map(e => Date.parse(e.at)), latest - WINDOW_MS);
+  const { latest, minEnd, maxEnd } = inkTimeRange(events,archive.generated);
   const [end, setEnd] = useState(latest);
   const [playing, setPlaying] = useState(true);
   const [source, setSource] = useState(`Saved trace · ${stamp(Date.parse(archive.generated))}`);
@@ -16,8 +15,6 @@ export function InkSeismograph({ archive }: { archive: InkArchive }) {
   const root = useRef<HTMLElement>(null);
   const drag = useRef<{x:number;end:number} | null>(null);
   const filter = `ink-${useId().replace(/[^a-z0-9]/gi, "")}`;
-  const minEnd = Math.min(latest, earliest + WINDOW_MS);
-  const maxEnd = latest + WINDOW_MS / 4;
   const clamp = (value: number) => Math.max(minEnd, Math.min(maxEnd, value));
   const shown = visibleEvents(events, end);
   const chosen = events.find(e => e.id === selected);
@@ -28,12 +25,17 @@ export function InkSeismograph({ archive }: { archive: InkArchive }) {
       void fetch("/api/seismograph", { signal:controller.signal }).then(r => r.ok ? r.json() : null).then(v => {
         if (!v) return;
         const parsed = parseInkEvents(v.events);
-        if (parsed.length) { setEvents(parsed); setSource(String(v.source)); }
+        if (parsed.length) {
+          const next = inkTimeRange(parsed,archive.generated);
+          setEvents(parsed);
+          setEnd(current => Math.max(next.minEnd,Math.min(next.maxEnd,current)));
+          setSource(String(v.source));
+        }
       }).catch(() => {});
     };
     refresh(); const timer = setInterval(refresh, 300_000);
     return () => { controller.abort(); clearInterval(timer); };
-  }, []);
+  }, [archive.generated]);
   useEffect(() => {
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const change = () => setReduced(motion.matches);
