@@ -47,7 +47,9 @@
 /* Retaining the entrance's final stacking context traps an earlier card's tools
    under later links and the masthead. Only the tools belong above that content. */
 .rise:has([data-paper-active]) { animation-fill-mode: backwards; }
-.cartridge[data-paper-active] { isolation: auto; translate: none !important; }
+/* Transitioning translate from zero to none retains a stacking context until
+   it finishes, briefly trapping the newly mounted tools below the masthead. */
+.cartridge[data-paper-active] { isolation: auto; translate: none !important; transition: none; }
 .cartridge[data-paper-active] > .cartridge-shell { z-index: 0; }
 .cartridge[data-paper-active] > .cartridge-label { z-index: 1; }
 /* Lift the same visible paper, without making its tools part of the transform.
