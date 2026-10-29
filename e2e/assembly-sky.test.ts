@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
-import { chromium, type Browser, type BrowserContext, type BrowserContextOptions, type Locator } from "playwright-core";
+import { chromium, type Browser, type BrowserContext, type BrowserContextOptions } from "playwright-core";
 import { site } from "../content/site.ts";
 import { processCrate } from "../lib/assembly.ts";
 
@@ -118,21 +118,9 @@ test("phone touch pans the chart; taps open each original note", async () => {
   await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
   await stroke.detach();
   assert.equal(new URL(page.url()).pathname, "/notes/sky", "a touch drag starting on a star cannot open its note");
-  // Playwright's tap dispatches touchStart and touchEnd in parallel. Send a
-  // physical press/release across rendered frames, including after a pan.
-  async function tap(link: Locator) {
-    await link.scrollIntoViewIfNeeded();
-    const box = (await link.boundingBox())!;
-    const touch = await context.newCDPSession(page);
-    await touch.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: box.x + box.width / 2, y: box.y + box.height / 2 }] });
-    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
-    await touch.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
-    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
-    await touch.detach();
-  }
   for (const note of site.notes) {
     const star = page.locator(`[data-sky-star="${note.slug}"]`);
-    await tap(star);
+    await star.tap();
     try { await page.waitForURL(`**/notes/${note.slug}`); }
     catch (error) {
       const state = await page.evaluate(() => ({ url: location.href,
@@ -141,7 +129,7 @@ test("phone touch pans the chart; taps open each original note", async () => {
       throw new Error(`Phone star ${note.slug}: ${JSON.stringify(state)}`, { cause: error });
     }
     assert.equal(await page.getByRole("heading", { name: note.title, exact: true }).count(), 1);
-    await tap(page.getByRole("link", { name: "Star chart" })); await page.waitForURL("**/notes/sky");
+    await page.getByRole("link", { name: "Star chart" }).tap(); await page.waitForURL("**/notes/sky");
   }
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "no horizontal page overflow");
   assert.deepEqual(errors, []);
