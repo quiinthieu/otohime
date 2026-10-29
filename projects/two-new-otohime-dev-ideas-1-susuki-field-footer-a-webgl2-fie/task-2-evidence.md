@@ -1,5 +1,168 @@
 # t-1766 — Susuki footer delivery evidence
 
+## Save-Data compatibility repair — run-9762
+
+Branch `pm-299-t-1766-run-9762` starts at freshly fetched main
+`3977e52e3ecd5cc27082d6aae4fc976fd34c03dd`, which already contains the complete
+Susuki implementation and the published `fix_plan_run-9749.md`. No recovered
+implementation was dropped or duplicated. This repair follows that fix plan:
+the connection type permits optional event methods, and subscription **and
+cleanup** guard the methods themselves. Full NetworkInformation/EventTarget
+objects continue to receive real `change` subscriptions. The older Kame,
+Kame Fetch and Peep-box Save-Data fixtures and all their assertions remain unchanged.
+
+The expanded Susuki suite covers a plain `{ saveData: true }` object and a real
+`EventTarget` control. Both render a nonblank single static frame with zero
+ambient rAF, retain visible page/footer content, and produce no console/page
+errors across input and client navigation. Real connection events switch
+static → live → static. Instrumentation forwards to real browser methods and
+proves one old GL program is deleted and the departed connection listener is
+removed, leaving only the new footer's listener. A post-cleanup event cannot
+redraw the old canvas. Next's Cache Components retains hidden route DOM using
+Activity; tests verify effect cleanup and the visible replacement rather than
+requiring DOM disconnection.
+
+### Verification and executable identity
+
+| Check | Result / complete worker capture |
+| --- | --- |
+| New plain-object regression against the pre-repair production executable | **0/1**, canvas removed during mount; `negative-before-fix.log` |
+| Five targeted suites, fresh production build, then final fixture rerun using that build | Final **56/56**, zero failed/skipped; `targeted-final.log` (33 older checks including nested tests, 23 Susuki/Bottle) |
+| Exact contract Susuki/Bottle command, including another fresh production build | **23/23**, zero failed/skipped; `required-final.log`; generated history restored by the contract's command |
+| Complete native `SKIP_BUILD=1 TMPDIR=/tmp npm run test:e2e` | **282/282**, zero failed/skipped; **833.80 seconds** wall time; `full-native.log` |
+| `TMPDIR=/tmp npm test` | **2,792/2,792**, zero failed/skipped; `unit.log` |
+| `npm run typecheck` | Pass; `typecheck-final.log` |
+| `npm run lint` | Pass, zero errors, 13 existing unrelated warnings; `lint-final.log` |
+| `TMPDIR=/tmp node scripts/check-gate-closure.mjs` | Certified, `local_controls=pass`, `failures=[]`, external evidence inconclusive; `closure.log` |
+| `SKIP_BUILD=1 TMPDIR=/tmp bash scripts/walk-end.sh` | **67 ok**, zero failed; `walk.log` |
+| `CI=1 SKIP_BUILD=1 TMPDIR=/tmp bash scripts/probe-end.sh` | **177 ok**, zero failed/errors; `probe.log` |
+
+Worker captures and `commits.txt` are in `shared/artifacts/` outside the checkout;
+per-run captures are in its `run-9762/` directory. No raw server logs, reset
+links, binaries, generated build output or dependency changes are committed.
+
+`npm ci` installed the unchanged lock. Actual runtime: Node **22.23.3**, Next
+**16.4.2**, React **19.3.0**, Playwright Core **1.64.0**, embedded Postgres
+**17.10.0-beta.17**, Chrome **156.0.8078.73**. The persisted run records the
+actual fleet profile **codex-sol-6-1-high**, model **gpt-6.1-sol**, effort
+**high**, worker **avietidol-mac-mini**. Installed client/lazy-loading and
+Cache Components/Activity guides were read. The chief-of-staff extraction and
+`docs/claude/software-development.md` remain absent; no code graph tool or RTK
+configuration is available in this run.
+
+Initial verified production build ID: **rxzVNM7VGs9VLSHxslmEm**. Ordered task fingerprint
+(same file list and SHA-256-of-ordered-hash-lines algorithm as the original
+record below): **b583efe3ffc6db8173b23531faa16dc48812241e7dd2ab8eae52989c8a3e2062**.
+Actual field chunk `.next/static/chunks/1xl0eq5fzmjvh.js`: SHA-256
+**a39e2102548f08a5592327d1fe407ffbc357f728e228f3941df15ee9bb50b352**.
+Lock SHA-256 remains **9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b**.
+`executable.json` binds all source/test hashes, build, chunk and installed versions.
+The complete failure-free native suite finished below the existing 960-second
+command limit, so CI timing/configuration is unchanged. This local measurement
+does not predict the remote runner's runtime or establish a green CI result.
+
+Execution is real production Next import/build/start, migrated embedded
+Postgres, browser GL adapter/shader/buffer/texture/fox-atlas construction,
+instanced draws and framebuffer reads, native input and actual GL context
+loss/restoration. Basic-object/Save-Data/no-WebGL/visibility capabilities are
+explicit fixtures; the EventTarget subscription is real. Existing Ghosts/Bottle
+network fixtures do not establish third-party services. Static GL ink is
+**214,176 pixels**, one draw and zero rAF; Canvas2D is **75,838 pixels**, zero
+GL calls/rAF. All original season, fox, pointer/scroll, accessibility, links,
+five-SVG, waterline and zero-geometry-shift assertions remain. The real-framebuffer
+negative control clears ink to exactly zero and observes drawing resume.
+
+Two intermediate captures are retained rather than concealed: `targeted-initial.log`
+passed **51/56**, failing five new cleanup fixtures that incorrectly required
+DOM disconnection; `required-e2e.log` passed **22/23**, with one new test comparing
+frames before navigation against frames after a legitimate hide/resize. The
+final fixtures use actual disposal/listener evidence and snapshot the old
+canvas after cleanup, before dispatching the event being tested. Product code
+was unchanged during these fixture repairs.
+
+### Fresh-main integration
+
+Main advanced during verification with the independent Ink Departures feature.
+A normal fast-forward brought `de21b2f064d73255970443844e3b1c0075e1f611` into
+the uncommitted task branch without dropping or duplicating any work. All task
+changes remain confined to Susuki source/tests, this evidence, and native
+input setup in two existing test files described below. The new production build ID
+is **d44Wfv0nEdvhue9bY-LXo**; the Susuki fingerprint and actual emitted field
+chunk hash above are unchanged. `pre-integration-executable.json` retains the
+initial build identity; `executable.json` describes this integrated build.
+
+Both exact contract commands were rerun on this base: **23/23** Susuki/Bottle,
+**2,794/2,794** units, types/lint pass (13 unrelated warnings), and certified
+closure with external evidence inconclusive. Captures use `integrated-*.log`.
+The final full native rerun passes **292/292**, zero failed/skipped, in
+**842.39 seconds** (`integrated-native-final.log`), below the unchanged 960s
+command limit. The integrated HTTP walk passes **67/67** (`integrated-walk.log`).
+The final browser probe passes **177/177**, with zero hydration, console, page,
+network-attribution or local server errors (`integrated-probe.log`), using
+Playwright's Chromium **156.0.8078.4**. No observed local defect remains.
+
+The first integrated full run found two additional Kame Fetch setup failures:
+the Peek hover wait and the drag-proxy wait, at checks 119/123. The new upstream
+board is above the project cards. A real Chrome diagnostic measured the first
+card at **y=1351.703125** and grip at **y=1389.703125** in an **860px** viewport;
+`elementFromPoint` at the original pointer target returned **null**. Revealing
+the card moved it to **y=351.703125** and the actual Peek opened. The test-only
+repair in `e2e/kame-fetch.test.ts` reveals the card/grip **before** measuring
+native input coordinates. All hover, proxy, cancellation, geometry and negative
+assertions remain. The focused real-browser rerun passes **2/2**
+(`kame-focused.log`); `kame-geometry-diagnostic.json` retains the offscreen
+negative control and revealed positive result. This is an explicitly recorded
+test-scope extension following concurrent upstream integration, not a change
+to Kame, Departures, `/shelf`, or another product route.
+
+That integrated capture completed **289/292**, with those two failures and a
+late `tactile-tear.test.ts` geometry fixture failure: keyboard focus legitimately
+scrolled the offscreen card from **y=1351.703125** to **y=180.703125** after its
+baseline was recorded. The baseline now follows focus, before the peel action;
+all geometry, margin, reload, route cleanup and native-link assertions remain.
+Its focused real-browser rerun passes **1/1** (`tactile-focused.log`). Both test
+extensions were recorded through plan-manager. No capability fixture or
+assertion was weakened. The complete failed capture is retained, and the final
+full native rerun includes both corrected files.
+
+The final combined executable/regression fingerprint is
+**e73eb20793a1b5e28772785299e23cb4e0f59b05bc5232e24e8da99dedf56765**: append
+`e2e/kame-fetch.test.ts`, then `e2e/tactile-tear.test.ts`, to the ordered hash
+list above. The manifest retains the unchanged Susuki core fingerprint as
+`susuki_core_fingerprint`. Both the field chunk and locked environment remain
+identical through these fixture-only corrections. Final typecheck/lint pass
+after both corrections (`integrated-typecheck-final.log`, `integrated-lint-final.log`).
+
+### History and handoff limits
+
+This run independently read two task-manager pages per terminal status (limit
+10, offsets 0 and 10): **20 of 143 FAILED**, **20 of 1,006 COMPLETED**, plus
+all **3 RUNNING** jobs at that snapshot. The unpaginated plan list had **26**
+runs, including eight t-1766 records. Native raw tails for run-9726 (1,009
+lines; 2,993 omitted), run-9742 (780; 3,222 omitted), and run-9749 (759; 3,243
+omitted) were read. They confirm the successful original main publication,
+run-9742's later `push_not_on_main` failure, and the published code-defect QA.
+All three native callbacks are delivered in one attempt; persisted plan runs
+have `callback_apply_failures=0`. Run-9749 is a completed agent execution with
+a persisted **failed/code QA report**, not a passing acceptance result.
+Callback payload internals and omitted raw history remain **inconclusive**;
+`history-summary.json` records the bounded scan. Old CI failures **40817421327**
+and **40817663407** belong to the old executable and are not erased by this repair.
+
+Local execution is demonstrated; runtime capacity is available. This SWE run
+does not observe a repair deployment or claim product acceptance. Per the
+stop-at-push contract, **plan-manager** owns repair-SHA CI/green-gate continuation
+(`t-1766/CI-green-gate`), and **quality_engineer** owns deployed ancestry and
+basic-object/EventTarget acceptance (`t-1766/deployed-QA`). Any failed job,
+timeout, excluded repair ancestry, removed page, console error, extra static
+frame or ambient static rAF fails those checks. New pipeline/deployment IDs
+are unobserved before push and are not invented. Platform owns final callback
+ingestion for `run-9762`; a missing/failed report application fails that handoff.
+No operator chore, capacity deferral, CI polling or deployed check is used.
+Decisions and lessons, including Activity retention, were recorded through
+plan-manager. Owner identity is checked before the single task-prefixed commit;
+the post-push summary and artifact `commits.txt` bind its immutable delivery SHA.
+
 ## Publication retry and browser synchronization regressions — run-9726
 
 The runner supplied recovered HEAD `8cf342d023452b7fd76cc7e90e8536163363907e`
