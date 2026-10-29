@@ -1,0 +1,13 @@
+Plan: pm-299
+Task: t-1766
+Run: run-9696
+Branch: pm-299-t-1766-recovery-run-9696
+Integration base: 573b70e9de539096f3f9e296fe075307b3fe288f
+Retained rescued commit: 2537166b546dc9803cfadf584a5fae413bc32b4d
+Original implementation: 3726e97953168205b9df128ddb57bc8fdf39682d
+Recovery subject: pm-299/t-1766: docs: record verified Susuki delivery recovery
+Delivery commit: enclosing recovery commit; see post-push summary git_sha.
+Resolve: git log -1 --format=%H -- projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9696/artifacts/commits.txt
+Push: git push origin HEAD:main (normal fast-forward); git push origin HEAD.
+No source/test work dropped; the recovered task-prefixed commit is preserved.
+The worker shared/artifacts/commits.txt records immutable delivery SHAs after commit.
