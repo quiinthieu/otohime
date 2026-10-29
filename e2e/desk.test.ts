@@ -12,7 +12,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { after, before, test } from "node:test";
 import { chromium, type Browser, type BrowserContext, type Page } from "playwright-core";
-import { DRAG_THRESHOLD, STACKED, PINS, PIN_PAIRS, dropAt, pastThreshold } from "../app/(site)/(app)/desk/_lib/drag.ts";
+import { DRAG_THRESHOLD, STACKED, PINS, PIN_PAIRS, dropAt, pastThreshold, pinHomes } from "../app/(site)/(app)/desk/_lib/drag.ts";
 import { LONG_PRESS_MS } from "../app/(site)/(app)/desk/_lib/long-press.ts";
 import { formatTrace, hasGesture, traceOf, type GestureRecord } from "../scripts/e2e-gesture-trace.ts";
 import {
@@ -382,6 +382,22 @@ test("a dragged item stays where it was dropped after a reload, and the red stri
   await page.mouse.up();
   assert.notEqual(during, before, "the string follows the pin during the drag");
   assert.equal(new URL(page.url()).pathname, "/desk");
+  const pinStyle = () => page.locator(`[data-pin="${a}"]`).evaluate((el) => ({ left: (el as HTMLElement).style.left, top: (el as HTMLElement).style.top }));
+  const droppedPin = await pinStyle();
+  await page.reload({ waitUntil: "load" });
+  await hydrated(page);
+  await page.waitForFunction(({ id, spot }) => {
+    const el = document.querySelector<HTMLElement>(`[data-pin="${id}"]`);
+    return el?.style.left === spot.left && el?.style.top === spot.top;
+  }, { id: a, spot: droppedPin }, { timeout: 5_000 });
+  assert.deepEqual(await pinStyle(), droppedPin, "pinned project positions survive a reload too");
+  await page.getByRole("button", { name: "Tidy up", exact: true }).click();
+  await page.reload({ waitUntil: "load" });
+  await hydrated(page);
+  const homePin = pinHomes()[a];
+  const tidiedPin = await pinStyle();
+  nearPct(tidiedPin.left, homePin.x * 100, "tidied pin left after reload");
+  nearPct(tidiedPin.top, homePin.y * 100, "tidied pin top after reload");
   assert.deepEqual(errors, []);
 });
 
