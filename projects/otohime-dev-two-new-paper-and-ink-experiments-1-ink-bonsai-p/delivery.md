@@ -54,6 +54,7 @@ After integrating concurrent main releases, run 40838054209 reached Senko after
 also recorded an intermittent Pachinko drain timeout. That file retained prior
 tests' pages and continuous canvas loops until file teardown; it now closes its
 contexts after each test. All six Pachinko browser cases pass locally with the
-original 12-second drain bounds. The expanded serial suite has a 1,500-second
-bound, a 27-minute step and 40-minute job; the workflow regression checks those
-bounds and retains failure-status propagation and process cleanup.
+original 12-second drain bounds. Current main subsequently supplied a
+1,800-second suite bound, a 32-minute step and 50-minute job, which this branch
+preserves. The workflow regression checks those bounds and retains failure-status
+propagation and process cleanup.

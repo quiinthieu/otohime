@@ -10,7 +10,7 @@ export type Theme = "light" | "dark";
 export type SeasonChoice = Season | "auto";
 
 // What the commands read: the theme showing, the sound switch, the season dial's choice and the stamps won.
-export type TerminalState = { theme: Theme; sound: boolean; season: SeasonChoice; stamps: readonly string[]; appearance: AppearanceSnapshot };
+export type TerminalState = { theme: Theme; sound: boolean; season: SeasonChoice; stamps: readonly string[]; appearance: AppearanceSnapshot; shimi?: boolean };
 
 export type Effect =
   | { kind: "go"; href: string }
@@ -18,6 +18,7 @@ export type Effect =
   | { kind: "sound"; on: boolean }
   | { kind: "season"; season: SeasonChoice }
   | { kind: "print-run"; printRun: PrintRunId }
+  | { kind: "shimi"; on: boolean }
   | { kind: "clear" }
   | { kind: "adventure" }
   | { kind: "close" };
@@ -93,6 +94,7 @@ export const HELP = [
   "print run [house|sumi|riso|indigo]   report or choose the print run",
   "lab                     open Ink Lab (/lab)",
   "stamps                  the stamps you have won",
+  "shimi [on|off]          paper silverfish on the page",
   "adventure               a walk through the data world",
   "clear                   wipe the screen",
   "exit                    close the terminal (or Esc)",
@@ -140,6 +142,12 @@ export function run(line: string, state: TerminalState): Reply {
       return state.stamps.length
         ? { lines: [`stamps (${state.stamps.length}):`, ...state.stamps.map((s) => `  [*] ${s}`)] }
         : { lines: ["no stamps yet. the adventure hides one."] };
+    case "shimi":
+    case "bookworms": {
+      if (arg && arg !== "on" && arg !== "off" && arg !== "toggle") return { lines: ["shimi: on, off or nothing to flip"] };
+      const on = arg === "on" ? true : arg === "off" ? false : !(state.shimi ?? false);
+      return { lines: [`shimi: ${on ? "on" : "off"}`], effect: { kind: "shimi", on } };
+    }
     case "clear":
     case "cls":
       return { lines: [], effect: { kind: "clear" } };
@@ -173,6 +181,7 @@ export const SUGGESTIONS: readonly Suggestion[] = [
   ...PRINT_RUN_IDS.map((id) => ({ line: `print run ${id}`, label: PRINT_RUNS[id].label, hint: "print run" })),
   ...(["auto", ...SEASONS] as const).map((s) => ({ line: `season ${s}`, label: `Season: ${s}`, hint: "season" })),
   { line: "stamps", label: "Stamps", hint: "your collection" },
+  { line: "shimi", label: "Shimi bookworms", hint: "on / off" },
   { line: "adventure", label: "Adventure", hint: "the data world" },
   { line: "help", label: "Help", hint: "every command" },
   { line: "clear", label: "Clear screen", hint: "clear" },

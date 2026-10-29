@@ -170,16 +170,16 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks budgets the expanded browser suite with a 40m job, 27m step and 1500s bound", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "40");
-  assert.match(workflow, /40838054209 exhausted 1200s at Senko after 286 tests/);
+test("checks budgets the full browser suite with a 50m job, 32m step and 1800s bound", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "50");
+  assert.match(workflow, /40820018472 exhausted 960s at the peep-box cases/);
   const checks = steps("checks");
-  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 27\n/);
+  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 32\n/);
   const e2e = gateBody("E2E against next start");
   assert.match(e2e, /^set -o pipefail$/m);
   assert.match(e2e, /^trap .*browser-gate-diagnostics\.mjs "E2E against next start".* EXIT$/m);
   assert.match(e2e, /^command -v timeout >\/dev\/null 2>&1 \|\| timeout\(\)/m);
-  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1500s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
+  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1800s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
   assert.equal(e2e.match(/npm run test:e2e/g).length, 1, "the browser suite runs once, only under the inner bound");
 });
 

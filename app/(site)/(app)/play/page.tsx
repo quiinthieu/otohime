@@ -47,6 +47,11 @@ export default function PlayPage() {
           <p className="mt-2 mb-4 text-muted">A shrine festival printed in four slightly mismatched inks. Look through the stalls for seven small keepsakes and take the stamp when the night is complete.</p>
           <p><Link href="/play/ennichi" className="btn" data-testid="play-ennichi-link">Enter Ennichi Night →</Link></p>
         </section>
+        <section className="mt-12" aria-labelledby="inkblot-heading">
+          <h2 id="inkblot-heading" className="caption"><RisoText>Ink Blot Test</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">Drip sumi on half a sheet, fold it into a symmetric blot, and write what you see. A paper-and-ink toy, not a diagnosis.</p>
+          <p><Link href="/play/inkblot" className="btn" data-testid="play-inkblot-link">Open Ink Blot Test →</Link></p>
+        </section>
         <section className="mt-12" aria-labelledby="hanafuda-heading">
           <h2 id="hanafuda-heading" className="caption">
             <RisoText>Hanafuda Koi-Koi</RisoText>
