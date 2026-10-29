@@ -7,7 +7,7 @@ import { site } from "../content/site.ts";
 import { away, KONAMI, TENTH_POKE } from "../lib/end.ts";
 import { CONSOLE_MENU, PUBLIC_PAGES } from "../lib/pages.ts";
 import { launchBrowser } from "./probe-browser.mjs";
-import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, settleEndEntrance, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
+import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, settleEndEntrance, observeEndReducedTicks, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
 
 const rootRequire = createRequire(import.meta.url);
 const pg = rootRequire("pg");
@@ -1380,7 +1380,7 @@ try {
         await livePage.waitForTimeout(60);
 
         // Click mascot to start the 2-tick press, verify busy/pressed and offset eyes, then emulate reducedMotion: reduce mid-press
-        const ticksBefore = await livePage.evaluate(() => window.__endIntervalTicks);
+        await livePage.evaluate(observeEndReducedTicks);
         await livePage.locator("footer.end [data-end-mascot]").click();
         const midPress = await livePage.evaluate(() => {
           const stage = document.querySelector("footer.end [data-end-stage]");
@@ -1417,7 +1417,7 @@ try {
             { timeout: 500 },
           )
           .catch(() => {});
-        const afterToggle = await livePage.evaluate((beforeTicks) => {
+        const afterToggle = await livePage.evaluate(() => {
           const stage = document.querySelector("footer.end [data-end-stage]");
           const btn = stage.querySelector("[data-end-mascot]");
           const pupils = stage.querySelector("[data-end-pupils]");
@@ -1426,15 +1426,17 @@ try {
             busy: stage.dataset.busy ?? null,
             pressed: btn.getAttribute("aria-pressed"),
             pupils: pupils.style.transform,
-            ticksDelta: window.__endIntervalTicks - beforeTicks,
+            ticksAtChange: window.__endReducedTicks,
+            ticksDelta: window.__endIntervalTicks - window.__endReducedTicks,
           };
-        }, ticksBefore);
+        });
         check(
           "reduced motion (mid-press): toggling prefers-reduced-motion settles active press and resets eyes immediately",
           afterToggle.active === null &&
             afterToggle.busy === null &&
             afterToggle.pressed === "false" &&
             afterToggle.pupils === "translate(0px, 0px)" &&
+            Number.isInteger(afterToggle.ticksAtChange) &&
             afterToggle.ticksDelta < 2,
           JSON.stringify(afterToggle),
         );

@@ -88,6 +88,19 @@ export async function settleEndEntrance(footer, timeoutMs) {
   } while (true);
 }
 
+// Count only work after the browser actually changes its preference. Ticks between a click and the
+// emulateMedia protocol command are normal press work, even if a busy host delays that command.
+export function observeEndReducedTicks() {
+  window.__endReducedTicks = null;
+  const media = matchMedia("(prefers-reduced-motion: reduce)");
+  const changed = () => {
+    if (!media.matches) return;
+    window.__endReducedTicks = window.__endIntervalTicks;
+    media.removeEventListener("change", changed);
+  };
+  media.addEventListener("change", changed);
+}
+
 // The heading's real text geometry: its visible glyphs (RisoText's anchors, or a plain heading's own text) must sit
 // inside the heading and the viewport. The anchors are measured rather than the opacity-0 source, whose pre-wrap
 // line ends hang their spaces past the edge. A Riso heading's scrollWidth also counts its aria-hidden ::before/
