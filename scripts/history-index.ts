@@ -339,8 +339,9 @@ export function checkHistory(
     return { ok: false, message: `names head ${committed.head}, which is not in HEAD's history; run npm run history:index` };
   }
 
-  // A PR merge can contain newer leaves on both parents. The index at HEAD is
-  // complete even though neither individual leaf contains the other branch.
+  // A merge can join diverged branches: its newest non-merge leaf cannot see
+  // the other branch's entries. Verify a freshly built index against the whole
+  // build revision before checking historical fallbacks at their own leaf.
   const rebuiltAtHead = indexAt(git, head);
   if (rebuiltAtHead && serializeHistory(rebuiltAtHead) === text) {
     return { ok: true, message: "matches git at HEAD" };

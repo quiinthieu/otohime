@@ -1,0 +1,25 @@
+.ink-shelf-page { color: var(--ink); }
+.shelf-intro { margin-top: 0.75rem; max-width: 38rem; color: var(--muted); }
+.shelf-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 1.5rem 0 1rem; }
+.shelf-filters { display: flex; gap: 0.4rem; }
+.shelf-filters button { min-height: 2.75rem; padding: 0.4rem 0.8rem; border: 1px solid var(--line); border-radius: 45% 3% 40% 4% / 4% 40% 3% 45%; background: var(--paper); cursor: pointer; }
+.shelf-filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.shelf-status, .shelf-colophon { font-size: 0.8rem; color: var(--muted); }
+.shelf-frame { position: relative; isolation: isolate; border: 1px solid var(--line); border-radius: 0.3rem 0.6rem 0.2rem 0.5rem; background: repeating-linear-gradient(108deg, transparent 0 6px, color-mix(in srgb, var(--ink) 3%, transparent) 7px 8px), var(--paper-2); }
+.shelf-planks { position: absolute; inset: 0; pointer-events: none; }
+.shelf-plank { position: absolute; left: 1%; right: 1%; height: 0.45rem; border: 1px solid var(--ink); border-radius: 30% 3% 25% 4% / 15% 40% 15% 40%; background: repeating-linear-gradient(2deg, var(--paper) 0 3px, var(--line) 4px 5px); box-shadow: 0 0.35rem 0 color-mix(in srgb, var(--shade) 12%, transparent); }
+.shelf-books { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
+.shelf-slot { position: absolute; transform-origin: center; }
+.shelf-book { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 0.4rem; width: 100%; height: 100%; padding: 0.6rem 0.1rem 0.3rem; border: 1px solid var(--ink); border-top-width: 0.55rem; border-radius: 0.2rem 0.15rem 0.1rem 0.3rem; color: var(--ink); background: repeating-linear-gradient(90deg, transparent 0 4px, color-mix(in srgb, var(--ink) 5%, transparent) 5px 6px), var(--paper); box-shadow: 2px 1px 0 var(--line); text-decoration: none; }
+.shelf-spine-title { writing-mode: vertical-rl; overflow: hidden; max-height: 100%; font-size: clamp(0.65rem, 1.5vw, 0.9rem); line-height: 1.1; text-overflow: ellipsis; white-space: nowrap; }
+.shelf-spine-kind { font-size: 0.6rem; line-height: 1; }
+.shelf-book:hover, .shelf-book:focus-visible { background-color: var(--paper-2); outline: 2px solid var(--ink); outline-offset: 3px; z-index: 1; }
+.shelf-filters button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.shelf-empty { position: absolute; top: 2rem; left: 1rem; color: var(--muted); }
+.shelf-colophon { margin-top: 0.8rem; }
+.shelf-overflow { margin-top: 2rem; }
+.shelf-overflow ul { list-style: disc; padding-left: 1.25rem; }
+.shelf-overflow a { text-decoration: underline; text-underline-offset: 0.2em; }
+@media (prefers-reduced-motion: reduce) {
+  .shelf-book { view-transition-name: none !important; }
+}

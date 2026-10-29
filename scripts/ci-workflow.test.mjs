@@ -46,6 +46,19 @@ function list(path) {
 
 const scalar = (path) => block(path)?.value.replace(/\s+#.*$/, "").replace(/^["']|["']$/g, "");
 
+test("every build refreshes the public ledger with the read-only Actions token", () => {
+  for (const job of ["checks", "preview", "production"]) {
+    const found = block(["jobs", job]);
+    assert.ok(found, job);
+    const source = lines.slice(found.start, found.end).join("\n");
+    const refresh = source.indexOf("- name: Refresh public stamp ledger");
+    const build = source.indexOf(job === "checks" ? "npm run build" : "npx vercel@64 build");
+    assert.ok(refresh >= 0 && build > refresh, `${job} refreshes before building`);
+    assert.match(source.slice(refresh, build), /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
+    assert.match(source.slice(refresh, build), /run: node scripts\/ledger-fetch\.mjs/);
+  }
+});
+
 // GitHub's filter glob: `**` crosses directories, `*` does not.
 const globRe = (glob) =>
   new RegExp(`^${glob.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*\/?|\*/g, (m) => (m === "*" ? "[^/]*" : ".*"))}$`);

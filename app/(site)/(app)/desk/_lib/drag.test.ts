@@ -6,7 +6,7 @@ import { site } from "../../../../../content/site.ts";
 import { DESK_ITEMS } from "../../../../../lib/desk.ts";
 import { stringPath } from "../../../../../lib/desk-string.ts";
 import { CONSOLE_MENU } from "../../../../../lib/pages.ts";
-import { anchor, CORK, DRAG_THRESHOLD, dropAt, pastThreshold, PIN_PAIRS, pinHomes, PINS, rebase, STACKED, turn } from "./drag.ts";
+import { anchor, CORK, DRAG_THRESHOLD, dropAt, pastThreshold, PIN_PAIRS, pinHomes, parsePins, serializePins, PINS, PINS_KEY, rebase, STACKED, turn } from "./drag.ts";
 
 const DIR = resolve(import.meta.dirname, "..");
 const read = (p: string) => readFileSync(join(DIR, p), "utf8");
@@ -90,6 +90,19 @@ test("the red string joins the projects that share a tag, and every pair sags in
   }
 });
 
+test("pin storage restores known positions, clamps edges and recovers corrupt or older layouts", () => {
+  const homes = pinHomes();
+  const id = PINS[0].id;
+  const moved = { ...homes, [id]: { x: 0.5, y: 0.75 } };
+  assert.deepEqual(parsePins(serializePins(moved)), moved);
+  for (const raw of [null, "broken", "{}", JSON.stringify({ v: "old", pins: moved })]) {
+    assert.deepEqual(parsePins(raw), homes);
+  }
+  const raw = JSON.stringify({ v: PINS_KEY, pins: { [id]: { x: -1, y: 2 }, unknown: { x: 1, y: 1 } } });
+  assert.deepEqual(parsePins(raw), { ...homes, [id]: { x: 0, y: 1 } });
+  assert.deepEqual(parsePins(JSON.stringify({ v: PINS_KEY, pins: { [id]: { x: "bad", y: 0 } } })), homes);
+});
+
 // The wiring, read as source: the component's DOM work is not runnable under node --test.
 test("the page names its h1 for the console's desk cartridge and draws the desk", () => {
   assert.ok(CONSOLE_MENU.some((page) => page.href === "/desk"));
@@ -115,7 +128,7 @@ test("the layout is kept with useSyncExternalStore and parseDesk under desk:v1, 
   assert.match(desk, /useSyncExternalStore\(subscribe, getLayout, getServerLayout\)/);
   assert.match(desk, /parseDesk\(localStorage\.getItem\(DESK_KEY\)\)/);
   assert.match(desk, /localStorage\.setItem\(DESK_KEY, serializeDesk\(next\)\)/);
-  assert.match(desk, /const next = tidy\(layout\);[\s\S]*saveLayout\(next\);\s*setPins\(homes\);/);
+  assert.match(desk, /const next = tidy\(layout\);[\s\S]*saveLayout\(next\);\s*savePins\(homes\);/);
   assert.match(desk, /onClick=\{tidyUp\}/);
   assert.doesNotMatch(desk, /Math\.random/);
 });
