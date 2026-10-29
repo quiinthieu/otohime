@@ -133,7 +133,9 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a folded moth/);
     await page.locator("#inkblot-note").fill("a lantern in the crease");
     await page.locator("#inkblot-name").fill("Ink");
+    const posted = page.waitForResponse((res) => res.url().includes("/api/inkblot/answers") && res.request().method() === "POST");
     await page.getByTestId("inkblot-submit-btn").click();
+    assert.equal((await posted).status(), 201);
     await page.getByTestId("inkblot-reading").waitFor();
     const reading = await page.getByTestId("inkblot-reading").innerText();
     assert.match(reading, /lantern/i);
