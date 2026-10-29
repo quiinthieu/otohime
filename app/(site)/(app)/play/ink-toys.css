@@ -5,8 +5,16 @@
 .ink-tools button:disabled { opacity: .45; cursor: default; }
 .ink-dials { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1.5rem; }
 .ink-dial { width: 220px; max-width: 100%; border: 1px solid var(--line); border-radius: 50% / 15%; padding: 1rem 1.25rem; box-shadow: 2px 3px 0 var(--line); }
-.ink-dial span { display: flex; justify-content: space-between; gap: 1rem; }
-.ink-dial input { width: 100%; min-height: 44px; accent-color: var(--ink); cursor: ew-resize; }
+.ink-dial > .caption { display: flex; justify-content: space-between; gap: 1rem; }
+.ink-dialFace { position: relative; display: block; width: 100px; height: 100px; margin: .5rem auto 0; border-radius: 50%; cursor: grab; touch-action: none; }
+.ink-dialFace:active { cursor: grabbing; }
+.ink-dialFace svg { width: 100%; height: 100%; stroke: var(--ink); fill: none; stroke-width: 1.5; }
+.ink-dialShadow { fill: var(--line); stroke: none; }
+.ink-dialPaper { fill: var(--paper); }
+.ink-dialNeedle { stroke-width: 3; stroke-linecap: round; }
+.ink-dialPivot { fill: var(--ink); stroke: none; }
+.ink-dialFace input { position: absolute; inset: 0; margin: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+.ink-dialFace:has(input:focus-visible) { outline: 2px solid var(--ink); outline-offset: 3px; }
 .ink-scoreScroll { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; border: 1px solid var(--line); background: var(--paper); }
 .ink-score { border-collapse: collapse; width: 100%; min-width: 870px; table-layout: fixed; }
 .ink-score th { font-size: .7rem; font-weight: 400; font-family: monospace; padding: .4rem .1rem; }
@@ -35,7 +43,7 @@
 .ink-preview { opacity: .55; }
 .ink-stamped { animation: thunk 330ms ease-out; transform: rotate(-5deg); }
 @keyframes thunk { 0% { transform: scale(1.25) rotate(-9deg); opacity: 0; } 40% { transform: scale(.96) rotate(-5deg); opacity: 1; } 100% { transform: scale(1) rotate(-5deg); } }
-@media (max-width: 640px) { .ink-pressLayout { grid-template-columns: minmax(0, 1fr); } .ink-dial { width: calc(50% - .5rem); min-width: 130px; padding: .7rem; } .ink-dial span { flex-direction: column; gap: .2rem; } }
+@media (max-width: 640px) { .ink-pressLayout { grid-template-columns: minmax(0, 1fr); } .ink-dial { width: calc(50% - .5rem); min-width: 130px; padding: .7rem; } .ink-dial > .caption { flex-direction: column; gap: .2rem; } }
 @media (prefers-reduced-motion: reduce) {
   .ink-score td[data-current="true"] { background: transparent; }
   .ink-score td[data-current="true"] [aria-pressed="true"] .ink-blot, .ink-stamped { animation: none; transform: none; }

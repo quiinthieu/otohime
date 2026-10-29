@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { createElement, useEffect, useId, useRef, useState, useSyncExternalStore, type PointerEvent } from "react";
 import { appearanceTags } from "@/lib/appearance-client";
 import { inkFilter } from "@/lib/ink-modes";
 import { blankPattern, decodePattern, demoPattern, encodePattern, hasBlot, ROWS, SCORE, scoreBlots, toggleBlot, type Pattern } from "@/lib/loom";
@@ -8,6 +8,32 @@ import { startLoom } from "@/lib/loom-client";
 import { canvasPng, downloadBlob } from "@/lib/ink-download";
 import { getServerSound, getSound, setSound, subscribeSound } from "@/lib/sound-client";
 import "../ink-toys.css";
+
+function PaperDial({ name, value, min, max, unit, onChange }: { name: string; value: number; min: number; max: number; unit: string; onChange: (value: number) => void }) {
+  const angle = -135 + (value - min) / (max - min) * 270;
+  function turn(event: PointerEvent<HTMLSpanElement>) {
+    const box = event.currentTarget.getBoundingClientRect();
+    const degrees = Math.atan2(event.clientX - box.left - box.width / 2, box.top + box.height / 2 - event.clientY) * 180 / Math.PI;
+    onChange(Math.round(min + (Math.max(-135, Math.min(135, degrees)) + 135) / 270 * (max - min)));
+  }
+  return <label className="ink-dial">
+    <span className="caption">{name} <output>{value}{unit}</output></span>
+    <span className="ink-dialFace" data-dial={name}
+      onClick={event => event.preventDefault()}
+      onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); event.currentTarget.querySelector("input")?.focus(); event.currentTarget.setPointerCapture(event.pointerId); turn(event); }}
+      onPointerMove={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) turn(event); }}
+      onPointerUp={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); }}>
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        {[-135, -90, -45, 0, 45, 90, 135].map(tick => <path key={tick} d="M50 6v5" transform={`rotate(${tick} 50 50)`} />)}
+        <circle cx="50" cy="52" r="33" className="ink-dialShadow" />
+        <circle cx="50" cy="50" r="33" className="ink-dialPaper" />
+        <path d="M50 49V25" transform={`rotate(${angle} 50 50)`} className="ink-dialNeedle" />
+        <circle cx="50" cy="50" r="3" className="ink-dialPivot" />
+      </svg>
+      <input aria-label={name} aria-valuetext={`${value}${unit}`} title="Drag around the dial, or use the arrow keys" type="range" min={min} max={max} value={value} onChange={event => onChange(Number(event.target.value))} />
+    </span>
+  </label>;
+}
 
 export function Loom() {
   const [pattern, setPattern] = useState(blankPattern);
@@ -80,8 +106,8 @@ export function Loom() {
       <button className="btn" type="button" disabled={!ready} onClick={() => { stop(); change(blankPattern()); }}>Clear</button>
     </div>
     <div className="ink-dials">
-      <label className="ink-dial"><span className="caption">Tempo <output>{pattern.tempo} BPM</output></span><input aria-label="Tempo" type="range" min="60" max="180" value={pattern.tempo} onChange={e => change({ ...latest.current, tempo: Number(e.target.value) })} /></label>
-      <label className="ink-dial"><span className="caption">Swing <output>{pattern.swing}%</output></span><input aria-label="Swing" type="range" min="0" max="50" value={pattern.swing} onChange={e => change({ ...latest.current, swing: Number(e.target.value) })} /></label>
+      <PaperDial name="Tempo" min={60} max={180} value={pattern.tempo} unit=" BPM" onChange={tempo => change({ ...latest.current, tempo })} />
+      <PaperDial name="Swing" min={0} max={50} value={pattern.swing} unit="%" onChange={swing => change({ ...latest.current, swing })} />
     </div>
     <p id="loom-help" className="mb-3 text-sm text-muted">Tap or use Tab and Space to stamp. On a phone, scroll the paper sideways to reach all sixteen steps.</p>
     <div className="ink-scoreScroll" role="region" aria-label="Sixteen-step score, scroll horizontally" tabIndex={0}>

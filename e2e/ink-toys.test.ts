@@ -75,7 +75,23 @@ for (const width of [1280, 390]) test(`Play discovery, stamping, share restore a
   assert.ok((await loom(page).locator('tbody button').first().boundingBox())!.height >= 44, "paper grid styles loaded");
   const cell = page.getByRole("button", { name: "Paper · soft, step 16", exact: true });
   await cell.focus(); await page.keyboard.press("Space"); assert.equal(await cell.getAttribute("aria-pressed"), "true");
-  const tempo = page.getByRole("slider", { name: "Tempo" }); await tempo.fill("132");
+  const tempo = page.getByRole("slider", { name: "Tempo" });
+  await tempo.scrollIntoViewIfNeeded();
+  const dial = (await page.locator('[data-dial="Tempo"]').boundingBox())!;
+  await page.mouse.move(dial.x + dial.width - 10, dial.y + dial.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(dial.x + dial.width / 2, dial.y + 10);
+  await page.mouse.up();
+  assert.equal(await tempo.inputValue(), "120", "dragging the paper dial sets its angular value");
+  if (width === 390) {
+    await page.touchscreen.tap(dial.x + dial.width - 10, dial.y + dial.height / 2);
+    assert.equal(await tempo.inputValue(), "160", "touching the dial sets the same angular value");
+    await page.touchscreen.tap(dial.x + dial.width / 2, dial.y + 10);
+  }
+  await tempo.focus(); await page.keyboard.press("ArrowRight");
+  assert.equal(await tempo.inputValue(), "121", "the rotary control keeps native range keyboard access");
+  await page.screenshot({ path: `/tmp/pm285-dials-${width}.png` });
+  await tempo.fill("132");
   await page.getByRole("slider", { name: "Swing" }).fill("35");
   await page.getByRole("button", { name: "Copy loop link ↗", exact: true }).click();
   const shared = await page.evaluate(() => (window as unknown as { __inkCopied: string }).__inkCopied);
