@@ -177,6 +177,10 @@ export function play(name: CueName) {
 }
 
 /** Quiet feature cues share the site's context. Recheck feature policy after an asynchronous resume. */
+export function playShimiChirp(cue: Cue): boolean {
+  return playCustomCue(cue);
+}
+
 export function playCustomCue(cue: Cue, isAllowed: () => boolean = () => true): boolean {
   load();
   if (!getSound() || typeof document === "undefined" || document.hidden || !cue.notes.length || !isAllowed()) return false;
