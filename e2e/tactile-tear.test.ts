@@ -30,9 +30,12 @@ test("keyboard peel/reset, real margin, stable geometry, session reload and rout
   const context=await browser.newContext();
   try {
     const page=await context.newPage(); await ready(page);
-    const card=page.locator('[data-paper-id]').first(); const before=await card.boundingBox();
+    const card=page.locator('[data-paper-id]').first();
     const peel=card.getByRole('button',{name:'Peel corner',exact:true});
-    await peel.focus(); await page.keyboard.press('Enter'); await state(page,'peeled');
+    // Focusing an off-screen card scrolls the page. Measure after that normal
+    // viewport movement so this assertion isolates geometry changed by peeling.
+    await peel.focus(); const before=await card.boundingBox();
+    await page.keyboard.press('Enter'); await state(page,'peeled');
     assert.ok(await card.locator('.paper-margin').isVisible());
     assert.ok((await card.locator('.paper-margin').innerText()).length>0);
     const after=await card.boundingBox(); assert.ok(before&&after);
