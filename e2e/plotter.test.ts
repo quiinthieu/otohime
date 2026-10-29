@@ -11,9 +11,12 @@ test("plotter samples real SVG transforms and separate subpaths, draws and expor
       document.querySelectorAll("main svg").forEach(s => s.setAttribute("data-plotter-ignore", ""));
       const fixture = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       fixture.setAttribute("width", "120"); fixture.setAttribute("height", "120");
+      fixture.setAttribute("data-plotter-fixture", "");
       fixture.innerHTML = '<g transform="translate(20 40) scale(2)"><path d="M0 0L10 0 M0 10L10 10" stroke="#ff0000" fill="none"/><circle cx="25" cy="10" r="5" stroke="#0000ff" fill="none"/></g>';
-      document.querySelector("main")!.append(fixture);
+      // First in the collection: late scene hydration must not spend the bounded point budget before this fixture.
+      document.querySelector("main")!.prepend(fixture);
     });
+    await page.locator("svg[data-plotter-fixture]").waitFor();
     await page.getByRole("button", { name: "Pen plotter", exact: true }).click();
     await page.locator(".plotter-overlay polyline").first().waitFor({ state: "attached" });
     const red = await page.locator('.plotter-overlay polyline[stroke="#ff0000"]').evaluateAll(lines => lines.map(l => (l as SVGPolylineElement).getBBox()).map(b => ({ width: b.width, y: b.y })));

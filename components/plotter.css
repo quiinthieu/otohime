@@ -9,5 +9,5 @@ body:has(.masthead) .plotter-fallback { display: none; }
 .plotter-actions button, .plotter-actions select { border: 1px solid currentColor; padding: .35rem .6rem; background: transparent; font: inherit; color: inherit; cursor: pointer; }
 .plotter-actions button:disabled { opacity: .5; cursor: default; }
 .plotter-actions :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-@media (max-width: 520px) { .plotter-label { display: none; } .masthead > div { gap: .35rem; } .plotter-toggle > button { padding: .35rem; } }
+@media (max-width: 520px) { .plotter-label { display: none; } .masthead:has(.plotter-toggle) > div { gap: .35rem; } .plotter-toggle > button { padding: .35rem; } }
 @media print { [data-plotter-ui] { display: none !important; } }
