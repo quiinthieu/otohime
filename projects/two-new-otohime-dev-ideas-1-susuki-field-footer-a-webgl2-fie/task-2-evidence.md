@@ -173,6 +173,27 @@ adding the other changed browser files, CI workflow/test and `vercel.json` to
 its ordered source-hash manifest. An additional task-prefixed evidence commit
 is required to preserve these post-rebase results without amending the repair.
 
+### Publication retry 2
+
+Retry 1's normal push at `4a2756dfc8007012bf733ec9ce164aa36a2ee07e` was also
+rejected as fetch-first. A second authorized rebase preserved both task commits
+above **d88c1bfb00834a88a341b77bd0ee5465de3bd74d**. The intervening source change
+only preserves `SKIP_BUILD` for CI's camera verifier, with corresponding CI
+regressions and evidence; there is still no application/library/lock/Next
+configuration change. This upstream camera wiring is retained, not claimed as
+this task's implementation or separately accepted camera execution.
+
+Both exact task gates pass again: **23/23** Susuki/Bottle, **2,798/2,798** units,
+types/lint and certified local closure (`retry2-*.log`). Footer walk passes
+**67/67** and the browser probe passes **177/177**, zero runtime/console/page/
+hydration/unexpected-network errors. Retry build **WAmTEWvgt8qLKKWkGV14E** is
+bound by `retry2-executable.json`, fingerprint
+**00d1a36d87269745eaa2926cf9573625de3220864c2b5dd3dc886a07e1f4cb8a**.
+The complete native and affected
+browser proofs above retain the same application and fixture sources; the new
+CI build-reuse behavior is covered by the updated project unit checks. No
+application or old fixture defect is waived by a pending publication.
+
 ### History and handoff limits
 
 This run independently read two task-manager pages per terminal status (limit
