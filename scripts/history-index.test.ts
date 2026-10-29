@@ -272,6 +272,34 @@ test("the index is capped at MAX_ENTRIES while total counts all reachable commit
   assert.equal(checkHistory(git, repo, serializeHistory(afterMerge), { strict: true }).ok, true);
 });
 
+test("a PR merge indexes both diverged branches and verifies the complete build revision", () => {
+  const repo = fixtureRepo(SAMPLE);
+  sh(repo, "checkout", "--quiet", "-b", "side");
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "side work");
+  sh(repo, "checkout", "--quiet", "main");
+  sh(repo, "commit", "--quiet", "--allow-empty", "-m", "concurrent main work");
+  const git = gitRunner(repo);
+  const beforeMerge = serializeHistory(indexAt(git)!);
+  sh(repo, "merge", "--quiet", "--no-ff", "-m", "PR merge", "side");
+  const index = indexAt(git)!;
+  assert.ok(index.entries.some((e) => e.subject === "side work"));
+  assert.ok(index.entries.some((e) => e.subject === "concurrent main work"));
+  for (const strict of [false, true]) {
+    const check = checkHistory(git, repo, serializeHistory(index), { strict });
+    assert.equal(check.ok, true, check.message);
+    assert.equal(checkHistory(git, repo, serializeHistory({ ...index, total: index.total + 1 }), { strict }).ok, false);
+    const tampered = structuredClone(index);
+    tampered.entries[1].subject = "invented change";
+    assert.equal(checkHistory(git, repo, serializeHistory(tampered), { strict }).ok, false);
+  }
+  assert.equal(checkHistory(git, repo, beforeMerge, { strict: true }).ok, false, "an index missing a branch still fails");
+  const file = join(TMP, `merge-${repos++}.json`);
+  const rev = sh(repo, "rev-parse", "HEAD").trim();
+  const result = runScript(`--repo=${repo}`, `--file=${file}`, "--strict", `--rev=${rev}`);
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(runScript(`--repo=${repo}`, `--file=${file}`, "--strict", "--check", `--rev=${rev}`).status, 0);
+});
+
 test("without git, outside a repository, or in an empty one, the committed fallback is used as it is", () => {
   const repo = fixtureRepo(SAMPLE);
   const fallback = indexAt(gitRunner(repo))!;
