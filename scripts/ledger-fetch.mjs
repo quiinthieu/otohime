@@ -1,9 +1,10 @@
 // Writes content/ledger.json, the Stamp Ledger's year of activity, at build time
 // (the prebuild step in package.json). Plain Node, no dependencies.
 //
-// Commits and releases come from GitHub's GraphQL API as the GITHUB_TOKEN's
-// owner (`viewer`): commit counts per UTC day from public repositories only, and
-// the names of public, non-draft releases. Notes come from the dates in
+// Commits and releases come from GitHub's GraphQL API for the site owner,
+// independently of who owns GITHUB_TOKEN (including an Actions bot). It reads
+// commit counts per UTC day from public repositories only, and the names of
+// public, non-draft releases. Notes come from the dates in
 // content/site.ts, sketches from the review dates in content/portraits.json.
 // Only counts and public release names are written: no commit messages, no
 // private repository names.
@@ -18,6 +19,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 export const ENDPOINT = "https://api.github.com/graphql";
+export const OWNER = "quiinthieu";
 // The calendar covers the WINDOW_DAYS UTC days ending today.
 export const WINDOW_DAYS = 365;
 // contributionsCollection is asked a slice at a time, so no repository can have
@@ -103,8 +105,8 @@ export function sketchDates(manifest) {
   return records.map((r) => (isRecord(r) && isRecord(r.review) ? dayOf(r.review.reviewedAt) : null)).filter((d) => d !== null);
 }
 
-const COMMITS_QUERY = `query($from: DateTime!, $to: DateTime!) {
-  viewer {
+const COMMITS_QUERY = `query($owner: String!, $from: DateTime!, $to: DateTime!) {
+  user(login: $owner) {
     contributionsCollection(from: $from, to: $to) {
       commitContributionsByRepository(maxRepositories: 100) {
         repository { isPrivate }
@@ -114,8 +116,8 @@ const COMMITS_QUERY = `query($from: DateTime!, $to: DateTime!) {
   }
 }`;
 
-const RELEASES_QUERY = `query {
-  viewer {
+const RELEASES_QUERY = `query($owner: String!) {
+  user(login: $owner) {
     repositories(first: 100, privacy: PUBLIC, ownerAffiliations: OWNER, orderBy: { field: PUSHED_AT, direction: DESC }) {
       nodes {
         name
@@ -142,8 +144,8 @@ async function graphql(fetchImpl, token, query, variables = {}) {
   const body = await res.json();
   if (!isRecord(body)) throw new Error("GitHub GraphQL: reply is not an object");
   if (Array.isArray(body.errors) && body.errors.length > 0) throw new Error("GitHub GraphQL: errors in reply");
-  if (!isRecord(body.data) || !isRecord(body.data.viewer)) throw new Error("GitHub GraphQL: no viewer in reply");
-  return body.data.viewer;
+  if (!isRecord(body.data) || !isRecord(body.data.user)) throw new Error("GitHub GraphQL: no owner in reply");
+  return body.data.user;
 }
 
 // Public commit counts per UTC day, and public release names per UTC day,
@@ -153,8 +155,8 @@ export async function fetchGithub(fetchImpl, token, { from, to }) {
   /** @type {Record<string, number>} */
   const commits = {};
   for (const slice of slices(from, to)) {
-    const viewer = await graphql(fetchImpl, token, COMMITS_QUERY, { from: `${slice.from}T00:00:00Z`, to: `${slice.to}T23:59:59Z` });
-    const byRepo = viewer.contributionsCollection?.commitContributionsByRepository;
+    const owner = await graphql(fetchImpl, token, COMMITS_QUERY, { owner: OWNER, from: `${slice.from}T00:00:00Z`, to: `${slice.to}T23:59:59Z` });
+    const byRepo = owner.contributionsCollection?.commitContributionsByRepository;
     if (!Array.isArray(byRepo)) throw new Error("GitHub GraphQL: no commitContributionsByRepository");
     for (const entry of byRepo) {
       if (!isRecord(entry) || !isRecord(entry.repository) || entry.repository.isPrivate !== false) continue;
@@ -171,8 +173,8 @@ export async function fetchGithub(fetchImpl, token, { from, to }) {
 
   /** @type {Record<string, string[]>} */
   const releases = {};
-  const viewer = await graphql(fetchImpl, token, RELEASES_QUERY);
-  const repos = viewer.repositories?.nodes;
+  const owner = await graphql(fetchImpl, token, RELEASES_QUERY, { owner: OWNER });
+  const repos = owner.repositories?.nodes;
   if (!Array.isArray(repos)) throw new Error("GitHub GraphQL: no repositories");
   for (const repo of repos) {
     if (!isRecord(repo) || repo.isPrivate !== false || !Array.isArray(repo.releases?.nodes)) continue;
