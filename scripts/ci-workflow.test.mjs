@@ -13,6 +13,13 @@ import "./check-deploy-author.test.mjs";
 import "./setup-owner-git.test.mjs";
 
 const workflow = readFileSync(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
+
+test("Vercel Git cannot bypass the checked full-history deployment", () => {
+  const config = JSON.parse(readFileSync(new URL("../vercel.json", import.meta.url), "utf8"));
+  assert.equal(config.git?.deploymentEnabled, false,
+    "automatic Git builds can replace CI's current palace history with the committed fallback");
+});
+
 const lines = workflow.split("\n");
 const indent = (line) => line.length - line.trimStart().length;
 const significant = (line) => line.trim() !== "" && !line.trim().startsWith("#");
