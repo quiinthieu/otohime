@@ -60,6 +60,12 @@ async function open(options: BrowserContextOptions = {}, route = "/", meter = fa
   page.on("response", (res) => { if (res.request().resourceType() === "script") scripts.push(res.url()); });
   await page.goto(`${BASE}${route}`);
   await page.locator('[data-shimi-ready="true"]').waitFor({ state: "attached" });
+  // Crumple hydrates its controls separately. Capture the DOM text baseline
+  // after those real controls arrive, rather than attributing them to Shimi.
+  if (route === "/notes") await page.waitForFunction(() => {
+    const cards = [...document.querySelectorAll("main [data-paper-id]")];
+    return cards.length > 0 && cards.every(card => card.querySelector("[data-paper-controls]"));
+  });
   return { page, context, errors, scripts };
 }
 
@@ -67,7 +73,9 @@ const canvas = (page: Page) => page.locator("[data-shimi-canvas]");
 const meter = (page: Page) => page.evaluate(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter);
 const pageText = (page: Page) => page.locator("main").evaluate(main => {
   const copy = main.cloneNode(true) as Element;
-  copy.querySelector("[data-pocket-shimi]")?.remove(); // The control's off/on label is expected to change.
+  // Toggle labels and selected options are live UI state; compare the complete
+  // article copy, links and headings rather than those interactive labels.
+  copy.querySelectorAll("button,select,output").forEach(control => control.remove());
   return copy.textContent;
 });
 
