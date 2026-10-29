@@ -6,6 +6,7 @@ import { dbToGain, MAX_DB, SOUND_KEY } from "./sound.ts";
 import {
   brownNoise,
   playCustomCue,
+  openSoundSession,
   startStoryVoice,
   stopStoryVoice,
   setSound,
@@ -323,4 +324,29 @@ test("custom cue policy is rechecked after a pending audio resume", async () => 
   assert.deepEqual(take(), [], "a reduced-motion change while resuming cannot schedule a stale clack");
   FakeAudioContext.holdResume = false;
   setSound(false);
+});
+
+test("shared audio sessions cancel on mute, hide, disposal and before a late resume", async () => {
+  setSound(false);
+  let starts = 0, stops = 0;
+  const begin = () => { starts++; return () => { stops++; }; };
+  openSoundSession(begin)(); assert.equal(starts, 0);
+  for (const why of ["dispose", "mute", "hidden", "pagehide"]) {
+    setSound(true, { silent: true });
+    const cancel = openSoundSession(begin); await tick();
+    const before = stops;
+    if (why === "dispose") cancel();
+    if (why === "mute") setSound(false);
+    if (why === "hidden") { Object.assign(doc, { hidden: true }); doc.fire("visibilitychange"); Object.assign(doc, { hidden: false }); }
+    if (why === "pagehide") win.fire("pagehide");
+    assert.equal(stops, before + 1, why);
+    cancel(); assert.equal(stops, before + 1, "idempotent cleanup");
+    assert.equal(doc.count("visibilitychange"), 0);
+  }
+  setSound(false); setSound(true, { silent: true });
+  FakeAudioContext.holdResume = true;
+  const before = starts, cancel = openSoundSession(begin);
+  cancel(); FakeAudioContext.releaseResume!(); await tick();
+  assert.equal(starts, before);
+  FakeAudioContext.holdResume = false; setSound(false);
 });
