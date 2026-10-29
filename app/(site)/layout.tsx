@@ -15,6 +15,7 @@ import "./seasons.css";
 import "./letterpress.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
+import { KintsugiMotion } from "@/components/kintsugi-card";
 
 export const metadata: Metadata = {
   // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SeasonLayer />
         {/* The letterpress keys' press cue (components/press-sound.tsx): one document listener for every page. */}
         <PressSound />
+        <KintsugiMotion />
         {/* "/" or Cmd/Ctrl-K opens the Pocket Terminal (components/pocket-terminal.tsx, its own chunk). Ahead of the
            pages, so its capture-phase key listener is added before the handheld's and can stop keys while open. */}
         <PocketTerminalLoader />
