@@ -104,6 +104,27 @@ async function focusLink(link: Locator) {
   }
 }
 
+test('enabling paper immediately releases the cartridge stacking context', async t => {
+  const page = await open(t);
+  const card = cards(page).first();
+  const hit = await card.evaluate(el => {
+    const button = el.querySelector<HTMLButtonElement>('.paper-crumple')!;
+    const r = button.getBoundingClientRect();
+    scrollTo(0, scrollY + r.y + r.height / 2 - 32);
+    // Replay the idle adapter's opt-in after the base cartridge has painted.
+    el.removeAttribute('data-paper-active');
+    getComputedStyle(el).translate;
+    for (const animation of el.getAnimations()) animation.finish();
+    getComputedStyle(el).translate;
+    el.setAttribute('data-paper-active', 'true');
+    const translate = getComputedStyle(el).translate;
+    const b = button.getBoundingClientRect();
+    return { translate, reachable: document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2) === button };
+  });
+  assert.equal(hit.translate, 'none', 'opt-in must not interpolate a stacking context');
+  assert.equal(hit.reachable, true, 'paper controls immediately clear the sticky header');
+});
+
 for (const width of [1280, 720]) for (const route of ['/projects', '/notes']) {
   test(`fresh native controls reach real Canvas at ${width}px on ${route}`, async t => {
     const page = await open(t, route, { viewport: { width, height: 860 } });
