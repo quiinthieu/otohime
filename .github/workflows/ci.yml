@@ -39,12 +39,12 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
     runs-on: ubuntu-24.04
-    # Run 40820018472 exhausted 960s at the peep-box cases, before the palace
-    # and remaining browser coverage. Allow 1200s for the full serial suite,
-    # 22m for readiness/TERM/diagnostics, and 35m for all probes.
+    # Run 40825297324 exhausted 1200s after only 273 browser cases, before the
+    # tactile coverage. Allow 1800s for the full serial suite, 32m for
+    # readiness/TERM/diagnostics, and 45m for all probes.
     # Individual assertions retain their timeouts; exit 124 still fails the job.
     # Motion's paced auth requests explain its 171s; no runtime browser installers in CI.
-    timeout-minutes: 35
+    timeout-minutes: 45
     services:
       postgres:
         image: postgres:17-alpine
@@ -163,7 +163,7 @@ jobs:
           curl -fsS --retry 15 --retry-connrefused --retry-delay 1 "$GHOSTS_FAKE_BASE/__ready"
       # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
       - name: E2E against next start
-        timeout-minutes: 22
+        timeout-minutes: 32
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "E2E against next start" "$status" "$RUNNER_TEMP/e2e.log" || true; exit "$status"' EXIT
@@ -171,7 +171,7 @@ jobs:
           npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
           curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
           command -v timeout >/dev/null 2>&1 || timeout() { node -e 'const {spawn}=require("node:child_process");const a=process.argv.slice(1);while(a[0]?.startsWith("-"))a.shift();const ms=parseFloat(a.shift())*1000;const c=spawn(a[0],a.slice(1),{stdio:"inherit",detached:true});let timedOut=false;const t=setTimeout(()=>{timedOut=true;try{process.kill(-c.pid,"SIGTERM")}catch{};setTimeout(()=>{try{process.kill(-c.pid,"SIGKILL")}catch{}},1000)},ms);c.on("exit",(code)=>{clearTimeout(t);process.exit(timedOut?124:code??1)})' -- "$@"; }
-          timeout --signal=TERM --kill-after=10s 1200s npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
+          timeout --signal=TERM --kill-after=10s 1800s npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
       # Signs in through the form against the same server and database, so a page error on the hop into a
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
       - name: Motion probe, signed in
