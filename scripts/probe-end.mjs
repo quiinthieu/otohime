@@ -255,6 +255,9 @@ function installLoopCounters() {
     if (src.includes("settled") && src.includes("scattered")) {
       return origRaf(cb);
     }
+    // This separate ambient island owns its lifecycle; count EndStage/Kame here.
+    // A literal marker survives minification, unlike a callback function name.
+    if (src.includes("susuki-ambient-frame")) return origRaf(cb);
     const id = origRaf((ts) => {
       pending.delete(id);
       window.__endPendingRafs = pending.size;
