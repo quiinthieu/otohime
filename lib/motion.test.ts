@@ -302,10 +302,11 @@ test("the site root layout mounts the season layer first in <body>, ahead of eve
   // (components/urashima-keys.tsx) renders nothing either. Kame and the paper loader render null
   // before load/idle; their null Suspense boundaries keep dynamic routes prerenderable.
   // Kame and paper overlays follow the route content and wait for host commits. Seasons remain first.
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?\{children\}\s*<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*<AppearanceRuntime \/>\s*<\/body>/);
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<KintsugiMotion \/>\s*<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?<ShimiLoader \/>\s*\{children\}\s*<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*<AppearanceRuntime \/>\s*<\/body>/);
   assert.equal(src.match(/<TactileLoader\b/g)?.length, 1);
   assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
   assert.equal(src.match(/<PressSound\b/g)?.length, 1);
+  assert.equal(src.match(/<KintsugiMotion\b/g)?.length, 1);
   assert.equal(src.match(/<KameLoader\b/g)?.length, 1);
   // Mounted once, in the root layout only: no group layout or page mounts a second one.
   const others = siteFiles(["layout.tsx", "page.tsx", "not-found.tsx"]).filter((p) => p !== join("app", "(site)", "layout.tsx"));

@@ -50,6 +50,9 @@ async function pointerClick(button: Locator) {
   const page = button.page();
   await page.mouse.move(0, page.viewportSize()!.height - 1);
   await page.evaluate(() => { if (document.activeElement instanceof HTMLElement) document.activeElement.blur(); });
+  // A prior card's hover Peek closes on a grace timer. Start the fresh native
+  // path only once that previous overlay has actually left the hit-test tree.
+  await page.locator('.peek-layer').waitFor({ state: 'hidden' });
   await button.scrollIntoViewIfNeeded();
   const hit = () => button.evaluate(el => {
     const r = el.getBoundingClientRect(), x = r.x + r.width / 2, y = r.y + r.height / 2;

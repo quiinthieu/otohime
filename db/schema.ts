@@ -197,3 +197,18 @@ export const inkblotUsage = pgTable("inkblot_usage", {
   count: integer("count").notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true, precision: 6 }).defaultNow().notNull(),
 }, (table) => [check("inkblot_usage_count_check", sql`${table.count} >= 0`)]);
+
+// Bounded shared golden webs; no raw visitor identifiers are stored.
+export const kintsugiCard = pgTable("kintsugi_card", {
+  id: text("id").primaryKey(),
+  count: integer("count").notNull(),
+  seams: jsonb("seams").notNull(),
+}, table => [
+  check("kintsugi_count_check", sql`${table.count} between 1 and 1000000`),
+  check("kintsugi_seams_check", sql`jsonb_typeof(${table.seams}) = 'array' and jsonb_array_length(${table.seams}) <= 12`),
+]);
+export const kintsugiUsage = pgTable("kintsugi_usage", {
+  bucket: text("bucket").primaryKey(),
+  count: integer("count").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}, table => [check("kintsugi_usage_count_check", sql`${table.count} between 0 and 1000`)]);
