@@ -1,0 +1,10 @@
+Plan: pm-301
+Task: t-1789
+Run: run-9713
+Branch: pm-301-t-1789-ennichi-core
+Integration base: b3e3b992a6b3d08311f32482178e0f8a75fa125c
+Delivery subject: pm-301/t-1789: feat: add the deterministic Ennichi festival core
+Delivery SHA: enclosing commit; immutable SHA is recorded in the plan-manager summary git_sha.
+Resolve: git log -1 --format=%H -- projects/otohime-dev-three-new-paper-and-ink-pieces-1-ink-departures/t-1789/artifacts/commits.txt
+Push commands: git push origin HEAD:main; git push origin HEAD
+No force push. On main contention, pull --rebase origin main and rerun required checks before retrying.
