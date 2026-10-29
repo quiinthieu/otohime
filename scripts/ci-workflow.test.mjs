@@ -2,7 +2,7 @@
 // pull requests keep running on every change, and the jobs that ship run on a pinned runner.
 // Dependency-free (no npm ci needed): reads the YAML by indentation, which is all this file uses.
 import assert from "node:assert/strict";
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -280,6 +280,48 @@ function gateBody(name) {
   }
   return body.join("\n");
 }
+
+test("camera CI reuses only a successful production build and preserves camera failure", () => {
+  const checks = steps("checks");
+  const camera = checks.indexOf("- name: Real CPU camera and privacy verifier");
+  const build = checks.indexOf("- run: npm run build\n");
+  assert.ok(build >= 0 && camera > build, "production build precedes camera");
+  // Both steps retain Actions' default success() gate and fail-closed behavior.
+  const cameraStep = checks.slice(camera, checks.indexOf("      - ", camera + 1));
+  assert.doesNotMatch(cameraStep, /\n\s*(if|continue-on-error):/);
+  assert.doesNotMatch(checks.slice(build, camera), /continue-on-error:|if:.*always\(/);
+  const buildCommand = checks.slice(build).split("\n")[0].replace("- run: ", "");
+  for (const [buildStatus, cameraStatus] of [[0, 0], [0, 7], [17, 0]]) {
+    const work = mkdtempSync(join(tmpdir(), "camera-build-ci-"));
+    try {
+      mkdirSync(join(work, "scripts"));
+      for (const file of ["browser-gate-diagnostics.mjs", "ci-probe-annotate.mjs", "e2e-annotate.mjs"])
+        copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
+      writeFileSync(join(work, "scripts/verify-peep-box-camera.mjs"), `
+        import assert from 'node:assert/strict';
+        import { readFileSync, writeFileSync } from 'node:fs';
+        assert.equal(process.env.SKIP_BUILD, '1');
+        assert.equal(readFileSync('.next/BUILD_ID', 'utf8'), 'successful fixture build');
+        writeFileSync('camera-called', 'yes');
+        process.exit(${cameraStatus});
+      `);
+      // Execute YAML's real commands with a fake compiler/camera, real shell and reporters.
+      const result = spawnSync("bash", ["-euc", `
+        npm() {
+          test "$*" = 'run build'
+          if [ ${buildStatus} -ne 0 ]; then return ${buildStatus}; fi
+          mkdir .next
+          printf 'successful fixture build' > .next/BUILD_ID
+        }
+        ${buildCommand}
+        ${gateBody("Real CPU camera and privacy verifier")}
+      `], { cwd: work, env: { ...process.env, RUNNER_TEMP: work }, encoding: "utf8", timeout: 10000 });
+      assert.ifError(result.error);
+      assert.equal(result.status, buildStatus || cameraStatus, result.stdout + result.stderr);
+      assert.equal(existsSync(join(work, "camera-called")), buildStatus === 0, "a failed build never invokes camera");
+    } finally { rmSync(work, { recursive: true, force: true }); }
+  }
+});
 
 // Execute the actual YAML shell, not a copy of its implementation. Only external
 // server/readiness/probe behavior is replaced; Node, streams, tee and reporters are real.
@@ -706,7 +748,7 @@ test("actual CI fake startup/readiness/late-probe/cleanup commands keep the tran
 
 test("application SHA and Next BUILD_ID are published independently from the Worker executable", () => {
   const checks = steps("checks");
-  assert.ok(checks.indexOf("- name: Publish application build identity") > checks.indexOf("- name: Real CPU camera and privacy verifier"), "camera verifier rebuilds .next: publish the build that next start actually serves");
+  assert.ok(checks.indexOf("- name: Publish application build identity") > checks.indexOf("- name: Real CPU camera and privacy verifier"), "publish the same prebuilt artifact after camera verification");
   assert.ok(checks.indexOf("- name: Publish application build identity") < checks.indexOf("- name: E2E against next start"));
   const identity = gateBody("Publish application build identity");
   assert.match(identity, /appSha: process.env.GITHUB_SHA/); assert.match(identity, /nextBuildId: fs.readFileSync\(".next\/BUILD_ID"/);
