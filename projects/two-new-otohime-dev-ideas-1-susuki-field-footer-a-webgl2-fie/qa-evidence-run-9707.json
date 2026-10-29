@@ -875,5 +875,25 @@
     ],
     "defects": [],
     "requiredDeferredChecks": []
+  },
+  "publicationRetry": {
+    "firstSavedCommit": "b11281ee6fc99465d6c2773ff36d1987cfd7e037",
+    "firstSavedBranch": "pm-299-t-1767-qa-run-9707",
+    "mainPush": "rejected fetch-first",
+    "recovery": "git pull --rebase origin main",
+    "finalIntegrationBase": "42faf51dc901e0e9faa0d80115587778a63a8db3",
+    "finalBranch": "pm-299-t-1767-qa-run-9707-retry-1",
+    "checks": {
+      "shelf": 9,
+      "tests": 2784,
+      "failed": 0,
+      "skipped": 0,
+      "typecheck": 0,
+      "lint": 0,
+      "lintWarnings": 13,
+      "build": 0
+    },
+    "taskFingerprintsUnchanged": true,
+    "forcePush": false
   }
 }

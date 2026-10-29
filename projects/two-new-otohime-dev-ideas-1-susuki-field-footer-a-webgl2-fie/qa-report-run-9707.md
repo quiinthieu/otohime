@@ -83,3 +83,10 @@ The [persisted QA snapshot](qa-evidence-run-9707.json) retains board gate, recor
 - Read `.github/workflows/ci.yml` history/diff from failed `88f60bc` through green `573b70e`: commit `2cc4b04` adds public ledger refresh steps. No CI change was made in this QA run and no historical failure is reclassified as an environment defect from its label alone. The shared unauthenticated API budget later returned 403 rate-limit; the delivery's public live workflow page supplies subsequent status updates.
 
 Local logs, production/local browser results, native-CI snapshots, reconstructed author bytes and SHA-256 manifest are saved as worker artifacts under `shared/artifacts/run-9707/`. Screenshots are uncommitted artifacts. The probe and report/evidence are the only repository changes.
+
+
+## Publication retry
+
+The first branch push saved **b11281ee6fc99465d6c2773ff36d1987cfd7e037** on `pm-299-t-1767-qa-run-9707`; the normal main push was rejected fetch-first. Per the explicit recovery instruction, `git pull --rebase origin main` succeeded onto **42faf51dc901e0e9faa0d80115587778a63a8db3**, preserving the incoming Senko/Ennichi core work. The original published branch remains preserved. Created fresh branch **pm-299-t-1767-qa-run-9707-retry-1** rather than force-pushing the rebased branch.
+
+Reran both complete contract gates on this final integration source: **9/9 shelf tests; 2,784/2,784 repository tests, zero failures/skips; typecheck, lint and production build all exit 0**. Lint retains 13 unrelated warnings. All ten listed shelf/catalog/lock/Next/CI fingerprints still match delivery `6420027`. Restored only generated history from the exact clean prebuild copy. This follow-up changes QA evidence only. Publication SHA, actual push outcomes and author are bound by the submitted QA report and worker commit/author manifests; the earlier deployed acceptance remains cited at `6420027`, not at a report-only commit.
