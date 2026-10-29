@@ -8,20 +8,33 @@ test("plotter samples real SVG transforms and separate subpaths, draws and expor
   try {
     await page.waitForFunction(() => "otohimeAppearance" in window);
     await page.evaluate(() => {
-      // Ignore stable scene containers, including SVGs they hydrate after this setup.
-      document.querySelectorAll("main > *").forEach(s => s.setAttribute("data-plotter-ignore", ""));
+      // Own the collector's main root independently of React's streamed Work
+      // content. Hydration and new illustrations must not replace this fixture.
+      const root = document.createElement("main");
+      root.setAttribute("data-plotter-fixture-root", "");
+      root.style.cssText = "position:fixed;top:180px;left:160px;width:120px;height:120px;pointer-events:none";
       const fixture = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       fixture.setAttribute("width", "120"); fixture.setAttribute("height", "120");
       fixture.setAttribute("data-plotter-fixture", "");
       fixture.innerHTML = '<g transform="translate(20 40) scale(2)"><path d="M0 0L10 0 M0 10L10 10" stroke="#ff0000" fill="none"/><circle cx="25" cy="10" r="5" stroke="#0000ff" fill="none"/></g>';
-      // First in the collection: late scene hydration must not spend the bounded point budget before this fixture.
-      document.querySelector("main")!.prepend(fixture);
+      root.append(fixture);
+      document.body.prepend(root);
     });
     await page.locator("svg[data-plotter-fixture]").waitFor();
     await page.getByRole("button", { name: "Pen plotter", exact: true }).click();
     await page.locator(".plotter-overlay polyline").first().waitFor({ state: "attached" });
     const red = await page.locator('.plotter-overlay polyline[stroke="#ff0000"]').evaluateAll(lines => lines.map(l => (l as SVGPolylineElement).getBBox()).map(b => ({ width: b.width, y: b.y })));
-    assert.equal(red.length, 2, "two subpaths require two pen strokes");
+    const evidence = await page.locator("svg[data-plotter-fixture]").evaluate(svg => ({
+      firstMain: svg.closest("main") === document.querySelector("main"),
+      shapes: [...svg.querySelectorAll<SVGGeometryElement>("path, circle")].map(shape => ({
+        stroke: getComputedStyle(shape).stroke,
+        visible: shape.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }),
+        length: shape.getTotalLength(),
+        rects: shape.getClientRects().length,
+      })),
+      plotted: [...document.querySelectorAll(".plotter-overlay polyline")].map(p => p.getAttribute("stroke")),
+    }));
+    assert.equal(red.length, 2, `two subpaths require two pen strokes: ${JSON.stringify(evidence)}`);
     assert.ok(red.every(b => Math.abs(b.width - 20) < .01), JSON.stringify(red));
     assert.ok(Math.abs(Math.abs(red[1].y - red[0].y) - 20) < .01);
     await page.getByRole("button", { name: "Skip drawing" }).click();
