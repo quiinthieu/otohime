@@ -1,0 +1,8 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-301",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "All three paper-and-ink pieces — Senko Hanabi (/play/senko Canvas 2D sparkler and Web Audio crackle), Ink Departures Board (scroll-driven + JS split-flap Solari board on /work and /projects), and Ennichi Night (/play/ennichi four-colour Showa offset SVG seek-and-find with localStorage progress) — are 100% repository-owned code using existing installed packages (next, react, playwright-core) and static content from content/site.ts. No new third-party APIs, secrets, database migrations, or operator-owned infrastructure are required.",
+  "prerequisites": []
+}
