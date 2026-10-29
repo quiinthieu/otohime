@@ -1,0 +1,7 @@
+Task: pm-299/t-1768, run-9732
+Branch: pm-299-t-1768-ink-shelf
+Subject: pm-299/t-1768: feat: Render the Ink Shelf with sumi-e shaders
+Base: 377dfe09193ff6d0aa3ab4fd02d339749485a19e
+Delivery: the enclosing commit; resolve with:
+git log -1 --format="%H %s" -- projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/artifacts/commits.txt
+The plan-manager summary binds the immutable pushed delivery SHA.

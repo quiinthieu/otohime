@@ -255,6 +255,9 @@ function installLoopCounters() {
     if (src.includes("settled") && src.includes("scattered")) {
       return origRaf(cb);
     }
+    // This separate ambient island owns its lifecycle; count EndStage/Kame here.
+    // A literal marker survives minification, unlike a callback function name.
+    if (src.includes("susuki-ambient-frame")) return origRaf(cb);
     const id = origRaf((ts) => {
       pending.delete(id);
       window.__endPendingRafs = pending.size;
@@ -1789,11 +1792,14 @@ try {
         await page.goto(`${BASE_URL}/`, { waitUntil: "load" });
         await hydrated(page);
         const footer = page.locator("footer.end").filter({ visible: true }).first();
-        await footer.scrollIntoViewIfNeeded();
-        await page.waitForTimeout(200);
+        // A tall footer can intersect while its console stage is offscreen.
+        // Its keyboard listener is active only while that stage intersects.
+        await footer.locator("[data-end-mascot]").focus();
+        await footer.locator("[data-end-stage]").evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+        await page.waitForFunction(() => document.querySelector("footer.end [data-end-stage]")?.getAttribute("data-active") === "true");
 
         for (const k of KONAMI) await page.keyboard.press(k);
-        await page.waitForTimeout(80);
+        const ephemeralSettle = await settleBadge(page);
 
         const ephemeral = await page.evaluate(() => {
           const footer = document.querySelector("footer.end");
@@ -1806,7 +1812,7 @@ try {
         check(
           "blocked localStorage: Konami unlocks ephemerally without throwing a page or console error",
           ephemeral.unlocked === "true" && ephemeral.lcd === "REACHED/THE END" && blockedErrors.length === 0,
-          JSON.stringify({ ephemeral, blockedErrors }),
+          JSON.stringify({ ephemeral, blockedErrors, settle: ephemeralSettle.diag }),
         );
       } finally {
         await context.close();

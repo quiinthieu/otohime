@@ -1,0 +1,20 @@
+ok - real WebGL2 1366px: compile/pixels/focus/hover/idle/filter/context loss {"proof":{"errors":[],"draws":70,"object":true,"normal":true,"composite":true,"glError":0,"dpr":1},"colours":3157,"dark":17095,"suppressed":0,"chunks":["/_next/static/chunks/0ob3qmxyio00h.js","/_next/static/chunks/3pcxvj954w__p.js"],"screenshotSha256":"faa0a6db35536fedd6aa9f9cf861dd0bcbfa65f1edf13fce1e176fcdf86b8146"}
+ok - real WebGL2 390px debug: compile/pixels/focus/hover/idle/filter/context loss {"proof":{"errors":[],"draws":70,"object":true,"normal":true,"composite":true,"glError":0,"dpr":1.5},"colours":271,"dark":1731760,"suppressed":2848,"chunks":["/_next/static/chunks/0ob3qmxyio00h.js","/_next/static/chunks/3pcxvj954w__p.js"],"screenshotSha256":"789814f8b6fcddcecb680c032d1b2f35caef5514339aea08f8c785aeecbd2dde"}
+ok - reduced motion disables pointer parallax {"unchangedPixels":true,"pageErrors":[]}
+ok - no-WebGL negative control {"shelfChunks":0,"pageErrors":[]}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForSelector: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-shelf-mode="flat"]') to be visible
+
+    at /data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/artifacts/task-4-browser-probe.mjs:159:20 {
+  log: [
+    `  - waiting for locator('[data-shelf-mode="flat"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.3

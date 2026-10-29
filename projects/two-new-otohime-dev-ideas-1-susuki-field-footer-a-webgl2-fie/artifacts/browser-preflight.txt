@@ -1,0 +1,73 @@
+ok - real WebGL2 1366px: compile/pixels/focus/hover/idle/filter/context loss {"proof":{"errors":[],"draws":70,"object":true,"normal":true,"composite":true,"glError":0,"dpr":1},"colours":3232,"dark":17107,"suppressed":0,"chunks":["/_next/static/chunks/0ob3qmxyio00h.js","/_next/static/chunks/3pcxvj954w__p.js"],"screenshotSha256":"ed94dbcec0d2471d1529a8263826f9a552d4dba5ee573c010d9008250efe6cd0"}
+ok - real WebGL2 390px debug: compile/pixels/focus/hover/idle/filter/context loss {"proof":{"errors":[],"draws":70,"object":true,"normal":true,"composite":true,"glError":0,"dpr":1.5},"colours":274,"dark":1731760,"suppressed":2848,"chunks":["/_next/static/chunks/0ob3qmxyio00h.js","/_next/static/chunks/3pcxvj954w__p.js"],"screenshotSha256":"85ef0a1b03da740fc9462da7e8e58a3660b2825899c30be9121b51e5fdf6cc3d"}
+ok - reduced motion disables pointer parallax {"unchangedPixels":true,"pageErrors":[]}
+ok - no-WebGL negative control {"shelfChunks":0,"pageErrors":[]}
+ok - Save-Data negative control {"shelfChunks":0,"pageErrors":[]}
+ok - home bundle isolation {"shelfChunks":0,"pageErrors":[]}
+{
+  "browser": "156.0.8078.48",
+  "node": "v22.23.4",
+  "build": "WFj9jJObbWTOqtMxjdPI4",
+  "checks": [
+    {
+      "name": "real WebGL2 1366px: compile/pixels/focus/hover/idle/filter/context loss",
+      "proof": {
+        "errors": [],
+        "draws": 70,
+        "object": true,
+        "normal": true,
+        "composite": true,
+        "glError": 0,
+        "dpr": 1
+      },
+      "colours": 3232,
+      "dark": 17107,
+      "suppressed": 0,
+      "chunks": [
+        "/_next/static/chunks/0ob3qmxyio00h.js",
+        "/_next/static/chunks/3pcxvj954w__p.js"
+      ],
+      "screenshotSha256": "ed94dbcec0d2471d1529a8263826f9a552d4dba5ee573c010d9008250efe6cd0"
+    },
+    {
+      "name": "real WebGL2 390px debug: compile/pixels/focus/hover/idle/filter/context loss",
+      "proof": {
+        "errors": [],
+        "draws": 70,
+        "object": true,
+        "normal": true,
+        "composite": true,
+        "glError": 0,
+        "dpr": 1.5
+      },
+      "colours": 274,
+      "dark": 1731760,
+      "suppressed": 2848,
+      "chunks": [
+        "/_next/static/chunks/0ob3qmxyio00h.js",
+        "/_next/static/chunks/3pcxvj954w__p.js"
+      ],
+      "screenshotSha256": "85ef0a1b03da740fc9462da7e8e58a3660b2825899c30be9121b51e5fdf6cc3d"
+    },
+    {
+      "name": "reduced motion disables pointer parallax",
+      "unchangedPixels": true,
+      "pageErrors": []
+    },
+    {
+      "name": "no-WebGL negative control",
+      "shelfChunks": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "Save-Data negative control",
+      "shelfChunks": 0,
+      "pageErrors": []
+    },
+    {
+      "name": "home bundle isolation",
+      "shelfChunks": 0,
+      "pageErrors": []
+    }
+  ]
+}

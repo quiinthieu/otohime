@@ -1,0 +1,10 @@
+Plan: pm-301
+Task: t-1789
+Run: run-9727
+Branch: pm-301-t-1789-green-gate
+Base: 377dfe0 (freshly fetched origin/main)
+Subject: pm-301/t-1789: fix: handle older Node 22 timezone data in checks
+Delivery: enclosing commit; immutable pushed SHA is recorded in plan_manager_submit_report.git_sha.
+Resolve: git log -1 --format="%H %s" -- projects/otohime-dev-three-new-paper-and-ink-pieces-1-ink-departures/run-9727/artifacts/commits.txt
+Targets: origin/pm-301-t-1789-green-gate and origin/main, normal fast-forward only.
+Exact delivery SHA and push results are also saved in /shared/artifacts/run-9727/commits.txt.

@@ -104,10 +104,35 @@ test("northern, unknown and empty zones default north", () => {
   }
 });
 
-test("every listed southern zone is one Intl knows", () => {
+test("listed southern zones are known to Intl, accounting for the tzdb 2025b addition", () => {
+  const tzdb = process.versions.tz;
   for (const tz of SOUTHERN_ZONES) {
+    // Node 22.x includes releases with tzdb 2024b. Coyhaique was added in
+    // 2025b: https://data.iana.org/time-zones/tzdb-2025b/NEWS
+    // Keep its hemisphere support without requiring a newer host database.
+    if (tz === "America/Coyhaique" && tzdb !== undefined && tzdb < "2025b") {
+      assert.equal(hemisphereFromZone(tz), "south", tz);
+      continue;
+    }
     assert.doesNotThrow(() => new Intl.DateTimeFormat("en-US", { timeZone: tz }), tz);
   }
+});
+
+test("a host missing Coyhaique uses the UTC month while keeping the southern season", (t) => {
+  const DateTimeFormat = Intl.DateTimeFormat;
+  t.mock.method(Intl, "DateTimeFormat", function (...args: Parameters<typeof Intl.DateTimeFormat>) {
+    if (args[1]?.timeZone === "America/Coyhaique") throw new RangeError("Zone absent from host tzdb");
+    return new DateTimeFormat(...args);
+  });
+  // At this instant UTC has crossed into March, while Chile is still in February.
+  const now = new Date("2026-03-01T00:30:00Z");
+  assert.equal(monthIn(now, "America/Coyhaique"), 2);
+  assert.equal(resolveSeason(null, now, "America/Coyhaique"), "autumn");
+  assert.equal(runScript(seasonScript, now, "America/Coyhaique", null), "autumn");
+  // Negative controls: other zones still use their own clock and hemisphere.
+  assert.equal(monthIn(now, "America/Santiago"), 1);
+  assert.equal(resolveSeason(null, now, "America/Santiago"), "summer");
+  assert.equal(resolveSeason(null, now, "Mars/Olympus_Mons"), "spring");
 });
 
 test("the month is read on the visitor's wall clock", () => {

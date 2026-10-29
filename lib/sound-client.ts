@@ -176,6 +176,22 @@ export function play(name: CueName) {
   );
 }
 
+/** Quiet feature cues share the site's gesture-unlocked context and sound preference. */
+export function playCustomCue(cue: Cue): boolean {
+  load();
+  if (!getSound() || typeof document === "undefined" || document.hidden || !cue.notes.length) return false;
+  const c = unlock();
+  if (!c) return false;
+  const asked = performance.now();
+  const begin = () => {
+    if (ctx !== c || !getSound() || document.hidden || c.state !== "running" || performance.now() - asked >= 250) return;
+    schedule(c, cue);
+  };
+  if (c.state === "running") begin();
+  else void c.resume().then(begin, () => {});
+  return true;
+}
+
 // The water: a few seconds of brown noise looped, low-passed, its level breathing on a slow sine.
 export const WATER_DB = -36;
 export const WATER_LOWPASS_HZ = 500;

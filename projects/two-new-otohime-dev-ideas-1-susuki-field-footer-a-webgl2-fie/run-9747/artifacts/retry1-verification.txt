@@ -1,0 +1,186 @@
+=== retry 1 unit: exit 0 ===
+TAP version 13
+# Subtest: grazing depth thresholds scale by 1/ndv and suppress steep plank gradients
+ok 1 - grazing depth thresholds scale by 1/ndv and suppress steep plank gradients
+  ---
+  duration_ms: 0.904556
+  type: 'test'
+  ...
+# Subtest: Sobel depth and normal channels combine by weighted maximum, with independent controls
+ok 2 - Sobel depth and normal channels combine by weighted maximum, with independent controls
+  ---
+  duration_ms: 0.116907
+  type: 'test'
+  ...
+# Subtest: four hatching bands choose exact boundaries and share thresholds with GLSL
+ok 3 - four hatching bands choose exact boundaries and share thresholds with GLSL
+  ---
+  duration_ms: 0.674851
+  type: 'test'
+  ...
+# Subtest: debug query parsing is strict, finite and bounded; uniforms match the inspected state
+ok 4 - debug query parsing is strict, finite and bounded; uniforms match the inspected state
+  ---
+  duration_ms: 0.427012
+  type: 'test'
+  ...
+# Subtest: GLSL uses linearized depth, view-space normals, full Sobel kernels and explicit grazing suppression
+ok 5 - GLSL uses linearized depth, view-space normals, full Sobel kernels and explicit grazing suppression
+  ---
+  duration_ms: 0.233391
+  type: 'test'
+  ...
+# Subtest: bundle isolation: only the shelf lazy renderer and existing atom import Three/R3F
+ok 6 - bundle isolation: only the shelf lazy renderer and existing atom import Three/R3F
+  ---
+  duration_ms: 27.873773
+  type: 'test'
+  ...
+# Subtest: renderer lifecycle keeps demand frames, bounded DPR, context-loss fallback and explicit GPU disposal
+ok 7 - renderer lifecycle keeps demand frames, bounded DPR, context-loss fallback and explicit GPU disposal
+  ---
+  duration_ms: 0.372444
+  type: 'test'
+  ...
+# Subtest: all current linked projects and notes become books with correct routes and newest-left order
+ok 8 - all current linked projects and notes become books with correct routes and newest-left order
+  ---
+  duration_ms: 2.005182
+  type: 'test'
+  ...
+# Subtest: packing fits tilted book extents within 3–4 planks with no overlap, including maximum thickness
+ok 9 - packing fits tilted book extents within 3–4 planks with no overlap, including maximum thickness
+  ---
+  duration_ms: 1.853551
+  type: 'test'
+  ...
+# Subtest: dimensions and tilt are deterministic, input-order independent, content-sensitive and immutable
+ok 10 - dimensions and tilt are deterministic, input-order independent, content-sensitive and immutable
+  ---
+  duration_ms: 0.618239
+  type: 'test'
+  ...
+# Subtest: caps at 40, respects smaller caps, omits unlinked projects and deduplicates identities across input
+ok 11 - caps at 40, respects smaller caps, omits unlinked projects and deduplicates identities across input
+  ---
+  duration_ms: 0.916608
+  type: 'test'
+  ...
+# Subtest: orthographic projection maps all corners to CSS pixels with inverted Y and optional viewport offset
+ok 12 - orthographic projection maps all corners to CSS pixels with inverted Y and optional viewport offset
+  ---
+  duration_ms: 0.946899
+  type: 'test'
+  ...
+# Subtest: perspective projection uses the nearest corners and clips near-plane crossings before division
+ok 13 - perspective projection uses the nearest corners and clips near-plane crossings before division
+  ---
+  duration_ms: 0.733872
+  type: 'test'
+  ...
+# Subtest: a rotated MVP includes extremal corners beyond the box diagonal endpoints
+ok 14 - a rotated MVP includes extremal corners beyond the box diagonal endpoints
+  ---
+  duration_ms: 0.670612
+  type: 'test'
+  ...
+# Subtest: clamps partial books, handles enclosing frusta and rejects offscreen, behind-camera and far-clipped books
+ok 15 - clamps partial books, handles enclosing frusta and rejects offscreen, behind-camera and far-clipped books
+  ---
+  duration_ms: 3.989702
+  type: 'test'
+  ...
+# Subtest: invalid viewport, matrix and bounds return a finite invisible box
+ok 16 - invalid viewport, matrix and bounds return a finite invisible box
+  ---
+  duration_ms: 0.514483
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 132.635671
+
+=== retry 1 test: exit 0 ===
+  ...
+1..2774
+# tests 2792
+# suites 2
+# pass 2792
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 38901.845233
+
+=== retry 1 typecheck: exit 0 ===
+
+> otohime@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+=== retry 1 lint: exit 0 ===
+
+> otohime@0.1.0 lint
+> eslint
+
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(articles)/_components/masthead.tsx
+  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(barometer)/barometer/page.tsx
+  50:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(capsule)/capsule/page.tsx
+  32:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(elements)/elements/page.tsx
+  28:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(orrery)/_components/chrome.tsx
+  16:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(planisphere)/planisphere/page.tsx
+  65:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(rotor)/rotor/page.tsx
+  43:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(shore)/shore/page.tsx
+  35:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/app/(vinyl)/vinyl/page.tsx
+  31:12  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-html-link-for-pages')
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/e2e/crumple.test.ts
+  116:5  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  118:5  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/acceptance/run-9385/walk-local.mjs
+  182:9  warning  'cSaw' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs
+  2:46  warning  'resolve' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 13 problems (0 errors, 13 warnings)
+  0 errors and 9 warnings potentially fixable with the `--fix` option.
+
+=== retry 1 build: exit 0 ===
+✓ Compiled successfully in 847ms
+  Finished TypeScript in 4.5s ...
+  Generating static pages using 19 workers (0/219) ...
+  Generating static pages using 19 workers (54/219)
+  Generating static pages using 19 workers (109/219)
+  Generating static pages using 19 workers (164/219)
+✓ Generating static pages using 19 workers (219/219) in 3.1s
+├ ◐ /shelf                                      1d      1w
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
