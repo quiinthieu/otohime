@@ -82,6 +82,8 @@ test("mobile reduced motion disables shake and preserves the static no-JS trace"
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth<=innerWidth));
   const nojs = await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
   const staticPage = await nojs.newPage(); await staticPage.goto(`${base}/work`,{waitUntil:"domcontentloaded",timeout:120_000});
+  await staticPage.waitForLoadState("load");
+  await staticPage.evaluate(async () => { await document.fonts.ready; });
   assert.ok((await staticPage.locator(".seismo-trace").getAttribute("d"))!.length>4000);
   assert.ok(await staticPage.locator(".seismo-events a").count()>10);
   assert.ok(await staticPage.evaluate(() => document.documentElement.scrollWidth<=innerWidth));
