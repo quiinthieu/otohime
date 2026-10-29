@@ -14,6 +14,7 @@
 // the next page in, read once a frame from getAnimations(); under reduced motion each completes and nothing runs.
 import pg from "pg";
 import { launchBrowser } from "./probe-browser.mjs";
+import { landingSettled } from "./probe-motion-state.mjs";
 
 const BASE_URL = process.env.BASE_URL;
 const RUN = process.env.PROBE_RUN;
@@ -128,18 +129,12 @@ async function open(browser, { viewport, reduced, cookies = [] }) {
 }
 
 // The landing has settled: the hop's transition has finished, every Suspense boundary has revealed, no transition
-// of React's is in flight and every finite animation is done. Then a beat, so a late rejection still surfaces.
+// of React's is in flight and every finite clock animation is done. Scroll-driven
+// departures drums can remain at their current progress. Then a beat for late rejections.
 async function settle(page) {
   const settled = await page
     .waitForFunction(
-      () =>
-        window.__probe?.done === true &&
-        !document.querySelector('template[id^="B:"]') &&
-        !document.__reactViewTransition &&
-        document
-          .getAnimations()
-          .filter((a) => a.effect?.getComputedTiming().endTime !== Infinity)
-          .every((a) => a.playState === "finished" || a.playState === "idle"),
+      landingSettled,
       null,
       { timeout: 10_000 },
     )
