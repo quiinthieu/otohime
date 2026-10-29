@@ -1,0 +1,13 @@
+Plan: pm-300
+Task: t-1773
+Run: run-9684
+Branch: pm-300-t-1773-delivery-run-9684
+Integration base: c5154c6a0efd877c156a18c1bb8a3e1c349c312c
+Retained rescued commit: 5141a48c43402c4506508e5af8ff89ebe754f765
+Original implementation: 0848628775af6990fef385255addd4be2eb5d16e
+Recovery subject: pm-300/t-1773: docs: record verified Shimi delivery recovery
+Delivery commit: enclosing recovery commit; see post-push summary git_sha.
+Resolve: git log -1 --format=%H -- projects/otohime-dev-two-ink-creature-experiments-1-shimi-bookworms-a/run-9684/artifacts/commits.txt
+Push: git push origin HEAD; git push origin HEAD:main (normal fast-forward).
+No original source/test work dropped; two task-prefixed commits preserved.
+The worker shared/artifacts/commits.txt records immutable delivery SHAs after commit.
