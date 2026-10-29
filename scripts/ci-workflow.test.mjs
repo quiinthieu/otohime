@@ -170,9 +170,9 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks budgets the full browser suite with a 45m job, 32m step and 1800s bound", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "45");
-  assert.match(workflow, /40825297324 and 40830688310 exhausted 1200s around the Susuki cases/);
+test("checks budgets the full browser suite with a 50m job, 32m step and 1800s bound", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "50");
+  assert.match(workflow, /40820018472 exhausted 960s at the peep-box cases/);
   const checks = steps("checks");
   assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 32\n/);
   const e2e = gateBody("E2E against next start");

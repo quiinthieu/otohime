@@ -39,13 +39,12 @@ jobs:
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
     runs-on: ubuntu-24.04
-    # Runs 40825297324 and 40830688310 exhausted 1200s around the Susuki cases
-    # at cases 273 / 272, before tactile and timeline coverage.
-    # Allow 1800s for the full serial suite, 32m for readiness/TERM/diagnostics,
-    # and 45m for setup and all probes.
+    # Run 40820018472 exhausted 960s at the peep-box cases, before the palace
+    # and remaining browser coverage. Run 40837465689 exhausted 1200s without assertion failures. Allow 1800s for the serial suite,
+    # 32m for readiness/TERM/diagnostics, and 50m for all probes.
     # Individual assertions retain their timeouts; exit 124 still fails the job.
     # Motion's paced auth requests explain its 171s; no runtime browser installers in CI.
-    timeout-minutes: 45
+    timeout-minutes: 50
     services:
       postgres:
         image: postgres:17-alpine
