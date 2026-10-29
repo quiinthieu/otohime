@@ -503,6 +503,7 @@ test("site paper-and-ink CSS tokens, opaque surfaces/borders, sticky status-bar 
       viewport,
       ...(viewport.width === 390 ? { isMobile: true, hasTouch: true } : {}),
     });
+    await page.clock.install({ time: new Date("2026-10-29T12:00:00Z") });
     await page.goto(`${BASE}/play/pachinko?seed=1346454344`);
     await page
       .locator('[data-testid="pachinko-root"][data-hydrated="true"]')
@@ -651,18 +652,21 @@ test("site paper-and-ink CSS tokens, opaque surfaces/borders, sticky status-bar 
     // (d) Click Backfill (60 records) and verify it drains completely back to IN-FLIGHT: 0 with completed >= 30
     const backfillBtn = page.getByTestId("pachinko-backfill-btn");
     assert.equal(await backfillBtn.getAttribute("data-batch-size"), "60");
+    // An idle future milestone cannot expire during browser IPC. Then run real
+    // renderer frames: runner CPU stalls must not consume the physics budget.
+    await page.clock.pauseAt(new Date("2026-10-29T13:00:00Z"));
     await backfillBtn.click();
-
-    await page.waitForFunction(
-      () => {
+    let drained = false;
+    for (let elapsed = 0; elapsed < 12_000 && !drained; elapsed += 500) {
+      await page.clock.runFor(500);
+      drained = await page.evaluate(() => {
         const activeBadge = document.querySelector('[data-testid="pachinko-active-badge"]');
         const settledEl = document.querySelector('[data-testid="pachinko-readout-settled"]');
         const settled = Number.parseInt(settledEl?.textContent || "0", 10);
         return activeBadge?.textContent?.trim() === "IN-FLIGHT: 0" && settled >= 30;
-      },
-      undefined,
-      { timeout: 12_000 },
-    );
+      });
+    }
+    assert.ok(drained, "all 60 records drain within 12 seconds of real browser simulation frames");
 
     const drainSummary = await page.evaluate(() => {
       const activeText = document.querySelector('[data-testid="pachinko-active-badge"]')?.textContent?.trim() ?? "";
