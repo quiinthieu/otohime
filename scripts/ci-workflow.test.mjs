@@ -510,6 +510,8 @@ test("guestbook author guard rejects a wrong-author schema or migration-only pus
 
     const [ownFrom, ownTo] = push(["db/migrations/0008_owner.sql", owner], ["db/schema.ts", owner]);
     assert.equal(run(ownFrom, ownTo).status, 0);
+    const [profileFrom, profileTo] = push(["lib/guestbook-profile.ts", { name: "Ōtohime", email: owner.email }]);
+    assert.equal(run(profileFrom, profileTo).status, 0, "GitHub squash merges use the owner's profile spelling");
     const [otherFrom, otherTo] = push(["docs/unrelated.md", stranger], ["db/seed-notes.txt", stranger]);
     assert.equal(run(otherFrom, otherTo).status, 0, "paths outside the guarded set are not author-gated here");
 

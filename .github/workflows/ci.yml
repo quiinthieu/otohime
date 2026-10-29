@@ -84,7 +84,7 @@ jobs:
           for commit in $commits; do
             if git diff-tree --no-commit-id --name-only -r "$commit" | grep -Eq '^(app/api/guestbook/|lib/guestbook[^/]*|e2e/guestbook-api\.test\.ts$|db/schema\.ts$|db/migrations/)'; then
               author="$(git show -s --format='%an <%ae>' "$commit")"
-              if [ "$author" != 'Otohime <quiinthieu@gmail.com>' ]; then
+              if [ "$author" != 'Otohime <quiinthieu@gmail.com>' ] && [ "$author" != 'Ōtohime <quiinthieu@gmail.com>' ]; then
                 echo "Guestbook delivery $commit has an undeployable author: $author" >&2
                 exit 1
               fi
