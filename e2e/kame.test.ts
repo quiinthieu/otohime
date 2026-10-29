@@ -158,7 +158,9 @@ test("keyboard hold threshold, focus loss, live reduced motion and Pocket pause"
   await page.locator('[data-kame][data-state="pet"]').waitFor({ state: "attached", timeout: 2_000 });
   assert.equal(await state(page), "pet", "the focused key remains held beyond the 500ms threshold");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
+  // A later fixture hour cannot expire while browser protocol work is queued.
+  // Keep the preceding resumed hold measured on the flowing browser clock.
+  await page.clock.pauseAt(new Date("2026-10-26T14:00:00+09:00"));
   await page.keyboard.down("Enter"); await page.clock.runFor(500); assert.equal(await state(page), "pet");
   await page.getByLabel("Kame name").focus(); await page.keyboard.up("Enter"); assert.equal(await state(page), "swim");
   await page.getByLabel("Kame name").fill("k"); await page.getByLabel("Kame name").press("k"); assert.equal(await state(page), "swim", "typing k is not Call");
