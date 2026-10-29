@@ -1,0 +1,779 @@
+{
+  "run": "run-9776",
+  "observedAt": "2026-10-29T05:51:40.857Z",
+  "history": [
+    {
+      "status": "FAILED",
+      "pages": [
+        {
+          "offset": 0,
+          "limit": 20,
+          "total": 1427,
+          "returned": 20,
+          "tasks": [
+            {
+              "id": "ccec25dc-879d-4544-9b2d-7632ecb5f966",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "fb965773-e5ed-4b67-ba6b-ecc9f522f1fb",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "ea0fa767-0221-4ddf-8cff-d25c2548790f",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "69c49b3b-b884-40c3-9493-d60e0e225491",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "b96936f3-0550-45ac-85ef-0c1edae496f3",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9772",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 79048861aeb5 is not on origin/main"
+            },
+            {
+              "id": "2ed62246-e998-48f1-9817-4df5bfd7a59a",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9768",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 233a5331f0ae is not on origin/main"
+            },
+            {
+              "id": "9d0df73b-96be-410b-b97c-f5bc2c64469f",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "0b470ee5-4258-457a-a004-7583a4a1aca5",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "b3691594-5188-4c8f-a68b-6c5ac3f2a4be",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "ce07158e-f243-4776-a0ea-a858572d5ad9",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "522476b8-1ca1-4c79-b554-61e7d9463b22",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "477f0d9a-659d-4167-916b-399399cfbd60",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "e2f38e78-be24-4a0b-8ece-31d36002cafd",
+              "status": "FAILED",
+              "taskType": "colab_session",
+              "error": "task exited with code 1"
+            },
+            {
+              "id": "272cf1b8-fa52-481a-97f7-7835c0612476",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9759",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD ed7ae6f5668b is not on origin/main"
+            },
+            {
+              "id": "1dedbb48-df4c-48d9-ab09-1c4b7dc12084",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "9efbbe71-cb9a-4a93-af77-a8f7c660fdae",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "0da075b4-fb73-40f9-85c1-afc04f027f26",
+              "status": "FAILED",
+              "taskType": "generation_task",
+              "run": "61f200e2-2051-563a-bc71-085c08f9ff23",
+              "error": "E_RIG_FAILED"
+            },
+            {
+              "id": "e4107cff-995c-4579-875b-642342f3aceb",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "b0eb79c8-e890-48b8-afea-f59644c871b8",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "2b6dfa03-e415-49c3-a069-ff2d66292236",
+              "status": "FAILED",
+              "taskType": "colab_session",
+              "error": "task exited with code 1"
+            }
+          ]
+        },
+        {
+          "offset": 20,
+          "limit": 20,
+          "total": 1427,
+          "returned": 20,
+          "tasks": [
+            {
+              "id": "c005ce6e-5511-4aaf-a64c-f047b32f69b3",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "6fba08ef-4c4e-447a-90d0-9ce021741710",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "3f97b898-21b5-47f2-a705-bbc7dc43806b",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "20fb5be3-d718-4e63-bd6c-65464180c216",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "90edc09d-8fb5-4d62-b96a-69b96da201be",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9743",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD fb5cbef26858 is not on origin/main"
+            },
+            {
+              "id": "7eaf54fa-0f85-45a6-b7fb-26510862d554",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9742",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD bcd013a8d0c7 is not on origin/main"
+            },
+            {
+              "id": "4e42b6d2-b209-4a13-be08-accaa8230180",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "6c57292b-616c-4326-a124-0ad7dfa36908",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "8a0ce780-20f1-44a3-83f1-9dcaa57ab43a",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9736",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 75e318e6e7c7 is not on origin/main"
+            },
+            {
+              "id": "2e2737fa-f04e-46ad-8301-3be7f9b43eff",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "586af897-2a4e-42d4-a32e-1def4b153755",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9732",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3709f2e4f907 is not on origin/main"
+            },
+            {
+              "id": "4fc9141f-9560-4528-981c-bff0b79697ce",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "e316df02-f928-4242-9cf8-b3f96580618e",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "7767502d-fac8-4cc1-9303-e7cdc44f19b0",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "3b2961cb-b97c-4e66-b6c4-162b12057bc8",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "57bb379f-f58a-4a74-a5ad-3f4f5cfc304c",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "be8b9c37-e86d-4296-b885-9c179e21a85c",
+              "status": "FAILED",
+              "taskType": "build_task",
+              "error": "build_failed: exit 2"
+            },
+            {
+              "id": "09d31a2d-bcd9-4e5f-b279-6e0be2c0fe3e",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9716",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4f681ca0d631 is not on origin/main"
+            },
+            {
+              "id": "349d1eff-92a2-4a71-9f05-d22d7779753e",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9709",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 4fac0dfb4af9 is not on origin/main"
+            },
+            {
+              "id": "8a15e6b9-f8f7-477f-8411-45d7839f1b17",
+              "status": "FAILED",
+              "taskType": "coding_task",
+              "run": "run-9708",
+              "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD d980a7ad43b9 is not on origin/main"
+            }
+          ]
+        }
+      ],
+      "complete": false
+    },
+    {
+      "status": "COMPLETED",
+      "pages": [
+        {
+          "offset": 0,
+          "limit": 20,
+          "total": 4495,
+          "returned": 20,
+          "tasks": [
+            {
+              "id": "b7abcc01-fd89-4b42-b077-1f69a8464754",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "abf206ab-8c5d-4541-b9ff-29cc418fc7b3",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "3e6ad82f-2113-4f39-adbf-8e13b7569635",
+              "status": "COMPLETED",
+              "taskType": "maintenance_task"
+            },
+            {
+              "id": "abb9e1ec-73f8-4670-b754-b1e0a3ea2112",
+              "status": "COMPLETED",
+              "taskType": "coding_task"
+            },
+            {
+              "id": "9be59750-cbff-4726-99dc-c41835f68018",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9775"
+            },
+            {
+              "id": "2dde87d7-a961-4479-b0f5-7e3c76d1debb",
+              "status": "COMPLETED",
+              "taskType": "maintenance_task"
+            },
+            {
+              "id": "e412749f-986e-4b07-81d9-a2a6f5ccf6b3",
+              "status": "COMPLETED",
+              "taskType": "maintenance_task"
+            },
+            {
+              "id": "da3e879c-99f6-4319-b51a-c80c3a02d1d4",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9771"
+            },
+            {
+              "id": "49782329-ed72-4f34-a9d3-34e0a0f76033",
+              "status": "COMPLETED",
+              "taskType": "maintenance_task"
+            },
+            {
+              "id": "650d2924-b6d3-4bbf-80f5-a3c74798d1af",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "191d6be0-0b58-444f-a081-b012825e3f59",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "80d2fcba-7f2a-4723-b7bb-2dfa697c2b8b",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "harvest-3e811b9a09c90f21"
+            },
+            {
+              "id": "6423677c-8055-401e-b73f-738c9fefa689",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9770"
+            },
+            {
+              "id": "39aad081-1bb9-4e7f-8bca-1455d78afe0b",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "can-529"
+            },
+            {
+              "id": "cb8db753-d485-4d4b-abcd-b257a99eacae",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9769"
+            },
+            {
+              "id": "028d1a0c-a1e3-4370-8631-c9c4e3c67694",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9767"
+            },
+            {
+              "id": "9f4dcb22-f58f-4f15-9300-3a5c9dccb209",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "d45f80cb-ce8f-402f-aef3-c128cd17ead4",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "5ef9a188-a0a0-4134-a5cf-41d067acb2bc",
+              "status": "COMPLETED",
+              "taskType": "ask_task",
+              "run": "run-9766"
+            },
+            {
+              "id": "66a8e5d1-8a97-44b1-a62c-7af3532f75f3",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9765"
+            }
+          ]
+        },
+        {
+          "offset": 20,
+          "limit": 20,
+          "total": 4495,
+          "returned": 20,
+          "tasks": [
+            {
+              "id": "a32707a7-23ab-4297-a190-637d61968245",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9763"
+            },
+            {
+              "id": "0447f21d-17c3-42dd-b5e0-2b3c974cc09e",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9764"
+            },
+            {
+              "id": "8644eb9e-78a7-4601-8389-6641a2592067",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "c673696b-6a61-4929-8afb-db6acde46f62",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "78d8524b-800e-4fe1-88ae-57083c8cdc47",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9761"
+            },
+            {
+              "id": "07d8c751-2d5a-47ea-8ef4-65f78beb9956",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9760"
+            },
+            {
+              "id": "d436c30c-13ff-4845-8441-ca1386d8b993",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "2cb2ed75-775f-434c-984f-e8b7797461a2",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "8eee5fed-619a-478b-af13-1a5fafe4bf59",
+              "status": "COMPLETED",
+              "taskType": "tabular-scraper"
+            },
+            {
+              "id": "1b685240-e9ad-48fb-bb6a-f9f92ef3e5f0",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9758"
+            },
+            {
+              "id": "9fa3edf3-f749-4175-9cec-0be3f1c901cf",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9757"
+            },
+            {
+              "id": "bfd3cfcd-a335-484d-afa3-ac118829f057",
+              "status": "COMPLETED",
+              "taskType": "coding_task"
+            },
+            {
+              "id": "57a197f4-e415-4277-af77-a06736adb5a2",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "d1c1dada-432d-4679-93a1-9df5489b0aec",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "af40b00a-9b26-45b6-b971-49781a2790d3",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "harvest-34d24ce89a12dd13"
+            },
+            {
+              "id": "e738ae30-9a1f-40e0-b89d-2ae652fa225a",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9756"
+            },
+            {
+              "id": "e811afb3-464a-4e58-a1dd-6297ae795c92",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9755"
+            },
+            {
+              "id": "8f916deb-fa59-476f-8bb9-5ee2b9359698",
+              "status": "COMPLETED",
+              "taskType": "coding_task",
+              "run": "run-9754"
+            },
+            {
+              "id": "3a148218-6684-4c71-87df-605c0c8afff9",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            },
+            {
+              "id": "6bba3f07-5b42-4e57-b169-994daf66db53",
+              "status": "COMPLETED",
+              "taskType": "build_task"
+            }
+          ]
+        }
+      ],
+      "complete": false
+    },
+    {
+      "status": "RUNNING",
+      "pages": [
+        {
+          "offset": 0,
+          "limit": 20,
+          "total": 4,
+          "returned": 4,
+          "tasks": [
+            {
+              "id": "c923af5c-3dcf-408d-ad59-bdaf955b7a8e",
+              "status": "RUNNING",
+              "taskType": "coding_task",
+              "run": "run-9776"
+            },
+            {
+              "id": "5153eecf-c021-4b1c-8829-1688eb9fd47f",
+              "status": "RUNNING",
+              "taskType": "coding_task",
+              "run": "run-9774"
+            },
+            {
+              "id": "e6389254-b5b6-43c8-924d-0c62ffed3e68",
+              "status": "RUNNING",
+              "taskType": "coding_task",
+              "run": "run-9773"
+            },
+            {
+              "id": "25ff8c21-4e3c-4595-b0bc-c913791be4b1",
+              "status": "RUNNING",
+              "taskType": "coding_task",
+              "run": "run-9762"
+            }
+          ]
+        }
+      ],
+      "complete": true
+    },
+    {
+      "status": "PENDING",
+      "pages": [
+        {
+          "offset": 0,
+          "limit": 20,
+          "total": 1,
+          "returned": 1,
+          "tasks": [
+            {
+              "id": "0b5d096b-9840-493e-9768-129211aaa207",
+              "status": "PENDING",
+              "taskType": "coding_task",
+              "run": "run-9777"
+            }
+          ]
+        }
+      ],
+      "complete": true
+    }
+  ],
+  "raw": [
+    {
+      "id": "2ed62246-e998-48f1-9817-4df5bfd7a59a",
+      "status": "FAILED",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 233a5331f0ae is not on origin/main",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "planRun": {
+        "id": "run-9768",
+        "status": "failed",
+        "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 233a5331f0ae is not on origin/main",
+        "callback_apply_failures": 0,
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+      },
+      "returnedLogLines": 1070,
+      "readScope": "Read final bounded tail for publication/failure/exit evidence; retain last 40 lines. Earlier returned material and older logs are not a complete historical audit.",
+      "tail": [
+        "remote:",
+        "remote: Create a pull request for 'pm-299-t-1768-author-handoff-run-9768' on GitHub by visiting:",
+        "remote:      https://github.com/quiinthieu/otohime/pull/new/pm-299-t-1768-author-handoff-run-9768",
+        "remote:",
+        "To github.com:quiinthieu/otohime.git",
+        " * [new branch]      HEAD -> pm-299-t-1768-author-handoff-run-9768",
+        "",
+        "mcp: plan-manager/plan_manager_submit_report started",
+        "mcp: plan-manager/plan_manager_submit_report (completed)",
+        "codex",
+        "Pushed `233a5331f0aec37ef6f58f84081d1f2b7bf89ab9` to `pm-299-t-1768-author-handoff-run-9768` and submitted the summary.",
+        "",
+        "All 16 shelf tests, 2,792 repository tests, typecheck, lint and build passed. CI was not watched.",
+        "",
+        "The existing implementation remains unchanged. **t-1768 remains unaccepted** until QA can read and verify the protected `author.txt` artifact.",
+        "tokens used",
+        "81,896",
+        "Pushed `233a5331f0aec37ef6f58f84081d1f2b7bf89ab9` to `pm-299-t-1768-author-handoff-run-9768` and submitted the summary.",
+        "",
+        "All 16 shelf tests, 2,792 repository tests, typecheck, lint and build passed. CI was not watched.",
+        "",
+        "The existing implementation remains unchanged. **t-1768 remains unaccepted** until QA can read and verify the protected `author.txt` artifact.",
+        "---",
+        "Command exited with code: 0",
+        "push_not_on_main: HEAD 233a5331f0aec37ef6f58f84081d1f2b7bf89ab9 is not on origin/main (1 commit(s) since 3977e52e3ecd5cc27082d6aae4fc976fd34c03dd); cutting task-rescue/2ed62246-e998-48f1-9817-4df5bfd7a59a",
+        "progress phase=rescue",
+        "=== rescue: preserving workspace of failed task (exit code 1, phase agent, budget 60s) ===",
+        "On branch pm-299-t-1768-author-handoff-run-9768",
+        "Your branch and 'origin/main' have diverged,",
+        "and have 1 and 1 different commits each, respectively.",
+        "",
+        "nothing to commit, working tree clean",
+        "remote:",
+        "remote: Create a pull request for 'task-rescue/2ed62246-e998-48f1-9817-4df5bfd7a59a' on GitHub by visiting:",
+        "remote:      https://github.com/quiinthieu/otohime/pull/new/task-rescue/2ed62246-e998-48f1-9817-4df5bfd7a59a",
+        "remote:",
+        "To github.com:quiinthieu/otohime.git",
+        " * [new branch]      HEAD -> task-rescue/2ed62246-e998-48f1-9817-4df5bfd7a59a",
+        "rescue: pushed working state to branch task-rescue/2ed62246-e998-48f1-9817-4df5bfd7a59a",
+        "=== rescue: done ==="
+      ]
+    },
+    {
+      "id": "da3e879c-99f6-4319-b51a-c80c3a02d1d4",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "planRun": {
+        "id": "run-9771",
+        "status": "succeeded",
+        "callback_apply_failures": 0,
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+      },
+      "returnedLogLines": 1094,
+      "readScope": "Read final bounded tail for publication/failure/exit evidence; retain last 40 lines. Earlier returned material and older logs are not a complete historical audit.",
+      "tail": [
+        "+| --- | --- |",
+        "+| `shelf-shader-unit` | 16 tests pass; zero failures/skips. Numerical grazing/silhouette, hatching, debug parsing/uniforms, GLSL, import isolation and lifecycle assertions execute. |",
+        "+| `repo-checks-and-build` | 2,794 repository tests pass, two suites, zero failures/skips; typecheck passes; lint has zero errors and 13 existing warnings; build generates 219/219 static pages including `/shelf`. Build ID: `qNOoCj6eTCrQ5LyAz-GSZ`. Existing Better Auth diagnostics do not fail the build. |",
+        "+| Real dependency construction | Actual locked Three/Fiber imports resolve. Real `ShaderMaterial`, `WebGLRenderTarget` and attached `DepthTexture` construct and dispose. No WebGL context or rendered pixel is claimed by this check. |",
+        "+| Executable correlation | All ten source/lock/config hashes match `run-9747/artifacts/executable-fingerprint.json`. Recomputed fingerprint: `d2ebb604525ce8933bbbe3ff088d6532b4a5d3d80e7f0d73a709619ded49c8d6`. Documentation SHAs do not represent executable changes. |",
+        "+| Negative control | In a temporary copy only, change `SHELF_THRESHOLDS.minNdv` from 0.2 to 0.1. The existing grazing test fails with `ERR_ASSERTION`, actual `0.17999999999999997` versus expected `Infinity`, exit 1. Repository source stays unchanged. This is SWE test-sensitivity evidence, not independent QA. |",
+        "+",
+        "+Prebuild-regenerated `content/history.json` was returned to its initially clean committed bytes. Build output, binaries and vendor files are excluded from the commit.",
+        "+",
+        "+## Evidence completeness and unresolved acceptance",
+        "+",
+        "+[Platform evidence](artifacts/platform-evidence.json) records two bounded native pages each of FAILED and COMPLETED jobs (offsets 0 and 20, limit 20): **40/165 FAILED**, **40/1,145 COMPLETED**. Those histories are incomplete; unread older jobs are inconclusive. All **5/5 RUNNING** jobs were returned. The plan's unfiltered SWE list returns 16 runs, including six for t-1768: three succeeded, two failed, one running. The literal `completed` plan status returns no rows because success is named `succeeded`; no absence is inferred from that empty filter. The successful delivery task `0671daac-7af4-4d24-8d86-920cecb2f1fb` independently persists COMPLETED with a delivered callback and one attempt; its bounded raw tail reports branch/main publication of f54f160 and exit 0. Raw logs are bounded/truncated overall, not a complete historical audit. No remote runtime executable, durable capacity queue job or new callback is submitted by this documentation recovery.",
+        "+",
+        "+Implementation integration and previous browser execution are historical observations recorded in the earlier evidence. Fresh local assertions, imports and a production build are demonstrated here; no new browser execution, deployed integration or delivered product acceptance is claimed. No capacity is awaited and no executable defect is hidden behind this authorization issue. The earlier independent QA remains responsible for its original browser proof boundaries.",
+        "+",
+        "+`esc-475` records an answer that access cannot be provided now, not successful access or an acceptance override. Do not reconstruct the protected artifact from Git author, its manifest digest or another task's matching metadata. No artifact request, repeated escalation or operator polling is performed.",
+        "+",
+        "+Deferred check **`t-1768/delivery-author-artifact`**: the human operator must grant QA read access to task `0671daac-7af4-4d24-8d86-920cecb2f1fb/artifacts/author.txt` or attach its exact **44 bytes**. QA must independently verify SHA-256 **`7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada`**, required Otohime identity and absence of `Co-Authored-By`, then rerun current delivered-SHA/deployment checks. Failure condition: unreadable bytes, a hash/identity/trailer mismatch, or unbound current delivery/deployment. Passing local gates or earlier deployed browser checks cannot waive it. No fresh CI result is observed. Independent t-1766 repair remains outside this task.",
+        "diff --git a/projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/task-4-evidence.md b/projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/task-4-evidence.md",
+        "index 5c206f05bfade4bea9391dd4b703085f88a13e74..c727ccb8fc7adf35ee57c9b512cd39a0bec1683c",
+        "--- a/projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/task-4-evidence.md",
+        "+++ b/projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/task-4-evidence.md",
+        "@@ -1,6 +1,6 @@",
+        " # t-1768 \u2014 Three.js Ink Shelf",
+        "",
+        "-Current authorization continuation: [run-9768 handoff](run-9768/summary.md). Fresh local checks pass (16 shelf tests, 2,792 repository tests, typecheck, lint and build), and a temporary cutoff mutation is rejected. **t-1768 remains unaccepted** under esc-475: QA must read and independently verify the protected delivery `author.txt`; neither prior executable/deployed checks nor this documentation delivery waive that requirement.",
+        "+Current publication recovery: [run-9771 handoff](run-9771/summary.md). Fresh local checks pass (16 shelf tests, 2,794 repository tests, typecheck, lint and build), the executable fingerprint is unchanged, and a temporary cutoff mutation is rejected. The prior branch-only handoff failed the runner's `push_not_on_main` check; this documentation recovery preserves it and publishes with `[skip ci]`. **t-1768 remains unaccepted** under esc-475: QA must read and independently verify the protected delivery `author.txt`; neither prior executable/deployed checks nor this documentation delivery waive that requirement. [Previous handoff](run-9768/summary.md) remains historical evidence.",
+        "",
+        " ## Delivery recovery \u2014 run-9747",
+        "",
+        "",
+        "tokens used",
+        "103,044",
+        "Pushed `017810c694e4e9ea256fc543b3ec213695875cc6` to `pm-299-t-1768-author-recovery-run-9771` and fast-forwarded `main`, fixing the publication failure.",
+        "",
+        "Passed: 16 shelf tests, 2,794 repository tests, typecheck, lint and build. Summary submitted. CI skip requested; no CI result observed.",
+        "",
+        "Application code remains unchanged. **t-1768 remains unaccepted** until QA verifies the protected `author.txt`.",
+        "---",
+        "Command exited with code: 0"
+      ]
+    },
+    {
+      "id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+      "status": "COMPLETED",
+      "callbackState": "delivered",
+      "callbackAttempts": 1,
+      "planRun": {
+        "id": "run-9747",
+        "status": "succeeded",
+        "callback_apply_failures": 0,
+        "agent_profile": "codex-sol-6-1-high",
+        "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'"
+      },
+      "returnedLogLines": 645,
+      "readScope": "Read final bounded tail for publication/failure/exit evidence; retain last 40 lines. Earlier returned material and older logs are not a complete historical audit.",
+      "tail": [
+        "",
+        "exec",
+        "/bin/bash -lc \"bash scripts/setup-owner-git.sh --check && git commit -m 'pm-299/t-1768: docs: Record second verified publication retry' && git status --short && git log -1 --format='%H %s' && git push origin HEAD HEAD:main --atomic\" in /data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime",
+        " succeeded in 4013ms:",
+        "Effective commit author: Otohime <quiinthieu@gmail.com> 1793249445 +0700",
+        "[pm-299-t-1768-delivery-recovery f54f160] pm-299/t-1768: docs: Record second verified publication retry",
+        " 4 files changed, 240 insertions(+), 1 deletion(-)",
+        " create mode 100644 projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9747/artifacts/retry2-executable-fingerprint.json",
+        " create mode 100644 projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9747/artifacts/retry2-verification.txt",
+        "f54f160a9e40284090f0332c2f5dca55d147ecfd pm-299/t-1768: docs: Record second verified publication retry",
+        "To github.com:quiinthieu/otohime.git",
+        "   463f3c8..f54f160  HEAD -> main",
+        " * [new branch]      HEAD -> pm-299-t-1768-delivery-recovery",
+        "",
+        "mcp: plan-manager/plan_manager_submit_report started",
+        "mcp: plan-manager/plan_manager_submit_report (completed)",
+        "codex",
+        "Delivered the 3D Ink Shelf and fixed the Save-Data browser probe.",
+        "",
+        "- Branch: `pm-299-t-1768-delivery-recovery`",
+        "- Commit: `f54f160a9e40284090f0332c2f5dca55d147ecfd`",
+        "- Pushed branch and fast-forwarded `main`.",
+        "- Passed: 2,792 tests, 16 shelf tests, typecheck, lint, build, and six browser checks.",
+        "- CI: unobserved, per contract.",
+        "",
+        "Evidence committed and plan-manager summary submitted.",
+        "2026-10-29T04:51:26.082037Z ERROR codex_core::session: failed to record rollout items: thread 01a185f4-ea83-7632-ac91-330f006c7e3a not found",
+        "tokens used",
+        "135,725",
+        "Delivered the 3D Ink Shelf and fixed the Save-Data browser probe.",
+        "",
+        "- Branch: `pm-299-t-1768-delivery-recovery`",
+        "- Commit: `f54f160a9e40284090f0332c2f5dca55d147ecfd`",
+        "- Pushed branch and fast-forwarded `main`.",
+        "- Passed: 2,792 tests, 16 shelf tests, typecheck, lint, build, and six browser checks.",
+        "- CI: unobserved, per contract.",
+        "",
+        "Evidence committed and plan-manager summary submitted.",
+        "---",
+        "Command exited with code: 0"
+      ]
+    }
+  ],
+  "artifact": {
+    "task_id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+    "name": "author.txt",
+    "content_type": "application/octet-stream",
+    "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+    "size": 44,
+    "bytesRead": false,
+    "authorization": "esc-475 expressly unavailable; not inferred from Git/digest"
+  },
+  "runProfile": [
+    {
+      "id": "run-9776",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "tm_task_id": "c923af5c-3dcf-408d-ad59-bdaf955b7a8e"
+    }
+  ],
+  "greenGate": {
+    "id": "ver-3885",
+    "sha": "017810c",
+    "status": "pass"
+  },
+  "ci": {
+    "status": "unproven",
+    "evidence": "Unauthenticated GitHub API HTTP403; otohime registry ci_token empty; fleet-qa secret read forbidden. No CI dispatch."
+  }
+}

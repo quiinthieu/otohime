@@ -1,0 +1,238 @@
+{
+  "plan_id": "pm-301",
+  "task_id": "t-1788",
+  "run_id": "run-9780",
+  "publication_retry": 1,
+  "branch": "pm-301-t-1788-camera-build-reuse-r1",
+  "integrated_base": "b241fd1873f9431ed7a0c859272d1844c731b07c",
+  "verified_implementation_commit": "49f62e7dcc5f947a2e9b90fdc574eefa819b4664",
+  "delivery": "Enclosing retry-evidence commit; exact pushed SHA in plan-manager summary.",
+  "runtime": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "high",
+    "evidence": "Actual parent Codex CLI --model and model_reasoning_effort arguments; no distinct named profile supplied",
+    "worker": "avietidol-z490",
+    "node": "v22.23.3",
+    "npm": "10.9.9",
+    "next": "16.4.2",
+    "playwright_core": "1.64.0",
+    "chrome": "156.0.8078.47"
+  },
+  "checks": {
+    "departures-e2e": {
+      "exit_code": 0,
+      "tap": {
+        "tests": 17,
+        "pass": 17,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 51714.53499
+      },
+      "log_sha256": "36bc5935ccc11decc40349238cf2b046d37d17f4daf1342c159abb03434c7a21",
+      "log_bytes": 9825
+    },
+    "npm-test": {
+      "exit_code": 0,
+      "tap": {
+        "tests": 2798,
+        "pass": 2798,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 51066.191919
+      },
+      "log_sha256": "a6eddcd75a92d0330b177b1b5ab6054bdc908195d51fb9e3b1de9cefb798c701",
+      "log_bytes": 578459
+    },
+    "camera": {
+      "exit_code": 0,
+      "tap": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 28294.759678
+      },
+      "log_sha256": "35a1e86a0b6355257da92b054e1072f4befce18f802103d66f548157c310ac0c",
+      "log_bytes": 6246
+    },
+    "typecheck": {
+      "exit_code": 0,
+      "log_sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326"
+    },
+    "lint": {
+      "exit_code": 0,
+      "log_sha256": "53cc540068570725910d5c4611e7bc36dd8e00f8833f704646c6508f34d74cc8",
+      "summary": "13 problems (0 errors, 13 warnings)"
+    },
+    "closure": {
+      "exit_code": 0,
+      "log_sha256": "4b8f17bf64271e9382ccf747742bca670bfeadf28871c88674e24a1d6b770d40"
+    }
+  },
+  "camera": {
+    "delegates": [
+      "CPU",
+      "GPU"
+    ],
+    "real": "locked CPU SDK/model/Wasm/production worker",
+    "fake": "media lifecycle only",
+    "browser": "156.0.8078.47",
+    "build": "4D8gI6Ezm2GsLy-kdVHqk",
+    "fixture": {
+      "file": "astronaut.png",
+      "url": "https://raw.githubusercontent.com/scikit-image/scikit-image/c1af2bf80d2c8845bbbf06222f87e8b58a8e5c1e/skimage/data/astronaut.png",
+      "sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+      "size": 791555,
+      "license": "Public domain (NASA)",
+      "terms": "NASA photograph of Eileen Collins. No known copyright restrictions; released into the public domain. No endorsement implied. Verification only; never deployed.",
+      "licenseEvidence": "https://scikit-image.org/docs/0.19.x/api/skimage.data.html#skimage.data.astronaut"
+    },
+    "workerSHA256": "abded2a89252b128933ca06c8a4c9501e128029aaf9df049f231bc7428b5337a",
+    "lockSHA256": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "assets": {
+      "version": "vision-0.10.32-face-1",
+      "package": "@mediapipe/tasks-vision",
+      "packageVersion": "0.10.32",
+      "modelVersion": "float16/1",
+      "assets": [
+        {
+          "file": "vision_bundle.cjs",
+          "packagePath": "vision_bundle.cjs",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/vision_bundle.cjs",
+          "sha256": "43c65a77825c5d5af7456d4781a64cd15cb3e53f479ff1f923c12b5adecf2b44",
+          "size": 137315,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "wasm/vision_wasm_internal.js",
+          "packagePath": "wasm/vision_wasm_internal.js",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_internal.js",
+          "sha256": "6f6b86509cf9e163ea1cfec7edc8cf53732699c04781e4c21c557c1ba402310e",
+          "size": 204816,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "wasm/vision_wasm_internal.wasm",
+          "packagePath": "wasm/vision_wasm_internal.wasm",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_internal.wasm",
+          "sha256": "cb3ec20026a9aecc2a81a93c25630ceb5389297ddb7a5f0bd61dd09cde606b9b",
+          "size": 11453626,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "wasm/vision_wasm_nosimd_internal.js",
+          "packagePath": "wasm/vision_wasm_nosimd_internal.js",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_nosimd_internal.js",
+          "sha256": "9f8fc960e363f0fb2f42f7937b97ae9cf9a5630490f71031fa90caa9bb121938",
+          "size": 204669,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "wasm/vision_wasm_nosimd_internal.wasm",
+          "packagePath": "wasm/vision_wasm_nosimd_internal.wasm",
+          "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm/vision_wasm_nosimd_internal.wasm",
+          "sha256": "924274fcd5ac8985f6570a8573e7971b7bd2d580ba1b8f3beb0ba8f95db6347c",
+          "size": 10647962,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        },
+        {
+          "file": "face_landmarker.task",
+          "url": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+          "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+          "size": 3758596,
+          "license": "Apache-2.0",
+          "terms": "content/licenses/peep-box/NOTICE.txt"
+        }
+      ]
+    },
+    "results": {
+      "ready": {
+        "generation": 7,
+        "type": "ready",
+        "delegate": "CPU",
+        "sdk": "0.10.32",
+        "model": "float16/1"
+      },
+      "output": [
+        {
+          "generation": 7,
+          "type": "pose",
+          "pose": {
+            "x": 92.87982881069183,
+            "y": -44.59767937660217,
+            "z": 542.1338409821002
+          },
+          "count": 478
+        },
+        {
+          "generation": 7,
+          "type": "pose",
+          "pose": {
+            "x": 61.557286977767944,
+            "y": -44.584646821022034,
+            "z": 543.194070740383
+          },
+          "count": 478
+        },
+        {
+          "generation": 7,
+          "type": "pose",
+          "pose": null,
+          "count": 0
+        },
+        {
+          "generation": 7,
+          "type": "pose",
+          "pose": {
+            "x": 92.87982881069183,
+            "y": -44.59767937660217,
+            "z": 542.1338409821002
+          },
+          "count": 478
+        }
+      ]
+    }
+  },
+  "closure": {
+    "certified": true,
+    "preflight_ok": true,
+    "local_controls": "pass",
+    "failures": []
+  },
+  "input_hashes": {
+    ".github/workflows/ci.yml": "7425649f118d73c6fc617bc0d5013947b3a390a8a797a1adb53ec281900fcc66",
+    "app/(site)/(app)/projects/page.tsx": "da7af6830804a460596eefd65f73dc2c2216feef0d276e4e5b33d6958f555c5e",
+    "app/(site)/(app)/work/page.tsx": "479a8f7eecaa552d1fc68648d2d3ae4dbc308b530cb6d994cf723789b8fd90c0",
+    "components/departures-board.css": "bd5e446ce4672ed430e770c5345812cbf96e7e71ca253b8fa9a7c49a941e073f",
+    "components/departures-board.tsx": "5c210aae41c8d376512cfdf8f399f5c5bfaa24888bcf75c96351154cf8818fe1",
+    "components/peep-box/head-worker.js": "9672259c6d2200c70497517c441d721ec0ea28a2204748c8b3b9054982f89735",
+    "content/peep-box-assets.json": "394a48c908ab02b5034413604fc4e2a6fa623fb1dc500de009a3692078a64fb6",
+    "e2e/departures.test.ts": "1b557d5a091badfe4c8a0f1eb868be2df3f8aa5775acdad2ee3ba1ddc5d6f98b",
+    "e2e/peep-box-camera.test.ts": "ad5018c4d90d99e0988a0858f8dd23a1908f6485d8ad9b23f8e55fcad13bd71d",
+    "e2e/peep-box-face-fixture.ts": "25ba46899216893ced94f1b80e5019d305c92a01b453e732138eb0a72d53aa9b",
+    "e2e/senko.test.ts": "88e7993e88cf79b5f6c9cf60bf81ce359b398aa9b788e490ed9cf793a5f95d58",
+    "lib/departures.ts": "b277b7f6b0f028df091316a3f601125c16f96acf448b1e69b0f8630535345dc0",
+    "lib/sound-client.ts": "0549f917adf366d3ee97570f58768658935c55f6265b1f9fddc2ca77de270ec2",
+    "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "scripts/ci-workflow.test.mjs": "e452e1ddc92db121e1b19acb995083379162271d89abef14d019c18969c6d9c4",
+    "scripts/e2e-build.test.mjs": "f2659014491603c0ad11bc00ee174b96a11f204faa75cf79be75d78472399b12",
+    "scripts/e2e.mjs": "55fc7db6dea62723c1575b9238fb3460c5ac5b84e9b7133d45fc88b17bc741f3",
+    "scripts/vendor-peep-box.mjs": "0dd1538f319dab0456ee0d0b85d006b1447b837102c5ab0e8a771a412e0a2075",
+    "scripts/verify-peep-box-camera.mjs": "7561a3ed3d355b42b52bf9cfbad755ebc5aa1934ed6cb1617f550a5ebe01da57"
+  },
+  "executable_input_sha256": "9078c749b170470dab9482d7624c2c5e4fd39754b9fb57ca59a4c94f71af908c",
+  "executable_inputs_unchanged_from_initial_verification": true,
+  "boundaries": "Same real/fake boundaries as task-4-evidence.md. Local execution demonstrated; deployed integration/CI recovery unproven. No pipeline or deployed checks performed."
+}
