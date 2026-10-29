@@ -1,5 +1,7 @@
 # t-1768 — Three.js Ink Shelf
 
+Current authorization continuation: [run-9768 handoff](run-9768/summary.md). Fresh local checks pass (16 shelf tests, 2,792 repository tests, typecheck, lint and build), and a temporary cutoff mutation is rejected. **t-1768 remains unaccepted** under esc-475: QA must read and independently verify the protected delivery `author.txt`; neither prior executable/deployed checks nor this documentation delivery waive that requirement.
+
 ## Delivery recovery — run-9747
 
 The recovered implementation was initially `52e866de1e806215cdd482dcc5aa3920d4d565b1`; after the first authorized push-rejection rebase it was `8328232d64b519ff72bcac1c789e0d726e59ee66`. This run repairs the integrated browser probe and adds verification and publication receipts on `pm-299-t-1768-delivery-recovery`, after fetching main `e30c2577a4250ee16c5cb122ef436070c61c4e77`. No renderer, shader, dependency, or unrelated recovered content was dropped or changed. The original implementation evidence below remains historical evidence from run-9732.

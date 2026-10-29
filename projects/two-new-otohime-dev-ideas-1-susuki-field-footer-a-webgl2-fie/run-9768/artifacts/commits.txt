@@ -1,0 +1,9 @@
+Task: pm-299/t-1768
+Run: run-9768
+Branch: pm-299-t-1768-author-handoff-run-9768
+Base: 3977e52e3ecd5cc27082d6aae4fc976fd34c03dd
+Executable delivery retained: f54f160a9e40284090f0332c2f5dca55d147ecfd
+Subject: pm-299/t-1768: docs: Preserve the unresolved author artifact requirement
+Handoff delivery: enclosing commit; resolve with:
+git log -1 --format="%H %s" -- projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9768/artifacts/commits.txt
+The plan-manager summary binds the pushed handoff SHA. This does not satisfy QA's protected author.txt check.
