@@ -1,0 +1,73 @@
+.ennichi-page { margin-bottom: 1rem; }
+.ennichi-scene { margin-top: 1.5rem; }
+.ennichi-tools { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+.ennichi-tools button { min-width: 44px; min-height: 44px; }
+.ennichi-viewport {
+  position: relative;
+  overflow: hidden;
+  height: clamp(440px, 68vw, 640px);
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  background: #f4efe4;
+  border: 1px solid #292723;
+  box-shadow: 4px 4px 0 rgba(41, 39, 35, 0.12);
+  margin-inline: -1.25rem;
+  width: calc(100% + 2.5rem);
+}
+.ennichi-viewport:active { cursor: grabbing; }
+.ennichi-svg { display: block; width: 100%; height: 100%; }
+.ennichi-plate { mix-blend-mode: multiply; transform: translate(var(--plate-dx), var(--plate-dy)); transition: transform 180ms linear; }
+.ennichi-hit { fill: transparent; stroke: transparent; cursor: pointer; }
+.ennichi-motif:focus { outline: none; }
+.ennichi-motif:focus-visible .ennichi-hit { stroke: #9a3412; stroke-width: 3; }
+.ennichi-motif[data-found="true"] .ennichi-hit { fill: rgba(181, 43, 29, 0.14); stroke: #b52b1d; stroke-width: 2; }
+.ennichi-lantern { pointer-events: none; }
+.ennichi-stamp {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.ennichi-hanko {
+  width: 9.5rem;
+  height: 9.5rem;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.15rem;
+  border: 4px solid #b52b1d;
+  border-radius: 50%;
+  color: #b52b1d;
+  background: rgba(244, 239, 228, 0.9);
+  box-shadow: inset 0 0 0 2px rgba(181, 43, 29, 0.45);
+  transform: rotate(-8deg);
+  text-align: center;
+  line-height: 1;
+}
+.ennichi-hanko span { font-size: 1.7rem; font-weight: 700; letter-spacing: 0.14em; }
+.ennichi-hanko small { font-size: 0.62rem; letter-spacing: 0.18em; }
+.ennichi-status { min-height: 3.2em; margin-top: 0.85rem; }
+.ennichi-help { max-width: 68ch; color: var(--muted); margin-top: 0.35rem; }
+.ennichi-checklist { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: 0.65rem; }
+@media (min-width: 40rem) {
+  .ennichi-checklist { grid-template-columns: 1fr 1fr; }
+  .ennichi-viewport { margin-inline: -2rem; width: calc(100% + 4rem); }
+}
+.ennichi-checklist li { border-top: 1px solid var(--line); padding-top: 0.45rem; }
+.ennichi-checklist p { margin: 0.15rem 0 0; color: var(--muted); font-size: 0.9rem; }
+.ennichi-scene button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+@keyframes ennichi-lantern { from { opacity: 0.55; } to { opacity: 1; } }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .ennichi-viewport:hover .ennichi-plate,
+  .ennichi-viewport:active .ennichi-plate { transform: translate(var(--plate-hx), var(--plate-hy)); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ennichi-lantern { animation: ennichi-lantern 1.8s ease-in-out infinite alternate; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ennichi-plate { transform: none !important; transition: none !important; animation: none !important; }
+  .ennichi-lantern { animation: none !important; transition: none !important; }
+}

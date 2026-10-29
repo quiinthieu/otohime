@@ -19,6 +19,7 @@ const rooms: { href: string; title: string; blurb: string; needs?: Permissions }
     blurb: "What each role can do.",
     needs: { user: ["list"] },
   },
+  { href: "/admin/guestbook", title: "Guestbook", blurb: "Review the drawings waiting on the wall.", needs: { guestbook: ["moderate"] } },
 ];
 
 export const metadata: Metadata = {

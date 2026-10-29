@@ -8,6 +8,7 @@ import { Cartridge } from "@/components/cartridge";
 import { DarumaBoard } from "@/components/daruma-board";
 import { FigTitle, Notice } from "@/components/figures";
 import { site } from "@/content/site";
+import { projectTargetId } from "@/lib/fortune-targets";
 import { peekMark, peekTags } from "@/lib/peek-marks";
 import { peekSlug } from "@/lib/peeks";
 import type { Metadata } from "next";
@@ -36,7 +37,7 @@ export default function ProjectsPage() {
           <DarumaBoard projects={site.projectList}>
             <ul className="cartridges mt-8 grid grid-cols-2 gap-x-3 gap-y-5 sm:gap-x-6 sm:gap-y-7 lg:grid-cols-3">
               {site.projectList.map((project, i) => (
-                <li key={project.title} className="rise cartridge-slot" style={{ "--i": i } as CSSProperties}>
+                <li id={project.href ? undefined : projectTargetId(project.title)} key={project.title} className="rise cartridge-slot" style={{ "--i": i } as CSSProperties}>
                   <Cartridge project={project}>
                     <span className="block">
                       <span className="font-semibold">

@@ -37,12 +37,14 @@ test("the places are every public page including Lab, then ask and postcard, eac
     PLACES.slice(0, PUBLIC_PAGES.length).map((p) => p.href),
     PUBLIC_PAGES.map((p) => p.href),
   );
-  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "lab", "ask", "postcard"]);
+  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "lab", "ask", "postcard", "guestbook", "fortune"]);
   assert.equal(new Set(PLACES.map((p) => p.name)).size, PLACES.length);
   assert.equal(findPlace("ask"), PLACES.find((p) => p.name === "ask"));
   assert.equal((findPlace("ask") as { href: string }).href, "/");
   assert.equal((findPlace("postcard") as { href: string }).href, "/postcard");
   assert.equal((findPlace("play") as { href: string }).href, "/play");
+  assert.equal((findPlace("guestbook") as { href: string }).href, "/guestbook");
+  assert.equal((findPlace("fortune") as { href: string }).href, "/fortune");
 });
 
 test("print run reports the effective appearance, including an applied Lab", () => {
