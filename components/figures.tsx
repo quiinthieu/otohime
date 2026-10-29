@@ -216,15 +216,18 @@ export function FigTitle({
   n,
   hint,
   morph,
+  transitionName,
   children,
 }: {
   n: string;
   hint?: React.ReactNode;
   morph?: ConsolePage;
+  /** Pairs this heading with one shelf book. Leave it unset for every other title. */
+  transitionName?: string;
   children: React.ReactNode;
 }) {
   const h1 = (
-    <h1>
+    <h1 style={transitionName ? { viewTransitionName: transitionName } : undefined}>
       <span aria-hidden="true">Fig. {n} — </span>
       {typeof children === "string" ? <RisoText>{children}</RisoText> : children}
     </h1>

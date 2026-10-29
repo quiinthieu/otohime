@@ -3,26 +3,41 @@
 /* eslint-disable react-hooks/immutability -- R3F owns mutable Three.js objects; effects and useFrame must update their uniforms, camera and renderer state imperatively. */
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Component, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Component, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
-  CanvasTexture, Color, DepthTexture, Mesh, NearestFilter, NoColorSpace,
+  Box3, CanvasTexture, Color, DepthTexture, Matrix4, Mesh, NearestFilter, NoColorSpace,
   OrthographicCamera, PerspectiveCamera, PlaneGeometry, Scene, ShaderMaterial,
-  SRGBColorSpace, UnsignedIntType, Vector2, WebGLRenderTarget,
+  SRGBColorSpace, UnsignedIntType, Vector2, WebGLRenderTarget, type Camera,
 } from "three";
-import { SHELF_BOOK_DEPTH, SHELF_ROW_GAP, SHELF_WIDTH, shelfRowCount, type ShelfBook } from "@/lib/shelf";
+import { projectBookScreenRect, SHELF_BOOK_DEPTH, SHELF_ROW_GAP, SHELF_WIDTH, shelfRowCount, type BookScreenRect, type ShelfBook } from "@/lib/shelf";
 import {
   buildShelfUniforms, parseOutlineDebugParams, shelfCompositeFragment, shelfCompositeVertex,
   shelfNormalFragment, shelfObjectFragment, shelfObjectVertex, type OutlineParams,
 } from "@/lib/shelf-shader";
 
+type Measure = (id: string) => BookScreenRect | null;
 type Props = {
   books: readonly ShelfBook[];
   filter: "all" | ShelfBook["kind"];
   focusedBook: string | null;
+  measureRef?: { current: Measure | null };
   onReady: () => void;
   onFail: () => void;
-  onActivate: (book: ShelfBook) => void;
+  onActivate: (book: ShelfBook, rect: BookScreenRect | null) => void;
 };
+
+function bookScreenRect(mesh: Mesh, camera: Camera, canvas: HTMLCanvasElement): BookScreenRect {
+  mesh.updateWorldMatrix(true, false);
+  const box = new Box3().setFromObject(mesh);
+  camera.updateMatrixWorld();
+  const mvp = new Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+  const view = canvas.getBoundingClientRect();
+  return projectBookScreenRect(
+    { min: { x: box.min.x, y: box.min.y, z: box.min.z }, max: { x: box.max.x, y: box.max.y, z: box.max.z } },
+    mvp.elements,
+    { left: view.left, top: view.top, width: view.width, height: view.height },
+  );
+}
 
 class Boundary extends Component<{ children: ReactNode; onFail: () => void }, { failed: boolean }> {
   state = { failed: false };
@@ -74,13 +89,17 @@ function resolvedThemeColour(canvas: HTMLCanvasElement, variable: string, fallba
   return colour;
 }
 
-function Volume({ book, active, still, onHover, onActivate }: {
+function Volume({ book, active, still, register, onHover, onActivate }: {
   book: ShelfBook; active: boolean; still: boolean;
+  register: (id: string, mesh: Mesh | null) => void;
   onHover: (id: string | null) => void; onActivate: Props["onActivate"];
 }) {
   const mesh = useRef<Mesh>(null);
   const velocity = useRef(0);
   const invalidate = useThree((state) => state.invalidate);
+  const camera = useThree((state) => state.camera);
+  const gl = useThree((state) => state.gl);
+  const setMesh = useCallback((node: Mesh | null) => { mesh.current = node; register(book.id, node); }, [book.id, register]);
   const resources = useMemo(() => {
     const texture = spineTexture(book);
     return { texture, material: objectMaterial(texture) };
@@ -104,19 +123,31 @@ function Volume({ book, active, still, onHover, onActivate }: {
     invalidate();
   });
   return (
-    <mesh ref={mesh} name={book.id} position={[book.x, book.y, book.z]} rotation={[0, 0, book.tiltRad]}
+    <mesh ref={setMesh} name={book.id} position={[book.x, book.y, book.z]} rotation={[0, 0, book.tiltRad]}
       material={resources.material}
       onPointerOver={(event) => { event.stopPropagation(); onHover(book.id); }}
       onPointerOut={() => onHover(null)}
-      onClick={(event) => { event.stopPropagation(); onActivate(book); }}>
+      onClick={(event) => { event.stopPropagation(); onActivate(book, mesh.current ? bookScreenRect(mesh.current, camera, gl.domElement) : null); }}>
       <boxGeometry args={[book.thickness, book.height, SHELF_BOOK_DEPTH]} />
     </mesh>
   );
 }
 
-function ShelfScene({ books, filter, focusedBook, onReady, onFail, onActivate, params, still }: Props & { params: OutlineParams; still: boolean }) {
+function ShelfScene({ books, filter, focusedBook, measureRef, onReady, onFail, onActivate, params, still }: Props & { params: OutlineParams; still: boolean }) {
   const { gl, camera, size, scene, invalidate } = useThree();
   const [hoveredBook, setHoveredBook] = useState<string | null>(null);
+  const meshes = useRef(new Map<string, Mesh>());
+  const register = useCallback((id: string, mesh: Mesh | null) => {
+    if (mesh) meshes.current.set(id, mesh); else meshes.current.delete(id);
+  }, []);
+  useLayoutEffect(() => {
+    if (!measureRef) return;
+    measureRef.current = (id) => {
+      const mesh = meshes.current.get(id);
+      return mesh ? bookScreenRect(mesh, camera, gl.domElement) : null;
+    };
+    return () => { measureRef.current = null; };
+  }, [measureRef, camera, gl]);
   const parallax = useRef(new Vector2());
   const centreY = (2.4 - (shelfRowCount(books.length) - 1) * SHELF_ROW_GAP) / 2;
   const ready = useRef(false);
@@ -257,7 +288,7 @@ function ShelfScene({ books, filter, focusedBook, onReady, onFail, onActivate, p
       </mesh>
     ))}
     {books.filter((book) => filter === "all" || book.kind === filter).map((book) => <Volume key={book.id} book={book} active={focusedBook === book.id || hoveredBook === book.id}
-      still={still} onHover={setHoveredBook} onActivate={onActivate} />)}
+      still={still} register={register} onHover={setHoveredBook} onActivate={onActivate} />)}
   </>;
 }
 
