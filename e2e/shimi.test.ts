@@ -142,6 +142,7 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   await page.keyboard.type("shimi");
   await canvas(page).waitFor();
   assert.equal(new URL(page.url()).pathname, "/notes/on-twos");
+  await page.locator('[data-shimi-canvas][data-shimi-mode="static"]').waitFor();
   assert.equal(await canvas(page).getAttribute("data-shimi-mode"), "static");
   const before = (await meter(page)).frames;
   await page.waitForTimeout(400);
@@ -155,6 +156,7 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   await page.waitForTimeout(800);
   const live = await open({}, "/notes/the-contract-caught-it", true, true);
   await live.page.locator(".sound-toggle").click();
+  await live.page.waitForFunction(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter.voices > 0);
   // Sound-on plays its own 990Hz cue; measure the following bookworm chirps.
   await live.page.evaluate(() => {
     const probe = (window as unknown as { __shimiMeter: Meter }).__shimiMeter;
