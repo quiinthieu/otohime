@@ -150,7 +150,7 @@ function createRenderer(gl: WebGL2RenderingContext, canvas: HTMLCanvasElement) {
   };
 }
 
-type Connection = EventTarget & { saveData?: boolean };
+type Connection = Partial<Pick<EventTarget, "addEventListener" | "removeEventListener">> & { saveData?: boolean };
 const CALM: PointerSpring = { x: -2, y: -2, vx: 0, vy: 0 };
 
 export default function SusukiField() {
@@ -287,7 +287,7 @@ export default function SusukiField() {
     window.addEventListener("scroll", scroll, passive); window.addEventListener("keydown", key, passive);
     document.addEventListener("visibilitychange", visibility);
     canvas.addEventListener("webglcontextlost", contextLost); canvas.addEventListener("webglcontextrestored", contextRestored);
-    reduced.addEventListener("change", policy); dark.addEventListener("change", appearance); connection?.addEventListener("change", policy);
+    reduced.addEventListener("change", policy); dark.addEventListener("change", appearance); connection?.addEventListener?.("change", policy);
     window.__triggerSusukiFox = trigger;
     return () => {
       disposed = true; stop(); renderer?.dispose();
@@ -297,7 +297,7 @@ export default function SusukiField() {
       window.removeEventListener("scroll", scroll); window.removeEventListener("keydown", key);
       document.removeEventListener("visibilitychange", visibility);
       canvas.removeEventListener("webglcontextlost", contextLost); canvas.removeEventListener("webglcontextrestored", contextRestored);
-      reduced.removeEventListener("change", policy); dark.removeEventListener("change", appearance); connection?.removeEventListener("change", policy);
+      reduced.removeEventListener("change", policy); dark.removeEventListener("change", appearance); connection?.removeEventListener?.("change", policy);
       if (window.__triggerSusukiFox === trigger) delete window.__triggerSusukiFox;
     };
   }, []);
