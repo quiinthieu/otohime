@@ -54,6 +54,16 @@ async function open(route = "/work", options: BrowserContextOptions = {}) {
   page.on("response", res => errors.response({ url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() }));
   await page.goto(`${BASE}${route}`);
   await page.getByTestId("departures-board").waitFor();
+  if (options.javaScriptEnabled !== false) {
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector('[data-testid="departures-row-flip"]');
+        return Boolean(el && Object.keys(el).some((k) => k.startsWith("__reactProps")));
+      },
+      null,
+      { timeout: 10_000 },
+    );
+  }
   return { page, errors };
 }
 const meter = (page: Page) => page.evaluate(() => (window as unknown as { __departuresMeter: Meter }).__departuresMeter);
