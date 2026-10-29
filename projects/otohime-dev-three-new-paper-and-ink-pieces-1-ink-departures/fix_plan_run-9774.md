@@ -1,0 +1,9 @@
+# Fix plan — pm-301 / t-1788 / run-9774
+
+**Cause: code, CI camera verifier orchestration.** Exact delivery workflow `40823434928`, job `123280927600`, failed at `.github/workflows/ci.yml:142-150` after the production build had passed. The camera wrapper at `scripts/verify-peep-box-camera.mjs:16` deletes `SKIP_BUILD`, forcing a second Next build in its isolated E2E runner. The last green same job `123259575831` had no intervening CI, verifier, lock or Next-config change, and the failing job's raw log is inaccessible (HTTP 403). The bounded annotation identifies an import-map/build-ID failure; the second build is a concrete removable path, while the deeper cause remains unproven.
+
+1. In `scripts/verify-peep-box-camera.mjs:16`, remove `delete env.SKIP_BUILD`. Preserve the real locked SDK/model/worker preflight, `delete env.BASE_URL`, real embedded database/server/browser construction and failure propagation.
+2. In `.github/workflows/ci.yml:148`, run `SKIP_BUILD=1 node scripts/verify-peep-box-camera.mjs` in the existing `tee`/diagnostic/failure-propagation pipeline. It must consume the successful `.next` build from line 140 rather than repeat it.
+3. Add a wrapper regression proving the prebuilt flag reaches the E2E runner only after a successful build, and that camera-test failure remains nonzero. Run the exact `departures-e2e` and `repo-checks` contracts and the real camera verifier, then push the owner-authored fix branch and `main`. Require green `checks` and production jobs on that fix SHA and recheck live health ancestry plus the independent reduced-motion control.
+
+If the prebuilt run still fails, read the new raw job log and identify the exact failing request before another code change. The functioning Departures UI requires no source edit.
