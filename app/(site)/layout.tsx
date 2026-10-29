@@ -15,6 +15,7 @@ import "./seasons.css";
 import "./letterpress.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
+import { StickerHunt } from "@/components/sticker-hunt";
 
 export const metadata: Metadata = {
   // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
            listener takes the word's a's before the Pocket console can open a page with them. */}
         <UrashimaKeys />
         {children}
+        <Suspense fallback={null}><StickerHunt /></Suspense>
         {/* Overlays follow route content and wait for each paper host's React commit. */}
         <Suspense fallback={null}><KameLoader /></Suspense>
         <Suspense fallback={null}><TactileLoader /></Suspense>

@@ -4,6 +4,8 @@ import { LostSheet } from "@/components/lost-sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 import { ViewTransition } from "react";
+import { StickerSpot } from "@/components/sticker-hunt";
+import { FINDS } from "@/content/stickers";
 
 // The lost page, for an unknown address (app/global-not-found.tsx) and for a site page that calls notFound(). The
 // sheet is drawn here, on the server: a torn top edge and a crumple filter (feTurbulence into feDisplacementMap).
@@ -85,6 +87,7 @@ export default function NotFound() {
             </h1>
             <p className="text-muted">There&apos;s no page at this address. It was torn out and crumpled up.</p>
             <LostSheet sheet={SHEET_ID} />
+            <StickerSpot id={FINDS.lost} />
             <nav aria-label="Ways back" className="lost-ways">
               <Link href="/" className="btn btn-primary">
                 Go home
