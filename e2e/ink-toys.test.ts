@@ -67,6 +67,25 @@ async function png(page: Page, name: string, width: number, height: number) {
   return bytes;
 }
 
+test("paper toy styles remain isolated across client navigation", async () => {
+  const { page, errors } = await open("/play/gashapon");
+  await page.waitForFunction(() => Number(document.querySelector('[data-testid="coin-count"]')?.textContent) > 0);
+  await page.evaluate(() => Object.assign(window, { __inkNavigation: true }));
+  await page.getByRole("link", { name: "← Play", exact: true }).click();
+  await page.getByTestId("play-loom-link").click(); await ready(page);
+  assert.equal(await loom(page).evaluate(el => getComputedStyle(el).borderTopWidth), "1px");
+  await page.locator('main a[href="/play"]').filter({ visible: true }).first().click();
+  await page.getByTestId("play-hanko-link").click();
+  assert.equal(await page.getByRole("region", { name: "Hanko seal maker" }).evaluate(el => getComputedStyle(el).borderTopWidth), "1px");
+  await page.locator('main a[href="/play"]').filter({ visible: true }).first().click();
+  await page.locator('main a[href="/play/gashapon"]').click();
+  const other = await page.locator("main .ink-toy").evaluate(el => ({ border: getComputedStyle(el).borderTopWidth, padding: getComputedStyle(el).paddingTop }));
+  assert.deepEqual(other, { border: "0px", padding: "0px" }, "Loom/Hanko borders and padding do not leak onto another toy");
+  assert.equal(await page.evaluate(() => (window as unknown as { __inkNavigation: boolean }).__inkNavigation), true, "the route changes retained loaded styles in the same document");
+  assert.equal((await meter(page)).contexts, 0);
+  assert.deepEqual(errors.unexpected, []);
+});
+
 for (const width of [1280, 390]) test(`Play discovery, stamping, share restore and score PNG at ${width}px`, async () => {
   const { page, errors } = await open("/play", { viewport: { width, height: 900 }, hasTouch: width === 390 });
   assert.equal(await page.getByTestId("play-hanko-link").getAttribute("href"), "/play/hanko");
@@ -174,8 +193,8 @@ for (const shape of ["Square", "Round"]) test(`Hanko ${shape}: deterministic car
   assert.equal(await signatures.count(), 2);
   for (const sig of await signatures.all()) assert.equal(await sig.getAttribute("data-hanko-name"), "Billie乙姫");
   await page.reload(); await page.waitForFunction(() => document.querySelector('[data-hanko-signature] [data-hanko-name]')?.getAttribute("data-hanko-name") === "Billie乙姫");
-  const note = page.locator('main a[href^="/notes/"]').first();
-  await note.click(); await page.waitForURL("**/notes/*");
+  const note = page.locator('main a[href="/notes/backfills-are-a-feature"]').first();
+  await note.click(); await page.waitForURL("**/notes/backfills-are-a-feature");
   await page.waitForFunction(() => { const seals = [...document.querySelectorAll('[data-hanko-signature] [data-hanko-name]')].filter(el => el.checkVisibility()); return seals.length === 2 && seals.every(el => el.getAttribute("data-hanko-name") === "Billie乙姫"); });
   await page.goto(`${BASE}/play/hanko`); await name.fill("Billie乙姫"); await page.getByRole("radio", { name: shape, exact: true }).check();
   assert.equal(await impression.locator("svg > path").getAttribute("d"), carving);

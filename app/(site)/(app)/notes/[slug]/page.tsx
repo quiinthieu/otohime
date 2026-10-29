@@ -31,6 +31,7 @@ export default async function NotePage({ params }: PageProps<"/notes/[slug]">) {
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <article className="rise">
         <Link href="/notes" className="caption underline underline-offset-4">← All notes</Link>
+        <Link href="/notes/sky" className="caption ml-5 underline underline-offset-4">Star chart ↗</Link>
         <header className="mt-6">
           <time dateTime={note.date} className="caption">{note.date}</time>
           <FigTitle n="04">{note.title}</FigTitle>

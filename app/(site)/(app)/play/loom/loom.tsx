@@ -98,7 +98,7 @@ export function Loom() {
       downloadBlob(await canvasPng(canvas), "ink-loom-score.png"); setStatus("Your score is printed. A little loop, kept on paper.");
     } catch { setStatus("The print could not be prepared. Your pattern is safe here; try again."); }
   }
-  return <section className="ink-toy" aria-label="Ink Loom sequencer" data-own-sound="" data-playing={playing} data-step={step} data-testid="loom">
+  return <section className="ink-paperToy" aria-label="Ink Loom sequencer" data-own-sound="" data-playing={playing} data-step={step} data-testid="loom">
     <div className="ink-tools">
       <button className="btn" type="button" aria-pressed={playing} disabled={!ready} onClick={playing ? stop : start}>{playing ? "Stop" : "Play"}</button>
       <button className="btn" type="button" aria-pressed={sound} onClick={() => { stop(); setSound(!sound, { silent: true }); }}>Sound {sound ? "on" : "off"}</button>

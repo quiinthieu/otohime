@@ -202,6 +202,8 @@ test("CI's E2E step keeps the suite's status and adds the server's log tail to t
     for (const file of ["browser-gate-diagnostics.mjs", "e2e-annotate.mjs"]) {
       copyFileSync(join(ROOT, "scripts", file), join(dir, "scripts", file));
     }
+    mkdirSync(join(dir, "e2e"));
+    writeFileSync(join(dir, "e2e/assembly-sky.test.ts"), "import { test } from 'node:test'; test('phone touch', () => {});\n");
     writeFileSync(join(dir, "fixture.mjs"), `
       process.stdout.write('suite stdout\\n', () => {
         process.stderr.write('suite stderr\\n', () => { process.exitCode = Number(process.env.CI_FIXTURE_STATUS); });
@@ -211,6 +213,8 @@ test("CI's E2E step keeps the suite's status and adds the server's log tail to t
     mkdirSync(join(dir, "bin"));
     writeFileSync(join(dir, "bin/npm"), "#!/bin/sh\nexec node fixture.mjs\n", { mode: 0o755 });
     const summaryPath = join(dir, "summary.md");
+    const fixtureEnv = { ...process.env };
+    delete fixtureEnv.NODE_TEST_CONTEXT;
     for (const status of [17, 0]) {
       writeFileSync(summaryPath, "");
       const result = spawnSync("bash", ["-eo", "pipefail", "-c", `
@@ -221,10 +225,12 @@ test("CI's E2E step keeps the suite's status and adds the server's log tail to t
         }
         curl() { wait || true; }
         ${body}
-      `], { cwd: dir, env: { ...process.env, PATH: `${join(dir, "bin")}:${process.env.PATH}`, RUNNER_TEMP: dir, GITHUB_STEP_SUMMARY: summaryPath,
+      `], { cwd: dir, env: { ...fixtureEnv, PATH: `${join(dir, "bin")}:${process.env.PATH}`, RUNNER_TEMP: dir, GITHUB_STEP_SUMMARY: summaryPath,
         GITHUB_SHA: "ci-status-fixture", CI_FIXTURE_STATUS: String(status) }, encoding: "utf8", timeout: 10000 });
       assert.equal(result.status, status, result.stderr);
-      assert.equal(readFileSync(join(dir, "e2e.log"), "utf8"), "suite stdout\nsuite stderr\n");
+      const captured = readFileSync(join(dir, "e2e.log"), "utf8");
+      assert.match(captured, /ok 1 - phone touch/);
+      assert.ok(captured.endsWith("suite stdout\nsuite stderr\n"));
       const summary = readFileSync(summaryPath, "utf8");
       if (status === 0) {
         assert.equal(summary, "");

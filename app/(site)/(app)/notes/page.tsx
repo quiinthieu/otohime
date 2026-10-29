@@ -18,6 +18,7 @@ export default function NotesPage() {
         <FigTitle n="04" morph="/notes" hint="short ones">
           Notes
         </FigTitle>
+        <p className="mt-3"><Link href="/notes/sky" className="link">Explore the Paper Star Chart →</Link></p>
         <div className="mt-8 grid items-start gap-10 md:grid-cols-[minmax(0,1fr)_16rem]">
           <ol>
             {site.notes.map(({ slug, date, title, body }) => (

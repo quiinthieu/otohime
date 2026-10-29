@@ -142,6 +142,7 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   await page.keyboard.type("shimi");
   await canvas(page).waitFor();
   assert.equal(new URL(page.url()).pathname, "/notes/on-twos");
+  await page.locator('[data-shimi-canvas][data-shimi-mode="static"]').waitFor();
   assert.equal(await canvas(page).getAttribute("data-shimi-mode"), "static");
   const before = (await meter(page)).frames;
   await page.waitForTimeout(400);

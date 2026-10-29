@@ -35,7 +35,7 @@ export function HankoPress() {
       setStatus(`${format.toUpperCase()} ready. Your seal is yours to keep.`);
     } catch { setStatus("The download could not be prepared. Your seal is still here; try again."); }
   }
-  return <section className="ink-toy" aria-label="Hanko seal maker" data-own-sound="">
+  return <section className="ink-paperToy" aria-label="Hanko seal maker" data-own-sound="">
     <div className="ink-pressLayout">
       <div className="ink-pressControls">
         <label htmlFor="hanko-name" className="caption">Name to carve</label>

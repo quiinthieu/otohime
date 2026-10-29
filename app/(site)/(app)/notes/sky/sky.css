@@ -1,0 +1,21 @@
+.sky-chart { margin-top: 2rem; border: 1.5px solid var(--ink); background: var(--paper-2); box-shadow: 5px 6px 0 var(--line); }
+.sky-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--line); }
+.sky-instructions { padding: .6rem 1rem; font-size: .8rem; color: var(--muted); }
+.sky-viewport { height: 470px; max-height: 65svh; overflow: auto; overscroll-behavior: contain; touch-action: none; cursor: grab; scrollbar-width: thin; }
+.sky-viewport[data-dragging="true"] { cursor: grabbing; user-select: none; }
+.sky-sheet { position: relative; background: radial-gradient(ellipse at 50% 50%, var(--paper), transparent 80%); }
+.sky-grid, .sky-lines { position: absolute; inset: 0; pointer-events: none; }
+.sky-grid { color: var(--muted); stroke: currentColor; stroke-width: .6; opacity: .45; }
+.sky-grid text { fill: currentColor; stroke: none; font-family: var(--font-mono), monospace; font-size: 10px; letter-spacing: 2px; }
+.sky-lines { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 5 6; }
+.sky-lines text { fill: var(--muted); stroke: none; font-size: 16px; font-style: italic; }
+.sky-star { position: absolute; transform: translate(-50%, -50%); width: 48px; height: 48px; color: var(--ink); border: 1px solid transparent; border-radius: 50%; }
+.sky-star:focus-visible { outline: 1px dashed var(--ink); outline-offset: 3px; background: var(--paper); z-index: 2; }
+.sky-label { display: none; position: absolute; bottom: 54px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 220px; padding: .4rem .7rem; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font-size: .85rem; box-shadow: 2px 3px 0 var(--line); }
+.sky-star:focus-visible .sky-label { display: block; }
+@media (hover: hover) {
+  .sky-star:hover { outline: 1px dashed var(--ink); outline-offset: 3px; background: var(--paper); z-index: 2; }
+  .sky-star:hover .sky-label, .sky-star:focus .sky-label { display: block; }
+}
+.sky-legend { padding: 1rem; border-top: 1px solid var(--line); font-size: .85rem; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+@media (prefers-reduced-motion: reduce) { .sky-viewport { scroll-behavior: auto; } }

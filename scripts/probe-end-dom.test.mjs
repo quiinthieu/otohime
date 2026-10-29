@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { after, before, test } from "node:test";
 import { site } from "../content/site.ts";
-import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
+import { endSvgStructure, endTitleBounds, endTitleText, inPage, settleEndTitle, settleEndEntrance, VISIBLE_FOOTER } from "./probe-end-dom.mjs";
 import { launchBrowser } from "./probe-browser.mjs";
 
 const css = readFileSync(resolve(import.meta.dirname, "../components/riso-heading.css"), "utf8");
@@ -43,6 +43,44 @@ async function inChrome(html, fn) {
   }
 }
 const title = (html, expr = VISIBLE_FOOTER) => inChrome(html, (page) => page.evaluate(inPage(endTitleText, expr)));
+
+test("probe entrance: waits for delayed real animation starts and rejects missing or replayed entries", async () => {
+  const html = `<style>@keyframes enter{from{opacity:.1}to{opacity:1}} .entry{animation:enter .05s both} .late{animation-name:none}</style>
+    <footer class="end" data-seen="true"><div data-end-stage data-active="true"></div>
+    <i class="end-cloud"></i><i class="end-star"></i><i class="end-lamp"></i><i class="end-packet"></i>
+    ${Array.from({ length: 6 }, (_, i) => `<span class="entry ${i === 5 ? "late" : ""}">ink</span>`).join("")}</footer>`;
+  await inChrome(html.replaceAll('class="entry ', 'class="pending '), async (page) => {
+    await page.evaluate(() => {
+      window.__endEntranceStarts = 0;
+      addEventListener("animationstart", () => window.__endEntranceStarts++);
+      document.querySelectorAll(".pending").forEach((el) => el.classList.replace("pending", "entry"));
+    });
+    await page.waitForFunction(() => window.__endEntranceStarts === 5);
+    await page.waitForTimeout(950);
+    assert.equal(await page.evaluate(() => window.__endEntranceStarts), 5, "the former fixed checkpoint misses the sixth start");
+    const missing = await page.evaluate(inPage(settleEndEntrance, VISIBLE_FOOTER, 100));
+    assert.equal(missing.starts, 5, "a missing animation remains a failure after the bound");
+    await page.evaluate(() => { setTimeout(() => document.querySelector(".late").classList.remove("late"), 80); });
+    const settled = await page.evaluate(inPage(settleEndEntrance, VISIBLE_FOOTER, 3000));
+    assert.equal(settled.starts, 6);
+    assert.equal(settled.seen, "true");
+    assert.equal(settled.active, "true");
+    assert.ok(settled.playStates.every((s) => s === "running"));
+    await page.evaluate(() => { document.querySelector(".end-cloud").style.animationPlayState = "paused"; });
+    const paused = await page.evaluate(inPage(settleEndEntrance, VISIBLE_FOOTER, 100));
+    assert.ok(paused.playStates.includes("paused"), "paused ambient motion remains a failure");
+    await page.evaluate(() => {
+      document.querySelector(".end-cloud").style.animationPlayState = "running";
+      const entry = document.querySelector(".entry");
+      entry.style.animationName = "none";
+      entry.getBoundingClientRect();
+      entry.style.animationName = "enter";
+    });
+    await page.waitForFunction(() => window.__endEntranceStarts === 7);
+    const replayed = await page.evaluate(inPage(settleEndEntrance, VISIBLE_FOOTER, 100));
+    assert.equal(replayed.starts, 7, "a real replay must not settle as six");
+  });
+});
 
 test("probe title: the plain Riso source inside h2#end-title, never the decorative plates", async () => {
   const h2 = (inner, id = "end-title") => footer(`<h2 id="${id}" class="end-title"><span class="end-title-text">${inner}</span></h2>`);

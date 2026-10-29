@@ -1,4 +1,4 @@
-.ink-toy { margin-top: 2rem; border-block: 1px solid var(--line); padding-block: 1.5rem; }
+.ink-paperToy { margin-top: 2rem; border-block: 1px solid var(--line); padding-block: 1.5rem; }
 .ink-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin-top: 1rem; }
 .ink-tools:first-child { margin-top: 0; }
 .ink-tools button { min-height: 44px; }
