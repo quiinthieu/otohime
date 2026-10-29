@@ -1,0 +1,43 @@
+e2e-2 (exit 0)
+ok 1 - /play discovers Senko at 1280px; real canvas, touch layout and OG card
+ok 2 - /play discovers Senko at 390px; real canvas, touch layout and OG card
+ok 3 - pointer hold lights; natural elapsed time visits all four flowers and release extinguishes
+ok 4 - pointer shake and Jolt hand drop the bead; latch and keyboard permit steady exploration
+ok 5 - hidden and blur inputs stop actual canvas draws; cancellation and route cleanup stop the loop
+ok 6 - audio stays silent by default; opt-in crackle uses one real shared context and stops when muted
+ok 7 - reduced motion stays playable with a still stem, fewer sparks and a deliberate drop control
+# tests 7
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# duration_ms 50998.484772
+
+e2e-3 (exit 0)
+ok 1 - /play discovers Senko at 1280px; real canvas, touch layout and OG card
+ok 2 - /play discovers Senko at 390px; real canvas, touch layout and OG card
+ok 3 - pointer hold lights; natural elapsed time visits all four flowers and release extinguishes
+ok 4 - pointer shake and Jolt hand drop the bead; latch and keyboard permit steady exploration
+ok 5 - hidden and blur inputs stop actual canvas draws; cancellation and route cleanup stop the loop
+ok 6 - audio stays silent by default; opt-in crackle uses one real shared context and stops when muted
+ok 7 - reduced motion stays playable with a still stem, fewer sparks and a deliberate drop control
+# tests 7
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# duration_ms 39419.862681
+
+unit (exit 0)
+# tests 2792
+# pass 2792
+# fail 0
+# cancelled 0
+# skipped 0
+# duration_ms 43400.967591
+
+typecheck: exit 0
+
+lint: exit 0; 0 errors, 13 existing warnings
+
+gate closure: exit 0; certified=true preflight.ok=true local_controls=pass

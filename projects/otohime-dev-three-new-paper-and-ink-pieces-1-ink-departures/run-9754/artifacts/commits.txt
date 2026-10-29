@@ -1,0 +1,10 @@
+Plan: pm-301
+Task: t-1786
+Run: run-9754
+Branch: pm-301-t-1786-title-race-run-9754
+Initial fetched base: f54f160a9e40284090f0332c2f5dca55d147ecfd
+Subject: pm-301/t-1786: fix: Wait for Senko navigation metadata
+Delivery: enclosing commit; immutable SHA is supplied in the plan-manager summary.
+Resolve: git log -1 --format=%H -- projects/otohime-dev-three-new-paper-and-ink-pieces-1-ink-departures/run-9754/artifacts/commits.txt
+Authorized save: git push origin HEAD; git push origin HEAD:main
+Policy: normal fast-forward pushes only; on rejection pull --rebase origin main, rerun required checks, retry up to three times.
