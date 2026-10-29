@@ -52,7 +52,7 @@ test("every build refreshes the public ledger with the read-only Actions token",
     assert.ok(found, job);
     const source = lines.slice(found.start, found.end).join("\n");
     const refresh = source.indexOf("- name: Refresh public stamp ledger");
-    const build = source.indexOf(job === "checks" ? "npm run build" : "npx vercel@64 build");
+    const build = source.indexOf(job === "checks" ? "npm run build" : "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build");
     assert.ok(refresh >= 0 && build > refresh, `${job} refreshes before building`);
     assert.match(source.slice(refresh, build), /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
     assert.match(source.slice(refresh, build), /run: node scripts\/ledger-fetch\.mjs/);
@@ -534,7 +534,7 @@ test("checks, preview and production check out full git ancestry (fetch-depth: 0
     );
     const gen = s.indexOf('npm run history:index -- --strict --rev="$GITHUB_SHA"');
     const preCheck = s.indexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
-    const build = s.indexOf(job === "checks" ? "npm run build" : job === "preview" ? "npx vercel@64 build" : "npx vercel@64 build --prod");
+    const build = s.indexOf(job === "checks" ? "npm run build" : job === "preview" ? "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build" : "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod");
     const postCheck = s.lastIndexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
     assert.ok(gen !== -1, `${job} must run strict history:index`);
     assert.ok(preCheck > gen && preCheck < build, `${job} must run strict history:check before build`);
@@ -630,7 +630,7 @@ test("production strict history build step blocks build/upload on shallow or mis
       return { ...res, built, uploaded };
     }
 
-    // 1. Shallow clone negative control: fails before npx vercel@64 build --prod or upload runs.
+    // 1. Shallow clone negative control: fails before npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod or upload runs.
     const shallow = join(work, "shallow");
     spawnSync("git", ["clone", "-q", "--depth=1", `file://${origin}`, shallow], { env: gitEnv });
     setupCheckout(shallow);
@@ -639,7 +639,7 @@ test("production strict history build step blocks build/upload on shallow or mis
     assert.equal(shallowRes.built, false, "shallow clone must not reach vercel build");
     assert.equal(shallowRes.uploaded, false, "shallow clone must not reach upload");
 
-    // 2. Full clone with wrong GITHUB_SHA negative control: fails before npx vercel@64 build --prod or upload runs.
+    // 2. Full clone with wrong GITHUB_SHA negative control: fails before npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod or upload runs.
     setupCheckout(origin);
     const wrongShaRes = runProdBuildStep(origin, oldSha);
     assert.notEqual(wrongShaRes.status, 0);
