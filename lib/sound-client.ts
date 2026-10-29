@@ -53,7 +53,7 @@ export const getSound = () => on;
 export const getServerSound = () => false;
 
 // Call from a click or key press only.
-export function setSound(next: boolean) {
+export function setSound(next: boolean, { silent = false }: { silent?: boolean } = {}) {
   load();
   on = next;
   try {
@@ -62,8 +62,8 @@ export function setSound(next: boolean) {
     // storage blocked: the choice lasts until reload
   }
   emit();
-  if (next) play("open");
-  else {
+  if (next && !silent) play("open");
+  if (!next) {
     stopPurr();
     stopWater();
     stopStoryVoice();
@@ -176,15 +176,15 @@ export function play(name: CueName) {
   );
 }
 
-/** Quiet feature cues share the site's gesture-unlocked context and sound preference. */
-export function playCustomCue(cue: Cue): boolean {
+/** Quiet feature cues share the site's context. Recheck feature policy after an asynchronous resume. */
+export function playCustomCue(cue: Cue, isAllowed: () => boolean = () => true): boolean {
   load();
-  if (!getSound() || typeof document === "undefined" || document.hidden || !cue.notes.length) return false;
+  if (!getSound() || typeof document === "undefined" || document.hidden || !cue.notes.length || !isAllowed()) return false;
   const c = unlock();
   if (!c) return false;
   const asked = performance.now();
   const begin = () => {
-    if (ctx !== c || !getSound() || document.hidden || c.state !== "running" || performance.now() - asked >= 250) return;
+    if (ctx !== c || !getSound() || document.hidden || !isAllowed() || c.state !== "running" || performance.now() - asked >= 250) return;
     schedule(c, cue);
   };
   if (c.state === "running") begin();

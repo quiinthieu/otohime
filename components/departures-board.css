@@ -1,0 +1,59 @@
+.departures-board {
+  margin-block: 2.5rem;
+  border: 1px solid var(--ink);
+  padding: clamp(.75rem, 2vw, 1.5rem);
+  background: var(--paper-2);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--hairline);
+}
+.departures-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.departures-heading h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 700; letter-spacing: -.04em; }
+.departures-kicker, .departures-footnote { font-family: var(--font-mono), monospace; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; }
+.departures-kicker { color: var(--muted); }
+.departures-seal { padding: .4rem; border: 2px solid var(--danger); color: var(--danger); font-weight: 700; writing-mode: vertical-rl; transform: rotate(5deg); }
+.departures-note { margin-block: .75rem; max-width: 60ch; font-size: .8rem; color: var(--muted); }
+.departures-tools { display: flex; flex-wrap: wrap; gap: .5rem; margin-block: 1rem; }
+.departures-tools button, .departures-row-button { min-height: 44px; }
+.departures-scroll { max-width: 100%; overflow-x: auto; }
+.departures-board table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+.departures-board th, .departures-board td { padding: .65rem .4rem; border-bottom: 1px solid var(--hairline); text-align: left; }
+.departures-board thead th { font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 400; }
+.departures-board tbody th { min-width: 9rem; font-weight: 500; }
+.departures-code, .departures-schedule { font-family: var(--font-mono), monospace; font-size: .7rem; }
+.departures-schedule { max-width: 9rem; overflow-wrap: anywhere; }
+.departures-drums { display: inline-flex; gap: 2px; white-space: pre; perspective: 500px; }
+.departures-drum { position: relative; display: inline-block; width: .85em; height: 1.8em; background: var(--ink); color: var(--paper); border-radius: 2px; font: 700 .75rem/1.8 var(--font-mono), monospace; text-align: center; }
+.departures-leaf { display: block; transform-origin: center; }
+/* The hairline between the two paper flaps remains visible at rest. */
+.departures-drum::after { content: ""; position: absolute; inset: 50% 0 auto; height: 1px; background: var(--paper-2); }
+.departures-board [data-row-status="DELAYED"] .departures-drum { background: var(--danger); color: var(--paper); }
+.departures-board [data-row-status="DELAYED"] .departures-code { color: var(--danger); }
+.departures-row-button { min-width: 44px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 1.25rem; cursor: pointer; }
+.departures-row-button:hover { border-color: var(--ink); }
+.departures-footnote { margin-top: 1rem; color: var(--muted); }
+@keyframes departure-flap { from { transform: rotateX(-75deg); } to { transform: rotateX(0); } }
+@keyframes departure-scroll { 0% { transform: rotateX(-70deg); } 60%, 100% { transform: rotateX(0); } }
+@media (max-width: 600px) {
+  .departures-board th, .departures-board td { padding-inline: .25rem; }
+  .departures-board tbody th { min-width: 7rem; }
+  .departures-tools .btn { font-size: .75rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .departures-board [data-flipping="true"] .departures-leaf { animation: departure-flap 65ms ease-out; }
+  @supports (animation-timeline: view()) {
+    /* Anchor outside the horizontal table scroller, whose own view() would
+       observe that scroller rather than the page's viewport. */
+    .departures-board { timeline-scope: --departures; view-timeline: --departures block; }
+    .departures-board .departures-drums {
+      animation: departure-scroll 1s linear both;
+      animation-timeline: --departures;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .departures-board, .departures-board *, .departures-board *::before, .departures-board *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

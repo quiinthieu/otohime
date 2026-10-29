@@ -1,0 +1,10 @@
+Plan: pm-301
+Task: t-1788
+Run: run-9765
+Branch: pm-301-t-1788-ink-departures
+Fetched base: 3977e52e3ecd5cc27082d6aae4fc976fd34c03dd
+Subject: pm-301/t-1788: feat: Add Ink Departures boards
+Delivery: enclosing commit; its immutable SHA is provided in the plan-manager summary.
+Resolve: git log -1 --format=%H -- projects/otohime-dev-three-new-paper-and-ink-pieces-1-ink-departures/run-9765/artifacts/commits.txt
+Save: git push origin HEAD; git push origin HEAD:main
+Policy: normal fast-forward pushes; on rejection pull --rebase origin main, rerun required verification and retry up to three times. Never force-push.

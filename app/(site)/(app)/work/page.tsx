@@ -1,4 +1,6 @@
 import { RisoText } from "@/components/riso-heading";
+import { DeparturesBoard } from "@/components/departures-board";
+import { buildWorkDepartures } from "@/lib/departures";
 import { Conveyor } from "@/components/conveyor";
 import { FigTitle } from "@/components/figures";
 import { Pipeline } from "@/components/pipeline";
@@ -29,6 +31,7 @@ export default function WorkPage() {
             Making-of Emaki handscroll
           </Link>
         </p>
+        <DeparturesBoard kind="work" rows={buildWorkDepartures()} />
         <div className="mt-8">
           <Pipeline />
         </div>

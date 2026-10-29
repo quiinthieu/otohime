@@ -5,6 +5,7 @@ import { test } from "node:test";
 import { dbToGain, MAX_DB, SOUND_KEY } from "./sound.ts";
 import {
   brownNoise,
+  playCustomCue,
   startStoryVoice,
   stopStoryVoice,
   setSound,
@@ -125,6 +126,16 @@ test("with sound off the pond's water makes nothing", () => {
   assert.deepEqual(take(), []);
   assert.equal(doc.count("visibilitychange"), 0);
   stopWater(); // harmless with nothing playing
+});
+
+test("a silent preference update persists opt-in without constructing audio or playing confirmation", async () => {
+  setSound(true, { silent: true });
+  await tick();
+  assert.equal(stored.get(SOUND_KEY), "on");
+  assert.equal(FakeAudioContext.made, 0);
+  assert.deepEqual(take(), []);
+  setSound(false, { silent: true });
+  assert.equal(stored.get(SOUND_KEY), "off");
 });
 
 test("with sound on a click starts one looped, low-passed, quiet water source", async () => {
@@ -298,4 +309,18 @@ test("a pending resume never revives a cancelled or muted voice", async () => {
   stopStoryVoice(); setSound(false); release(); await tick();
   assert.deepEqual(take(), []);
   FakeAudioContext.holdResume = false;
+});
+
+test("custom cue policy is rechecked after a pending audio resume", async () => {
+  setSound(false); take();
+  setSound(true, { silent: true });
+  FakeAudioContext.holdResume = true;
+  let allowed = true;
+  const cue = { db: -24, notes: [{ hz: 1640, at: 0, attack: .001, decay: .007 }] };
+  assert.equal(playCustomCue(cue, () => false), false);
+  assert.equal(playCustomCue(cue, () => allowed), true);
+  allowed = false; FakeAudioContext.releaseResume!(); await tick();
+  assert.deepEqual(take(), [], "a reduced-motion change while resuming cannot schedule a stale clack");
+  FakeAudioContext.holdResume = false;
+  setSound(false);
 });
