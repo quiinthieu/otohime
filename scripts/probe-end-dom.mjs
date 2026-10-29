@@ -66,6 +66,28 @@ export async function settleEndTitle(footer, timeoutMs) {
   return { pending: finite().length, waitedMs: Math.round(performance.now() - start) };
 }
 
+// Observe the same six entrance starts the probe asserts, rather than sampling at a fixed wall-clock delay.
+// Preserve the last state on timeout so missing/replayed animations still fail with useful diagnostics.
+export async function settleEndEntrance(footer, timeoutMs) {
+  const started = performance.now();
+  let state;
+  do {
+    state = {
+      seen: footer?.dataset.seen ?? null,
+      active: footer?.querySelector("[data-end-stage]")?.dataset.active ?? null,
+      playStates: [".end-cloud", ".end-star", ".end-lamp", ".end-packet"].map((sel) => {
+        const node = footer?.querySelector(sel);
+        return node ? getComputedStyle(node).animationPlayState : null;
+      }),
+      starts: window.__endEntranceStarts,
+    };
+    if (state.seen === "true" && state.active === "true" && state.starts === 6 &&
+      state.playStates.every((s) => s === "running")) return state;
+    if (performance.now() - started >= timeoutMs) return state;
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  } while (true);
+}
+
 // The heading's real text geometry: its visible glyphs (RisoText's anchors, or a plain heading's own text) must sit
 // inside the heading and the viewport. The anchors are measured rather than the opacity-0 source, whose pre-wrap
 // line ends hang their spaces past the edge. A Riso heading's scrollWidth also counts its aria-hidden ::before/

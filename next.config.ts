@@ -29,6 +29,13 @@ const nextConfig: NextConfig = {
         headers: [{ key: "Content-Security-Policy", value: "default-src 'none'; script-src 'self' blob: 'wasm-unsafe-eval'; connect-src 'self' blob:; worker-src 'none'" }],
       },
       {
+        source: "/vendor/duckdb/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; worker-src 'none'" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+        ],
+      },
+      {
         source: "/play",
         headers: [
           { key: "Permissions-Policy", value: "camera=(self), microphone=()" },

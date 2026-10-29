@@ -10,8 +10,41 @@ import { test } from "node:test";
 import { site } from "../content/site.ts";
 import { CONSOLE_MENU } from "./pages.ts";
 import { SEASON_ATTR, SEASON_KEY, SEASONS, seasonScript } from "./seasons.ts";
+import { landingSettled as motionLandingSettled } from "../scripts/probe-motion-state.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
+
+test("motion landing waits for document animations, hops and reveals while scroll timelines remain active", async () => {
+  const { chromium } = await import("playwright-core");
+  const options = { headless: true, env: { ...process.env, TMPDIR: "/tmp" } };
+  const browser = process.env.CHROME_PATH
+    ? await chromium.launch({ ...options, executablePath: process.env.CHROME_PATH })
+    : await chromium.launch({ ...options, channel: "chrome" }).catch(() => chromium.launch(options));
+  try {
+    const page = await browser.newPage({ viewport: { width: 800, height: 600 } });
+    await page.setContent(`<style>
+      @keyframes drift { from { transform: rotateX(-70deg); } to { transform: rotateX(0); } }
+      .scrollmark { height: 1000px; margin-top: 200px; animation: drift 1s linear both; animation-timeline: view(); }
+      body { min-height: 3000px; }
+    </style><div class="scrollmark">departure board</div><div id="finite">page reveal</div>`);
+    await page.evaluate(() => { Object.assign(window, { __probe: { done: true } }); });
+    await page.waitForFunction(() => document.getAnimations().some(a => a.timeline !== document.timeline && a.playState === "running"));
+    assert.equal(await page.evaluate(motionLandingSettled), true, "a real scroll-driven board must not prevent a completed navigation from settling");
+    await page.evaluate(() => {
+      const animation = document.querySelector("#finite")!.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 10000, fill: "both" });
+      animation.pause();
+    });
+    assert.equal(await page.evaluate(motionLandingSettled), false, "an unfinished document animation still blocks settlement");
+    await page.evaluate(() => document.getAnimations().filter(a => a.timeline === document.timeline).forEach(a => a.finish()));
+    assert.equal(await page.evaluate(motionLandingSettled), true);
+    await page.evaluate(() => { const t = document.createElement("template"); t.id = "B:pending"; document.body.append(t); });
+    assert.equal(await page.evaluate(motionLandingSettled), false, "a pending streamed reveal still blocks settlement");
+    await page.evaluate(() => { document.querySelector("template")!.remove(); Object.assign(document, { __reactViewTransition: {} }); });
+    assert.equal(await page.evaluate(motionLandingSettled), false, "an in-flight React transition still blocks settlement");
+    await page.evaluate(() => { Object.assign(document, { __reactViewTransition: null }); Object.assign(window, { __probe: { done: false } }); });
+    assert.equal(await page.evaluate(motionLandingSettled), false, "an unfinished hop still blocks settlement");
+  } finally { await browser.close(); }
+});
 
 // A group is a document once it has a root layout; one that holds only its
 // engine (_lib/) serves nothing yet, so it has no hop to check.
@@ -244,7 +277,7 @@ test("an unknown address gets app/global-not-found.tsx, drawn on the server with
   assert.match(page, /<head>[\s\S]*<style>\{"@view-transition\{navigation:auto;types:hop\}"\}<\/style>[\s\S]*<\/head>/);
   assert.match(page, /import "\.\/\(site\)\/globals\.css";/);
   assert.match(page, /import NotFound from "\.\/\(site\)\/not-found";/);
-  assert.match(page, /<body[^>]*>\s*<NotFound \/>\s*<AppearanceRuntime \/>\s*<\/body>/);
+  assert.match(page, /<body[^>]*>\s*<NotFound \/>\s*<PlotterToggle fallback \/>\s*<AppearanceRuntime \/>\s*<\/body>/);
 });
 
 test("the site layout loads the season tints after its root sheet, and only the site does", () => {
@@ -302,7 +335,9 @@ test("the site root layout mounts the season layer first in <body>, ahead of eve
   // (components/urashima-keys.tsx) renders nothing either. Kame and the paper loader render null
   // before load/idle; their null Suspense boundaries keep dynamic routes prerenderable.
   // Kame and paper overlays follow the route content and wait for host commits. Seasons remain first.
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<KintsugiMotion \/>\s*<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?<ShimiLoader \/>\s*\{children\}\s*<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*<AppearanceRuntime \/>\s*<\/body>/);
+  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<KintsugiMotion \/>\s*<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?<ShimiLoader \/>\s*\{children\}\s*<Suspense fallback=\{null\}><StickerHunt \/><\/Suspense>\s*<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*<PlotterToggle fallback \/>\s*<AppearanceRuntime \/>\s*<\/body>/);
+
+  assert.equal(src.match(/<StickerHunt\b/g)?.length, 1);
   assert.equal(src.match(/<TactileLoader\b/g)?.length, 1);
   assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
   assert.equal(src.match(/<PressSound\b/g)?.length, 1);

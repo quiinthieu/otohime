@@ -72,7 +72,6 @@ before(async () => {
 });
 
 after(async () => {
-  for (const c of contexts) await c.close();
   await browser?.close();
   rmSync(tmp, { recursive: true, force: true });
 });
@@ -509,6 +508,7 @@ test("site paper-and-ink CSS tokens, opaque surfaces/borders, sticky status-bar 
       viewport,
       ...(viewport.width === 390 ? { isMobile: true, hasTouch: true } : {}),
     });
+    await page.clock.install();
     await page.goto(`${BASE}/play/pachinko?seed=1346454344`);
     await page
       .locator('[data-testid="pachinko-root"][data-hydrated="true"]')
@@ -659,16 +659,18 @@ test("site paper-and-ink CSS tokens, opaque surfaces/borders, sticky status-bar 
     assert.equal(await backfillBtn.getAttribute("data-batch-size"), "60");
     await backfillBtn.click();
 
-    await page.waitForFunction(
-      () => {
+    // Drive real rAF callbacks at a fixed cadence. CPU load must not decide
+    // whether the physics has received enough steps to drain all 60 records.
+    for (let second = 0; second < 30; second++) {
+      const drained = await page.evaluate(() => {
         const activeBadge = document.querySelector('[data-testid="pachinko-active-badge"]');
         const settledEl = document.querySelector('[data-testid="pachinko-readout-settled"]');
         const settled = Number.parseInt(settledEl?.textContent || "0", 10);
         return activeBadge?.textContent?.trim() === "IN-FLIGHT: 0" && settled >= 30;
-      },
-      undefined,
-      { timeout: 12_000 },
-    );
+      });
+      if (drained) break;
+      await page.clock.runFor(1000);
+    }
 
     const drainSummary = await page.evaluate(() => {
       const activeText = document.querySelector('[data-testid="pachinko-active-badge"]')?.textContent?.trim() ?? "";

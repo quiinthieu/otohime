@@ -352,8 +352,9 @@ test("an early load and 46s clock jump cannot mutate the still-unhydrated projec
   const released = new Promise<void>(resolve => { release = resolve; });
   t.after(async () => {
     release();
-    // Drain real chunk requests before disposing their request context.
-    await page.unrouteAll({ behavior: "wait" });
+    // Required chunks have loaded before the final assertions. Cancel routing
+    // before closing; late prefetch handlers may race request disposal.
+    await page.unrouteAll({ behavior: "ignoreErrors" });
     await context.close();
   });
   let held = 0;

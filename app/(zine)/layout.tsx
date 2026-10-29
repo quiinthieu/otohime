@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./zine.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Fold-a-Zine is its own root layout: its own <html>, <body> and stylesheet, so the printed sheet carries nothing of
@@ -29,7 +30,7 @@ export default function ZineLayout({ children }: LayoutProps<"/">) {
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <AppearanceBoot root="zine" />
       </head>
-      <body>{children}<AppearanceRuntime /></body>
+      <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>
     </html>
   );
 }

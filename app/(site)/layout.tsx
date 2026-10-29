@@ -15,7 +15,9 @@ import "./globals.css";
 import "./seasons.css";
 import "./letterpress.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
+import { StickerHunt } from "@/components/sticker-hunt";
 import { KintsugiMotion } from "@/components/kintsugi-card";
 
 export const metadata: Metadata = {
@@ -78,10 +80,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Recognize the word before the handheld consumes its single-letter keys. */}
         <ShimiLoader />
         {children}
+        <Suspense fallback={null}><StickerHunt /></Suspense>
         {/* Overlays follow route content and wait for each paper host's React commit. */}
         <Suspense fallback={null}><KameLoader /></Suspense>
         <Suspense fallback={null}><TactileLoader /></Suspense>
-        <AppearanceRuntime />
+        <PlotterToggle fallback /><AppearanceRuntime />
       </body>
     </html>
   );
