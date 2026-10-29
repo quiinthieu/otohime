@@ -1,6 +1,6 @@
 # Task 3 — deterministic Ink Shelf and accessible route
 
-The original implementation evidence below belongs to `run-9661`. The recovery verification and publication procedure for **run-9669** are recorded at the end of this file.
+The original implementation evidence below belongs to `run-9661`. Recovery verification for **run-9669** and fresh verification for **run-9695** follow below.
 
 Plan `pm-299`, task `t-1767`, run `run-9661`, 2026-10-29.
 Branch: `pm-299-t-1767-ink-shelf`. Base: `95887d3eef1947d487726f17b276b5b72c398462`.
@@ -105,3 +105,43 @@ Bounded plan history read: all-runs endpoint returned seven records without a cu
 Publication procedure: commit on the task branch, write the exact SHA/subject to worker `shared/artifacts/commits.txt` and `shared/artifacts/run-9669/commits.txt`, then `git push origin HEAD` and normal `git push origin HEAD:main` to fast-forward the tested commit into integration. Return the primary checkout to this delivery branch before pushing so the runner inspects the delivered HEAD. The rescue remains preserved. On a non-fast-forward rejection, use the explicitly authorized pull/rebase and rerun both contract gates before retrying; never force push. Actual push outcomes and delivery SHA are bound by the summary report rather than claimed before publication here.
 
 Integration deployed: **unproven**. Capacity wait: **none**. Local execution demonstrated: **yes**. Task 3 implementation is complete; deployed product acceptance remains **pending**, owned by plan-manager CI/QA for `t-1767` at the submitted `git_sha`, and fails if delivery CI or deployed shelf usability checks fail. No known shelf defect is deferred. Three.js and book-to-page transition wiring remain Tasks 4–5. Stop after publication and summary; no CI watching or deployed checks. Current raw check logs, browser driver/output and fingerprints are worker artifacts under `shared/artifacts/run-9669/`.
+
+## Fresh verification — run-9695
+
+2026-10-29. Claimed `t-1767` before repository work. The persisted run identifies profile **codex-sol-6-1-high**, model **gpt-6.1-sol**, effort **high**, fleet worker **billie-mac**. Created branch `pm-299-t-1767-verify-run-9695` from freshly fetched `origin/main` at `573b70e9de539096f3f9e296fe075307b3fe288f`, which already contains delivery `bfce6a2ffc25d09d4b3a425ff61a4bd978287fa1`. No shelf implementation repair was necessary: the five source/test files, lockfile and Next configuration match all seven SHA-256 fingerprints above exactly. This run changes only this evidence document.
+
+Read installed Next 16.4.2 App Router pages, Server/Client Components, lazy-loading and View Transitions guidance. The two referenced standing-rule documents remain absent, including after a filename search; followed AGENTS.md and the supplied contract. No codebase knowledge-graph tool was available, so source was inspected directly.
+
+Installed the exact lock using `npm ci`. The worker initially supplied Node **22.12.0** / npm **10.9.0**. Its full suite executed 2,736 tests with one failure: `lib/seasons.test.ts:107` rejected `America/Coyhaique` because that runtime's ICU timezone database is older. `npm ci` also warned that locked `eslint-visitor-keys` requires Node >=22.13 on the Node 22 line. Installed pinned Node **22.23.3** outside the checkout, matching the prior green delivery's runtime; ICU **78.3** recognizes that zone. No application/test/dependency changes or skipped tests were used to fix the environment.
+
+| Current check, Node 22.23.3 / npm 10.9.0 | Result |
+| --- | --- |
+| Contract `shelf-unit` | PASS: 9 tests, zero failures |
+| `TMPDIR=/tmp npm test` | PASS: 2,736 tests, zero failures/skips |
+| `npm run typecheck` | PASS |
+| `npm run lint` | PASS: zero errors, 11 existing unrelated warnings |
+| `npm run build` | PASS: `/shelf` partially prerendered |
+| Owner identity and whitespace checks | PASS |
+
+The complete required command chain exited zero. The unconfigured build still prints the existing Better Auth default-secret diagnostics while exiting zero. The local production server uses the repository E2E public placeholder and loopback auth URL; its raw tail contains no auth failure. Restored only `content/history.json` from the clean prebuild copy after inspecting the generator's diff; generated output is excluded from delivery.
+
+Real execution: Next **16.4.2**, React **19.3.0**, production build **`XxPYUZNlm9f6UmMQQ0fqx`**, locked Playwright Core **1.64.0**, installed Chrome **156.0.8078.48**, server `127.0.0.1:4327`:
+
+```text
+SSR HTTP 200: all 14 project/note links in the raw crawlable list
+1366x768 and 390x844: filters, keyboard Tab focus tracking, unique transition names pass
+576px shelf frame unchanged across filters; no horizontal overflow or console/page errors
+Negative control: JavaScript disabled, all links and reserved geometry remain; real note navigation passes
+Capability negative control: reduced motion + Save-Data + unavailable WebGL preserve functional flat links
+Reduced motion disables all book transition names
+```
+
+HTML, hydration, Chrome rendering and navigation were real. Save-Data and unavailable WebGL were capability fixtures; no fake renderer or projection adapter was used. No new assets, real credentials or database writes were needed. The server was stopped after the checks. Frame measurements establish the shelf's reserved geometry, not a whole-site CLS audit.
+
+History inspection: the plan endpoint returned 14 runs, no cursor: seven succeeded, five failed, two running. Explicit failed/completed/running filters were read; `completed` returns zero because plan successes are named `succeeded`. Task-manager FAILED and COMPLETED pages at offsets 0 and 10, limit 10, were inspected under `project_id=plan-manager` (totals 154 failed / 1,183 completed). An initial `project_id=otohime` scan was empty because Otohime is the **repoId**, not the task project. The current unfiltered RUNNING page returned five jobs, including this run and `run-9696`. These bounded scans are not a complete platform history audit; full raw logs remain unproven.
+
+Read raw runner tails for the prior shelf delivery/recovery and both QA attempts. `run-9661` really failed the publication check after a branch-only push; `run-9669` exited zero after publishing `bfce6a2` to main. For `run-9682` (`81d64689-85f0-4cb9-8317-67c4a5a76001`) and `run-9683` (`f9c89481-dfdb-4ce2-81f2-c95f688644c5`), direct task-manager tails end with **Selected model is at capacity**, exit 1, and **workspace has no local work beyond origin/main**. Both used profile `codex-sol-medium`, model `gpt-6-sol`, effort `medium`. Their `push_failed` markers quote the known-issue text supplied in their prompts; neither tail demonstrates an attempted push. Direct task-manager tails resolve the incomplete `get_run` log for run-9682. Both failed QA callbacks, plus successful delivery/verification callbacks, are persisted as delivered once; corresponding plan runs report zero callback application failures. The board's green gate **ver-3847** passed both contract gates at **bfce6a2**. No shelf executable defect is established by the QA capacity failures.
+
+Raw local logs, browser driver/output, seven-file fingerprint manifest and bounded history evidence are worker artifacts under `shared/artifacts/run-9695/`. Publication writes the actual delivery SHA/subject to `shared/artifacts/commits.txt` and `shared/artifacts/run-9695/commits.txt`, pushes `origin HEAD`, then normally fast-forwards `origin HEAD:main` for this runner's integration requirement. Any main conflict requires the authorized rebase plus both contract gates again; no force push. Actual outcomes and SHA are bound by the summary report.
+
+Integration deployed: **unproven**. Waiting for capacity in this run: **no**. Local execution demonstrated: **yes**. Task 3 implementation remains delivered; deployed acceptance is **pending required plan-manager CI/QA for t-1767 at the summary's pushed SHA**, owned by plan-manager, failing on a failed delivery gate or deployed shelf acceptance check. No known shelf defect is deferred. This software_engineer run does not supply a QA verdict, change QA profiles, watch CI, or inspect the deployed system. Three.js and book-to-page wiring remain Tasks 4–5.
