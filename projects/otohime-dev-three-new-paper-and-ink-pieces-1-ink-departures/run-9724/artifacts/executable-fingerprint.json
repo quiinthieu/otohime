@@ -1,0 +1,20 @@
+{
+  "algorithm": "sha256",
+  "combined": "3b53fd43eb9fb75eda4acc30cf477a5d53b2cce701de9de097e09027607008ed",
+  "files": {
+    "app/(site)/(app)/play/page.tsx": "a97450c444e6ac5682fdb1533c7e0c4af0a59578a6a46265af0504139479a774",
+    "app/(site)/(app)/play/senko/_components/senko-loader.tsx": "98f5e0cf12d0de979e8d09d68c113705d0bdcf81ad77506948c7f7bbf329cf23",
+    "app/(site)/(app)/play/senko/_components/senko-stage.tsx": "b411546a360bfbe51fa42561fd2d2b0f1bf9a5547cf2fcc4ff6ed3f8cdd1ede5",
+    "app/(site)/(app)/play/senko/_lib/senko.ts": "2bbfd3dbfbaadb22cbbc7163cf7cb0ecfb5b93ce4d0916da6fdb490ebb162830",
+    "app/(site)/(app)/play/senko/opengraph-image.tsx": "d8c7e4544c0eaf6a4c7b7b03f7c53e63409edcfd57b41f21efe6c74b7d989e37",
+    "app/(site)/(app)/play/senko/page.tsx": "d1e4059f91672ef18c8bc7280dc51bb0e60c593575f1199c47eb8e120ea545e2",
+    "app/(site)/(app)/play/senko/senko.css": "3209a7991bdb0c48423fec460a735a0660f8b6588ce5e3d2d727ec2c7fba12c7",
+    "e2e/senko.test.ts": "fad9a8a27d2b2a863aa57d26a91d6ed9a84f507e7789e244770768e53959d280",
+    "lib/ink-particles.ts": "b5f7552ff8cbbec5fe35fa9447383c441b861544b8530dcbbe433749250877f1",
+    "lib/senko.ts": "2b639952132b3e025b14e62e1aee015e4b8d92c5443f86faaad47c5a18343d47",
+    "lib/sound-client.ts": "74a8cf231442d750f4f07d4a8ad022ad0998adb5b5ceee2034df205d5cd4fdf7",
+    "lib/sound.ts": "7711e42a5aa37824caafd391d3cb61e48020c621749602af8f3975109387af7f",
+    "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b"
+  }
+}

@@ -27,6 +27,11 @@ export default function PlayPage() {
         <div className="mt-8">
           <ClawMachine games={site.games} />
         </div>
+        <section className="mt-12" aria-labelledby="senko-heading">
+          <h2 id="senko-heading" className="caption"><RisoText>Senko Hanabi</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">Hold a tiny ink sparkler steady as peony, pine needles, willow and falling chrysanthemum bloom across the paper. A quiet summer ritual, with optional crackle.</p>
+          <p><Link href="/play/senko" className="btn" data-testid="play-senko-link">Light a Senko Hanabi →</Link></p>
+        </section>
         <section className="mt-12" aria-labelledby="hanafuda-heading">
           <h2 id="hanafuda-heading" className="caption">
             <RisoText>Hanafuda Koi-Koi</RisoText>

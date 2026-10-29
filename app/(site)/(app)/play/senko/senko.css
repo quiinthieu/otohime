@@ -1,0 +1,28 @@
+.senko-page { --senko-ember: #b74729; }
+.senko-island { margin-top: 2rem; }
+.senko-paper { position: relative; border: 1px solid var(--line); background: var(--paper-2); overflow: hidden; border-radius: 48% 48% 3px 3px / 10% 10% 3px 3px; }
+.senko-paper::after { content: ""; position: absolute; inset: 12px; border: 1px solid var(--line); border-radius: inherit; pointer-events: none; }
+.senko-canvas { display: block; width: 100%; height: clamp(320px, 52vw, 440px); color: var(--ink); touch-action: none; user-select: none; cursor: crosshair; }
+.senko-margin { position: absolute; top: 2rem; left: 2rem; writing-mode: vertical-rl; letter-spacing: .3em; font-size: .85rem; color: var(--muted); pointer-events: none; }
+.senko-caption { position: absolute; right: 1.5rem; bottom: 1.5rem; color: var(--muted); font-size: .75rem; letter-spacing: .15em; pointer-events: none; }
+.senko-controls { display: flex; gap: .65rem; flex-wrap: wrap; margin-top: 1rem; }
+.senko-island button { min-height: 44px; white-space: normal; }
+.senko-hold { touch-action: none; user-select: none; }
+.senko-island button[aria-pressed="true"] { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+.senko-status { min-height: 3.5em; margin-top: 1rem; font-size: 1.05rem; }
+.senko-help { color: var(--muted); max-width: 66ch; margin-top: .5rem; }
+.senko-guide { margin-top: 2rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+.senko-guide ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-top: 1rem; list-style: none; padding: 0; }
+.senko-guide button { display: block; text-align: left; margin-bottom: .5rem; }
+.senko-guide p { color: var(--muted); font-size: .9rem; }
+.senko-guide small { display: block; letter-spacing: .12em; }
+.senko-island button:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.senko-loading { min-height: 440px; display: grid; place-items: center; }
+@media (max-width: 480px) {
+  .senko-guide ol { grid-template-columns: 1fr; gap: 1rem; }
+  .senko-margin { left: 1.25rem; }
+  .senko-controls > button { flex: 1 1 42%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .senko-island *, .senko-island *::before, .senko-island *::after { animation: none !important; transition: none !important; }
+}

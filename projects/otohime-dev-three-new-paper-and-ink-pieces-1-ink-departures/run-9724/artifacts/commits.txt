@@ -1,0 +1,10 @@
+Plan: pm-301
+Task: t-1786
+Run: run-9724
+Branch: pm-301-t-1786-senko
+Base: 377dfe09193ff6d0aa3ab4fd02d339749485a19e
+Subject: pm-301/t-1786: feat: add the interactive Senko Hanabi sparkler
+Delivery: enclosing commit; the submitted summary carries its immutable git_sha.
+Resolve: git log -1 --format=%H -- projects/otohime-dev-three-new-paper-and-ink-pieces-1-ink-departures/run-9724/artifacts/commits.txt
+Save commands: git push origin HEAD; git push origin HEAD:main
+Policy: normal fast-forward pushes only; rebase and rerun task verification if main advances.
