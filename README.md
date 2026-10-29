@@ -25,6 +25,25 @@ The script raises Node's HTTP header size so mini-app cookies on `localhost` do 
 
 ## Layout
 
+The paper experiments live at `/timeline` (2018–2026 pop-up archive) and
+`/ledger/sql` (Ink Ledger SQL desk); `/ledger` keeps the Stamp Ledger. Work links
+to both experiments. The timeline labels unrecorded career years explicitly;
+`lib/timeline.ts` builds its recorded entries from the public site content.
+
+Pen plotter is available in the masthead, or at the bottom right of standalone
+projects. It samples inline SVG strokes, reduces pen travel within ink layers,
+and exports A4/A5 SVGs in millimetres. Photos, raster sketches and HTML/SVG type
+are excluded. The page remains intact underneath the temporary overlay.
+
+DuckDB loads only after **Open DuckDB**. `prebuild` copies the pinned package's
+workers/WASM into ignored `public/vendor/duckdb/` and generates
+`public/ledger-sql.json` from explicit public fields. No database records enter
+that export: `music_plays` is an empty typed table until a public listening export
+exists; `songs` contains the curated songs. External access and extension loading
+are disabled; the worker is released after six seconds on a timed-out query.
+Saved receipts remain readable without WASM or JavaScript. Run browser coverage
+with `node --experimental-strip-types scripts/e2e.mjs --test e2e/plotter.test.ts e2e/timeline.test.ts e2e/sql-desk.test.ts`.
+
 ```
 app/                 holds only api/, icon.svg and global-not-found.tsx (the 404 for an unknown address, drawn
                      with the site's parcel page); every page lives in a route group
