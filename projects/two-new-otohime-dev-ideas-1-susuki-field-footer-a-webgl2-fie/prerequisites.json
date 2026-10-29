@@ -1,0 +1,8 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-299",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "Both Susuki Field footer (WebGL2 sumi-ink pampas grass in EndFooter) and Ink Shelf (/shelf Three.js 3D bookshelf with custom sumi-e outline and hatching post-process and View Transitions) are purely client-side and repository-owned Next.js App Router features using installed packages (three 0.186.1, @react-three/fiber 9.8.2, @react-three/drei 10.7.9) and deterministic TypeScript unit/Playwright E2E tests. No external APIs, secrets, database migrations, or operator-owned infrastructure are required.",
+  "prerequisites": []
+}
