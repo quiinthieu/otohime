@@ -42,7 +42,8 @@
     "hanafuda:verify": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-hanafuda-engine.mjs",
     "peep-box:vendor": "node scripts/vendor-peep-box.mjs",
     "peep-box:verify": "node scripts/verify-peep-box-camera.mjs",
-    "test:ghosts": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/ghosts.test.ts"
+    "test:ghosts": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test e2e/ghosts.test.ts",
+    "seismo:refresh": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seismo-fetch.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.3.0",
