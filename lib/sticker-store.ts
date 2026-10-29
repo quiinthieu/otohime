@@ -39,5 +39,6 @@ export function updateCollection(change: (s: Collection) => Collection): Collect
 export function useCollection() {
   const collection = useSyncExternalStore(subscribe, () => state, () => server);
   const persistent = useSyncExternalStore(subscribe, () => durable, () => true);
-  return { collection, durable: persistent };
+  const ready = useSyncExternalStore(subscribe, () => loaded, () => false);
+  return { collection, durable: persistent, ready };
 }

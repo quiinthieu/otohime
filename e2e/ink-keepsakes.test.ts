@@ -63,7 +63,9 @@ test("machine spends once per keyboard/drag turn, tracks duplicates, real odds a
   await page.getByRole("button", { name: "Crack open your capsule" }).click();
   assert.equal(Number(await page.getByTestId("stock-total").innerText()), initial - 1);
   assert.equal((await collection(page)).owned.spark, 1);
-  await page.goto(`${BASE}/work`); await page.goto(`${BASE}/play/gashapon`);
+  await page.goto(`${BASE}/work`);
+  await page.waitForFunction(key => JSON.parse(localStorage.getItem(key) ?? "null")?.visited?.includes("/work"), COLLECTION_KEY);
+  await page.goto(`${BASE}/play/gashapon`);
   await page.getByRole("button", { name: "Insert paper coin" }).click();
   const crank = page.getByRole("button", { name: "Turn crank clockwise" });
   const b = (await crank.boundingBox())!, cx = b.x + b.width / 2, cy = b.y + b.height / 2, radius = b.width * .32;
@@ -87,7 +89,7 @@ test("four hidden finds are one-time, typing-safe, and persist across full loads
   for (const [path, id] of [["/notes", FINDS.notes], ["/sketches", FINDS.sketches], ["/a-lost-ink-scrap", FINDS.lost]]) {
     await page.goto(`${BASE}${path}`);
     await page.getByTestId(`find-${id}`).getByRole("button").click();
-    await page.reload(); await page.getByTestId(`find-${id}`).getByRole("button").waitFor();
+    await page.reload(); await page.getByTestId(`find-${id}`).getByRole("button", { name: /collected$/ }).waitFor();
     assert.equal(await page.getByTestId(`find-${id}`).getByRole("button").isDisabled(), true);
     assert.equal((await collection(page)).owned[id], 1);
   }
@@ -97,16 +99,26 @@ test("four hidden finds are one-time, typing-safe, and persist across full loads
   assert.equal((await collection(page)).finds.includes(FINDS.konami), false);
   await page.getByRole("heading", { level: 1 }).click();
   for (const key of KONAMI) await page.keyboard.press(key);
-  await page.getByRole("status").filter({ hasText: "Secret Kame found" }).waitFor();
+  await page.getByTestId("sticker-hunt-announcement").filter({ hasText: "Secret Kame found" }).waitFor();
   for (const key of KONAMI) await page.keyboard.press(key);
   assert.equal((await collection(page)).owned[FINDS.konami], 1);
   assert.equal((await collection(page)).finds.length, 4);
   assert.deepEqual(errors, []);
 });
 
+test("hidden finds stay disabled until collection hydration is available", { timeout: 180000 }, async () => {
+  const context = await browser.newContext({ javaScriptEnabled: false }); contexts.push(context);
+  const page = await context.newPage();
+  // The global 404 renders its find on the server; route-aware Notes finds
+  // live behind a pathname Suspense boundary and need the client to appear.
+  await page.goto(`${BASE}/a-lost-ink-scrap`);
+  assert.equal(await page.getByTestId(`find-${FINDS.lost}`).getByRole("button").isDisabled(), true);
+});
+
 test("album supports pointer/keyboard placement, reload, shader fallback and nonblank PNG", { timeout: 180000 }, async () => {
   const { page, errors } = await open({ mobile: true, reduce: true, fixture: true });
   await page.goto(`${BASE}/play/gashapon/album`);
+  const empty = await png(page, "Save album PNG", 1200, 900);
   await page.getByRole("button", { name: "Place Foil Moon", exact: true }).click();
   const placed = page.getByRole("button", { name: /^Foil Moon, copy/ });
   await placed.focus(); await placed.press("ArrowRight"); await placed.press("r");
@@ -116,7 +128,12 @@ test("album supports pointer/keyboard placement, reload, shader fallback and non
   const state = await collection(page); assert.ok(state.album[0].x > .22, JSON.stringify({ album: state.album, bounds: b })); assert.equal(state.album[0].rotation, 10);
   await page.reload(); await placed.waitFor(); assert.deepEqual((await collection(page)).album, state.album);
   assert.equal(await page.locator(".holo-foil").evaluate(el => getComputedStyle(el).display), "none");
-  await png(page, "Save album PNG", 1200, 900);
+  const saved = await png(page, "Save album PNG", 1200, 900);
+  const blankPixels = await sharp(empty.bytes).ensureAlpha().raw().toBuffer();
+  const placedPixels = await sharp(saved.bytes).ensureAlpha().raw().toBuffer();
+  let changed = 0;
+  for (let i = 0; i < placedPixels.length; i += 4) if (placedPixels[i] !== blankPixels[i] || placedPixels[i + 1] !== blankPixels[i + 1] || placedPixels[i + 2] !== blankPixels[i + 2]) changed++;
+  assert.ok(changed > 2000, `the placed sticker changes the actual exported page (${changed} pixels)`);
   await page.evaluate(() => Object.defineProperty(navigator, "canShare", { configurable: true, value: () => false }));
   await png(page, "Share album image", 1200, 900); // unsupported file share downloads
   // Exercise the file-sharing adapter without opening the operating system's share sheet.
