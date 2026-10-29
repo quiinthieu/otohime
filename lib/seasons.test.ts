@@ -218,3 +218,10 @@ test("the comparison catches a script that forgets the south", () => {
   assert.equal(runScript(north, now, "Australia/Sydney", null), "winter");
   assert.notEqual(runScript(north, now, "Australia/Sydney", null), resolveSeason(null, now, "Australia/Sydney"));
 });
+
+test("southern time zones and browser aliases use the southern season", () => {
+  for (const zone of ["America/Coyhaique", "Pacific/Pitcairn", "Asia/Jakarta", "Brazil/West", "Africa/Luanda"]) {
+    assert.equal(hemisphereFromZone(zone), "south", zone);
+    assert.equal(resolveSeason("auto", utc("2026-01-15"), zone), "summer", zone);
+  }
+});

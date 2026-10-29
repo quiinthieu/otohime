@@ -406,3 +406,14 @@ test("a question that matches only Play, Home or Bio gets the offline answer and
     assert.deepEqual(body.lines, [OFFLINE, ...answer(index, question).lines], "the offline answer still uses the whole index");
   }
 });
+
+test("a substantive answer without a valid shown citation falls back", async () => {
+  for (const cited of [[], ["made-up"], ["article-why-the-sky-is-blue"]]) {
+    const fake = fakeClient({ lines: ["An unsupported claim."], cited });
+    const res = await handlePost(post({ question: "work" }), deps({ complete: fake.complete }));
+    const body = await res.json();
+    assert.equal(body.mode, "offline");
+    assert.deepEqual(body.lines, [OFFLINE, ...answer(index, "work").lines]);
+    assert.ok(body.sources.length > 0);
+  }
+});

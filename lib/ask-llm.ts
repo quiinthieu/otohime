@@ -1,19 +1,23 @@
 // Ask the console, with a model: the optional tier behind POST /api/ask. Off unless ASK_LLM=1 and
-// ANTHROPIC_API_KEY are both set; then GET reports enabled and POST answers a question from the top
+// the selected provider's API key are both set; then GET reports enabled and POST answers a question from the top
 // Work, Projects and Notes passages lib/ask.ts finds. The model sees only those passages and may cite only their ids, so every
 // link on the receipt is one of the site's own pages. Each IP gets ASK_LIMITS.hour model answers an
 // hour and the whole site ASK_LIMITS.day a day; past either, or on any SDK error, a refusal or a reply
 // that does not parse, the console prints the offline answer under an (OFFLINE) line.
-// Framework-free: app/api/ask/route.ts passes the SDK call, the Postgres store and the env in.
+// Framework-free: app/api/ask/route.ts passes the provider call, the Postgres store and the env in.
 import Anthropic from "@anthropic-ai/sdk";
 import { createHmac } from "node:crypto";
 import { answer, search, type AskIndex, type Passage, type PassageKind, type Reply, type Source } from "./ask.ts";
 
 type CreateParams = Anthropic.Beta.Messages.MessageCreateParamsNonStreaming;
-type Message = Anthropic.Beta.Messages.BetaMessage;
+export type AskCompletion = { stop_reason: string | null; content: { type: string; text?: string }[] };
+export class AskProviderError extends Error {
+  name = "AskProviderError";
+}
 
 // Haiku: a visitor oracle answering from six short passages needs a cheap, fast model, not Opus.
 export const MODEL = "claude-haiku-5-5";
+export const GEMINI_MODEL = "gemini-3.5-flash-lite";
 export const MAX_PASSAGES = 6;
 export const ASK_LIMITS = { hour: 10, day: 150 } as const;
 export const MAX_BODY_BYTES = 1024;
@@ -26,6 +30,9 @@ const MAX_TOKENS = 2048;
 
 export type AskEnv = {
   ASK_LLM?: string;
+  ASK_PROVIDER?: string;
+  ASK_MODEL?: string;
+  GEMINI_API_KEY?: string;
   ANTHROPIC_API_KEY?: string;
   BETTER_AUTH_URL?: string;
   BETTER_AUTH_SECRET?: string;
@@ -38,14 +45,21 @@ export type AskDeps = {
   env: AskEnv;
   index: AskIndex;
   store: AskUsageStore;
-  complete: (params: CreateParams) => Promise<Message>;
+  complete: (params: CreateParams) => Promise<AskCompletion>;
   now?: () => Date;
 };
 
 export type AskAnswer = Reply & { mode: "llm" | "offline" };
 
+export function providerFor(env: AskEnv): "anthropic" | "gemini" | null {
+  const provider = env.ASK_PROVIDER ?? "anthropic";
+  return provider === "anthropic" || provider === "gemini" ? provider : null;
+}
+
 export function llmEnabled(env: AskEnv): boolean {
-  return env.ASK_LLM === "1" && Boolean(env.ANTHROPIC_API_KEY);
+  const provider = providerFor(env);
+  const key = provider === "gemini" ? env.GEMINI_API_KEY : provider === "anthropic" ? env.ANTHROPIC_API_KEY : undefined;
+  return env.ASK_LLM === "1" && Boolean(key?.trim());
 }
 
 const SYSTEM = [
@@ -103,12 +117,12 @@ export function topPassages(index: AskIndex, question: string): Passage[] {
 
 // The whole request: no sampling knobs and no cache_control, by design. No `fallbacks` either: Haiku has
 // no server-side fallback, and a refusal already prints the offline answer.
-export function buildPrompt(question: string, passages: Passage[]): CreateParams {
+export function buildPrompt(question: string, passages: Passage[], model = MODEL): CreateParams {
   const docs = passages
     .map((p) => `<passage id="${escapeXml(p.id)}" title="${escapeXml(p.title)}">${escapeXml(p.text)}</passage>`)
     .join("\n");
   return {
-    model: MODEL,
+    model,
     max_tokens: MAX_TOKENS,
     output_config: { effort: "low", format: { type: "json_schema", schema: ANSWER_SCHEMA } },
     system: SYSTEM,
@@ -247,25 +261,29 @@ export async function handlePost(request: Request, deps: AskDeps): Promise<Respo
     return json(offline(index, question));
   }
 
-  let message: Message;
+  let message: AskCompletion;
   try {
-    message = await deps.complete(buildPrompt(question, passages));
+    message = await deps.complete(buildPrompt(question, passages, env.ASK_MODEL?.trim() || (providerFor(env) === "gemini" ? GEMINI_MODEL : MODEL)));
   } catch (error) {
-    if (error instanceof Anthropic.AnthropicError) {
-      console.error("ask model call failed", error.name, error.message);
+    if (error instanceof Anthropic.AnthropicError || error instanceof AskProviderError) {
+      console.error("ask model call failed", error.name);
       return json(offline(index, question));
     }
     throw error;
   }
   if (message.stop_reason !== "end_turn") return json(offline(index, question));
-  const text = message.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("");
+  const text = message.content.flatMap((b) => (b.type === "text" && typeof b.text === "string" ? [b.text] : [])).join("");
   const parsed = parseAnswer(text);
   if (!parsed) return json(offline(index, question));
+  const sources = mapSources(parsed.cited, hrefMap(passages));
+  // Never print a substantive model answer without a page the visitor can check.
+  const noMatch = parsed.lines.length === 1 && parsed.lines[0] === "NO MATCH.";
+  if (!noMatch && sources.length === 0) return json(offline(index, question));
   const result: AskAnswer = {
     mode: "llm",
     intent: "search",
     lines: parsed.lines,
-    sources: mapSources(parsed.cited, hrefMap(passages)),
+    sources,
   };
   return json(result);
 }
