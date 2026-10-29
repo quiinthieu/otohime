@@ -133,6 +133,46 @@ list above. The manifest retains the unchanged Susuki core fingerprint as
 identical through these fixture-only corrections. Final typecheck/lint pass
 after both corrections (`integrated-typecheck-final.log`, `integrated-lint-final.log`).
 
+### Publication retry 1
+
+The first normal main push of `e8ffbc51470be6470d6f2d8e8187c639322c9396`
+was rejected as fetch-first. The authorized `git pull --rebase origin main`
+preserved every change above **b241fd1873f9431ed7a0c859272d1844c731b07c**;
+the retained repair is **838eb9305ac90bfb9eb13ce55545092ae8b8818a**.
+No force push, reset, stash, amendment or dropped work was used.
+
+The intervening upstream commits change **tests, CI/Vercel configuration and
+evidence**, with no application, library, lock or Next config changes. They
+independently convert four older Save-Data fixtures to real EventTargets,
+synchronize Pachinko's normal-record drain, and change CI to a 1200s command,
+22m step and 35m job. They also disable Vercel's automatic Git deployment.
+Those upstream changes are preserved and are not attributed to this repair.
+The plain-object Susuki regression remains explicit and passing; replacing it
+with an EventTarget would conceal the compatibility boundary and was not done.
+Earlier statements about the older fixtures and 960s budget describe the
+pre-retry integration, not these subsequently inherited changes.
+
+Both exact task gates passed again after rebase: **23/23** Susuki/Bottle from a
+fresh production build, **2,795/2,795** units, types/lint and certified local
+closure. Captures are `retry1-{required,unit,typecheck,lint,closure}.log`.
+The affected five browser suites pass **56/56** (`retry1-targeted.log`), the
+changed Pachinko scenario passes **1/1** (`retry1-pachinko.log`), and the footer
+HTTP walk passes **67/67** (`retry1-walk.log`). The final retry browser probe
+passes **177/177**, with zero hydration, console, page, unexpected network or
+local server errors (`retry1-probe.log`). The complete **292/292** native result
+above applies to identical application sources/lock and real field bytes,
+with the then-current fixtures; it is **not** represented as a full run of
+the subsequently revised upstream fixtures. Focused retry execution covers
+those revised fixtures and the changed CI regression tests.
+
+Retry build ID: **VCdkz0WZcWow8r7k8Rugh**. The Susuki core fingerprint and field
+chunk hash above remain identical. `retry1-executable.json` records the new
+test/config boundary: extended fingerprint
+**25c3c31c0fe5bee4e919c088c542cf691474cd4b284b0963a6ab6143285936a7**,
+adding the other changed browser files, CI workflow/test and `vercel.json` to
+its ordered source-hash manifest. An additional task-prefixed evidence commit
+is required to preserve these post-rebase results without amending the repair.
+
 ### History and handoff limits
 
 This run independently read two task-manager pages per terminal status (limit
@@ -160,7 +200,7 @@ are unobserved before push and are not invented. Platform owns final callback
 ingestion for `run-9762`; a missing/failed report application fails that handoff.
 No operator chore, capacity deferral, CI polling or deployed check is used.
 Decisions and lessons, including Activity retention, were recorded through
-plan-manager. Owner identity is checked before the single task-prefixed commit;
+plan-manager. Owner identity is checked before every task-prefixed commit;
 the post-push summary and artifact `commits.txt` bind its immutable delivery SHA.
 
 ## Publication retry and browser synchronization regressions — run-9726
