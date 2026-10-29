@@ -1,0 +1,61 @@
+Bounded excerpt: final 60 lines of returned runner tail; earlier output is not a complete audit.
+ ## Delivery recovery — run-9747
+
+-The recovered implementation was initially `52e866de1e806215cdd482dcc5aa3920d4d565b1`; after the authorized push-rejection rebase it is `8328232d64b519ff72bcac1c789e0d726e59ee66`. This run repairs the integrated browser probe and adds verification and publication receipts on `pm-299-t-1768-delivery-recovery`, after fetching main `e30c2577a4250ee16c5cb122ef436070c61c4e77`. No renderer, shader, dependency, or unrelated recovered content was dropped or changed. The original implementation evidence below remains historical evidence from run-9732.
++The recovered implementation was initially `52e866de1e806215cdd482dcc5aa3920d4d565b1`; after the first authorized push-rejection rebase it was `8328232d64b519ff72bcac1c789e0d726e59ee66`. This run repairs the integrated browser probe and adds verification and publication receipts on `pm-299-t-1768-delivery-recovery`, after fetching main `e30c2577a4250ee16c5cb122ef436070c61c4e77`. No renderer, shader, dependency, or unrelated recovered content was dropped or changed. The original implementation evidence below remains historical evidence from run-9732.
+
+ **Failure diagnosis:** plan-manager run-9732 and task-manager task `586af897-2a4e-42d4-a32e-1def4b153755` both persist `push_not_on_main: HEAD 3709f2e4f907 is not on origin/main`. The agent log tail contains the successful branch push; the runner subsequently rejected publication. The task's callback is `delivered`, with one attempt and zero plan-side apply failures. Delivery therefore publishes the tested task branch and fast-forwards `origin/main`, without committing on main or force-pushing. [Recovery commits receipt](run-9747/artifacts/commits.txt) identifies the implementation and enclosing recovery commit; the post-push board summary binds the delivery SHA.
+
+@@ -25,6 +25,8 @@ The recovered implementation was initially `52e866de1e806215cdd482dcc5aa3920d4d5
+
+ **Publication retry 1:** the atomic push of `3adb5da3828b2faac8e1cecc11b7549de80bbec8` was rejected because main advanced. Neither ref was published. The explicitly authorized `git pull --rebase origin main` replayed only the two task commits onto `eb67eebbcbc19373d4c6b56e350737312d5efedc` (an unrelated Senko QA/fix-plan documentation commit), without conflicts or lost changes. Both named task gates passed again: **16 shelf tests**, **2,792 repository tests**, typecheck, lint (13 existing warnings), and **219/219** static pages. [Retry verification](run-9747/artifacts/retry1-verification.txt) and [retry fingerprint](run-9747/artifacts/retry1-executable-fingerprint.json) bind these results to build **`Ew-lO4tNsoWhmo6okqMpA`**, the unchanged source fingerprint and byte-identical shelf chunks. [Retry browser receipt](run-9747/artifacts/retry1-browser-preflight.txt) records the repeated real-browser preflight against that rebuilt output. No force push is used.
+
++**Publication retry 2:** main advanced again with two further Senko QA documentation commits. The second atomic rejection published neither ref. The authorized rebase onto `463f3c8bf32efd3e96cfa0a95fc9f53f351685be` succeeded without conflicts; the renderer implementation is now `e6d0e64c7db356822b0a0522ce18423bb4920510`. Both required gates pass again: **16 shelf tests**, **2,792 repository tests**, typecheck, lint (13 existing warnings) and **219/219** static pages. [Retry 2 verification](run-9747/artifacts/retry2-verification.txt) records the rerun. [Retry 2 fingerprint](run-9747/artifacts/retry2-executable-fingerprint.json) binds build **`pMMg_ldUdlntVzF5rdBFa`** to the identical executable source, locked environment and byte-identical compiled shelf chunks. The six-group real browser execution from retry 1 is reused by that exact fingerprint; no new browser execution or deployed QA is claimed.
++
+ ## Original implementation — run-9732
+
+ Implemented in `run-9732` on `pm-299-t-1768-ink-shelf`, based on freshly fetched main `377dfe09193ff6d0aa3ab4fd02d339749485a19e`. The enclosing delivery commit is identified by [artifacts/commits.txt](artifacts/commits.txt); the board summary records its pushed SHA.
+M  projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9747/artifacts/commits.txt
+A  projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9747/artifacts/retry2-executable-fingerprint.json
+A  projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9747/artifacts/retry2-verification.txt
+M  projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/task-4-evidence.md
+
+exec
+/bin/bash -lc "bash scripts/setup-owner-git.sh --check && git commit -m 'pm-299/t-1768: docs: Record second verified publication retry' && git status --short && git log -1 --format='%H %s' && git push origin HEAD HEAD:main --atomic" in /data/build-worker/leases/0671daac-7af4-4d24-8d86-920cecb2f1fb-0d35c151507e7318248a85e642a97459/work/otohime
+ succeeded in 4013ms:
+Effective commit author: Otohime <quiinthieu@gmail.com> 1793249445 +0700
+[pm-299-t-1768-delivery-recovery f54f160] pm-299/t-1768: docs: Record second verified publication retry
+ 4 files changed, 240 insertions(+), 1 deletion(-)
+ create mode 100644 projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9747/artifacts/retry2-executable-fingerprint.json
+ create mode 100644 projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/run-9747/artifacts/retry2-verification.txt
+f54f160a9e40284090f0332c2f5dca55d147ecfd pm-299/t-1768: docs: Record second verified publication retry
+To github.com:quiinthieu/otohime.git
+   463f3c8..f54f160  HEAD -> main
+ * [new branch]      HEAD -> pm-299-t-1768-delivery-recovery
+
+mcp: plan-manager/plan_manager_submit_report started
+mcp: plan-manager/plan_manager_submit_report (completed)
+codex
+Delivered the 3D Ink Shelf and fixed the Save-Data browser probe.
+
+- Branch: `pm-299-t-1768-delivery-recovery`
+- Commit: `f54f160a9e40284090f0332c2f5dca55d147ecfd`
+- Pushed branch and fast-forwarded `main`.
+- Passed: 2,792 tests, 16 shelf tests, typecheck, lint, build, and six browser checks.
+- CI: unobserved, per contract.
+
+Evidence committed and plan-manager summary submitted.
+2026-10-29T04:51:26.082037Z ERROR codex_core::session: failed to record rollout items: thread 01a185f4-ea83-7632-ac91-330f006c7e3a not found
+tokens used
+135,725
+Delivered the 3D Ink Shelf and fixed the Save-Data browser probe.
+
+- Branch: `pm-299-t-1768-delivery-recovery`
+- Commit: `f54f160a9e40284090f0332c2f5dca55d147ecfd`
+- Pushed branch and fast-forwarded `main`.
+- Passed: 2,792 tests, 16 shelf tests, typecheck, lint, build, and six browser checks.
+- CI: unobserved, per contract.
+
+Evidence committed and plan-manager summary submitted.
+---
+Command exited with code: 0

@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: grazing depth thresholds scale by 1/ndv and suppress steep plank gradients
+ok 1 - grazing depth thresholds scale by 1/ndv and suppress steep plank gradients
+  ---
+  duration_ms: 0.895378
+  type: 'test'
+  ...
+# Subtest: Sobel depth and normal channels combine by weighted maximum, with independent controls
+ok 2 - Sobel depth and normal channels combine by weighted maximum, with independent controls
+  ---
+  duration_ms: 0.115447
+  type: 'test'
+  ...
+# Subtest: four hatching bands choose exact boundaries and share thresholds with GLSL
+ok 3 - four hatching bands choose exact boundaries and share thresholds with GLSL
+  ---
+  duration_ms: 0.661703
+  type: 'test'
+  ...
+# Subtest: debug query parsing is strict, finite and bounded; uniforms match the inspected state
+ok 4 - debug query parsing is strict, finite and bounded; uniforms match the inspected state
+  ---
+  duration_ms: 0.421154
+  type: 'test'
+  ...
+# Subtest: GLSL uses linearized depth, view-space normals, full Sobel kernels and explicit grazing suppression
+ok 5 - GLSL uses linearized depth, view-space normals, full Sobel kernels and explicit grazing suppression
+  ---
+  duration_ms: 0.217733
+  type: 'test'
+  ...
+# Subtest: bundle isolation: only the shelf lazy renderer and existing atom import Three/R3F
+ok 6 - bundle isolation: only the shelf lazy renderer and existing atom import Three/R3F
+  ---
+  duration_ms: 58.925877
+  type: 'test'
+  ...
+# Subtest: renderer lifecycle keeps demand frames, bounded DPR, context-loss fallback and explicit GPU disposal
+ok 7 - renderer lifecycle keeps demand frames, bounded DPR, context-loss fallback and explicit GPU disposal
+  ---
+  duration_ms: 0.387737
+  type: 'test'
+  ...
+# Subtest: all current linked projects and notes become books with correct routes and newest-left order
+ok 8 - all current linked projects and notes become books with correct routes and newest-left order
+  ---
+  duration_ms: 2.019432
+  type: 'test'
+  ...
+# Subtest: packing fits tilted book extents within 3–4 planks with no overlap, including maximum thickness
+ok 9 - packing fits tilted book extents within 3–4 planks with no overlap, including maximum thickness
+  ---
+  duration_ms: 3.085579
+  type: 'test'
+  ...
+# Subtest: dimensions and tilt are deterministic, input-order independent, content-sensitive and immutable
+ok 10 - dimensions and tilt are deterministic, input-order independent, content-sensitive and immutable
+  ---
+  duration_ms: 0.790067
+  type: 'test'
+  ...
+# Subtest: caps at 40, respects smaller caps, omits unlinked projects and deduplicates identities across input
+ok 11 - caps at 40, respects smaller caps, omits unlinked projects and deduplicates identities across input
+  ---
+  duration_ms: 1.233579
+  type: 'test'
+  ...
+# Subtest: orthographic projection maps all corners to CSS pixels with inverted Y and optional viewport offset
+ok 12 - orthographic projection maps all corners to CSS pixels with inverted Y and optional viewport offset
+  ---
+  duration_ms: 0.91615
+  type: 'test'
+  ...
+# Subtest: perspective projection uses the nearest corners and clips near-plane crossings before division
+ok 13 - perspective projection uses the nearest corners and clips near-plane crossings before division
+  ---
+  duration_ms: 0.722319
+  type: 'test'
+  ...
+# Subtest: a rotated MVP includes extremal corners beyond the box diagonal endpoints
+ok 14 - a rotated MVP includes extremal corners beyond the box diagonal endpoints
+  ---
+  duration_ms: 0.56077
+  type: 'test'
+  ...
+# Subtest: clamps partial books, handles enclosing frusta and rejects offscreen, behind-camera and far-clipped books
+ok 15 - clamps partial books, handles enclosing frusta and rejects offscreen, behind-camera and far-clipped books
+  ---
+  duration_ms: 1.881179
+  type: 'test'
+  ...
+# Subtest: invalid viewport, matrix and bounds return a finite invisible box
+ok 16 - invalid viewport, matrix and bounds return a finite invisible box
+  ---
+  duration_ms: 0.396939
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 154.376874

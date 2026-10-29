@@ -1,0 +1,110 @@
+ok 2758 - the default loader resolves the repo's locked playwright-core
+  ---
+  duration_ms: 1.556258
+  type: 'test'
+  ...
+# Subtest: probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+ok 2759 - probe title: the plain Riso source inside h2\#end-title, never the decorative plates
+  ---
+  duration_ms: 1062.280685
+  type: 'test'
+  ...
+# Subtest: probe bounds: measured after the one-shot ink lands, from the visible glyphs
+ok 2760 - probe bounds: measured after the one-shot ink lands, from the visible glyphs
+  ---
+  duration_ms: 1262.090436
+  type: 'test'
+  ...
+# Subtest: probe SVG inventory: one accessible basket, three original hidden layers and the exact wave, with no-JS negatives
+ok 2761 - probe SVG inventory: one accessible basket, three original hidden layers and the exact wave, with no-JS negatives
+  ---
+  duration_ms: 216.002651
+  type: 'test'
+  ...
+# Subtest: Footer 403 exit calls the heading observer after navigation before reading main h1
+ok 2762 - Footer 403 exit calls the heading observer after navigation before reading main h1
+  ---
+  duration_ms: 95.25749
+  type: 'test'
+  ...
+# Subtest: streamed /dashboard heading arriving after 1.5s resolves the real observer
+ok 2763 - streamed /dashboard heading arriving after 1.5s resolves the real observer
+  ---
+  duration_ms: 1668.860013
+  type: 'test'
+  ...
+# Subtest: missing, empty and hidden main headings fail at the 10s bound (negative control)
+ok 2764 - missing, empty and hidden main headings fail at the 10s bound (negative control)
+  ---
+  duration_ms: 10123.494141
+  type: 'test'
+  ...
+# Subtest: parseLog and parseSiteSource extract commits, notes, and project fields and reject garbled git records
+ok 2765 - parseLog and parseSiteSource extract commits, notes, and project fields and reject garbled git records
+  ---
+  duration_ms: 2.702723
+  type: 'test'
+  ...
+# Subtest: a full clone aggregates git commits, site.ts projects/notes, and ledger.json across all 12 months
+ok 2766 - a full clone aggregates git commits, site.ts projects/notes, and ledger.json across all 12 months
+  ---
+  duration_ms: 27.419828
+  type: 'test'
+  ...
+# Subtest: highlights are capped at MAX_HIGHLIGHTS_PER_MONTH while commits counts all non-merge commits in the month
+ok 2767 - highlights are capped at MAX_HIGHLIGHTS_PER_MONTH while commits counts all non-merge commits in the month
+  ---
+  duration_ms: 55.93623
+  type: 'test'
+  ...
+# Subtest: without git, outside a repository, or in an empty one, the committed fallback is preserved untouched
+ok 2768 - without git, outside a repository, or in an empty one, the committed fallback is preserved untouched
+  ---
+  duration_ms: 40.345165
+  type: 'test'
+  ...
+# Subtest: a shallow clone splices commits since fallback.head, matching a full clone byte for byte
+ok 2769 - a shallow clone splices commits since fallback.head, matching a full clone byte for byte
+  ---
+  duration_ms: 50.280911
+  type: 'test'
+  ...
+# Subtest: a shallow clone that no longer holds fallback.head preserves the fallback unchanged
+ok 2770 - a shallow clone that no longer holds fallback.head preserves the fallback unchanged
+  ---
+  duration_ms: 37.947115
+  type: 'test'
+  ...
+# Subtest: a garbled git log falls back cleanly instead of failing the build
+ok 2771 - a garbled git log falls back cleanly instead of failing the build
+  ---
+  duration_ms: 19.06026
+  type: 'test'
+  ...
+# Subtest: --check passes fresh and shallow fallbacks, tolerates later site.ts edits within MAX_LAG, and catches tampering or staleness
+ok 2772 - --check passes fresh and shallow fallbacks, tolerates later site.ts edits within MAX_LAG, and catches tampering or staleness
+  ---
+  duration_ms: 156.106714
+  type: 'test'
+  ...
+# Subtest: CLI writes the yearly log, preserves gitless fallback, and enforces --strict checks
+ok 2773 - CLI writes the yearly log, preserves gitless fallback, and enforces --strict checks
+  ---
+  duration_ms: 934.836197
+  type: 'test'
+  ...
+# Subtest: committed content/yearly-log.json is valid, canonical, in sync with content/site.ts, and package.json wires yearly-log scripts
+ok 2774 - committed content/yearly-log.json is valid, canonical, in sync with content/site.ts, and package.json wires yearly-log scripts
+  ---
+  duration_ms: 1.31183
+  type: 'test'
+  ...
+1..2774
+# tests 2792
+# suites 2
+# pass 2792
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 39477.166896

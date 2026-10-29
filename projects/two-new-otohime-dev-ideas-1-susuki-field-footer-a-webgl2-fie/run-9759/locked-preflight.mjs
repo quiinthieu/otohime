@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import * as THREE from 'three';
+import {Canvas} from '@react-three/fiber';
+import {shelfCompositeVertex,shelfCompositeFragment,shelfNormalFragment,shelfObjectVertex,buildShelfUniforms,parseOutlineDebugParams} from '../../../lib/shelf-shader.ts';
+
+const root=new URL('../../../',import.meta.url);
+const prior=JSON.parse(readFileSync(new URL('../artifacts/executable-fingerprint.json',import.meta.url)));
+const sourceHashes=Object.fromEntries(Object.keys(prior.sourceHashes).map(p=>[p,createHash('sha256').update(readFileSync(new URL(p,root))).digest('hex')]));
+const fingerprint=createHash('sha256').update(JSON.stringify(sourceHashes)).digest('hex');
+const material=new THREE.ShaderMaterial({vertexShader:shelfCompositeVertex,fragmentShader:shelfCompositeFragment,uniforms:buildShelfUniforms(parseOutlineDebugParams(new URLSearchParams()))});
+const normal=new THREE.ShaderMaterial({vertexShader:shelfObjectVertex,fragmentShader:shelfNormalFragment});
+const target=new THREE.WebGLRenderTarget(8,8);target.depthTexture=new THREE.DepthTexture(8,8,THREE.UnsignedIntType);
+const require=createRequire(import.meta.url);
+assert.equal(fingerprint,prior.fingerprint);assert.equal(typeof Canvas,'function');
+assert.ok(material.isShaderMaterial && normal.isShaderMaterial && target.isWebGLRenderTarget && target.depthTexture.isDepthTexture);
+console.log(JSON.stringify({node:process.version,three:THREE.REVISION,fiber:require('@react-three/fiber/package.json').version,next:require('next/package.json').version,react:require('react/package.json').version,Canvas:typeof Canvas,material:material.isShaderMaterial,normal:normal.isShaderMaterial,target:target.isWebGLRenderTarget,depth:target.depthTexture.isDepthTexture,sourceHashes,fingerprint,buildId:readFileSync(new URL('.next/BUILD_ID',root),'utf8').trim()},null,2));
+material.dispose();normal.dispose();target.dispose();

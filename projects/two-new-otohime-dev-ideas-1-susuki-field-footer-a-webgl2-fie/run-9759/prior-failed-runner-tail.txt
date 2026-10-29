@@ -1,0 +1,61 @@
+Bounded excerpt: final 60 lines of returned runner tail; earlier output is not a complete audit.
++2. **Mobile 390×844 at emulated device scale 3:** real render DPR caps at **1.5**. `?outlineDebug=1&kd=2&kn=0.7&ndvCutoff=0.3` exposes the matching uniforms and debug attribute. Pixel assertions find **2,848 blue grazing-suppression pixels**. Focus, hover, idle and filtering checks also pass.
++3. **Reduced motion:** moving between two empty shelf positions and driving 24 frames leaves the rendered screenshot byte-identical, proving pointer parallax is disabled.
++4. **Actual context loss:** both desktop and mobile call the real `WEBGL_lose_context` extension. The 3D canvas unmounts, `data-shelf-mode="flat"` returns, and the persistent link list regains opacity 1. No page/shader errors.
++5. **No-WebGL and Save-Data negative controls:** each keeps all 14 crawlable book links, mounts no shelf canvas, loads zero renderer/Three chunks, and successfully navigates through a real flat-shelf link. No page errors.
++6. **Home isolation:** visiting `/` loads neither the shelf renderer nor the Three core chunk. Bundle observations read every captured JS response body before navigation; unread response bodies fail the probe. Static import tests independently restrict the route's import graph.
++
++Reproduce after `npm run build` and starting `next start` with suitable local auth placeholders:
++
++```sh
++BASE_URL=http://localhost:4431 TMPDIR=/tmp node \
++  --experimental-strip-types --disable-warning=ExperimentalWarning \
++  --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
++  projects/two-new-otohime-dev-ideas-1-susuki-field-footer-a-webgl2-fie/artifacts/task-4-browser-probe.mjs
++```
++
++## Failures corrected and evidence completeness
++
++- Initial unit verification caught a floating-point strict-equality assertion; use tolerance at the 0.2 grazing boundary. Initial typecheck caught a default parameter inferred as literal `0.2`; annotate it as `number` so custom cutoff tests are valid.
++- The lease's default Node 22.12.0 failed the existing `every listed southern zone is one Intl knows` assertion for `America/Coyhaique`. Node 22.23.4 recognizes the zone and the full suite passes. The app was not changed to accommodate obsolete ICU data. This is recorded as a lesson.
++- The initial real browser attempt remained flat: R3F 9.8.2 always mounts `Canvas.fallback` DOM children. A side-effecting fallback incorrectly signalled failure. It is now `null`; capability detection, error boundaries and context-loss listeners handle real failures. A source regression invariant and the real execution probe cover the correction. This is recorded as a lesson.
++- An intermediate dev probe could not read a JS response body after navigation; that attempt was inconclusive for bundle isolation. The final probe collects and asserts complete response bodies before navigating, and reports zero unread bodies. The final production receipt is complete, with six passing groups and no ignored executable defect.
++- Runtime queue/current-job and paginated FAILED/COMPLETED histories are **not applicable**: this task builds an in-browser renderer and submits no remote executable jobs or callbacks. Local failing attempts above were inspected and resolved; final named receipts are complete. No capacity or operator deferrals exist.
++- Prebuild's regenerated `content/history.json` was restored to its initially clean bytes; build output, vendor files and PNG screenshots are not committed. Only task-owned source and text evidence are delivered.
++
++## Delivery state and deferred ownership
++
++Implementation and local execution are demonstrated. Production integration and deployed product acceptance remain **unproven** until plan-manager's post-push gates and independent QA run. Per the role contract, this run stops at the branch push, submits its summary, and does not watch CI or probe a deployed system. No CI run ID/result was observed.
++
++Deferred check IDs: `t-1768/shelf-shader-unit`, `t-1768/repo-checks-and-build`, and deployed QA for `t-1768`, owned by plan-manager's green gate / quality engineer. They fail if the named gates fail, real deployed shader rendering/idle/focus/fallback/isolation regresses, or the deployment cannot bind the delivery fingerprint. This local SWE preflight is not a substitute for independent QA. Book-to-page View Transitions remain task 5's scope.
+
+2026-10-29T04:34:57.961218Z ERROR codex_core::session: failed to record rollout items: thread 01a185de-3b7b-7992-af3d-f20b35eb50ad not found
+2026-10-29T04:34:57.962651Z ERROR codex_core::session: failed to record rollout items: thread 01a185de-3b7b-7992-af3d-f20b35eb50ad not found
+tokens used
+145,273
+Implemented and pushed the 3D Ink Shelf with sumi-e shaders, interactions, debug controls, and flat fallbacks.
+
+- Branch: `pm-299-t-1768-ink-shelf`
+- Commit: `3709f2e4f907c43b1b94022a3276e4414039095a`
+- Passed: 2,791 tests, typecheck, lint, build, and six browser checks.
+- CI: not watched, per contract.
+
+Evidence committed and plan-manager summary submitted.
+---
+Command exited with code: 0
+push_not_on_main: HEAD 3709f2e4f907c43b1b94022a3276e4414039095a is not on origin/main (1 commit(s) since 377dfe09193ff6d0aa3ab4fd02d339749485a19e); cutting task-rescue/586af897-2a4e-42d4-a32e-1def4b153755
+progress phase=rescue
+=== rescue: preserving workspace of failed task (exit code 1, phase agent, budget 60s) ===
+On branch pm-299-t-1768-ink-shelf
+Your branch and 'origin/main' have diverged,
+and have 1 and 5 different commits each, respectively.
+
+nothing to commit, working tree clean
+remote:
+remote: Create a pull request for 'task-rescue/586af897-2a4e-42d4-a32e-1def4b153755' on GitHub by visiting:
+remote:      https://github.com/quiinthieu/otohime/pull/new/task-rescue/586af897-2a4e-42d4-a32e-1def4b153755
+remote:
+To github.com:quiinthieu/otohime.git
+ * [new branch]      HEAD -> task-rescue/586af897-2a4e-42d4-a32e-1def4b153755
+rescue: pushed working state to branch task-rescue/586af897-2a4e-42d4-a32e-1def4b153755
+=== rescue: done ===

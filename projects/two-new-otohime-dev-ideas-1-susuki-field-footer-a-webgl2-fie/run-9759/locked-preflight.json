@@ -1,0 +1,26 @@
+{
+  "node": "v22.23.3",
+  "three": "186",
+  "fiber": "9.8.2",
+  "next": "16.4.2",
+  "react": "19.3.0",
+  "Canvas": "function",
+  "material": true,
+  "normal": true,
+  "target": true,
+  "depth": true,
+  "sourceHashes": {
+    "package-lock.json": "9d0bded9b7c00b1dcb124931f68d266b0bbd5643437fb023d81ee2d505e23f7b",
+    "package.json": "8f9738c8f9cf680970dc8c12c614f3f7a43796e4eac43ecd6f674e4ee9adaacd",
+    "next.config.ts": "321b992409329951687bbdf81ff936fd317055490a1c438e15a22abfe7f6606d",
+    "components/ink-shelf.tsx": "fa4794dea4e54a3c6b2738144940ddac72cd679694da7844a0b83c9da4a5fd54",
+    "components/ink-shelf-3d.tsx": "a7147346fc665b62b34e2346fac76225adb88ece81342afcddaab9e1a58cc47e",
+    "lib/shelf.ts": "b36c205a76068dbf8e6c61ead0fd7214dca1abd7eabf22ec710c4cd90673c4a0",
+    "lib/shelf-shader.ts": "1e51725eb9799f9e2689a250a9b28f7538d2d7cfd56c2cf252cf0f8ebd99c0ee",
+    "content/site.ts": "7e924841a468d850cb8bbdf8d62a74f8b586759d4c65042e371c88bb511b3464",
+    "app/(site)/(app)/shelf/page.tsx": "4dc1663fafad1fbbe7480aeff9798ed8a90c0aaaa7d3b4e5a470e3674150bf29",
+    "app/(site)/(app)/shelf/shelf.css": "8d3acd55155458b62db23e83e98bf11d374c6819c38af0a8d650ad76c83b85a3"
+  },
+  "fingerprint": "d2ebb604525ce8933bbbe3ff088d6532b4a5d3d80e7f0d73a709619ded49c8d6",
+  "buildId": "KIRa4AcGSXnaQ9EZXIsZN"
+}

@@ -1,0 +1,197 @@
+{
+  "base": "https://otohime.dev",
+  "browser": "156.0.8078.47",
+  "node": "v22.23.3",
+  "observations": [
+    {
+      "name": "initial-health",
+      "ok": true,
+      "sha": "ce7f635652de107a44d2ee5e27f7377596d662cd"
+    },
+    {
+      "name": "desktop-real-gpu",
+      "gpu": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "draws": 70,
+        "targets": 2,
+        "programs": [
+          {
+            "linked": true,
+            "info": "",
+            "hatch": true,
+            "normal": false,
+            "composite": false
+          },
+          {
+            "linked": true,
+            "info": "",
+            "hatch": false,
+            "normal": true,
+            "composite": false
+          },
+          {
+            "linked": true,
+            "info": "",
+            "hatch": false,
+            "normal": true,
+            "composite": true
+          }
+        ],
+        "uniforms": {
+          "uKd": 1,
+          "uKn": 1,
+          "uNdvCutoff": 0.20000000298023224,
+          "uDebug": 0
+        },
+        "error": 0,
+        "dpr": 1
+      },
+      "before": {
+        "sha256": "a9f9d88fbd0ea6e068e0d2961edb535470358d196b21fd89faef1be0038cf950",
+        "colours": 3156,
+        "dark": 17095,
+        "blue": 0
+      },
+      "focused": {
+        "sha256": "7b73749e4894bd265195ac08a18da37af07e5727693117e1a69d6b7387c1f873",
+        "colours": 3429,
+        "dark": 17173,
+        "blue": 0
+      },
+      "idle": "31",
+      "hoverIdle": "70",
+      "hit": {
+        "book": "project-articles",
+        "x": 445.1818181818182,
+        "y": 290.68125
+      },
+      "clickedHref": "/articles",
+      "fallbackHref": "/articles",
+      "chunks": [
+        {
+          "path": "/_next/static/immutable/chunks/1h7i7w2bcvkpg.js",
+          "sha256": "fbe13d630efdeec60591182f437eb9453713d90920f335852d17da99f0e8798a",
+          "shelf": true
+        },
+        {
+          "path": "/_next/static/immutable/chunks/1qj2e5cq36glh.js",
+          "sha256": "471cafcd1fb215c2b8129102cd7ac6c3c734822f9a01b7d22003eb30f204d783",
+          "shelf": true
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "name": "mobile-real-gpu",
+      "gpu": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "draws": 70,
+        "targets": 2,
+        "programs": [
+          {
+            "linked": true,
+            "info": "",
+            "hatch": true,
+            "normal": false,
+            "composite": false
+          },
+          {
+            "linked": true,
+            "info": "",
+            "hatch": false,
+            "normal": true,
+            "composite": false
+          },
+          {
+            "linked": true,
+            "info": "",
+            "hatch": false,
+            "normal": true,
+            "composite": true
+          }
+        ],
+        "uniforms": {
+          "uKd": 2.5,
+          "uKn": 0.6000000238418579,
+          "uNdvCutoff": 0.30000001192092896,
+          "uDebug": 1
+        },
+        "error": 0,
+        "dpr": 1.5
+      },
+      "before": {
+        "sha256": "ef4d8742335eebf8b680b2f9820bf5942091ea7ec91377bf56bed80aae01261e",
+        "colours": 291,
+        "dark": 1731760,
+        "blue": 2848
+      },
+      "focused": {
+        "sha256": "3de63b3c10d5a904babb649feb3c30e209c51808dc95c10c8217a08ca7157923",
+        "colours": 293,
+        "dark": 1731547,
+        "blue": 2848
+      },
+      "idle": "39",
+      "hoverIdle": "147",
+      "hit": {
+        "book": "project-articles",
+        "x": 52.63636363636364,
+        "y": 559.990625
+      },
+      "clickedHref": "/articles",
+      "fallbackHref": "/articles",
+      "chunks": [
+        {
+          "path": "/_next/static/immutable/chunks/1h7i7w2bcvkpg.js",
+          "sha256": "fbe13d630efdeec60591182f437eb9453713d90920f335852d17da99f0e8798a",
+          "shelf": true
+        },
+        {
+          "path": "/_next/static/immutable/chunks/1qj2e5cq36glh.js",
+          "sha256": "471cafcd1fb215c2b8129102cd7ac6c3c734822f9a01b7d22003eb30f204d783",
+          "shelf": true
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "name": "isolation-negative-control",
+      "options": {
+        "blocked": true
+      },
+      "shelfChunks": 0,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "name": "isolation-negative-control",
+      "options": {
+        "saveData": true
+      },
+      "shelfChunks": 0,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "name": "isolation-negative-control",
+      "options": {
+        "route": "/"
+      },
+      "shelfChunks": 0,
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    {
+      "name": "reduced-motion",
+      "unchanged": true,
+      "sha256": "a9f9d88fbd0ea6e068e0d2961edb535470358d196b21fd89faef1be0038cf950"
+    },
+    {
+      "name": "final-health",
+      "ok": true,
+      "sha": "ce7f635652de107a44d2ee5e27f7377596d662cd"
+    }
+  ]
+}

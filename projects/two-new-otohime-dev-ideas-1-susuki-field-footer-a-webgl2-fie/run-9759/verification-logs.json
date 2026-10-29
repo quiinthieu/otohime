@@ -1,0 +1,38 @@
+[
+  {
+    "name": "npm-ci",
+    "raw_log_sha256": "ca05c0bf54e0374acc213242c8acecf396025641311edea17eb322ccf5080fb3",
+    "raw_line_count": 15,
+    "tail_lines": 15
+  },
+  {
+    "name": "shelf-tests",
+    "raw_log_sha256": "d18617a6220879ff5cc4c1d84630fa3a09acc6db133c4b75b22632cb5de671a1",
+    "raw_line_count": 106,
+    "tail_lines": 106
+  },
+  {
+    "name": "npm-test",
+    "raw_log_sha256": "dec7178863d3aa7a33f7980d719b3276bc207bd85a19687ef5b6c64e390a5394",
+    "raw_line_count": 16784,
+    "tail_lines": 110
+  },
+  {
+    "name": "typecheck",
+    "raw_log_sha256": "0b5ef40543dbec94675fa551c559220c2c3f422a158cef8c9769515ce129e326",
+    "raw_line_count": 6,
+    "tail_lines": 6
+  },
+  {
+    "name": "lint",
+    "raw_log_sha256": "6e2b4b56e98fa9304c7e2c139bf93d2e23203b37f904fa6aba6b9d5717d20204",
+    "raw_line_count": 45,
+    "tail_lines": 45
+  },
+  {
+    "name": "build",
+    "raw_log_sha256": "ea509c5801ae9cf72f157f1a170b709bd5ff6ddae152d7d14c1e9562c3f35602",
+    "raw_line_count": 186,
+    "tail_lines": 110
+  }
+]

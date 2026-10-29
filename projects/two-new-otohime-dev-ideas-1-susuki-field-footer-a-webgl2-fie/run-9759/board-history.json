@@ -1,0 +1,282 @@
+{
+  "green_gate": {
+    "id": "ver-3879",
+    "sha": "f54f160",
+    "status": "pass",
+    "items": [
+      {
+        "name": "shelf-shader-unit",
+        "status": "pass",
+        "exit_code": 0,
+        "duration_ms": 164
+      },
+      {
+        "name": "repo-checks-and-build",
+        "status": "pass",
+        "exit_code": 0,
+        "duration_ms": 142153
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "run-9728",
+      "tm_task_id": "a634b12e-e83a-471e-8efe-770570645205",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9732",
+      "tm_task_id": "586af897-2a4e-42d4-a32e-1def4b153755",
+      "role": "software_engineer",
+      "status": "failed",
+      "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3709f2e4f907 is not on origin/main",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9747",
+      "tm_task_id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+      "role": "software_engineer",
+      "status": "succeeded",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9756",
+      "tm_task_id": "e738ae30-9a1f-40e0-b89d-2ae652fa225a",
+      "role": "verify",
+      "status": "succeeded",
+      "callback_apply_failures": 0
+    },
+    {
+      "id": "run-9759",
+      "tm_task_id": "272cf1b8-fa52-481a-97f7-7835c0612476",
+      "role": "quality_engineer",
+      "status": "running",
+      "agent_profile": "codex-sol-6-1-high",
+      "profile_flags": "--dangerously-bypass-approvals-and-sandbox --model gpt-6.1-sol -c 'model_reasoning_effort=\"high\"'",
+      "callback_apply_failures": 0
+    }
+  ],
+  "history": [
+    {
+      "project_id": "plan-manager",
+      "status": "FAILED",
+      "offset": 0,
+      "limit": 25,
+      "total": 162,
+      "returned": 25,
+      "oldest": "2026-10-28T09:09:03Z",
+      "relevant": [
+        {
+          "id": "7eaf54fa-0f85-45a6-b7fb-26510862d554",
+          "status": "FAILED",
+          "run_id": "run-9742",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD bcd013a8d0c7 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "586af897-2a4e-42d4-a32e-1def4b153755",
+          "status": "FAILED",
+          "run_id": "run-9732",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3709f2e4f907 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2a5f2cec-80b1-4b1e-88ee-a2c01c5191f9",
+          "status": "FAILED",
+          "run_id": "run-9696",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f3635e573b48 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "f9c89481-dfdb-4ce2-81f2-c95f688644c5",
+          "status": "FAILED",
+          "run_id": "run-9683",
+          "error": "agent_failed: exit 1 class=push_failed marker=- [iss-162 · other · ×63] task-manager coding_task failures: agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on orig",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "004a2771-a897-49b1-bd66-ac55b71ff32d",
+          "status": "FAILED",
+          "run_id": "run-9686",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3726e9795316 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "81d64689-85f0-4cb9-8317-67c4a5a76001",
+          "status": "FAILED",
+          "run_id": "run-9682",
+          "error": "agent_failed: exit 1 class=push_failed marker=- [iss-162 · other · ×63] task-manager coding_task failures: agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD f2ace78cc187 is not on orig",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "ef3b114f-7fa7-42a4-ac55-21ba8936521d",
+          "status": "FAILED",
+          "run_id": "run-9661",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 59d6abe76a56 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "cd4797bf-945e-4e7a-b6c2-3b9c984310ef",
+          "status": "FAILED",
+          "run_id": "run-9660",
+          "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD d606b9966966 is not on origin/main",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "project_id": "plan-manager",
+      "status": "FAILED",
+      "offset": 25,
+      "limit": 25,
+      "total": 162,
+      "returned": 25,
+      "oldest": "2026-10-28T03:48:57Z",
+      "relevant": []
+    },
+    {
+      "project_id": "plan-manager",
+      "status": "COMPLETED",
+      "offset": 0,
+      "limit": 25,
+      "total": 1132,
+      "returned": 25,
+      "oldest": "2026-10-29T04:14:09Z",
+      "relevant": [
+        {
+          "id": "e738ae30-9a1f-40e0-b89d-2ae652fa225a",
+          "status": "COMPLETED",
+          "run_id": "run-9756",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+          "status": "COMPLETED",
+          "run_id": "run-9747",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e3c4e495-167a-4567-94ac-b4e7eb407873",
+          "status": "COMPLETED",
+          "run_id": "run-9739",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "project_id": "plan-manager",
+      "status": "COMPLETED",
+      "offset": 25,
+      "limit": 25,
+      "total": 1132,
+      "returned": 25,
+      "oldest": "2026-10-29T03:29:56Z",
+      "relevant": [
+        {
+          "id": "a634b12e-e83a-471e-8efe-770570645205",
+          "status": "COMPLETED",
+          "run_id": "run-9728",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "e3050401-3675-4cbe-a2de-88c807a38c56",
+          "status": "COMPLETED",
+          "run_id": "run-9726",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "2d275340-2bde-4682-bbbe-b2cec33c37c5",
+          "status": "COMPLETED",
+          "run_id": "run-9707",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        },
+        {
+          "id": "a6a8ad77-6886-4c4b-bab4-3a3a7d98a5f8",
+          "status": "COMPLETED",
+          "run_id": "run-9705",
+          "callbackState": "delivered",
+          "callbackAttempts": 1
+        }
+      ]
+    },
+    {
+      "project_id": "plan-manager",
+      "status": "RUNNING",
+      "offset": 0,
+      "limit": 25,
+      "total": 5,
+      "returned": 5,
+      "oldest": "2026-10-29T04:30:00Z",
+      "relevant": [
+        {
+          "id": "272cf1b8-fa52-481a-97f7-7835c0612476",
+          "status": "RUNNING",
+          "run_id": "run-9759"
+        },
+        {
+          "id": "c13923dc-6700-485b-8697-9ddc3db6e761",
+          "status": "RUNNING",
+          "run_id": "run-9749"
+        }
+      ]
+    },
+    {
+      "project_id": "plan-manager",
+      "status": "PENDING",
+      "offset": 0,
+      "limit": 25,
+      "total": 0,
+      "returned": 0,
+      "relevant": []
+    }
+  ],
+  "delivery": {
+    "id": "0671daac-7af4-4d24-8d86-920cecb2f1fb",
+    "status": "COMPLETED",
+    "callbackState": "delivered",
+    "callbackAttempts": 1,
+    "artifacts": [
+      {
+        "content_type": "application/octet-stream",
+        "name": "author.txt",
+        "sha256": "7694250f32f87a6fd29a61b3171d13b30e854a830dbfe458ae56151101cd5ada",
+        "size": 44
+      },
+      {
+        "content_type": "application/octet-stream",
+        "name": "uncommitted.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    ]
+  },
+  "priorFailure": {
+    "id": "586af897-2a4e-42d4-a32e-1def4b153755",
+    "status": "FAILED",
+    "error": "agent_failed: exit 1 class=push_failed marker=push_not_on_main: HEAD 3709f2e4f907 is not on origin/main",
+    "callbackState": "delivered",
+    "callbackAttempts": 1
+  }
+}

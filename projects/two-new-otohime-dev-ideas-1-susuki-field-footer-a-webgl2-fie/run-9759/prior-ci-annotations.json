@@ -1,0 +1,110 @@
+[
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/.github",
+    "start_line": 1341,
+    "start_column": null,
+    "end_line": 1341,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "",
+    "message": "Process completed with exit code 124.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/.github",
+    "start_line": 1252,
+    "start_column": null,
+    "end_line": 1252,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "E2E against next start",
+    "message": "Gate: E2E against next start; exit 124\nCommit: e30c2577a4250ee16c5cb122ef436070c61c4e77\nBuild: 7NjTrBvn-If2bBWMDIC0s\nNode: v22.23.4\nChrome: Google Chrome 156.0.8078.47\nCommand, last 80 lines (bounded):\nrelinquishes to controls and tears down\nok 171 - tilt permission grant calibrates, rotates, relinquishes to controls and tears down\n  ---\n  duration_ms: 6049.657282\n  type: 'test'\n  ...\n# Subtest: denial and unavailable tilt preserve pointer controls\nok 172 - denial and unavailable tilt preserve pointer controls\n  ---\n  duration_ms: 7207.863411\n  type: 'test'\n  ...\n# Subtest: a pending tilt grant cannot reactivate after Disable or reduced motion\nok 173 - a pending tilt grant cannot reactivate after Disable or reduced motion\n  ---\n  duration_ms: 5864.848478\n  type: 'test'\n  ...\n# Subtest: rest, offscreen, hidden, disable, pagehide and live reduced motion cancel work\nok 174 - rest, offscreen, hidden, disable, pagehide and live reduced motion cancel work\n  ---\n  duration_ms: 7349.642974\n  type: 'test'\n  ...\n# Subtest: touch pans scroll normally, Save-Data stays opt-in and original toys remain\nnot ok 175 - touch pans scroll normally, Save-Data stays opt-in and original toys remain\n\n::error file=e2e/peep-box.test.ts,line=635,title=E2E failed%3A touch pans scroll normally%2C Save-Data stays opt-in and original toys remain::locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.%0ACall log:%0A  - waiting for locator('#press-heading')%0A%0A    at TestContext.<anonymous> (/home/runner/work/otohime/otohime/e2e/peep-box.test.ts:647:37)\n  ---\n  duration_ms: 31505.783459\n  type: 'test'\n  location: '/home/runner/work/otohime/otohime/e2e/peep-box.test.ts:635:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\n    Call log:\n      - waiting for locator('#press-heading')\n    \n  code: 'ERR_TEST_FAILURE'\n  name: 'TimeoutError'\n  stack: |-\n    TestContext.<anonymous> (/home/runner/work/otohime/otohime/e2e/peep-box.test.ts:647:37)\n  ...\n# Subtest: no-JS and reduced motion keep the server paper scene with no pose loop\nok 176 - no-JS and reduced motion keep the server paper scene with no pose loop\n  ---\n  duration_ms: 3853.636073\n  type: 'test'\n  ...\n# Subtest: nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog\nok 177 - nothing of the terminal loads with the page; / brings its chunk and opens an accessible dialog\n  ---\n  duration_ms: 1997.180071\n  type: 'test'\n  ...\n# Subtest: help prints into the live log; Tab stays inside; Escape closes and gives focus back\nok 178 - help prints into the live log; Tab stays inside; Escape closes and gives focus back\n  ---\n  duration_ms: 2164.041433\n  type: 'test'\n  ...\n# Subtest: a bare page name, and a palette pick, navigate and close the terminal\nok 179 - a bare page name, and a palette pick, navigate and close the terminal\n  ---\n  duration_ms: 2551.685864\n  type: 'test'\n  ...\n# Subtest: theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens\nok 180 - theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens\n  ---\n  duration_ms: 3395.9558\n  type: 'test'\n  ...\nnext start, last 80 lines (bounded):\n\n> otohime@0.1.0 start\n> next start\n\n\u25b2 Next.js 16.4.2\n- Local:         http://localhost:3000\n- Network:       http://10.1.0.22:3000\n\u2713 Ready in 146ms\n\u2713 Running next.config.ts took 45ms",
+    "raw_details": ""
+  },
+  {
+    "path": "e2e/peep-box.test.ts",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/e2e/peep-box.test.ts",
+    "start_line": 635,
+    "start_column": null,
+    "end_line": 635,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "E2E failed: touch pans scroll normally, Save-Data stays opt-in and original toys remain",
+    "message": "locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#press-heading')\n\n    at TestContext.<anonymous> (/home/runner/work/otohime/otohime/e2e/peep-box.test.ts:647:37)",
+    "raw_details": ""
+  },
+  {
+    "path": "e2e/kame.test.ts",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/e2e/kame.test.ts",
+    "start_line": 181,
+    "start_column": null,
+    "end_line": 181,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "E2E failed: blocked storage remains usable and Save-Data imports only on explicit enable",
+    "message": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Enable Kame companion' }) to be visible\n\n    at TestContext.<anonymous> (/home/runner/work/otohime/otohime/e2e/kame.test.ts:186:92)",
+    "raw_details": ""
+  },
+  {
+    "path": "e2e/kame-fetch.test.ts",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/e2e/kame-fetch.test.ts",
+    "start_line": 180,
+    "start_column": null,
+    "end_line": 180,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "E2E failed: Save-Data keeps toys unloaded, paper-only fetch rejects, explicit Kame enable permits measured completion",
+    "message": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Enable paper corners', exact: true }) to be visible\n\n    at TestContext.<anonymous> (/home/runner/work/otohime/otohime/e2e/kame-fetch.test.ts:184:75)",
+    "raw_details": ""
+  },
+  {
+    "path": "projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/projects/reference-image-https-pin-it-4kjro8mya-creative-agent-prompt/qa_run-8460/probe.mjs",
+    "start_line": 2,
+    "start_column": 46,
+    "end_line": 2,
+    "end_column": 46,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "'resolve' is defined but never used",
+    "raw_details": ""
+  },
+  {
+    "path": "projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/acceptance/run-9385/walk-local.mjs",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/projects/part-2-of-otohime-s-undersea-palace-pm-256-to-be-drafted-onl/acceptance/run-9385/walk-local.mjs",
+    "start_line": 182,
+    "start_column": 9,
+    "end_line": 182,
+    "end_column": 9,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "'cSaw' is assigned a value but never used",
+    "raw_details": ""
+  },
+  {
+    "path": "e2e/crumple.test.ts",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/e2e/crumple.test.ts",
+    "start_line": 118,
+    "start_column": 5,
+    "end_line": 118,
+    "end_column": 5,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "Expected an assignment or function call and instead saw an expression",
+    "raw_details": ""
+  },
+  {
+    "path": "e2e/crumple.test.ts",
+    "blob_href": "https://github.com/quiinthieu/otohime/blob/e30c2577a4250ee16c5cb122ef436070c61c4e77/e2e/crumple.test.ts",
+    "start_line": 116,
+    "start_column": 5,
+    "end_line": 116,
+    "end_column": 5,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "Expected an assignment or function call and instead saw an expression",
+    "raw_details": ""
+  }
+]

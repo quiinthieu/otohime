@@ -1,0 +1,324 @@
+{
+  "total_count": 3,
+  "jobs": [
+    {
+      "id": 123271797502,
+      "name": "checks",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-29T04:56:55Z",
+      "completed_at": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-29T04:56:56Z",
+          "completed_at": "2026-10-29T04:56:57Z"
+        },
+        {
+          "name": "Initialize containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-29T04:56:57Z",
+          "completed_at": "2026-10-29T04:57:04Z"
+        },
+        {
+          "name": "Run actions/checkout@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-29T04:57:04Z",
+          "completed_at": "2026-10-29T04:57:06Z"
+        },
+        {
+          "name": "Check guestbook delivery author",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-29T04:57:06Z",
+          "completed_at": "2026-10-29T04:57:06Z"
+        },
+        {
+          "name": "Check Vercel deployment author",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-29T04:57:06Z",
+          "completed_at": "2026-10-29T04:57:06Z"
+        },
+        {
+          "name": "Run actions/cache@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-29T04:57:06Z",
+          "completed_at": "2026-10-29T04:57:08Z"
+        },
+        {
+          "name": "Run actions/setup-node@v7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-29T04:57:08Z",
+          "completed_at": "2026-10-29T04:57:11Z"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-29T04:57:11Z",
+          "completed_at": "2026-10-29T04:57:29Z"
+        },
+        {
+          "name": "Run npm run lint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-29T04:57:29Z",
+          "completed_at": "2026-10-29T04:58:03Z"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-29T04:58:03Z",
+          "completed_at": "2026-10-29T04:58:25Z"
+        },
+        {
+          "name": "npm test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-29T04:58:25Z",
+          "completed_at": "2026-10-29T04:59:46Z"
+        },
+        {
+          "name": "Annotate failed unit tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-10-29T04:59:46Z",
+          "completed_at": "2026-10-29T04:59:46Z"
+        },
+        {
+          "name": "Run bash scripts/vercel-deploy.test.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-29T04:59:46Z",
+          "completed_at": "2026-10-29T04:59:59Z"
+        },
+        {
+          "name": "Run bash scripts/verify-deploy.sh --self-test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-29T04:59:59Z",
+          "completed_at": "2026-10-29T05:00:40Z"
+        },
+        {
+          "name": "Run bash scripts/probe-history.sh --self-test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-29T05:00:40Z",
+          "completed_at": "2026-10-29T05:01:05Z"
+        },
+        {
+          "name": "Run npm run ask:check",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-29T05:01:05Z",
+          "completed_at": "2026-10-29T05:01:05Z"
+        },
+        {
+          "name": "Migrations match db/schema.ts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-29T05:01:05Z",
+          "completed_at": "2026-10-29T05:01:07Z"
+        },
+        {
+          "name": "Run npm run history:index -- --strict --rev=\"$GITHUB_SHA\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-29T05:01:07Z",
+          "completed_at": "2026-10-29T05:01:07Z"
+        },
+        {
+          "name": "Run npm run history:check -- --strict --rev=\"$GITHUB_SHA\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-29T05:01:07Z",
+          "completed_at": "2026-10-29T05:01:08Z"
+        },
+        {
+          "name": "Refresh public stamp ledger",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-29T05:01:08Z",
+          "completed_at": "2026-10-29T05:01:10Z"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-29T05:01:10Z",
+          "completed_at": "2026-10-29T05:01:55Z"
+        },
+        {
+          "name": "Run npm run history:check -- --strict --rev=\"$GITHUB_SHA\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-29T05:01:55Z",
+          "completed_at": "2026-10-29T05:01:56Z"
+        },
+        {
+          "name": "Real CPU camera and privacy verifier",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 23,
+          "started_at": "2026-10-29T05:01:56Z",
+          "completed_at": null
+        },
+        {
+          "name": "Run npm run db:migrate",
+          "status": "pending",
+          "conclusion": null,
+          "number": 24,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Publish application build identity",
+          "status": "pending",
+          "conclusion": null,
+          "number": 25,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Run actions/upload-artifact@v6",
+          "status": "pending",
+          "conclusion": null,
+          "number": 26,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Start local ghost fake",
+          "status": "pending",
+          "conclusion": null,
+          "number": 27,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "E2E against next start",
+          "status": "pending",
+          "conclusion": null,
+          "number": 28,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Motion probe, signed in",
+          "status": "pending",
+          "conclusion": null,
+          "number": 29,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Footer walk",
+          "status": "pending",
+          "conclusion": null,
+          "number": 30,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Footer Chromium probe",
+          "status": "pending",
+          "conclusion": null,
+          "number": 31,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Stop local ghost fake",
+          "status": "pending",
+          "conclusion": null,
+          "number": 32,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/setup-node@v7",
+          "status": "pending",
+          "conclusion": null,
+          "number": 61,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/cache@v6",
+          "status": "pending",
+          "conclusion": null,
+          "number": 62,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/checkout@v7",
+          "status": "pending",
+          "conclusion": null,
+          "number": 63,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Stop containers",
+          "status": "pending",
+          "conclusion": null,
+          "number": 64,
+          "started_at": null,
+          "completed_at": null
+        }
+      ],
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40820561536/job/123271797502"
+    },
+    {
+      "id": 123271798826,
+      "name": "cleanup",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-29T04:56:54Z",
+      "completed_at": "2026-10-29T04:56:53Z",
+      "steps": [],
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40820561536/job/123271798826"
+    },
+    {
+      "id": 123271799094,
+      "name": "preview",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-29T04:56:54Z",
+      "completed_at": "2026-10-29T04:56:53Z",
+      "steps": [],
+      "html_url": "https://github.com/quiinthieu/otohime/actions/runs/40820561536/job/123271799094"
+    }
+  ]
+}
