@@ -38,3 +38,13 @@ An initial sandboxed unit run could not launch its browser/Postgres fixtures;
 the complete rerun with the required local OS access passed. Initial feature
 validation also caught a test-double type, page-transition wrappers, internal
 links, and a fallback-message assertion, which were repaired before publication.
+
+The first hosted PR run passed units, build, real camera verification and the
+complete browser suite, then failed four signed-in motion assertions on the
+unchanged Work/Projects pages. The same failure was reproduced on production:
+the departure board uses a ViewTimeline that stays running until the visitor
+scrolls. The probe now waits for finite animations on the document's time
+timeline. A real-browser regression reproduces the old failure and retains
+negative controls for running/paused clock animations, unresolved Suspense,
+React transitions and unfinished page hops. All 78 affected CI/motion guard
+tests pass locally; the four formerly failing Work/Projects cases also pass.
