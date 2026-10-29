@@ -35,7 +35,8 @@
   border: 1px solid var(--line);
 }
 .peep-tools {
-  height: 460px;
+  /* min-height keeps the still-sea reserve, then grows instead of clipping 24px text. */
+  min-height: 460px;
   padding-top: 1rem;
 }
 .peep-tools button {

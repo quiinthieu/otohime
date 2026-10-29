@@ -37,12 +37,14 @@ test("the places are every public page including Lab, then ask and postcard, eac
     PLACES.slice(0, PUBLIC_PAGES.length).map((p) => p.href),
     PUBLIC_PAGES.map((p) => p.href),
   );
-  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "lab", "ask", "postcard"]);
+  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "lab", "ask", "postcard", "guestbook", "fortune"]);
   assert.equal(new Set(PLACES.map((p) => p.name)).size, PLACES.length);
   assert.equal(findPlace("ask"), PLACES.find((p) => p.name === "ask"));
   assert.equal((findPlace("ask") as { href: string }).href, "/");
   assert.equal((findPlace("postcard") as { href: string }).href, "/postcard");
   assert.equal((findPlace("play") as { href: string }).href, "/play");
+  assert.equal((findPlace("guestbook") as { href: string }).href, "/guestbook");
+  assert.equal((findPlace("fortune") as { href: string }).href, "/fortune");
 });
 
 test("print run reports the effective appearance, including an applied Lab", () => {
@@ -150,7 +152,7 @@ test("help lists every command", () => {
   const reply = run("help", STATE);
   assert.equal(reply.lines, HELP);
   assert.deepEqual(run("?", STATE).lines, HELP);
-  for (const cmd of ["help", "go", "theme", "sound", "season", "stamps", "adventure", "clear", "exit"]) {
+  for (const cmd of ["help", "go", "theme", "sound", "season", "stamps", "shimi", "adventure", "clear", "exit"]) {
     assert.ok(HELP.some((l) => l.startsWith(cmd)), cmd);
   }
 });
@@ -183,6 +185,15 @@ test("season pins a season or auto; bare, it reports the choice", () => {
   assert.equal(parseSeasonChoice("summer"), "summer");
   assert.equal(parseSeasonChoice(null), "auto");
   assert.equal(parseSeasonChoice("fall"), "auto");
+});
+
+test("shimi flips the paper silverfish, or sets them on or off", () => {
+  assert.deepEqual(run("shimi", STATE), { lines: ["shimi: on"], effect: { kind: "shimi", on: true } });
+  assert.deepEqual(run("shimi", { ...STATE, shimi: true }).effect, { kind: "shimi", on: false });
+  assert.deepEqual(run("shimi off", { ...STATE, shimi: true }).effect, { kind: "shimi", on: false });
+  assert.deepEqual(run("shimi on", STATE).effect, { kind: "shimi", on: true });
+  assert.deepEqual(run("bookworms toggle", STATE).effect, { kind: "shimi", on: true });
+  assert.equal(run("shimi loud", STATE).effect, undefined);
 });
 
 test("stamps lists what is won, or says there are none", () => {

@@ -40,11 +40,11 @@ jobs:
     # Pinned: ubuntu-latest is migrating to 26.04; move deliberately, not by drift.
     runs-on: ubuntu-24.04
     # Run 40820018472 exhausted 960s at the peep-box cases, before the palace
-    # and remaining browser coverage. Allow 1200s for the full serial suite,
-    # 22m for readiness/TERM/diagnostics, and 35m for all probes.
+    # and remaining browser coverage. Run 40837465689 exhausted 1200s without assertion failures. Allow 1800s for the serial suite,
+    # 32m for readiness/TERM/diagnostics, and 50m for all probes.
     # Individual assertions retain their timeouts; exit 124 still fails the job.
     # Motion's paced auth requests explain its 171s; no runtime browser installers in CI.
-    timeout-minutes: 35
+    timeout-minutes: 50
     services:
       postgres:
         image: postgres:17-alpine
@@ -82,7 +82,7 @@ jobs:
           for commit in $commits; do
             if git diff-tree --no-commit-id --name-only -r "$commit" | grep -Eq '^(app/api/guestbook/|lib/guestbook[^/]*|e2e/guestbook-api\.test\.ts$|db/schema\.ts$|db/migrations/)'; then
               author="$(git show -s --format='%an <%ae>' "$commit")"
-              if [ "$author" != 'Otohime <quiinthieu@gmail.com>' ]; then
+              if [ "$author" != 'Otohime <quiinthieu@gmail.com>' ] && [ "$author" != 'Ōtohime <quiinthieu@gmail.com>' ]; then
                 echo "Guestbook delivery $commit has an undeployable author: $author" >&2
                 exit 1
               fi
@@ -163,7 +163,7 @@ jobs:
           curl -fsS --retry 15 --retry-connrefused --retry-delay 1 "$GHOSTS_FAKE_BASE/__ready"
       # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
       - name: E2E against next start
-        timeout-minutes: 22
+        timeout-minutes: 32
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "E2E against next start" "$status" "$RUNNER_TEMP/e2e.log" || true; exit "$status"' EXIT
@@ -171,7 +171,7 @@ jobs:
           npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
           curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
           command -v timeout >/dev/null 2>&1 || timeout() { node -e 'const {spawn}=require("node:child_process");const a=process.argv.slice(1);while(a[0]?.startsWith("-"))a.shift();const ms=parseFloat(a.shift())*1000;const c=spawn(a[0],a.slice(1),{stdio:"inherit",detached:true});let timedOut=false;const t=setTimeout(()=>{timedOut=true;try{process.kill(-c.pid,"SIGTERM")}catch{};setTimeout(()=>{try{process.kill(-c.pid,"SIGKILL")}catch{}},1000)},ms);c.on("exit",(code)=>{clearTimeout(t);process.exit(timedOut?124:code??1)})' -- "$@"; }
-          timeout --signal=TERM --kill-after=10s 1200s npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
+          timeout --signal=TERM --kill-after=10s 1800s npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
       # Signs in through the form against the same server and database, so a page error on the hop into a
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
       - name: Motion probe, signed in
@@ -274,26 +274,26 @@ jobs:
           # Child branches inherit production's role password: mask it before anything can print it.
           echo "::add-mask::$(node -p 'new URL(process.argv[1]).password' "$direct")"
           { echo "DATABASE_URL=$direct"; echo "DATABASE_URL_POOLED=$pooled"; } >> "$GITHUB_ENV"
-      - run: npx vercel@64 pull --yes --environment=preview
+      - run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel pull --yes --environment=preview
       - run: npm run history:index -- --strict --rev="$GITHUB_SHA"
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - name: Refresh public stamp ledger
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/ledger-fetch.mjs
-      - run: npx vercel@64 build
+      - run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run db:migrate # DATABASE_URL = direct URL of the PR branch
       - name: Deploy
         id: deploy
         run: |
           # Assign first: a failed deploy inside echo "$(…)" would not fail the step.
-          url=$(npx vercel@64 deploy --prebuilt --archive=tgz --env DATABASE_URL="$DATABASE_URL_POOLED")
+          url=$(npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel deploy --prebuilt --archive=tgz --env DATABASE_URL="$DATABASE_URL_POOLED")
           echo "url=$url" >> "$GITHUB_OUTPUT"
       - name: Smoke test (vercel curl adds the protection bypass)
         env:
           URL: ${{ steps.deploy.outputs.url }}
-        run: npx vercel@64 curl "$URL/api/health" --yes -- --fail --silent --show-error
+        run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel curl "$URL/api/health" --yes -- --fail --silent --show-error
       - name: Comment preview URL
         env:
           GH_TOKEN: ${{ github.token }}
@@ -338,7 +338,7 @@ jobs:
           node-version-file: package.json
           cache: npm
       - run: npm ci
-      - run: npx vercel@64 pull --yes --environment=production
+      - run: npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel pull --yes --environment=production
       - name: Refresh public stamp ledger
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -348,7 +348,7 @@ jobs:
         run: |
           npm run history:index -- --strict --rev="$GITHUB_SHA"
           npm run history:check -- --strict --rev="$GITHUB_SHA"
-          npx vercel@64 build --prod
+          npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod
           npm run history:check -- --strict --rev="$GITHUB_SHA"
       - run: npm run db:migrate
         env:

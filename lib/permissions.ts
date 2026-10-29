@@ -7,6 +7,7 @@ export const ac = createAccessControl({
   ...defaultStatements,
   song: ["create", "delete"],
   bottle: ["moderate"],
+  guestbook: ["moderate"],
 });
 
 export const statements = ac.statements;

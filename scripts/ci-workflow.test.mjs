@@ -59,7 +59,7 @@ test("every build refreshes the public ledger with the read-only Actions token",
     assert.ok(found, job);
     const source = lines.slice(found.start, found.end).join("\n");
     const refresh = source.indexOf("- name: Refresh public stamp ledger");
-    const build = source.indexOf(job === "checks" ? "npm run build" : "npx vercel@64 build");
+    const build = source.indexOf(job === "checks" ? "npm run build" : "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build");
     assert.ok(refresh >= 0 && build > refresh, `${job} refreshes before building`);
     assert.match(source.slice(refresh, build), /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
     assert.match(source.slice(refresh, build), /run: node scripts\/ledger-fetch\.mjs/);
@@ -170,16 +170,16 @@ test("verify-deploy only exempts filtered Markdown and requires project delivery
     "project paths must require deployment before the generic Markdown exemption");
 });
 
-test("checks budgets the full browser suite with a 35m job, 22m step and 1200s bound", () => {
-  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "35");
+test("checks budgets the full browser suite with a 50m job, 32m step and 1800s bound", () => {
+  assert.equal(scalar(["jobs", "checks", "timeout-minutes"]), "50");
   assert.match(workflow, /40820018472 exhausted 960s at the peep-box cases/);
   const checks = steps("checks");
-  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 22\n/);
+  assert.match(checks, /- name: E2E against next start\n\s*timeout-minutes: 32\n/);
   const e2e = gateBody("E2E against next start");
   assert.match(e2e, /^set -o pipefail$/m);
   assert.match(e2e, /^trap .*browser-gate-diagnostics\.mjs "E2E against next start".* EXIT$/m);
   assert.match(e2e, /^command -v timeout >\/dev\/null 2>&1 \|\| timeout\(\)/m);
-  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1200s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
+  assert.match(e2e, /^timeout --signal=TERM --kill-after=10s 1800s npm run test:e2e 2>&1 \| tee -a "\$RUNNER_TEMP\/e2e\.log"$/m);
   assert.equal(e2e.match(/npm run test:e2e/g).length, 1, "the browser suite runs once, only under the inner bound");
 });
 
@@ -462,10 +462,10 @@ for (const [name, log] of browserGates) {
 }
 
 test("E2E timeout: the inner bound terminates a hung suite with exit 124 and a bounded annotation", () => {
-  // Same workflow shell; only the 1200s contract and 10s grace shrink so the fixture does not wait.
+  // Same workflow shell; only the 1800s contract and 10s grace shrink so the fixture does not wait.
   const started = Date.now();
   const result = runGate("E2E against next start", "e2e.log", "hang",
-    (body) => body.replace("--kill-after=10s 1200s npm", "--kill-after=1s 1s npm"));
+    (body) => body.replace("--kill-after=10s 1800s npm", "--kill-after=1s 1s npm"));
   assert.equal(result.status, 124, result.stderr);
   assert.ok(Date.now() - started < 8000, "the hung child was terminated by the inner bound");
   assert.equal(result.calls, "called\n");
@@ -558,6 +558,8 @@ test("guestbook author guard rejects a wrong-author schema or migration-only pus
 
     const [ownFrom, ownTo] = push(["db/migrations/0008_owner.sql", owner], ["db/schema.ts", owner]);
     assert.equal(run(ownFrom, ownTo).status, 0);
+    const [profileFrom, profileTo] = push(["lib/guestbook-profile.ts", { name: "Ōtohime", email: owner.email }]);
+    assert.equal(run(profileFrom, profileTo).status, 0, "GitHub squash merges use the owner's profile spelling");
     const [otherFrom, otherTo] = push(["docs/unrelated.md", stranger], ["db/seed-notes.txt", stranger]);
     assert.equal(run(otherFrom, otherTo).status, 0, "paths outside the guarded set are not author-gated here");
 
@@ -582,7 +584,7 @@ test("checks, preview and production check out full git ancestry (fetch-depth: 0
     );
     const gen = s.indexOf('npm run history:index -- --strict --rev="$GITHUB_SHA"');
     const preCheck = s.indexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
-    const build = s.indexOf(job === "checks" ? "npm run build" : job === "preview" ? "npx vercel@64 build" : "npx vercel@64 build --prod");
+    const build = s.indexOf(job === "checks" ? "npm run build" : job === "preview" ? "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build" : "npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod");
     const postCheck = s.lastIndexOf('npm run history:check -- --strict --rev="$GITHUB_SHA"');
     assert.ok(gen !== -1, `${job} must run strict history:index`);
     assert.ok(preCheck > gen && preCheck < build, `${job} must run strict history:check before build`);
@@ -678,7 +680,7 @@ test("production strict history build step blocks build/upload on shallow or mis
       return { ...res, built, uploaded };
     }
 
-    // 1. Shallow clone negative control: fails before npx vercel@64 build --prod or upload runs.
+    // 1. Shallow clone negative control: fails before npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod or upload runs.
     const shallow = join(work, "shallow");
     spawnSync("git", ["clone", "-q", "--depth=1", `file://${origin}`, shallow], { env: gitEnv });
     setupCheckout(shallow);
@@ -687,7 +689,7 @@ test("production strict history build step blocks build/upload on shallow or mis
     assert.equal(shallowRes.built, false, "shallow clone must not reach vercel build");
     assert.equal(shallowRes.uploaded, false, "shallow clone must not reach upload");
 
-    // 2. Full clone with wrong GITHUB_SHA negative control: fails before npx vercel@64 build --prod or upload runs.
+    // 2. Full clone with wrong GITHUB_SHA negative control: fails before npx --yes --package=vercel@64.7.0 --package=@types/estree@1.0.9 -- vercel build --prod or upload runs.
     setupCheckout(origin);
     const wrongShaRes = runProdBuildStep(origin, oldSha);
     assert.notEqual(wrongShaRes.status, 0);
