@@ -1,5 +1,105 @@
 # t-1766 — Susuki footer delivery evidence
 
+## Publication recovery — run-9696
+
+The recovered implementation commit is
+`2537166b546dc9803cfadf584a5fae413bc32b4d` (original delivery
+`3726e97953168205b9df128ddb57bc8fdf39682d`). This run fetched main
+`573b70e9de539096f3f9e296fe075307b3fe288f`, retained the recovered commit
+without another rebase, and created `pm-299-t-1766-recovery-run-9696`.
+The previous run's persisted failure was
+`push_not_on_main: HEAD 3726e9795316 is not on origin/main`; its feature
+branch push succeeded, but that alone did not meet the runner's delivery check.
+This recovery therefore publishes the verified task branch and fast-forwards
+main using ordinary pushes. Commits are made on the task branch, not main.
+Main advanced during verification to `250705f2345c8cb77d03a5ed9d53d36494f0470e`
+with a paper-controls fix (`tactile.css` and its browser regression). If the main
+push is rejected, the contract requires `git pull --rebase origin main`, full
+task verification again, and up to three normal push retries. The captures in
+this section identify the first recovery build; the submitted summary and worker
+artifacts bind any subsequent retry build and final delivery SHA.
+
+No implementation or test work was dropped. The unrelated Shimi/inkblot paths
+listed in the rescue prompt are already on main and remain untouched. The only
+discarded working-tree change is the generated `content/history.json` from the
+required production build, restored with the contract's explicit command.
+The additional recovery commit records verification and durable commit evidence;
+it preserves the original task-prefixed implementation commit.
+
+Fresh `npm ci` used the unchanged lock. Runtime: Node `v22.23.3`, npm `10.9.9`,
+Next `16.4.2`, Playwright Core `1.64.0`, Chrome `156.0.8078.47`. The current
+run's recorded profile is `codex-sol-6-1-high`, invoked with model
+`gpt-6.1-sol` and `model_reasoning_effort="high"` on the fleet runner.
+Installed Next server/client and lazy-loading guides were read. The two missing
+standing-rule documents noted in the original record are still absent.
+
+Fresh production build ID: `_5g6oNWKI7e11sLZb4r-2`. The ordered executable
+fingerprint described below remains
+`e8391b38fb8be6554832b0c4b09a13b5faae00b13e4ba943c0b9521d436f5fa0`.
+The emitted field chunk remains `.next/static/chunks/12qgltjgzy1gg.js`, SHA-256
+`5ca02dfa389bb4c1055229019d254b2dc447eff5ad2dd7e5735319091ec1ff16`.
+Thus verification is tied to the same executable, rather than an unrelated
+evidence-only SHA. Production imports, shader compilation/linking, local fox
+atlas creation, GL adapter construction and real embedded-Postgres migrations
+all executed successfully in this locked installation.
+
+| Fresh check | Command | Result |
+| --- | --- | --- |
+| Susuki and Bottle browser suites | `TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/susuki.test.ts' 'e2e/bottle-ui.test.ts'` | 21 tests, 21 pass, 0 fail, 0 skipped; includes fresh production build/start |
+| Project tests | `TMPDIR=/tmp npm test` | 2,736 tests, 2,736 pass, 0 fail, 0 skipped |
+| Types | `npm run typecheck` | exit 0 |
+| Lint | `npm run lint` | exit 0; 0 errors, 11 existing warnings outside this task's files |
+| Gate closure | `TMPDIR=/tmp node scripts/check-gate-closure.mjs` | certified; `local_controls: pass`, `failures: []`; external evidence inconclusive |
+| Footer walk | `SKIP_BUILD=1 TMPDIR=/tmp bash scripts/walk-end.sh` | 67 ok, 0 failed |
+| Footer browser probe | `CI=1 SKIP_BUILD=1 TMPDIR=/tmp bash scripts/probe-end.sh` | 177 ok, 0 failed; includes idle-loop, overlap, navigation and negative controls |
+
+Fresh browser output demonstrates actual GL pixels and shader uniform updates,
+the same-draw fox instance and immediate input cancellation, all four live season
+tints, clickable links/Bottle/mascot, five SVGs, waterline ordering and **0 px**
+geometry shift. Static results were:
+
+```text
+{"renderer":"real WebGL2","inkPixels":214538,"browser":"156.0.8078.47"}
+{"fallback":"reduced","pixels":214484,"calls":1,"ticks":0}
+{"fallback":"save-data","pixels":214484,"calls":1,"ticks":0}
+{"fallback":"no-webgl","pixels":85737,"calls":0,"ticks":0}
+# tests 21
+# pass 21
+# fail 0
+# skipped 0
+```
+
+Real/fake boundaries remain as documented below: WebGL2, rendering, context loss
+and restoration, input and database execution are real; missing WebGL2,
+Save-Data and document visibility are deliberate capability/event fixtures.
+The negative control clears the real framebuffer and asserts exactly zero ink
+pixels, then observes resumed actual draws. This is local SWE execution proof,
+not independent deployed QA or a production delivery claim.
+
+History inspection used the plan's SWE run list (no pagination/cursor is exposed
+by that tool): 8 rows, comprising 3 failed, 3 succeeded and 2 current runs at
+inspection. This task's history is `run-9680` (succeeded), `run-9686` (failed),
+and `run-9696` (current). A literal `completed` filter returned no rows, so the
+unfiltered list was read to find actual `succeeded` records. The complete 29-line
+`run-9680` runner capture says `red_gate_already_green`, with no agent started;
+that is not proof of the missing feature. The prior `run-9686` raw capture is
+truncated (4,648 earlier lines omitted), so full raw historical completeness is
+inconclusive. Its persisted status/failure marker agrees with the publication
+tail supplied in this task; `callback_apply_failures` is 0 in the three task run
+records. Callback payloads/ingestion internals and remote CI history were not
+available through this evidence and are not claimed proven.
+
+No observed local defect remains in the verified executable. CI, global green
+gate, deployment and independent product acceptance remain unproven here.
+Plan-manager owns these deferred checks for `pm-299/t-1766` and `run-9696`, bound
+to the delivery `git_sha` in the submitted summary; any failed job or acceptance
+assertion returns this task. There is no runtime-capacity deferral or operator
+prerequisite. Per contract, this run stops at push without watching a pipeline
+or exercising a deployed system. See `run-9696/artifacts/commits.txt` for the
+retained commit and recovery-commit resolver.
+
+## Original implementation record — run-9686
+
 Run `run-9686`, role `software_engineer`, plan `pm-299`. Task branch:
 `pm-299-t-1766-susuki`, based on freshly fetched main
 `2cc4b041a506d36bcf264c10b6f46fdcebacfb71`.
