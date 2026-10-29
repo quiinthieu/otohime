@@ -8,6 +8,10 @@ import { HanafudaBoard } from "./_components/hanafuda-board";
 import "./hanafuda.css";
 
 export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Hanafuda+Koi-Koi&path=%2Fplay%2Fhanafuda", width: 1200, height: 630, alt: "Hanafuda Koi-Koi, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
   title: "Hanafuda Koi-Koi",
   description:
     "Play a 48-card ink-and-washi Hanafuda Koi-Koi match against the CPU and flip monthly card backs to inspect the yearly shipped log.",

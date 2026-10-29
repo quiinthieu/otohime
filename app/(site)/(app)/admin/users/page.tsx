@@ -6,7 +6,13 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
-export const metadata: Metadata = { title: "Users" };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Users&path=%2Fadmin%2Fusers", width: 1200, height: 630, alt: "Users, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: "Users",
+};
 
 const PAGE_SIZE = 20;
 const joined = new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" });

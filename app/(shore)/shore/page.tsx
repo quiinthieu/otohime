@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import { ShoreApp } from "../_components/shore-app";
 
 // absolute: the layout's template would otherwise make this "Shore · Shore".
-export const metadata: Metadata = { title: { absolute: "Shore" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Shore&path=%2Fshore", width: 1200, height: 630, alt: "Shore, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Shore" },
+};
 
 export default function ShorePage() {
   return (

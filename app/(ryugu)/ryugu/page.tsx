@@ -7,7 +7,13 @@ import { Tamatebako } from "../_components/tamatebako";
 import { replay } from "../_lib/tamatebako";
 
 // absolute: the layout's template would otherwise make this "Ryugu-jo · Ryugu-jo".
-export const metadata: Metadata = { title: { absolute: "Ryugu-jo" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Ryugu-jo&path=%2Fryugu", width: 1200, height: 630, alt: "Ryugu-jo, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Ryugu-jo" },
+};
 
 // /ryugu: the paper site's surface at the top, and below the waterline the ink sea with Otohime's palace on its floor
 // and her Tamatebako, which replays the changelog built at build time (content/history.json, scripts/history-index.ts).

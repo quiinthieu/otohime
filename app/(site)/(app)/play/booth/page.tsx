@@ -6,6 +6,10 @@ import { BoothStudio } from "./_components/booth-studio";
 import "./booth.css";
 
 export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Ink+Purikura+Photobooth&path=%2Fplay%2Fbooth", width: 1200, height: 630, alt: "Ink Purikura Photobooth, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
   title: "Ink Purikura Photobooth",
   description:
     "Take a 4-frame paper-and-ink photobooth strip in sumi-e wash, riso two-tone halftone, or newsprint dot screen, decorate with purikura ink pen and stickers, and export or print locally.",

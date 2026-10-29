@@ -348,9 +348,9 @@ jobs:
         # Upload 5 + ready 7 is the deploy's own budget; the job's 18 also covers the verify step below.
         timeout-minutes: 12
         run: bash scripts/vercel-deploy.sh
-      # The live site must serve this commit (bounded poll) and still have the Pocket Terminal and the /play
-      # Ink Poster Press: their e2e files run read-only against https://otohime.dev (runner's Google Chrome).
-      - name: Verify the deployed sha, terminal and press
+      # The live site must serve this commit and pass the terminal, press and postcard HTTP/browser flows.
+      # These tests run read-only against https://otohime.dev with the runner's Google Chrome.
+      - name: Verify the deployed sha, terminal, press and postcards
         run: EXPECT_SHA="$GITHUB_SHA" bash scripts/verify-deploy.sh https://otohime.dev
       - name: Verify deployed palace changelog history
         run: EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-history.sh https://otohime.dev

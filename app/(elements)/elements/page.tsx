@@ -3,7 +3,13 @@ import { CC_BY_SA } from "../_components/element-detail";
 import { Table } from "../_components/table";
 
 // absolute: the layout's template would otherwise make this "Elements · Elements".
-export const metadata: Metadata = { title: { absolute: "Elements" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Elements&path=%2Felements", width: 1200, height: 630, alt: "Elements, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Elements" },
+};
 
 const DATASET = "https://github.com/Bowserinator/Periodic-Table-JSON";
 

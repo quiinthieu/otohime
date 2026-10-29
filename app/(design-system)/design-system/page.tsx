@@ -19,7 +19,13 @@ import { textWords } from "../_lib/words.ts";
 export const ensureStatic = "navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return { title: { absolute: title }, description: deck };
+  return {
+    title: { absolute: title }, description: deck,
+    openGraph: {
+      images: [{ url: `/og?${new URLSearchParams({ title, path: "/design-system" })}`, width: 1200, height: 630, alt: `${title}, stamped on paper by otohime.dev` }],
+    },
+    twitter: { card: "summary_large_image" },
+  };
 }
 
 const ORDER = Object.keys(PART_TITLES) as (keyof Parts)[];

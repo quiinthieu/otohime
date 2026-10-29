@@ -2,6 +2,7 @@ import { RisoText } from "@/components/riso-heading";
 import { FigTitle } from "@/components/figures";
 import { site, type Sketch } from "@/content/site";
 import { getSketchDimensions } from "@/lib/sketches";
+import { POSTCARD_SKETCHES } from "@/lib/postcard";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,6 +32,7 @@ function frame(src: string, width: number, height: number): { d: string; stroke:
 function Sheet({ sketch }: { sketch: Sketch }) {
   const dims = getSketchDimensions(sketch.kind);
   const ink = frame(sketch.src, dims.width, dims.height);
+  const postcard = POSTCARD_SKETCHES.find((sheet) => sheet.src === sketch.src);
   return (
     <figure>
       {/* The art, a paper wash that slides off it and an ink frame that draws round it as the sheet scrolls in
@@ -65,6 +67,11 @@ function Sheet({ sketch }: { sketch: Sketch }) {
           <span className="block font-semibold">{sketch.title}</span>
         )}
         <span className="text-muted">{sketch.note}</span>
+        {postcard && (
+          <Link href={`/postcard?s=${postcard.id}`} className="mt-1 block text-xs underline underline-offset-4">
+            Send {postcard.title} as a postcard
+          </Link>
+        )}
       </figcaption>
     </figure>
   );

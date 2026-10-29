@@ -700,16 +700,17 @@ test("application SHA and Next BUILD_ID are published independently from the Wor
   } finally { rmSync(work, { recursive: true, force: true }); }
 });
 
-test("production read-only Terminal/Press probe runs without fake configuration and preserves browser failures", () => {
+test("production read-only feature probes run without fake configuration and preserve browser failures", () => {
   const script = readFileSync(new URL("./verify-deploy.sh", import.meta.url), "utf8");
-  const invocation = script.split('  echo "# running the Pocket Terminal and Ink Poster Press e2e against $base"\n')[1]
+  const invocation = script.split('  echo "# running the Pocket Terminal, Ink Poster Press and Postcard Mailroom e2e against $base"\n')[1]
     ?.split('  if [ "$status" -ne 0 ]; then')[0];
   assert.ok(invocation, "execute the actual default verifier browser invocation");
   const work = mkdtempSync(join(tmpdir(), "readonly-browser-"));
   try {
     mkdirSync(join(work, "scripts")); mkdirSync(join(work, "e2e"));
     for (const file of ["e2e.mjs", "e2e-annotate.mjs"]) copyFileSync(new URL(`./${file}`, import.meta.url), join(work, "scripts", file));
-    for (const name of ["pocket-terminal", "ink-press"]) writeFileSync(join(work, `e2e/${name}.test.ts`), `
+    const features = ["pocket-terminal", "ink-press", "postcard", "postcard-browser"];
+    for (const name of features) writeFileSync(join(work, `e2e/${name}.test.ts`), `
       import assert from 'node:assert/strict';
       import { test } from 'node:test';
       test('${name} read-only fixture', () => {
@@ -719,7 +720,7 @@ test("production read-only Terminal/Press probe runs without fake configuration 
         assert.ok(process.env.FAIL_CASE !== '${name}', 'intentional browser assertion');
       });
     `);
-    for (const ci of ["false", "true"]) for (const fail of ["", "ink-press"]) {
+    for (const ci of ["false", "true"]) for (const fail of ["", ...features]) {
       const env = { ...process.env, NODE_BINARY: process.execPath, GITHUB_ACTIONS: ci, FAIL_CASE: fail,
         GITHUB_STEP_SUMMARY: join(work, "summary.md") };
       for (const key of ["GHOSTS_FAKE_BASE", "GHOSTS_ENDPOINT", "VERIFY_E2E_CMD", "NODE_TEST_CONTEXT"]) delete env[key];
@@ -731,8 +732,7 @@ test("production read-only Terminal/Press probe runs without fake configuration 
       `], { cwd: work, env, encoding: "utf8", timeout: 10000 });
       assert.ifError(result.error);
       assert.equal(result.status, fail ? 1 : 0, result.stdout + result.stderr);
-      assert.match(result.stdout, /pocket-terminal read-only fixture/);
-      assert.match(result.stdout, /ink-press read-only fixture/);
+      for (const name of features) assert.ok(result.stdout.includes(`${name} read-only fixture`), name);
       assert.doesNotMatch(result.stdout + result.stderr, /requires explicit GHOSTS_FAKE_BASE/);
       if (ci === "true" && fail) assert.match(result.stdout, /::error/);
     }

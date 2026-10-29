@@ -13,7 +13,13 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { ViewTransition } from "react";
 
-export const metadata: Metadata = { title: "Account" };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Account&path=%2Faccount", width: 1200, height: 630, alt: "Account, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: "Account",
+};
 
 export default async function AccountPage() {
   const { user, session } = await requireUser("/account");

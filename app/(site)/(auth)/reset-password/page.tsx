@@ -3,7 +3,13 @@ import { ResetPasswordForm } from "@/components/password-reset-forms";
 import type { Metadata } from "next";
 import { Suspense, ViewTransition } from "react";
 
-export const metadata: Metadata = { title: "New password" };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=New+password&path=%2Freset-password", width: 1200, height: 630, alt: "New password, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: "New password",
+};
 
 export default function ResetPasswordPage() {
   return (

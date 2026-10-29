@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Drawing } from "../_components/figure";
 import { Colophon, TopBar } from "../_components/chrome";
@@ -31,6 +32,13 @@ function CostDots({ slug }: { slug: string }) {
     </ul>
   );
 }
+
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Structures&path=%2Fstructures", width: 1200, height: 630, alt: "Structures, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 export default function StructuresIndex() {
   return (

@@ -47,11 +47,11 @@ test("every kind of page names a stamped card, and each card is a 1200x630 PNG",
     ["/projects", /^\/projects\/opengraph-image/],
     ["/sketches", /^\/sketches\/opengraph-image/],
     ["/postcard", /^\/postcard\/opengraph-image/],
-    ["/sign-in", /^\/og$/],
-    ["/shore", /^\/og$/],
-    ["/orrery/sun", /^\/og$/],
-    ["/articles", /^\/og$/],
-    ["/elements/h", /^\/og$/],
+    ["/sign-in", /^\/og\?title=Sign/],
+    ["/shore", /^\/og\?title=Shore/],
+    ["/orrery/sun", /^\/og\?title=Sun/],
+    ["/articles", /^\/og\?title=The/],
+    ["/elements/h", /^\/og\?title=Hydrogen/],
   ];
   const drawn = new Set<string>();
   for (const [page, expected] of pages) {
@@ -79,6 +79,41 @@ test("/postcard offers the twelve sheets and a note capped at 140; /sketches lin
   assert.match(await html("/sketches"), /href="\/postcard"/);
   // ?s= picks the sheet: the streamed desk has cup checked.
   assert.match(await html("/postcard?s=cup"), /name="sketch" checked="" value="cup"/);
+});
+
+test("standalone sketches and nested pages stamp their own titles instead of inheriting a generic card", async () => {
+  const pages = [
+    "/sign-in", "/forgot-password", "/reset-password", "/shore", "/capsule", "/vinyl", "/rotor",
+    "/ryugu", "/zine", "/barometer", "/planisphere", "/design-system", "/orrery", "/orrery/sun",
+    "/elements", "/elements/h", "/articles", "/structures", "/lab", "/making-of",
+    "/play/hanafuda", "/play/booth", "/play/pachinko",
+  ];
+  for (const index of ["/articles", "/structures", "/notes"]) {
+    const links = [...(await html(index)).matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+    const leaf = links.find((href) => href.startsWith(`${index}/`) && !href.includes("?"));
+    assert.ok(leaf, `${index}: a detail page to check`);
+    pages.push(leaf);
+  }
+  const cards = new Set<string>();
+  for (const path of pages) {
+    const page = await html(path);
+    const [image] = meta(page, "og:image");
+    assert.ok(image, `${path}: missing og:image`);
+    const url = new URL(image.replaceAll("&amp;", "&"));
+    assert.equal(url.pathname, "/og", path);
+    assert.equal(url.searchParams.get("path"), path, `${path}: inherited a parent's card`);
+    const title = page.match(/<title>(.*?)<\/title>/)?.[1].split(" · ")[0];
+    assert.equal(url.searchParams.get("title"), title, `${path}: image title differs from page title`);
+    assert.deepEqual(meta(page, "twitter:card"), ["summary_large_image"], path);
+    assert.ok(!cards.has(image), `${path}: shares another page's card`);
+    cards.add(image);
+  }
+  // Draw more than one title: the renderer must use the parameters, not just return the default /og.
+  const [a, b] = await Promise.all([
+    fetch(`${BASE}/og?title=Shore&path=%2Fshore`).then((r) => r.arrayBuffer()),
+    fetch(`${BASE}/og?title=Sun&path=%2Forrery%2Fsun`).then((r) => r.arrayBuffer()),
+  ]);
+  assert.notDeepEqual(Buffer.from(a), Buffer.from(b));
 });
 
 test("a postcard's link opens its view: noindex, titled, its own card as og:image, the note as text", async () => {

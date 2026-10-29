@@ -3,7 +3,13 @@ import { CapsuleApp } from "../_components/capsule-app";
 import { ratesLine } from "../_lib/gacha.ts";
 
 // absolute: the layout's template would otherwise make this "Capsule · Capsule".
-export const metadata: Metadata = { title: { absolute: "Capsule" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Capsule&path=%2Fcapsule", width: 1200, height: 630, alt: "Capsule, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Capsule" },
+};
 
 export default function CapsulePage() {
   return (

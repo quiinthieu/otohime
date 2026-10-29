@@ -7,7 +7,13 @@ import { PrintButton } from "../_components/print-button";
 import { Sheet } from "../_components/sheet";
 
 // absolute: the layout's template would otherwise make this "Fold-a-Zine · Fold-a-Zine".
-export const metadata: Metadata = { title: { absolute: "Fold-a-Zine" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Fold-a-Zine&path=%2Fzine", width: 1200, height: 630, alt: "Fold-a-Zine, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Fold-a-Zine" },
+};
 
 /** The one @page rule, per paper: the sheet is the page, edge to edge. */
 const PAGE_SIZE: Record<Paper, string> = { a4: "210mm 297mm", letter: "8.5in 11in" };

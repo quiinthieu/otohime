@@ -7,7 +7,13 @@ import { formQuery } from "../_lib/form.ts";
 import { SOURCES } from "../_lib/wiring.ts";
 
 // absolute: the layout's template would otherwise make this "Rotor · Rotor".
-export const metadata: Metadata = { title: { absolute: "Rotor" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Rotor&path=%2Frotor", width: 1200, height: 630, alt: "Rotor, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Rotor" },
+};
 
 // The whole page depends on the query, and it must work with JavaScript off.
 // Behind <Suspense> it would stream into a hidden <div> that only a script

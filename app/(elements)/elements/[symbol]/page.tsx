@@ -20,7 +20,13 @@ const find = (symbol: string) => ELEMENTS.find((el) => slug(el) === symbol.toLow
 
 export async function generateMetadata({ params }: PageProps<"/elements/[symbol]">): Promise<Metadata> {
   const el = find((await params).symbol);
-  return el ? { title: `${el.name} (${el.symbol})` } : {};
+  return el ? {
+    title: `${el.name} (${el.symbol})`,
+    openGraph: {
+      images: [{ url: `/og?${new URLSearchParams({ title: `${el.name} (${el.symbol})`, path: `/elements/${slug(el)}` })}`, width: 1200, height: 630, alt: `${el.name} (${el.symbol}), stamped on paper by otohime.dev` }],
+    },
+    twitter: { card: "summary_large_image" },
+  } : {};
 }
 
 export default async function ElementPage({ params }: PageProps<"/elements/[symbol]">) {

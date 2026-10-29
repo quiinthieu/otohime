@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Card, minutesOf, ReadOn } from "../_components/card";
 import { Figure } from "../_components/figure";
 import { Colophon, Masthead, TopBar } from "../_components/masthead";
@@ -9,6 +10,13 @@ import { dateline } from "../_lib/edition.ts";
 // story sits above the fold with its figure, and the other five follow in
 // ruled columns. Nothing here reads the request, so the whole page is static.
 export const ensureStatic = "navigation";
+
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=The+Otohime+Gazette&path=%2Farticles", width: 1200, height: 630, alt: "The Otohime Gazette, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 export default function FrontPage() {
   const [lead, ...rest] = ARTICLES;

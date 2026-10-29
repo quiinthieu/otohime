@@ -6,7 +6,13 @@ import { describe } from "../_lib/reading.ts";
 import { readStation } from "../_lib/station.ts";
 
 // absolute: the layout's template would otherwise make this "Barometer · Barometer".
-export const metadata: Metadata = { title: { absolute: "Barometer" } };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Barometer&path=%2Fbarometer", width: 1200, height: 630, alt: "Barometer, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: { absolute: "Barometer" },
+};
 
 // The whole page depends on the query, and it must work with JavaScript off.
 // Inside a streamed boundary it would arrive into a hidden <div> that only a script

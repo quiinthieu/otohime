@@ -11,7 +11,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 
-export const metadata: Metadata = { title: "User" };
+export const metadata: Metadata = {
+  title: "User",
+  openGraph: {
+    images: [{ url: "/og?title=User&path=%2Fadmin%2Fusers", width: 1200, height: 630, alt: "User, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 const joined = new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" });
 

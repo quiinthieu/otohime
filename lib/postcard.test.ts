@@ -177,7 +177,7 @@ test("every root layout and the global 404 set metadataBase and name the shared 
     assert.match(src, /metadataBase: new URL\(process\.env\.SITE_URL \?\? "https:\/\/otohime\.dev"\)/, file);
     assert.match(src, /openGraph: \{ images: \[\{ url: "\/og", alt: "[^"]+", width: 1200, height: 630 \}\] \}/, file);
   }
-  assert.match(read("app/og/route.tsx"), /export function GET\(\)/);
+  assert.match(read("app/og/route.tsx"), /export function GET\(request: NextRequest\)/);
 });
 
 test("the view is noindex with its own card; the image route only draws decoded, allow-listed postcards", () => {

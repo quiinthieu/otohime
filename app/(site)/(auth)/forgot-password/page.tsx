@@ -4,7 +4,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
-export const metadata: Metadata = { title: "Forgot password" };
+export const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: "/og?title=Forgot+password&path=%2Fforgot-password", width: 1200, height: 630, alt: "Forgot password, stamped on paper by otohime.dev" }],
+  },
+  twitter: { card: "summary_large_image" },
+  title: "Forgot password",
+};
 
 export default function ForgotPasswordPage() {
   return (
