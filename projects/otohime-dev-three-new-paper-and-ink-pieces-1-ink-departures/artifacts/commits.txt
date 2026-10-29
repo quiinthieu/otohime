@@ -1,0 +1,9 @@
+Plan: pm-301
+Task: t-1787
+Run: run-9712
+Base: 444953b99578374d5204dc9b5e71d93fd87ef07d
+Branch: pm-301-t-1787-departures-core
+Subject: pm-301/t-1787: feat: add deterministic departures core
+Delivery: the enclosing commit, whose immutable pushed SHA is recorded in plan_manager_submit_report.git_sha.
+Resolve: git log -1 --format="%H %s" -- projects/otohime-dev-three-new-paper-and-ink-pieces-1-ink-departures/artifacts/commits.txt
+Targets: origin/pm-301-t-1787-departures-core and origin/main (fast-forward only).
