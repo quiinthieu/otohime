@@ -3,6 +3,7 @@ import { FigTitle } from "@/components/figures";
 import { site, type Sketch } from "@/content/site";
 import { getSketchDimensions } from "@/lib/sketches";
 import { POSTCARD_SKETCHES } from "@/lib/postcard";
+import { sketchTargetId } from "@/lib/fortune-targets";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,7 +52,7 @@ function Sheet({ sketch }: { sketch: Sketch }) {
           <path d={ink.d} pathLength={1} strokeWidth={ink.stroke} />
         </svg>
       </div>
-      <figcaption className="mt-2">
+      <figcaption id={sketchTargetId(sketch.src)} className="mt-2 scroll-mt-80">
         {sketch.downloadHref && sketch.downloadFilename ? (
           <div className="flex items-baseline justify-between gap-2">
             <span className="block font-semibold">{sketch.title}</span>
