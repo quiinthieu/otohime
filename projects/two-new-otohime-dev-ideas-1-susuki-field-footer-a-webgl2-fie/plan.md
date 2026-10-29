@@ -76,7 +76,7 @@ Chains `1 -> 2` and `3 -> 4` have disjoint interfaces and can execute in paralle
 - **Acceptance Criteria**: `footer.end` renders a non-blank Susuki Field canvas that parts with the cursor, speeds up on scroll, retints across all four seasons, trots the ink-fox on idle/on-demand trigger and cancels on input, renders a single static frame with zero rAF under reduced motion or no-WebGL2, keeps all footer links clickable, and passes `e2e/susuki.test.ts`, `e2e/bottle-ui.test.ts`, `scripts/walk-end.sh`, and `scripts/probe-end.sh`.
 - **Verification**:
   - `susuki-and-footer-e2e`: `(test -d node_modules || npm ci) && TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/susuki.test.ts' 'e2e/bottle-ui.test.ts' && git checkout -- content/history.json`
-  - `footer-walk-and-unit`: `(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint && node scripts/check-gate-closure.mjs`
+  - `footer-walk-and-unit`: `(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint && TMPDIR=/tmp node scripts/check-gate-closure.mjs`
 
 ### Task 3: Deterministic Ink Shelf layout model and accessible `/shelf` route (`qa: "required"`)
 - **Problem**: There is no `/shelf` route or deterministic bookshelf layout model that maps `site.projectList` and `site.notes` into 3–4 rows of sized/tilted volumes with crawlable, accessible DOM links and a zero-CLS flat shelf fallback when WebGL is disabled or loading.
@@ -118,7 +118,7 @@ Chains `1 -> 2` and `3 -> 4` have disjoint interfaces and can execute in paralle
 - **Acceptance Criteria**: Clicking a book on `/shelf` morphs via `document.startViewTransition` (when motion is allowed) from its projected 3D rect to the destination project or note heading and skips `startViewTransition` under reduced motion; `/projects` links to `/shelf`; WebGL-disabled browsers render the flat fallback cleanly; `three` loads only on `/shelf` (and `/elements` 3D dialog); and all unit, E2E, typecheck, lint, and gate-closure checks pass.
 - **Verification**:
   - `shelf-and-susuki-e2e`: `(test -d node_modules || npm ci) && TMPDIR=/tmp node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/e2e.mjs --test 'e2e/shelf.test.ts' 'e2e/susuki.test.ts' && git checkout -- content/history.json`
-  - `repo-checks-and-closure`: `(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint && node scripts/check-gate-closure.mjs`
+  - `repo-checks-and-closure`: `(test -d node_modules || npm ci) && TMPDIR=/tmp npm test && npm run typecheck && npm run lint && TMPDIR=/tmp node scripts/check-gate-closure.mjs`
 
 ---
 
