@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import {
-  shimiRng, shimiSeedFromString, createShimiSwarm, stepShimiSwarm, restoreShimiNibblesNear,
+  shimiRng, shimiSeedFromString, createShimiSwarm, placeShimiSwarm, stepShimiSwarm, restoreShimiNibblesNear,
   restoreAllShimiNibbles, SHIMI_TRAIL_ALPHA, SHIMI_TRAIL_CAP, SHIMI_NIBBLE_CAP,
   SHIMI_SKIP_TAGS, shouldSkipShimiElement, extractCrawlableWords, createShimiDiet,
   ingestWords, generateShimiBurp, SHIMI_PENTATONIC_HZ, charToPentatonicHz,
@@ -59,6 +59,21 @@ function restingSwarm(): ShimiSwarm {
   const swarm = createShimiSwarm(4, 5);
   return { ...swarm, creatures: swarm.creatures.map(creature => ({ ...creature, x: 60, y: 48 })) };
 }
+
+test("initial placement reaches visible prose promptly without selecting offscreen words", () => {
+  const source = createShimiSwarm(1), original = structuredClone(source);
+  const prose = { ...word, x: 650, y: 450 };
+  const targets = [{ ...word, id: "offscreen", x: 900 }, prose];
+  let swarm = placeShimiSwarm(source, targets, viewport);
+  assert.deepEqual(swarm, placeShimiSwarm(source, targets, viewport));
+  assert.deepEqual(source, original);
+  assert.equal(placeShimiSwarm(source, [targets[0]], viewport), source);
+  assert.ok(swarm.creatures.every(creature => creature.targetId === prose.id));
+  const rng = shimiRng(1);
+  for (let i = 0; i < 40; i++) swarm = stepShimiSwarm(swarm, targets, 0.1, viewport, rng);
+  assert.ok(swarm.nibbles.length > 0);
+  assert.ok(swarm.nibbles.every(nibble => nibble.targetId === prose.id));
+});
 
 test("kinematics are deterministic immutable snapshots with sine-phase legs and bounded trail rings", () => {
   let a = createShimiSwarm(2), b = createShimiSwarm(2);
