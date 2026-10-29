@@ -38,6 +38,20 @@ test("SQL desk defers WASM, runs real DuckDB joins and saved queries, bounds out
     await query.fill("SELECT count(*) AS notes FROM notes");
     await page.getByRole("button", { name: "Run SQL" }).click();
     await page.waitForFunction(() => document.querySelector(".sql-results tbody td")?.textContent === "3");
+    await query.fill("WITH RECURSIVE forever(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM forever) SELECT sum(n) FROM forever");
+    await page.getByRole("button", { name: "Run SQL" }).click();
+    await page.getByRole("button", { name: "Cancel query", exact: true }).click();
+    await page.getByRole("button", { name: "Open DuckDB", exact: true }).click();
+    await page.locator('[data-sql-state="ready"]').waitFor({ timeout: 60000 });
+    await query.fill("SELECT 'new session' AS receipt");
+    await page.getByRole("button", { name: "Run SQL" }).click();
+    await page.waitForFunction(() => document.querySelector(".sql-results tbody td")?.textContent === "new session");
+    // Observe past the cancelled query's real six-second deadline: it must not overwrite the new session.
+    await page.waitForTimeout(6500);
+    assert.equal(await page.locator(".sql-desk").getAttribute("data-sql-state"), "ready");
+    const alerts = page.getByRole("region", { name: "SQL desk", exact: true }).getByRole("alert");
+    assert.equal(await alerts.count(), 0, (await alerts.allTextContents()).join("\n"));
+    assert.equal(await page.locator(".sql-results tbody td").textContent(), "new session");
     assert.deepEqual(errors.unexpected, []);
   } finally { await context.close(); }
 });

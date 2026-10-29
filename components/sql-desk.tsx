@@ -43,13 +43,15 @@ export function SqlDesk({ dataset }: { dataset: SqlDataset }) {
   };
   const run = async (query = sql) => {
     if (!engine.current || state !== "ready") return;
+    const session = engine.current, controller = abort.current;
+    const current = () => !controller?.signal.aborted && engine.current === session;
     setState("running"); setError(""); setMessage("Writing the receipt…");
     try {
-      const result = await engine.current.query(query);
-      if (abort.current?.signal.aborted) return;
+      const result = await session.query(query);
+      if (!current()) return;
       setRows(result.rows); setColumns(result.columns); setMessage(`DuckDB receipt · ${result.rows.length} rows · ${Math.round(result.ms)} ms${result.truncated ? " · display capped at 200 rows / 20 columns" : ""}`);
-    } catch (e) { if (!abort.current?.signal.aborted) { setError(e instanceof Error ? e.message : String(e)); setMessage(engine.current?.closed ? "Worker released. Reopen DuckDB to try another query." : "The query needs another look. Your last receipt is kept below."); } }
-    finally { if (!abort.current?.signal.aborted) setState(engine.current?.closed ? "closed" : "ready"); }
+    } catch (e) { if (current()) { setError(e instanceof Error ? e.message : String(e)); setMessage(session.closed ? "Worker released. Reopen DuckDB to try another query." : "The query needs another look. Your last receipt is kept below."); } }
+    finally { if (current()) setState(session.closed ? "closed" : "ready"); }
   };
   return <section className="sql-desk" aria-label="SQL desk" data-sql-state={state}>
     <header className="sql-topline"><span>OT / PUBLIC ACCOUNTS</span><span>FOLIO 02d</span></header>
