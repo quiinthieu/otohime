@@ -1,0 +1,62 @@
+{
+  "expected": {
+    "0ob3qmxyio00h.js": "fbe13d630efdeec60591182f437eb9453713d90920f335852d17da99f0e8798a",
+    "3pcxvj954w__p.js": "471cafcd1fb215c2b8129102cd7ac6c3c734822f9a01b7d22003eb30f204d783"
+  },
+  "observed": [
+    {
+      "mode": "desktop",
+      "capturedBundles": 29,
+      "expectedChunkHashesPresent": {
+        "0ob3qmxyio00h.js": true,
+        "3pcxvj954w__p.js": true
+      },
+      "captureCompleteness": "all script body promises settled successfully before navigation/context close"
+    },
+    {
+      "mode": "mobile-debug",
+      "capturedBundles": 28,
+      "expectedChunkHashesPresent": {
+        "0ob3qmxyio00h.js": true,
+        "3pcxvj954w__p.js": true
+      },
+      "captureCompleteness": "all script body promises settled successfully before navigation/context close"
+    },
+    {
+      "mode": "no-webgl",
+      "capturedBundles": 27,
+      "expectedChunkHashesPresent": {
+        "0ob3qmxyio00h.js": false,
+        "3pcxvj954w__p.js": false
+      },
+      "captureCompleteness": "all script body promises settled successfully before navigation/context close"
+    },
+    {
+      "mode": "reduced-motion",
+      "capturedBundles": 29,
+      "expectedChunkHashesPresent": {
+        "0ob3qmxyio00h.js": true,
+        "3pcxvj954w__p.js": true
+      },
+      "captureCompleteness": "all script body promises settled successfully before navigation/context close"
+    },
+    {
+      "mode": "home",
+      "capturedBundles": 26,
+      "expectedChunkHashesPresent": {
+        "0ob3qmxyio00h.js": false,
+        "3pcxvj954w__p.js": false
+      },
+      "captureCompleteness": "all script body promises settled successfully before navigation/context close"
+    },
+    {
+      "mode": "desktop-click",
+      "capturedBundles": 29,
+      "expectedChunkHashesPresent": {
+        "0ob3qmxyio00h.js": true,
+        "3pcxvj954w__p.js": true
+      },
+      "captureCompleteness": "all script body promises settled successfully before navigation/context close"
+    }
+  ]
+}
