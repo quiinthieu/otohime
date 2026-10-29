@@ -28,16 +28,30 @@ after(async () => {
   rmSync(tmp, { recursive: true, force: true });
 });
 
-async function open(options: BrowserContextOptions = {}, route = "/play/inkblot") {
+async function open(options: BrowserContextOptions = {}, route = "/play/inkblot", expectRejections = false) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
   contexts.push(context);
   const page = await context.newPage(), errors = collectBrowserErrors(BASE);
+  const rejected = { responses: 0, console: 0 };
+  const endpoint = new URL("/api/inkblot/answers", BASE).href;
   page.on("pageerror", (e) => errors.pageError(e.message));
-  page.on("console", (msg) => { if (msg.type() === "error") errors.console({ text: msg.text(), ...msg.location(), args: msg.args().length }); });
-  page.on("response", (res) => errors.response({ url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() }));
+  page.on("console", (msg) => {
+    if (msg.type() !== "error") return;
+    const location = msg.location();
+    if (expectRejections && location.url === endpoint && location.lineNumber === 0 && location.columnNumber === 0 && msg.args().length === 0 &&
+      /^Failed to load resource: the server responded with a status of 400 \((Bad Request)?\)$/.test(msg.text())) {
+      rejected.console++;
+      return;
+    }
+    errors.console({ text: msg.text(), ...location, args: msg.args().length });
+  });
+  page.on("response", (res) => {
+    if (expectRejections && res.url() === endpoint && res.status() === 400 && res.request().method() === "POST" && res.request().resourceType() === "fetch") rejected.responses++;
+    errors.response({ url: res.url(), status: res.status(), method: res.request().method(), resourceType: res.request().resourceType() });
+  });
   await page.goto(`${BASE}${route}`);
   if (route.startsWith("/play/inkblot")) await page.getByTestId("inkblot-sheet").waitFor();
-  return { page, context, errors };
+  return { page, context, errors, rejected };
 }
 
 async function lobes(page: Page) {
@@ -108,7 +122,7 @@ test("pointer and keyboard drips fold into a symmetric blot; reduced motion skip
 });
 
 test("an observation shows a toy reading and pins a note; URLs and profanity are rejected", async () => {
-  const { page, errors } = await open({}, "/play/inkblot?b=otohime7");
+  const { page, errors, rejected } = await open({}, "/play/inkblot?b=otohime7", true);
   const approved = randomUUID();
   await pool.query(
     "insert into inkblot_answer(id,blot_key,name,note,status,tilt,hand) values($1,'otohime7','Ward clerk','a folded moth','approved',-2,1)",
@@ -117,6 +131,7 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
   try {
     await page.reload();
     await page.getByTestId("inkblot-gallery").waitFor();
+    await page.getByText("a folded moth", { exact: true }).waitFor();
     assert.match(await page.getByTestId("inkblot-gallery").innerText(), /a folded moth/);
     await page.locator("#inkblot-note").fill("a lantern in the crease");
     await page.locator("#inkblot-name").fill("Ink");
@@ -140,6 +155,8 @@ test("an observation shows a toy reading and pins a note; URLs and profanity are
     await page.getByTestId("inkblot-submit-btn").click();
     await page.waitForFunction(() => /kinder/i.test(document.querySelector('[data-testid="inkblot-status"]')?.textContent ?? ""));
     assert.equal(Number((await pool.query("select count(*)::int as n from inkblot_answer")).rows[0].n), before + 0);
+    assert.equal(rejected.responses, 2, "both invalid observations were rejected by the API");
+    assert.ok(rejected.console <= rejected.responses, "every expected browser resource error has a matching response");
   } finally {
     await pool.query("delete from inkblot_answer where id=$1 or note in ('a lantern in the crease','https://spam.example','this is shit')", [approved]);
   }

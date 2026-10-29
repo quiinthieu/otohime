@@ -58,11 +58,29 @@ async function open(options: BrowserContextOptions = {}, route = "/", meter = fa
   const scripts: string[] = [];
   page.on("response", (res) => { if (res.request().resourceType() === "script") scripts.push(res.url()); });
   await page.goto(`${BASE}${route}`);
+  await page.locator('html[data-shimi-ready="true"]').waitFor({ state: "attached" });
   return { page, context, errors, scripts };
 }
 
 const canvas = (page: Page) => page.locator("[data-shimi-canvas]");
 const meter = (page: Page) => page.evaluate(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter);
+const prose = (page: Page) => page.locator("main").evaluate((main) => {
+  const copy = main.cloneNode(true) as Element;
+  // Toggle labels and status regions intentionally change; article text must not.
+  copy.querySelectorAll('button, input, textarea, select, dialog, [role="status"], [data-paper-controls]').forEach((node) => node.remove());
+  return copy.textContent;
+});
+
+async function waitForNibbles(page: Page) {
+  // Worms travel at 18–36px/s from the corner to real page text. Advance
+  // animation time explicitly instead of assuming every layout is 12s away.
+  await page.clock.install();
+  for (let elapsed = 0; elapsed < 90_000; elapsed += 5000) {
+    if (Number(await canvas(page).getAttribute("data-shimi-nibbles")) > 0) return;
+    await page.clock.runFor(5000);
+  }
+  assert.ok(Number(await canvas(page).getAttribute("data-shimi-nibbles")) > 0, "worms reached visible page text");
+}
 
 test("Shimi Bookworms stay off by default on Home and Notes", async () => {
   for (const route of ["/", "/notes"]) {
@@ -77,33 +95,33 @@ test("Shimi Bookworms stay off by default on Home and Notes", async () => {
 test("Pocket chip, terminal, and typing shimi summon overlay nibbles without mutating DOM text", async () => {
   const home = await open({}, "/");
   await home.page.locator("[data-pocket-shimi]").waitFor();
-  const beforeHome = await home.page.locator("main").textContent();
+  const beforeHome = await prose(home.page);
   await home.page.locator("[data-pocket-shimi]").click();
   await canvas(home.page).waitFor();
   assert.equal(await canvas(home.page).getAttribute("aria-hidden"), "true");
-  await home.page.waitForFunction(() => Number(document.querySelector("[data-shimi-canvas]")?.getAttribute("data-shimi-nibbles")) > 0, null, { timeout: 12_000 });
-  assert.equal(await home.page.locator("main").textContent(), beforeHome);
+  await waitForNibbles(home.page);
+  assert.equal(await prose(home.page), beforeHome);
   await home.page.locator("[data-shimi-toggle]").click();
   await canvas(home.page).waitFor({ state: "detached" });
 
   const notes = await open({}, "/notes");
-  const beforeNotes = await notes.page.locator("main").textContent();
+  const beforeNotes = await prose(notes.page);
   await notes.page.keyboard.press("/");
   await notes.page.locator("dialog.pocket-terminal").waitFor({ state: "visible" });
   await notes.page.locator("#pt-in").fill("shimi on");
   await notes.page.keyboard.press("Enter");
   await canvas(notes.page).waitFor();
-  assert.equal(await notes.page.locator("main").textContent(), beforeNotes);
+  assert.equal(await prose(notes.page), beforeNotes);
   await notes.page.keyboard.press("Escape");
   await notes.page.keyboard.press("Escape");
   await canvas(notes.page).waitFor({ state: "detached" });
 
   const slug = await open({}, "/notes/backfills-are-a-feature");
-  const beforeSlug = await slug.page.locator("main").textContent();
+  const beforeSlug = await prose(slug.page);
   await slug.page.keyboard.type("shimi");
   await canvas(slug.page).waitFor();
-  await slug.page.waitForFunction(() => Number(document.querySelector("[data-shimi-canvas]")?.getAttribute("data-shimi-nibbles")) > 0, null, { timeout: 12_000 });
-  assert.equal(await slug.page.locator("main").textContent(), beforeSlug);
+  await waitForNibbles(slug.page);
+  assert.equal(await prose(slug.page), beforeSlug);
   await slug.page.locator("[data-shimi-burp-trigger]").click();
   await slug.page.locator("[data-shimi-bubble]").waitFor();
   const burp = (await slug.page.locator("[data-shimi-bubble]").textContent()) ?? "";
@@ -139,7 +157,12 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   await live.page.locator(".sound-toggle").click();
   await live.page.keyboard.type("shimi");
   await canvas(live.page).waitFor();
-  await live.page.waitForFunction(() => Number(document.querySelector("[data-shimi-canvas]")?.getAttribute("data-shimi-nibbles")) > 0, null, { timeout: 12_000 });
+  await live.page.evaluate(() => {
+    const probe = (window as unknown as { __shimiMeter: Meter }).__shimiMeter;
+    probe.voices = 0;
+    probe.frequencies = [];
+  });
+  await waitForNibbles(live.page);
   await live.page.waitForFunction(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter.voices > 0, null, { timeout: 8_000 });
   const heard = await meter(live.page);
   assert.ok(heard.voices > 0 && heard.voices <= 24);
