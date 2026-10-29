@@ -41,11 +41,12 @@ jobs:
     runs-on: ubuntu-24.04
     # Green run 40800499636 used 857s for 252 E2E cases. With postcard coverage,
     # run 40804149539 passed 253 cases before 900s, leaving three existing gesture
-    # cases unfinished. Budget the added coverage: 960s command, 18m step for
-    # readiness, TERM and diagnostics; 30m keeps the remaining probes inside their
+    # cases unfinished. Run 40820343835 reached newer Senko/Susuki coverage at
+    # the 960s cutoff. Budget the expanded suite: 1200s command, 22m step for
+    # readiness, TERM and diagnostics; 40m keeps the remaining probes inside their
     # own caps. A timeout (124) stays red.
     # Motion's paced auth requests explain its 171s; no runtime browser installers in CI.
-    timeout-minutes: 30
+    timeout-minutes: 40
     services:
       postgres:
         image: postgres:17-alpine
@@ -164,7 +165,7 @@ jobs:
           curl -fsS --retry 15 --retry-connrefused --retry-delay 1 "$GHOSTS_FAKE_BASE/__ready"
       # Keep per-assertion reporting; the EXIT fallback also covers readiness and pre-reporter crashes.
       - name: E2E against next start
-        timeout-minutes: 18
+        timeout-minutes: 22
         run: |
           set -o pipefail
           trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "E2E against next start" "$status" "$RUNNER_TEMP/e2e.log" || true; exit "$status"' EXIT
@@ -172,7 +173,7 @@ jobs:
           npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
           curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
           command -v timeout >/dev/null 2>&1 || timeout() { node -e 'const {spawn}=require("node:child_process");const a=process.argv.slice(1);while(a[0]?.startsWith("-"))a.shift();const ms=parseFloat(a.shift())*1000;const c=spawn(a[0],a.slice(1),{stdio:"inherit",detached:true});let timedOut=false;const t=setTimeout(()=>{timedOut=true;try{process.kill(-c.pid,"SIGTERM")}catch{};setTimeout(()=>{try{process.kill(-c.pid,"SIGKILL")}catch{}},1000)},ms);c.on("exit",(code)=>{clearTimeout(t);process.exit(timedOut?124:code??1)})' -- "$@"; }
-          timeout --signal=TERM --kill-after=10s 960s npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
+          timeout --signal=TERM --kill-after=10s 1200s npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
       # Signs in through the form against the same server and database, so a page error on the hop into a
       # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
       - name: Motion probe, signed in

@@ -57,7 +57,7 @@ async function open(options: BrowserContextOptions = {}, fallback?: "no-webgl" |
         if (id === "webgl2" && this.hasAttribute("data-susuki-field")) return null;
         return Reflect.apply(get, this, [id, ...args]);
       } as typeof get;
-    } else Object.defineProperty(navigator, "connection", { value: { saveData: true, addEventListener() {}, removeEventListener() {} } });
+    } else Object.defineProperty(navigator, "connection", { value: { saveData: true } });
   }, fallback);
   const p = await context.newPage(); p.setDefaultTimeout(10_000);
   await p.goto(base);

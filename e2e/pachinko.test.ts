@@ -713,7 +713,8 @@ test("on-call pager Easter egg: 2-DLQ negative control, 3-consecutive-DLQ trigge
   await page.getByTestId("pachinko-launch-btn").click();
   await page.waitForFunction(() => {
     const el = document.querySelector('[data-testid="pachinko-partition-total"]');
-    return el && Number.parseInt(el.textContent || "0", 10) >= 1;
+    return el && Number.parseInt(el.textContent || "0", 10) >= 1 &&
+      document.querySelector('[data-testid="pachinko-active-badge"]')?.textContent?.trim() === "IN-FLIGHT: 0";
   });
   assert.equal(await dlqReadout.getAttribute("data-streak"), "0");
 
