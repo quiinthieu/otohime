@@ -125,8 +125,15 @@ function Volume({ book, active, still, register, onHover, onActivate }: {
   return (
     <mesh ref={setMesh} name={book.id} position={[book.x, book.y, book.z]} rotation={[0, 0, book.tiltRad]}
       material={resources.material}
-      onPointerOver={(event) => { event.stopPropagation(); onHover(book.id); }}
-      onPointerOut={() => onHover(null)}
+      onPointerOver={(event) => {
+        event.stopPropagation();
+        gl.domElement.dataset.hoveredBook = book.id;
+        onHover(book.id);
+      }}
+      onPointerOut={() => {
+        if (gl.domElement.dataset.hoveredBook === book.id) gl.domElement.dataset.hoveredBook = "";
+        onHover(null);
+      }}
       onClick={(event) => { event.stopPropagation(); onActivate(book, mesh.current ? bookScreenRect(mesh.current, camera, gl.domElement) : null); }}>
       <boxGeometry args={[book.thickness, book.height, SHELF_BOOK_DEPTH]} />
     </mesh>
