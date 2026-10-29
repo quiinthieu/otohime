@@ -129,9 +129,9 @@ test("static receipts require both tool invocations and generated routes; closur
   assert.throws(() => assertEvidence("static", output.replace("> eslint", "")), /static tool did not execute/);
   const closure = { schema: "otohime.gate-closure.v1", runner: "real", certified: true, local_controls: "pass",
     preflight: { ok: true }, fingerprint: { ok: true }, failures: [],
-    commands: ["preflight", "e2e-runner", "end", "urashima"].map((id) => ({ id, executed: true, exit_code: 0, ok: true, ...(id === "preflight" ? {} : { required: [{ name: id, status: "pass" }] }) })),
+    commands: ["preflight", "ink-experiments", "e2e-runner", "end", "urashima"].map((id) => ({ id, executed: true, exit_code: 0, ok: true, ...(id === "preflight" ? {} : { required: [{ name: id, status: "pass" }] }) })),
   };
-  assert.equal(assertEvidence("closure", JSON.stringify(closure)).required.length, 3);
+  assert.equal(assertEvidence("closure", JSON.stringify(closure)).required.length, 4);
   assert.throws(() => assertEvidence("closure", JSON.stringify({ ...closure, runner: "fake" })));
   closure.commands[1].required[0].status = "missing";
   assert.throws(() => assertEvidence("closure", JSON.stringify(closure)));

@@ -507,3 +507,33 @@ the disabled-by-default `.github/workflows/ghosts.yml`, public version/fingerpri
 read-only live proof and rollback. `GHOSTS_DEPLOY_ENABLED=true` enables Worker deployment only;
 setting the dedicated `wss://…/ghosts` endpoint in Vercel enables the application separately.
 Unset `GHOSTS_ENDPOINT` and redeploy the configuration to roll back. Local/fake proof does not establish hosted fan-out.
+# Ink garden and shadow theatre
+
+`/play/bonsai` grows a bounded, deterministic L-system from `quiinthieu`'s
+public GitHub contribution counts. `npm run contributions:refresh` refreshes
+`content/contributions.json`; `prebuild` also attempts it and falls back to the
+committed snapshot offline. The page displays the snapshot date and never
+requests GitHub data. Quiet weeks keep bare twigs. Share a pinned week and
+season with `/play/bonsai?week=YYYY-Www&season=autumn`; `/og/bonsai` renders the
+same unpruned tree as PNG. The local postcard download includes visitor pruning.
+
+`/play/shadows` defaults to draggable, touch and keyboard paper puppets. The
+explicit **Enable camera** button starts browser-only MediaPipe Hand Landmarker
+0.10.32; no microphone, recording, frame upload, analytics of hands, or external
+model requests are used. Stop, tab hiding, pagehide and route exit release the
+tracks. Recognition uses four simple documented poses and a six-frame debounce;
+paper mode remains available if recognition or camera permission fails.
+
+`prebuild` vendors the hash-pinned model and Wasm into ignored
+`public/vendor/hand-landmarker/`. Run `npm run hand-landmarker:check` to verify
+cached bytes. Worker CSP restricts connections to this origin. Licenses are in
+`content/licenses/hand-landmarker/`. Reduced motion disables falling leaves,
+puppet hops, morph transitions and candle flicker.
+
+The normal unit and E2E suites include these experiments. For a focused browser
+run: `node --experimental-strip-types scripts/e2e.mjs --test
+e2e/ink-experiments.test.ts`. It constructs the real local model on CPU and
+checks a blank-frame inference; fake camera and synthetic landmark fixtures
+exercise lifecycle and pose/link paths. Those fixtures do not prove recognition
+of real human hands. `node scripts/check-gate-closure.mjs` also verifies the
+named privacy, interaction, fallback and share checks, including rename failures.

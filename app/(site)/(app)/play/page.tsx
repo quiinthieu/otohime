@@ -27,6 +27,16 @@ export default function PlayPage() {
         <div className="mt-8">
           <ClawMachine games={site.games} />
         </div>
+        <section className="mt-12" aria-labelledby="garden-heading">
+          <h2 id="garden-heading" className="caption"><RisoText>Ink Bonsai</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">A year of public activity, grown into a little ink tree. Prune a twig, turn the seasons, and send a postcard.</p>
+          <Link href="/play/bonsai" className="btn" data-testid="play-bonsai-link">Visit the ink garden →</Link>
+        </section>
+        <section className="mt-12" aria-labelledby="shadows-heading">
+          <h2 id="shadows-heading" className="caption"><RisoText>Hand-Shadow Puppet Theatre</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">Four paper creatures in the candlelight. Move cutout puppets, or invite your hands with optional, private camera tracking.</p>
+          <Link href="/play/shadows" className="btn" data-testid="play-shadows-link">Open the shadow theatre →</Link>
+        </section>
         <section className="mt-12" aria-labelledby="senko-heading">
           <h2 id="senko-heading" className="caption"><RisoText>Senko Hanabi</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Hold a tiny ink sparkler steady as peony, pine needles, willow and falling chrysanthemum bloom across the paper. A quiet summer ritual, with optional crackle.</p>

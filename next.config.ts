@@ -21,6 +21,14 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/play/shadows",
+        headers: [{ key: "Permissions-Policy", value: "camera=(self), microphone=()" }],
+      },
+      {
+        source: "/vendor/hand-landmarker/:version/hand-worker.js",
+        headers: [{ key: "Content-Security-Policy", value: "default-src 'none'; script-src 'self' blob: 'wasm-unsafe-eval'; connect-src 'self' blob:; worker-src 'none'" }],
+      },
+      {
         source: "/play",
         headers: [
           { key: "Permissions-Policy", value: "camera=(self), microphone=()" },
