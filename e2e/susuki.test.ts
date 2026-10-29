@@ -11,6 +11,8 @@ after(async () => { await browser?.close(); });
 
 type Proof = {
   calls: number; ticks: number; pixels: number; vertices: number; instances: number;
+  connectionListeners: number;
+  deletedPrograms: number;
   uniforms: Record<string, number | number[]>;
   inspect: () => number;
 };
@@ -19,8 +21,27 @@ declare global { interface Window { __susukiProof: Proof } }
 // Observe the real GL program at the draw boundary, including readPixels before
 // the compositor discards its buffer. No fake renderer or claimed dataset proof.
 function instrument() {
-  const proof: Proof = { calls: 0, ticks: 0, pixels: 0, vertices: 0, instances: 0, uniforms: {}, inspect: () => 0 };
+  const proof: Proof = { calls: 0, ticks: 0, pixels: 0, vertices: 0, instances: 0, connectionListeners: 0, deletedPrograms: 0, uniforms: {}, inspect: () => 0 };
   window.__susukiProof = proof;
+  const listeners = new Set<EventListenerOrEventListenerObject>();
+  const add = EventTarget.prototype.addEventListener, remove = EventTarget.prototype.removeEventListener;
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (this === (navigator as Navigator & { connection?: EventTarget }).connection && type === "change" && listener) {
+      listeners.add(listener); proof.connectionListeners = listeners.size;
+    }
+    return add.call(this, type, listener, options);
+  };
+  EventTarget.prototype.removeEventListener = function(type, listener, options) {
+    if (this === (navigator as Navigator & { connection?: EventTarget }).connection && type === "change" && listener) {
+      listeners.delete(listener); proof.connectionListeners = listeners.size;
+    }
+    return remove.call(this, type, listener, options);
+  };
+  const deleteProgram = WebGL2RenderingContext.prototype.deleteProgram;
+  WebGL2RenderingContext.prototype.deleteProgram = function(program) {
+    if (this.canvas instanceof HTMLCanvasElement && this.canvas.hasAttribute("data-susuki-field")) proof.deletedPrograms++;
+    return deleteProgram.call(this, program);
+  };
   const draw = WebGL2RenderingContext.prototype.drawArraysInstanced;
   WebGL2RenderingContext.prototype.drawArraysInstanced = function(mode, first, vertices, instances) {
     draw.call(this, mode, first, vertices, instances);
@@ -47,7 +68,7 @@ function instrument() {
     return raf(ts => { proof.ticks++; cb(ts); });
   };
 }
-async function open(options: BrowserContextOptions = {}, fallback?: "no-webgl" | "save-data") {
+async function open(options: BrowserContextOptions = {}, fallback?: "no-webgl" | "save-data" | "save-data-events") {
   const context = await browser.newContext({ viewport: { width: 1366, height: 768 }, ...options });
   await context.addInitScript(instrument);
   if (fallback) await context.addInitScript((mode) => {
@@ -57,14 +78,19 @@ async function open(options: BrowserContextOptions = {}, fallback?: "no-webgl" |
         if (id === "webgl2" && this.hasAttribute("data-susuki-field")) return null;
         return Reflect.apply(get, this, [id, ...args]);
       } as typeof get;
-    } else Object.defineProperty(navigator, "connection", { value: { saveData: true, addEventListener() {}, removeEventListener() {} } });
+    } else Object.defineProperty(navigator, "connection", {
+      value: mode === "save-data-events" ? Object.assign(new EventTarget(), { saveData: true }) : { saveData: true },
+    });
   }, fallback);
   const p = await context.newPage(); p.setDefaultTimeout(10_000);
+  const errors: string[] = [];
+  p.on("pageerror", e => errors.push(e.message));
+  p.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
   await p.goto(base);
   await p.locator("canvas[data-susuki-field]").waitFor({ state: "attached" });
   await p.locator("[data-susuki-field]").scrollIntoViewIfNeeded();
   await p.waitForFunction(() => Number(document.querySelector<HTMLElement>("[data-susuki-field]")?.dataset.frames) > 0);
-  return { context, p, canvas: p.locator("[data-susuki-field]") };
+  return { context, p, canvas: p.locator("[data-susuki-field]"), errors };
 }
 async function live(p: Page) {
   await p.waitForFunction(() => Number(document.querySelector<HTMLElement>("[data-susuki-field]")?.dataset.rafTicks) > 2);
@@ -155,9 +181,9 @@ test("Susuki retints real uniforms across four seasons and themes; decorative in
   } finally { await context.close(); }
 });
 
-for (const fallback of ["reduced", "save-data", "no-webgl"] as const) {
+for (const fallback of ["reduced", "save-data", "save-data-events", "no-webgl"] as const) {
   test(`Susuki ${fallback} draws one nonblank static frame and schedules zero ambient rAF callbacks`, async () => {
-    const { context, p, canvas } = await open(fallback === "reduced" ? { reducedMotion: "reduce" } : {}, fallback === "reduced" ? undefined : fallback);
+    const { context, p, canvas, errors } = await open(fallback === "reduced" ? { reducedMotion: "reduce" } : {}, fallback === "reduced" ? undefined : fallback);
     try {
       assert.equal(await canvas.getAttribute("data-mode"), "static");
       assert.equal(await canvas.getAttribute("data-running"), "false");
@@ -181,9 +207,61 @@ for (const fallback of ["reduced", "save-data", "no-webgl"] as const) {
       assert.equal(await canvas.getAttribute("data-scroll-boost"), "0");
       assert.notEqual(await canvas.getAttribute("data-fox"), "trotting");
       console.log(JSON.stringify({ fallback, ...proof }));
+      // Cache Components retains hidden route DOM but cleans up its effects.
+      // Observe real GL disposal and a healthy new footer in the same document.
+      const oldCanvas = await canvas.elementHandle();
+      await p.locator('[data-end-page="/work"]').click();
+      await p.waitForURL("**/work");
+      await p.waitForFunction(c => !c!.checkVisibility(), oldCanvas);
+      const current = p.locator("footer.end:visible [data-susuki-field]");
+      await current.waitFor({ state: "visible" });
+      await p.waitForFunction(() => Array.from(document.querySelectorAll<HTMLElement>("[data-susuki-field]")).some(c => c.checkVisibility() && Number(c.dataset.frames) > 0));
+      assert.equal(await p.locator("main:visible").count(), 1, "page remains intact after footer cleanup/remount");
+      assert.equal(await p.locator("footer.end:visible").count(), 1);
+      assert.equal(await current.getAttribute("data-mode"), "static");
+      assert.equal(await current.getAttribute("data-frames"), "1");
+      assert.equal(await current.getAttribute("data-raf-ticks"), "0");
+      if (fallback !== "no-webgl") assert.equal(await p.evaluate(() => window.__susukiProof.deletedPrograms), 1, "departed footer disposes its real GL program");
+      assert.deepEqual(errors, [], "mount, input and cleanup produce no console/page errors");
     } finally { await context.close(); }
   });
 }
+
+test("Susuki subscribes to real connection changes and removes its listener on unmount", async () => {
+  const { context, p, canvas, errors } = await open({}, "save-data-events");
+  try {
+    assert.equal(await p.evaluate(() => window.__susukiProof.connectionListeners), 1);
+    assert.equal(await canvas.getAttribute("data-frames"), "1");
+    await p.evaluate(() => {
+      const connection = (navigator as Navigator & { connection: EventTarget & { saveData: boolean } }).connection;
+      connection.saveData = false; connection.dispatchEvent(new Event("change"));
+    });
+    await live(p);
+    assert.equal(await canvas.getAttribute("data-mode"), "live");
+    await p.evaluate(() => {
+      const connection = (navigator as Navigator & { connection: EventTarget & { saveData: boolean } }).connection;
+      connection.saveData = true; connection.dispatchEvent(new Event("change"));
+    });
+    assert.equal(await canvas.getAttribute("data-mode"), "static");
+    const ticks = await p.evaluate(() => window.__susukiProof.ticks);
+    await p.evaluate(async () => { for (let i = 0; i < 4; i++) await new Promise(requestAnimationFrame); });
+    assert.equal(await p.evaluate(() => window.__susukiProof.ticks), ticks);
+    const oldCanvas = await canvas.elementHandle();
+    await p.locator('[data-end-page="/work"]').click();
+    await p.waitForURL("**/work");
+    await p.waitForFunction(c => !c!.checkVisibility(), oldCanvas);
+    const current = p.locator("footer.end:visible [data-susuki-field]");
+    await current.waitFor({ state: "visible" });
+    await p.waitForFunction(() => Array.from(document.querySelectorAll<HTMLElement>("[data-susuki-field]")).some(c => c.checkVisibility() && Number(c.dataset.frames) > 0));
+    assert.equal(await p.evaluate(() => window.__susukiProof.connectionListeners), 1, "old listener removed; only the remounted footer subscribes");
+    assert.equal(await p.evaluate(() => window.__susukiProof.deletedPrograms), 1);
+    const frames = await oldCanvas!.getAttribute("data-frames");
+    await p.evaluate(() => (navigator as Navigator & { connection: EventTarget }).connection.dispatchEvent(new Event("change")));
+    assert.equal(await oldCanvas!.getAttribute("data-frames"), frames, "unmounted policy listener cannot redraw the old canvas");
+    assert.equal(await current.getAttribute("data-mode"), "static");
+    assert.deepEqual(errors, []);
+  } finally { await context.close(); }
+});
 
 test("Susuki stops outside the viewport and when hidden, changes motion preference live, and recovers a real lost GL context", async () => {
   const { context, p, canvas } = await open();

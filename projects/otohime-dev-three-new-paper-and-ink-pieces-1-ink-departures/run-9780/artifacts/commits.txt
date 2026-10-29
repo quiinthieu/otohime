@@ -1,0 +1,15 @@
+Plan: pm-301
+Task: t-1788
+Run: run-9780
+Branch: pm-301-t-1788-camera-build-reuse
+Fetched base: 3cf6d6dd8f1d8b46687b81767263c8c6d91f96ad
+Subject: pm-301/t-1788: fix: Reuse the verified camera build
+Delivery: enclosing commit; its immutable SHA is provided in the plan-manager summary.
+Resolve: git log -1 --format=%H -- projects/otohime-dev-three-new-paper-and-ink-pieces-1-ink-departures/run-9780/artifacts/commits.txt
+Save: git push origin HEAD; git push origin HEAD:main
+Policy: fast-forward pushes only; after rejection pull --rebase origin main, rerun task tests and retry up to three times. Never force-push.
+
+Retry 1: main rejected the original push as fetch-first; git pull --rebase origin main integrated b241fd1873f9431ed7a0c859272d1844c731b07c.
+Final branch: pm-301-t-1788-camera-build-reuse-r1
+Verified implementation: 49f62e7dcc5f947a2e9b90fdc574eefa819b4664
+Delivery: enclosing retry-evidence commit, resolved by the same git log command above; pushed SHA in summary.
