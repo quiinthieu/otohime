@@ -1,4 +1,5 @@
 import { PaperHost } from "@/components/paper-host";
+import { HankoSignature } from "@/components/hanko-signature";
 import { BottleButton } from "@/components/bottle/button";
 import { RisoText } from "@/components/riso-heading";
 import { EndStage, EndTop } from "@/components/end-stage";
@@ -100,6 +101,7 @@ export function EndFooter() {
         <PaperHost id="kame-shell" />
 
         <div className="end-bar">
+          <HankoSignature />
           <p className="end-credits">
             <span data-end-signature="">{site.end.signature}</span>
             <span aria-hidden="true" className="end-dot">

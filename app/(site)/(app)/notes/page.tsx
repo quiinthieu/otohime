@@ -1,4 +1,5 @@
 import { PaperHost } from "@/components/paper-host";
+import { HankoSignature } from "@/components/hanko-signature";
 import { RisoText } from "@/components/riso-heading";
 import { stableSurfaceId } from "@/lib/tactile";
 import { FigTitle, Figure } from "@/components/figures";
@@ -30,6 +31,7 @@ export default function NotesPage() {
           </ol>
           <Figure kind="parcel" className="mx-auto w-full max-w-64" />
         </div>
+        <div className="mt-6"><HankoSignature /></div>
       </div>
     </ViewTransition>
   );

@@ -25,5 +25,5 @@ test("seal persistence broadcasts same-tab changes, follows storage, and tolerat
   assert.equal(saveSeal({ name: "Billie", shape: "square" }), false);
   assert.match(getSeal()!, /Billie/);
   unsub(); assert.equal(events.size, 0);
-  subscribeSeal(() => {})(); assert.equal(getSeal(), null);
+  subscribeSeal(() => {})(); assert.match(getSeal()!, /Billie/, "new islands keep this tab's seal even when persistence is denied");
 });

@@ -27,6 +27,16 @@ export default function PlayPage() {
         <div className="mt-8">
           <ClawMachine games={site.games} />
         </div>
+        <section className="mt-12" aria-labelledby="loom-heading">
+          <h2 id="loom-heading" className="caption"><RisoText>Ink Loom</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">Stamp a rhythm on a sixteen-step paper score. Weave chip notes, marimba, brush and crinkled paper into a loop, share it, or press a print.</p>
+          <p><Link href="/play/loom" className="btn" data-testid="play-loom-link">Weave an Ink Loom →</Link></p>
+        </section>
+        <section className="mt-12" aria-labelledby="hanko-heading">
+          <h2 id="hanko-heading" className="caption"><RisoText>Hanko Press</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">Carve your name into a little vermilion seal. Press it, save your impression, and let it sign Notes and the footer on your device.</p>
+          <p><Link href="/play/hanko" className="btn" data-testid="play-hanko-link">Make your Hanko →</Link></p>
+        </section>
         <section className="mt-12" aria-labelledby="senko-heading">
           <h2 id="senko-heading" className="caption"><RisoText>Senko Hanabi</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Hold a tiny ink sparkler steady as peony, pine needles, willow and falling chrysanthemum bloom across the paper. A quiet summer ritual, with optional crackle.</p>

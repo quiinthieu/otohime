@@ -3,7 +3,7 @@ import { readSeal, SEAL_KEY, type SealChoice } from "./hanko.ts";
 const listeners = new Set<() => void>();
 let stored: string | null = null;
 function refresh() {
-  try { stored = localStorage.getItem(SEAL_KEY); } catch { stored = null; }
+  try { stored = localStorage.getItem(SEAL_KEY); } catch { /* keep this tab's impression when storage is blocked */ }
 }
 function storage(event: StorageEvent) {
   if (event.key === SEAL_KEY || event.key === null) { refresh(); listeners.forEach(fn => fn()); }

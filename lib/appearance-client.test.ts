@@ -545,6 +545,7 @@ test("value lists, seeds and bad sources", () => {
 
 test("each named SVG keeps its id, region and seed, is tagged with its rendered value, and never takes var()", () => {
   const sources: [string, RegExp][] = [
+    ["app/(site)/(app)/play/loom/loom.tsx", /createElement\(p\.tag, \{ key: i, \.\.\.p\.attrs, \.\.\.appearanceTags\(p\) \}\)/],
     ["components/figures.tsx", /createElement\(p\.tag, \{ key: i, \.\.\.p\.attrs, \.\.\.appearanceTags\(p\) \}\)/],
     ["components/season-layer.tsx", /createElement\(p\.tag, \{ key: i, \.\.\.p\.attrs, \.\.\.appearanceTags\(p\) \}\)/],
     ["components/ink-press.tsx", /createElement\(p\.tag, \{ key: i, \.\.\.p\.attrs, \.\.\.appearanceTags\(p\) \}\)/],
