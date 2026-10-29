@@ -63,5 +63,6 @@ async function Nav() {
   const session = await getSession();
   if (!session) return <NavLinks items={PUBLIC} />;
   const admin = can(session.user.role, { user: ["list"] });
-  return <NavLinks items={[...PUBLIC, ...MINE, ...(admin ? ADMIN : [])]} />;
+  const guestbook = can(session.user.role, { guestbook: ["moderate"] });
+  return <NavLinks items={[...PUBLIC, ...MINE, ...(admin ? ADMIN : []), ...(guestbook ? [{ href: "/admin/guestbook", label: "Guestbook" }] : [])]} />;
 }
