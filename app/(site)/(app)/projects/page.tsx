@@ -26,6 +26,11 @@ export default function ProjectsPage() {
           Projects
         </FigTitle>
         <p className="mt-2 text-muted">{site.projects}</p>
+        <p className="mt-3">
+          <Link href="/shelf" data-testid="projects-shelf-link" className="caption underline underline-offset-4">
+            Browse the 3D Ink Shelf →
+          </Link>
+        </p>
         <DeparturesBoard kind="projects" rows={buildProjectDepartures()} />
         {site.projectList.length === 0 ? (
           <div className="mt-8">
