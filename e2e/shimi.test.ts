@@ -116,17 +116,20 @@ test("Pocket chip, terminal, and typing shimi summon overlay nibbles without mut
   const slug = await open({}, "/notes/backfills-are-a-feature", false, true);
   const slugProse = "main article h1, main article > p, main article > ul";
   const beforeSlug = await slug.page.locator(slugProse).allTextContents();
+  assert.ok(beforeSlug.length >= 3, "the prose snapshot includes the real title, body and tags");
   await slug.page.keyboard.type("shimi");
   await canvas(slug.page).waitFor();
   assert.equal(new URL(slug.page.url()).pathname, "/notes/backfills-are-a-feature", "the word is not consumed by single-letter navigation");
   await waitForNibble(slug.page);
   assert.deepEqual(await slug.page.locator(slugProse).allTextContents(), beforeSlug);
+  // The crawler also learns main's note links, date and margin text.
+  const learnedText = await slug.page.locator("main").innerText();
   await slug.page.locator("[data-shimi-burp-trigger]").click();
   await slug.page.locator("[data-shimi-bubble]").waitFor();
   const burp = (await slug.page.locator("[data-shimi-bubble]").textContent()) ?? "";
   assert.ok(burp.split(/\s+/).length >= 4);
-  const vocab = new Set<string>([...(beforeSlug.join(" ").toLowerCase().match(/[a-z0-9']+/g) ?? []), "little", "paper", "dreams", "taste", "of", "quiet", "ink"]);
-  assert.ok(burp.toLowerCase().split(/\s+/).some((word) => vocab.has(word.replace(/[^a-z0-9']/g, ""))));
+  const vocab = new Set<string>([...(learnedText.normalize("NFKC").toLowerCase().match(/[\p{L}\p{M}\p{N}'’-]+/gu) ?? []), "little", "paper", "dreams", "taste", "of", "quiet", "ink"]);
+  assert.ok(burp.normalize("NFKC").toLowerCase().split(/\s+/).some((word) => vocab.has(word)), `burp draws on readable main text: ${burp}`);
   await slug.page.mouse.move(24, 24);
   await slug.page.keyboard.press("Escape");
   await canvas(slug.page).waitFor({ state: "detached" });

@@ -2,6 +2,12 @@ export type InkEvent = { id: string; at: string; kind: "commit" | "pr" | "pipeli
 export type InkArchive = { generated: string; events: InkEvent[] };
 export const TRACE_WIDTH = 900, TRACE_HEIGHT = 220, WINDOW_MS = 6 * 3600_000;
 
+export function inkTimeRange(events: readonly InkEvent[], generated: string) {
+  const latest = Math.max(...events.map(event => Date.parse(event.at)), Date.parse(generated));
+  const earliest = Math.min(...events.map(event => Date.parse(event.at)), latest - WINDOW_MS);
+  return { latest, minEnd:Math.min(latest,earliest+WINDOW_MS), maxEnd:latest+WINDOW_MS/4 };
+}
+
 export function parseInkEvents(value: unknown): InkEvent[] {
   if (!Array.isArray(value)) return [];
   const seen = new Set<string>();

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces } from "next/font/google";
 import "./capsule.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Capsule is its own root layout: its own <html>, <body> and stylesheet. It must
@@ -39,7 +40,7 @@ export default function CapsuleLayout({ children }: LayoutProps<"/">) {
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
         <AppearanceBoot root="capsule" />
       </head>
-      <body>{children}<AppearanceRuntime /></body>
+      <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>
     </html>
   );
 }

@@ -30,6 +30,8 @@ export default function WorkPage() {
           <Link href="/ledger" className="link">
             The year in ink stamps
           </Link>
+          <Link href="/timeline" className="link">Pop-up Book Timeline</Link>
+          <Link href="/ledger/sql" className="link">Ink Ledger SQL desk</Link>
           <span aria-hidden="true" className="text-muted">
             ·
           </span>

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
-import { after, before, test } from "node:test";
+import { after, afterEach, before, test } from "node:test";
 import {
   chromium,
   type Browser,
@@ -71,8 +71,12 @@ before(async () => {
   }
 });
 
+afterEach(async () => {
+  // Idle machines still render; old cases must not compete with later ones.
+  for (const context of contexts.splice(0)) await context.close();
+});
+
 after(async () => {
-  for (const c of contexts) await c.close();
   await browser?.close();
   rmSync(tmp, { recursive: true, force: true });
 });

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Caveat, Patrick_Hand } from "next/font/google";
 import "./design-system.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
+import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
 
 // Design system is its own root layout: its own <html>, <body> and stylesheet.
@@ -57,7 +58,7 @@ export default function DesignSystemLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
         <AppearanceBoot root="design-system" />
       </head>
-      <body>{children}<AppearanceRuntime /></body>
+      <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>
     </html>
   );
 }

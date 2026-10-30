@@ -175,7 +175,7 @@ test("the waterline: the last thing below the footer links down to the palace, b
   assert.deepEqual(errors, []);
 });
 
-test("the palace loads its own stylesheet only: no Tailwind, no cartridge or machine styling", async () => {
+test("the palace loads its own stylesheet and scoped shared controls: no Tailwind, cartridge or machine styling", async () => {
   const { page } = await open("/ryugu");
   const sheets = await page.$$eval("link[rel=stylesheet]", (ls) => ls.map((l) => (l as HTMLLinkElement).href));
   const texts = await Promise.all(sheets.map(async (href) => (await page.request.get(href)).text()));
@@ -184,7 +184,33 @@ test("the palace loads its own stylesheet only: no Tailwind, no cartridge or mac
   const appearance = texts.filter((css) => /--ap-speck-light/.test(css) && !/\.fish-body/.test(css));
   assert.ok(appearance.length <= 1, sheets.join(", "));
   for (const css of appearance) assert.doesNotMatch(css, /\.[a-z][\w-]*\s*[{,]/i, "the print-run sheet styles no class");
-  const own = texts.filter((css) => !appearance.includes(css));
+  const plotter = texts.filter(css => /\.plotter-controls/.test(css) && /\.plotter-overlay/.test(css) && !/\.fish-body/.test(css));
+  assert.equal(plotter.length, 1, "one scoped shared plotter sheet");
+  const plotterSheets = sheets.filter((_, i) => plotter.includes(texts[i]));
+  const selectors = await page.evaluate(urls => {
+    const out: string[] = [];
+    const walk = (rules: CSSRuleList) => {
+      for (const rule of rules) {
+        if (rule instanceof CSSStyleRule) out.push(rule.selectorText);
+        else if ("cssRules" in rule) walk((rule as CSSGroupingRule).cssRules);
+      }
+    };
+    for (const sheet of document.styleSheets) if (sheet.href && urls.includes(sheet.href)) walk(sheet.cssRules);
+    return out;
+  }, plotterSheets);
+  assert.ok(selectors.length > 0);
+  const scoped = (rule: string) => {
+    const parts = [""]; let depth = 0;
+    for (const char of rule) {
+      if (char === "(") depth++;
+      if (char === ")") depth--;
+      if (char === "," && depth === 0) parts.push("");
+      else parts[parts.length - 1] += char;
+    }
+    return parts.every(s => /\.plotter-|\[data-plotter-ui\]/.test(s));
+  };
+  assert.ok(selectors.every(scoped), selectors.join("\n"));
+  const own = texts.filter((css) => !appearance.includes(css) && !plotter.includes(css));
   assert.equal(own.length, 1, sheets.join(", "));
   const css = own[0];
   assert.match(css, /\.fish-body/);
