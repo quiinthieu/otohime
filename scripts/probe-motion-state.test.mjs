@@ -24,6 +24,8 @@ test("landing waits for clock animations and streams while scroll timelines may 
     assert.equal(await page.evaluate(landingSettled),false,"the hop must finish");
     await page.evaluate(() => { window.__probe.done=true;document.querySelector("#drum").animate([{opacity:.9},{opacity:1}],{duration:1000,iterations:Infinity}); });
     assert.equal(await page.evaluate(landingSettled),true,"ambient clock loops retain the existing exclusion");
-    assert.match(readFileSync(new URL("./probe-motion-signed-in.mjs",import.meta.url),"utf8"),/waitForFunction\(\s*landingSettled,/);
+    const probeSource = readFileSync(new URL("./probe-motion-signed-in.mjs",import.meta.url),"utf8");
+    assert.match(probeSource,/waitForFunction\(\s*landingSettled,/);
+    assert.ok(probeSource.includes('() => (stripped++, "<script></script>")'));
   } finally { await browser.close(); }
 });
