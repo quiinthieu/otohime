@@ -1,6 +1,7 @@
 // t-1647's local gate receipt: execute the contract commands, then require named
 // assertions and counts. A silent exit 0 cannot become verification evidence.
 import assert from "node:assert/strict";
+import { CONTROLS } from "./check-gate-closure.mjs";
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { createWriteStream, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -72,7 +73,7 @@ export function assertEvidence(id, output) {
   assert.equal(result.preflight.ok, true);
   assert.equal(result.fingerprint.ok, true);
   assert.deepEqual(result.failures, []);
-  assert.deepEqual(result.commands.map((c) => c.id), ["preflight", "e2e-runner", "end", "urashima"]);
+  assert.deepEqual(result.commands.map((c) => c.id), ["preflight", ...CONTROLS.map(c => c.id)]);
   for (const command of result.commands) {
     assert.equal(command.executed, true);
     assert.equal(command.exit_code, 0);

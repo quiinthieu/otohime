@@ -239,7 +239,7 @@ Walk `/music` with `bash scripts/walk-music.sh` (builds with no database and ser
 
 Walk `/sketches` and run its headless Chromium probe with `bash scripts/walk-sketches.sh` (builds, serves on :4081, checks build-sha, section and figure counts, responsive loaded images at 1366x768 and 390x844, negative-control 404 image interception, and `/sketches/download/[filename]`), or reuse a build with `SKIP_BUILD=1 EXPECT_PEOPLE=0 bash scripts/walk-sketches.sh` (pre-activation, 12 studies) / `SKIP_BUILD=1 EXPECT_PEOPLE=10 bash scripts/walk-sketches.sh` (activated, 22 studies), or against a deployment with `BASE_URL=https://otohime.dev EXPECT_PEOPLE=10 bash scripts/walk-sketches.sh`.
 
-Validate the sketches assets and portrait manifest with `npm run sketches:check` (offline schema, 3:4 aspect ratio, `1152x1536` `< 600 KB` JPEG derivatives, `https://files-cdn.x.ai` allowlist, non-expiring provenance, and hash uniqueness; add `-- --require-people` to require all ten reviewed portrait records and `-- --live` to download, hash, and decode all 20 public URLs). On-demand generation, import, and xAI Files publication live in `scripts/sketches-paint.ts` (`preflight --offline`, `generate`, `import`, `publish`), backed by a redacted attempt ledger and `content/portraits.json` (which stays `[]` until all ten reviewed portraits are published and verified).
+Validate the sketches assets and portrait manifest with `npm run sketches:check` (offline schema, 3:4 aspect ratio, `1152x1536` `< 600 KB` JPEG derivatives, `https://files-cdn.x.ai` allowlist, non-expiring provenance, and hash uniqueness; add `-- --require-people` to require all ten reviewed portrait records and `-- --live` to download, hash, and decode all 20 public URLs). On-demand generation, import, and xAI Files publication live in `scripts/sketches-paint.ts` (`preflight --offline`, `generate`, `import`, `publish`), backed by a redacted attempt ledger. `content/portraits.json` holds the ten reviewed portraits once they are published and verified, and stays `[]` only before that activation.
 
 Walk the Internet Save Point footer across all seven public site pages, auth, global 404 and the eleven isolated project roots with `bash scripts/walk-end.sh` (builds, serves on :4081; or reuse a build with `SKIP_BUILD=1 PORT=4081 bash scripts/walk-end.sh`, or walk a deployment with `BASE_URL=https://otohime.dev bash scripts/walk-end.sh`).
 
@@ -558,3 +558,33 @@ the disabled-by-default `.github/workflows/ghosts.yml`, public version/fingerpri
 read-only live proof and rollback. `GHOSTS_DEPLOY_ENABLED=true` enables Worker deployment only;
 setting the dedicated `wss://…/ghosts` endpoint in Vercel enables the application separately.
 Unset `GHOSTS_ENDPOINT` and redeploy the configuration to roll back. Local/fake proof does not establish hosted fan-out.
+# Ink garden and shadow theatre
+
+`/play/bonsai` grows a bounded, deterministic L-system from `quiinthieu`'s
+public GitHub contribution counts. `npm run contributions:refresh` refreshes
+`content/contributions.json`; `prebuild` also attempts it and falls back to the
+committed snapshot offline. The page displays the snapshot date and never
+requests GitHub data. Quiet weeks keep bare twigs. Share a pinned week and
+season with `/play/bonsai?week=YYYY-Www&season=autumn`; `/og/bonsai` renders the
+same unpruned tree as PNG. The local postcard download includes visitor pruning.
+
+`/play/shadows` defaults to draggable, touch and keyboard paper puppets. The
+explicit **Enable camera** button starts browser-only MediaPipe Hand Landmarker
+0.10.32; no microphone, recording, frame upload, analytics of hands, or external
+model requests are used. Stop, tab hiding, pagehide and route exit release the
+tracks. Recognition uses four simple documented poses and a six-frame debounce;
+paper mode remains available if recognition or camera permission fails.
+
+`prebuild` vendors the hash-pinned model and Wasm into ignored
+`public/vendor/hand-landmarker/`. Run `npm run hand-landmarker:check` to verify
+cached bytes. Worker CSP restricts connections to this origin. Licenses are in
+`content/licenses/hand-landmarker/`. Reduced motion disables falling leaves,
+puppet hops, morph transitions and candle flicker.
+
+The normal unit and E2E suites include these experiments. For a focused browser
+run: `node --experimental-strip-types scripts/e2e.mjs --test
+e2e/ink-experiments.test.ts`. It constructs the real local model on CPU and
+checks a blank-frame inference; fake camera and synthetic landmark fixtures
+exercise lifecycle and pose/link paths. Those fixtures do not prove recognition
+of real human hands. `node scripts/check-gate-closure.mjs` also verifies the
+named privacy, interaction, fallback and share checks, including rename failures.

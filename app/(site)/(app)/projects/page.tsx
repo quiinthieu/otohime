@@ -1,3 +1,4 @@
+import MouldVeinsLoader from "@/components/mould-veins-loader";
 import { TheatreLoader } from "@/components/kamishibai/loader";
 import { DeparturesBoard } from "@/components/departures-board";
 import { buildProjectDepartures } from "@/lib/departures";
@@ -25,6 +26,11 @@ export default function ProjectsPage() {
           Projects
         </FigTitle>
         <p className="mt-2 text-muted">{site.projects}</p>
+        <p className="mt-3">
+          <Link href="/shelf" data-testid="projects-shelf-link" className="caption underline underline-offset-4">
+            Browse the 3D Ink Shelf →
+          </Link>
+        </p>
         <DeparturesBoard kind="projects" rows={buildProjectDepartures()} />
         {site.projectList.length === 0 ? (
           <div className="mt-8">
@@ -63,6 +69,11 @@ export default function ProjectsPage() {
             </ul>
           </DarumaBoard>
         )}
+        <p className="mt-10 flex flex-wrap gap-x-4 gap-y-1">
+          <Link href="/play/mould" className="link">Ink Slime Mould</Link>
+          <Link href="/strata" className="link">Paper Strata</Link>
+        </p>
+        <MouldVeinsLoader variant="projects" />
         <TheatreLoader><ProjectStories /></TheatreLoader>
         <GazetteDesks />
       </div>

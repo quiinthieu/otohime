@@ -131,15 +131,24 @@ test("prompts.md parses into ten distinct concepts with exact filenames, titles 
   assert.equal(parsed.promptPackSha256, pack.promptPackSha256);
 });
 
-test("committed content/portraits.json starts empty and keeps production at 12 studies", () => {
+test("committed content/portraits.json activates ten people beside the twelve studies", () => {
   const raw = JSON.parse(readFileSync(resolve(ROOT, "content/portraits.json"), "utf8"));
-  const result = validatePortraitManifest(raw, { requirePeople: false });
+  const result = validatePortraitManifest(raw, { requirePeople: true });
   assert.equal(result.errors.length, 0, result.errors.join("\n"));
-  assert.equal(result.records.length, 0);
+  assert.equal(result.records.length, 10);
 
-  assert.equal(site.sketches.length, 12);
-  assert.equal(site.sketches.filter((s) => s.kind === "person").length, 0);
-  assert.equal(site.sketchesIntro, "Twelve studies from one sketchbook. Places first, then the things that sit still.");
+  assert.equal(site.sketches.length, 22);
+  assert.equal(site.sketches.filter((s) => s.kind === "place").length, 6);
+  assert.equal(site.sketches.filter((s) => s.kind === "object").length, 6);
+  assert.equal(site.sketches.filter((s) => s.kind === "person").length, 10);
+  assert.deepEqual(
+    site.sketches.slice(0, 12).map((sketch) => sketch.src),
+    BASE_SKETCHES.map((sketch) => sketch.src),
+  );
+  assert.equal(
+    site.sketchesIntro,
+    "Twenty-two studies from one sketchbook. Places first, then the things that sit still, and the people.",
+  );
 });
 
 test("validatePortraitManifest requires ten records when requirePeople is true and rejects partial/extra/fake records", () => {

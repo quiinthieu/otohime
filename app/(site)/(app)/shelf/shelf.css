@@ -17,9 +17,10 @@
 .shelf-filters button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .shelf-empty { position: absolute; top: 2rem; left: 1rem; color: var(--muted); }
 .shelf-colophon { margin-top: 0.8rem; }
+.shelf-transition-proxy { position: fixed; z-index: 40; display: none; box-sizing: border-box; pointer-events: none; border: 1px solid var(--ink); border-radius: 0.2rem; background: var(--paper); }
 .shelf-overflow { margin-top: 2rem; }
 .shelf-overflow ul { list-style: disc; padding-left: 1.25rem; }
 .shelf-overflow a { text-decoration: underline; text-underline-offset: 0.2em; }
 @media (prefers-reduced-motion: reduce) {
-  .shelf-book { view-transition-name: none !important; }
+  .shelf-book, .shelf-transition-proxy { view-transition-name: none !important; }
 }

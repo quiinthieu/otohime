@@ -52,6 +52,28 @@ export function createShimiSwarm(seed: number, count = 4): ShimiSwarm {
 }
 
 const clamp = (value: number, max: number) => Math.max(0, Math.min(max, value));
+function usableTargets(wordTargets: readonly ShimiWordTarget[], viewport: { width: number; height: number }) {
+  return wordTargets.filter(target => {
+    if (![target.x, target.y, target.width, target.height].every(Number.isFinite) ||
+      target.width <= 0 || target.height <= 0 || target.x < 0 || target.y < 0 ||
+      target.x + target.width > viewport.width || target.y + target.height > viewport.height) return false;
+    const words = extractCrawlableWords(target.text);
+    return words.length === 1 && words[0] === target.text;
+  });
+}
+
+/** Start beside visible prose rather than crossing an empty page margin first. */
+export function placeShimiSwarm(swarm: ShimiSwarm, wordTargets: readonly ShimiWordTarget[],
+  viewport: { width: number; height: number }): ShimiSwarm {
+  const targets = usableTargets(wordTargets, viewport);
+  if (!targets.length) return swarm;
+  return { ...swarm, creatures: swarm.creatures.map(creature => {
+    const target = targets[creature.seed % targets.length];
+    const x = clamp(target.x - 32, viewport.width), y = clamp(target.y + target.height / 2, viewport.height);
+    return { ...creature, x, y, targetId: target.id, heading: 0 };
+  }) };
+}
+
 /** dt is seconds, viewport and cached word rectangles are pixels. No layout reads.
  * A stalled frame advances at most 100ms; pass dt=0 for a static resting pose.
  * Trail storage is a fixed ring; trailHead points at the next slot to replace.
@@ -61,13 +83,7 @@ export function stepShimiSwarm(swarm: ShimiSwarm, wordTargets: readonly ShimiWor
   if (!Number.isFinite(dt) || dt <= 0 || !Number.isFinite(viewport.width) || !Number.isFinite(viewport.height) ||
     viewport.width <= 0 || viewport.height <= 0) return swarm;
   const seconds = Math.min(dt, 0.1), elapsed = swarm.elapsed + seconds;
-  const targets = wordTargets.filter(target => {
-    if (![target.x, target.y, target.width, target.height].every(Number.isFinite) ||
-      target.width <= 0 || target.height <= 0 || target.x < 0 || target.y < 0 ||
-      target.x + target.width > viewport.width || target.y + target.height > viewport.height) return false;
-    const words = extractCrawlableWords(target.text);
-    return words.length === 1 && words[0] === target.text;
-  });
+  const targets = usableTargets(wordTargets, viewport);
   const nibbles = swarm.nibbles.filter(nibble => elapsed - nibble.born < 4).slice(-SHIMI_NIBBLE_CAP)
     .map(nibble => ({ ...nibble, alpha: Math.min(1, Math.max(0, (4 - (elapsed - nibble.born)) / 0.4)) }));
   let nextNibbleId = swarm.nextNibbleId;

@@ -17,6 +17,23 @@ import "@/components/peep-box/peep-box.css";
 
 export const metadata: Metadata = { title: "Play" };
 
+const TOYS = [
+  {
+    href: "/play/mould",
+    title: "Ink Slime Mould",
+    note: "Drop food on warm paper and watch sumi veins find the projects and the pipes.",
+    label: "Grow an Ink Slime Mould →",
+    testId: "play-mould-link",
+  },
+  {
+    href: "/strata",
+    title: "Paper Strata",
+    note: "A year of commits and notes, cut into stacked sheets of coloured paper.",
+    label: "Open Paper Strata →",
+    testId: "play-strata-link",
+  },
+] as const;
+
 export default function PlayPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
@@ -41,6 +58,16 @@ export default function PlayPage() {
           <h2 id="hanko-heading" className="caption"><RisoText>Hanko Press</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Carve your name into a little vermilion seal. Press it, save your impression, and let it sign Notes and the footer on your device.</p>
           <p><Link href="/play/hanko" className="btn" data-testid="play-hanko-link">Make your Hanko →</Link></p>
+        </section>
+        <section className="mt-12" aria-labelledby="garden-heading">
+          <h2 id="garden-heading" className="caption"><RisoText>Ink Bonsai</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">A year of public activity, grown into a little ink tree. Prune a twig, turn the seasons, and send a postcard.</p>
+          <Link href="/play/bonsai" className="btn" data-testid="play-bonsai-link">Visit the ink garden →</Link>
+        </section>
+        <section className="mt-12" aria-labelledby="shadows-heading">
+          <h2 id="shadows-heading" className="caption"><RisoText>Hand-Shadow Puppet Theatre</RisoText></h2>
+          <p className="mt-2 mb-4 text-muted">Four paper creatures in the candlelight. Move cutout puppets, or invite your hands with optional, private camera tracking.</p>
+          <Link href="/play/shadows" className="btn" data-testid="play-shadows-link">Open the shadow theatre →</Link>
         </section>
         <section className="mt-12" aria-labelledby="senko-heading">
           <h2 id="senko-heading" className="caption"><RisoText>Senko Hanabi</RisoText></h2>
@@ -99,6 +126,13 @@ export default function PlayPage() {
             </Link>
           </p>
         </section>
+        {TOYS.map((toy) => (
+          <section key={toy.href} className="mt-12" aria-labelledby={toy.testId}>
+            <h2 id={toy.testId} className="caption"><RisoText>{toy.title}</RisoText></h2>
+            <p className="mt-2 mb-4 text-muted">{toy.note}</p>
+            <p><Link href={toy.href} className="btn" data-testid={toy.testId}>{toy.label}</Link></p>
+          </section>
+        ))}
         <section className="mt-12" aria-labelledby="pond-heading">
           <h2 id="pond-heading" className="caption"><RisoText>Suminagashi pond</RisoText></h2>
           <p className="mt-2 mb-4 text-muted">Float ink on still water, then comb and blow it into rings.</p>

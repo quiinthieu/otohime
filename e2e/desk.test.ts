@@ -557,7 +557,11 @@ async function walk(page: Page, { driveNotebook = false } = {}) {
   await page.locator(`[data-desk-menu="projects"]`).waitFor({ state: "attached", timeout: LONG_PRESS_MS * 2 });
   const menuAnim = await page.locator(".desk-menu").evaluate((el) => `${getComputedStyle(el).animationName} ${el.getAnimations().length}`);
   // Long enough for a frame to send any animation event: a menu removed first never sends one.
-  await page.waitForTimeout(200);
+  if (menuAnim.startsWith("desk-menu-in")) {
+    await page.waitForFunction(() => window.__desk.animations.some((a) => a.endsWith("desk-menu-in")), null, { timeout: 2_000 });
+  } else {
+    await page.waitForTimeout(200);
+  }
   await page.mouse.up();
   await page.keyboard.press("Escape");
 

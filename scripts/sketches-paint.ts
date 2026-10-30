@@ -47,7 +47,8 @@ async function main(): Promise<number> {
         console.error("error: XAI_API_KEY or mounted .grok/user-settings.json credential is not available");
         return 1;
       }
-      const publisher = new XaiImagePublisher({ baseUrl, credential });
+      // 2k PNG masters are several megabytes; the 60s default aborts the upload.
+      const publisher = new XaiImagePublisher({ baseUrl, credential, timeoutMs: 180_000 });
       const conceptArg = getArgValue(args, "--concept");
       const qualityArg = getArgValue(args, "--quality") as "low" | "medium" | "auto" | undefined;
       const referenceImageUrl = getArgValue(args, "--reference-url");
@@ -108,7 +109,8 @@ async function main(): Promise<number> {
         console.error("error: XAI_API_KEY or mounted .grok/user-settings.json credential is not available");
         return 1;
       }
-      const publisher = new XaiImagePublisher({ baseUrl, credential });
+      // 2k PNG masters are several megabytes; the 60s default aborts the upload.
+      const publisher = new XaiImagePublisher({ baseUrl, credential, timeoutMs: 180_000 });
       const manifestArg = getArgValue(args, "--manifest");
       const writeDefaultManifest = args.includes("--write-manifest");
       const manifestPath = manifestArg

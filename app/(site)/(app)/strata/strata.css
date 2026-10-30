@@ -1,0 +1,47 @@
+.strata-toy { margin-top: 1.5rem; }
+.strata-controls { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; }
+.strata-controls button, .strata-controls input { min-height: 44px; }
+.strata-controls button[aria-pressed="true"] { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+.strata-years, .strata-controls [role="group"] { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.strata-stage {
+  --paper-deep: #e4d5b8;
+  --amber: #e2a23a;
+  --moss: #6d8f62;
+  --sky: #7f97b8;
+  --indigo: #3e4d73;
+  --vermilion: #c4492c;
+  position: relative;
+  margin-top: 1rem;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  outline: none;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+.strata-stage:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.strata-stage svg { display: block; width: 100%; height: auto; }
+.strata-layer {
+  transform: translate(var(--strata-dx, 0px), var(--strata-dy, 0px));
+  filter: drop-shadow(0 7px 0 rgb(35 30 22 / 0.16));
+}
+.strata-layer path { fill: var(--strata-fill); }
+.strata-deckle { fill: rgb(35 30 22 / 0.14); pointer-events: none; }
+.strata-inspector {
+  margin-top: 0.8rem;
+  min-height: 5.5rem;
+  padding: 0.8rem 1rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 3px 3px 0 rgb(35 30 22 / 0.12);
+}
+.strata-inspector p { margin: 0; }
+.strata-inspector p + p { margin-top: 0.2rem; color: var(--muted); }
+.strata-note { margin-top: 0.6rem; color: var(--muted); max-width: 62ch; }
+.strata-loading { min-height: 280px; display: grid; place-items: center; }
+@media (prefers-reduced-motion: reduce) {
+  .strata-layer { transform: none; transition: none; }
+  .strata-toy, .strata-toy *, .strata-toy *::before, .strata-toy *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

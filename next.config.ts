@@ -4,6 +4,20 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  outputFileTracingExcludes: {
+    "*": [
+      "./public/vendor/**/*",
+      "./public/icons/**/*",
+      "./node_modules/sharp/**/*",
+      "./node_modules/@img/**/*",
+    ],
+    "/*": [
+      "./public/vendor/**/*",
+      "./public/icons/**/*",
+      "./node_modules/sharp/**/*",
+      "./node_modules/@img/**/*",
+    ],
+  },
   // forbidden() for gated pages (lib/dal.ts). globalNotFound: an unknown address gets app/global-not-found.tsx,
   // a whole document drawn on the server, since the site and the projects are separate root layouts.
   experimental: { authInterrupts: true, globalNotFound: true },
@@ -20,6 +34,14 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        source: "/play/shadows",
+        headers: [{ key: "Permissions-Policy", value: "camera=(self), microphone=()" }],
+      },
+      {
+        source: "/vendor/hand-landmarker/:version/hand-worker.js",
+        headers: [{ key: "Content-Security-Policy", value: "default-src 'none'; script-src 'self' blob: 'wasm-unsafe-eval'; connect-src 'self' blob:; worker-src 'none'" }],
+      },
       {
         source: "/vendor/duckdb/:path*",
         headers: [

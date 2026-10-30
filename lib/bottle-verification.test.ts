@@ -78,10 +78,15 @@ test("Bottle closure receipt rejects renamed or empty controls and a fake uncert
   assert.throws(() => assertBottleEvidence("closure", log("closure")));
   const fixture = JSON.parse(log("closure"));
   for (const control of CONTROLS) {
-    const command = fixture.commands.find((command: { id: string }) => command.id === control.id);
+    let command = fixture.commands.find((command: { id: string }) => command.id === control.id);
+    if (!command) {
+      command = { ...fixture.commands.find((entry: { id: string }) => entry.id === "end"), id: control.id };
+      fixture.commands.push(command);
+    }
     command.required = control.required.map((required: { id: string; name: string }) => ({ ...required, status: "pass" }));
     command.stdout_tail = tapFixture(command.required.map((required: { name: string }) => required.name));
   }
+  fixture.commands = [fixture.commands.find((command: { id: string }) => command.id === "preflight"), ...CONTROLS.map(control => fixture.commands.find((command: { id: string }) => command.id === control.id))];
   const output = JSON.stringify(fixture); // Synthetic parser fixture; the CLI still requires fresh execution.
   const evidence = assertBottleEvidence("closure", output);
   assert.ok("required" in evidence && evidence.required.length > 0);
