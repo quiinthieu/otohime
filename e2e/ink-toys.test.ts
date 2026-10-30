@@ -58,6 +58,7 @@ async function open(route: string, options: BrowserContextOptions = {}, blockedS
 const meter = (page: Page) => page.evaluate(() => (window as unknown as { __inkMeter: Meter }).__inkMeter);
 const loom = (page: Page) => page.getByTestId("loom");
 async function ready(page: Page) { await page.waitForFunction(() => { const button = document.querySelector<HTMLButtonElement>('[aria-label="Ink Loom sequencer"] button'); return button && !button.disabled; }); }
+async function hankoReady(page: Page) { await page.waitForFunction(() => { const input = document.querySelector<HTMLInputElement>("#hanko-name"); return Boolean(input && Object.keys(input).some(k => k.startsWith("__reactProps$"))); }); }
 async function png(page: Page, name: string, width: number, height: number) {
   const pending = page.waitForEvent("download"); await page.getByRole("button", { name, exact: true }).click();
   const download = await pending; const path = await download.path(); assert.ok(path);
@@ -170,7 +171,7 @@ test("invalid hashes and absent audio keep Loom usable in reduced motion", async
 });
 
 for (const shape of ["Square", "Round"]) test(`Hanko ${shape}: deterministic carving, complete SVG/PNG and saved signatures`, async () => {
-  const { page, errors } = await open("/play/hanko", { viewport: { width: shape === "Square" ? 1280 : 390, height: 900 } });
+  const { page, errors } = await open("/play/hanko", { viewport: { width: shape === "Square" ? 1280 : 390, height: 900 } }); await hankoReady(page);
   const name = page.getByRole("textbox", { name: "Name to carve" });
   await name.fill("Billie乙姫"); await page.getByRole("radio", { name: shape, exact: true }).check();
   const impression = page.getByTestId("hanko-impression");
@@ -196,7 +197,7 @@ for (const shape of ["Square", "Round"]) test(`Hanko ${shape}: deterministic car
   const note = page.locator('main a[href="/notes/backfills-are-a-feature"]').first();
   await note.click(); await page.waitForURL("**/notes/backfills-are-a-feature");
   await page.waitForFunction(() => { const seals = [...document.querySelectorAll('[data-hanko-signature] [data-hanko-name]')].filter(el => el.checkVisibility()); return seals.length === 2 && seals.every(el => el.getAttribute("data-hanko-name") === "Billie乙姫"); });
-  await page.goto(`${BASE}/play/hanko`); await name.fill("Billie乙姫"); await page.getByRole("radio", { name: shape, exact: true }).check();
+  await page.goto(`${BASE}/play/hanko`); await hankoReady(page); await name.fill("Billie乙姫"); await page.getByRole("radio", { name: shape, exact: true }).check();
   assert.equal(await impression.locator("svg > path").getAttribute("d"), carving);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await page.screenshot({ path: `/tmp/pm285-hanko-${shape}.png` });
@@ -204,7 +205,7 @@ for (const shape of ["Square", "Round"]) test(`Hanko ${shape}: deterministic car
 });
 
 test("Hanko handles blocked storage and hostile input, reduced motion and dark paper", async () => {
-  const { page, errors } = await open("/play/hanko", { reducedMotion: "reduce", colorScheme: "dark", viewport: { width: 390, height: 844 } }, true);
+  const { page, errors } = await open("/play/hanko", { reducedMotion: "reduce", colorScheme: "dark", viewport: { width: 390, height: 844 } }, true); await hankoReady(page);
   await page.getByRole("textbox", { name: "Name to carve" }).fill('<&"乙姫');
   await page.getByRole("button", { name: "Press your seal ↓", exact: true }).click();
   assert.match(await page.getByRole("status").filter({ hasText: "Storage is unavailable" }).innerText(), /still download/);
@@ -216,9 +217,10 @@ test("Hanko handles blocked storage and hostile input, reduced motion and dark p
 });
 
 test("Hanko's thunk starts only on an opted-in press and reuses the shared context", async () => {
-  const { page, errors } = await open("/play/hanko");
+  const { page, errors } = await open("/play/hanko"); await hankoReady(page);
   await page.getByRole("textbox", { name: "Name to carve" }).fill("乙姫");
   await page.getByRole("button", { name: "Sound off", exact: true }).click();
+  await page.getByRole("button", { name: "Sound on", exact: true }).waitFor();
   assert.equal((await meter(page)).contexts, 0);
   await page.getByRole("button", { name: "Press your seal ↓", exact: true }).click();
   await page.waitForFunction(() => (window as unknown as { __inkMeter: Meter }).__inkMeter.peak > .001);
