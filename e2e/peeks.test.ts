@@ -122,7 +122,7 @@ test("every card goes somewhere real: each destination answers 200 and has its #
     if (hash) assert.match(pages.get(path)!, new RegExp(`id="${hash}"`), `${item.href}: #${hash} is on the page`);
   }
   for (const src of new Set(items.flatMap((i) => (i.src ? [i.src] : [])))) {
-    const res = await fetch(`${BASE}${src}`, { method: "HEAD" });
+    const res = await fetch(new URL(src, BASE), { method: "HEAD" });
     assert.equal(res.status, 200, `${src}`);
   }
 });
