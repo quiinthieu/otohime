@@ -32,7 +32,7 @@ export default async function NotePage({ params }: PageProps<"/notes/[slug]">) {
         <Link href="/notes" className="caption underline underline-offset-4">← All notes</Link>
         <header className="mt-6">
           <time dateTime={note.date} className="caption">{note.date}</time>
-          <FigTitle n="04">{note.title}</FigTitle>
+          <FigTitle n="04" transitionName={`note-${note.slug}`}>{note.title}</FigTitle>
         </header>
         <p className="mt-6 max-w-prose text-muted">{note.body}</p>
         <ul aria-label="Tags" className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-muted">
