@@ -12,10 +12,10 @@ type Meter = { frames: number; voices: number; frequencies: number[] };
 
 before(async () => {
   const env = { ...process.env, TMPDIR: tmp };
-  if (process.env.CHROME_PATH) browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, env });
+  if (process.env.CHROME_PATH) browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, env, args: ["--mute-audio"] });
   else {
-    try { browser = await chromium.launch({ channel: "chrome", env }); }
-    catch { browser = await chromium.launch({ env }); }
+    try { browser = await chromium.launch({ channel: "chrome", env, args: ["--mute-audio"] }); }
+    catch { browser = await chromium.launch({ env, args: ["--mute-audio"] }); }
   }
 });
 after(async () => {
@@ -159,7 +159,7 @@ test("reduced motion stays static with button-only burps; muted sound schedules 
   await page.waitForTimeout(800);
   const live = await open({}, "/notes/the-contract-caught-it", true, true);
   await live.page.locator(".sound-toggle").click();
-  await live.page.waitForFunction(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter.voices > 0);
+  await live.page.waitForFunction(() => (window as unknown as { __shimiMeter: Meter }).__shimiMeter.voices >= 2);
   // Sound-on plays its own 990Hz cue; measure the following bookworm chirps.
   await live.page.evaluate(() => {
     const probe = (window as unknown as { __shimiMeter: Meter }).__shimiMeter;

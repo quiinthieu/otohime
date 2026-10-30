@@ -77,6 +77,15 @@ test("clock fixture observes browser elapsed time rather than host delay", async
   await page.clock.runFor(499);
   assert.equal(await fired(), "true", "observed browser time adds to runFor(499)");
   t.diagnostic(`observed browser elapsed before runFor(499): ${elapsed}ms`);
+
+  // A short deadline sampled over one protocol call may expire before the next.
+  const expired = await page.evaluate(() => Date.now() + 100);
+  await page.waitForFunction(deadline => Date.now() > deadline, expired);
+  await assert.rejects(page.clock.pauseAt(expired), /Cannot fast-forward to the past/);
+  await page.clock.pauseAt(new Date("2026-10-26T05:00:00Z"));
+  const paused = await page.evaluate(() => performance.now());
+  await page.clock.runFor(500);
+  assert.equal(await page.evaluate(() => performance.now()) - paused, 500, "a future fixture milestone restores exact elapsed control");
 });
 
 test("server baseline has only an inert shell; no JS retains public links", async (t) => {
@@ -158,8 +167,8 @@ test("keyboard hold threshold, focus loss, live reduced motion and Pocket pause"
   await page.locator('[data-kame][data-state="pet"]').waitFor({ state: "attached", timeout: 2_000 });
   assert.equal(await state(page), "pet", "the focused key remains held beyond the 500ms threshold");
   await page.keyboard.up("Space"); assert.equal(await state(page), "swim");
-  // A later fixture hour cannot expire while browser protocol work is queued.
-  // Keep the preceding resumed hold measured on the flowing browser clock.
+  // The resumed fixture is just after 13:00. Use the next fixed hour rather
+  // than a 100ms IPC deadline that can already be past on a busy runner.
   await page.clock.pauseAt(new Date("2026-10-26T14:00:00+09:00"));
   await page.keyboard.down("Enter"); await page.clock.runFor(500); assert.equal(await state(page), "pet");
   await page.getByLabel("Kame name").focus(); await page.keyboard.up("Enter"); assert.equal(await state(page), "swim");

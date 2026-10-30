@@ -436,25 +436,29 @@ try {
     let stripped = 0;
     let seen = [];
     const tries = [];
-    for (let i = 0; i < 3 && seen.length === 0; i++) {
-      const { context, page, errors } = await open(browser, { viewport: DESKTOP, reduced: false });
-      try {
-        await page.route(/./, async (route) => {
-          const request = route.request();
-          if (request.resourceType() !== "document" || new URL(request.url()).pathname !== "/dashboard") return route.continue();
-          const response = await route.fetch();
-          const body = (await response.text()).replace(/<script>addEventListener\("pagereveal"[\s\S]*?<\/script>/g, () => (stripped++, ""));
-          await route.fulfill({ response, body });
-        });
-        await signIn(page, "owner", "", "/dashboard");
-        await settle(page);
-        seen = errors.filter((e) => /^pageerror .*Transition was skipped/.test(e));
-        tries.push(`${errors.length} errors`);
-      } catch (e) {
-        tries.push(e.message.split("\n")[0]);
-      } finally {
-        await context.close();
+    const { context, page, errors } = await open(browser, { viewport: DESKTOP, reduced: false });
+    try {
+      await page.route(/./, async (route) => {
+        const request = route.request();
+        if (request.resourceType() !== "document" || new URL(request.url()).pathname !== "/dashboard") return route.continue();
+        const response = await route.fetch();
+        const body = (await response.text()).replace(/<script>addEventListener\("pagereveal"[\s\S]*?<\/script>/g, () => (stripped++, "<script></script>"));
+        await route.fulfill({ response, body });
+      });
+      for (let i = 0; i < 3 && seen.length === 0; i++) {
+        const from = errors.length;
+        try {
+          await context.clearCookies();
+          await signIn(page, "owner", "", "/dashboard");
+          await settle(page);
+          seen = errors.slice(from).filter((e) => /^pageerror .*Transition was skipped/.test(e));
+          tries.push(`${errors.length - from} errors`);
+        } catch (e) {
+          tries.push(e.message.split("\n")[0]);
+        }
       }
+    } finally {
+      await context.close();
     }
     check("negative: the probe stripped the pagereveal guard from /dashboard's HTML", stripped >= 1, `${stripped} scripts stripped`);
     check('negative: without the guard a sign-in logs "Transition was skipped"', seen.length > 0, tries.join("; "));

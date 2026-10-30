@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 import { FigTitle } from "@/components/figures";
+import { HankoSignature } from "@/components/hanko-signature";
 import { site } from "@/content/site";
 import { noteBySlug } from "../_lib/notes";
 
@@ -39,6 +40,7 @@ export default async function NotePage({ params }: PageProps<"/notes/[slug]">) {
         <ul aria-label="Tags" className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-muted">
           {note.tags.map((tag) => <li key={tag}>#{tag}</li>)}
         </ul>
+        <div className="mt-6"><HankoSignature /></div>
       </article>
     </ViewTransition>
   );

@@ -196,6 +196,35 @@ export function playCustomCue(cue: Cue, isAllowed: () => boolean = () => true): 
   return true;
 }
 
+/** Acquire the shared context inside a Play gesture. Cancellation also guards a late resume. */
+export function openSoundSession(begin: (context: AudioContext) => () => void): () => void {
+  load();
+  if (!on || document.hidden) return () => {};
+  const c = unlock();
+  if (!c) return () => {};
+  let cancelled = false;
+  let dispose: (() => void) | undefined;
+  const unsubscribe = subscribeSound(() => { if (!on) cancel(); });
+  function cancel() {
+    cancelled = true;
+    dispose?.(); dispose = undefined;
+    unsubscribe();
+    document.removeEventListener("visibilitychange", hidden);
+    removeEventListener("pagehide", cancel);
+  }
+  function hidden() { if (document.hidden) cancel(); }
+  document.addEventListener("visibilitychange", hidden);
+  addEventListener("pagehide", cancel);
+  const asked = performance.now();
+  const start = () => {
+    if (cancelled || ctx !== c || !on || document.hidden || c.state !== "running" || performance.now() - asked >= 250) return;
+    try { dispose = begin(c); } catch { cancel(); }
+  };
+  if (c.state === "running") start();
+  else void c.resume().then(start, cancel);
+  return cancel;
+}
+
 // The water: a few seconds of brown noise looped, low-passed, its level breathing on a slow sine.
 export const WATER_DB = -36;
 export const WATER_LOWPASS_HZ = 500;

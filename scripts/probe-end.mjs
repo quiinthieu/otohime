@@ -1895,13 +1895,15 @@ try {
           else if (el.hasAttribute("data-end-line")) kind = `line:${el.getAttribute("data-end-line")}`;
           else if (el.hasAttribute("data-kame-action")) kind = `kame:${el.getAttribute("data-kame-action")}`;
           else if (el.matches('input[aria-label="Kame name"]')) kind = "kame:name";
+          else if (el.hasAttribute("data-hanko-signature")) kind = `hanko:${el.getAttribute("href")}`;
           else if (el.hasAttribute("data-end-top")) kind = "top";
           else if (el.hasAttribute("data-end-ryugu")) kind = "ryugu";
           return { inFooter, kind, focusRing };
         });
 
       // Every stop the footer should hold, in order: the pages, then the zine link under them (/zine, a sheet to print,
-      // not a CONSOLE_MENU room), then the contact lines, Back to top, and last the waterline's way down to Ryugu-jo.
+      // not a CONSOLE_MENU room), then the contact lines, Kame, the Hanko
+      // signature, Back to top, and last the waterline's way down to Ryugu-jo.
       // The walk takes one Tab per stop, so a new page or line lengthens it instead of leaving the last stops unvisited.
       const expectedKinds = [
         "mascot",
@@ -1911,6 +1913,7 @@ try {
         "zine",
         ...site.lines.map((l) => `line:${l.label}`),
         "kame:call", "kame:pet", "kame:hide", "kame:name",
+        "hanko:/play/hanko",
         "top",
         "ryugu",
       ];
@@ -1929,7 +1932,7 @@ try {
       const allRingsVisible = tabStops.every((s) => s.inFooter && s.focusRing);
 
       check(
-        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines, Kame controls, Back to top and the waterline in order with visible focus rings and no trap`,
+        `keyboard Tab progression: visits mascot, wobble, swatch group, ${CONSOLE_MENU.length} pages, the zine link, ${site.lines.length} contact lines, Kame controls, Hanko signature, Back to top and the waterline in order with visible focus rings and no trap`,
         JSON.stringify(gotKinds) === JSON.stringify(expectedKinds) &&
           allRingsVisible &&
           afterFooter?.inFooter === false,
