@@ -1,0 +1,8 @@
+{
+  "schema": "platform.plan-prerequisites.v1",
+  "plan_id": "pm-303",
+  "revision": 1,
+  "external_dependencies_reviewed": true,
+  "reason": "Every deliverable in this plan (the per-app JSON manifests and JSON Schema in content/apps/, the pure schema validator and filter/seal model in lib/apps.ts, the node:fs manifest loader in lib/apps-server.ts, the PUBLIC_PAGES navigation entry in lib/pages.ts, the /apps index and /apps/[slug] detail pages with generated <Inked> SVG illustrations and reduced-motion-safe ASCII/Canvas/CSS terminal previews, the pure Server Component Home featured strip, the Satori next/og OpenGraph endpoints at /apps/opengraph-image and /og/apps/[slug], app/sitemap.ts + public/robots.txt, and unit + Playwright E2E/accessibility suites) is 100% repository-owned and runs locally against locked dependencies with zero external credentials, third-party APIs, secrets, database migrations, or external execution runtimes.",
+  "prerequisites": []
+}
