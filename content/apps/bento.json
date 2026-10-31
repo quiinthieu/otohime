@@ -1,0 +1,133 @@
+{
+  "$schema": "./_schema.json",
+  "slug": "bento",
+  "order": 1,
+  "featured": true,
+  "name": "Bento",
+  "tagline": "Audits plugins, skills, MCP servers and rules across AI coding agents, keeping every context budget lean.",
+  "description": [
+    "Bento brings every AI coding agent customization on your machine into one tidy tray. Instead of hunting across scattered dotfiles and hidden folders, you can inspect every installed plugin, skill, MCP server, and rule file side by side.",
+    "Both the native macOS app and the companion CLI (bentoctx) measure how much startup context each tool and instruction block consumes per agent, flagging duplicate schemas and idle MCP servers before they eat into your working token budget."
+  ],
+  "platforms": ["macos", "cli"],
+  "status": "building",
+  "swatch": "coral",
+  "techStack": ["macOS App", "CLI (bentoctx)", "MCP", "Agent Rules & Skills"],
+  "features": [
+    {
+      "title": "Cross-agent customization inventory",
+      "detail": "Scans plugins, skills, MCP server definitions, and repository rule files across installed AI coding agents from a single read-only audit pass."
+    },
+    {
+      "title": "Per-agent context & token budget",
+      "detail": "Estimates startup token weight for every rule, skill prompt, and MCP tool schema so you see immediately which integrations crowd an agent's context window."
+    },
+    {
+      "title": "Profile packing & conflict lint",
+      "detail": "Spots duplicate instructions, broken MCP command paths, and overlapping global vs workspace rules, letting you pack lean per-project profiles."
+    },
+    {
+      "title": "macOS tray + bentoctx CLI parity",
+      "detail": "Toggle customizations visually from the macOS app or script repeatable budget checks in shell workflows and pre-flight hooks with bentoctx."
+    }
+  ],
+  "install": {
+    "label": "Homebrew Cask",
+    "command": "brew install --cask agent-bento",
+    "note": "Installs the macOS app alongside the bentoctx CLI binary."
+  },
+  "links": {
+    "repo": "https://github.com/quiinthieu/bento",
+    "homebrew": {
+      "cask": "agent-bento",
+      "command": "brew install --cask agent-bento",
+      "url": "https://github.com/quiinthieu/bento"
+    }
+  },
+  "illustration": {
+    "kind": "ink",
+    "motif": "bento-box",
+    "alt": "Hand-inked isometric bento box sorting MCP servers, skills, plugins, and rules into four compartments beside a context token gauge.",
+    "caption": "Fig. 08a — Compartmented context tray & per-agent budget gauge"
+  },
+  "preview": {
+    "kind": "frames",
+    "title": "bentoctx context audit",
+    "command": "bentoctx audit --agents all",
+    "alt": "Terminal output from bentoctx auditing MCP servers, skills, and rules across coding agents and reporting reclaimable startup tokens.",
+    "intervalMs": 2200,
+    "frames": [
+      {
+        "label": "Inventory scan",
+        "lines": [
+          "scanning workspace + user agent configs...",
+          "  claude-code   4 mcp · 9 skills · 3 rules   18,420 tok",
+          "  codex-cli     3 mcp · 6 skills · 2 rules   11,290 tok",
+          "  cursor        5 mcp · 4 skills · 4 rules   21,080 tok"
+        ]
+      },
+      {
+        "label": "Budget hotspots",
+        "lines": [
+          "flagged context weight (> 2,500 tok at startup):",
+          "  ! mcp/browser-full    6,840 tok   38 eager tool schemas",
+          "  ! rules/legacy.md     2,910 tok   duplicated in AGENTS.md",
+          "  ~ skill/db-admin      1,980 tok   unused in last 30 sessions"
+        ]
+      },
+      {
+        "label": "Packed profile",
+        "lines": [
+          "bentoctx pack --profile lean-web --dry-run",
+          "  deferred 2 idle MCP servers to lazy load (-8,820 tok)",
+          "  deduplicated overlapping rule blocks     (-2,910 tok)",
+          "  ready: startup budget 18,420 -> 6,690 tok (-63.7%)"
+        ]
+      }
+    ]
+  },
+  "milestones": [
+    {
+      "title": "Multi-agent discovery & token estimator",
+      "state": "done",
+      "note": "Parses MCP server manifests, skill folders, and rule files into a unified per-agent token breakdown."
+    },
+    {
+      "title": "bentoctx CLI audit & diff commands",
+      "state": "done",
+      "note": "Terminal audit table, duplicate rule detection, and JSON export for local scripts."
+    },
+    {
+      "title": "macOS compartment inspector & agent-bento cask",
+      "state": "active",
+      "target": "Q4 2026",
+      "note": "Polishing per-workspace profile switching and notarized Homebrew cask builds."
+    },
+    {
+      "title": "One-click lazy-MCP & budget guardrails",
+      "state": "next",
+      "target": "Q1 2027",
+      "note": "Reversible profile snapshots with per-repo context budget thresholds."
+    }
+  ],
+  "changelog": [
+    {
+      "version": "0.3.0-dev",
+      "date": "2026-10-24",
+      "summary": "Added per-agent MCP schema token accounting and Homebrew cask packaging for agent-bento.",
+      "highlights": [
+        "Measured eager vs lazy MCP tool schema footprints per coding agent.",
+        "Wired bentoctx CLI binary bundling inside the macOS app bundle."
+      ]
+    },
+    {
+      "version": "0.2.0-dev",
+      "date": "2026-09-29",
+      "summary": "Initial cross-agent scanner for skills, plugins, and repository rule files.",
+      "highlights": [
+        "Unified workspace and home-directory discovery with read-only safety.",
+        "Added duplicate rule and broken MCP command path diagnostics."
+      ]
+    }
+  ]
+}

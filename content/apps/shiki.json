@@ -1,0 +1,101 @@
+{
+  "$schema": "./_schema.json",
+  "slug": "shiki",
+  "order": 4,
+  "featured": true,
+  "name": "Shiki",
+  "tagline": "Terminal colours that drift slowly with local sunrise, sunset and the seasons, with continuous contrast safety.",
+  "description": [
+    "Most terminal themes snap abruptly between a blinding noon white and a pitch-black midnight toggle. Shiki lets your terminal paper and ink breathe with the real sky outside—drifting imperceptibly from cool dawn mist to warm afternoon paper, amber dusk, and deep indigo night.",
+    "Driven by local solar elevation and the four seasons, shiki-term interpolates a continuous palette gradient while mathematically clamping every foreground and ANSI accent token against WCAG contrast floors so long coding sessions never sacrifice legibility for atmosphere."
+  ],
+  "platforms": ["cli"],
+  "status": "building",
+  "swatch": "blue",
+  "techStack": ["CLI (shiki-term)", "Solar & Seasonal Gradient", "WCAG Contrast Safety"],
+  "features": [
+    {
+      "title": "Continuous solar elevation gradient",
+      "detail": "Computes local sunrise, solar noon, twilight, and midnight offline from latitude or timezone—eliminating jarring binary light/dark switches."
+    },
+    {
+      "title": "Four-season ink & paper undertones",
+      "detail": "Shifts palette warmth gently across spring sakura paper, crisp summer cedar, autumn persimmon dusk, and quiet winter sumi."
+    },
+    {
+      "title": "Guaranteed WCAG contrast floor",
+      "detail": "Continuously verifies relative luminance across every interpolated stop, clamping body text and syntax tokens to AAA-grade contrast (>= 7:1)."
+    },
+    {
+      "title": "Live OSC escape sequences for modern terminals",
+      "detail": "Updates Ghostty, Kitty, WezTerm, Alacritty, and iTerm2 palettes smoothly in place via standard terminal OSC colour sequences."
+    }
+  ],
+  "install": {
+    "label": "CLI preview",
+    "command": "shiki-term status",
+    "note": "In development — CLI daemon and one-shot shell hook preparing for first public beta."
+  },
+  "links": {
+    "follow": {
+      "label": "Notify me by email",
+      "href": "mailto:hello@otohime.dev?subject=Notify%20me%3A%20Shiki"
+    }
+  },
+  "illustration": {
+    "kind": "ink",
+    "motif": "sun-dial",
+    "alt": "Hand-inked brass and paper sundial tracing sunrise, zenith, and sunset arcs over a four-season horizon ring.",
+    "caption": "Fig. 08d — Solar elevation dial & four-season contrast ring"
+  },
+  "preview": {
+    "kind": "shiki-drift",
+    "title": "shiki-term solar & seasonal palette drift",
+    "command": "shiki-term --preview-day",
+    "alt": "Terminal session drifting smoothly across dawn, noon, sunset, and midnight palettes with a live WCAG AAA contrast readout."
+  },
+  "milestones": [
+    {
+      "title": "Offline solar elevation & seasonal interpolator",
+      "state": "done",
+      "note": "Continuous Dawn -> Noon -> Sunset -> Midnight curves across spring, summer, autumn, and winter."
+    },
+    {
+      "title": "Continuous WCAG >= 7.0 contrast clamping",
+      "state": "done",
+      "note": "Per-stop relative luminance solver preventing muddy twilight midtones across all 16 ANSI slots."
+    },
+    {
+      "title": "shiki-term OSC emitter & terminal adapters",
+      "state": "active",
+      "target": "Q4 2026",
+      "note": "Testing flicker-free OSC 10/11/4 live updates across Ghostty, Kitty, WezTerm, and tmux passthrough."
+    },
+    {
+      "title": "Public CLI release & static theme exporter",
+      "state": "next",
+      "target": "Q1 2027",
+      "note": "Homebrew formula plus static snapshot export for editors and terminals without OSC hooks."
+    }
+  ],
+  "changelog": [
+    {
+      "version": "0.2.0-dev",
+      "date": "2026-10-28",
+      "summary": "Added continuous WCAG >= 7:1 contrast clamping across twilight transitions and seasonal presets.",
+      "highlights": [
+        "Eliminated low-contrast dusk crossover by pivoting paper/ink polarity around civil twilight.",
+        "Added shiki-term --preview-day dry-run inspector with live contrast ratios."
+      ]
+    },
+    {
+      "version": "0.1.0-dev",
+      "date": "2026-09-22",
+      "summary": "Initial offline solar ephemeris calculator and OSC palette emitter.",
+      "highlights": [
+        "Computed local sunrise, noon, and sunset without external weather or geolocation APIs.",
+        "Drafted spring, summer, autumn, and winter base ink palettes."
+      ]
+    }
+  ]
+}

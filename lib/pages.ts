@@ -1,5 +1,5 @@
 export type PublicPage = {
-  href: "/" | "/work" | "/play" | "/notes" | "/music" | "/projects" | "/sketches" | "/lab";
+  href: "/" | "/work" | "/play" | "/notes" | "/music" | "/projects" | "/sketches" | "/apps" | "/lab";
   label: string;
 };
 
@@ -11,6 +11,7 @@ export const PUBLIC_PAGES = [
   { href: "/music", label: "Music" },
   { href: "/projects", label: "Projects" },
   { href: "/sketches", label: "Sketches" },
+  { href: "/apps", label: "Apps" },
   { href: "/lab", label: "Ink Lab" },
 ] as const satisfies readonly PublicPage[];
 
@@ -18,11 +19,11 @@ export const PUBLIC_PAGES = [
 // and the default home is unchanged.
 export const DESK_PAGE = { href: "/desk", label: "Desk" } as const;
 
-export type ConsoleItem = { href: Exclude<PublicPage["href"], "/" | "/lab"> | typeof DESK_PAGE.href; label: string };
+export type ConsoleItem = { href: Exclude<PublicPage["href"], "/" | "/lab" | "/apps"> | typeof DESK_PAGE.href; label: string };
 
-// Lab is public and terminal-addressable, but the physical LCD has seven cartridges.
+// Lab and Apps are public and terminal-addressable, but the physical LCD has seven cartridges.
 export const CONSOLE_MENU = [
-  ...PUBLIC_PAGES.filter((page) => page.href !== "/" && page.href !== "/lab"),
+  ...PUBLIC_PAGES.filter((page) => page.href !== "/" && page.href !== "/lab" && page.href !== "/apps"),
   DESK_PAGE,
 ] as const satisfies readonly ConsoleItem[];
 

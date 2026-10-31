@@ -1,0 +1,101 @@
+{
+  "$schema": "./_schema.json",
+  "slug": "niwa",
+  "order": 2,
+  "featured": true,
+  "name": "Niwa",
+  "tagline": "A cozy idle garden that lives in your terminal and macOS menu bar and grows quietly while you work.",
+  "description": [
+    "Niwa tucks a quiet stoneware tray of moss, bamboo, and bonsai into a corner of your terminal and macOS menu bar. There are no streaks to lose, no loud timers, and no notifications demanding attention while you think.",
+    "Built as a lightweight Rust TUI/CLI (niwa) paired with a native Swift menu bar companion, the garden reads gentle work cadence from active coding sessions—unfolding new shoots, blossoms, and evening lantern light at an unhurried pace."
+  ],
+  "platforms": ["macos", "cli", "tui"],
+  "status": "building",
+  "swatch": "mint",
+  "techStack": ["Rust", "TUI / CLI (niwa)", "Swift", "macOS Menu Bar"],
+  "features": [
+    {
+      "title": "Rust TUI & single-line CLI status",
+      "detail": "Open a calm box-drawn courtyard in any split pane with niwa, or print a compact one-line botanical status for tmux and prompt bars."
+    },
+    {
+      "title": "Native Swift macOS menu bar companion",
+      "detail": "Mirrors the same local garden state in the macOS menu bar with crisp monochrome glyphs and a popover courtyard card."
+    },
+    {
+      "title": "Zero-guilt idle growth",
+      "detail": "Plants rest naturally when you step away instead of wilting—rewarding steady focus without gamified pressure or streak anxiety."
+    },
+    {
+      "title": "Shared local garden file",
+      "detail": "Both the Rust TUI and Swift menu bar app read a tiny plain-JSON garden state on disk with near-zero CPU wakeups and zero network traffic."
+    }
+  ],
+  "install": {
+    "label": "CLI preview",
+    "command": "niwa",
+    "note": "In development — the Rust TUI/CLI binary (niwa) and Swift menu bar app will ship together in the first public beta."
+  },
+  "links": {
+    "follow": {
+      "label": "Notify me by email",
+      "href": "mailto:hello@otohime.dev?subject=Notify%20me%3A%20Niwa"
+    }
+  },
+  "illustration": {
+    "kind": "ink",
+    "motif": "bonsai-garden",
+    "alt": "Hand-inked stoneware bonsai tray with moss, pruned pine boughs, stepping stones, and a miniature garden lantern.",
+    "caption": "Fig. 08b — Stoneware bonsai tray, moss bed & courtyard lantern"
+  },
+  "preview": {
+    "kind": "niwa-garden",
+    "title": "Niwa terminal & menu bar garden",
+    "command": "niwa --watch",
+    "alt": "Animated ASCII bonsai and moss garden growing across five quiet stages beneath a simulated macOS menu bar readout."
+  },
+  "milestones": [
+    {
+      "title": "Deterministic Rust growth engine & 5-stage flora",
+      "state": "done",
+      "note": "Seeded moss bed, sprout, bamboo shoots, stone lantern blossoms, and evening fireflies in pure Rust."
+    },
+    {
+      "title": "Low-wakeup TUI renderer (niwa)",
+      "state": "done",
+      "note": "Event-driven terminal redraws that sleep cleanly whenever the pane is idle or unfocused."
+    },
+    {
+      "title": "Swift macOS menu bar companion & state sync",
+      "state": "active",
+      "target": "Q4 2026",
+      "note": "Connecting atomic local file watches between the Swift menu bar item and the niwa CLI."
+    },
+    {
+      "title": "Seasonal specimen seeds & Homebrew tap",
+      "state": "next",
+      "target": "Q1 2027",
+      "note": "Maple, pine, and plum specimens alongside packaged macOS + CLI releases."
+    }
+  ],
+  "changelog": [
+    {
+      "version": "0.2.0-dev",
+      "date": "2026-10-20",
+      "summary": "Added Swift menu bar status item prototype synced to the local Rust garden state.",
+      "highlights": [
+        "Shared atomic garden snapshot schema between Rust CLI and Swift menu bar app.",
+        "Added evening lantern and firefly resting stage for late work sessions."
+      ]
+    },
+    {
+      "version": "0.1.0-dev",
+      "date": "2026-09-18",
+      "summary": "First playable Rust TUI courtyard with five botanical growth stages.",
+      "highlights": [
+        "Hand-tuned box-drawing tray proportions for 40x12 split terminal panes.",
+        "Zero-timer idle sleep when terminal output is paused."
+      ]
+    }
+  ]
+}

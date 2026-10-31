@@ -32,12 +32,12 @@ const key = (k: string, mods: Partial<{ metaKey: boolean; ctrlKey: boolean; altK
   ...mods,
 });
 
-test("the places are every public page including Lab, then ask and postcard, each once", () => {
+test("the places are every public page including Apps and Lab, then ask and postcard, each once", () => {
   assert.deepEqual(
     PLACES.slice(0, PUBLIC_PAGES.length).map((p) => p.href),
     PUBLIC_PAGES.map((p) => p.href),
   );
-  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "lab", "ask", "postcard", "guestbook", "fortune"]);
+  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "apps", "lab", "ask", "postcard", "guestbook", "fortune"]);
   assert.equal(new Set(PLACES.map((p) => p.name)).size, PLACES.length);
   assert.equal(findPlace("ask"), PLACES.find((p) => p.name === "ask"));
   assert.equal((findPlace("ask") as { href: string }).href, "/");
@@ -287,4 +287,14 @@ test("the terminal is an accessible modal: a dialog with a combobox prompt, a li
 
 test("Lab has one terminal destination after joining public navigation", () => {
   assert.equal(PLACES.filter(place => place.href === "/lab").length, 1);
+});
+
+test("Apps is addressable via apps and go apps in Pocket Terminal without changing the 7-line LCD", () => {
+  assert.equal(PLACES.filter((place) => place.href === "/apps").length, 1);
+  for (const line of ["apps", "go apps", "go /apps", "open apps", "go app"]) {
+    assert.deepEqual(run(line, STATE).effect, { kind: "go", href: "/apps" }, line);
+  }
+  assert.ok(suggest("apps").some((s) => s.line === "go apps"));
+  assert.equal(CONSOLE_MENU.length, 7);
+  assert.ok(CONSOLE_MENU.every((p) => String(p.href) !== "/apps"));
 });

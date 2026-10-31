@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  outputFileTracingIncludes: {
+    "/apps": ["./content/apps/**/*.json"],
+    "/apps/[slug]": ["./content/apps/**/*.json"],
+    "/og/apps/[slug]": ["./content/apps/**/*.json"],
+    "/sitemap.xml": ["./content/apps/**/*.json"],
+  },
   outputFileTracingExcludes: {
     "*": [
       "./public/vendor/**/*",

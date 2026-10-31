@@ -1,0 +1,124 @@
+{
+  "$schema": "./_schema.json",
+  "slug": "kakeibo",
+  "order": 3,
+  "featured": true,
+  "name": "Kakeibo",
+  "tagline": "A local-only token budget diary that breaks down where every coding-agent session spent your quota.",
+  "description": [
+    "Named after the Japanese household budgeting ledger, Kakeibo turns opaque coding-agent quota burn into an honest daily diary. Instead of guessing why a session exhausted your allowance in twenty minutes, you get a line-by-line accounting of where the tokens actually went.",
+    "The kakeibo CLI parses local session transcripts directly on your machine—separating resumed conversation history, verbose tool output, retry loops, and prompt-cache misses—without ever uploading prompts, code, or telemetry anywhere."
+  ],
+  "platforms": ["cli"],
+  "status": "building",
+  "swatch": "yellow",
+  "techStack": ["CLI (kakeibo)", "Local-only", "Session Token Ledger"],
+  "features": [
+    {
+      "title": "Four-column token spend breakdown",
+      "detail": "Attributes every session's tokens across resumed context, raw tool stdout, failed-step retries, and cold prompt-cache misses."
+    },
+    {
+      "title": "Quota drain flags & culprit commands",
+      "detail": "Highlights the exact tool invocations—unbounded grep dumps, full lockfile reads, or thrashing test loops—that spiked a session's cost."
+    },
+    {
+      "title": "Strictly local-only by design",
+      "detail": "Reads local agent log directories offline into a compact local ledger with zero accounts, zero cloud sync, and zero outbound requests."
+    },
+    {
+      "title": "Daily & per-repo kakeibo summaries",
+      "detail": "Roll up token spend by day, repository, or task branch so you can compare lean workflows against expensive ones."
+    }
+  ],
+  "install": {
+    "label": "CLI preview",
+    "command": "kakeibo summary --today",
+    "note": "In development — local-only CLI binary entering public beta soon."
+  },
+  "links": {
+    "follow": {
+      "label": "Notify me by email",
+      "href": "mailto:hello@otohime.dev?subject=Notify%20me%3A%20Kakeibo"
+    }
+  },
+  "illustration": {
+    "kind": "ink",
+    "motif": "ledger-book",
+    "alt": "Hand-inked open kakeibo account book with ruled columns comparing resumed context, tool output, retries, and cache misses.",
+    "caption": "Fig. 08c — Open kakeibo ledger & four-column token balance"
+  },
+  "preview": {
+    "kind": "frames",
+    "title": "kakeibo session token ledger",
+    "command": "kakeibo summary --last 5",
+    "alt": "Terminal ledger breaking down coding-agent token usage into resumed context, tool output, retries, and cache misses.",
+    "intervalMs": 2400,
+    "frames": [
+      {
+        "label": "Ledger breakdown",
+        "lines": [
+          "SESSION LEDGER · LAST 5 RUNS (LOCAL-ONLY)       412.8k tok",
+          "  resumed context   ██████████░░░░░░   41%      169.2k tok",
+          "  tool output       ██████░░░░░░░░░░   27%      111.5k tok",
+          "  cache misses      ████░░░░░░░░░░░░   19%       78.4k tok",
+          "  retries           ███░░░░░░░░░░░░░   13%       53.7k tok"
+        ]
+      },
+      {
+        "label": "Quota drain flags",
+        "lines": [
+          "TOP QUOTA DRAINS FLAGGED:",
+          "  [!] run-04 step 19  unbounded test log dump    +46.2k tok",
+          "  [!] run-02 turn 08  cache miss after idle gap  +38.9k tok",
+          "  [!] run-05 steps 4-7 3x typecheck retry loop   +29.4k tok",
+          "tip: compact before idle gaps; cap test log tails to 80 lines"
+        ]
+      }
+    ]
+  },
+  "milestones": [
+    {
+      "title": "Local transcript parser & 4-bucket attribution",
+      "state": "done",
+      "note": "Separates resumed context, tool payloads, retry turns, and cache-miss deltas from local JSONL transcripts."
+    },
+    {
+      "title": "Quota-drain anomaly heuristics",
+      "state": "done",
+      "note": "Detects oversized tool outputs, repeated command retry loops, and cold-cache session resumptions."
+    },
+    {
+      "title": "kakeibo CLI daily/weekly ledger & export",
+      "state": "active",
+      "target": "Q4 2026",
+      "note": "Finalizing terminal table layouts, per-repo rollups, and plain Markdown/CSV export."
+    },
+    {
+      "title": "Standalone Homebrew formula release",
+      "state": "next",
+      "target": "Q1 2027",
+      "note": "Single-binary macOS and Linux builds with zero runtime dependencies."
+    }
+  ],
+  "changelog": [
+    {
+      "version": "0.2.0-dev",
+      "date": "2026-10-27",
+      "summary": "Added cache-miss vs resumed-context attribution and top quota-drain flags.",
+      "highlights": [
+        "Distinguished warm cache reads from cold cache rebuilds after idle pauses.",
+        "Added per-step culprit ranking for oversized tool stdout payloads."
+      ]
+    },
+    {
+      "version": "0.1.0-dev",
+      "date": "2026-10-03",
+      "summary": "Initial offline transcript reader and daily kakeibo summary table.",
+      "highlights": [
+        "Zero-network local ingestion across workspace session logs.",
+        "Added per-repository token totals and retry-loop detection."
+      ]
+    }
+  ]
+}
