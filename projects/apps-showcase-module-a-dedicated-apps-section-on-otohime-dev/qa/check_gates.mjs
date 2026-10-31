@@ -59,6 +59,14 @@ function verifyGatesContract(results) {
   assert.ok(typecheckStep, "typecheck step must be recorded");
   assert.match(typecheckStep.stdout, /tsc --noEmit/, "npm run typecheck must invoke tsc --noEmit");
 
+  const previewTestStep = results.find((r) => r.name === "preview_unit_test");
+  assert.ok(previewTestStep, "preview_unit_test step must be recorded");
+  assert.match(
+    previewTestStep.stdout,
+    /ℹ fail 0|# fail 0/,
+    "lib/apps-preview.test.ts must report 0 failures",
+  );
+
   const testStep = results.find((r) => r.name === "test");
   assert.ok(testStep, "test step must be recorded");
   assert.match(testStep.stdout, /ℹ fail 0|# fail 0/, "node --test must report 0 failures");
@@ -85,9 +93,27 @@ if (isNegativeControl) {
   console.error("ERROR: verifyGatesContract failed to reject broken gate result");
   process.exit(0);
 } else {
+  const previewTestFile = path.join(REPO_ROOT, "lib", "apps-preview.test.ts");
+  const previewStep = fs.existsSync(previewTestFile)
+    ? runStep("preview_unit_test", "node", [
+        "--experimental-strip-types",
+        "--disable-warning=ExperimentalWarning",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "lib/apps-preview.test.ts",
+      ])
+    : {
+        name: "preview_unit_test",
+        status: 1,
+        durationMs: 0,
+        stdout: "",
+        stderr: "Missing required test file: lib/apps-preview.test.ts",
+      };
+
   const results = [
     runStep("lint", "npm", ["run", "lint"]),
     runStep("typecheck", "npm", ["run", "typecheck"]),
+    previewStep,
     runStep("test", "npm", ["test"]),
     runStep("deploy_author", "node", ["scripts/check-deploy-author.mjs"], {
       DEPLOY_AUTHOR_EMAIL: "quiinthieu@gmail.com",
@@ -97,7 +123,7 @@ if (isNegativeControl) {
   console.log(
     JSON.stringify({
       ok: true,
-      case: "t1882-lint-typecheck-and-unit-tests",
+      case: "t1883-lint-typecheck-and-unit-tests",
       steps: results.map((r) => ({
         name: r.name,
         status: r.status,

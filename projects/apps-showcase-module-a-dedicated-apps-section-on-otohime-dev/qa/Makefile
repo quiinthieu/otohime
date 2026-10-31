@@ -5,7 +5,7 @@ QA_DIR := projects/apps-showcase-module-a-dedicated-apps-section-on-otohime-dev/
 NODE_TS := node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
 
 help:
-	@echo "Targets for pm-303 / t-1882 executable QA suite:"
+	@echo "Targets for pm-303 / t-1882 & t-1883 executable QA suite:"
 	@echo "  make help   - Display this help message"
 	@echo "  make build  - Validate suite.json schema and budget (declared_s <= 1800)"
 	@echo "  make test   - Run positive checks and verify negative controls fail as expected"
@@ -16,10 +16,12 @@ build:
 
 run: build
 	cd "$(REPO_ROOT)" && $(NODE_TS) $(QA_DIR)/check_data_and_nav.mts
+	cd "$(REPO_ROOT)" && $(NODE_TS) $(QA_DIR)/check_preview_engine.mts
 	cd "$(REPO_ROOT)" && node $(QA_DIR)/check_gates.mjs
 	cd "$(REPO_ROOT)" && node $(QA_DIR)/check_browser_journey.mjs
 
 test: run
 	cd "$(REPO_ROOT)" && ( ! $(NODE_TS) $(QA_DIR)/check_data_and_nav.mts --negative-control )
+	cd "$(REPO_ROOT)" && ( ! $(NODE_TS) $(QA_DIR)/check_preview_engine.mts --negative-control )
 	cd "$(REPO_ROOT)" && ( ! node $(QA_DIR)/check_gates.mjs --negative-control )
 	cd "$(REPO_ROOT)" && ( ! node $(QA_DIR)/check_browser_journey.mjs --negative-control )

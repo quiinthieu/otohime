@@ -13,9 +13,20 @@
       "negative_control": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON projects/apps-showcase-module-a-dedicated-apps-section-on-otohime-dev/qa/check_data_and_nav.mts --negative-control"
     },
     {
-      "id": "t1882-lint-typecheck-and-unit-tests",
+      "id": "t1883-preview-engine-and-contrast-contract",
       "covers": [
-        "t-1882:sha256:0589346a70c8df8f407cf7a5016267205eb159078e44e35dc1b8a0380078da4a"
+        "t-1883:sha256:35304ad919bef86caf22c4c7304671952ff5b1e106ba37aee4691c759169da49"
+      ],
+      "cmd": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON projects/apps-showcase-module-a-dedicated-apps-section-on-otohime-dev/qa/check_preview_engine.mts",
+      "cwd": ".",
+      "timeout_s": 30,
+      "negative_control": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON projects/apps-showcase-module-a-dedicated-apps-section-on-otohime-dev/qa/check_preview_engine.mts --negative-control"
+    },
+    {
+      "id": "t1883-lint-typecheck-and-unit-tests",
+      "covers": [
+        "t-1882:sha256:0589346a70c8df8f407cf7a5016267205eb159078e44e35dc1b8a0380078da4a",
+        "t-1883:sha256:35304ad919bef86caf22c4c7304671952ff5b1e106ba37aee4691c759169da49"
       ],
       "cmd": "node projects/apps-showcase-module-a-dedicated-apps-section-on-otohime-dev/qa/check_gates.mjs",
       "cwd": ".",
@@ -23,9 +34,10 @@
       "negative_control": "node projects/apps-showcase-module-a-dedicated-apps-section-on-otohime-dev/qa/check_gates.mjs --negative-control"
     },
     {
-      "id": "t1882-build-and-browser-user-journey",
+      "id": "t1883-build-and-browser-preview-journey",
       "covers": [
-        "t-1882:sha256:0589346a70c8df8f407cf7a5016267205eb159078e44e35dc1b8a0380078da4a"
+        "t-1882:sha256:0589346a70c8df8f407cf7a5016267205eb159078e44e35dc1b8a0380078da4a",
+        "t-1883:sha256:35304ad919bef86caf22c4c7304671952ff5b1e106ba37aee4691c759169da49"
       ],
       "cmd": "node projects/apps-showcase-module-a-dedicated-apps-section-on-otohime-dev/qa/check_browser_journey.mjs",
       "cwd": ".",

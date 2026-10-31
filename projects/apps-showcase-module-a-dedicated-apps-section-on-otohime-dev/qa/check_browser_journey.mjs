@@ -76,12 +76,39 @@ function restorePrebuildSideEffects() {
   }
   spawnSync(
     "git",
-    ["checkout", "--", "content/history.json", "content/contributions.json", "public/sql-index.json"],
+    ["checkout", "--", "content/history.json", "content/contributions.json"],
     {
       cwd: REPO_ROOT,
       stdio: "ignore",
     },
   );
+}
+
+function killServerProcessGroup(server) {
+  if (!server) return;
+  try {
+    server.stdout?.destroy();
+    server.stderr?.destroy();
+  } catch {
+    // ignore
+  }
+  if (server.pid) {
+    try {
+      process.kill(-server.pid, "SIGTERM");
+    } catch {
+      // ignore
+    }
+    try {
+      process.kill(-server.pid, "SIGKILL");
+    } catch {
+      // ignore
+    }
+  }
+  try {
+    server.kill("SIGKILL");
+  } catch {
+    // ignore
+  }
 }
 
 process.on("SIGINT", () => {
@@ -170,7 +197,14 @@ function verifyBrowserObservation(obs) {
   assert.equal(obs.resetCountText, "Showing 4 of 4 apps");
   assert.deepEqual(obs.resetSlugs, ["bento", "niwa", "kakeibo", "shiki"]);
 
-  // 4. Detail pages (/apps/bento, /apps/niwa, /apps/kakeibo, /apps/shiki)
+  // 4. Detail pages (/apps/bento, /apps/niwa, /apps/kakeibo, /apps/shiki) + terminal previews
+  const expectedPreviewKinds = {
+    bento: "frames",
+    niwa: "niwa-garden",
+    kakeibo: "frames",
+    shiki: "shiki-drift",
+  };
+
   assert.equal(obs.details.length, 4, "All 4 app detail pages must be inspected");
   for (const detail of obs.details) {
     assert.equal(detail.status, 200, `/apps/${detail.slug} must return HTTP 200`);
@@ -207,16 +241,89 @@ function verifyBrowserObservation(obs) {
 
     if (detail.slug === "bento") {
       assert.equal(detail.hasRepoLink, true, "/apps/bento must render GitHub repository link");
-      assert.equal(detail.hasHomebrewCask, true, "/apps/bento must render Homebrew caskagent-bento");
+      assert.equal(detail.hasHomebrewCask, true, "/apps/bento must render Homebrew cask agent-bento");
       assert.equal(detail.primaryCtaText, "Watch on GitHub");
     } else {
       assert.equal(detail.hasRepoLink, false, `/apps/${detail.slug} must omit unverified repo link`);
       assert.match(detail.primaryCtaHref, /^mailto:hello@otohime\.dev\?subject=/);
       assert.equal(detail.secondaryCtaHref, "https://x.com/otohime73");
     }
+
+    // t-1883: Terminal preview region assertions on every detail page
+    assert.equal(
+      detail.previewKind,
+      expectedPreviewKinds[detail.slug],
+      `/apps/${detail.slug} must render [data-terminal-preview="${expectedPreviewKinds[detail.slug]}"]`,
+    );
+    assert.equal(
+      detail.previewRole,
+      "region",
+      `/apps/${detail.slug} terminal preview must have role="region"`,
+    );
+    assert.ok(
+      detail.previewAriaLabel.length > 0,
+      `/apps/${detail.slug} terminal preview must have non-empty aria-label`,
+    );
+    assert.ok(
+      detail.previewHasPlayPauseButton,
+      `/apps/${detail.slug} terminal preview must render an operable Play/Pause control`,
+    );
+    assert.equal(
+      detail.finiteMountAnimations,
+      0,
+      `/apps/${detail.slug} must have 0 finite mount animations blocking probe-motion-state.mjs`,
+    );
   }
 
-  // 5. Dynamic zero-code JSON drop-in on /apps and /apps/<slug>, and HTTP 404 for unknown slug
+  // t-1883 specific checks for Niwa, Shiki, and Frames previews
+  assert.equal(
+    obs.niwaPreview.hasMenuBarHeader,
+    true,
+    "/apps/niwa preview must render simulated macOS menu bar header containing 'niwa'",
+  );
+  assert.equal(
+    obs.niwaPreview.stageButtonCount,
+    5,
+    "/apps/niwa preview must render 5 stage selector controls",
+  );
+  assert.equal(
+    obs.niwaPreview.stageChangedOnSelect,
+    true,
+    "/apps/niwa stage selector controls must update the displayed garden stage",
+  );
+
+  assert.equal(
+    obs.shikiPreview.hasCanvas,
+    true,
+    "/apps/shiki preview must render a <canvas> solar/horizon strip",
+  );
+  assert.deepEqual(
+    obs.shikiPreview.phasesFound,
+    ["Dawn", "Noon", "Sunset", "Midnight"],
+    "/apps/shiki preview must expose Dawn, Noon, Sunset, Midnight controls",
+  );
+  assert.deepEqual(
+    obs.shikiPreview.seasonsFound,
+    ["Spring", "Summer", "Autumn", "Winter"],
+    "/apps/shiki preview must expose Spring, Summer, Autumn, Winter season selectors",
+  );
+  assert.ok(
+    obs.shikiPreview.minObservedContrast >= 7.0,
+    `/apps/shiki live WCAG contrast readout must remain >= 7.0 across phases and seasons (min=${obs.shikiPreview.minObservedContrast})`,
+  );
+
+  assert.equal(
+    obs.framesPreview.bentoStepped,
+    true,
+    "/apps/bento declarative frames stepper must advance frames when Next/frame control is activated",
+  );
+  assert.equal(
+    obs.framesPreview.kakeiboStepped,
+    true,
+    "/apps/kakeibo declarative frames stepper must advance frames when Next/frame control is activated",
+  );
+
+  // 5. Dynamic zero-code JSON drop-in on /apps and /apps/<slug> (including custom frames preview)
   assert.ok(
     Array.isArray(obs.dropInDetail.catalogSlugs) &&
       obs.dropInDetail.catalogSlugs.includes(PROBE_SLUG) &&
@@ -231,9 +338,41 @@ function verifyBrowserObservation(obs) {
   assert.match(obs.dropInDetail.h1, /Workshop Probe/);
   assert.equal(obs.dropInDetail.motif, "blueprint", "Omitted motif must render blueprint fallback");
   assert.equal(obs.dropInDetail.currentStep, "Idea");
+  assert.equal(
+    obs.dropInDetail.previewKind,
+    "frames",
+    "Dropped-in custom JSON manifest with preview.kind='frames' must render [data-terminal-preview='frames']",
+  );
+  assert.equal(
+    obs.dropInDetail.previewStepped,
+    true,
+    "Dropped-in custom JSON manifest frames stepper must advance when controlled",
+  );
   assert.equal(obs.unknownSlugStatus, 404, "Unknown /apps/<slug> must return HTTP 404");
 
-  // 6. Responsive viewports & console cleanliness
+  // 6. Reduced-motion & No-JS (SSR static frame) behavior
+  assert.equal(
+    obs.reducedMotion.allPausedOnLoad,
+    true,
+    "Under prefers-reduced-motion: reduce, all previews must set data-reduced-motion='true' and data-playing='false'",
+  );
+  assert.equal(
+    obs.reducedMotion.autoAdvancedDuringWait,
+    false,
+    "Under prefers-reduced-motion: reduce, automatic timers must NOT advance frames across a 1600ms wait",
+  );
+  assert.equal(
+    obs.reducedMotion.manualKeyboardOperable,
+    true,
+    "Under prefers-reduced-motion: reduce, manual keyboard controls (stage/time/season/Play) must remain operable",
+  );
+  assert.equal(
+    obs.noJs.allStaticFramesRendered,
+    true,
+    "Without JS (before hydration), complete static terminal frames must render immediately with data-playing='false'",
+  );
+
+  // 7. Responsive viewports & console cleanliness
   assert.equal(obs.desktopOverflow, false, "Desktop 1280x860 must have no horizontal overflow");
   assert.equal(obs.mobileOverflow, false, "Mobile 390x844 must have no horizontal overflow");
   assert.deepEqual(obs.pageErrors, [], "Browser journey must produce zero pageerror/console.error");
@@ -271,8 +410,10 @@ async function collectBrowserObservation() {
 
   const port = await getFreePort();
   const baseUrl = `http://127.0.0.1:${port}`;
-  const server = spawn("npx", ["next", "start", "-p", String(port), "-H", "127.0.0.1"], {
+  const nextBin = path.join(REPO_ROOT, "node_modules", ".bin", "next");
+  const server = spawn(nextBin, ["start", "-p", String(port), "-H", "127.0.0.1"], {
     cwd: REPO_ROOT,
+    detached: true,
     env: {
       ...process.env,
       NODE_ENV: "production",
@@ -282,6 +423,9 @@ async function collectBrowserObservation() {
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
+  server.stdout?.on("data", () => {});
+  server.stderr?.on("data", () => {});
+  server.unref();
 
   const shortTmp = fs.mkdtempSync("/tmp/otohime-qa-pw-");
   let browser;
@@ -297,6 +441,7 @@ async function collectBrowserObservation() {
     const context = await browser.newContext({
       viewport: { width: 1280, height: 860 },
       permissions: ["clipboard-read", "clipboard-write"],
+      reducedMotion: "no-preference",
     });
     const page = await context.newPage();
     const pageErrors = [];
@@ -387,8 +532,24 @@ async function collectBrowserObservation() {
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     );
 
-    // 3. Visit all 4 detail pages
+    // 3. Visit all 4 detail pages and inspect detail + terminal preview behavior
     const details = [];
+    const niwaPreview = {
+      hasMenuBarHeader: false,
+      stageButtonCount: 0,
+      stageChangedOnSelect: false,
+    };
+    const shikiPreview = {
+      hasCanvas: false,
+      phasesFound: [],
+      seasonsFound: [],
+      minObservedContrast: 0,
+    };
+    const framesPreview = {
+      bentoStepped: false,
+      kakeiboStepped: false,
+    };
+
     for (const slug of ["bento", "niwa", "kakeibo", "shiki"]) {
       const res = await page.goto(`${baseUrl}/apps/${slug}`, { waitUntil: "networkidle" });
       await page.locator(".app-snippet-btn").click();
@@ -425,6 +586,25 @@ async function collectBrowserObservation() {
         const hasHomebrewCask = linksText.includes("Cask: agent-bento");
         const primaryCta = document.querySelector(".app-follow-actions a.btn-primary");
         const secondaryCta = document.querySelector(".app-follow-actions a.link");
+
+        const previewEl = document.querySelector("[data-terminal-preview]");
+        const previewKind = previewEl?.getAttribute("data-terminal-preview") ?? "";
+        const previewRole = previewEl?.getAttribute("role") ?? "";
+        const previewAriaLabel = previewEl?.getAttribute("aria-label") ?? "";
+        const previewButtons = Array.from(previewEl?.querySelectorAll("button") ?? []).map((b) =>
+          (b.textContent ?? "").trim(),
+        );
+        const previewHasPlayPauseButton = previewButtons.some((t) =>
+          /^(play|pause)$/i.test(t),
+        );
+
+        const Scroll = globalThis.ScrollTimeline;
+        const finiteMountAnimations = document
+          .getAnimations()
+          .filter((a) => !(typeof Scroll === "function" && a.timeline instanceof Scroll))
+          .filter((a) => a.effect?.getComputedTiming().endTime !== Infinity)
+          .filter((a) => a.playState !== "finished" && a.playState !== "idle").length;
+
         return {
           slug: s,
           h1,
@@ -444,6 +624,11 @@ async function collectBrowserObservation() {
           primaryCtaText: primaryCta?.textContent?.trim() ?? "",
           primaryCtaHref: primaryCta?.getAttribute("href") ?? "",
           secondaryCtaHref: secondaryCta?.getAttribute("href") ?? "",
+          previewKind,
+          previewRole,
+          previewAriaLabel,
+          previewHasPlayPauseButton,
+          finiteMountAnimations,
         };
       }, slug);
 
@@ -451,21 +636,90 @@ async function collectBrowserObservation() {
         status: res?.status() ?? 0,
         ...detailObs,
       });
+
+      const previewLoc = page.locator("[data-terminal-preview]");
+      if ((await previewLoc.count()) > 0) {
+        if (slug === "niwa") {
+          const textBefore = (await previewLoc.textContent()) ?? "";
+          niwaPreview.hasMenuBarHeader = /niwa/i.test(textBefore);
+          const stageBtns = previewLoc.locator("button").filter({ hasText: /Stage\s*[1-5]|^[1-5]$/i });
+          niwaPreview.stageButtonCount = await stageBtns.count();
+          if (niwaPreview.stageButtonCount >= 2) {
+            await stageBtns.first().click();
+            const textStage1 = (await previewLoc.textContent()) ?? "";
+            await stageBtns.nth(niwaPreview.stageButtonCount - 1).click();
+            const textStage5 = (await previewLoc.textContent()) ?? "";
+            niwaPreview.stageChangedOnSelect = textStage1 !== textStage5;
+          }
+        } else if (slug === "shiki") {
+          shikiPreview.hasCanvas = (await previewLoc.locator("canvas").count()) > 0;
+          const phasesFound = [];
+          const seasonsFound = [];
+          const observedRatios = [];
+
+          for (const phase of ["Dawn", "Noon", "Sunset", "Midnight"]) {
+            const btn = previewLoc.locator("button", { hasText: new RegExp(`^${phase}$`, "i") });
+            if ((await btn.count()) > 0) {
+              phasesFound.push(phase);
+              await btn.first().click();
+              const txt = (await previewLoc.textContent()) ?? "";
+              const m = txt.match(/(\d+(?:\.\d+)?)\s*:\s*1/);
+              if (m) observedRatios.push(parseFloat(m[1]));
+            }
+          }
+          for (const season of ["Spring", "Summer", "Autumn", "Winter"]) {
+            const btn = previewLoc.locator("button", { hasText: new RegExp(`^${season}$`, "i") });
+            if ((await btn.count()) > 0) {
+              seasonsFound.push(season);
+              await btn.first().click();
+              const txt = (await previewLoc.textContent()) ?? "";
+              const m = txt.match(/(\d+(?:\.\d+)?)\s*:\s*1/);
+              if (m) observedRatios.push(parseFloat(m[1]));
+            }
+          }
+          shikiPreview.phasesFound = phasesFound;
+          shikiPreview.seasonsFound = seasonsFound;
+          shikiPreview.minObservedContrast =
+            observedRatios.length > 0 ? Math.min(...observedRatios) : 0;
+        } else if (slug === "bento" || slug === "kakeibo") {
+          // Pause first if playing so we deterministically test manual Next/Prev step
+          const pauseBtn = previewLoc.locator("button", { hasText: /^Pause$/i });
+          if ((await pauseBtn.count()) > 0) {
+            await pauseBtn.first().click();
+          }
+          const beforeFrame = (await previewLoc.textContent()) ?? "";
+          const nextBtn = previewLoc.locator("button", { hasText: /Next/i });
+          if ((await nextBtn.count()) > 0) {
+            await nextBtn.first().click();
+          }
+          const afterFrame = (await previewLoc.textContent()) ?? "";
+          if (slug === "bento") framesPreview.bentoStepped = beforeFrame !== afterFrame;
+          if (slug === "kakeibo") framesPreview.kakeiboStepped = beforeFrame !== afterFrame;
+        }
+      }
     }
 
-    // Check mobile viewport overflow on /apps/bento and /apps
+    // Check mobile viewport overflow on /apps/bento, /apps/niwa, /apps/shiki and /apps
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${baseUrl}/apps`, { waitUntil: "networkidle" });
     const mobileAppsOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     );
-    await page.goto(`${baseUrl}/apps/bento`, { waitUntil: "networkidle" });
+    await page.goto(`${baseUrl}/apps/shiki`, { waitUntil: "networkidle" });
     const mobileDetailOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     );
 
-    // 4. Dynamically drop a 5th JSON manifest in content/apps/ while server is running
-    let dropInDetail = { status: 0, h1: "", motif: "", currentStep: "", catalogSlugs: [] };
+    // 4. Dynamically drop a 5th JSON manifest in content/apps/ with a declarative frames preview
+    let dropInDetail = {
+      status: 0,
+      h1: "",
+      motif: "",
+      currentStep: "",
+      previewKind: "",
+      previewStepped: false,
+      catalogSlugs: [],
+    };
     try {
       const probeManifest = {
         $schema: "./_schema.json",
@@ -481,6 +735,23 @@ async function collectBrowserObservation() {
         illustration: {
           kind: "ink",
           alt: "Blueprint fallback artwork for workshop probe",
+        },
+        preview: {
+          kind: "frames",
+          title: "workshop-probe terminal stepper",
+          command: "npx workshop-probe --verify",
+          alt: "Declarative CLI frame stepper for dropped-in workshop probe manifest",
+          intervalMs: 1800,
+          frames: [
+            {
+              label: "Probe init",
+              lines: ["$ npx workshop-probe --verify", "  loading manifest schema... ok"],
+            },
+            {
+              label: "Probe done",
+              lines: ["  verified 5/5 workshop invariants", "  status: green"],
+            },
+          ],
         },
         description: [
           "First paragraph verifying zero-code drop-in rendering on /apps/[slug].",
@@ -531,10 +802,28 @@ async function collectBrowserObservation() {
           document
             .querySelector('.app-lifecycle-step[aria-current="step"] span:nth-child(2)')
             ?.textContent?.trim() ?? "",
+        previewKind:
+          document
+            .querySelector("[data-terminal-preview]")
+            ?.getAttribute("data-terminal-preview") ?? "",
       }));
+
+      let previewStepped = false;
+      const probePreview = page.locator("[data-terminal-preview]");
+      if ((await probePreview.count()) > 0) {
+        const pauseBtn = probePreview.locator("button", { hasText: /^Pause$/i });
+        if ((await pauseBtn.count()) > 0) await pauseBtn.first().click();
+        const beforeTxt = (await probePreview.textContent()) ?? "";
+        const nextBtn = probePreview.locator("button", { hasText: /Next/i });
+        if ((await nextBtn.count()) > 0) await nextBtn.first().click();
+        const afterTxt = (await probePreview.textContent()) ?? "";
+        previewStepped = beforeTxt !== afterTxt;
+      }
+
       dropInDetail = {
         status: probeRes?.status() ?? 0,
         catalogSlugs,
+        previewStepped,
         ...probeDom,
       };
     } finally {
@@ -543,7 +832,80 @@ async function collectBrowserObservation() {
       }
     }
 
-    // 5. Verify unknown slug returns HTTP 404
+    // 5. Reduced-motion context verification (prefers-reduced-motion: reduce)
+    const rmContext = await browser.newContext({
+      viewport: { width: 1280, height: 860 },
+      reducedMotion: "reduce",
+    });
+    const rmPage = await rmContext.newPage();
+    let allPausedOnLoad = true;
+    let autoAdvancedDuringWait = false;
+    let manualKeyboardOperable = false;
+
+    for (const slug of ["niwa", "shiki", "bento", "kakeibo"]) {
+      await rmPage.goto(`${baseUrl}/apps/${slug}`, { waitUntil: "networkidle" });
+      const loc = rmPage.locator("[data-terminal-preview]");
+      if ((await loc.count()) === 0) {
+        allPausedOnLoad = false;
+        autoAdvancedDuringWait = true;
+        continue;
+      }
+      const rmAttr = await loc.getAttribute("data-reduced-motion");
+      const playingAttr = await loc.getAttribute("data-playing");
+      if (rmAttr !== "true" || playingAttr !== "false") {
+        allPausedOnLoad = false;
+      }
+
+      if (slug === "niwa" || slug === "shiki") {
+        const snapBefore = (await loc.textContent()) ?? "";
+        await rmPage.waitForTimeout(1600);
+        const snapAfter = (await loc.textContent()) ?? "";
+        if (snapBefore !== snapAfter) {
+          autoAdvancedDuringWait = true;
+        }
+      }
+
+      if (slug === "niwa") {
+        const beforeKey = (await loc.textContent()) ?? "";
+        const stage1Btn = loc.locator("button").filter({ hasText: /Stage\s*1|^1$/i }).first();
+        if ((await stage1Btn.count()) > 0) {
+          await stage1Btn.focus();
+          await rmPage.keyboard.press("Enter");
+          const afterStage1 = (await loc.textContent()) ?? "";
+          const playBtn = loc.locator("button", { hasText: /^(Play|Pause)$/i }).first();
+          if ((await playBtn.count()) > 0) {
+            await playBtn.focus();
+            await rmPage.keyboard.press("Enter");
+          }
+          manualKeyboardOperable = beforeKey !== afterStage1;
+        }
+      }
+    }
+    await rmContext.close();
+
+    // 6. No-JS context verification (javaScriptEnabled: false)
+    const noJsContext = await browser.newContext({
+      viewport: { width: 1280, height: 860 },
+      javaScriptEnabled: false,
+    });
+    const noJsPage = await noJsContext.newPage();
+    let allStaticFramesRendered = true;
+    for (const slug of ["niwa", "shiki", "bento", "kakeibo"]) {
+      await noJsPage.goto(`${baseUrl}/apps/${slug}`, { waitUntil: "domcontentloaded" });
+      const loc = noJsPage.locator("[data-terminal-preview]");
+      if ((await loc.count()) === 0) {
+        allStaticFramesRendered = false;
+        break;
+      }
+      const playingAttr = await loc.getAttribute("data-playing");
+      const txt = ((await loc.textContent()) ?? "").trim();
+      if (playingAttr !== "false" || txt.length < 20) {
+        allStaticFramesRendered = false;
+      }
+    }
+    await noJsContext.close();
+
+    // 7. Verify unknown slug returns HTTP 404
     const res404 = await fetch(`${baseUrl}/apps/unknown-nonexistent-slug-404`, {
       redirect: "manual",
     });
@@ -566,7 +928,18 @@ async function collectBrowserObservation() {
       resetCountText,
       resetSlugs,
       details,
+      niwaPreview,
+      shikiPreview,
+      framesPreview,
       dropInDetail,
+      reducedMotion: {
+        allPausedOnLoad,
+        autoAdvancedDuringWait,
+        manualKeyboardOperable,
+      },
+      noJs: {
+        allStaticFramesRendered,
+      },
       unknownSlugStatus,
       desktopOverflow,
       mobileOverflow: mobileAppsOverflow || mobileDetailOverflow,
@@ -577,7 +950,7 @@ async function collectBrowserObservation() {
     if (browser) {
       await browser.close().catch(() => {});
     }
-    server.kill("SIGTERM");
+    killServerProcessGroup(server);
     fs.rmSync(shortTmp, { recursive: true, force: true });
   }
 }
@@ -585,8 +958,9 @@ async function collectBrowserObservation() {
 const isNegativeControl = process.argv.includes("--negative-control");
 
 if (isNegativeControl) {
-  // Construct a mutated browser observation (missing 4th card, wrong status on unknown slug,
-  // and uncarved hanko stamp) and feed into the exact same verifyBrowserObservation() oracle.
+  // Construct a mutated browser observation (missing preview region, reduced-motion timer leak,
+  // low WCAG contrast on Shiki, and finite mount animations) and feed into the exact same
+  // verifyBrowserObservation() oracle.
   const brokenObservation = {
     buildExitCode: 0,
     buildIdExists: true,
@@ -600,29 +974,127 @@ if (isNegativeControl) {
         title: "Bento",
         hankoStatus: "building",
         hankoLabel: "In development",
-        hasSvgMask: false,
-        hankoGlyph: "作",
+        hasSvgMask: true,
+        hankoGlyph: "開",
         illustrationKind: "ink",
         illustrationMotif: "bento-box",
         polygonCount: 8,
         badges: ["macOS", "CLI"],
-        installCmd: "$ brew install --cask otohime73/tap/agent-bento",
+        installCmd: "$ brew install --cask agent-bento",
+      },
+      {
+        slug: "niwa",
+        title: "Niwa",
+        hankoStatus: "building",
+        hankoLabel: "In development",
+        hasSvgMask: true,
+        hankoGlyph: "開",
+        illustrationKind: "ink",
+        illustrationMotif: "bonsai-garden",
+        polygonCount: 8,
+        badges: ["macOS", "CLI", "TUI"],
+        installCmd: "$ niwa",
+      },
+      {
+        slug: "kakeibo",
+        title: "Kakeibo",
+        hankoStatus: "building",
+        hankoLabel: "In development",
+        hasSvgMask: true,
+        hankoGlyph: "開",
+        illustrationKind: "ink",
+        illustrationMotif: "ledger-book",
+        polygonCount: 8,
+        badges: ["CLI"],
+        installCmd: "$ kakeibo summary --today",
+      },
+      {
+        slug: "shiki",
+        title: "Shiki",
+        hankoStatus: "building",
+        hankoLabel: "In development",
+        hasSvgMask: true,
+        hankoGlyph: "開",
+        illustrationKind: "ink",
+        illustrationMotif: "sun-dial",
+        polygonCount: 8,
+        badges: ["CLI"],
+        installCmd: "$ shiki-term status",
       },
     ],
-    initialCountText: "Showing 1 of 1 app",
-    tuiFilterPressed: "false",
-    tuiFilterCountText: "Showing 0 of 1 app",
-    tuiFilteredSlugs: [],
-    releasedFilterCountText: "Showing 0 of 1 app",
-    emptyNoticeVisible: false,
-    resetCountText: "Showing 1 of 1 app",
-    resetSlugs: ["bento"],
-    details: [],
-    dropInDetail: { status: 404, h1: "", motif: "", currentStep: "" },
-    unknownSlugStatus: 200,
+    initialCountText: "Showing 4 of 4 apps",
+    tuiFilterPressed: "true",
+    tuiFilterCountText: "Showing 1 of 4 apps",
+    tuiFilteredSlugs: ["niwa"],
+    releasedFilterCountText: "Showing 0 of 4 apps",
+    emptyNoticeVisible: true,
+    resetCountText: "Showing 4 of 4 apps",
+    resetSlugs: ["bento", "niwa", "kakeibo", "shiki"],
+    details: ["bento", "niwa", "kakeibo", "shiki"].map((slug) => ({
+      slug,
+      status: 200,
+      h1: slug,
+      hankoStatus: "building",
+      hasSvgMask: true,
+      copyStateAfterClick: "copied",
+      copyLiveStatus: "Copied command to clipboard.",
+      descriptionParagraphs: 2,
+      featureCount: 4,
+      lifecycleSteps: ["Idea", "Planned", "In development", "Beta", "Released"],
+      currentLifecycleStep: "In development",
+      milestoneCount: 4,
+      milestoneGlyphs: ["✓", "✓", "●", "○"],
+      changelogDates: ["2026-10-24"],
+      hasRepoLink: slug === "bento",
+      hasHomebrewCask: slug === "bento",
+      primaryCtaText: slug === "bento" ? "Watch on GitHub" : "Notify me by email",
+      primaryCtaHref:
+        slug === "bento"
+          ? "https://github.com/quiinthieu/bento"
+          : `mailto:hello@otohime.dev?subject=Notify%20me`,
+      secondaryCtaHref: slug === "bento" ? "" : "https://x.com/otohime73",
+      previewKind: "",
+      previewRole: "",
+      previewAriaLabel: "",
+      previewHasPlayPauseButton: false,
+      finiteMountAnimations: 2,
+    })),
+    niwaPreview: {
+      hasMenuBarHeader: false,
+      stageButtonCount: 0,
+      stageChangedOnSelect: false,
+    },
+    shikiPreview: {
+      hasCanvas: false,
+      phasesFound: ["Dawn"],
+      seasonsFound: ["Spring"],
+      minObservedContrast: 4.1,
+    },
+    framesPreview: {
+      bentoStepped: false,
+      kakeiboStepped: false,
+    },
+    dropInDetail: {
+      status: 200,
+      h1: "Workshop Probe",
+      motif: "blueprint",
+      currentStep: "Idea",
+      previewKind: "",
+      previewStepped: false,
+      catalogSlugs: ["bento", "niwa", "kakeibo", "shiki", PROBE_SLUG],
+    },
+    reducedMotion: {
+      allPausedOnLoad: false,
+      autoAdvancedDuringWait: true,
+      manualKeyboardOperable: false,
+    },
+    noJs: {
+      allStaticFramesRendered: false,
+    },
+    unknownSlugStatus: 404,
     desktopOverflow: false,
     mobileOverflow: false,
-    pageErrors: ["Simulated console error"],
+    pageErrors: [],
   };
   verifyBrowserObservation(brokenObservation);
   console.error("ERROR: verifyBrowserObservation failed to reject negative control observation");
@@ -633,13 +1105,23 @@ if (isNegativeControl) {
   console.log(
     JSON.stringify({
       ok: true,
-      case: "t1882-build-and-browser-user-journey",
+      case: "t1883-build-and-browser-preview-journey",
       appsIndexStatus: observation.appsIndexStatus,
       cards: observation.cards.map((c) => c.slug),
-      details: observation.details.map((d) => ({ slug: d.slug, status: d.status })),
+      details: observation.details.map((d) => ({
+        slug: d.slug,
+        status: d.status,
+        previewKind: d.previewKind,
+      })),
+      niwaPreview: observation.niwaPreview,
+      shikiPreview: observation.shikiPreview,
+      framesPreview: observation.framesPreview,
+      reducedMotion: observation.reducedMotion,
+      noJs: observation.noJs,
       dropInDetail: observation.dropInDetail,
       unknownSlugStatus: observation.unknownSlugStatus,
       pageErrorCount: observation.pageErrors.length,
     }),
   );
+  process.exit(0);
 }
