@@ -198,7 +198,7 @@ export function Figure({
 // the page's h1 share one name, title-<page>, so a console navigation morphs the one into the other. Each name
 // sits on one heading only, and pages with different names never pair, so the sidebar's moves keep their fade.
 // default="none": the pair moves only when it forms; share without it would stop the morph.
-export type ConsolePage = ConsoleItem["href"];
+export type ConsolePage = ConsoleItem["href"] | "/play" | "/music" | "/sketches" | "/desk";
 export const CONSOLE_TRANSITION = "console";
 export const titleName = (page: ConsolePage) => `title-${page.slice(1)}`;
 

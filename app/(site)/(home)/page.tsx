@@ -1,64 +1,155 @@
-import { GhostLoader } from "@/ghosts/loader";
-import { RisoText } from "@/components/riso-heading";
-import { AskConsoleLoader } from "@/components/ask-console-loader";
-import { Handheld } from "@/components/handheld";
-import { InkHeroLoader } from "@/components/ink-hero-loader";
-import { Switchboard } from "@/components/switchboard";
 import { site } from "@/content/site";
-import { ViewTransition } from "react";
+import { away } from "@/lib/end";
+import Link from "next/link";
+import { type CSSProperties, ViewTransition } from "react";
 
-// The front page: a pocket console boots up and its menu is the way in. The name is signed under the h1 in
-// ink specks that a pointer blows apart (components/ink-hero-loader.tsx, loaded when idle).
-// Under the console, a chip asks the console about the site (components/ask-console-loader.tsx).
-// The sidebar waits on the pages behind it; the rest is below the fold.
+const FEATURED_PROJECTS = site.projectList.slice(0, 6);
+const RECENT_NOTES = site.notes.slice(0, 3);
+
 export default function HomePage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
-      <div className="rise">
-        <GhostLoader room="/" />
-        <section className="grid min-h-[calc(100dvh-8rem)] items-center gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
-          <div>
-            <p className="caption">Fig. 01 — Home</p>
-            <h1 className="mt-3 text-[clamp(2.5rem,8vw,4.5rem)] leading-none"><RisoText>Otohime</RisoText></h1>
-            {/* the name signed in ink specks under it; decoration only, the h1 stays the text */}
-            <InkHeroLoader />
-            <p className="mt-4 text-[15px] font-semibold">{site.tagline}</p>
-            <p className="mt-6 max-w-sm text-muted">
-              Pick a page on the console: ▲ ▼ or the arrow keys, then A or Enter.
-            </p>
+      <div className="rise space-y-16">
+        <section className="space-y-6 pt-2">
+          <div className="space-y-2">
+            <p className="caption">Engineering Portfolio</p>
+            <h1 className="text-[clamp(2.25rem,5vw,3.25rem)] font-semibold tracking-tight leading-[1.1]">
+              Otohime
+            </h1>
+            <p className="text-[15px] font-medium text-ink">{site.tagline}</p>
           </div>
-          <div>
-            <Handheld />
-            {/* ask the console about the site; the dialog and its index load on the first press */}
-            <AskConsoleLoader />
-          </div>
-        </section>
-        <section aria-labelledby="about" className="mt-8 grid items-start gap-x-12 gap-y-8 border-t border-line pt-8 lg:grid-cols-2">
-          <div>
-            <h2 id="about" className="caption"><RisoText>About</RisoText></h2>
+          <div className="max-w-2xl space-y-3 text-muted">
             {site.bio.map((line) => (
-              <p key={line} className="mt-3 max-w-prose text-muted">
-                {line}
-              </p>
+              <p key={line}>{line}</p>
             ))}
           </div>
-          <div>
-            <h2 className="caption"><RisoText>Now</RisoText></h2>
-            <dl className="mt-2">
-              {site.now.map(({ what, note }) => (
-                <div key={what} className="grid grid-cols-[6rem_1fr] gap-x-4 border-t border-line py-2.5">
-                  <dt className="text-muted">{what}</dt>
-                  <dd>{note}</dd>
-                </div>
-              ))}
-            </dl>
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <Link href="/work" className="btn btn-primary">
+              Work & Stack
+            </Link>
+            <Link href="/projects" className="btn">
+              Browse Curiosities ({site.projectList.length})
+            </Link>
+            <Link href="/notes" className="btn">
+              Read Notes
+            </Link>
           </div>
         </section>
-        <section aria-labelledby="elsewhere" className="mt-12">
-          <h2 id="elsewhere" className="caption"><RisoText>Elsewhere</RisoText></h2>
-          <div className="mt-4">
-            <Switchboard lines={site.lines} />
+
+        <section aria-labelledby="now-heading" className="space-y-4">
+          <div className="section-head">
+            <h2 id="now-heading" className="caption">
+              Now
+            </h2>
+            <span className="caption">Current focus</span>
           </div>
+          <dl>
+            {site.now.map(({ what, note }) => (
+              <div key={what} className="spec-row">
+                <dt className="text-muted">{what}</dt>
+                <dd>{note}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section aria-labelledby="curiosities-heading" className="space-y-5">
+          <div className="section-head">
+            <h2 id="curiosities-heading" className="caption">
+              Selected Curiosities
+            </h2>
+            <Link href="/projects" className="link text-[12px] text-muted hover:text-ink">
+              All {site.projectList.length} projects →
+            </Link>
+          </div>
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {FEATURED_PROJECTS.map((project, i) => (
+              <li
+                key={project.title}
+                className="rise project-card"
+                style={{ "--i": i } as CSSProperties}
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h3 className="font-semibold">
+                      {project.href ? (
+                        <a href={project.href} className="row-link hover:underline underline-offset-4">
+                          {project.title}
+                        </a>
+                      ) : (
+                        project.title
+                      )}
+                    </h3>
+                    <span className="badge">{project.status}</span>
+                  </div>
+                  <p className="text-muted">{project.note}</p>
+                </div>
+                {project.href && (
+                  <p className="caption flex items-center gap-1 pt-1">
+                    <span>{project.href}</span>
+                    <span aria-hidden="true">↗</span>
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="notes-heading" className="space-y-4">
+          <div className="section-head">
+            <h2 id="notes-heading" className="caption">
+              Recent Notes
+            </h2>
+            <Link href="/notes" className="link text-[12px] text-muted hover:text-ink">
+              All notes →
+            </Link>
+          </div>
+          <ol className="divide-y divide-line">
+            {RECENT_NOTES.map(({ slug, date, title, body }) => (
+              <li key={slug} className="py-4 first:pt-1">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                  <h3 className="font-semibold">
+                    <Link
+                      href={`/notes/${slug}`}
+                      className="underline decoration-line underline-offset-4 hover:decoration-ink"
+                    >
+                      {title}
+                    </Link>
+                  </h3>
+                  <time dateTime={date} className="caption shrink-0">
+                    {date}
+                  </time>
+                </div>
+                <p className="mt-1 max-w-2xl text-muted">{body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section aria-labelledby="elsewhere-heading" className="space-y-4">
+          <div className="section-head">
+            <h2 id="elsewhere-heading" className="caption">
+              Elsewhere
+            </h2>
+            <span className="caption">Direct channels</span>
+          </div>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {site.lines.map((line) => (
+              <li key={line.label} className="project-card">
+                <div className="flex items-baseline justify-between gap-3">
+                  <a
+                    href={line.href}
+                    className="row-link font-semibold hover:underline underline-offset-4"
+                    {...away(line.href)}
+                  >
+                    {line.label}
+                  </a>
+                  <span className="badge">{line.code}</span>
+                </div>
+                <p className="text-muted">{line.handle}</p>
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
     </ViewTransition>

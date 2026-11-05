@@ -7,17 +7,15 @@ import { usePathname, useRouter } from "next/navigation";
 export type NavItem = { href: string; label: string };
 
 // Static list, also the Suspense fallback while usePathname resolves.
-// Pills on small screens, a "Fig. 01" captioned list from lg up (globals.css).
 export function NavList({ items, pathname }: { items: NavItem[]; pathname?: string }) {
   return (
-    <ul>
-      {items.map(({ href, label }, i) => {
+    <ul className="nav-list">
+      {items.map(({ href, label }) => {
         const current =
           pathname === href || (href !== "/" && pathname?.startsWith(`${href}/`));
         return (
           <li key={href}>
             <Link href={href} className="nav-item" aria-current={current ? "page" : undefined}>
-              <small aria-hidden="true">Fig. {String(i + 1).padStart(2, "0")}</small>
               {label}
             </Link>
           </li>
@@ -29,6 +27,23 @@ export function NavList({ items, pathname }: { items: NavItem[]; pathname?: stri
 
 export function NavLinks({ items }: { items: NavItem[] }) {
   return <NavList items={items} pathname={usePathname()} />;
+}
+
+export function CommandPaletteButton() {
+  return (
+    <button
+      type="button"
+      className="btn btn-sm"
+      aria-label="Open command palette"
+      title="Command palette (⌘K or /)"
+      onClick={() => {
+        window.dispatchEvent(new CustomEvent("otohime:open-terminal"));
+      }}
+    >
+      <span className="hidden sm:inline">Jump</span>
+      <kbd className="text-[11px] text-muted">⌘K</kbd>
+    </button>
+  );
 }
 
 export function SignOutButton() {

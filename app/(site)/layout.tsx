@@ -1,12 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Suspense } from "react";
 import { PocketTerminalLoader } from "@/components/pocket-terminal-loader";
-import { TactileLoader } from "@/components/tactile/loader";
-import { PressSound } from "@/components/press-sound";
-import { SeasonLayer } from "@/components/season-layer";
-import { UrashimaKeys } from "@/components/urashima-keys";
-import { KameLoader } from "@/components/kame/loader";
-import { ShimiLoader } from "@/shimi/loader";
 import { site } from "@/content/site";
 import { bootScript } from "@/lib/boot";
 import { pondPrintScript } from "@/lib/pond-print";
@@ -15,10 +8,7 @@ import "./globals.css";
 import "./seasons.css";
 import "./letterpress.css";
 import { AppearanceBoot } from "@/components/appearance-boot";
-import { PlotterToggle } from "@/components/plotter-toggle";
 import { AppearanceRuntime } from "@/components/appearance-runtime";
-import { StickerHunt } from "@/components/sticker-hunt";
-import { KintsugiMotion } from "@/components/kintsugi-card";
 
 export const metadata: Metadata = {
   // The postmarked card every page shares (app/og/route.tsx); a segment's own opengraph-image file wins.
@@ -65,26 +55,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AppearanceBoot root="site" />
       </head>
       <body className="min-h-full">
-        {/* The season's ambient bits, fixed behind every page and ahead of each group's masthead; mounted here once,
-           so a move between groups does not restart them. */}
-        <SeasonLayer />
-        {/* The letterpress keys' press cue (components/press-sound.tsx): one document listener for every page. */}
-        <PressSound />
-        <KintsugiMotion />
-        {/* "/" or Cmd/Ctrl-K opens the Pocket Terminal (components/pocket-terminal.tsx, its own chunk). Ahead of the
-           pages, so its capture-phase key listener is added before the handheld's and can stop keys while open. */}
+        {/* "/" or Cmd/Ctrl-K opens the Pocket Terminal (components/pocket-terminal.tsx, its own chunk). */}
         <PocketTerminalLoader />
-        {/* Typing "urashima" goes down to Ryugu-jo (components/urashima-keys.tsx). Also ahead of the pages: its capture
-           listener takes the word's a's before the Pocket console can open a page with them. */}
-        <UrashimaKeys />
-        {/* Recognize the word before the handheld consumes its single-letter keys. */}
-        <ShimiLoader />
         {children}
-        <Suspense fallback={null}><StickerHunt /></Suspense>
-        {/* Overlays follow route content and wait for each paper host's React commit. */}
-        <Suspense fallback={null}><KameLoader /></Suspense>
-        <Suspense fallback={null}><TactileLoader /></Suspense>
-        <PlotterToggle fallback /><AppearanceRuntime />
+        <AppearanceRuntime />
       </body>
     </html>
   );

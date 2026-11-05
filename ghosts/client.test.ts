@@ -266,9 +266,8 @@ test("canvas painter draws brush tips, trails and only live ripple arcs", () => 
   assert.deepEqual(calls, ["clearRect"]);
 });
 
-test("both pages mount the neutral idle loader; canvas is decorative, passive and style-isolated", () => {
+test("ryugu mounts the neutral idle loader; canvas is decorative, passive and style-isolated", () => {
   const read = (path: string) => readFileSync(new URL(path, import.meta.url), "utf8");
-  assert.match(read("../app/(site)/(home)/page.tsx"), /<GhostLoader room="\/"/);
   assert.match(read("../app/(ryugu)/ryugu/page.tsx"), /<GhostLoader room="\/ryugu"/);
   assert.doesNotMatch(read("../app/(ryugu)/layout.tsx"), /GhostLoader|ghosts/);
   const loader = read("./loader.tsx");

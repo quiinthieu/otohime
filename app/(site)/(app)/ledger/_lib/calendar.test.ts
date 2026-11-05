@@ -146,7 +146,7 @@ test("the calendar is one SVG: a <symbol> stamp, <use> per day, SMUDGES shared f
   for (const handler of ["onFocus", "onPointerEnter", "onClick", "onKeyDown"]) assert.match(src, new RegExp(`${handler}=`));
 });
 
-test("Work links to the ledger", () => {
+test("Work page renders the engineering stack and pipeline", () => {
   const work = readFileSync(resolve(DIR, "../work/page.tsx"), "utf8");
-  assert.match(work, /<Link href="\/ledger"/);
+  assert.match(work, /<Pipeline \/>/);
 });

@@ -82,7 +82,24 @@ const nextConfig: NextConfig = {
   // Sun became Orrery (pm-199): the old page is the Sun's poster now. The exact
   // path only, so /sun/nope stays the site's 404. 308s are cached for good.
   async redirects() {
-    return [{ source: "/sun", destination: "/orrery/sun", permanent: true }];
+    return [
+      { source: "/sun", destination: "/orrery/sun", permanent: true },
+      { source: "/apps", destination: "/projects", permanent: false },
+      { source: "/lab", destination: "/projects", permanent: false },
+      { source: "/desk", destination: "/projects", permanent: false },
+      { source: "/strata", destination: "/projects", permanent: false },
+      { source: "/fortune", destination: "/projects", permanent: false },
+      { source: "/kintsugi", destination: "/projects", permanent: false },
+      { source: "/shelf", destination: "/projects", permanent: false },
+      { source: "/postcard", destination: "/projects", permanent: false },
+      { source: "/guestbook", destination: "/projects", permanent: false },
+      { source: "/play", destination: "/projects", permanent: false },
+      { source: "/music", destination: "/projects", permanent: false },
+      { source: "/sketches", destination: "/projects", permanent: false },
+      { source: "/making-of", destination: "/work", permanent: false },
+      { source: "/timeline", destination: "/work", permanent: false },
+      { source: "/ledger", destination: "/work", permanent: false },
+    ];
   },
   // Chrome falls back to /favicon.ico when a soft navigation leaves no icon link (the hop out of a 403); the
   // site's only icon is app/icon.svg, so serve that instead of a 404 console error.
