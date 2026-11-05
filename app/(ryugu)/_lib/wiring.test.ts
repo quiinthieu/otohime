@@ -25,7 +25,7 @@ test("the palace's unit tests are all found, and npm test runs every one of them
 
 test("npm test runs the entry points' tests, and npm run test:e2e walks the palace in a browser", () => {
   for (const file of ["lib/urashima.test.ts", "lib/motion.test.ts"]) assert.ok(runs(UNIT, file), file);
-  assert.ok(runs(E2E, "e2e/ryugu.test.ts"), "test:e2e never runs e2e/ryugu.test.ts");
+  assert.ok(runs(E2E, "e2e/pocket-terminal.test.ts"), "test:e2e never runs e2e/pocket-terminal.test.ts");
 });
 
 test("negative control: the matcher is not always true, so the checks above can fail", () => {
