@@ -146,7 +146,7 @@ export default function HomePage() {
                   </a>
                   <span className="badge">{line.code}</span>
                 </div>
-                <p className="text-muted">{line.note}</p>
+                <p className="text-muted">{line.handle}</p>
               </li>
             ))}
           </ul>

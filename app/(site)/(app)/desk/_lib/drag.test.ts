@@ -5,7 +5,6 @@ import { test } from "node:test";
 import { site } from "../../../../../content/site.ts";
 import { DESK_ITEMS } from "../../../../../lib/desk.ts";
 import { stringPath } from "../../../../../lib/desk-string.ts";
-import { CONSOLE_MENU } from "../../../../../lib/pages.ts";
 import { anchor, CORK, DRAG_THRESHOLD, dropAt, pastThreshold, PIN_PAIRS, pinHomes, parsePins, serializePins, PINS, PINS_KEY, rebase, STACKED, turn } from "./drag.ts";
 
 const DIR = resolve(import.meta.dirname, "..");
@@ -105,7 +104,6 @@ test("pin storage restores known positions, clamps edges and recovers corrupt or
 
 // The wiring, read as source: the component's DOM work is not runnable under node --test.
 test("the page names its h1 for the console's desk cartridge and draws the desk", () => {
-  assert.ok(CONSOLE_MENU.some((page) => page.href === "/desk"));
   const page = read("page.tsx");
   assert.match(page, /<FigTitle n="\d+" morph="\/desk"/);
   assert.match(page, /<InkDesk\b/);

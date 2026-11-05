@@ -12,11 +12,13 @@ export const PUBLIC_PAGES = [
 
 export const DESK_PAGE = { href: "/projects", label: "Curiosities" } as const;
 
-export type ConsoleItem = { href: Exclude<PublicPage["href"], "/">; label: string };
+export type ConsoleItem = Exclude<(typeof PUBLIC_PAGES)[number], { href: "/" }>;
 
-export const CONSOLE_MENU = [
-  ...PUBLIC_PAGES.filter((page): page is ConsoleItem => page.href !== "/"),
-] as const satisfies readonly ConsoleItem[];
+export const CONSOLE_MENU: readonly ConsoleItem[] = [
+  { href: "/work", label: "Work" },
+  { href: "/projects", label: "Projects" },
+  { href: "/notes", label: "Notes" },
+];
 
 export const LCD = { y: -158, h: 56 };
 export const MENU_PITCH = 7.5;
