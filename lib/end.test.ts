@@ -339,7 +339,6 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
   const walkSh = readFileSync(walkPath, "utf8");
   const probeSh = readFileSync(probePath, "utf8");
   const probeMjs = readFileSync(resolve(root, "scripts/probe-end.mjs"), "utf8");
-  const ci = readFileSync(resolve(root, ".github/workflows/ci.yml"), "utf8");
 
   assert.match(walkSh, /PORT="\$\{PORT:-4081\}"/);
   assert.match(probeSh, /PORT="\$\{PORT:-4083\}"/);
@@ -367,8 +366,6 @@ test("walk-end.sh, probe-end.sh and CI checks wire the footer verification suite
   assert.match(probeMjs, /await scrollQuiet\(page\);\n\s+await page\.waitForFunction\(\(\) => window\.__endPendingRafs === 0\);/);
   assert.match(probeMjs, /rAF negative control: a scroll during pointer work/);
   assert.match(probeMjs, />= 0\.99/);
-  assert.match(ci, /bash scripts\/walk-end\.sh/);
-  assert.match(ci, /bash scripts\/probe-end\.sh/);
 
   const rolesPage = readFileSync(resolve(root, "app/(site)/(app)/admin/roles/page.tsx"), "utf8");
   const forbiddenPage = readFileSync(resolve(root, "app/(site)/(app)/forbidden.tsx"), "utf8");

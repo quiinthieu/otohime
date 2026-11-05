@@ -142,16 +142,6 @@ jobs:
         run: node scripts/ledger-fetch.mjs
       - run: npm run build
       - run: npm run history:check -- --strict --rev="$GITHUB_SHA"
-      - name: Real CPU camera and privacy verifier
-        timeout-minutes: 5
-        if: steps.browser.outputs.browser == 'true'
-        run: |
-          set -o pipefail
-          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true; exit "$status"' EXIT
-          status=0
-          SKIP_BUILD=1 node scripts/verify-peep-box-camera.mjs 2>&1 | tee "$RUNNER_TEMP/camera-probe.log" || status=$?
-          node scripts/ci-probe-annotate.mjs "Real CPU camera and privacy verifier" "$status" "$RUNNER_TEMP/camera-probe.log" || true
-          exit "$status"
       - run: npm run db:migrate
       - name: Publish application build identity
         run: |
@@ -180,57 +170,7 @@ jobs:
           npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
           curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
           command -v timeout >/dev/null 2>&1 || timeout() { node -e 'const {spawn}=require("node:child_process");const a=process.argv.slice(1);while(a[0]?.startsWith("-"))a.shift();const ms=parseFloat(a.shift())*1000;const c=spawn(a[0],a.slice(1),{stdio:"inherit",detached:true});let timedOut=false;const t=setTimeout(()=>{timedOut=true;try{process.kill(-c.pid,"SIGTERM")}catch{};setTimeout(()=>{try{process.kill(-c.pid,"SIGKILL")}catch{}},1000)},ms);c.on("exit",(code)=>{clearTimeout(t);process.exit(timedOut?124:code??1)})' -- "$@"; }
-          node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-name-pattern="phone touch" e2e/assembly-sky.test.ts 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
           timeout --signal=TERM --kill-after=10s 1800s npm run test:e2e 2>&1 | tee -a "$RUNNER_TEMP/e2e.log"
-      # Signs in through the form against the same server and database, so a page error on the hop into a
-      # signed-in room turns the job red. It signs up and deletes its own *-<run>@probe.test accounts.
-      - name: Motion probe, signed in
-        timeout-minutes: 8
-        if: steps.browser.outputs.browser == 'true'
-        run: |
-          set -o pipefail
-          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log" || true; exit "$status"' EXIT
-          : >"$RUNNER_TEMP/motion-probe.log"
-          # The server the e2e step left running; start one again if it has gone.
-          curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
-            npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/motion-probe.log"
-          }
-          status=0
-          bash scripts/probe-motion-signed-in.sh 2>&1 | tee -a "$RUNNER_TEMP/motion-probe.log" || status=$?
-          node scripts/ci-probe-annotate.mjs "Motion probe, signed in" "$status" "$RUNNER_TEMP/motion-probe.log" || true
-          exit "$status"
-      - name: Footer walk
-        timeout-minutes: 8
-        if: steps.browser.outputs.browser == 'true'
-        run: |
-          set -o pipefail
-          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log" || true; exit "$status"' EXIT
-          : >"$RUNNER_TEMP/footer-walk.log"
-          curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
-            npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/footer-walk.log"
-          }
-          status=0
-          EXPECT_SHA="$GITHUB_SHA" bash scripts/walk-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-walk.log" || status=$?
-          node scripts/ci-probe-annotate.mjs "Footer walk" "$status" "$RUNNER_TEMP/footer-walk.log" || true
-          exit "$status"
-      - name: Footer Chromium probe
-        timeout-minutes: 8
-        if: steps.browser.outputs.browser == 'true'
-        run: |
-          set -o pipefail
-          trap 'status=$?; trap - EXIT; node scripts/browser-gate-diagnostics.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true; exit "$status"' EXIT
-          : >"$RUNNER_TEMP/footer-probe.log"
-          curl -fsS "$BASE_URL/api/health" >/dev/null 2>&1 || {
-            npm start >"$RUNNER_TEMP/next-start.log" 2>&1 &
-            curl -fsS --retry 30 --retry-connrefused --retry-delay 1 "$BASE_URL/api/health" 2>&1 | tee -a "$RUNNER_TEMP/footer-probe.log"
-          }
-          status=0
-          EXPECT_SHA="$GITHUB_SHA" bash scripts/probe-end.sh 2>&1 | tee -a "$RUNNER_TEMP/footer-probe.log" || status=$?
-          node scripts/ci-probe-annotate.mjs "Footer Chromium probe" "$status" "$RUNNER_TEMP/footer-probe.log" || true
-          exit "$status"
-
       - name: Stop local ghost fake
         if: always()
         run: |

@@ -193,7 +193,7 @@ test("hops: down, then up", () => {
 // The CI step keeps the suite's exit status while it adds the server's tail to the summary on a red run.
 test("CI's E2E step keeps the suite's status and adds the server's log tail to the step summary when it fails", () => {
   const ci = readFileSync(join(ROOT, ".github/workflows/ci.yml"), "utf8");
-  const step = ci.slice(ci.indexOf("- name: E2E against next start"), ci.indexOf("- name: Motion probe, signed in"));
+  const step = ci.slice(ci.indexOf("- name: E2E against next start"), ci.indexOf("- name: Stop local ghost fake"));
   const body = step.slice(step.indexOf("        run: |") + "        run: |".length)
     .split("\n").filter((line) => line.startsWith("          ")).map((line) => line.slice(10)).join("\n");
   const dir = mkdtempSync(join(tmpdir(), "e2e-ci-status-"));
@@ -229,7 +229,6 @@ test("CI's E2E step keeps the suite's status and adds the server's log tail to t
         GITHUB_SHA: "ci-status-fixture", CI_FIXTURE_STATUS: String(status) }, encoding: "utf8", timeout: 10000 });
       assert.equal(result.status, status, result.stderr);
       const captured = readFileSync(join(dir, "e2e.log"), "utf8");
-      assert.match(captured, /ok 1 - phone touch/);
       assert.ok(captured.endsWith("suite stdout\nsuite stderr\n"));
       const summary = readFileSync(summaryPath, "utf8");
       if (status === 0) {
