@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
-import { FigTitle } from "@/components/figures";
-import { HankoSignature } from "@/components/hanko-signature";
 import { site } from "@/content/site";
 import { noteBySlug } from "../_lib/notes";
 
@@ -29,18 +27,24 @@ export default async function NotePage({ params }: PageProps<"/notes/[slug]">) {
 
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
-      <article className="rise">
-        <Link href="/notes" className="caption underline underline-offset-4">← All notes</Link>
-        <Link href="/notes/sky" className="caption ml-5 underline underline-offset-4">Star chart ↗</Link>
-        <header className="mt-6">
-          <time dateTime={note.date} className="caption">{note.date}</time>
-          <FigTitle n="04" transitionName={`note-${note.slug}`}>{note.title}</FigTitle>
+      <article className="rise space-y-6">
+        <Link href="/notes" className="caption link">
+          ← All notes
+        </Link>
+        <header className="space-y-2 border-b border-line pb-6">
+          <time dateTime={note.date} className="caption block">
+            {note.date}
+          </time>
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{note.title}</h1>
         </header>
-        <p className="mt-6 max-w-prose text-muted">{note.body}</p>
-        <ul aria-label="Tags" className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-muted">
-          {note.tags.map((tag) => <li key={tag}>#{tag}</li>)}
+        <p className="max-w-2xl text-[14px] leading-relaxed text-ink">{note.body}</p>
+        <ul aria-label="Tags" className="flex flex-wrap gap-3 pt-2 text-muted">
+          {note.tags.map((tag) => (
+            <li key={tag} className="caption">
+              #{tag}
+            </li>
+          ))}
         </ul>
-        <div className="mt-6"><HankoSignature /></div>
       </article>
     </ViewTransition>
   );

@@ -1,102 +1,103 @@
-import MouldVeinsLoader from "@/components/mould-veins-loader";
-import { TheatreLoader } from "@/components/kamishibai/loader";
-import { DeparturesBoard } from "@/components/departures-board";
-import { buildProjectDepartures } from "@/lib/departures";
-import { ProjectStories } from "@/components/kamishibai/stories";
-import { RisoText } from "@/components/riso-heading";
-import { Cartridge } from "@/components/cartridge";
-import { DarumaBoard } from "@/components/daruma-board";
-import { FigTitle, Notice } from "@/components/figures";
 import { site } from "@/content/site";
 import { projectTargetId } from "@/lib/fortune-targets";
-import { peekMark, peekTags } from "@/lib/peek-marks";
-import { peekSlug } from "@/lib/peeks";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { type CSSProperties, ViewTransition } from "react";
-import "./daruma.css";
 
 export const metadata: Metadata = { title: "Projects" };
 
 export default function ProjectsPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
-      <div className="rise">
-        <FigTitle n="06" morph="/projects" hint="own time">
-          Projects
-        </FigTitle>
-        <p className="mt-2 text-muted">{site.projects}</p>
-        <p className="mt-3">
-          <Link href="/shelf" data-testid="projects-shelf-link" className="caption underline underline-offset-4">
-            Browse the 3D Ink Shelf →
-          </Link>
-        </p>
-        <DeparturesBoard kind="projects" rows={buildProjectDepartures()} />
-        {site.projectList.length === 0 ? (
-          <div className="mt-8">
-            <Notice n="—" title="Nothing on the bench yet" figure="parcel" heading="h2">
-              <p className="text-muted">Check back later.</p>
-            </Notice>
+      <div className="rise space-y-12">
+        <header className="space-y-3">
+          <p className="caption">Curiosities &amp; Standalone Experiments</p>
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Projects</h1>
+          <p className="max-w-2xl text-muted">{site.projects}</p>
+        </header>
+
+        <section aria-labelledby="curiosities-grid-heading" className="space-y-5">
+          <div className="section-head">
+            <h2 id="curiosities-grid-heading" className="caption">
+              Directory ({site.projectList.length})
+            </h2>
+            <span className="caption">Interactive web experiments</span>
           </div>
-        ) : (
-          <DarumaBoard projects={site.projectList}>
-            <ul className="cartridges mt-8 grid grid-cols-2 gap-x-3 gap-y-5 sm:gap-x-6 sm:gap-y-7 lg:grid-cols-3">
-              {site.projectList.map((project, i) => (
-                <li id={project.href ? undefined : projectTargetId(project.title)} key={project.title} className="rise cartridge-slot" style={{ "--i": i } as CSSProperties}>
-                  <Cartridge project={project}>
-                    <span className="block">
-                      <span className="font-semibold">
-                        {project.href ? (
-                          // The title travels to the project's h1 on the hop: globals.css names it from --vt.
-                          <a
-                            href={project.href}
-                            className="project-title"
-                            style={{ "--vt": `project-${project.href.slice(1)}` } as CSSProperties}
-                            {...peekMark(`project:${peekSlug(project.title)}`)}
-                          >
-                            {project.title}
-                          </a>
-                        ) : (
-                          project.title
-                        )}
-                      </span>{" "}
-                      <span className="badge">{project.status}</span>
+
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {site.projectList.map((project, i) => (
+              <li
+                id={project.href ? undefined : projectTargetId(project.title)}
+                key={project.title}
+                className="rise project-card"
+                style={{ "--i": i } as CSSProperties}
+              >
+                <div className="space-y-2">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="font-semibold">
+                      <span className="mr-2 text-[11px] font-normal text-muted">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {project.href ? (
+                        // The title travels to the project's h1 on the hop: globals.css names it from --vt.
+                        <a
+                          href={project.href}
+                          className="project-title row-link hover:underline underline-offset-4"
+                          style={{ "--vt": `project-${project.href.slice(1)}` } as CSSProperties}
+                        >
+                          {project.title}
+                        </a>
+                      ) : (
+                        project.title
+                      )}
                     </span>
-                    <span className="cartridge-note">{project.note}</span>
-                  </Cartridge>
-                </li>
-              ))}
-            </ul>
-          </DarumaBoard>
-        )}
-        <p className="mt-10 flex flex-wrap gap-x-4 gap-y-1">
-          <Link href="/play/mould" className="link">Ink Slime Mould</Link>
-          <Link href="/strata" className="link">Paper Strata</Link>
-        </p>
-        <MouldVeinsLoader variant="projects" />
-        <TheatreLoader><ProjectStories /></TheatreLoader>
-        <GazetteDesks />
+                    <span className="badge">{project.status}</span>
+                  </div>
+                  <p className="text-muted">{project.note}</p>
+                </div>
+                {project.href && (
+                  <p className="caption flex items-center justify-between pt-1">
+                    <span>{project.href}</span>
+                    <span aria-hidden="true">Open ↗</span>
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="editions-heading" className="space-y-4">
+          <div className="section-head">
+            <h2 id="editions-heading" className="caption">
+              Print &amp; Special Editions
+            </h2>
+            <span className="caption">Standalone layouts</span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="project-card">
+              <div className="flex items-baseline justify-between gap-3">
+                <a href="/zine" className="row-link font-semibold hover:underline underline-offset-4">
+                  Print Zine Edition
+                </a>
+                <span className="badge">print</span>
+              </div>
+              <p className="text-muted">
+                A single-sheet broadside version of the site formatted for folding and printing on paper.
+              </p>
+            </div>
+            <div className="project-card">
+              <div className="flex items-baseline justify-between gap-3">
+                <a href="/ryugu" className="row-link font-semibold hover:underline underline-offset-4">
+                  Ryūgū-jō
+                </a>
+                <span className="badge">edition</span>
+              </div>
+              <p className="text-muted">
+                An alternate deep-sea colophon and archive beneath the main site.
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
     </ViewTransition>
-  );
-}
-
-// The Gazette's desks as tags: each goes to the paper's front page and peeks at three pieces near it.
-function GazetteDesks() {
-  const tags = peekTags();
-  if (tags.length === 0) return null;
-  return (
-    <section aria-labelledby="desks" className="mt-10">
-      <h2 id="desks" className="caption"><RisoText>Gazette desks</RisoText></h2>
-      <ul className="peek-tags mt-2">
-        {tags.map(({ key, label }) => (
-          <li key={key}>
-            <Link href="/articles" className="badge" {...peekMark(key)}>
-              {label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
