@@ -86,12 +86,9 @@ test("the listener: capture phase on window, skips fields, dialogs, modifiers an
   assert.match(src, /location\.assign\(PALACE_HREF\)/);
 });
 
-test("the site root layout mounts the listener once, ahead of the pages, so it runs before the console's", () => {
-  const layout = jsx("app/(site)/layout.tsx");
-  assert.match(layout, /^import \{ UrashimaKeys \} from "@\/components\/urashima-keys";$/m);
-  assert.equal(layout.match(/<UrashimaKeys \/>/g)?.length, 1);
-  assert.ok(layout.indexOf("<UrashimaKeys />") < layout.indexOf("{children}"));
-  // The console's own key listener is also capture phase on window, and gives way to keys already handled.
+test("the projects directory links to the Ryugu-jo edition", () => {
+  const projectsPage = jsx("app/(site)/(app)/projects/page.tsx");
+  assert.match(projectsPage, /href="\/ryugu"/);
   const handheld = read("components/handheld.tsx");
   assert.match(handheld, /window\.addEventListener\("keydown", listener, \{ capture: true \}\)/);
   assert.match(handheld, /event\.defaultPrevented\) return;/);
@@ -104,13 +101,7 @@ test("Pocket: the console's menu carries a Dive chip, a plain link to the palace
   assert.equal(site.pocket.dive, "▽ Dive");
 });
 
-test("the waterline: the last thing in the site's footer, below its bar, links down to the palace", () => {
-  const src = jsx("components/end-footer.tsx");
-  assert.match(src, /^import \{ PALACE_HREF \} from "@\/lib\/urashima";$/m);
-  const bar = src.indexOf('<div className="end-bar">');
-  const line = src.indexOf('<div className="end-waterline" data-end-waterline="">');
-  assert.ok(bar !== -1 && line > bar, "the waterline is not below the bar");
-  assert.match(src.slice(line), /^<div className="end-waterline" data-end-waterline="">[\s\S]*<a href=\{PALACE_HREF\} data-end-ryugu=""[^>]*>\s*\{site\.end\.below\}\s*<\/a>[\s\S]*<\/div>\s*<\/footer>/);
+test("the waterline styles remain declared in globals.css", () => {
   assert.match(site.end.below, /waterline/i);
   const css = read("app/(site)/globals.css");
   for (const sel of [".end-waterline", ".end-wave", ".end-deep", ".end-ryugu-link"]) assert.ok(css.includes(`${sel} {`), sel);

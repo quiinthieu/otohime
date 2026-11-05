@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { test } from "node:test";
-import { CONSOLE_MENU, PUBLIC_PAGES } from "./pages.ts";
+import { PUBLIC_PAGES } from "./pages.ts";
 import { createAppearanceStore, normalizeLab } from "./ink-lab.ts";
 import { PRINT_RUN_IDS, PRINT_RUNS } from "./print-runs.ts";
 import {

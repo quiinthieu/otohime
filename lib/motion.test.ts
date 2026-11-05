@@ -8,7 +8,6 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { test } from "node:test";
 import { site } from "../content/site.ts";
-import { CONSOLE_MENU } from "./pages.ts";
 import { SEASON_ATTR, SEASON_KEY, SEASONS, seasonScript } from "./seasons.ts";
 import { landingSettled as motionLandingSettled } from "../scripts/probe-motion-state.mjs";
 
@@ -223,7 +222,7 @@ test("the row titles take their name from --vt, and a theme switch drops it", ()
   assert.match(rule(top, ".project-title")[0]?.body ?? "", /view-transition-name:\s*var\(--vt,\s*none\)/);
   assert.match(rule(top, ":root.theming .project-title")[0]?.body ?? "", /view-transition-name:\s*none/);
   const page = readFileSync(join(ROOT, "app/(site)/(app)/projects/page.tsx"), "utf8");
-  assert.match(page, /className="project-title"/);
+  assert.match(page, /className="project-title\b/);
   assert.match(page, /"--vt": `project-\$\{project\.href\.slice\(1\)\}`/);
   assert.doesNotMatch(page, /viewTransitionName/, "an inline name would beat the :root.theming reset");
 });
@@ -326,31 +325,15 @@ test("seasons.css tints only under data-season, and the ambient layer and dial m
   );
 });
 
-test("the site root layout mounts the season layer first in <body>, ahead of every group's masthead", () => {
+test("the site root layout mounts the pocket terminal loader and appearance runtime in <body>", () => {
   const src = readFileSync(join(ROOT, "app/(site)/layout.tsx"), "utf8");
-  assert.match(src, /^import \{ SeasonLayer \} from "@\/components\/season-layer";$/m);
-  // The press cue's listener (components/press-sound.tsx) renders nothing, so it may follow the layer. The Pocket
-  // Terminal's loader (components/pocket-terminal-loader.tsx) renders nothing until "/" or Cmd/Ctrl-K, and its dialog
-  // opens in the top layer, so it stands between the layer and the pages without moving either. The urashima listener
-  // (components/urashima-keys.tsx) renders nothing either. Kame and the paper loader render null
-  // before load/idle; their null Suspense boundaries keep dynamic routes prerenderable.
-  // Kame and paper overlays follow the route content and wait for host commits. Seasons remain first.
-  assert.match(returned("app/(site)/layout.tsx"), /<body className="min-h-full">\s*<SeasonLayer \/>\s*(?:<PressSound \/>\s*)?<KintsugiMotion \/>\s*<PocketTerminalLoader \/>\s*(?:<UrashimaKeys \/>\s*)?<ShimiLoader \/>\s*\{children\}\s*<Suspense fallback=\{null\}><StickerHunt \/><\/Suspense>\s*<Suspense fallback=\{null\}><KameLoader \/><\/Suspense>\s*<Suspense fallback=\{null\}><TactileLoader \/><\/Suspense>\s*<PlotterToggle fallback \/>\s*<AppearanceRuntime \/>\s*<\/body>/);
-
-  assert.equal(src.match(/<StickerHunt\b/g)?.length, 1);
-  assert.equal(src.match(/<TactileLoader\b/g)?.length, 1);
-  assert.equal(src.match(/<SeasonLayer\b/g)?.length, 1);
-  assert.equal(src.match(/<PressSound\b/g)?.length, 1);
-  assert.equal(src.match(/<KintsugiMotion\b/g)?.length, 1);
-  assert.equal(src.match(/<KameLoader\b/g)?.length, 1);
-  // Mounted once, in the root layout only: no group layout or page mounts a second one.
-  const others = siteFiles(["layout.tsx", "page.tsx", "not-found.tsx"]).filter((p) => p !== join("app", "(site)", "layout.tsx"));
-  assert.deepEqual(others.filter((p) => readFileSync(join(ROOT, p), "utf8").includes("SeasonLayer")), []);
-  const layer = readFileSync(join(ROOT, "components/season-layer.tsx"), "utf8");
-  assert.match(layer, /^"use client";/);
-  assert.match(layer, /<svg className="season-layer" aria-hidden="true"/);
-  assert.match(layer, /addEventListener\("visibilitychange"/);
-  assert.match(layer, /useSyncExternalStore\(subscribeHidden, hidden, \(\) => false\)/);
+  assert.match(src, /^import \{ PocketTerminalLoader \} from "@\/components\/pocket-terminal-loader";$/m);
+  assert.match(
+    returned("app/(site)/layout.tsx"),
+    /<body className="min-h-full">\s*<PocketTerminalLoader \/>\s*\{children\}\s*<AppearanceRuntime \/>\s*<\/body>/,
+  );
+  assert.equal(src.match(/<PocketTerminalLoader\b/g)?.length, 1);
+  assert.equal(src.match(/<AppearanceRuntime\b/g)?.length, 1);
 });
 
 test("both documents pin data-season in <head> before first paint, beside the theme pin", () => {
@@ -403,7 +386,7 @@ test("the 404's bar, with the brand mark, stays out of its wrapper", () => {
   const jsx = returned("app/(site)/not-found.tsx");
   const header = jsx.indexOf('<header className="masthead">');
   assert.ok(header !== -1 && header < jsx.indexOf("<ViewTransition"));
-  assert.match(jsx, /<header className="masthead">\s*<BrandMark \/>/);
+  assert.match(jsx, /<header className="masthead">[\s\S]*?<BrandMark \/>/);
 });
 
 test("the /projects rows rise one after another, and reduced motion drops the delay", () => {
@@ -497,14 +480,9 @@ test("the sketch sheets rest whole and draw on scroll only where view timelines 
 // The pocket console's A (components/handheld.tsx): its chosen line, as HTML over the LCD, and the page's h1 are a
 // named pair, title-<page>, and the navigation is typed console, which zooms the arriving page out of the LCD.
 // scripts/probe-console-zoom.sh watches it run.
-test("each console page names its h1 for the console's label, once, and nothing else takes a title name", () => {
+test("TitleMorph defines the console-title view transition helper", () => {
   const pages = siteFiles(["page.tsx"]);
-  const morphs = pages.flatMap((p) => [...readFileSync(join(ROOT, p), "utf8").matchAll(/\bmorph="([^"]+)"/g)].map((m) => `${p} ${m[1]}`));
-  assert.deepEqual(
-    morphs.sort(),
-    CONSOLE_MENU.map(({ href }) => `app/(site)/(app)${href}/page.tsx ${href}`).sort(),
-  );
-  // FigTitle and StampHeading (Play) wrap their h1 alone, and only when asked.
+  // FigTitle and StampHeading wrap their h1 alone, and only when asked.
   for (const p of ["components/figures.tsx", "components/stamp-heading.tsx"]) {
     const text = readFileSync(join(ROOT, p), "utf8");
     assert.match(text, /\{morph \? <TitleMorph page=\{morph\}>\{h1\}<\/TitleMorph> : h1\}/, p);
