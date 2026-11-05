@@ -11,7 +11,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
       <Masthead />
       <ViewTransition enter="page-in" exit="page-out" default="none">
         <main id="main" tabIndex={-1} className="min-w-0 outline-none">
-          <div className="mx-auto max-w-5xl px-5 py-6 sm:px-8 lg:py-8">{children}</div>
+          <div className="mx-auto max-w-4xl px-5 py-10 sm:px-8 lg:py-14">{children}</div>
         </main>
         <EndFooter />
       </ViewTransition>

@@ -1,13 +1,19 @@
 import { BrandMark } from "@/components/brand-mark";
-import { SignOutButton, StopImpersonatingButton } from "@/components/nav-links";
-import { SeasonDial } from "@/components/season-dial";
-import { SoundToggle } from "@/components/sound-toggle";
+import {
+  CommandPaletteButton,
+  NavLinks,
+  NavList,
+  SignOutButton,
+  StopImpersonatingButton,
+  type NavItem,
+} from "@/components/nav-links";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { PlotterToggle } from "@/components/plotter-toggle";
-import { site } from "@/content/site";
 import { getSession } from "@/lib/dal";
+import { PUBLIC_PAGES } from "@/lib/pages";
 import Link from "next/link";
 import { Suspense } from "react";
+
+const NAV_ITEMS: NavItem[] = [...PUBLIC_PAGES];
 
 // The chrome every layout shares: a skip link, the sticky masthead and the
 // impersonation banner. It prerenders; anything that reads the session
@@ -22,15 +28,22 @@ export function Masthead() {
         Skip to content
       </a>
       <header className="masthead">
-        <BrandMark />
-        <div className="flex min-w-0 items-center gap-3">
-          <Suspense fallback={null}>
-            <Account />
-          </Suspense>
-          <PlotterToggle />
-          <SoundToggle label={site.sound.label} />
-          <SeasonDial />
-          <ThemeToggle />
+        <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-6">
+            <BrandMark />
+            <nav aria-label="Primary" className="masthead-nav">
+              <Suspense fallback={<NavList items={NAV_ITEMS} />}>
+                <NavLinks items={NAV_ITEMS} />
+              </Suspense>
+            </nav>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <CommandPaletteButton />
+            <Suspense fallback={null}>
+              <Account />
+            </Suspense>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
       <Suspense fallback={null}>

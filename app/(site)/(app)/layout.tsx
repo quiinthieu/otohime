@@ -1,16 +1,10 @@
 import { EndFooter } from "@/components/end-footer";
 import { Masthead } from "@/components/masthead";
-import { NavLinks, NavList, type NavItem } from "@/components/nav-links";
-import { PeekLayer } from "@/components/peek-layer";
-import { site } from "@/content/site";
+import { NavLinks, type NavItem } from "@/components/nav-links";
 import { getSession } from "@/lib/dal";
-import { PUBLIC_PAGES } from "@/lib/pages";
 import { can } from "@/lib/permissions";
 import { Suspense, ViewTransition } from "react";
-import "../peeks.css";
 
-// Public pages for everyone; signed-in people also get their own rooms.
-const PUBLIC: NavItem[] = [...PUBLIC_PAGES];
 const MINE: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/account", label: "Account" },
@@ -21,10 +15,6 @@ const ADMIN: NavItem[] = [
   { href: "/admin/bottles", label: "Bottles" },
 ];
 
-// The pages with the sidebar. The chrome prerenders; the nav reads the
-// session behind its own boundary. Only gated rooms have loading.tsx;
-// public page titles must be visible in the initial cross-document hop snapshot.
-//
 // React runs a <ViewTransition>'s enter and exit only when it sits above every
 // DOM node that is inserted or removed. Moving to or from another group's
 // layout ((home), (auth)) swaps this whole layout, so the pages' own wrappers,
@@ -34,22 +24,14 @@ const ADMIN: NavItem[] = [
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      {/* Outside <main> and the pages' wrappers: the fan is fixed to the viewport and leaves with its page. */}
-      <PeekLayer />
       <Masthead />
       <ViewTransition enter="page-in" exit="page-out" default="none">
-        <div className="lg:grid lg:grid-cols-[220px_1fr]">
-          <nav aria-label="Main" className="appnav">
-            <div className="mb-5 hidden lg:block">
-              <p className="font-bold tracking-[0.02em]">Otohime</p>
-              <p className="text-[12px] text-muted">{site.tagline}</p>
-            </div>
-            <Suspense fallback={<NavList items={PUBLIC} />}>
-              <Nav />
-            </Suspense>
-          </nav>
+        <div className="min-w-0">
+          <Suspense fallback={null}>
+            <SignedInNav />
+          </Suspense>
           <main id="main" tabIndex={-1} className="min-w-0 outline-none">
-            <div className="mx-auto max-w-5xl px-5 py-6 sm:px-8 lg:py-8">{children}</div>
+            <div className="mx-auto max-w-4xl px-5 py-10 sm:px-8 lg:py-14">{children}</div>
           </main>
         </div>
         <EndFooter />
@@ -59,10 +41,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 }
 
 // The nav only hints; every gated page checks again (lib/dal.ts).
-async function Nav() {
+async function SignedInNav() {
   const session = await getSession();
-  if (!session) return <NavLinks items={PUBLIC} />;
+  if (!session) return null;
   const admin = can(session.user.role, { user: ["list"] });
   const guestbook = can(session.user.role, { guestbook: ["moderate"] });
-  return <NavLinks items={[...PUBLIC, ...MINE, ...(admin ? ADMIN : []), ...(guestbook ? [{ href: "/admin/guestbook", label: "Guestbook" }] : [])]} />;
+  const items = [
+    ...MINE,
+    ...(admin ? ADMIN : []),
+    ...(guestbook ? [{ href: "/admin/guestbook", label: "Guestbook" }] : []),
+  ];
+  return (
+    <nav aria-label="Account" className="subnav">
+      <div className="mx-auto max-w-4xl px-5 sm:px-8">
+        <NavLinks items={items} />
+      </div>
+    </nav>
+  );
 }
