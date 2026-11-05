@@ -32,19 +32,16 @@ const key = (k: string, mods: Partial<{ metaKey: boolean; ctrlKey: boolean; altK
   ...mods,
 });
 
-test("the places are every public page including Apps and Lab, then ask and postcard, each once", () => {
+test("the places are every public page followed by the curiosities gallery mini-apps, each once", () => {
   assert.deepEqual(
     PLACES.slice(0, PUBLIC_PAGES.length).map((p) => p.href),
     PUBLIC_PAGES.map((p) => p.href),
   );
-  assert.deepEqual(PLACES.map((p) => p.name), ["home", "work", "play", "notes", "music", "projects", "sketches", "apps", "lab", "ask", "postcard", "guestbook", "fortune"]);
+  assert.deepEqual(PLACES.slice(0, 4).map((p) => p.name), ["home", "work", "projects", "notes"]);
   assert.equal(new Set(PLACES.map((p) => p.name)).size, PLACES.length);
-  assert.equal(findPlace("ask"), PLACES.find((p) => p.name === "ask"));
-  assert.equal((findPlace("ask") as { href: string }).href, "/");
-  assert.equal((findPlace("postcard") as { href: string }).href, "/postcard");
-  assert.equal((findPlace("play") as { href: string }).href, "/play");
-  assert.equal((findPlace("guestbook") as { href: string }).href, "/guestbook");
-  assert.equal((findPlace("fortune") as { href: string }).href, "/fortune");
+  assert.equal((findPlace("shore") as { href: string }).href, "/shore");
+  assert.equal((findPlace("orrery") as { href: string }).href, "/orrery");
+  assert.equal((findPlace("elements") as { href: string }).href, "/elements");
 });
 
 test("print run reports the effective appearance, including an applied Lab", () => {
@@ -84,14 +81,9 @@ test("preset results report effective choice and disclose either storage failure
   assert.equal(printRunStatus(store.setPrintRun("house")), "print run: House (house). Saved for reload; Ink Lab override cleared.");
 });
 
-test("lab navigation and print run choices appear in help and suggestions without changing the LCD", () => {
-  for (const line of ["lab", "go lab", "go /lab"]) assert.deepEqual(run(line, STATE).effect, { kind: "go", href: "/lab" });
+test("print run choices appear in help and suggestions", () => {
   assert.ok(HELP.some((line) => line.startsWith("print run")));
-  assert.ok(HELP.some((line) => line.startsWith("lab")));
   assert.deepEqual(suggest("print run").map((s) => s.line), ["print run", ...PRINT_RUN_IDS.map((id) => `print run ${id}`)]);
-  assert.ok(suggest("lab").some((s) => s.line === "go lab"));
-  assert.equal(CONSOLE_MENU.length, 7);
-  assert.ok(CONSOLE_MENU.every((p) => String(p.href) !== "/lab"));
 });
 
 test("go opens a page by name, path or a prefix only one page has", () => {
@@ -100,12 +92,12 @@ test("go opens a page by name, path or a prefix only one page has", () => {
     ["go /notes", "/notes"],
     ["GO NOTES", "/notes"],
     ["go no", "/notes"],
-    ["go m", "/music"],
+    ["go orrery", "/orrery"],
     ["go /", "/"],
     ["go home", "/"],
-    ["go pos", "/postcard"],
+    ["go sh", "/shore"],
     ["cd work", "/work"],
-    ["open sketches", "/sketches"],
+    ["open elements", "/elements"],
   ] as const) {
     const reply = run(typed, STATE);
     assert.deepEqual(reply.effect, { kind: "go", href }, typed);
@@ -115,17 +107,17 @@ test("go opens a page by name, path or a prefix only one page has", () => {
 
 test("a bare page name or prefix is a go; an exact name beats a longer one", () => {
   assert.deepEqual(run("notes", STATE).effect, { kind: "go", href: "/notes" });
-  assert.deepEqual(run("mu", STATE).effect, { kind: "go", href: "/music" });
-  assert.deepEqual(run("play", STATE).effect, { kind: "go", href: "/play" });
-  assert.deepEqual(run("Sketches", STATE).effect, { kind: "go", href: "/sketches" });
-  assert.deepEqual(run("ask", STATE).effect, { kind: "go", href: "/" });
-  assert.deepEqual(run("postcard", STATE).effect, { kind: "go", href: "/postcard" });
+  assert.deepEqual(run("or", STATE).effect, { kind: "go", href: "/orrery" });
+  assert.deepEqual(run("projects", STATE).effect, { kind: "go", href: "/projects" });
+  assert.deepEqual(run("Elements", STATE).effect, { kind: "go", href: "/elements" });
+  assert.deepEqual(run("shore", STATE).effect, { kind: "go", href: "/shore" });
+  assert.deepEqual(run("work", STATE).effect, { kind: "go", href: "/work" });
 });
 
 test("a prefix several pages share lists them and goes nowhere", () => {
   const reply = run("p", STATE);
   assert.equal(reply.effect, undefined);
-  assert.equal(reply.lines[0], `"p" could be play, projects, postcard`);
+  assert.equal(reply.lines[0], `"p" could be projects, planisphere`);
   assert.equal(run("go pro", STATE).effect?.kind, "go");
   assert.equal(run("go pr", STATE).effect?.kind, "go"); // projects alone starts with "pr"
   assert.equal(run("go p", STATE).effect, undefined);
@@ -221,13 +213,11 @@ test("the palette shows everything when empty, and filters by line start first, 
   assert.deepEqual(suggest("  "), SUGGESTIONS);
   assert.deepEqual(suggest("go no").map((s) => s.line), ["go notes"]);
   assert.deepEqual(suggest("them").map((s) => s.line), ["theme"]);
-  // "th" starts the theme line, then the word "the" in "Ask the console"
-  assert.deepEqual(suggest("th").map((s) => s.line), ["theme", "go ask"]);
-  // "s" starts sound, the seasons, stamps; then go sketches by its name and the season labels by word
+  assert.deepEqual(suggest("th").map((s) => s.line), ["theme"]);
   const s = suggest("s").map((x) => x.line);
   assert.deepEqual(s.slice(0, 7), ["sound", "season auto", "season spring", "season summer", "season autumn", "season winter", "stamps"]);
-  assert.ok(s.includes("go sketches"));
-  assert.deepEqual(suggest("MUS").map((x) => x.line), ["go music"]);
+  assert.ok(s.includes("go shore"));
+  assert.deepEqual(suggest("ORR").map((x) => x.line), ["go orrery"]);
   assert.deepEqual(suggest("zzz"), []);
   // every suggestion runs to something other than "unknown command"
   for (const item of SUGGESTIONS) assert.doesNotMatch(run(item.line, STATE).lines.join(" "), /unknown command/, item.line);
@@ -285,16 +275,14 @@ test("the terminal is an accessible modal: a dialog with a combobox prompt, a li
   assert.match(terminal, /import "\.\/pocket-terminal\.css";/);
 });
 
-test("Lab has one terminal destination after joining public navigation", () => {
-  assert.equal(PLACES.filter(place => place.href === "/lab").length, 1);
+test("Curiosities mini-apps are addressable in Pocket Terminal", () => {
+  for (const [line, href] of [
+    ["shore", "/shore"],
+    ["go orrery", "/orrery"],
+    ["open elements", "/elements"],
+    ["go structures", "/structures"],
+  ] as const) {
+    assert.deepEqual(run(line, STATE).effect, { kind: "go", href }, line);
+  }
 });
 
-test("Apps is addressable via apps and go apps in Pocket Terminal without changing the 7-line LCD", () => {
-  assert.equal(PLACES.filter((place) => place.href === "/apps").length, 1);
-  for (const line of ["apps", "go apps", "go /apps", "open apps", "go app"]) {
-    assert.deepEqual(run(line, STATE).effect, { kind: "go", href: "/apps" }, line);
-  }
-  assert.ok(suggest("apps").some((s) => s.line === "go apps"));
-  assert.equal(CONSOLE_MENU.length, 7);
-  assert.ok(CONSOLE_MENU.every((p) => String(p.href) !== "/apps"));
-});

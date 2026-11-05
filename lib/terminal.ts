@@ -27,14 +27,22 @@ export type Reply = { lines: string[]; effect?: Effect };
 
 export type Place = { name: string; href: string; label: string };
 
-// Where `go` and a bare word lead: the public pages, in nav order, then the Ask chip (on Home) and the postcards.
+// Where `go` and a bare word lead: the public pages in nav order, plus the standalone mini-apps in the Curiosities gallery.
 export const PLACES: readonly Place[] = [
-  ...PUBLIC_PAGES.map((p) => ({ name: p.href === "/lab" ? "lab" : p.label.toLowerCase(), href: p.href, label: p.label })),
-  { name: "ask", href: "/", label: "Ask the console" },
-  { name: "postcard", href: "/postcard", label: "Postcard" },
-  { name: "guestbook", href: "/guestbook", label: "Ink Guestbook" },
-  { name: "fortune", href: "/fortune", label: "Origami Fortune Teller" },
+  ...PUBLIC_PAGES.map((p) => ({ name: p.label.toLowerCase(), href: p.href, label: p.label })),
+  { name: "shore", href: "/shore", label: "Shore (Focus timer)" },
+  { name: "orrery", href: "/orrery", label: "Orrery (Solar system)" },
+  { name: "elements", href: "/elements", label: "Elements (Periodic table)" },
+  { name: "structures", href: "/structures", label: "Structures (Data structures)" },
+  { name: "rotor", href: "/rotor", label: "Rotor (Enigma machine)" },
+  { name: "planisphere", href: "/planisphere", label: "Planisphere (Star wheel)" },
+  { name: "barometer", href: "/barometer", label: "Barometer (Weather station)" },
+  { name: "vinyl", href: "/vinyl", label: "Vinyl (Turntable)" },
+  { name: "capsule", href: "/capsule", label: "Capsule (Card dispenser)" },
+  { name: "articles", href: "/articles", label: "Gazette (Science essays)" },
+  { name: "design-system", href: "/design-system", label: "Design System" },
 ];
+
 
 export function describePrintRun(snapshot: AppearanceSnapshot): string {
   const id = snapshot.lab?.printRun ?? snapshot.printRun;
@@ -86,13 +94,12 @@ function go(word: string): Reply {
 
 export const HELP = [
   "help                    this list",
-  "go <page>               open a page; a bare name works too",
-  `                        ${names(PLACES)}`,
-  "theme [light|dark]      flip or pin the paper",
-  "sound [on|off]          flip or set the beeps",
+  "go <page>               open a page or mini-app; a bare name works too",
+  `                        ${names(PLACES.slice(0, 8))}…`,
+  "theme [light|dark]      flip or pin the color scheme",
+  "sound [on|off]          flip or set sound effects",
   `season [auto|${SEASONS.join("|")}]`,
   "print run [house|sumi|riso|indigo]   report or choose the print run",
-  "lab                     open Ink Lab (/lab)",
   "stamps                  the stamps you have won",
   "shimi [on|off]          paper silverfish on the page",
   "adventure               a walk through the data world",

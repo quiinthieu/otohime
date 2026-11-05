@@ -30,6 +30,16 @@ export function PocketTerminalLoader() {
   }, []);
 
   useEffect(() => {
+    const openPalette = () => {
+      if (shown.current || document.querySelector("dialog[open]")) return;
+      back.current = document.activeElement as HTMLElement | null;
+      shown.current = true;
+      setOpen(true);
+      import("@/components/pocket-terminal").then(
+        (m) => setTerminal(() => m.default),
+        () => close(),
+      );
+    };
     const onKey = (event: KeyboardEvent) => {
       if (shown.current) {
         event.stopPropagation();
@@ -41,16 +51,14 @@ export function PocketTerminalLoader() {
       if (!opensTerminal(event, editing(event.target))) return;
       event.preventDefault();
       event.stopPropagation();
-      back.current = document.activeElement as HTMLElement | null;
-      shown.current = true;
-      setOpen(true);
-      import("@/components/pocket-terminal").then(
-        (m) => setTerminal(() => m.default),
-        () => close(), // offline: the next press tries again
-      );
+      openPalette();
     };
     addEventListener("keydown", onKey, true);
-    return () => removeEventListener("keydown", onKey, true);
+    addEventListener("otohime:open-terminal", openPalette);
+    return () => {
+      removeEventListener("keydown", onKey, true);
+      removeEventListener("otohime:open-terminal", openPalette);
+    };
   }, [close]);
 
   return Terminal && <Terminal open={open} onClose={close} bind={bind} />;
