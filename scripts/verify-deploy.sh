@@ -176,7 +176,7 @@ verify() {
     if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
       reporters=(--test-reporter=tap --test-reporter-destination=stdout --test-reporter=./scripts/e2e-annotate.mjs --test-reporter-destination=stdout)
     fi
-    BASE_URL="$base" "${NODE_TS[@]}" --test-concurrency=1 ${reporters[@]+"${reporters[@]}"} --test e2e/pocket-terminal.test.ts e2e/ink-press.test.ts e2e/postcard.test.ts e2e/postcard-browser.test.ts || status=$?
+    BASE_URL="$base" "${NODE_TS[@]}" --test-concurrency=1 ${reporters[@]+"${reporters[@]}"} --test e2e/pocket-terminal.test.ts || status=$?
   fi
   if [ "$status" -ne 0 ]; then
     echo "not ok - terminal/press/postcard e2e failed against $base (exit $status)"

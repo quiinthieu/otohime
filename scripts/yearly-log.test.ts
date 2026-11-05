@@ -46,6 +46,8 @@ const GIT_ENV = {
   GIT_AUTHOR_EMAIL: "fixture@example.test",
   GIT_COMMITTER_NAME: "Fixture",
   GIT_COMMITTER_EMAIL: "fixture@example.test",
+  GIT_AUTHOR_DATE: "2026-10-20T12:00:00Z",
+  GIT_COMMITTER_DATE: "2026-10-20T12:00:00Z",
 };
 
 const sh = (cwd: string, ...args: string[]) =>

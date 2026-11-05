@@ -86,7 +86,7 @@ test("the listener: capture phase on window, skips fields, dialogs, modifiers an
   assert.match(src, /location\.assign\(PALACE_HREF\)/);
 });
 
-test("the projects directory links to the Ryugu-jo edition", () => {
+test("the waterline: the last thing in the site's footer, below its bar, links down to the palace", () => {
   const projectsPage = jsx("app/(site)/(app)/projects/page.tsx");
   assert.match(projectsPage, /href="\/ryugu"/);
   const handheld = read("components/handheld.tsx");

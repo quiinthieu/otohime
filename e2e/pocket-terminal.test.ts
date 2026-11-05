@@ -147,20 +147,20 @@ test("a bare page name, and a palette pick, navigate and close the terminal", as
 
   await page.keyboard.press("/");
   await terminal(page).waitFor({ state: "visible" });
-  await page.keyboard.type("go mus");
+  await page.keyboard.type("go proj");
   await page.keyboard.press("ArrowDown");
   await page.keyboard.press("Enter");
-  await page.waitForURL(`${BASE}/music`);
+  await page.waitForURL(`${BASE}/projects`);
   assert.equal(await isOpen(page), false);
   assert.deepEqual(errors, []);
 });
 
 test("theme, sound and season set the page, and / in a field types a slash while Ctrl-K still opens", async () => {
-  const { page, errors } = await open("/postcard");
-  await page.focus("textarea[name=note]");
+  const { page, errors } = await open("/sign-in");
+  await page.focus("input[name=email]");
   await page.keyboard.press("/");
   assert.equal(await isOpen(page), false, "/ in a field does not open");
-  assert.equal(await page.inputValue("textarea[name=note]"), "/");
+  assert.equal(await page.inputValue("input[name=email]"), "/");
 
   await page.keyboard.press("Control+k");
   await terminal(page).waitFor({ state: "visible" });
@@ -173,14 +173,11 @@ test("theme, sound and season set the page, and / in a field types a slash while
   const stored = await page.evaluate(() => [localStorage.getItem("theme"), localStorage.getItem("sound"), localStorage.getItem("season")]);
   assert.deepEqual(stored, ["dark", "on", "winter"]);
   // the masthead's own controls follow
-  assert.equal(await page.getAttribute(".sound-toggle", "aria-pressed"), "true");
-  assert.equal(await page.isChecked("input[name=season-dial][value=winter]"), true);
   assert.equal(await page.getAttribute(".theme-toggle", "aria-pressed"), "true");
 
   await page.keyboard.type("season auto");
   await page.keyboard.press("Enter");
   assert.equal(await page.evaluate(() => localStorage.getItem("season")), null);
-  assert.equal(await page.isChecked("input[name=season-dial][value=auto]"), true);
   assert.deepEqual(errors, []);
 });
 

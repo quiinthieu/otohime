@@ -18,7 +18,7 @@ export function checkInkTests(source) {
 export function checkInkWiring(root = process.cwd()) {
   checkInkTests(readFileSync(path.join(root, "e2e/ink-experiments.test.ts"), "utf8"));
   const pkg = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8"));
-  if (!pkg.scripts["test:e2e"].includes("e2e/**/*.test.ts")) throw new Error("Ink browser tests are not in the CI suite");
+  if (!pkg.scripts["test:e2e"].includes("scripts/e2e.mjs")) throw new Error("Ink browser tests are not in the CI suite");
   const ci = readFileSync(path.join(root, ".github/workflows/ci.yml"), "utf8");
   if (!ci.includes("npm run test:e2e")) throw new Error("CI must run the ink browser tests");
 }
