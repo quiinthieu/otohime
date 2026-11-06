@@ -12,6 +12,7 @@ import {
   MIN_CONTRAST,
   parseRecords,
   validateRecords,
+  VIDEO_ID,
   videoIds,
   watchUrl,
   type VinylRecord,
@@ -19,17 +20,15 @@ import {
 
 const RAW: unknown = JSON.parse(readFileSync(join(import.meta.dirname, "records.json"), "utf8"));
 const RECORDS = parseRecords(RAW);
-const PLACEHOLDER_IDS = ["IXA6bQsVNjs", "agneRtEe-t8", "vR49dHUwMUA"];
 
 test("records.json validates with no errors and at least 12 records", () => {
   const { errors, warnings } = validateRecords(RAW);
   assert.deepEqual(errors, []);
+  assert.deepEqual(warnings, []);
   assert.ok(RECORDS.length >= 12);
-  // the placeholders share three ids, which is a warning and only a warning
-  assert.ok(warnings.length > 0 && warnings.every((w) => /is also on/.test(w)), warnings.join("\n"));
 });
 
-test("the sample crate covers what the page needs", () => {
+test("the curated crate covers what the page needs", () => {
   assert.ok(genres(RECORDS).length >= 5);
   assert.ok(RECORDS.some((r) => r.rpm === 33) && RECORDS.some((r) => r.rpm === 45));
   const sided = RECORDS.find((r) => r.tracks);
@@ -38,10 +37,10 @@ test("the sample crate covers what the page needs", () => {
   assert.ok(RECORDS.some((r) => r.startSeconds !== undefined && r.endSeconds !== undefined));
   for (const r of RECORDS) {
     assert.equal(r.coverArtUrl, `procedural:${r.id}`);
-    assert.equal(r.placeholder, true);
-    for (const id of videoIds(r)) assert.ok(PLACEHOLDER_IDS.includes(id), `${r.id}: ${id}`);
+    assert.equal(r.placeholder, undefined);
+    for (const id of videoIds(r)) assert.match(id, VIDEO_ID, `${r.id}: ${id}`);
   }
-  assert.deepEqual([...new Set(RECORDS.map((r) => r.youtubeVideoId))].sort(), [...PLACEHOLDER_IDS].sort());
+  assert.equal(new Set(RECORDS.map((r) => r.youtubeVideoId)).size, RECORDS.length);
 });
 
 const base = (): Record<string, unknown> => ({ ...(RECORDS[0] as unknown as Record<string, unknown>) });
@@ -148,7 +147,7 @@ test("genres are unique and sorted; filter matches title or artist, any case, wi
     RECORDS.filter((r) => r.genre === "Jazz").map((r) => r.id),
   );
   assert.deepEqual(filterRecords(RECORDS, { query: "  harbour " }).map((r) => r.id), ["harbour-lights"]);
-  assert.deepEqual(filterRecords(RECORDS, { query: "ROSA" }).map((r) => r.id), ["velvet-morning"]);
+  assert.deepEqual(filterRecords(RECORDS, { query: "SINATRA" }).map((r) => r.id), ["velvet-morning"]);
   assert.deepEqual(filterRecords(RECORDS, { query: "harbour", genre: "Soul" }), []);
   assert.deepEqual(filterRecords(RECORDS, { query: "no such record" }), []);
 });

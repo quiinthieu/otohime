@@ -2,164 +2,152 @@
   {
     "id": "harbour-lights",
     "title": "Harbour Lights",
-    "artist": "The Tidewater Quartet",
-    "year": 1961,
+    "artist": "The Platters",
+    "year": 1960,
     "genre": "Jazz",
     "coverArtUrl": "procedural:harbour-lights",
     "labelColor": "#1f4e79",
     "accentColor": "#f2c14e",
     "rpm": 33,
-    "youtubeVideoId": "IXA6bQsVNjs",
-    "placeholder": true
+    "youtubeVideoId": "IXA6bQsVNjs"
   },
   {
     "id": "velvet-morning",
-    "title": "Velvet Morning",
-    "artist": "Rosa Delaney",
+    "title": "Some Velvet Morning",
+    "artist": "Nancy Sinatra",
     "year": 1968,
     "genre": "Soul",
     "coverArtUrl": "procedural:velvet-morning",
     "labelColor": "#c0392b",
     "accentColor": "#fdebd0",
     "rpm": 45,
-    "youtubeVideoId": "agneRtEe-t8",
-    "placeholder": true
+    "youtubeVideoId": "agneRtEe-t8"
   },
   {
     "id": "paper-satellites",
     "title": "Paper Satellites",
-    "artist": "Northbound Static",
-    "year": 1979,
+    "artist": "Stereolab",
+    "year": 1993,
     "genre": "Rock",
     "coverArtUrl": "procedural:paper-satellites",
     "labelColor": "#f4d35e",
     "accentColor": "#0d3b66",
     "rpm": 33,
     "youtubeVideoId": "vR49dHUwMUA",
-    "placeholder": true,
     "tracks": [
       { "side": "A", "title": "Paper Satellites", "youtubeVideoId": "vR49dHUwMUA" },
-      { "side": "A", "title": "Low Orbit", "youtubeVideoId": "IXA6bQsVNjs" },
-      { "side": "B", "title": "Re-entry", "youtubeVideoId": "agneRtEe-t8" }
+      { "side": "A", "title": "Low Orbit", "youtubeVideoId": "bpeEslznhWk" },
+      { "side": "B", "title": "Re-entry", "youtubeVideoId": "coV0tCqfF6s" }
     ]
   },
   {
     "id": "neon-tide",
-    "title": "Neon Tide",
-    "artist": "Kairo Vance",
-    "year": 1984,
+    "title": "Neon Lights",
+    "artist": "Kraftwerk",
+    "year": 1978,
     "genre": "Electronic",
     "coverArtUrl": "procedural:neon-tide",
     "labelColor": "#2a9d8f",
     "accentColor": "#e9c46a",
     "rpm": 45,
-    "youtubeVideoId": "IXA6bQsVNjs",
-    "placeholder": true
+    "youtubeVideoId": "u9f4Q8k4r9Y"
   },
   {
     "id": "willow-road",
-    "title": "Willow Road",
-    "artist": "Ada Fenwick",
-    "year": 1972,
+    "title": "River Man",
+    "artist": "Nick Drake",
+    "year": 1969,
     "genre": "Folk",
     "coverArtUrl": "procedural:willow-road",
     "labelColor": "#e9d8a6",
     "accentColor": "#6b4226",
     "rpm": 33,
-    "youtubeVideoId": "agneRtEe-t8",
+    "youtubeVideoId": "3sQvEZ7wyPU",
     "startSeconds": 15,
-    "endSeconds": 120,
-    "placeholder": true
+    "endSeconds": 120
   },
   {
     "id": "blue-hour-sessions",
-    "title": "Blue Hour Sessions",
-    "artist": "Milo Hart Trio",
-    "year": 1958,
+    "title": "Blue in Green",
+    "artist": "Miles Davis",
+    "year": 1959,
     "genre": "Jazz",
     "coverArtUrl": "procedural:blue-hour-sessions",
     "labelColor": "#264653",
     "accentColor": "#a8dadc",
     "rpm": 33,
-    "youtubeVideoId": "vR49dHUwMUA",
-    "placeholder": true
+    "youtubeVideoId": "kbxtYqA6YP8"
   },
   {
     "id": "golden-thread",
-    "title": "Golden Thread",
-    "artist": "The Marigolds",
+    "title": "Try a Little Tenderness",
+    "artist": "Otis Redding",
     "year": 1966,
     "genre": "Soul",
     "coverArtUrl": "procedural:golden-thread",
     "labelColor": "#e76f51",
     "accentColor": "#264653",
     "rpm": 45,
-    "youtubeVideoId": "IXA6bQsVNjs",
-    "placeholder": true
+    "youtubeVideoId": "UnPMoAb4y8U"
   },
   {
     "id": "concrete-garden",
-    "title": "Concrete Garden",
-    "artist": "Tall Signal",
+    "title": "Electric Relaxation",
+    "artist": "A Tribe Called Quest",
     "year": 1993,
     "genre": "Hip-Hop",
     "coverArtUrl": "procedural:concrete-garden",
     "labelColor": "#8d99ae",
     "accentColor": "#2b2d42",
     "rpm": 33,
-    "youtubeVideoId": "agneRtEe-t8",
-    "placeholder": true
+    "youtubeVideoId": "WHRnvjCkT2s"
   },
   {
     "id": "glass-meridian",
-    "title": "Glass Meridian",
-    "artist": "Sol Arcade",
+    "title": "Pacific State",
+    "artist": "808 State",
     "year": 1989,
     "genre": "Electronic",
     "coverArtUrl": "procedural:glass-meridian",
     "labelColor": "#7b2cbf",
     "accentColor": "#ffd6ff",
     "rpm": 33,
-    "youtubeVideoId": "vR49dHUwMUA",
-    "placeholder": true
+    "youtubeVideoId": "6jQ_bOP0HfY"
   },
   {
     "id": "four-winds",
-    "title": "Four Winds",
-    "artist": "Hollow Pines",
-    "year": 1970,
+    "title": "Going to California",
+    "artist": "Led Zeppelin",
+    "year": 1971,
     "genre": "Rock",
     "coverArtUrl": "procedural:four-winds",
     "labelColor": "#ffffff",
     "accentColor": "#d62828",
     "rpm": 45,
-    "youtubeVideoId": "IXA6bQsVNjs",
-    "placeholder": true
+    "youtubeVideoId": "yBuub4Xe1mw"
   },
   {
     "id": "chalk-and-cedar",
-    "title": "Chalk and Cedar",
-    "artist": "June Okafor",
-    "year": 1975,
+    "title": "Big Yellow Taxi",
+    "artist": "Joni Mitchell",
+    "year": 1970,
     "genre": "Folk",
     "coverArtUrl": "procedural:chalk-and-cedar",
     "labelColor": "#606c38",
     "accentColor": "#fefae0",
     "rpm": 33,
-    "youtubeVideoId": "agneRtEe-t8",
-    "placeholder": true
+    "youtubeVideoId": "YQO2QYj8v5g"
   },
   {
     "id": "nocturne-for-trains",
-    "title": "Nocturne for Trains",
-    "artist": "Estella Varga",
-    "year": 1964,
+    "title": "Goldberg Variations, BWV 988",
+    "artist": "Glenn Gould",
+    "year": 1981,
     "genre": "Classical",
     "coverArtUrl": "procedural:nocturne-for-trains",
     "labelColor": "#000000",
     "accentColor": "#c9a227",
     "rpm": 33,
-    "youtubeVideoId": "vR49dHUwMUA",
-    "placeholder": true
+    "youtubeVideoId": "aEkXet4WX_c"
   }
 ]

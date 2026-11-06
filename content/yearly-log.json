@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "head": "2e14e3b50be6e2b360e637f17495d0f90398b762",
+  "head": "eeb1620f339345836f97ca6101b88a0fbb0e6a0c",
   "generatedYear": 2026,
   "months": {
     "01": {
@@ -81,7 +81,7 @@
     "10": {
       "month": 10,
       "flower": "Maple",
-      "commits": 660,
+      "commits": 816,
       "shippedProjects": [
         {"title":"Shore","href":"/shore","shipped":"2026-10-19"},
         {"title":"Capsule","href":"/capsule","shipped":"2026-10-19"},
@@ -99,20 +99,24 @@
         {"title":"Backfills are a feature","date":"2026-10-12"}
       ],
       "highlights": [
-        {"sha":"2e14e3b50b","date":"2026-10-27T17:13:25Z","plan":"pm-293","subject":"revise Washi Daruma, Emaki, and Hanafuda for cycle 1"},
-        {"sha":"a770c135ab","date":"2026-10-27T17:07:46Z","plan":"pm-268","subject":"record verified hydration delivery"},
-        {"sha":"a178b845dc","date":"2026-10-27T17:01:16Z","plan":"pm-293","subject":"Record failed acceptance and change request"},
-        {"sha":"c5497e0ce3","date":"2026-10-27T16:46:31Z","plan":"pm-268","subject":"fix Kame and paper hydration ordering"},
-        {"sha":"e8f2667bc3","date":"2026-10-27T16:43:45Z","plan":"pm-293","subject":"Record QA pass report for Making-of Emaki handscroll"}
+        {"sha":"1bf4ee051c","date":"2026-10-31T08:33:23Z","plan":"pm-303","subject":"test(qa): add t-1883 terminal preview QA suite and failure report"},
+        {"sha":"607ccaf19d","date":"2026-10-31T07:22:36Z","plan":"pm-303","subject":"test(qa): add executable QA suite and report for /apps MVP"},
+        {"sha":"be70fa4329","date":"2026-10-31T06:27:16Z","plan":"pm-303","subject":"feat(apps): add apps data layer, manifests, nav, index and detail pages"},
+        {"sha":"48043c8545","date":"2026-10-31T05:05:10Z","plan":"pm-303","subject":"draft Ink Apps Workshop execution plan"},
+        {"sha":"761b636ac1","date":"2026-10-30T09:42:50Z","plan":null,"subject":"feat(play): add ink loom and hanko press"}
       ]
     },
     "11": {
       "month": 11,
       "flower": "Willow",
-      "commits": 0,
+      "commits": 3,
       "shippedProjects": [],
       "notes": [],
-      "highlights": []
+      "highlights": [
+        {"sha":"eeb1620f33","date":"2026-11-05T15:28:22Z","plan":null,"subject":"fix(test): quote test:e2e glob for wiring check"},
+        {"sha":"205af653ab","date":"2026-11-05T15:07:25Z","plan":null,"subject":"fix(ci): align unit tests and E2E pipeline with revamped site"},
+        {"sha":"bb2ccac932","date":"2026-11-05T14:37:58Z","plan":null,"subject":"feat(site): revamp website into minimalist engineering portfolio"}
+      ]
     },
     "12": {
       "month": 12,

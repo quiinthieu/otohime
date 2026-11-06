@@ -23,21 +23,21 @@ export function Masthead() {
     <>
       <a
         href="#main"
-        className="btn sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+        className="btn sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 shadow-md"
       >
         Skip to content
       </a>
       <header className="masthead">
-        <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-6">
+        <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4 px-2 sm:px-4">
+          <div className="flex min-w-0 items-center gap-5 sm:gap-7">
             <BrandMark />
-            <nav aria-label="Primary" className="masthead-nav">
+            <nav aria-label="Primary" className="masthead-nav min-w-0">
               <Suspense fallback={<NavList items={NAV_ITEMS} />}>
                 <NavLinks items={NAV_ITEMS} />
               </Suspense>
             </nav>
           </div>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2.5">
             <CommandPaletteButton />
             <Suspense fallback={null}>
               <Account />

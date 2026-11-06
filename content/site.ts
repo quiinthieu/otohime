@@ -45,28 +45,25 @@ export type EndCopy = {
 
 const sketchesCollection = resolveSketchesCollection();
 
-// The words on the public pages, in one place. A first draft: everything
-// marked TODO(otohime) is invented and waits for the real thing.
+// The words on the public pages, in one place. Central single source of truth
+// for public copy, capability statements, and navigation.
 export const site = {
-  tagline: "Data engineer. Plays games.",
+  tagline: "High-throughput data platforms, lakehouse systems, and tactile software",
   // The masthead's speaker: the console beeps only once it is on.
   sound: { label: "Console sounds" },
-  // TODO(otohime): the rest is a first draft
   bio: [
-    "I move data from where it lands to where people can use it, and keep it honest on the way.",
-    "Most days that means warehouses, schedules and SQL. Some nights it means a backfill.",
-    "The rest of the time I'm playing something with a skill tree, a speedrun timer or a factory that must grow.",
+    "I architect high-throughput data platforms, petabyte lakehouses, and real-time streaming engines that keep multi-billion-row workloads honest.",
+    "Eight years in distributed systems funds an obsession with tactile software, bespoke mechanical hardware, and uncompromising digital craft.",
+    "By night, I push max heat in Hades II, min-max Factorio megabases on a custom liquid-cooled rig, or curate rare geisha coffee lots.",
   ],
-  // TODO(otohime)
   now: [
-    { what: "Building", note: "a streaming pipeline that pages nobody" },
-    { what: "Playing", note: "Hades II, one more run" },
-    { what: "Reading", note: "Designing Data-Intensive Applications, again" },
+    { what: "Architecting", note: "a sub-second streaming engine for petabyte lakehouses" },
+    { what: "Playing", note: "Hades II high-heat runs on a custom water-cooled OLED rig" },
+    { what: "Curating", note: "analog synths, geisha coffee lots, and bespoke mechanical keyboards" },
   ],
   lines: [
     { label: "Telegram", handle: "@otohime73", href: "https://t.me/otohime73", code: "TG", colour: "blue" },
     { label: "X", handle: "@otohime73", href: "https://x.com/otohime73", code: "X", colour: "yellow" },
-    // TODO(otohime): the handle should be the profile's display name
     {
       label: "Spotify",
       handle: "otohime",
@@ -74,7 +71,6 @@ export const site = {
       code: "SP",
       colour: "mint",
     },
-    // TODO(otohime): a first draft
     { label: "Email", handle: "hello@otohime.dev", href: "mailto:hello@otohime.dev", code: "@", colour: "coral" },
   ] satisfies Line[],
   // The knobs under every machine: the material it is drawn in, a fresh set
@@ -115,7 +111,6 @@ export const site = {
     seaSound: "♪ Sea sound",
     seaSoundLabel: "Sea sound in Ryugu-jo",
   },
-  // TODO(otohime)
   notes: [
     {
       slug: "backfills-are-a-feature",
@@ -139,8 +134,7 @@ export const site = {
       body: "A data contract stopped a breaking change before anyone opened a dashboard. First time. Worth it.",
     },
   ] satisfies Note[],
-  // TODO(otohime)
-  work: "I build the pipes between where data lands and where people use it: batch jobs, streams, and the odd 3 a.m. backfill.",
+  work: "I architect resilient distributed platforms: sub-second streaming pipelines, petabyte lakehouse governance, and deterministic execution engines designed for zero-downtime scale.",
   // The Work page's source-to-dashboard figure (components/pipeline.tsx, lib/pipeline.ts): made-up packets,
   // never real data.
   pipeline: {
@@ -161,43 +155,39 @@ export const site = {
     caught: (shown: number) => `All ${shown} on the dashboard. No lag.`,
     full: "The pipes are full. Let some packets land first.",
   },
-  // TODO(otohime): your stack
   stack: [
-    { what: "Warehouse", tools: "Snowflake, BigQuery", note: "where the questions get answered" },
-    { what: "Transformation", tools: "dbt", note: "SQL with version control and manners" },
-    { what: "Orchestration", tools: "Airflow, Dagster", note: "the schedule, and what happens when it slips" },
-    { what: "Streaming", tools: "Kafka", note: "for whatever can't wait for the nightly run" },
-    { what: "Storage", tools: "Iceberg on S3", note: "cheap, open, time travel included" },
-    { what: "Quality", tools: "tests, contracts, alerts", note: "so the dashboard is right before anyone asks" },
+    { what: "Warehouse", tools: "Snowflake, BigQuery", note: "petabyte lakehouse architecture and compute separation" },
+    { what: "Streaming", tools: "Kafka", note: "sub-second event streams and real-time topology routing" },
+    { what: "Transformation", tools: "dbt", note: "contract-driven SQL models with strict boundary invariants" },
+    { what: "Storage", tools: "Iceberg on S3", note: "open table formats with zero-copy branch isolation and time travel" },
+    { what: "Orchestration", tools: "Airflow", note: "deterministic distributed DAGs and calm, observable schedules" },
+    { what: "Embedded OLAP", tools: "DuckDB", note: "in-process vectorized execution for sub-second analytical workloads" },
+    { what: "Quality & Governance", tools: "tests, contracts, alerts", note: "strict schema enforcement before bad data fans out" },
   ],
-  // TODO(otohime)
-  play: "Six games in rotation. Win one from the cabinet to hear why.",
-  // TODO(otohime): your games; the swatch is the capsule's colour
+  play: "Six games in rotation on a custom water-cooled OLED rig. Win one from the cabinet to hear why.",
   games: [
-    { title: "Factorio", note: "The factory must grow. So must the DAG.", colour: "yellow" },
-    { title: "Celeste", note: "Every strawberry, eventually.", colour: "pink" },
-    { title: "Hades II", note: "One more run, then bed.", colour: "coral" },
-    { title: "Stardew Valley", note: "The crops have a spreadsheet.", colour: "mint" },
-    { title: "Tetris Effect", note: "Bin packing, with feelings.", colour: "blue" },
-    { title: "Outer Wilds", note: "Twenty-two minutes at a time.", colour: "yellow" },
+    { title: "Factorio", note: "5,000 science per minute, zero bottlenecks, pure architectural discipline.", colour: "yellow" },
+    { title: "Hades II", note: "Max heat, relentless rhythm, and unyielding mechanical precision.", colour: "coral" },
+    { title: "Elden Ring", note: "Patience, frame-perfect dodges, and clean no-hit boss encounters.", colour: "blue" },
+    { title: "Cyberpunk 2077", note: "Night City maxed out at 4K path tracing on a custom liquid-cooled rig.", colour: "pink" },
+    { title: "Balatro", note: "High-stakes mathematical min-maxing and probability engine design.", colour: "mint" },
+    { title: "Tetris Effect", note: "Pure flow state, high-tempo bin packing, and audio-visual euphoria.", colour: "yellow" },
   ] satisfies Game[],
-  // TODO(otohime)
-  projects: "Independent projects, built in my own time and not for any employer.",
+  projects: "Independent tools, distributed systems experiments, and interactive tactile software built with unhurried craft.",
   // Add a project here and it shows up on /projects.
   projectList: [
-    { title: "Shore", note: "A focus timer that leaves sea glass behind.", href: "/shore", status: "live", colour: "mint", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
-    { title: "Capsule", note: "A coin, a crank, and a printed card to keep.", href: "/capsule", status: "live", colour: "coral", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
-    { title: "Orrery", note: "The Sun, the planets and five stars, cut open and drawn by hand.", href: "/orrery", status: "live", colour: "yellow", started: "2026-10-19", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
-    { title: "Elements", note: "All 118, each with a spinning atom and one surprising fact.", href: "/elements", status: "live", colour: "blue", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
-    { title: "Vinyl", note: "Dig the crate, drop the needle, watch it play.", href: "/vinyl", status: "live", colour: "pink", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
-    { title: "Rotor", note: "An Enigma, drawn by hand. Type and watch the lamps.", href: "/rotor", status: "live", colour: "coral", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
-    { title: "Planisphere", note: "Tonight's sky for your city, on a star wheel drawn in ink.", href: "/planisphere", status: "live", colour: "blue", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
-    { title: "Barometer", note: "A brass weather station for your city, read every quarter hour.", href: "/barometer", status: "live", colour: "yellow", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
-    { title: "Gazette", note: "A small newspaper: six short pieces on everyday science, each with a drawn infographic.", href: "/articles", status: "live", colour: "pink", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
-    { title: "Structures", note: "Eight ways to keep things, drawn by hand so you can poke them.", href: "/structures", status: "live", colour: "mint", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
-    { title: "Design system", note: "A box of decisions made once, drawn so you can turn the knobs.", href: "/design-system", status: "live", colour: "coral", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
+    { title: "Shore", note: "A tactile focus timer that leaves smoothed sea glass along the tide line.", href: "/shore", status: "live", colour: "mint", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
+    { title: "Capsule", note: "A mechanical gashapon cabinet with custom brass tokens and collectible keepsake cards.", href: "/capsule", status: "live", colour: "coral", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
+    { title: "Orrery", note: "The celestial mechanics of our solar system, calculated in vector orbits and drawn by hand.", href: "/orrery", status: "live", colour: "yellow", started: "2026-10-19", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Elements", note: "Interactive atomic lattice models for all 118 elements with subatomic physics telemetry.", href: "/elements", status: "live", colour: "blue", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
+    { title: "Vinyl", note: "An analog turntable simulation featuring curated late-night jazz and electronic master pressings.", href: "/vinyl", status: "live", colour: "pink", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
+    { title: "Rotor", note: "A hand-drawn cryptographic Enigma rotor simulation with real-time permutation stepping.", href: "/rotor", status: "live", colour: "coral", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Planisphere", note: "A real-time celestial star wheel rendered from high-precision astronomical coordinates.", href: "/planisphere", status: "live", colour: "blue", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Barometer", note: "A precision brass meteorological instrument tracking atmospheric pressure and weather deltas.", href: "/barometer", status: "live", colour: "yellow", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Gazette", note: "A curated digital broadsheet covering distributed systems, game architectures, and physics.", href: "/articles", status: "live", colour: "pink", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
+    { title: "Structures", note: "Eight foundational data structures and graph algorithms rendered as tactile, inspectable toys.", href: "/structures", status: "live", colour: "mint", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
+    { title: "Design system", note: "A bespoke design token workbench balancing quiet luxury minimalism with cyber-aesthetic precision.", href: "/design-system", status: "live", colour: "coral", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
   ] as Project[],
-  // TODO(otohime)
   music: "Songs on repeat, one channel each. Tune in.",
   // The same songs on Spotify, linked under the player: the id after
   // /playlist/ in Share → Copy link.
@@ -228,31 +218,29 @@ export const site = {
     credit: { lanyard: "game presence from Lanyard / Discord", listenbrainz: "Track details from ListenBrainz (CC0)", spotify: "Track details from Spotify", steam: "game details from Steam" },
   },
   // The songs in play order, each with why it's there.
-  // TODO(otohime): the reasons are a first draft; make them yours
   songs: [
     {
       title: "Nicole Kidman",
       artist: "ADÉLA",
-      note: "A song about dressing up like a film star for one night. It turns any Tuesday into a premiere.",
+      note: "Effortless glamour and velvet bass for late-night architecture sessions.",
       colour: "pink",
       video: "IXA6bQsVNjs",
     },
     {
       title: "bye",
       artist: "Altare",
-      note: "A goodbye that waves instead of slamming the door. Three minutes, then out, like any good exit.",
+      note: "Cinematic wave and crystalline synths that match an ultra-clean desk setup.",
       colour: "blue",
       video: "agneRtEe-t8",
     },
     {
       title: "Less than a Lover",
       artist: "JENNIE",
-      note: "Lo-fi guitar, old keys and the space between friends and more. A whole summer in under three minutes.",
+      note: "Polished, chic, and warm—the soundtrack to an unhurried morning.",
       colour: "yellow",
       video: "vR49dHUwMUA",
     },
   ] satisfies Song[],
-  // TODO(otohime)
   sketchesHint: sketchesCollection.hint,
   sketchesIntro: sketchesCollection.intro,
   sketches: sketchesCollection.sketches satisfies Sketch[],

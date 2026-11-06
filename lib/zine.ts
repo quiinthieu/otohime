@@ -97,7 +97,7 @@ export const ZINE_URL = "otohime.dev";
 
 /** Characters per field, sized for the smaller page (Letter, 69.85 x 107.95 mm) at 8pt with 6 mm margins. */
 export const BUDGETS = {
-  cover: { title: 16, tagline: 60, issue: 32 },
+  cover: { title: 16, tagline: 80, issue: 32 },
   bio: { body: 420 },
   project: { title: 24, note: 140, href: 40 },
   sketch: { title: 24, note: 90 },

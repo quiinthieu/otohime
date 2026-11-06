@@ -15,18 +15,25 @@ export function EndFooter() {
     <footer className="end" aria-label="Footer">
       <div className="end-inner mx-auto max-w-4xl px-5 sm:px-8">
         <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-start">
-          <div className="space-y-1.5">
-            <p className="font-semibold tracking-[0.02em]">Otohime</p>
-            <p className="text-[12px] text-muted">{site.tagline}</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="inline-block size-2 rounded-full bg-yellow" aria-hidden="true" />
+              <p className="font-semibold tracking-[0.02em]">Otohime</p>
+            </div>
+            <p className="max-w-xs text-[12px] leading-relaxed text-muted">{site.tagline}</p>
           </div>
 
           <div className="flex flex-wrap gap-x-12 gap-y-6">
             <nav aria-label="Footer navigation">
-              <p className="caption mb-2">Pages</p>
+              <p className="caption mb-2 text-ink/70">Pages</p>
               <ul className="space-y-1.5">
                 {PUBLIC_PAGES.map(({ href, label }) => (
                   <li key={href}>
-                    <Link href={href} data-end-page={href} className="link text-muted hover:text-ink">
+                    <Link
+                      href={href}
+                      data-end-page={href}
+                      className="link text-[13px] text-muted hover:text-ink transition-colors duration-150"
+                    >
                       {label}
                     </Link>
                   </li>
@@ -35,14 +42,14 @@ export function EndFooter() {
             </nav>
 
             <div>
-              <p className="caption mb-2">Elsewhere</p>
+              <p className="caption mb-2 text-ink/70">Elsewhere</p>
               <ul className="space-y-1.5">
                 {site.lines.map((line) => (
                   <li key={line.label}>
                     <a
                       href={line.href}
                       data-end-line={line.label}
-                      className="link text-muted hover:text-ink"
+                      className="link text-[13px] text-muted hover:text-ink transition-colors duration-150"
                       {...away(line.href)}
                     >
                       {line.label}
@@ -57,14 +64,17 @@ export function EndFooter() {
         <div className="end-bar">
           <p className="end-credits">
             <span data-end-signature="">{site.end.signature}</span>
-            <span aria-hidden="true" className="end-dot">
+            <span aria-hidden="true" className="end-dot text-muted/60">
               ·
             </span>
             <span data-end-copyright="">
               © <EndYear /> Otohime
             </span>
           </p>
-          <a href="#main" className="link text-[12px] text-muted hover:text-ink">
+          <a
+            href="#main"
+            className="link text-[12px] text-muted hover:text-ink transition-colors duration-150"
+          >
             Back to top ↑
           </a>
         </div>
