@@ -1,8 +1,9 @@
 {
   "version": 1,
-  "head": "726382bc8fd330e1d95cc198a609d99aef0d9ed6",
-  "total": 822,
+  "head": "cd2fd6896cb0995f53cf37e15587e6b95116fe96",
+  "total": 823,
   "entries": [
+    {"sha":"cd2fd6896c","date":"2026-11-06T13:32:30Z","plan":null,"task":null,"subject":"feat(site): adapt dark/light themes, responsive layouts, and streamline CI","files":39,"added":843,"removed":74,"areas":["app/(site)","scripts","content"]},
     {"sha":"726382bc8f","date":"2026-11-06T10:12:40Z","plan":null,"task":null,"subject":"fix(site): preserve house paper/ink tokens and ask model scope","files":8,"added":30,"removed":29,"areas":["content","public","app/(site)"]},
     {"sha":"7461011f18","date":"2026-11-06T09:34:11Z","plan":null,"task":null,"subject":"feat(site): redesign layout, chrome, and content for showcase","files":25,"added":2232,"removed":674,"areas":["app/(site)","content","lib"]},
     {"sha":"eeb1620f33","date":"2026-11-05T15:28:22Z","plan":null,"task":null,"subject":"fix(test): quote test:e2e glob for wiring check","files":2,"added":2,"removed":2,"areas":["app/(ryugu)","package.json"]},
@@ -201,7 +202,6 @@
     {"sha":"cf9e3e5c2a","date":"2026-10-27T10:01:09Z","plan":"pm-271","task":"t-1562","subject":"Reopen palace sound after a back/forward cache restore","files":6,"added":233,"removed":16,"areas":["app/(ryugu)","projects"]},
     {"sha":"4ccc1f682b","date":"2026-10-27T10:00:15Z","plan":"pm-271","task":"t-1561","subject":"Record passing QA of the deployed Tamatebako at 103f0c5","files":8,"added":322,"removed":0,"areas":["projects"]},
     {"sha":"4da200bff3","date":"2026-10-27T09:57:17Z","plan":"pm-268","task":"t-1600","subject":"Record deployed Pocket QA","files":2,"added":76,"removed":0,"areas":["projects"]},
-    {"sha":"15bb2acac6","date":"2026-10-27T09:45:10Z","plan":"pm-270","task":"run-9203","subject":"Record passing acceptance of the main lane at 103f0c5","files":9,"added":6137,"removed":0,"areas":["projects"]},
-    {"sha":"8b98265875","date":"2026-10-27T09:29:34Z","plan":"pm-270","task":"t-1671","subject":"Record passing QA of deployed readiness repair","files":1,"added":31,"removed":0,"areas":["projects"]}
+    {"sha":"15bb2acac6","date":"2026-10-27T09:45:10Z","plan":"pm-270","task":"run-9203","subject":"Record passing acceptance of the main lane at 103f0c5","files":9,"added":6137,"removed":0,"areas":["projects"]}
   ]
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "head": "726382bc8fd330e1d95cc198a609d99aef0d9ed6",
+  "head": "cd2fd6896cb0995f53cf37e15587e6b95116fe96",
   "generatedYear": 2026,
   "months": {
     "01": {
@@ -109,15 +109,15 @@
     "11": {
       "month": 11,
       "flower": "Willow",
-      "commits": 5,
+      "commits": 6,
       "shippedProjects": [],
       "notes": [],
       "highlights": [
+        {"sha":"cd2fd6896c","date":"2026-11-06T13:32:30Z","plan":null,"subject":"feat(site): adapt dark/light themes, responsive layouts, and streamline CI"},
         {"sha":"726382bc8f","date":"2026-11-06T10:12:40Z","plan":null,"subject":"fix(site): preserve house paper/ink tokens and ask model scope"},
         {"sha":"7461011f18","date":"2026-11-06T09:34:11Z","plan":null,"subject":"feat(site): redesign layout, chrome, and content for showcase"},
         {"sha":"eeb1620f33","date":"2026-11-05T15:28:22Z","plan":null,"subject":"fix(test): quote test:e2e glob for wiring check"},
-        {"sha":"205af653ab","date":"2026-11-05T15:07:25Z","plan":null,"subject":"fix(ci): align unit tests and E2E pipeline with revamped site"},
-        {"sha":"bb2ccac932","date":"2026-11-05T14:37:58Z","plan":null,"subject":"feat(site): revamp website into minimalist engineering portfolio"}
+        {"sha":"205af653ab","date":"2026-11-05T15:07:25Z","plan":null,"subject":"fix(ci): align unit tests and E2E pipeline with revamped site"}
       ]
     },
     "12": {
