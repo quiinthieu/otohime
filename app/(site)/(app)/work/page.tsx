@@ -28,9 +28,9 @@ export default function WorkPage() {
     <ViewTransition enter="page-in" exit="page-out" default="none">
       <div className="rise space-y-16">
         <header className="space-y-4 pt-2">
-          <div className="inline-flex items-center gap-2 rounded-full border border-line bg-paper-2/60 px-3 py-1 backdrop-blur-xs">
-            <span className="inline-block size-2 rounded-full bg-yellow" aria-hidden="true" />
-            <p className="caption tracking-[0.1em]">Staff Data Platform Architecture</p>
+          <div className="inline-flex max-w-full items-center gap-2 rounded-2xl sm:rounded-full border border-line bg-paper-2/60 px-3 py-1.5 sm:py-1 backdrop-blur-xs">
+            <span className="inline-block size-2 shrink-0 rounded-full bg-yellow" aria-hidden="true" />
+            <p className="caption tracking-[0.06em] sm:tracking-[0.1em] break-words">Staff Data Platform Architecture</p>
           </div>
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-ink">Work</h1>
           <p className="max-w-3xl text-[15px] leading-relaxed text-ink/85">{site.work}</p>

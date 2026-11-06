@@ -54,7 +54,7 @@ export const SIBLINGS: readonly Sibling[] = [
     file: "app/(orrery)/orrery.css",
     paper: "#f6f1e7",
     ink: "#3a2a28",
-    decisions: 16,
+    decisions: 17,
     hasPaper: true,
     hasInk: true,
     dress: { name: "Orrery", spot: "#e0672c", spotFrom: "app/(orrery)/orrery.css", radius: 14, face: "cursive" },

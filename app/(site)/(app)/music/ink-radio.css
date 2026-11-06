@@ -73,7 +73,7 @@
 }
 
 .radio-lamp[data-on] text {
-  fill: var(--ink);
+  fill: var(--on-swatch);
 }
 
 .radio-globe-hit {

@@ -32,8 +32,8 @@ export function parseContributions(html, now = new Date()) {
   for (const [day, count] of sorted) counts.set(weekKey(day), (counts.get(weekKey(day)) ?? 0) + count);
   return { owner: OWNER, source: SOURCE, fetchedAt: now.toISOString(), through: sorted.at(-1)[0], weeks: [...counts].map(([week, count]) => ({ week, count })) };
 }
-export async function refresh({ fetcher = fetch, destination = output, now = new Date() } = {}) {
-  const response = await fetcher(SOURCE, { signal: AbortSignal.timeout(15000), headers: { "User-Agent": "otohime-bonsai-build" } });
+export async function refresh({ fetcher = fetch, destination = output, now = new Date(), timeoutMs = 15000 } = {}) {
+  const response = await fetcher(SOURCE, { signal: AbortSignal.timeout(timeoutMs), headers: { "User-Agent": "otohime-bonsai-build" } });
   if (!response.ok) throw new Error(`Contribution fetch failed: ${response.status}`);
   const snapshot = parseContributions(await response.text(), now);
   if (snapshot.weeks.length < 40 || snapshot.through !== now.toISOString().slice(0, 10)) throw new Error("Stale or truncated contribution calendar");
@@ -44,9 +44,13 @@ export async function refresh({ fetcher = fetch, destination = output, now = new
   return snapshot;
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  try { await refresh(); }
+  const isBuild = process.argv.includes("--build");
+  try {
+    const timeoutMs = isBuild ? 1500 : 15000;
+    await refresh({ timeoutMs });
+  }
   catch (error) {
-    if (!process.argv.includes("--build")) throw error;
+    if (!isBuild) throw error;
     // Builds may work offline, but never silently invent fresh activity.
     const snapshot = JSON.parse(await readFile(output, "utf8"));
     if (snapshot.owner !== OWNER || !snapshot.weeks?.length) throw error;

@@ -12,9 +12,9 @@ export default function HomePage() {
       <div className="rise space-y-16">
         <section className="space-y-6 pt-3">
           <div className="space-y-3.5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-line bg-paper-2/60 px-3 py-1 backdrop-blur-xs">
-              <span className="inline-block size-2 rounded-full bg-yellow" aria-hidden="true" />
-              <p className="caption tracking-[0.1em]">Otohime · Staff Data Platform Architect &amp; Systems Engineer</p>
+            <div className="inline-flex max-w-full items-center gap-2 rounded-2xl sm:rounded-full border border-line bg-paper-2/60 px-3 py-1.5 sm:py-1 backdrop-blur-xs">
+              <span className="inline-block size-2 shrink-0 rounded-full bg-yellow" aria-hidden="true" />
+              <p className="caption tracking-[0.06em] sm:tracking-[0.1em] break-words">Otohime · Staff Data Platform Architect &amp; Systems Engineer</p>
             </div>
             <h1 className="text-[clamp(2.75rem,6vw,4.25rem)] font-bold tracking-[-0.03em] leading-[1.06] text-ink">
               Otohime

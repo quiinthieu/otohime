@@ -29,9 +29,19 @@ const subscribe = (cb: () => void) => {
     cb();
   };
   window.addEventListener("storage", onStorage);
+  const observer = typeof MutationObserver !== "undefined"
+    ? new MutationObserver(cb)
+    : null;
+  if (observer && typeof document !== "undefined") {
+    observer.observe(document.documentElement, { attributeFilter: ["data-theme"] });
+  }
+  const media = typeof window !== "undefined" && window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  media?.addEventListener("change", cb);
   return () => {
     listeners.delete(cb);
     window.removeEventListener("storage", onStorage);
+    observer?.disconnect();
+    media?.removeEventListener("change", cb);
   };
 };
 const readServer = () => null;
@@ -67,6 +77,20 @@ function update(change: (ledger: Ledger) => Ledger) {
 
 const finish = (session: Session) => update((ledger) => washUp(ledger, session));
 
+function effectiveScene(ledgerScene: Scene): Scene {
+  try {
+    const t = localStorage.getItem("theme");
+    if (t === "light" || t === "dark") return t;
+  } catch {}
+  if (typeof document !== "undefined") {
+    const pinned = document.documentElement.dataset.theme;
+    if (pinned === "light" || pinned === "dark") return pinned;
+    if (ledgerScene === "dark") return "dark";
+    if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) return "dark";
+  }
+  return ledgerScene;
+}
+
 export function ShoreApp({ header, footer }: { header: ReactNode; footer: ReactNode }) {
   const raw = useSyncExternalStore(subscribe, read, readServer);
   const now = useSyncExternalStore(subscribeClock, readClock, readClockServer);
@@ -78,7 +102,7 @@ export function ShoreApp({ header, footer }: { header: ReactNode; footer: ReactN
   // `now` moves with the clock below, and on every press.
   const ledger = normalizeLedger(raw, now);
   const pebbles = today(ledger, now);
-  const scene = ledger.scene;
+  const scene = effectiveScene(ledger.scene);
 
   const left = phase === "idle" ? minutes * 60_000 : phase === "done" || !session ? 0 : remaining(now, session);
 
@@ -135,7 +159,13 @@ export function ShoreApp({ header, footer }: { header: ReactNode; footer: ReactN
     setClock(Date.now());
     setPhase("done");
   };
-  const setScene = (value: Scene) => update((l) => withScene(l, value));
+  const setScene = (value: Scene) => {
+    update((l) => withScene(l, value));
+    try {
+      localStorage.setItem("theme", value);
+      document.documentElement.setAttribute("data-theme", value);
+    } catch {}
+  };
   const clearToday = () => {
     update((l) => clearDay(l, Date.now()));
     setConfirming(false);

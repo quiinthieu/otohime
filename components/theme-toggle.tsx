@@ -77,6 +77,7 @@ export function ThemeToggle() {
       className="icon-btn theme-toggle"
       aria-pressed={theme === null ? undefined : theme === "dark"}
       title="Dark theme"
+      aria-label="Toggle dark theme"
       onClick={toggle}
     >
       <svg viewBox="0 0 20 20" className="size-4" aria-hidden="true">

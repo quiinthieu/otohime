@@ -222,7 +222,7 @@
   padding: 1px;
   border: 1px solid color-mix(in srgb, #b82b1d 35%, #231e16);
   border-radius: 6px;
-  background: #f5eddf;
+  background: var(--paper-2);
 }
 
 .app-hanko-sm .app-hanko-chip {

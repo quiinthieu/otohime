@@ -24,7 +24,8 @@
 .book-wheel label span { font-size: 28px; }
 .book-wheel input { width: 100%; accent-color: var(--ink); }
 .book-wheel p { min-height: 5rem; }
-.book-turner { display: flex; justify-content: space-between; align-items: center; gap: .6rem; border-top: 1px solid var(--line); padding-top: 1rem; font-size: 12px; }
+.book-turner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; border-top: 1px solid var(--line); padding-top: 1rem; font-size: 12px; }
+@media (max-width: 400px) { .book-turner { justify-content: center; } }
 .paper-hinge { transform-box: fill-box; transform-origin: 50% 100%; }
 .timeline-book[data-enhanced=true] .paper-hinge { animation: book-unfold .8s cubic-bezier(.2,.8,.25,1) both; }
 .timeline-book[data-enhanced=true] .paper-hinge-back { animation-delay: .12s; }

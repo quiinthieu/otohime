@@ -1,8 +1,9 @@
 {
   "version": 1,
-  "head": "7461011f1884df4e5b3874ecd35ee13a440fd677",
-  "total": 821,
+  "head": "726382bc8fd330e1d95cc198a609d99aef0d9ed6",
+  "total": 822,
   "entries": [
+    {"sha":"726382bc8f","date":"2026-11-06T10:12:40Z","plan":null,"task":null,"subject":"fix(site): preserve house paper/ink tokens and ask model scope","files":8,"added":30,"removed":29,"areas":["content","public","app/(site)"]},
     {"sha":"7461011f18","date":"2026-11-06T09:34:11Z","plan":null,"task":null,"subject":"feat(site): redesign layout, chrome, and content for showcase","files":25,"added":2232,"removed":674,"areas":["app/(site)","content","lib"]},
     {"sha":"eeb1620f33","date":"2026-11-05T15:28:22Z","plan":null,"task":null,"subject":"fix(test): quote test:e2e glob for wiring check","files":2,"added":2,"removed":2,"areas":["app/(ryugu)","package.json"]},
     {"sha":"205af653ab","date":"2026-11-05T15:07:25Z","plan":null,"task":null,"subject":"fix(ci): align unit tests and E2E pipeline with revamped site","files":9,"added":13,"removed":78,"areas":["lib","scripts",".github"]},
@@ -201,7 +202,6 @@
     {"sha":"4ccc1f682b","date":"2026-10-27T10:00:15Z","plan":"pm-271","task":"t-1561","subject":"Record passing QA of the deployed Tamatebako at 103f0c5","files":8,"added":322,"removed":0,"areas":["projects"]},
     {"sha":"4da200bff3","date":"2026-10-27T09:57:17Z","plan":"pm-268","task":"t-1600","subject":"Record deployed Pocket QA","files":2,"added":76,"removed":0,"areas":["projects"]},
     {"sha":"15bb2acac6","date":"2026-10-27T09:45:10Z","plan":"pm-270","task":"run-9203","subject":"Record passing acceptance of the main lane at 103f0c5","files":9,"added":6137,"removed":0,"areas":["projects"]},
-    {"sha":"8b98265875","date":"2026-10-27T09:29:34Z","plan":"pm-270","task":"t-1671","subject":"Record passing QA of deployed readiness repair","files":1,"added":31,"removed":0,"areas":["projects"]},
-    {"sha":"3dc10f8df5","date":"2026-10-27T09:20:29Z","plan":"pm-269","task":"t-1648","subject":"Record deployment pending QA evidence","files":2,"added":24,"removed":0,"areas":["projects"]}
+    {"sha":"8b98265875","date":"2026-10-27T09:29:34Z","plan":"pm-270","task":"t-1671","subject":"Record passing QA of deployed readiness repair","files":1,"added":31,"removed":0,"areas":["projects"]}
   ]
 }

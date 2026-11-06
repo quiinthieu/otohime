@@ -163,6 +163,11 @@ svg text.spot-label { fill: var(--spot); }
 .knobs > legend { padding: 0 4px; font-size: 16px; color: var(--muted); }
 .knobs:disabled { opacity: 0.55; }
 .knob-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; }
+@media (max-width: 480px) {
+  .knob-groups {
+    grid-template-columns: 1fr;
+  }
+}
 .knob { min-width: 0; margin: 0; padding: 0; border: 0; }
 .knob > legend { padding: 0; font-family: var(--title-face); font-weight: 700; font-size: 22px; line-height: 1.2; }
 .knob.wide { grid-column: 1 / -1; }
