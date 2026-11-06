@@ -11,10 +11,13 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    // Scoped non-production and artifact directories
+    ".agents/**",
+    ".agent-artifacts/**",
+    "projects/**",
+    "changelogs/**",
     // Generated unmodified SDK/Wasm loader bytes, verified by the asset manifest.
-    "public/vendor/peep-box/**",
-    "public/vendor/hand-landmarker/**",
-    "public/vendor/duckdb/**",
+    "public/vendor/**",
     "next-env.d.ts",
     // Vendored verbatim from sea-glass (Apache-2.0).
     "app/(shore)/_lib/sea-glass.mjs",

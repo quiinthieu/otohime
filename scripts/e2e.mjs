@@ -37,6 +37,8 @@ const SERIAL = ["--test-concurrency=1", ...ANNOTATE];
 const SUITE = [...process.execArgv, ...SERIAL, ...ARGS];
 // These files talk HTTP only. CI runs them together; the frame-timed Chrome files stay one at a time.
 const HTTP_E2E = [
+  "e2e/adversarial-coverage.test.ts",
+  "e2e/capability-showcase.test.ts",
   "e2e/ghosts-config.test.ts",
   "e2e/guestbook-api.test.ts",
   "e2e/ink-radio.test.ts",
@@ -44,7 +46,9 @@ const HTTP_E2E = [
   "e2e/kintsugi-store.test.ts",
   "e2e/music.test.ts",
   "e2e/peeks.test.ts",
+  "e2e/persona-redesign.test.ts",
   "e2e/postcard.test.ts",
+  "e2e/production-readiness.test.ts",
   "e2e/rbac.test.ts",
 ];
 const HTTP_SET = new Set(HTTP_E2E);

@@ -83,6 +83,9 @@ export async function vendor({
   await mkdir(dest, { recursive: true });
   for (const [file, bytes] of outputs) {
     const target = path.join(dest, file);
+    try {
+      if ((await readFile(target)).equals(bytes)) continue;
+    } catch {}
     await mkdir(path.dirname(target), { recursive: true });
     const temp = `${target}.${process.pid}.tmp`;
     try {
