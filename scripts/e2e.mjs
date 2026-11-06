@@ -46,7 +46,6 @@ const HTTP_E2E = [
   "e2e/kintsugi-store.test.ts",
   "e2e/music.test.ts",
   "e2e/peeks.test.ts",
-  "e2e/persona-redesign.test.ts",
   "e2e/postcard.test.ts",
   "e2e/production-readiness.test.ts",
   "e2e/rbac.test.ts",

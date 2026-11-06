@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-06T10:12:40Z",
-  "head": "726382bc8fd330e1d95cc198a609d99aef0d9ed6",
+  "generatedAt": "2026-11-06T13:32:30Z",
+  "head": "cd2fd6896cb0995f53cf37e15587e6b95116fe96",
   "weightBasis": "Commit counts are non-merge commits that touch each project's route. Pipeline and stack throughput weights are illustrative, not measured throughput.",
   "workGraph": {
     "nodes": [
@@ -209,9 +209,9 @@
         "href": "/shore",
         "x": 0.5,
         "y": 0.18,
-        "commits": 10,
+        "commits": 11,
         "throughputWeight": 0.7,
-        "depositWeight": 0.958757,
+        "depositWeight": 0.962485,
         "swatch": "#93d3b0"
       },
       {
@@ -221,9 +221,9 @@
         "href": "/capsule",
         "x": 0.6946,
         "y": 0.2308,
-        "commits": 17,
+        "commits": 18,
         "throughputWeight": 0.7,
-        "depositWeight": 0.975687,
+        "depositWeight": 0.977035,
         "swatch": "#ef6a4c"
       },
       {
@@ -233,9 +233,9 @@
         "href": "/orrery",
         "x": 0.8275,
         "y": 0.3671,
-        "commits": 9,
+        "commits": 10,
         "throughputWeight": 0.7,
-        "depositWeight": 0.95421,
+        "depositWeight": 0.958757,
         "swatch": "#f4b829"
       },
       {
@@ -269,9 +269,9 @@
         "href": "/rotor",
         "x": 0.6014,
         "y": 0.807,
-        "commits": 8,
+        "commits": 9,
         "throughputWeight": 0.7,
-        "depositWeight": 0.948542,
+        "depositWeight": 0.95421,
         "swatch": "#ef6a4c"
       },
       {
@@ -281,9 +281,9 @@
         "href": "/planisphere",
         "x": 0.3986,
         "y": 0.807,
-        "commits": 14,
+        "commits": 15,
         "throughputWeight": 0.7,
-        "depositWeight": 0.970493,
+        "depositWeight": 0.972454,
         "swatch": "#76a0e2"
       },
       {
@@ -329,9 +329,9 @@
         "href": "/design-system",
         "x": 0.3054,
         "y": 0.2308,
-        "commits": 13,
+        "commits": 14,
         "throughputWeight": 0.7,
-        "depositWeight": 0.968232,
+        "depositWeight": 0.970493,
         "swatch": "#ef6a4c"
       }
     ],
@@ -339,19 +339,19 @@
       {
         "from": "shore",
         "to": "capsule",
-        "weight": 0.9672,
+        "weight": 0.9698,
         "kind": "project"
       },
       {
         "from": "capsule",
         "to": "orrery",
-        "weight": 0.9649,
+        "weight": 0.9679,
         "kind": "project"
       },
       {
         "from": "orrery",
         "to": "elements",
-        "weight": 0.9612,
+        "weight": 0.9635,
         "kind": "project"
       },
       {
@@ -363,19 +363,19 @@
       {
         "from": "vinyl",
         "to": "rotor",
-        "weight": 0.9614,
+        "weight": 0.9642,
         "kind": "project"
       },
       {
         "from": "rotor",
         "to": "planisphere",
-        "weight": 0.9595,
+        "weight": 0.9633,
         "kind": "project"
       },
       {
         "from": "planisphere",
         "to": "barometer",
-        "weight": 0.9595,
+        "weight": 0.9605,
         "kind": "project"
       },
       {
@@ -393,13 +393,13 @@
       {
         "from": "structures",
         "to": "design-system",
-        "weight": 0.9548,
+        "weight": 0.9559,
         "kind": "project"
       },
       {
         "from": "design-system",
         "to": "shore",
-        "weight": 0.9635,
+        "weight": 0.9665,
         "kind": "project"
       }
     ]
