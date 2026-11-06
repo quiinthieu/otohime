@@ -119,7 +119,7 @@ test("the index covers the site and the Gazette with short passages", () => {
   assert.equal(href("note-backfills-are-a-feature"), "/notes");
   assert.equal(href("stack-streaming"), "/work");
   assert.equal(href("work"), "/work");
-  assert.equal(href("game-celeste"), "/play");
+  assert.equal(href("game-cyberpunk-2077"), "/play");
   assert.equal(href("bio-1"), "/");
   assert.equal(href("now-playing"), "/");
 });
@@ -130,9 +130,9 @@ test("'what is shore' ranks /shore first", () => {
   assert.equal(reply.sources[0].href, "/shore");
 });
 
-test("'celest' forgives the typo and ranks Celeste first", () => {
-  assert.equal(search(index, "celest")[0].passage.title, "Celeste");
-  assert.equal(answer(index, "celest").sources[0].title, "Celeste");
+test("'cyberpnk' forgives the typo and ranks Cyberpunk 2077 first", () => {
+  assert.equal(search(index, "cyberpnk")[0].passage.title, "Cyberpunk 2077");
+  assert.equal(answer(index, "cyberpnk").sources[0].title, "Cyberpunk 2077");
 });
 
 test("'pizza recipe' is NO MATCH", () => {

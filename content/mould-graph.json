@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-29T13:19:08+07:00",
-  "head": "ac4101509cd7f7e87b1a4d7f9798a869b61e4c83",
+  "generatedAt": "2026-11-05T15:28:22Z",
+  "head": "eeb1620f339345836f97ca6101b88a0fbb0e6a0c",
   "weightBasis": "Commit counts are non-merge commits that touch each project's route. Pipeline and stack throughput weights are illustrative, not measured throughput.",
   "workGraph": {
     "nodes": [
@@ -65,11 +65,11 @@
         "swatch": "#8a8175"
       },
       {
-        "id": "transformation",
-        "label": "Transformation",
+        "id": "streaming",
+        "label": "Streaming",
         "kind": "stack",
         "href": "/work",
-        "x": 0.284,
+        "x": 0.26,
         "y": 0.74,
         "commits": 0,
         "throughputWeight": 0.46,
@@ -77,11 +77,11 @@
         "swatch": "#8a8175"
       },
       {
-        "id": "orchestration",
-        "label": "Orchestration",
+        "id": "transformation",
+        "label": "Transformation",
         "kind": "stack",
         "href": "/work",
-        "x": 0.428,
+        "x": 0.38,
         "y": 0.74,
         "commits": 0,
         "throughputWeight": 0.52,
@@ -89,11 +89,11 @@
         "swatch": "#8a8175"
       },
       {
-        "id": "streaming",
-        "label": "Streaming",
+        "id": "storage",
+        "label": "Storage",
         "kind": "stack",
         "href": "/work",
-        "x": 0.572,
+        "x": 0.5,
         "y": 0.74,
         "commits": 0,
         "throughputWeight": 0.58,
@@ -101,11 +101,11 @@
         "swatch": "#8a8175"
       },
       {
-        "id": "storage",
-        "label": "Storage",
+        "id": "orchestration",
+        "label": "Orchestration",
         "kind": "stack",
         "href": "/work",
-        "x": 0.716,
+        "x": 0.62,
         "y": 0.74,
         "commits": 0,
         "throughputWeight": 0.64,
@@ -113,15 +113,27 @@
         "swatch": "#8a8175"
       },
       {
-        "id": "quality",
-        "label": "Quality",
+        "id": "embedded-olap",
+        "label": "Embedded OLAP",
+        "kind": "stack",
+        "href": "/work",
+        "x": 0.74,
+        "y": 0.74,
+        "commits": 0,
+        "throughputWeight": 0.7,
+        "depositWeight": 0.60272,
+        "swatch": "#8a8175"
+      },
+      {
+        "id": "quality-governance",
+        "label": "Quality & Governance",
         "kind": "stack",
         "href": "/work",
         "x": 0.86,
         "y": 0.74,
         "commits": 0,
-        "throughputWeight": 0.7,
-        "depositWeight": 0.60272,
+        "throughputWeight": 0.76,
+        "depositWeight": 0.618918,
         "swatch": "#8a8175"
       }
     ],
@@ -152,32 +164,38 @@
       },
       {
         "from": "warehouse",
-        "to": "transformation",
+        "to": "streaming",
         "weight": 0.46,
         "kind": "pipeline"
       },
       {
         "from": "warehouse",
-        "to": "orchestration",
+        "to": "transformation",
         "weight": 0.52,
         "kind": "pipeline"
       },
       {
         "from": "warehouse",
-        "to": "streaming",
+        "to": "storage",
         "weight": 0.58,
         "kind": "pipeline"
       },
       {
         "from": "warehouse",
-        "to": "storage",
+        "to": "orchestration",
         "weight": 0.64,
         "kind": "pipeline"
       },
       {
         "from": "warehouse",
-        "to": "quality",
+        "to": "embedded-olap",
         "weight": 0.7,
+        "kind": "pipeline"
+      },
+      {
+        "from": "warehouse",
+        "to": "quality-governance",
+        "weight": 0.76,
         "kind": "pipeline"
       }
     ]
@@ -191,9 +209,9 @@
         "href": "/shore",
         "x": 0.5,
         "y": 0.18,
-        "commits": 9,
+        "commits": 10,
         "throughputWeight": 0.7,
-        "depositWeight": 0.95421,
+        "depositWeight": 0.958757,
         "swatch": "#93d3b0"
       },
       {
@@ -203,9 +221,9 @@
         "href": "/capsule",
         "x": 0.6946,
         "y": 0.2308,
-        "commits": 16,
+        "commits": 17,
         "throughputWeight": 0.7,
-        "depositWeight": 0.974171,
+        "depositWeight": 0.975687,
         "swatch": "#ef6a4c"
       },
       {
@@ -215,9 +233,9 @@
         "href": "/orrery",
         "x": 0.8275,
         "y": 0.3671,
-        "commits": 8,
+        "commits": 9,
         "throughputWeight": 0.7,
-        "depositWeight": 0.948542,
+        "depositWeight": 0.95421,
         "swatch": "#f4b829"
       },
       {
@@ -227,9 +245,9 @@
         "href": "/elements",
         "x": 0.8563,
         "y": 0.5455,
-        "commits": 12,
+        "commits": 13,
         "throughputWeight": 0.7,
-        "depositWeight": 0.965596,
+        "depositWeight": 0.968232,
         "swatch": "#76a0e2"
       },
       {
@@ -239,9 +257,9 @@
         "href": "/vinyl",
         "x": 0.7721,
         "y": 0.7096,
-        "commits": 14,
+        "commits": 15,
         "throughputWeight": 0.7,
-        "depositWeight": 0.970493,
+        "depositWeight": 0.972454,
         "swatch": "#f3a6bb"
       },
       {
@@ -251,9 +269,9 @@
         "href": "/rotor",
         "x": 0.6014,
         "y": 0.807,
-        "commits": 7,
+        "commits": 8,
         "throughputWeight": 0.7,
-        "depositWeight": 0.941283,
+        "depositWeight": 0.948542,
         "swatch": "#ef6a4c"
       },
       {
@@ -263,9 +281,9 @@
         "href": "/planisphere",
         "x": 0.3986,
         "y": 0.807,
-        "commits": 13,
+        "commits": 14,
         "throughputWeight": 0.7,
-        "depositWeight": 0.968232,
+        "depositWeight": 0.970493,
         "swatch": "#76a0e2"
       },
       {
@@ -275,9 +293,9 @@
         "href": "/barometer",
         "x": 0.2279,
         "y": 0.7096,
-        "commits": 7,
+        "commits": 8,
         "throughputWeight": 0.7,
-        "depositWeight": 0.941283,
+        "depositWeight": 0.948542,
         "swatch": "#f4b829"
       },
       {
@@ -287,9 +305,9 @@
         "href": "/articles",
         "x": 0.1437,
         "y": 0.5455,
-        "commits": 5,
+        "commits": 6,
         "throughputWeight": 0.7,
-        "depositWeight": 0.918317,
+        "depositWeight": 0.931661,
         "swatch": "#f3a6bb"
       },
       {
@@ -299,9 +317,9 @@
         "href": "/structures",
         "x": 0.1725,
         "y": 0.3671,
-        "commits": 6,
+        "commits": 7,
         "throughputWeight": 0.7,
-        "depositWeight": 0.931661,
+        "depositWeight": 0.941283,
         "swatch": "#93d3b0"
       },
       {
@@ -311,9 +329,9 @@
         "href": "/design-system",
         "x": 0.3054,
         "y": 0.2308,
-        "commits": 12,
+        "commits": 13,
         "throughputWeight": 0.7,
-        "depositWeight": 0.965596,
+        "depositWeight": 0.968232,
         "swatch": "#ef6a4c"
       }
     ],
@@ -321,67 +339,67 @@
       {
         "from": "shore",
         "to": "capsule",
-        "weight": 0.9642,
+        "weight": 0.9672,
         "kind": "project"
       },
       {
         "from": "capsule",
         "to": "orrery",
-        "weight": 0.9614,
+        "weight": 0.9649,
         "kind": "project"
       },
       {
         "from": "orrery",
         "to": "elements",
-        "weight": 0.9571,
+        "weight": 0.9612,
         "kind": "project"
       },
       {
         "from": "elements",
         "to": "vinyl",
-        "weight": 0.968,
+        "weight": 0.9703,
         "kind": "project"
       },
       {
         "from": "vinyl",
         "to": "rotor",
-        "weight": 0.9559,
+        "weight": 0.9605,
         "kind": "project"
       },
       {
         "from": "rotor",
         "to": "planisphere",
-        "weight": 0.9548,
+        "weight": 0.9595,
         "kind": "project"
       },
       {
         "from": "planisphere",
         "to": "barometer",
-        "weight": 0.9548,
+        "weight": 0.9595,
         "kind": "project"
       },
       {
         "from": "barometer",
         "to": "articles",
-        "weight": 0.9298,
+        "weight": 0.9401,
         "kind": "project"
       },
       {
         "from": "articles",
         "to": "structures",
-        "weight": 0.925,
+        "weight": 0.9365,
         "kind": "project"
       },
       {
         "from": "structures",
         "to": "design-system",
-        "weight": 0.9486,
+        "weight": 0.9548,
         "kind": "project"
       },
       {
         "from": "design-system",
         "to": "shore",
-        "weight": 0.9599,
+        "weight": 0.9635,
         "kind": "project"
       }
     ]

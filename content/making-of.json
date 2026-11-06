@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "head": "d3b2e1f4d77a5245a04a19c897f388588986ee65",
+  "head": "eeb1620f339345836f97ca6101b88a0fbb0e6a0c",
   "scenes": [
     {
       "planId": "pm-293",
       "title": "Washi Daruma, Emaki, and Hanafuda",
       "date": "2026-10-27",
-      "sha": "d3b2e1f4d7",
-      "commitUrl": "https://github.com/quiinthieu/otohime/commit/d3b2e1f4d7",
-      "commitCount": 14,
-      "areas": ["projects","app/(site)","e2e"],
+      "sha": "6a545f48db",
+      "commitUrl": "https://github.com/quiinthieu/otohime/commit/6a545f48db",
+      "commitCount": 19,
+      "areas": ["projects","app/(site)","lib"],
       "roles": [
         {"role":"research","label":"Researcher","modelId":"claude-sonnet-5-5"},
         {"role":"product_owner","label":"Product Owner","modelId":"gemini-4-argon-medium"},

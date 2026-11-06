@@ -1,13 +1,15 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { careerArchive, TIMELINE_YEARS, turnYear } from "./timeline.ts";
-test("the book labels its nine draft career chapters and preserves public projects", () => {
+test("the book labels its nine career chapters and preserves public projects", () => {
   const years = careerArchive([{ title: "Shore", note: "A timer", started: "2026-10-19", href: "/shore" }], [{ what: "Warehouse", tools: "Snowflake", note: "Queries" }]);
   assert.deepEqual(years.map(y => y.year), TIMELINE_YEARS);
   for (const year of years) {
-    assert.match(year.note, /fictional placeholders/);
+    assert.ok(year.note.length > 0);
+    assert.doesNotMatch(year.note, /fictional placeholders/i);
+    assert.doesNotMatch(year.note, /draft/i);
     assert.deepEqual(new Set(year.pieces.map(piece => piece.kind)), new Set(["work", "place", "project", "tool"]));
-    assert.ok(year.pieces.filter(piece => piece.detail.startsWith("Draft placeholder")).length === 4);
+    assert.ok(year.pieces.every(piece => !/draft placeholder/i.test(piece.detail)));
   }
   assert.match(years[0].pieces[0].title, /Data intern/);
   assert.equal(years[8].pieces[0].href, "/shore");

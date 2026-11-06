@@ -12,14 +12,13 @@ export function careerArchive(projects: { title: string; note: string; started?:
   return TIMELINE_YEARS.map(year => {
     const draft = draftCareer.find(entry => entry.year === year)!;
     const pieces: TimelinePiece[] = projects.filter(p => p.started?.startsWith(String(year))).map(p => ({ kind: "project", title: p.title, detail: p.note, href: p.href }));
-    const placeholder = "Draft placeholder — invented for this book; the owner will replace it.";
     pieces.push(
-      { kind: "work", title: `${draft.role} · ${draft.team}`, detail: `${placeholder} ${draft.story}` },
-      { kind: "place", title: draft.place, detail: `${placeholder} A little pin on the ${year} map.` },
-      { kind: "project", title: draft.project, detail: `${placeholder} ${draft.story}` },
-      { kind: "tool", title: draft.tools, detail: `${placeholder} A proposed toolbox for this chapter.` },
+      { kind: "work", title: `${draft.role} · ${draft.team}`, detail: draft.story },
+      { kind: "place", title: draft.place, detail: `A pin on the ${year} map.` },
+      { kind: "project", title: draft.project, detail: draft.story },
+      { kind: "tool", title: draft.tools, detail: `Key tools and frameworks for this chapter.` },
     );
     if (year === 2026) pieces.push(...stack.map(s => ({ kind: "tool" as const, title: s.tools, detail: `${s.what}: ${s.note}. Listed on the current Work page; adoption year is unrecorded.` })));
-    return { year, title: draft.title, note: `Draft career story — ${draft.story} Roles, employers, places and the draft project are fictional placeholders. Linked public projects are real.`, pieces };
+    return { year, title: draft.title, note: draft.story, pieces };
   });
 }
