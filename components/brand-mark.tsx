@@ -2,10 +2,14 @@ import Link from "next/link";
 
 export function BrandMark() {
   return (
-    <Link href="/" className="inline-flex items-center gap-2.5 text-ink hover:opacity-80">
+    <Link
+      href="/"
+      className="group inline-flex items-center gap-2.5 text-ink transition-opacity hover:opacity-80 focus-visible:rounded-sm"
+      aria-label="Otohime home"
+    >
       <svg
         viewBox="0 0 24 24"
-        className="size-6 shrink-0"
+        className="size-6 shrink-0 transition-transform duration-200 group-hover:scale-105"
         aria-hidden="true"
         fill="none"
         stroke="currentColor"

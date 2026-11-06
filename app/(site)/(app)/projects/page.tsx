@@ -8,11 +8,14 @@ export const metadata: Metadata = { title: "Projects" };
 export default function ProjectsPage() {
   return (
     <ViewTransition enter="page-in" exit="page-out" default="none">
-      <div className="rise space-y-12">
-        <header className="space-y-3">
-          <p className="caption">Curiosities &amp; Standalone Experiments</p>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Projects</h1>
-          <p className="max-w-2xl text-muted">{site.projects}</p>
+      <div className="rise space-y-14">
+        <header className="space-y-3 pt-2">
+          <div className="inline-flex items-center gap-2 rounded-full border border-line bg-paper-2/60 px-3 py-1 backdrop-blur-xs">
+            <span className="inline-block size-2 rounded-full bg-yellow" aria-hidden="true" />
+            <p className="caption tracking-[0.1em]">Bespoke Software &amp; Interactive Experiments</p>
+          </div>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-ink">Projects</h1>
+          <p className="max-w-2xl text-[15px] leading-relaxed text-ink/85">{site.projects}</p>
         </header>
 
         <section aria-labelledby="curiosities-grid-heading" className="space-y-5">
@@ -20,7 +23,7 @@ export default function ProjectsPage() {
             <h2 id="curiosities-grid-heading" className="caption">
               Directory ({site.projectList.length})
             </h2>
-            <span className="caption">Interactive web experiments</span>
+            <span className="caption">Tactile software &amp; computational models</span>
           </div>
 
           <ul className="grid gap-4 sm:grid-cols-2">
@@ -28,13 +31,13 @@ export default function ProjectsPage() {
               <li
                 id={project.href ? undefined : projectTargetId(project.title)}
                 key={project.title}
-                className="rise project-card"
+                className="rise project-card group"
                 style={{ "--i": i } as CSSProperties}
               >
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-semibold">
-                      <span className="mr-2 text-[11px] font-normal text-muted">
+                    <span className="font-semibold tracking-tight text-ink text-[15px]">
+                      <span className="mr-2.5 text-[11px] font-mono font-medium text-muted/70">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       {project.href ? (
@@ -50,14 +53,16 @@ export default function ProjectsPage() {
                         project.title
                       )}
                     </span>
-                    <span className="badge">{project.status}</span>
+                    <span className="badge" data-tone="ok">{project.status}</span>
                   </div>
-                  <p className="text-muted">{project.note}</p>
+                  <p className="text-[13px] leading-relaxed text-muted">{project.note}</p>
                 </div>
                 {project.href && (
-                  <p className="caption flex items-center justify-between pt-1">
-                    <span>{project.href}</span>
-                    <span aria-hidden="true">Open ↗</span>
+                  <p className="caption flex items-center justify-between pt-1 text-muted/80 group-hover:text-ink">
+                    <span className="font-mono text-[11px]">{project.href}</span>
+                    <span aria-hidden="true" className="font-sans font-medium text-ink transition-transform duration-150 group-hover:translate-x-0.5">
+                      Open ↗
+                    </span>
                   </p>
                 )}
               </li>
@@ -70,29 +75,45 @@ export default function ProjectsPage() {
             <h2 id="editions-heading" className="caption">
               Print &amp; Special Editions
             </h2>
-            <span className="caption">Standalone layouts</span>
+            <span className="caption">Standalone tactile layouts</span>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="project-card">
-              <div className="flex items-baseline justify-between gap-3">
-                <a href="/zine" className="row-link font-semibold hover:underline underline-offset-4">
-                  Print Zine Edition
-                </a>
-                <span className="badge">print</span>
+            <div className="project-card group">
+              <div className="space-y-2">
+                <div className="flex items-baseline justify-between gap-3">
+                  <a href="/zine" className="row-link font-semibold tracking-tight text-[15px] hover:underline underline-offset-4">
+                    Print Zine Edition
+                  </a>
+                  <span className="badge" data-tone="ok">print</span>
+                </div>
+                <p className="text-[13px] leading-relaxed text-muted">
+                  A single-sheet broadside version of the site formatted for folding and printing on paper.
+                </p>
               </div>
-              <p className="text-muted">
-                A single-sheet broadside version of the site formatted for folding and printing on paper.
+              <p className="caption flex items-center justify-between pt-1 text-muted/80 group-hover:text-ink">
+                <span className="font-mono text-[11px]">/zine</span>
+                <span aria-hidden="true" className="font-sans font-medium text-ink transition-transform duration-150 group-hover:translate-x-0.5">
+                  Open edition ↗
+                </span>
               </p>
             </div>
-            <div className="project-card">
-              <div className="flex items-baseline justify-between gap-3">
-                <a href="/ryugu" className="row-link font-semibold hover:underline underline-offset-4">
-                  Ryūgū-jō
-                </a>
-                <span className="badge">edition</span>
+            <div className="project-card group">
+              <div className="space-y-2">
+                <div className="flex items-baseline justify-between gap-3">
+                  <a href="/ryugu" className="row-link font-semibold tracking-tight text-[15px] hover:underline underline-offset-4">
+                    Ryūgū-jō
+                  </a>
+                  <span className="badge" data-role="owner">edition</span>
+                </div>
+                <p className="text-[13px] leading-relaxed text-muted">
+                  An alternate deep-sea colophon and archive beneath the main site.
+                </p>
               </div>
-              <p className="text-muted">
-                An alternate deep-sea colophon and archive beneath the main site.
+              <p className="caption flex items-center justify-between pt-1 text-muted/80 group-hover:text-ink">
+                <span className="font-mono text-[11px]">/ryugu</span>
+                <span aria-hidden="true" className="font-sans font-medium text-ink transition-transform duration-150 group-hover:translate-x-0.5">
+                  Open archive ↗
+                </span>
               </p>
             </div>
           </div>

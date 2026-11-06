@@ -11,22 +11,22 @@
  */
 :root {
   color-scheme: light dark;
-  --paper: light-dark(#f2efe7, #1c1915);
-  --paper-2: light-dark(#ebe7dc, #27231d);
-  --field: light-dark(#faf8f3, #221f1a);
-  --ink: light-dark(#231e16, #ebe6da);
-  --muted: light-dark(#6b6456, #a39b8b);
-  --line: light-dark(#ddd6c8, #3a342c);
-  --hairline: light-dark(rgb(35 30 22 / 0.14), rgb(235 230 218 / 0.14));
+  --paper: light-dark(#faf8f5, #121114);
+  --paper-2: light-dark(#f2efe9, #1a181d);
+  --field: light-dark(#fdfbf7, #161418);
+  --ink: light-dark(#1a1715, #f5f2eb);
+  --muted: light-dark(#696253, #a89f91);
+  --line: light-dark(#e4ddd0, #2e2933);
+  --hairline: light-dark(rgb(26 23 21 / 0.12), rgb(245 242 235 / 0.12));
   --danger: light-dark(#b03a22, #f0826a);
-  --yellow: #f4b829;
-  --coral: #ef6a4c;
-  --mint: #93d3b0;
-  --blue: #76a0e2;
-  --pink: #f3a6bb;
+  --yellow: #e6c364;
+  --coral: #ee6f54;
+  --mint: #80c8a6;
+  --blue: #6b95d9;
+  --pink: #f0a8b9;
   --shade: light-dark(#3f4e93, #2b3666);
   /* Ink that stays dark in both themes: text on swatches, figure line work. */
-  --on-swatch: #231e16;
+  --on-swatch: #1a1715;
 }
 
 :root[data-theme="light"] {
@@ -60,14 +60,17 @@
   body {
     background: var(--paper);
     color: var(--ink);
-    font: 13px / 1.55 var(--font-mono);
+    font: 13px / 1.6 var(--font-mono);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1,
   h2,
   h3 {
+    font-family: var(--font-sans);
     font-weight: 600;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.015em;
   }
 
   :focus-visible {
@@ -121,52 +124,71 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
-    min-height: 2rem;
-    padding: 5px 14px;
-    border: 1px solid var(--ink);
+    gap: 0.45rem;
+    min-height: 2.125rem;
+    padding: 6px 15px;
+    border: 1px solid var(--line);
     border-radius: 999px;
-    background: var(--paper);
+    background: light-dark(rgb(255 255 255 / 0.65), rgb(255 255 255 / 0.04));
+    backdrop-filter: blur(8px);
     color: var(--ink);
-    font: 400 13px / 1.3 var(--font-mono);
+    font: 450 12.5px / 1.3 var(--font-sans);
+    letter-spacing: 0.02em;
     white-space: nowrap;
     cursor: pointer;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.03);
     transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
+      background-color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .btn:hover:not(:disabled, [aria-disabled="true"]) {
-    background: var(--ink);
-    color: var(--paper);
+    border-color: var(--ink);
+    background: var(--paper-2);
+    color: var(--ink);
+    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 0.06);
+  }
+
+  .btn:active:not(:disabled, [aria-disabled="true"]) {
+    transform: scale(0.985);
   }
 
   .btn-primary {
     padding: 7px 18px;
-    background: var(--ink);
+    border-color: color-mix(in srgb, var(--yellow) 40%, var(--ink));
+    background: linear-gradient(180deg, var(--ink) 0%, color-mix(in srgb, var(--ink) 90%, var(--yellow)) 100%);
     color: var(--paper);
     font: 600 12.8px / 1.3 var(--font-sans);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
+    box-shadow: 0 2px 8px -1px color-mix(in srgb, var(--ink) 25%, transparent);
   }
 
   .btn-primary:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--ink) 85%, var(--paper));
+    background: color-mix(in srgb, var(--ink) 85%, var(--yellow));
+    border-color: var(--yellow);
+    color: var(--paper);
+    box-shadow: 0 4px 14px -1px color-mix(in srgb, var(--ink) 35%, transparent);
   }
 
   .btn-danger {
-    border-color: var(--on-swatch);
+    border-color: var(--coral);
     background: var(--coral);
     color: var(--on-swatch);
   }
 
   .btn-ghost {
     border-color: transparent;
+    background: transparent;
+    box-shadow: none;
   }
 
   .btn-sm {
     min-height: 1.75rem;
-    padding: 3px 12px;
-    font-size: 12px;
+    padding: 3px 11px;
+    font-size: 11.5px;
   }
 
   .btn:disabled,
@@ -309,9 +331,17 @@
   }
 
   .card {
-    border: 1px solid var(--line);
+    border: 1px solid light-dark(rgb(26 23 21 / 0.1), rgb(245 242 235 / 0.09));
     border-radius: 12px;
-    background: light-dark(rgb(255 255 255 / 0.35), rgb(255 255 255 / 0.03));
+    background: light-dark(rgb(255 255 255 / 0.72), rgb(255 255 255 / 0.03));
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.02), 0 4px 16px -2px rgb(0 0 0 / 0.03);
+    transition:
+      border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .card-link {
@@ -319,47 +349,59 @@
     align-items: flex-start;
     gap: 0.875rem;
     padding: 1rem;
-    transition: border-color 0.15s ease;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
   }
 
   .card-link:hover {
     border-color: var(--ink);
+    background: var(--paper-2);
   }
 
   .badge {
     display: inline-flex;
     align-items: center;
-    padding: 0 8px;
-    border: 1px solid var(--ink);
+    gap: 0.25rem;
+    padding: 1px 9px;
+    border: 1px solid var(--line);
     border-radius: 999px;
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 11px;
+    background: light-dark(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.03));
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
     letter-spacing: 0.06em;
     line-height: 1.6;
     text-transform: uppercase;
     white-space: nowrap;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      color 0.15s ease;
   }
 
   .badge[data-role="owner"] {
     background: var(--yellow);
+    border-color: var(--yellow);
   }
 
   .badge[data-role="admin"] {
     background: var(--pink);
+    border-color: var(--pink);
   }
 
   .badge[data-tone="ok"] {
     background: var(--mint);
+    border-color: var(--mint);
   }
 
   .badge[data-tone="danger"] {
     background: var(--coral);
+    border-color: var(--coral);
   }
 
   .badge:is([data-role="owner"], [data-role="admin"], [data-tone]) {
-    border-color: var(--on-swatch);
     color: var(--on-swatch);
+    font-weight: 600;
   }
 
   .alert {
@@ -459,19 +501,40 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    height: 3.75rem;
-    padding: 0 1.25rem;
+    height: 3.85rem;
+    padding: 0 1rem;
     border-bottom: 1px solid var(--line);
-    background: color-mix(in srgb, var(--paper) 94%, transparent);
-    backdrop-filter: blur(8px);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(14px) saturate(160%);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  @media (min-width: 40rem) {
+    .masthead {
+      padding: 0 1.5rem;
+    }
+  }
+
+  .masthead-nav {
+    min-width: 0;
   }
 
   .masthead-nav .nav-list {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.35rem;
     overflow-x: auto;
     scrollbar-width: none;
+    padding-block: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .masthead-nav .nav-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .masthead-nav .nav-list > li {
+    flex-shrink: 0;
   }
 
   .subnav {
@@ -491,23 +554,30 @@
   .nav-item {
     display: inline-flex;
     align-items: center;
-    padding: 5px 12px;
-    border-radius: 6px;
+    padding: 5px 13px;
+    border: 1px solid transparent;
+    border-radius: 999px;
     color: var(--muted);
-    font-size: 13px;
+    font-family: var(--font-sans);
+    font-size: 12.8px;
+    font-weight: 450;
+    letter-spacing: 0.01em;
     white-space: nowrap;
     transition:
       background-color 0.15s ease,
+      border-color 0.15s ease,
       color 0.15s ease;
   }
 
   .nav-item:hover {
     background: var(--paper-2);
+    border-color: var(--line);
     color: var(--ink);
   }
 
   .nav-item[aria-current="page"] {
     background: var(--ink);
+    border-color: var(--ink);
     color: var(--paper);
     font-weight: 600;
   }
@@ -524,11 +594,20 @@
 
   .spec-row {
     display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr);
-    gap: 0.75rem 1.5rem;
-    padding-block: 0.75rem;
+    grid-template-columns: 1fr;
+    gap: 0.25rem 1.5rem;
+    padding-block: 0.85rem;
     border-bottom: 1px solid var(--line);
     align-items: baseline;
+    font-variant-numeric: tabular-nums;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  @media (min-width: 40rem) {
+    .spec-row {
+      grid-template-columns: 8rem minmax(0, 1fr);
+      gap: 0.75rem 1.5rem;
+    }
   }
 
   .project-card {
@@ -536,19 +615,26 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 0.75rem;
-    padding: 1.125rem 1.25rem;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: light-dark(rgb(255 255 255 / 0.45), rgb(255 255 255 / 0.025));
+    gap: 0.85rem;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid light-dark(rgb(26 23 21 / 0.1), rgb(245 242 235 / 0.09));
+    border-radius: 12px;
+    background: light-dark(rgb(255 255 255 / 0.72), rgb(255 255 255 / 0.03));
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.02), 0 4px 16px -2px rgb(0 0 0 / 0.03);
     transition:
-      border-color 0.15s ease,
-      background-color 0.15s ease;
+      border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .project-card:hover {
-    border-color: var(--ink);
-    background: var(--paper-2);
+    border-color: color-mix(in srgb, var(--line) 30%, var(--ink));
+    background: light-dark(rgb(255 255 255 / 0.9), var(--paper-2));
+    box-shadow: 0 6px 20px -2px rgb(0 0 0 / 0.06), 0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent);
+    transform: translateY(-1.5px);
   }
 
   .avatar {
@@ -1264,26 +1350,26 @@
    */
   .end {
     position: relative;
-    margin-top: 3rem;
+    margin-top: 4.5rem;
     border-top: 1px solid var(--line);
     background: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--paper-2) 60%, var(--paper)) 0%,
-      var(--paper) 5rem
+      color-mix(in srgb, var(--paper-2) 50%, var(--paper)) 0%,
+      var(--paper) 6rem
     );
   }
 
   .end::before {
     content: "";
     display: block;
-    border-top: 1px dashed var(--hairline);
+    border-top: 1px solid var(--hairline);
   }
 
   .end-inner {
     position: relative;
     z-index: 1;
     /* Reserve the Bottle header band, including enlarged text and its scene gap. */
-    padding-block: 3.75rem 2.25rem;
+    padding-block: 4.25rem 2.5rem;
   }
 
   .end-susuki {
@@ -1527,14 +1613,15 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem 1.5rem;
-    margin-top: 2rem;
-    padding-top: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
     border-top: 1px solid var(--line);
   }
 
   .end-credits {
     color: var(--muted);
     font-size: 12px;
+    letter-spacing: 0.02em;
   }
 
   .end-dot {
