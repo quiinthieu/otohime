@@ -134,7 +134,7 @@ export const site = {
       body: "A data contract stopped a breaking change before anyone opened a dashboard. First time. Worth it.",
     },
   ] satisfies Note[],
-  work: "I architect resilient distributed platforms: sub-second streaming pipelines, petabyte lakehouse governance, and deterministic execution engines designed for zero-downtime scale.",
+  work: "I architect the core data stack engineers use at work: sub-second streaming pipelines, petabyte lakehouse governance, and deterministic execution engines designed for zero-downtime scale.",
   // The Work page's source-to-dashboard figure (components/pipeline.tsx, lib/pipeline.ts): made-up packets,
   // never real data.
   pipeline: {
@@ -182,9 +182,9 @@ export const site = {
     { title: "Elements", note: "Interactive atomic lattice models for all 118 elements with subatomic physics telemetry.", href: "/elements", status: "live", colour: "blue", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
     { title: "Vinyl", note: "An analog turntable simulation featuring curated late-night jazz and electronic master pressings.", href: "/vinyl", status: "live", colour: "pink", started: "2026-10-19", shipped: "2026-10-19", lastActivityAt: "2026-10-26" },
     { title: "Rotor", note: "A hand-drawn cryptographic Enigma rotor simulation with real-time permutation stepping.", href: "/rotor", status: "live", colour: "coral", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
-    { title: "Planisphere", note: "A real-time celestial star wheel rendered from high-precision astronomical coordinates.", href: "/planisphere", status: "live", colour: "blue", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
+    { title: "Planisphere", note: "A real-time night-sky star wheel rendered from high-precision astronomical coordinates.", href: "/planisphere", status: "live", colour: "blue", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
     { title: "Barometer", note: "A precision brass meteorological instrument tracking atmospheric pressure and weather deltas.", href: "/barometer", status: "live", colour: "yellow", started: "2026-10-20", shipped: "2026-10-20", lastActivityAt: "2026-10-26" },
-    { title: "Gazette", note: "A curated digital broadsheet covering distributed systems, game architectures, and physics.", href: "/articles", status: "live", colour: "pink", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
+    { title: "Gazette", note: "A curated digital broadsheet covering distributed systems, interactive engines, and physics.", href: "/articles", status: "live", colour: "pink", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
     { title: "Structures", note: "Eight foundational data structures and graph algorithms rendered as tactile, inspectable toys.", href: "/structures", status: "live", colour: "mint", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
     { title: "Design system", note: "A bespoke design token workbench balancing quiet luxury minimalism with cyber-aesthetic precision.", href: "/design-system", status: "live", colour: "coral", started: "2026-10-21", shipped: "2026-10-21", lastActivityAt: "2026-10-26" },
   ] as Project[],
