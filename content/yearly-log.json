@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "head": "7461011f1884df4e5b3874ecd35ee13a440fd677",
+  "head": "726382bc8fd330e1d95cc198a609d99aef0d9ed6",
   "generatedYear": 2026,
   "months": {
     "01": {
@@ -109,10 +109,11 @@
     "11": {
       "month": 11,
       "flower": "Willow",
-      "commits": 4,
+      "commits": 5,
       "shippedProjects": [],
       "notes": [],
       "highlights": [
+        {"sha":"726382bc8f","date":"2026-11-06T10:12:40Z","plan":null,"subject":"fix(site): preserve house paper/ink tokens and ask model scope"},
         {"sha":"7461011f18","date":"2026-11-06T09:34:11Z","plan":null,"subject":"feat(site): redesign layout, chrome, and content for showcase"},
         {"sha":"eeb1620f33","date":"2026-11-05T15:28:22Z","plan":null,"subject":"fix(test): quote test:e2e glob for wiring check"},
         {"sha":"205af653ab","date":"2026-11-05T15:07:25Z","plan":null,"subject":"fix(ci): align unit tests and E2E pipeline with revamped site"},

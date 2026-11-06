@@ -117,7 +117,7 @@ textarea:focus-visible {
   }
 }
 
-h1 { margin: 0; font-family: var(--title); font-weight: 700; font-size: 64px; line-height: 1; }
+h1 { margin: 0; font-family: var(--title); font-weight: 700; font-size: clamp(32px, 8vw, 64px); line-height: 1; }
 h2 { margin: 0 0 8px; font-family: var(--title); font-weight: 700; font-size: 30px; line-height: 1.1; }
 .tagline { margin: 4px 0 0; font-size: 22px; color: var(--ink-soft); }
 

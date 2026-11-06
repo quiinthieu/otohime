@@ -34,8 +34,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6f1e7",
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f1e7" },
+    { media: "(prefers-color-scheme: dark)", color: "#1d1916" },
+  ],
 };
+
+// Applies a theme pinned by the site's toggle (localStorage.theme, same origin)
+// before first paint; otherwise the OS setting decides.
+const pinTheme = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function OrreryLayout({ children }: LayoutProps<"/">) {
   return (
@@ -45,6 +53,7 @@ export default function OrreryLayout({ children }: LayoutProps<"/">) {
            orrery.css can arrive too late on a first visit (an inline script behind a loading stylesheet), so the opt-in is
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
+        <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
         <AppearanceBoot root="orrery" />
       </head>
       <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>

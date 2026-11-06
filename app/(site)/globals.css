@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 /*
  * Paper and ink, after colorfigures.vercel.app, on light or dark paper.
  * WCAG contrast on paper, light / dark: ink 14.4 / 14.1, muted 5.1 / 6.4,

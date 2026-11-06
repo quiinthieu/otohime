@@ -4,6 +4,7 @@
    layout.tsx as --font-display) for the title, plates, buttons and status.
    No text is set under 12px. Nothing here sets overflow: hidden. */
 :root {
+  color-scheme: light;
   --paper: #f3ecdd;
   --paper-deep: #e9dfcb;
   --white: #fffaf0;
@@ -21,6 +22,36 @@
   background: var(--paper);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1a1614;
+  --paper-deep: #241f1c;
+  --white: #221c19;
+  --ink: #f2ece1;
+  --ink-soft: #b8a99c;
+  --coral: #e07a60;
+  --coral-deep: #f08b73;
+  --slate: #8ca0be;
+  --gold: #d4a53a;
+  --rule: #3a322c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #1a1614;
+    --paper-deep: #241f1c;
+    --white: #221c19;
+    --ink: #f2ece1;
+    --ink-soft: #b8a99c;
+    --coral: #e07a60;
+    --coral-deep: #f08b73;
+    --slate: #8ca0be;
+    --gold: #d4a53a;
+    --rule: #3a322c;
+  }
 }
 * { box-sizing: border-box; }
 /* The paper grain: fractal noise in ink at a few per cent, tiled. */
@@ -349,6 +380,12 @@ h2 {
 .tier-common { border-color: var(--ink); }
 .tier-rare { border-color: var(--slate); background: #dcdcd9; }
 .tier-legend { border-color: var(--gold); background: #ecd9ac; box-shadow: inset 0 0 0 1.5px var(--paper), inset 0 0 0 2.25px var(--gold); }
+:root[data-theme="dark"] .tier-rare { background: #262c36; }
+:root[data-theme="dark"] .tier-legend { background: #332a18; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .tier-rare { background: #262c36; }
+  :root:not([data-theme="light"]) .tier-legend { background: #332a18; }
+}
 .enlarge-note { font-size: 14px; line-height: 1.55; margin-bottom: 8px !important; }
 
 .card { display: block; height: auto; overflow: visible; }

@@ -29,16 +29,20 @@ export function Masthead() {
       </a>
       <header className="masthead">
         <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4 px-2 sm:px-4">
-          <div className="flex min-w-0 items-center gap-5 sm:gap-7">
-            <BrandMark />
-            <nav aria-label="Primary" className="masthead-nav min-w-0">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-7">
+            <div className="shrink-0 min-w-0">
+              <BrandMark />
+            </div>
+            <nav aria-label="Primary" className="masthead-nav min-w-0 overflow-x-auto">
               <Suspense fallback={<NavList items={NAV_ITEMS} />}>
                 <NavLinks items={NAV_ITEMS} />
               </Suspense>
             </nav>
           </div>
-          <div className="flex shrink-0 items-center gap-2.5">
-            <CommandPaletteButton />
+          <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+            <span className="hidden sm:inline-flex">
+              <CommandPaletteButton />
+            </span>
             <Suspense fallback={null}>
               <Account />
             </Suspense>

@@ -4,7 +4,7 @@
 .kintsugi-seams { opacity:.85; }
 .kintsugi-shards { fill:var(--paper,#f2efe7); opacity:.45; }
 .kintsugi-shards path { animation:shard-drift .45s ease-out both; }
-.kintsugi-mend { pointer-events:auto; position:absolute; right:7px; top:7px; width:26px; height:26px; color:#936b23; background:var(--paper,#f2efe7); border:1px solid #b28c4b; border-radius:50%; font-size:12px; opacity:0; transition:opacity .2s; }
+.kintsugi-mend { pointer-events:auto; position:absolute; right:7px; top:7px; width:26px; height:26px; color:light-dark(#936b23, var(--yellow)); background:var(--paper,#f2efe7); border:1px solid light-dark(#b28c4b, var(--yellow)); border-radius:50%; font-size:12px; opacity:0; transition:opacity .2s; }
 [data-kintsugi-card]:hover .kintsugi-mend,[data-kintsugi-card]:focus-within .kintsugi-mend,.kintsugi-mend:focus-visible { opacity:1; }
 .kintsugi-mend:focus-visible { outline:2px solid currentColor; outline-offset:3px; }
 [data-phase=break] .kintsugi-new path { stroke:var(--ink,#28231e); stroke-width:1.3; animation:seam-draw .45s both; }

@@ -27,8 +27,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f3ecdd",
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3ecdd" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1614" },
+  ],
 };
+
+// Applies a theme pinned by the site's toggle (localStorage.theme, same origin)
+// before first paint; otherwise the OS setting decides.
+const pinTheme = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function CapsuleLayout({ children }: LayoutProps<"/">) {
   return (
@@ -38,6 +46,7 @@ export default function CapsuleLayout({ children }: LayoutProps<"/">) {
            capsule.css can arrive too late on a first visit (an inline script behind a loading stylesheet), so the opt-in is
            also parsed with the HTML. */}
         <style>{"@view-transition{navigation:auto;types:hop}"}</style>
+        <script dangerouslySetInnerHTML={{ __html: pinTheme }} />
         <AppearanceBoot root="capsule" />
       </head>
       <body>{children}<PlotterToggle fallback /><AppearanceRuntime /></body>

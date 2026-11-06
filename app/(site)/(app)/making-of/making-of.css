@@ -265,14 +265,14 @@
 
 .emaki-root[data-hydrated="false"] .emaki-scene-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 295px), 1fr));
   width: 100%;
   transform: none !important;
 }
 
 .emaki-scene {
-  width: 340px;
-  flex: 0 0 340px;
+  width: min(340px, calc(100vw - 3rem));
+  flex: 0 0 min(340px, calc(100vw - 3rem));
   min-width: 0;
   display: flex;
 }
@@ -471,7 +471,7 @@
 
 .emaki-root[data-reduced-motion="true"] .emaki-scene-list {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)) !important;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 295px), 1fr)) !important;
   width: 100% !important;
   transform: none !important;
 }
@@ -498,7 +498,7 @@
 
   .emaki-scene-list {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)) !important;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 295px), 1fr)) !important;
     width: 100% !important;
   }
 }
