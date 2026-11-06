@@ -11,13 +11,13 @@
  */
 :root {
   color-scheme: light dark;
-  --paper: light-dark(#faf8f5, #121114);
+  --paper: light-dark(#f2efe7, #121114);
   --paper-2: light-dark(#f2efe9, #1a181d);
   --field: light-dark(#fdfbf7, #161418);
-  --ink: light-dark(#1a1715, #f5f2eb);
+  --ink: light-dark(#231e16, #f5f2eb);
   --muted: light-dark(#696253, #a89f91);
   --line: light-dark(#e4ddd0, #2e2933);
-  --hairline: light-dark(rgb(26 23 21 / 0.12), rgb(245 242 235 / 0.12));
+  --hairline: light-dark(rgb(35 30 22 / 0.12), rgb(245 242 235 / 0.12));
   --danger: light-dark(#b03a22, #f0826a);
   --yellow: #e6c364;
   --coral: #ee6f54;
@@ -26,7 +26,7 @@
   --pink: #f0a8b9;
   --shade: light-dark(#3f4e93, #2b3666);
   /* Ink that stays dark in both themes: text on swatches, figure line work. */
-  --on-swatch: #1a1715;
+  --on-swatch: #231e16;
 }
 
 :root[data-theme="light"] {
